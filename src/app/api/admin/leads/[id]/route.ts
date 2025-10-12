@@ -88,19 +88,23 @@ export async function PATCH(
     const { id } = await params;
 
     const body = await request.json();
+    console.log(`Updating lead ${id} with data:`, body);
+    
     const lead = await Lead.findByIdAndUpdate(
       id,
-      body,
+      { ...body, updatedAt: new Date() },
       { new: true, runValidators: true }
     );
 
     if (!lead) {
+      console.log(`Lead not found: ${id}`);
       return NextResponse.json(
         { error: 'Lead not found' },
         { status: 404 }
       );
     }
 
+    console.log(`Lead updated successfully: ${lead._id} - Status: ${lead.status}`);
     return NextResponse.json(lead);
   } catch (error) {
     console.error('Update lead error:', error);

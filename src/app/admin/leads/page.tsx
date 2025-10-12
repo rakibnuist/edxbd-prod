@@ -25,6 +25,7 @@ export default function LeadsPageNew() {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<Lead | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
 
   useEffect(() => {
     if (isAuthenticated && !authLoading) {
@@ -75,11 +76,14 @@ export default function LeadsPageNew() {
 
   const updateLeadStatus = async (leadId: string, newStatus: string) => {
     try {
+      setUpdatingStatus(leadId);
       const token = localStorage.getItem('admin_token');
       
       if (!token) {
         throw new Error('No authentication token found. Please login again.');
       }
+
+      console.log(`Updating lead ${leadId} status to: ${newStatus}`);
 
       const response = await fetch(`/api/admin/leads/${leadId}`, {
         method: 'PATCH',
@@ -91,26 +95,35 @@ export default function LeadsPageNew() {
       });
 
       if (response.ok) {
-        // Update local state
+        const updatedLead = await response.json();
+        console.log('Lead updated successfully:', updatedLead);
+        
+        // Update local state with the actual response from server
         setLeads(prevLeads => 
           prevLeads.map(lead => 
             lead._id === leadId 
-              ? { ...lead, status: newStatus, updatedAt: new Date().toISOString() }
+              ? { ...lead, status: updatedLead.status, updatedAt: updatedLead.updatedAt }
               : lead
           )
         );
         
         if (selectedLead && selectedLead._id === leadId) {
-          setSelectedLead(prev => prev ? { ...prev, status: newStatus, updatedAt: new Date().toISOString() } : null);
+          setSelectedLead(prev => prev ? { ...prev, status: updatedLead.status, updatedAt: updatedLead.updatedAt } : null);
         }
         
         setError(null);
+        
+        // Show success message (optional)
+        console.log(`✅ Lead status updated to: ${newStatus}`);
       } else {
-        throw new Error(`Failed to update lead status: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Failed to update lead status: ${response.status}`);
       }
     } catch (err) {
       console.error('Error updating lead status:', err);
       setError(err instanceof Error ? err.message : 'Failed to update lead status');
+    } finally {
+      setUpdatingStatus(null);
     }
   };
 
@@ -315,11 +328,13 @@ export default function LeadsPageNew() {
                     {lead.source}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <select
-                      value={lead.status}
-                      onChange={(e) => updateLeadStatus(lead._id, e.target.value)}
-                      className={`text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 ${getStatusColor(lead.status)}`}
-                    >
+                    <div className="flex items-center space-x-2">
+                      <select
+                        value={lead.status}
+                        onChange={(e) => updateLeadStatus(lead._id, e.target.value)}
+                        disabled={updatingStatus === lead._id}
+                        className={`text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 ${getStatusColor(lead.status)} ${updatingStatus === lead._id ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
                       <option value="new">New</option>
                       <option value="contacted">Contacted</option>
                       <option value="consultation_scheduled">Consultation Scheduled</option>
@@ -334,7 +349,11 @@ export default function LeadsPageNew() {
                       <option value="converted">Converted</option>
                       <option value="not_interested">Not Interested</option>
                       <option value="closed">Closed</option>
-                    </select>
+                      </select>
+                      {updatingStatus === lead._id && (
+                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(lead.createdAt).toLocaleDateString()}
