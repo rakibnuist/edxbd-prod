@@ -78,3 +78,38 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const decoded = verifyTokenFromRequest(request);
+    
+    if (!decoded || decoded.role !== 'admin') {
+      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    }
+
+    await connectDB();
+
+    const { searchParams } = new URL(request.url);
+    const leadId = searchParams.get('id');
+
+    if (!leadId) {
+      return NextResponse.json({ error: 'Lead ID is required' }, { status: 400 });
+    }
+
+    const deletedLead = await Lead.findByIdAndDelete(leadId);
+
+    if (!deletedLead) {
+      return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+    }
+
+    console.log(`Lead deleted: ${deletedLead._id} - ${deletedLead.name}`);
+
+    return NextResponse.json({ message: 'Lead deleted successfully', deletedLead });
+  } catch (error) {
+    console.error('Error deleting lead:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete lead' },
+      { status: 500 }
+    );
+  }
+}

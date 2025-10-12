@@ -23,6 +23,8 @@ export default function LeadsPageNew() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<Lead | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated && !authLoading) {
@@ -109,6 +111,44 @@ export default function LeadsPageNew() {
     } catch (err) {
       console.error('Error updating lead status:', err);
       setError(err instanceof Error ? err.message : 'Failed to update lead status');
+    }
+  };
+
+  const deleteLead = async (leadId: string) => {
+    try {
+      setDeleting(true);
+      const token = localStorage.getItem('admin_token');
+      
+      if (!token) {
+        throw new Error('No authentication token found. Please login again.');
+      }
+
+      const response = await fetch(`/api/admin/leads?id=${leadId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        // Remove from local state
+        setLeads(prevLeads => prevLeads.filter(lead => lead._id !== leadId));
+        
+        // Close any open modals
+        setSelectedLead(null);
+        setDeleteConfirm(null);
+        
+        setError(null);
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Failed to delete lead: ${response.status}`);
+      }
+    } catch (err) {
+      console.error('Error deleting lead:', err);
+      setError(err instanceof Error ? err.message : 'Failed to delete lead');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -306,6 +346,12 @@ export default function LeadsPageNew() {
                     >
                       View
                     </button>
+                    <button
+                      onClick={() => setDeleteConfirm(lead)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -378,6 +424,61 @@ export default function LeadsPageNew() {
                   <label className="block text-sm font-medium text-gray-700">Created</label>
                   <p className="mt-1 text-sm text-gray-900">{new Date(selectedLead.createdAt).toLocaleString()}</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              
+              <h3 className="text-lg font-medium text-gray-900 text-center mb-2">
+                Delete Lead
+              </h3>
+              
+              <div className="text-center mb-6">
+                <p className="text-sm text-gray-500 mb-2">
+                  Are you sure you want to delete this lead?
+                </p>
+                <p className="text-sm font-medium text-gray-900">
+                  {deleteConfirm.name} ({deleteConfirm.email})
+                </p>
+                <p className="text-xs text-red-600 mt-1">
+                  This action cannot be undone.
+                </p>
+              </div>
+              
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setDeleteConfirm(null)}
+                  disabled={deleting}
+                  className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => deleteLead(deleteConfirm._id)}
+                  disabled={deleting}
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50"
+                >
+                  {deleting ? (
+                    <div className="flex items-center justify-center">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                      Deleting...
+                    </div>
+                  ) : (
+                    'Delete'
+                  )}
+                </button>
               </div>
             </div>
           </div>
