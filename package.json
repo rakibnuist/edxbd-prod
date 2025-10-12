@@ -1,12 +1,12 @@
 {
-  "name": "eduexpress-international",
+  "name": "edxbd",
   "version": "1.0.0",
   "description": "EduExpress International - Your Gateway to Global Education. Expert study abroad consultancy with FREE scholarship assistance since 2018.",
   "private": true,
   "homepage": "https://eduexpressint.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/edXBD.git"
+    "url": "https://github.com/rakibnuist/edxbd.git"
   },
   "keywords": [
     "study-abroad",

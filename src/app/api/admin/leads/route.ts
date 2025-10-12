@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import Lead from '@/models/Lead';
+import mongoose from 'mongoose';
 
 export async function GET(request: NextRequest) {
   try {
@@ -39,7 +40,10 @@ export async function GET(request: NextRequest) {
 
     console.log(`Found ${leads.length} leads in database`);
     console.log('Query used:', query);
+    console.log('Database name:', mongoose.connection.db?.databaseName);
+    console.log('Collection name:', Lead.collection.name);
     console.log('Sample lead:', leads[0] ? { id: leads[0]._id, name: leads[0].name, email: leads[0].email } : 'No leads found');
+    console.log('All lead IDs:', leads.map(lead => lead._id));
 
     return NextResponse.json(leads);
   } catch (error) {
