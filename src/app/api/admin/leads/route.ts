@@ -35,8 +35,7 @@ export async function GET(request: NextRequest) {
     }
 
     const leads = await Lead.find(query)
-      .sort({ createdAt: -1 })
-      .limit(100);
+      .sort({ createdAt: -1 });
 
     console.log(`Found ${leads.length} leads in database`);
     console.log('Query used:', query);

@@ -94,7 +94,6 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-playfair-display), 'Playfair Display', Georgia, serif;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.01em;
@@ -611,6 +610,12 @@ a:focus {
     backdrop-filter: blur(5px);
   }
   
+  /* Ensure hero section is fully visible on mobile */
+  .hero-section-mobile {
+    min-height: calc(100vh - 80px);
+    padding-top: 80px;
+  }
+  
   .card-enhanced {
     padding: 1.5rem;
     border-radius: 16px;
@@ -644,6 +649,17 @@ a:focus {
   h2 {
     font-size: 2rem !important;
     line-height: 1.2 !important;
+  }
+  
+  /* Mobile hero section improvements */
+  .mobile-hero-text {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  
+  .mobile-hero-heading {
+    font-size: 2rem;
+    line-height: 1.1;
   }
   
   /* Mobile-specific glassmorphism adjustments */
@@ -803,6 +819,17 @@ a:focus {
   h2 {
     font-size: 1.75rem !important;
     line-height: 1.2 !important;
+  }
+  
+  /* Extra small mobile hero improvements */
+  .mobile-hero-heading {
+    font-size: 1.75rem !important;
+    line-height: 1.1 !important;
+  }
+  
+  .mobile-hero-text {
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
   }
 
   h3 {

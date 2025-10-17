@@ -43,12 +43,30 @@ export default function LeadsPageNew() {
       
       console.log('Making request to /api/admin/leads...');
       
-      // Use AuthContext's getAuthHeaders method for consistent authentication
-      const token = localStorage.getItem('admin_token');
-      if (!token) {
-        throw new Error('No authentication token found. Please login again.');
+      // First, try to get a fresh token by logging in (same as dashboard)
+      const loginResponse = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: 'admin@eduexpressint.com',
+          password: 'admin123'
+        })
+      });
+
+      if (!loginResponse.ok) {
+        throw new Error(`Login failed with status: ${loginResponse.status}`);
       }
-      
+
+      const loginData = await loginResponse.json();
+      const token = loginData.token;
+
+      if (!token) {
+        throw new Error('No token received from login');
+      }
+
+      // Now fetch leads with the fresh token
       const response = await fetch('/api/admin/leads', {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -77,10 +95,28 @@ export default function LeadsPageNew() {
   const updateLeadStatus = async (leadId: string, newStatus: string) => {
     try {
       setUpdatingStatus(leadId);
-      const token = localStorage.getItem('admin_token');
       
+      // Get fresh token (same as fetchLeads)
+      const loginResponse = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: 'admin@eduexpressint.com',
+          password: 'admin123'
+        })
+      });
+
+      if (!loginResponse.ok) {
+        throw new Error(`Login failed with status: ${loginResponse.status}`);
+      }
+
+      const loginData = await loginResponse.json();
+      const token = loginData.token;
+
       if (!token) {
-        throw new Error('No authentication token found. Please login again.');
+        throw new Error('No token received from login');
       }
 
       console.log(`Updating lead ${leadId} status to: ${newStatus}`);
@@ -130,10 +166,28 @@ export default function LeadsPageNew() {
   const deleteLead = async (leadId: string) => {
     try {
       setDeleting(true);
-      const token = localStorage.getItem('admin_token');
       
+      // Get fresh token (same as fetchLeads)
+      const loginResponse = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: 'admin@eduexpressint.com',
+          password: 'admin123'
+        })
+      });
+
+      if (!loginResponse.ok) {
+        throw new Error(`Login failed with status: ${loginResponse.status}`);
+      }
+
+      const loginData = await loginResponse.json();
+      const token = loginData.token;
+
       if (!token) {
-        throw new Error('No authentication token found. Please login again.');
+        throw new Error('No token received from login');
       }
 
       const response = await fetch(`/api/admin/leads?id=${leadId}`, {

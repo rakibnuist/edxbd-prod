@@ -2,7 +2,6 @@
 
 import { User, ArrowRight, Share2, MessageCircle, Phone } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import QuickContactForm from '@/components/QuickContactForm';
 import { trackConsultationRequest } from '@/lib/analytics';
 import { Update, UpdateClientProps } from '@/lib/types';
 
@@ -235,7 +234,6 @@ export default function UpdateClient({ update }: UpdateClientProps) {
       </section>
 
       {/* Quick Contact Form Modal */}
-      <QuickContactForm />
     </div>
   );
 }

@@ -25,6 +25,30 @@ export interface Country {
 
 export const countries: Country[] = [
   {
+    name: 'China',
+    slug: 'china',
+    flag: '🇨🇳',
+    description: 'Ancient wisdom meets modern innovation',
+    universities: ['Tsinghua University', 'Peking University', 'Fudan University'],
+    programs: ['Engineering', 'Business', 'Computer Science', 'Medicine', 'Language'],
+    requirements: {
+      language: ['HSK 4+ (Chinese programs)', 'IELTS 6.0+ (English programs)'],
+      documents: ['Academic Transcripts', 'Language Certificate', 'Health Certificate'],
+      visa: ['JW201/JW202 Form', 'Financial Documents', 'Admission Letter']
+    },
+    costs: {
+      tuition: '$3,000 - $8,000',
+      living: '$2,000 - $4,000',
+      currency: 'USD'
+    },
+    scholarships: ['Chinese Government Scholarship (CSC)', 'Confucius Institute Scholarship'],
+    isActive: true,
+    featured: true,
+    images: [],
+    metaTitle: 'Study in China - Top Universities & Scholarships',
+    metaDescription: 'Study in China with world-class universities and scholarship opportunities'
+  },
+  {
     name: 'South Korea',
     slug: 'south-korea',
     flag: '🇰🇷',
@@ -215,30 +239,6 @@ export const countries: Country[] = [
     images: [],
     metaTitle: 'Study in Netherlands - Innovation Excellence',
     metaDescription: 'Study in Netherlands with innovation excellence and EU work rights'
-  },
-  {
-    name: 'China',
-    slug: 'china',
-    flag: '🇨🇳',
-    description: 'Ancient wisdom meets modern innovation',
-    universities: ['Tsinghua University', 'Peking University', 'Fudan University'],
-    programs: ['Engineering', 'Business', 'Computer Science', 'Medicine', 'Language'],
-    requirements: {
-      language: ['HSK 4+ (Chinese programs)', 'IELTS 6.0+ (English programs)'],
-      documents: ['Academic Transcripts', 'Language Certificate', 'Health Certificate'],
-      visa: ['JW201/JW202 Form', 'Financial Documents', 'Admission Letter']
-    },
-    costs: {
-      tuition: '$3,000 - $8,000',
-      living: '$2,000 - $4,000',
-      currency: 'USD'
-    },
-    scholarships: ['Chinese Government Scholarship (CSC)', 'Confucius Institute Scholarship'],
-    isActive: true,
-    featured: true,
-    images: [],
-    metaTitle: 'Study in China - Top Universities & Scholarships',
-    metaDescription: 'Study in China with world-class universities and scholarship opportunities'
   }
 ];
 

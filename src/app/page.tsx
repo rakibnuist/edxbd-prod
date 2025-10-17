@@ -23,9 +23,34 @@ import EngagementTracker from '@/components/EngagementTracker';
 import { fadeInUp, fadeInDown, scaleIn, staggerContainer, staggerItem, float } from '@/lib/animations';
 
 // Import components normally for now - lazy loading can be added later
-import QuickContactForm from '@/components/QuickContactForm';
 import { Testimonial, Update } from '@/lib/types';
 import { featuredCountries } from '@/lib/countries';
+
+// Client-side only flag component to prevent hydration issues
+const ClientOnlyFlag = ({ flag, className }: { flag: string; className: string }) => {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  if (!mounted) {
+    return (
+      <div className={className}>
+        {flag}
+      </div>
+    );
+  }
+  
+  return (
+    <motion.div 
+      className={className}
+      whileHover={{ scale: 1.15, rotate: 5 }}
+    >
+      {flag}
+    </motion.div>
+  );
+};
 
 const Home = memo(function Home() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -251,7 +276,7 @@ const Home = memo(function Home() {
       <EngagementTracker pageName="home" />
       
       {/* Compact Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <section className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 pt-20 sm:pt-24 md:pt-28 lg:pt-32">
         {/* Enhanced Background Elements with Glassmorphism */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {/* Main gradient orbs */}
@@ -313,8 +338,8 @@ const Home = memo(function Home() {
           />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="text-center max-w-5xl mx-auto">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          <div className="text-center max-w-5xl mx-auto py-8 sm:py-12">
             {/* Compact Trust Badge */}
             <AnimatedSection animation="fadeInDown" delay={0.2}>
               <div className="mb-4">
@@ -342,7 +367,7 @@ const Home = memo(function Home() {
 
             {/* Compact Main Heading */}
             <AnimatedSection animation="fadeInUp" delay={0.4}>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 font-bold leading-tight">
+              <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 font-bold leading-tight font-heading px-2">
                 <motion.span 
                   className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent"
                   initial={{ opacity: 0, y: 50 }}
@@ -363,14 +388,14 @@ const Home = memo(function Home() {
             </AnimatedSection>
 
             {/* Compact Value Proposition */}
-            <div className="mb-3 sm:mb-4">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">
+            <div className="mb-3 sm:mb-4 px-2">
+              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 font-heading">
                 🎓 <span className="bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">FREE</span> Scholarship Assistance
               </h2>
             </div>
 
             {/* Compact Subtitle */}
-            <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-4">
               Transform your education journey with expert study abroad consultancy. 
               <span className="font-bold text-green-600"> FREE scholarship assistance</span> since 2018. 
               <span className="font-bold text-blue-600"> 97% success rate</span> helping 3000+ students study at top universities worldwide.
@@ -378,7 +403,7 @@ const Home = memo(function Home() {
 
             {/* Compact CTA Buttons */}
             <AnimatedSection animation="fadeInUp" delay={1.2}>
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 justify-center items-center px-4 sm:px-6">
                 <motion.button
                   onClick={() => {
                     trackConsultationRequest('hero_cta');
@@ -424,7 +449,7 @@ const Home = memo(function Home() {
 
             {/* Compact Stats Preview */}
             <AnimatedSection animation="stagger" delay={1.4}>
-              <div className="mt-6 sm:mt-8 grid mobile-grid-2 sm:grid-cols-4 gap-3 sm:gap-6 max-w-4xl mx-auto mobile-p-4">
+              <div className="mt-6 sm:mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 max-w-4xl mx-auto px-4 sm:px-6">
                 {[
                   { value: "3000+", label: "Students Helped", icon: "🎓" },
                   { value: "97%", label: "Success Rate", icon: "🏆" },
@@ -433,7 +458,7 @@ const Home = memo(function Home() {
                 ].map((stat, index) => (
                   <motion.div
                     key={stat.label}
-                    className="text-center p-4 bg-white/80 backdrop-blur-md rounded-2xl border border-white/40 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 mobile-card touch-manipulation group"
+                    className="text-center p-3 sm:p-4 bg-white/80 backdrop-blur-md rounded-2xl border border-white/40 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 touch-manipulation group"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.6 + index * 0.1 }}
@@ -448,8 +473,8 @@ const Home = memo(function Home() {
                     >
                       {stat.icon}
                     </motion.div>
-                    <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-1 mobile-text-large">{stat.value}</div>
-                    <div className="text-xs sm:text-sm text-gray-700 font-semibold mobile-text-small">{stat.label}</div>
+                    <div className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-1">{stat.value}</div>
+                    <div className="text-xs sm:text-sm text-gray-700 font-semibold">{stat.label}</div>
                     
                     {/* Subtle glow effect */}
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -477,7 +502,7 @@ const Home = memo(function Home() {
                 </div>
               </motion.div>
               
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-gray-900">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-gray-900 font-heading">
                 How We Help You
               </h2>
               
@@ -549,7 +574,7 @@ const Home = memo(function Home() {
                     </motion.div>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 font-heading">
                     {process.title}
                   </h3>
                   
@@ -567,7 +592,7 @@ const Home = memo(function Home() {
       <section className="py-20 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-gray-900">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-gray-900 font-heading">
               Popular Study Destinations
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -646,12 +671,10 @@ const Home = memo(function Home() {
                           <div className="text-center relative z-10">
                             {/* Enhanced flag with glow effect - Mobile Responsive */}
                             <div className="relative mb-6 sm:mb-8 lg:mb-10">
-                              <motion.div 
+                              <ClientOnlyFlag 
+                                flag={country.flag}
                                 className="text-6xl sm:text-7xl lg:text-9xl mb-2 sm:mb-3 group-hover:scale-110 transition-transform duration-500 filter group-hover:drop-shadow-2xl group-hover:brightness-110"
-                                whileHover={{ scale: 1.15, rotate: 5 }}
-                              >
-                                {country.flag}
-                              </motion.div>
+                              />
                               {/* Subtle glow effect behind flag */}
                               <div className="absolute inset-0 text-6xl sm:text-7xl lg:text-9xl opacity-0 group-hover:opacity-25 transition-opacity duration-500 blur-sm">
                                 {country.flag}
@@ -659,7 +682,7 @@ const Home = memo(function Home() {
                             </div>
                             
                             {/* Enhanced title with gradient text - Mobile Responsive */}
-                            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-5 lg:mb-6 leading-tight bg-gradient-to-r from-gray-900 via-indigo-800 to-purple-800 bg-clip-text text-transparent group-hover:from-indigo-600 group-hover:via-purple-600 group-hover:to-pink-600 transition-all duration-500">
+                            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-5 lg:mb-6 leading-tight bg-gradient-to-r from-gray-900 via-indigo-800 to-purple-800 bg-clip-text text-transparent group-hover:from-indigo-600 group-hover:via-purple-600 group-hover:to-pink-600 transition-all duration-500 font-heading">
                               {country.name}
                             </h3>
                             
@@ -718,7 +741,7 @@ const Home = memo(function Home() {
                 </div>
               </motion.div>
               
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-emerald-800 to-teal-800 bg-clip-text text-transparent">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-emerald-800 to-teal-800 bg-clip-text text-transparent font-heading">
                 Success Stories
               </h2>
               
@@ -798,7 +821,7 @@ const Home = memo(function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 }}
                   >
-                    <h4 className="font-bold text-gray-900 text-xl mb-2">
+                    <h4 className="font-bold text-gray-900 text-xl mb-2 font-heading">
                       {testimonials[currentTestimonial]?.name || "Student"}
                     </h4>
                     <p className="text-gray-600 text-lg">
@@ -828,7 +851,7 @@ const Home = memo(function Home() {
                 </div>
               </motion.div>
               
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-gray-900">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-gray-900 font-heading">
                 Latest Updates
               </h2>
               
@@ -880,7 +903,7 @@ const Home = memo(function Home() {
                       
                       {/* Title */}
                       <header className="mb-4 flex-1">
-                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-700 transition-colors duration-300 line-clamp-2 leading-tight">
+                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-700 transition-colors duration-300 line-clamp-2 leading-tight font-heading">
                           {update.title}
                         </h3>
                       </header>
@@ -922,7 +945,7 @@ const Home = memo(function Home() {
           ) : (
             <div className="text-center">
               <div className="text-6xl mb-6">📰</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No Updates Available</h3>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2 font-heading">No Updates Available</h3>
               <p className="text-gray-500">Check back soon for the latest news and updates!</p>
             </div>
           )}
@@ -1000,7 +1023,6 @@ const Home = memo(function Home() {
       </section>
 
       {/* Optimized components */}
-      <QuickContactForm />
     </div>
   );
 });

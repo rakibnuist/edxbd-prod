@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMetaTracking } from '@/hooks/useMetaTracking';
 import CountryCodePhoneInput from './CountryCodePhoneInput';
-import { Send } from 'lucide-react';
+import { Send, ArrowRight } from 'lucide-react';
 
 interface ContactFormData {
   name: string;
@@ -28,6 +28,9 @@ interface EnhancedContactFormProps {
   showLocation?: boolean;
   className?: string;
   onSubmit?: () => void; // Callback for form submission
+  autoHide?: boolean; // Whether to auto-hide form after successful submission
+  autoHideDelay?: number; // Delay in milliseconds before auto-hiding (default: 3000)
+  onAutoHide?: () => void; // Callback when form auto-hides
 }
 
 const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
@@ -40,7 +43,10 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
   showMessage = true,
   showLocation = false,
   className = '',
-  onSubmit
+  onSubmit,
+  autoHide = false,
+  autoHideDelay = 3000,
+  onAutoHide
 }) => {
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -58,8 +64,42 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastSubmissionTime, setLastSubmissionTime] = useState<number>(0);
+  const [isHidden, setIsHidden] = useState(false);
+  const [countdown, setCountdown] = useState<number>(0);
   
   const { trackFormSubmission, trackButtonClick } = useMetaTracking();
+
+  // Auto-hide functionality after successful submission
+  useEffect(() => {
+    if (isSubmitted && autoHide) {
+      console.log('Auto-hide triggered:', { isSubmitted, autoHide, autoHideDelay });
+      
+      // Start countdown
+      setCountdown(Math.ceil(autoHideDelay / 1000));
+      
+      const countdownInterval = setInterval(() => {
+        setCountdown(prev => {
+          console.log('Countdown:', prev);
+          if (prev <= 1) {
+            clearInterval(countdownInterval);
+            console.log('Auto-hide executing...');
+            setIsHidden(true);
+            if (onAutoHide) {
+              console.log('Calling onAutoHide callback');
+              // Use setTimeout to prevent setState-in-render issues
+              setTimeout(() => {
+                onAutoHide();
+              }, 0);
+            }
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(countdownInterval);
+    }
+  }, [isSubmitted, autoHide, autoHideDelay, onAutoHide]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -177,6 +217,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
       const result = await response.json();
       console.log('Success result:', result);
 
+      console.log('Form submitted successfully, setting isSubmitted to true');
       setIsSubmitted(true);
       
       // Track successful submission (completely non-blocking)
@@ -235,6 +276,11 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
     });
   };
 
+  // If form is hidden after auto-hide, return null
+  if (isHidden) {
+    return null;
+  }
+
   if (isSubmitted) {
     return (
       <div className={`bg-green-50 border border-green-200 rounded-lg p-6 text-center ${className}`}>
@@ -243,41 +289,72 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         <p className="text-green-700 mb-4">
           Your {formType} request has been submitted successfully. Our team will contact you within 24 hours.
         </p>
-        <button
-          onClick={() => {
-            setIsSubmitted(false);
-            setFormData({
-              name: '',
-              email: '',
-              phone: '',
-              country: '',
-              program: '',
-              message: '',
-              city: '',
-              state: '',
-              zipCode: ''
-            });
-            setError(null);
-          }}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-        >
-          Submit Another Request
-        </button>
+        {!autoHide && (
+          <button
+            onClick={() => {
+              setIsSubmitted(false);
+              setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                country: '',
+                program: '',
+                message: '',
+                city: '',
+                state: '',
+                zipCode: ''
+              });
+              setError(null);
+            }}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+          >
+            Submit Another Request
+          </button>
+        )}
+        {autoHide && countdown > 0 && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
+                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-green-800 font-semibold">
+                  ✅ Form submitted successfully!
+                </p>
+                <p className="text-green-700 text-sm mt-1">
+                  This window will close automatically in <span className="font-bold text-green-900">{countdown}</span> second{countdown !== 1 ? 's' : ''}...
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
 
   return (
-    <div className={`bg-white/98 backdrop-blur-lg rounded-xl shadow-2xl border border-white/30 p-4 ${className}`}>
-      <div className="text-center mb-3">
-        <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-1">{title}</h2>
-        <p className="text-gray-600 text-sm">{description}</p>
-      </div>
+    <div className={`bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-white/40 p-6 ${className}`}>
+      {(title || description) && (
+        <div className="text-center mb-6">
+          {title && (
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+              {title}
+            </h2>
+          )}
+          {description && (
+            <p className="text-gray-600 text-sm leading-relaxed max-w-md mx-auto">
+              {description}
+            </p>
+          )}
+        </div>
+      )}
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name */}
         <div>
-          <label htmlFor="name" className="block text-sm font-semibold text-gray-800 mb-1">
+          <label htmlFor="name" className="block text-sm font-semibold text-gray-800 mb-2">
             Full Name *
           </label>
           <input
@@ -287,14 +364,14 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
             value={formData.name}
             onChange={handleInputChange}
             required
-            className="w-full px-3 py-2 text-sm border border-gray-300/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all duration-300 bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg"
+            className="w-full px-4 py-3 text-sm border border-gray-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg hover:border-gray-300/80"
             placeholder="Enter your full name"
           />
         </div>
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-1">
+          <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-2">
             Email Address *
           </label>
           <input
@@ -304,17 +381,17 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
             value={formData.email}
             onChange={handleInputChange}
             required
-            className="w-full px-3 py-2 text-sm border border-gray-300/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all duration-300 bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg"
+            className="w-full px-4 py-3 text-sm border border-gray-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg hover:border-gray-300/80"
             placeholder="Enter your email address"
           />
         </div>
 
         {/* Phone */}
         <div>
-          <label htmlFor="phone" className="block text-sm font-semibold text-gray-800 mb-1">
+          <label htmlFor="phone" className="block text-sm font-semibold text-gray-800 mb-2">
             Phone Number *
           </label>
-          <div className="border border-gray-300/60 rounded-lg focus-within:ring-2 focus-within:ring-blue-500/30 focus-within:border-blue-500 transition-all duration-300 bg-white/90 backdrop-blur-sm shadow-sm hover:shadow-md focus-within:shadow-lg">
+          <div className="border border-gray-200/60 rounded-xl focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm hover:shadow-md focus-within:shadow-lg hover:border-gray-300/80">
             <CountryCodePhoneInput
               value={formData.phone}
               onChange={(value) => setFormData(prev => ({ ...prev, phone: value }))}
@@ -328,7 +405,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Country */}
         {showCountry && (
           <div>
-            <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="country" className="block text-sm font-semibold text-gray-800 mb-2">
               Preferred Study Destination
             </label>
             <select
@@ -336,11 +413,11 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
               name="country"
               value={formData.country}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 text-sm border border-gray-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg hover:border-gray-300/80"
             >
               <option value="">Select a country</option>
-              <option value="UK">United Kingdom</option>
               <option value="China">China</option>
+              <option value="UK">United Kingdom</option>
               <option value="South Korea">South Korea</option>
               <option value="Hungary">Hungary</option>
               <option value="Netherlands">Netherlands</option>
@@ -355,7 +432,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Program */}
         {showProgram && (
           <div>
-            <label htmlFor="program" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="program" className="block text-sm font-semibold text-gray-800 mb-2">
               Program of Interest
             </label>
             <select
@@ -363,7 +440,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
               name="program"
               value={formData.program}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 text-sm border border-gray-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg hover:border-gray-300/80"
             >
               <option value="">Select a program</option>
               <option value="Bachelor">Bachelor's Degree</option>
@@ -382,7 +459,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="city" className="block text-sm font-semibold text-gray-800 mb-2">
                   City
                 </label>
                 <input
@@ -391,12 +468,12 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                   name="city"
                   value={formData.city}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 text-sm border border-gray-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg hover:border-gray-300/80"
                   placeholder="Enter your city"
                 />
               </div>
               <div>
-                <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="state" className="block text-sm font-semibold text-gray-800 mb-2">
                   State/Province
                 </label>
                 <input
@@ -405,13 +482,13 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                   name="state"
                   value={formData.state}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 text-sm border border-gray-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg hover:border-gray-300/80"
                   placeholder="Enter your state"
                 />
               </div>
             </div>
             <div>
-              <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="zipCode" className="block text-sm font-semibold text-gray-800 mb-2">
                 ZIP/Postal Code
               </label>
               <input
@@ -420,7 +497,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                 name="zipCode"
                 value={formData.zipCode}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 text-sm border border-gray-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg hover:border-gray-300/80"
                 placeholder="Enter your ZIP code"
               />
             </div>
@@ -430,7 +507,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Message */}
         {showMessage && (
           <div>
-            <label htmlFor="message" className="block text-xs font-semibold text-gray-800 mb-0.5">
+            <label htmlFor="message" className="block text-sm font-semibold text-gray-800 mb-2">
               Message (Optional)
             </label>
             <textarea
@@ -438,8 +515,8 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
               name="message"
               value={formData.message}
               onChange={handleInputChange}
-              rows={3}
-              className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+              rows={4}
+              className="w-full px-4 py-3 text-sm border border-gray-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg hover:border-gray-300/80 resize-none"
               placeholder="Tell us more about your study abroad goals..."
             />
           </div>
@@ -456,19 +533,19 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 hover:from-blue-700 hover:via-purple-700 hover:to-blue-700 text-white py-3 px-6 rounded-xl font-bold text-sm shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] border border-white/20 relative overflow-hidden"
+          className="group w-full bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 text-white py-4 px-6 rounded-2xl font-bold text-sm shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] border border-white/20 relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
           <div className="flex items-center justify-center space-x-2 relative z-10">
             {isSubmitting ? (
               <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 <span>Submitting...</span>
               </>
             ) : (
               <>
-                <span>Submit Request</span>
-                <Send className="w-4 h-4" />
+                <span>Get Free Consultation</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </>
             )}
           </div>

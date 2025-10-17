@@ -2,7 +2,6 @@
 
 import { Users, Award, Globe, Heart, GraduationCap, Shield, DollarSign, ArrowRight, BookOpen, Target, Zap } from 'lucide-react';
 import Link from 'next/link';
-import QuickContactForm from '@/components/QuickContactForm';
 import { trackConsultationRequest } from '@/lib/analytics';
 
 export default function AboutClient() {
@@ -254,7 +253,6 @@ export default function AboutClient() {
       </section>
 
       {/* Quick Contact Form Modal */}
-      <QuickContactForm />
     </div>
   );
 }
