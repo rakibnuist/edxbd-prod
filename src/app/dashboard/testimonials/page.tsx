@@ -140,19 +140,19 @@ export default function UserTestimonialsPage() {
   }
 
   return (
-    <div>
+    <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
       {/* Message Display */}
       {message && (
-        <div className={`mb-4 p-4 rounded-lg ${
+        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${
           message.type === 'success' 
             ? 'bg-green-100 border border-green-400 text-green-700' 
             : 'bg-red-100 border border-red-400 text-red-700'
         }`}>
           <div className="flex justify-between items-center">
-            <span>{message.text}</span>
+            <span className="text-xs sm:text-sm lg:text-base">{message.text}</span>
             <button
               onClick={() => setMessage(null)}
-              className="ml-4 text-lg font-bold"
+              className="ml-4 text-lg font-bold touch-manipulation"
             >
               ×
             </button>
@@ -160,8 +160,8 @@ export default function UserTestimonialsPage() {
         </div>
       )}
 
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Testimonials Management</h1>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 lg:mb-8 gap-3 sm:gap-0">
+        <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">Testimonials Management</h1>
         <button
           onClick={() => {
             setShowForm(true);
@@ -179,7 +179,7 @@ export default function UserTestimonialsPage() {
               featured: false
             });
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 text-xs sm:text-sm font-medium touch-manipulation"
         >
           Add New Testimonial
         </button>

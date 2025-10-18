@@ -5,6 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // For build time, use a fallback secret
 const jwtSecret = JWT_SECRET || 'build-time-fallback-secret';
 
+
 export interface AuthUser {
   userId: string;
   email: string;

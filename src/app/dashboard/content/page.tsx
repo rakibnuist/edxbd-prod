@@ -203,19 +203,19 @@ export default function UserContentPage() {
   }
 
   return (
-    <div>
+    <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
       {/* Message Display */}
       {message && (
-        <div className={`mb-4 p-4 rounded-lg ${
+        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${
           message.type === 'success' 
             ? 'bg-green-100 border border-green-400 text-green-700' 
             : 'bg-red-100 border border-red-400 text-red-700'
         }`}>
           <div className="flex justify-between items-center">
-            <span>{message.text}</span>
+            <span className="text-xs sm:text-sm lg:text-base">{message.text}</span>
             <button
               onClick={() => setMessage(null)}
-              className="ml-4 text-lg font-bold"
+              className="ml-4 text-lg font-bold touch-manipulation"
             >
               ×
             </button>
@@ -223,8 +223,8 @@ export default function UserContentPage() {
         </div>
       )}
 
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Content Management</h1>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 lg:mb-8 gap-3 sm:gap-0">
+        <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">Content Management</h1>
         <button
           onClick={() => {
             setShowForm(true);
@@ -242,7 +242,7 @@ export default function UserContentPage() {
               author: 'User'
             });
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 text-xs sm:text-sm font-medium touch-manipulation"
         >
           Add New Content
         </button>
@@ -254,19 +254,19 @@ export default function UserContentPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-2 sm:px-3 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Title
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden sm:table-cell px-3 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Type
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-2 sm:px-3 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden md:table-cell px-3 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Updated
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-2 sm:px-3 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -274,16 +274,22 @@ export default function UserContentPage() {
             <tbody className="bg-white divide-y divide-gray-200">
               {contents.map((content) => (
                 <tr key={content._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{content.title}</div>
-                      <div className="text-sm text-gray-500">/{content.slug}</div>
+                      <div className="text-xs sm:text-sm font-medium text-gray-900">{content.title}</div>
+                      <div className="text-xs sm:text-sm text-gray-500">/{content.slug}</div>
+                      {/* Mobile: Show type below title */}
+                      <div className="sm:hidden mt-1">
+                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                          {content.type}
+                        </span>
+                      </div>
                       {content.categories && content.categories.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-1">
                           {content.categories.map((category, index) => (
                             <span
                               key={index}
-                              className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800"
+                              className="inline-flex px-1 sm:px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800"
                             >
                               {category}
                             </span>
@@ -292,34 +298,36 @@ export default function UserContentPage() {
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="hidden sm:table-cell px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                     <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                       {content.type}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       content.isPublished ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                     }`}>
                       {content.isPublished ? 'Published' : 'Draft'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="hidden md:table-cell px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                     {new Date(content.updatedAt).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => handleEdit(content)}
-                      className="text-blue-600 hover:text-blue-900 mr-3"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(content._id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Delete
-                    </button>
+                  <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium">
+                    <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
+                      <button
+                        onClick={() => handleEdit(content)}
+                        className="text-blue-600 hover:text-blue-900 touch-manipulation"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(content._id)}
+                        className="text-red-600 hover:text-red-900 touch-manipulation"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -331,25 +339,25 @@ export default function UserContentPage() {
       {/* Add/Edit Form Modal */}
       {showForm && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
-            <div className="mt-3">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium text-gray-900">
+          <div className="relative top-2 sm:top-4 lg:top-20 mx-auto p-3 sm:p-4 lg:p-5 border w-11/12 sm:w-10/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div className="mt-2 sm:mt-3">
+              <div className="flex justify-between items-center mb-3 sm:mb-4">
+                <h3 className="text-sm sm:text-base lg:text-lg font-medium text-gray-900">
                   {editingContent ? 'Edit Content' : 'Add New Content'}
                 </h3>
                 <button
                   onClick={() => setShowForm(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 touch-manipulation"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
               
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Title</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Title</label>
                   <input
                     type="text"
                     value={formData.title}
@@ -361,28 +369,28 @@ export default function UserContentPage() {
                         slug: !editingContent ? generateSlug(title) : formData.slug
                       });
                     }}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                     required
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Slug</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Slug</label>
                   <input
                     type="text"
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                     required
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Type</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Type</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                   >
                     <option value="page">Page</option>
                     <option value="blog">Blog</option>

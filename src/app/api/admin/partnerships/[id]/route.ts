@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyTokenFromRequest } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import Partnership from '@/models/Partnership';
 
@@ -7,6 +8,12 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const decoded = verifyTokenFromRequest(request);
+    
+    if (!decoded || decoded.role !== 'admin') {
+      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    }
+
     await connectDB();
     
     const { id } = await params;
@@ -36,6 +43,12 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const decoded = verifyTokenFromRequest(request);
+    
+    if (!decoded || decoded.role !== 'admin') {
+      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    }
+
     await connectDB();
     
     const { id } = await params;
@@ -73,6 +86,12 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const decoded = verifyTokenFromRequest(request);
+    
+    if (!decoded || decoded.role !== 'admin') {
+      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    }
+
     await connectDB();
     
     const { id } = await params;

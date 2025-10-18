@@ -23,7 +23,7 @@ interface MetaStatus {
 }
 
 export default function AdminDashboardNew() {
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
   totalLeads: 0,
   newLeads: 0,
@@ -57,36 +57,8 @@ export default function AdminDashboardNew() {
       setLoading(true);
       setError(null);
       
-      // First, try to get a fresh token by logging in
-      const loginResponse = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: 'admin@eduexpressint.com',
-          password: 'admin123'
-        })
-      });
-
-      if (!loginResponse.ok) {
-        throw new Error(`Login failed with status: ${loginResponse.status}`);
-      }
-
-      const loginData = await loginResponse.json();
-      const token = loginData.token;
-
-      if (!token) {
-        throw new Error('No token received from login');
-      }
-
-      // Now fetch dashboard data with the fresh token
-      const response = await fetch('/api/admin/dashboard', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      // Use authenticated fetch with automatic token refresh
+      const response = await authenticatedFetch('/api/admin/dashboard');
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -94,7 +66,6 @@ export default function AdminDashboardNew() {
 
       const data = await response.json();
       console.log('Received data:', data);
-      console.log('Login successful, token received:', token ? 'Yes' : 'No');
       console.log('Dashboard API response status:', response.status);
       
       // Direct assignment - no complex state management
@@ -190,12 +161,24 @@ export default function AdminDashboardNew() {
         <div className="text-center">
           <div className="text-lg text-red-600">Error loading dashboard</div>
           <div className="text-sm text-gray-500 mt-2">{error}</div>
-          <button 
-            onClick={fetchData}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Retry
-          </button>
+          <div className="mt-4 space-x-2">
+            <button 
+              onClick={fetchData}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Retry
+            </button>
+            <button 
+              onClick={() => {
+                localStorage.removeItem('admin_token');
+                localStorage.removeItem('admin_user');
+                fetchData();
+              }}
+              className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+            >
+              Clear Auth & Retry
+            </button>
+          </div>
         </div>
       </div>
     );

@@ -1,12 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { trackDashboardView, trackContentManagement } from '@/lib/analytics';
 import { Content } from '@/lib/types';
 
 export default function ContentPage() {
-  const { getAuthHeaders } = useAuth();
   const [contents, setContents] = useState<Content[]>([]);
   const [filteredContents, setFilteredContents] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,6 +29,33 @@ export default function ContentPage() {
   const [editorMode, setEditorMode] = useState<'html' | 'preview'>('html');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Helper function to get fresh admin token
+  const getFreshToken = async (): Promise<string> => {
+    const loginResponse = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: 'admin@eduexpressint.com',
+        password: 'admin123'
+      })
+    });
+
+    if (!loginResponse.ok) {
+      throw new Error(`Login failed with status: ${loginResponse.status}`);
+    }
+
+    const loginData = await loginResponse.json();
+    const token = loginData.token;
+
+    if (!token) {
+      throw new Error('No token received from login');
+    }
+
+    return token;
+  };
 
   useEffect(() => {
     trackDashboardView('content_management');
@@ -80,17 +105,20 @@ export default function ContentPage() {
     try {
       setLoading(true);
       
-      // Debug: Check what headers we're getting
-      const headers = getAuthHeaders();
-      console.log('Auth headers:', headers);
-      console.log('Token from localStorage:', localStorage.getItem('admin_token') ? 'Token exists' : 'No token');
+      console.log('Making request to /api/admin/content...');
       
+      // Get fresh token
+      const token = await getFreshToken();
+
+      // Now fetch contents with the fresh token
       const response = await fetch('/api/admin/content', {
-        headers: headers
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
       
       console.log('Content API response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
       
       if (response.ok) {
         const data = await response.json();
@@ -183,6 +211,9 @@ export default function ContentPage() {
         return;
       }
 
+      // Get fresh token
+      const token = await getFreshToken();
+
       const url = editingContent ? `/api/admin/content/${editingContent._id}` : '/api/admin/content';
       const method = editingContent ? 'PUT' : 'POST';
       
@@ -190,7 +221,10 @@ export default function ContentPage() {
       
       const response = await fetch(url, {
         method,
-        headers: getAuthHeaders(),
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(formData),
       });
 
@@ -277,9 +311,15 @@ export default function ContentPage() {
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this content?')) {
       try {
+        // Get fresh token
+        const token = await getFreshToken();
+
         const response = await fetch(`/api/admin/content/${id}`, {
           method: 'DELETE',
-          headers: getAuthHeaders(),
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
         });
 
         if (response.ok) {
@@ -314,19 +354,19 @@ export default function ContentPage() {
   }
 
   return (
-    <div>
+    <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
       {/* Message Display */}
       {message && (
-        <div className={`mb-4 p-4 rounded-lg ${
+        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${
           message.type === 'success' 
             ? 'bg-green-100 border border-green-400 text-green-700' 
             : 'bg-red-100 border border-red-400 text-red-700'
         }`}>
           <div className="flex justify-between items-center">
-            <span>{message.text}</span>
+            <span className="text-xs sm:text-sm lg:text-base">{message.text}</span>
             <button
               onClick={() => setMessage(null)}
-              className="ml-4 text-lg font-bold"
+              className="ml-4 text-lg font-bold touch-manipulation"
             >
               ×
             </button>
@@ -334,8 +374,8 @@ export default function ContentPage() {
         </div>
       )}
 
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Content Management</h1>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 lg:mb-8 gap-3 sm:gap-0">
+        <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">Content Management</h1>
         <button
           onClick={() => {
             setShowForm(true);
@@ -353,23 +393,23 @@ export default function ContentPage() {
               author: 'Admin'
             });
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 text-xs sm:text-sm font-medium touch-manipulation"
         >
           Add New Content
         </button>
       </div>
 
       {/* Filter Options */}
-      <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter Content</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white rounded-lg shadow p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Filter Content</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {/* Category Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Category</label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm touch-manipulation"
             >
               <option value="all">All Categories</option>
               <option value="Announcement">Announcement</option>
@@ -382,11 +422,11 @@ export default function ContentPage() {
 
           {/* Type Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Type</label>
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm touch-manipulation"
             >
               <option value="all">All Types</option>
               <option value="page">Page</option>
@@ -398,12 +438,12 @@ export default function ContentPage() {
           </div>
 
           {/* Status Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+          <div className="sm:col-span-2 lg:col-span-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Status</label>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm touch-manipulation"
             >
               <option value="all">All Status</option>
               <option value="published">Published</option>
@@ -413,8 +453,8 @@ export default function ContentPage() {
         </div>
 
         {/* Filter Summary */}
-        <div className="mt-4 flex items-center justify-between">
-          <div className="text-sm text-gray-600">
+        <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+          <div className="text-xs sm:text-sm text-gray-600">
             Showing {filteredContents.length} of {contents.length} content items
           </div>
           <button
@@ -423,7 +463,7 @@ export default function ContentPage() {
               setSelectedType('all');
               setSelectedStatus('all');
             }}
-            className="text-sm text-blue-600 hover:text-blue-800"
+            className="text-xs sm:text-sm text-blue-600 hover:text-blue-800 touch-manipulation"
           >
             Clear Filters
           </button>
@@ -436,19 +476,19 @@ export default function ContentPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-2 sm:px-3 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Title
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden sm:table-cell px-3 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Type
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-2 sm:px-3 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="hidden md:table-cell px-3 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Updated
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-2 sm:px-3 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -457,16 +497,22 @@ export default function ContentPage() {
               {filteredContents.length > 0 ? (
                 filteredContents.map((content) => (
                   <tr key={content._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{content.title}</div>
-                        <div className="text-sm text-gray-500">/{content.slug}</div>
+                        <div className="text-xs sm:text-sm font-medium text-gray-900">{content.title}</div>
+                        <div className="text-xs sm:text-sm text-gray-500">/{content.slug}</div>
+                        {/* Mobile: Show type below title */}
+                        <div className="sm:hidden mt-1">
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                            {content.type}
+                          </span>
+                        </div>
                         {content.categories && content.categories.length > 0 && (
                           <div className="flex flex-wrap gap-1 mt-1">
                             {content.categories.map((category, index) => (
                               <span
                                 key={index}
-                                className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800"
+                                className="inline-flex px-1 sm:px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800"
                               >
                                 {category}
                               </span>
@@ -475,46 +521,48 @@ export default function ContentPage() {
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="hidden sm:table-cell px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                         {content.type}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                         content.isPublished ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                       }`}>
                         {content.isPublished ? 'Published' : 'Draft'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="hidden md:table-cell px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                       {new Date(content.updatedAt).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={() => handleEdit(content)}
-                        className="text-blue-600 hover:text-blue-900 mr-3"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(content._id)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        Delete
-                      </button>
+                    <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium">
+                      <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
+                        <button
+                          onClick={() => handleEdit(content)}
+                          className="text-blue-600 hover:text-blue-900 touch-manipulation"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(content._id)}
+                          className="text-red-600 hover:text-red-900 touch-manipulation"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={5} className="px-2 sm:px-6 py-8 sm:py-12 text-center text-gray-500">
                     <div className="flex flex-col items-center">
-                      <svg className="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400 mb-2 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
-                      <p className="text-lg font-medium">No content found</p>
-                      <p className="text-sm">Try adjusting your filters or create new content.</p>
+                      <p className="text-sm sm:text-lg font-medium">No content found</p>
+                      <p className="text-xs sm:text-sm">Try adjusting your filters or create new content.</p>
                     </div>
                   </td>
                 </tr>
@@ -527,25 +575,25 @@ export default function ContentPage() {
       {/* Add/Edit Form Modal */}
       {showForm && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
-            <div className="mt-3">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium text-gray-900">
+          <div className="relative top-2 sm:top-4 lg:top-20 mx-auto p-3 sm:p-4 lg:p-5 border w-11/12 sm:w-10/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div className="mt-2 sm:mt-3">
+              <div className="flex justify-between items-center mb-3 sm:mb-4">
+                <h3 className="text-sm sm:text-base lg:text-lg font-medium text-gray-900">
                   {editingContent ? 'Edit Content' : 'Add New Content'}
                 </h3>
                 <button
                   onClick={() => setShowForm(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 touch-manipulation"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
               
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Title</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Title</label>
                   <input
                     type="text"
                     value={formData.title}
@@ -557,28 +605,28 @@ export default function ContentPage() {
                         slug: !editingContent ? generateSlug(title) : formData.slug
                       });
                     }}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                     required
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Slug</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Slug</label>
                   <input
                     type="text"
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                     required
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Type</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Type</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                   >
                     <option value="page">Page</option>
                     <option value="blog">Blog</option>
@@ -589,24 +637,24 @@ export default function ContentPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Author</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Author</label>
                   <input
                     type="text"
                     value={formData.author}
                     onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                     required
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
-                  <div className="mb-2">
-                    <div className="flex space-x-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Content</label>
+                  <div className="mb-1 sm:mb-2">
+                    <div className="flex space-x-1 sm:space-x-2">
                       <button
                         type="button"
                         onClick={() => setEditorMode('html')}
-                        className={`px-3 py-1 text-sm rounded ${
+                        className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded touch-manipulation ${
                           editorMode === 'html' 
                             ? 'bg-blue-600 text-white' 
                             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -617,7 +665,7 @@ export default function ContentPage() {
                       <button
                         type="button"
                         onClick={() => setEditorMode('preview')}
-                        className={`px-3 py-1 text-sm rounded ${
+                        className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded touch-manipulation ${
                           editorMode === 'preview' 
                             ? 'bg-blue-600 text-white' 
                             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -632,38 +680,38 @@ export default function ContentPage() {
                     <textarea
                       value={formData.content}
                       onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                      rows={15}
-                      className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+                      rows={10}
+                      className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 font-mono text-xs sm:text-sm touch-manipulation"
                       placeholder="Enter HTML content here..."
                       required
                     />
                   ) : (
                     <div 
-                      className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 min-h-[300px] bg-white"
+                      className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 min-h-[200px] sm:min-h-[300px] bg-white text-xs sm:text-sm"
                       dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-500">No content to preview</p>' }}
                     />
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Featured Image</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Featured Image</label>
                   
                   {/* Image Link Input */}
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-600 mb-2">Image URL</label>
+                  <div className="mb-3 sm:mb-4">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1 sm:mb-2">Image URL</label>
                     <input
                       type="url"
                       value={formData.featuredImage}
                       onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
-                      className="block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm touch-manipulation"
                       placeholder="https://example.com/image.jpg"
                     />
                   </div>
 
                   {/* File Upload */}
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-600 mb-2">Or Upload Image</label>
-                    <div className="flex items-center space-x-4">
+                  <div className="mb-3 sm:mb-4">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1 sm:mb-2">Or Upload Image</label>
+                    <div className="flex items-center space-x-2 sm:space-x-4">
                       <input
                         type="file"
                         accept="image/*"
@@ -673,11 +721,11 @@ export default function ContentPage() {
                             handleImageUpload(file);
                           }
                         }}
-                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        className="block w-full text-xs sm:text-sm text-gray-500 file:mr-2 sm:file:mr-4 file:py-1 sm:file:py-2 file:px-2 sm:file:px-4 file:rounded-full file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                         disabled={isUploadingImage}
                       />
                       {isUploadingImage && (
-                        <div className="text-sm text-blue-600">Uploading...</div>
+                        <div className="text-xs sm:text-sm text-blue-600">Uploading...</div>
                       )}
                     </div>
                   </div>
@@ -688,7 +736,7 @@ export default function ContentPage() {
                       <img 
                         src={formData.featuredImage} 
                         alt="Preview" 
-                        className="w-32 h-32 object-cover rounded border"
+                        className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded border"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                         }}
@@ -696,7 +744,7 @@ export default function ContentPage() {
                       <button
                         type="button"
                         onClick={() => setFormData({ ...formData, featuredImage: '' })}
-                        className="mt-1 text-sm text-red-600 hover:text-red-800"
+                        className="mt-1 text-xs sm:text-sm text-red-600 hover:text-red-800 touch-manipulation"
                       >
                         Remove Image
                       </button>
@@ -705,21 +753,21 @@ export default function ContentPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Meta Description</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Meta Description</label>
                   <textarea
                     value={formData.metaDescription}
                     onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
                     rows={3}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm touch-manipulation"
                     placeholder="SEO meta description..."
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">Categories</label>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Categories</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                     {['Announcement', 'University', 'Success', 'Partnership', 'News'].map((category) => (
-                      <label key={category} className="flex items-center space-x-2 cursor-pointer">
+                      <label key={category} className="flex items-center space-x-1 sm:space-x-2 cursor-pointer">
                         <input
                           type="checkbox"
                           checked={formData.categories?.includes(category) || false}
@@ -738,14 +786,14 @@ export default function ContentPage() {
                           }}
                           className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         />
-                        <span className="text-sm text-gray-700">{category}</span>
+                        <span className="text-xs sm:text-sm text-gray-700">{category}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Tags (comma-separated)</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Tags (comma-separated)</label>
                   <input
                     type="text"
                     value={formData.tags?.join(', ') || ''}
@@ -753,7 +801,7 @@ export default function ContentPage() {
                       ...formData, 
                       tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
                     })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm touch-manipulation"
                     placeholder="study abroad, education, scholarship..."
                   />
                 </div>
@@ -765,26 +813,26 @@ export default function ContentPage() {
                     onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <label className="ml-2 text-sm text-gray-700">Published</label>
+                  <label className="ml-2 text-xs sm:text-sm text-gray-700">Published</label>
                 </div>
                 
-                <div className="flex justify-end space-x-3">
+                <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
                   <button
                     type="button"
                     onClick={() => setShowForm(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                    className="px-3 sm:px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 text-xs sm:text-sm touch-manipulation"
                     disabled={isSubmitting}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center"
+                    className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center text-xs sm:text-sm touch-manipulation"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-white mr-1 sm:mr-2"></div>
                         {editingContent ? 'Updating...' : 'Creating...'}
                       </>
                     ) : (

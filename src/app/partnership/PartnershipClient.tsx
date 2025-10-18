@@ -16,40 +16,46 @@ import {
   Headphones,
   Zap
 } from 'lucide-react';
-import EnhancedContactForm from '@/components/EnhancedContactForm';
+import PartnershipForm from '@/components/PartnershipForm';
 
 const PartnershipClient = () => {
 
   const partnershipTypes = [
     {
       title: 'Authorized Agent',
-      description: 'Represent EduExpress in your region',
+      description: 'Represent EduExpress in your region with exclusive territory rights',
       features: [
         'Exclusive territory rights',
-        'Training and support',
-        'Marketing materials'
+        'Complete training & support',
+        'Marketing materials & leads',
+        '15% commission on placements',
+        'Priority student support'
       ],
       icon: Shield,
       color: 'from-blue-500 to-blue-700'
     },
     {
       title: 'Strategic Partner',
-      description: 'Long-term partnership for established consultancies',
+      description: 'Long-term partnership for established education consultancies',
       features: [
         'Joint marketing initiatives',
-        'Shared resources',
-        'Customized terms'
+        'Shared resources & leads',
+        'Customized partnership terms',
+        '20% commission on placements',
+        'Dedicated account manager'
       ],
       icon: Handshake,
       color: 'from-purple-500 to-purple-700'
     },
     {
       title: 'Referral Partner',
-      description: 'Simple referral program',
+      description: 'Simple referral program for new education consultants',
       features: [
         'Easy referral process',
-        'No upfront investment',
-        'Flexible arrangements'
+        'No upfront investment required',
+        'Flexible arrangements',
+        '10% commission on referrals',
+        'Quick approval process'
       ],
       icon: Users,
       color: 'from-green-500 to-green-700'
@@ -60,25 +66,25 @@ const PartnershipClient = () => {
     {
       icon: TrendingUp,
       title: 'Revenue Growth',
-      description: 'Up to 15% commission on successful placements',
-      stat: 'Up to 15% commission'
+      description: 'Earn up to 20% commission on successful student placements',
+      stat: 'Up to 20% commission'
     },
     {
       icon: Globe,
       title: 'Global Network',
-      description: 'Access to 500+ universities worldwide',
+      description: 'Access to 500+ universities across 15+ countries',
       stat: '500+ Universities'
     },
     {
       icon: BookOpen,
       title: 'Training & Support',
-      description: 'Complete training and ongoing support',
+      description: 'Complete training program and ongoing business support',
       stat: '100% Success Rate'
     },
     {
       icon: Headphones,
       title: '24/7 Support',
-      description: 'Round-the-clock support for you and students',
+      description: 'Round-the-clock support for you and your students',
       stat: 'Instant Response'
     }
   ];
@@ -92,32 +98,39 @@ const PartnershipClient = () => {
 
 
   const requirements = [
-    'Valid business license',
-    '2+ years experience',
-    'Strong local network',
-    'Ethical business practices'
+    'Valid business license or registration',
+    '1+ years education consultancy experience',
+    'Strong local student network',
+    'Ethical business practices & student welfare focus',
+    'Basic understanding of study abroad processes',
+    'Commitment to student success'
   ];
 
   const process = [
     {
       step: 1,
       title: 'Apply',
-      description: 'Submit your application'
+      description: 'Submit your partnership application with business details'
     },
     {
       step: 2,
       title: 'Review',
-      description: 'We evaluate your application'
+      description: 'We evaluate your education consultancy experience'
     },
     {
       step: 3,
       title: 'Interview',
-      description: 'Virtual discussion'
+      description: 'Virtual discussion about your goals and capabilities'
     },
     {
       step: 4,
+      title: 'Training',
+      description: 'Complete our partner training program'
+    },
+    {
+      step: 5,
       title: 'Launch',
-      description: 'Partnership begins'
+      description: 'Start referring students and earning commissions'
     }
   ];
 
@@ -144,12 +157,12 @@ const PartnershipClient = () => {
               <Handshake className="w-10 h-10 text-white" />
             </motion.div>
             
-            <h1 className="text-4xl md:text-6xl font-heading font-bold text-white mb-6">
-              Be Our <span className="text-yellow-300">Partner</span>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              Grow Your <span className="text-yellow-300">Education Consultancy</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-blue-100 mb-8 leading-relaxed">
-              Join EduExpress International and grow your education consultancy business
+              Partner with EduExpress International and expand your student placement business with our global network
             </p>
             
             <motion.div
@@ -212,10 +225,10 @@ const PartnershipClient = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 mb-6">
-              Partnership <span className="text-blue-600">Opportunities</span>
+              Partnership <span className="text-blue-600">Models</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Choose the partnership model that fits your business
+              Choose the partnership model that best fits your education consultancy business
             </p>
           </motion.div>
 
@@ -274,10 +287,10 @@ const PartnershipClient = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 mb-6">
-              Why Partner With <span className="text-blue-600">Us?</span>
+              Why Partner With <span className="text-blue-600">EduExpress?</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Join successful partners who have grown their business with us
+              Join successful education consultants who have grown their business with our global network
             </p>
           </motion.div>
 
@@ -323,7 +336,7 @@ const PartnershipClient = () => {
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-8">
-                Partnership <span className="text-blue-600">Requirements</span>
+                Partner <span className="text-blue-600">Requirements</span>
               </h2>
               
               <div className="space-y-4">
@@ -351,7 +364,7 @@ const PartnershipClient = () => {
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-8">
-                Application <span className="text-blue-600">Process</span>
+                Partnership <span className="text-blue-600">Process</span>
               </h2>
               
               <div className="space-y-6">
@@ -393,24 +406,14 @@ const PartnershipClient = () => {
             className="text-center mb-12"
           >
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 mb-6">
-              Ready to <span className="text-blue-600">Apply?</span>
+              Ready to <span className="text-blue-600">Partner?</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Fill out our quick application form to get started.
+              Complete our comprehensive partnership application to get started with EduExpress International.
             </p>
           </motion.div>
 
-          <EnhancedContactForm
-            formType="partnership"
-            source="partnership_page"
-            title="Partnership Application"
-            description="Fill out the form below to apply for partnership with EduExpress International"
-            showCountry={true}
-            showProgram={false}
-            showMessage={true}
-            showLocation={true}
-            className="max-w-2xl mx-auto"
-          />
+          <PartnershipForm />
         </div>
       </section>
 
@@ -425,11 +428,11 @@ const PartnershipClient = () => {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6">
-              Ready to <span className="text-yellow-300">Partner?</span>
+              Ready to <span className="text-yellow-300">Grow Your Business?</span>
             </h2>
             
             <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Join EduExpress International today
+              Join EduExpress International and start earning commissions on student placements today
             </p>
             
             <motion.div

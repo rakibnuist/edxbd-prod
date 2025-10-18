@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyTokenFromRequest } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import Partnership from '@/models/Partnership';
 
 export async function GET(request: NextRequest) {
   try {
+    const decoded = verifyTokenFromRequest(request);
+    
+    if (!decoded || decoded.role !== 'admin') {
+      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    }
+
     await connectDB();
 
     const { searchParams } = new URL(request.url);
@@ -91,6 +98,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const decoded = verifyTokenFromRequest(request);
+    
+    if (!decoded || decoded.role !== 'admin') {
+      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    }
+
     await connectDB();
 
     const body = await request.json();

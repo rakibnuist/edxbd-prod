@@ -28,7 +28,7 @@ export default function UserDashboardLayout({
 
             {/* Sidebar */}
             <div className={`
-              fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0
+              fixed inset-y-0 left-0 z-50 w-72 sm:w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0
               ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
               <div className="flex flex-col h-full">
@@ -51,7 +51,7 @@ export default function UserDashboardLayout({
                 <nav className="mt-2 sm:mt-6 flex-1 px-2 sm:px-0">
                   <Link
                     href="/dashboard"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1"
+                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
                     onClick={() => setSidebarOpen(false)}
                   >
                     <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,7 +61,7 @@ export default function UserDashboardLayout({
                   </Link>
                   <Link
                     href="/dashboard/content"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1"
+                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
                     onClick={() => setSidebarOpen(false)}
                   >
                     <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,7 +71,7 @@ export default function UserDashboardLayout({
                   </Link>
                   <Link
                     href="/dashboard/testimonials"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1"
+                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
                     onClick={() => setSidebarOpen(false)}
                   >
                     <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,7 +81,7 @@ export default function UserDashboardLayout({
                   </Link>
                   <Link
                     href="/dashboard/leads"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1"
+                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
                     onClick={() => setSidebarOpen(false)}
                   >
                     <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,7 +91,7 @@ export default function UserDashboardLayout({
                   </Link>
                   <Link
                     href="/dashboard/partnerships"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1"
+                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
                     onClick={() => setSidebarOpen(false)}
                   >
                     <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,11 +111,11 @@ export default function UserDashboardLayout({
             {/* Main Content */}
             <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
               {/* Mobile header */}
-              <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+              <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 sticky top-0 z-30">
                 <div className="flex items-center justify-between">
                   <button
                     onClick={() => setSidebarOpen(true)}
-                    className="p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                    className="p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 touch-manipulation"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -127,7 +127,7 @@ export default function UserDashboardLayout({
               </div>
               
               <div className="flex-1 overflow-auto">
-                <div className="p-4 sm:p-6 lg:p-8">
+                <div className="p-3 sm:p-4 lg:p-6 xl:p-8">
                   {children}
                 </div>
               </div>

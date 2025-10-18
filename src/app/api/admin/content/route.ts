@@ -7,7 +7,10 @@ export async function GET(request: NextRequest) {
   try {
     const decoded = verifyTokenFromRequest(request);
     
+    console.log('Token verification result:', decoded);
+    
     if (!decoded || decoded.role !== 'admin') {
+      console.log('Access denied - decoded:', decoded);
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 

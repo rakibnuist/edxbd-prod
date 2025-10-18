@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 interface Lead {
   _id: string;
@@ -26,6 +27,20 @@ export default function LeadsPageNew() {
   const [deleteConfirm, setDeleteConfirm] = useState<Lead | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+
+  const handleWhatsAppTracking = async (data: any) => {
+    // Track WhatsApp interaction for admin dashboard
+    console.log('WhatsApp contact tracked from admin:', data);
+    
+    // You can add additional tracking here if needed
+    // For example, send to analytics service or update lead status
+  };
+
+  const handleCall = (phoneNumber: string) => {
+    if (phoneNumber) {
+      window.open(`tel:${phoneNumber}`, '_self');
+    }
+  };
 
   useEffect(() => {
     if (isAuthenticated && !authLoading) {
@@ -371,7 +386,25 @@ export default function LeadsPageNew() {
                       <div className="text-sm font-medium text-gray-900">{lead.name}</div>
                       <div className="text-sm text-gray-500">{lead.email}</div>
                       {lead.phone && (
-                        <div className="text-sm text-blue-600">{lead.phone}</div>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <button
+                            onClick={() => handleCall(lead.phone!)}
+                            className="text-sm text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                            title="Click to call"
+                          >
+                            📞 {lead.phone}
+                          </button>
+                          <WhatsAppButton
+                            phoneNumber={lead.phone}
+                            leadName={lead.name}
+                            leadCountry={lead.country}
+                            leadProgram={lead.program}
+                            leadStatus={lead.status}
+                            size="small"
+                            showText={false}
+                            onTrack={handleWhatsAppTracking}
+                          />
+                        </div>
                       )}
                     </div>
                   </td>
@@ -413,18 +446,20 @@ export default function LeadsPageNew() {
                     {new Date(lead.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => setSelectedLead(lead)}
-                      className="text-blue-600 hover:text-blue-900 mr-3"
-                    >
-                      View
-                    </button>
-                    <button
-                      onClick={() => setDeleteConfirm(lead)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Delete
-                    </button>
+                    <div className="flex items-center space-x-3">
+                      <button
+                        onClick={() => setSelectedLead(lead)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        View
+                      </button>
+                      <button
+                        onClick={() => setDeleteConfirm(lead)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -465,7 +500,31 @@ export default function LeadsPageNew() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Phone</label>
-                    <p className="mt-1 text-sm text-gray-900">{selectedLead.phone || 'Not provided'}</p>
+                    <div className="mt-1">
+                      {selectedLead.phone ? (
+                        <div className="flex items-center space-x-3">
+                          <button
+                            onClick={() => handleCall(selectedLead.phone!)}
+                            className="text-sm text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                            title="Click to call"
+                          >
+                            📞 {selectedLead.phone}
+                          </button>
+                          <WhatsAppButton
+                            phoneNumber={selectedLead.phone}
+                            leadName={selectedLead.name}
+                            leadCountry={selectedLead.country}
+                            leadProgram={selectedLead.program}
+                            leadStatus={selectedLead.status}
+                            size="medium"
+                            showText={true}
+                            onTrack={handleWhatsAppTracking}
+                          />
+                        </div>
+                      ) : (
+                        <p className="text-sm text-gray-500">Not provided</p>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Country</label>
