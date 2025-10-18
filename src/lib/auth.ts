@@ -14,16 +14,13 @@ export interface AuthUser {
 
 export function verifyToken(token: string): AuthUser | null {
   try {
-    console.log('Verifying token with secret length:', jwtSecret.length);
     const decoded = jwt.verify(token, jwtSecret) as any;
-    console.log('Token decoded successfully:', { userId: decoded.userId, email: decoded.email, role: decoded.role });
     return {
       userId: decoded.userId,
       email: decoded.email,
       role: decoded.role
     };
   } catch (error) {
-    console.error('Token verification failed:', error);
     return null;
   }
 }
@@ -31,18 +28,9 @@ export function verifyToken(token: string): AuthUser | null {
 export function verifyTokenFromRequest(request: Request): AuthUser | null {
   const token = getTokenFromRequest(request);
   if (!token) {
-    console.log('No token found in request');
     return null;
   }
-  
-  console.log('Token found, attempting verification...');
-  console.log('JWT Secret available:', !!jwtSecret);
-  console.log('Token length:', token.length);
-  
-  const result = verifyToken(token);
-  console.log('Token verification result:', result);
-  
-  return result;
+  return verifyToken(token);
 }
 
 export function generateToken(user: AuthUser): string {
