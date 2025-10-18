@@ -87,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const getAuthHeaders = () => {
+  const getAuthHeaders = (): Record<string, string> => {
     const token = localStorage.getItem('admin_token');
     if (!token) {
       console.warn('No token found in localStorage');
@@ -155,12 +155,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const authenticatedFetch = async (url: string, options: RequestInit = {}): Promise<Response> => {
     // First attempt with current token
+    const authHeaders = getAuthHeaders();
+    const mergedHeaders: Record<string, string> = {
+      ...authHeaders,
+      ...(options.headers as Record<string, string> || {}),
+    };
+    
     let response = await fetch(url, {
       ...options,
-      headers: {
-        ...getAuthHeaders(),
-        ...options.headers,
-      },
+      headers: mergedHeaders,
     });
 
     // If we get a 403, try to refresh the token and retry once
@@ -171,12 +174,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (refreshSuccess) {
         console.log('Token refreshed successfully, retrying request...');
         // Retry the request with the new token
+        const retryAuthHeaders = getAuthHeaders();
+        const retryMergedHeaders: Record<string, string> = {
+          ...retryAuthHeaders,
+          ...(options.headers as Record<string, string> || {}),
+        };
+        
         response = await fetch(url, {
           ...options,
-          headers: {
-            ...getAuthHeaders(),
-            ...options.headers,
-          },
+          headers: retryMergedHeaders,
         });
       } else {
         console.error('Token refresh failed');
