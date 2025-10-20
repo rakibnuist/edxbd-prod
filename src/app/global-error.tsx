@@ -15,9 +15,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html>
-      <body>
-        <div style={{
+    <div style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -27,7 +25,7 @@ export default function GlobalError({
           backgroundColor: '#f8fafc',
           color: '#1e293b'
         }}>
-          <div style={{
+      <div style={{
             textAlign: 'center',
             maxWidth: '600px',
             padding: '2rem',
@@ -72,9 +70,7 @@ export default function GlobalError({
             >
               Try again
             </button>
-          </div>
-        </div>
-      </body>
-    </html>
+      </div>
+    </div>
   );
 }
