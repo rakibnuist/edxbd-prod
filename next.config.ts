@@ -114,13 +114,15 @@ const nextConfig: NextConfig = {
         destination: '/',
         permanent: true,
       },
+      // Redirect apex domain to www using host condition
       {
-        source: '/www.eduexpressint.com/:path*',
-        destination: 'https://www.eduexpressint.com/:path*',
-        permanent: true,
-      },
-      {
-        source: '/eduexpressint.com/:path*',
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'eduexpressint.com',
+          },
+        ],
         destination: 'https://www.eduexpressint.com/:path*',
         permanent: true,
       },
