@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     let dbStatus = 'not_configured';
     if (process.env.MONGODB_URI) {
       try {
-        const { connectDB } = await import('@/lib/mongodb');
+        const connectDB = (await import('@/lib/mongodb')).default;
         await connectDB();
         dbStatus = 'connected';
       } catch (dbError) {
