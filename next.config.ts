@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // Domain optimization for eduexpressint.com
-  output: 'standalone',
-  outputFileTracingRoot: __dirname,
+  // output: 'standalone', // Commented out for Vercel compatibility
+  // outputFileTracingRoot: __dirname, // Not needed for Vercel
   poweredByHeader: false,
   eslint: {
     ignoreDuringBuilds: true,
