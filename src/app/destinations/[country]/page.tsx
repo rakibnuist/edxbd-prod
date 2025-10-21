@@ -43,14 +43,23 @@ export async function generateMetadata({ params }: CountryPageProps): Promise<Me
 }
 
 export default async function CountryPage({ params }: CountryPageProps) {
-  const { country: countrySlug } = await params;
-  const country = countries.find((c) => c.slug === countrySlug);
+  try {
+    const { country: countrySlug } = await params;
+    
+    // Validate the country slug
+    if (!countrySlug || typeof countrySlug !== 'string') {
+      console.error('Invalid country slug:', countrySlug);
+      notFound();
+    }
+    
+    const country = countries.find((c) => c.slug === countrySlug);
 
-  if (!country) {
-    notFound();
-  }
+    if (!country) {
+      console.error('Country not found for slug:', countrySlug);
+      notFound();
+    }
 
-  const structuredData = {
+    const structuredData = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     "name": `Study in ${country.name}`,
@@ -211,4 +220,8 @@ export default async function CountryPage({ params }: CountryPageProps) {
       </div>
     </>
   );
+  } catch (error) {
+    console.error('Error in CountryPage:', error);
+    notFound();
+  }
 }
