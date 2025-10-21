@@ -5,6 +5,7 @@ export async function GET(request: NextRequest) {
     // Check environment variables
     const envCheck = {
       mongodb: !!process.env.MONGODB_URI,
+      jwtSecret: !!process.env.JWT_SECRET,
       nodeEnv: process.env.NODE_ENV,
       vercel: process.env.VERCEL,
       vercelEnv: process.env.VERCEL_ENV,
@@ -14,21 +15,44 @@ export async function GET(request: NextRequest) {
     const isProduction = process.env.NODE_ENV === 'production';
     const isVercel = !!process.env.VERCEL;
 
+    // Test database connection if MONGODB_URI is available
+    let dbStatus = 'not_configured';
+    if (process.env.MONGODB_URI) {
+      try {
+        const { connectDB } = await import('@/lib/mongodb');
+        await connectDB();
+        dbStatus = 'connected';
+      } catch (dbError) {
+        dbStatus = 'connection_failed';
+        console.error('Database connection test failed:', dbError);
+      }
+    }
+
     return NextResponse.json({
-      status: 'healthy',
+      status: envCheck.mongodb ? 'healthy' : 'missing_env_vars',
       timestamp: new Date().toISOString(),
       environment: {
         nodeEnv: process.env.NODE_ENV,
         vercel: isVercel,
         vercelEnv: process.env.VERCEL_ENV,
+        region: process.env.VERCEL_REGION,
       },
       envCheck,
+      database: {
+        status: dbStatus,
+        configured: envCheck.mongodb,
+      },
       deployment: {
         isProduction,
         isVercel,
         region: process.env.VERCEL_REGION,
       },
-      message: 'API is running successfully'
+      message: envCheck.mongodb 
+        ? 'API is running successfully' 
+        : 'Missing required environment variables (MONGODB_URI)',
+      instructions: envCheck.mongodb 
+        ? 'All systems operational'
+        : 'Please set MONGODB_URI environment variable in Vercel dashboard'
     });
   } catch (error) {
     console.error('Health check error:', error);
@@ -36,7 +60,8 @@ export async function GET(request: NextRequest) {
       { 
         status: 'error',
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        instructions: 'Check Vercel logs for detailed error information'
       },
       { status: 500 }
     );
