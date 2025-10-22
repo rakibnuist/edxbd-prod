@@ -54,6 +54,12 @@ export default function UsersPage() {
     return token;
   };
 
+  useEffect(() => {
+    if (currentUser?.role === 'admin') {
+      fetchUsers();
+    }
+  }, [currentUser]);
+
   // Check if current user is admin
   if (currentUser?.role !== 'admin') {
     return (
@@ -70,10 +76,6 @@ export default function UsersPage() {
       </div>
     );
   }
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const fetchUsers = async () => {
     try {
