@@ -2,7 +2,7 @@
 
 > **Your Gateway to Global Education** - Expert study abroad consultancy with FREE scholarship assistance since 2018.
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Site-blue?style=for-the-badge&logo=vercel)](https://edxbd.vercel.app)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Site-blue?style=for-the-badge&logo=vercel)](https://eduexpressint.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/rakibnuist/edXBD)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -10,7 +10,7 @@
 
 ## 🚀 Live Application
 
-**🌐 Production URL:** [https://edxbd.vercel.app](https://edxbd.vercel.app)
+**🌐 Production URL:** [https://eduexpressint.com](https://eduexpressint.com)
 
 **📊 Deployment Status:** ✅ Automatically deployed from GitHub
 
@@ -204,7 +204,7 @@ vercel --prod
 
 ## 📞 Support & Contact
 
-- **🌐 Website:** [https://edxbd.vercel.app](https://edxbd.vercel.app)
+- **🌐 Website:** [https://eduexpressint.com](https://eduexpressint.com)
 - **📧 Email:** Contact through the website
 - **💬 WhatsApp:** Available on the website
 - **📱 Phone:** Available on the website
@@ -232,6 +232,6 @@ This project is proprietary software owned by EduExpress International. All righ
 
 *Empowering students to achieve their global education dreams since 2018*
 
-[![Live Demo](https://img.shields.io/badge/🌐_Visit_Live_Site-https://edxbd.vercel.app-blue?style=for-the-badge)](https://edxbd.vercel.app)
+[![Live Demo](https://img.shields.io/badge/🌐_Visit_Live_Site-https://eduexpressint.com-blue?style=for-the-badge)](https://eduexpressint.com)
 
 </div>
