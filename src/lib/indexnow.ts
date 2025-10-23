@@ -9,8 +9,9 @@ const BASE_URL = 'https://www.eduexpressint.com'
 // IndexNow endpoints for different search engines
 const INDEXNOW_ENDPOINTS = {
   bing: 'https://api.indexnow.org/indexnow',
-  yandex: 'https://yandex.com/indexnow',
-  seznam: 'https://search.seznam.cz/indexnow',
+  // Temporarily disable problematic endpoints that might cause DNS issues
+  // yandex: 'https://yandex.com/indexnow',
+  // seznam: 'https://search.seznam.cz/indexnow',
   indexnow: 'https://api.indexnow.org/indexnow'
 }
 
@@ -31,6 +32,16 @@ export async function submitToIndexNow(
   urls: string[],
   keyLocation?: string
 ): Promise<IndexNowResponse> {
+  // Skip IndexNow calls in development or if no URLs provided
+  if (process.env.NODE_ENV === 'development' || !urls || urls.length === 0) {
+    return {
+      success: true,
+      message: 'IndexNow submission skipped in development',
+      submittedUrls: urls || [],
+      errors: []
+    }
+  }
+
   try {
     // Ensure URLs are absolute
     const absoluteUrls = urls.map(url => 
@@ -52,17 +63,24 @@ export async function submitToIndexNow(
       errors: []
     }
 
-    // Submit to multiple IndexNow endpoints
+    // Submit to multiple IndexNow endpoints with timeout and better error handling
     const submissions = await Promise.allSettled(
       Object.entries(INDEXNOW_ENDPOINTS).map(async ([engine, endpoint]) => {
         try {
+          // Add timeout to prevent hanging requests
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+          
           const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(requestBody)
+            body: JSON.stringify(requestBody),
+            signal: controller.signal
           })
+
+          clearTimeout(timeoutId);
 
           if (!response.ok) {
             throw new Error(`${engine}: ${response.status} ${response.statusText}`)
@@ -70,10 +88,32 @@ export async function submitToIndexNow(
 
           return { engine, success: true }
         } catch (error) {
+          // Handle different types of errors
+          if (error instanceof Error) {
+            if (error.name === 'AbortError') {
+              return { 
+                engine, 
+                success: false, 
+                error: `${engine}: Request timeout`
+              }
+            }
+            if (error.message.includes('DNS') || error.message.includes('ENOTFOUND')) {
+              return { 
+                engine, 
+                success: false, 
+                error: `${engine}: DNS resolution failed`
+              }
+            }
+            return { 
+              engine, 
+              success: false, 
+              error: `${engine}: ${error.message}`
+            }
+          }
           return { 
             engine, 
             success: false, 
-            error: error instanceof Error ? error.message : 'Unknown error'
+            error: `${engine}: Unknown error`
           }
         }
       })

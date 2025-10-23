@@ -212,10 +212,24 @@ const hashData = async (data: string): Promise<string> => {
 // Get client IP address
 const getClientIP = async (): Promise<string> => {
   try {
-    const response = await fetch('https://api.ipify.org?format=json');
+    // Add timeout to prevent hanging requests
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+    
+    const response = await fetch('https://api.ipify.org?format=json', {
+      signal: controller.signal
+    });
+    
+    clearTimeout(timeoutId);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
     const data = await response.json();
     return data.ip;
-  } catch {
+  } catch (error) {
+    console.warn('Failed to get client IP, using fallback:', error instanceof Error ? error.message : 'Unknown error');
     return '0.0.0.0';
   }
 };
