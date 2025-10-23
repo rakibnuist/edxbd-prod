@@ -216,7 +216,7 @@ const getClientIP = async (): Promise<string> => {
     const data = await response.json();
     return data.ip;
   } catch {
-    return '127.0.0.1';
+    return '0.0.0.0';
   }
 };
 

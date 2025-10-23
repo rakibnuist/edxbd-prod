@@ -27,7 +27,7 @@ export const getClientIP = (request: Request): string => {
     return cfConnectingIP;
   }
   
-  return '127.0.0.1';
+  return '0.0.0.0';
 };
 
 // Extract Event Quality parameters from request
@@ -137,7 +137,7 @@ export const sendConversionAPIEvent = async (
     }
 
     // Get client IP and user agent
-    const clientIP = request ? getClientIP(request) : '127.0.0.1';
+    const clientIP = request ? getClientIP(request) : '0.0.0.0';
     const userAgent = request ? request.headers.get('user-agent') || '' : '';
 
     const eventData = {
