@@ -211,6 +211,11 @@ const hashData = async (data: string): Promise<string> => {
 
 // Get client IP address
 const getClientIP = async (): Promise<string> => {
+  // Skip IP detection during build to prevent DNS issues
+  if (process.env.NODE_ENV === 'production' && process.env.VERCEL === '1') {
+    return '0.0.0.0';
+  }
+  
   try {
     // Add timeout to prevent hanging requests
     const controller = new AbortController();

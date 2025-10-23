@@ -83,6 +83,14 @@ export const sendConversionAPIEvent = async (
   eventId?: string,
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
+  // Skip Meta API calls during build to prevent DNS issues
+  if (process.env.NODE_ENV === 'production' && process.env.VERCEL === '1' && !request) {
+    return {
+      success: true,
+      eventId: eventId || generateEventId(),
+    };
+  }
+
   if (!META_ACCESS_TOKEN || !META_PIXEL_ID) {
     return {
       success: false,

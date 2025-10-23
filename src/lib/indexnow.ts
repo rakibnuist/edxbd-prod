@@ -32,11 +32,13 @@ export async function submitToIndexNow(
   urls: string[],
   keyLocation?: string
 ): Promise<IndexNowResponse> {
-  // Skip IndexNow calls in development or if no URLs provided
-  if (process.env.NODE_ENV === 'development' || !urls || urls.length === 0) {
+  // Skip IndexNow calls in development, build time, or if no URLs provided
+  if (process.env.NODE_ENV === 'development' || 
+      process.env.NODE_ENV === 'production' && process.env.VERCEL === '1' ||
+      !urls || urls.length === 0) {
     return {
       success: true,
-      message: 'IndexNow submission skipped in development',
+      message: 'IndexNow submission skipped during build',
       submittedUrls: urls || [],
       errors: []
     }

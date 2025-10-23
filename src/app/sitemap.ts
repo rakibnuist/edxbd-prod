@@ -76,24 +76,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Dynamic update pages from database
+  // Dynamic update pages from database - skip during build to prevent DNS issues
   let updatePages: MetadataRoute.Sitemap = [];
-  try {
-    await connectDB();
-    const updates = await Content.find({ 
-      type: 'update', 
-      isPublished: true 
-    }).select('slug updatedAt').limit(100);
-    
-    updatePages = updates.map(update => ({
-      url: `${baseUrl}/updates/${update.slug}`,
-      lastModified: update.updatedAt,
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    }));
-  } catch (error) {
-    console.error('Error fetching updates for sitemap:', error);
-    // Fallback to static update pages
+  
+  // Skip database connection during build to prevent DNS issues
+  if (process.env.NODE_ENV === 'production' && process.env.VERCEL === '1') {
+    // Use static fallback during build
     updatePages = [
       'scholarships',
       'visa-updates',
@@ -106,6 +94,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.6,
     }));
+  } else {
+    try {
+      await connectDB();
+      const updates = await Content.find({ 
+        type: 'update', 
+        isPublished: true 
+      }).select('slug updatedAt').limit(100);
+      
+      updatePages = updates.map(update => ({
+        url: `${baseUrl}/updates/${update.slug}`,
+        lastModified: update.updatedAt,
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      }));
+    } catch (error) {
+      console.error('Error fetching updates for sitemap:', error);
+      // Fallback to static update pages
+      updatePages = [
+        'scholarships',
+        'visa-updates',
+        'university-news',
+        'events',
+        'success-stories'
+      ].map(update => ({
+        url: `${baseUrl}/updates/${update}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.6,
+      }));
+    }
   }
 
   // Admin pages (lower priority, not indexed)
