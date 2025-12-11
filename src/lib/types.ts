@@ -24,6 +24,7 @@ export interface Update {
   excerpt?: string;
   metaDescription?: string;
   category?: string;
+  categories?: string[];
   tags?: string[];
   featuredImage?: string;
   isFeatured: boolean;

@@ -16,7 +16,7 @@ export const getClientIP = (request: Request): string => {
   const forwarded = request.headers.get('x-forwarded-for');
   const realIP = request.headers.get('x-real-ip');
   const cfConnectingIP = request.headers.get('cf-connecting-ip');
-  
+
   if (forwarded) {
     return forwarded.split(',')[0].trim();
   }
@@ -26,9 +26,24 @@ export const getClientIP = (request: Request): string => {
   if (cfConnectingIP) {
     return cfConnectingIP;
   }
-  
+
   return '0.0.0.0';
 };
+
+export interface MetaUserData {
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  zipCode?: string;
+  fbc?: string;
+  fbp?: string;
+  external_id?: string;
+  fb_login_id?: string;
+}
 
 // Extract Event Quality parameters from request
 export const extractEventQualityParams = (request: Request): {
@@ -39,7 +54,7 @@ export const extractEventQualityParams = (request: Request): {
 } => {
   const url = new URL(request.url);
   const fbc = url.searchParams.get('fbclid') || undefined;
-  
+
   // Note: fbp, external_id, and fb_login_id should be passed from client-side
   // as they're not available in server-side requests
   return {
@@ -64,21 +79,7 @@ export const generatePageViewEventId = (): string => {
 // Send event to Meta Conversion API with Event Quality parameters
 export const sendConversionAPIEvent = async (
   eventName: string,
-  userData: {
-    email?: string;
-    phone?: string;
-    firstName?: string;
-    lastName?: string;
-    city?: string;
-    state?: string;
-    country?: string;
-    zipCode?: string;
-    // Event Quality parameters
-    fbc?: string;
-    fbp?: string;
-    external_id?: string;
-    fb_login_id?: string;
-  },
+  userData: MetaUserData,
   customData?: Record<string, unknown>,
   eventId?: string,
   request?: Request
@@ -101,10 +102,10 @@ export const sendConversionAPIEvent = async (
 
   try {
     const finalEventId = eventId || generateEventId();
-    
+
     // Prepare user data with hashed values
     const hashedUserData: Record<string, string[] | string> = {};
-    
+
     if (userData.email) {
       hashedUserData.em = [hashData(userData.email)];
     }
@@ -181,7 +182,8 @@ export const sendConversionAPIEvent = async (
     }
 
     const result = await response.json();
-    
+    console.log('Meta API result:', result);
+
     return {
       success: true,
       eventId: finalEventId,
@@ -215,7 +217,7 @@ export const trackStudyAbroadLead = async (
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = formData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
-  
+
   const userData = {
     email: formData.email,
     phone: formData.phone,
@@ -252,7 +254,7 @@ export const trackConsultationRequest = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: 'Free Consultation Request',
     content_category: 'Lead Generation',
@@ -271,7 +273,7 @@ export const trackPageView = async (
   eventId?: string
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const finalEventId = eventId || generatePageViewEventId();
-  
+
   const customData = {
     content_name: pageName,
     content_category: pageCategory || 'general',
@@ -294,7 +296,7 @@ export const trackViewContent = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: contentName,
     content_category: contentCategory,
@@ -316,7 +318,7 @@ export const trackCompleteRegistration = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: `${formType} Registration`,
     content_category: 'Form Submission',
@@ -339,7 +341,7 @@ export const trackContact = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: `${contactMethod} Contact`,
     content_category: 'Contact',
@@ -367,7 +369,7 @@ export const trackLeadStatusChange = async (
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = leadData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
-  
+
   const userData = {
     email: leadData.email,
     phone: leadData.phone,
@@ -394,8 +396,8 @@ export const trackLeadStatusChange = async (
     'closed': { event: 'Contact', value: 0, category: 'Lead Closed' }
   };
 
-  const mapping = statusEventMapping[leadData.newStatus as keyof typeof statusEventMapping] || 
-                  { event: 'Contact', value: 0, category: 'Status Update' };
+  const mapping = statusEventMapping[leadData.newStatus as keyof typeof statusEventMapping] ||
+    { event: 'Contact', value: 0, category: 'Status Update' };
 
   const customData = {
     content_name: `Lead Status: ${leadData.newStatus.replace('_', ' ').toUpperCase()}`,
@@ -428,7 +430,7 @@ export const trackConsultationBooking = async (
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = leadData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
-  
+
   const userData = {
     email: leadData.email,
     phone: leadData.phone,
@@ -468,7 +470,7 @@ export const trackApplicationSubmission = async (
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = leadData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
-  
+
   const userData = {
     email: leadData.email,
     phone: leadData.phone,
@@ -508,7 +510,7 @@ export const trackAdmissionReceived = async (
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = leadData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
-  
+
   const userData = {
     email: leadData.email,
     phone: leadData.phone,
@@ -548,7 +550,7 @@ export const trackVisaApproval = async (
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = leadData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
-  
+
   const userData = {
     email: leadData.email,
     phone: leadData.phone,
@@ -588,7 +590,7 @@ export const trackEnrollmentCompletion = async (
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = leadData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
-  
+
   const userData = {
     email: leadData.email,
     phone: leadData.phone,
@@ -624,7 +626,7 @@ export const trackWhatsAppClick = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: 'WhatsApp Contact',
     content_category: 'Communication',
@@ -650,7 +652,7 @@ export const trackPhoneClick = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: 'Phone Call',
     content_category: 'Communication',
@@ -676,7 +678,7 @@ export const trackDestinationView = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: `Study in ${countryName}`,
     content_category: 'Destination Interest',
@@ -702,7 +704,7 @@ export const trackScholarshipInquiry = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: 'Scholarship Inquiry',
     content_category: 'Scholarship Interest',
@@ -729,7 +731,7 @@ export const trackUniversityInterest = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: `University Interest: ${universityName}`,
     content_category: 'University Research',
@@ -756,7 +758,7 @@ export const trackProgramInterest = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: `Program Interest: ${programName}`,
     content_category: 'Program Research',
@@ -783,7 +785,7 @@ export const trackDocumentDownload = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: `Download: ${documentName}`,
     content_category: 'Document Download',
@@ -806,7 +808,7 @@ export const trackEmailSubscription = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: 'Email Subscription',
     content_category: 'Newsletter Signup',
@@ -832,7 +834,7 @@ export const trackPartnershipInquiry = async (
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = userData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
-  
+
   const customData = {
     content_name: 'Partnership Inquiry',
     content_category: 'Business Partnership',
@@ -856,7 +858,7 @@ export const testConversionAPI = async (
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: 'Test Event',
     content_category: 'Testing',
@@ -876,11 +878,11 @@ export const trackAddToCart = async (
   currency: string,
   contentName: string,
   contentCategory: string,
-  userData: any,
+  userData: MetaUserData,
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     value,
     currency,
@@ -903,11 +905,11 @@ export const trackAddToWishlist = async (
   currency: string,
   contentName: string,
   contentCategory: string,
-  userData: any,
+  userData: MetaUserData,
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     value,
     currency,
@@ -930,11 +932,11 @@ export const trackInitiateCheckout = async (
   currency: string,
   contentName: string,
   contentCategory: string,
-  userData: any,
+  userData: MetaUserData,
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     value,
     currency,
@@ -958,11 +960,11 @@ export const trackPurchase = async (
   currency: string,
   contentName: string,
   contentCategory: string,
-  userData: any,
+  userData: MetaUserData,
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     value,
     currency,
@@ -983,11 +985,11 @@ export const trackPurchase = async (
 // Search - for program searches
 export const trackSearch = async (
   searchString: string,
-  userData: any,
+  userData: MetaUserData,
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     search_string: searchString
   };
@@ -998,11 +1000,11 @@ export const trackSearch = async (
 // Find Location - for office visits
 export const trackFindLocation = async (
   searchString: string,
-  userData: any,
+  userData: MetaUserData,
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     search_string: searchString
   };
@@ -1014,11 +1016,11 @@ export const trackFindLocation = async (
 export const trackSchedule = async (
   contentName: string,
   contentCategory: string,
-  userData: any,
+  userData: MetaUserData,
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: contentName,
     content_category: contentCategory
@@ -1031,11 +1033,11 @@ export const trackSchedule = async (
 export const trackSubmitApplication = async (
   contentName: string,
   contentCategory: string,
-  userData: any,
+  userData: MetaUserData,
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: contentName,
     content_category: contentCategory
@@ -1048,11 +1050,11 @@ export const trackSubmitApplication = async (
 export const trackSubscribe = async (
   contentName: string,
   contentCategory: string,
-  userData: any,
+  userData: MetaUserData,
   request?: Request
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
-  
+
   const customData = {
     content_name: contentName,
     content_category: contentCategory

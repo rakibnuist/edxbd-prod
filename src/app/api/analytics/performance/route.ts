@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const source = searchParams.get('source');
 
     // Build filter
-    const filter: any = {
+    const filter: Record<string, unknown> = {
       createdAt: {
         $gte: new Date(startDate),
         $lte: new Date(endDate)
@@ -28,10 +28,10 @@ export async function GET(request: NextRequest) {
 
     // Calculate metrics
     const totalLeads = leads.length;
-    const totalConversions = leads.filter(lead => 
+    const totalConversions = leads.filter(lead =>
       ['admission_received', 'visa_approved', 'enrolled', 'converted'].includes(lead.status)
     ).length;
-    
+
     const conversionRate = totalLeads > 0 ? (totalConversions / totalLeads) * 100 : 0;
 
     // Group by country

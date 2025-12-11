@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     "education consultancy",
     "scholarship assistance",
     "UK universities",
-    "China universities", 
+    "China universities",
     "South Korea education",
     "Hungary study",
     "visa assistance",
@@ -283,7 +283,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -303,7 +303,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        
+
         {/* Font Preloading for Performance */}
         <link
           rel="preload"
@@ -323,7 +323,7 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
         />
-        
+
         <meta name="geo.region" content="BD-DH" />
         <meta name="geo.placename" content="Dhaka" />
         <meta name="geo.position" content="23.8103;90.4125" />
@@ -342,7 +342,7 @@ export default function RootLayout({
         <PerformanceOptimizer />
         <MobileOptimizer />
         <EnhancedAnalytics />
-        <EducationTracking 
+        <EducationTracking
           whatsappSource="floating_widget"
           phoneSource="header_contact"
         />
@@ -355,7 +355,7 @@ export default function RootLayout({
         <Footer />
         <QuickContactForm />
         <ScrollToTop />
-        <FloatingWhatsApp 
+        <FloatingWhatsApp
           phoneNumber="+8801983333566"
           message="Hi! I'm interested in studying abroad. Can you help me with information about universities and scholarships?"
         />

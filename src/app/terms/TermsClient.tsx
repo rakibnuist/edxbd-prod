@@ -41,7 +41,7 @@ export default function TermsClient() {
                   Simple, understandable terms that protect both you and us.
                 </p>
               </div>
-              
+
               <div className="text-center p-6 bg-white rounded-2xl shadow-sm">
                 <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Users className="w-8 h-8 text-blue-600" />
@@ -51,7 +51,7 @@ export default function TermsClient() {
                   Transparent service agreements that benefit all parties involved.
                 </p>
               </div>
-              
+
               <div className="text-center p-6 bg-white rounded-2xl shadow-sm">
                 <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Shield className="w-8 h-8 text-orange-500" />
@@ -71,7 +71,7 @@ export default function TermsClient() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg max-w-none">
-              
+
               {/* Introduction */}
               <div className="mb-12">
                 <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
@@ -79,7 +79,7 @@ export default function TermsClient() {
                   Introduction
                 </h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  Welcome to EduExpress International. These Terms of Service ("Terms") govern your use of our website, services, and any related applications (collectively, the "Service") operated by EduExpress International ("us," "we," or "our").
+                  Welcome to EduExpress International. These Terms of Service (&quot;Terms&quot;) govern your use of our website, services, and any related applications (collectively, the &quot;Service&quot;) operated by EduExpress International (&quot;us,&quot; &quot;we,&quot; or &quot;our&quot;).
                 </p>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   By accessing or using our Service, you agree to be bound by these Terms. If you disagree with any part of these terms, then you may not access the Service.
@@ -218,7 +218,7 @@ export default function TermsClient() {
               <div className="mb-12">
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">Indemnification</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  You agree to defend, indemnify, and hold harmless EduExpress International and its licensee and licensors, and their employees, contractors, agents, officers and directors, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney's fees).
+                  You agree to defend, indemnify, and hold harmless EduExpress International and its licensee and licensors, and their employees, contractors, agents, officers and directors, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney&apos;s fees).
                 </p>
               </div>
 
@@ -282,7 +282,7 @@ export default function TermsClient() {
                   <div className="space-y-3">
                     <p className="text-gray-700"><strong>EduExpress International</strong></p>
                     <p className="text-gray-700">House: 12/1, Ground Floor, Road: 4/A</p>
-                    <p className="text-gray-700">Dhanmondi, Dhaka - 1209, Bangladesh</p>
+                    <p className="text-gray-700">Dhanmondi, Dhaka-1209, Bangladesh</p>
                     <p className="text-gray-700">Phone: +880-1983-333566</p>
                     <p className="text-gray-700">Email: info@eduexpressint.com</p>
                   </div>
@@ -311,17 +311,17 @@ export default function TermsClient() {
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Questions About Our Terms?</h2>
             <p className="text-xl mb-8 text-blue-100">
-              We're here to help clarify any questions you may have about our terms and conditions.
+              We&apos;re here to help clarify any questions you may have about our terms and conditions.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                href="/contact" 
+              <Link
+                href="/contact"
                 className="inline-flex items-center bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 transform hover:scale-105"
               >
                 Contact Us
               </Link>
-              <Link 
-                href="/privacy" 
+              <Link
+                href="/privacy"
                 className="inline-flex items-center bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200"
               >
                 Privacy Policy

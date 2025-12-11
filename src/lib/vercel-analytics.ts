@@ -8,7 +8,8 @@ import { track } from '@vercel/analytics';
  */
 
 // Event types for better type safety
-export type VercelEventName = 
+export type VercelEventName =
+  | 'page_view'
   | 'contact_form_submit'
   | 'partnership_form_submit'
   | 'consultation_request'
@@ -69,9 +70,9 @@ export const trackEvent = (name: VercelEventName, properties?: VercelEventProper
   try {
     // Filter out undefined values to match Vercel Analytics requirements
     const cleanProperties = properties ? Object.fromEntries(
-      Object.entries(properties).filter(([_, value]) => value !== undefined)
+      Object.entries(properties).filter(([, value]) => value !== undefined)
     ) as Record<string, string | number | boolean> : undefined;
-    
+
     track(name, cleanProperties);
     console.log(`Vercel Analytics: Tracked event "${name}"`, cleanProperties);
   } catch (error) {
@@ -169,7 +170,7 @@ export const trackDownload = (fileName: string, fileType: string, properties?: V
  */
 export const getUserDevice = (): 'mobile' | 'desktop' | 'tablet' => {
   if (typeof window === 'undefined') return 'desktop';
-  
+
   const width = window.innerWidth;
   if (width < 768) return 'mobile';
   if (width < 1024) return 'tablet';

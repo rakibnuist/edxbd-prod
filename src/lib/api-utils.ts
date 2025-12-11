@@ -3,32 +3,32 @@ import connectDB from '@/lib/mongodb';
 
 // Common API response helpers
 export const apiResponse = {
-  success: (data: any, status = 200) => {
+  success: (data: unknown, status = 200) => {
     return NextResponse.json(data, { status });
   },
-  
-  error: (message: string, status = 500, details?: any) => {
+
+  error: (message: string, status = 500, details?: unknown) => {
     return NextResponse.json(
-      { 
+      {
         error: message,
-        ...(details && { details })
+        ...(details ? { details } : {})
       },
       { status }
     );
   },
-  
+
   notFound: (message = 'Resource not found') => {
     return NextResponse.json(
       { error: message },
       { status: 404 }
     );
   },
-  
-  badRequest: (message: string, details?: any) => {
+
+  badRequest: (message: string, details?: unknown) => {
     return NextResponse.json(
-      { 
+      {
         error: message,
-        ...(details && { details })
+        ...(details ? { details } : {})
       },
       { status: 400 }
     );
@@ -36,8 +36,10 @@ export const apiResponse = {
 };
 
 // Common error handling wrapper
-export const withErrorHandling = (handler: Function) => {
-  return async (request: NextRequest, context?: any) => {
+type ApiHandler = (request: NextRequest, context?: unknown) => Promise<NextResponse> | NextResponse;
+
+export const withErrorHandling = (handler: ApiHandler) => {
+  return async (request: NextRequest, context?: unknown) => {
     try {
       await connectDB();
       return await handler(request, context);
@@ -53,7 +55,7 @@ export const withErrorHandling = (handler: Function) => {
 };
 
 // Common validation helpers
-export const validateRequired = (data: any, fields: string[]) => {
+export const validateRequired = (data: Record<string, unknown>, fields: string[]) => {
   const missing = fields.filter(field => !data[field]);
   if (missing.length > 0) {
     throw new Error(`Missing required fields: ${missing.join(', ')}`);
@@ -66,7 +68,7 @@ export const getPaginationParams = (request: NextRequest) => {
   const page = parseInt(searchParams.get('page') || '1');
   const limit = parseInt(searchParams.get('limit') || '10');
   const skip = (page - 1) * limit;
-  
+
   return { page, limit, skip };
 };
 
@@ -74,21 +76,21 @@ export const getPaginationParams = (request: NextRequest) => {
 export const getSortParams = (request: NextRequest, defaultSort = '-createdAt') => {
   const { searchParams } = new URL(request.url);
   const sort = searchParams.get('sort') || defaultSort;
-  
+
   return sort;
 };
 
 // Common filtering helper
 export const getFilterParams = (request: NextRequest, allowedFilters: string[] = []) => {
   const { searchParams } = new URL(request.url);
-  const filters: any = {};
-  
+  const filters: Record<string, string> = {};
+
   allowedFilters.forEach(filter => {
     const value = searchParams.get(filter);
     if (value) {
       filters[filter] = value;
     }
   });
-  
+
   return filters;
 };

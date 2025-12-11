@@ -39,7 +39,7 @@ export const getMetaParameters = (): MetaEventQualityParams => {
 // Get Facebook Click ID from URL parameter
 export const getUrlParameter = (name: string): string | undefined => {
   if (typeof window === 'undefined') return undefined;
-  
+
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(name) || undefined;
 };
@@ -47,7 +47,7 @@ export const getUrlParameter = (name: string): string | undefined => {
 // Get Facebook Browser ID from cookie
 export const getCookie = (name: string): string | undefined => {
   if (typeof window === 'undefined') return undefined;
-  
+
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) {
@@ -59,19 +59,19 @@ export const getCookie = (name: string): string | undefined => {
 // Get external ID (your internal user ID)
 export const getExternalId = (): string | undefined => {
   if (typeof window === 'undefined') return undefined;
-  
+
   // Try to get from localStorage first
   const storedUserId = localStorage.getItem('user_id');
   if (storedUserId) return storedUserId;
-  
+
   // Try to get from sessionStorage
   const sessionUserId = sessionStorage.getItem('user_id');
   if (sessionUserId) return sessionUserId;
-  
+
   // Generate a temporary ID for anonymous users
   const tempId = sessionStorage.getItem('temp_user_id');
   if (tempId) return tempId;
-  
+
   // Create and store a new temporary ID
   const newTempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   sessionStorage.setItem('temp_user_id', newTempId);
@@ -81,21 +81,21 @@ export const getExternalId = (): string | undefined => {
 // Get Facebook Login ID (requires Facebook Login SDK)
 export const getFacebookLoginId = (): string | undefined => {
   if (typeof window === 'undefined') return undefined;
-  
+
   // Check if Facebook SDK is loaded and user is logged in
-  if (window.FB && window.FB.getLoginStatus) {
+  if (window.FB?.getLoginStatus) {
     // This would need to be called asynchronously
     // For now, we'll return undefined and handle it in the tracking functions
     return undefined;
   }
-  
+
   return undefined;
 };
 
 // Enhanced event tracking function with Event Quality parameters
 export const trackMetaEvent = (
   eventName: string,
-  parameters: Record<string, any> = {},
+  parameters: Record<string, unknown> = {},
   userData: EnhancedUserData = {}
 ): void => {
   if (typeof window === 'undefined' || !window.fbq) {
@@ -104,7 +104,7 @@ export const trackMetaEvent = (
   }
 
   const metaParams = getMetaParameters();
-  
+
   // Combine all parameters
   const eventData = {
     ...parameters,
@@ -122,12 +122,12 @@ export const trackMetaEvent = (
 
   // Generate unique event ID for deduplication
   const eventId = `${eventName}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  
+
   console.log(`Tracking Meta event: ${eventName}`, eventData);
-  
+
   // Track with Meta Pixel
   window.fbq('track', eventName, eventData, { eventID: eventId });
-  
+
   // Also send to server-side Conversions API for better tracking
   sendToServerSideAPI(eventName, eventData, eventId);
 };
@@ -135,7 +135,7 @@ export const trackMetaEvent = (
 // Send event to server-side API for Conversions API
 export const sendToServerSideAPI = async (
   eventName: string,
-  eventData: Record<string, any>,
+  eventData: Record<string, unknown>,
   eventId: string
 ): Promise<void> => {
   try {
@@ -178,7 +178,7 @@ const mapEventNameToType = (eventName: string): string => {
     'Subscribe': 'subscribe',
     'SubmitApplication': 'submit_application'
   };
-  
+
   return mapping[eventName] || 'study_abroad_lead';
 };
 
@@ -323,7 +323,13 @@ export const trackEnrollmentCompletion = (userData: EnhancedUserData, university
 // Facebook Login integration
 export const initializeFacebookLogin = (): void => {
   if (typeof window === 'undefined') return;
-  
+
+  // Facebook Login requires HTTPS
+  if (window.location.protocol !== 'https:') {
+    console.log('Facebook Login SDK skipped on non-HTTPS (localhost)');
+    return;
+  }
+
   // Load Facebook SDK if not already loaded
   if (!window.FB) {
     const script = document.createElement('script');
@@ -332,9 +338,9 @@ export const initializeFacebookLogin = (): void => {
     script.defer = true;
     script.crossOrigin = 'anonymous';
     document.head.appendChild(script);
-    
+
     script.onload = () => {
-      window.FB.init({
+      window.FB?.init({
         appId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || '',
         cookie: true,
         xfbml: true,
@@ -347,12 +353,12 @@ export const initializeFacebookLogin = (): void => {
 // Get Facebook Login status and ID
 export const getFacebookLoginStatus = (): Promise<string | undefined> => {
   return new Promise((resolve) => {
-    if (typeof window === 'undefined' || !window.FB) {
+    if (typeof window === 'undefined' || !window.FB || window.location.protocol !== 'https:') {
       resolve(undefined);
       return;
     }
-    
-    window.FB.getLoginStatus((response: any) => {
+
+    window.FB?.getLoginStatus((response: any) => {
       if (response.status === 'connected') {
         resolve(response.authResponse.userID);
       } else {
@@ -365,23 +371,23 @@ export const getFacebookLoginStatus = (): Promise<string | undefined> => {
 // Enhanced tracking with Facebook Login ID
 export const trackMetaEventWithFacebookLogin = async (
   eventName: string,
-  parameters: Record<string, any> = {},
+  parameters: Record<string, unknown> = {},
   userData: EnhancedUserData = {}
 ): Promise<void> => {
   const fbLoginId = await getFacebookLoginStatus();
-  
+
   const enhancedUserData = {
     ...userData,
     fb_login_id: fbLoginId
   };
-  
+
   trackMetaEvent(eventName, parameters, enhancedUserData);
 };
 
 // Utility to set user ID for external_id tracking
 export const setUserId = (userId: string, persistent: boolean = true): void => {
   if (typeof window === 'undefined') return;
-  
+
   if (persistent) {
     localStorage.setItem('user_id', userId);
   } else {
@@ -392,7 +398,7 @@ export const setUserId = (userId: string, persistent: boolean = true): void => {
 // Utility to clear user ID
 export const clearUserId = (): void => {
   if (typeof window === 'undefined') return;
-  
+
   localStorage.removeItem('user_id');
   sessionStorage.removeItem('user_id');
   sessionStorage.removeItem('temp_user_id');
@@ -401,7 +407,7 @@ export const clearUserId = (): void => {
 // Debug function to check current Meta parameters
 export const debugMetaParameters = (): void => {
   if (typeof window === 'undefined') return;
-  
+
   const params = getMetaParameters();
   console.log('Meta Event Quality Parameters:', params);
   console.log('Current URL:', window.location.href);

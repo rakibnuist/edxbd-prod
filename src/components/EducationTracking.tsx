@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import { 
-  trackWhatsAppClick, 
-  trackPhoneClick, 
+import {
+  trackWhatsAppClick,
+  trackPhoneClick,
   trackScholarshipInquiry,
   trackUniversityInterest,
   trackProgramInterest,
@@ -15,29 +15,29 @@ import {
 interface EducationTrackingProps {
   // WhatsApp tracking
   whatsappSource?: string;
-  
+
   // Phone tracking
   phoneSource?: string;
-  
+
   // Scholarship tracking
   scholarshipCountry?: string;
   scholarshipProgram?: string;
-  
+
   // University tracking
   universityName?: string;
   universityCountry?: string;
-  
+
   // Program tracking
   programName?: string;
   programCountry?: string;
-  
+
   // Document tracking
   documentName?: string;
   documentType?: string;
-  
+
   // Email subscription
   emailAddress?: string;
-  
+
   // Partnership tracking
   companyName?: string;
 }
@@ -56,13 +56,14 @@ export default function EducationTracking({
   emailAddress,
   companyName
 }: EducationTrackingProps) {
-  
+
   // Track WhatsApp clicks
   useEffect(() => {
     if (whatsappSource) {
       const handleWhatsAppClick = () => {
-        trackWhatsAppClick(whatsappSource);
-        
+        const userData = { email: emailAddress };
+        trackWhatsAppClick(whatsappSource, userData);
+
         // Also track with Meta Conversion API
         fetch('/api/meta-conversion', {
           method: 'POST',
@@ -72,7 +73,7 @@ export default function EducationTracking({
           body: JSON.stringify({
             eventType: 'whatsapp_click',
             data: {
-              userData: {}
+              userData: userData
             },
             source: whatsappSource
           }),
@@ -97,8 +98,9 @@ export default function EducationTracking({
   useEffect(() => {
     if (phoneSource) {
       const handlePhoneClick = () => {
-        trackPhoneClick(phoneSource);
-        
+        const userData = { email: emailAddress };
+        trackPhoneClick(phoneSource, userData);
+
         // Also track with Meta Conversion API
         fetch('/api/meta-conversion', {
           method: 'POST',
@@ -108,7 +110,7 @@ export default function EducationTracking({
           body: JSON.stringify({
             eventType: 'phone_click',
             data: {
-              userData: {}
+              userData: userData
             },
             source: phoneSource
           }),
@@ -133,8 +135,13 @@ export default function EducationTracking({
   useEffect(() => {
     if (scholarshipCountry || scholarshipProgram) {
       const handleScholarshipInquiry = () => {
-        trackScholarshipInquiry(scholarshipCountry, scholarshipProgram);
-        
+        const userData = {
+          email: emailAddress || '',
+          country: scholarshipCountry,
+          program: scholarshipProgram
+        };
+        trackScholarshipInquiry(scholarshipCountry, scholarshipProgram, userData);
+
         // Also track with Meta Conversion API
         fetch('/api/meta-conversion', {
           method: 'POST',
@@ -144,11 +151,7 @@ export default function EducationTracking({
           body: JSON.stringify({
             eventType: 'scholarship_inquiry',
             data: {
-              userData: {
-                email: emailAddress || '',
-                country: scholarshipCountry,
-                program: scholarshipProgram
-              }
+              userData: userData
             },
             source: 'scholarship_section'
           }),
@@ -173,8 +176,9 @@ export default function EducationTracking({
   useEffect(() => {
     if (universityName && universityCountry) {
       const handleUniversityInterest = () => {
-        trackUniversityInterest(universityName, universityCountry);
-        
+        const userData = { email: emailAddress || '' };
+        trackUniversityInterest(universityName, universityCountry, userData);
+
         // Also track with Meta Conversion API
         fetch('/api/meta-conversion', {
           method: 'POST',
@@ -186,9 +190,7 @@ export default function EducationTracking({
             data: {
               universityName,
               country: universityCountry,
-              userData: {
-                email: emailAddress || ''
-              }
+              userData: userData
             },
             source: 'university_section'
           }),
@@ -213,8 +215,9 @@ export default function EducationTracking({
   useEffect(() => {
     if (programName && programCountry) {
       const handleProgramInterest = () => {
-        trackProgramInterest(programName, programCountry);
-        
+        const userData = { email: emailAddress || '' };
+        trackProgramInterest(programName, programCountry, userData);
+
         // Also track with Meta Conversion API
         fetch('/api/meta-conversion', {
           method: 'POST',
@@ -226,9 +229,7 @@ export default function EducationTracking({
             data: {
               programName,
               country: programCountry,
-              userData: {
-                email: emailAddress || ''
-              }
+              userData: userData
             },
             source: 'program_section'
           }),
@@ -253,8 +254,9 @@ export default function EducationTracking({
   useEffect(() => {
     if (documentName && documentType) {
       const handleDocumentDownload = () => {
-        trackDocumentDownload(documentName, documentType);
-        
+        const userData = { email: emailAddress || '' };
+        trackDocumentDownload(documentName, documentType, userData);
+
         // Also track with Meta Conversion API
         fetch('/api/meta-conversion', {
           method: 'POST',
@@ -266,9 +268,7 @@ export default function EducationTracking({
             data: {
               documentName,
               documentType,
-              userData: {
-                email: emailAddress || ''
-              }
+              userData: userData
             },
             source: 'document_section'
           }),
@@ -293,8 +293,9 @@ export default function EducationTracking({
   useEffect(() => {
     if (emailAddress) {
       const handleEmailSubscription = () => {
-        trackEmailSubscription(emailAddress);
-        
+        const userData = { email: emailAddress };
+        trackEmailSubscription(emailAddress, userData);
+
         // Also track with Meta Conversion API
         fetch('/api/meta-conversion', {
           method: 'POST',
@@ -304,11 +305,7 @@ export default function EducationTracking({
           body: JSON.stringify({
             eventType: 'email_subscription',
             data: {
-              userData: {
-                email: emailAddress,
-                firstName: '',
-                lastName: ''
-              }
+              userData: userData
             },
             source: 'newsletter_signup'
           }),
@@ -333,8 +330,12 @@ export default function EducationTracking({
   useEffect(() => {
     if (companyName) {
       const handlePartnershipInquiry = () => {
-        trackPartnershipInquiry(companyName);
-        
+        const userData = {
+          email: emailAddress || '',
+          company: companyName
+        };
+        trackPartnershipInquiry(companyName, userData);
+
         // Also track with Meta Conversion API
         fetch('/api/meta-conversion', {
           method: 'POST',
@@ -344,11 +345,7 @@ export default function EducationTracking({
           body: JSON.stringify({
             eventType: 'partnership_inquiry',
             data: {
-              userData: {
-                name: '',
-                email: emailAddress || '',
-                company: companyName
-              }
+              userData: userData
             },
             source: 'partnership_section'
           }),

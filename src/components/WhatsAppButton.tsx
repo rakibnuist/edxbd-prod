@@ -3,6 +3,15 @@
 import { useState } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
 
+interface TrackingData {
+  leadName: string;
+  phoneNumber: string;
+  country?: string;
+  program?: string;
+  status?: string;
+  messageType: string;
+}
+
 interface WhatsAppButtonProps {
   phoneNumber: string;
   leadName: string;
@@ -13,7 +22,7 @@ interface WhatsAppButtonProps {
   variant?: 'default' | 'outline' | 'minimal';
   showText?: boolean;
   className?: string;
-  onTrack?: (data: any) => void;
+  onTrack?: (data: TrackingData) => void;
 }
 
 export default function WhatsAppButton({
@@ -35,14 +44,14 @@ export default function WhatsAppButton({
     if (!phoneNumber) return;
 
     setIsClicked(true);
-    
+
     // Remove any non-numeric characters and ensure it starts with country code
     const cleanPhone = phoneNumber.replace(/\D/g, '');
     const whatsappPhone = cleanPhone.startsWith('880') ? cleanPhone : `880${cleanPhone}`;
-    
+
     // Create personalized message based on lead status and information
     const message = createPersonalizedMessage(leadName, leadCountry, leadProgram, leadStatus);
-    
+
     // Track the interaction
     if (onTrack) {
       onTrack({
@@ -54,10 +63,10 @@ export default function WhatsAppButton({
         messageType: 'whatsapp_contact'
       });
     }
-    
+
     // Open WhatsApp with the message
     window.open(`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`, '_blank');
-    
+
     // Reset click state after animation
     setTimeout(() => setIsClicked(false), 1000);
   };
@@ -68,23 +77,23 @@ export default function WhatsAppButton({
       `Hello ${name}! 😊`,
       `Hi there ${name}! 🌟`
     ];
-    
+
     const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-    
+
     let message = `${randomGreeting}\n\nThis is EduExpress International. I'm reaching out regarding your study abroad inquiry.`;
-    
+
     if (country) {
       message += `\n\nI see you're interested in studying in ${country}.`;
     }
-    
+
     if (program) {
       message += `\n\nFor the ${program} program, I'd be happy to help you with:`;
     } else {
       message += `\n\nI'd be happy to help you with:`;
     }
-    
+
     message += `\n• University selection & applications\n• Visa guidance\n• Scholarship opportunities\n• Pre-departure support\n\nHow can I assist you today? 😊`;
-    
+
     // Add status-specific message
     if (status) {
       switch (status) {
@@ -108,7 +117,7 @@ export default function WhatsAppButton({
           break;
       }
     }
-    
+
     return message;
   };
 
@@ -167,23 +176,23 @@ export default function WhatsAppButton({
     >
       {/* WhatsApp Icon with Animation */}
       <div className={`relative ${getIconSize()} ${showText ? 'mr-2' : ''}`}>
-        <FaWhatsapp 
+        <FaWhatsapp
           className={`${getIconSize()} transition-transform duration-300 ${isHovered ? 'rotate-12' : ''}`}
         />
-        
+
         {/* Pulse animation for new messages */}
         {isHovered && (
           <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
         )}
       </div>
-      
+
       {/* Button Text */}
       {showText && (
         <span className="font-medium">
           {size === 'small' ? 'WA' : 'WhatsApp'}
         </span>
       )}
-      
+
       {/* Status indicator */}
       {leadStatus && (
         <div className="ml-1">

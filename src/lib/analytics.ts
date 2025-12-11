@@ -6,67 +6,27 @@ export const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || '
 export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1234567890';
 export const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || '';
 
-// Initialize GTM
-export const initGTM = () => {
-  if (typeof window !== 'undefined' && GTM_ID !== 'GTM-XXXXXXX') {
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function gtag(...args: unknown[]) {
-      window.dataLayer?.push(args);
-    };
-    window.gtag('js', new Date());
-    window.gtag('config', GTM_ID);
-  }
-};
 
-// Initialize GA4
-export const initGA4 = () => {
-  if (typeof window !== 'undefined' && GA4_MEASUREMENT_ID !== 'G-XXXXXXXXXX') {
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function gtag(...args: unknown[]) {
-      window.dataLayer?.push(args);
-    };
-    window.gtag('js', new Date());
-    window.gtag('config', GA4_MEASUREMENT_ID);
-  }
-};
-
-// Initialize Meta Pixel
-export const initMetaPixel = () => {
-  if (typeof window !== 'undefined' && META_PIXEL_ID && META_PIXEL_ID !== '1234567890') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const w = window as any;
-    
-    w.fbq = w.fbq || function(...args: unknown[]) {
-      if (w.fbq.callMethod) {
-        w.fbq.callMethod(...args);
-      } else {
-        w.fbq.queue = w.fbq.queue || [];
-        w.fbq.queue.push(args);
-      }
-    };
-    
-    w.fbq.queue = w.fbq.queue || [];
-    
-    if (!w.fbq.loaded) {
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = 'https://connect.facebook.net/en_US/fbevents.js';
-      document.head.appendChild(script);
-      w.fbq.loaded = true;
-    }
-    
-    w.fbq('init', META_PIXEL_ID);
-    w.fbq('track', 'PageView');
-  }
-};
 
 // Generate unique event ID for deduplication
 const generateEventId = (): string => {
   return `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 };
 
+// Define UserData interface
+export interface UserData {
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  zipCode?: string;
+}
+
 // Track events
-export const trackEvent = (eventName: string, parameters?: Record<string, unknown>) => {
+export const trackEvent = (eventName: string, parameters?: Record<string, unknown>, userData?: UserData) => {
   const eventId = generateEventId();
   const eventData = {
     event_id: eventId,
@@ -83,16 +43,19 @@ export const trackEvent = (eventName: string, parameters?: Record<string, unknow
         event_id: eventId,
         ...parameters
       });
-    } catch (error) {
+    } catch {
       // Silent error handling
     }
   }
 
   // Meta Pixel tracking
-  if (typeof window !== 'undefined' && window.fbq && META_PIXEL_ID && META_PIXEL_ID !== '1234567890') {
+  // FB.getLoginStatus and other methods require HTTPS
+  const isHttps = typeof window !== 'undefined' && window.location.protocol === 'https:';
+
+  if (isHttps && typeof window !== 'undefined' && window.fbq && META_PIXEL_ID && META_PIXEL_ID !== '1234567890') {
     try {
       window.fbq('track', eventName, eventData);
-    } catch (error) {
+    } catch {
       // Silent error handling
     }
   }
@@ -174,7 +137,8 @@ export const sendConversionAPIEvent = async (
           userData,
           ...customData
         },
-        source: 'client_side'
+        source: 'client_side',
+        eventId
       }),
     });
 
@@ -189,55 +153,7 @@ export const sendConversionAPIEvent = async (
   }
 };
 
-// Hash data for Meta Conversion API
-const hashData = async (data: string): Promise<string> => {
-  if (typeof window !== 'undefined' && window.crypto && window.crypto.subtle) {
-    const encoder = new TextEncoder();
-    const dataBuffer = encoder.encode(data.toLowerCase().trim());
-    const hashBuffer = await window.crypto.subtle.digest('SHA-256', dataBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  } else {
-    // Fallback for environments without Web Crypto API
-    let hash = 0;
-    for (let i = 0; i < data.length; i++) {
-      const char = data.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return Math.abs(hash).toString(16);
-  }
-};
 
-// Get client IP address
-const getClientIP = async (): Promise<string> => {
-  // Skip IP detection during build to prevent DNS issues
-  if (process.env.NODE_ENV === 'production' && process.env.VERCEL === '1') {
-    return '0.0.0.0';
-  }
-  
-  try {
-    // Add timeout to prevent hanging requests
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-    
-    const response = await fetch('https://api.ipify.org?format=json', {
-      signal: controller.signal
-    });
-    
-    clearTimeout(timeoutId);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    
-    const data = await response.json();
-    return data.ip;
-  } catch (error) {
-    console.warn('Failed to get client IP, using fallback:', error instanceof Error ? error.message : 'Unknown error');
-    return '0.0.0.0';
-  }
-};
 
 // Enhanced lead tracking with Conversion API
 export const trackStudyAbroadLead = async (
@@ -254,7 +170,7 @@ export const trackStudyAbroadLead = async (
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = formData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
-  
+
   const userData = {
     email: formData.email,
     phone: formData.phone,
@@ -281,13 +197,15 @@ export const trackStudyAbroadLead = async (
   });
 
   // Track with Meta Pixel
-  if (typeof window !== 'undefined' && window.fbq && META_PIXEL_ID && META_PIXEL_ID !== '1234567890') {
+  const isHttps = typeof window !== 'undefined' && window.location.protocol === 'https:';
+
+  if (isHttps && typeof window !== 'undefined' && window.fbq && META_PIXEL_ID && META_PIXEL_ID !== '1234567890') {
     try {
       window.fbq('track', 'Lead', {
         event_id: eventId,
         ...customData
       });
-    } catch (error) {
+    } catch {
       // Silent error handling
     }
   }
@@ -306,86 +224,88 @@ export const trackDashboardView = (dashboardType: string) => {
 };
 
 // Enhanced tracking functions for education consultancy
-export const trackWhatsAppClick = (source: string = 'website') => {
+export const trackWhatsAppClick = (source: string = 'website', userData?: UserData) => {
   trackEvent('contact', {
     event_category: 'communication',
     event_label: 'whatsapp_click',
     contact_method: 'whatsapp',
     source: source
-  });
+  }, userData);
 };
 
-export const trackPhoneClick = (source: string = 'website') => {
+export const trackPhoneClick = (source: string = 'website', userData?: UserData) => {
   trackEvent('contact', {
     event_category: 'communication',
     event_label: 'phone_click',
     contact_method: 'phone',
     source: source
-  });
+  }, userData);
 };
 
-export const trackDestinationView = (countryName: string) => {
+export const trackDestinationView = (countryName: string, userData?: UserData) => {
   trackEvent('view_content', {
     event_category: 'destination_interest',
     event_label: `study_in_${countryName.toLowerCase().replace(/\s+/g, '_')}`,
     destination_country: countryName,
     content_name: `Study in ${countryName}`
-  });
+  }, userData);
 };
 
-export const trackScholarshipInquiry = (country?: string, program?: string) => {
+export const trackScholarshipInquiry = (country?: string, program?: string, userData?: UserData) => {
   trackEvent('lead', {
     event_category: 'scholarship_interest',
     event_label: 'scholarship_inquiry',
     study_destination: country || 'not_specified',
     program_interest: program || 'not_specified'
-  });
+  }, userData);
 };
 
-export const trackUniversityInterest = (universityName: string, country: string) => {
+export const trackUniversityInterest = (universityName: string, country: string, userData?: UserData) => {
   trackEvent('view_content', {
     event_category: 'university_research',
     event_label: `university_${universityName.toLowerCase().replace(/\s+/g, '_')}`,
     university_name: universityName,
     destination_country: country,
     content_name: `University Interest: ${universityName}`
-  });
+  }, userData);
 };
 
-export const trackProgramInterest = (programName: string, country: string) => {
+export const trackProgramInterest = (programName: string, country: string, userData?: UserData) => {
   trackEvent('view_content', {
     event_category: 'program_research',
     event_label: `program_${programName.toLowerCase().replace(/\s+/g, '_')}`,
     program_name: programName,
     destination_country: country,
     content_name: `Program Interest: ${programName}`
-  });
+  }, userData);
 };
 
-export const trackDocumentDownload = (documentName: string, documentType: string) => {
+export const trackDocumentDownload = (documentName: string, documentType: string, userData?: UserData) => {
   trackEvent('view_content', {
     event_category: 'document_download',
     event_label: `download_${documentName.toLowerCase().replace(/\s+/g, '_')}`,
     document_type: documentType,
     content_name: `Download: ${documentName}`
-  });
+  }, userData);
 };
 
-export const trackEmailSubscription = (email: string) => {
+export const trackEmailSubscription = (email: string, userData?: UserData) => {
+  const finalUserData = { ...userData, email };
   trackEvent('subscribe', {
     event_category: 'newsletter_signup',
     event_label: 'email_subscription',
-    content_name: 'Email Subscription'
-  });
+    content_name: 'Email Subscription',
+    email: email
+  }, finalUserData);
 };
 
-export const trackPartnershipInquiry = (companyName?: string) => {
+export const trackPartnershipInquiry = (companyName?: string, userData?: UserData) => {
   trackEvent('lead', {
     event_category: 'business_partnership',
     event_label: 'partnership_inquiry',
     company_name: companyName || 'not_specified',
     content_name: 'Partnership Inquiry'
-  });
+  }, userData);
 };
 
 export const trackDashboardAction = (action: string, parameters?: Record<string, unknown>) => {

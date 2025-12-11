@@ -15,7 +15,7 @@ export default function SitemapSubmissionPage() {
           <h1 className="text-3xl font-bold text-blue-600 text-center mb-8">
             🚀 Sitemap Submission for Search Engines
           </h1>
-          
+
           <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg mb-8">
             <h3 className="text-lg font-semibold text-blue-800 mb-4">📋 Your Sitemap Information</h3>
             <div className="space-y-3">
@@ -39,9 +39,9 @@ export default function SitemapSubmissionPage() {
             <div className="border border-gray-200 rounded-lg p-6">
               <h2 className="text-xl font-semibold text-blue-600 mb-4">🔍 Google Search Console</h2>
               <p className="text-gray-600 mb-4">Submit your sitemap to Google for better indexing:</p>
-              <a 
-                href="https://search.google.com/search-console/sitemaps" 
-                target="_blank" 
+              <a
+                href="https://search.google.com/search-console/sitemaps"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors mr-4 mb-4"
               >
@@ -52,9 +52,9 @@ export default function SitemapSubmissionPage() {
                 <ol className="list-decimal list-inside text-green-700 mt-2 space-y-1">
                   <li>Go to Google Search Console</li>
                   <li>Select your property (eduexpressint.com)</li>
-                  <li>Navigate to "Sitemaps" in the left menu</li>
+                  <li>Navigate to &quot;Sitemaps&quot; in the left menu</li>
                   <li>Add new sitemap: <code className="bg-green-100 px-1 rounded">sitemap.xml</code></li>
-                  <li>Click "Submit"</li>
+                  <li>Click &quot;Submit&quot;</li>
                 </ol>
               </div>
             </div>
@@ -63,9 +63,9 @@ export default function SitemapSubmissionPage() {
             <div className="border border-gray-200 rounded-lg p-6">
               <h2 className="text-xl font-semibold text-blue-600 mb-4">🔍 Bing Webmaster Tools</h2>
               <p className="text-gray-600 mb-4">Submit your sitemap to Bing for better visibility:</p>
-              <a 
-                href="https://www.bing.com/webmasters/sitemaps" 
-                target="_blank" 
+              <a
+                href="https://www.bing.com/webmasters/sitemaps"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors mr-4 mb-4"
               >
@@ -77,7 +77,7 @@ export default function SitemapSubmissionPage() {
                   <li>Go to Bing Webmaster Tools</li>
                   <li>Sign in with your Microsoft account</li>
                   <li>Add your website if not already added</li>
-                  <li>Go to "Sitemaps" section</li>
+                  <li>Go to &quot;Sitemaps&quot; section</li>
                   <li>Submit sitemap URL: <code className="bg-green-100 px-1 rounded">https://www.eduexpressint.com/sitemap.xml</code></li>
                 </ol>
               </div>
@@ -87,9 +87,9 @@ export default function SitemapSubmissionPage() {
             <div className="border border-gray-200 rounded-lg p-6">
               <h2 className="text-xl font-semibold text-blue-600 mb-4">🤖 OpenAI GPT (ChatGPT)</h2>
               <p className="text-gray-600 mb-4">Submit your sitemap to OpenAI for AI search indexing:</p>
-              <a 
-                href="https://platform.openai.com/docs/plugins/sitemap" 
-                target="_blank" 
+              <a
+                href="https://platform.openai.com/docs/plugins/sitemap"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors mr-4 mb-4"
               >
@@ -111,25 +111,25 @@ export default function SitemapSubmissionPage() {
               <h2 className="text-xl font-semibold text-blue-600 mb-4">🔍 Additional Search Engines</h2>
               <p className="text-gray-600 mb-4">Submit to other major search engines:</p>
               <div className="flex flex-wrap gap-4">
-                <a 
-                  href="https://yandex.com/support/webmaster/sitemap/" 
-                  target="_blank" 
+                <a
+                  href="https://yandex.com/support/webmaster/sitemap/"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
                 >
                   Yandex Webmaster
                 </a>
-                <a 
-                  href="https://www.baidu.com/search/url_submit.html" 
-                  target="_blank" 
+                <a
+                  href="https://www.baidu.com/search/url_submit.html"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
                 >
                   Baidu Submit
                 </a>
-                <a 
-                  href="https://www.duckduckgo.com/duckduckbot" 
-                  target="_blank" 
+                <a
+                  href="https://www.duckduckgo.com/duckduckbot"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
                 >
@@ -165,8 +165,8 @@ export default function SitemapSubmissionPage() {
 
           {/* Back to Home */}
           <div className="text-center mt-8">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="inline-block bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
             >
               ← Back to Home

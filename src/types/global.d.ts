@@ -5,8 +5,12 @@ declare global {
     fbq?: (action: string, event?: string, parameters?: Record<string, unknown>, options?: Record<string, unknown>) => void;
     gtag?: (...args: unknown[]) => void;
     dataLayer?: unknown[];
-    FB?: any; // Facebook SDK
+    FB?: {
+      init: (params: Record<string, unknown>) => void;
+      getLoginStatus: (callback: (response: unknown) => void) => void;
+      [key: string]: unknown;
+    };
   }
 }
 
-export {};
+export { };

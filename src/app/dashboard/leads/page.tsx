@@ -37,13 +37,13 @@ export default function UserLeadsPage() {
       if (countryFilter !== 'all') {
         params.append('country', countryFilter);
       }
-      
+
       const url = `/api/admin/leads${params.toString() ? `?${params.toString()}` : ''}`;
       const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
         setLeads(data);
-        
+
         // Extract unique countries for filter dropdown
         const countries = [...new Set(data.map((lead: Lead) => lead.country))].sort() as string[];
         setAvailableCountries(countries);
@@ -89,19 +89,19 @@ export default function UserLeadsPage() {
         }
 
         // Update local state immediately for better UX
-        setLeads(prevLeads => 
-          prevLeads.map(lead => 
-            lead._id === leadId 
-              ? { ...lead, status: newStatus as any, updatedAt: new Date().toISOString() }
+        setLeads(prevLeads =>
+          prevLeads.map(lead =>
+            lead._id === leadId
+              ? { ...lead, status: newStatus as Lead['status'], updatedAt: new Date().toISOString() }
               : lead
           )
         );
-        
+
         // Update selected lead if it's the one being edited
         if (selectedLead && selectedLead._id === leadId) {
-          setSelectedLead(prev => prev ? { ...prev, status: newStatus as any, updatedAt: new Date().toISOString() } : null);
+          setSelectedLead(prev => prev ? { ...prev, status: newStatus as Lead['status'], updatedAt: new Date().toISOString() } : null);
         }
-        
+
         showMessage('success', 'Lead status updated successfully!');
       } else {
         showMessage('error', 'Failed to update lead status');
@@ -117,10 +117,10 @@ export default function UserLeadsPage() {
     }
   };
 
-  const handleWhatsAppTracking = async (data: any) => {
+  const handleWhatsAppTracking = async (data: unknown) => {
     // Track WhatsApp interaction for user dashboard
     console.log('WhatsApp contact tracked:', data);
-    
+
     // You can add additional tracking here if needed
     // For example, send to analytics service
   };
@@ -174,7 +174,7 @@ export default function UserLeadsPage() {
             <p className="text-sm text-gray-600">Manage and track your leads</p>
           </div>
         </div>
-        
+
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -190,11 +190,10 @@ export default function UserLeadsPage() {
     <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
       {/* Message Display */}
       {message && (
-        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${
-          message.type === 'success' 
-            ? 'bg-green-100 border border-green-400 text-green-700' 
-            : 'bg-red-100 border border-red-400 text-red-700'
-        }`}>
+        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${message.type === 'success'
+          ? 'bg-green-100 border border-green-400 text-green-700'
+          : 'bg-red-100 border border-red-400 text-red-700'
+          }`}>
           <div className="flex justify-between items-center">
             <span className="text-xs sm:text-sm lg:text-base">{message.text}</span>
             <button
@@ -254,7 +253,7 @@ export default function UserLeadsPage() {
               <option value="closed">Closed</option>
             </select>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Source</label>
             <select
@@ -270,7 +269,7 @@ export default function UserLeadsPage() {
               <option value="other">Other</option>
             </select>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
             <select
@@ -285,7 +284,7 @@ export default function UserLeadsPage() {
             </select>
           </div>
         </div>
-        
+
         {/* Clear Filters Button */}
         {(statusFilter !== 'all' || sourceFilter !== 'all' || countryFilter !== 'all') && (
           <div className="mt-3 sm:mt-4">
@@ -442,7 +441,7 @@ export default function UserLeadsPage() {
                   </button>
                 </div>
               </div>
-              
+
               {/* Contact Actions */}
               {lead.phone && (
                 <div className="flex items-center space-x-2 mb-3">
@@ -467,7 +466,7 @@ export default function UserLeadsPage() {
                   />
                 </div>
               )}
-              
+
               {/* Status */}
               <div className="flex items-center justify-between">
                 <span className="text-xs text-gray-500">
@@ -515,7 +514,7 @@ export default function UserLeadsPage() {
                   </svg>
                 </button>
               </div>
-              
+
               <div className="space-y-4 sm:space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                   <div>
@@ -598,11 +597,10 @@ export default function UserLeadsPage() {
                       <button
                         key={status}
                         onClick={() => updateLeadStatus(selectedLead._id, status)}
-                        className={`px-3 py-2 text-xs font-medium rounded-lg touch-manipulation transition-colors ${
-                          selectedLead.status === status
-                            ? 'bg-blue-600 text-white shadow-md'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300 active:bg-gray-400'
-                        }`}
+                        className={`px-3 py-2 text-xs font-medium rounded-lg touch-manipulation transition-colors ${selectedLead.status === status
+                          ? 'bg-blue-600 text-white shadow-md'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300 active:bg-gray-400'
+                          }`}
                       >
                         {status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                       </button>

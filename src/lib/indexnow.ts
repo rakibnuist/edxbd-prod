@@ -33,9 +33,9 @@ export async function submitToIndexNow(
   keyLocation?: string
 ): Promise<IndexNowResponse> {
   // Skip IndexNow calls in development, build time, or if no URLs provided
-  if (process.env.NODE_ENV === 'development' || 
-      process.env.NODE_ENV === 'production' && process.env.VERCEL === '1' ||
-      !urls || urls.length === 0) {
+  if (process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV === 'production' && process.env.VERCEL === '1' ||
+    !urls || urls.length === 0) {
     return {
       success: true,
       message: 'IndexNow submission skipped during build',
@@ -46,7 +46,7 @@ export async function submitToIndexNow(
 
   try {
     // Ensure URLs are absolute
-    const absoluteUrls = urls.map(url => 
+    const absoluteUrls = urls.map(url =>
       url.startsWith('http') ? url : `${BASE_URL}${url}`
     )
 
@@ -72,7 +72,7 @@ export async function submitToIndexNow(
           // Add timeout to prevent hanging requests
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-          
+
           const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
@@ -93,28 +93,28 @@ export async function submitToIndexNow(
           // Handle different types of errors
           if (error instanceof Error) {
             if (error.name === 'AbortError') {
-              return { 
-                engine, 
-                success: false, 
+              return {
+                engine,
+                success: false,
                 error: `${engine}: Request timeout`
               }
             }
             if (error.message.includes('DNS') || error.message.includes('ENOTFOUND')) {
-              return { 
-                engine, 
-                success: false, 
+              return {
+                engine,
+                success: false,
                 error: `${engine}: DNS resolution failed`
               }
             }
-            return { 
-              engine, 
-              success: false, 
+            return {
+              engine,
+              success: false,
               error: `${engine}: ${error.message}`
             }
           }
-          return { 
-            engine, 
-            success: false, 
+          return {
+            engine,
+            success: false,
             error: `${engine}: Unknown error`
           }
         }
@@ -123,7 +123,7 @@ export async function submitToIndexNow(
 
     // Process results
     const errors: string[] = []
-    submissions.forEach((result, index) => {
+    submissions.forEach((result, _index) => {
       if (result.status === 'rejected') {
         errors.push(`Submission failed: ${result.reason}`)
       } else if (!result.value.success) {
@@ -167,18 +167,18 @@ export async function submitUrlsInBatches(
   batchSize: number = 10000
 ): Promise<IndexNowResponse[]> {
   const results: IndexNowResponse[] = []
-  
+
   for (let i = 0; i < urls.length; i += batchSize) {
     const batch = urls.slice(i, i + batchSize)
     const result = await submitToIndexNow(batch)
     results.push(result)
-    
+
     // Add delay between batches to avoid rate limiting
     if (i + batchSize < urls.length) {
       await new Promise(resolve => setTimeout(resolve, 1000))
     }
   }
-  
+
   return results
 }
 

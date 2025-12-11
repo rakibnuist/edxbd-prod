@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { trackEngagement, getUserDevice } from '@/lib/vercel-analytics';
+import { trackEngagement, trackPageView, getUserDevice } from '@/lib/vercel-analytics';
 
 interface EngagementTrackerProps {
   pageName: string;
@@ -10,7 +10,6 @@ interface EngagementTrackerProps {
 const EngagementTracker = ({ pageName }: EngagementTrackerProps) => {
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout;
-    let timeTracker: NodeJS.Timeout;
     const startTime = Date.now();
 
     // Track scroll engagement
@@ -18,15 +17,15 @@ const EngagementTracker = ({ pageName }: EngagementTrackerProps) => {
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
         const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-        
+
         if (scrollPercent >= 50 && scrollPercent < 100) {
-          trackEngagement('scroll_50', { 
+          trackEngagement('scroll_50', {
             page: pageName,
             device: getUserDevice(),
             scroll_percent: Math.round(scrollPercent)
           });
         } else if (scrollPercent >= 100) {
-          trackEngagement('scroll_100', { 
+          trackEngagement('scroll_100', {
             page: pageName,
             device: getUserDevice(),
             scroll_percent: Math.round(scrollPercent)
@@ -38,21 +37,21 @@ const EngagementTracker = ({ pageName }: EngagementTrackerProps) => {
     // Track time on page
     const trackTimeOnPage = () => {
       const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-      
+
       if (timeSpent === 30) {
-        trackEngagement('time_30s', { 
+        trackEngagement('time_30s', {
           page: pageName,
           device: getUserDevice(),
           time_spent: timeSpent
         });
       } else if (timeSpent === 60) {
-        trackEngagement('time_60s', { 
+        trackEngagement('time_60s', {
           page: pageName,
           device: getUserDevice(),
           time_spent: timeSpent
         });
       } else if (timeSpent === 120) {
-        trackEngagement('time_120s', { 
+        trackEngagement('time_120s', {
           page: pageName,
           device: getUserDevice(),
           time_spent: timeSpent
@@ -62,14 +61,13 @@ const EngagementTracker = ({ pageName }: EngagementTrackerProps) => {
     };
 
     // Start time tracking
-    timeTracker = setInterval(trackTimeOnPage, 1000);
+    const timeTracker = setInterval(trackTimeOnPage, 1000);
 
     // Add scroll listener
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     // Track page view
-    trackEngagement('page_view' as any, {
-      page: pageName,
+    trackPageView(pageName, {
       device: getUserDevice(),
       timestamp: new Date().toISOString()
     });

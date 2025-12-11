@@ -1,11 +1,11 @@
 'use client';
 
 import { useCallback } from 'react';
-import { 
-  trackMetaEvent, 
-  trackLead, 
-  trackContact, 
-  trackWhatsAppClick, 
+import {
+  trackMetaEvent,
+  trackLead,
+  trackContact,
+  trackWhatsAppClick,
   trackPhoneClick,
   trackDestinationView,
   trackScholarshipInquiry,
@@ -25,7 +25,7 @@ export const useMetaTracking = () => {
   // Generic event tracking
   const trackEvent = useCallback((
     eventName: string,
-    parameters: Record<string, any> = {},
+    parameters: Record<string, unknown> = {},
     userData: EnhancedUserData = {}
   ) => {
     trackMetaEvent(eventName, parameters, userData);
@@ -34,7 +34,7 @@ export const useMetaTracking = () => {
   // Enhanced event tracking with Facebook Login ID
   const trackEventWithFacebookLogin = useCallback(async (
     eventName: string,
-    parameters: Record<string, any> = {},
+    parameters: Record<string, unknown> = {},
     userData: EnhancedUserData = {}
   ) => {
     await trackMetaEventWithFacebookLogin(eventName, parameters, userData);
@@ -70,32 +70,32 @@ export const useMetaTracking = () => {
   }, []);
 
   const trackApplicationEvent = useCallback((
-    userData: EnhancedUserData, 
-    university?: string, 
+    userData: EnhancedUserData,
+    university?: string,
     program?: string
   ) => {
     trackApplicationSubmission(userData, university, program);
   }, []);
 
   const trackAdmissionEvent = useCallback((
-    userData: EnhancedUserData, 
-    university?: string, 
+    userData: EnhancedUserData,
+    university?: string,
     program?: string
   ) => {
     trackAdmissionReceived(userData, university, program);
   }, []);
 
   const trackVisaEvent = useCallback((
-    userData: EnhancedUserData, 
-    university?: string, 
+    userData: EnhancedUserData,
+    university?: string,
     program?: string
   ) => {
     trackVisaApproval(userData, university, program);
   }, []);
 
   const trackEnrollmentEvent = useCallback((
-    userData: EnhancedUserData, 
-    university?: string, 
+    userData: EnhancedUserData,
+    university?: string,
     program?: string
   ) => {
     trackEnrollmentCompletion(userData, university, program);
@@ -212,8 +212,8 @@ export const useMetaTracking = () => {
 
   // Content view tracking
   const trackContentView = useCallback((
-    contentName: string, 
-    contentCategory: string, 
+    contentName: string,
+    contentCategory: string,
     userData?: EnhancedUserData
   ) => {
     trackEvent('ViewContent', {
@@ -228,7 +228,7 @@ export const useMetaTracking = () => {
     // Generic tracking
     trackEvent,
     trackEventWithFacebookLogin,
-    
+
     // Specific event tracking
     trackLeadEvent,
     trackContactEvent,
@@ -241,13 +241,13 @@ export const useMetaTracking = () => {
     trackAdmissionEvent,
     trackVisaEvent,
     trackEnrollmentEvent,
-    
+
     // Form and interaction tracking
     trackFormSubmission,
     trackButtonClick,
     trackPageView,
     trackContentView,
-    
+
     // User management
     setUser,
     clearUser

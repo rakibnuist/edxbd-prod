@@ -65,25 +65,46 @@ export async function GET(request: NextRequest) {
     // Get total count for pagination
     const totalCount = await Content.countDocuments(query);
 
-    // Get unique categories for filter
-    const categories = await Content.distinct('category', { 
-      type: 'update', 
-      isPublished: true,
-      category: { $exists: true, $ne: null }
-    });
+    // Get unique categories (single + multi) and authors for filters
+    const [singleCategories, multiCategories, authors] = await Promise.all([
+      Content.distinct('category', { 
+        type: 'update', 
+        isPublished: true,
+        category: { $exists: true, $ne: null }
+      }),
+      Content.distinct('categories', { 
+        type: 'update', 
+        isPublished: true,
+        categories: { $exists: true, $ne: null }
+      }),
+      Content.distinct('author', { 
+        type: 'update', 
+        isPublished: true,
+        author: { $exists: true, $ne: null }
+      })
+    ]);
 
-    // Get unique authors for filter
-    const authors = await Content.distinct('author', { 
-      type: 'update', 
-      isPublished: true,
-      author: { $exists: true, $ne: null }
-    });
+    const normalizeList = (values: unknown[]) => Array.from(
+      new Set(
+        values
+          .filter((value): value is string => typeof value === 'string')
+          .map(value => value.trim())
+          .filter(Boolean)
+      )
+    ).sort((a, b) => a.localeCompare(b));
+
+    const normalizedCategories = normalizeList([
+      ...singleCategories,
+      ...multiCategories
+    ]);
+
+    const normalizedAuthors = normalizeList(authors);
 
     return NextResponse.json({
       updates,
       totalCount,
-      categories: ['All', ...categories],
-      authors: ['All', ...authors],
+      categories: ['All', ...normalizedCategories],
+      authors: ['All', ...normalizedAuthors],
       pagination: {
         page: page ? parseInt(page) : 1,
         limit: limit ? parseInt(limit) : updates.length,

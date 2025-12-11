@@ -10,6 +10,22 @@ export interface SEOData {
   structuredData?: Record<string, unknown>;
 }
 
+export interface CountryData {
+  slug: string;
+  countryCode?: string;
+  [key: string]: unknown;
+}
+
+export interface UpdateData {
+  title: string;
+  metaDescription?: string;
+  excerpt?: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
+  [key: string]: unknown;
+}
+
 // Generate SEO data for different page types
 export const generateSEOData = {
   // Homepage SEO
@@ -126,7 +142,7 @@ export const generateSEOData = {
   }),
 
   // Country destination pages
-  country: (countryName: string, countryData: any): SEOData => ({
+  country: (countryName: string, countryData: CountryData): SEOData => ({
     title: `Study in ${countryName} | ${countryName} Universities | EduExpress International`,
     description: `Study in ${countryName} with EduExpress International. Expert guidance for ${countryName} universities, scholarships, and visa assistance. Free consultation available for ${countryName} study programs.`,
     keywords: [
@@ -241,7 +257,7 @@ export const generateSEOData = {
   }),
 
   // Updates/Blog posts
-  update: (updateData: any): SEOData => ({
+  update: (updateData: UpdateData): SEOData => ({
     title: `${updateData.title} | Study Abroad Updates | EduExpress International`,
     description: updateData.metaDescription || updateData.excerpt || `Latest study abroad updates from EduExpress International. ${updateData.title} - Expert insights on international education.`,
     keywords: [

@@ -41,7 +41,7 @@ export default function PrivacyClient() {
                   Your information is encrypted and stored securely with industry-standard protection.
                 </p>
               </div>
-              
+
               <div className="text-center p-6 bg-white rounded-2xl shadow-sm">
                 <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Eye className="w-8 h-8 text-blue-600" />
@@ -51,7 +51,7 @@ export default function PrivacyClient() {
                   We clearly explain how we collect, use, and share your personal information.
                 </p>
               </div>
-              
+
               <div className="text-center p-6 bg-white rounded-2xl shadow-sm">
                 <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Users className="w-8 h-8 text-purple-600" />
@@ -71,7 +71,6 @@ export default function PrivacyClient() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg max-w-none">
-              
               {/* Introduction */}
               <div className="mb-12">
                 <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
@@ -79,7 +78,7 @@ export default function PrivacyClient() {
                   Introduction
                 </h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  EduExpress International ("we," "our," or "us") is committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our services, or interact with us.
+                  EduExpress International (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our services, or interact with us.
                 </p>
                 <p className="text-gray-700 leading-relaxed">
                   By using our services, you agree to the collection and use of information in accordance with this policy. If you do not agree with our policies and practices, please do not use our services.
@@ -92,7 +91,7 @@ export default function PrivacyClient() {
                   <Database className="w-8 h-8 mr-3 text-green-600" />
                   Information We Collect
                 </h2>
-                
+
                 <h3 className="text-2xl font-semibold text-gray-900 mb-4">Personal Information</h3>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   We may collect the following types of personal information:
@@ -194,7 +193,7 @@ export default function PrivacyClient() {
                   <li><strong>Objection:</strong> Object to certain types of processing</li>
                 </ul>
                 <p className="text-gray-700 leading-relaxed">
-                  To exercise these rights, please contact us using the information provided in the "Contact Us" section below.
+                  To exercise these rights, please contact us using the information provided in the &quot;Contact Us&quot; section below.
                 </p>
               </div>
 
@@ -250,7 +249,7 @@ export default function PrivacyClient() {
 
               {/* Children's Privacy */}
               <div className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">Children's Privacy</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-6">Children&apos;s Privacy</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   Our services are not directed to children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately.
                 </p>
@@ -285,7 +284,7 @@ export default function PrivacyClient() {
                   <div className="space-y-3">
                     <p className="text-gray-700"><strong>EduExpress International</strong></p>
                     <p className="text-gray-700">House: 12/1, Ground Floor, Road: 4/A</p>
-                    <p className="text-gray-700">Dhanmondi, Dhaka - 1209, Bangladesh</p>
+                    <p className="text-gray-700">Dhanmondi, Dhaka-1209, Bangladesh</p>
                     <p className="text-gray-700">Phone: +880-1983-333566</p>
                     <p className="text-gray-700">Email: info@eduexpressint.com</p>
                   </div>
@@ -303,17 +302,17 @@ export default function PrivacyClient() {
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Questions About Your Privacy?</h2>
             <p className="text-xl mb-8 text-blue-100">
-              We're here to help. Contact us if you have any questions about how we protect your information.
+              We&apos;re here to help. Contact us if you have any questions about how we protect your information.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                href="/contact" 
+              <Link
+                href="/contact"
                 className="inline-flex items-center bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 transform hover:scale-105"
               >
                 Contact Us
               </Link>
-              <Link 
-                href="/" 
+              <Link
+                href="/"
                 className="inline-flex items-center bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200"
               >
                 Back to Home

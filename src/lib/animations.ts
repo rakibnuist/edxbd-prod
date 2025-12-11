@@ -12,7 +12,7 @@ export const animationConfig = {
     elastic: [0.175, 0.885, 0.32, 1.275] as const,
     snappy: [0.25, 0.46, 0.45, 0.94] as const,
   },
-  
+
   // Duration presets
   duration: {
     fast: 0.2,
@@ -20,7 +20,7 @@ export const animationConfig = {
     slow: 0.5,
     slower: 0.8,
   },
-  
+
   // Stagger delays
   stagger: {
     fast: 0.1,
@@ -469,13 +469,15 @@ export const useScrollAnimation = () => {
       }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);

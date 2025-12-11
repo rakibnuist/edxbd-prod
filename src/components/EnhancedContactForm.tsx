@@ -59,24 +59,24 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
     state: '',
     zipCode: ''
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastSubmissionTime, setLastSubmissionTime] = useState<number>(0);
   const [isHidden, setIsHidden] = useState(false);
   const [countdown, setCountdown] = useState<number>(0);
-  
+
   const { trackFormSubmission, trackButtonClick } = useMetaTracking();
 
   // Auto-hide functionality after successful submission
   useEffect(() => {
     if (isSubmitted && autoHide) {
       console.log('Auto-hide triggered:', { isSubmitted, autoHide, autoHideDelay });
-      
+
       // Start countdown
       setCountdown(Math.ceil(autoHideDelay / 1000));
-      
+
       const countdownInterval = setInterval(() => {
         setCountdown(prev => {
           console.log('Countdown:', prev);
@@ -111,7 +111,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Prevent multiple submissions
     if (isSubmitting) {
       console.log('Form already submitting, ignoring duplicate submission');
@@ -125,7 +125,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
       return;
     }
     setLastSubmissionTime(now);
-    
+
     setIsSubmitting(true);
     setError(null);
 
@@ -219,7 +219,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
       console.log('Form submitted successfully, setting isSubmitted to true');
       setIsSubmitted(true);
-      
+
       // Track successful submission (completely non-blocking)
       setTimeout(() => {
         try {
@@ -245,7 +245,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
       console.error('Error name:', err instanceof Error ? err.name : 'Unknown');
       console.error('Error message:', err instanceof Error ? err.message : String(err));
       console.error('Error stack:', err instanceof Error ? err.stack : 'No stack trace');
-      
+
       if (err instanceof TypeError && err.message.includes('fetch')) {
         setError('Network error. Please check your internet connection and try again.');
       } else if (err instanceof Error) {
@@ -443,8 +443,8 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
               className="w-full px-4 py-3 text-sm border border-gray-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/95 backdrop-blur-sm shadow-sm hover:shadow-md focus:shadow-lg hover:border-gray-300/80"
             >
               <option value="">Select a program</option>
-              <option value="Bachelor">Bachelor's Degree</option>
-              <option value="Master">Master's Degree</option>
+              <option value="Bachelor">Bachelor&apos;s Degree</option>
+              <option value="Master">Master&apos;s Degree</option>
               <option value="PhD">PhD</option>
               <option value="Diploma">Diploma</option>
               <option value="Certificate">Certificate</option>

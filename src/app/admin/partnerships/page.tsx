@@ -2,25 +2,17 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Building2, 
-  Search, 
-  Filter, 
-  Eye, 
-  Edit, 
-  Trash2, 
-  Download,
+import {
+  Building2,
+  Search,
+  Eye,
+  Edit,
+  Trash2,
   Plus,
-  Calendar,
   MapPin,
   Phone,
   Mail,
   User,
-  Briefcase,
-  DollarSign,
-  AlertCircle,
-  CheckCircle,
-  Clock,
   X,
   RefreshCw
 } from 'lucide-react';
@@ -28,7 +20,7 @@ import { Partnership } from '@/lib/types';
 import { useAuth } from '@/contexts/AuthContext';
 
 const AdminPartnershipsPage = () => {
-  const { getAuthHeaders, refreshToken, authenticatedFetch } = useAuth();
+  const { authenticatedFetch } = useAuth();
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -97,7 +89,7 @@ const AdminPartnershipsPage = () => {
     statusCounts: [] as Array<{ _id: string; count: number }>,
     typeCounts: [] as Array<{ _id: string; count: number }>
   });
-  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const showMessage = (type: 'success' | 'error', text: string) => {
@@ -235,7 +227,7 @@ const AdminPartnershipsPage = () => {
 
   const handleCreatePartnership = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const response = await authenticatedFetch('/api/admin/partnerships', {
         method: 'POST',
@@ -285,7 +277,7 @@ const AdminPartnershipsPage = () => {
 
   const handleEditPartnership = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!editingPartnership) return;
 
     try {
@@ -345,11 +337,10 @@ const AdminPartnershipsPage = () => {
     <div className="p-6 space-y-6">
       {/* Message Display */}
       {message && (
-        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${
-          message.type === 'success' 
-            ? 'bg-green-100 border border-green-400 text-green-700' 
-            : 'bg-red-100 border border-red-400 text-red-700'
-        }`}>
+        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${message.type === 'success'
+          ? 'bg-green-100 border border-green-400 text-green-700'
+          : 'bg-red-100 border border-red-400 text-red-700'
+          }`}>
           <div className="flex justify-between items-center">
             <span className="text-xs sm:text-sm lg:text-base">{message.text}</span>
             <button
@@ -369,7 +360,7 @@ const AdminPartnershipsPage = () => {
           <p className="text-gray-600">Manage B2B partnership applications</p>
         </div>
         <div className="flex items-center space-x-3">
-          <button 
+          <button
             onClick={fetchPartnerships}
             disabled={loading}
             className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 disabled:opacity-50"
@@ -377,7 +368,7 @@ const AdminPartnershipsPage = () => {
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
           </button>
-          <button 
+          <button
             onClick={() => setShowCreateModal(true)}
             className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 hover:from-blue-700 hover:via-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-full font-semibold shadow-2xl hover:shadow-3xl transition-all duration-300 flex items-center space-x-2"
           >
@@ -697,7 +688,7 @@ const AdminPartnershipsPage = () => {
                     </div>
                     {selectedPartnership.website && (
                       <div>
-                        <span className="font-medium">Website:</span> 
+                        <span className="font-medium">Website:</span>
                         <a href={selectedPartnership.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">
                           {selectedPartnership.website}
                         </a>
@@ -734,7 +725,7 @@ const AdminPartnershipsPage = () => {
                   <h3 className="text-lg font-semibold text-gray-900">Business Details</h3>
                   <div className="space-y-2">
                     <div>
-                      <span className="font-medium">Partnership Type:</span> 
+                      <span className="font-medium">Partnership Type:</span>
                       <span className="ml-1">{partnershipTypeLabels[selectedPartnership.partnershipType as keyof typeof partnershipTypeLabels]}</span>
                     </div>
                     <div>
@@ -744,7 +735,7 @@ const AdminPartnershipsPage = () => {
                       <span className="font-medium">Monthly Target:</span> {selectedPartnership.monthlyTarget}
                     </div>
                     <div>
-                      <span className="font-medium">Target Countries:</span> 
+                      <span className="font-medium">Target Countries:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {selectedPartnership.targetCountries.map((country, index) => (
                           <span key={index} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
@@ -834,7 +825,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={createForm.companyName}
-                      onChange={(e) => setCreateForm({...createForm, companyName: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, companyName: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
@@ -845,7 +836,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <select
                       value={createForm.businessType}
-                      onChange={(e) => setCreateForm({...createForm, businessType: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, businessType: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     >
@@ -864,7 +855,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={createForm.contactPerson}
-                      onChange={(e) => setCreateForm({...createForm, contactPerson: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, contactPerson: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -877,7 +868,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="email"
                       value={createForm.email}
-                      onChange={(e) => setCreateForm({...createForm, email: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -890,7 +881,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="tel"
                       value={createForm.phone}
-                      onChange={(e) => setCreateForm({...createForm, phone: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, phone: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -902,7 +893,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <select
                       value={createForm.partnershipType}
-                      onChange={(e) => setCreateForm({...createForm, partnershipType: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, partnershipType: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     >
@@ -919,7 +910,7 @@ const AdminPartnershipsPage = () => {
                       type="number"
                       min="0"
                       value={createForm.yearsInBusiness}
-                      onChange={(e) => setCreateForm({...createForm, yearsInBusiness: parseInt(e.target.value) || 0})}
+                      onChange={(e) => setCreateForm({ ...createForm, yearsInBusiness: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -932,7 +923,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={createForm.address}
-                      onChange={(e) => setCreateForm({...createForm, address: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, address: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -945,7 +936,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={createForm.city}
-                      onChange={(e) => setCreateForm({...createForm, city: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, city: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -958,7 +949,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={createForm.state}
-                      onChange={(e) => setCreateForm({...createForm, state: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, state: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -971,7 +962,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={createForm.country}
-                      onChange={(e) => setCreateForm({...createForm, country: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, country: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -984,7 +975,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={createForm.postalCode}
-                      onChange={(e) => setCreateForm({...createForm, postalCode: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, postalCode: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -998,7 +989,7 @@ const AdminPartnershipsPage = () => {
                       type="number"
                       min="0"
                       value={createForm.currentClients}
-                      onChange={(e) => setCreateForm({...createForm, currentClients: parseInt(e.target.value) || 0})}
+                      onChange={(e) => setCreateForm({ ...createForm, currentClients: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1012,7 +1003,7 @@ const AdminPartnershipsPage = () => {
                       type="number"
                       min="0"
                       value={createForm.monthlyTarget}
-                      onChange={(e) => setCreateForm({...createForm, monthlyTarget: parseInt(e.target.value) || 0})}
+                      onChange={(e) => setCreateForm({ ...createForm, monthlyTarget: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1025,7 +1016,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={createForm.investmentCapacity}
-                      onChange={(e) => setCreateForm({...createForm, investmentCapacity: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, investmentCapacity: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1038,7 +1029,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={createForm.expectedCommission}
-                      onChange={(e) => setCreateForm({...createForm, expectedCommission: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, expectedCommission: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1051,7 +1042,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={createForm.localNetwork}
-                      onChange={(e) => setCreateForm({...createForm, localNetwork: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, localNetwork: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1063,7 +1054,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <select
                       value={createForm.status}
-                      onChange={(e) => setCreateForm({...createForm, status: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, status: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="pending">Pending</option>
@@ -1080,7 +1071,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <select
                       value={createForm.priority}
-                      onChange={(e) => setCreateForm({...createForm, priority: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, priority: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="low">Low</option>
@@ -1097,7 +1088,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <textarea
                       value={createForm.experience}
-                      onChange={(e) => setCreateForm({...createForm, experience: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, experience: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
                       required
@@ -1110,7 +1101,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <textarea
                       value={createForm.motivation}
-                      onChange={(e) => setCreateForm({...createForm, motivation: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, motivation: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
                       required
@@ -1123,7 +1114,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <textarea
                       value={createForm.expectations}
-                      onChange={(e) => setCreateForm({...createForm, expectations: e.target.value})}
+                      onChange={(e) => setCreateForm({ ...createForm, expectations: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
                       required
@@ -1182,7 +1173,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={editForm.companyName}
-                      onChange={(e) => setEditForm({...editForm, companyName: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, companyName: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
@@ -1193,7 +1184,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <select
                       value={editForm.businessType}
-                      onChange={(e) => setEditForm({...editForm, businessType: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, businessType: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     >
@@ -1212,7 +1203,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={editForm.contactPerson}
-                      onChange={(e) => setEditForm({...editForm, contactPerson: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, contactPerson: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1225,7 +1216,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="email"
                       value={editForm.email}
-                      onChange={(e) => setEditForm({...editForm, email: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1238,7 +1229,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="tel"
                       value={editForm.phone}
-                      onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1250,7 +1241,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <select
                       value={editForm.partnershipType}
-                      onChange={(e) => setEditForm({...editForm, partnershipType: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, partnershipType: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     >
@@ -1267,7 +1258,7 @@ const AdminPartnershipsPage = () => {
                       type="number"
                       min="0"
                       value={editForm.yearsInBusiness}
-                      onChange={(e) => setEditForm({...editForm, yearsInBusiness: parseInt(e.target.value) || 0})}
+                      onChange={(e) => setEditForm({ ...editForm, yearsInBusiness: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1280,7 +1271,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={editForm.address}
-                      onChange={(e) => setEditForm({...editForm, address: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1293,7 +1284,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={editForm.city}
-                      onChange={(e) => setEditForm({...editForm, city: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1306,7 +1297,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={editForm.state}
-                      onChange={(e) => setEditForm({...editForm, state: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, state: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1319,7 +1310,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={editForm.country}
-                      onChange={(e) => setEditForm({...editForm, country: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, country: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1332,7 +1323,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={editForm.postalCode}
-                      onChange={(e) => setEditForm({...editForm, postalCode: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, postalCode: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1346,7 +1337,7 @@ const AdminPartnershipsPage = () => {
                       type="number"
                       min="0"
                       value={editForm.currentClients}
-                      onChange={(e) => setEditForm({...editForm, currentClients: parseInt(e.target.value) || 0})}
+                      onChange={(e) => setEditForm({ ...editForm, currentClients: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1360,7 +1351,7 @@ const AdminPartnershipsPage = () => {
                       type="number"
                       min="0"
                       value={editForm.monthlyTarget}
-                      onChange={(e) => setEditForm({...editForm, monthlyTarget: parseInt(e.target.value) || 0})}
+                      onChange={(e) => setEditForm({ ...editForm, monthlyTarget: parseInt(e.target.value) || 0 })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1373,7 +1364,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={editForm.investmentCapacity}
-                      onChange={(e) => setEditForm({...editForm, investmentCapacity: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, investmentCapacity: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1386,7 +1377,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={editForm.expectedCommission}
-                      onChange={(e) => setEditForm({...editForm, expectedCommission: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, expectedCommission: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1399,7 +1390,7 @@ const AdminPartnershipsPage = () => {
                     <input
                       type="text"
                       value={editForm.localNetwork}
-                      onChange={(e) => setEditForm({...editForm, localNetwork: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, localNetwork: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     />
@@ -1411,7 +1402,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <select
                       value={editForm.status}
-                      onChange={(e) => setEditForm({...editForm, status: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="pending">Pending</option>
@@ -1428,7 +1419,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <select
                       value={editForm.priority}
-                      onChange={(e) => setEditForm({...editForm, priority: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, priority: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="low">Low</option>
@@ -1445,7 +1436,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <textarea
                       value={editForm.experience}
-                      onChange={(e) => setEditForm({...editForm, experience: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, experience: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
                       required
@@ -1458,7 +1449,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <textarea
                       value={editForm.motivation}
-                      onChange={(e) => setEditForm({...editForm, motivation: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, motivation: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
                       required
@@ -1471,7 +1462,7 @@ const AdminPartnershipsPage = () => {
                     </label>
                     <textarea
                       value={editForm.expectations}
-                      onChange={(e) => setEditForm({...editForm, expectations: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, expectations: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows={3}
                       required

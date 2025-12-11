@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Sparkles, ArrowRight, Star, Award } from 'lucide-react';
-import { modalBackdrop, modalContent, fadeInUp, scaleInCenter } from '@/lib/animations';
+import { MessageCircle, X, Sparkles, Star, Award } from 'lucide-react';
+
 import EnhancedContactForm from './EnhancedContactForm';
 
 const QuickContactForm = () => {
@@ -25,7 +25,7 @@ const QuickContactForm = () => {
   const handleFormSubmit = () => {
     // This callback is called when the form is successfully submitted
     // The auto-hide functionality is now handled by EnhancedContactForm
-    
+
     // Fallback: Close modal after 3 seconds if auto-hide doesn't work
     setTimeout(() => {
       console.log('Fallback: Closing modal after 3 seconds');
@@ -66,15 +66,15 @@ const QuickContactForm = () => {
         >
           {/* Animated background gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-purple-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          
+
           {/* Main icon */}
           <motion.div
-            animate={{ 
+            animate={{
               rotate: [0, 5, -5, 0],
               scale: [1, 1.1, 1]
             }}
-            transition={{ 
-              duration: 3, 
+            transition={{
+              duration: 3,
               repeat: Infinity,
               ease: "easeInOut"
             }}
@@ -82,21 +82,21 @@ const QuickContactForm = () => {
           >
             <MessageCircle className="w-6 h-6" />
           </motion.div>
-          
+
           {/* Sparkle effects */}
           <motion.div
-            animate={{ 
+            animate={{
               opacity: [0, 1, 0],
               scale: [0.5, 1, 0.5]
             }}
-            transition={{ 
-              duration: 2, 
+            transition={{
+              duration: 2,
               repeat: Infinity,
               delay: 0.5
             }}
             className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"
           />
-          
+
           {/* Tooltip */}
           <div className="absolute right-full mr-4 top-1/2 transform -translate-y-1/2 bg-gray-900/95 backdrop-blur-md text-white px-4 py-3 rounded-xl text-sm font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl border border-white/10">
             <div className="flex items-center space-x-2">
@@ -106,7 +106,7 @@ const QuickContactForm = () => {
             <div className="absolute right-0 top-1/2 transform translate-x-1 -translate-y-1/2 w-2 h-2 bg-gray-900/95 rotate-45 border-r border-b border-white/10" />
           </div>
         </motion.button>
-        
+
         {/* Floating particles effect */}
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(3)].map((_, i) => (
@@ -136,7 +136,7 @@ const QuickContactForm = () => {
       {/* Modern Modal */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -152,7 +152,7 @@ const QuickContactForm = () => {
               }
             }}
           >
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.8, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: 50 }}
@@ -167,19 +167,19 @@ const QuickContactForm = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-indigo-50/50" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.1),transparent_50%)]" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(147,51,234,0.1),transparent_50%)]" />
-              
+
               {/* Enhanced Header */}
               <div className="relative p-6 border-b border-gray-200/30">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <motion.div 
+                    <motion.div
                       className="relative w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg"
-                      animate={{ 
+                      animate={{
                         rotate: [0, 5, -5, 0],
                         scale: [1, 1.05, 1]
                       }}
-                      transition={{ 
-                        duration: 4, 
+                      transition={{
+                        duration: 4,
                         repeat: Infinity,
                         ease: "easeInOut"
                       }}
@@ -187,12 +187,12 @@ const QuickContactForm = () => {
                       <Award className="w-6 h-6 text-white" />
                       {/* Sparkle effect */}
                       <motion.div
-                        animate={{ 
+                        animate={{
                           opacity: [0, 1, 0],
                           scale: [0.5, 1, 0.5]
                         }}
-                        transition={{ 
-                          duration: 2, 
+                        transition={{
+                          duration: 2,
                           repeat: Infinity,
                           delay: 1
                         }}
@@ -218,9 +218,9 @@ const QuickContactForm = () => {
                     <X className="w-5 h-5 text-gray-500 group-hover:text-gray-700" />
                   </motion.button>
                 </div>
-                
+
                 {/* Trust indicators */}
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}

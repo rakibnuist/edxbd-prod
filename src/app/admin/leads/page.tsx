@@ -28,10 +28,10 @@ export default function LeadsPageNew() {
   const [deleting, setDeleting] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
 
-  const handleWhatsAppTracking = async (data: any) => {
+  const handleWhatsAppTracking = async (data: unknown) => {
     // Track WhatsApp interaction for admin dashboard
     console.log('WhatsApp contact tracked from admin:', data);
-    
+
     // You can add additional tracking here if needed
     // For example, send to analytics service or update lead status
   };
@@ -55,9 +55,9 @@ export default function LeadsPageNew() {
     try {
       setLoading(true);
       setError(null);
-      
+
       console.log('Making request to /api/admin/leads...');
-      
+
       // First, try to get a fresh token by logging in (same as dashboard)
       const loginResponse = await fetch('/api/auth/login', {
         method: 'POST',
@@ -88,9 +88,9 @@ export default function LeadsPageNew() {
           'Content-Type': 'application/json'
         }
       });
-      
+
       console.log('Response status:', response.status);
-      
+
       if (response.ok) {
         const data = await response.json();
         console.log('Leads fetched:', data);
@@ -110,7 +110,7 @@ export default function LeadsPageNew() {
   const updateLeadStatus = async (leadId: string, newStatus: string) => {
     try {
       setUpdatingStatus(leadId);
-      
+
       // Get fresh token (same as fetchLeads)
       const loginResponse = await fetch('/api/auth/login', {
         method: 'POST',
@@ -148,22 +148,22 @@ export default function LeadsPageNew() {
       if (response.ok) {
         const updatedLead = await response.json();
         console.log('Lead updated successfully:', updatedLead);
-        
+
         // Update local state with the actual response from server
-        setLeads(prevLeads => 
-          prevLeads.map(lead => 
-            lead._id === leadId 
+        setLeads(prevLeads =>
+          prevLeads.map(lead =>
+            lead._id === leadId
               ? { ...lead, status: updatedLead.status, updatedAt: updatedLead.updatedAt }
               : lead
           )
         );
-        
+
         if (selectedLead && selectedLead._id === leadId) {
           setSelectedLead(prev => prev ? { ...prev, status: updatedLead.status, updatedAt: updatedLead.updatedAt } : null);
         }
-        
+
         setError(null);
-        
+
         // Show success message (optional)
         console.log(`✅ Lead status updated to: ${newStatus}`);
       } else {
@@ -181,7 +181,7 @@ export default function LeadsPageNew() {
   const deleteLead = async (leadId: string) => {
     try {
       setDeleting(true);
-      
+
       // Get fresh token (same as fetchLeads)
       const loginResponse = await fetch('/api/auth/login', {
         method: 'POST',
@@ -216,11 +216,11 @@ export default function LeadsPageNew() {
       if (response.ok) {
         // Remove from local state
         setLeads(prevLeads => prevLeads.filter(lead => lead._id !== leadId));
-        
+
         // Close any open modals
         setSelectedLead(null);
         setDeleteConfirm(null);
-        
+
         setError(null);
       } else {
         const errorData = await response.json();
@@ -293,7 +293,7 @@ export default function LeadsPageNew() {
         <div className="text-center">
           <div className="text-lg text-gray-600">Authentication required</div>
           <div className="text-sm text-gray-500 mt-2">Please login to access the leads</div>
-          <a 
+          <a
             href="/login"
             className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
@@ -321,7 +321,7 @@ export default function LeadsPageNew() {
         <div className="text-center">
           <div className="text-lg text-red-600">Error loading leads</div>
           <div className="text-sm text-gray-500 mt-2">{error}</div>
-          <button 
+          <button
             onClick={fetchLeads}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
@@ -345,9 +345,9 @@ export default function LeadsPageNew() {
       <div className="mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded">
         <h3 className="font-bold text-yellow-800">Debug Info:</h3>
         <p className="text-sm text-yellow-700">
-          Total Leads: {leads.length} | 
-          Auth Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'} | 
-          Loading: {loading ? 'Yes' : 'No'} | 
+          Total Leads: {leads.length} |
+          Auth Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'} |
+          Loading: {loading ? 'Yes' : 'No'} |
           Error: {error || 'None'}
         </p>
       </div>
@@ -422,20 +422,20 @@ export default function LeadsPageNew() {
                         disabled={updatingStatus === lead._id}
                         className={`text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 ${getStatusColor(lead.status)} ${updatingStatus === lead._id ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
-                      <option value="new">New</option>
-                      <option value="contacted">Contacted</option>
-                      <option value="consultation_scheduled">Consultation Scheduled</option>
-                      <option value="consultation_completed">Consultation Completed</option>
-                      <option value="qualified">Qualified</option>
-                      <option value="application_started">Application Started</option>
-                      <option value="application_submitted">Application Submitted</option>
-                      <option value="admission_received">Admission Received</option>
-                      <option value="visa_applied">Visa Applied</option>
-                      <option value="visa_approved">Visa Approved</option>
-                      <option value="enrolled">Enrolled</option>
-                      <option value="converted">Converted</option>
-                      <option value="not_interested">Not Interested</option>
-                      <option value="closed">Closed</option>
+                        <option value="new">New</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="consultation_scheduled">Consultation Scheduled</option>
+                        <option value="consultation_completed">Consultation Completed</option>
+                        <option value="qualified">Qualified</option>
+                        <option value="application_started">Application Started</option>
+                        <option value="application_submitted">Application Submitted</option>
+                        <option value="admission_received">Admission Received</option>
+                        <option value="visa_applied">Visa Applied</option>
+                        <option value="visa_approved">Visa Approved</option>
+                        <option value="enrolled">Enrolled</option>
+                        <option value="converted">Converted</option>
+                        <option value="not_interested">Not Interested</option>
+                        <option value="closed">Closed</option>
                       </select>
                       {updatingStatus === lead._id && (
                         <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -484,7 +484,7 @@ export default function LeadsPageNew() {
                   </svg>
                 </button>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -572,11 +572,11 @@ export default function LeadsPageNew() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                 </svg>
               </div>
-              
+
               <h3 className="text-lg font-medium text-gray-900 text-center mb-2">
                 Delete Lead
               </h3>
-              
+
               <div className="text-center mb-6">
                 <p className="text-sm text-gray-500 mb-2">
                   Are you sure you want to delete this lead?
@@ -588,7 +588,7 @@ export default function LeadsPageNew() {
                   This action cannot be undone.
                 </p>
               </div>
-              
+
               <div className="flex space-x-3">
                 <button
                   onClick={() => setDeleteConfirm(null)}

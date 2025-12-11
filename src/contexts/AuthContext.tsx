@@ -32,18 +32,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Check if user is logged in on mount
     const token = localStorage.getItem('admin_token');
     const userData = localStorage.getItem('admin_user');
-    
+
     if (token && userData) {
       try {
         const parsedUser = JSON.parse(userData);
         setUser(parsedUser);
-      } catch (error) {
+      } catch {
         // Invalid user data, clear it
         localStorage.removeItem('admin_token');
         localStorage.removeItem('admin_user');
       }
     }
-    
+
     setLoading(false);
   }, []);
 
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         return { success: false };
       }
-    } catch (error) {
+    } catch {
       return { success: false };
     }
   };
@@ -77,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await fetch('/api/auth/logout', {
         method: 'POST',
       });
-    } catch (error) {
+    } catch {
       // Ignore logout API errors
     } finally {
       localStorage.removeItem('admin_token');
@@ -95,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         'Content-Type': 'application/json'
       };
     }
-    
+
     // Basic token validation - check if it's a valid JWT format
     const tokenParts = token.split('.');
     if (tokenParts.length !== 3) {
@@ -107,7 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         'Content-Type': 'application/json'
       };
     }
-    
+
     // Check if token is expired
     try {
       const payload = JSON.parse(atob(tokenParts[1]));
@@ -119,7 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.warn('Error checking token expiration:', error);
     }
-    
+
     return {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -160,7 +160,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ...authHeaders,
       ...(options.headers as Record<string, string> || {}),
     };
-    
+
     let response = await fetch(url, {
       ...options,
       headers: mergedHeaders,
@@ -170,7 +170,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (response.status === 403) {
       console.log('Got 403, attempting token refresh...');
       const refreshSuccess = await refreshToken();
-      
+
       if (refreshSuccess) {
         console.log('Token refreshed successfully, retrying request...');
         // Retry the request with the new token
@@ -179,7 +179,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           ...retryAuthHeaders,
           ...(options.headers as Record<string, string> || {}),
         };
-        
+
         response = await fetch(url, {
           ...options,
           headers: retryMergedHeaders,

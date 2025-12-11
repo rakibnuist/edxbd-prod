@@ -1,16 +1,13 @@
 'use client';
 
-import { 
-  GraduationCap, 
-  Users, 
-  Clock, 
-  ArrowRight, 
-  Phone, 
+import {
+  GraduationCap,
+  Users,
+  ArrowRight,
+  Phone,
   CheckCircle,
   Award,
   MessageCircle,
-  Send,
-  Plane,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
@@ -20,7 +17,7 @@ import { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedButton from '@/components/AnimatedButton';
 import EngagementTracker from '@/components/EngagementTracker';
-import { fadeInUp, fadeInDown, scaleIn, staggerContainer, staggerItem, float } from '@/lib/animations';
+import { float } from '@/lib/animations';
 
 // Import components normally for now - lazy loading can be added later
 import { Testimonial, Update } from '@/lib/types';
@@ -29,11 +26,11 @@ import { featuredCountries } from '@/lib/countries';
 // Client-side only flag component to prevent hydration issues
 const ClientOnlyFlag = ({ flag, className }: { flag: string; className: string }) => {
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
-  
+
   if (!mounted) {
     return (
       <div className={className}>
@@ -41,9 +38,9 @@ const ClientOnlyFlag = ({ flag, className }: { flag: string; className: string }
       </div>
     );
   }
-  
+
   return (
-    <motion.div 
+    <motion.div
       className={className}
       whileHover={{ scale: 1.15, rotate: 5 }}
     >
@@ -178,13 +175,13 @@ const Home = memo(function Home() {
     const interval = setInterval(() => {
       // Rotate destinations every 6 seconds
       setCurrentDestination((prev) => (prev + 1) % countries.length);
-      
+
       // Enhanced carousel movement with slide-based navigation - one card per slide
       setCurrentCarouselSlide((prev) => {
         const totalSlides = featuredCountries.length;
         return (prev + 1) % totalSlides;
       });
-      
+
       // Rotate updates every 10 seconds
       if (updates.length > 4) {
         const totalSlides = Math.ceil(updates.length / 4);
@@ -258,7 +255,7 @@ const Home = memo(function Home() {
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
@@ -274,49 +271,49 @@ const Home = memo(function Home() {
     <div className="min-h-screen bg-white text-gray-900">
       {/* Engagement Tracking */}
       <EngagementTracker pageName="home" />
-      
+
       {/* Compact Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 pt-20 sm:pt-24 md:pt-28 lg:pt-32">
         {/* Enhanced Background Elements with Glassmorphism */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {/* Main gradient orbs */}
-          <motion.div 
+          <motion.div
             className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/15 to-purple-400/15 rounded-full blur-3xl"
             variants={float}
             animate="animate"
           />
-          <motion.div 
+          <motion.div
             className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-pink-400/15 to-orange-400/15 rounded-full blur-3xl"
             variants={float}
             animate="animate"
             transition={{ delay: 1 }}
           />
-          
+
           {/* Additional floating elements */}
-          <motion.div 
+          <motion.div
             className="absolute top-1/3 right-1/3 w-64 h-64 bg-gradient-to-r from-green-400/10 to-emerald-400/10 rounded-full blur-2xl"
-            animate={{ 
+            animate={{
               y: [0, -20, 0],
               x: [0, 15, 0],
               scale: [1, 1.1, 1]
             }}
-            transition={{ 
+            transition={{
               duration: 8,
               repeat: Infinity,
               ease: "easeInOut",
               delay: 2
             }}
           />
-          
+
           {/* Glassmorphism floating shapes */}
           <motion.div
             className="absolute top-20 left-20 w-32 h-32 bg-white/10 backdrop-blur-sm rounded-full border border-white/20"
-            animate={{ 
+            animate={{
               y: [0, -30, 0],
               x: [0, 20, 0],
               rotate: [0, 180, 360]
             }}
-            transition={{ 
+            transition={{
               duration: 12,
               repeat: Infinity,
               ease: "easeInOut"
@@ -324,12 +321,12 @@ const Home = memo(function Home() {
           />
           <motion.div
             className="absolute bottom-32 right-32 w-24 h-24 bg-white/10 backdrop-blur-sm rounded-full border border-white/20"
-            animate={{ 
+            animate={{
               y: [0, 25, 0],
               x: [0, -15, 0],
               rotate: [0, -180, -360]
             }}
-            transition={{ 
+            transition={{
               duration: 10,
               repeat: Infinity,
               ease: "easeInOut",
@@ -343,12 +340,12 @@ const Home = memo(function Home() {
             {/* Compact Trust Badge */}
             <AnimatedSection animation="fadeInDown" delay={0.2}>
               <div className="mb-4">
-                <motion.div 
+                <motion.div
                   className="inline-flex items-center space-x-2 bg-white/90 backdrop-blur-md border border-blue-200/60 rounded-full px-6 py-2 shadow-lg hover:shadow-xl transition-all duration-300"
                   whileHover={{ scale: 1.05, y: -2 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <motion.div 
+                  <motion.div
                     className="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}
@@ -356,7 +353,7 @@ const Home = memo(function Home() {
                   <span className="text-xs font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent">
                     🏆 Trusted Since 2018 • 3000+ Students Got Scholarships
                   </span>
-                  <motion.div 
+                  <motion.div
                     className="w-2 h-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ duration: 2, repeat: Infinity, delay: 1 }}
@@ -368,7 +365,7 @@ const Home = memo(function Home() {
             {/* Compact Main Heading */}
             <AnimatedSection animation="fadeInUp" delay={0.4}>
               <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-3 sm:mb-4 font-bold leading-tight font-heading px-2">
-                <motion.span 
+                <motion.span
                   className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent"
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -376,7 +373,7 @@ const Home = memo(function Home() {
                 >
                   Study Abroad
                 </motion.span>
-                <motion.span 
+                <motion.span
                   className="block bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-clip-text text-transparent"
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -396,8 +393,8 @@ const Home = memo(function Home() {
 
             {/* Compact Subtitle */}
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-4">
-              Transform your education journey with expert study abroad consultancy. 
-              <span className="font-bold text-green-600"> FREE scholarship assistance</span> since 2018. 
+              Transform your education journey with expert study abroad consultancy.
+              <span className="font-bold text-green-600"> FREE scholarship assistance</span> since 2018.
               <span className="font-bold text-blue-600"> 97% success rate</span> helping 3000+ students study at top universities worldwide.
             </p>
 
@@ -426,7 +423,7 @@ const Home = memo(function Home() {
                   {/* Shine effect */}
                   <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 </motion.button>
-                
+
                 <motion.button
                   onClick={() => trackApplicationStart('phone_call')}
                   className="group relative bg-white/90 backdrop-blur-md hover:bg-white text-blue-600 text-base px-8 py-3 rounded-full font-bold shadow-lg border-2 border-blue-600/50 hover:border-blue-700 min-h-[48px] touch-manipulation active:scale-95 transition-all duration-300 hover:shadow-xl"
@@ -465,7 +462,7 @@ const Home = memo(function Home() {
                     whileHover={{ scale: 1.05, y: -4 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <motion.div 
+                    <motion.div
                       className="text-2xl sm:text-3xl mb-2 group-hover:scale-110 transition-transform duration-300"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
@@ -475,7 +472,7 @@ const Home = memo(function Home() {
                     </motion.div>
                     <div className="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-1">{stat.value}</div>
                     <div className="text-xs sm:text-sm text-gray-700 font-semibold">{stat.label}</div>
-                    
+
                     {/* Subtle glow effect */}
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </motion.div>
@@ -491,7 +488,7 @@ const Home = memo(function Home() {
         <div className="container mx-auto px-6">
           <AnimatedSection animation="fadeInUp" delay={0.2}>
             <div className="text-center mb-20">
-              <motion.div 
+              <motion.div
                 className="inline-block mb-8"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -501,18 +498,18 @@ const Home = memo(function Home() {
                   <Award className="w-12 h-12 text-white" />
                 </div>
               </motion.div>
-              
+
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-gray-900 font-heading">
                 How We Help You
               </h2>
-              
-              <motion.div 
+
+              <motion.div
                 className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mb-8"
                 initial={{ width: 0 }}
                 animate={{ width: 96 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
               />
-              
+
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 <span className="font-bold text-purple-600">3 Simple Steps</span> to Study Abroad with Scholarship Assistance
               </p>
@@ -529,7 +526,7 @@ const Home = memo(function Home() {
                   icon: "💬"
                 },
                 {
-                  step: "02", 
+                  step: "02",
                   title: "Application Support",
                   description: "Complete assistance with university applications, document preparation, and scholarship applications.",
                   icon: "📝"
@@ -550,12 +547,12 @@ const Home = memo(function Home() {
                   whileHover={{ y: -10 }}
                 >
                   <div className="relative mb-8">
-                    <motion.div 
+                    <motion.div
                       className="w-32 h-32 bg-gradient-to-br from-blue-50 to-purple-50 rounded-full flex items-center justify-center mx-auto shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105"
                       whileHover={{ scale: 1.1, rotate: 5 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
-                      <motion.span 
+                      <motion.span
                         className="text-4xl"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
@@ -564,7 +561,7 @@ const Home = memo(function Home() {
                         {process.icon}
                       </motion.span>
                     </motion.div>
-                    <motion.div 
+                    <motion.div
                       className="absolute -top-2 -right-2 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg"
                       initial={{ scale: 0, rotate: -180 }}
                       animate={{ scale: 1, rotate: 0 }}
@@ -573,11 +570,11 @@ const Home = memo(function Home() {
                       {process.step}
                     </motion.div>
                   </div>
-                  
+
                   <h3 className="text-xl font-bold text-gray-900 mb-4 font-heading">
                     {process.title}
                   </h3>
-                  
+
                   <p className="text-gray-600 leading-relaxed">
                     {process.description}
                   </p>
@@ -602,7 +599,7 @@ const Home = memo(function Home() {
 
           {/* Enhanced Carousel with Controls */}
           <div className="max-w-7xl mx-auto">
-            <div 
+            <div
               className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/60 via-blue-50/30 to-purple-50/40 backdrop-blur-md shadow-2xl border border-white/30 hover:border-blue-200/50 transition-all duration-500"
               onMouseEnter={() => setIsCarouselPaused(true)}
               onMouseLeave={() => setIsCarouselPaused(false)}
@@ -623,7 +620,7 @@ const Home = memo(function Home() {
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/20 group-hover:to-purple-500/20 transition-all duration-300 blur-sm"></div>
                 <ChevronLeft className="relative w-4 h-4 sm:w-6 sm:h-6 group-hover:-translate-x-1 transition-transform duration-200" />
               </button>
-              
+
               <button
                 onClick={goToNextSlide}
                 className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 bg-white/95 hover:bg-white text-gray-700 hover:text-blue-600 rounded-full p-2 sm:p-4 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 backdrop-blur-md border border-white/30 hover:border-blue-300/50 opacity-90 hover:opacity-100 group min-h-[44px] min-w-[44px] flex items-center justify-center"
@@ -635,9 +632,9 @@ const Home = memo(function Home() {
 
               {/* Carousel Container - One Card Per Slide */}
               <div className="overflow-hidden">
-                <div 
+                <div
                   className="flex transition-transform duration-700 ease-in-out"
-                  style={{ 
+                  style={{
                     transform: `translateX(-${currentCarouselSlide * 100}%)`
                   }}
                 >
@@ -657,21 +654,21 @@ const Home = memo(function Home() {
                         >
                           {/* Enhanced multi-layer gradient overlay */}
                           <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/0 via-purple-50/0 to-pink-50/0 group-hover:from-indigo-50/60 group-hover:via-purple-50/50 group-hover:to-pink-50/60 transition-all duration-700 rounded-3xl"></div>
-                          
+
                           {/* Animated pattern overlay */}
                           <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500">
                             <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/30 via-purple-400/20 to-pink-400/30 rounded-3xl animate-pulse"></div>
                           </div>
-                          
+
                           {/* Subtle border glow effect */}
                           <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                             <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-indigo-400/20 via-purple-400/20 to-pink-400/20 blur-sm"></div>
                           </div>
-                          
+
                           <div className="text-center relative z-10">
                             {/* Enhanced flag with glow effect - Mobile Responsive */}
                             <div className="relative mb-6 sm:mb-8 lg:mb-10">
-                              <ClientOnlyFlag 
+                              <ClientOnlyFlag
                                 flag={country.flag}
                                 className="text-6xl sm:text-7xl lg:text-9xl mb-2 sm:mb-3 group-hover:scale-110 transition-transform duration-500 filter group-hover:drop-shadow-2xl group-hover:brightness-110"
                               />
@@ -680,21 +677,21 @@ const Home = memo(function Home() {
                                 {country.flag}
                               </div>
                             </div>
-                            
+
                             {/* Enhanced title with gradient text - Mobile Responsive */}
                             <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-5 lg:mb-6 leading-tight bg-gradient-to-r from-gray-900 via-indigo-800 to-purple-800 bg-clip-text text-transparent group-hover:from-indigo-600 group-hover:via-purple-600 group-hover:to-pink-600 transition-all duration-500 font-heading">
                               {country.name}
                             </h3>
-                            
+
                             {/* Enhanced description with better typography - Mobile Responsive */}
                             <p className="text-sm sm:text-base lg:text-lg text-gray-600 mb-6 sm:mb-8 lg:mb-10 group-hover:text-gray-700 transition-colors duration-300 leading-relaxed font-medium">
                               {country.description}
                             </p>
-                            
+
                             {/* Enhanced CTA button with gradient background - Mobile Responsive */}
                             <div className="relative">
                               <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full blur opacity-0 group-hover:opacity-80 transition-opacity duration-500"></div>
-                              <motion.div 
+                              <motion.div
                                 className="relative inline-flex items-center text-white font-bold text-sm sm:text-base lg:text-lg bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 group-hover:from-indigo-500 group-hover:via-purple-500 group-hover:to-pink-500 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-full transition-all duration-300 shadow-xl group-hover:shadow-2xl"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
@@ -725,11 +722,11 @@ const Home = memo(function Home() {
           <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-emerald-400/5 to-teal-400/5 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-gradient-to-r from-blue-400/5 to-indigo-400/5 rounded-full blur-3xl" />
         </div>
-        
+
         <div className="container mx-auto px-6 relative z-10">
           <AnimatedSection animation="fadeInUp" delay={0.2}>
             <div className="text-center mb-20">
-              <motion.div 
+              <motion.div
                 className="inline-block mb-8"
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
@@ -740,18 +737,18 @@ const Home = memo(function Home() {
                   <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-full" />
                 </div>
               </motion.div>
-              
+
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-emerald-800 to-teal-800 bg-clip-text text-transparent font-heading">
                 Success Stories
               </h2>
-              
-              <motion.div 
+
+              <motion.div
                 className="w-32 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 rounded-full mx-auto mb-8 shadow-lg"
                 initial={{ width: 0 }}
                 animate={{ width: 128 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
               />
-              
+
               <p className="text-xl text-gray-600 max-w-4xl mx-auto font-medium">
                 Hear from students who achieved their study abroad dreams with our support
               </p>
@@ -760,7 +757,7 @@ const Home = memo(function Home() {
 
           {testimonialsLoading ? (
             <div className="text-center">
-              <motion.div 
+              <motion.div
                 className="animate-spin rounded-full h-16 w-16 border-4 border-emerald-200 border-t-emerald-600 mx-auto mb-6"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
@@ -769,7 +766,7 @@ const Home = memo(function Home() {
             </div>
           ) : (
             <div className="max-w-5xl mx-auto">
-              <motion.div 
+              <motion.div
                 className="bg-white/80 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/30 relative overflow-hidden"
                 key={currentTestimonial}
                 initial={{ opacity: 0, y: 20 }}
@@ -780,9 +777,9 @@ const Home = memo(function Home() {
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-teal-50/30 to-blue-50/50 rounded-3xl" />
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-400/10 to-teal-400/10 rounded-full blur-2xl" />
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full blur-2xl" />
-                
+
                 <div className="text-center relative z-10">
-                  <motion.div 
+                  <motion.div
                     className="text-8xl mb-8"
                     initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
@@ -790,7 +787,7 @@ const Home = memo(function Home() {
                   >
                     {testimonials[currentTestimonial]?.image || "👨‍🎓"}
                   </motion.div>
-                  
+
                   <div className="flex justify-center mb-6">
                     {[...Array(5)].map((_, i) => (
                       <motion.div
@@ -805,17 +802,17 @@ const Home = memo(function Home() {
                       </motion.div>
                     ))}
                   </div>
-                  
-                  <motion.blockquote 
+
+                  <motion.blockquote
                     className="text-xl text-gray-700 mb-8 italic leading-relaxed font-medium"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
                   >
-                    "{testimonials[currentTestimonial]?.quote || 'EduExpress International made my study abroad dream come true!'}"
+                    &quot;{testimonials[currentTestimonial]?.quote || 'EduExpress International made my study abroad dream come true!'}&quot;
                   </motion.blockquote>
-                  
-                  <motion.div 
+
+                  <motion.div
                     className="text-center"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -840,7 +837,7 @@ const Home = memo(function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <AnimatedSection animation="fadeInUp" delay={0.2}>
-              <motion.div 
+              <motion.div
                 className="inline-block mb-8"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -850,18 +847,18 @@ const Home = memo(function Home() {
                   <MessageCircle className="w-12 h-12 text-white" />
                 </div>
               </motion.div>
-              
+
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-gray-900 font-heading">
                 Latest Updates
               </h2>
-              
-              <motion.div 
+
+              <motion.div
                 className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mx-auto mb-8"
                 initial={{ width: 0 }}
                 animate={{ width: 96 }}
                 transition={{ delay: 0.6, duration: 0.8 }}
               />
-              
+
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Stay informed with the latest news, scholarship opportunities, and study abroad insights
               </p>
@@ -876,60 +873,64 @@ const Home = memo(function Home() {
           ) : updates.length > 0 ? (
             <AnimatedSection animation="stagger" delay={0.8}>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-                {updates.slice(0, 4).map((update, index) => (
-                  <motion.article
-                    key={update._id}
-                    className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer border border-gray-100 hover:border-green-200 relative overflow-hidden"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.0 + index * 0.1 }}
-                    onClick={() => window.open(`/updates/${update.slug}`, '_blank')}
-                  >
-                    {/* Featured Badge */}
-                    {update.isFeatured && (
-                      <div className="absolute top-3 right-3 z-10">
-                        <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full animate-pulse"></div>
-                      </div>
-                    )}
-                    
-                    {/* Card Content */}
-                    <div className="p-6 h-full flex flex-col">
-                      {/* Category Badge */}
-                      {update.category && (
-                        <div className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 mb-4 w-fit">
-                          {update.category}
+                {updates.slice(0, 4).map((update, index) => {
+                  const primaryCategory = update.category || update.categories?.[0];
+
+                  return (
+                    <motion.article
+                      key={update._id}
+                      className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer border border-gray-100 hover:border-green-200 relative overflow-hidden"
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.0 + index * 0.1 }}
+                      onClick={() => window.open(`/updates/${update.slug}`, '_blank')}
+                    >
+                      {/* Featured Badge */}
+                      {update.isFeatured && (
+                        <div className="absolute top-3 right-3 z-10">
+                          <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full animate-pulse"></div>
                         </div>
                       )}
-                      
-                      {/* Title */}
-                      <header className="mb-4 flex-1">
-                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-700 transition-colors duration-300 line-clamp-2 leading-tight font-heading">
-                          {update.title}
-                        </h3>
-                      </header>
-                      
-                      {/* Meta Description */}
-                      <div className="mb-6 flex-1">
-                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                          {update.metaDescription || update.excerpt || 'Stay updated with the latest news and opportunities.'}
-                        </p>
-                      </div>
-                      
-                      {/* Read More Link */}
-                      <footer className="mt-auto">
-                        <div className="inline-flex items-center text-green-600 hover:text-green-700 font-medium text-sm group-hover:translate-x-1 transition-all duration-300">
-                          <span>Read More</span>
-                          <ArrowRight className="ml-1 w-4 h-4" />
+
+                      {/* Card Content */}
+                      <div className="p-6 h-full flex flex-col">
+                        {/* Category Badge */}
+                        {primaryCategory && (
+                          <div className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 mb-4 w-fit">
+                            {primaryCategory}
+                          </div>
+                        )}
+
+                        {/* Title */}
+                        <header className="mb-4 flex-1">
+                          <h3 className="text-lg font-bold text-gray-900 group-hover:text-green-700 transition-colors duration-300 line-clamp-2 leading-tight font-heading">
+                            {update.title}
+                          </h3>
+                        </header>
+
+                        {/* Meta Description */}
+                        <div className="mb-6 flex-1">
+                          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                            {update.metaDescription || update.excerpt || 'Stay updated with the latest news and opportunities.'}
+                          </p>
                         </div>
-                      </footer>
-                    </div>
-                    
-                    {/* Hover Effect Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-50/0 to-emerald-50/0 group-hover:from-green-50/30 group-hover:to-emerald-50/20 transition-all duration-300 rounded-xl"></div>
-                  </motion.article>
-                ))}
+
+                        {/* Read More Link */}
+                        <footer className="mt-auto">
+                          <div className="inline-flex items-center text-green-600 hover:text-green-700 font-medium text-sm group-hover:translate-x-1 transition-all duration-300">
+                            <span>Read More</span>
+                            <ArrowRight className="ml-1 w-4 h-4" />
+                          </div>
+                        </footer>
+                      </div>
+
+                      {/* Hover Effect Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-50/0 to-emerald-50/0 group-hover:from-green-50/30 group-hover:to-emerald-50/20 transition-all duration-300 rounded-xl"></div>
+                    </motion.article>
+                  );
+                })}
               </div>
-              
+
               {/* View All Updates Button */}
               <div className="text-center mt-12">
                 <AnimatedButton
@@ -960,10 +961,10 @@ const Home = memo(function Home() {
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-white/10 to-transparent rounded-full blur-3xl" />
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-white/5 to-transparent rounded-full blur-2xl" />
         </div>
-        
+
         <div className="container mx-auto px-6 relative z-10">
           <div className="text-center max-w-5xl mx-auto">
-            <motion.div 
+            <motion.div
               className="inline-block mb-10"
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
@@ -974,8 +975,8 @@ const Home = memo(function Home() {
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-full" />
               </div>
             </motion.div>
-            
-            <motion.h2 
+
+            <motion.h2
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-8 text-white"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -983,15 +984,15 @@ const Home = memo(function Home() {
             >
               Ready to Study Abroad?
             </motion.h2>
-            
-            <motion.div 
+
+            <motion.div
               className="w-32 h-1.5 bg-white/60 rounded-full mx-auto mb-10 shadow-lg"
               initial={{ width: 0 }}
               animate={{ width: 128 }}
               transition={{ delay: 0.6, duration: 0.8 }}
             />
-            
-            <motion.p 
+
+            <motion.p
               className="text-blue-100 text-xl lg:text-2xl mb-16 max-w-4xl mx-auto leading-relaxed font-medium"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -999,7 +1000,7 @@ const Home = memo(function Home() {
             >
               Join <span className="font-bold text-yellow-300 bg-yellow-300/20 px-3 py-1 rounded-full">3000+ students</span> who achieved their study abroad dreams with our FREE scholarship assistance since 2018
             </motion.p>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}

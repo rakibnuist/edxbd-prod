@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
@@ -7,15 +8,15 @@ import User from '@/models/User';
 export async function GET(request: NextRequest) {
   try {
     const decoded = verifyTokenFromRequest(request);
-    
+
     if (!decoded || decoded.role !== 'admin') {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     await connectDB();
-    
+
     const users = await User.find({}).select('-password').sort({ createdAt: -1 });
-    
+
     // Convert MongoDB ObjectIds to strings
     const usersWithStringIds = users.map(user => ({
       id: user._id.toString(),
@@ -25,7 +26,7 @@ export async function GET(request: NextRequest) {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
     }));
-    
+
     return NextResponse.json({ users: usersWithStringIds });
   } catch (error) {
     console.error('Fetch users error:', error);
@@ -37,13 +38,13 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const decoded = verifyTokenFromRequest(request);
-    
+
     if (!decoded || decoded.role !== 'admin') {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     await connectDB();
-    
+
     const { name, email, password, role = 'user' } = await request.json();
 
     // Validate required fields
@@ -81,7 +82,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Hash password
-    const bcrypt = require('bcryptjs');
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 

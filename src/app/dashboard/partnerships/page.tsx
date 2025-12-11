@@ -55,11 +55,11 @@ export default function UserPartnershipsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       const url = editingPartnership ? `/api/admin/partnerships/${editingPartnership._id}` : '/api/admin/partnerships';
       const method = editingPartnership ? 'PUT' : 'POST';
-      
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -118,7 +118,7 @@ export default function UserPartnershipsPage() {
 
         if (response.ok) {
           // Update local state immediately
-          setPartnerships(prevPartnerships => 
+          setPartnerships(prevPartnerships =>
             prevPartnerships.filter(partnership => partnership._id !== id)
           );
           showMessage('success', 'Partnership deleted successfully!');
@@ -143,14 +143,14 @@ export default function UserPartnershipsPage() {
 
       if (response.ok) {
         // Update local state immediately for better UX
-        setPartnerships(prevPartnerships => 
-          prevPartnerships.map(partnership => 
-            partnership._id === partnershipId 
-              ? { ...partnership, status: newStatus as any, updatedAt: new Date().toISOString() }
+        setPartnerships(prevPartnerships =>
+          prevPartnerships.map(partnership =>
+            partnership._id === partnershipId
+              ? { ...partnership, status: newStatus as Partnership['status'], updatedAt: new Date().toISOString() }
               : partnership
           )
         );
-        
+
         showMessage('success', 'Partnership status updated successfully!');
         setEditingPartnershipId(null);
         setEditingStatus('');
@@ -220,11 +220,10 @@ export default function UserPartnershipsPage() {
     <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
       {/* Message Display */}
       {message && (
-        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${
-          message.type === 'success' 
-            ? 'bg-green-100 border border-green-400 text-green-700' 
+        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${message.type === 'success'
+            ? 'bg-green-100 border border-green-400 text-green-700'
             : 'bg-red-100 border border-red-400 text-red-700'
-        }`}>
+          }`}>
           <div className="flex justify-between items-center">
             <span className="text-xs sm:text-sm lg:text-base">{message.text}</span>
             <button
@@ -387,7 +386,7 @@ export default function UserPartnershipsPage() {
                   </svg>
                 </button>
               </div>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -400,7 +399,7 @@ export default function UserPartnershipsPage() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Contact Person</label>
                     <input
@@ -424,7 +423,7 @@ export default function UserPartnershipsPage() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Phone</label>
                     <input
@@ -447,7 +446,7 @@ export default function UserPartnershipsPage() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Partnership Type</label>
                     <select
@@ -482,7 +481,7 @@ export default function UserPartnershipsPage() {
                       <option value="on_hold">On Hold</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Priority</label>
                     <select
@@ -495,10 +494,10 @@ export default function UserPartnershipsPage() {
                       <option value="high">High</option>
                     </select>
                   </div>
-                  
+
                 </div>
 
-                
+
                 <div className="flex justify-end space-x-3">
                   <button
                     type="button"

@@ -2,18 +2,11 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Building2, 
-  User, 
-  Briefcase, 
-  DollarSign, 
-  Share2, 
-  FileText, 
-  MessageSquare,
+import {
+  Building2,
+  Briefcase,
   CheckCircle,
   AlertCircle,
-  Upload,
-  X,
   ArrowRight,
   ArrowLeft,
   Handshake
@@ -43,27 +36,9 @@ const initialFormData: PartnershipFormData = {
   motivation: ''
 };
 
-const businessTypes = [
-  { value: 'individual', label: 'Individual Consultant' },
-  { value: 'consultancy', label: 'Education Consultancy' },
-  { value: 'agency', label: 'Recruitment Agency' },
-  { value: 'institution', label: 'Educational Institution' },
-  { value: 'other', label: 'Other' }
-];
-
 const partnershipTypes = [
   { value: 'individual_agent', label: 'Individual Agent', description: 'Perfect for individual consultants and freelancers' },
   { value: 'company', label: 'Company', description: 'Ideal for education consultancies and agencies' }
-];
-
-const targetCountries = [
-  'Australia', 'Canada', 'China', 'Cyprus', 'Finland', 'Georgia', 'Germany', 'Hungary', 
-  'Ireland', 'Malaysia', 'Netherlands', 'New Zealand', 'Singapore', 'United Kingdom', 'United States'
-];
-
-const marketingChannels = [
-  'Social Media', 'Website/Blog', 'Email Marketing', 'Print Media', 'Radio/TV', 
-  'Events/Seminars', 'Referrals', 'Online Advertising', 'Partnerships', 'Other'
 ];
 
 const PartnershipForm = () => {
@@ -75,12 +50,12 @@ const PartnershipForm = () => {
 
   const totalSteps = 2;
 
-  const updateFormData = (field: string, value: any) => {
+  const updateFormData = (field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({
@@ -90,33 +65,6 @@ const PartnershipForm = () => {
     }
   };
 
-  const updateNestedFormData = (parent: string, field: string, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [parent]: {
-        ...(prev[parent as keyof PartnershipFormData] as any),
-        [field]: value
-      }
-    }));
-  };
-
-  const addToArray = (field: string, value: string) => {
-    const currentArray = formData[field as keyof PartnershipFormData] as unknown as string[];
-    if (value.trim() && !currentArray.includes(value)) {
-      setFormData(prev => ({
-        ...prev,
-        [field]: [...(prev[field as keyof PartnershipFormData] as unknown as string[]), value]
-      }));
-    }
-  };
-
-  const removeFromArray = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: (prev[field as keyof PartnershipFormData] as unknown as string[]).filter((item: string) => item !== value)
-    }));
-  };
-
   const validateStep = (step: number): boolean => {
     const newErrors: Record<string, string> = {};
 
@@ -124,20 +72,20 @@ const PartnershipForm = () => {
       case 1: // Basic Information
         if (!formData.contactPerson.trim()) newErrors.contactPerson = 'Contact person is required';
         else if (formData.contactPerson.trim().length < 2) newErrors.contactPerson = 'Name must be at least 2 characters';
-        
+
         if (!formData.email.trim()) newErrors.email = 'Email is required';
         else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Please enter a valid email address';
-        
+
         if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
         else if (formData.phone.trim().length < 10) newErrors.phone = 'Please enter a valid phone number';
-        
+
         if (!formData.city.trim()) newErrors.city = 'City is required';
         else if (formData.city.trim().length < 2) newErrors.city = 'Please enter a valid city name';
-        
+
         if (!formData.country.trim()) newErrors.country = 'Country is required';
         else if (formData.country.trim().length < 2) newErrors.country = 'Please enter a valid country name';
         break;
-      
+
       case 2: // Partnership Details
         if (!formData.partnershipType) newErrors.partnershipType = 'Please select a partnership type';
         if (!formData.motivation.trim()) newErrors.motivation = 'Please tell us why you want to partner with us';
@@ -181,7 +129,7 @@ const PartnershipForm = () => {
           country: formData.country,
           partnershipType: formData.partnershipType,
           motivation: formData.motivation,
-          
+
           // Required fields with defaults
           businessType: formData.partnershipType === 'individual_agent' ? 'individual' : 'consultancy',
           yearsInBusiness: 1,
@@ -227,7 +175,7 @@ const PartnershipForm = () => {
           partnership_type: formData.partnershipType,
           country: formData.country
         });
-        
+
         setSubmitStatus('success');
         setFormData(initialFormData);
         setCurrentStep(1);
@@ -282,13 +230,12 @@ const PartnershipForm = () => {
                   type="text"
                   value={formData.contactPerson}
                   onChange={(e) => updateFormData('contactPerson', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${
-                    errors.contactPerson 
-                      ? 'border-red-500 bg-red-50' 
-                      : formData.contactPerson 
-                        ? 'border-green-500 bg-green-50' 
-                        : 'border-gray-300 hover:border-gray-400'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${errors.contactPerson
+                    ? 'border-red-500 bg-red-50'
+                    : formData.contactPerson
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-300 hover:border-gray-400'
+                    }`}
                   placeholder="Your full name"
                 />
                 {errors.contactPerson && <p className="text-red-500 text-xs mt-1">{errors.contactPerson}</p>}
@@ -302,13 +249,12 @@ const PartnershipForm = () => {
                   type="email"
                   value={formData.email}
                   onChange={(e) => updateFormData('email', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${
-                    errors.email 
-                      ? 'border-red-500 bg-red-50' 
-                      : formData.email 
-                        ? 'border-green-500 bg-green-50' 
-                        : 'border-gray-300 hover:border-gray-400'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${errors.email
+                    ? 'border-red-500 bg-red-50'
+                    : formData.email
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-300 hover:border-gray-400'
+                    }`}
                   placeholder="your@email.com"
                 />
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
@@ -322,13 +268,12 @@ const PartnershipForm = () => {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => updateFormData('phone', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${
-                    errors.phone 
-                      ? 'border-red-500 bg-red-50' 
-                      : formData.phone 
-                        ? 'border-green-500 bg-green-50' 
-                        : 'border-gray-300 hover:border-gray-400'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${errors.phone
+                    ? 'border-red-500 bg-red-50'
+                    : formData.phone
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-300 hover:border-gray-400'
+                    }`}
                   placeholder="+1 (555) 123-4567"
                 />
                 {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
@@ -342,13 +287,12 @@ const PartnershipForm = () => {
                   type="text"
                   value={formData.city}
                   onChange={(e) => updateFormData('city', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${
-                    errors.city 
-                      ? 'border-red-500 bg-red-50' 
-                      : formData.city 
-                        ? 'border-green-500 bg-green-50' 
-                        : 'border-gray-300 hover:border-gray-400'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${errors.city
+                    ? 'border-red-500 bg-red-50'
+                    : formData.city
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-300 hover:border-gray-400'
+                    }`}
                   placeholder="Your city"
                 />
                 {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
@@ -362,13 +306,12 @@ const PartnershipForm = () => {
                   type="text"
                   value={formData.country}
                   onChange={(e) => updateFormData('country', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${
-                    errors.country 
-                      ? 'border-red-500 bg-red-50' 
-                      : formData.country 
-                        ? 'border-green-500 bg-green-50' 
-                        : 'border-gray-300 hover:border-gray-400'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${errors.country
+                    ? 'border-red-500 bg-red-50'
+                    : formData.country
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-300 hover:border-gray-400'
+                    }`}
                   placeholder="Your country"
                 />
                 {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country}</p>}
@@ -393,11 +336,10 @@ const PartnershipForm = () => {
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {partnershipTypes.map(type => (
-                    <label key={type.value} className={`relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                      formData.partnershipType === type.value 
-                        ? 'border-blue-500 bg-blue-50 shadow-md' 
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                    }`}>
+                    <label key={type.value} className={`relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${formData.partnershipType === type.value
+                      ? 'border-blue-500 bg-blue-50 shadow-md'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      }`}>
                       <input
                         type="radio"
                         name="partnershipType"
@@ -408,11 +350,10 @@ const PartnershipForm = () => {
                       />
                       <div className="flex items-center justify-between mb-2">
                         <div className="font-semibold text-gray-900 text-sm">{type.label}</div>
-                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                          formData.partnershipType === type.value 
-                            ? 'border-blue-500 bg-blue-500' 
-                            : 'border-gray-300'
-                        }`}>
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${formData.partnershipType === type.value
+                          ? 'border-blue-500 bg-blue-500'
+                          : 'border-gray-300'
+                          }`}>
                           {formData.partnershipType === type.value && (
                             <div className="w-2 h-2 bg-white rounded-full"></div>
                           )}
@@ -432,13 +373,12 @@ const PartnershipForm = () => {
                 <textarea
                   value={formData.motivation}
                   onChange={(e) => updateFormData('motivation', e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors resize-none ${
-                    errors.motivation 
-                      ? 'border-red-500 bg-red-50' 
-                      : formData.motivation 
-                        ? 'border-green-500 bg-green-50' 
-                        : 'border-gray-300 hover:border-gray-400'
-                  }`}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors resize-none ${errors.motivation
+                    ? 'border-red-500 bg-red-50'
+                    : formData.motivation
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-300 hover:border-gray-400'
+                    }`}
                   rows={4}
                   placeholder="Briefly explain your motivation for partnering with EduExpress International..."
                 />
@@ -447,7 +387,7 @@ const PartnershipForm = () => {
                     <p className="text-red-500 text-xs">{errors.motivation}</p>
                   ) : (
                     <p className="text-gray-500 text-xs">
-                      {formData.motivation.length < 20 
+                      {formData.motivation.length < 20
                         ? `Minimum 20 characters (${formData.motivation.length}/20)`
                         : 'Great! You\'ve provided enough detail.'
                       }
@@ -479,8 +419,8 @@ const PartnershipForm = () => {
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
         <h3 className="text-2xl font-bold text-gray-900 mb-4">Application Submitted Successfully!</h3>
         <p className="text-gray-600 mb-8">
-          Thank you for your interest in partnering with EduExpress International. 
-          We have received your application and will review it carefully. 
+          Thank you for your interest in partnering with EduExpress International.
+          We have received your application and will review it carefully.
           Our team will contact you within 2-3 business days.
         </p>
         <button
@@ -548,11 +488,10 @@ const PartnershipForm = () => {
           <button
             onClick={prevStep}
             disabled={currentStep === 1}
-            className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors text-xs ${
-              currentStep === 1
-                ? 'text-gray-400 cursor-not-allowed'
-                : 'text-gray-700 hover:bg-gray-100'
-            }`}
+            className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors text-xs ${currentStep === 1
+              ? 'text-gray-400 cursor-not-allowed'
+              : 'text-gray-700 hover:bg-gray-100'
+              }`}
           >
             <ArrowLeft className="w-3 h-3" />
             <span>Previous</span>

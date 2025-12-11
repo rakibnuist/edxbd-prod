@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       businessLicense,
       website,
       yearsInBusiness,
-      
+
       // Contact Information
       contactPerson,
       email,
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       state,
       country,
       postalCode,
-      
+
       // Business Details
       partnershipType,
       targetCountries,
@@ -35,26 +35,26 @@ export async function POST(request: NextRequest) {
       monthlyTarget,
       experience,
       currentPartners,
-      
+
       // Financial Information
       annualRevenue,
       investmentCapacity,
       expectedCommission,
-      
+
       // Marketing & Network
       marketingChannels,
       socialMediaPresence,
       localNetwork,
       referralSources,
-      
+
       // Documents
       documents,
-      
+
       // Additional Information
       motivation,
       expectations,
       additionalInfo,
-      
+
       // System Fields
       source = 'website'
     } = body;
@@ -78,9 +78,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Get client IP and user agent
-    const ipAddress = request.headers.get('x-forwarded-for') || 
-                     request.headers.get('x-real-ip') || 
-                     'unknown';
+    const ipAddress = request.headers.get('x-forwarded-for') ||
+      request.headers.get('x-real-ip') ||
+      'unknown';
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
     // Create new partnership application
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       businessLicense,
       website,
       yearsInBusiness,
-      
+
       // Contact Information
       contactPerson,
       email,
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
       state,
       country,
       postalCode,
-      
+
       // Business Details
       partnershipType,
       targetCountries,
@@ -111,26 +111,26 @@ export async function POST(request: NextRequest) {
       monthlyTarget,
       experience,
       currentPartners,
-      
+
       // Financial Information
       annualRevenue,
       investmentCapacity,
       expectedCommission,
-      
+
       // Marketing & Network
       marketingChannels,
       socialMediaPresence,
       localNetwork,
       referralSources,
-      
+
       // Documents
       documents,
-      
+
       // Additional Information
       motivation,
       expectations,
       additionalInfo,
-      
+
       // System Fields
       source,
       ipAddress,
@@ -157,9 +157,9 @@ export async function POST(request: NextRequest) {
     // await sendPartnershipConfirmationEmail(partnership);
 
     return NextResponse.json(
-      { 
+      {
         message: 'Partnership application submitted successfully',
-        id: partnership._id 
+        id: partnership._id
       },
       { status: 201 }
     );
@@ -185,7 +185,7 @@ export async function GET(request: NextRequest) {
     const country = searchParams.get('country');
 
     // Build filter object
-    const filter: any = {};
+    const filter: Record<string, unknown> = {};
     if (status) filter.status = status;
     if (partnershipType) filter.partnershipType = partnershipType;
     if (country) filter.country = country;

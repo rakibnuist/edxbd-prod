@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
@@ -10,16 +11,16 @@ export async function GET(
 ) {
   try {
     const decoded = verifyTokenFromRequest(request);
-    
+
     if (!decoded || decoded.role !== 'admin') {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     await connectDB();
-    
+
     const { id } = await params;
     const user = await User.findById(id).select('-password');
-    
+
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
@@ -47,18 +48,18 @@ export async function PUT(
 ) {
   try {
     const decoded = verifyTokenFromRequest(request);
-    
+
     if (!decoded || decoded.role !== 'admin') {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     await connectDB();
-    
+
     const { name, email, role, password } = await request.json();
     const { id } = await params;
 
     const user = await User.findById(id);
-    
+
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
@@ -73,7 +74,7 @@ export async function PUT(
           { status: 400 }
         );
       }
-      
+
       // Check if email is already taken by another user
       const existingUser = await User.findOne({ email: email.toLowerCase().trim(), _id: { $ne: id } });
       if (existingUser) {
@@ -82,11 +83,11 @@ export async function PUT(
           { status: 409 }
         );
       }
-      
+
       user.email = email.toLowerCase().trim();
     }
     if (role) user.role = role;
-    
+
     if (password) {
       if (password.length < 6) {
         return NextResponse.json(
@@ -94,7 +95,6 @@ export async function PUT(
           { status: 400 }
         );
       }
-      const bcrypt = require('bcryptjs');
       const saltRounds = 12;
       user.password = await bcrypt.hash(password, saltRounds);
     }
@@ -128,16 +128,16 @@ export async function DELETE(
 ) {
   try {
     const decoded = verifyTokenFromRequest(request);
-    
+
     if (!decoded || decoded.role !== 'admin') {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     await connectDB();
-    
+
     const { id } = await params;
     const user = await User.findById(id);
-    
+
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }

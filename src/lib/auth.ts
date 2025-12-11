@@ -14,13 +14,13 @@ export interface AuthUser {
 
 export function verifyToken(token: string): AuthUser | null {
   try {
-    const decoded = jwt.verify(token, jwtSecret) as any;
+    const decoded = jwt.verify(token, jwtSecret) as jwt.JwtPayload;
     return {
       userId: decoded.userId,
       email: decoded.email,
       role: decoded.role
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }

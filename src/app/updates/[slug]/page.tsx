@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
         description: update.excerpt || update.content.substring(0, 160),
       }
     };
-  } catch (error) {
+  } catch {
     return {
       title: 'Update Not Found',
       description: 'The requested update could not be found.'
@@ -80,6 +80,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       content: update.content,
       excerpt: update.excerpt,
       category: update.category,
+      categories: update.categories,
       tags: update.tags,
       featuredImage: update.featuredImage,
       isFeatured: update.isFeatured,

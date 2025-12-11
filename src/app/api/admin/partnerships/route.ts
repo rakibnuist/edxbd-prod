@@ -6,7 +6,7 @@ import Partnership from '@/models/Partnership';
 export async function GET(request: NextRequest) {
   try {
     const decoded = verifyTokenFromRequest(request);
-    
+
     if (!decoded || decoded.role !== 'admin') {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
@@ -23,12 +23,12 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search');
 
     // Build filter object
-    const filter: any = {};
+    const filter: Record<string, unknown> = {};
     if (status) filter.status = status;
     if (partnershipType) filter.partnershipType = partnershipType;
     if (country) filter.country = country;
     if (priority) filter.priority = priority;
-    
+
     // Search functionality
     if (search) {
       filter.$or = [
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const decoded = verifyTokenFromRequest(request);
-    
+
     if (!decoded || decoded.role !== 'admin') {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
@@ -146,9 +146,9 @@ export async function POST(request: NextRequest) {
     await partnership.save();
 
     return NextResponse.json(
-      { 
+      {
         message: 'Partnership created successfully',
-        partnership 
+        partnership
       },
       { status: 201 }
     );

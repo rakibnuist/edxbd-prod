@@ -10,8 +10,8 @@ interface DashboardStats {
   totalCountries: number;
   totalPartnerships: number;
   newPartnerships: number;
-  recentLeads: any[];
-  recentPartnerships: any[];
+  recentLeads: { name: string; email: string; country: string }[];
+  recentPartnerships: { companyName: string; contactEmail: string; country: string }[];
 }
 
 interface MetaStatus {
@@ -25,14 +25,14 @@ interface MetaStatus {
 export default function AdminDashboardNew() {
   const { isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
-  totalLeads: 0,
-  newLeads: 0,
-  totalTestimonials: 0,
-  totalCountries: 0,
-  totalPartnerships: 0,
-  newPartnerships: 0,
-  recentLeads: [],
-  recentPartnerships: []
+    totalLeads: 0,
+    newLeads: 0,
+    totalTestimonials: 0,
+    totalCountries: 0,
+    totalPartnerships: 0,
+    newPartnerships: 0,
+    recentLeads: [],
+    recentPartnerships: []
   });
   const [metaStatus, setMetaStatus] = useState<MetaStatus>({
     pixelId: null,
@@ -56,7 +56,7 @@ export default function AdminDashboardNew() {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Use authenticated fetch with automatic token refresh
       const response = await authenticatedFetch('/api/admin/dashboard');
 
@@ -67,7 +67,7 @@ export default function AdminDashboardNew() {
       const data = await response.json();
       console.log('Received data:', data);
       console.log('Dashboard API response status:', response.status);
-      
+
       // Direct assignment - no complex state management
       setStats({
         totalLeads: data.totalLeads || 0,
@@ -79,7 +79,7 @@ export default function AdminDashboardNew() {
         recentLeads: data.recentLeads || [],
         recentPartnerships: data.recentPartnerships || []
       });
-      
+
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -162,13 +162,13 @@ export default function AdminDashboardNew() {
           <div className="text-lg text-red-600">Error loading dashboard</div>
           <div className="text-sm text-gray-500 mt-2">{error}</div>
           <div className="mt-4 space-x-2">
-            <button 
+            <button
               onClick={fetchData}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
               Retry
             </button>
-            <button 
+            <button
               onClick={() => {
                 localStorage.removeItem('admin_token');
                 localStorage.removeItem('admin_user');
@@ -198,13 +198,13 @@ export default function AdminDashboardNew() {
       <div className="mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded">
         <h3 className="font-bold text-yellow-800">Debug Info:</h3>
         <p className="text-sm text-yellow-700">
-          Total Leads: {stats.totalLeads} | 
-          Total Testimonials: {stats.totalTestimonials} | 
+          Total Leads: {stats.totalLeads} |
+          Total Testimonials: {stats.totalTestimonials} |
           Total Countries: {stats.totalCountries}
         </p>
         <p className="text-xs text-yellow-600 mt-1">
-          Auth Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'} | 
-          Loading: {loading ? 'Yes' : 'No'} | 
+          Auth Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'} |
+          Loading: {loading ? 'Yes' : 'No'} |
           Error: {error || 'None'}
         </p>
       </div>
@@ -228,7 +228,7 @@ export default function AdminDashboardNew() {
               {metaStatus.pixelActive ? 'Active' : 'Inactive'}
             </span>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <div className={`w-3 h-3 rounded-full ${metaStatus.conversionApiActive ? 'bg-green-500' : 'bg-red-500'}`}></div>
             <span className="text-sm font-medium text-gray-700">Conversion API</span>
@@ -236,18 +236,18 @@ export default function AdminDashboardNew() {
               {metaStatus.conversionApiActive ? 'Active' : 'Inactive'}
             </span>
           </div>
-          
+
           <div className="text-sm">
             <span className="font-medium text-gray-700">Pixel ID:</span>
             <span className="text-gray-600 ml-1">{metaStatus.pixelId || 'Not Set'}</span>
-              </div>
-          
+          </div>
+
           <div className="text-sm">
             <span className="font-medium text-gray-700">Access Token:</span>
             <span className="text-gray-600 ml-1">{metaStatus.accessToken || 'Not Set'}</span>
-            </div>
+          </div>
         </div>
-        
+
         {!metaStatus.pixelActive && (
           <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded">
             <p className="text-sm text-yellow-800">
@@ -255,7 +255,7 @@ export default function AdminDashboardNew() {
             </p>
           </div>
         )}
-        
+
         {!metaStatus.conversionApiActive && (
           <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded">
             <p className="text-sm text-yellow-800">
@@ -264,7 +264,7 @@ export default function AdminDashboardNew() {
           </div>
         )}
       </div>
-      
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg shadow-md border">
@@ -356,41 +356,41 @@ export default function AdminDashboardNew() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-md border">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Leads</h3>
-            {stats.recentLeads.length > 0 ? (
+          {stats.recentLeads.length > 0 ? (
             <div className="space-y-3">
               {stats.recentLeads.map((lead, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                    <div>
+                  <div>
                     <p className="font-medium text-gray-900">{lead.name}</p>
-                      <p className="text-sm text-gray-600">{lead.email}</p>
+                    <p className="text-sm text-gray-600">{lead.email}</p>
                   </div>
                   <span className="text-sm text-gray-500">{lead.country}</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500">No recent leads</p>
-            )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">No recent leads</p>
+          )}
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md border">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Partnerships</h3>
-            {stats.recentPartnerships.length > 0 ? (
+          {stats.recentPartnerships.length > 0 ? (
             <div className="space-y-3">
               {stats.recentPartnerships.map((partnership, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                    <div>
+                  <div>
                     <p className="font-medium text-gray-900">{partnership.companyName}</p>
                     <p className="text-sm text-gray-600">{partnership.contactEmail}</p>
                   </div>
                   <span className="text-sm text-gray-500">{partnership.country}</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500">No recent partnerships</p>
-            )}
-          </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">No recent partnerships</p>
+          )}
+        </div>
       </div>
     </div>
   );

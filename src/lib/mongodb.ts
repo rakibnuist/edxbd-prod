@@ -12,9 +12,9 @@ if (!MONGODB_URI) {
  * during API Route usage.
  */
 declare global {
-  var mongoose: { 
-    conn: any | null; 
-    promise: Promise<any> | null 
+  var mongoose: {
+    conn: typeof import('mongoose') | null;
+    promise: Promise<typeof import('mongoose')> | null
   } | undefined;
 }
 

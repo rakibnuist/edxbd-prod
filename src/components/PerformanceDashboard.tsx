@@ -50,7 +50,7 @@ export default function PerformanceDashboard() {
         };
 
         setMetrics(mockMetrics);
-      } catch (err) {
+      } catch (_err) {
         setError('Failed to fetch metrics');
       } finally {
         setLoading(false);
@@ -167,7 +167,7 @@ export default function PerformanceDashboard() {
       <div>
         <h4 className="text-md font-semibold mb-3">Event Performance</h4>
         <div className="space-y-2">
-          {metrics.topEvents.map((event, index) => (
+          {metrics.topEvents.map((event, _index) => (
             <div key={event.event} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <div className="flex items-center">
                 <CheckCircle className="w-5 h-5 text-green-500 mr-3" />

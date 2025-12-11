@@ -1,9 +1,11 @@
 'use client';
 
-import { User, ArrowRight, Share2, MessageCircle, Phone } from 'lucide-react';
+import { ArrowRight, Share2, Calendar, Clock, ChevronLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { trackConsultationRequest } from '@/lib/analytics';
-import { Update, UpdateClientProps } from '@/lib/types';
+import { UpdateClientProps } from '@/lib/types';
 
 export default function UpdateClient({ update }: UpdateClientProps) {
   const [isClient, setIsClient] = useState(false);
@@ -11,14 +13,6 @@ export default function UpdateClient({ update }: UpdateClientProps) {
   useEffect(() => {
     setIsClient(true);
   }, []);
-
-  const whiteTextStyle = {
-    color: '#ffffff',
-    WebkitTextFillColor: '#ffffff',
-    textFillColor: '#ffffff',
-    textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-    fontWeight: '500'
-  };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -32,7 +26,6 @@ export default function UpdateClient({ update }: UpdateClientProps) {
         console.log('Error sharing:', error);
       }
     } else {
-      // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(window.location.href);
         alert('Link copied to clipboard!');
@@ -42,198 +35,151 @@ export default function UpdateClient({ update }: UpdateClientProps) {
     }
   };
 
+  const formatDate = (dateString: string) => {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(new Date(dateString));
+  };
+
+  // Calculate read time
+  const readTime = Math.max(1, Math.ceil((update.content.length || 0) / 1000)) + ' min read';
+
+  // Dynamic Category Colors (Matching Main List)
+  const getCategoryColor = (category: string) => {
+    const colors: { [key: string]: string } = {
+      'Scholarships': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+      'Visa Updates': 'bg-blue-100 text-blue-800 border-blue-200',
+      'Events': 'bg-violet-100 text-violet-800 border-violet-200',
+      'Partnerships': 'bg-orange-100 text-orange-800 border-orange-200',
+      'Success Stories': 'bg-amber-100 text-amber-800 border-amber-200',
+      'Announcement': 'bg-pink-100 text-pink-800 border-pink-200',
+      'News': 'bg-rose-100 text-rose-800 border-rose-200'
+    };
+    return colors[category] || 'bg-slate-100 text-slate-700 border-slate-200';
+  };
+
   if (!isClient) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-slate-200 rounded-full animate-pulse"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <style jsx>{`
-        .cta-title {
-          color: #ffffff !important;
-          -webkit-text-fill-color: #ffffff !important;
-          text-fill-color: #ffffff !important;
-        }
-        .cta-title * {
-          color: #ffffff !important;
-        }
-      `}</style>
-      {/* Enhanced Header */}
-      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 border-b border-gray-200 pt-20 pb-12 relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100 rounded-full -translate-y-48 translate-x-48 opacity-20"></div>
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-100 rounded-full translate-y-40 -translate-x-40 opacity-20"></div>
-        
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-center justify-between">
-              <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-900 via-purple-900 to-blue-900 bg-clip-text text-transparent leading-tight flex-1">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-indigo-100 selection:text-indigo-900 pb-24">
+
+      {/* 1. Sticky Professional Header */}
+      <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/60 h-16 transition-all">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
+          <Link
+            href="/updates"
+            className="flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors group"
+          >
+            <div className="p-1.5 rounded-full group-hover:bg-slate-100 transition-colors">
+              <ChevronLeft className="w-4 h-4" />
+            </div>
+            Back to Updates
+          </Link>
+
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-slate-700 hover:bg-white hover:text-slate-900 transition-all border border-slate-200 hover:border-slate-300 shadow-sm bg-white/50"
+          >
+            <Share2 className="w-4 h-4" />
+            <span>Share</span>
+          </button>
+        </div>
+      </nav>
+
+      <main className="pt-28 md:pt-32">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+
+          {/* 2. Structured White Card Container */}
+          <article className="bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 ring-1 ring-slate-900/5 overflow-hidden p-8 md:p-12 lg:p-16 mb-16">
+
+            {/* Header Info */}
+            <header className="mb-12 text-center max-w-2xl mx-auto">
+              {/* Meta Caps */}
+              <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+                {update.category && (
+                  <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border ${getCategoryColor(update.category)}`}>
+                    {update.category}
+                  </span>
+                )}
+                <span className="text-slate-300 text-lg">•</span>
+                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">
+                  {formatDate(update.publishedAt || update.createdAt)}
+                </span>
+              </div>
+
+              <h1 className="text-3xl md:text-5xl lg:text-5xl font-extrabold text-slate-900 mb-8 leading-[1.15] tracking-tight text-balance">
                 {update.title}
               </h1>
-              <button
-                onClick={handleShare}
-                className="flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl transition-all duration-300 ml-6 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-              >
-                <Share2 className="w-5 h-5" />
-                <span className="hidden sm:inline font-semibold">Share</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Enhanced Featured Image Section */}
-      {update.featuredImage && (
-        <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-blue-50 relative overflow-hidden">
-          {/* Background decoration */}
-          <div className="absolute top-0 left-0 w-96 h-96 bg-blue-100 rounded-full -translate-y-48 -translate-x-48 opacity-10"></div>
-          <div className="absolute bottom-0 right-0 w-80 h-80 bg-purple-100 rounded-full translate-y-40 translate-x-40 opacity-10"></div>
-          
-          <div className="container mx-auto px-6 relative z-10">
-            <div className="max-w-5xl mx-auto">
-              <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200 relative group">
-                <img 
-                  src={update.featuredImage} 
+              {/* Read Time */}
+              <div className="flex items-center justify-center gap-2 text-slate-400 text-sm font-medium">
+                <Clock className="w-4 h-4" />
+                {readTime}
+              </div>
+            </header>
+
+            {/* Wide Focus Image */}
+            {update.featuredImage && (
+              <div className="mb-16 -mx-8 md:-mx-12 lg:-mx-16 relative aspect-video shadow-sm border-y border-slate-100 bg-slate-50">
+                <Image
+                  src={update.featuredImage}
                   alt={update.title}
-                  className="w-full h-80 lg:h-[500px] object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  priority
+                  className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-            </div>
-          </div>
-        </section>
-      )}
+            )}
 
-      {/* Enhanced Content Section */}
-      <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-blue-50 relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-100 rounded-full -translate-y-48 translate-x-48 opacity-10"></div>
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-100 rounded-full translate-y-40 -translate-x-40 opacity-10"></div>
-        
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-3xl p-12 shadow-xl relative overflow-hidden">
-              {/* Content decoration */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full -translate-y-16 translate-x-16"></div>
-              
-              <div className="article-body relative z-10">
-                {isClient ? (
-                  <div 
-                    className="prose prose-lg max-w-none prose-headings:text-slate-900 prose-p:text-slate-700 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-ul:text-slate-700 prose-ol:text-slate-700 prose-li:text-slate-700 prose-blockquote:text-slate-600 prose-blockquote:border-blue-300 prose-blockquote:bg-blue-50 prose-blockquote:p-6 prose-blockquote:rounded-xl"
-                    dangerouslySetInnerHTML={{ __html: update.content }}
-                    suppressHydrationWarning={true}
-                  />
-                ) : (
-                  <div className="prose prose-lg max-w-none prose-headings:text-slate-900 prose-p:text-slate-700 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-ul:text-slate-700 prose-ol:text-slate-700 prose-li:text-slate-700 prose-blockquote:text-slate-600 prose-blockquote:border-blue-300 prose-blockquote:bg-blue-50 prose-blockquote:p-6 prose-blockquote:rounded-xl">
-                    <div dangerouslySetInnerHTML={{ __html: update.content }} />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            {/* Content */}
+            <div className="prose prose-lg md:prose-xl max-w-none prose-slate prose-headings:font-bold prose-headings:text-slate-900 prose-headings:tracking-tight prose-p:text-slate-700 prose-p:leading-8 prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline prose-a:font-semibold prose-img:rounded-2xl prose-img:shadow-md prose-blockquote:border-l-4 prose-blockquote:border-indigo-500 prose-blockquote:bg-indigo-50/30 prose-blockquote:px-8 prose-blockquote:py-6 prose-blockquote:my-10 prose-blockquote:not-italic prose-blockquote:rounded-r-xl">
+              {update.excerpt && (
+                <p className="lead text-2xl font-normal text-slate-600 mb-12 not-prose leading-relaxed border-b border-slate-100 pb-12">
+                  {update.excerpt}
+                </p>
+              )}
 
-      {/* Professional CTA Section */}
-      <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px),
-                             radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 2px, transparent 2px)`,
-            backgroundSize: '60px 60px'
-          }}></div>
-        </div>
-        
-        {/* Subtle overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/50 to-slate-900/80"></div>
-        
-        <div className="container mx-auto px-6 text-center relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-6">
-              <h2 
-                className="cta-title text-4xl sm:text-5xl font-bold drop-shadow-2xl shadow-black/50 bg-black/20 backdrop-blur-sm px-8 py-4 rounded-2xl border border-white/10" 
-                style={{
-                  color: '#ffffff',
-                  WebkitTextFillColor: '#ffffff'
-                }}
-              >
-                Ready to Start Your Journey?
+              <div dangerouslySetInnerHTML={{ __html: update.content }} />
+            </div>
+          </article>
+
+          {/* 6. High-Visibility Gradient CTA Banner */}
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2rem] p-10 md:p-16 text-center shadow-2xl shadow-blue-600/30 relative overflow-hidden mb-12">
+
+            {/* Subtle Pattern to add texture without reducing contrast */}
+            <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight drop-shadow-md">
+                Start your study abroad journey
               </h2>
-            </div>
-            <p className="text-xl text-white mb-12 leading-relaxed max-w-3xl mx-auto drop-shadow-md">
-              Get your <span className="font-semibold text-blue-300">FREE consultation</span> today and take the first step towards your international education.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <button 
+              <p className="text-blue-50 mb-10 max-w-2xl mx-auto text-lg/relaxed font-medium drop-shadow-sm">
+                Join thousands of students who have realized their dreams. Our expert counselors are here to guide you through every step.
+              </p>
+
+              <button
                 onClick={() => {
-                  trackConsultationRequest('update_final_cta');
+                  trackConsultationRequest('update_footer_cta');
                   window.dispatchEvent(new CustomEvent('openQuickForm'));
                 }}
-                className="group flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-105 min-h-[60px] border border-blue-500"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-white text-blue-700 rounded-full font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:bg-blue-50 hover:-translate-y-1"
               >
-                <User className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
-                Get FREE Consultation
-                <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
+                Book Free Consultation
+                <ArrowRight className="w-5 h-5" />
               </button>
-              
-              <a
-                href="https://wa.me/8801983333566?text=Hi! I'm interested in study abroad consultation. Can you help me?"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all duration-300 font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-105 min-h-[60px] border border-green-500"
-              >
-                <MessageCircle className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
-                Chat on WhatsApp
-                <div className="ml-3 relative">
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse border-2 border-white"></div>
-                </div>
-              </a>
-            </div>
-            
-            <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 border border-white/30 shadow-lg">
-                  <Phone className="w-8 h-8 text-blue-300" />
-                </div>
-                <div className="text-2xl font-bold text-blue-300 drop-shadow-md">24/7</div>
-                <div className="text-sm" style={whiteTextStyle}>Support</div>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 border border-white/30 shadow-lg">
-                  <User className="w-8 h-8 text-blue-300" />
-                </div>
-                <div className="text-2xl font-bold text-blue-300 drop-shadow-md">FREE</div>
-                <div className="text-sm" style={whiteTextStyle}>Consultation</div>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 border border-white/30 shadow-lg">
-                  <MessageCircle className="w-8 h-8 text-blue-300" />
-                </div>
-                <div className="text-2xl font-bold text-blue-300 drop-shadow-md">Instant</div>
-                <div className="text-sm" style={whiteTextStyle}>Response</div>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 border border-white/30 shadow-lg">
-                  <ArrowRight className="w-8 h-8 text-blue-300" />
-                </div>
-                <div className="text-2xl font-bold text-blue-300 drop-shadow-md">Fast</div>
-                <div className="text-sm" style={whiteTextStyle}>Processing</div>
-              </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Quick Contact Form Modal */}
+        </div>
+      </main>
     </div>
   );
 }
