@@ -173,7 +173,7 @@ export const useMetaTracking = () => {
 
   // Button click tracking
   const trackButtonClick = useCallback((
-    buttonType: 'whatsapp' | 'phone' | 'email' | 'consultation' | 'application',
+    buttonType: 'whatsapp' | 'phone' | 'email' | 'consultation' | 'application' | 'consultation_submit',
     source: string = 'website',
     userData?: EnhancedUserData
   ) => {
@@ -188,6 +188,7 @@ export const useMetaTracking = () => {
         trackContactEvent('email', userData);
         break;
       case 'consultation':
+      case 'consultation_submit':
         trackConsultationEvent(source, userData);
         break;
       case 'application':

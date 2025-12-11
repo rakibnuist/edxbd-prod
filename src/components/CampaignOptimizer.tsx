@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, Target, DollarSign, Users, AlertCircle } from 'lucide-react';
+import { Target, AlertCircle } from 'lucide-react';
 
 interface CampaignData {
   campaignId: string;
@@ -103,11 +103,11 @@ export default function CampaignOptimizer() {
     return value >= threshold ? 'text-green-600' : 'text-red-600';
   };
 
-  const getPerformanceIcon = (value: number, threshold: number) => {
-    return value >= threshold ? 
-      <TrendingUp className="w-4 h-4" /> : 
-      <TrendingDown className="w-4 h-4" />;
-  };
+  /* const getPerformanceIcon = (score: number) => {
+    if (score >= 90) return <Zap className="w-4 h-4 text-amber-500" />;
+    if (score >= 70) return <TrendingUp className="w-4 h-4 text-green-500" />;
+    return <RefreshCw className="w-4 h-4 text-blue-500" />;
+  }; */
 
   if (loading) {
     return (
@@ -134,11 +134,10 @@ export default function CampaignOptimizer() {
 
       <div className="space-y-4">
         {campaigns.map((campaign) => (
-          <div 
+          <div
             key={campaign.campaignId}
-            className={`border rounded-lg p-4 cursor-pointer transition-colors ${
-              selectedCampaign === campaign.campaignId ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-            }`}
+            className={`border rounded-lg p-4 cursor-pointer transition-colors ${selectedCampaign === campaign.campaignId ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+              }`}
             onClick={() => setSelectedCampaign(
               selectedCampaign === campaign.campaignId ? null : campaign.campaignId
             )}
@@ -203,7 +202,7 @@ export default function CampaignOptimizer() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div>
                     <h5 className="font-medium mb-2">Optimization Recommendations</h5>
                     <div className="space-y-2 text-sm">

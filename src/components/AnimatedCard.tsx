@@ -27,7 +27,7 @@ const AnimatedCard = ({
 
   const getAnimationVariants = () => {
     if (animation === 'none') return {};
-    
+
     const variants = {
       fadeInUp: {
         ...fadeInUp,
@@ -77,12 +77,12 @@ const AnimatedCard = ({
 };
 
 // Specialized card variants
-export const FeatureCard = ({ 
-  children, 
+export const FeatureCard = ({
+  children,
   className = '',
-  delay = 0 
-}: { 
-  children: ReactNode; 
+  delay = 0
+}: {
+  children: ReactNode;
   className?: string;
   delay?: number;
 }) => (
@@ -95,12 +95,12 @@ export const FeatureCard = ({
   </AnimatedCard>
 );
 
-export const TestimonialCard = ({ 
-  children, 
+export const TestimonialCard = ({
+  children,
   className = '',
-  delay = 0 
-}: { 
-  children: ReactNode; 
+  delay = 0
+}: {
+  children: ReactNode;
   className?: string;
   delay?: number;
 }) => (
@@ -114,12 +114,12 @@ export const TestimonialCard = ({
   </AnimatedCard>
 );
 
-export const StatsCard = ({ 
-  children, 
+export const StatsCard = ({
+  children,
   className = '',
-  delay = 0 
-}: { 
-  children: ReactNode; 
+  delay = 0
+}: {
+  children: ReactNode;
   className?: string;
   delay?: number;
 }) => (

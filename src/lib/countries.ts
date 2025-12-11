@@ -28,217 +28,193 @@ export const countries: Country[] = [
     name: 'China',
     slug: 'china',
     flag: '🇨🇳',
-    description: 'Ancient wisdom meets modern innovation',
-    universities: ['Tsinghua University', 'Peking University', 'Fudan University'],
-    programs: ['Engineering', 'Business', 'Computer Science', 'Medicine', 'Language'],
+    description: 'Full Scholarships & Top Global Rankings',
+    universities: ['Tsinghua University', 'Peking University', 'Zhejiang University', 'Shanghai Jiao Tong'],
+    programs: ['MBBS', 'Engineering', 'Computer Science', 'Business', 'Mandarin Language'],
     requirements: {
-      language: ['HSK 4+ (Chinese programs)', 'IELTS 6.0+ (English programs)'],
-      documents: ['Academic Transcripts', 'Language Certificate', 'Health Certificate'],
-      visa: ['JW201/JW202 Form', 'Financial Documents', 'Admission Letter']
+      language: ['IELTS not always required', 'HSK 4+ for Chinese medium'],
+      documents: ['Transcripts', 'Physical Examination', 'Police Clearance', 'Bank Statement'],
+      visa: ['JW202 Form', 'X1/X2 Visa Application']
     },
     costs: {
-      tuition: '$3,000 - $8,000',
-      living: '$2,000 - $4,000',
+      tuition: '$2,500 - $6,000 / year (Often Free)',
+      living: '$200 - $400 / month',
       currency: 'USD'
     },
-    scholarships: ['Chinese Government Scholarship (CSC)', 'Confucius Institute Scholarship'],
+    scholarships: ['CSC Scholarship (Type A & B)', 'University Presidential Scholarship', 'Belt & Road Scholarship', 'Provincial Government Scholarship'],
     isActive: true,
     featured: true,
     images: [],
-    metaTitle: 'Study in China - Top Universities & Scholarships',
-    metaDescription: 'Study in China with world-class universities and scholarship opportunities'
+    metaTitle: 'Study in China from Bangladesh - Full Scholarships 2025',
+    metaDescription: 'Study in China with full Free scholarship. No IELTS options available. Top ranking universities for Medicine and Engineering.'
   },
   {
     name: 'South Korea',
     slug: 'south-korea',
     flag: '🇰🇷',
-    description: 'World-class technology education with K-culture immersion',
-    universities: ['Seoul National University', 'KAIST', 'Yonsei University', 'Korea University', 'Hanyang University', 'Sungkyunkwan University'],
-    programs: ['Engineering & Technology', 'Business Administration', 'Medicine & Healthcare', 'Arts & Design', 'Korean Language (EAP/KAP)', 'Computer Science', 'International Studies'],
+    description: 'Technology Hub with GKS Scholarships',
+    universities: ['Seoul National University', 'KAIST', 'Korea University', 'Yonsei University'],
+    programs: ['Computer Science', 'Engineering', 'Business', 'Media & Arts'],
     requirements: {
-      language: ['TOPIK 3+ (Korean programs)', 'IELTS 6.0+ (English programs)', 'TOEFL 80+ (English programs)'],
-      documents: ['Academic Transcripts', 'Language Certificate', 'Health Certificate', 'Financial Statement', 'Passport Copy', 'Application Form'],
-      visa: ['Certificate of Admission (COA)', 'Financial Documents ($10,000+ proof)', 'Passport Copy', 'Visa Application Form', 'Health Insurance']
+      language: ['IELTS 5.5+ or TOPIK Level 3'],
+      documents: ['Apostilled Transcripts', 'Study Plan', 'Bank Solvency ($20,000)'],
+      visa: ['Certificate of Admission (CoA)', 'D-2 Visa']
     },
     costs: {
-      tuition: '$3,000 - $8,000 per year',
-      living: '$4,000 - $7,000 per year',
+      tuition: '$3,000 - $6,000 / semester',
+      living: '$500 - $800 / month',
       currency: 'USD'
     },
-    scholarships: ['Korean Government Scholarship (KGSP)', 'Global Korea Scholarship (GKS)', 'University-specific Scholarships', 'Research Assistantships', 'Teaching Assistantships'],
+    scholarships: ['GKS (Global Korea Scholarship)', 'Professor Scholarship', 'University Merit Scholarship'],
     isActive: true,
     featured: true,
-    images: ['/images/destinations/south-korea-1.jpg', '/images/destinations/south-korea-2.jpg'],
-    metaTitle: 'Study in South Korea 2025 - Top Universities & Scholarships | EduExpress',
-    metaDescription: 'Study in South Korea with world-class universities like SNU, KAIST, Yonsei. Get FREE scholarship assistance for Korean Government Scholarship (KGSP) and university programs. Expert guidance for Bangladeshi students.'
+    images: [],
+    metaTitle: 'Study in South Korea from Bangladesh - GKS Scholarship',
+    metaDescription: 'Apply for GKS Scholarship in South Korea. Study in top tech universities with funding.'
   },
   {
     name: 'United Kingdom',
     slug: 'uk',
     flag: '🇬🇧',
-    description: 'Classic education excellence',
-    universities: ['University of Oxford', 'University of Cambridge', 'Imperial College London'],
-    programs: ['Business', 'Engineering', 'Medicine', 'Law', 'Arts'],
+    description: 'Prestigious Degrees & Post-Study Work',
+    universities: ['Russell Group Universities', 'University of Manchester', 'Coventry University', 'UWE Bristol'],
+    programs: ['Business', 'Law', 'Data Science', 'Public Health', 'Engineering'],
     requirements: {
-      language: ['IELTS 6.5+', 'TOEFL 90+'],
-      documents: ['Academic Transcripts', 'Personal Statement', 'References'],
-      visa: ['CAS Letter', 'Financial Documents', 'Tuberculosis Test']
+      language: ['IELTS 6.0+ (MOI accepted for some)', 'PTE 58+'],
+      documents: ['SOP', 'LOR', 'Bank Solvency (28 days maturity)', 'TB Test'],
+      visa: ['CAS Letter', 'Tier 4 Student Visa', 'IHS Surcharge Payment']
     },
     costs: {
-      tuition: '£15,000 - £35,000',
-      living: '£12,000 - £15,000',
+      tuition: '£12,000 - £16,000 / year',
+      living: '£1,000 - £1,300 / month',
       currency: 'GBP'
     },
-    scholarships: ['Chevening Scholarship', 'Commonwealth Scholarship'],
+    scholarships: ['Commonwealth Scholarship', 'Great Scholarship', 'Vice Chancellor Excellence'],
     isActive: true,
     featured: true,
     images: [],
-    metaTitle: 'Study in UK - World-Class Education',
-    metaDescription: 'Study in UK with Russell Group universities and world-class education'
+    metaTitle: 'Study in UK from Bangladesh - No IELTS Options',
+    metaDescription: 'Study in UK with 2-year post-study work permit (PSW). Gap accepted. Apply now.'
   },
   {
     name: 'Hungary',
     slug: 'hungary',
     flag: '🇭🇺',
-    description: 'Central European charm',
-    universities: ['University of Budapest', 'Semmelweis University', 'Corvinus University'],
-    programs: ['Medicine', 'Engineering', 'Business', 'Arts', 'Sciences'],
+    description: 'Stipendium Hungaricum Full Scholarship',
+    universities: ['University of Debrecen', 'University of Pecs', 'Eotvos Lorand University'],
+    programs: ['Medicine', 'Engineering', 'Business', 'Agriculture'],
     requirements: {
-      language: ['IELTS 6.0+', 'TOEFL 80+'],
-      documents: ['Academic Transcripts', 'Language Certificate', 'Health Certificate'],
-      visa: ['Admission Letter', 'Financial Documents', 'Passport Copy']
+      language: ['IELTS 5.5+ or Duolingo'],
+      documents: ['Medical Certificate', 'Motivation Letter', 'Transcripts'],
+      visa: ['D-Type Visa', 'Accommodation Proof']
     },
     costs: {
-      tuition: '€2,000 - €6,000',
-      living: '€3,000 - €5,000',
+      tuition: '€3,000 - €6,000 / year (Free with Scholarship)',
+      living: '€300 - €500 / month',
       currency: 'EUR'
     },
-    scholarships: ['Stipendium Hungaricum', 'University-specific Scholarships'],
+    scholarships: ['Stipendium Hungaricum (Full Free + Monthly Stipend)', 'Diaspora Scholarship'],
     isActive: true,
     featured: true,
     images: [],
-    metaTitle: 'Study in Hungary - Central European Excellence',
-    metaDescription: 'Study in Hungary with affordable education and central European charm'
-  },
-  {
-    name: 'Cyprus',
-    slug: 'cyprus',
-    flag: '🇨🇾',
-    description: 'Mediterranean learning paradise',
-    universities: ['University of Cyprus', 'European University Cyprus', 'Cyprus University of Technology'],
-    programs: ['Business', 'Engineering', 'Medicine', 'Tourism', 'Arts'],
-    requirements: {
-      language: ['IELTS 6.0+', 'TOEFL 80+'],
-      documents: ['Academic Transcripts', 'Language Certificate', 'Health Certificate'],
-      visa: ['Admission Letter', 'Financial Documents', 'Passport Copy']
-    },
-    costs: {
-      tuition: '€3,000 - €8,000',
-      living: '€4,000 - €6,000',
-      currency: 'EUR'
-    },
-    scholarships: ['Cyprus Government Scholarship', 'University-specific Scholarships'],
-    isActive: true,
-    featured: true,
-    images: [],
-    metaTitle: 'Study in Cyprus - Mediterranean Paradise',
-    metaDescription: 'Study in Cyprus with English programs and Mediterranean learning paradise'
-  },
-  {
-    name: 'Croatia',
-    slug: 'croatia',
-    flag: '🇭🇷',
-    description: 'Affordable EU education with stunning Adriatic coastline',
-    universities: ['University of Zagreb', 'University of Split', 'University of Rijeka', 'University of Dubrovnik', 'Josip Juraj Strossmayer University'],
-    programs: ['Engineering & Technology', 'Medicine & Healthcare', 'Business & Economics', 'Arts & Humanities', 'Tourism & Hospitality', 'Marine Sciences', 'Computer Science'],
-    requirements: {
-      language: ['IELTS 6.0+', 'TOEFL 80+', 'Croatian language certificate (for Croatian programs)'],
-      documents: ['Academic Transcripts', 'Language Certificate', 'Health Certificate', 'Financial Statement', 'Passport Copy', 'Motivation Letter'],
-      visa: ['Admission Letter', 'Financial Documents (€5,000+ proof)', 'Passport Copy', 'Health Insurance', 'Accommodation Proof']
-    },
-    costs: {
-      tuition: '€2,000 - €6,000 per year',
-      living: '€3,000 - €5,000 per year',
-      currency: 'EUR'
-    },
-    scholarships: ['Croatian Government Scholarship', 'University-specific Scholarships', 'Erasmus+ Program', 'Bilateral Agreements', 'Research Grants'],
-    isActive: true,
-    featured: true,
-    images: ['/images/destinations/croatia-1.jpg', '/images/destinations/croatia-2.jpg'],
-    metaTitle: 'Study in Croatia 2025 - EU Education & Scholarships | EduExpress',
-    metaDescription: 'Study in Croatia with affordable EU education, stunning Adriatic coastline, and scholarship opportunities. Expert guidance for Bangladeshi students to study in EU with low costs.'
-  },
-  {
-    name: 'Georgia',
-    slug: 'georgia',
-    flag: '🇬🇪',
-    description: 'Caucasian mountain knowledge',
-    universities: ['Tbilisi State Medical University', 'Georgian American University', 'Caucasus University'],
-    programs: ['Medicine (MBBS)', 'Dentistry', 'Pharmacy', 'Nursing', 'Engineering'],
-    requirements: {
-      language: ['IELTS 6.0+', 'TOEFL 80+'],
-      documents: ['Academic Transcripts', 'Language Certificate', 'Health Certificate'],
-      visa: ['Admission Letter', 'Financial Documents', 'Passport Copy']
-    },
-    costs: {
-      tuition: '$3,000 - $6,000',
-      living: '$300 - $500',
-      currency: 'USD'
-    },
-    scholarships: ['Georgian Government Scholarship', 'University-specific Scholarships'],
-    isActive: true,
-    featured: true,
-    images: [],
-    metaTitle: 'Study in Georgia - World-Class Medical Education',
-    metaDescription: 'Study in Georgia with WHO-recognized medical degrees and world-class education'
+    metaTitle: 'Study in Hungary from Bangladesh - Stipendium Hungaricum',
+    metaDescription: 'Apply for Stipendium Hungaricum Scholarship in Hungary. Full free tuition + Dormitory + Monthly stipend.'
   },
   {
     name: 'Finland',
     slug: 'finland',
     flag: '🇫🇮',
-    description: 'Nordic excellence in education',
-    universities: ['University of Helsinki', 'Aalto University', 'University of Turku'],
-    programs: ['Technology', 'Engineering', 'Business', 'Arts', 'Sciences'],
+    description: 'Happiest Country & High Tech Education',
+    universities: ['Aalto University', 'LUT University', 'Tampere University'],
+    programs: ['IT', 'Business', 'Game Design', 'Sustainable Engineering'],
     requirements: {
-      language: ['IELTS 6.5+', 'TOEFL 90+'],
-      documents: ['Academic Transcripts', 'Language Certificate', 'Health Certificate'],
-      visa: ['Admission Letter', 'Financial Documents', 'Passport Copy']
+      language: ['IELTS 6.0+', 'PTE 55+'],
+      documents: ['SAT often required for Bachelors', 'Motivation Video'],
+      visa: ['Residence Permit (Type A)', 'Block Account (€6,720)']
     },
     costs: {
-      tuition: '€8,000 - €15,000',
-      living: '€6,000 - €8,000',
+      tuition: '€6,000 - €10,000 / year',
+      living: '€600 - €800 / month',
       currency: 'EUR'
     },
-    scholarships: ['Finnish Government Scholarship', 'University-specific Scholarships'],
+    scholarships: ['Finland Scholarship (100% + €5000)', 'Early Bird Discount (50%)'],
     isActive: true,
     featured: true,
     images: [],
-    metaTitle: 'Study in Finland - Nordic Excellence',
-    metaDescription: 'Study in Finland with Nordic excellence in education and innovation'
+    metaTitle: 'Study in Finland - Scholarships for Bangladeshi Students',
+    metaDescription: 'Study in Finland with huge scholarships. Easy PR pathway after graduation.'
   },
   {
-    name: 'Netherlands',
-    slug: 'netherlands',
-    flag: '🇳🇱',
-    description: 'Innovation and international focus',
-    universities: ['Delft University of Technology', 'University of Amsterdam', 'Erasmus University'],
-    programs: ['Engineering', 'Business', 'Technology', 'Arts', 'Sciences'],
+    name: 'Cyprus',
+    slug: 'cyprus',
+    flag: '🇨🇾',
+    description: 'Affordable Education & Easy Visa',
+    universities: ['European University of Lefke', 'Near East University', 'Eastern Mediterranean University'],
+    programs: ['Hotel Management', 'Business', 'Pharmacy', 'Engineering'],
     requirements: {
-      language: ['IELTS 6.5+', 'TOEFL 90+'],
-      documents: ['Academic Transcripts', 'Language Certificate', 'Health Certificate'],
-      visa: ['Admission Letter', 'Financial Documents', 'Passport Copy']
+      language: ['No IELTS required', 'Internal English Test'],
+      documents: ['Passport Copy', 'Photos', 'Transcripts'],
+      visa: ['On-arrival Visa (North)', 'Embassy Visa (South)']
     },
     costs: {
-      tuition: '€8,000 - €15,000',
-      living: '€8,000 - €12,000',
+      tuition: '€2,500 - €4,000 / year',
+      living: '€300 - €400 / month',
       currency: 'EUR'
     },
-    scholarships: ['Holland Scholarship', 'University-specific Scholarships'],
+    scholarships: ['50% Scholarship for All International Students'],
     isActive: true,
     featured: true,
     images: [],
-    metaTitle: 'Study in Netherlands - Innovation Excellence',
-    metaDescription: 'Study in Netherlands with innovation excellence and EU work rights'
+    metaTitle: 'Study in Cyprus from Bangladesh - No IELTS',
+    metaDescription: 'Study in Cyprus with 50% scholarship. No IELTS required. Affordable tuition fees.'
+  },
+  {
+    name: 'Croatia',
+    slug: 'croatia',
+    flag: '🇭🇷',
+    description: 'Schengen Country & Tourism Hub',
+    universities: ['University of Zagreb', 'Algebra University College', 'RIT Croatia'],
+    programs: ['Tourism', 'Digital Marketing', 'Computer Science'],
+    requirements: {
+      language: ['IELTS 6.0'],
+      documents: ['Police Clearance', 'Apostilled Documents'],
+      visa: ['Temporary Residence Permit']
+    },
+    costs: {
+      tuition: '€3,000 - €5,000 / year',
+      living: '€500 - €700 / month',
+      currency: 'EUR'
+    },
+    scholarships: ['Ministry of Science Scholarship', 'Erasmus+'],
+    isActive: true,
+    featured: true,
+    images: [],
+    metaTitle: 'Study in Croatia - Schengen Visa',
+    metaDescription: 'Study in Croatia (Schengen Area). Affordable tuition and work opportunities.'
+  },
+  {
+    name: 'Georgia',
+    slug: 'georgia',
+    flag: '🇬🇪',
+    description: 'Best for MBBS (No Entrance Exam)',
+    universities: ['University of Georgia (UG)', 'Tbilisi State Medical University', 'SEU'],
+    programs: ['MBBS (Medicine)', 'Dentistry', 'Business'],
+    requirements: {
+      language: ['Video Interview', 'Basic English'],
+      documents: ['Passport', 'High School Transcripts'],
+      visa: ['E-Visa or Embassy Visa']
+    },
+    costs: {
+      tuition: '$4,500 - $6,000 / year (MBBS)',
+      living: '$300 - $500 / month',
+      currency: 'USD'
+    },
+    scholarships: ['Merit based tuition discounts'],
+    isActive: true,
+    featured: true,
+    images: [],
+    metaTitle: 'MBBS in Georgia for Bangladeshi Students',
+    metaDescription: 'Study MBBS in Georgia. WHO recognizable degree. No entrance exam. Low cost.'
   }
 ];
 

@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ChevronDown, Phone, ArrowRight, Handshake } from 'lucide-react';
+import { Menu, X, Phone, ArrowRight, Mail } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { trackConsultationRequest, trackPhoneClick } from '@/lib/analytics';
-import { fadeInDown, slideInFromLeft, slideInFromRight, iconBounce } from '@/lib/animations';
-import { countryNames } from '@/lib/countries';
+import { trackConsultationRequest } from '@/lib/analytics';
+import { fadeInDown, slideInFromLeft } from '@/lib/animations';
+import { countries } from '@/lib/countries';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,40 +18,48 @@ const Header = () => {
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
 
-  const countries = countryNames;
+
+  // Transparent when not scrolled (applies to all pages for consistent premium feel)
+  const isTransparent = !isScrolled;
+
+  // Dynamic Styles - Crystal Glass
+  const headerClass = isTransparent
+    ? 'bg-white/10 backdrop-blur-[10px] border-white/10 py-6' // Ultra-clear top state
+    : 'bg-white/70 backdrop-blur-2xl border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] py-4'; // Frosted scroll state
+
+  const navLinkClass = isTransparent
+    ? 'text-slate-800 font-bold hover:text-blue-700' // High contrast
+    : 'text-slate-600 hover:text-blue-600 font-medium';
+
+  const logoFilterClass = '';
 
   const navigation = [
     { name: 'Home', href: '/', current: isMounted && pathname === '/' },
     { name: 'Destinations', href: '/destinations', current: isMounted && pathname.startsWith('/destinations') },
     { name: 'Services', href: '/services', current: isMounted && pathname === '/services' },
     { name: 'Updates', href: '/updates', current: isMounted && pathname === '/updates' },
-    { name: 'About', href: '/about', current: isMounted && pathname === '/about' },
     { name: 'Contact', href: '/contact', current: isMounted && pathname === '/contact' },
   ];
 
-  // Handle mounting to prevent hydration issues
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Handle scroll effect
   useEffect(() => {
     if (!isMounted) return;
-    
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initially
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMounted]);
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setIsMenuOpen(false);
     setActiveDropdown(null);
   }, [pathname]);
 
-  // Dropdown delay functions
   const handleDropdownEnter = () => {
     if (dropdownTimeout) {
       clearTimeout(dropdownTimeout);
@@ -63,288 +71,263 @@ const Header = () => {
   const handleDropdownLeave = () => {
     const timeout = setTimeout(() => {
       setActiveDropdown(null);
-    }, 150); // 150ms delay
+    }, 200); // Slightly longer delay for smoother exit
     setDropdownTimeout(timeout);
   };
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
-      if (dropdownTimeout) {
-        clearTimeout(dropdownTimeout);
-      }
+      if (dropdownTimeout) clearTimeout(dropdownTimeout);
     };
   }, [dropdownTimeout]);
 
+  if (!isMounted) return null;
+
   return (
-    <motion.header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg' 
-          : 'bg-white/90 backdrop-blur-sm border-b border-gray-100'
-      }`} 
-      style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50 }}
-      initial="initial"
-      animate="animate"
-      variants={fadeInDown}
-    >
-      {/* Top Announcement Bar */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 py-2 px-4">
-        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center text-sm space-y-1 sm:space-y-0">
-          <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-red-500 rounded-full" />
-            <span className="font-montserrat-bold text-white text-xs sm:text-sm">✨ Your Gateway to Global Education</span>
-          </div>
-          <div className="flex items-center space-x-2 sm:space-x-4">
-            <a
-              href="tel:+8801983333566"
-              onClick={() => trackPhoneClick('+880 1983-333566')}
-              className="flex items-center space-x-1 sm:space-x-2 text-blue-100 hover:text-white transition-colors font-open-sans-semibold text-xs sm:text-sm min-h-[44px] px-2 py-1 rounded-lg hover:bg-white/10"
-            >
-              <Phone className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">+880 1983-333566</span>
-              <span className="sm:hidden">Call</span>
-            </a>
-            <div className="text-white/60 hidden sm:block">|</div>
-            <a
-              href="/partnership"
-              className="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-400 hover:from-yellow-300 hover:via-yellow-200 hover:to-yellow-300 text-gray-800 font-montserrat-bold text-xs sm:text-sm transition-all duration-300 min-h-[44px] px-4 py-2 rounded-full shadow-lg hover:shadow-xl border border-yellow-200 hover:border-yellow-100"
-            >
-              <Handshake className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span>Be our Partner</span>
-            </a>
-          </div>
-        </div>
-      </div>
+    <>
+      <motion.header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${headerClass}`}
+        initial="initial"
+        animate="animate"
+        variants={fadeInDown}
+      >
+        {/* Inner Texture for Glass Effect */}
+        {isScrolled && <div className="absolute inset-0 opacity-[0.4] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay pointer-events-none"></div>}
 
-      {/* Main Navigation */}
-      <nav className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
-          <motion.div
-            initial="initial"
-            animate="animate"
-            variants={slideInFromLeft}
-          >
-            <Link href="/" className="group flex items-center space-x-2 sm:space-x-3 min-h-[44px]">
-              <div className="relative h-10 sm:h-12 md:h-14 w-auto">
-                <Image
-                  src="/logo.png"
-                  alt="EduExpress International Logo"
-                  width={84}
-                  height={56}
-                  className="h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                  style={{ width: 'auto', height: '100%' }}
-                  priority
-                />
-              </div>
-            </Link>
-          </motion.div>
+        <nav className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="flex justify-between items-center">
 
-          {/* Desktop Navigation */}
-          <motion.div 
-            className="hidden lg:flex items-center space-x-8"
-            initial="initial"
-            animate="animate"
-            variants={slideInFromRight}
-          >
-            {navigation.map((item, index) => (
-              <motion.div 
-                key={item.name} 
-                className="relative"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                {item.name === 'Destinations' ? (
-                  <div
-                    className="relative"
-                    onMouseEnter={handleDropdownEnter}
-                    onMouseLeave={handleDropdownLeave}
-                  >
-                    <button
-                      className={`flex items-center text-lg transition-colors font-montserrat ${
-                        item.current 
-                          ? 'text-blue-600 font-montserrat-bold' 
-                          : 'text-gray-700 hover:text-blue-600'
+            {/* Logo */}
+            <motion.div
+              className="flex-shrink-0"
+              variants={slideInFromLeft}
+            >
+              <Link href="/" className="flex items-center gap-2 group">
+                <div className={`relative h-10 w-auto transition-transform duration-300 group-hover:scale-105 ${logoFilterClass}`}>
+                  <Image
+                    src="/logo.png"
+                    alt="EduExpress International"
+                    width={180}
+                    height={50}
+                    className="h-10 w-auto object-contain drop-shadow-sm"
+                    priority
+                  />
+                </div>
+              </Link>
+            </motion.div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-10">
+              {navigation.map((item) => (
+                <div
+                  key={item.name}
+                  className="relative group h-full flex items-center py-2"
+                  onMouseEnter={item.name === 'Destinations' ? handleDropdownEnter : undefined}
+                  onMouseLeave={item.name === 'Destinations' ? handleDropdownLeave : undefined}
+                >
+                  <Link
+                    href={item.href}
+                    className={`text-sm transition-all duration-300 block relative ${item.current
+                      ? (isTransparent ? 'text-blue-700 font-black' : 'text-blue-600 font-extrabold')
+                      : navLinkClass
                       }`}
-                    >
-                      {item.name}
-                      <ChevronDown className="ml-1 w-4 h-4" />
-                    </button>
+                  >
+                    {item.name}
+                    {/* Hover Underline - Smooth Expansion */}
+                    <span className={`absolute -bottom-1 left-0 w-full h-[2px] rounded-full transform origin-left transition-transform duration-300 ${item.current ? 'scale-x-100 bg-blue-600' : 'scale-x-0 group-hover:scale-x-100 bg-blue-400/80'
+                      }`} />
+                  </Link>
+
+                  {/* --- CRYSTAL MEGA DROPDOWN --- */}
+                  {item.name === 'Destinations' && (
                     <AnimatePresence>
                       {activeDropdown === 'destinations' && (
-                        <motion.div 
-                          className="absolute left-1/2 transform -translate-x-1/2 top-full pt-1 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl py-4 z-10 border border-gray-200"
-                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        <motion.div
+                          className="absolute top-full left-1/2 transform -translate-x-1/2 pt-8 w-[800px]"
+                          initial={{ opacity: 0, y: 10, scale: 0.96 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                          transition={{ duration: 0.2 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.96 }}
+                          transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }} // Cubic bezier for premium feel
                         >
-                          {countries.map((country, index) => (
-                            <motion.div
-                              key={country}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: index * 0.05 }}
-                            >
-                              <Link
-                                href={country === 'China' ? '/destinations/china' : country === 'United Kingdom' ? '/destinations/uk' : `/destinations/${country.toLowerCase().replace(' ', '-')}`}
-                                className="block px-6 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-600 transition-all duration-300 font-open-sans-semibold text-center"
-                              >
-                                {country}
-                              </Link>
-                            </motion.div>
-                          ))}
+                          {/* Dropdown Container: Frosted Glass Prism */}
+                          <div className="relative bg-white/70 backdrop-blur-3xl rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-white/50 overflow-hidden ring-1 ring-white/60">
+                            {/* Decorative Gradients */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-400/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+                            <div className="flex">
+                              {/* Left Panel: Featured/Summary */}
+                              <div className="w-1/3 bg-white/40 p-6 border-r border-white/40 flex flex-col justify-between">
+                                <div>
+                                  <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-widest mb-1">Explore</h3>
+                                  <h4 className="text-xl font-heading font-black text-blue-700 mb-4">Global Opportunities</h4>
+                                  <p className="text-xs text-slate-600 leading-relaxed mb-6 font-medium">
+                                    Browse our curated list of top-tier study destinations. Fully funded scholarships available.
+                                  </p>
+                                </div>
+
+                                <div className="mt-auto">
+                                  <div className="flex items-center gap-3 p-3 rounded-xl bg-blue-50/50 border border-blue-100/50">
+                                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs ring-4 ring-white">
+                                      {countries.length}
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="text-xs font-bold text-slate-800">Total Destinations</div>
+                                      <div className="text-[10px] text-slate-500">Verified & Partnered</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Right Panel: Grid */}
+                              <div className="w-2/3 p-6">
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                  {countries.slice(0, 6).map((country) => (
+                                    <Link
+                                      key={country.slug}
+                                      href={country.slug === 'china' ? '/destinations/china' : `/destinations/${country.slug}`}
+                                      className="group/item flex items-center gap-3 p-3 rounded-2xl hover:bg-white/60 transition-all duration-300 border border-transparent hover:border-white/60 shadow-sm hover:shadow-md"
+                                    >
+                                      <div className="w-10 h-10 flex items-center justify-center text-2xl bg-white rounded-xl shadow-sm border border-slate-100 group-hover/item:scale-110 transition-transform duration-300">
+                                        {country.flag}
+                                      </div>
+                                      <div>
+                                        <span className="text-sm font-bold text-slate-800 group-hover/item:text-blue-700 transition-colors block">
+                                          {country.name}
+                                        </span>
+                                        <span className="text-[10px] text-slate-500 font-medium uppercase tracking-wide group-hover/item:text-slate-600">
+                                          View Details
+                                        </span>
+                                      </div>
+                                      <ArrowRight className="w-4 h-4 text-slate-300 ml-auto opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300" />
+                                    </Link>
+                                  ))}
+                                </div>
+
+                                <Link
+                                  href="/destinations"
+                                  className="block w-full py-3 bg-slate-900 text-white hover:bg-blue-700 rounded-xl text-center text-sm font-bold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group/btn"
+                                >
+                                  View All Destinations <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </div>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className={`text-lg transition-colors font-montserrat ${
-                      item.current 
-                        ? 'text-blue-600 font-montserrat-bold' 
-                        : 'text-gray-700 hover:text-blue-600'
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                )}
-              </motion.div>
-            ))}
-            
+                  )}
+                </div>
+              ))}
+            </div>
+
             {/* CTA Button */}
-            {isMounted && (
+            <div className="hidden lg:flex items-center space-x-5">
+              <div className={`h-8 w-px ${isTransparent ? 'bg-slate-300/30' : 'bg-slate-300'}`}></div>
               <motion.button
                 onClick={() => {
                   trackConsultationRequest('header');
                   window.dispatchEvent(new CustomEvent('openQuickForm'));
                 }}
-                className="btn-primary flex items-center space-x-2 font-primary-semibold hover:scale-105 transition-transform"
+                className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 shadow-lg group ${isTransparent
+                  ? 'bg-white/60 backdrop-blur-md text-slate-900 border border-white/50 hover:bg-white hover:scale-105 hover:shadow-xl'
+                  : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-blue-600/30 hover:scale-105'
+                  }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span>FREE CONSULTATION</span>
-                <motion.div
-                  variants={iconBounce}
-                  whileHover="hover"
-                  whileTap="tap"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </motion.div>
+                <span>Free Consultation</span>
+                <ArrowRight className={`w-4 h-4 ${isTransparent ? 'text-blue-600' : 'text-white'} group-hover:translate-x-1 transition-transform`} />
               </motion.button>
-            )}
-          </motion.div>
+            </div>
 
-          {/* Enhanced Mobile Menu Button */}
-          <button
-            className="lg:hidden p-3 text-gray-700 hover:text-blue-600 transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center rounded-lg hover:bg-gray-100 active:bg-gray-200 touch-manipulation"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle mobile menu"
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
+            {/* Mobile Menu Button */}
+            <div className="lg:hidden flex items-center">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className={`p-2 rounded-xl transition-colors ${isMenuOpen ? 'bg-slate-100 text-slate-900' : (isTransparent ? 'bg-white/50 text-slate-900 backdrop-blur-md' : 'text-slate-900')}`}
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+
+          </div>
+        </nav>
+
+      </motion.header>
+
+      {/* Mobile Menu Overlay - Crystal Style */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-[60] lg:hidden bg-white/95 backdrop-blur-3xl"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
           >
-            <motion.div
-              animate={{ rotate: isMenuOpen ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </motion.div>
-          </button>
-        </div>
+            {/* Background Gradients */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-200/20 rounded-full blur-3xl pointer-events-none"></div>
 
-        {/* Enhanced Mobile Menu */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div 
-              id="mobile-menu"
-              className="lg:hidden mt-4 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl py-4 border border-gray-200 mx-2 mobile-overflow-hidden"
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="flex flex-col space-y-1 px-4">
-                {navigation.map((item) => (
-                  <div key={item.name}>
-                    {item.name === 'Destinations' ? (
-                      <div>
-                        <button 
-                          className="flex items-center justify-between w-full text-lg py-4 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 min-h-[56px] font-montserrat touch-manipulation active:bg-blue-100"
-                          onClick={() => setActiveDropdown(activeDropdown === 'destinations' ? null : 'destinations')}
-                          aria-expanded={activeDropdown === 'destinations'}
-                          aria-controls="destinations-dropdown"
-                        >
-                          {item.name}
-                          <ChevronDown className={`ml-1 w-4 h-4 transform transition-transform ${
-                            activeDropdown === 'destinations' ? 'rotate-180' : ''
-                          }`} />
-                        </button>
-                        {activeDropdown === 'destinations' && (
-                          <motion.div 
-                            id="destinations-dropdown"
-                            className="pl-4 pb-2 space-y-1"
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            {countries.map((country) => (
-                              <Link
-                                key={country}
-                                href={country === 'China' ? '/destinations/china' : country === 'United Kingdom' ? '/destinations/uk' : `/destinations/${country.toLowerCase().replace(' ', '-')}`}
-                                className="text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 font-open-sans-semibold transition-all duration-200 py-3 px-3 rounded-lg min-h-[48px] flex items-center touch-manipulation active:bg-blue-100"
-                              >
-                                {country}
-                              </Link>
-                            ))}
-                          </motion.div>
-                        )}
-                      </div>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className={`text-lg transition-all duration-200 py-4 px-3 rounded-lg min-h-[56px] flex items-center font-montserrat touch-manipulation active:bg-blue-100 ${
-                          item.current 
-                            ? 'text-blue-600 font-montserrat-bold bg-blue-50' 
-                            : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
-                        }`}
-                      >
-                        {item.name}
-                      </Link>
-                    )}
-                  </div>
-                ))}
-                
-                {/* Enhanced Partnership Button for Mobile */}
-                <a
-                  href="/partnership"
-                  className="w-full mt-4 flex items-center justify-center space-x-2 py-4 min-h-[56px] text-base font-montserrat-bold bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-400 hover:from-yellow-300 hover:via-yellow-200 hover:to-yellow-300 text-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-yellow-200 touch-manipulation active:from-yellow-200 active:via-yellow-100 active:to-yellow-200"
+            <div className="relative z-10 flex flex-col h-full">
+              <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-white/50 backdrop-blur-md">
+                <Image src="/logo.png" alt="Logo" width={140} height={40} className="h-9 w-auto" />
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
                 >
-                  <Handshake className="w-5 h-5" />
-                  <span>Be our Partner</span>
-                </a>
-                
-                {isMounted && (
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="px-6 py-8 space-y-2 overflow-y-auto flex-grow">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`block px-5 py-4 text-xl font-bold rounded-2xl transition-all ${item.current
+                      ? 'bg-blue-50 text-blue-700 shadow-sm border border-blue-100'
+                      : 'text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-sm'
+                      }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      {item.name}
+                      {item.current && <div className="w-2 h-2 rounded-full bg-blue-600"></div>}
+                    </div>
+                  </Link>
+                ))}
+
+                <div className="mt-8 pt-8 border-t border-slate-100 space-y-4">
                   <button
                     onClick={() => {
-                      trackConsultationRequest('mobile_menu');
+                      setIsMenuOpen(false);
                       window.dispatchEvent(new CustomEvent('openQuickForm'));
                     }}
-                    className="btn-primary w-full mt-3 flex items-center justify-center space-x-2 py-4 min-h-[56px] text-base font-montserrat-bold touch-manipulation active:scale-95"
+                    className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-600/20 active:scale-95 transition-transform flex items-center justify-center gap-3"
                   >
-                    <span>FREE CONSULTATION</span>
-                    <ArrowRight className="w-4 h-4" />
+                    Book Consultation <ArrowRight className="w-5 h-5" />
                   </button>
-                )}
+
+                  <div className="grid grid-cols-2 gap-4 mt-4">
+                    <a href="tel:+8801983333566" className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-slate-50 border border-slate-100 text-slate-600 hover:bg-white hover:shadow-md transition-all">
+                      <Phone size={24} className="text-blue-600" />
+                      <span className="text-xs font-bold uppercase tracking-wide">Call</span>
+                    </a>
+                    <a href="mailto:info@eduexpressint.com" className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-slate-50 border border-slate-100 text-slate-600 hover:bg-white hover:shadow-md transition-all">
+                      <Mail size={24} className="text-blue-600" />
+                      <span className="text-xs font-bold uppercase tracking-wide">Email</span>
+                    </a>
+                  </div>
+                </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-    </motion.header>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import EnhancedAnalytics from "@/components/EnhancedAnalytics";
-import Header from "@/components/Header";
+
 import Footer from "@/components/Footer";
 import QuickContactForm from "@/components/QuickContactForm";
 import ConditionalHeader from "@/components/ConditionalHeader";
@@ -305,25 +305,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
 
-        {/* Font Preloading for Performance */}
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-          as="style"
-        />
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
-          as="style"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
-        />
+
 
         <meta name="geo.region" content="BD-DH" />
         <meta name="geo.placename" content="Dhaka" />

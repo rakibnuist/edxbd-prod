@@ -139,7 +139,7 @@ export default function UserLeadsPage() {
         } else {
           showMessage('error', 'Failed to delete lead');
         }
-      } catch (error) {
+      } catch (_error) {
         showMessage('error', 'Network error while deleting lead');
       }
     }

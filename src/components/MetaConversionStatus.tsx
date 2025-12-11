@@ -27,9 +27,9 @@ export default function MetaConversionStatus() {
     const checkStatus = async () => {
       try {
         // Check Meta Pixel
-        const pixelActive = typeof window !== 'undefined' && 
-                           typeof window.fbq === 'function' && 
-                           process.env.NEXT_PUBLIC_META_PIXEL_ID !== '1234567890';
+        const pixelActive = typeof window !== 'undefined' &&
+          typeof window.fbq === 'function' &&
+          process.env.NEXT_PUBLIC_META_PIXEL_ID !== '1234567890';
 
         // Check Conversion API
         let conversionAPI = false;
@@ -106,7 +106,7 @@ export default function MetaConversionStatus() {
       });
 
       if (response.ok) {
-        const result = await response.json();
+        const _result = await response.json();
         localStorage.setItem('lastMetaConversionTest', new Date().toISOString());
         setStatus(prev => ({
           ...prev,
@@ -150,7 +150,7 @@ export default function MetaConversionStatus() {
         <AlertCircle className="w-5 h-5 mr-2 text-blue-500" />
         Meta Conversion API Status
       </h3>
-      
+
       <div className="space-y-4">
         {/* Meta Pixel Status */}
         <div className="flex items-center justify-between p-3 rounded-lg border">

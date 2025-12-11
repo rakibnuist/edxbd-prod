@@ -26,7 +26,7 @@ export interface UserData {
 }
 
 // Track events
-export const trackEvent = (eventName: string, parameters?: Record<string, unknown>, userData?: UserData) => {
+export const trackEvent = (eventName: string, parameters?: Record<string, unknown>, _userData?: UserData) => {
   const eventId = generateEventId();
   const eventData = {
     event_id: eventId,

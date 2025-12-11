@@ -181,7 +181,11 @@ const EnhancedAnalytics = () => {
                                       sessionStorage.getItem('user_id') || 
                                       sessionStorage.getItem('temp_user_id');
                     
-                    // Combine all parameters
+                    /* const getMetaParameters = () => {
+    return {
+      // implementation details
+    };
+  }; */                // Combine all parameters
                     const eventData = {
                       ...parameters,
                       ...(fbc && { fbc: fbc }),

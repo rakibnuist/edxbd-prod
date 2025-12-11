@@ -1,21 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin, Heart, MessageCircle } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin, ArrowRight, Globe, Youtube, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer, staggerItem, iconBounce } from '@/lib/animations';
+
 import { countries } from '@/lib/countries';
 
 const Footer = () => {
-  const [currentYear, setCurrentYear] = useState<number | null>(null);
 
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear());
-  }, []);
 
-  // Get featured countries for footer
   const destinations = countries
     .filter(country => country.featured)
     .map(country => ({
@@ -25,255 +18,172 @@ const Footer = () => {
 
   const quickLinks = [
     { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Services', href: '/services' },
-    { name: 'Updates', href: '/updates' },
+    { name: 'About Us', href: '/about' },
+    { name: 'Our Services', href: '/services' },
+    { name: 'Latest Updates', href: '/updates' },
     { name: 'Partnership', href: '/partnership' },
     { name: 'Contact', href: '/contact' },
   ];
 
   const socialLinks = [
-    { name: 'Facebook', href: 'https://www.facebook.com/eduexpressint', icon: Facebook },
-    { name: 'LinkedIn', href: 'https://www.linkedin.com/company/eduexpress-international', icon: Linkedin },
+    { name: 'Facebook', href: 'https://www.facebook.com/EduExpressIntBD', icon: Facebook },
+    { name: 'LinkedIn', href: 'https://www.linkedin.com/company/eduexpress/', icon: Linkedin },
     { name: 'Instagram', href: 'https://www.instagram.com/eduexpressint', icon: Instagram },
-    { name: 'Twitter', href: 'https://twitter.com/eduexpressint', icon: Twitter },
+    { name: 'YouTube', href: 'https://www.youtube.com/@EduExpressInt', icon: Youtube },
   ];
 
   return (
-    <motion.footer 
-      className="relative bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 text-white overflow-hidden"
-      initial="initial"
-      whileInView="animate"
-      viewport={{ once: true, margin: "-100px" }}
-      variants={fadeInUp}
-    >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }} />
-      </div>
+    <footer className="relative bg-slate-50 -z-10 text-slate-700 font-sans overflow-hidden border-t-4 border-blue-600">
 
-      <div className="relative container mx-auto mobile-p-4 sm:px-6 py-12">
-        {/* Enhanced Mobile Main Content */}
-        <motion.div 
-          className="grid mobile-grid-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 mb-8 sm:mb-12"
-          variants={staggerContainer}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
-        >
-          {/* Brand Section */}
-          <motion.div 
-            className="lg:col-span-4"
-            variants={staggerItem}
-          >
-            <motion.div 
-              className="flex items-center space-x-4 mb-6"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="h-12 w-auto">
+      {/* Background Pattern - Subtle, not interfering */}
+      <div className="absolute inset-0 opacity-[0.4] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay pointer-events-none"></div>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+
+          {/* Brand Column */}
+          <div className="lg:col-span-4 space-y-8">
+            <Link href="/" className="inline-block relative group">
+              <div className="relative w-56 h-auto">
                 <Image
-                  src="/white-logo.png"
-                  alt="EduExpress International Logo"
-                  width={72}
-                  height={48}
-                  className="h-full w-auto object-contain"
-                  style={{ width: 'auto', height: '100%' }}
+                  src="/logo.png"
+                  alt="EduExpress International"
+                  width={224}
+                  height={80}
+                  className="h-auto w-full object-contain"
+                  priority
                 />
               </div>
-            </motion.div>
-            
-            <p className="text-gray-300 text-base leading-relaxed mb-6 max-w-md">
-              Your trusted partner for study abroad opportunities with <span className="text-yellow-400 font-semibold">FREE scholarship assistance</span>. 
-              Helping students achieve their international education dreams since 2018.
+            </Link>
+            <p className="text-slate-700 text-lg leading-relaxed max-w-sm font-semibold">
+              Your trusted partner for global education. We specialize in unlocking opportunities with <span className="text-slate-900 font-bold bg-amber-100 px-1 rounded border border-amber-200">FREE scholarship assistance</span> to help you achieve your dreams abroad.
             </p>
 
-            {/* Enhanced Mobile Social Links */}
-            <div className="flex space-x-4 mobile-flex-center">
-              {socialLinks.map((social, index) => (
-                <motion.a
+            <div className="flex gap-4">
+              {socialLinks.map((social) => (
+                <a
                   key={social.name}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-blue-500 hover:scale-110 transition-all duration-300 border border-white/20 touch-manipulation active:scale-95"
+                  className="w-12 h-12 flex items-center justify-center rounded-xl bg-white border-2 border-slate-200 text-slate-500 hover:text-white hover:bg-blue-700 hover:border-blue-700 transition-all duration-200 shadow-sm"
                   aria-label={social.name}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2 + index * 0.1 }}
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
                 >
-                  <motion.div
-                    variants={iconBounce}
-                    whileHover="hover"
-                    whileTap="tap"
-                  >
-                    <social.icon className="w-5 h-5 text-gray-300 group-hover:text-white transition-colors" />
-                  </motion.div>
-                </motion.a>
+                  <social.icon className="w-6 h-6" />
+                </a>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Enhanced Mobile Links Section */}
-          <motion.div 
-            className="lg:col-span-8 grid mobile-grid-1 md:grid-cols-3 gap-6 lg:gap-8"
-            variants={staggerItem}
-          >
+          {/* Links Section */}
+          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
+
             {/* Quick Links */}
-            <motion.div 
-              className="min-w-0"
-              variants={staggerItem}
-            >
-              <h3 className="text-lg font-bold mb-4 text-white relative z-10 tracking-wide drop-shadow-sm">
+            <div>
+              <h3 className="text-xl font-black text-slate-900 mb-8 tracking-tight uppercase border-b-2 border-slate-200 pb-2 inline-block">
                 Quick Links
-                <motion.div 
-                  className="absolute -bottom-1 left-0 w-8 h-1 bg-gradient-to-r from-blue-400 to-blue-300 rounded-full shadow-sm"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: 32 }}
-                  transition={{ delay: 0.5, duration: 0.8 }}
-                  viewport={{ once: true }}
-                />
               </h3>
-              <div className="space-y-3">
-                {quickLinks.map((link, index) => (
-                  <motion.div
-                    key={link.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.6 + index * 0.1 }}
-                    viewport={{ once: true }}
-                  >
+              <ul className="space-y-4">
+                {quickLinks.map((link) => (
+                  <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-gray-300 hover:text-blue-400 transition-colors duration-200 hover:translate-x-1 transform text-sm min-h-[44px] flex items-center touch-manipulation active:bg-white/10 rounded-lg px-2 -mx-2"
+                      className="group flex items-center text-slate-700 hover:text-blue-800 transition-all duration-200 font-medium"
                     >
-                      {link.name}
+                      <ArrowRight className="w-4 h-4 mr-3 text-blue-600 transition-transform group-hover:translate-x-1" />
+                      <span className="group-hover:translate-x-1 transition-transform">{link.name}</span>
                     </Link>
-                  </motion.div>
+                  </li>
                 ))}
-              </div>
-            </motion.div>
+              </ul>
+            </div>
 
             {/* Destinations */}
-            <div className="min-w-0">
-              <h3 className="text-lg font-bold mb-4 text-white relative z-10 tracking-wide drop-shadow-sm">
-                Destinations
-                <div className="absolute -bottom-1 left-0 w-8 h-1 bg-gradient-to-r from-blue-400 to-blue-300 rounded-full shadow-sm"></div>
+            <div>
+              <h3 className="text-xl font-black text-slate-900 mb-8 tracking-tight uppercase border-b-2 border-slate-200 pb-2 inline-block">
+                Top Destinations
               </h3>
-              <div className="space-y-3">
-                {destinations.slice(0, 6).map((country) => (
-                  <Link
-                    key={country.slug}
-                    href={`/destinations/${country.slug}`}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-200 hover:translate-x-1 transform text-sm min-h-[44px] flex items-center touch-manipulation active:bg-white/10 rounded-lg px-2 -mx-2"
-                  >
-                    {country.name}
-                  </Link>
+              <ul className="space-y-4">
+                {destinations.slice(0, 5).map((country) => (
+                  <li key={country.slug}>
+                    <Link
+                      href={`/destinations/${country.slug}`}
+                      className="group flex items-center text-slate-700 hover:text-blue-800 transition-all duration-200 font-medium"
+                    >
+                      <Globe className="w-5 h-5 mr-3 text-blue-500" />
+                      <span>{country.name}</span>
+                    </Link>
+                  </li>
                 ))}
-                {destinations.length > 6 && (
+                <li>
                   <Link
                     href="/destinations"
-                    className="text-blue-400 hover:text-blue-300 transition-colors duration-200 font-medium text-sm min-h-[44px] flex items-center touch-manipulation active:bg-white/10 rounded-lg px-2 -mx-2"
+                    className="inline-flex items-center text-blue-700 hover:text-blue-900 font-black mt-4 transition-colors group text-sm uppercase tracking-wider pl-1"
                   >
-                    View All →
+                    View All <ExternalLink className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Link>
-                )}
-              </div>
+                </li>
+              </ul>
             </div>
 
-            {/* Contact */}
-            <div className="min-w-0 md:col-span-1">
-              <h3 className="text-lg font-bold mb-4 text-white relative z-10 tracking-wide drop-shadow-sm">
+            {/* Contact Info */}
+            <div>
+              <h3 className="text-xl font-black text-slate-900 mb-8 tracking-tight uppercase border-b-2 border-slate-200 pb-2 inline-block">
                 Contact Us
-                <div className="absolute -bottom-1 left-0 w-8 h-1 bg-gradient-to-r from-blue-400 to-blue-300 rounded-full shadow-sm"></div>
               </h3>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <MapPin className="w-4 h-4 mt-0.5 text-blue-400 flex-shrink-0" />
-                  <div>
-                    <p className="text-gray-300 text-xs leading-relaxed">
-                      House: 12/1, Ground Floor<br />
-                      Road: 4/A, Dhanmondi<br />
-                      Dhaka - 1209, Bangladesh
-                    </p>
+              <ul className="space-y-6">
+                <li className="flex items-start gap-4">
+                  <div className="p-3 rounded-lg bg-white border-2 border-slate-200 shrink-0">
+                    <MapPin className="w-6 h-6 text-blue-700" />
                   </div>
-                </div>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <Phone className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <a href="tel:+8801983333566" className="text-gray-300 hover:text-blue-400 transition-colors text-xs truncate min-h-[44px] flex items-center touch-manipulation active:bg-white/10 rounded-lg px-2 -mx-2">
-                        +880 1983-333566
-                      </a>
-                    </div>
-                    <a 
-                      href="https://wa.me/8801983333566" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-7 h-7 bg-green-500 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors group flex-shrink-0 touch-manipulation active:scale-95"
-                      aria-label="WhatsApp +880 1983-333566"
-                    >
-                      <MessageCircle className="w-3 h-3 text-white group-hover:scale-110 transition-transform" />
+                  <span className="text-slate-700 text-base leading-relaxed font-semibold pt-1">
+                    House: 12/1, Ground Floor<br />
+                    Road: 4/A, Dhanmondi<br />
+                    Dhaka - 1209, Bangladesh
+                  </span>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="p-3 rounded-lg bg-white border-2 border-slate-200 shrink-0">
+                    <Phone className="w-6 h-6 text-blue-700" />
+                  </div>
+                  <div className="flex flex-col gap-1 pt-1">
+                    <a href="tel:+8801983333566" className="text-slate-800 hover:text-blue-800 transition-colors text-base font-bold">
+                      +880 1983-333566
+                    </a>
+                    <a href="tel:+88013296663505" className="text-slate-700 hover:text-blue-700 transition-colors text-base font-medium">
+                      +880 1329-6663505
                     </a>
                   </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Phone className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <a href="tel:+88013296663505" className="text-gray-300 hover:text-blue-400 transition-colors text-xs truncate min-h-[44px] flex items-center touch-manipulation active:bg-white/10 rounded-lg px-2 -mx-2">
-                        +880 1329-6663505
-                      </a>
-                    </div>
-                    <a 
-                      href="https://wa.me/88013296663505" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-7 h-7 bg-green-500 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors group flex-shrink-0 touch-manipulation active:scale-95"
-                      aria-label="WhatsApp +880 1329-6663505"
-                    >
-                      <MessageCircle className="w-3 h-3 text-white group-hover:scale-110 transition-transform" />
-                    </a>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="p-3 rounded-lg bg-white border-2 border-slate-200 shrink-0">
+                    <Mail className="w-6 h-6 text-blue-700" />
                   </div>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <Mail className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                  <a href="mailto:info@eduexpressint.com" className="text-gray-300 hover:text-blue-400 transition-colors text-xs truncate min-h-[44px] flex items-center touch-manipulation active:bg-white/10 rounded-lg px-2 -mx-2">
+                  <a href="mailto:info@eduexpressint.com" className="text-slate-700 hover:text-blue-800 transition-colors text-base font-semibold pt-2">
                     info@eduexpressint.com
                   </a>
-                </div>
-              </div>
+                </li>
+              </ul>
             </div>
-          </motion.div>
-        </motion.div>
 
-        {/* Enhanced Mobile Bottom Section */}
-        <div className="border-t border-white/10 pt-8">
-          <div className="flex mobile-flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="flex items-center space-x-2 text-gray-400 mobile-text-small">
-              <span>© {currentYear || new Date().getFullYear()} EduExpress International. Made with</span>
-              <Heart className="w-4 h-4 text-red-500 fill-current" />
-              <span>in Bangladesh</span>
-            </div>
-            <div className="flex space-x-6 mobile-flex-center">
-              <Link href="/privacy" className="text-gray-400 hover:text-blue-400 transition-colors text-sm min-h-[44px] flex items-center touch-manipulation active:bg-white/10 rounded-lg px-2 -mx-2">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-blue-400 transition-colors text-sm min-h-[44px] flex items-center touch-manipulation active:bg-white/10 rounded-lg px-2 -mx-2">
-                Terms of Service
-              </Link>
-            </div>
+          </div>
+        </div>
+
+
+        {/* Bottom Bar */}
+        <div className="mt-20 pt-8 border-t-2 border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-600 relative z-10">
+          <div className="flex items-center gap-2 order-2 md:order-1 font-bold">
+            {/* Copyright Removed */}
+          </div>
+
+          <div className="flex items-center gap-8 order-1 md:order-2">
+            <Link href="/privacy" className="hover:text-blue-700 transition-colors font-bold text-slate-700 hover:underline">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-blue-700 transition-colors font-bold text-slate-700 hover:underline">Terms of Service</Link>
           </div>
         </div>
       </div>
-    </motion.footer>
+    </footer>
   );
 };
 
 export default Footer;
-

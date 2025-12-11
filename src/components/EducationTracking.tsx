@@ -92,7 +92,7 @@ export default function EducationTracking({
         });
       };
     }
-  }, [whatsappSource]);
+  }, [whatsappSource, emailAddress]);
 
   // Track phone clicks
   useEffect(() => {
@@ -129,7 +129,7 @@ export default function EducationTracking({
         });
       };
     }
-  }, [phoneSource]);
+  }, [phoneSource, emailAddress]);
 
   // Track scholarship inquiries
   useEffect(() => {
@@ -292,6 +292,7 @@ export default function EducationTracking({
   // Track email subscriptions
   useEffect(() => {
     if (emailAddress) {
+
       const handleEmailSubscription = () => {
         const userData = { email: emailAddress };
         trackEmailSubscription(emailAddress, userData);

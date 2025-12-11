@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: Request) {
   try {
     // Check environment variables
     const envCheck = {
@@ -47,17 +47,17 @@ export async function GET(request: NextRequest) {
         isVercel,
         region: process.env.VERCEL_REGION,
       },
-      message: envCheck.mongodb 
-        ? 'API is running successfully' 
+      message: envCheck.mongodb
+        ? 'API is running successfully'
         : 'Missing required environment variables (MONGODB_URI)',
-      instructions: envCheck.mongodb 
+      instructions: envCheck.mongodb
         ? 'All systems operational'
         : 'Please set MONGODB_URI environment variable in Vercel dashboard'
     });
   } catch (error) {
     console.error('Health check error:', error);
     return NextResponse.json(
-      { 
+      {
         status: 'error',
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString(),

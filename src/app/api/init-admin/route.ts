@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
 
-export async function POST(request: NextRequest) {
+export async function GET(_request: Request) {
   try {
     await connectDB();
 

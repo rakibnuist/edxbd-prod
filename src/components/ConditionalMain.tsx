@@ -1,19 +1,19 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+// import { usePathname } from 'next/navigation';
 
 interface ConditionalMainProps {
   children: React.ReactNode;
 }
 
 const ConditionalMain = ({ children }: ConditionalMainProps) => {
-  const pathname = usePathname();
-  
+  // const pathname = usePathname();
+
   // Don't add padding for admin and dashboard routes
-  const shouldAddPadding = !pathname.startsWith('/admin') && !pathname.startsWith('/dashboard');
-  
+  // The variable `shouldAddPadding` was removed as it was unused.
+
   return (
-    <main className={shouldAddPadding ? "pt-24 sm:pt-28 md:pt-32 lg:pt-36" : ""}>
+    <main>
       {children}
     </main>
   );
