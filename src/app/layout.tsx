@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import EnhancedAnalytics from "@/components/EnhancedAnalytics";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -359,6 +360,7 @@ export default function RootLayout({
           phoneNumber="+8801983333566"
           message="Hi! I'm interested in studying abroad. Can you help me with information about universities and scholarships?"
         />
+        <SpeedInsights />
       </body>
     </html>
   );

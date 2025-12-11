@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import ConsultationButton from '@/components/ConsultationButton';
+import PageHeader from '@/components/PageHeader';
+import { Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Study Abroad Services | University Selection, Visa & Scholarship Support',
@@ -154,32 +156,27 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20">
-        <div className="container mx-auto px-6 text-center">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-              Our <span className="text-blue-600">Services</span>
-            </h1>
-            <p className="text-xl lg:text-2xl text-gray-600 mb-8 leading-relaxed">
-              Comprehensive study abroad solutions designed to make your international education journey seamless and successful. Trusted since 2018 with 6+ years of proven experience.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <ConsultationButton
-                text="Get Free Consultation"
-                source="services_page_hero_consultation"
-                className="bg-blue-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
-              />
-              <Link
-                href="/destinations"
-                className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-600 hover:text-white transition-all duration-300 transform hover:-translate-y-1"
-              >
-                Explore Destinations
-              </Link>
-            </div>
-          </div>
+      <PageHeader
+        title="Our"
+        highlight="Services"
+        description="Comprehensive study abroad solutions designed to make your international education journey seamless and successful. Trusted since 2018 with 6+ years of proven experience."
+        icon={<Briefcase />}
+        badgeText="Expert Educational Services"
+      >
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <ConsultationButton
+            text="Get Free Consultation"
+            source="services_page_hero_consultation"
+            className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+          />
+          <Link
+            href="/destinations"
+            className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:-translate-y-1"
+          >
+            Explore Destinations
+          </Link>
         </div>
-      </section>
+      </PageHeader>
 
       {/* Main Services */}
       <section className="py-20 bg-white">

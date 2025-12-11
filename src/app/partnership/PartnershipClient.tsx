@@ -1,14 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { 
-  Handshake, 
-  Users, 
-  TrendingUp, 
-  Award, 
-  Globe, 
-  Shield, 
-  BookOpen, 
+import {
+  Handshake,
+  Users,
+  TrendingUp,
+  Award,
+  Globe,
+  Shield,
+  BookOpen,
   CheckCircle,
   ArrowRight,
   Star,
@@ -17,6 +17,7 @@ import {
   Zap
 } from 'lucide-react';
 import PartnershipForm from '@/components/PartnershipForm';
+import PageHeader from '@/components/PageHeader';
 
 const PartnershipClient = () => {
 
@@ -136,84 +137,62 @@ const PartnershipClient = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Hero Section */}
-      <section className="relative py-20 px-6 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 opacity-90" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20" />
-        
-        <div className="container mx-auto relative z-10">
+      <PageHeader
+        title="Grow Your"
+        highlight="Education Consultancy"
+        description="Partner with EduExpress International and expand your student placement business with our global network"
+        icon={Handshake}
+        badgeText="B2B Partnership"
+      >
+        <div className="flex flex-col items-center gap-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => document.getElementById('partnership-form')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-8 py-4 rounded-full text-lg transition-colors flex items-center justify-center space-x-2"
+            >
+              <span>Apply Now</span>
+              <ArrowRight className="w-5 h-5" />
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="border-2 border-white text-white hover:bg-white hover:text-blue-600 font-bold px-8 py-4 rounded-full text-lg transition-colors"
+            >
+              Download Brochure
+            </motion.button>
+          </motion.div>
+
+          {/* Success Statistics */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl w-full"
           >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6"
-            >
-              <Handshake className="w-10 h-10 text-white" />
-            </motion.div>
-            
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Grow Your <span className="text-yellow-300">Education Consultancy</span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-blue-100 mb-8 leading-relaxed">
-              Partner with EduExpress International and expand your student placement business with our global network
-            </p>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
-            >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => document.getElementById('partnership-form')?.scrollIntoView({ behavior: 'smooth' })}
-                className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-8 py-4 rounded-full text-lg transition-colors flex items-center justify-center space-x-2"
+            {successStats.map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+                className="text-center bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20"
               >
-                <span>Apply Now</span>
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="border-2 border-white text-white hover:bg-white hover:text-blue-600 font-bold px-8 py-4 rounded-full text-lg transition-colors"
-              >
-                Download Brochure
-              </motion.button>
-            </motion.div>
-
-            {/* Success Statistics */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
-            >
-              {successStats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-                  className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20"
-                >
-                  <stat.icon className="w-8 h-8 text-yellow-300 mx-auto mb-2" />
-                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.number}</div>
-                  <div className="text-blue-100 text-sm">{stat.label}</div>
-                </motion.div>
-              ))}
-            </motion.div>
+                <stat.icon className="w-8 h-8 text-yellow-300 mx-auto mb-2" />
+                <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.number}</div>
+                <div className="text-blue-100 text-sm">{stat.label}</div>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
-      </section>
+      </PageHeader>
 
       {/* Partnership Types */}
       <section className="py-20 px-6">
@@ -242,20 +221,20 @@ const PartnershipClient = () => {
                 className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 relative overflow-hidden group"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${type.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-                
+
                 <div className="relative z-10">
                   <div className={`w-16 h-16 bg-gradient-to-r ${type.color} rounded-2xl flex items-center justify-center mb-6`}>
                     <type.icon className="w-8 h-8 text-white" />
                   </div>
-                  
+
                   <h3 className="text-2xl font-heading font-bold text-gray-900 mb-4">
                     {type.title}
                   </h3>
-                  
+
                   <p className="text-gray-600 mb-6 leading-relaxed">
                     {type.description}
                   </p>
-                  
+
                   <ul className="space-y-3">
                     {type.features.map((feature, featureIndex) => (
                       <motion.li
@@ -306,11 +285,11 @@ const PartnershipClient = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <benefit.icon className="w-6 h-6 text-white" />
                 </div>
-                
+
                 <h3 className="text-xl font-heading font-bold text-gray-900 mb-3">
                   {benefit.title}
                 </h3>
-                
+
                 <p className="text-gray-600 leading-relaxed mb-3">
                   {benefit.description}
                 </p>
@@ -338,7 +317,7 @@ const PartnershipClient = () => {
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-8">
                 Partner <span className="text-blue-600">Requirements</span>
               </h2>
-              
+
               <div className="space-y-4">
                 {requirements.map((requirement, index) => (
                   <motion.div
@@ -366,7 +345,7 @@ const PartnershipClient = () => {
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-8">
                 Partnership <span className="text-blue-600">Process</span>
               </h2>
-              
+
               <div className="space-y-6">
                 {process.map((step, index) => (
                   <motion.div
@@ -379,7 +358,7 @@ const PartnershipClient = () => {
                     <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-white font-bold text-lg">{step.step}</span>
                     </div>
-                    
+
                     <div className="flex-1">
                       <h3 className="text-xl font-heading font-bold text-gray-900 mb-2">
                         {step.title}
@@ -430,11 +409,11 @@ const PartnershipClient = () => {
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-6">
               Ready to <span className="text-yellow-300">Grow Your Business?</span>
             </h2>
-            
+
             <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
               Join EduExpress International and start earning commissions on student placements today
             </p>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -450,7 +429,7 @@ const PartnershipClient = () => {
                 <Briefcase className="w-5 h-5" />
                 <span>Apply for Partnership</span>
               </motion.button>
-              
+
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -461,7 +440,7 @@ const PartnershipClient = () => {
                 <span>Schedule Consultation</span>
               </motion.button>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}

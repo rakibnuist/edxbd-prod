@@ -417,7 +417,7 @@ export default function UpdatesClient() {
               <Search className="w-10 h-10 text-blue-400" />
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-3">No updates found</h3>
-            <p className="text-gray-500 mb-8 max-w-md mx-auto text-lg">We couldn't find any updates matching your current filters. Try adjusting them or clear everything.</p>
+            <p className="text-gray-500 mb-8 max-w-md mx-auto text-lg">We couldn&apos;t find any updates matching your current filters. Try adjusting them or clear everything.</p>
             <button
               onClick={clearAllFilters}
               className="inline-flex items-center px-8 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all font-semibold shadow-lg shadow-gray-900/10"

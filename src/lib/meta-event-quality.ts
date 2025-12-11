@@ -9,6 +9,16 @@ export interface MetaEventQualityParams {
   fb_login_id?: string; // Facebook Login ID
 }
 
+interface FacebookLoginStatusResponse {
+  status: string;
+  authResponse: {
+    userID: string;
+    accessToken: string;
+    expiresIn: number;
+    signedRequest: string;
+  };
+}
+
 export interface EnhancedUserData {
   email?: string;
   phone?: string;
@@ -358,9 +368,10 @@ export const getFacebookLoginStatus = (): Promise<string | undefined> => {
       return;
     }
 
-    window.FB?.getLoginStatus((response: any) => {
-      if (response.status === 'connected') {
-        resolve(response.authResponse.userID);
+    window.FB?.getLoginStatus((response: unknown) => {
+      const fbResponse = response as FacebookLoginStatusResponse;
+      if (fbResponse.status === 'connected') {
+        resolve(fbResponse.authResponse.userID);
       } else {
         resolve(undefined);
       }

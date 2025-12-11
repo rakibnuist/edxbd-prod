@@ -2,30 +2,22 @@
 
 import { Shield, Eye, Lock, Database, Users, Globe, FileText, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import PageHeader from '@/components/PageHeader';
 
 export default function PrivacyClient() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-16 sm:py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Shield className="w-4 h-4 mr-2" />
-              Your Privacy Matters
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
-              Privacy <span className="text-blue-600">Policy</span>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed">
-              Learn how we protect your personal information and respect your privacy rights
-            </p>
-            <p className="text-sm text-gray-500">
-              Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHeader
+        title="Privacy"
+        highlight="Policy"
+        description="Learn how we protect your personal information and respect your privacy rights"
+        icon={Shield}
+        badgeText="Your Privacy Matters"
+      >
+        <p className="text-sm text-blue-100/80 mt-4">
+          Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </p>
+      </PageHeader>
 
       {/* Quick Overview */}
       <section className="py-16 bg-gray-50">
