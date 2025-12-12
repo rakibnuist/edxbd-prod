@@ -14,7 +14,8 @@ import {
   Star,
   Briefcase,
   Headphones,
-  Zap
+  Zap,
+  GraduationCap
 } from 'lucide-react';
 import PartnershipForm from '@/components/PartnershipForm';
 import PageHeader from '@/components/PageHeader';
@@ -159,6 +160,16 @@ const PartnershipClient = () => {
             >
               <span>Apply Now</span>
               <ArrowRight className="w-5 h-5" />
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => window.location.href = '/partnership/universities'}
+              className="bg-white text-blue-600 hover:bg-blue-50 font-bold px-8 py-4 rounded-full text-lg transition-all flex items-center justify-center space-x-2 shadow-lg shadow-blue-500/10 border border-blue-100"
+            >
+              <GraduationCap className="w-5 h-5" />
+              <span>View Universities</span>
             </motion.button>
 
             <motion.button

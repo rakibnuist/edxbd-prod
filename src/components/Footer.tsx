@@ -33,7 +33,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-slate-50 -z-10 text-slate-700 font-sans overflow-hidden border-t-4 border-blue-600">
+    <footer className="relative bg-slate-50 text-slate-700 font-sans overflow-hidden border-t-4 border-blue-600">
 
       {/* Background Pattern - Subtle, not interfering */}
       <div className="absolute inset-0 opacity-[0.4] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay pointer-events-none"></div>

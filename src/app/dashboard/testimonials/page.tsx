@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { Testimonial } from '@/lib/types';
 
 export default function UserTestimonialsPage() {
@@ -54,11 +55,11 @@ export default function UserTestimonialsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       const url = editingTestimonial ? `/api/admin/testimonials/${editingTestimonial._id}` : '/api/admin/testimonials';
       const method = editingTestimonial ? 'PUT' : 'POST';
-      
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -143,11 +144,10 @@ export default function UserTestimonialsPage() {
     <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
       {/* Message Display */}
       {message && (
-        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${
-          message.type === 'success' 
-            ? 'bg-green-100 border border-green-400 text-green-700' 
-            : 'bg-red-100 border border-red-400 text-red-700'
-        }`}>
+        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${message.type === 'success'
+          ? 'bg-green-100 border border-green-400 text-green-700'
+          : 'bg-red-100 border border-red-400 text-red-700'
+          }`}>
           <div className="flex justify-between items-center">
             <span className="text-xs sm:text-sm lg:text-base">{message.text}</span>
             <button
@@ -218,7 +218,13 @@ export default function UserTestimonialsPage() {
                     <div className="flex items-center">
                       {testimonial.image && (
                         <div className="flex-shrink-0 h-10 w-10">
-                          <img className="h-10 w-10 rounded-full" src={testimonial.image} alt={testimonial.name} />
+                          <Image
+                            className="h-10 w-10 rounded-full object-cover"
+                            src={testimonial.image}
+                            alt={testimonial.name}
+                            width={40}
+                            height={40}
+                          />
                         </div>
                       )}
                       <div className="ml-4">
@@ -239,7 +245,7 @@ export default function UserTestimonialsPage() {
                       {[...Array(5)].map((_, i) => (
                         <svg
                           key={i}
-                          className={`h-4 w-4 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                          className={`h-4 w-4 ${i < testimonial.rating ? 'text-amber-500' : 'text-gray-300'}`}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -249,9 +255,8 @@ export default function UserTestimonialsPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      testimonial.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${testimonial.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}>
                       {testimonial.isActive ? 'Active' : 'Inactive'}
                     </span>
                     {testimonial.featured && (
@@ -292,14 +297,14 @@ export default function UserTestimonialsPage() {
                 </h3>
                 <button
                   onClick={() => setShowForm(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-500 hover:text-gray-600"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -312,7 +317,7 @@ export default function UserTestimonialsPage() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Location</label>
                     <input
@@ -336,7 +341,7 @@ export default function UserTestimonialsPage() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Program</label>
                     <input
@@ -408,7 +413,7 @@ export default function UserTestimonialsPage() {
                     />
                     <label className="ml-2 text-sm text-gray-700">Active</label>
                   </div>
-                  
+
                   <div className="flex items-center">
                     <input
                       type="checkbox"
@@ -419,7 +424,7 @@ export default function UserTestimonialsPage() {
                     <label className="ml-2 text-sm text-gray-700">Featured</label>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-end space-x-3">
                   <button
                     type="button"

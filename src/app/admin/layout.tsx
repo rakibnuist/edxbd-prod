@@ -20,7 +20,7 @@ export default function AdminLayout({
           <div className="flex h-screen">
             {/* Mobile sidebar overlay */}
             {sidebarOpen && (
-              <div 
+              <div
                 className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden"
                 onClick={() => setSidebarOpen(false)}
               />
@@ -39,7 +39,7 @@ export default function AdminLayout({
                     </h1>
                     <button
                       onClick={() => setSidebarOpen(false)}
-                      className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                      className="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100"
                     >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -47,7 +47,7 @@ export default function AdminLayout({
                     </button>
                   </div>
                 </div>
-                
+
                 <nav className="mt-2 sm:mt-6 flex-1 px-2 sm:px-0">
                   <Link
                     href="/admin"
@@ -100,6 +100,16 @@ export default function AdminLayout({
                     Partnerships
                   </Link>
                   <Link
+                    href="/admin/universities"
+                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0v6m0-6l-9 5m9-5l9 5" />
+                    </svg>
+                    Universities
+                  </Link>
+                  <Link
                     href="/admin/countries"
                     className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
                     onClick={() => setSidebarOpen(false)}
@@ -131,7 +141,7 @@ export default function AdminLayout({
                     Settings
                   </Link>
                 </nav>
-                
+
                 {/* Logout Button */}
                 <div className="p-4 sm:p-6 border-t border-gray-200">
                   <LogoutButton />
@@ -146,7 +156,7 @@ export default function AdminLayout({
                 <div className="flex items-center justify-between">
                   <button
                     onClick={() => setSidebarOpen(true)}
-                    className="p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 touch-manipulation"
+                    className="p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100 touch-manipulation"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -156,7 +166,7 @@ export default function AdminLayout({
                   <div className="w-10"></div> {/* Spacer for centering */}
                 </div>
               </div>
-              
+
               <div className="flex-1 overflow-auto">
                 <div className="p-3 sm:p-4 lg:p-6 xl:p-8">
                   {children}

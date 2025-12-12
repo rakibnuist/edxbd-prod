@@ -282,6 +282,7 @@ export default function UpdatesClient() {
                   placeholder="Find scholarships, news, articles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  aria-label="Search updates"
                   className="block w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:bg-white transition-all font-medium text-lg leading-6 outline-none"
                 />
               </div>
@@ -304,7 +305,7 @@ export default function UpdatesClient() {
 
           {/* Categories Chips */}
           <div className="mb-8">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Categories</h3>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 px-1">Categories</h3>
             <div className="flex flex-wrap gap-2">
               {categoryOptions.map((category) => (
                 <button
@@ -324,7 +325,7 @@ export default function UpdatesClient() {
           {/* Granular Filters */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-slate-100">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Date</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Date</label>
               <select
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
@@ -338,7 +339,7 @@ export default function UpdatesClient() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Sort</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sort</label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
@@ -502,6 +503,7 @@ export default function UpdatesClient() {
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
+              aria-label="Previous page"
               className="p-3 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white shadow-sm"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -525,6 +527,7 @@ export default function UpdatesClient() {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
+              aria-label="Next page"
               className="p-3 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white shadow-sm"
             >
               <ChevronRight className="w-5 h-5" />
@@ -542,6 +545,7 @@ export default function UpdatesClient() {
               {/* Close Button */}
               <button
                 onClick={closeModal}
+                aria-label="Close modal"
                 className="absolute top-4 right-4 bg-white/80 hover:bg-white p-2.5 rounded-full text-slate-500 hover:text-rose-500 transition-all z-10 backdrop-blur-sm shadow-sm ring-1 ring-black/5"
               >
                 <X className="w-5 h-5" />

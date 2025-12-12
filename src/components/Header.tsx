@@ -19,6 +19,9 @@ const Header = () => {
   const pathname = usePathname();
 
 
+  // Check if we are on a university detail page (dark background)
+  const isUniversityDetail = /^\/partnership\/universities\/[^/]+$/.test(pathname);
+
   // Transparent when not scrolled (applies to all pages for consistent premium feel)
   const isTransparent = !isScrolled;
 
@@ -28,7 +31,7 @@ const Header = () => {
     : 'bg-white/70 backdrop-blur-2xl border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] py-4'; // Frosted scroll state
 
   const navLinkClass = isTransparent
-    ? 'text-slate-800 font-bold hover:text-blue-700' // High contrast
+    ? (isUniversityDetail ? 'text-white font-bold hover:text-blue-200' : 'text-slate-800 font-bold hover:text-blue-700') // Adaptive contrast
     : 'text-slate-600 hover:text-blue-600 font-medium';
 
   const logoFilterClass = '';
@@ -276,6 +279,7 @@ const Header = () => {
                 <Image src="/logo.png" alt="Logo" width={140} height={40} className="h-9 w-auto" />
                 <button
                   onClick={() => setIsMenuOpen(false)}
+                  aria-label="Close menu"
                   className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
                 >
                   <X size={24} />

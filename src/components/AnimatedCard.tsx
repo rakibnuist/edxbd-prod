@@ -58,7 +58,6 @@ const AnimatedCard = ({
   };
 
   const animationVariants = getAnimationVariants();
-  const hoverVariants = hoverable ? cardHover : {};
 
   return (
     <motion.div

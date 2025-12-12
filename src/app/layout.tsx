@@ -9,10 +9,10 @@ import ConditionalHeader from "@/components/ConditionalHeader";
 import ConditionalMain from "@/components/ConditionalMain";
 import PageTransition from "@/components/PageTransition";
 import ScrollToTop from "@/components/ScrollToTop";
-import PerformanceOptimizer from "@/components/PerformanceOptimizer";
-import MobileOptimizer from "@/components/MobileOptimizer";
-import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import EducationTracking from "@/components/EducationTracking";
+
+import WhatsAppWrapper from "@/components/WhatsAppWrapper";
+
 import "./globals.css";
 
 // Primary font for body text and UI elements
@@ -305,25 +305,17 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
 
+        {/* Preconnect to critical origins */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
 
-        <meta name="geo.region" content="BD-DH" />
-        <meta name="geo.placename" content="Dhaka" />
-        <meta name="geo.position" content="23.8103;90.4125" />
-        <meta name="ICBM" content="23.8103, 90.4125" />
-        <meta name="language" content="en-US" />
-        <meta name="revisit-after" content="7 days" />
-        <meta name="distribution" content="global" />
-        <meta name="rating" content="general" />
-        <meta name="HandheldFriendly" content="True" />
-        <meta name="MobileOptimized" content="320" />
       </head>
       <body
+        suppressHydrationWarning
         className={`${inter.variable} ${playfairDisplay.variable} antialiased`}
         style={{ marginTop: 0 }}
       >
-        <PerformanceOptimizer />
-        <MobileOptimizer />
         <EnhancedAnalytics />
         <EducationTracking
           whatsappSource="floating_widget"
@@ -338,7 +330,7 @@ export default function RootLayout({
         <Footer />
         <QuickContactForm />
         <ScrollToTop />
-        <FloatingWhatsApp
+        <WhatsAppWrapper
           phoneNumber="+8801983333566"
           message="Hi! I'm interested in studying abroad. Can you help me with information about universities and scholarships?"
         />

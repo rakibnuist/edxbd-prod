@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { Content } from '@/lib/types';
 
 export default function UserContentPage() {
@@ -69,12 +70,12 @@ export default function UserContentPage() {
     try {
       const formData = new FormData();
       formData.append('image', file);
-      
+
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setFormData(prev => ({ ...prev, featuredImage: data.imageUrl }));
@@ -91,7 +92,7 @@ export default function UserContentPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Validate required fields
       if (!formData.title.trim()) {
@@ -113,9 +114,9 @@ export default function UserContentPage() {
 
       const url = editingContent ? `/api/admin/content/${editingContent._id}` : '/api/admin/content';
       const method = editingContent ? 'PUT' : 'POST';
-      
+
       console.log('Submitting content:', { url, method, formData });
-      
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -130,7 +131,7 @@ export default function UserContentPage() {
       if (response.ok) {
         const result = await response.json();
         console.log('Content saved successfully:', result);
-        
+
         showMessage('success', editingContent ? 'Content updated successfully!' : 'Content created successfully!');
         fetchContents();
         setShowForm(false);
@@ -206,11 +207,10 @@ export default function UserContentPage() {
     <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
       {/* Message Display */}
       {message && (
-        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${
-          message.type === 'success' 
-            ? 'bg-green-100 border border-green-400 text-green-700' 
-            : 'bg-red-100 border border-red-400 text-red-700'
-        }`}>
+        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${message.type === 'success'
+          ? 'bg-green-100 border border-green-400 text-green-700'
+          : 'bg-red-100 border border-red-400 text-red-700'
+          }`}>
           <div className="flex justify-between items-center">
             <span className="text-xs sm:text-sm lg:text-base">{message.text}</span>
             <button
@@ -304,9 +304,8 @@ export default function UserContentPage() {
                     </span>
                   </td>
                   <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      content.isPublished ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${content.isPublished ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}>
                       {content.isPublished ? 'Published' : 'Draft'}
                     </span>
                   </td>
@@ -347,14 +346,14 @@ export default function UserContentPage() {
                 </h3>
                 <button
                   onClick={() => setShowForm(false)}
-                  className="text-gray-400 hover:text-gray-600 touch-manipulation"
+                  className="text-gray-500 hover:text-gray-600 touch-manipulation"
                 >
                   <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-              
+
               <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Title</label>
@@ -363,8 +362,8 @@ export default function UserContentPage() {
                     value={formData.title}
                     onChange={(e) => {
                       const title = e.target.value;
-                      setFormData({ 
-                        ...formData, 
+                      setFormData({
+                        ...formData,
                         title,
                         slug: !editingContent ? generateSlug(title) : formData.slug
                       });
@@ -373,7 +372,7 @@ export default function UserContentPage() {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Slug</label>
                   <input
@@ -384,7 +383,7 @@ export default function UserContentPage() {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Type</label>
                   <select
@@ -410,7 +409,7 @@ export default function UserContentPage() {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
                   <div className="mb-2">
@@ -418,28 +417,26 @@ export default function UserContentPage() {
                       <button
                         type="button"
                         onClick={() => setEditorMode('html')}
-                        className={`px-3 py-1 text-sm rounded ${
-                          editorMode === 'html' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
+                        className={`px-3 py-1 text-sm rounded ${editorMode === 'html'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                          }`}
                       >
                         HTML Code
                       </button>
                       <button
                         type="button"
                         onClick={() => setEditorMode('preview')}
-                        className={`px-3 py-1 text-sm rounded ${
-                          editorMode === 'preview' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
+                        className={`px-3 py-1 text-sm rounded ${editorMode === 'preview'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                          }`}
                       >
                         Preview
                       </button>
                     </div>
                   </div>
-                  
+
                   {editorMode === 'html' ? (
                     <textarea
                       value={formData.content}
@@ -450,7 +447,7 @@ export default function UserContentPage() {
                       required
                     />
                   ) : (
-                    <div 
+                    <div
                       className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 min-h-[300px] bg-white"
                       dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-500">No content to preview</p>' }}
                     />
@@ -459,7 +456,7 @@ export default function UserContentPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Featured Image</label>
-                  
+
                   {/* Image Link Input */}
                   <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-600 mb-2">Image URL</label>
@@ -497,14 +494,18 @@ export default function UserContentPage() {
                   {/* Image Preview */}
                   {formData.featuredImage && (
                     <div className="mt-2">
-                      <img 
-                        src={formData.featuredImage} 
-                        alt="Preview" 
-                        className="w-32 h-32 object-cover rounded border"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
+                      <div className="relative h-10 w-16">
+                        <Image
+                          src={formData.featuredImage}
+                          alt={formData.title}
+                          fill
+                          className="object-cover rounded"
+                          onError={(e) => {
+                            // Hide parent div is tricky in React/Next.js Image without state
+                            // For now, we keep the frame or users can remove the image
+                          }}
+                        />
+                      </div>
                       <button
                         type="button"
                         onClick={() => setFormData({ ...formData, featuredImage: '' })}
@@ -561,15 +562,15 @@ export default function UserContentPage() {
                   <input
                     type="text"
                     value={formData.tags?.join(', ') || ''}
-                    onChange={(e) => setFormData({ 
-                      ...formData, 
+                    onChange={(e) => setFormData({
+                      ...formData,
                       tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
                     })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     placeholder="study abroad, education, scholarship..."
                   />
                 </div>
-                
+
                 <div className="flex items-center">
                   <input
                     type="checkbox"
@@ -579,7 +580,7 @@ export default function UserContentPage() {
                   />
                   <label className="ml-2 text-sm text-gray-700">Published</label>
                 </div>
-                
+
                 <div className="flex justify-end space-x-3">
                   <button
                     type="button"

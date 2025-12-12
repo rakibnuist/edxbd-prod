@@ -421,9 +421,9 @@ export default function UserLeadsPage() {
                   <h3 className="text-sm font-medium text-gray-900">{lead.name}</h3>
                   <p className="text-sm text-gray-500 truncate">{lead.email}</p>
                   <div className="flex items-center mt-1">
-                    <span className="text-xs text-gray-400 mr-2">{lead.country}</span>
-                    <span className="text-xs text-gray-400">•</span>
-                    <span className="text-xs text-gray-400 ml-2">{lead.source}</span>
+                    <span className="text-xs text-gray-500 mr-2">{lead.country}</span>
+                    <span className="text-xs text-gray-500">•</span>
+                    <span className="text-xs text-gray-500 ml-2">{lead.source}</span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -507,7 +507,7 @@ export default function UserLeadsPage() {
                 <h3 className="text-base sm:text-lg lg:text-xl font-medium text-gray-900">Lead Details</h3>
                 <button
                   onClick={() => setSelectedLead(null)}
-                  className="text-gray-400 hover:text-gray-600 touch-manipulation p-2 -m-2"
+                  className="text-gray-500 hover:text-gray-600 touch-manipulation p-2 -m-2"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

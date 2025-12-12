@@ -406,7 +406,7 @@ const AdminPartnershipsPage = () => {
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4" />
             <input
               type="text"
               placeholder="Search partnerships..."
@@ -666,7 +666,7 @@ const AdminPartnershipsPage = () => {
                 </h2>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-500 hover:text-gray-600"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -702,19 +702,19 @@ const AdminPartnershipsPage = () => {
                   <h3 className="text-lg font-semibold text-gray-900">Contact Information</h3>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
-                      <User className="w-4 h-4 text-gray-400" />
+                      <User className="w-4 h-4 text-gray-500" />
                       <span>{selectedPartnership.contactPerson}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Mail className="w-4 h-4 text-gray-400" />
+                      <Mail className="w-4 h-4 text-gray-500" />
                       <span>{selectedPartnership.email}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Phone className="w-4 h-4 text-gray-400" />
+                      <Phone className="w-4 h-4 text-gray-500" />
                       <span>{selectedPartnership.phone}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <MapPin className="w-4 h-4 text-gray-400" />
+                      <MapPin className="w-4 h-4 text-gray-500" />
                       <span>{selectedPartnership.city}, {selectedPartnership.country}</span>
                     </div>
                   </div>
@@ -810,7 +810,7 @@ const AdminPartnershipsPage = () => {
                 </h2>
                 <button
                   onClick={() => setShowCreateModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-500 hover:text-gray-600"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -1158,7 +1158,7 @@ const AdminPartnershipsPage = () => {
                 </h2>
                 <button
                   onClick={() => setShowEditModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-500 hover:text-gray-600"
                 >
                   <X className="w-6 h-6" />
                 </button>

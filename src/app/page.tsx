@@ -228,22 +228,10 @@ const Home = memo(function Home() {
         {/* Noise Overlay */}
         <div className="absolute inset-0 opacity-[0.4] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay z-[1]"></div>
 
-        {/* Aurora Blobs */}
-        <motion.div
-          animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="absolute -top-[20%] -left-[20%] w-[80vw] h-[80vw] rounded-full bg-blue-300/30 blur-[120px] mix-blend-multiply"
-        />
-        <motion.div
-          animate={{ rotate: -360, scale: [1, 1.2, 1], x: [0, 100, 0] }}
-          transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-          className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-rose-300/30 blur-[120px] mix-blend-multiply"
-        />
-        <motion.div
-          animate={{ x: [-100, 100, -100], y: [-50, 50, -50] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-[-20%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-amber-200/30 blur-[100px] mix-blend-multiply"
-        />
+        {/* Aurora Blobs - CSS Animation Optimized */}
+        <div className="absolute -top-[20%] -left-[20%] w-[80vw] h-[80vw] rounded-full bg-blue-300/30 blur-[120px] mix-blend-multiply animate-aurora-1" />
+        <div className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-rose-300/30 blur-[120px] mix-blend-multiply animate-aurora-2" />
+        <div className="absolute bottom-[-20%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-amber-200/30 blur-[100px] mix-blend-multiply animate-aurora-3" />
       </div>
 
       {/* --- HERO SECTION: CRYSTAL CLEAR --- */}
@@ -252,12 +240,7 @@ const Home = memo(function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
           {/* LEFT: Text Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-2xl relative"
-          >
+          <div className="max-w-2xl relative">
             {/* Glass Ticker */}
             <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/40 backdrop-blur-2xl border border-white/60 shadow-lg shadow-blue-500/5 mb-10 overflow-hidden hover:scale-105 transition-all cursor-default relative group">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
@@ -325,7 +308,7 @@ const Home = memo(function Home() {
               </div>
             </div>
 
-          </motion.div>
+          </div>
 
           {/* RIGHT: Interactive 3D Card */}
           <HeroCard />
@@ -497,7 +480,7 @@ const Home = memo(function Home() {
               <motion.div
                 key={`${country.name}-${i}`}
                 whileHover={{ scale: 1.02, y: -10 }}
-                className="shrink-0 w-[350px] h-[520px] rounded-[3rem] overflow-hidden relative group cursor-pointer"
+                className="shrink-0 w-[85vw] sm:w-[350px] h-[520px] rounded-[3rem] overflow-hidden relative group cursor-pointer"
               >
                 <GlassCard className="h-full !rounded-[3rem] border-opacity-80 bg-white/80 hover:bg-white/95 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
                   {/* Image Section (Top Half) */}
@@ -652,28 +635,14 @@ const Home = memo(function Home() {
           </div>
 
           {/* Marquee Container */}
-          <div className="relative w-full overflow-hidden py-10 -mx-4 px-4">
+          <div className="relative w-full overflow-hidden py-10 -mx-4 px-4 min-h-[500px]">
             {/* Gradient Masks */}
             <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-[#FAFAFA] to-transparent z-10 pointer-events-none"></div>
             <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-[#FAFAFA] to-transparent z-10 pointer-events-none"></div>
 
-            {/* CSS Animation Definitions (Inline for simplicity) */}
-            <style jsx>{`
-              @keyframes marquee-scroll {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-33.333%); }
-              }
-              .animate-marquee-scroll {
-                animation: marquee-scroll 40s linear infinite;
-              }
-              .animate-marquee-scroll:hover {
-                animation-play-state: paused;
-              }
-            `}</style>
-
-            <div className="flex gap-8 w-max animate-marquee-scroll">
-              {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
-                <div key={i} className="w-[450px] shrink-0">
+            <div className="flex gap-8 w-max animate-marquee hover:[animation-play-state:paused]">
+              {[...testimonials, ...testimonials].map((t, i) => (
+                <div key={i} className="w-[85vw] md:w-[450px] shrink-0">
                   <GlassCard className="p-10 hover:border-blue-300/50 hover:bg-white/60 transition-all duration-300 group flex flex-col h-full rounded-[2.5rem]">
                     {/* Verified Badge */}
                     <div className="absolute top-8 right-8 flex items-center gap-1.5 px-3 py-1 bg-green-50/50 border border-green-200/50 rounded-full backdrop-blur-sm">

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { trackDashboardView, trackContentManagement } from '@/lib/analytics';
 import { Content } from '@/lib/types';
 
@@ -68,7 +69,7 @@ export default function ContentPage() {
 
     // Filter by category
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(content => 
+      filtered = filtered.filter(content =>
         content.categories && content.categories.includes(selectedCategory)
       );
     }
@@ -104,9 +105,9 @@ export default function ContentPage() {
   const fetchContents = async () => {
     try {
       setLoading(true);
-      
+
       console.log('Making request to /api/admin/content...');
-      
+
       // Get fresh token
       const token = await getFreshToken();
 
@@ -117,9 +118,9 @@ export default function ContentPage() {
           'Content-Type': 'application/json'
         }
       });
-      
+
       console.log('Content API response status:', response.status);
-      
+
       if (response.ok) {
         const data = await response.json();
         setContents(data);
@@ -130,7 +131,7 @@ export default function ContentPage() {
         console.error('Failed to fetch contents:', errorData);
         console.error('Response status:', response.status);
         console.error('Response statusText:', response.statusText);
-        
+
         if (response.status === 403) {
           showMessage('error', 'Access denied. Please log in as an admin.');
         } else if (response.status === 500) {
@@ -156,31 +157,31 @@ export default function ContentPage() {
     try {
       const formData = new FormData();
       formData.append('image', file);
-      
+
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setFormData(prev => ({ ...prev, featuredImage: data.imageUrl }));
-        trackContentManagement('image_upload', { 
-          success: true, 
+        trackContentManagement('image_upload', {
+          success: true,
           file_size: file.size,
-          file_type: file.type 
+          file_type: file.type
         });
       } else {
-        trackContentManagement('image_upload', { 
-          success: false, 
-          error: 'upload_failed' 
+        trackContentManagement('image_upload', {
+          success: false,
+          error: 'upload_failed'
         });
         alert('Failed to upload image');
       }
     } catch (error) {
-      trackContentManagement('image_upload', { 
-        success: false, 
-        error: 'network_error' 
+      trackContentManagement('image_upload', {
+        success: false,
+        error: 'network_error'
       });
       alert('Failed to upload image');
     } finally {
@@ -191,7 +192,7 @@ export default function ContentPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Validate required fields
       if (!formData.title.trim()) {
@@ -216,9 +217,9 @@ export default function ContentPage() {
 
       const url = editingContent ? `/api/admin/content/${editingContent._id}` : '/api/admin/content';
       const method = editingContent ? 'PUT' : 'POST';
-      
+
       console.log('Submitting content:', { url, method, formData });
-      
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -234,16 +235,16 @@ export default function ContentPage() {
       if (response.ok) {
         const result = await response.json();
         console.log('Content saved successfully:', result);
-        
+
         const action = editingContent ? 'update' : 'create';
-        trackContentManagement(action, { 
+        trackContentManagement(action, {
           content_id: editingContent?._id || result._id,
           title: formData.title,
           type: formData.type,
           has_image: !!formData.featuredImage,
           success: true
         });
-        
+
         showMessage('success', editingContent ? 'Content updated successfully!' : 'Content created successfully!');
         fetchContents();
         setShowForm(false);
@@ -264,27 +265,27 @@ export default function ContentPage() {
       } else {
         const errorData = await response.json();
         console.error('API Error:', errorData);
-        
+
         const action = editingContent ? 'update' : 'create';
-        trackContentManagement(action, { 
+        trackContentManagement(action, {
           content_id: editingContent?._id,
           title: formData.title,
           success: false,
           error: 'api_error'
         });
-        
+
         showMessage('error', `Failed to ${editingContent ? 'update' : 'create'} content: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Network Error:', error);
-      
+
       const action = editingContent ? 'update' : 'create';
-      trackContentManagement(action, { 
+      trackContentManagement(action, {
         content_id: editingContent?._id,
         success: false,
         error: 'network_error'
       });
-      
+
       showMessage('error', 'Network error. Please check your connection and try again.');
     } finally {
       setIsSubmitting(false);
@@ -323,20 +324,20 @@ export default function ContentPage() {
         });
 
         if (response.ok) {
-          trackContentManagement('delete', { 
+          trackContentManagement('delete', {
             content_id: id,
-            success: true 
+            success: true
           });
           fetchContents();
         } else {
-          trackContentManagement('delete', { 
+          trackContentManagement('delete', {
             content_id: id,
             success: false,
             error: 'api_error'
           });
         }
       } catch (error) {
-        trackContentManagement('delete', { 
+        trackContentManagement('delete', {
           content_id: id,
           success: false,
           error: 'network_error'
@@ -357,11 +358,10 @@ export default function ContentPage() {
     <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
       {/* Message Display */}
       {message && (
-        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${
-          message.type === 'success' 
-            ? 'bg-green-100 border border-green-400 text-green-700' 
-            : 'bg-red-100 border border-red-400 text-red-700'
-        }`}>
+        <div className={`mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg ${message.type === 'success'
+          ? 'bg-green-100 border border-green-400 text-green-700'
+          : 'bg-red-100 border border-red-400 text-red-700'
+          }`}>
           <div className="flex justify-between items-center">
             <span className="text-xs sm:text-sm lg:text-base">{message.text}</span>
             <button
@@ -527,9 +527,8 @@ export default function ContentPage() {
                       </span>
                     </td>
                     <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        content.isPublished ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                      }`}>
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${content.isPublished ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}>
                         {content.isPublished ? 'Published' : 'Draft'}
                       </span>
                     </td>
@@ -558,7 +557,7 @@ export default function ContentPage() {
                 <tr>
                   <td colSpan={5} className="px-2 sm:px-6 py-8 sm:py-12 text-center text-gray-500">
                     <div className="flex flex-col items-center">
-                      <svg className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400 mb-2 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-8 h-8 sm:w-12 sm:h-12 text-gray-500 mb-2 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                       <p className="text-sm sm:text-lg font-medium">No content found</p>
@@ -583,14 +582,14 @@ export default function ContentPage() {
                 </h3>
                 <button
                   onClick={() => setShowForm(false)}
-                  className="text-gray-400 hover:text-gray-600 touch-manipulation"
+                  className="text-gray-500 hover:text-gray-600 touch-manipulation"
                 >
                   <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-              
+
               <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Title</label>
@@ -599,8 +598,8 @@ export default function ContentPage() {
                     value={formData.title}
                     onChange={(e) => {
                       const title = e.target.value;
-                      setFormData({ 
-                        ...formData, 
+                      setFormData({
+                        ...formData,
                         title,
                         slug: !editingContent ? generateSlug(title) : formData.slug
                       });
@@ -609,7 +608,7 @@ export default function ContentPage() {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Slug</label>
                   <input
@@ -620,7 +619,7 @@ export default function ContentPage() {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Type</label>
                   <select
@@ -646,7 +645,7 @@ export default function ContentPage() {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Content</label>
                   <div className="mb-1 sm:mb-2">
@@ -654,28 +653,26 @@ export default function ContentPage() {
                       <button
                         type="button"
                         onClick={() => setEditorMode('html')}
-                        className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded touch-manipulation ${
-                          editorMode === 'html' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
+                        className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded touch-manipulation ${editorMode === 'html'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                          }`}
                       >
                         HTML Code
                       </button>
                       <button
                         type="button"
                         onClick={() => setEditorMode('preview')}
-                        className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded touch-manipulation ${
-                          editorMode === 'preview' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
+                        className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded touch-manipulation ${editorMode === 'preview'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                          }`}
                       >
                         Preview
                       </button>
                     </div>
                   </div>
-                  
+
                   {editorMode === 'html' ? (
                     <textarea
                       value={formData.content}
@@ -686,7 +683,7 @@ export default function ContentPage() {
                       required
                     />
                   ) : (
-                    <div 
+                    <div
                       className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 min-h-[200px] sm:min-h-[300px] bg-white text-xs sm:text-sm"
                       dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-500">No content to preview</p>' }}
                     />
@@ -695,7 +692,7 @@ export default function ContentPage() {
 
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Featured Image</label>
-                  
+
                   {/* Image Link Input */}
                   <div className="mb-3 sm:mb-4">
                     <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1 sm:mb-2">Image URL</label>
@@ -733,14 +730,21 @@ export default function ContentPage() {
                   {/* Image Preview */}
                   {formData.featuredImage && (
                     <div className="mt-2">
-                      <img 
-                        src={formData.featuredImage} 
-                        alt="Preview" 
-                        className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded border"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
+                      <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded border">
+                        <Image
+                          src={formData.featuredImage}
+                          alt={formData.title || "Featured Image Preview"}
+                          fill
+                          className="object-cover rounded"
+                          onError={(e) => {
+                            // This onError is for the Image component itself.
+                            // To hide the parent div on error, you might need a state variable.
+                            // For direct DOM manipulation like the original img tag, it's not directly supported by Next.js Image.
+                            // You might need to set a state to hide the image preview section.
+                            console.error("Failed to load image:", e.currentTarget.src);
+                          }}
+                        />
+                      </div>
                       <button
                         type="button"
                         onClick={() => setFormData({ ...formData, featuredImage: '' })}
@@ -797,15 +801,15 @@ export default function ContentPage() {
                   <input
                     type="text"
                     value={formData.tags?.join(', ') || ''}
-                    onChange={(e) => setFormData({ 
-                      ...formData, 
+                    onChange={(e) => setFormData({
+                      ...formData,
                       tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
                     })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm touch-manipulation"
                     placeholder="study abroad, education, scholarship..."
                   />
                 </div>
-                
+
                 <div className="flex items-center">
                   <input
                     type="checkbox"
@@ -815,7 +819,7 @@ export default function ContentPage() {
                   />
                   <label className="ml-2 text-xs sm:text-sm text-gray-700">Published</label>
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
                   <button
                     type="button"
