@@ -3,8 +3,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Sparkles, Star, Award } from 'lucide-react';
+import dynamic from 'next/dynamic';
 
-import EnhancedContactForm from './EnhancedContactForm';
+const EnhancedContactForm = dynamic(() => import('./EnhancedContactForm'), {
+  loading: () => <div className="h-96 flex items-center justify-center"><div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
+});
 import { trackConsultationRequest } from '@/lib/analytics';
 
 const QuickContactForm = () => {
@@ -58,60 +61,8 @@ const QuickContactForm = () => {
   return (
     <>
       {/* Modern Floating Contact Button */}
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1, type: "spring", stiffness: 200 }}
-        className="fixed bottom-6 right-6 z-40"
-      >
-        {/* Floating Action Button - CRYSTAL BLUE */}
-        <motion.button
-          whileHover={{ scale: 1.05, y: -3 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleOpen}
-          className="group relative bg-gradient-to-br from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white p-4 rounded-2xl shadow-2xl hover:shadow-blue-500/40 transition-all duration-500 border border-white/20 overflow-hidden ring-4 ring-blue-600/20"
-        >
-          {/* Main icon */}
-          <motion.div
-            animate={{
-              rotate: [0, 5, -5, 0],
-              scale: [1, 1.1, 1]
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="relative z-10"
-          >
-            <MessageCircle className="w-7 h-7" />
-          </motion.div>
+      {/* Floating Action Button removed - Consolidated into WhatsApp Widget */}
 
-          {/* Sparkle effects */}
-          <motion.div
-            animate={{
-              opacity: [0, 1, 0],
-              scale: [0.5, 1, 0.5]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              delay: 0.5
-            }}
-            className="absolute -top-1 -right-1 w-3 h-3 bg-amber-400 rounded-full border border-white"
-          />
-
-          {/* Tooltip */}
-          <div className="absolute right-full mr-4 top-1/2 transform -translate-y-1/2 bg-slate-900 text-white px-5 py-3 rounded-xl text-sm font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl border border-slate-700 pointer-events-none">
-            <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>Get Free Consultation</span>
-            </div>
-            {/* Arrow */}
-            <div className="absolute right-0 top-1/2 transform translate-x-1 -translate-y-1/2 w-2 h-2 bg-slate-900 rotate-45 border-r border-b border-slate-700" />
-          </div>
-        </motion.button>
-      </motion.div>
 
       {/* Modern Modal */}
       <AnimatePresence>

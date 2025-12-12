@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
-import { cardHover, fadeInUp } from '@/lib/animations';
+import { fadeInUp } from '@/lib/animations';
 
 interface AnimatedCardProps {
   children: ReactNode;

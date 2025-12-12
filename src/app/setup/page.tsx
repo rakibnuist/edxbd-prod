@@ -20,23 +20,23 @@ export default function SetupPage() {
   const router = useRouter();
 
   useEffect(() => {
-    checkAdminStatus();
-  }, []);
-
-  const checkAdminStatus = async () => {
-    try {
-      const response = await fetch('/api/setup/admin');
-      const data = await response.json();
-      setAdminExists(data.adminExists);
-      if (data.adminExists) {
-        router.push('/login');
+    const checkAdminStatus = async () => {
+      try {
+        const response = await fetch('/api/setup/admin');
+        const data = await response.json();
+        setAdminExists(data.adminExists);
+        if (data.adminExists) {
+          router.push('/login');
+        }
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+      } finally {
+        setChecking(false);
       }
-    } catch (error) {
-      console.error('Error checking admin status:', error);
-    } finally {
-      setChecking(false);
-    }
-  };
+    };
+
+    checkAdminStatus();
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,7 +74,7 @@ export default function SetupPage() {
       } else {
         setError(data.message || 'Failed to create admin user');
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setLoading(false);
@@ -85,7 +85,7 @@ export default function SetupPage() {
     setInitializingDb(true);
     setError('');
     setSuccess('');
-    
+
     try {
       const response = await fetch('/api/init-db', {
         method: 'POST',
@@ -102,7 +102,7 @@ export default function SetupPage() {
       } else {
         setError(data.error || 'Failed to initialize database');
       }
-    } catch (error) {
+    } catch {
       setError('Network error while initializing database');
     } finally {
       setInitializingDb(false);
@@ -152,7 +152,7 @@ export default function SetupPage() {
             Create the initial administrator account to access the dashboard
           </p>
         </div>
-        
+
         {/* Database Initialization Section */}
         <div className="bg-white p-6 rounded-lg shadow mb-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Database Setup</h3>
@@ -195,7 +195,7 @@ export default function SetupPage() {
                 placeholder="Enter your full name"
               />
             </div>
-            
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email Address
@@ -211,7 +211,7 @@ export default function SetupPage() {
                 placeholder="Enter your email address"
               />
             </div>
-            
+
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
@@ -227,7 +227,7 @@ export default function SetupPage() {
                 placeholder="Enter a secure password"
               />
             </div>
-            
+
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                 Confirm Password

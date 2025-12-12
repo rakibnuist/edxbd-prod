@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment } from 'react';
+
 
 interface TickerProps {
     items: string[];

@@ -50,7 +50,7 @@ const Footer = () => {
                   src="/logo.png"
                   alt="EduExpress International"
                   width={224}
-                  height={80}
+                  height={63}
                   className="h-auto w-full object-contain"
                   priority
                 />
@@ -132,22 +132,22 @@ const Footer = () => {
               <h3 className="text-lg font-bold text-gray-900 mb-6 tracking-wide uppercase inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-0.5 after:bg-blue-600 pb-2">
                 Contact Us
               </h3>
-              <ul className="space-y-8">
-                <li className="flex items-start gap-5">
+              <ul className="space-y-6">
+                <li className="flex items-start gap-4">
                   <div className="p-3 rounded-lg bg-white border border-gray-200 shrink-0 shadow-sm text-blue-600">
                     <MapPin className="w-5 h-5" />
                   </div>
-                  <span className="text-gray-600 text-sm leading-relaxed pt-0.5">
+                  <span className="text-gray-600 text-sm leading-relaxed pt-1">
                     House: 12/1, Ground Floor<br />
                     Road: 4/A, Dhanmondi<br />
                     Dhaka - 1209, Bangladesh
                   </span>
                 </li>
-                <li className="flex items-start gap-5">
+                <li className="flex items-start gap-4">
                   <div className="p-3 rounded-lg bg-white border border-gray-200 shrink-0 shadow-sm text-blue-600">
                     <Phone className="w-5 h-5" />
                   </div>
-                  <div className="flex flex-col gap-1.5 pt-1">
+                  <div className="flex flex-col gap-1 pt-1">
                     <a href="tel:+8801983333566" className="text-gray-800 hover:text-blue-700 transition-colors text-sm font-bold">
                       +880 1983-333566
                     </a>
@@ -156,11 +156,11 @@ const Footer = () => {
                     </a>
                   </div>
                 </li>
-                <li className="flex items-start gap-5">
+                <li className="flex items-start gap-4">
                   <div className="p-3 rounded-lg bg-white border border-gray-200 shrink-0 shadow-sm text-blue-600">
                     <Mail className="w-5 h-5" />
                   </div>
-                  <a href="mailto:info@eduexpressint.com" className="text-gray-600 hover:text-blue-700 transition-colors text-sm pt-1.5 break-all">
+                  <a href="mailto:info@eduexpressint.com" className="text-gray-600 hover:text-blue-700 transition-colors text-sm pt-2.5 break-all font-medium">
                     info@eduexpressint.com
                   </a>
                 </li>

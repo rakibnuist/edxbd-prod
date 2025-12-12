@@ -10,7 +10,6 @@ import {
     BookOpen,
     MapPin,
     CheckCircle2,
-    ArrowRight,
     School,
     Landmark,
     Languages,

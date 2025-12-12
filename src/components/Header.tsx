@@ -15,7 +15,7 @@ const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+
   const pathname = usePathname();
 
 
@@ -40,27 +40,22 @@ const Header = () => {
   const logoFilterClass = '';
 
   const navigation = [
-    { name: 'Home', href: '/', current: isMounted && pathname === '/' },
-    { name: 'Destinations', href: '/destinations', current: isMounted && pathname.startsWith('/destinations') },
-    { name: 'Universities', href: '/partnership/universities', current: isMounted && pathname.startsWith('/partnership/universities') },
-    { name: 'Services', href: '/services', current: isMounted && pathname === '/services' },
-    { name: 'Updates', href: '/updates', current: isMounted && pathname === '/updates' },
-    { name: 'Contact', href: '/contact', current: isMounted && pathname === '/contact' },
+    { name: 'Home', href: '/', current: pathname === '/' },
+    { name: 'Destinations', href: '/destinations', current: pathname.startsWith('/destinations') },
+    { name: 'Universities', href: '/partnership/universities', current: pathname.startsWith('/partnership/universities') },
+    { name: 'Services', href: '/services', current: pathname === '/services' },
+    { name: 'Updates', href: '/updates', current: pathname === '/updates' },
+    { name: 'Contact', href: '/contact', current: pathname === '/contact' },
   ];
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted) return;
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Check initially
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMounted]);
+  }, []);
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -88,7 +83,7 @@ const Header = () => {
     };
   }, [dropdownTimeout]);
 
-  if (!isMounted) return null;
+
 
   return (
     <>

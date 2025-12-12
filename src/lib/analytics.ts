@@ -119,7 +119,9 @@ export const trackPageView = async (pageName: string, pageCategory?: string) => 
     };
 
     // Fire and forget CAPI
-    sendConversionAPIEvent('PageView', userData, {
+    // Fix: Send 'page_view' as expected by route.ts and include pageName
+    sendConversionAPIEvent('page_view', userData, {
+      pageName: pageName, // Required by route.ts
       page_title: pageName,
       page_category: pageCategory || 'general',
       page_location: window.location.href
@@ -155,7 +157,8 @@ export const sendConversionAPIEvent = async (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        eventType: eventName.toLowerCase().replace(/([A-Z])/g, '_$1'),
+        // Fix: Send event type exactly as passed, avoiding broken transformation
+        eventType: eventName, 
         data: {
           userData,
           ...customData
@@ -166,7 +169,10 @@ export const sendConversionAPIEvent = async (
     });
 
     if (!response.ok) {
-      throw new Error(`Meta Conversion API error: ${response.status}`);
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`Meta Conversion API warning: ${response.status}`);
+      }
+      return null;
     }
 
     return await response.json();
@@ -244,7 +250,11 @@ export const trackStudyAbroadLead = async (
   }
 
   // Track with Conversion API
-  await sendConversionAPIEvent('Lead', userData, customData, eventId);
+  // Fix: Send 'study_abroad_lead' and include all formData fields
+  await sendConversionAPIEvent('study_abroad_lead', userData, {
+    ...formData, // Pass original formData for server processing (name, etc.)
+    ...customData
+  }, eventId);
 };
 
 // Additional analytics functions for admin dashboard

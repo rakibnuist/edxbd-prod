@@ -3,17 +3,12 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
-    Smile,
-    Smartphone,
-    Cpu,
     GraduationCap,
     Euro,
     Sun,
-    Waves,
     Building2,
     CheckCircle2,
-    Globe,
-    BookOpen
+    Globe
 } from 'lucide-react';
 import ConsultationButton from '@/components/ConsultationButton';
 import Ticker from '@/components/ui/Ticker';

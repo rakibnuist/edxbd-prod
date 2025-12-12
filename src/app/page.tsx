@@ -316,138 +316,100 @@ const Home = memo(function Home() {
         </div>
       </section>
 
-      {/* --- SERVICES (FROSTED BENTO) --- */}
-      <section className="py-32 relative z-10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-24 max-w-4xl mx-auto">
+      {/* --- WHY CHOOSE (CLEAN GRID) --- */}
+      <section className="py-24 relative z-10 bg-slate-50/50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16 max-w-3xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-block"
             >
-              <span className="text-blue-800 font-extrabold tracking-widest text-xs uppercase bg-blue-100/50 backdrop-blur-md px-6 py-2 rounded-full border border-blue-200/50 mb-8 shadow-sm inline-flex items-center gap-2">
-                <Sparkles className="w-3 h-3 text-blue-600" />
-                Why Choose EduExpress
-              </span>
+              <h2 className="text-sm font-bold tracking-widest text-blue-600 uppercase mb-3">Why Choose EduExpress</h2>
+              <h3 className="text-3xl md:text-5xl font-heading font-black text-slate-900 mb-6 tracking-tight">
+                Your Success is Our <span className="text-blue-600">Mission</span>
+              </h3>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                We bridge the gap between your ambition and admission with a data-driven, transparent, and personalized approach.
+              </p>
             </motion.div>
-
-            <h2 className="text-5xl md:text-7xl font-heading font-black text-slate-900 mt-2 leading-[0.9] tracking-tighter drop-shadow-lg mb-8">
-              Expert Guidance. <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-indigo-600 to-purple-600 opacity-90">Crystal Clear Results.</span>
-            </h2>
-            <p className="text-xl text-slate-700 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-sm">
-              We combine data-driven university matching with personalized mentorship to ensure your study abroad success is transparent and guaranteed.
-            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 auto-rows-[auto]">
-
-            {/* Large Card: Strategic Consultation */}
-            <motion.div className="md:col-span-2" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-              <GlassCard className="h-full p-10 md:p-14 group hover:bg-white/60 transition-colors duration-500">
-                <div className="relative z-10 flex flex-col md:flex-row gap-12 items-center">
-                  <div className="flex-1 text-left">
-                    <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-8 text-blue-600 border border-blue-200/50 backdrop-blur-md shadow-inner group-hover:scale-110 transition-transform duration-500">
-                      <MessageCircle className="w-10 h-10 drop-shadow-md" />
-                    </div>
-                    <h3 className="text-4xl font-heading font-bold text-slate-900 mb-6 drop-shadow-sm">Strategic Consultation</h3>
-                    <p className="text-slate-700 leading-relaxed text-lg mb-10 font-medium">
-                      We don&apos;t do generic advice. We adhere to a <span className="text-blue-800 font-bold bg-blue-100/50 px-2 py-0.5 rounded border border-blue-200">precision-matching protocol</span> that aligns your academic profile with elite institutions.
-                    </p>
-
-                    <button
-                      onClick={() => window.dispatchEvent(new CustomEvent('openQuickForm'))}
-                      className="flex items-center gap-3 px-8 py-4 bg-slate-900/90 text-white font-bold rounded-full hover:bg-blue-700/90 transition-all group/btn shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 border border-white/20 backdrop-blur-md"
-                    >
-                      Start Profile Analysis <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
-                  </div>
-
-                  {/* Visual Decor: Clean Stats Grid */}
-                  <div className="grid grid-cols-1 gap-5 min-w-[220px] w-full md:w-auto">
-                    <div className="p-8 bg-white/40 backdrop-blur-xl rounded-[2rem] border border-white/60 shadow-lg group-hover:bg-white/60 transition-all">
-                      <div className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-2">Success Rate</div>
-                      <div className="text-5xl font-heading font-black text-slate-900 tracking-tight">98.5%</div>
-                    </div>
-                    <div className="p-8 bg-blue-500/10 backdrop-blur-xl rounded-[2rem] border border-blue-200/40 shadow-lg group-hover:bg-blue-500/20 transition-all">
-                      <div className="text-xs text-blue-800 font-bold uppercase tracking-wider mb-2">Partner Unis</div>
-                      <div className="text-5xl font-heading font-black text-blue-700 tracking-tight">150+</div>
-                    </div>
-                  </div>
-                </div>
-              </GlassCard>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="bg-white rounded-3xl p-8 shadow-lg shadow-slate-200/50 border border-slate-100 hover:border-blue-200 hover:shadow-xl transition-all duration-300 group"
+            >
+              <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 text-blue-600 group-hover:scale-110 transition-transform duration-300">
+                <MessageCircle className="w-8 h-8" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">Strategic Counseling</h4>
+              <p className="text-slate-600 leading-relaxed mb-6">
+                No generic advice. We use precision matching to align your academic profile with strict university requirements, maximizing acceptance rates.
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-center text-sm text-slate-700 font-medium">
+                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" /> 98% Visa Success Rate
+                </li>
+                <li className="flex items-center text-sm text-slate-700 font-medium">
+                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" /> Personalized Roadmap
+                </li>
+              </ul>
             </motion.div>
 
-            {/* Tall Card: Scholarship Expert */}
-            <motion.div className="md:row-span-2" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-              <GlassCard className="h-full bg-gradient-to-b from-blue-600/90 to-indigo-700/90 border-blue-400/30 p-10 md:p-12 text-white group shadow-blue-900/20">
-                {/* Inner Texture */}
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
-
-                <div className="relative z-10 h-full flex flex-col items-start text-left">
-                  <div className="flex justify-between items-start w-full mb-12">
-                    <div className="w-20 h-20 bg-white/10 border border-white/20 rounded-3xl flex items-center justify-center text-white backdrop-blur-md shadow-inner group-hover:scale-110 transition-transform duration-500">
-                      <Award className="w-10 h-10 drop-shadow-lg" />
-                    </div>
-                    <div className="px-4 py-2 bg-amber-400/90 backdrop-blur-sm text-slate-900 rounded-full text-xs font-black uppercase tracking-widest shadow-lg shadow-amber-900/20 border border-amber-300">
-                      Premium
-                    </div>
-                  </div>
-
-                  <h3 className="text-5xl font-heading font-black text-white mb-8 leading-none tracking-tight drop-shadow-md">
-                    Funding <br /><span className="text-amber-300">Secured.</span>
-                  </h3>
-
-                  <p className="text-blue-50 leading-relaxed text-lg mb-12 font-medium opacity-90 drop-shadow-sm">
-                    Access prestigious fully-funded opportunities. We specialize in <span className="text-white font-bold decoration-amber-400 underline underline-offset-4">CSC, GKS, & Stipendium Hungaricum</span>.
-                  </p>
-
-                  <div className="mt-auto space-y-4 w-full">
-                    {['100% Tuition Waiver', 'Monthly Stipend', 'Accommodation'].map((item, i) => (
-                      <div key={i} className="flex items-center gap-4 p-5 rounded-2xl bg-white/10 border border-white/10 hover:bg-white/20 transition-colors backdrop-blur-md shadow-lg shadow-blue-900/10">
-                        <div className="w-8 h-8 rounded-full bg-green-400/20 flex items-center justify-center text-green-300 border border-green-400/30">
-                          <CheckCircle className="w-5 h-5" />
-                        </div>
-                        <span className="text-lg font-bold text-white tracking-wide">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-12 pt-8 w-full border-t border-white/10">
-                    <button
-                      onClick={() => window.dispatchEvent(new CustomEvent('openQuickForm'))}
-                      className="w-full py-5 bg-white text-blue-700 font-bold rounded-2xl transition-all flex items-center justify-center gap-2 shadow-xl hover:bg-indigo-50 active:scale-95"
-                    >
-                      <span>Check Eligibility</span> <ArrowRight className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              </GlassCard>
+            {/* Feature 2 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-3xl p-8 shadow-lg shadow-slate-200/50 border border-slate-100 hover:border-amber-200 hover:shadow-xl transition-all duration-300 group relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 bg-amber-400 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-bl-xl">Top Rated</div>
+              <div className="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-6 text-amber-500 group-hover:scale-110 transition-transform duration-300">
+                <Award className="w-8 h-8" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors">Scholarship Guarantee</h4>
+              <p className="text-slate-600 leading-relaxed mb-6">
+                From full tuition waivers to monthly stipends, we specialize in securing high-value scholarships like CSC, GKS, and Stipendium Hungaricum.
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-center text-sm text-slate-700 font-medium">
+                  <CheckCircle className="w-4 h-4 text-amber-500 mr-2" /> $5M+ Secured Funding
+                </li>
+                <li className="flex items-center text-sm text-slate-700 font-medium">
+                  <CheckCircle className="w-4 h-4 text-amber-500 mr-2" /> Monthly Stipend Access
+                </li>
+              </ul>
             </motion.div>
 
-            {/* Card: Post-Arrival */}
-            <motion.div className="md:col-span-2" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
-              <GlassCard className="p-10 md:p-12 group hover:bg-teal-50/40 border-teal-100/30 transition-colors duration-500">
-                <div className="relative z-10 text-left flex flex-col sm:flex-row gap-10 items-start sm:items-center">
-                  <div className="flex-grow">
-                    <div className="w-16 h-16 bg-teal-500/10 rounded-2xl flex items-center justify-center mb-6 text-teal-600 border border-teal-200/50 backdrop-blur-md shadow-inner group-hover:scale-110 transition-transform duration-500">
-                      <Users className="w-8 h-8 drop-shadow-sm" />
-                    </div>
-                    <h3 className="text-3xl font-bold text-slate-900 mb-4 drop-shadow-sm">Post-Arrival Care</h3>
-                    <p className="text-slate-700 font-medium text-lg leading-relaxed mb-2 max-w-md">
-                      We ensure a safe landing. From airport pickup to finding accommodation, our local community helps you settle in.
-                    </p>
-                  </div>
-
-                  <Link
-                    href="/services"
-                    className="shrink-0 flex items-center gap-2 px-8 py-4 bg-white/80 backdrop-blur-md text-teal-700 font-bold rounded-full border border-teal-200/50 hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all group/btn shadow-lg hover:shadow-xl"
-                  >
-                    <span>View Services</span> <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </GlassCard>
+            {/* Feature 3 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="bg-white rounded-3xl p-8 shadow-lg shadow-slate-200/50 border border-slate-100 hover:border-violet-200 hover:shadow-xl transition-all duration-300 group"
+            >
+              <div className="w-16 h-16 bg-violet-50 rounded-2xl flex items-center justify-center mb-6 text-violet-600 group-hover:scale-110 transition-transform duration-300">
+                <Users className="w-8 h-8" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-violet-600 transition-colors">End-to-End Support</h4>
+              <p className="text-slate-600 leading-relaxed mb-6">
+                We don&apos;t just get you an offer letter. We handle visa processing, travel arrangements, and even help you settle in your new country.
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-center text-sm text-slate-700 font-medium">
+                  <CheckCircle className="w-4 h-4 text-violet-500 mr-2" /> Airport Pickup
+                </li>
+                <li className="flex items-center text-sm text-slate-700 font-medium">
+                  <CheckCircle className="w-4 h-4 text-violet-500 mr-2" /> Accommodation Support
+                </li>
+              </ul>
             </motion.div>
           </div>
         </div>

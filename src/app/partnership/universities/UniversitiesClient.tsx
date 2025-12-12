@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
     Search,
     School,
@@ -10,8 +10,6 @@ import {
     Filter,
     ArrowRight,
     TrendingUp,
-    X,
-    ChevronDown,
     GraduationCap,
     Loader2
 } from 'lucide-react';
@@ -41,7 +39,7 @@ const UniversitiesClient = () => {
 
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [totalItems, setTotalItems] = useState(0);
+
 
     const [error, setError] = useState<string | null>(null);
 
@@ -65,7 +63,7 @@ const UniversitiesClient = () => {
                     const data = await res.json();
                     setUniversities(data.universities);
                     setTotalPages(data.pagination.totalPages);
-                    setTotalItems(data.pagination.total);
+
                     // If backend pagination is used, simple client-side filtering won't work perfectly for other fields (intake, taught, major).
                     // For this task, we assume backend filtering is primary or we pagination locally.
                     // Given the prompt "add pagination", server-side is best. 

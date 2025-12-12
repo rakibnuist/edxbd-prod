@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import {
     GraduationCap,
     MapPin,
-    Trophy,
     BookOpen,
     DollarSign,
     Calendar,
