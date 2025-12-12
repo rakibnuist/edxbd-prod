@@ -113,14 +113,14 @@ export default function UkClient() {
                     className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] border border-white/5 rounded-full z-0"
                 />
 
-                <div className="container mx-auto px-6 relative z-10 pt-20">
+                <div className="container mx-auto px-6 relative z-10 pt-32">
                     <motion.div
                         initial="hidden"
                         animate="visible"
                         variants={staggerContainer}
                         className="text-center max-w-5xl mx-auto"
                     >
-                        <motion.div variants={fadeInUp} className="inline-flex items-center space-x-2 bg-red-900/80 backdrop-blur-md border border-red-500/30 px-6 py-2 rounded-full mb-8 shadow-lg shadow-red-900/20">
+                        <motion.div variants={fadeInUp} className="inline-flex items-center space-x-2 bg-black/50 backdrop-blur-md border border-white/20 px-6 py-2 rounded-full mb-8 shadow-lg shadow-black/20">
                             <Crown className="w-5 h-5 text-amber-400" />
                             <span className="text-sm font-bold tracking-widest text-white uppercase">Home of Academic Excellence</span>
                         </motion.div>
@@ -170,7 +170,7 @@ export default function UkClient() {
                 <div className="container mx-auto px-6 flex items-center justify-center space-x-8 animate-marquee whitespace-nowrap">
                     <div className="flex items-center space-x-2">
                         <CheckCircle2 className="w-5 h-5 text-amber-400" />
-                        <span className="font-bold tracking-wide">NEXT INTAKE: SEPTEMBER 2026</span>
+                        <span className="font-bold tracking-wide">INTAKE: Multiple Intakes</span>
                     </div>
                     <div className="w-2 h-2 rounded-full bg-white/20"></div>
                     <div className="flex items-center space-x-2">

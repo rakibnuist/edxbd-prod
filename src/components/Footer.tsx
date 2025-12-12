@@ -20,6 +20,7 @@ const Footer = () => {
     { name: 'Home', href: '/' },
     { name: 'About Us', href: '/about' },
     { name: 'Our Services', href: '/services' },
+    { name: 'Universities', href: '/partnership/universities' },
     { name: 'Latest Updates', href: '/updates' },
     { name: 'Partnership', href: '/partnership' },
     { name: 'Contact', href: '/contact' },
@@ -33,7 +34,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-slate-50 text-slate-700 font-sans overflow-hidden border-t-4 border-blue-600">
+    <footer className="relative bg-gray-50 text-gray-600 font-sans overflow-hidden border-t border-gray-200">
 
       {/* Background Pattern - Subtle, not interfering */}
       <div className="absolute inset-0 opacity-[0.4] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay pointer-events-none"></div>
@@ -55,8 +56,8 @@ const Footer = () => {
                 />
               </div>
             </Link>
-            <p className="text-slate-700 text-lg leading-relaxed max-w-sm font-semibold">
-              Your trusted partner for global education. We specialize in unlocking opportunities with <span className="text-slate-900 font-bold bg-amber-100 px-1 rounded border border-amber-200">FREE scholarship assistance</span> to help you achieve your dreams abroad.
+            <p className="text-gray-600 text-sm leading-relaxed max-w-sm">
+              Your trusted partner for global education. We specialize in unlocking opportunities with <span className="text-gray-900 font-bold bg-blue-50 px-1 rounded border border-blue-100">FREE scholarship assistance</span> to help you achieve your dreams abroad.
             </p>
 
             <div className="flex gap-4">
@@ -66,10 +67,10 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 flex items-center justify-center rounded-xl bg-white border-2 border-slate-200 text-slate-500 hover:text-white hover:bg-blue-700 hover:border-blue-700 transition-all duration-200 shadow-sm"
+                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-white hover:bg-blue-600 hover:border-blue-600 transition-all duration-300 shadow-sm"
                   aria-label={social.name}
                 >
-                  <social.icon className="w-6 h-6" />
+                  <social.icon className="w-5 h-5" />
                 </a>
               ))}
             </div>
@@ -80,7 +81,7 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div>
-              <h3 className="text-xl font-black text-slate-900 mb-8 tracking-tight uppercase border-b-2 border-slate-200 pb-2 inline-block">
+              <h3 className="text-lg font-bold text-gray-900 mb-6 tracking-wide uppercase inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-0.5 after:bg-blue-600 pb-2">
                 Quick Links
               </h3>
               <ul className="space-y-4">
@@ -88,9 +89,9 @@ const Footer = () => {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="group flex items-center text-slate-700 hover:text-blue-800 transition-all duration-200 font-medium"
+                      className="group flex items-center text-gray-600 text-sm hover:text-blue-700 transition-all duration-300"
                     >
-                      <ArrowRight className="w-4 h-4 mr-3 text-blue-600 transition-transform group-hover:translate-x-1" />
+                      <ArrowRight className="w-4 h-4 mr-2 text-gray-400 transition-transform group-hover:translate-x-1 group-hover:text-blue-500" />
                       <span className="group-hover:translate-x-1 transition-transform">{link.name}</span>
                     </Link>
                   </li>
@@ -100,7 +101,7 @@ const Footer = () => {
 
             {/* Destinations */}
             <div>
-              <h3 className="text-xl font-black text-slate-900 mb-8 tracking-tight uppercase border-b-2 border-slate-200 pb-2 inline-block">
+              <h3 className="text-lg font-bold text-gray-900 mb-6 tracking-wide uppercase inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-0.5 after:bg-blue-600 pb-2">
                 Top Destinations
               </h3>
               <ul className="space-y-4">
@@ -108,9 +109,9 @@ const Footer = () => {
                   <li key={country.slug}>
                     <Link
                       href={`/destinations/${country.slug}`}
-                      className="group flex items-center text-slate-700 hover:text-blue-800 transition-all duration-200 font-medium"
+                      className="group flex items-center text-gray-600 text-sm hover:text-blue-700 transition-all duration-300"
                     >
-                      <Globe className="w-5 h-5 mr-3 text-blue-500" />
+                      <Globe className="w-4 h-4 mr-2 text-gray-400 group-hover:text-blue-500 transition-colors" />
                       <span>{country.name}</span>
                     </Link>
                   </li>
@@ -128,38 +129,38 @@ const Footer = () => {
 
             {/* Contact Info */}
             <div>
-              <h3 className="text-xl font-black text-slate-900 mb-8 tracking-tight uppercase border-b-2 border-slate-200 pb-2 inline-block">
+              <h3 className="text-lg font-bold text-gray-900 mb-6 tracking-wide uppercase inline-block relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-0.5 after:bg-blue-600 pb-2">
                 Contact Us
               </h3>
-              <ul className="space-y-6">
-                <li className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-white border-2 border-slate-200 shrink-0">
-                    <MapPin className="w-6 h-6 text-blue-700" />
+              <ul className="space-y-8">
+                <li className="flex items-start gap-5">
+                  <div className="p-3 rounded-lg bg-white border border-gray-200 shrink-0 shadow-sm text-blue-600">
+                    <MapPin className="w-5 h-5" />
                   </div>
-                  <span className="text-slate-700 text-base leading-relaxed font-semibold pt-1">
+                  <span className="text-gray-600 text-sm leading-relaxed pt-0.5">
                     House: 12/1, Ground Floor<br />
                     Road: 4/A, Dhanmondi<br />
                     Dhaka - 1209, Bangladesh
                   </span>
                 </li>
-                <li className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-white border-2 border-slate-200 shrink-0">
-                    <Phone className="w-6 h-6 text-blue-700" />
+                <li className="flex items-start gap-5">
+                  <div className="p-3 rounded-lg bg-white border border-gray-200 shrink-0 shadow-sm text-blue-600">
+                    <Phone className="w-5 h-5" />
                   </div>
-                  <div className="flex flex-col gap-1 pt-1">
-                    <a href="tel:+8801983333566" className="text-slate-800 hover:text-blue-800 transition-colors text-base font-bold">
+                  <div className="flex flex-col gap-1.5 pt-1">
+                    <a href="tel:+8801983333566" className="text-gray-800 hover:text-blue-700 transition-colors text-sm font-bold">
                       +880 1983-333566
                     </a>
-                    <a href="tel:+88013296663505" className="text-slate-700 hover:text-blue-700 transition-colors text-base font-medium">
+                    <a href="tel:+88013296663505" className="text-gray-600 hover:text-blue-700 transition-colors text-sm font-medium">
                       +880 1329-6663505
                     </a>
                   </div>
                 </li>
-                <li className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-white border-2 border-slate-200 shrink-0">
-                    <Mail className="w-6 h-6 text-blue-700" />
+                <li className="flex items-start gap-5">
+                  <div className="p-3 rounded-lg bg-white border border-gray-200 shrink-0 shadow-sm text-blue-600">
+                    <Mail className="w-5 h-5" />
                   </div>
-                  <a href="mailto:info@eduexpressint.com" className="text-slate-700 hover:text-blue-800 transition-colors text-base font-semibold pt-2">
+                  <a href="mailto:info@eduexpressint.com" className="text-gray-600 hover:text-blue-700 transition-colors text-sm pt-1.5 break-all">
                     info@eduexpressint.com
                   </a>
                 </li>
@@ -171,14 +172,14 @@ const Footer = () => {
 
 
         {/* Bottom Bar */}
-        <div className="mt-20 pt-8 border-t-2 border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-600 relative z-10">
+        <div className="mt-20 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-gray-500 relative z-10">
           <div className="flex items-center gap-2 order-2 md:order-1 font-bold">
-            {/* Copyright Removed */}
+            © 2025 EduExpress International. All Rights Reserved.
           </div>
 
           <div className="flex items-center gap-8 order-1 md:order-2">
-            <Link href="/privacy" className="hover:text-blue-700 transition-colors font-bold text-slate-700 hover:underline">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-blue-700 transition-colors font-bold text-slate-700 hover:underline">Terms of Service</Link>
+            <Link href="/privacy" className="hover:text-blue-600 transition-colors font-medium text-gray-600 hover:underline">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-blue-600 transition-colors font-medium text-gray-600 hover:underline">Terms of Service</Link>
           </div>
         </div>
       </div>

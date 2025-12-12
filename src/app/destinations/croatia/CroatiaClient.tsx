@@ -16,6 +16,7 @@ import {
     BookOpen
 } from 'lucide-react';
 import ConsultationButton from '@/components/ConsultationButton';
+import Ticker from '@/components/ui/Ticker';
 
 export default function CroatiaClient() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -32,13 +33,13 @@ export default function CroatiaClient() {
             {/* Hero Section - Adriatic Aurora Theme */}
             <section className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-slate-900">
                 <div className="absolute inset-0 z-0">
+                    {/* Hero Background Image */}
+                    <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555992336-fb0d29498b13?q=80&w=2070&auto=format&fit=crop')" }}
+                    />
                     {/* Gradient Background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 z-10" />
-                    <div className="absolute inset-0 opacity-40 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400 via-indigo-500 to-transparent blur-3xl transform -translate-y-1/2" />
-                    <div className="absolute bottom-0 left-0 right-0 h-1/2 opacity-30 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-red-500 via-orange-500 to-transparent blur-3xl transform translate-y-1/4" />
-
-                    {/* Subtle Texture */}
-                    <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-blue-950/80 to-slate-900/80 z-10" />
                 </div>
 
                 <motion.div
@@ -88,7 +89,7 @@ export default function CroatiaClient() {
                         { icon: <Globe className="w-8 h-8 text-indigo-600" />, value: "27", label: "EU Countries", sub: "Work & Travel Access" },
                         { icon: <Building2 className="w-8 h-8 text-red-600" />, value: "50+", label: "Universities", sub: "World-Class Education" },
                     ].map((stat, idx) => (
-                        <div key={idx} className="flex flex-col items-center text-center group hover:transform hover:scale-105 transition-transform duration-300">
+                        <div key={idx} className="flex flex-col items-center text-center group hover:transform hover:scale-105 transition-transform duration-300 py-4 md:py-0">
                             <div className="mb-4 p-4 bg-slate-50 rounded-2xl group-hover:bg-blue-50 transition-colors shadow-sm">
                                 {stat.icon}
                             </div>
@@ -103,12 +104,12 @@ export default function CroatiaClient() {
             {/* Why Croatia */}
             <section className="py-24 px-6 container mx-auto">
                 <div className="flex flex-col md:flex-row items-center gap-16">
-                    <div className="md:w-1/2">
+                    <div className="w-full md:w-1/2">
                         <div className="relative rounded-3xl overflow-hidden shadow-2xl group">
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-60" />
                             {/* Dubrovnik Image */}
                             <div
-                                className="h-[600px] bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                className="h-[400px] md:h-[600px] bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                                 style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555992336-fb0d29498b13?q=80&w=2070&auto=format&fit=crop')" }}
                             />
                             <div className="absolute bottom-8 left-8 z-20 text-white">
@@ -231,18 +232,14 @@ export default function CroatiaClient() {
                     <h2 className="text-3xl font-bold text-slate-900">Partner Universities</h2>
                     <p className="text-slate-500 mt-2">Study at prestigious institutions across Croatia</p>
                 </div>
-                <div className="flex animate-scroll space-x-8 w-max">
-                    {[
+                <Ticker
+                    items={[
                         "University of Zagreb", "University of Split", "University of Rijeka",
                         "University of Dubrovnik", "University of Zadar", "University of Pula",
-                        "RIT Croatia", "Algebra University College",
-                        "University of Zagreb", "University of Split", "University of Rijeka"
-                    ].map((uni, idx) => (
-                        <div key={idx} className="bg-white px-8 py-6 rounded-2xl shadow-sm border border-slate-100 text-slate-700 font-bold whitespace-nowrap hover:shadow-md transition-shadow">
-                            {uni}
-                        </div>
-                    ))}
-                </div>
+                        "RIT Croatia", "Algebra University College"
+                    ]}
+                    speed="normal"
+                />
             </section>
 
             {/* CTA Section */}

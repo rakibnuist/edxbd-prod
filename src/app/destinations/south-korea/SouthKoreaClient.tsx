@@ -105,16 +105,16 @@ export default function SouthKoreaClient() {
                     className="absolute bottom-10 left-10 w-80 h-80 bg-blue-600 rounded-full blur-[100px] opacity-20 z-0"
                 />
 
-                <div className="container mx-auto px-6 relative z-10 pt-20">
+                <div className="container mx-auto px-6 relative z-10 pt-32">
                     <motion.div
                         initial="hidden"
                         animate="visible"
                         variants={staggerContainer}
                         className="text-center max-w-5xl mx-auto"
                     >
-                        <motion.div variants={fadeInUp} className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full mb-8">
-                            <span className="text-xl">🇰🇷</span>
-                            <span className="text-sm font-medium tracking-wide text-blue-100">FAST-TRACK EDUCATION PATHWAYS</span>
+                        <motion.div variants={fadeInUp} className="inline-flex items-center space-x-2 bg-black/60 backdrop-blur-md border border-white/20 px-6 py-2 rounded-full mb-8 shadow-lg">
+                            <span className="text-2xl">🇰🇷</span>
+                            <span className="text-sm font-bold tracking-wide text-blue-100 uppercase">Fast-Track Education Pathways</span>
                         </motion.div>
 
                         <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight leading-tight">
@@ -162,22 +162,39 @@ export default function SouthKoreaClient() {
                 </div>
             </section>
 
-            {/* Intakes Banner */}
-            <div className="bg-slate-900 border-t border-slate-800 text-white py-4 overflow-hidden">
-                <div className="container mx-auto px-6 flex items-center justify-center space-x-8 animate-marquee whitespace-nowrap">
-                    <div className="flex items-center space-x-2">
-                        <CheckCircle2 className="w-5 h-5 text-blue-400" />
-                        <span className="font-medium tracking-wide">MASTERS E-VISA: PRIORITY PROCESSING</span>
+            {/* Professional Status Bar (Static) */}
+            {/* Intakes Banner / Ticker */}
+            <div className="bg-slate-900 border-y border-slate-800 text-white py-4 overflow-hidden shadow-2xl relative z-20">
+                <div className="container mx-auto px-6 flex items-center justify-center space-x-12 animate-marquee whitespace-nowrap">
+                    {/* Group 1: Visa Status */}
+                    <div className="flex items-center space-x-3">
+                        <FileCheck className="w-5 h-5 text-blue-400" />
+                        <span className="font-bold tracking-wide text-slate-300">VISA STATUS:</span>
+                        <span className="font-bold text-white">MASTERS E-VISA</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                        <span className="font-medium text-slate-300">PRIORITY PROCESSING</span>
                     </div>
-                    <div className="w-2 h-2 rounded-full bg-white/20"></div>
-                    <div className="flex items-center space-x-2">
-                        <CheckCircle2 className="w-5 h-5 text-red-400" />
-                        <span className="font-medium tracking-wide">NO IELTS REQUIRED WITH EAP</span>
+
+                    <div className="w-2 h-2 rounded-full bg-white/10"></div>
+
+                    {/* Group 2: Language Req */}
+                    <div className="flex items-center space-x-3">
+                        <Languages className="w-5 h-5 text-red-400" />
+                        <span className="font-bold tracking-wide text-slate-300">LANGUAGE REQ:</span>
+                        <span className="font-bold text-white">NO IELTS NEEDED</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                        <span className="font-medium text-slate-300">WITH EAP PROGRAM</span>
                     </div>
-                    <div className="w-2 h-2 rounded-full bg-white/20"></div>
-                    <div className="flex items-center space-x-2">
-                        <CheckCircle2 className="w-5 h-5 text-green-400" />
-                        <span className="font-medium tracking-wide">MULTIPLE INTAKES OPEN NOW</span>
+
+                    <div className="w-2 h-2 rounded-full bg-white/10"></div>
+
+                    {/* Group 3: Admissions */}
+                    <div className="flex items-center space-x-3">
+                        <Clock className="w-5 h-5 text-green-400" />
+                        <span className="font-bold tracking-wide text-slate-300">ADMISSIONS:</span>
+                        <span className="font-bold text-white">MULTIPLE INTAKES</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                        <span className="font-medium text-slate-300">OPEN NOW</span>
                     </div>
                 </div>
             </div>

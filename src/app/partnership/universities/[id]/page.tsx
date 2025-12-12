@@ -12,7 +12,8 @@ export async function generateStaticParams() {
     }));
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }) {
+    const params = await props.params;
     await connectDB();
     const uni = await University.findOne({ slug: params.id });
 
@@ -35,7 +36,8 @@ async function getUniversity(slug: string) {
     return JSON.parse(JSON.stringify(uni));
 }
 
-export default async function UniversityDetailPage({ params }: { params: { id: string } }) {
+export default async function UniversityDetailPage(props: { params: Promise<{ id: string }> }) {
+    const params = await props.params;
     const uni = await getUniversity(params.id);
 
     if (!uni) {

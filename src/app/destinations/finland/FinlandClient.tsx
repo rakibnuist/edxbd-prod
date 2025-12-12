@@ -62,7 +62,7 @@ export default function FinlandClient() {
 
                         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                             <ConsultationButton
-                                text="Apply for 2025 Intake"
+                                text="Apply for 2026 Intake"
                                 source="finland_hero_primary"
                                 className="px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-slate-900 rounded-full font-bold text-lg shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_40px_rgba(6,182,212,0.6)] transition-all transform hover:-translate-y-1 w-full sm:w-auto"
                             />
@@ -100,12 +100,12 @@ export default function FinlandClient() {
             {/* Why Finland: Tech x Nature */}
             <section className="py-24 px-6 container mx-auto">
                 <div className="flex flex-col md:flex-row items-center gap-16">
-                    <div className="md:w-1/2">
+                    <div className="w-full md:w-1/2">
                         <div className="relative rounded-3xl overflow-hidden shadow-2xl group">
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-60" />
                             {/* Placeholder for Helsinki Landscape or Tech Hub */}
                             <div
-                                className="h-[600px] bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                className="h-[400px] md:h-[600px] bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                                 style={{ backgroundImage: "url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop')" }}
                             />
                             <div className="absolute bottom-8 left-8 z-20 text-white">
@@ -229,7 +229,7 @@ export default function FinlandClient() {
                     <h2 className="text-3xl font-bold text-slate-900">Top Research Universities</h2>
                     <p className="text-slate-500 mt-2">Ranked among the top 1% globally</p>
                 </div>
-                <div className="flex animate-scroll space-x-8 w-max">
+                <div className="flex animate-marquee space-x-8 w-max">
                     {[
                         "University of Helsinki", "Aalto University", "Tampere University",
                         "University of Oulu", "University of Turku", "LUT University",

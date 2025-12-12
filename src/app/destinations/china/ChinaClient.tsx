@@ -21,16 +21,14 @@ import {
     Sparkles
 } from 'lucide-react';
 import ConsultationButton from '@/components/ConsultationButton';
+import Ticker from '@/components/ui/Ticker';
 
 // --- Data ---
 
 const universities = [
-    { name: 'Tsinghua University', logo: School, color: 'bg-red-50 text-red-700' },
-    { name: 'Peking University', logo: Landmark, color: 'bg-amber-50 text-amber-700' },
-    { name: 'Fudan University', logo: BookOpen, color: 'bg-blue-50 text-blue-700' },
-    { name: 'Shanghai Jiao Tong', logo: Building2, color: 'bg-indigo-50 text-indigo-700' },
-    { name: 'Zhejiang University', logo: Globe, color: 'bg-purple-50 text-purple-700' },
-    { name: 'USTC', logo: Award, color: 'bg-emerald-50 text-emerald-700' }
+    'Tsinghua University', 'Peking University', 'Fudan University',
+    'Shanghai Jiao Tong University', 'Zhejiang University', 'University of Science and Technology of China (USTC)',
+    'Nanjing University', 'Wuhan University', 'Harbin Institute of Technology', 'Xi\'an Jiaotong University'
 ];
 
 const scholarships = [
@@ -57,10 +55,10 @@ const popularPrograms = [
 ];
 
 const cities = [
-    { name: 'Beijing', stats: '21.5M Pop • 39 Univ.', highlights: ['Capital City', 'Cultural Hub', 'Top Ranking Univ.'], imageQuery: 'beijing' },
-    { name: 'Shanghai', stats: '24.3M Pop • 64 Univ.', highlights: ['Financial Hub', 'Global City', 'Modern Lifestyle'], imageQuery: 'shanghai' },
-    { name: 'Guangzhou', stats: '15.3M Pop • 83 Univ.', highlights: ['Trade Hub', 'Cantonese Culture', 'Key Business Center'], imageQuery: 'guangzhou' },
-    { name: 'Hangzhou', stats: '10.4M Pop • 47 Univ.', highlights: ['Tech Hub', 'Scenic Beauty', 'Alibaba HQ'], imageQuery: 'hangzhou' }
+    { name: 'Beijing', stats: '21.5M Pop • 39 Univ.', highlights: ['Capital City', 'Cultural Hub', 'Top Ranking Univ.'], imageQuery: 'https://images.unsplash.com/photo-1599571234909-29ed5d1321d6?q=80&w=2070&auto=format&fit=crop' },
+    { name: 'Shanghai', stats: '24.3M Pop • 64 Univ.', highlights: ['Financial Hub', 'Global City', 'Modern Lifestyle'], imageQuery: 'https://images.unsplash.com/photo-1548919973-5cef591cdbc9?q=80&w=2069&auto=format&fit=crop' },
+    { name: 'Guangzhou', stats: '15.3M Pop • 83 Univ.', highlights: ['Trade Hub', 'Cantonese Culture', 'Key Business Center'], imageQuery: 'https://images.unsplash.com/photo-1583491470868-8772074815d0?q=80&w=2070&auto=format&fit=crop' },
+    { name: 'Hangzhou', stats: '10.4M Pop • 47 Univ.', highlights: ['Tech Hub', 'Scenic Beauty', 'Alibaba HQ'], imageQuery: 'https://images.unsplash.com/photo-1568222629618-9366c8f94cb4?q=80&w=2070&auto=format&fit=crop' }
 ];
 
 // --- Animations ---
@@ -85,7 +83,7 @@ export default function ChinaClient() {
         <div className="min-h-screen bg-slate-50 font-sans selection:bg-red-100 selection:text-red-900">
 
             {/* Hero Section */}
-            <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-slate-900 text-white">
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900 text-white">
                 {/* Abstract Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-red-950 via-slate-900 to-slate-900 z-0"></div>
                 <div className="absolute inset-0 opacity-20 z-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
@@ -102,7 +100,7 @@ export default function ChinaClient() {
                     className="absolute bottom-10 left-10 w-80 h-80 bg-amber-500 rounded-full blur-[100px] opacity-20 z-0"
                 />
 
-                <div className="container mx-auto px-6 relative z-10 pt-20">
+                <div className="container mx-auto px-6 relative z-10 pt-36">
                     <motion.div
                         initial="hidden"
                         animate="visible"
@@ -241,38 +239,22 @@ export default function ChinaClient() {
             </section>
 
             {/* Universities Carousel */}
-            <section className="py-24 bg-white border-y border-slate-100">
+            <section className="py-24 bg-white border-y border-slate-100 overflow-hidden">
                 <div className="container mx-auto px-6">
                     <div className="flex flex-col md:flex-row justify-between items-end mb-12">
                         <div>
                             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Partner Universities</h2>
                             <p className="text-slate-600 max-w-xl">We work with China&apos;s most prestigious institutions.</p>
                         </div>
-                        {/* Decoration */}
-                        <div className="hidden md:block">
-                            <ArrowRight className="w-8 h-8 text-slate-300" />
-                        </div>
                     </div>
 
-                    <div className="overflow-x-auto pb-8 hide-scrollbar">
-                        <div className="flex space-x-6 min-w-max">
-                            {universities.map((uni, idx) => (
-                                <div key={idx} className={`w-72 p-8 rounded-2xl ${uni.color} hover:shadow-lg transition-all cursor-default`}>
-                                    <div className="bg-white/80 w-16 h-16 rounded-full flex items-center justify-center mb-6 shadow-sm">
-                                        <uni.logo className="w-8 h-8" />
-                                    </div>
-                                    <h3 className="text-xl font-bold mb-2">{uni.name}</h3>
-                                    <div className="h-1 w-10 bg-current opacity-20 rounded-full"></div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    <Ticker items={universities} speed="normal" />
                 </div>
             </section>
 
             {/* Main Content Layout */}
-            <section className="py-24 bg-slate-50">
-                <div className="container mx-auto px-6">
+            <section className="py-12 md:py-24 bg-slate-50">
+                <div className="container mx-auto px-4 md:px-6">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
                         {/* Left Column (Content) */}
@@ -315,11 +297,12 @@ export default function ChinaClient() {
                                 <div className="space-y-4">
                                     {cities.map((city, idx) => (
                                         <div key={idx} className="group flex flex-col md:flex-row items-center bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
-                                            <div className="w-full md:w-32 h-24 bg-slate-200 rounded-lg flex-shrink-0 mb-4 md:mb-0 md:mr-6 overflow-hidden relative">
-                                                {/* Placeholder for city image */}
-                                                <div className="absolute inset-0 flex items-center justify-center text-slate-400 bg-slate-100">
-                                                    <Building2 className="w-8 h-8 opacity-50" />
-                                                </div>
+                                            <div className="w-full md:w-32 h-40 md:h-24 bg-slate-200 rounded-lg flex-shrink-0 mb-4 md:mb-0 md:mr-6 overflow-hidden relative">
+                                                <img
+                                                    src={city.imageQuery}
+                                                    alt={city.name}
+                                                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                                />
                                             </div>
                                             <div className="flex-grow text-center md:text-left">
                                                 <h4 className="text-xl font-bold text-slate-900">{city.name}</h4>

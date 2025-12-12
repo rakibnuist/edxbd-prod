@@ -22,6 +22,9 @@ const Header = () => {
   // Check if we are on a university detail page (dark background)
   const isUniversityDetail = /^\/partnership\/universities\/[^/]+$/.test(pathname);
 
+  // Check if we are on a destination detail page (dark background)
+  const isDestinationDetail = /^\/destinations\/[^/]+$/.test(pathname);
+
   // Transparent when not scrolled (applies to all pages for consistent premium feel)
   const isTransparent = !isScrolled;
 
@@ -31,7 +34,7 @@ const Header = () => {
     : 'bg-white/70 backdrop-blur-2xl border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] py-4'; // Frosted scroll state
 
   const navLinkClass = isTransparent
-    ? (isUniversityDetail ? 'text-white font-bold hover:text-blue-200' : 'text-slate-800 font-bold hover:text-blue-700') // Adaptive contrast
+    ? (isUniversityDetail || isDestinationDetail ? 'text-white font-bold hover:text-blue-200' : 'text-slate-800 font-bold hover:text-blue-700') // Adaptive contrast
     : 'text-slate-600 hover:text-blue-600 font-medium';
 
   const logoFilterClass = '';
@@ -39,6 +42,7 @@ const Header = () => {
   const navigation = [
     { name: 'Home', href: '/', current: isMounted && pathname === '/' },
     { name: 'Destinations', href: '/destinations', current: isMounted && pathname.startsWith('/destinations') },
+    { name: 'Universities', href: '/partnership/universities', current: isMounted && pathname.startsWith('/partnership/universities') },
     { name: 'Services', href: '/services', current: isMounted && pathname === '/services' },
     { name: 'Updates', href: '/updates', current: isMounted && pathname === '/updates' },
     { name: 'Contact', href: '/contact', current: isMounted && pathname === '/contact' },

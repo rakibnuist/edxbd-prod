@@ -1,4 +1,5 @@
 // Analytics and tracking utilities for EduExpress International
+import { getMetaParameters } from './meta-event-quality';
 
 // Configuration
 export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX';
@@ -23,6 +24,10 @@ export interface UserData {
   state?: string;
   country?: string;
   zipCode?: string;
+  fbp?: string;
+  fbc?: string;
+  external_id?: string;
+  fb_login_id?: string;
 }
 
 // Track events
@@ -95,12 +100,35 @@ export const trackEmailClick = (email: string) => {
 };
 
 
-export const trackPageView = (pageName: string, pageCategory?: string) => {
-  trackEvent('page_view', {
+
+export const trackPageView = async (pageName: string, pageCategory?: string) => {
+  const eventId = trackEvent('PageView', {
     page_title: pageName,
     page_category: pageCategory || 'general',
     page_location: typeof window !== 'undefined' ? window.location.href : ''
   });
+
+  // Send to CAPI
+  if (typeof window !== 'undefined') {
+    const metaParams = getMetaParameters();
+    const userData: UserData = {
+      fbp: metaParams.fbp,
+      fbc: metaParams.fbc,
+      external_id: metaParams.external_id,
+      fb_login_id: metaParams.fb_login_id
+    };
+
+    // Fire and forget CAPI
+    sendConversionAPIEvent('PageView', userData, {
+      page_title: pageName,
+      page_category: pageCategory || 'general',
+      page_location: window.location.href
+    }, eventId).catch(err => {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('CAPI PageView failed:', err);
+      }
+    });
+  }
 };
 
 export const trackCountryInterest = (country: string) => {
@@ -116,12 +144,7 @@ export const trackCountryInterest = (country: string) => {
 // Meta Conversion API Functions (Client-side wrapper)
 export const sendConversionAPIEvent = async (
   eventName: string,
-  userData: {
-    email?: string;
-    phone?: string;
-    firstName?: string;
-    lastName?: string;
-  },
+  userData: UserData,
   customData?: Record<string, unknown>,
   eventId?: string
 ) => {
@@ -171,12 +194,20 @@ export const trackStudyAbroadLead = async (
   const [firstName, ...lastNameParts] = formData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
 
-  const userData = {
+  // Get Meta Event Quality Parameters (fbp, fbc, etc.)
+  const metaParams = typeof window !== 'undefined' ? getMetaParameters() : {};
+
+  const userData: UserData = {
     email: formData.email,
     phone: formData.phone,
     firstName: firstName,
     lastName: lastName,
-    country: formData.country
+    country: formData.country,
+    // Add Enhanced Match Quality Parameters
+    fbp: metaParams.fbp,
+    fbc: metaParams.fbc,
+    external_id: metaParams.external_id,
+    fb_login_id: metaParams.fb_login_id
   };
 
   const customData = {
@@ -204,6 +235,8 @@ export const trackStudyAbroadLead = async (
       window.fbq('track', 'Lead', {
         event_id: eventId,
         ...customData
+      }, {
+        eventID: eventId // Pass eventID to Pixel for deduplication
       });
     } catch {
       // Silent error handling

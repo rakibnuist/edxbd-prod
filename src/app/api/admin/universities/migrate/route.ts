@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
-import University from '@/models/University';
+
 import { universities } from '@/data/partnershipUniversities';
 
 export async function POST(request: NextRequest) {
@@ -26,12 +26,12 @@ export async function POST(request: NextRequest) {
                 // The static data interface seems to match our schema mostly using the same "University" interface concept
                 // We just need to map 'id' to 'slug' because our model uses 'slug' as the friendly ID
 
+                const { id, ...rest } = uniData;
                 const doc = {
-                    ...uniData,
-                    slug: uniData.id, // Map id -> slug
+                    ...rest,
+                    slug: id, // Map id -> slug
                     isActive: true
                 };
-                delete (doc as any).id; // Remove id to avoid conflict with _id
 
                 console.log('Migrating doc:', JSON.stringify(doc, null, 2));
 

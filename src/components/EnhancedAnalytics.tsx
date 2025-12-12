@@ -2,8 +2,9 @@
 
 import { useEffect } from 'react';
 import Script from 'next/script';
+import { usePathname } from 'next/navigation';
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
-import { GTM_ID, GA4_MEASUREMENT_ID, META_PIXEL_ID } from '@/lib/analytics';
+import { GTM_ID, GA4_MEASUREMENT_ID, META_PIXEL_ID, trackPageView } from '@/lib/analytics';
 import {
   debugMetaParameters,
   initializeFacebookLogin,
@@ -11,6 +12,21 @@ import {
 } from '@/lib/meta-event-quality';
 
 const EnhancedAnalytics = () => {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Track PageView on route change (including initial load)
+    const handlePageView = () => {
+      // Use document title if available, otherwise just use the pathname
+      // Small timeout to allow title to update
+      setTimeout(() => {
+        trackPageView(document.title || 'EduExpress International', 'general');
+      }, 500);
+    };
+
+    handlePageView();
+  }, [pathname]);
+
   useEffect(() => {
     // Initialize Facebook Login SDK for Event Quality
     initializeFacebookLogin();
@@ -74,46 +90,13 @@ const EnhancedAnalytics = () => {
                   
                   fbq('init', '${META_PIXEL_ID}');
                   
-                  // Enhanced PageView tracking
+                  // Helper for custom events that might rely on old global functions
                   function trackEnhancedPageView() {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const fbc = urlParams.get('fbclid');
-                    
-                    function getCookie(name) {
-                      const value = '; ' + document.cookie;
-                      const parts = value.split('; ' + name + '=');
-                      if (parts.length === 2) return parts.pop().split(';').shift();
-                      return null;
-                    }
-                    const fbp = getCookie('_fbp');
-                    
-                    const externalId = localStorage.getItem('user_id') || 
-                                      sessionStorage.getItem('user_id');
-                    
-                    const pageViewEventId = 'pageview_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                    
-                    const eventData = {
-                      content_name: document.title,
-                      content_category: 'general',
-                      page_title: document.title,
-                      page_category: 'general'
-                    };
-                    
-                    if (fbc) eventData.fbc = fbc;
-                    if (fbp) eventData.fbp = fbp;
-                    if (externalId) eventData.external_id = externalId;
-                    
-                    fbq('track', 'PageView', eventData, { eventID: pageViewEventId });
-                    
-                    // Server-side tracking skipped for brevity in client-side deferral optimization
-                    // Ideally, keep it if critical, but simplified here for performance
+                     // Legacy placeholder - handled by React useEffect now
                   }
-                  
-                  trackEnhancedPageView();
                   
                   // Global tracking functions
                   window.trackEnhancedMetaEvent = function(eventName, parameters = {}, userData = {}) {
-                     // Simplified for performance - mostly pass-through to fbq
                      fbq('track', eventName, parameters);
                   };
                   

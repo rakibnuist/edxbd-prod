@@ -5,26 +5,30 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Plus, Search, Edit, Trash2, GraduationCap, MapPin, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { IUniversity } from '@/types/university';
 
 export default function UniversitiesPage() {
-    const { user } = useAuth();
-    const [universities, setUniversities] = useState<any[]>([]);
+    const { user, authenticatedFetch } = useAuth(); // authentication
+    const [universities, setUniversities] = useState<IUniversity[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+
+    // Pagination state
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
 
     // Fetch data
     const fetchUniversities = async () => {
         try {
             setLoading(true);
-            const res = await fetch(`/api/admin/universities?search=${search}`, {
-                headers: {
-                    // 'Authorization': `Bearer ${token}` 
-                    // relying on cookie/verifyTokenFromRequest logic which might read from cookie
-                }
-            });
+            // Public endpoint might not need auth, but admin endpoint does
+            const res = await authenticatedFetch(`/api/admin/universities?search=${search}&page=${page}&limit=10`);
             if (res.ok) {
                 const data = await res.json();
-                setUniversities(data);
+                setUniversities(data.universities);
+                setTotalPages(data.pagination.totalPages);
+                setTotalItems(data.pagination.total);
             }
         } catch (error) {
             console.error('Failed to fetch', error);
@@ -35,23 +39,51 @@ export default function UniversitiesPage() {
 
     useEffect(() => {
         fetchUniversities();
-    }, [search]); // Debounce usually better but simple for now
+    }, [search, page]);
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this university?')) return;
+    // Old handleDelete removed as it is replaced by modal logic above
 
-        const res = await fetch(`/api/admin/universities/${id}`, {
-            method: 'DELETE',
-        });
+    const [deleteId, setDeleteId] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
-        if (res.ok) {
-            fetchUniversities();
+    // ... fetch logic ...
+
+    const handleDeleteClick = (id: string) => {
+        setDeleteId(id);
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteId) return;
+
+        try {
+            setIsDeleting(true);
+            const res = await authenticatedFetch(`/api/admin/universities/${deleteId}`, {
+                method: 'DELETE',
+            });
+
+            if (res.ok) {
+                // Determine if we are on the last item of the page and not on the first page
+                if (universities.length === 1 && page > 1) {
+                    setPage(page - 1);
+                } else {
+                    fetchUniversities();
+                }
+                setDeleteId(null); // Close modal
+            } else {
+                const data = await res.json();
+                alert(`Failed to delete: ${data.error || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Delete error:', error);
+            alert('An error occurred while deleting');
+        } finally {
+            setIsDeleting(false);
         }
     };
 
     const handleMigrate = async () => {
         setLoading(true);
-        await fetch('/api/admin/universities/migrate', { method: 'POST' });
+        await authenticatedFetch('/api/admin/universities/migrate', { method: 'POST' });
         fetchUniversities();
     };
 
@@ -86,7 +118,7 @@ export default function UniversitiesPage() {
                     type="text"
                     placeholder="Search universities..."
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                     className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
             </div>
@@ -121,7 +153,7 @@ export default function UniversitiesPage() {
                                     <Edit size={20} />
                                 </Link>
                                 <button
-                                    onClick={() => handleDelete(uni._id)}
+                                    onClick={() => handleDeleteClick(uni._id)}
                                     className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                 >
                                     <Trash2 size={20} />
@@ -135,6 +167,69 @@ export default function UniversitiesPage() {
                             No universities found. Try syncing data or adding a new one.
                         </div>
                     )}
+                </div>
+            )}
+
+            {/* Pagination */}
+            {!loading && totalPages > 1 && (
+                <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+                    <span className="text-sm text-slate-500">
+                        Showing {universities.length} of {totalItems} universities (Page {page} of {totalPages})
+                    </span>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => setPage(p => Math.max(1, p - 1))}
+                            disabled={page === 1}
+                            className="px-4 py-2 text-sm font-bold text-slate-600 bg-slate-50 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Previous
+                        </button>
+                        <button
+                            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                            disabled={page === totalPages}
+                            className="px-4 py-2 text-sm font-bold text-slate-600 bg-slate-50 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {deleteId && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl animate-in fade-in zoom-in duration-200">
+                        <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mb-4 mx-auto text-red-600">
+                            <Trash2 size={24} />
+                        </div>
+                        <h3 className="text-xl font-bold text-center text-slate-900 mb-2">Delete University?</h3>
+                        <p className="text-slate-500 text-center mb-6">
+                            Are you sure you want to delete this university? This action cannot be undone.
+                        </p>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setDeleteId(null)}
+                                disabled={isDeleting}
+                                className="flex-1 px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition-colors disabled:opacity-50"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmDelete}
+                                disabled={isDeleting}
+                                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                            >
+                                {isDeleting ? (
+                                    <>
+                                        <Loader2 size={16} className="animate-spin" />
+                                        Deleting...
+                                    </>
+                                ) : (
+                                    'Delete'
+                                )}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

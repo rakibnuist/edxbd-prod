@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
-import mongoose from 'mongoose';
+
 import University from '@/models/University';
 
 export async function GET(request: NextRequest) {
@@ -32,7 +32,13 @@ export async function GET(request: NextRequest) {
         const degree = searchParams.get('degree');
         const search = searchParams.get('search');
 
-        let query: any = {};
+        // Pagination params
+        const page = parseInt(searchParams.get('page') || '1');
+        const limit = parseInt(searchParams.get('limit') || '10');
+        const skip = (page - 1) * limit;
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const query: any = {};
 
         if (country && country !== 'all') {
             query.country = country;
@@ -49,9 +55,21 @@ export async function GET(request: NextRequest) {
             ];
         }
 
-        const universities = await University.find(query).sort({ name: 1 });
+        const total = await University.countDocuments(query);
+        const universities = await University.find(query)
+            .sort({ name: 1 })
+            .skip(skip)
+            .limit(limit);
 
-        return NextResponse.json(universities);
+        return NextResponse.json({
+            universities,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
     } catch (error) {
         console.error('Error fetching universities:', error);
         return NextResponse.json(

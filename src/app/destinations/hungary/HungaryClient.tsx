@@ -44,7 +44,7 @@ export default function HungaryClient() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 mb-8 hover:bg-white/20 transition-colors">
+                        <div className="inline-flex items-center space-x-2 bg-black/40 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 mb-8 hover:bg-black/50 transition-colors shadow-lg">
                             <span className="text-2xl">🇭🇺</span>
                             <span className="font-medium text-amber-300 tracking-wide uppercase text-sm">Heart of Europe</span>
                         </div>
@@ -85,8 +85,30 @@ export default function HungaryClient() {
                 </motion.div>
             </section>
 
+            {/* Intakes Banner */}
+            <div className="bg-red-900 border-t border-red-800 text-white py-4 overflow-hidden relative z-30">
+                <div className="container mx-auto px-6">
+                    <div className="flex items-center justify-center space-x-8 animate-marquee whitespace-nowrap">
+                        <div className="flex items-center space-x-2">
+                            <CheckCircle2 className="w-5 h-5 text-amber-400" />
+                            <span className="font-bold tracking-wide">INTAKE 2026: FALL AND SPRING</span>
+                        </div>
+                        <div className="w-2 h-2 rounded-full bg-white/20"></div>
+                        <div className="flex items-center space-x-2">
+                            <CheckCircle2 className="w-5 h-5 text-amber-400" />
+                            <span className="font-bold tracking-wide">STIPENDIUM HUNGARICUM OPEN</span>
+                        </div>
+                        <div className="w-2 h-2 rounded-full bg-white/20"></div>
+                        <div className="flex items-center space-x-2">
+                            <CheckCircle2 className="w-5 h-5 text-amber-400" />
+                            <span className="font-bold tracking-wide">APPLY NOW FOR BEST SCHOLARSHIPS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* Quick Stats Bar */}
-            <div className="bg-white relative z-30 -mt-20 mx-4 md:mx-auto max-w-6xl rounded-2xl shadow-xl p-8 grid grid-cols-1 md:grid-cols-4 gap-8 md:divide-x divide-slate-100">
+            <div className="bg-white relative z-30 mx-4 md:mx-auto max-w-6xl rounded-2xl shadow-xl p-8 grid grid-cols-1 md:grid-cols-4 gap-8 md:divide-x divide-slate-100 mt-8">
                 {[
                     { icon: <Euro className="w-8 h-8 text-green-500" />, value: "€3,000+", label: "Annual Tuition" },
                     { icon: <Globe className="w-8 h-8 text-blue-500" />, value: "27", label: "Schengen Countries" },
@@ -229,7 +251,7 @@ export default function HungaryClient() {
                 <div className="container mx-auto px-6 mb-12 text-center">
                     <h2 className="text-3xl font-bold font-serif text-slate-900">Top Partner Universities</h2>
                 </div>
-                <div className="flex animate-scroll space-x-8 w-max">
+                <div className="flex animate-marquee space-x-8 w-max">
                     {[
                         "Semmelweis University", "Eötvös Loránd University", "University of Debrecen",
                         "University of Szeged", "University of Pécs", "Corvinus University",

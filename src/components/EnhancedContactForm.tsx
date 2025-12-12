@@ -42,7 +42,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
   showCountry = true,
   showProgram = true,
   showMessage = true,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   showLocation: _showLocation = true,
   className = '',
   onSubmit,

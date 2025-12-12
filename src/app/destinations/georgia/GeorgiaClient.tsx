@@ -102,11 +102,11 @@ export default function GeorgiaClient() {
             {/* Why Georgia Section */}
             <section className="py-24 px-6 container mx-auto">
                 <div className="flex flex-col md:flex-row items-center gap-16">
-                    <div className="md:w-1/2">
+                    <div className="w-full md:w-1/2">
                         <div className="relative rounded-3xl overflow-hidden shadow-2xl group border-4 border-white">
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent z-10" />
                             <div
-                                className="h-[600px] bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                className="h-[400px] md:h-[600px] bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                                 style={{ backgroundImage: "url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop')" }}
                             />
                             <div className="absolute bottom-8 left-8 z-20 text-white">
@@ -215,7 +215,7 @@ export default function GeorgiaClient() {
                     <h2 className="text-3xl font-bold text-slate-900">Top Accredited Universities</h2>
                     <p className="text-slate-500 mt-2">Partnered with the best institutions in Georgia</p>
                 </div>
-                <div className="flex animate-scroll space-x-8 w-max">
+                <div className="flex animate-marquee space-x-8 w-max">
                     {[
                         "Tbilisi State Medical University", "Caucasus International University", "University of Georgia",
                         "European University", "Geomedi Medical University", "Batumi Shota Rustaveli State University",

@@ -100,11 +100,11 @@ export default function CyprusClient() {
             {/* Why Cyprus: Career x Lifestyle */}
             <section className="py-24 px-6 container mx-auto">
                 <div className="flex flex-col md:flex-row items-center gap-16">
-                    <div className="md:w-1/2">
+                    <div className="w-full md:w-1/2">
                         <div className="relative rounded-3xl overflow-hidden shadow-2xl group border-4 border-white">
                             <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-40" />
                             <div
-                                className="h-[600px] bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                className="h-[400px] md:h-[600px] bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                                 style={{ backgroundImage: "url('https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=1966&auto=format&fit=crop')" }}
                             />
                             <div className="absolute bottom-8 left-8 z-20 text-white">
@@ -226,7 +226,7 @@ export default function CyprusClient() {
                     <h2 className="text-3xl font-bold text-slate-900">Partner Institutions</h2>
                     <p className="text-slate-500 mt-2">Study at top-tier universities with UK accreditations</p>
                 </div>
-                <div className="flex animate-scroll space-x-8 w-max">
+                <div className="flex animate-marquee space-x-8 w-max">
                     {[
                         "University of Cyprus", "European University Cyprus", "University of Nicosia",
                         "Frederick University", "Neapolis University", "Cyprus College",
