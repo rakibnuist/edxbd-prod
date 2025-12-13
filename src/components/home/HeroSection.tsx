@@ -1,212 +1,298 @@
 'use client';
 
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
-import { ArrowRight, Globe, Sparkles, CheckCircle } from 'lucide-react';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, ArrowRight, Star, Users, Send } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
 
-// --- 3D PRISM HERO CARD ---
-const HeroCard = () => {
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-    const rotateX = useTransform(y, [-100, 100], [10, -10]);
-    const rotateY = useTransform(x, [-100, 100], [-10, 10]);
-
-    return (
-        <div style={{ perspective: 2000 }} className="hidden lg:flex justify-center items-center">
-            <motion.div
-                style={{ rotateX, rotateY, z: 100 }}
-                drag
-                dragElastic={0.10}
-                dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
-                whileHover={{ cursor: "grab" }}
-                whileTap={{ cursor: "grabbing" }}
-                onMouseMove={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const width = rect.width;
-                    const height = rect.height;
-                    const mouseX = e.clientX - rect.left;
-                    const mouseY = e.clientY - rect.top;
-                    const xPct = mouseX / width - 0.5;
-                    const yPct = mouseY / height - 0.5;
-                    x.set(xPct * 400);
-                    y.set(yPct * 400);
-                }}
-                onMouseLeave={() => {
-                    x.set(0);
-                    y.set(0);
-                }}
-                className="relative w-full max-w-md aspect-[3/4] rounded-[2.5rem] bg-white/10 backdrop-blur-3xl border-2 border-white/30 shadow-[0_20px_50px_rgba(8,_112,_184,_0.15)] p-8 flex flex-col overflow-hidden group transition-all duration-300 ease-out"
-            >
-                {/* Holographic Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-400/10 via-purple-400/10 to-amber-400/10 opacity-50 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-0"></div>
-
-                {/* Prismatic Edge Shine */}
-                <div className="absolute -inset-[2px] rounded-[2.5rem] bg-gradient-to-br from-white/80 via-transparent to-white/20 opacity-100 pointer-events-none z-50 mix-blend-overlay"></div>
-
-                {/* Inner Glass Thickness */}
-                <div className="absolute inset-[1px] rounded-[2.5rem] bg-white/20 backdrop-blur-md z-0"></div>
-
-                {/* Content */}
-                <div className="relative z-20 flex flex-col h-full">
-                    {/* Header */}
-                    <div className="flex justify-between items-start mb-8 pointer-events-none">
-                        <div className="w-16 h-16 rounded-2xl bg-white/40 flex items-center justify-center border border-white/50 shadow-inner backdrop-blur-md">
-                            <Globe className="w-8 h-8 text-blue-600 drop-shadow-sm" />
-                        </div>
-                        <div className="text-right">
-                            <div className="text-xs text-blue-800 uppercase tracking-widest font-black mb-1">Your Future</div>
-                            <div className="text-3xl font-black text-slate-800 font-heading tracking-tight drop-shadow-sm">Secured</div>
-                        </div>
-                    </div>
-
-                    {/* Middle: Checklist */}
-                    <div className="space-y-4 flex-grow pointer-events-none">
-                        {[
-                            { label: "Profile Evaluation", checked: true },
-                            { label: "Check Eligibility", checked: true },
-                            { label: "Scholarship Search", checked: true },
-                            { label: "Visa Approval", checked: false, highlight: true }
-                        ].map((item, i) => (
-                            <div key={i} className={`flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300 backdrop-blur-md ${item.highlight ? 'bg-blue-500/10 border-blue-400/30' : 'bg-white/30 border-white/40'}`}>
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-transform duration-300 backdrop-blur-sm ${item.checked ? 'bg-green-500 text-white scale-110' : (item.highlight ? 'bg-blue-600 shadow-blue-500/50 animate-pulse text-white' : 'border-2 border-white/50 text-transparent')}`}>
-                                    {(item.checked || item.highlight) && <CheckCircle className="w-5 h-5" />}
-                                </div>
-                                <span className={`font-bold text-lg drop-shadow-sm ${item.highlight ? 'text-blue-900' : 'text-slate-700'}`}>{item.label}</span>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Bottom: Action */}
-                    <div className="mt-auto pt-6">
-                        <button
-                            onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('openQuickForm')); }}
-                            className="w-full py-4 bg-slate-900/90 hover:bg-blue-700/90 backdrop-blur-md text-white font-black rounded-2xl transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 border border-white/20 flex items-center justify-center gap-2 group/btn"
-                        >
-                            <Sparkles className="w-4 h-4 text-amber-300 group-hover/btn:animate-spin" />
-                            <span>Verify Now</span>
-                        </button>
-                    </div>
-                </div>
-            </motion.div>
-        </div>
-    );
-};
+// Slide Data
+const SLIDES = [
+    {
+        id: 1,
+        title: "Study in China",
+        subtitle: "Up to 100% Scholarship",
+        image: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=2340&auto=format&fit=crop",
+        link: "/destinations/china"
+    },
+    {
+        id: 2,
+        title: "Study in South Korea",
+        subtitle: "E-Visa & Apply without IELTS",
+        image: "https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=2340&auto=format&fit=crop",
+        link: "/destinations/south-korea"
+    },
+    {
+        id: 3,
+        title: "Study in Europe",
+        subtitle: "Apply with or Without IELTS",
+        image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2340&auto=format&fit=crop",
+        link: "/destinations/europe"
+    }
+];
 
 const HeroSection = () => {
-    const [tickerIndex, setTickerIndex] = useState(0);
+    const [currentSlide, setCurrentSlide] = useState(0);
 
-    // REALISTIC Ticker Data
-    const tickerItems = [
-        "🎉 Visa Granted: China (X1 Student Visa)",
-        "🎉 Scholarship Won: Stipendium Hungaricum (Hungary)",
-        "🎉 Visa Granted: UK (University of Portsmouth)",
-        "🎉 Admission Offer: GKS Scholarship (South Korea)"
-    ];
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+    };
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setTickerIndex((prev) => (prev + 1) % tickerItems.length);
-        }, 4000);
-        return () => clearInterval(interval);
-    }, [tickerItems.length]);
+        const timer = setInterval(nextSlide, 5000);
+        return () => clearInterval(timer);
+    }, []);
 
     return (
-        <>
-            {/* --- BACKGROUND AURORA (FIXED) --- */}
-            <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
-                {/* Noise Overlay */}
-                <div className="absolute inset-0 opacity-[0.4] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay z-[1]"></div>
+        <section className="relative min-h-[90vh] flex flex-col justify-center bg-blue-50">
+            {/* Background Image Removed */}
 
-                {/* Aurora Blobs - CSS Animation Optimized */}
-                <div className="absolute -top-[20%] -left-[20%] w-[80vw] h-[80vw] rounded-full bg-blue-300/30 blur-[120px] mix-blend-multiply animate-aurora-1" />
-                <div className="absolute top-[20%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-rose-300/30 blur-[120px] mix-blend-multiply animate-aurora-2" />
-                <div className="absolute bottom-[-20%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-amber-200/30 blur-[100px] mix-blend-multiply animate-aurora-3" />
+            {/* Aurora Background Effect Container (Clipped) */}
+            <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute inset-0 z-0 opacity-30 mix-blend-overlay">
+                    <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+                    <div className="absolute -bottom-40 left-20 w-96 h-96 bg-rose-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+                </div>
             </div>
 
-            {/* --- HERO SECTION: CRYSTAL CLEAR --- */}
-            <section className="relative min-h-[100vh] flex items-center pt-32 pb-20 relative z-10 overflow-hidden">
+            {/* --- SPLIT CONTENT --- */}
+            <div className="relative z-10 flex-grow container mx-auto px-4 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center pt-24 pb-12 lg:pt-32 lg:pb-40">
 
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                {/* LEFT: Text Content */}
+                <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0 order-2 lg:order-1">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={currentSlide}
+                            initial={{ x: -30, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: 30, opacity: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 border border-green-200 mb-6 w-fit mx-auto lg:mx-0 shadow-sm">
+                                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                <span className="text-sm font-bold text-green-700 uppercase tracking-wide">Accepting Applications</span>
+                            </div>
 
-                    {/* LEFT: Text Content */}
-                    <div className="max-w-2xl relative">
-                        {/* Glass Ticker */}
-                        <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/40 backdrop-blur-2xl border border-white/60 shadow-lg shadow-blue-500/5 mb-10 overflow-hidden hover:scale-105 transition-all cursor-default relative group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                            <span className="relative flex h-3 w-3">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 shadow-lg shadow-green-500/50"></span>
-                            </span>
-                            <AnimatePresence mode='wait'>
-                                <motion.span
-                                    key={tickerIndex}
-                                    initial={{ y: 20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: -20, opacity: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="text-sm font-bold tracking-wide text-green-800 whitespace-nowrap drop-shadow-sm"
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-tight text-slate-900">
+                                {SLIDES[currentSlide].title}
+                            </h1>
+                            <p className="text-lg md:text-xl text-slate-600 font-medium mb-8 leading-relaxed max-w-lg mx-auto lg:mx-0">
+                                {SLIDES[currentSlide].subtitle}. Start your journey with expert guidance and secured scholarships.
+                            </p>
+
+                            <div className="flex justify-center lg:justify-start">
+                                <Link
+                                    href={SLIDES[currentSlide].link}
+                                    className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group"
                                 >
-                                    {tickerItems[tickerIndex]}
-                                </motion.span>
-                            </AnimatePresence>
-                        </div>
-
-                        <h1 className="text-5xl lg:text-8xl font-black font-heading leading-[1.05] mb-8 tracking-tighter text-slate-900 drop-shadow-lg">
-                            <span className="block mb-2">Crafting</span>
-                            <span className="relative inline-block">
-                                <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 pb-2">Global</span>
-                                {/* Text Glint Effect */}
-                                <div className="absolute -inset-1 bg-blue-400/20 blur-xl -z-10 rounded-full"></div>
-                            </span>
-                            <span className="block mt-2">Success.</span>
-                        </h1>
-
-                        <p className="text-xl text-slate-700 mb-12 leading-relaxed font-semibold max-w-lg drop-shadow-sm">
-                            Unlock prestigious, fully funded opportunities in <span className="bg-white/50 px-2 py-1 rounded-lg border border-white/40 text-blue-700 shadow-sm">China</span>, <span className="bg-white/50 px-2 py-1 rounded-lg border border-white/40 text-blue-700 shadow-sm">Europe</span> & <span className="bg-white/50 px-2 py-1 rounded-lg border border-white/40 text-blue-700 shadow-sm">UK</span> with our precision-matched consultancy.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row gap-5">
-                            <motion.button
-                                suppressHydrationWarning
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => window.dispatchEvent(new CustomEvent('openQuickForm'))}
-                                className="px-10 py-5 bg-slate-900 text-white font-black text-lg rounded-full shadow-[0_20px_40px_-10px_rgba(15,23,42,0.3)] transition-all flex items-center justify-center gap-3 group relative overflow-hidden ring-4 ring-white/30 backdrop-blur-sm"
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-                                <span className="relative z-10">Start Your Journey</span>
-                                <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-                            </motion.button>
-
-                            <Link href="/destinations/china" className="px-10 py-5 bg-white/50 backdrop-blur-lg border border-white/60 text-slate-800 font-bold text-lg rounded-full hover:bg-white/80 transition-all flex items-center justify-center shadow-lg shadow-slate-200/50 hover:shadow-xl">
-                                Explore Destinations
-                            </Link>
-                        </div>
-
-                        {/* Stats Strip - Glass Style */}
-                        <div className="mt-20 pt-10 border-t border-slate-900/10 w-full flex gap-12">
-                            <div className="group cursor-default">
-                                <div className="text-5xl font-black font-heading text-slate-900 mb-1 drop-shadow-sm group-hover:text-blue-600 transition-colors">100%</div>
-                                <div className="text-xs text-slate-600 uppercase tracking-widest font-bold">Visa Success Rate</div>
+                                    Start Your Journey <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                </Link>
                             </div>
-                            <div className="w-px h-16 bg-gradient-to-b from-transparent via-slate-400/50 to-transparent"></div>
-                            <div className="group cursor-default">
-                                <div className="text-5xl font-black font-heading text-slate-900 mb-1 drop-shadow-sm group-hover:text-amber-500 transition-colors">$5M+</div>
-                                <div className="text-xs text-slate-600 uppercase tracking-widest font-bold">Scholarships Secured</div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    {/* RIGHT: Interactive 3D Card */}
-                    <HeroCard />
-
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
-            </section>
-        </>
+
+                {/* RIGHT: Human Element (Man Touch) - Now Visible! */}
+                <div className="relative h-[450px] lg:h-[550px] order-1 lg:order-2 flex items-center justify-center">
+                    <motion.div
+                        initial={{ y: 50, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        className="relative w-full max-w-[400px] lg:max-w-[450px] h-full"
+                    >
+                        {/* Decorative Blob Background */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-[3rem] rotate-3 opacity-80 transform scale-95 shadow-2xl" />
+
+                        {/* Main Image Container */}
+                        <div className="absolute inset-0 bg-white rounded-[2.5rem] overflow-hidden border-4 border-white shadow-2xl">
+                            <img
+                                src="/images/headerright.jpg"
+                                alt="Student Header Image"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        {/* Floating "Trust" Badge 1: Visa Success */}
+                        <motion.div
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                            className="absolute -left-4 lg:-left-16 top-16 lg:top-20 bg-white p-3 lg:p-4 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3"
+                        >
+                            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div className="text-lg lg:text-xl font-bold text-slate-900">98%</div>
+                                <div className="text-xs text-slate-500 font-medium uppercase tracking-wide">Visa Success</div>
+                            </div>
+                        </motion.div>
+
+                        {/* Floating "Trust" Badge 2: Scholarship */}
+                        <motion.div
+                            animate={{ y: [0, 10, 0] }}
+                            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+                            className="absolute -right-4 lg:-right-12 bottom-28 lg:bottom-32 bg-white p-3 lg:p-4 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3"
+                        >
+                            <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center text-amber-600">
+                                <Star className="w-6 h-6 fill-current" />
+                            </div>
+                            <div>
+                                <div className="text-lg lg:text-xl font-bold text-slate-900">$5M+</div>
+                                <div className="text-xs text-slate-500 font-medium uppercase tracking-wide">Scholarships</div>
+                            </div>
+                        </motion.div>
+
+                        {/* Floating "Trust" Badge 3: Support */}
+                        <motion.div
+                            animate={{ scale: [1, 1.05, 1] }}
+                            transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                            className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2"
+                        >
+                            <div className="flex -space-x-2">
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} className="w-6 h-6 rounded-full bg-blue-400 border-2 border-blue-600" />
+                                ))}
+                            </div>
+                            <span className="text-sm font-bold">24/7 Support</span>
+                        </motion.div>
+                    </motion.div>
+                </div>
+            </div>
+
+            {/* --- NAVIGATION ARROWS (Corner) --- */}
+            <div className="absolute right-4 lg:right-8 bottom-48 lg:bottom-16 flex gap-2 z-20">
+                <button
+                    onClick={prevSlide}
+                    className="w-12 h-12 rounded-full bg-white border border-slate-200 text-slate-700 flex items-center justify-center hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-md"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                </button>
+                <button
+                    onClick={nextSlide}
+                    className="w-12 h-12 rounded-full bg-white border border-slate-200 text-slate-700 flex items-center justify-center hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-md"
+                >
+                    <ArrowRight className="w-5 h-5" />
+                </button>
+            </div>
+
+            {/* --- THREE CARDS SECTION (Overlapping Bottom) --- */}
+            <div className="absolute bottom-0 left-0 w-full translate-y-1/2 z-30 px-4 hidden lg:block">
+                <div className="container mx-auto grid grid-cols-3 gap-8">
+                    {/* Card 1 */}
+                    <motion.div
+                        initial={{ y: 50, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="bg-white rounded-xl shadow-xl p-8 text-center flex flex-col items-center h-full min-h-[220px] justify-center border-b-4 border-blue-600"
+                    >
+                        <div className="bg-blue-50 p-3 rounded-full mb-4">
+                            <Star className="w-8 h-8 text-blue-600 fill-current" />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-800 mb-2">Up to 100% Scholarship</h3>
+                        <p className="text-slate-600 text-sm">
+                            You could be eligible for a scholarship, grant or funding
+                        </p>
+                    </motion.div>
+
+                    {/* Card 2 */}
+                    <motion.div
+                        initial={{ y: 50, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="bg-white rounded-xl shadow-xl p-8 text-center flex flex-col items-center h-full min-h-[220px] justify-center border-b-4 border-amber-500"
+                    >
+                        <div className="bg-amber-50 p-3 rounded-full mb-4">
+                            <Users className="w-8 h-8 text-amber-500 fill-current" />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-800 mb-2">Free Consultations</h3>
+                        <p className="text-slate-600 text-sm">
+                            Book a FREE appointment and consult to find your path
+                        </p>
+                    </motion.div>
+
+                    {/* Card 3 */}
+                    <motion.div
+                        initial={{ y: 50, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.3 }}
+                        className="bg-white rounded-xl shadow-xl p-8 text-center flex flex-col items-center h-full min-h-[220px] justify-center border-b-4 border-gray-800"
+                    >
+                        <div className="bg-gray-100 p-3 rounded-full mb-4">
+                            <Send className="w-8 h-8 text-gray-800 fill-current" />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-800 mb-2">7 Years of Experience</h3>
+                        <p className="text-slate-600 text-sm">
+                            Successfully helping students achieve their dreams
+                        </p>
+                    </motion.div>
+                </div>
+            </div>
+
+            {/* Mobile View Cards (Stacked below hero basically) - 
+                Actually, to maintain structure, we might want to just let them be 
+                below the hero 'proper' in flow, but visuals require overlap.
+                
+                For simplicity in this layout, let's keep the desktop absolute overlap
+                and deal with the "gap" in the next section's padding.
+                
+                For Mobile: We show them stacked, maybe not overlapped to save space,
+                or slight overlap.
+            */}
+            <div className="absolute bottom-0 left-0 w-full translate-y-[20%] z-30 px-4 block lg:hidden pb-10">
+                {/* Mobile allows horizontal scroll or just stack. 
+                    Design often implies stack. 
+                    Let's not do overlapping on mobile to avoid covering the hero text if screen is short.
+                    Actually, let's just Hide this here and expect it to be rendered in the main flow 
+                    if we were refactoring the whole page. 
+                    
+                    BUT, since this is "HeroSection", I must return everything.
+                    
+                    Let's put the mobile cards in a way that works.
+                */}
+            </div>
+        </section >
     );
 };
 
-export default HeroSection;
+// We need a wrapper to handle the layout impact of the absolute cards
+// Because the cards hang *off* the bottom, the next section needs padding-top.
+// Since we only control HeroSection, we can add a 'spacer' div at the bottom 
+// that is part of the flow if we want, OR we assume the user will fix the next section.
+// However, a better approach for the Component is to include the spacer 
+// or let the cards be in flow for mobile and absolute for desktop.
+
+const HeroWrapper = () => {
+    return (
+        <div className="relative mb-24 lg:mb-[140px]">
+            <HeroSection />
+            {/* Mobile Cards Reuse - rendered below 'section' for flow */}
+            <div className="container mx-auto px-4 grid gap-6 lg:hidden relative z-30 -mt-12">
+                {[
+                    { icon: Star, title: "Up to 100% Scholarship", text: "You could be eligible for a scholarship, grant or funding", color: "text-blue-600", border: "border-blue-600" },
+                    { icon: Users, title: "Free Consultations", text: "Book a FREE appointment and consult to find your path", color: "text-amber-500", border: "border-amber-500" },
+                    { icon: Send, title: "7 Years of Experience", text: "Successfully helping students achieve their dreams", color: "text-gray-800", border: "border-gray-800" }
+                ].map((card, i) => (
+                    <div key={i} className={`bg-white rounded-xl shadow-lg p-6 text-center flex flex-col items-center border-b-4 ${card.border}`}>
+                        <card.icon className={`w-10 h-10 mb-4 fill-current ${card.color}`} />
+                        <h3 className="text-xl font-bold text-slate-800 mb-2">{card.title}</h3>
+                        <p className="text-slate-600 text-sm">{card.text}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+// Rewriting Generic component export
+export default HeroWrapper;
+

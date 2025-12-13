@@ -16,6 +16,7 @@ export interface Country {
     currency: string;
   };
   scholarships: string[];
+  benefits: string[]; // Added benefits field
   isActive: boolean;
   featured: boolean;
   images: string[];
@@ -42,6 +43,7 @@ export const countries: Country[] = [
       currency: 'USD'
     },
     scholarships: ['CSC Scholarship (Type A & B)', 'University Presidential Scholarship', 'Belt & Road Scholarship', 'Provincial Government Scholarship'],
+    benefits: ['Full Free Scholarship', 'Global Top Ranking Universities', 'No IELTS Options'],
     isActive: true,
     featured: true,
     images: [],
@@ -66,6 +68,7 @@ export const countries: Country[] = [
       currency: 'USD'
     },
     scholarships: ['GKS (Global Korea Scholarship)', 'Professor Scholarship', 'University Merit Scholarship'],
+    benefits: ['GKS Full Scholarship', 'Part-time Work Allowed', 'High Tech Education'],
     isActive: true,
     featured: true,
     images: [],
@@ -90,6 +93,7 @@ export const countries: Country[] = [
       currency: 'GBP'
     },
     scholarships: ['Commonwealth Scholarship', 'Great Scholarship', 'Vice Chancellor Excellence'],
+    benefits: ['2-Year Post Study Work', 'Spouse Visa Integration', 'World Class Education'],
     isActive: true,
     featured: true,
     images: [],
@@ -114,6 +118,7 @@ export const countries: Country[] = [
       currency: 'EUR'
     },
     scholarships: ['Stipendium Hungaricum (Full Free + Monthly Stipend)', 'Diaspora Scholarship'],
+    benefits: ['Full Scholarship + Stipend', 'Schengen Visa Access', 'Affordable Living Cost'],
     isActive: true,
     featured: true,
     images: [],
@@ -138,6 +143,7 @@ export const countries: Country[] = [
       currency: 'EUR'
     },
     scholarships: ['Finland Scholarship (100% + €5000)', 'Early Bird Discount (50%)'],
+    benefits: ['PR Opportunity', 'Spouse Can Work Full-time', 'Happiest Country in World'],
     isActive: true,
     featured: true,
     images: [],
@@ -162,6 +168,7 @@ export const countries: Country[] = [
       currency: 'EUR'
     },
     scholarships: ['50% Scholarship for All International Students'],
+    benefits: ['No IELTS Required', 'Very Affordable Tuition', 'Easy Visa Process'],
     isActive: true,
     featured: true,
     images: [],
@@ -186,6 +193,7 @@ export const countries: Country[] = [
       currency: 'EUR'
     },
     scholarships: ['Ministry of Science Scholarship', 'Erasmus+'],
+    benefits: ['Schengen Member State', 'High Visa Success Rate', 'Part-time Work Rights'],
     isActive: true,
     featured: true,
     images: [],
@@ -210,6 +218,7 @@ export const countries: Country[] = [
       currency: 'USD'
     },
     scholarships: ['Merit based tuition discounts'],
+    benefits: ['No Entrance Exam', 'WHO Recognized Degree', 'Low Cost of Living'],
     isActive: true,
     featured: true,
     images: [],

@@ -2,15 +2,19 @@
 
 import { motion } from 'framer-motion';
 import { ArrowRight, Handshake, Globe, Briefcase, Building2 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import GlassCard from '@/components/ui/GlassCard';
 
 const PartnershipSection = () => {
     return (
-        <section className="py-24 relative z-10">
+        <section className="py-24 relative z-10 bg-white">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <GlassCard className="p-0 border-white/60 bg-white/40">
-                    <div className="relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-0">
+                < GlassCard className="p-0 border-slate-100 bg-white shadow-xl shadow-slate-200/50 overflow-hidden relative">
+                    {/* Background decoration */}
+                    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-blue-50/50 to-transparent rounded-full blur-3xl -z-10" />
+
+                    <div className="grid lg:grid-cols-2 gap-0 relative z-10">
 
                         {/* Left Content */}
                         <div className="p-12 md:p-20 flex flex-col justify-center">
@@ -19,70 +23,54 @@ const PartnershipSection = () => {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                             >
-                                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-white/60 shadow-sm mb-8 backdrop-blur-md">
-                                    <Handshake className="w-4 h-4 text-amber-500" />
-                                    <span className="text-slate-800 text-xs font-bold uppercase tracking-widest">B2B Partnership Program</span>
+                                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-100 mb-8">
+                                    <Handshake className="w-4 h-4 text-orange-500" />
+                                    <span className="text-orange-900 text-xs font-bold uppercase tracking-widest">B2B Partnership Program</span>
                                 </div>
 
-                                <h2 className="text-4xl md:text-6xl font-heading font-extrabold text-slate-900 mb-8 leading-[1]">
-                                    Scale Your Business <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600">Without Limits.</span>
+                                <h2 className="text-4xl md:text-6xl font-heading font-extrabold text-slate-900 mb-6 leading-tight">
+                                    Scale Your <br />
+                                    Business <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Without Limits.</span>
                                 </h2>
 
-                                <p className="text-lg text-slate-700 mb-10 max-w-lg leading-relaxed font-medium">
+                                <p className="text-lg text-slate-600 mb-10 max-w-md leading-relaxed">
                                     Join our global network of educational agents and institutions. Access exclusive university contracts, high commission rates, and 24/7 processing support.
                                 </p>
 
-                                <div className="flex flex-wrap gap-4">
-                                    <Link href="/partnership" className="px-10 py-5 bg-slate-900 text-white font-bold rounded-full hover:bg-blue-800 transition-all shadow-xl hover:shadow-2xl flex items-center gap-2 group/btn border border-white/20">
-                                        Become a Partner <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                                <div>
+                                    <Link href="/partnership" className="inline-flex items-center justify-center px-8 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl group">
+                                        Become a Partner <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                     </Link>
                                 </div>
                             </motion.div>
-
-                            {/* Trust Indicators */}
-                            <div className="mt-16 flex items-center gap-12 border-t border-slate-900/10 pt-8">
-                                <div>
-                                    <div className="text-3xl font-black text-slate-900">50+</div>
-                                    <div className="text-xs text-slate-600 uppercase tracking-wider font-bold">Active Partners</div>
-                                </div>
-                                <div className="w-px h-12 bg-slate-300"></div>
-                                <div>
-                                    <div className="text-3xl font-black text-slate-900">24h</div>
-                                    <div className="text-xs text-slate-600 uppercase tracking-wider font-bold">Response Time</div>
-                                </div>
-                            </div>
                         </div>
 
-                        {/* Right Visual: Network Graph */}
-                        <div className="relative min-h-[400px] lg:min-h-auto bg-white/20 border-t lg:border-t-0 lg:border-l border-white/40 flex items-center justify-center overflow-hidden">
-                            {/* Interactive Map Visual (Simulated) */}
-                            <div className="relative w-full h-full flex items-center justify-center">
-                                {/* Noise Overlay */}
-                                <div className="absolute inset-0 opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+                        {/* Right Visual: Professional Image */}
+                        <div className="relative min-h-[300px] md:min-h-[400px] lg:h-full flex items-center justify-center bg-slate-50/50 border-t lg:border-t-0 lg:border-l border-slate-100 overflow-hidden group order-first lg:order-last">
+                            {/* Image Container */}
+                            <div className="absolute inset-0 w-full h-full">
+                                <Image
+                                    src="/images/partnership.jpg"
+                                    alt="Global Partnership"
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                />
+                                {/* Gradient Overlay for text readability/style */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent mix-blend-multiply" />
+                            </div>
 
-                                {/* Central Node */}
-                                <div className="absolute z-20 w-28 h-28 bg-white/20 backdrop-blur-2xl rounded-full flex items-center justify-center shadow-[0_20px_60px_rgba(37,99,235,0.2)] border border-white/60 group-hover:scale-110 transition-transform duration-700">
-                                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-inner">
-                                        <Globe className="w-10 h-10 text-white" />
-                                    </div>
-                                </div>
-
-                                {/* Orbiting Nodes */}
-                                <div className="absolute inset-0 animate-[spin_20s_linear_infinite]">
-                                    <div className="absolute top-1/4 left-1/4 p-5 bg-white/60 backdrop-blur-xl rounded-3xl border border-white/50 shadow-xl -rotate-[45deg]">
-                                        <Briefcase className="w-6 h-6 text-indigo-600" />
-                                    </div>
-                                    <div className="absolute bottom-1/4 right-1/4 p-5 bg-white/60 backdrop-blur-xl rounded-3xl border border-white/50 shadow-xl -rotate-[45deg]">
-                                        <Building2 className="w-6 h-6 text-emerald-600" />
-                                    </div>
-                                </div>
-
-                                {/* Connecting Lines (SVG) */}
-                                <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40">
-                                    <circle cx="50%" cy="50%" r="120" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="6 6" className="text-blue-400 animate-[spin_30s_linear_infinite_reverse]" />
-                                    <circle cx="50%" cy="50%" r="180" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="10 10" className="text-indigo-400 animate-[spin_40s_linear_infinite]" />
-                                </svg>
+                            {/* Floating Stats/Badges for professional look */}
+                            <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-3 md:gap-4">
+                                <GlassCard className="p-3 md:p-4 bg-white/10 backdrop-blur-md border-white/20 text-center md:text-left">
+                                    <div className="text-xl md:text-2xl font-bold text-white mb-1">50+</div>
+                                    <div className="text-blue-200 text-[10px] md:text-xs font-medium uppercase tracking-wider">Countries</div>
+                                </GlassCard>
+                                <GlassCard className="p-3 md:p-4 bg-white/10 backdrop-blur-md border-white/20 text-center md:text-left">
+                                    <div className="text-xl md:text-2xl font-bold text-white mb-1">500+</div>
+                                    <div className="text-blue-200 text-[10px] md:text-xs font-medium uppercase tracking-wider">Universities</div>
+                                </GlassCard>
                             </div>
                         </div>
                     </div>

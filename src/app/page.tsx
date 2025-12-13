@@ -4,7 +4,10 @@ import InfinityTicker from '@/components/InfinityTicker';
 
 // Client Components
 import HeroSection from '@/components/home/HeroSection';
-import WhyChooseSection from '@/components/home/WhyChooseSection';
+import FeaturesSection from '@/components/home/FeaturesSection'; // [NEW]
+import AboutPreviewSection from '@/components/home/AboutPreviewSection'; // [NEW]
+
+import ProcessTimelineSection from '@/components/home/ProcessTimelineSection';
 import DestinationsSection from '@/components/home/DestinationsSection';
 import PartnershipSection from '@/components/home/PartnershipSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
@@ -20,14 +23,14 @@ async function getTestimonials(): Promise<Testimonial[]> {
   return [
     {
       _id: "t1",
-      name: "Birinda Nemezo Ella Franck Levy",
-      location: "Shaoxing University",
-      program: "Computer Science",
-      quote: "I am now studying Computer Science at Shaoxing University with a full scholarship. Thanks to EduExpress, my tuition and hostel are free, and I even receive a 500 CNY monthly stipend.",
+      name: "Tanveer Shuvo",
+      location: "University of Oulu",
+      university: "University of Oulu",
+      program: "Student",
+      quote: "Highly recommended. They are very much professional and highly skilled and helped me a lot throughout my whole journey. It was a great experience with them.",
       rating: 5,
-      image: "🇨🇳",
-      country: "China",
-      university: "Shaoxing University",
+      image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&auto=format&fit=crop",
+      country: "Finland",
       isActive: true,
       featured: true,
       createdAt: new Date().toISOString(),
@@ -35,14 +38,14 @@ async function getTestimonials(): Promise<Testimonial[]> {
     },
     {
       _id: "t2",
-      name: "Orarigdech Yannapong",
-      location: "Jiangsu Shipping College",
-      program: "Diploma in Computer Network Technology",
-      quote: "I secured a full scholarship for my Diploma in Computer Network Technology at Jiangsu Shipping College. Thanks to EduExpress, my journey from Thailand was seamless, and my tuition and hostel are fully covered.",
+      name: "Sarah Rahman",
+      location: "Tbilisi State Medical University",
+      university: "Tbilisi State Medical University",
+      program: "Master's Student",
+      quote: "The guidance I received for my visa application was exceptional. They handled every detail with precision. I'm now living my dream in Europe thanks to EduExpress.",
       rating: 5,
-      image: "🇨🇳",
-      country: "China",
-      university: "Jiangsu Shipping College",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
+      country: "Georgia",
       isActive: true,
       featured: true,
       createdAt: new Date().toISOString(),
@@ -50,14 +53,14 @@ async function getTestimonials(): Promise<Testimonial[]> {
     },
     {
       _id: "t3",
-      name: "Md. Sakib Hasan",
-      location: "Shanghai University of Engineering Science",
-      program: "Artificial Intelligence",
-      quote: "I secured a tuition-free scholarship for Artificial Intelligence at Shanghai University of Engineering Science. EduExpress handled everything seamlessly, from my application and visa processing to airport pickup.",
+      name: "Michael Chen",
+      location: "Seoul National University",
+      university: "Seoul National University",
+      program: "Research Fellow",
+      quote: "Getting a full scholarship seemed impossible until I met this team. Their strategic advice and essay editing were game-changers for my application.",
       rating: 5,
-      image: "🇨🇳",
-      country: "China",
-      university: "Shanghai University of Engineering Science",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+      country: "South Korea",
       isActive: true,
       featured: true,
       createdAt: new Date().toISOString(),
@@ -65,80 +68,20 @@ async function getTestimonials(): Promise<Testimonial[]> {
     },
     {
       _id: "t4",
-      name: "Tharushi Chathurika David Arachchilage",
-      location: "Southwest Petroleum University",
-      program: "Computer Science",
-      quote: "I achieved a Full Tuition Fee Scholarship for Computer Science at Southwest Petroleum University. EduExpress made my dream a reality, guiding me all the way from Sri Lanka.",
+      name: "Ayesha Siddiqua",
+      location: "University of Cyprus",
+      university: "University of Cyprus",
+      program: "Undergraduate",
+      quote: "Supportive, transparent, and always available. They didn't just process my file; they mentored me through the entire interview process.",
       rating: 5,
-      image: "🇨🇳",
-      country: "China",
-      university: "Southwest Petroleum University",
-      isActive: true,
-      featured: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      _id: "t5",
-      name: "Lija Akter",
-      location: "Nantong University",
-      program: "Pharmacy",
-      quote: "I was awarded a full scholarship for Pharmacy at Nantong University. EduExpress handled everything seamlessly—from my visa processing in Bangladesh to airport pickup and registration.",
-      rating: 5,
-      image: "🇨🇳",
-      country: "China",
-      university: "Nantong University",
-      isActive: true,
-      featured: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      _id: "t6",
-      name: "Md Khaled Mahmud",
-      location: "Taiyuan University of Technology",
-      program: "Scholarship Recipient",
-      quote: "I secured a Full Tuition Scholarship and a 1000 CNY monthly stipend at Taiyuan University of Technology. EduExpress made my journey smooth, handling everything from visa assistance to on-ground support.",
-      rating: 5,
-      image: "🇨🇳",
-      country: "China",
-      university: "Taiyuan University of Technology",
-      isActive: true,
-      featured: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      _id: "t7",
-      name: "Naoroj Jaman Rafi",
-      location: "Shanghai University of Electric Power",
-      program: "Scholarship Recipient",
-      quote: "I obtained a Full Tuition Scholarship and a 1200 CNY monthly stipend at Shanghai University of Electric Power. EduExpress ensured a seamless transition from Bangladesh, handling my visa and even airport pickup.",
-      rating: 5,
-      image: "🇨🇳",
-      country: "China",
-      university: "Shanghai University of Electric Power",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop",
+      country: "Cyprus",
       isActive: true,
       featured: true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
   ];
-  /*
-  try {
-    await connectDB();
-    // Fetch active and featured testimonials, sorted by newest
-    const testimonials = await TestimonialModel.find({ isActive: true, featured: true })
-      .sort({ createdAt: -1 })
-      .lean();
-    
-    // Serialize to standard JSON objects to avoid serialization warnings with ObjectId
-    return JSON.parse(JSON.stringify(testimonials));
-  } catch (error) {
-    console.error("Failed to fetch testimonials", error);
-    return [];
-  }
-  */
 }
 
 export default async function Home() {
@@ -151,11 +94,17 @@ export default async function Home() {
       {/* Hero Section (Aurora + 3D Card) */}
       <HeroSection />
 
-      {/* Why Choose EduExpress */}
-      <WhyChooseSection />
+      {/* Features / Why Choose Us - Added for Trust */}
+      <FeaturesSection />
 
-      {/* Top Destinations */}
+      {/* Top Destinations (Acting as University Partners/Destinations) */}
       <DestinationsSection />
+
+      {/* Process Timeline */}
+      <ProcessTimelineSection />
+
+      {/* About/Team Preview - Added for Trust */}
+      <AboutPreviewSection />
 
       {/* Partnership Program */}
       <PartnershipSection />

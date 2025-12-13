@@ -66,7 +66,7 @@ export default function FloatingWhatsApp({
             </svg>
           </button>
           <p className="text-sm text-gray-700 leading-relaxed font-medium">
-            Hello Dear Sir/Madam, Thank you for contacting EduExpress International. Please let us know how may we assist you?
+            Hello Future Scholar! 🎓 We provide expert guidance for studying abroad with scholarship assistance. Want to check your eligibility? Let's chat!
           </p>
           {/* Arrow pointing down */}
           <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white transform rotate-45 border-r border-b border-gray-100"></div>
