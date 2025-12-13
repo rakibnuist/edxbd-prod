@@ -12,72 +12,133 @@ import CTASection from '@/components/home/CTASection';
 
 export const dynamic = 'force-dynamic'; // Ensure fresh data if needed, or remove for static generation
 
+// import connectDB from '@/lib/mongodb';
+// import TestimonialModel from '@/models/Testimonial';
+
 async function getTestimonials(): Promise<Testimonial[]> {
+  // Returning hardcoded real testimonials as requested
+  return [
+    {
+      _id: "t1",
+      name: "Birinda Nemezo Ella Franck Levy",
+      location: "Shaoxing University",
+      program: "Computer Science",
+      quote: "I am now studying Computer Science at Shaoxing University with a full scholarship. Thanks to EduExpress, my tuition and hostel are free, and I even receive a 500 CNY monthly stipend.",
+      rating: 5,
+      image: "🇨🇳",
+      country: "China",
+      university: "Shaoxing University",
+      isActive: true,
+      featured: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "t2",
+      name: "Orarigdech Yannapong",
+      location: "Jiangsu Shipping College",
+      program: "Diploma in Computer Network Technology",
+      quote: "I secured a full scholarship for my Diploma in Computer Network Technology at Jiangsu Shipping College. Thanks to EduExpress, my journey from Thailand was seamless, and my tuition and hostel are fully covered.",
+      rating: 5,
+      image: "🇨🇳",
+      country: "China",
+      university: "Jiangsu Shipping College",
+      isActive: true,
+      featured: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "t3",
+      name: "Md. Sakib Hasan",
+      location: "Shanghai University of Engineering Science",
+      program: "Artificial Intelligence",
+      quote: "I secured a tuition-free scholarship for Artificial Intelligence at Shanghai University of Engineering Science. EduExpress handled everything seamlessly, from my application and visa processing to airport pickup.",
+      rating: 5,
+      image: "🇨🇳",
+      country: "China",
+      university: "Shanghai University of Engineering Science",
+      isActive: true,
+      featured: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "t4",
+      name: "Tharushi Chathurika David Arachchilage",
+      location: "Southwest Petroleum University",
+      program: "Computer Science",
+      quote: "I achieved a Full Tuition Fee Scholarship for Computer Science at Southwest Petroleum University. EduExpress made my dream a reality, guiding me all the way from Sri Lanka.",
+      rating: 5,
+      image: "🇨🇳",
+      country: "China",
+      university: "Southwest Petroleum University",
+      isActive: true,
+      featured: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "t5",
+      name: "Lija Akter",
+      location: "Nantong University",
+      program: "Pharmacy",
+      quote: "I was awarded a full scholarship for Pharmacy at Nantong University. EduExpress handled everything seamlessly—from my visa processing in Bangladesh to airport pickup and registration.",
+      rating: 5,
+      image: "🇨🇳",
+      country: "China",
+      university: "Nantong University",
+      isActive: true,
+      featured: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "t6",
+      name: "Md Khaled Mahmud",
+      location: "Taiyuan University of Technology",
+      program: "Scholarship Recipient",
+      quote: "I secured a Full Tuition Scholarship and a 1000 CNY monthly stipend at Taiyuan University of Technology. EduExpress made my journey smooth, handling everything from visa assistance to on-ground support.",
+      rating: 5,
+      image: "🇨🇳",
+      country: "China",
+      university: "Taiyuan University of Technology",
+      isActive: true,
+      featured: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "t7",
+      name: "Naoroj Jaman Rafi",
+      location: "Shanghai University of Electric Power",
+      program: "Scholarship Recipient",
+      quote: "I obtained a Full Tuition Scholarship and a 1200 CNY monthly stipend at Shanghai University of Electric Power. EduExpress ensured a seamless transition from Bangladesh, handling my visa and even airport pickup.",
+      rating: 5,
+      image: "🇨🇳",
+      country: "China",
+      university: "Shanghai University of Electric Power",
+      isActive: true,
+      featured: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ];
+  /*
   try {
-    // In a real Server Component, you might call DB directly or an internal API URL
-    // For now, we use the same API route relative path if we can, or absolute URL
-    // Since we are server-side, it's often better to call the DB/Controller logic directly if possible
-    // But to minimize refactor risk, we can use the API if we have the full URL, or just return the fallback data for now if API access is tricky without base URL.
-    // However, in Next.js App Router, it's idiomatic to fetch directly.
-    // Given the previous code fetched from /api/testimonials, we'll try to fetch.
-
-    // For this refactor, I will use the FALLBACK data as the primary source if fetch fails
-    // or if we want to avoid self-request issues during build.
-
-    // NOTE: Simulating the fetch or using direct logic would be better. 
-    // Let's assume for now we use the fallback data to ensure stability during this refactor, 
-    // as passing full URL (http://localhost:3000...) can be flaky in some environments without env vars.
-    return [
-      {
-        _id: "1",
-        name: "Sadia Rahman",
-        location: "Zhejiang University",
-        program: "MBBS",
-        quote: "EduExpress helped me get the CSC Type A full scholarship. I am studying Medicine in China completely free of cost!",
-        rating: 5,
-        image: "🇨🇳",
-        country: "China",
-        university: "Zhejiang University",
-        isActive: true,
-        featured: true,
-        createdAt: "",
-        updatedAt: ""
-      },
-      {
-        _id: "2",
-        name: "Tanvir Hasan",
-        location: "University of Debrecen",
-        program: "BSc Engineering",
-        quote: "The team guided me perfectly for the Stipendium Hungaricum scholarship. Now I'm in Europe with full funding.",
-        rating: 5,
-        image: "🇭🇺",
-        country: "Hungary",
-        university: "University of Debrecen",
-        isActive: true,
-        featured: true,
-        createdAt: "",
-        updatedAt: ""
-      },
-      {
-        _id: "3",
-        name: "Mahmud Hasan",
-        location: "University of South Wales",
-        program: "MSc Management",
-        quote: "Visa processing for the UK was complex, but they made it so simple. got my visa in just 7 days without an interview!",
-        rating: 5,
-        image: "🇬🇧",
-        country: "UK",
-        university: "University of South Wales",
-        isActive: true,
-        featured: true,
-        createdAt: "",
-        updatedAt: ""
-      }
-    ];
+    await connectDB();
+    // Fetch active and featured testimonials, sorted by newest
+    const testimonials = await TestimonialModel.find({ isActive: true, featured: true })
+      .sort({ createdAt: -1 })
+      .lean();
+    
+    // Serialize to standard JSON objects to avoid serialization warnings with ObjectId
+    return JSON.parse(JSON.stringify(testimonials));
   } catch (error) {
     console.error("Failed to fetch testimonials", error);
     return [];
   }
+  */
 }
 
 export default async function Home() {
