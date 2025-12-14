@@ -151,14 +151,14 @@ export const sendConversionAPIEvent = async (
   eventId?: string
 ) => {
   try {
-    const response = await fetch('/api/meta-conversion', {
+    const response = await fetch('/api/meta-capi', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         // Fix: Send event type exactly as passed, avoiding broken transformation
-        eventType: eventName, 
+        eventType: eventName,
         data: {
           userData,
           ...customData
