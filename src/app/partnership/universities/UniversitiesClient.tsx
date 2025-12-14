@@ -52,9 +52,8 @@ const UniversitiesClient = () => {
                 params.append('page', page.toString());
                 params.append('limit', '10'); // Default limit
 
-                // Add filters to backend query if possible (optional: for now we fetch all pages logic or keep client filtering)
-                // Note: The backend supports `search`, `country`, `degree`. Let's use them!
-                if (searchQuery) params.append('search', searchQuery);
+                // Only send country/degree to backend for base filtering
+                // Search will be done client-side for all fields
                 if (selectedCountry) params.append('country', selectedCountry);
                 if (selectedDegree) params.append('degree', selectedDegree);
 
@@ -63,13 +62,6 @@ const UniversitiesClient = () => {
                     const data = await res.json();
                     setUniversities(data.universities);
                     setTotalPages(data.pagination.totalPages);
-
-                    // If backend pagination is used, simple client-side filtering won't work perfectly for other fields (intake, taught, major).
-                    // For this task, we assume backend filtering is primary or we pagination locally.
-                    // Given the prompt "add pagination", server-side is best. 
-                    // However, we are mixing client-side filtering for some fields. 
-                    // Let's rely on server response for list but acknowledge client-filter limitation or simply display what we got.
-                    // Ideally we should move ALL filtering to backend. 
                 } else {
                     setError(`Failed to fetch: ${res.status} ${res.statusText}`);
                 }
@@ -81,7 +73,7 @@ const UniversitiesClient = () => {
             }
         };
         fetchUniversities();
-    }, [page, searchQuery, selectedCountry, selectedDegree]); // Trigger fetch on page/filter change
+    }, [page, selectedCountry, selectedDegree]); // Removed searchQuery from dependencies
 
     // Memoize ONLY for fields NOT filtered by backend if mixed (Intake, Taught, Major)
     // NOTE: This logic is tricky if backend only returns ONE page. 
