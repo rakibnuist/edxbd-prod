@@ -29,7 +29,7 @@ export default function AboutClient() {
           </button>
           <Link
             href="/services"
-            className="inline-flex items-center justify-center bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-900 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-lg transition-all duration-300 min-h-[48px] w-full sm:w-auto"
+            className="inline-flex items-center justify-center bg-blue-700 text-white hover:bg-blue-800 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-700/20 active:scale-95 w-full sm:w-auto"
           >
             Our Services
           </Link>
