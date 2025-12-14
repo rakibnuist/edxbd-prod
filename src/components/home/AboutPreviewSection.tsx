@@ -97,7 +97,7 @@ const AboutPreviewSection = () => {
                             viewport={{ once: true }}
                             transition={{ delay: 0.4 }}
                         >
-                            <Link href="/about" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-bold transition-all hover:gap-4">
+                            <Link href="/about#team" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-bold transition-all hover:gap-4">
                                 Meet Our Team <ArrowRight className="w-5 h-5" />
                             </Link>
                         </motion.div>

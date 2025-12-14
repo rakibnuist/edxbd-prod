@@ -14,7 +14,6 @@ const PageTransition = ({ children }: PageTransitionProps) => {
   return (
     <AnimatePresence mode="wait" initial={false}>
       <m.div
-        key={pathname}
         initial="initial"
         animate="in"
         exit="out"
