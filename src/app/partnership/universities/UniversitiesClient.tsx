@@ -39,6 +39,8 @@ const UniversitiesClient = () => {
 
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [jumpToPage, setJumpToPage] = useState('');
 
 
     const [error, setError] = useState<string | null>(null);
@@ -57,7 +59,7 @@ const UniversitiesClient = () => {
                     params.append('page', '1');
                 } else {
                     params.append('page', page.toString());
-                    params.append('limit', '10');
+                    params.append('limit', itemsPerPage.toString());
                 }
 
                 // Only send country/degree to backend for base filtering
@@ -87,7 +89,7 @@ const UniversitiesClient = () => {
             }
         };
         fetchUniversities();
-    }, [page, selectedCountry, selectedDegree, searchQuery]); // Added searchQuery back
+    }, [page, selectedCountry, selectedDegree, searchQuery, itemsPerPage]); // Added searchQuery and itemsPerPage
 
     // Memoize ONLY for fields NOT filtered by backend if mixed (Intake, Taught, Major)
     // NOTE: This logic is tricky if backend only returns ONE page. 
@@ -437,24 +439,83 @@ const UniversitiesClient = () => {
 
                                     {/* Pagination Controls */}
                                     {totalPages > 1 && (
-                                        <div className="flex justify-center items-center space-x-2 mt-8">
-                                            <button
-                                                onClick={() => setPage(p => Math.max(1, p - 1))}
-                                                disabled={page === 1}
-                                                className="px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50"
-                                            >
-                                                Previous
-                                            </button>
-                                            <div className="text-sm font-medium text-slate-600">
-                                                Page {page} of {totalPages}
+                                        <div className="mt-8 space-y-4">
+                                            {/* Results per page and Jump to page */}
+                                            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-4">
+                                                {/* Results per page */}
+                                                <div className="flex items-center gap-2">
+                                                    <label className="text-sm text-slate-600 font-medium">Show:</label>
+                                                    <select
+                                                        value={itemsPerPage}
+                                                        onChange={(e) => {
+                                                            setItemsPerPage(Number(e.target.value));
+                                                            setPage(1); // Reset to page 1 when changing items per page
+                                                        }}
+                                                        className="px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                                    >
+                                                        <option value={10}>10 per page</option>
+                                                        <option value={25}>25 per page</option>
+                                                        <option value={50}>50 per page</option>
+                                                    </select>
+                                                </div>
+
+                                                {/* Jump to page */}
+                                                <div className="flex items-center gap-2">
+                                                    <label className="text-sm text-slate-600 font-medium">Jump to:</label>
+                                                    <input
+                                                        type="number"
+                                                        min="1"
+                                                        max={totalPages}
+                                                        value={jumpToPage}
+                                                        onChange={(e) => setJumpToPage(e.target.value)}
+                                                        onKeyPress={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                const pageNum = parseInt(jumpToPage);
+                                                                if (pageNum >= 1 && pageNum <= totalPages) {
+                                                                    setPage(pageNum);
+                                                                    setJumpToPage('');
+                                                                }
+                                                            }
+                                                        }}
+                                                        placeholder="Page"
+                                                        className="w-20 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                                                    />
+                                                    <button
+                                                        onClick={() => {
+                                                            const pageNum = parseInt(jumpToPage);
+                                                            if (pageNum >= 1 && pageNum <= totalPages) {
+                                                                setPage(pageNum);
+                                                                setJumpToPage('');
+                                                            }
+                                                        }}
+                                                        disabled={!jumpToPage || parseInt(jumpToPage) < 1 || parseInt(jumpToPage) > totalPages}
+                                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                                    >
+                                                        Go
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <button
-                                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                                disabled={page === totalPages}
-                                                className="px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50"
-                                            >
-                                                Next
-                                            </button>
+
+                                            {/* Page navigation */}
+                                            <div className="flex justify-center items-center space-x-2">
+                                                <button
+                                                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                                                    disabled={page === 1}
+                                                    className="px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 font-medium"
+                                                >
+                                                    Previous
+                                                </button>
+                                                <div className="text-sm font-medium text-slate-600 px-4">
+                                                    Page {page} of {totalPages}
+                                                </div>
+                                                <button
+                                                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                                    disabled={page === totalPages}
+                                                    className="px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 font-medium"
+                                                >
+                                                    Next
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
 
