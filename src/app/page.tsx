@@ -13,7 +13,14 @@ import PartnershipSection from '@/components/home/PartnershipSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import CTASection from '@/components/home/CTASection';
 
-export const dynamic = 'force-dynamic'; // Ensure fresh data if needed, or remove for static generation
+export const dynamic = 'force-dynamic';
+
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Study Abroad Consultancy | EduExpress International",
+  description: "Transform your education journey with EduExpress International. Expert study abroad consultancy in Bangladesh with FREE scholarship assistance for UK, USA, Canada, & more.",
+};
 
 // import connectDB from '@/lib/mongodb';
 // import TestimonialModel from '@/models/Testimonial';

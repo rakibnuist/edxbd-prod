@@ -73,8 +73,8 @@ const HeroSection = () => {
                             transition={{ duration: 0.5 }}
                         >
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 border border-green-200 mb-6 w-fit mx-auto lg:mx-0 shadow-sm">
-                                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                                <span className="text-sm font-bold text-green-700 uppercase tracking-wide">Accepting Applications</span>
+                                <span className="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span>
+                                <span className="text-sm font-bold text-green-800 uppercase tracking-wide">Accepting Applications</span>
                             </div>
 
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-tight text-slate-900">
@@ -183,13 +183,15 @@ const HeroSection = () => {
             <div className="absolute right-4 lg:right-8 bottom-48 lg:bottom-16 flex gap-2 z-20">
                 <button
                     onClick={prevSlide}
-                    className="w-12 h-12 rounded-full bg-white border border-slate-200 text-slate-700 flex items-center justify-center hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-md"
+                    aria-label="Previous Slide"
+                    className="w-12 h-12 rounded-full bg-white border border-slate-200 text-slate-700 flex items-center justify-center hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-md active:scale-95 touch-manipulation"
                 >
                     <ArrowLeft className="w-5 h-5" />
                 </button>
                 <button
                     onClick={nextSlide}
-                    className="w-12 h-12 rounded-full bg-white border border-slate-200 text-slate-700 flex items-center justify-center hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-md"
+                    aria-label="Next Slide"
+                    className="w-12 h-12 rounded-full bg-white border border-slate-200 text-slate-700 flex items-center justify-center hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-md active:scale-95 touch-manipulation"
                 >
                     <ArrowRight className="w-5 h-5" />
                 </button>

@@ -46,7 +46,7 @@ const DestinationsSection = () => {
                     <motion.span
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-700 text-sm font-bold tracking-wide uppercase mb-4"
+                        className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-bold tracking-wide uppercase mb-4"
                     >
                         Global Network
                     </motion.span>
@@ -140,7 +140,7 @@ const DestinationsSection = () => {
 
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('openQuickForm')); }}
-                                                    className="w-full py-3 lg:py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 group/btn border-2 border-transparent hover:border-blue-200"
+                                                    className="w-full py-3 lg:py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 group/btn border-2 border-transparent hover:border-blue-200 active:scale-95 touch-manipulation"
                                                 >
                                                     Start Your Application
                                                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
