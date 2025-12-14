@@ -121,33 +121,6 @@ export default function DestinationsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      {/* GTM Tracking */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            if (typeof gtag !== 'undefined') {
-              gtag('event', 'page_view', {
-                page_title: 'Study Abroad Destinations',
-                page_location: window.location.href,
-                content_group1: 'Destinations'
-              });
-            }
-            
-            document.addEventListener('click', function(e) {
-              if (e.target.closest('[data-source*="destinations"]')) {
-                if (typeof gtag !== 'undefined') {
-                  gtag('event', 'generate_lead', {
-                    event_category: 'Consultation',
-                    event_label: 'Destinations Page',
-                    value: 1
-                  });
-                }
-              }
-            });
-          `
-        }}
-      />
-
       <DestinationsClient />
     </>
   );
