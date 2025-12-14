@@ -106,10 +106,14 @@ const UniversitiesClient = () => {
     // Filter Logic
     const filteredUniversities = useMemo(() => {
         return universities.filter(uni => {
-            // 1. Search Query (Name or Location string)
-            const matchesSearch =
-                uni.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                uni.location.toLowerCase().includes(searchQuery.toLowerCase());
+            // 1. Enhanced Multi-Field Search (University name, Major, Degree, Location)
+            const searchLower = searchQuery.toLowerCase();
+            const matchesSearch = searchQuery === '' || (
+                uni.name.toLowerCase().includes(searchLower) ||
+                uni.location.toLowerCase().includes(searchLower) ||
+                uni.degree.some(d => d.toLowerCase().includes(searchLower)) ||
+                uni.details?.majors?.some(m => m.toLowerCase().includes(searchLower)) || false
+            );
 
             // 2. Exact Match Filters
             const matchesCountry = selectedCountry ? uni.country === selectedCountry : true;
@@ -187,7 +191,7 @@ const UniversitiesClient = () => {
                                             <Search className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                                             <input
                                                 type="text"
-                                                placeholder="Name..."
+                                                placeholder="Name, Major, Degree, Location..."
                                                 className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                                                 value={searchQuery}
                                                 onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
@@ -286,8 +290,23 @@ const UniversitiesClient = () => {
                             </div>
                         </div>
 
-                        {/* Mobile Filter Toggle */}
-                        <div className="lg:hidden">
+                        {/* Mobile Search (Always Visible) */}
+                        <div className="lg:hidden space-y-4">
+                            {/* Search Bar */}
+                            <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+                                <div className="relative">
+                                    <Search className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
+                                    <input
+                                        type="text"
+                                        placeholder="Search university, major, degree, location..."
+                                        className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                                        value={searchQuery}
+                                        onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Filter Toggle Button */}
                             <button
                                 onClick={() => setIsFilterOpen(!isFilterOpen)}
                                 className="flex items-center justify-center w-full bg-white border border-slate-200 p-4 rounded-xl shadow-sm font-bold text-slate-700"
