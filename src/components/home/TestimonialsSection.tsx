@@ -69,7 +69,7 @@ const TestimonialsSection = ({ testimonials }: TestimonialsSectionProps) => {
                                                         <Star key={i} className="w-3 h-3 md:w-4 md:h-4 fill-current" />
                                                     ))}
                                                 </div>
-                                                <span className="text-sm text-slate-500 font-medium truncate max-w-[200px]">{testimonials[current].program}</span>
+                                                <span className="text-sm text-slate-700 font-medium truncate max-w-[200px]">{testimonials[current].program}</span>
                                             </div>
                                         </div>
                                     </div>
