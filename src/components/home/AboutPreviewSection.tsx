@@ -42,7 +42,7 @@ const AboutPreviewSection = () => {
                             />
 
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-8">
-                                <p className="text-white font-medium italic">"We treat every application as if it were our own."</p>
+                                <p className="text-white font-medium italic">&quot;We treat every application as if it were our own.&quot;</p>
                                 <p className="text-blue-400 text-sm mt-2">- The EduExpress Team</p>
                             </div>
                         </div>
@@ -73,7 +73,7 @@ const AboutPreviewSection = () => {
                             transition={{ delay: 0.1 }}
                             className="text-slate-300 text-lg mb-8 leading-relaxed"
                         >
-                            EduExpress isn't just a consultancy; we are a team of former international students, educators, and career strategists. We understand the anxiety of applying abroad because we've been there. Our mission is to make quality education accessible to every deserving student.
+                            EduExpress isn&apos;t just a consultancy; we are a team of former international students, educators, and career strategists. We understand the anxiety of applying abroad because we&apos;ve been there. Our mission is to make quality education accessible to every deserving student.
                         </motion.p>
 
                         <div className="grid grid-cols-3 gap-6 mb-10">
@@ -85,7 +85,7 @@ const AboutPreviewSection = () => {
                                     viewport={{ once: true }}
                                     transition={{ delay: 0.2 + (idx * 0.1) }}
                                 >
-                                    <h4 className="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</h4>
+                                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</h3>
                                     <p className="text-slate-400 text-sm font-medium">{stat.label}</p>
                                 </motion.div>
                             ))}

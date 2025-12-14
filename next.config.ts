@@ -6,7 +6,22 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  
+
+  // Aggressive tree-shaking for icon libraries
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
+      skipDefaultConversion: true,
+    },
+  },
+
+  experimental: {
+    optimizePackageImports: ['framer-motion'],
+    optimizeCss: {
+      critters: true,
+    },
+  },
+
   // Basic image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -21,7 +36,7 @@ const nextConfig: NextConfig = {
     ],
   },
   compress: true,
-  
+
   // Basic security headers
   async headers() {
     return [
@@ -40,7 +55,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  
+
   // Basic redirects
   async redirects() {
     return [

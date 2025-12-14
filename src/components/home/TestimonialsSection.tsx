@@ -53,15 +53,16 @@ const TestimonialsSection = ({ testimonials }: TestimonialsSectionProps) => {
                                         {/* Profile Image */}
                                         <div className="w-16 h-16 rounded-full bg-slate-200 border-2 border-white shadow-md overflow-hidden relative shrink-0">
                                             <Image
-                                                src={testimonials[current].image || '/images/placeholder.jpg'}
+                                                src={testimonials[current].image || 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200&auto=format&fit=crop'}
                                                 alt={testimonials[current].name}
                                                 width={100}
                                                 height={100}
+                                                sizes="100px"
                                                 className="object-cover w-full h-full"
                                             />
                                         </div>
                                         <div>
-                                            <h4 className="text-xl font-bold text-slate-900">{testimonials[current].name}</h4>
+                                            <h3 className="text-xl font-bold text-slate-900">{testimonials[current].name}</h3>
                                             <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                                                 <div className="flex text-amber-400">
                                                     {[...Array(5)].map((_, i) => (
@@ -74,7 +75,7 @@ const TestimonialsSection = ({ testimonials }: TestimonialsSectionProps) => {
                                     </div>
 
                                     <p className="text-slate-600 text-lg leading-relaxed relative z-10">
-                                        "{testimonials[current].quote}"
+                                        &quot;{testimonials[current].quote}&quot;
                                     </p>
 
                                     <div className="mt-4 pt-4 border-t border-slate-50">
@@ -114,7 +115,7 @@ const TestimonialsSection = ({ testimonials }: TestimonialsSectionProps) => {
                         </div>
 
                         <p className="text-slate-600 text-lg mb-10 max-w-md">
-                            You can read more reviews from our students on our Google and Facebook pages. Don't forget to leave a review while you're there.
+                            You can read more reviews from our students on our Google and Facebook pages. Don&apos;t forget to leave a review while you&apos;re there.
                         </p>
 
                         <button className="inline-flex items-center gap-3 bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 group">
@@ -128,9 +129,11 @@ const TestimonialsSection = ({ testimonials }: TestimonialsSectionProps) => {
                                 <button
                                     key={idx}
                                     onClick={() => setCurrent(idx)}
-                                    className={`h-2 rounded-full transition-all duration-300 ${idx === current ? 'w-8 bg-blue-600' : 'w-2 bg-slate-300 hover:bg-blue-400'}`}
+                                    className="w-12 h-12 flex items-center justify-center group/dot focus:outline-none" // Increased touch target
                                     aria-label={`Go to slide ${idx + 1}`}
-                                />
+                                >
+                                    <span className={`rounded-full transition-all duration-300 ${idx === current ? 'w-8 bg-blue-600 h-2' : 'w-2 h-2 bg-slate-300 group-hover/dot:bg-blue-400'}`} />
+                                </button>
                             ))}
                         </div>
                     </motion.div>

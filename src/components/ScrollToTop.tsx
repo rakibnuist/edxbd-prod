@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { ChevronUp } from 'lucide-react';
 import { fadeInUp, iconBounce } from '@/lib/animations';
 
@@ -31,7 +31,7 @@ const ScrollToTop = () => {
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.button
+        <m.button
           onClick={scrollToTop}
           className="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
           initial={{ opacity: 0, scale: 0, y: 20 }}
@@ -42,14 +42,14 @@ const ScrollToTop = () => {
           whileTap={{ scale: 0.9 }}
           variants={fadeInUp}
         >
-          <motion.div
+          <m.div
             variants={iconBounce}
             whileHover="hover"
             whileTap="tap"
           >
             <ChevronUp className="w-6 h-6" />
-          </motion.div>
-        </motion.button>
+          </m.div>
+        </m.button>
       )}
     </AnimatePresence>
   );

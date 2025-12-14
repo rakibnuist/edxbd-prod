@@ -71,6 +71,7 @@ export default function DestinationsClient() {
                                                 src={country.images[0]}
                                                 alt={`Study in ${country.name}`}
                                                 fill
+                                                quality={75}
                                                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
@@ -162,7 +163,7 @@ export default function DestinationsClient() {
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Starts Here</span>
                             </h2>
                             <p className="text-xl md:text-2xl mb-12 text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                                Don't let paperwork hold you back. We handle the complexity so you can focus on your dreams.
+                                Don&apos;t let paperwork hold you back. We handle the complexity so you can focus on your dreams.
                             </p>
 
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">

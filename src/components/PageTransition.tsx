@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { pageVariants } from '@/lib/animations';
 
@@ -13,7 +13,7 @@ const PageTransition = ({ children }: PageTransitionProps) => {
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      <motion.div
+      <m.div
         key={pathname}
         initial="initial"
         animate="in"
@@ -22,7 +22,7 @@ const PageTransition = ({ children }: PageTransitionProps) => {
         className="w-full"
       >
         {children}
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 };

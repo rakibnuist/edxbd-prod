@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { featuredCountries } from '@/lib/countries';
 import { useState } from 'react';
@@ -9,15 +9,15 @@ import NextImage from 'next/image';
 // Map countries to high-quality Unsplash images (Curated & Reliable)
 // Map countries to high-quality Unsplash images (Curated & Reliable)
 const countryImages: Record<string, string> = {
-    'China': 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=2000&auto=format&fit=crop', // Great Wall
-    'South Korea': 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=2000&auto=format&fit=crop', // Seoul
-    'United Kingdom': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=2000&auto=format&fit=crop', // London
-    'Hungary': 'https://images.unsplash.com/photo-1516901632977-d141a38d469b?q=80&w=2000&auto=format&fit=crop', // Budapest
-    'Finland': 'https://images.unsplash.com/photo-1517935706615-2717063c2225?q=80&w=2000&auto=format&fit=crop', // Northern Lights (Reliable)
-    'Cyprus': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2000&auto=format&fit=crop', // Sturdy fallback (Cyprus Coast)
-    'Croatia': 'https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=80&w=2000&auto=format&fit=crop', // (No change)
-    'Georgia': 'https://images.unsplash.com/photo-1565008576549-57569a49371d?q=80&w=2000&auto=format&fit=crop', // Mountains
-    'Malaysia': 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2000&auto=format&fit=crop' // Iconic Petronas (Stable)
+    'China': '/images/destinations/china.jpg',
+    'South Korea': '/images/destinations/south-korea.jpg',
+    'United Kingdom': '/images/destinations/united-kingdom.jpg',
+    'Hungary': '/images/destinations/hungary.jpg',
+    'Finland': '/images/destinations/finland.jpg',
+    'Cyprus': '/images/destinations/cyprus.jpg',
+    'Croatia': '/images/destinations/croatia.jpg',
+    'Georgia': '/images/destinations/georgia.jpg',
+    'Malaysia': '/images/destinations/malaysia.jpg'
 };
 
 // Fallback background colors if images fail to load
@@ -43,29 +43,29 @@ const DestinationsSection = () => {
             <div className="relative z-10">
                 {/* Header */}
                 <div className="container mx-auto px-4 mb-16 text-center">
-                    <motion.span
+                    <m.span
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-bold tracking-wide uppercase mb-4"
                     >
                         Global Network
-                    </motion.span>
-                    <motion.h2
+                    </m.span>
+                    <m.h2
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-5xl font-bold text-slate-900 mb-6"
                     >
                         {featuredCountries.length} World-Class Study Destinations
-                    </motion.h2>
-                    <motion.p
+                    </m.h2>
+                    <m.p
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                         className="text-lg text-slate-600 max-w-2xl mx-auto"
                     >
                         Embark on a borderless educational journey. From the innovation hubs of Asia to the historic campuses of Europe, we connect your ambitions with world-class opportunities.
-                    </motion.p>
+                    </m.p>
                 </div>
 
                 {/* Accordion Container - Taller on mobile to fit content */}
@@ -74,7 +74,7 @@ const DestinationsSection = () => {
                         {featuredCountries.map((country, index) => {
                             const isActive = activeId === index;
                             return (
-                                <motion.div
+                                <m.div
                                     key={country.slug}
                                     layout
                                     onClick={() => setActiveId(index)}
@@ -92,7 +92,9 @@ const DestinationsSection = () => {
                                             className={`object-cover transition-transform duration-700
                                             ${isActive ? 'scale-100' : 'scale-110 group-hover:scale-105 grayscale group-hover:grayscale-0'}
                                         `}
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                            quality={45}
+                                            priority={index === 0}
                                         />
                                         {/* Overlay - Darker for better text visibility */}
                                         <div className={`absolute inset-0 transition-colors duration-500
@@ -113,7 +115,7 @@ const DestinationsSection = () => {
 
                                         {/* Bottom Content (Active) */}
                                         {isActive && (
-                                            <motion.div
+                                            <m.div
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: 0.2 }}
@@ -145,7 +147,7 @@ const DestinationsSection = () => {
                                                     Start Your Application
                                                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                                                 </button>
-                                            </motion.div>
+                                            </m.div>
                                         )}
 
                                         {/* Bottom Label (Inactive - Vertical Text on Desktop) */}
@@ -157,7 +159,7 @@ const DestinationsSection = () => {
                                             </div>
                                         )}
                                     </div>
-                                </motion.div>
+                                </m.div>
                             );
                         })}
                     </div>

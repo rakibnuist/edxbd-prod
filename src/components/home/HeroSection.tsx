@@ -9,16 +9,17 @@ import Image from 'next/image';
 import { activeCountries } from '@/lib/countries';
 
 // Map countries to high-quality Unsplash images (Consistent with DestinationsSection)
+// Removing the fixed w=2000 to allow Next.js Image optimization to request appropriate sizes
 const countryImages: Record<string, string> = {
-    'China': 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=2000&auto=format&fit=crop', // Great Wall
-    'South Korea': 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=2000&auto=format&fit=crop', // Seoul
-    'United Kingdom': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=2000&auto=format&fit=crop', // London
-    'Hungary': 'https://images.unsplash.com/photo-1516901632977-d141a38d469b?q=80&w=2000&auto=format&fit=crop', // Budapest
-    'Finland': 'https://images.unsplash.com/photo-1517935706615-2717063c2225?q=80&w=2000&auto=format&fit=crop', // Northern Lights
-    'Cyprus': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2000&auto=format&fit=crop', // Sturdy fallback (Cyprus Coast)
-    'Croatia': 'https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=80&w=2000&auto=format&fit=crop', // (No change)
-    'Georgia': 'https://images.unsplash.com/photo-1565008576549-57569a49371d?q=80&w=2000&auto=format&fit=crop', // Mountains
-    'Malaysia': 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2000&auto=format&fit=crop' // Iconic Petronas (Stable)
+    'China': 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=75&w=1200&auto=format&fit=crop',
+    'South Korea': 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=75&w=1200&auto=format&fit=crop',
+    'United Kingdom': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=75&w=1200&auto=format&fit=crop',
+    'Hungary': 'https://images.unsplash.com/photo-1516901632977-d141a38d469b?q=75&w=1200&auto=format&fit=crop',
+    'Finland': 'https://images.unsplash.com/photo-1517935706615-2717063c2225?q=75&w=1200&auto=format&fit=crop',
+    'Cyprus': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=75&w=1200&auto=format&fit=crop',
+    'Croatia': 'https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=75&w=1200&auto=format&fit=crop',
+    'Georgia': 'https://images.unsplash.com/photo-1565008576549-57569a49371d?q=75&w=1200&auto=format&fit=crop',
+    'Malaysia': 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=75&w=1200&auto=format&fit=crop'
 };
 
 // Slide Data
@@ -53,9 +54,9 @@ const HeroSection = () => {
             {/* Aurora Background Effect Container (Clipped) */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute inset-0 z-0 opacity-30 mix-blend-overlay">
-                    <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-                    <div className="absolute -bottom-40 left-20 w-96 h-96 bg-rose-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+                    <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob will-change-transform"></div>
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000 will-change-transform"></div>
+                    <div className="absolute -bottom-40 left-20 w-96 h-96 bg-rose-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 will-change-transform"></div>
                 </div>
             </div>
 
@@ -112,8 +113,8 @@ const HeroSection = () => {
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={currentSlide}
-                                    initial={{ opacity: 0, scale: 1.1 }}
-                                    animate={{ opacity: 1, scale: 1 }}
+                                    initial={{ scale: 1.1 }}
+                                    animate={{ scale: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.7 }}
                                     className="relative w-full h-full"
@@ -123,8 +124,10 @@ const HeroSection = () => {
                                         alt={SLIDES[currentSlide].title}
                                         fill
                                         priority={true}
+                                        fetchPriority="high"
+                                        quality={60}
                                         className="object-cover"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        sizes="(max-width: 768px) 90vw, (max-width: 1200px) 40vw, 30vw"
                                     />
                                 </motion.div>
                             </AnimatePresence>
@@ -177,10 +180,10 @@ const HeroSection = () => {
                         </motion.div>
                     </motion.div>
                 </div>
-            </div>
+            </div >
 
             {/* --- NAVIGATION ARROWS (Corner) --- */}
-            <div className="absolute right-4 lg:right-8 bottom-48 lg:bottom-16 flex gap-2 z-20">
+            < div className="absolute right-4 lg:right-8 bottom-48 lg:bottom-16 flex gap-2 z-20" >
                 <button
                     onClick={prevSlide}
                     aria-label="Previous Slide"
@@ -195,10 +198,10 @@ const HeroSection = () => {
                 >
                     <ArrowRight className="w-5 h-5" />
                 </button>
-            </div>
+            </div >
 
             {/* --- THREE CARDS SECTION (Overlapping Bottom) --- */}
-            <div className="absolute bottom-0 left-0 w-full translate-y-1/2 z-30 px-4 hidden lg:block">
+            < div className="absolute bottom-0 left-0 w-full translate-y-1/2 z-30 px-4 hidden lg:block" >
                 <div className="container mx-auto grid grid-cols-3 gap-8">
                     {/* Card 1 */}
                     <motion.div
@@ -211,7 +214,7 @@ const HeroSection = () => {
                         <div className="bg-blue-50 p-3 rounded-full mb-4">
                             <Star className="w-8 h-8 text-blue-600 fill-current" />
                         </div>
-                        <h3 className="text-xl font-bold text-slate-800 mb-2">Up to 100% Scholarship</h3>
+                        <h2 className="text-xl font-bold text-slate-800 mb-2">Up to 100% Scholarship</h2>
                         <p className="text-slate-600 text-sm">
                             You could be eligible for a scholarship, grant or funding
                         </p>
@@ -223,12 +226,12 @@ const HeroSection = () => {
                         whileInView={{ y: 0, opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="bg-white rounded-xl shadow-xl p-8 text-center flex flex-col items-center h-full min-h-[220px] justify-center border-b-4 border-amber-500"
+                        className="bg-white rounded-xl shadow-xl p-8 text-center flex flex-col items-center h-full min-h-[220px] justify-center border-b-4 border-amber-600"
                     >
                         <div className="bg-amber-50 p-3 rounded-full mb-4">
-                            <Users className="w-8 h-8 text-amber-500 fill-current" />
+                            <Users className="w-8 h-8 text-amber-600 fill-current" />
                         </div>
-                        <h3 className="text-xl font-bold text-slate-800 mb-2">Free Consultations</h3>
+                        <h2 className="text-xl font-bold text-slate-800 mb-2">Free Consultations</h2>
                         <p className="text-slate-600 text-sm">
                             Book a FREE appointment and consult to find your path
                         </p>
@@ -245,13 +248,13 @@ const HeroSection = () => {
                         <div className="bg-gray-100 p-3 rounded-full mb-4">
                             <Send className="w-8 h-8 text-gray-800 fill-current" />
                         </div>
-                        <h3 className="text-xl font-bold text-slate-800 mb-2">7 Years of Experience</h3>
+                        <h2 className="text-xl font-bold text-slate-800 mb-2">7 Years of Experience</h2>
                         <p className="text-slate-600 text-sm">
                             Successfully helping students achieve their dreams
                         </p>
                     </motion.div>
                 </div>
-            </div>
+            </div >
 
             {/* Mobile View Cards (Stacked below hero basically) - 
                 Actually, to maintain structure, we might want to just let them be 
@@ -263,7 +266,7 @@ const HeroSection = () => {
                 For Mobile: We show them stacked, maybe not overlapped to save space,
                 or slight overlap.
             */}
-            <div className="absolute bottom-0 left-0 w-full translate-y-[20%] z-30 px-4 block lg:hidden pb-10">
+            < div className="absolute bottom-0 left-0 w-full translate-y-[20%] z-30 px-4 block lg:hidden pb-10" >
                 {/* Mobile allows horizontal scroll or just stack. 
                     Design often implies stack. 
                     Let's not do overlapping on mobile to avoid covering the hero text if screen is short.
@@ -274,7 +277,7 @@ const HeroSection = () => {
                     
                     Let's put the mobile cards in a way that works.
                 */}
-            </div>
+            </div >
         </section >
     );
 };
@@ -294,12 +297,12 @@ const HeroWrapper = () => {
             <div className="container mx-auto px-4 grid gap-6 lg:hidden relative z-30 -mt-12">
                 {[
                     { icon: Star, title: "Up to 100% Scholarship", text: "You could be eligible for a scholarship, grant or funding", color: "text-blue-600", border: "border-blue-600" },
-                    { icon: Users, title: "Free Consultations", text: "Book a FREE appointment and consult to find your path", color: "text-amber-500", border: "border-amber-500" },
+                    { icon: Users, title: "Free Consultations", text: "Book a FREE appointment and consult to find your path", color: "text-amber-600", border: "border-amber-600" },
                     { icon: Send, title: "7 Years of Experience", text: "Successfully helping students achieve their dreams", color: "text-gray-800", border: "border-gray-800" }
                 ].map((card, i) => (
                     <div key={i} className={`bg-white rounded-xl shadow-lg p-6 text-center flex flex-col items-center border-b-4 ${card.border}`}>
                         <card.icon className={`w-10 h-10 mb-4 fill-current ${card.color}`} />
-                        <h3 className="text-xl font-bold text-slate-800 mb-2">{card.title}</h3>
+                        <h2 className="text-xl font-bold text-slate-800 mb-2">{card.title}</h2>
                         <p className="text-slate-600 text-sm">{card.text}</p>
                     </div>
                 ))}

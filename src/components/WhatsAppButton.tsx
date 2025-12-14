@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FaWhatsapp } from 'react-icons/fa';
+import { MessageCircle } from 'lucide-react';
 
 interface TrackingData {
   leadName: string;
@@ -176,7 +176,7 @@ export default function WhatsAppButton({
     >
       {/* WhatsApp Icon with Animation */}
       <div className={`relative ${getIconSize()} ${showText ? 'mr-2' : ''}`}>
-        <FaWhatsapp
+        <MessageCircle
           className={`${getIconSize()} transition-transform duration-300 ${isHovered ? 'rotate-12' : ''}`}
         />
 

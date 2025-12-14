@@ -81,13 +81,13 @@ const FeaturesSection = () => {
                         </div>
                         <h3 className="text-2xl font-bold text-slate-900 mb-4">Scholarship <br /> Guidance</h3>
                         <p className="text-slate-600 leading-relaxed mb-6">
-                            We don't just apply; we strategist. Our team helps clarify your SOPs and profiles to unlock hidden funding opportunities and grants that make education affordable.
+                            We don&apos;t just apply; we strategist. Our team helps clarify your SOPs and profiles to unlock hidden funding opportunities and grants that make education affordable.
                         </p>
                         <div className="mt-auto">
                             <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                                 <div className="h-full w-3/4 bg-amber-400 rounded-full" />
                             </div>
-                            <p className="text-xs text-amber-500 mt-2 font-bold uppercase tracking-wider">$5M+ Secured</p>
+                            <p className="text-xs text-amber-700 mt-2 font-bold uppercase tracking-wider">$5M+ Secured</p>
                         </div>
                     </motion.div>
 
@@ -146,12 +146,12 @@ const FeaturesSection = () => {
                             <div>
                                 <h3 className="text-2xl font-bold mb-2 text-white">Expert Counselors</h3>
                                 <p className="text-slate-400 text-sm md:text-base leading-relaxed">
-                                    Our team consists of former international students who have "been there, done that". We guide you based on real-world experience, not just brochures.
+                                    Our team consists of former international students who have &quot;been there, done that&quot;. We guide you based on real-world experience, not just brochures.
                                 </p>
                             </div>
-                            <div className="ml-auto bg-slate-800 p-3 rounded-full hover:bg-blue-600 transition-colors cursor-pointer">
-                                <HeartHandshake className="w-6 h-6 text-white" />
-                            </div>
+                            <button aria-label="Contact our expert team" className="ml-auto bg-slate-800 p-3 rounded-full hover:bg-blue-600 transition-colors cursor-pointer text-white">
+                                <HeartHandshake className="w-6 h-6" />
+                            </button>
                         </div>
                     </motion.div>
 

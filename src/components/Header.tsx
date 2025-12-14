@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Phone, ArrowRight, Mail } from 'lucide-react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { trackConsultationRequest } from '@/lib/analytics';
 import { fadeInDown, slideInFromLeft } from '@/lib/animations';
 import { countries } from '@/lib/countries';
@@ -49,8 +49,16 @@ const Header = () => {
   ];
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Check initially
@@ -87,7 +95,7 @@ const Header = () => {
 
   return (
     <>
-      <motion.header
+      <m.header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${headerClass}`}
         initial="initial"
         animate="animate"
@@ -100,7 +108,7 @@ const Header = () => {
           <div className="flex justify-between items-center">
 
             {/* Logo */}
-            <motion.div
+            <m.div
               className="flex-shrink-0"
               variants={slideInFromLeft}
             >
@@ -111,12 +119,14 @@ const Header = () => {
                     alt="EduExpress International"
                     width={180}
                     height={50}
+                    quality={60}
                     className="h-10 w-auto object-contain drop-shadow-sm"
                     priority
+                    sizes="(max-width: 768px) 140px, 180px"
                   />
                 </div>
               </Link>
-            </motion.div>
+            </m.div>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-10">
@@ -144,7 +154,7 @@ const Header = () => {
                   {item.name === 'Destinations' && (
                     <AnimatePresence>
                       {activeDropdown === 'destinations' && (
-                        <motion.div
+                        <m.div
                           className="absolute top-full left-1/2 transform -translate-x-1/2 pt-8 w-[800px]"
                           initial={{ opacity: 0, y: 10, scale: 0.96 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -215,7 +225,7 @@ const Header = () => {
                               </div>
                             </div>
                           </div>
-                        </motion.div>
+                        </m.div>
                       )}
                     </AnimatePresence>
                   )}
@@ -226,7 +236,7 @@ const Header = () => {
             {/* CTA Button */}
             <div className="hidden lg:flex items-center space-x-5">
               <div className={`h-8 w-px ${isTransparent ? 'bg-slate-300/30' : 'bg-slate-300'}`}></div>
-              <motion.button
+              <m.button
                 onClick={() => {
                   trackConsultationRequest('header');
                   window.dispatchEvent(new CustomEvent('openQuickForm'));
@@ -240,7 +250,7 @@ const Header = () => {
               >
                 <span>Free Consultation</span>
                 <ArrowRight className={`w-4 h-4 ${isTransparent ? 'text-blue-600' : 'text-white'} group-hover:translate-x-1 transition-transform`} />
-              </motion.button>
+              </m.button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -257,12 +267,12 @@ const Header = () => {
           </div>
         </nav>
 
-      </motion.header>
+      </m.header>
 
       {/* Mobile Menu Overlay - Crystal Style */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
+          <m.div
             className="fixed inset-0 z-[60] lg:hidden bg-white/95 backdrop-blur-3xl"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -275,7 +285,15 @@ const Header = () => {
 
             <div className="relative z-10 flex flex-col h-full">
               <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-white/50 backdrop-blur-md">
-                <Image src="/logo.png" alt="Logo" width={140} height={40} className="h-9 w-auto" />
+                <Image
+                  src="/logo.png"
+                  alt="Logo"
+                  width={140}
+                  height={40}
+                  className="h-9 w-auto"
+                  quality={80}
+                  sizes="140px"
+                />
                 <button
                   onClick={() => setIsMenuOpen(false)}
                   aria-label="Close menu"
@@ -327,7 +345,7 @@ const Header = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { FaWhatsapp } from 'react-icons/fa';
+import { MessageCircle } from 'lucide-react';
 
 interface UniversityWhatsAppProps {
     universityName: string;
@@ -21,7 +21,7 @@ const UniversityWhatsApp = ({ universityName, className = '' }: UniversityWhatsA
             onClick={handleClick}
             className={`flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl group ${className}`}
         >
-            <FaWhatsapp className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
             <span>Chat on WhatsApp</span>
         </button>
     );

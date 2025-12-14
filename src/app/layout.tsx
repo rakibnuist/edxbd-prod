@@ -1,26 +1,25 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import EnhancedAnalytics from "@/components/EnhancedAnalytics";
+import { LazyMotion, domAnimation } from "framer-motion";
 
-import Footer from "@/components/Footer";
-import QuickContactForm from "@/components/QuickContactForm";
 import ConditionalHeader from "@/components/ConditionalHeader";
 import ConditionalMain from "@/components/ConditionalMain";
 import PageTransition from "@/components/PageTransition";
-import ScrollToTop from "@/components/ScrollToTop";
 import EducationTracking from "@/components/EducationTracking";
+import DeferredComponents from "@/components/DeferredComponents";
 
 import WhatsAppWrapper from "@/components/WhatsAppWrapper";
+import { Preconnect } from "@/components/Preconnect";
 
 import "./globals.css";
 
 // Primary font for body text and UI elements
 const inter = Inter({
-  variable: "--font-inter",
   subsets: ["latin"],
+  variable: "--font-inter",
   weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
+  display: "swap", // Prevent Flash of Invisible Text (FOIT)
 });
 
 // Elegant serif font for headings and special text
@@ -28,9 +27,17 @@ const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
-  display: "swap",
+  display: "swap", // Prevent Flash of Invisible Text (FOIT)
 });
 
+export const viewport: Viewport = {
+  themeColor: "#1e40af",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.eduexpressint.com'),
@@ -138,15 +145,24 @@ export const metadata: Metadata = {
   category: 'education',
   classification: 'Education Services',
   other: {
-    'mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'default',
-    'apple-mobile-web-app-title': 'EduExpress International',
-    'application-name': 'EduExpress International',
     'msapplication-TileColor': '#1e40af',
     'msapplication-config': '/browserconfig.xml',
-    'theme-color': '#1e40af',
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "EduExpress International",
+  },
+  icons: {
+    icon: [
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180' },
+    ],
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
@@ -285,55 +301,36 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-        <link rel="canonical" href="https://www.eduexpressint.com" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
-        <meta name="theme-color" content="#1e40af" />
-        <meta name="msapplication-TileColor" content="#1e40af" />
-        <meta name="msapplication-config" content="/browserconfig.xml" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="EduExpress International" />
-        <meta name="format-detection" content="telephone=no" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-
-
-
-
-      </head>
       <body
         suppressHydrationWarning
         className={`${inter.variable} ${playfairDisplay.variable} antialiased`}
         style={{ marginTop: 0 }}
       >
-        <EnhancedAnalytics />
-        <EducationTracking
-          whatsappSource="floating_widget"
-          phoneSource="header_contact"
-        />
-        <ConditionalHeader />
-        <ConditionalMain>
-          <PageTransition>
-            {children}
-          </PageTransition>
-        </ConditionalMain>
-        <Footer />
-        <QuickContactForm />
-        <ScrollToTop />
-        <WhatsAppWrapper
-          phoneNumber="+8801983333566"
-          message="Hi! I'm interested in studying abroad. Can you help me with information about universities and scholarships?"
-        />
-        <SpeedInsights />
+        <LazyMotion features={domAnimation}>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          />
+          <EducationTracking
+            whatsappSource="floating_widget"
+            phoneSource="header_contact"
+          />
+          <ConditionalHeader />
+          <ConditionalMain>
+            <PageTransition>
+              {children}
+            </PageTransition>
+          </ConditionalMain>
+          <Preconnect />
+          <WhatsAppWrapper
+            phoneNumber="+8801983333566"
+            message="Hi! I'm interested in studying abroad. Can you help me with information about universities and scholarships?"
+          />
+          <DeferredComponents />
+          <SpeedInsights />
+        </LazyMotion>
       </body>
     </html>
   );
 }
+

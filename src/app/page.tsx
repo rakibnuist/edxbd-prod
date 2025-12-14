@@ -4,22 +4,35 @@ import InfinityTicker from '@/components/InfinityTicker';
 
 // Client Components
 import HeroSection from '@/components/home/HeroSection';
-import FeaturesSection from '@/components/home/FeaturesSection'; // [NEW]
-import AboutPreviewSection from '@/components/home/AboutPreviewSection'; // [NEW]
+import dynamic from 'next/dynamic';
 
-import ProcessTimelineSection from '@/components/home/ProcessTimelineSection';
+import FeaturesSection from '@/components/home/FeaturesSection';
+const AboutPreviewSection = dynamic(() => import('@/components/home/AboutPreviewSection'));
+const ProcessTimelineSection = dynamic(() => import('@/components/home/ProcessTimelineSection'));
 import DestinationsSection from '@/components/home/DestinationsSection';
-import PartnershipSection from '@/components/home/PartnershipSection';
-import TestimonialsSection from '@/components/home/TestimonialsSection';
-import CTASection from '@/components/home/CTASection';
+const PartnershipSection = dynamic(() => import('@/components/home/PartnershipSection'));
+const TestimonialsSection = dynamic(() => import('@/components/home/TestimonialsSection'));
+const CTASection = dynamic(() => import('@/components/home/CTASection'));
 
-export const dynamic = 'force-dynamic';
+
 
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "Study Abroad Consultancy | EduExpress International",
   description: "Transform your education journey with EduExpress International. Expert study abroad consultancy in Bangladesh with FREE scholarship assistance for UK, USA, Canada, & more.",
+  openGraph: {
+    title: "Study Abroad Consultancy | EduExpress International",
+    description: "Transform your education journey with EduExpress International. Expert study abroad consultancy in Bangladesh with FREE scholarship assistance for UK, USA, Canada, & more.",
+    type: "website",
+    url: "https://www.eduexpressint.com",
+    siteName: "EduExpress International",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Study Abroad Consultancy | EduExpress International",
+    description: "Transform your education journey with EduExpress International. Expert study abroad consultancy in Bangladesh with FREE scholarship assistance for UK, USA, Canada, & more.",
+  },
 };
 
 // import connectDB from '@/lib/mongodb';

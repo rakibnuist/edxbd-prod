@@ -46,7 +46,7 @@ export const countries: Country[] = [
     benefits: ['Full Free Scholarship', 'Global Top Ranking Universities', 'No IELTS Options'],
     isActive: true,
     featured: true,
-    images: ['/images/destinations/china.png'],
+    images: ['https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in China from Bangladesh - Full Scholarships 2025',
     metaDescription: 'Study in China with full Free scholarship. No IELTS options available. Top ranking universities for Medicine and Engineering.'
   },
@@ -71,7 +71,7 @@ export const countries: Country[] = [
     benefits: ['GKS Full Scholarship', 'Part-time Work Allowed', 'High Tech Education'],
     isActive: true,
     featured: true,
-    images: ['/images/destinations/south-korea.png'],
+    images: ['https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in South Korea from Bangladesh - GKS Scholarship',
     metaDescription: 'Apply for GKS Scholarship in South Korea. Study in top tech universities with funding.'
   },
@@ -96,7 +96,7 @@ export const countries: Country[] = [
     benefits: ['2-Year Post Study Work', 'Spouse Visa Integration', 'World Class Education'],
     isActive: true,
     featured: true,
-    images: ['/images/destinations/uk.png'],
+    images: ['https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in UK from Bangladesh - No IELTS Options',
     metaDescription: 'Study in UK with 2-year post-study work permit (PSW). Gap accepted. Apply now.'
   },
@@ -121,7 +121,7 @@ export const countries: Country[] = [
     benefits: ['Full Scholarship + Stipend', 'Schengen Visa Access', 'Affordable Living Cost'],
     isActive: true,
     featured: true,
-    images: ['/images/destinations/hungary.png'],
+    images: ['https://images.unsplash.com/photo-1516901632977-d141a38d469b?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in Hungary from Bangladesh - Stipendium Hungaricum',
     metaDescription: 'Apply for Stipendium Hungaricum Scholarship in Hungary. Full free tuition + Dormitory + Monthly stipend.'
   },
@@ -146,7 +146,7 @@ export const countries: Country[] = [
     benefits: ['PR Opportunity', 'Spouse Can Work Full-time', 'Happiest Country in World'],
     isActive: true,
     featured: true,
-    images: ['/images/destinations/finland.png'],
+    images: ['https://images.unsplash.com/photo-1517935706615-2717063c2225?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in Finland - Scholarships for Bangladeshi Students',
     metaDescription: 'Study in Finland with huge scholarships. Easy PR pathway after graduation.'
   },
@@ -171,7 +171,7 @@ export const countries: Country[] = [
     benefits: ['No IELTS Required', 'Very Affordable Tuition', 'Easy Visa Process'],
     isActive: true,
     featured: true,
-    images: ['/images/destinations/cyprus.png'],
+    images: ['https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in Cyprus from Bangladesh - No IELTS',
     metaDescription: 'Study in Cyprus with 50% scholarship. No IELTS required. Affordable tuition fees.'
   },
@@ -196,7 +196,7 @@ export const countries: Country[] = [
     benefits: ['Schengen Member State', 'High Visa Success Rate', 'Part-time Work Rights'],
     isActive: true,
     featured: true,
-    images: ['/images/destinations/croatia.png'],
+    images: ['https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in Croatia - Schengen Visa',
     metaDescription: 'Study in Croatia (Schengen Area). Affordable tuition and work opportunities.'
   },
@@ -221,7 +221,7 @@ export const countries: Country[] = [
     benefits: ['No Entrance Exam', 'WHO Recognized Degree', 'Low Cost of Living'],
     isActive: true,
     featured: true,
-    images: ['/images/destinations/georgia.png'],
+    images: ['https://images.unsplash.com/photo-1565008576549-57569a49371d?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'MBBS in Georgia for Bangladeshi Students',
     metaDescription: 'Study MBBS in Georgia. WHO recognizable degree. No entrance exam. Low cost.'
   },
@@ -246,7 +246,7 @@ export const countries: Country[] = [
     benefits: ['Affordable Tuition', 'Transfer Options to UK/AUS', 'Multicultural Hub'],
     isActive: true,
     featured: true,
-    images: ['/images/destinations/malaysia.png'],
+    images: ['https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in Malaysia from Bangladesh - Affordable Quality Education',
     metaDescription: 'Study in Malaysia with affordable tuition fees. Transfer credits to UK/Australia/USA. Apply now.'
   }
