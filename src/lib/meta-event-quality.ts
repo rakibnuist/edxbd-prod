@@ -102,6 +102,56 @@ export const getFacebookLoginId = (): string | undefined => {
   return undefined;
 };
 
+// Generate unique event ID for deduplication between browser and server
+export const generateEventId = (eventName: string): string => {
+  const timestamp = Date.now();
+  const random = Math.random().toString(36).substring(2, 11);
+  return `${eventName}_${timestamp}_${random}`;
+};
+
+// Send event to Conversions API (server-side)
+export const sendToConversionsAPI = async (
+  eventName: string,
+  eventId: string,
+  userData: Record<string, any> = {},
+  customData: Record<string, any> = {}
+): Promise<void> => {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const metaParams = getMetaParameters();
+
+    await fetch('/api/meta-capi', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        event_name: eventName,
+        event_id: eventId,
+        event_source_url: window.location.href,
+        user_data: {
+          fbp: metaParams.fbp,
+          fbc: metaParams.fbc,
+          external_id: metaParams.external_id,
+          // Pass raw PII - will be hashed server-side
+          email: userData.email,
+          phone: userData.phone,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          city: userData.city,
+          state: userData.state,
+          zipCode: userData.zipCode,
+          country: userData.country,
+        },
+        custom_data: customData,
+      }),
+    });
+  } catch (error) {
+    console.error('Conversions API error:', error);
+  }
+};
+
 // Enhanced event tracking function with Event Quality parameters
 export const trackMetaEvent = (
   eventName: string,
@@ -131,15 +181,15 @@ export const trackMetaEvent = (
   };
 
   // Generate unique event ID for deduplication
-  const eventId = `${eventName}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  const eventId = generateEventId(eventName);
 
-  console.log(`Tracking Meta event: ${eventName}`, eventData);
+  console.log(`Tracking Meta event: ${eventName}`, { event_id: eventId });
 
-  // Track with Meta Pixel
+  // Track with Meta Pixel (browser-side)
   window.fbq('track', eventName, eventData, { eventID: eventId });
 
-  // Also send to server-side Conversions API for better tracking
-  sendToServerSideAPI(eventName, eventData, eventId);
+  // Also send to Conversions API (server-side) for event matching
+  sendToConversionsAPI(eventName, eventId, userData, parameters);
 };
 
 // Send event to server-side API for Conversions API
