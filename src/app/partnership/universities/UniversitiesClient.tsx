@@ -49,8 +49,16 @@ const UniversitiesClient = () => {
                 setLoading(true);
                 // Create query parameters
                 const params = new URLSearchParams();
-                params.append('page', page.toString());
-                params.append('limit', '10'); // Default limit
+
+                // When searching, fetch ALL universities for client-side filtering
+                // When not searching, use normal pagination
+                if (searchQuery.trim()) {
+                    params.append('limit', '1000'); // Fetch all for search
+                    params.append('page', '1');
+                } else {
+                    params.append('page', page.toString());
+                    params.append('limit', '10');
+                }
 
                 // Only send country/degree to backend for base filtering
                 // Search will be done client-side for all fields
@@ -61,7 +69,13 @@ const UniversitiesClient = () => {
                 if (res.ok) {
                     const data = await res.json();
                     setUniversities(data.universities);
-                    setTotalPages(data.pagination.totalPages);
+
+                    // Only show pagination when NOT searching
+                    if (!searchQuery.trim()) {
+                        setTotalPages(data.pagination.totalPages);
+                    } else {
+                        setTotalPages(1); // Hide pagination during search
+                    }
                 } else {
                     setError(`Failed to fetch: ${res.status} ${res.statusText}`);
                 }
@@ -73,7 +87,7 @@ const UniversitiesClient = () => {
             }
         };
         fetchUniversities();
-    }, [page, selectedCountry, selectedDegree]); // Removed searchQuery from dependencies
+    }, [page, selectedCountry, selectedDegree, searchQuery]); // Added searchQuery back
 
     // Memoize ONLY for fields NOT filtered by backend if mixed (Intake, Taught, Major)
     // NOTE: This logic is tricky if backend only returns ONE page. 
