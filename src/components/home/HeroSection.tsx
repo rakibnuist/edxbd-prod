@@ -6,30 +6,29 @@ import { ArrowLeft, ArrowRight, Star, Users, Send } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+import { activeCountries } from '@/lib/countries';
+
+// Map countries to high-quality Unsplash images (Consistent with DestinationsSection)
+const countryImages: Record<string, string> = {
+    'China': 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=2000&auto=format&fit=crop', // Great Wall
+    'South Korea': 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=2000&auto=format&fit=crop', // Seoul
+    'United Kingdom': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=2000&auto=format&fit=crop', // London
+    'Hungary': 'https://images.unsplash.com/photo-1516901632977-d141a38d469b?q=80&w=2000&auto=format&fit=crop', // Budapest
+    'Finland': 'https://images.unsplash.com/photo-1517935706615-2717063c2225?q=80&w=2000&auto=format&fit=crop', // Northern Lights
+    'Cyprus': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2000&auto=format&fit=crop', // Sturdy fallback (Cyprus Coast)
+    'Croatia': 'https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=80&w=2000&auto=format&fit=crop', // (No change)
+    'Georgia': 'https://images.unsplash.com/photo-1565008576549-57569a49371d?q=80&w=2000&auto=format&fit=crop', // Mountains
+    'Malaysia': 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2000&auto=format&fit=crop' // Iconic Petronas (Stable)
+};
+
 // Slide Data
-const SLIDES = [
-    {
-        id: 1,
-        title: "Study in China",
-        subtitle: "Up to 100% Scholarship",
-        image: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=2340&auto=format&fit=crop",
-        link: "/destinations/china"
-    },
-    {
-        id: 2,
-        title: "Study in South Korea",
-        subtitle: "E-Visa & Apply without IELTS",
-        image: "https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=2340&auto=format&fit=crop",
-        link: "/destinations/south-korea"
-    },
-    {
-        id: 3,
-        title: "Study in Europe",
-        subtitle: "Apply with or Without IELTS",
-        image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2340&auto=format&fit=crop",
-        link: "/destinations/europe"
-    }
-];
+const SLIDES = activeCountries.map((country, index) => ({
+    id: index + 1,
+    title: `Study in ${country.name}`,
+    subtitle: country.description,
+    link: `/destinations/${country.slug}`,
+    image: countryImages[country.name] || countryImages['China'] // Fallback
+}));
 
 const HeroSection = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -110,11 +109,18 @@ const HeroSection = () => {
 
                         {/* Main Image Container */}
                         <div className="absolute inset-0 bg-white rounded-[2.5rem] overflow-hidden border-4 border-white shadow-2xl">
-                            <img
-                                src="/images/headerright.jpg"
-                                alt="Student Header Image"
-                                className="w-full h-full object-cover"
-                            />
+                            <AnimatePresence mode="wait">
+                                <motion.img
+                                    key={currentSlide}
+                                    src={SLIDES[currentSlide].image}
+                                    alt={SLIDES[currentSlide].title}
+                                    initial={{ opacity: 0, scale: 1.1 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.7 }}
+                                    className="w-full h-full object-cover"
+                                />
+                            </AnimatePresence>
                         </div>
 
                         {/* Floating "Trust" Badge 1: Visa Success */}

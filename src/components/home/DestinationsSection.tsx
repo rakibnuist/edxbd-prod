@@ -14,9 +14,10 @@ const countryImages: Record<string, string> = {
     'United Kingdom': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=2000&auto=format&fit=crop', // London
     'Hungary': 'https://images.unsplash.com/photo-1516901632977-d141a38d469b?q=80&w=2000&auto=format&fit=crop', // Budapest
     'Finland': 'https://images.unsplash.com/photo-1517935706615-2717063c2225?q=80&w=2000&auto=format&fit=crop', // Northern Lights (Reliable)
-    'Cyprus': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2000&auto=format&fit=crop', // Coast
-    'Croatia': 'https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=80&w=2000&auto=format&fit=crop', // Dubrovnik (Standard)
-    'Georgia': 'https://images.unsplash.com/photo-1565008576549-57569a49371d?q=80&w=2000&auto=format&fit=crop' // Mountains
+    'Cyprus': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2000&auto=format&fit=crop', // Sturdy fallback (Cyprus Coast)
+    'Croatia': 'https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=80&w=2000&auto=format&fit=crop', // (No change)
+    'Georgia': 'https://images.unsplash.com/photo-1565008576549-57569a49371d?q=80&w=2000&auto=format&fit=crop', // Mountains
+    'Malaysia': 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2000&auto=format&fit=crop' // Iconic Petronas (Stable)
 };
 
 // Fallback background colors if images fail to load
@@ -28,7 +29,8 @@ const countryColors: Record<string, string> = {
     'Finland': 'bg-sky-900',
     'Cyprus': 'bg-orange-800',
     'Croatia': 'bg-teal-800',
-    'Georgia': 'bg-purple-900'
+    'Georgia': 'bg-purple-900',
+    'Malaysia': 'bg-indigo-800'
 };
 
 const DestinationsSection = () => {
@@ -54,7 +56,7 @@ const DestinationsSection = () => {
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-5xl font-bold text-slate-900 mb-6"
                     >
-                        {featuredCountries.length} Premium Study Destinations
+                        {featuredCountries.length} World-Class Study Destinations
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 10 }}
@@ -67,7 +69,7 @@ const DestinationsSection = () => {
                 </div>
 
                 {/* Accordion Container - Taller on mobile to fit content */}
-                <div className="w-full h-[850px] lg:h-[700px] px-4">
+                <div className="w-full h-[1400px] lg:h-[700px] px-4">
                     <div className="max-w-[1400px] mx-auto h-full flex flex-col lg:flex-row gap-4">
                         {featuredCountries.map((country, index) => {
                             const isActive = activeId === index;
@@ -92,20 +94,20 @@ const DestinationsSection = () => {
                                         `}
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                         />
-                                        {/* Overlay */}
+                                        {/* Overlay - Darker for better text visibility */}
                                         <div className={`absolute inset-0 transition-colors duration-500
-                                        ${isActive ? 'bg-black/30' : 'bg-black/40 group-hover:bg-black/20'}
+                                        ${isActive ? 'bg-black/40' : 'bg-black/50 group-hover:bg-black/30'}
                                     `} />
                                     </div>
 
                                     {/* Content */}
-                                    <div className="absolute inset-0 p-6 lg:p-10 flex flex-col justify-between z-10 text-white">
+                                    <div className="absolute inset-0 p-5 lg:p-10 flex flex-col justify-between z-10 text-white">
 
                                         {/* Top Label */}
                                         <div className={`transition-all duration-300 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-                                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full w-fit">
-                                                <span className="text-2xl">{country.flag}</span>
-                                                <span className="font-bold tracking-wide">{country.name}</span>
+                                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-1.5 lg:px-4 lg:py-2 rounded-full w-fit">
+                                                <span className="text-xl lg:text-2xl">{country.flag}</span>
+                                                <span className="font-bold tracking-wide text-sm lg:text-base">{country.name}</span>
                                             </div>
                                         </div>
 
@@ -115,30 +117,30 @@ const DestinationsSection = () => {
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: 0.2 }}
-                                                className="space-y-6 bg-black/40 backdrop-blur-lg p-6 rounded-3xl border border-white/10"
+                                                className="space-y-4 lg:space-y-6 bg-black/40 backdrop-blur-lg p-5 lg:p-6 rounded-3xl border border-white/10"
                                             >
                                                 <div>
-                                                    <h3 className="text-3xl md:text-5xl font-bold mb-3">{country.name}</h3>
-                                                    <p className="text-white/90 text-sm md:text-base max-w-xl line-clamp-2 md:line-clamp-none">
+                                                    <h3 className="text-2xl lg:text-5xl font-bold mb-2 lg:mb-3">{country.name}</h3>
+                                                    <p className="text-white/90 text-sm lg:text-base max-w-xl line-clamp-3 md:line-clamp-none">
                                                         {country.description}
                                                     </p>
                                                 </div>
 
                                                 {/* Benefits List */}
-                                                <div className="space-y-3">
+                                                <div className="space-y-2 lg:space-y-3">
                                                     {country.benefits?.slice(0, 3).map((benefit, i) => (
                                                         <div key={i} className="flex items-center gap-3">
                                                             <div className="p-1 rounded-full bg-green-500/20 text-green-400">
                                                                 <CheckCircle2 className="w-4 h-4" />
                                                             </div>
-                                                            <span className="text-sm md:text-base font-medium text-white/90">{benefit}</span>
+                                                            <span className="text-sm lg:text-base font-medium text-white/90">{benefit}</span>
                                                         </div>
                                                     ))}
                                                 </div>
 
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('openQuickForm')); }}
-                                                    className="w-full py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 group/btn"
+                                                    className="w-full py-3 lg:py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 group/btn border-2 border-transparent hover:border-blue-200"
                                                 >
                                                     Start Your Application
                                                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />

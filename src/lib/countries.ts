@@ -46,7 +46,7 @@ export const countries: Country[] = [
     benefits: ['Full Free Scholarship', 'Global Top Ranking Universities', 'No IELTS Options'],
     isActive: true,
     featured: true,
-    images: [],
+    images: ['/images/destinations/china.png'],
     metaTitle: 'Study in China from Bangladesh - Full Scholarships 2025',
     metaDescription: 'Study in China with full Free scholarship. No IELTS options available. Top ranking universities for Medicine and Engineering.'
   },
@@ -71,7 +71,7 @@ export const countries: Country[] = [
     benefits: ['GKS Full Scholarship', 'Part-time Work Allowed', 'High Tech Education'],
     isActive: true,
     featured: true,
-    images: [],
+    images: ['/images/destinations/south-korea.png'],
     metaTitle: 'Study in South Korea from Bangladesh - GKS Scholarship',
     metaDescription: 'Apply for GKS Scholarship in South Korea. Study in top tech universities with funding.'
   },
@@ -96,7 +96,7 @@ export const countries: Country[] = [
     benefits: ['2-Year Post Study Work', 'Spouse Visa Integration', 'World Class Education'],
     isActive: true,
     featured: true,
-    images: [],
+    images: ['/images/destinations/uk.png'],
     metaTitle: 'Study in UK from Bangladesh - No IELTS Options',
     metaDescription: 'Study in UK with 2-year post-study work permit (PSW). Gap accepted. Apply now.'
   },
@@ -121,7 +121,7 @@ export const countries: Country[] = [
     benefits: ['Full Scholarship + Stipend', 'Schengen Visa Access', 'Affordable Living Cost'],
     isActive: true,
     featured: true,
-    images: [],
+    images: ['/images/destinations/hungary.png'],
     metaTitle: 'Study in Hungary from Bangladesh - Stipendium Hungaricum',
     metaDescription: 'Apply for Stipendium Hungaricum Scholarship in Hungary. Full free tuition + Dormitory + Monthly stipend.'
   },
@@ -146,7 +146,7 @@ export const countries: Country[] = [
     benefits: ['PR Opportunity', 'Spouse Can Work Full-time', 'Happiest Country in World'],
     isActive: true,
     featured: true,
-    images: [],
+    images: ['/images/destinations/finland.png'],
     metaTitle: 'Study in Finland - Scholarships for Bangladeshi Students',
     metaDescription: 'Study in Finland with huge scholarships. Easy PR pathway after graduation.'
   },
@@ -171,7 +171,7 @@ export const countries: Country[] = [
     benefits: ['No IELTS Required', 'Very Affordable Tuition', 'Easy Visa Process'],
     isActive: true,
     featured: true,
-    images: [],
+    images: ['/images/destinations/cyprus.png'],
     metaTitle: 'Study in Cyprus from Bangladesh - No IELTS',
     metaDescription: 'Study in Cyprus with 50% scholarship. No IELTS required. Affordable tuition fees.'
   },
@@ -196,7 +196,7 @@ export const countries: Country[] = [
     benefits: ['Schengen Member State', 'High Visa Success Rate', 'Part-time Work Rights'],
     isActive: true,
     featured: true,
-    images: [],
+    images: ['/images/destinations/croatia.png'],
     metaTitle: 'Study in Croatia - Schengen Visa',
     metaDescription: 'Study in Croatia (Schengen Area). Affordable tuition and work opportunities.'
   },
@@ -221,9 +221,34 @@ export const countries: Country[] = [
     benefits: ['No Entrance Exam', 'WHO Recognized Degree', 'Low Cost of Living'],
     isActive: true,
     featured: true,
-    images: [],
+    images: ['/images/destinations/georgia.png'],
     metaTitle: 'MBBS in Georgia for Bangladeshi Students',
     metaDescription: 'Study MBBS in Georgia. WHO recognizable degree. No entrance exam. Low cost.'
+  },
+  {
+    name: 'Malaysia',
+    slug: 'malaysia',
+    flag: '🇲🇾',
+    description: 'World-Class Education & Affordable Living',
+    universities: ['Universiti Malaya', 'UTM', 'Monash Malaysia', 'Nottingham Malaysia'],
+    programs: ['Business', 'Engineering', 'IT', 'Hospitality'],
+    requirements: {
+      language: ['IELTS 5.0-6.0', 'MOI Accepted'],
+      documents: ['Passport', 'Photos', 'Transcripts'],
+      visa: ['EMGS Approval', 'Student Pass']
+    },
+    costs: {
+      tuition: '$4,000 - $8,000 / year',
+      living: '$300 - $500 / month',
+      currency: 'USD'
+    },
+    scholarships: ['University Merit Scholarship', 'MIS Scholarship'],
+    benefits: ['Affordable Tuition', 'Transfer Options to UK/AUS', 'Multicultural Hub'],
+    isActive: true,
+    featured: true,
+    images: ['/images/destinations/malaysia.png'],
+    metaTitle: 'Study in Malaysia from Bangladesh - Affordable Quality Education',
+    metaDescription: 'Study in Malaysia with affordable tuition fees. Transfer credits to UK/Australia/USA. Apply now.'
   }
 ];
 

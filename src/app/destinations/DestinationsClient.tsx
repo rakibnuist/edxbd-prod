@@ -1,115 +1,200 @@
 'use client';
 
-import { Globe, ArrowRight, GraduationCap, Building2, Wallet } from 'lucide-react';
+import { Globe, ArrowRight, Building2, Wallet, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import PageHeader from '@/components/PageHeader';
 import ConsultationButton from '@/components/ConsultationButton';
 import { countries } from '@/lib/countries';
+import { motion } from 'framer-motion';
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1
+        }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.5,
+            ease: "easeOut"
+        }
+    }
+};
 
 export default function DestinationsClient() {
     return (
-        <div className="min-h-screen bg-white text-slate-900">
+        <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900">
             <PageHeader
                 title="Study Abroad"
                 highlight="Destinations"
-                description="Explore top study abroad destinations with scholarship opportunities. Study in UK, China, South Korea, Hungary, Cyprus, Croatia, Georgia, Finland, Netherlands and more."
+                description="Explore top global education hubs. From the UK's prestige to Finland's innovation, find the perfect destination for your academic journey."
                 icon={<Globe />}
                 badgeText="Global Opportunities"
             />
 
             {/* Countries Grid */}
-            <section className="py-24 relative bg-slate-50">
-                {/* Background Effects */}
-                <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                    <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-[120px]" />
-                    <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-100/50 rounded-full blur-[120px]" />
+            <section className="py-24 relative overflow-hidden">
+                {/* Dynamic Background */}
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-blue-100/40 to-indigo-100/40 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
+                    <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-amber-100/40 to-orange-100/40 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
+                    <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
                 </div>
 
                 <div className="container mx-auto px-4 relative z-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-100px" }}
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
                         {countries.map((country) => (
-                            <Link
-                                href={country.slug === 'china' ? '/destinations/china' : `/destinations/${country.slug}`}
-                                key={country.slug}
-                                className="group relative bg-white rounded-[2rem] border border-slate-200 hover:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1 overflow-hidden flex flex-col h-full"
-                            >
-                                {/* Hover Gradient Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <motion.div key={country.slug} variants={itemVariants} className="h-full">
+                                <Link
+                                    href={country.slug === 'china' ? '/destinations/china' : `/destinations/${country.slug}`}
+                                    className="group relative bg-white rounded-[2rem] border border-slate-200 hover:border-blue-400/50 transition-all duration-500 shadow-sm hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 overflow-hidden flex flex-col h-full"
+                                >
+                                    {/* Card Header with Image and Flag */}
+                                    <div className="relative h-56 overflow-hidden bg-slate-900">
+                                        {country.images[0] && (
+                                            <Image
+                                                src={country.images[0]}
+                                                alt={`Study in ${country.name}`}
+                                                fill
+                                                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            />
+                                        )}
 
-                                <div className="p-8 flex flex-col flex-grow relative z-10">
-                                    <div className="flex items-start justify-between mb-6">
-                                        <div className="text-6xl transform group-hover:scale-110 transition-transform duration-300 drop-shadow-sm">
+                                        {/* Gradient Overlay */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-300" />
+
+                                        {/* Flag Badge */}
+                                        <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-3xl shadow-lg">
                                             {country.flag}
                                         </div>
-                                        <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-blue-600 group-hover:border-blue-500 transition-all duration-300 shadow-sm">
-                                            <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-white" />
+
+                                        <div className="absolute bottom-0 left-0 right-0 p-6">
+                                            <h2 className="text-3xl font-bold text-white group-hover:text-blue-200 transition-colors drop-shadow-md">
+                                                {country.name}
+                                            </h2>
                                         </div>
                                     </div>
 
-                                    <h2 className="text-2xl font-bold text-slate-900 mb-3 tracking-tight group-hover:text-blue-600 transition-colors">
-                                        {country.name}
-                                    </h2>
-                                    <p className="text-slate-600 mb-6 line-clamp-3 leading-relaxed">
-                                        {country.description}
-                                    </p>
+                                    <div className="p-8 pt-6 flex flex-col flex-grow relative z-10 bg-white">
+                                        <p className="text-slate-600 mb-8 line-clamp-3 leading-relaxed text-base font-medium">
+                                            {country.description}
+                                        </p>
 
-                                    {/* Quick Stats */}
-                                    <div className="space-y-4 mt-auto">
-                                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 group-hover:bg-white/80 transition-colors">
-                                            <div className="flex items-center gap-2 mb-2 text-blue-600 font-bold text-sm uppercase tracking-wide">
-                                                <GraduationCap className="w-4 h-4" />
-                                                <span>Top Universities</span>
+                                        {/* Simplified Key Features - Only showing top universities for brevity and impact */}
+                                        <div className="space-y-6 mt-auto">
+
+
+                                            {/* Cost Snapshot */}
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-1">
+                                                    <div className="flex items-center gap-2 text-slate-500 text-xs font-semibold uppercase tracking-wide">
+                                                        <Building2 className="w-3 h-3" />
+                                                        <span>Tuition</span>
+                                                    </div>
+                                                    <p className="text-sm font-bold text-slate-800 truncate" title={country.costs.tuition}>
+                                                        {country.costs.tuition}
+                                                    </p>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <div className="flex items-center gap-2 text-slate-500 text-xs font-semibold uppercase tracking-wide">
+                                                        <Wallet className="w-3 h-3" />
+                                                        <span>Living</span>
+                                                    </div>
+                                                    <p className="text-sm font-bold text-slate-800 truncate" title={country.costs.living}>
+                                                        {country.costs.living}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <ul className="text-sm text-slate-600 space-y-1 ml-6 list-disc marker:text-blue-400">
-                                                {country.universities.slice(0, 2).map((uni, i) => (
-                                                    <li key={i}>{uni}</li>
-                                                ))}
-                                            </ul>
                                         </div>
 
-                                        <div className="grid grid-cols-2 gap-3 text-sm">
-                                            <div className="bg-slate-50 rounded-xl p-3 border border-slate-100 group-hover:bg-white/80 transition-colors">
-                                                <div className="flex items-center gap-2 text-slate-700 font-bold mb-1">
-                                                    <Building2 className="w-3 h-3 text-blue-500" />
-                                                    <span>Tuition</span>
-                                                </div>
-                                                <p className="text-slate-600 text-xs font-medium">{country.costs.tuition}</p>
-                                            </div>
-                                            <div className="bg-slate-50 rounded-xl p-3 border border-slate-100 group-hover:bg-white/80 transition-colors">
-                                                <div className="flex items-center gap-2 text-slate-700 font-bold mb-1">
-                                                    <Wallet className="w-3 h-3 text-green-500" />
-                                                    <span>Living</span>
-                                                </div>
-                                                <p className="text-slate-600 text-xs font-medium">{country.costs.living}</p>
+                                        {/* Action Area */}
+                                        <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between group/btn">
+                                            <span className="text-sm font-bold text-slate-500 group-hover/btn:text-blue-600 transition-colors">
+                                                Explore details
+                                            </span>
+                                            <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200 group-hover/btn:bg-blue-600 group-hover/btn:border-blue-600 transition-all duration-300 shadow-sm group-hover/btn:scale-110">
+                                                <ArrowRight className="w-4 h-4 text-slate-400 group-hover/btn:text-white transition-colors" />
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
+                                </Link>
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section className="py-24 relative overflow-hidden bg-slate-900">
-                <div className="absolute inset-0 bg-blue-900/20"></div>
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.15)_0%,transparent_70%)]"></div>
+            {/* Premium CTA Section */}
+            <section className="py-32 relative overflow-hidden bg-[#0A1A2F]">
+                {/* Abstract Background */}
+                <div className="absolute inset-0">
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[128px]" />
+                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-[128px]" />
+                    <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.05]" />
+                </div>
 
                 <div className="container mx-auto px-4 text-center relative z-10">
-                    <div className="max-w-3xl mx-auto">
-                        <h2 className="text-3xl md:text-5xl font-heading font-bold mb-6 text-white text-center">
-                            Ready to Start Your <span className="text-amber-400">Journey?</span>
-                        </h2>
-                        <p className="text-xl mb-10 text-slate-300 text-center leading-relaxed">
-                            Get FREE consultation and scholarship assistance for your dream destination.
-                            Our experts are here to guide you every step of the way.
-                        </p>
-                        <ConsultationButton
-                            text="Get FREE Consultation"
-                            source="destinations_page_cta"
-                            className="inline-flex items-center bg-amber-500 text-slate-900 hover:bg-amber-400 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] shadow-lg"
-                        />
+                    <div className="max-w-4xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                        >
+                            <h2 className="text-4xl md:text-6xl font-extrabold mb-8 text-white tracking-tight leading-tight">
+                                Your Global Future <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Starts Here</span>
+                            </h2>
+                            <p className="text-xl md:text-2xl mb-12 text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                                Don't let paperwork hold you back. We handle the complexity so you can focus on your dreams.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                                <ConsultationButton
+                                    text="Get Free Consultation"
+                                    source="destinations_page_cta_primary"
+                                    className="w-full sm:w-auto px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold text-lg transition-all duration-300 shadow-[0_0_40px_rgba(37,99,235,0.3)] hover:shadow-[0_0_60px_rgba(37,99,235,0.5)] hover:-translate-y-1"
+                                />
+                                <Link
+                                    href="/contact"
+                                    className="w-full sm:w-auto px-10 py-5 bg-transparent border border-slate-700 hover:border-slate-500 text-white rounded-full font-bold text-lg transition-all duration-300 hover:bg-slate-800/50"
+                                >
+                                    Contact Support
+                                </Link>
+                            </div>
+
+                            {/* Trust Signals */}
+                            <div className="mt-16 flex flex-wrap justify-center gap-x-12 gap-y-6 text-slate-400 font-medium text-sm">
+                                <div className="flex items-center gap-2">
+                                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                                    <span>98% Visa Success Rate</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                                    <span>500+ Partner Universities</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                                    <span>Free Scholarship Support</span>
+                                </div>
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
             </section>

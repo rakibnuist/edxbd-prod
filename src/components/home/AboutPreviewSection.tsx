@@ -22,6 +22,32 @@ const AboutPreviewSection = () => {
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-16 items-center">
 
+                    {/* Image/Visual - Using a placeholder for team/office environment */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="relative"
+                    >
+                        <div className="absolute inset-0 bg-blue-600 rounded-3xl -rotate-6 opacity-30 blur-2xl transform scale-95" />
+                        <div className="relative rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl">
+                            {/* Placeholder image from unsplash representing team/discussion */}
+                            <Image
+                                src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1632&auto=format&fit=crop"
+                                alt="EduExpress Team"
+                                width={800}
+                                height={600}
+                                className="object-cover w-full h-[500px]"
+                            />
+
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-8">
+                                <p className="text-white font-medium italic">"We treat every application as if it were our own."</p>
+                                <p className="text-blue-400 text-sm mt-2">- The EduExpress Team</p>
+                            </div>
+                        </div>
+                    </motion.div>
+
                     {/* Text Content */}
                     <div>
                         <motion.span
@@ -76,32 +102,6 @@ const AboutPreviewSection = () => {
                             </Link>
                         </motion.div>
                     </div>
-
-                    {/* Image/Visual - Using a placeholder for team/office environment */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.2 }}
-                        className="relative"
-                    >
-                        <div className="absolute inset-0 bg-blue-600 rounded-3xl -rotate-6 opacity-30 blur-2xl transform scale-95" />
-                        <div className="relative rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl">
-                            {/* Placeholder image from unsplash representing team/discussion */}
-                            <Image
-                                src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1632&auto=format&fit=crop"
-                                alt="EduExpress Team"
-                                width={800}
-                                height={600}
-                                className="object-cover w-full h-[500px]"
-                            />
-
-                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-8">
-                                <p className="text-white font-medium italic">"We treat every application as if it were our own."</p>
-                                <p className="text-blue-400 text-sm mt-2">- The EduExpress Team</p>
-                            </div>
-                        </div>
-                    </motion.div>
 
                 </div>
             </div>

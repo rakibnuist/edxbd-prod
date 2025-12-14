@@ -4,6 +4,7 @@ import { Users, Award, Globe, Heart, GraduationCap, Shield, DollarSign, ArrowRig
 import Link from 'next/link';
 import { trackConsultationRequest } from '@/lib/analytics';
 import PageHeader from '@/components/PageHeader';
+import TeamSection from '@/components/about/TeamSection';
 
 export default function AboutClient() {
   return (
@@ -115,6 +116,9 @@ export default function AboutClient() {
           </div>
         </div>
       </section>
+
+      {/* Team Section */}
+      <TeamSection />
 
       {/* What We Do - Simple Services */}
       <section className="py-20 bg-gray-50">
