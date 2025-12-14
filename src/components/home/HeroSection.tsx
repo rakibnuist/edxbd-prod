@@ -110,16 +110,23 @@ const HeroSection = () => {
                         {/* Main Image Container */}
                         <div className="absolute inset-0 bg-white rounded-[2.5rem] overflow-hidden border-4 border-white shadow-2xl">
                             <AnimatePresence mode="wait">
-                                <motion.img
+                                <motion.div
                                     key={currentSlide}
-                                    src={SLIDES[currentSlide].image}
-                                    alt={SLIDES[currentSlide].title}
                                     initial={{ opacity: 0, scale: 1.1 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.7 }}
-                                    className="w-full h-full object-cover"
-                                />
+                                    className="relative w-full h-full"
+                                >
+                                    <Image
+                                        src={SLIDES[currentSlide].image}
+                                        alt={SLIDES[currentSlide].title}
+                                        fill
+                                        priority={true}
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    />
+                                </motion.div>
                             </AnimatePresence>
                         </div>
 
