@@ -111,7 +111,7 @@ export default function ContactClient() {
                   <Phone className="w-8 h-8 text-blue-600 mb-4" />
                   <h4 className="font-semibold text-slate-900 mb-2">Phone Numbers</h4>
                   <p className="text-slate-600 text-sm">+880 1983-333566</p>
-                  <p className="text-slate-600 text-sm">+880 1329-6663505</p>
+                  <p className="text-slate-600 text-sm">+880 1329-663505</p>
                 </div>
 
                 <div className="bg-white border border-slate-200 p-6 rounded-xl hover:border-green-200 transition-colors shadow-sm">

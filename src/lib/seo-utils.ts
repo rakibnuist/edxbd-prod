@@ -81,7 +81,7 @@ export const generateSEOData = {
       "contactPoint": [
         {
           "@type": "ContactPoint",
-          "telephone": "+880-1983-333566",
+          "telephone": "+880 1983-333566",
           "contactType": "customer service",
           "availableLanguage": ["English", "Bengali"],
           "areaServed": "BD",
@@ -319,7 +319,7 @@ export const generateSEOData = {
 };
 
 // Generate breadcrumb structured data
-export const generateBreadcrumbStructuredData = (breadcrumbs: Array<{name: string, url: string}>) => ({
+export const generateBreadcrumbStructuredData = (breadcrumbs: Array<{ name: string, url: string }>) => ({
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": breadcrumbs.map((crumb, index) => ({
@@ -331,7 +331,7 @@ export const generateBreadcrumbStructuredData = (breadcrumbs: Array<{name: strin
 });
 
 // Generate FAQ structured data
-export const generateFAQStructuredData = (faqs: Array<{question: string, answer: string}>) => ({
+export const generateFAQStructuredData = (faqs: Array<{ question: string, answer: string }>) => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": faqs.map(faq => ({
@@ -385,7 +385,7 @@ export const generateLocalBusinessStructuredData = () => ({
   "name": "EduExpress International",
   "description": "Leading study abroad consultancy in Bangladesh",
   "url": "https://www.eduexpressint.com",
-  "telephone": "+880-1983-333566",
+  "telephone": "+880 1983-333566",
   "email": "info@eduexpressint.com",
   "address": {
     "@type": "PostalAddress",

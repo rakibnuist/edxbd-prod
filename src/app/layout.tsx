@@ -199,7 +199,7 @@ export default function RootLayout({
     "contactPoint": [
       {
         "@type": "ContactPoint",
-        "telephone": "+880-1983-333566",
+        "telephone": "+880 1983-333566",
         "contactType": "customer service",
         "availableLanguage": ["English", "Bengali"],
         "areaServed": "BD",
@@ -212,7 +212,7 @@ export default function RootLayout({
       },
       {
         "@type": "ContactPoint",
-        "telephone": "+880-1329-6663505",
+        "telephone": "+880 1329-663505",
         "contactType": "customer service",
         "availableLanguage": ["English", "Bengali"],
         "areaServed": "BD"
