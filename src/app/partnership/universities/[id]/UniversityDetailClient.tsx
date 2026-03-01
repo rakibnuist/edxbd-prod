@@ -114,11 +114,28 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                                                     const parts = badge.split(':');
                                                     const label = parts[0]?.trim();
                                                     const value = parts[1]?.trim() || '';
+
+                                                    let logoUrl = null;
+                                                    const lLabel = label.toLowerCase();
+                                                    if (lLabel.includes('us news') || lLabel.includes('u.s. news')) {
+                                                        logoUrl = 'https://www.usnews.com/static-atlas/assets/img/usn-logo-large.svg';
+                                                    } else if (lLabel.includes('shanghai') || lLabel.includes('arwu')) {
+                                                        logoUrl = 'https://www.shanghairanking.com/_nuxt/img/logo.902480b.svg';
+                                                    } else if (lLabel.includes('times') || lLabel.includes('the')) {
+                                                        logoUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Times_Higher_Education_logo.svg/500px-Times_Higher_Education_logo.svg.png';
+                                                    }
+
                                                     return (
-                                                        <div key={`rank-${i}`} className="bg-gradient-to-r from-amber-900/50 to-orange-900/50 backdrop-blur-md border border-amber-400/20 rounded-xl px-4 py-2 flex items-center gap-3 shadow-lg shadow-amber-900/20 hover:border-amber-400/40 transition-colors">
-                                                            <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-300">
-                                                                <Trophy className="w-4 h-4" />
-                                                            </div>
+                                                        <div key={`rank-${i}`} className="bg-gradient-to-r from-amber-900/50 to-orange-900/50 backdrop-blur-md border border-amber-400/20 rounded-xl px-4 py-2 flex items-center gap-3 shadow-lg shadow-amber-900/20 hover:border-amber-400/40 transition-colors group">
+                                                            {logoUrl ? (
+                                                                <div className="w-10 h-10 bg-white shadow-inner border border-white/20 rounded-full flex items-center justify-center p-1.5 overflow-hidden flex-shrink-0 group-hover:scale-110 transition-transform">
+                                                                    <img src={logoUrl} alt={label} className="w-full h-full object-contain" />
+                                                                </div>
+                                                            ) : (
+                                                                <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-300 flex-shrink-0">
+                                                                    <Trophy className="w-4 h-4" />
+                                                                </div>
+                                                            )}
                                                             <div>
                                                                 <p className="text-[10px] text-amber-200/70 uppercase font-bold tracking-wider">{label}</p>
                                                                 <p className="text-white font-black text-lg leading-tight">{value.startsWith('#') ? value : `#${value}`}</p>
