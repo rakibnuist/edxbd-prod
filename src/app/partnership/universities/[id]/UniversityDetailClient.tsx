@@ -418,6 +418,52 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                                                 </div>
                                             </div>
                                         </div>
+                                    ) : uni.slug === 'xsyu' ? (
+                                        <div className="space-y-6">
+                                            {/* XSYU Belt and Road Scholarship */}
+                                            <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 hover:bg-white/20 transition-all hover:shadow-lg overflow-hidden">
+                                                <h4 className="font-extrabold text-white mb-4 text-lg tracking-tight flex items-center">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 mr-2"></span>
+                                                    Belt and Road International Students Scholarship
+                                                </h4>
+                                                <div className="overflow-x-auto -mx-5 px-5 lg:mx-0 lg:px-0">
+                                                    <table className="w-full text-left border-collapse min-w-[300px]">
+                                                        <thead>
+                                                            <tr className="border-b border-white/20 text-[12px] uppercase tracking-wider text-cyan-200">
+                                                                <th className="py-2 pr-4 font-bold">Fees</th>
+                                                                <th className="py-2 px-3 font-bold text-center">1st Type</th>
+                                                                <th className="py-2 px-3 font-bold text-center">2nd Type</th>
+                                                                <th className="py-2 pl-3 font-bold text-center">3rd Type</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="text-[13px] font-semibold text-white/90">
+                                                            <tr className="border-b border-white/10">
+                                                                <td className="py-3 pr-4 text-blue-100 font-bold whitespace-nowrap">Tuition Fee</td>
+                                                                <td className="py-3 px-3 text-center text-cyan-300">100% Free</td>
+                                                                <td className="py-3 px-3 text-center text-cyan-300">100% Free</td>
+                                                                <td className="py-3 pl-3 text-center text-white/50">50% Free<br /><span className="text-[10px]">(Pay 9,250 CNY)</span></td>
+                                                            </tr>
+                                                            <tr className="border-b border-white/10">
+                                                                <td className="py-3 pr-4 text-blue-100 font-bold whitespace-nowrap">Accommodation</td>
+                                                                <td className="py-3 px-3 text-center text-cyan-300">100% Free</td>
+                                                                <td className="py-3 px-3 text-center text-white/50">Self-Paid</td>
+                                                                <td className="py-3 pl-3 text-center text-cyan-300">50% Free</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td className="py-3 pr-4 text-blue-100 font-bold whitespace-nowrap">Stipend</td>
+                                                                <td className="py-3 px-3 text-center text-cyan-300">1500 CNY/Month</td>
+                                                                <td className="py-3 px-3 text-center text-cyan-300">1500 CNY/Month</td>
+                                                                <td className="py-3 pl-3 text-center text-cyan-300">1500 CNY/Month</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3">
+                                                    <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                                                    <p className="text-sm text-red-200/90 font-medium">All scholarship winners must pass an annual review. The Level of scholarship will be adjusted according strictly to their academic performance.</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     ) : (
                                         <div className="space-y-6">
                                             {uni.scholarships?.map((sch, i) => (

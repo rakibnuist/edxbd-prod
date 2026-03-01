@@ -503,5 +503,60 @@ export const universities: University[] = [
       application: '30th June 2026',
       startDate: 'September 2026'
     }
+  },
+  {
+    id: '15',
+    name: "Xi'an Shiyou University (XSYU)",
+    country: 'China',
+    city: "Xi'an",
+    location: 'Xian City, Shaanxi Province, China',
+    rankings: {},
+    badges: ['QS Rank: 1201-1300', 'Times Higher Edu: 801-1000'],
+    degree: ['Bachelor'],
+    taught: ['English'],
+    intake: ['Fall 2026'],
+    details: {
+      tuition: '18,500 CNY/Year',
+      majors: [
+        'Civil Engineering',
+        'Petroleum Engineering',
+        'Geology',
+        'Offshore Oil & Gas Engineering',
+        'Resource Exploration Engineering'
+      ]
+    },
+    fees: [
+      { item: 'Application Fee', cost: '600 CNY (Non-refundable)' },
+      { item: 'Tuition Fee', cost: '18,500 CNY/Year' },
+      { item: 'Hostel Fee', cost: '7,500 CNY/Year' },
+      { item: 'Insurance Fee', cost: '800 CNY/Year' },
+      { item: 'Medical Fee', cost: '100-500 CNY (1st Year only)' },
+      { item: 'Residence Permit Fee', cost: '800 CNY/Year' }
+    ],
+    scholarships: [
+      {
+        title: 'Belt and Road International Students Scholarship',
+        type: 'Mixed',
+        amount: 'See Details',
+        details: [
+          '1st Type: 100% Tuition Free + 100% Accommodation Free + Monthly Stipend: 1500CNY',
+          '2nd Type: 100% Tuition Free + Monthly Stipend: 1500CNY',
+          '3rd Type: 50% Tuition Free + 50% Accommodation Free + Monthly Stipend: 1500CNY (Students should pay 9,250 CNY as Tuition Fee)'
+        ]
+      }
+    ],
+    notes: [
+      'Age Limit: 18-25',
+      'All scholarship winners must pass an annual review. The Level of scholarship will be adjusted according strictly to their academic performance.',
+      'HSC 4.50+ OR Equivalent required.',
+      'IELTS: 5.5 or DET: 95 required.'
+    ],
+    documents: [
+      'Passport', 'Picture', 'Higher Secondary School /Grade 12th /A Level/ High School Certificate', 'Higher Secondary School /Grade 12th /A Level/ High School Transcript', 'Foreign Physical Medical Examination Form', 'English Proficiency Certificate (IELTS or TOFEL and Duolingo or any other valid English Certificate)', 'Non Criminal Record / Police Clearance', 'Bank Statement', 'Study Plan', 'Application Form'
+    ],
+    deadlines: {
+      application: 'May 30th, 2026 (Depends on Seats)',
+      startDate: 'September 2026'
+    }
   }
 ];
