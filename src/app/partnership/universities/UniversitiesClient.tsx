@@ -355,6 +355,9 @@ const UniversitiesClient = () => {
                                                 transition={{ duration: 0.3, delay: index * 0.05 }}
                                                 className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-200 hover:border-blue-300 transition-all duration-300 group flex flex-col relative"
                                             >
+                                                {/* Absolute Link covering the entire card */}
+                                                <Link href={`/partnership/universities/${uni.slug}`} className="absolute inset-0 z-20" aria-label={`View details for ${uni.name}`} />
+
                                                 {/* Background Logo Watermark */}
                                                 {uni.logo && (
                                                     <div className="absolute right-0 top-0 h-full w-[60%] z-0 flex items-center justify-end opacity-[0.1] pointer-events-none select-none overflow-hidden pr-4">
@@ -366,7 +369,7 @@ const UniversitiesClient = () => {
                                                     </div>
                                                 )}
 
-                                                <div className="p-6 flex-1 relative z-10 flex flex-col h-full">
+                                                <div className="p-6 flex-1 relative z-10 flex flex-col h-full pointer-events-none">
                                                     {/* Header: Badges */}
                                                     <div className="flex flex-wrap gap-2 justify-end mb-4">
                                                         {uni.country && (
@@ -421,17 +424,14 @@ const UniversitiesClient = () => {
                                                 </div>
 
                                                 {/* Footer: Tuition & Action */}
-                                                <div className="px-6 py-4 bg-white/50 backdrop-blur-sm border-t border-slate-100 flex items-center justify-between relative z-10">
+                                                <div className="px-6 py-4 bg-white/50 backdrop-blur-sm border-t border-slate-100 flex items-center justify-between relative z-10 pointer-events-none">
                                                     <div>
                                                         <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">Tuition</p>
                                                         <p className="text-sm font-bold text-slate-900">{uni.details?.tuition}</p>
                                                     </div>
-                                                    <Link
-                                                        href={`/partnership/universities/${uni.slug}`}
-                                                        className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 border border-slate-200 text-slate-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm"
-                                                    >
+                                                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 border border-slate-200 text-slate-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm">
                                                         <ArrowRight className="w-5 h-5" />
-                                                    </Link>
+                                                    </div>
                                                 </div>
                                             </motion.div>
                                         ))}

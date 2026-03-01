@@ -113,7 +113,7 @@ const Header = () => {
               variants={slideInFromLeft}
             >
               <Link href="/" className="flex items-center gap-2 group">
-                <div className={`relative h-10 w-auto transition-transform duration-300 group-hover:scale-105 ${logoFilterClass}`}>
+                <div className={`relative h-10 w-auto transition-transform duration-300 group-hover:scale-105 ${logoFilterClass} ${(isTransparent && (isUniversityDetail || isDestinationDetail)) ? 'brightness-0 invert opacity-90' : ''}`}>
                   <Image
                     src="/logo.png"
                     alt="EduExpress International"
