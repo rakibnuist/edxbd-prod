@@ -41,7 +41,6 @@ export interface University {
   };
   notes?: string[];
   badges?: string[]; // e.g., "English Taught"
-  logo?: string;
 }
 
 export const universities: University[] = [
@@ -168,15 +167,15 @@ export const universities: University[] = [
   {
     id: 'cupb',
     name: 'China University of Petroleum, Beijing (CUPB)',
-    location: 'Beijing City, China',
+    location: 'Beijing, China',
     country: 'China',
-    city: 'Beijing City',
+    city: 'Beijing',
     intake: ['September'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {
-      world: 686,
-      national: 501
+      country: 64,
+      world: 497
     },
     badges: ['Bachelor Degree', 'English Taught'],
     details: {
@@ -187,135 +186,116 @@ export const universities: University[] = [
         'Petroleum Engineering',
         'English'
       ],
-      tuition: '25,000 CNY/Year',
+      tuition: '25,000 CNY/Year (Normal)',
     },
     fees: [
-      { item: 'Application Fee', cost: '400 CNY (Non-refundable)' },
-      { item: 'Tuition Fee', cost: '25,000 CNY/Year' },
-      { item: 'Hostel Fee', cost: '1,200 - 1,500 CNY/Month' },
-      { item: 'Insurance Fee', cost: '800 CNY/Year' },
-      { item: 'Medical Fee', cost: '400 CNY (1st Year only)' },
-      { item: 'Residence Permit Fee', cost: '400 CNY/Year' }
+      { item: 'Accommodation', cost: '1200-1500 CNY/Month' },
+      { item: 'Medical Insurance', cost: '800 CNY/Year' },
+      { item: 'Residence Permit', cost: '400 CNY/Year' },
+      { item: 'Health Check up', cost: '400 CNY' },
+      { item: 'Registration Fees', cost: '400 CNY (Only for 1st Year)' }
     ],
     scholarships: [
       {
-        title: 'First Class Scholarship',
+        title: 'Type A',
         details: [
-          '100% Tuition Free',
-          '100% Accommodation Free',
-          '100% Insurance Free',
-          'Stipend: 2,500 CNY/Month'
+          'Full Tuition fees free',
+          'Full Accommodation fees free',
+          'Medical Insurance Fees Free',
+          'Monthly stipend: 2500 CNY/Month'
         ]
       },
       {
-        title: 'Second Class Scholarship',
+        title: 'Type B',
         details: [
-          '100% Tuition Free',
-          '100% Accommodation Free',
-          '100% Insurance Free'
+          'Full Tuition fees free',
+          'Full Accommodation fees free',
+          'Medical Insurance Fees Free'
         ]
       },
       {
-        title: 'Third Class Scholarship',
-        details: ['100% Tuition Free']
+        title: 'Type C',
+        details: ['Full Tuition fees free']
       }
     ],
     notes: [
-      'Age Limit: 18-25',
-      'Requirements: HSC 4.00+',
-      'English Proficiency: IELTS 6.0 or DET 115',
-      'CSCA Required',
-      'All scholarship winners must pass an annual review.'
+      'English Proficiency: IELTS 6.0 or TOFEL 75 and Duolingo 95',
+      'University will take an interview for 4-5 minutes.',
+      'China Scholastic Competency Assessment (CSCA) Exam Score Report required'
     ],
     documents: [
-      'Requirements: HSC 4.00+',
-      'IELTS: 6.0 or DET: 115',
-      'CSCA Required'
+      'Passport', 'Picture', 'Higher Secondary School Certificate', 'Health Check Up',
+      'English Proficiency Certificate', 'Non Criminal Record', 'Bank Statement (5000$)',
+      'Study Plan', 'Application Form', 'CSCA Exam Score Report'
     ],
     deadlines: {
-      application: 'May 5th, 2026 (Depends on Seats)',
-      startDate: 'September'
+      application: '5th May 2026',
+      startDate: 'September 2026'
     }
   },
   {
     id: 'njtech',
-    name: 'Nanjing Tech University (NJTech)',
-    location: 'Nanjing City, Jiangsu Province, China',
+    name: 'Nanjing Tech University',
+    location: 'Nanjing, China',
     country: 'China',
     city: 'Nanjing',
     intake: ['September'],
     degree: ['Bachelor'],
     taught: ['English'],
-    documents: [],
     rankings: {
-      world: 301
+      national: 74,
+      world: 560
     },
-    badges: ['QS Rank: 301-350', 'Times Higher Edu: 601-800', 'U.S.News: 556'],
+    badges: ['Bachelor Degree', 'English Taught'],
     details: {
       majors: [
-        'Computer Science & Technology',
-        'Applied Chemistry',
-        'Electrical Engineering & Automation',
+        'International Economy and Trade',
+        'Computer Science and Technology',
+        'Civil Engineering',
         'Mechanical Engineering',
         'Pharmacy',
-        'International Trade & Economics',
-        'Transportation Engineering',
-        'Surveying and Mapping Engineering',
-        'Materials science and Engineering'
+        'Electrical Engineering and Automation',
+        'Chemical Engineering and Technics',
+        'Traffic Engineering'
       ],
       tuition: '16,000 CNY/Year',
     },
     fees: [
-      { item: 'Application Fee', cost: '500 CNY (Non-refundable)' },
-      { item: 'Tuition Fee', cost: '16,000 CNY/Year' },
-      { item: 'Hostel Fee', cost: '2,000-4,000 CNY/Year' },
-      { item: 'Insurance Fee', cost: '800 CNY/Year' },
-      { item: 'Medical Fee', cost: '400 CNY (1st Year only)' },
-      { item: 'Residence Permit Fee', cost: '400 CNY/Year' }
+      { item: 'Accommodation', cost: '2000-4000 CNY/Year' },
+      { item: 'Insurance', cost: '800 CNY/Year' },
+      { item: 'Resident Permit', cost: '400 CNY/Year' },
+      { item: 'Medical Check Up', cost: '400 CNY (1st Year only)' },
+      { item: 'Registration Fees', cost: '500 CNY' },
+      { item: 'Application Fees', cost: '500 CNY (non-refundable)' }
     ],
     scholarships: [
       {
-        title: 'First Year Scholarship',
-        amount: '100% Free Tuition',
+        title: 'Scholarship',
+        amount: '20,000 CNY/Year/Student',
         details: [
-          'Tuition Fee: 100% Free',
-          'Stipend: 400 CNY/Month'
+          'Condition: Attendance ≥ 85%, average scores ≥ 60 for continuation.'
         ]
       },
       {
-        title: 'From Second Year: Type A (10%)',
-        amount: '100% Free Tuition + Stipend',
+        title: 'Extra Scholarship (2nd Year+ for Top Students)',
         details: [
-          'Tuition Fee: 100% Free',
-          'Accommodation Fee: Self-Paid',
-          'Stipend: 400 CNY/Month'
-        ]
-      },
-      {
-        title: 'From Second Year: Type B (30%)',
-        amount: '100% Free Tuition',
-        details: [
-          'Tuition Fee: 100% Free',
-          'Accommodation Fee: Self-Paid',
-          'Stipend: N/A'
-        ]
-      },
-      {
-        title: 'From Second Year: Type C (60%)',
-        details: [
-          'Tuition Fee: 8,000 CNY/Year',
-          'Accommodation Fee: Self-Paid',
-          'Stipend: N/A'
+          'Jiangsu Provincial Scholarship: 18,000 CNY',
+          'Nanjing Government Scholarship: 10,000 CNY',
+          'NJTECH University Scholarship: Monthly 400 CNY'
         ]
       }
     ],
     notes: [
-      'Requirements: HSC 4.50+',
-      'English Proficiency: IELTS 6.0 or DET 105',
-      'Age Limit: 18-25'
+      'Students shall pay the Tuition and Accommodation fees to the University first.',
+      'Scholarship amount (20000CNY) allows deduction or stipend payment (2000CNY/Month for 10 months).'
+    ],
+    documents: [
+      'Passport', 'Picture', 'Higher Secondary School Certificate', 'Health Check Up',
+      'English Proficiency Certificate', 'Non Criminal Record', 'Bank Statement',
+      'Application Form', 'Award Certificate', 'Study Plan'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
+      application: '10th June 2026',
       startDate: 'September 2026'
     }
   },
@@ -521,65 +501,6 @@ export const universities: University[] = [
     ],
     deadlines: {
       application: '30th June 2026',
-      startDate: 'September 2026'
-    }
-  },
-  {
-    id: 'npu',
-    name: 'Northwestern Polytechnical University (NPU)',
-    location: 'Xi\'an City, Shaanxi Province, China',
-    country: 'China',
-    city: 'Xi\'an',
-    intake: ['September'],
-    degree: ['Bachelor'],
-    taught: ['English'],
-    documents: [],
-    logo: 'https://upload.wikimedia.org/wikipedia/en/3/32/Seal_of_NWPU.png',
-    rankings: {
-      world: 207
-    },
-    badges: ['ShanghaiRank: 128', 'U.S.News: 207', 'Times Higher Edu: 273'],
-    details: {
-      majors: [
-        'Aerospace Engineering (Aeronautics)',
-        'Aerospace Engineering (Astronautics)',
-        'Mechanical Engineering',
-        'Electrical Engineering and Automation',
-        'Electronics & Information Engineering',
-        'Biotechnology',
-        'Computer Science & Technology (till 15th March)',
-        'Business Administration (till 15th April)',
-        'Materials Science and Engineering'
-      ],
-      tuition: '25,000 CNY/Year',
-    },
-    fees: [
-      { item: 'Application Fee', cost: '600 CNY (Non-refundable)' },
-      { item: 'Tuition Fee', cost: '25,000 CNY/Year' },
-      { item: 'Hostel Fee', cost: '5,400-7,200 CNY/Year' },
-      { item: 'Insurance Fee', cost: '800 CNY/Year' },
-      { item: 'Medical Fee', cost: '400 CNY (1st Year only)' },
-      { item: 'Residence Permit Fee', cost: '400 CNY/Year' }
-    ],
-    scholarships: [
-      {
-        title: 'The Belt & Road Scholarship (Only 1st Year)',
-        details: []
-      },
-      {
-        title: 'NPU President Scholarship (All Years)',
-        details: []
-      }
-    ],
-    notes: [
-      'All scholarship winners must pass an annual review.',
-      'Requirements: HSC 4.50+',
-      'English Proficiency: IELTS: 6.0 or DET: 115',
-      'Additional Requirements: Exam + Interview, CSCA Required',
-      'Age Limit: 18-25'
-    ],
-    deadlines: {
-      application: 'May 1st, 2026 (Depends on Seats)',
       startDate: 'September 2026'
     }
   }
