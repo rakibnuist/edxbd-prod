@@ -125,7 +125,7 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-900">
+        <div className="min-h-screen text-slate-900" style={{ background: 'linear-gradient(180deg, #f1f5f9 0%, #f8fafc 40%, #f0f4ff 100%)' }}>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -277,10 +277,10 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                         <div className={`grid divide-x divide-slate-100 ${availableTabs.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
                             {availableTabs.map((tab) => {
                                 const isActive = activeTab === tab;
-                                const cfgMap: Record<string, {label: string; sub: string; icon: JSX.Element; activeGrad: string; activeText: string; dot: string}> = {
+                                const cfgMap: Record<string, { label: string; sub: string; icon: JSX.Element; activeGrad: string; activeText: string; dot: string }> = {
                                     bachelor: { label: 'Bachelor', sub: 'Undergraduate', icon: <GraduationCap className="w-5 h-5" />, activeGrad: 'from-emerald-500 to-teal-500', activeText: 'text-emerald-600', dot: 'bg-emerald-500' },
-                                    mbbs:     { label: 'Medical / MBBS', sub: 'Clinical Program', icon: <Stethoscope className="w-5 h-5" />, activeGrad: 'from-rose-500 to-red-500', activeText: 'text-rose-600', dot: 'bg-rose-500' },
-                                    masters:  { label: 'Masters', sub: 'Postgraduate', icon: <School className="w-5 h-5" />, activeGrad: 'from-violet-500 to-indigo-500', activeText: 'text-violet-600', dot: 'bg-violet-500' },
+                                    mbbs: { label: 'Medical / MBBS', sub: 'Clinical Program', icon: <Stethoscope className="w-5 h-5" />, activeGrad: 'from-rose-500 to-red-500', activeText: 'text-rose-600', dot: 'bg-rose-500' },
+                                    masters: { label: 'Masters', sub: 'Postgraduate', icon: <School className="w-5 h-5" />, activeGrad: 'from-violet-500 to-indigo-500', activeText: 'text-violet-600', dot: 'bg-violet-500' },
                                 };
                                 const cfg = cfgMap[tab];
                                 return (
@@ -328,56 +328,62 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                 </div>
             </section>
 
-            <section className="container mx-auto px-6 pt-10 pb-24 relative z-20">
-                <div className="grid lg:grid-cols-12 gap-8">
+            <section className="container mx-auto px-4 md:px-6 pt-10 pb-28 relative z-20">
+                <div className="grid lg:grid-cols-12 gap-6 xl:gap-10">
 
                     {/* LEFT COLUMN: Main Information */}
                     <div className="lg:col-span-8 space-y-8">
 
                         {/* Quick Highlights Row */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            {/* Program Card */}
                             <motion.div
                                 key={`degree-${activeTab}`}
-                                initial={{ opacity: 0, y: 10 }}
+                                initial={{ opacity: 0, y: 12 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex items-center group transition-all"
+                                transition={{ duration: 0.3 }}
+                                whileHover={{ y: -4, boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}
+                                className={`bg-white rounded-2xl border-l-4 border border-slate-100 px-6 py-5 flex items-center gap-5 shadow-sm transition-all duration-300 cursor-default
+                                    ${activeTab === 'mbbs' ? 'border-l-rose-400' : activeTab === 'masters' ? 'border-l-violet-400' : 'border-l-emerald-400'}`}
                             >
-                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-5 flex-shrink-0 border transition-transform group-hover:scale-110
-                                    ${activeTab === 'mbbs' ? 'bg-rose-50 border-rose-100/50 text-rose-600' :
-                                        activeTab === 'masters' ? 'bg-indigo-50 border-indigo-100/50 text-indigo-600' :
-                                            'bg-emerald-50 border-emerald-100/50 text-emerald-600'}`}
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0
+                                    ${activeTab === 'mbbs' ? 'bg-gradient-to-br from-rose-400 to-red-500 text-white shadow-lg shadow-rose-200' :
+                                        activeTab === 'masters' ? 'bg-gradient-to-br from-violet-400 to-indigo-500 text-white shadow-lg shadow-violet-200' :
+                                            'bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-lg shadow-emerald-200'}`}
                                 >
-                                    {activeTab === 'mbbs' ? <Stethoscope className="w-6 h-6" /> : <GraduationCap className="w-6 h-6" />}
+                                    {activeTab === 'mbbs' ? <Stethoscope className="w-5 h-5" /> : activeTab === 'masters' ? <School className="w-5 h-5" /> : <GraduationCap className="w-5 h-5" />}
                                 </div>
-                                <div className="overflow-hidden">
-                                    <span className="block text-[11px] text-slate-400 font-bold uppercase tracking-widest mb-1">Program</span>
-                                    <span className="block text-lg font-black text-slate-900 capitalize">{activeTab}</span>
+                                <div>
+                                    <p className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest mb-1">Program</p>
+                                    <p className="text-lg font-extrabold text-slate-900 capitalize leading-tight">{activeTab === 'mbbs' ? 'Medical / MBBS' : activeTab}</p>
                                 </div>
                             </motion.div>
 
+                            {/* Language Card */}
                             <motion.div
-                                whileHover={{ y: -4 }}
-                                className="bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex items-center group transition-all"
+                                whileHover={{ y: -4, boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}
+                                className="bg-white rounded-2xl border-l-4 border-l-sky-400 border border-slate-100 px-6 py-5 flex items-center gap-5 shadow-sm transition-all duration-300 cursor-default"
                             >
-                                <div className="w-12 h-12 bg-gradient-to-br from-pink-50 to-pink-100/50 rounded-xl flex items-center justify-center mr-5 flex-shrink-0 border border-pink-100/50 group-hover:scale-110 transition-transform">
-                                    <Languages className="w-6 h-6 text-pink-600" />
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 text-white shadow-lg shadow-sky-200 flex items-center justify-center flex-shrink-0">
+                                    <Languages className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <span className="block text-[11px] text-slate-400 font-bold uppercase tracking-widest mb-1">Language</span>
-                                    <span className="block text-lg font-black text-slate-900">{uni.taught?.join(', ')}</span>
+                                    <p className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest mb-1">Taught In</p>
+                                    <p className="text-lg font-extrabold text-slate-900 leading-tight">{uni.taught?.join(' & ')}</p>
                                 </div>
                             </motion.div>
 
+                            {/* Intake Card */}
                             <motion.div
-                                whileHover={{ y: -4 }}
-                                className="bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex items-center group transition-all"
+                                whileHover={{ y: -4, boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}
+                                className="bg-white rounded-2xl border-l-4 border-l-amber-400 border border-slate-100 px-6 py-5 flex items-center gap-5 shadow-sm transition-all duration-300 cursor-default"
                             >
-                                <div className="w-12 h-12 bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl flex items-center justify-center mr-5 flex-shrink-0 border border-green-100/50 group-hover:scale-110 transition-transform">
-                                    <Calendar className="w-6 h-6 text-green-600" />
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg shadow-amber-200 flex items-center justify-center flex-shrink-0">
+                                    <Calendar className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <span className="block text-[11px] text-slate-400 font-bold uppercase tracking-widest mb-1">Intake</span>
-                                    <span className="block text-lg font-black text-slate-900">{uni.intake?.join(', ')}</span>
+                                    <p className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest mb-1">Intake</p>
+                                    <p className="text-lg font-extrabold text-slate-900 leading-tight">{uni.intake?.join(', ')}</p>
                                 </div>
                             </motion.div>
                         </div>
@@ -2939,30 +2945,33 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="bg-white rounded-[2rem] p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100"
+                            className="bg-white rounded-3xl p-7 md:p-10 shadow-sm border border-slate-100 relative overflow-hidden"
                         >
-                            <div className="flex items-center mb-8 pb-6 border-b border-slate-100/80">
-                                <div className="w-14 h-14 bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-2xl flex items-center justify-center mr-5 text-blue-600 border border-blue-100/50">
-                                    <BookOpen className="w-7 h-7" />
+                            {/* Subtle background decoration */}
+                            <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
+
+                            <div className="flex items-center mb-8 pb-6 border-b border-slate-100 relative z-10">
+                                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mr-4 text-white shadow-lg shadow-blue-200 flex-shrink-0">
+                                    <BookOpen className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+                                    <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
                                         {(activeTab === 'mbbs' || activeTab === 'masters') ? 'Major List' : 'Available Majors'}
                                     </h2>
-                                    <p className="text-sm font-medium text-slate-500 mt-1">
-                                        {(activeTab === 'mbbs' || activeTab === 'masters') ? '(English Medium)' : 'Undergraduate programs offered'}
+                                    <p className="text-[12px] font-semibold text-slate-400 mt-0.5 uppercase tracking-widest">
+                                        {(activeTab === 'mbbs' || activeTab === 'masters') ? 'English Medium' : 'Undergraduate Programs'}
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="grid md:grid-cols-2 gap-3">
+                            <div className="grid md:grid-cols-2 gap-2.5 relative z-10">
                                 {activeProgram?.majors?.length > 0 ? (
                                     activeProgram.majors.map((major, i) => (
-                                        <div key={i} className="flex items-start p-4 bg-slate-50/50 hover:bg-blue-50/30 rounded-2xl transition-all group border border-transparent hover:border-blue-100 hover:shadow-[0_4px_20px_rgb(59,130,246,0.05)]">
-                                            <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5 group-hover:scale-110 group-hover:bg-blue-600 transition-all flex-shrink-0">
-                                                <div className="w-2 h-2 bg-blue-600 group-hover:bg-white rounded-full transition-colors"></div>
+                                        <div key={i} className="flex items-center p-3.5 bg-slate-50/80 hover:bg-blue-50 rounded-xl transition-all group border border-transparent hover:border-blue-100">
+                                            <div className="w-6 h-6 rounded-lg bg-blue-100 group-hover:bg-blue-500 flex items-center justify-center mr-3 flex-shrink-0 transition-colors">
+                                                <ChevronRight className="w-3.5 h-3.5 text-blue-500 group-hover:text-white transition-colors" strokeWidth={3} />
                                             </div>
-                                            <span className="text-slate-700 font-semibold group-hover:text-slate-900 transition-colors text-[15px] leading-relaxed">{major}</span>
+                                            <span className="text-slate-700 font-semibold group-hover:text-slate-900 transition-colors text-[14px] leading-snug">{major}</span>
                                         </div>
                                     ))
                                 ) : (
@@ -2978,21 +2987,21 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_40px_rgb(0,0,0,0.03)] border border-slate-100 relative overflow-hidden"
+                            className="bg-white rounded-3xl p-7 md:p-10 shadow-sm border border-slate-100 relative overflow-hidden"
                         >
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
 
-                            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-5 border-b border-slate-200/80 relative z-10 gap-4">
+                            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-5 border-b border-slate-100 relative z-10 gap-4">
                                 <div className="flex items-center">
-                                    <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mr-5 text-emerald-600 border border-emerald-100/50">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center mr-4 text-white shadow-lg shadow-emerald-200 flex-shrink-0">
                                         <Wallet className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
+                                        <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
                                             {(activeTab === 'mbbs' || activeTab === 'masters') ? 'Actual Fees' : 'Tuition & Fees'}
                                         </h2>
-                                        <p className="text-[14px] font-medium text-slate-500 mt-0.5 flex items-center">
-                                            {(activeTab === 'mbbs' || activeTab === 'masters') ? 'Official university fee structure' : 'Estimated annual costs'}
+                                        <p className="text-[12px] font-semibold text-slate-400 mt-0.5 uppercase tracking-widest">
+                                            {(activeTab === 'mbbs' || activeTab === 'masters') ? 'Official Fee Structure' : 'Estimated Annual Costs'}
                                         </p>
                                     </div>
                                 </div>
@@ -3108,17 +3117,20 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
 
                             {/* Notes Card */}
                             {uni.notes && uni.notes.length > 0 && (
-                                <div className="bg-blue-50/50 rounded-3xl p-6 md:p-8 border border-blue-100/60 shadow-inner">
+                                <div className="bg-amber-50 rounded-2xl p-6 border border-amber-200/60 shadow-sm">
                                     <div className="flex items-center gap-3 mb-5">
-                                        <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 flex-shrink-0">
+                                        <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-white flex-shrink-0 shadow-md shadow-amber-200">
                                             <AlertCircle className="w-5 h-5" />
                                         </div>
-                                        <h3 className="font-extrabold text-blue-900 text-lg tracking-tight">Important Notes</h3>
+                                        <div>
+                                            <h3 className="font-extrabold text-amber-900 text-base tracking-tight">Important Notes</h3>
+                                            <p className="text-[11px] text-amber-600 font-bold uppercase tracking-widest">Read before applying</p>
+                                        </div>
                                     </div>
-                                    <div className="space-y-3">
+                                    <div className="space-y-2.5">
                                         {uni.notes.map((note: string, i) => (
-                                            <div key={i} className="flex items-start text-sm text-blue-900/70 font-medium leading-relaxed bg-white/50 p-3 rounded-xl border border-blue-100/30">
-                                                <span className="mr-3 text-blue-400 mt-1 flex-shrink-0">•</span>
+                                            <div key={i} className="flex items-start text-sm text-amber-900/80 font-medium leading-relaxed bg-white/70 p-3.5 rounded-xl border border-amber-100/60">
+                                                <span className="mr-2.5 text-amber-500 font-black mt-0.5 flex-shrink-0">›</span>
                                                 <span className="flex-1">{note}</span>
                                             </div>
                                         ))}
