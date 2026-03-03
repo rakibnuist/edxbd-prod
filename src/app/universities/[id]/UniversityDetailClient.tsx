@@ -3091,18 +3091,15 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                             </div>
 
                             <div className="grid md:grid-cols-2 gap-x-6 gap-y-4 relative z-10">
-                                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                 {[
-                                    ...((activeProgram as any)?.documents || uni.documents || [
-                                        "Passport (Minimum 1 Year Validity)",
-                                        "Recent Passport Size Photo",
-                                        "Highest Degree Certificate",
-                                        "Academic Transcript",
-                                        "Foreign Physical Examination Form",
-                                        "Language Proficiency Certificate (IELTS / TOEFL / MOI / Equivalent)",
-                                        "Non-Criminal Record / Police Clearance Certificate",
-                                        "Bank Statement (Minimum $5,000 Balance)",
-                                    ]),
+                                    "Passport (Minimum 1 Year Validity)",
+                                    "Recent Passport Size Photo",
+                                    "Highest Degree Certificate",
+                                    "Academic Transcript",
+                                    "Foreign Physical Examination Form",
+                                    "Language Proficiency Certificate (IELTS / TOEFL / MOI / Equivalent)",
+                                    "Non-Criminal Record / Police Clearance Certificate",
+                                    "Bank Statement (Minimum $5,000 Balance)",
                                     ...(activeTab === 'masters' ? ["Two Recommendation Letters (Masters & PhD)"] : []),
                                     ...(activeTab === 'bachelor' ? ["CSCA Transcript"] : []),
                                 ].map((doc: string, i: number) => (
