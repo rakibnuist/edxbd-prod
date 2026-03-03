@@ -3092,18 +3092,20 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
 
                             <div className="grid md:grid-cols-2 gap-x-6 gap-y-4 relative z-10">
                                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                                {((activeProgram as any)?.documents || uni.documents || [
-                                    "Passport (Minimum 1 Year Validity)",
-                                    "Recent Passport Size Photo",
-                                    "Highest Degree Certificate",
-                                    "Academic Transcript",
-                                    "Foreign Physical Examination Form",
-                                    "Language Proficiency Certificate (IELTS / TOEFL / MOI / Equivalent)",
-                                    "Non-Criminal Record / Police Clearance Certificate",
-                                    "Bank Statement (Minimum $5,000 Balance)",
+                                {[
+                                    ...((activeProgram as any)?.documents || uni.documents || [
+                                        "Passport (Minimum 1 Year Validity)",
+                                        "Recent Passport Size Photo",
+                                        "Highest Degree Certificate",
+                                        "Academic Transcript",
+                                        "Foreign Physical Examination Form",
+                                        "Language Proficiency Certificate (IELTS / TOEFL / MOI / Equivalent)",
+                                        "Non-Criminal Record / Police Clearance Certificate",
+                                        "Bank Statement (Minimum $5,000 Balance)",
+                                    ]),
                                     ...(activeTab === 'masters' ? ["Two Recommendation Letters (Masters & PhD)"] : []),
                                     ...(activeTab === 'bachelor' ? ["CSCA Transcript"] : []),
-                                ]).map((doc: string, i: number) => (
+                                ].map((doc: string, i: number) => (
                                     <div key={i} className="flex items-center p-4 bg-white hover:bg-slate-50/80 rounded-2xl border border-slate-200/60 hover:border-indigo-200 transition-all duration-300 group shadow-sm hover:shadow-md cursor-default">
                                         <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center mr-5 group-hover:bg-indigo-500 group-hover:shadow-lg group-hover:shadow-indigo-500/30 transition-all duration-300 flex-shrink-0 border border-slate-200 group-hover:border-transparent">
                                             <Check className="w-5 h-5 text-slate-300 group-hover:text-white transition-colors" strokeWidth={3} />
