@@ -184,94 +184,94 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                         </motion.div>
 
 
-                            {/* RIGHT: University Info */}
-                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="text-white">
+                        {/* RIGHT: University Info */}
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="text-white">
 
-                                {/* Meta Badges */}
-                                <div className="flex flex-wrap gap-2 mb-5">
-                                    {uni.country && (
-                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 text-xs font-bold border border-blue-400/30 uppercase tracking-wider">
-                                            <Globe className="w-3 h-3" />{uni.country}
-                                        </span>
-                                    )}
-                                    {uni.taught?.map(lang => (
-                                        <span key={lang} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-bold border border-emerald-400/30 uppercase tracking-wider">
-                                            <Languages className="w-3 h-3" />{lang} Medium
-                                        </span>
-                                    ))}
-                                    {uni.intake?.slice(0, 1).map(intake => (
-                                        <span key={intake} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-200 text-xs font-bold border border-amber-400/30 uppercase tracking-wider">
-                                            <Calendar className="w-3 h-3" />{intake}
-                                        </span>
-                                    ))}
-                                </div>
+                            {/* Meta Badges */}
+                            <div className="flex flex-wrap gap-2 mb-5">
+                                {uni.country && (
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 text-xs font-bold border border-blue-400/30 uppercase tracking-wider">
+                                        <Globe className="w-3 h-3" />{uni.country}
+                                    </span>
+                                )}
+                                {uni.taught?.map(lang => (
+                                    <span key={lang} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-bold border border-emerald-400/30 uppercase tracking-wider">
+                                        <Languages className="w-3 h-3" />{lang} Medium
+                                    </span>
+                                ))}
+                                {uni.intake?.slice(0, 1).map(intake => (
+                                    <span key={intake} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-200 text-xs font-bold border border-amber-400/30 uppercase tracking-wider">
+                                        <Calendar className="w-3 h-3" />{intake}
+                                    </span>
+                                ))}
+                            </div>
 
-                                {/* Name */}
-                                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight text-white mb-3 tracking-tight">
-                                    {uni.name}
-                                </h1>
+                            {/* Name */}
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight text-white mb-3 tracking-tight">
+                                {uni.name}
+                            </h1>
 
-                                {/* Location */}
-                                <div className="flex items-center gap-2 text-slate-400 mb-8 text-base font-medium">
-                                    <MapPin className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                                    {uni.location}
-                                </div>
+                            {/* Location */}
+                            <div className="flex items-center gap-2 text-slate-400 mb-8 text-base font-medium">
+                                <MapPin className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                                {uni.location}
+                            </div>
 
-                                <div className="h-px bg-white/10 mb-6" />
+                            <div className="h-px bg-white/10 mb-6" />
 
-                                {/* Rankings */}
-                                {(uni.rankings?.world || uni.rankings?.national || uni.badges?.some(b => b.toLowerCase().match(/rank|news|edu|qs|times|cwur/))) && (
-                                    <div className="mb-6">
-                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-300/70 mb-3">Global Rankings</p>
-                                        <div className="flex flex-wrap gap-3">
-                                            {uni.rankings?.world && (
-                                                <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
-                                                    <Globe className="w-4 h-4 text-blue-400" />
+                            {/* Rankings */}
+                            {(uni.rankings?.world || uni.rankings?.national || uni.badges?.some(b => b.toLowerCase().match(/rank|news|edu|qs|times|cwur/))) && (
+                                <div className="mb-6">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-300/70 mb-3">Global Rankings</p>
+                                    <div className="flex flex-wrap gap-3">
+                                        {uni.rankings?.world && (
+                                            <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
+                                                <Globe className="w-4 h-4 text-blue-400" />
+                                                <div>
+                                                    <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">World</p>
+                                                    <p className="text-white font-extrabold text-base leading-none">#{uni.rankings.world}</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {uni.rankings?.national && (
+                                            <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-emerald-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
+                                                <MapPin className="w-4 h-4 text-emerald-400" />
+                                                <div>
+                                                    <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">National</p>
+                                                    <p className="text-white font-extrabold text-base leading-none">#{uni.rankings.national}</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {uni.badges?.map((badge, i) => {
+                                            if (!badge.toLowerCase().match(/rank|news|edu|qs|times|cwur/)) return null;
+                                            const parts = badge.split(':');
+                                            const label = parts[0]?.trim();
+                                            const value = parts[1]?.trim() || '';
+                                            return (
+                                                <div key={i} className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
+                                                    <Trophy className="w-4 h-4 text-amber-400" />
                                                     <div>
-                                                        <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">World</p>
-                                                        <p className="text-white font-extrabold text-base leading-none">#{uni.rankings.world}</p>
+                                                        <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">{label}</p>
+                                                        <p className="text-white font-extrabold text-base leading-none">{value.startsWith('#') ? value : `#${value}`}</p>
                                                     </div>
                                                 </div>
-                                            )}
-                                            {uni.rankings?.national && (
-                                                <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-emerald-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
-                                                    <MapPin className="w-4 h-4 text-emerald-400" />
-                                                    <div>
-                                                        <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">National</p>
-                                                        <p className="text-white font-extrabold text-base leading-none">#{uni.rankings.national}</p>
-                                                    </div>
-                                                </div>
-                                            )}
-                                            {uni.badges?.map((badge, i) => {
-                                                if (!badge.toLowerCase().match(/rank|news|edu|qs|times|cwur/)) return null;
-                                                const parts = badge.split(':');
-                                                const label = parts[0]?.trim();
-                                                const value = parts[1]?.trim() || '';
-                                                return (
-                                                    <div key={i} className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
-                                                        <Trophy className="w-4 h-4 text-amber-400" />
-                                                        <div>
-                                                            <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">{label}</p>
-                                                            <p className="text-white font-extrabold text-base leading-none">{value.startsWith('#') ? value : `#${value}`}</p>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
+                                            );
+                                        })}
                                     </div>
-                                )}
+                                </div>
+                            )}
 
-                                {/* Deadline */}
-                                {uni.deadlines?.application && (
-                                    <div className="inline-flex items-center gap-3 bg-amber-400/10 border border-amber-400/30 rounded-2xl px-5 py-3">
-                                        <Clock className="w-5 h-5 text-amber-400 animate-pulse flex-shrink-0" />
-                                        <div>
-                                            <p className="text-[10px] text-amber-300/80 font-bold uppercase tracking-widest">Application Deadline</p>
-                                            <p className="text-amber-200 font-black text-sm">{uni.deadlines.application}</p>
-                                        </div>
+                            {/* Deadline */}
+                            {uni.deadlines?.application && (
+                                <div className="inline-flex items-center gap-3 bg-amber-400/10 border border-amber-400/30 rounded-2xl px-5 py-3">
+                                    <Clock className="w-5 h-5 text-amber-400 animate-pulse flex-shrink-0" />
+                                    <div>
+                                        <p className="text-[10px] text-amber-300/80 font-bold uppercase tracking-widest">Application Deadline</p>
+                                        <p className="text-amber-200 font-black text-sm">{uni.deadlines.application}</p>
                                     </div>
-                                )}
-                            </motion.div>
+                                </div>
+                            )}
+                        </motion.div>
                     </div>
                 </div>
 
@@ -3094,16 +3094,15 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                 {((activeProgram as any)?.documents || uni.documents || [
                                     "Passport (Minimum 1 Year Validity)",
-                                    "Digital Passport Size Picture",
-                                    "Higher Secondary / Grade 12th / A-Level Certificate",
-                                    "Higher Secondary / Grade 12th / A-Level Transcript",
-                                    "Foreign Physical Medical Examination Form",
-                                    "English Proficiency (IELTS, TOEFL, Duolingo, MOI)",
-                                    "Non-Criminal Record / Police Clearance",
+                                    "Recent Passport Size Photo",
+                                    "Highest Degree Certificate",
+                                    "Academic Transcript",
+                                    "Foreign Physical Examination Form",
+                                    "Language Proficiency Certificate (IELTS / TOEFL / MOI / Equivalent)",
+                                    "Non-Criminal Record / Police Clearance Certificate",
                                     "Bank Statement (Minimum $5,000 Balance)",
-                                    "Study Plan / Personal Statement",
-                                    "Signed Application Form (If Required)",
-                                    "CSCA Exam Score Report (If Applicable)"
+                                    ...(activeTab === 'masters' ? ["Two Recommendation Letters (Masters & PhD)"] : []),
+                                    ...(activeTab === 'bachelor' ? ["CSCA Transcript"] : []),
                                 ]).map((doc: string, i: number) => (
                                     <div key={i} className="flex items-center p-4 bg-white hover:bg-slate-50/80 rounded-2xl border border-slate-200/60 hover:border-indigo-200 transition-all duration-300 group shadow-sm hover:shadow-md cursor-default">
                                         <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center mr-5 group-hover:bg-indigo-500 group-hover:shadow-lg group-hover:shadow-indigo-500/30 transition-all duration-300 flex-shrink-0 border border-slate-200 group-hover:border-transparent">
@@ -3167,8 +3166,8 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                         className="flex-1 flex items-center justify-center gap-2 bg-emerald-500 active:bg-emerald-600 text-white font-extrabold text-sm py-3.5 rounded-2xl transition-colors shadow-md shadow-emerald-200 active:scale-95"
                     >
                         <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.521-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.522 5.846L.057 24l6.376-1.668A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.37l-.359-.214-3.717.975.993-3.634-.234-.372A9.818 9.818 0 0112 2.182c5.422 0 9.818 4.396 9.818 9.818S17.422 21.818 12 21.818z"/>
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.521-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.522 5.846L.057 24l6.376-1.668A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.37l-.359-.214-3.717.975.993-3.634-.234-.372A9.818 9.818 0 0112 2.182c5.422 0 9.818 4.396 9.818 9.818S17.422 21.818 12 21.818z" />
                         </svg>
                         WhatsApp
                     </a>
