@@ -298,35 +298,45 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
             </div>
 
             <section className={`container mx-auto px-6 -mt-16 pb-24 relative z-20`}>
-                {/* Modern Program Tabs */}
-                <div className="flex justify-center mb-10">
-                    <div className="bg-slate-900/80 backdrop-blur-2xl p-1.5 rounded-2xl border border-white/10 shadow-2xl flex flex-wrap justify-center gap-1">
+                {/* Ultra-Premium Degree Tabs */}
+                <div className="relative w-full max-w-4xl mx-auto mb-16">
+                    <div className="absolute inset-0 bg-blue-500/5 blur-2xl rounded-full"></div>
+                    <div className="relative bg-white/10 backdrop-blur-3xl p-2 rounded-3xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.12)] flex flex-wrap justify-between md:justify-center gap-2">
                         {availableTabs.map((tab) => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab as "mbbs" | "masters" | "bachelor")}
                                 className={`
-                                        relative px-8 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-2
+                                        relative px-6 py-4 rounded-2xl text-sm md:text-base font-extrabold uppercase tracking-widest transition-all duration-500 flex-1 md:flex-none flex items-center justify-center gap-3 overflow-hidden group
                                         ${activeTab === tab
-                                        ? 'text-white'
-                                        : 'text-slate-400 hover:text-white hover:bg-white/5'}
+                                        ? 'text-white shadow-lg'
+                                        : 'text-slate-500 hover:text-slate-800 hover:bg-white/60'}
                                     `}
                             >
                                 {activeTab === tab && (
-                                    <motion.div
-                                        layoutId="activeTabBg"
-                                        className="absolute inset-0 bg-blue-600 rounded-xl -z-10 shadow-[0_0_20px_rgba(37,99,235,0.4)]"
-                                        transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                                    />
+                                    <>
+                                        <motion.div
+                                            layoutId="activeTabBg"
+                                            className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl -z-10"
+                                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                                        />
+                                        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay -z-10"></div>
+                                        {/* Subtle inner glow */}
+                                        <div className="absolute inset-0 rounded-2xl border border-white/20 -z-10 shadow-[inset_0_2px_15px_rgba(255,255,255,0.2)]"></div>
+                                    </>
                                 )}
-                                {tab === 'mbbs' ? (
-                                    <Stethoscope className={`w-4 h-4 ${activeTab === tab ? 'text-white' : 'text-blue-400/60'}`} />
-                                ) : tab === 'masters' ? (
-                                    <School className={`w-4 h-4 ${activeTab === tab ? 'text-white' : 'text-indigo-400/60'}`} />
-                                ) : (
-                                    <GraduationCap className={`w-4 h-4 ${activeTab === tab ? 'text-white' : 'text-emerald-400/60'}`} />
-                                )}
-                                {tab === 'mbbs' ? 'Medical/MBBS' : tab}
+
+                                {/* Icon Container */}
+                                <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-300 ${activeTab === tab ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-blue-600'}`}>
+                                    {tab === 'mbbs' ? (
+                                        <Stethoscope className="w-4 h-4" />
+                                    ) : tab === 'masters' ? (
+                                        <School className="w-4 h-4" />
+                                    ) : (
+                                        <GraduationCap className="w-4 h-4" />
+                                    )}
+                                </div>
+                                <span className="relative z-10">{tab === 'mbbs' ? 'Medical / MBBS' : tab}</span>
                             </button>
                         ))}
                     </div>
