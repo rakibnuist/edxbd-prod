@@ -1,4 +1,5 @@
 'use client';
+import type { ReactElement } from 'react';
 
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -156,10 +157,10 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                     </Link>
 
                     {/* Hero Grid */}
-                    <div className="grid lg:grid-cols-[260px_1fr] gap-12 items-start">
+                    <div className="grid lg:grid-cols-[260px_1fr] gap-8 lg:gap-12 items-start">
 
-                        {/* LEFT: White Logo Card */}
-                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="flex-shrink-0">
+                        {/* LEFT: White Logo Card — hidden on mobile */}
+                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="flex-shrink-0 hidden lg:block">
                             <div className="relative">
                                 <div className="absolute inset-0 rounded-3xl bg-blue-500/30 blur-2xl scale-105" />
                                 <div className="relative bg-white rounded-3xl shadow-[0_0_80px_rgba(59,130,246,0.3)] p-8 w-full aspect-square flex items-center justify-center overflow-hidden">
@@ -167,100 +168,110 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                                     {uni.logo ? (
                                         <img src={uni.logo} alt={`${uni.name} logo`} className="w-full h-full object-contain relative z-10 drop-shadow-sm" />
                                     ) : (
-                                        <GraduationCap className="w-20 h-20 text-slate-300" />
+                                        /* Premium text fallback when no logo */
+                                        <div className="relative z-10 flex flex-col items-center justify-center text-center p-4">
+                                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center mb-4 shadow-lg">
+                                                <span className="text-white font-extrabold text-xl">
+                                                    {uni.name.split(' ').filter((w: string) => w.length > 2).map((w: string) => w[0]).slice(0, 3).join('')}
+                                                </span>
+                                            </div>
+                                            <p className="text-slate-700 font-extrabold text-sm leading-tight text-center">{uni.name}</p>
+                                            {uni.city && <p className="text-slate-400 text-xs font-semibold mt-1">{uni.city}</p>}
+                                        </div>
                                     )}
                                 </div>
                             </div>
                         </motion.div>
 
-                        {/* RIGHT: University Info */}
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="text-white">
 
-                            {/* Meta Badges */}
-                            <div className="flex flex-wrap gap-2 mb-5">
-                                {uni.country && (
-                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 text-xs font-bold border border-blue-400/30 uppercase tracking-wider">
-                                        <Globe className="w-3 h-3" />{uni.country}
-                                    </span>
-                                )}
-                                {uni.taught?.map(lang => (
-                                    <span key={lang} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-bold border border-emerald-400/30 uppercase tracking-wider">
-                                        <Languages className="w-3 h-3" />{lang} Medium
-                                    </span>
-                                ))}
-                                {uni.intake?.slice(0, 1).map(intake => (
-                                    <span key={intake} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-200 text-xs font-bold border border-amber-400/30 uppercase tracking-wider">
-                                        <Calendar className="w-3 h-3" />{intake}
-                                    </span>
-                                ))}
-                            </div>
+                            {/* RIGHT: University Info */}
+                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="text-white">
 
-                            {/* Name */}
-                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight text-white mb-3 tracking-tight">
-                                {uni.name}
-                            </h1>
+                                {/* Meta Badges */}
+                                <div className="flex flex-wrap gap-2 mb-5">
+                                    {uni.country && (
+                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 text-xs font-bold border border-blue-400/30 uppercase tracking-wider">
+                                            <Globe className="w-3 h-3" />{uni.country}
+                                        </span>
+                                    )}
+                                    {uni.taught?.map(lang => (
+                                        <span key={lang} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-bold border border-emerald-400/30 uppercase tracking-wider">
+                                            <Languages className="w-3 h-3" />{lang} Medium
+                                        </span>
+                                    ))}
+                                    {uni.intake?.slice(0, 1).map(intake => (
+                                        <span key={intake} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-200 text-xs font-bold border border-amber-400/30 uppercase tracking-wider">
+                                            <Calendar className="w-3 h-3" />{intake}
+                                        </span>
+                                    ))}
+                                </div>
 
-                            {/* Location */}
-                            <div className="flex items-center gap-2 text-slate-400 mb-8 text-base font-medium">
-                                <MapPin className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                                {uni.location}
-                            </div>
+                                {/* Name */}
+                                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight text-white mb-3 tracking-tight">
+                                    {uni.name}
+                                </h1>
 
-                            <div className="h-px bg-white/10 mb-6" />
+                                {/* Location */}
+                                <div className="flex items-center gap-2 text-slate-400 mb-8 text-base font-medium">
+                                    <MapPin className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                                    {uni.location}
+                                </div>
 
-                            {/* Rankings */}
-                            {(uni.rankings?.world || uni.rankings?.national || uni.badges?.some(b => b.toLowerCase().match(/rank|news|edu|qs|times|cwur/))) && (
-                                <div className="mb-6">
-                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-300/70 mb-3">Global Rankings</p>
-                                    <div className="flex flex-wrap gap-3">
-                                        {uni.rankings?.world && (
-                                            <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
-                                                <Globe className="w-4 h-4 text-blue-400" />
-                                                <div>
-                                                    <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">World</p>
-                                                    <p className="text-white font-extrabold text-base leading-none">#{uni.rankings.world}</p>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {uni.rankings?.national && (
-                                            <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-emerald-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
-                                                <MapPin className="w-4 h-4 text-emerald-400" />
-                                                <div>
-                                                    <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">National</p>
-                                                    <p className="text-white font-extrabold text-base leading-none">#{uni.rankings.national}</p>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {uni.badges?.map((badge, i) => {
-                                            if (!badge.toLowerCase().match(/rank|news|edu|qs|times|cwur/)) return null;
-                                            const parts = badge.split(':');
-                                            const label = parts[0]?.trim();
-                                            const value = parts[1]?.trim() || '';
-                                            return (
-                                                <div key={i} className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
-                                                    <Trophy className="w-4 h-4 text-amber-400" />
+                                <div className="h-px bg-white/10 mb-6" />
+
+                                {/* Rankings */}
+                                {(uni.rankings?.world || uni.rankings?.national || uni.badges?.some(b => b.toLowerCase().match(/rank|news|edu|qs|times|cwur/))) && (
+                                    <div className="mb-6">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-300/70 mb-3">Global Rankings</p>
+                                        <div className="flex flex-wrap gap-3">
+                                            {uni.rankings?.world && (
+                                                <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
+                                                    <Globe className="w-4 h-4 text-blue-400" />
                                                     <div>
-                                                        <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">{label}</p>
-                                                        <p className="text-white font-extrabold text-base leading-none">{value.startsWith('#') ? value : `#${value}`}</p>
+                                                        <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">World</p>
+                                                        <p className="text-white font-extrabold text-base leading-none">#{uni.rankings.world}</p>
                                                     </div>
                                                 </div>
-                                            );
-                                        })}
+                                            )}
+                                            {uni.rankings?.national && (
+                                                <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-emerald-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
+                                                    <MapPin className="w-4 h-4 text-emerald-400" />
+                                                    <div>
+                                                        <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">National</p>
+                                                        <p className="text-white font-extrabold text-base leading-none">#{uni.rankings.national}</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {uni.badges?.map((badge, i) => {
+                                                if (!badge.toLowerCase().match(/rank|news|edu|qs|times|cwur/)) return null;
+                                                const parts = badge.split(':');
+                                                const label = parts[0]?.trim();
+                                                const value = parts[1]?.trim() || '';
+                                                return (
+                                                    <div key={i} className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
+                                                        <Trophy className="w-4 h-4 text-amber-400" />
+                                                        <div>
+                                                            <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">{label}</p>
+                                                            <p className="text-white font-extrabold text-base leading-none">{value.startsWith('#') ? value : `#${value}`}</p>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
 
-                            {/* Deadline */}
-                            {uni.deadlines?.application && (
-                                <div className="inline-flex items-center gap-3 bg-amber-400/10 border border-amber-400/30 rounded-2xl px-5 py-3">
-                                    <Clock className="w-5 h-5 text-amber-400 animate-pulse flex-shrink-0" />
-                                    <div>
-                                        <p className="text-[10px] text-amber-300/80 font-bold uppercase tracking-widest">Application Deadline</p>
-                                        <p className="text-amber-200 font-black text-sm">{uni.deadlines.application}</p>
+                                {/* Deadline */}
+                                {uni.deadlines?.application && (
+                                    <div className="inline-flex items-center gap-3 bg-amber-400/10 border border-amber-400/30 rounded-2xl px-5 py-3">
+                                        <Clock className="w-5 h-5 text-amber-400 animate-pulse flex-shrink-0" />
+                                        <div>
+                                            <p className="text-[10px] text-amber-300/80 font-bold uppercase tracking-widest">Application Deadline</p>
+                                            <p className="text-amber-200 font-black text-sm">{uni.deadlines.application}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
-                        </motion.div>
+                                )}
+                            </motion.div>
                     </div>
                 </div>
 
@@ -277,7 +288,7 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                         <div className={`grid divide-x divide-slate-100 ${availableTabs.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
                             {availableTabs.map((tab) => {
                                 const isActive = activeTab === tab;
-                                const cfgMap: Record<string, { label: string; sub: string; icon: JSX.Element; activeGrad: string; activeText: string; dot: string }> = {
+                                const cfgMap: Record<string, { label: string; sub: string; icon: ReactElement; activeGrad: string; activeText: string; dot: string }> = {
                                     bachelor: { label: 'Bachelor', sub: 'Undergraduate', icon: <GraduationCap className="w-5 h-5" />, activeGrad: 'from-emerald-500 to-teal-500', activeText: 'text-emerald-600', dot: 'bg-emerald-500' },
                                     mbbs: { label: 'Medical / MBBS', sub: 'Clinical Program', icon: <Stethoscope className="w-5 h-5" />, activeGrad: 'from-rose-500 to-red-500', activeText: 'text-rose-600', dot: 'bg-rose-500' },
                                     masters: { label: 'Masters', sub: 'Postgraduate', icon: <School className="w-5 h-5" />, activeGrad: 'from-violet-500 to-indigo-500', activeText: 'text-violet-600', dot: 'bg-violet-500' },
@@ -3112,7 +3123,7 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                         {/* 1. APPLY NOW FORM - Primary Call to Action */}
                         <div className="sticky top-28 space-y-6">
 
-                            <CTALeadForm universityName={uni.name} />
+                            <div data-cta-form="true"><CTALeadForm universityName={uni.name} /></div>
                             <UniversityWhatsApp universityName={uni.name} className="w-full" />
 
                             {/* Notes Card */}
@@ -3142,6 +3153,48 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                     </div>
                 </div >
             </section >
+
+            {/* ═══════════════════════════════════════════════════════════ */}
+            {/*  STICKY MOBILE BOTTOM CTA BAR — lg:hidden                  */}
+            {/* ═══════════════════════════════════════════════════════════ */}
+            <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200 shadow-[0_-8px_30px_rgba(0,0,0,0.12)]">
+                <div className="flex items-center gap-3 px-4 py-3">
+                    {/* WhatsApp Button */}
+                    <a
+                        href={`https://wa.me/8801971277688?text=I'm interested in ${encodeURIComponent(uni.name)}. Please share more details.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-2 bg-emerald-500 active:bg-emerald-600 text-white font-extrabold text-sm py-3.5 rounded-2xl transition-colors shadow-md shadow-emerald-200 active:scale-95"
+                    >
+                        <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.521-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.522 5.846L.057 24l6.376-1.668A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.37l-.359-.214-3.717.975.993-3.634-.234-.372A9.818 9.818 0 0112 2.182c5.422 0 9.818 4.396 9.818 9.818S17.422 21.818 12 21.818z"/>
+                        </svg>
+                        WhatsApp
+                    </a>
+
+                    {/* Apply Now Button */}
+                    <button
+                        onClick={() => {
+                            const form = document.querySelector('[data-cta-form]') as HTMLElement | null;
+                            if (form) {
+                                form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            } else {
+                                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                            }
+                        }}
+                        className="flex-[2] flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-700 active:from-blue-700 active:to-indigo-800 text-white font-extrabold text-sm py-3.5 rounded-2xl transition-all shadow-md shadow-blue-200 active:scale-95"
+                    >
+                        Apply Now — Free
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            {/* Spacer so sticky bar doesn't overlap content on mobile */}
+            <div className="lg:hidden h-24" />
         </div >
     );
 };
