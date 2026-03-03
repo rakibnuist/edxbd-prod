@@ -1,0 +1,27 @@
+* Host localhost:3000 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:3000...
+* Connected to localhost (::1) port 3000
+> GET /universities HTTP/1.1
+> Host: localhost:3000
+> User-Agent: curl/8.7.1
+> Accept: */*
+> 
+* Request completely sent off
+  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:02 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:03 --:--:--     0< HTTP/1.1 500 Internal Server Error
+< X-Frame-Options: DENY
+< X-Content-Type-Options: nosniff
+< Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+< link: </_next/static/media/e4af272ccee01ff0-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2", </_next/static/media/eaead17c7dbfcd5d-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+< Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate
+< Date: Tue, 03 Mar 2026 19:11:18 GMT
+< Connection: keep-alive
+< Keep-Alive: timeout=5
+< Transfer-Encoding: chunked
+< 
+{ [32 bytes data]
+100    21    0    21    0     0      6      0 --:--:--  0:00:03 --:--:--     6100    21    0    21    0     0      6      0 --:--:--  0:00:03 --:--:--     6
+* Connection #0 to host localhost left intact

@@ -427,7 +427,7 @@ const UniversitiesClient = () => {
                                                         <p className="text-sm font-bold text-slate-900">{uni.details?.tuition}</p>
                                                     </div>
                                                     <Link
-                                                        href={`/partnership/universities/${uni.slug}`}
+                                                        href={`/universities/${uni.slug}`}
                                                         className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 border border-slate-200 text-slate-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm"
                                                     >
                                                         <ArrowRight className="w-5 h-5" />

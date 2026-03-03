@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
         // Allow if role is admin OR in dev environment possibly?
         // For safety, force admin.
         if (!decoded || decoded.role !== 'admin') {
-            // return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
+            return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }
 
         await connectDB();

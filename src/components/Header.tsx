@@ -20,7 +20,7 @@ const Header = () => {
 
 
   // Check if we are on a university detail page (dark background)
-  const isUniversityDetail = /^\/partnership\/universities\/[^/]+$/.test(pathname);
+  const isUniversityDetail = /^\/universities\/[^/]+$/.test(pathname);
 
   // Check if we are on a destination detail page (dark background)
   const isDestinationDetail = /^\/destinations\/[^/]+$/.test(pathname);
@@ -42,7 +42,7 @@ const Header = () => {
   const navigation = [
     { name: 'Home', href: '/', current: pathname === '/' },
     { name: 'Destinations', href: '/destinations', current: pathname.startsWith('/destinations') },
-    { name: 'Universities', href: '/partnership/universities', current: pathname.startsWith('/partnership/universities') },
+    { name: 'Universities', href: '/universities', current: pathname.startsWith('/universities') },
     { name: 'Services', href: '/services', current: pathname === '/services' },
     { name: 'Updates', href: '/updates', current: pathname === '/updates' },
     { name: 'Contact', href: '/contact', current: pathname === '/contact' },

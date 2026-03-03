@@ -22,6 +22,7 @@ interface ConversionsAPIEvent {
         zp?: string; // hashed zip
         country?: string; // hashed country
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     custom_data?: Record<string, any>;
 }
 

@@ -20,7 +20,7 @@ const Footer = () => {
     { name: 'Home', href: '/' },
     { name: 'About Us', href: '/about' },
     { name: 'Our Services', href: '/services' },
-    { name: 'Universities', href: '/partnership/universities' },
+    { name: 'Universities', href: '/universities' },
     { name: 'Latest Updates', href: '/updates' },
     { name: 'Partnership', href: '/partnership' },
     { name: 'Contact', href: '/contact' },

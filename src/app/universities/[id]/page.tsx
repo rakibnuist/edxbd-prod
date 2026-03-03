@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
     await connectDB();
-    const uni = await University.findOne({ slug: params.id }, 'name').lean();
+    const uni = await University.findOne({ slug: params.id }, 'name location country badges degree').lean();
 
     if (!uni) {
         return {
@@ -26,9 +26,25 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
         };
     }
 
+    const isMBBS = uni.degree?.some(d => d.toLowerCase().includes('mbbs') || d.toLowerCase().includes('medicine')) || uni.badges?.some(b => b.toLowerCase().includes('mbbs'));
+    const isMaster = uni.degree?.some(d => d.toLowerCase().includes('master')) || uni.badges?.some(b => b.toLowerCase().includes('master'));
+
+    let degreeText = "Degree Programs";
+    if (isMBBS) degreeText = "MBBS & Clinical Medicine Programs";
+    else if (isMaster) degreeText = "Master's & Bachelor's Programs";
+
     return {
-        title: `${uni.name} - Partnership Opportunities`,
-        description: `Explore scholarship and admission details for ${uni.name} available for EduExpress partners.`,
+        title: `Study at ${uni.name}, ${uni.country} | EduExpress International`,
+        description: `Apply to ${uni.name} in ${uni.location || uni.country} with EduExpress. Explore tuition fees, ${degreeText}, and FREE scholarship opportunities for international students.`,
+        keywords: [
+            uni.name,
+            `Study in ${uni.country}`,
+            `${uni.name} Scholarships`,
+            `${uni.name} Admissions`,
+            `EduExpress International ${uni.country}`,
+            isMBBS ? `MBBS in ${uni.country}` : '',
+            isMaster ? `Masters in ${uni.country}` : ''
+        ].filter(Boolean).join(', ')
     };
 }
 

@@ -4,6 +4,13 @@ export interface IUniversityFee {
     notes?: string;
 }
 
+export interface IProgramData {
+    majors: string[];
+    tuition: string;
+    tuitionDetails?: string[];
+    fees?: IUniversityFee[];
+}
+
 export interface IUniversityScholarship {
     title: string;
     type?: string;
@@ -42,6 +49,11 @@ export interface IUniversity {
     notes?: string[];
     badges?: string[];
     logo?: string;
+    programs?: {
+        bachelor?: IProgramData;
+        mbbs?: IProgramData;
+        masters?: IProgramData;
+    };
     isActive: boolean;
     createdAt?: Date;
     updatedAt?: Date;

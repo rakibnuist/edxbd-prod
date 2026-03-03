@@ -113,7 +113,9 @@ export const generateEventId = (eventName: string): string => {
 export const sendToConversionsAPI = async (
   eventName: string,
   eventId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   userData: Record<string, any> = {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   customData: Record<string, any> = {}
 ): Promise<void> => {
   if (typeof window === 'undefined') return;
