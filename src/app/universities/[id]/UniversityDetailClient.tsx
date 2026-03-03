@@ -277,7 +277,7 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                         <div className={`grid divide-x divide-slate-100 ${availableTabs.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
                             {availableTabs.map((tab) => {
                                 const isActive = activeTab === tab;
-                                const cfgMap: Record<string, {label: string; sub: string; icon: React.ReactNode; activeGrad: string; activeText: string; dot: string}> = {
+                                const cfgMap: Record<string, {label: string; sub: string; icon: JSX.Element; activeGrad: string; activeText: string; dot: string}> = {
                                     bachelor: { label: 'Bachelor', sub: 'Undergraduate', icon: <GraduationCap className="w-5 h-5" />, activeGrad: 'from-emerald-500 to-teal-500', activeText: 'text-emerald-600', dot: 'bg-emerald-500' },
                                     mbbs:     { label: 'Medical / MBBS', sub: 'Clinical Program', icon: <Stethoscope className="w-5 h-5" />, activeGrad: 'from-rose-500 to-red-500', activeText: 'text-rose-600', dot: 'bg-rose-500' },
                                     masters:  { label: 'Masters', sub: 'Postgraduate', icon: <School className="w-5 h-5" />, activeGrad: 'from-violet-500 to-indigo-500', activeText: 'text-violet-600', dot: 'bg-violet-500' },
