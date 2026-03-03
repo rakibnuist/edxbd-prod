@@ -130,218 +130,205 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
             />
-            {/* Extended Header Background - Darker premium feel */}
-            <div className="bg-gradient-to-br from-slate-950 via-[#0b1426] to-slate-900 text-white min-h-[500px] relative overflow-hidden flex flex-col justify-center border-b border-slate-800">
-                {/* Background Decor */}
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+            {/* ═══════════════════════════════════════════ */}
+            {/*  PREMIUM HERO BANNER                        */}
+            {/* ═══════════════════════════════════════════ */}
+            <div className="relative overflow-hidden bg-[#050c1a]" style={{ minHeight: '560px' }}>
 
-                {/* Background Logo Watermark for University Detail */}
-                {uni.logo && (
-                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[50%] h-[80%] opacity-[0.03] pointer-events-none select-none flex items-center justify-end z-0">
-                        <img
-                            src={uni.logo}
-                            alt=""
-                            className="h-full w-full object-contain object-right"
-                        />
-                    </div>
-                )}
+                {/* Grid pattern */}
+                <div className="absolute inset-0 z-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(rgba(59,130,246,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.07) 1px, transparent 1px)`, backgroundSize: '60px 60px' }} />
 
-                <div className="container mx-auto px-6 pt-32 pb-12 relative z-10 w-full">
-                    <Link href="/universities" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors group bg-white/10 px-4 py-2 rounded-full backdrop-blur-md hover:bg-white/20 border border-white/10">
-                        <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                        Back to Universities
+                {/* Glow orbs */}
+                <div className="absolute top-0 left-1/3 w-[700px] h-[700px] bg-blue-700/20 rounded-full blur-[130px] -translate-y-1/2 pointer-events-none z-0" />
+                <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-indigo-700/15 rounded-full blur-[100px] translate-y-1/3 pointer-events-none z-0" />
+
+                {/* Top accent line */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent z-10" />
+
+                <div className="container mx-auto px-6 pt-28 pb-16 relative z-10">
+
+                    {/* Back link */}
+                    <Link href="/universities" className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm font-semibold mb-12 group transition-colors">
+                        <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white/50 group-hover:bg-white/10 transition-all">
+                            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+                        </div>
+                        <span>Back to Universities</span>
                     </Link>
 
-                    <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
-                        {/* Left Side: Content */}
-                        <div className="max-w-3xl flex-1">
-                            <div className="flex flex-wrap gap-2 mb-6">
-                                {uni.badges?.filter(b => !b.toLowerCase().match(/rank|news|edu|qs/)).map((badge, i) => (
-                                    <span key={i} className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-blue-100 text-xs font-semibold border border-white/10 shadow-sm backdrop-blur-md">
-                                        {badge}
+                    {/* Hero Grid */}
+                    <div className="grid lg:grid-cols-[260px_1fr] gap-12 items-start">
+
+                        {/* LEFT: White Logo Card */}
+                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="flex-shrink-0">
+                            <div className="relative">
+                                <div className="absolute inset-0 rounded-3xl bg-blue-500/30 blur-2xl scale-105" />
+                                <div className="relative bg-white rounded-3xl shadow-[0_0_80px_rgba(59,130,246,0.3)] p-8 w-full aspect-square flex items-center justify-center overflow-hidden">
+                                    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,1) 1px, transparent 1px)`, backgroundSize: '20px 20px' }} />
+                                    {uni.logo ? (
+                                        <img src={uni.logo} alt={`${uni.name} logo`} className="w-full h-full object-contain relative z-10 drop-shadow-sm" />
+                                    ) : (
+                                        <GraduationCap className="w-20 h-20 text-slate-300" />
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* RIGHT: University Info */}
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="text-white">
+
+                            {/* Meta Badges */}
+                            <div className="flex flex-wrap gap-2 mb-5">
+                                {uni.country && (
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 text-xs font-bold border border-blue-400/30 uppercase tracking-wider">
+                                        <Globe className="w-3 h-3" />{uni.country}
+                                    </span>
+                                )}
+                                {uni.taught?.map(lang => (
+                                    <span key={lang} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs font-bold border border-emerald-400/30 uppercase tracking-wider">
+                                        <Languages className="w-3 h-3" />{lang} Medium
+                                    </span>
+                                ))}
+                                {uni.intake?.slice(0, 1).map(intake => (
+                                    <span key={intake} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-200 text-xs font-bold border border-amber-400/30 uppercase tracking-wider">
+                                        <Calendar className="w-3 h-3" />{intake}
                                     </span>
                                 ))}
                             </div>
 
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold mb-4 text-white leading-tight drop-shadow-lg">
+                            {/* Name */}
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight text-white mb-3 tracking-tight">
                                 {uni.name}
                             </h1>
 
-                            <div className="flex items-center text-lg text-slate-200 mb-8 font-medium drop-shadow-md">
-                                <MapPin className="w-5 h-5 mr-2 text-blue-400 flex-shrink-0" />
+                            {/* Location */}
+                            <div className="flex items-center gap-2 text-slate-400 mb-8 text-base font-medium">
+                                <MapPin className="w-4 h-4 text-blue-400 flex-shrink-0" />
                                 {uni.location}
                             </div>
 
-                            {/* Professional Rankings & Key Stats */}
-                            <div className="mt-8 space-y-4">
-                                {/* Global Rankings */}
-                                {(uni.rankings?.world || uni.rankings?.national || (uni.badges && uni.badges.some(b => b.toLowerCase().match(/rank|news|edu|qs/)))) && (
-                                    <div>
-                                        <p className="text-blue-200/80 text-xs font-bold uppercase tracking-widest mb-3">Global Recognition</p>
-                                        <div className="flex flex-nowrap overflow-x-auto pb-4 gap-3 scrollbar-hide -mx-6 px-6 lg:mx-0 lg:px-0">
-                                            {uni.rankings?.world && (
-                                                <div className="bg-gradient-to-r from-blue-900/60 to-indigo-900/60 backdrop-blur-md border border-blue-400/20 rounded-xl px-4 py-2 flex items-center gap-3 shadow-lg shadow-blue-900/20 hover:border-blue-400/40 transition-colors">
-                                                    <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-300">
-                                                        <Globe className="w-4 h-4" />
-                                                    </div>
+                            <div className="h-px bg-white/10 mb-6" />
+
+                            {/* Rankings */}
+                            {(uni.rankings?.world || uni.rankings?.national || uni.badges?.some(b => b.toLowerCase().match(/rank|news|edu|qs|times|cwur/))) && (
+                                <div className="mb-6">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-300/70 mb-3">Global Rankings</p>
+                                    <div className="flex flex-wrap gap-3">
+                                        {uni.rankings?.world && (
+                                            <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
+                                                <Globe className="w-4 h-4 text-blue-400" />
+                                                <div>
+                                                    <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">World</p>
+                                                    <p className="text-white font-extrabold text-base leading-none">#{uni.rankings.world}</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {uni.rankings?.national && (
+                                            <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-emerald-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
+                                                <MapPin className="w-4 h-4 text-emerald-400" />
+                                                <div>
+                                                    <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">National</p>
+                                                    <p className="text-white font-extrabold text-base leading-none">#{uni.rankings.national}</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {uni.badges?.map((badge, i) => {
+                                            if (!badge.toLowerCase().match(/rank|news|edu|qs|times|cwur/)) return null;
+                                            const parts = badge.split(':');
+                                            const label = parts[0]?.trim();
+                                            const value = parts[1]?.trim() || '';
+                                            return (
+                                                <div key={i} className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400/30 rounded-2xl px-4 py-2.5 transition-all cursor-default">
+                                                    <Trophy className="w-4 h-4 text-amber-400" />
                                                     <div>
-                                                        <p className="text-[10px] text-blue-200/70 uppercase font-bold tracking-wider">World Rank</p>
-                                                        <p className="text-white font-black text-lg leading-tight">#{uni.rankings.world}</p>
+                                                        <p className="text-[9px] text-white/40 uppercase font-bold tracking-wider">{label}</p>
+                                                        <p className="text-white font-extrabold text-base leading-none">{value.startsWith('#') ? value : `#${value}`}</p>
                                                     </div>
                                                 </div>
-                                            )}
-                                            {uni.rankings?.national && (
-                                                <div className="bg-gradient-to-r from-emerald-900/60 to-teal-900/60 backdrop-blur-md border border-emerald-400/20 rounded-xl px-4 py-2 flex items-center gap-3 shadow-lg shadow-emerald-900/20 hover:border-emerald-400/40 transition-colors">
-                                                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-300">
-                                                        <MapPin className="w-4 h-4" />
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-[10px] text-emerald-200/70 uppercase font-bold tracking-wider">National Rank</p>
-                                                        <p className="text-white font-black text-lg leading-tight">#{uni.rankings.national}</p>
-                                                    </div>
-                                                </div>
-                                            )}
-                                            {uni.badges?.map((badge, i) => {
-                                                const isRank = badge.toLowerCase().match(/rank|news|edu|qs/);
-                                                if (isRank) {
-                                                    const parts = badge.split(':');
-                                                    const label = parts[0]?.trim();
-                                                    const value = parts[1]?.trim() || '';
-
-                                                    let logoUrl = null;
-                                                    const lLabel = label.toLowerCase();
-                                                    if (lLabel.includes('us news') || lLabel.includes('u.s. news')) {
-                                                        logoUrl = 'https://www.usnews.com/static-atlas/assets/img/usn-logo-large.svg';
-                                                    } else if (lLabel.includes('shanghai') || lLabel.includes('arwu')) {
-                                                        logoUrl = 'https://www.shanghairanking.com/_nuxt/img/logo.902480b.svg';
-                                                    } else if (lLabel.includes('times') || lLabel.includes('the')) {
-                                                        logoUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Times_Higher_Education_logo.svg/500px-Times_Higher_Education_logo.svg.png';
-                                                    } else if (lLabel.includes('qs')) {
-                                                        logoUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Qs_university_ranking.svg/500px-Qs_university_ranking.svg.png';
-                                                    }
-
-                                                    return (
-                                                        <div key={`rank-${i}`} className="bg-gradient-to-r from-amber-900/50 to-orange-900/50 backdrop-blur-md border border-amber-400/20 rounded-xl px-4 py-2 flex items-center gap-3 shadow-lg shadow-amber-900/20 hover:border-amber-400/40 transition-colors group">
-                                                            {logoUrl ? (
-                                                                <div className="w-10 h-10 bg-white shadow-inner border border-white/20 rounded-full flex items-center justify-center p-1.5 overflow-hidden flex-shrink-0 group-hover:scale-110 transition-transform">
-                                                                    <img src={logoUrl} alt={label} className="w-full h-full object-contain" />
-                                                                </div>
-                                                            ) : (
-                                                                <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-300 flex-shrink-0">
-                                                                    <Trophy className="w-4 h-4" />
-                                                                </div>
-                                                            )}
-                                                            <div>
-                                                                <p className="text-[10px] text-amber-200/70 uppercase font-bold tracking-wider">{label}</p>
-                                                                <p className="text-white font-black text-lg leading-tight">{value.startsWith('#') ? value : `#${value}`}</p>
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                }
-                                                return null;
-                                            })}
-                                        </div>
+                                            );
+                                        })}
                                     </div>
-                                )}
-
-
-                            </div>
-                        </div>
-
-                        {/* Right Side: Visuals & Deadline */}
-                        <div className="flex flex-col items-center lg:items-end gap-6 w-full lg:w-auto mt-8 lg:mt-0">
-                            {/* Logo Card */}
-                            {uni.logo ? (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="flex-shrink-0 relative group"
-                                >
-                                    <div className="absolute inset-0 bg-blue-500/10 rounded-[2.5rem] blur-3xl group-hover:bg-blue-500/20 transition-all duration-700"></div>
-                                    <div className="relative bg-slate-900/40 backdrop-blur-2xl border border-white/10 p-10 rounded-[2.5rem] shadow-2xl w-[260px] h-[260px] md:w-[320px] md:h-[320px] flex items-center justify-center group-hover:scale-[1.03] group-hover:border-white/20 transition-all duration-500 overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/5 before:to-transparent before:pointer-events-none">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-50"></div>
-                                        <img
-                                            src={uni.logo}
-                                            alt={`${uni.name} logo`}
-                                            className="w-full h-full object-contain filter hover:brightness-105 transition-all drop-shadow-sm"
-                                        />
-                                    </div>
-                                </motion.div>
-                            ) : (
-                                <div className="flex-shrink-0 hidden lg:flex relative w-[260px] h-[260px] md:w-[320px] md:h-[320px] items-center justify-center bg-white/5 backdrop-blur-md rounded-[2rem] border border-white/10">
-                                    <GraduationCap className="w-24 h-24 text-white/20" />
                                 </div>
                             )}
 
-                            {/* Application Deadline */}
+                            {/* Deadline */}
                             {uni.deadlines?.application && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.2 }}
-                                    className="w-full md:w-[320px] flex items-center gap-4 bg-white/10 backdrop-blur-xl px-5 py-4 rounded-2xl border border-white/20 shadow-2xl group hover:bg-white/15 transition-colors"
-                                >
-                                    <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-400 border border-amber-500/30 group-hover:bg-amber-500/30 transition-colors flex-shrink-0">
-                                        <Clock className="w-6 h-6 animate-pulse" />
-                                    </div>
+                                <div className="inline-flex items-center gap-3 bg-amber-400/10 border border-amber-400/30 rounded-2xl px-5 py-3">
+                                    <Clock className="w-5 h-5 text-amber-400 animate-pulse flex-shrink-0" />
                                     <div>
-                                        <p className="text-[10px] text-amber-200/80 font-bold uppercase tracking-widest mb-0.5">Application Deadline</p>
-                                        <p className="text-white font-black text-sm tracking-tight leading-tight">{uni.deadlines.application}</p>
+                                        <p className="text-[10px] text-amber-300/80 font-bold uppercase tracking-widest">Application Deadline</p>
+                                        <p className="text-amber-200 font-black text-sm">{uni.deadlines.application}</p>
                                     </div>
-                                </motion.div>
+                                </div>
                             )}
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
+
+                {/* Bottom fade to page bg */}
+                <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-slate-50 to-transparent z-10 pointer-events-none" />
             </div>
 
-            <section className={`container mx-auto px-6 -mt-16 pb-24 relative z-20`}>
-                {/* Ultra-Premium Degree Tabs */}
-                <div className="relative w-full max-w-4xl mx-auto mb-16">
-                    <div className="absolute inset-0 bg-blue-500/5 blur-2xl rounded-full"></div>
-                    <div className="relative bg-white/10 backdrop-blur-3xl p-2 rounded-3xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.12)] flex flex-wrap justify-between md:justify-center gap-2">
-                        {availableTabs.map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => setActiveTab(tab as "mbbs" | "masters" | "bachelor")}
-                                className={`
-                                        relative px-6 py-4 rounded-2xl text-sm md:text-base font-extrabold uppercase tracking-widest transition-all duration-500 flex-1 md:flex-none flex items-center justify-center gap-3 overflow-hidden group
-                                        ${activeTab === tab
-                                        ? 'text-white shadow-lg'
-                                        : 'text-slate-500 hover:text-slate-800 hover:bg-white/60'}
-                                    `}
-                            >
-                                {activeTab === tab && (
-                                    <>
-                                        <motion.div
-                                            layoutId="activeTabBg"
-                                            className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl -z-10"
-                                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                        />
-                                        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay -z-10"></div>
-                                        {/* Subtle inner glow */}
-                                        <div className="absolute inset-0 rounded-2xl border border-white/20 -z-10 shadow-[inset_0_2px_15px_rgba(255,255,255,0.2)]"></div>
-                                    </>
-                                )}
-
-                                {/* Icon Container */}
-                                <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-300 ${activeTab === tab ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-blue-600'}`}>
-                                    {tab === 'mbbs' ? (
-                                        <Stethoscope className="w-4 h-4" />
-                                    ) : tab === 'masters' ? (
-                                        <School className="w-4 h-4" />
-                                    ) : (
-                                        <GraduationCap className="w-4 h-4" />
-                                    )}
-                                </div>
-                                <span className="relative z-10">{tab === 'mbbs' ? 'Medical / MBBS' : tab}</span>
-                            </button>
-                        ))}
-                    </div>
+            {/* ═══════════════════════════════════════════════════════════ */}
+            {/*  DEGREE PROGRAM SELECTOR — full-width card-style tabs      */}
+            {/* ═══════════════════════════════════════════════════════════ */}
+            <section className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-30">
+                <div className="container mx-auto px-6">
+                    {availableTabs.length > 1 ? (
+                        <div className={`grid divide-x divide-slate-100 ${availableTabs.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                            {availableTabs.map((tab) => {
+                                const isActive = activeTab === tab;
+                                const cfgMap: Record<string, {label: string; sub: string; icon: React.ReactNode; activeGrad: string; activeText: string; dot: string}> = {
+                                    bachelor: { label: 'Bachelor', sub: 'Undergraduate', icon: <GraduationCap className="w-5 h-5" />, activeGrad: 'from-emerald-500 to-teal-500', activeText: 'text-emerald-600', dot: 'bg-emerald-500' },
+                                    mbbs:     { label: 'Medical / MBBS', sub: 'Clinical Program', icon: <Stethoscope className="w-5 h-5" />, activeGrad: 'from-rose-500 to-red-500', activeText: 'text-rose-600', dot: 'bg-rose-500' },
+                                    masters:  { label: 'Masters', sub: 'Postgraduate', icon: <School className="w-5 h-5" />, activeGrad: 'from-violet-500 to-indigo-500', activeText: 'text-violet-600', dot: 'bg-violet-500' },
+                                };
+                                const cfg = cfgMap[tab];
+                                return (
+                                    <button
+                                        key={tab}
+                                        onClick={() => setActiveTab(tab as 'mbbs' | 'masters' | 'bachelor')}
+                                        className={`relative flex items-center gap-4 px-8 py-5 transition-all duration-200 group text-left
+                                            ${isActive ? 'bg-slate-50' : 'bg-white hover:bg-slate-50/60'}`}
+                                    >
+                                        {/* Active indicator bottom bar */}
+                                        {isActive && (
+                                            <motion.div
+                                                layoutId="tabUnderline"
+                                                className={`absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r ${cfg.activeGrad}`}
+                                                transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+                                            />
+                                        )}
+                                        {/* Icon */}
+                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors
+                                            ${isActive ? `bg-gradient-to-br ${cfg.activeGrad} text-white shadow-md` : 'bg-slate-100 text-slate-400 group-hover:text-slate-600'}`}>
+                                            {cfg.icon}
+                                        </div>
+                                        {/* Labels */}
+                                        <div>
+                                            <p className={`text-[10px] font-black uppercase tracking-widest mb-0.5 ${isActive ? cfg.activeText : 'text-slate-400'}`}>
+                                                {cfg.sub}
+                                            </p>
+                                            <p className={`text-base font-extrabold leading-tight ${isActive ? 'text-slate-900' : 'text-slate-500 group-hover:text-slate-700'}`}>
+                                                {cfg.label}
+                                            </p>
+                                        </div>
+                                        {/* Active dot */}
+                                        {isActive && <div className={`ml-auto w-2 h-2 rounded-full ${cfg.dot}`} />}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="py-4 flex items-center gap-3 text-slate-600">
+                            <GraduationCap className="w-5 h-5 text-blue-500" />
+                            <span className="font-bold capitalize text-slate-800">{availableTabs[0]}</span>
+                            <span className="text-slate-400">Program</span>
+                        </div>
+                    )}
                 </div>
+            </section>
 
+            <section className="container mx-auto px-6 pt-10 pb-24 relative z-20">
                 <div className="grid lg:grid-cols-12 gap-8">
 
                     {/* LEFT COLUMN: Main Information */}
