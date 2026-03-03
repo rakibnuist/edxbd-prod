@@ -355,84 +355,85 @@ const UniversitiesClient = () => {
                                                 transition={{ duration: 0.3, delay: index * 0.05 }}
                                                 className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-200 hover:border-blue-300 transition-all duration-300 group flex flex-col relative"
                                             >
-                                                {/* Background Logo Watermark */}
-                                                {uni.logo && (
-                                                    <div className="absolute right-0 top-0 h-full w-[60%] z-0 flex items-center justify-end opacity-[0.1] pointer-events-none select-none overflow-hidden pr-4">
-                                                        <img
-                                                            src={uni.logo}
-                                                            alt=""
-                                                            className="h-[80%] w-full object-contain object-right"
-                                                        />
-                                                    </div>
-                                                )}
+                                                <Link href={`/universities/${uni.slug}`} className="flex flex-col flex-1 w-full h-full relative group cursor-pointer block">
+                                                    {/* Background Logo Watermark */}
+                                                    {uni.logo && (
+                                                        <div className="absolute right-0 top-0 h-full w-[60%] z-0 flex items-center justify-end opacity-[0.1] pointer-events-none select-none overflow-hidden pr-4">
+                                                            <img
+                                                                src={uni.logo}
+                                                                alt=""
+                                                                className="h-[80%] w-full object-contain object-right"
+                                                            />
+                                                        </div>
+                                                    )}
 
-                                                <div className="p-6 flex-1 relative z-10 flex flex-col h-full">
-                                                    {/* Header: Badges */}
-                                                    <div className="flex flex-wrap gap-2 justify-end mb-4">
-                                                        {uni.country && (
-                                                            <span className="bg-slate-100 text-slate-700 text-xs font-bold px-2.5 py-1 rounded-md border border-slate-200 shadow-sm">
-                                                                {uni.country}
-                                                            </span>
-                                                        )}
-                                                        {uni.degree && uni.degree[0] && (
-                                                            <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-md border border-blue-100 shadow-sm">
-                                                                {uni.degree[0]}
-                                                            </span>
-                                                        )}
-                                                    </div>
+                                                    <div className="p-6 flex-1 relative z-10 flex flex-col h-full">
+                                                        {/* Header: Badges */}
+                                                        <div className="flex flex-wrap gap-2 justify-end mb-4">
+                                                            {uni.country && (
+                                                                <span className="bg-slate-100 text-slate-700 text-xs font-bold px-2.5 py-1 rounded-md border border-slate-200 shadow-sm">
+                                                                    {uni.country}
+                                                                </span>
+                                                            )}
+                                                            {uni.degree && uni.degree[0] && (
+                                                                <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-md border border-blue-100 shadow-sm">
+                                                                    {uni.degree[0]}
+                                                                </span>
+                                                            )}
+                                                        </div>
 
-                                                    {/* Main Content */}
-                                                    <div className="space-y-4">
-                                                        <div>
-                                                            <h3 className="text-xl font-extrabold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
-                                                                {uni.name}
-                                                            </h3>
+                                                        {/* Main Content */}
+                                                        <div className="space-y-4">
+                                                            <div>
+                                                                <h3 className="text-xl font-extrabold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
+                                                                    {uni.name}
+                                                                </h3>
 
-                                                            <div className="flex items-center text-slate-600 text-sm font-medium mt-2">
-                                                                <MapPin className="w-4 h-4 mr-1.5 shrink-0 text-slate-400" />
-                                                                {uni.location}
+                                                                <div className="flex items-center text-slate-600 text-sm font-medium mt-2">
+                                                                    <MapPin className="w-4 h-4 mr-1.5 shrink-0 text-slate-400" />
+                                                                    {uni.location}
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Rankings */}
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {uni.rankings?.world && (
+                                                                    <div className="flex items-center text-xs font-semibold bg-slate-50 border border-slate-100 px-2 py-1.5 rounded text-slate-600">
+                                                                        <GraduationCap className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
+                                                                        World #{uni.rankings.world}
+                                                                    </div>
+                                                                )}
+                                                                {uni.rankings?.national && (
+                                                                    <div className="flex items-center text-xs font-semibold bg-slate-50 border border-slate-100 px-2 py-1.5 rounded text-slate-600">
+                                                                        <TrendingUp className="w-3.5 h-3.5 mr-1.5 text-green-500" />
+                                                                        National #{uni.rankings.national}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+
+                                                            {/* Majors */}
+                                                            <div className="pt-4 mt-auto">
+                                                                <p className="text-[10px] text-slate-400 uppercase font-extrabold tracking-wider mb-2">Available Majors</p>
+                                                                <p className="text-sm text-slate-600 leading-relaxed line-clamp-2">
+                                                                    {uni.details?.majors?.join(', ')}
+                                                                </p>
                                                             </div>
                                                         </div>
+                                                    </div>
 
-                                                        {/* Rankings */}
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {uni.rankings?.world && (
-                                                                <div className="flex items-center text-xs font-semibold bg-slate-50 border border-slate-100 px-2 py-1.5 rounded text-slate-600">
-                                                                    <GraduationCap className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
-                                                                    World #{uni.rankings.world}
-                                                                </div>
-                                                            )}
-                                                            {uni.rankings?.national && (
-                                                                <div className="flex items-center text-xs font-semibold bg-slate-50 border border-slate-100 px-2 py-1.5 rounded text-slate-600">
-                                                                    <TrendingUp className="w-3.5 h-3.5 mr-1.5 text-green-500" />
-                                                                    National #{uni.rankings.national}
-                                                                </div>
-                                                            )}
+                                                    {/* Footer: Tuition & Action */}
+                                                    <div className="px-6 py-4 bg-white/50 backdrop-blur-sm border-t border-slate-100 flex items-center justify-between relative z-10">
+                                                        <div>
+                                                            <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">Tuition</p>
+                                                            <p className="text-sm font-bold text-slate-900">{uni.details?.tuition}</p>
                                                         </div>
-
-                                                        {/* Majors */}
-                                                        <div className="pt-4 mt-auto">
-                                                            <p className="text-[10px] text-slate-400 uppercase font-extrabold tracking-wider mb-2">Available Majors</p>
-                                                            <p className="text-sm text-slate-600 leading-relaxed line-clamp-2">
-                                                                {uni.details?.majors?.join(', ')}
-                                                            </p>
+                                                        <div
+                                                            className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 border border-slate-200 text-slate-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm"
+                                                        >
+                                                            <ArrowRight className="w-5 h-5" />
                                                         </div>
                                                     </div>
-                                                </div>
-
-                                                {/* Footer: Tuition & Action */}
-                                                <div className="px-6 py-4 bg-white/50 backdrop-blur-sm border-t border-slate-100 flex items-center justify-between relative z-10">
-                                                    <div>
-                                                        <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">Tuition</p>
-                                                        <p className="text-sm font-bold text-slate-900">{uni.details?.tuition}</p>
-                                                    </div>
-                                                    <Link
-                                                        href={`/universities/${uni.slug}`}
-                                                        className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 border border-slate-200 text-slate-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm"
-                                                    >
-                                                        <ArrowRight className="w-5 h-5" />
-                                                    </Link>
-                                                </div>
+                                                </Link>
                                             </motion.div>
                                         ))}
                                     </div>
