@@ -46,7 +46,7 @@ async function run() {
             country: 'China',
             city: 'Nantong',
             intake: ['Fall 2026'],
-            degree: ['Bachelor'],
+            degree: ['Bachelor', 'MBBS', 'Masters'],
             taught: ['English'],
             rankings: {},
             badges: [

@@ -375,11 +375,11 @@ const UniversitiesClient = () => {
                                                                     {uni.country}
                                                                 </span>
                                                             )}
-                                                            {uni.degree && uni.degree[0] && (
-                                                                <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-md border border-blue-100 shadow-sm">
-                                                                    {uni.degree[0]}
+                                                            {uni.degree?.slice(0, 3).map((d) => (
+                                                                <span key={d} className="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-md border border-blue-100 shadow-sm whitespace-nowrap">
+                                                                    {d}
                                                                 </span>
-                                                            )}
+                                                            ))}
                                                         </div>
 
                                                         {/* Main Content */}
