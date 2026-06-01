@@ -42,9 +42,7 @@ export async function POST(request: NextRequest) {
       email: user.email,
       role: user.role
     };
-    console.log('Generating token for:', tokenPayload);
     const token = generateToken(tokenPayload);
-    console.log('Generated token:', token.substring(0, 50) + '...');
 
     // Return success response
     return NextResponse.json({

@@ -2,8 +2,17 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// For build time, use a fallback secret
-const jwtSecret = JWT_SECRET || 'build-time-fallback-secret';
+// Allow a placeholder ONLY during the build phase (no real auth happens then).
+// At runtime in production, a missing/short secret is fatal so tokens can never
+// be signed or verified with a predictable key.
+const isProd = process.env.NODE_ENV === 'production';
+const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
+
+if (isProd && !isBuildPhase && (!JWT_SECRET || JWT_SECRET.length < 32)) {
+  throw new Error('JWT_SECRET is missing or too short (min 32 chars) in production.');
+}
+
+const jwtSecret = JWT_SECRET || 'build-time-only-placeholder-not-for-runtime';
 
 
 export interface AuthUser {

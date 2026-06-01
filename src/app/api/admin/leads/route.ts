@@ -7,12 +7,8 @@ import mongoose from 'mongoose';
 export async function GET(request: NextRequest) {
   try {
     const decoded = verifyTokenFromRequest(request);
-    
-    console.log('Leads API - Token verification result:', decoded);
-    console.log('Leads API - Request headers:', Object.fromEntries(request.headers.entries()));
-    
+
     if (!decoded || decoded.role !== 'admin') {
-      console.log('Leads API - Authentication failed:', { decoded, role: decoded?.role });
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
