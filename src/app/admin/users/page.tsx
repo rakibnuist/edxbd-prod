@@ -7,7 +7,7 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'user';
+  role: 'super_admin' | 'admin' | 'user';
   createdAt: string;
   updatedAt: string;
 }
@@ -24,8 +24,16 @@ export default function UsersPage() {
     name: '',
     email: '',
     password: '',
-    role: 'user' as 'admin' | 'user'
+    role: 'user' as 'super_admin' | 'admin' | 'user'
   });
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [messagingUser, setMessagingUser] = useState<User | null>(null);
+  const [messageForm, setMessageForm] = useState({ subject: '', body: '' });
+  const [messageSending, setMessageSending] = useState(false);
+  const [messageSuccess, setMessageSuccess] = useState('');
+  const [showSentMessagesModal, setShowSentMessagesModal] = useState(false);
+  const [sentMessages, setSentMessages] = useState<any[]>([]);
+  const [loadingMessages, setLoadingMessages] = useState(false);
 
   // Helper function to get fresh admin token
   const getFreshToken = async (): Promise<string> => {
@@ -54,14 +62,41 @@ export default function UsersPage() {
     return token;
   };
 
+  const isSuperAdmin = currentUser?.role === 'super_admin';
+  const isAdmin = currentUser?.role === 'admin';
+  const canMessage = isSuperAdmin || isAdmin || currentUser?.email === 'admin@eduexpressint.com';
+
+  const fetchSentMessages = async () => {
+    try {
+      setLoadingMessages(true);
+      const token = await getFreshToken();
+      const response = await fetch('/api/admin/messages', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setSentMessages(data.messages || []);
+      } else {
+        setError('Failed to fetch sent messages');
+      }
+    } catch {
+      setError('Failed to fetch sent messages');
+    } finally {
+      setLoadingMessages(false);
+    }
+  };
+
   useEffect(() => {
-    if (currentUser?.role === 'admin') {
+    if (currentUser?.role === 'admin' || currentUser?.role === 'super_admin') {
       fetchUsers();
     }
   }, [currentUser]);
 
-  // Check if current user is admin
-  if (currentUser?.role !== 'admin') {
+  // Check if current user is admin or super_admin
+  if (currentUser?.role !== 'admin' && currentUser?.role !== 'super_admin') {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
@@ -198,9 +233,52 @@ export default function UsersPage() {
   const closeModals = () => {
     setShowCreateModal(false);
     setShowEditModal(false);
+    setShowMessageModal(false);
+    setShowSentMessagesModal(false);
     setEditingUser(null);
+    setMessagingUser(null);
     setFormData({ name: '', email: '', password: '', role: 'user' });
+    setMessageForm({ subject: '', body: '' });
     setError('');
+    setMessageSuccess('');
+  };
+
+  const openMessageModal = (user: User) => {
+    setMessagingUser(user);
+    setMessageForm({ subject: '', body: '' });
+    setMessageSuccess('');
+    setShowMessageModal(true);
+  };
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!messagingUser) return;
+    setMessageSending(true);
+    try {
+      const token = await getFreshToken();
+      const response = await fetch('/api/admin/messages', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          toUserId: messagingUser.id,
+          toEmail: messagingUser.email,
+          toName: messagingUser.name,
+          subject: messageForm.subject,
+          body: messageForm.body,
+        }),
+      });
+      if (response.ok) {
+        setMessageSuccess('Message sent successfully!');
+        setMessageForm({ subject: '', body: '' });
+      } else {
+        const data = await response.json();
+        setError(data.message || 'Failed to send message');
+      }
+    } catch {
+      setError('Failed to send message');
+    } finally {
+      setMessageSending(false);
+    }
   };
 
   if (loading) {
@@ -220,15 +298,31 @@ export default function UsersPage() {
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              Create User
-            </button>
+            <div className="flex space-x-3">
+              {canMessage && (
+                <button
+                  onClick={() => {
+                    fetchSentMessages();
+                    setShowSentMessagesModal(true);
+                  }}
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center transition-colors shadow-sm"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  View Sent Messages
+                </button>
+              )}
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Create User
+              </button>
+            </div>
           </div>
 
           {error && (
@@ -257,13 +351,26 @@ export default function UsersPage() {
                     </div>
                     <div className="flex items-center space-x-4">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        user.role === 'admin' 
-                          ? 'bg-red-100 text-red-800' 
+                        user.role === 'super_admin'
+                          ? 'bg-purple-100 text-purple-800'
+                          : user.role === 'admin'
+                          ? 'bg-red-100 text-red-800'
                           : 'bg-green-100 text-green-800'
                       }`}>
-                        {user.role}
+                        {user.role === 'super_admin' ? 'Super Admin' : user.role}
                       </span>
                       <div className="flex space-x-2">
+                        {canMessage && user.id !== currentUser?.id && (
+                          <button
+                            onClick={() => openMessageModal(user)}
+                            title="Send Message"
+                            className="text-green-600 hover:text-green-900"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                        )}
                         <button
                           onClick={() => openEditModal(user)}
                           className="text-blue-600 hover:text-blue-900"
@@ -332,11 +439,12 @@ export default function UsersPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                   <select
                     value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'admin' | 'user' })}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'super_admin' | 'admin' | 'user' })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
+                    {isSuperAdmin && <option value="super_admin">Super Admin</option>}
                   </select>
                 </div>
                 <div className="flex justify-end space-x-3">
@@ -355,6 +463,102 @@ export default function UsersPage() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Send Message Modal - Admin & Super Admin */}
+      {showMessageModal && messagingUser && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-[480px] shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900">Send Message</h3>
+                  <p className="text-sm text-gray-500">To: {messagingUser.name} ({messagingUser.email})</p>
+                </div>
+              </div>
+
+              {messageSuccess ? (
+                <div className="text-center py-6">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <p className="text-green-700 font-medium">{messageSuccess}</p>
+                  <button
+                    onClick={closeModals}
+                    className="mt-4 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md"
+                  >
+                    Close
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSendMessage}>
+                  {error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded mb-3 text-sm">
+                      {error}
+                    </div>
+                  )}
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                    <input
+                      type="text"
+                      required
+                      value={messageForm.subject}
+                      onChange={(e) => setMessageForm({ ...messageForm, subject: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                      placeholder="Enter message subject"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                    <textarea
+                      required
+                      rows={5}
+                      value={messageForm.body}
+                      onChange={(e) => setMessageForm({ ...messageForm, body: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                      placeholder="Type your message here..."
+                    />
+                  </div>
+                  <div className="flex justify-end space-x-3">
+                    <button
+                      type="button"
+                      onClick={closeModals}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={messageSending}
+                      className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                    >
+                      {messageSending ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                          </svg>
+                          Send Message
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
         </div>
@@ -400,11 +604,12 @@ export default function UsersPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                   <select
                     value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'admin' | 'user' })}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'super_admin' | 'admin' | 'user' })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
+                    {isSuperAdmin && <option value="super_admin">Super Admin</option>}
                   </select>
                 </div>
                 <div className="flex justify-end space-x-3">
@@ -423,6 +628,68 @@ export default function UsersPage() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sent Messages History Modal */}
+      {showSentMessagesModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-[600px] shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <div className="flex justify-between items-center mb-4 pb-2 border-b">
+                <h3 className="text-xl font-bold text-gray-900 flex items-center">
+                  <svg className="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                  </svg>
+                  Sent Messages History
+                </h3>
+                <button
+                  onClick={() => setShowSentMessagesModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {loadingMessages ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="w-8 h-8 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              ) : sentMessages.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  No sent messages found.
+                </div>
+              ) : (
+                <div className="max-h-[400px] overflow-y-auto space-y-4 pr-2">
+                  {sentMessages.map((msg, index) => (
+                    <div key={msg._id || index} className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-green-200 transition-colors">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800">To: {msg.toName} ({msg.toEmail})</p>
+                          <p className="text-xs text-gray-500">Sent on: {new Date(msg.createdAt).toLocaleString()}</p>
+                        </div>
+                      </div>
+                      <div className="border-t border-gray-100 pt-2 mt-2">
+                        <p className="text-sm font-bold text-gray-900 mb-1">Subject: {msg.subject}</p>
+                        <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{msg.body}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex justify-end mt-6 pt-4 border-t">
+                <button
+                  onClick={() => setShowSentMessagesModal(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>

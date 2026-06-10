@@ -62,11 +62,16 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
     }, [uni]);
 
     const [activeTab, setActiveTab] = useState<'bachelor' | 'mbbs' | 'masters'>(initialTab);
+    const [isMounted, setIsMounted] = useState(false);
 
     // Ensure we sync tab if initialData changes (though rare in this view)
     useEffect(() => {
         setActiveTab(initialTab);
     }, [initialTab]);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const availableTabs = useMemo(() => {
         const tabs: ('bachelor' | 'mbbs' | 'masters')[] = [];
@@ -2953,9 +2958,7 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
 
                         {/* Programs Section */}
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
+                            {...(isMounted ? { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } } : {})}
                             className="bg-white rounded-3xl p-7 md:p-10 shadow-sm border border-slate-100 relative overflow-hidden"
                         >
                             {/* Subtle background decoration */}
@@ -2995,74 +2998,76 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
 
                         {/* Financials Section */}
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
+                            {...(isMounted ? { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } } : {})}
                             className="bg-white rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden"
                         >
                             {/* Header band */}
-                            <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-7 md:px-10 py-7 overflow-hidden">
+                            <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-5 md:px-10 py-5 md:py-7 overflow-hidden">
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
                                 <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-400/10 rounded-full blur-3xl -ml-16 mb-0 pointer-events-none" />
-                                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-900/40 flex-shrink-0">
-                                            <Wallet className="w-6 h-6" />
+                                <div className="relative z-10 flex items-center justify-between gap-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-900/40 flex-shrink-0">
+                                            <Wallet className="w-5 h-5 md:w-6 md:h-6" />
                                         </div>
                                         <div>
-                                            <h2 className="text-xl font-extrabold text-white tracking-tight">
+                                            <h2 className="text-lg md:text-xl font-extrabold text-white tracking-tight">
                                                 {(activeTab === 'mbbs' || activeTab === 'masters') ? 'Actual Fees' : 'Tuition & Fees'}
                                             </h2>
-                                            <p className="text-[11px] font-bold text-slate-400 mt-0.5 uppercase tracking-widest">
+                                            <p className="text-[10px] md:text-[11px] font-bold text-slate-400 mt-0.5 uppercase tracking-widest">
                                                 {(activeTab === 'mbbs' || activeTab === 'masters') ? 'Official Fee Structure · Per Year' : 'Estimated Annual Costs'}
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2 bg-emerald-400/10 border border-emerald-400/30 rounded-xl px-4 py-2 self-start sm:self-auto">
-                                        <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                                        <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-widest">Verified</span>
+                                    <div className="flex items-center gap-1.5 bg-emerald-400/10 border border-emerald-400/30 rounded-xl px-3 py-1.5 flex-shrink-0">
+                                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                                        <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-widest">Verified</span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Fee rows */}
-                            <div className="divide-y divide-slate-100 px-7 md:px-10 relative z-10">
+                            <div className="divide-y divide-slate-100 px-4 md:px-10 relative z-10">
                                 {(activeProgram?.fees || uni.fees)?.map((fee, i) => (
-                                    <div key={i} className="flex items-center justify-between gap-4 py-4 group">
-                                        {/* Left: Index + Description */}
-                                        <div className="flex items-center gap-4 min-w-0">
-                                            <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center flex-shrink-0">
-                                                <span className="text-[11px] font-extrabold text-slate-400">{String(i + 1).padStart(2, '0')}</span>
+                                    <div key={i} className="py-3.5 md:py-4 group">
+                                        {/* Mobile: stacked layout | Desktop: single row */}
+                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                                            {/* Left: description */}
+                                            <div className="flex items-start gap-3 min-w-0">
+                                                <div className="flex items-center gap-2 flex-shrink-0 mt-0.5">
+                                                    <span className="text-[11px] font-black text-slate-300 tabular-nums w-5 text-right">{String(i + 1).padStart(2, '0')}</span>
+                                                    <div className="w-px h-4 bg-slate-200 flex-shrink-0" />
+                                                </div>
+                                                <div className="min-w-0 flex-1">
+                                                    <p className="font-bold text-slate-800 text-[14px] md:text-[15px] leading-snug">{fee.item}</p>
+                                                    {fee.notes && (
+                                                        <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">{fee.notes}</p>
+                                                    )}
+                                                </div>
                                             </div>
-                                            <div className="min-w-0">
-                                                <p className="font-bold text-slate-800 text-[15px] leading-snug truncate">{fee.item}</p>
-                                                {fee.notes && (
-                                                    <p className="text-[12px] text-slate-400 mt-0.5 leading-snug">{fee.notes}</p>
-                                                )}
-                                            </div>
-                                        </div>
 
-                                        {/* Right: Amount pill */}
-                                        <div className="flex-shrink-0">
-                                            <span className={`inline-flex items-center font-extrabold text-sm px-4 py-2 rounded-xl whitespace-nowrap
-                                                ${fee.cost?.toString().toLowerCase().includes('free') || fee.cost?.toString() === '0'
-                                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                                    : 'bg-slate-50 text-slate-800 border border-slate-200'
-                                                }`}>
-                                                {fee.cost?.toString().toLowerCase().includes('free') || fee.cost?.toString() === '0' ? (
-                                                    <svg className="w-3.5 h-3.5 mr-1.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-                                                ) : null}
-                                                {fee.cost}
-                                            </span>
+                                            {/* Cost pill — full width on mobile, auto on desktop */}
+                                            <div className="mt-2.5 sm:mt-0 sm:flex-shrink-0 pl-8 sm:pl-0">
+                                                <span className={`flex sm:inline-flex items-center justify-center sm:justify-start font-extrabold text-sm px-4 py-2 rounded-xl sm:whitespace-nowrap w-full sm:w-auto
+                                                    ${fee.cost?.toString().toLowerCase().includes('free') || fee.cost?.toString() === '0'
+                                                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                                        : 'bg-slate-50 text-slate-800 border border-slate-200'
+                                                    }`}>
+                                                    {fee.cost?.toString().toLowerCase().includes('free') || fee.cost?.toString() === '0' ? (
+                                                        <svg className="w-3.5 h-3.5 mr-1.5 text-emerald-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                                                    ) : null}
+                                                    {fee.cost}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
 
                             {/* Footer note */}
-                            <div className="mx-7 md:mx-10 mb-7 md:mb-8 mt-2 bg-blue-50 border border-blue-100 rounded-2xl px-5 py-3.5 flex items-start gap-3">
+                            <div className="mx-4 md:mx-10 mb-5 md:mb-8 mt-1 bg-blue-50 border border-blue-100 rounded-2xl px-4 py-3 flex items-start gap-2.5">
                                 <svg className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                <p className="text-[12px] text-blue-700 font-semibold leading-snug">
+                                <p className="text-[11px] md:text-[12px] text-blue-700 font-semibold leading-snug">
                                     Fees are approximate and subject to change. Contact our counselors for the latest confirmed fee schedule and scholarship options.
                                 </p>
                             </div>
@@ -3070,9 +3075,7 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
 
                         {/* Documents Section */}
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
+                            {...(isMounted ? { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } } : {})}
                             className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_40px_rgb(0,0,0,0.03)] border border-slate-100 relative overflow-hidden"
                         >
                             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
@@ -3165,7 +3168,7 @@ const UniversityDetailClient = ({ initialData }: UniversityDetailClientProps) =>
                 <div className="flex items-center gap-3 px-4 py-3">
                     {/* WhatsApp Button */}
                     <a
-                        href={`https://wa.me/8801971277688?text=I'm interested in ${encodeURIComponent(uni.name)}. Please share more details.`}
+                        href={`https://wa.me/8801983333566?text=I'm interested in ${encodeURIComponent(uni.name)}. Please share more details.`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex-1 flex items-center justify-center gap-2 bg-emerald-500 active:bg-emerald-600 text-white font-extrabold text-sm py-3.5 rounded-2xl transition-colors shadow-md shadow-emerald-200 active:scale-95"

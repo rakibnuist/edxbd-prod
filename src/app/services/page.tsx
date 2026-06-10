@@ -6,7 +6,7 @@ import { Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Study Abroad Services | University Selection, Visa & Scholarship Support',
-  description: 'Expert study abroad services including university selection, visa assistance, scholarship support, and career guidance since 2018. 95% success rate with 300+ partner universities worldwide.',
+  description: 'Expert study abroad services including university selection, visa assistance, scholarship support, and career guidance since 2018. 98% success rate with 150+ partner universities worldwide.',
   keywords: [
     'study abroad services',
     'university selection',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'Study Abroad Services | Expert Guidance for International Education',
-    description: 'Comprehensive study abroad solutions with 95% success rate since 2018. Expert guidance for university selection, visa assistance, and scholarship support.',
+    description: 'Comprehensive study abroad solutions with 98% success rate since 2018. Expert guidance for university selection, visa assistance, and scholarship support.',
     type: 'website',
   },
   alternates: {
@@ -52,7 +52,7 @@ export default function ServicesPage() {
         'Document verification',
         'Interview coaching',
         'Appeal support if needed',
-        '95% success rate'
+        '98% success rate'
       ],
       icon: '📋',
       color: 'from-green-500 to-emerald-500'
@@ -144,7 +144,7 @@ export default function ServicesPage() {
     },
     {
       title: 'Proven Success',
-      description: '95% visa success rate and 500+ partner universities worldwide ensure your success.',
+      description: '98% visa success rate and 150+ partner universities worldwide ensure your success.',
       icon: '🏆'
     },
     {

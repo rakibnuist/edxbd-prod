@@ -31,7 +31,7 @@ export const generateSEOData = {
   // Homepage SEO
   homepage: (): SEOData => ({
     title: "Study Abroad Consultancy | Free Scholarship Assistance | EduExpress International",
-    description: "Transform your education journey with EduExpress International. Expert study abroad consultancy with FREE scholarship assistance. 97% success rate. Study in UK, China, South Korea, Hungary & more. Free consultation available.",
+    description: "Transform your education journey with EduExpress International. Expert study abroad consultancy with FREE scholarship assistance. 98% success rate. Study in UK, China, South Korea, Hungary & more. Free consultation available.",
     keywords: [
       "study abroad",
       "education consultancy",
@@ -57,7 +57,7 @@ export const generateSEOData = {
       "@type": "EducationalOrganization",
       "name": "EduExpress International",
       "alternateName": ["EduExpress", "EduExpress International Consultancy"],
-      "description": "Leading study abroad consultancy in Bangladesh providing expert guidance and FREE scholarship assistance for international education. 97% success rate with 3000+ students helped since 2018.",
+      "description": "Leading study abroad consultancy in Bangladesh providing expert guidance and FREE scholarship assistance for international education. 98% success rate with 3,000+ students helped since 2018.",
       "url": "https://www.eduexpressint.com",
       "logo": {
         "@type": "ImageObject",
@@ -223,7 +223,7 @@ export const generateSEOData = {
   // About page
   about: (): SEOData => ({
     title: "About Us | EduExpress International | Study Abroad Consultancy",
-    description: "Learn about EduExpress International - Bangladesh's leading study abroad consultancy. 3000+ students helped since 2018 with 97% success rate. Expert guidance for international education.",
+    description: "Learn about EduExpress International - Bangladesh's leading study abroad consultancy. 3,000+ students helped since 2018 with 98% success rate. Expert guidance for international education.",
     keywords: [
       "about eduexpress international",
       "study abroad consultancy Bangladesh",

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   try {
     const decoded = verifyTokenFromRequest(request);
 
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !['admin', 'super_admin'].includes(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
   try {
     const decoded = verifyTokenFromRequest(request);
 
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !['admin', 'super_admin'].includes(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 

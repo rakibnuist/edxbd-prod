@@ -5,7 +5,7 @@ export const config = {
   site: {
     name: 'EduExpress International',
     url: 'https://www.eduexpressint.com',
-    description: 'Expert study abroad consultancy with FREE scholarship assistance. 97% success rate.',
+    description: 'Expert study abroad consultancy with FREE scholarship assistance. 98% success rate.',
   },
 
   // Tracking IDs (replace with your actual IDs)
@@ -50,7 +50,7 @@ export const config = {
     founded: '2005',
     rating: '4.9',
     reviewCount: '1250',
-    successRate: '97%',
+    successRate: '98%',
     studentsHelped: '10000+',
   },
 };

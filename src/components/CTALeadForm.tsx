@@ -35,7 +35,7 @@ const CTALeadForm = ({ universityName }: CTALeadFormProps) => {
                 {/* Trust stats */}
                 <div className="grid grid-cols-3 gap-2 mt-5 relative z-10">
                     {[
-                        { icon: <Users className="w-3.5 h-3.5" />, label: '500+', sub: 'Placed' },
+                        { icon: <Users className="w-3.5 h-3.5" />, label: '3,000+', sub: 'Placed' },
                         { icon: <Shield className="w-3.5 h-3.5" />, label: '98%', sub: 'Success' },
                         { icon: <Clock className="w-3.5 h-3.5" />, label: '24h', sub: 'Response' },
                     ].map((stat, i) => (

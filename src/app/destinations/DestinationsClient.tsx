@@ -188,7 +188,7 @@ export default function DestinationsClient() {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                                    <span>500+ Partner Universities</span>
+                                    <span>150+ Partner Universities</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <CheckCircle2 className="w-5 h-5 text-emerald-500" />

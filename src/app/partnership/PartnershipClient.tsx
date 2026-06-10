@@ -85,7 +85,7 @@ const PartnershipClient = () => {
       icon: Globe,
       title: 'Global Network',
       description: 'Access to universities across 15+ countries, including 150+ directly affiliated Chinese institutions.',
-      stat: '500+ Universities'
+      stat: '150+ Universities'
     },
     {
       icon: BookOpen,
@@ -133,8 +133,8 @@ const PartnershipClient = () => {
   ];
 
   const successStats = [
-    { number: '500+', label: 'Active Partners', icon: Users },
-    { number: '5,000+', label: 'Students Placed', icon: BookOpen },
+    { number: '150+', label: 'Active Partners', icon: Users },
+    { number: '3,000+', label: 'Students Placed', icon: BookOpen },
     { number: '7 Yrs', label: 'In Market', icon: Award },
     { number: '24/7', label: 'Support Available', icon: Headphones }
   ];
@@ -594,7 +594,7 @@ const PartnershipClient = () => {
             >
               <div className="flex items-center space-x-2">
                 <Star className="w-5 h-5 text-amber-500" />
-                <span>500+ Active Partners</span>
+                <span>150+ Active Partners</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Shield className="w-5 h-5 text-amber-500" />

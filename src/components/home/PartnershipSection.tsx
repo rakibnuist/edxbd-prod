@@ -68,7 +68,7 @@ const PartnershipSection = () => {
                                     <div className="text-blue-200 text-[10px] md:text-xs font-medium uppercase tracking-wider">Countries</div>
                                 </GlassCard>
                                 <GlassCard className="p-3 md:p-4 bg-white/10 backdrop-blur-md border-white/20 text-center md:text-left">
-                                    <div className="text-xl md:text-2xl font-bold text-white mb-1">500+</div>
+                                    <div className="text-xl md:text-2xl font-bold text-white mb-1">150+</div>
                                     <div className="text-blue-200 text-[10px] md:text-xs font-medium uppercase tracking-wider">Universities</div>
                                 </GlassCard>
                             </div>

@@ -10,6 +10,7 @@ import EducationTracking from "@/components/EducationTracking";
 import DeferredComponents from "@/components/DeferredComponents";
 
 import WhatsAppWrapper from "@/components/WhatsAppWrapper";
+import CookieConsent from "@/components/CookieConsent";
 import { Preconnect } from "@/components/Preconnect";
 
 import "./globals.css";
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
     default: "EduExpress International - Study Abroad Consultancy | Free Scholarship Assistance",
     template: "%s | EduExpress International"
   },
-  description: "Transform your education journey with EduExpress International. Expert study abroad consultancy with FREE scholarship assistance. 97% success rate. Study in UK, China, South Korea, Hungary & more. Free consultation available.",
+  description: "Transform your education journey with EduExpress International. Expert study abroad consultancy with FREE scholarship assistance. 98% success rate. Study in UK, China, South Korea, Hungary & more. Free consultation available.",
   keywords: [
     "study abroad",
     "education consultancy",
@@ -108,7 +109,7 @@ export const metadata: Metadata = {
     url: "https://www.eduexpressint.com",
     siteName: "EduExpress International",
     title: "EduExpress International - Study Abroad Consultancy | Free Scholarship Assistance",
-    description: "Transform your education journey with expert study abroad consultancy. FREE scholarship assistance with 97% success rate. Study in UK, China, South Korea, Hungary & more.",
+    description: "Transform your education journey with expert study abroad consultancy. FREE scholarship assistance with 98% success rate. Study in UK, China, South Korea, Hungary & more.",
     images: [
       {
         url: "/og-image.jpg",
@@ -122,7 +123,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "EduExpress International - Study Abroad Consultancy | Free Scholarship Assistance",
-    description: "Transform your education journey with expert study abroad consultancy. FREE scholarship assistance with 97% success rate.",
+    description: "Transform your education journey with expert study abroad consultancy. FREE scholarship assistance with 98% success rate.",
     images: ["/og-image.jpg"],
     creator: "@eduexpressint",
     site: "@eduexpressint",
@@ -175,7 +176,7 @@ export default function RootLayout({
     "@type": "EducationalOrganization",
     "name": "EduExpress International",
     "alternateName": ["EduExpress", "EduExpress International Consultancy"],
-    "description": "Leading study abroad consultancy in Bangladesh providing expert guidance and FREE scholarship assistance for international education. 97% success rate with 3000+ students helped since 2018.",
+    "description": "Leading study abroad consultancy in Bangladesh providing expert guidance and FREE scholarship assistance for international education. 98% success rate with 3,000+ students helped since 2018.",
     "url": "https://www.eduexpressint.com",
     "logo": {
       "@type": "ImageObject",
@@ -326,6 +327,7 @@ export default function RootLayout({
             phoneNumber="+8801983333566"
             message="Hi! I'm interested in studying abroad. Can you help me with information about universities and scholarships?"
           />
+          <CookieConsent />
           <DeferredComponents />
           <SpeedInsights />
         </LazyMotion>

@@ -17,17 +17,32 @@ export default function FloatingWhatsApp({
   const [isVisible, setIsVisible] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if mobile (< 1024px = lg breakpoint)
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     // Show the widget after a delay
+    let popupTimer: NodeJS.Timeout;
     const timer = setTimeout(() => {
       setIsVisible(true);
-      // Show popup shortly after widget appears
-      setTimeout(() => setShowPopup(true), 1000);
+      // Show popup shortly after widget appears (only on desktop to avoid blocking mobile screens)
+      if (!isMobile) {
+        popupTimer = setTimeout(() => setShowPopup(true), 1000);
+      }
     }, 2000);
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => {
+      clearTimeout(timer);
+      if (popupTimer) clearTimeout(popupTimer);
+    };
+  }, [isMobile]);
 
   const handleWhatsAppClick = () => {
     // Track WhatsApp interaction
@@ -52,7 +67,7 @@ export default function FloatingWhatsApp({
   if (!isVisible) return null;
 
   return (
-    <div className={`fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 ${className} font-sans`}>
+    <div className={`fixed bottom-24 md:bottom-6 right-6 z-50 flex flex-col items-end gap-4 ${className} font-sans`}>
       {/* Greeting Popup */}
       {showPopup && (
         <div className="bg-white p-4 rounded-xl shadow-2xl max-w-[280px] relative animate-fadeIn transition-all duration-300 border border-gray-100">

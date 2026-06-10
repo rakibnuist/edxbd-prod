@@ -12,7 +12,7 @@ export default function AboutClient() {
       <PageHeader
         title="About"
         highlight="EduExpress"
-        description="Your trusted partner in global education since 2018. We've helped over 3000 students achieve their dreams of studying abroad with 6+ years of proven experience."
+        description="Your trusted partner in global education since 2018. We've helped over 3,000 students achieve their dreams of studying abroad with 6+ years of proven experience."
         icon={BookOpen}
         badgeText="Trusted Since 2018"
       >
@@ -42,15 +42,15 @@ export default function AboutClient() {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
               <div className="text-center group">
-                <div className="text-4xl font-bold text-blue-600 mb-2 group-hover:scale-110 transition-transform duration-200">3000+</div>
+                <div className="text-4xl font-bold text-blue-600 mb-2 group-hover:scale-110 transition-transform duration-200">3,000+</div>
                 <div className="text-gray-600 font-medium">Students Placed</div>
               </div>
               <div className="text-center group">
-                <div className="text-4xl font-bold text-green-600 mb-2 group-hover:scale-110 transition-transform duration-200">95%</div>
+                <div className="text-4xl font-bold text-green-600 mb-2 group-hover:scale-110 transition-transform duration-200">98%</div>
                 <div className="text-gray-600 font-medium">Success Rate</div>
               </div>
               <div className="text-center group">
-                <div className="text-4xl font-bold text-orange-500 mb-2 group-hover:scale-110 transition-transform duration-200">300+</div>
+                <div className="text-4xl font-bold text-orange-500 mb-2 group-hover:scale-110 transition-transform duration-200">150+</div>
                 <div className="text-gray-600 font-medium">Universities</div>
               </div>
               <div className="text-center group">
@@ -58,7 +58,7 @@ export default function AboutClient() {
                 <div className="text-gray-600 font-medium">Countries</div>
               </div>
               <div className="text-center group">
-                <div className="text-4xl font-bold text-red-500 mb-2 group-hover:scale-110 transition-transform duration-200">€2M+</div>
+                <div className="text-4xl font-bold text-red-500 mb-2 group-hover:scale-110 transition-transform duration-200">$5M+</div>
                 <div className="text-gray-600 font-medium">Scholarships</div>
               </div>
               <div className="text-center group">
@@ -99,7 +99,7 @@ export default function AboutClient() {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Our Impact</h3>
                 <p className="text-gray-600">
-                  Over 3000 successful placements with a 95% success rate across 25+ countries worldwide.
+                  Over 3,000 successful placements with a 98% success rate across 25+ countries worldwide.
                 </p>
               </div>
 
@@ -191,7 +191,7 @@ export default function AboutClient() {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Proven Success</h3>
               <p className="text-gray-600 text-lg">
-                95% success rate with over 3000 students placed in top universities worldwide since 2018.
+                98% success rate with over 3,000 students placed in top universities worldwide since 2018.
               </p>
             </div>
 
@@ -211,7 +211,7 @@ export default function AboutClient() {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Global Network</h3>
               <p className="text-gray-600 text-lg">
-                Direct partnerships with 300+ universities across 25+ countries worldwide.
+                Direct partnerships with 150+ universities across 25+ countries worldwide.
               </p>
             </div>
           </div>
