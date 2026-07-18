@@ -70,48 +70,70 @@ export default function AboutClient() {
         </div>
       </section>
 
-      {/* Our Story - Simple & Focused */}
+      {/* Our Story & History */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
-              <p className="text-xl text-gray-600 leading-relaxed">
-                Since 2018, we&apos;ve been helping students turn their study abroad dreams into reality.
-                Our mission is simple: make world-class education accessible to everyone with our proven 6+ years of experience.
+              <h2 className="text-4xl font-bold text-gray-900 mb-8">Our Story</h2>
+              <div className="text-lg text-gray-600 leading-relaxed text-left space-y-6">
+                <p>
+                  EduExpress International’s journey began on 8 March 2018 through Founder and CEO Abdullah Al Rakib’s work in Chinese higher education. In 2019, he established Wuxi Haiying Culture and Art Consulting Co., Ltd. in China and developed institutional cooperation with Chinese universities, including a formal student-recruitment cooperation agreement with Linyi University.
+                </p>
+                <p>
+                  Regional partner operations were also developed in Thailand and Vietnam. Following a temporary suspension during the COVID-19 period, EduExpress relaunched its Bangladesh operation in 2023 and now supports both students and education-agency partners.
+                </p>
+              </div>
+            </div>
+
+            {/* China Specialist Positioning */}
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-3xl p-8 md:p-12 mb-20 text-center border border-blue-200/50 shadow-sm relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-blue-600 to-blue-400"></div>
+              <h3 className="text-2xl md:text-3xl font-bold text-blue-900 mb-6">
+                EduExpress International — Bangladesh’s China Admission and Scholarship Specialist
+              </h3>
+              <p className="text-lg md:text-xl text-blue-800/80 leading-relaxed max-w-3xl mx-auto font-medium">
+                Through experience dating back to 2018, a former China-registered operating company, university agent portals and institutional relationships, EduExpress provides specialised support for Chinese university admission, scholarships, documentation and student visa preparation.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Target className="w-8 h-8 text-blue-600" />
+            {/* Historical Timeline */}
+            <div className="mb-8">
+              <h3 className="text-3xl font-bold text-center text-gray-900 mb-16">Our Historical Timeline</h3>
+              
+              <div className="relative border-l-2 border-blue-200 pl-8 ml-4 md:pl-0 md:ml-0 md:border-l-0">
+                {/* Desktop Center Line */}
+                <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-blue-100 -translate-x-1/2"></div>
+                
+                <div className="space-y-12">
+                  {[
+                    { year: "2018", title: "Journey began", desc: "Abdullah Al Rakib entered the Chinese international-education and student-admission sector." },
+                    { year: "2019", title: "China company established", desc: "Wuxi Haiying Culture and Art Consulting Co., Ltd. was formed in China." },
+                    { year: "2019", title: "Regional expansion", desc: "Partner offices and cooperation were developed in Thailand and Vietnam." },
+                    { year: "Pre-COVID period", title: "Institutional cooperation", desc: "The China company entered university recruitment relationships, including the attached agreement with Linyi University." },
+                    { year: "COVID period", title: "Operations suspended", desc: "International operations were temporarily closed because of pandemic disruption." },
+                    { year: "2023", title: "Bangladesh relaunch", desc: "EduExpress resumed operations from RK Tower, Banglamotor." },
+                    { year: "Present", title: "Dhanmondi operation", desc: "EduExpress operates from Dhanmondi 4/A, serving both students and education agencies." },
+                  ].map((item, idx) => (
+                    <div key={idx} className={`relative flex flex-col md:flex-row items-start md:items-center ${idx % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                      
+                      {/* Timeline Dot */}
+                      <div className="absolute left-[-41px] md:left-1/2 top-1 md:top-1/2 w-5 h-5 bg-blue-600 rounded-full border-4 border-white shadow-md md:-translate-x-1/2 md:-translate-y-1/2 z-10"></div>
+                      
+                      {/* Content Card */}
+                      <div className={`w-full md:w-[45%] ${idx % 2 === 0 ? 'md:pl-10 text-left' : 'md:pr-10 md:text-right'}`}>
+                        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                          <div className="inline-block px-3 py-1 bg-blue-50 text-blue-700 font-bold text-sm rounded-full mb-3">{item.year}</div>
+                          <h4 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h4>
+                          <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+                        </div>
+                      </div>
+
+                    </div>
+                  ))}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Our Mission</h3>
-                <p className="text-gray-600">
-                  To democratize access to world-class education through personalized guidance and comprehensive support.
-                </p>
               </div>
 
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Zap className="w-8 h-8 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Our Impact</h3>
-                <p className="text-gray-600">
-                  Over 3,000 successful placements with a 98% success rate across 25+ countries worldwide.
-                </p>
-              </div>
-
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Heart className="w-8 h-8 text-orange-500" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Our Promise</h3>
-                <p className="text-gray-600">
-                  Every student gets personalized attention and dedicated support throughout their journey.
-                </p>
-              </div>
             </div>
           </div>
         </div>

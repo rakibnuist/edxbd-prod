@@ -248,9 +248,9 @@ const HeroSection = () => {
                         <div className="bg-gray-100 p-3 rounded-full mb-4">
                             <Send className="w-8 h-8 text-gray-800 fill-current" />
                         </div>
-                        <h2 className="text-xl font-bold text-slate-800 mb-2">7 Years of Experience</h2>
+                        <h2 className="text-xl font-bold text-slate-800 mb-2">China-Specialist Since 2018</h2>
                         <p className="text-slate-600 text-sm">
-                            Successfully helping students achieve their dreams
+                            China-focused experience since 2018, with 2,000+ successful student cases supported through B2C and agency-partner channels.
                         </p>
                     </motion.div>
                 </div>
@@ -298,7 +298,7 @@ const HeroWrapper = () => {
                 {[
                     { icon: Star, title: "Up to 100% Scholarship", text: "You could be eligible for a scholarship, grant or funding", color: "text-blue-600", border: "border-blue-600" },
                     { icon: Users, title: "Free Consultations", text: "Book a FREE appointment and consult to find your path", color: "text-amber-600", border: "border-amber-600" },
-                    { icon: Send, title: "7 Years of Experience", text: "Successfully helping students achieve their dreams", color: "text-gray-800", border: "border-gray-800" }
+                    { icon: Send, title: "China-Specialist Since 2018", text: "China-focused experience since 2018, with 2,000+ successful student cases supported through B2C and agency-partner channels.", color: "text-gray-800", border: "border-gray-800" }
                 ].map((card, i) => (
                     <div key={i} className={`bg-white rounded-xl shadow-lg p-6 text-center flex flex-col items-center border-b-4 ${card.border}`}>
                         <card.icon className={`w-10 h-10 mb-4 fill-current ${card.color}`} />
