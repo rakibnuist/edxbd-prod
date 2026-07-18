@@ -19,11 +19,11 @@ const CTASection = dynamic(() => import('@/components/home/CTASection'));
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Study Abroad Consultancy | EduExpress International",
-  description: "Transform your education journey with EduExpress International. Expert study abroad consultancy in Bangladesh with FREE scholarship assistance for UK, USA, Canada, & more.",
+  title: "Best Education Consultancy in Bangladesh | EduExpress International",
+  description: "Ranked as the best education consultancy in Bangladesh. Transform your education journey with FREE scholarship assistance for China, UK, USA, & more.",
   openGraph: {
-    title: "Study Abroad Consultancy | EduExpress International",
-    description: "Transform your education journey with EduExpress International. Expert study abroad consultancy in Bangladesh with FREE scholarship assistance for UK, USA, Canada, & more.",
+    title: "Best Education Consultancy in Bangladesh | EduExpress International",
+    description: "Ranked as the best education consultancy in Bangladesh. Transform your education journey with FREE scholarship assistance for China, UK, USA, & more.",
     type: "website",
     url: "https://eduexpressint.com",
     siteName: "EduExpress International",
@@ -34,8 +34,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Study Abroad Consultancy | EduExpress International",
-    description: "Transform your education journey with EduExpress International. Expert study abroad consultancy in Bangladesh with FREE scholarship assistance for UK, USA, Canada, & more.",
+    title: "Best Education Consultancy in Bangladesh | EduExpress International",
+    description: "Ranked as the best education consultancy in Bangladesh. Transform your education journey with FREE scholarship assistance for China, UK, USA, & more.",
   },
 };
 
@@ -45,6 +45,21 @@ export const metadata: Metadata = {
 async function getTestimonials(): Promise<Testimonial[]> {
   // Returning hardcoded real testimonials as requested
   return [
+    {
+      _id: "t0",
+      name: "Ahmed Reaz",
+      location: "Tsinghua University",
+      university: "Tsinghua University",
+      program: "B.Sc Engineering",
+      quote: "EduExpress is undoubtedly the best agency for China in Bangladesh. Their guidance for the CSC Scholarship was flawless, and I received full funding!",
+      rating: 5,
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+      country: "China",
+      isActive: true,
+      featured: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
     {
       _id: "t1",
       name: "Tanveer Shuvo",

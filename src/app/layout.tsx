@@ -176,8 +176,8 @@ export default function RootLayout({
     "foundingDate": "2018",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "House: 12/1, Ground Floor, Road: 4/A",
-      "addressLocality": "Dhanmondi",
+      "streetAddress": "Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi-1209",
+      "addressLocality": "Dhaka",
       "addressRegion": "Dhaka",
       "postalCode": "1209",
       "addressCountry": "BD"

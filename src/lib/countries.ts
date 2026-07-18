@@ -59,6 +59,7 @@ export interface Country {
   popularProgramsList?: ProgramCategory[];
   citiesList?: CityDetail[];
   scholarshipsList?: ScholarshipDetail[];
+  faqs?: { question: string; answer: string }[];
 }
 
 export const countries: Country[] = [
@@ -66,31 +67,31 @@ export const countries: Country[] = [
     name: 'China',
     slug: 'china',
     flag: '🇨🇳',
-    description: 'Full Scholarships & Top Global Rankings',
+    description: 'Full Scholarships & Top Global Rankings for Bangladeshi Students',
     universities: ['Tsinghua University', 'Peking University', 'Zhejiang University', 'Shanghai Jiao Tong', 'Fudan University', 'Nanjing University'],
     programs: ['MBBS', 'Engineering', 'Computer Science', 'Business', 'Mandarin Language'],
     requirements: {
-      language: ['IELTS not always required (English Proficiency Letter accepted)', 'HSK 4+ required only for Chinese-medium programs'],
-      documents: ['Notarized Transcripts & Certificates', 'Physical Examination Form', 'Police Clearance Certificate', 'Study Plan/SOP'],
-      visa: ['JW202/JW201 Government Form', 'X1/X2 Visa Application at China Embassy']
+      language: ['IELTS not always required (English Proficiency Letter from Bangladeshi College/University accepted)', 'HSK 4+ required only for Chinese-medium programs'],
+      documents: ['Notarized Transcripts & Certificates (SSC/HSC/Bachelors)', 'Physical Examination Form (From Dhaka Hospitals)', 'Police Clearance Certificate (From Bangladesh Police)', 'Study Plan/SOP'],
+      visa: ['JW202/JW201 Government Form', 'X1/X2 Visa Application at China Embassy in Dhaka, Bangladesh']
     },
     costs: {
-      tuition: '$2,500 - $6,000 / year (Fully Waived under Scholarship)',
+      tuition: '$2,500 - $6,000 / year (Fully Waived under CSC Scholarship)',
       living: '$200 - $400 / month',
       currency: 'USD'
     },
     scholarships: ['CSC Scholarship (Type A & B)', 'University Presidential Scholarship', 'Belt & Road Scholarship', 'Provincial Government Scholarship'],
-    benefits: ['100% Free Tuition & Hostel Accommodation', 'Global Top 100 QS Ranking Universities', 'No IELTS Options (MOI accepted)'],
+    benefits: ['100% Free Tuition & Hostel Accommodation', 'Global Top 100 QS Ranking Universities', 'No IELTS Options for Bangladeshi Students'],
     isActive: true,
     featured: true,
     images: ['https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=75&w=1200&auto=format&fit=crop'],
-    metaTitle: 'Study in China from Bangladesh - Full Scholarships 2026',
-    metaDescription: 'Study in China with full Free scholarship. No IELTS options available. Top ranking universities for Medicine and Engineering.',
+    metaTitle: 'Best Agency for China in Bangladesh - Full Scholarships 2026',
+    metaDescription: 'EduExpress is the best education consultancy in Bangladesh for studying in China. Get full free CSC scholarships for MBBS and Engineering.',
     nextDeadline: 'December 15th',
     intakesText: 'March & September',
     factText: 'Chinese universities host state-of-the-art research labs and represent the frontier of AI, clean tech, and high-speed rail development.',
     degreesList: [
-      { title: 'Foundation Program', duration: '1 Year', desc: 'Pre-university preparation bridging academic gaps.', icon: 'Sparkles', color: 'bg-indigo-50 text-indigo-600 border-indigo-100' },
+      { title: 'Foundation Program', duration: '1 Year', desc: 'Pre-university preparation bridging academic gaps after HSC.', icon: 'Sparkles', color: 'bg-indigo-50 text-indigo-600 border-indigo-100' },
       { title: 'Diploma Program', duration: '2-3 Years', desc: 'Vocational and technical training focused on practical engineering.', icon: 'Scroll', color: 'bg-teal-50 text-teal-600 border-teal-100' },
       { title: 'Bachelor Degree', duration: '4-6 Years', desc: 'Undergraduate programs in Engineering, Medicine (MBBS), Business, etc.', icon: 'GraduationCap', color: 'bg-red-50 text-red-600 border-red-100' },
       { title: 'Masters Degree', duration: '2-3 Years', desc: 'Postgraduate specialization with intensive research opportunities.', icon: 'Award', color: 'bg-purple-50 text-purple-600 border-purple-100' },
@@ -114,6 +115,24 @@ export const countries: Country[] = [
       { name: 'Confucius Institute Scholarship', amount: 'Full Tuition + Health Insurance + Monthly Stipend', deadline: 'April 20th', icon: 'Languages' },
       { name: 'Provincial Government Scholarship', amount: 'Partial to Full Tuition Coverage (¥10,000 - ¥30,000 / year)', deadline: 'Varies', icon: 'MapPin' },
       { name: 'University Presidential Scholarship', amount: '10% - 100% Tuition Waiver + Free Accommodation', deadline: 'Varies', icon: 'School' }
+    ],
+    faqs: [
+      {
+        question: 'Which is the best agency for China in Bangladesh?',
+        answer: 'EduExpress International is widely recognized as the best agency for China in Bangladesh. We have successfully sent hundreds of Bangladeshi students to top Chinese universities with full CSC scholarships.'
+      },
+      {
+        question: 'Can Bangladeshi students study in China without IELTS?',
+        answer: 'Yes! Many top universities in China accept an English Proficiency Certificate from your previous school or college in Bangladesh instead of IELTS.'
+      },
+      {
+        question: 'How to apply for the CSC Scholarship from Bangladesh?',
+        answer: 'The CSC Scholarship requires applying through the official CSC portal and the university portal. EduExpress International provides complete, free assistance to Bangladeshi students for CSC Type A and Type B applications.'
+      },
+      {
+        question: 'Is a Chinese MBBS degree valid in Bangladesh?',
+        answer: 'Yes, MBBS degrees from BMDC (Bangladesh Medical and Dental Council) recognized Chinese universities are fully valid in Bangladesh. You just need to pass the BMDC licensing exam upon return.'
+      }
     ]
   },
   {

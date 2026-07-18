@@ -43,6 +43,7 @@ export async function generateMetadata({ params }: CountryPageProps): Promise<Me
 }
 
 import DestinationDetailClient from './DestinationDetailClient';
+import FAQSection from '@/components/FAQSection';
 
 export default async function CountryPage({ params }: CountryPageProps) {
   try {
@@ -84,6 +85,19 @@ export default async function CountryPage({ params }: CountryPageProps) {
       }
     };
 
+    const faqSchema = country.faqs && country.faqs.length > 0 ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": country.faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    } : null;
+
     return (
       <>
         {/* Structured Data */}
@@ -91,6 +105,12 @@ export default async function CountryPage({ params }: CountryPageProps) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        {faqSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+          />
+        )}
 
         {/* Destination Tracking */}
         <DestinationTracking countryName={country.name} />
@@ -125,6 +145,12 @@ export default async function CountryPage({ params }: CountryPageProps) {
         />
 
         <DestinationDetailClient country={country} />
+        
+        {country.faqs && country.faqs.length > 0 && (
+          <div className="bg-gray-50/50 w-full pb-12">
+            <FAQSection faqs={country.faqs} />
+          </div>
+        )}
       </>
     );
   } catch (error) {
