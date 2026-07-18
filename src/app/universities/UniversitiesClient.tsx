@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
     Search,
@@ -23,10 +23,17 @@ const INTAKES = ['March', 'September'];
 const DEGREES = ['Diploma', 'Bachelor', 'Masters', 'PhD', 'Language', 'Foundation'];
 const TAUGHT_LANGUAGES = ['English', 'Chinese'];
 
-const UniversitiesClient = () => {
+// PHASE 0 FIX: the page (server component) passes the full active university
+// list so every card is server-rendered into the HTML (crawlable by Google and
+// AI bots). The client only fetches when the user changes page/filters.
+interface UniversitiesClientProps {
+    initialUniversities?: IUniversity[];
+}
+
+const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProps) => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
-    const [universities, setUniversities] = useState<IUniversity[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [universities, setUniversities] = useState<IUniversity[]>(initialUniversities);
+    const [loading, setLoading] = useState(initialUniversities.length === 0);
 
     // Filter States
     const [searchQuery, setSearchQuery] = useState('');
@@ -45,7 +52,16 @@ const UniversitiesClient = () => {
 
     const [error, setError] = useState<string | null>(null);
 
+    // PHASE 0 FIX: skip the initial client-side fetch when the server already
+    // provided data — the effect still runs on any page/filter change.
+    const skipInitialFetch = useRef(initialUniversities.length > 0);
+
     useEffect(() => {
+        if (skipInitialFetch.current) {
+            skipInitialFetch.current = false;
+            setLoading(false);
+            return;
+        }
         const fetchUniversities = async () => {
             try {
                 setLoading(true);
