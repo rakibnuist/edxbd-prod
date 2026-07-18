@@ -39,11 +39,19 @@ const mergeUniqueCategories = (base: string[], additions: string[]) => {
   return merged;
 };
 
-export default function UpdatesClient() {
-  const [updates, setUpdates] = useState<Update[]>([]);
-  const [filteredUpdates, setFilteredUpdates] = useState<Update[]>([]);
-  const [apiCategories, setApiCategories] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
+// PHASE 0 FIX: the page (server component) passes pre-fetched data so the
+// full list is server-rendered into the HTML. The client only re-fetches if
+// no initial data was provided (fallback).
+interface UpdatesClientProps {
+  initialUpdates?: Update[];
+  initialCategories?: string[];
+}
+
+export default function UpdatesClient({ initialUpdates = [], initialCategories = [] }: UpdatesClientProps) {
+  const [updates, setUpdates] = useState<Update[]>(initialUpdates);
+  const [filteredUpdates, setFilteredUpdates] = useState<Update[]>(initialUpdates);
+  const [apiCategories, setApiCategories] = useState<string[]>(initialCategories);
+  const [loading, setLoading] = useState(initialUpdates.length === 0);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [dateFilter, setDateFilter] = useState('All');
@@ -151,8 +159,12 @@ export default function UpdatesClient() {
   }, [updates, searchTerm, selectedCategory, dateFilter, sortBy, showFeaturedOnly]);
 
   useEffect(() => {
-    fetchUpdates();
+    // PHASE 0 FIX: only fetch client-side if the server didn't provide data
+    if (initialUpdates.length === 0) {
+      fetchUpdates();
+    }
     trackPageView('updates_page');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
