@@ -24,9 +24,13 @@ export async function generateMetadata({ params }: CountryPageProps): Promise<Me
   }
 
   return {
-    title: `Study in ${country.name} | EduExpress International`,
+    title: `Study in ${country.name}`,
     description: `Study abroad in ${country.name} with expert guidance. FREE scholarship assistance, university applications, and visa support. 98% success rate.`,
     keywords: `study in ${country.name}, ${country.name} universities, ${country.name} education, study abroad ${country.name}, ${country.name} scholarships`,
+    alternates: {
+      // PHASE 0 FIX: per-page canonical
+      canonical: `/destinations/${countrySlug}`,
+    },
     openGraph: {
       title: `Study in ${country.name} | EduExpress International`,
       description: `Transform your education journey in ${country.name}. FREE scholarship assistance with 98% success rate.`,
