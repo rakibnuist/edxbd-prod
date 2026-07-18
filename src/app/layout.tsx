@@ -187,6 +187,7 @@ export default function RootLayout({
       "latitude": 23.7461,
       "longitude": 90.3742
     },
+    "telephone": "+880 1983-333566",
     "contactPoint": [
       {
         "@type": "ContactPoint",
