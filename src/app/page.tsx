@@ -25,8 +25,12 @@ export const metadata: Metadata = {
     title: "Study Abroad Consultancy | EduExpress International",
     description: "Transform your education journey with EduExpress International. Expert study abroad consultancy in Bangladesh with FREE scholarship assistance for UK, USA, Canada, & more.",
     type: "website",
-    url: "https://www.eduexpressint.com",
+    url: "https://eduexpressint.com",
     siteName: "EduExpress International",
+  },
+  alternates: {
+    // PHASE 0 FIX: homepage canonical (root-layout canonical was removed)
+    canonical: "/",
   },
   twitter: {
     card: "summary_large_image",
