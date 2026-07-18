@@ -41,7 +41,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.eduexpressint.com'),
+  metadataBase: new URL('https://eduexpressint.com'),
   title: {
     default: "EduExpress International - Study Abroad Consultancy | Free Scholarship Assistance",
     template: "%s | EduExpress International"
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     "student visa help",
     "education guidance"
   ],
-  authors: [{ name: "EduExpress International", url: "https://www.eduexpressint.com" }],
+  authors: [{ name: "EduExpress International", url: "https://eduexpressint.com" }],
   creator: "EduExpress International",
   publisher: "EduExpress International",
   applicationName: "EduExpress International",
@@ -106,7 +106,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.eduexpressint.com",
+    url: "https://eduexpressint.com",
     siteName: "EduExpress International",
     title: "EduExpress International - Study Abroad Consultancy | Free Scholarship Assistance",
     description: "Transform your education journey with expert study abroad consultancy. FREE scholarship assistance with 98% success rate. Study in UK, China, South Korea, Hungary & more.",
@@ -127,21 +127,6 @@ export const metadata: Metadata = {
     images: ["/og-image.jpg"],
     creator: "@eduexpressint",
     site: "@eduexpressint",
-  },
-  verification: {
-    google: "your-google-verification-code",
-    yandex: "your-yandex-verification-code",
-    yahoo: "your-yahoo-verification-code",
-    other: {
-      "msvalidate.01": "your-bing-verification-code",
-    },
-  },
-  alternates: {
-    canonical: "https://www.eduexpressint.com",
-    languages: {
-      'en-US': 'https://www.eduexpressint.com',
-      'bn-BD': 'https://www.eduexpressint.com/bn',
-    },
   },
   category: 'education',
   classification: 'Education Services',
@@ -177,16 +162,16 @@ export default function RootLayout({
     "name": "EduExpress International",
     "alternateName": ["EduExpress", "EduExpress International Consultancy"],
     "description": "Leading study abroad consultancy in Bangladesh providing expert guidance and FREE scholarship assistance for international education. 98% success rate with 3,000+ students helped since 2018.",
-    "url": "https://www.eduexpressint.com",
+    "url": "https://eduexpressint.com",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://www.eduexpressint.com/logo.png",
+      "url": "https://eduexpressint.com/logo.png",
       "width": 200,
       "height": 200
     },
     "image": [
-      "https://www.eduexpressint.com/og-image.jpg",
-      "https://www.eduexpressint.com/logo.png"
+      "https://eduexpressint.com/og-image.jpg",
+      "https://eduexpressint.com/logo.png"
     ],
     "foundingDate": "2018",
     "address": {
@@ -197,6 +182,11 @@ export default function RootLayout({
       "postalCode": "1209",
       "addressCountry": "BD"
     },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 23.7461,
+      "longitude": 90.3742
+    },
     "contactPoint": [
       {
         "@type": "ContactPoint",
@@ -206,7 +196,7 @@ export default function RootLayout({
         "areaServed": "BD",
         "hoursAvailable": {
           "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
           "opens": "09:00",
           "closes": "18:00"
         }
@@ -221,10 +211,10 @@ export default function RootLayout({
     ],
     "email": "info@eduexpressint.com",
     "sameAs": [
-      "https://www.facebook.com/eduexpressint",
-      "https://www.linkedin.com/company/eduexpress-international",
+      "https://www.facebook.com/EduExpressIntBD",
+      "https://www.linkedin.com/company/eduexpress/",
       "https://www.instagram.com/eduexpressint",
-      "https://twitter.com/eduexpressint"
+      "https://www.youtube.com/@EduExpressInt"
     ],
     "serviceArea": {
       "@type": "Country",
@@ -271,13 +261,6 @@ export default function RootLayout({
           }
         }
       ]
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "3000",
-      "bestRating": "5",
-      "worstRating": "1"
     },
     "priceRange": "Free consultation available",
     "knowsAbout": [
