@@ -6,7 +6,7 @@ import 'dotenv/config';
 const prisma = new PrismaClient();
 
 async function readJson(filename: string) {
-  const filePath = path.join(process.cwd(), 'db-dump-new', filename);
+  const filePath = path.join(process.cwd(), 'db-dump', filename);
   try {
     const data = await fs.readFile(filePath, 'utf-8');
     return JSON.parse(data);
