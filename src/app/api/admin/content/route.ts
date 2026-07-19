@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import Content from '@/models/Content';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,10 +13,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-
-    const contents = await Content.find()
-      .sort({ updatedAt: -1 });
+    const contents = await prisma.content.findMany({
+      orderBy: { updatedAt: 'desc' }
+    });
 
     return NextResponse.json(contents);
   } catch (error) {
@@ -37,8 +35,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-
     const body = await request.json();
     console.log('Creating content with data:', body);
     
@@ -56,8 +52,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if slug already exists
-    const existingContent = await Content.findOne({ slug: body.slug });
+    const existingContent = await prisma.content.findUnique({ where: { slug: body.slug } });
     if (existingContent) {
       console.error('Slug already exists:', body.slug);
       return NextResponse.json(
@@ -66,9 +61,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const content = new Content(body);
-    const savedContent = await content.save();
-    console.log('Content created successfully:', savedContent._id);
+    const savedContent = await prisma.content.create({
+      data: body
+    });
+    console.log('Content created successfully:', savedContent.id);
 
     return NextResponse.json(savedContent, { status: 201 });
   } catch (error) {

@@ -384,6 +384,10 @@ export default function StudyInChinaFromBangladeshPage() {
                 ['Plan the full study cost', '/study-in-china-cost-bangladesh'],
                 ['IELTS alternative routes', '/study-in-china-without-ielts'],
                 ['China intakes and deadlines', '/china-intakes-deadlines'],
+                ['MBBS in China', '/mbbs-in-china-bangladesh'],
+                ['Student life in China', '/life-in-china-bangladeshi-students'],
+                ['China success stories', '/china-success-stories'],
+                ['China visa-first policy', '/china-visa-first-policy'],
               ].map(([label, href]) => (
                 <Link key={href} href={href} className="group flex min-h-20 items-center justify-between border-b border-r border-[#174f7a]/20 p-4 text-sm font-black hover:bg-[#e9f7fd]">
                   {label}<ArrowRight size={16} className="text-[#174f7a] transition group-hover:translate-x-1" />

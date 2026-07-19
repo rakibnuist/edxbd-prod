@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, BadgeCheck, BookOpenCheck, Check, FileCheck2, GraduationCap, Languages, ShieldCheck, Sparkles } from 'lucide-react';
 
 const canonical = 'https://eduexpressint.com/bn/study-in-china';
-const chinaTerms = 'কোনো ফাইল খোলার চার্জ নেই। চীনের ভিসা অনুমোদনের আগে EduExpress-এর কোনো সার্ভিস ফি নেই। তবে বিশ্ববিদ্যালয়, দূতাবাস, মেডিকেল, অনুবাদ, কুরিয়ার, ডিপোজিট বা অন্য কোনো তৃতীয় পক্ষের ফি আগে প্রয়োজন হলে শিক্ষার্থী এগোনোর আগে তা লিখিতভাবে আলাদা করে জানাতে হবে।';
+const chinaTerms = '“কোনো ফাইল ওপেনিং চার্জ নেই। চীনের ভিসা অ্যাপ্রুভালের আগে এডুএক্সপ্রেসের কোনো সার্ভিস ফি নেই। স্টুডেন্ট প্রসেস শুরু করার আগে ইউনিভার্সিটি, এম্বাসি, মেডিকেল, ট্রান্সলেশন, কুরিয়ার বা অন্য যেকোনো থার্ড-পার্টি ফি অবশ্যই লিখিতভাবে জানাতে হবে।”';
 
 export const metadata: Metadata = {
   title: { absolute: 'বাংলাদেশ থেকে চীনে উচ্চশিক্ষা | EduExpress' },

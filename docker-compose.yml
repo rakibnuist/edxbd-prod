@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: edxbd_web
+    restart: always
+    environment:
+      # Use a persistent location for the database inside the container
+      - DATABASE_URL=file:/app/prisma/data/prod.db
+      - NODE_ENV=production
+    volumes:
+      # Mount a local directory to persist the SQLite database
+      - ./prisma/data:/app/prisma/data
+    labels:
+      - "traefik.enable=true"
+      # Route for eduexpressint.com and www.eduexpressint.com
+      - "traefik.http.routers.edxbd.rule=Host(`eduexpressint.com`) || Host(`www.eduexpressint.com`)"
+      - "traefik.http.routers.edxbd.entrypoints=websecure"
+      - "traefik.http.routers.edxbd.tls.certresolver=letsencrypt" # Assumes Let's Encrypt resolver is named 'letsencrypt' in Traefik setup
+      # Port configuration
+      - "traefik.http.services.edxbd.loadbalancer.server.port=3000"
+    networks:
+      - traefik-net
+
+networks:
+  traefik-net:
+    external: true
+    # Your Hostinger VPS template likely uses an external network for Traefik.
+    # If the network name is different, change it here (e.g., 'proxy' or 'web').

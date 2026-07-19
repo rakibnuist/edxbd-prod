@@ -666,7 +666,7 @@ export default function UsersPage() {
               ) : (
                 <div className="max-h-[400px] overflow-y-auto space-y-4 pr-2">
                   {sentMessages.map((msg, index) => (
-                    <div key={msg._id || index} className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-green-200 transition-colors">
+                    <div key={msg.id || index} className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-green-200 transition-colors">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <p className="text-sm font-semibold text-gray-800">To: {msg.toName} ({msg.toEmail})</p>

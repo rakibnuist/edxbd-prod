@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import Lead from '@/models/Lead';
+import prisma from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
@@ -14,10 +13,9 @@ export async function GET(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
     const { id } = await params;
 
-    const lead = await Lead.findById(id);
+    const lead = await prisma.lead.findUnique({ where: { id } });
     if (!lead) {
       return NextResponse.json(
         { error: 'Lead not found' },
@@ -46,15 +44,13 @@ export async function PUT(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
     const { id } = await params;
 
     const body = await request.json();
-    const lead = await Lead.findByIdAndUpdate(
-      id,
-      body,
-      { new: true, runValidators: true }
-    );
+    const lead = await prisma.lead.update({
+      where: { id },
+      data: body
+    }).catch(() => null);
 
     if (!lead) {
       return NextResponse.json(
@@ -84,17 +80,15 @@ export async function PATCH(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
     const { id } = await params;
 
     const body = await request.json();
     console.log(`Updating lead ${id} with data:`, body);
     
-    const lead = await Lead.findByIdAndUpdate(
-      id,
-      { ...body, updatedAt: new Date() },
-      { new: true, runValidators: true }
-    );
+    const lead = await prisma.lead.update({
+      where: { id },
+      data: body
+    }).catch(() => null);
 
     if (!lead) {
       console.log(`Lead not found: ${id}`);
@@ -104,7 +98,7 @@ export async function PATCH(
       );
     }
 
-    console.log(`Lead updated successfully: ${lead._id} - Status: ${lead.status}`);
+    console.log(`Lead updated successfully: ${lead.id} - Status: ${lead.status}`);
     return NextResponse.json(lead);
   } catch (error) {
     console.error('Update lead error:', error);
@@ -126,10 +120,9 @@ export async function DELETE(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
     const { id } = await params;
 
-    const lead = await Lead.findByIdAndDelete(id);
+    const lead = await prisma.lead.delete({ where: { id } }).catch(() => null);
     if (!lead) {
       return NextResponse.json(
         { error: 'Lead not found' },

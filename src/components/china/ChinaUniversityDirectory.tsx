@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, BookOpenCheck, Building2, CalendarCheck, Filter, Languages, MapPin, Search, Sparkles } from 'lucide-react';
 
 export type ChinaUniversityRecord = {
-  _id: string;
+  id: string;
   slug: string;
   name: string;
   city: string;
@@ -81,7 +81,7 @@ export default function ChinaUniversityDirectory({ universities }: Props) {
           {filtered.map((university, index) => {
             const isVerified = university.verificationStatus === 'verified' && university.sourceUrls?.length;
             return (
-              <article key={university._id} className="grid border-b border-r border-[#174f7a]/20 bg-white lg:grid-cols-[5rem_1.25fr_.9fr_.8fr_auto]">
+              <article key={university.id} className="grid border-b border-r border-[#174f7a]/20 bg-white lg:grid-cols-[5rem_1.25fr_.9fr_.8fr_auto]">
                 <div className="flex items-center justify-between border-b border-[#174f7a]/15 bg-[#08263c] px-4 py-3 text-white lg:flex-col lg:justify-start lg:border-b-0 lg:border-r lg:px-2 lg:py-5">
                   <span className="font-mono text-[9px] font-black text-[#8ed0ee]">{String(index + 1).padStart(2, '0')}</span>
                   <span className="mt-0 grid size-9 place-items-center bg-white/10 font-heading text-sm font-bold lg:mt-5">{university.name.charAt(0)}</span>

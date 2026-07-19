@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import TermsClient from './TermsClient';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service - EduExpress International',
+  title: 'Terms of Service',
   description: 'Read the terms and conditions for using EduExpress International services. Our comprehensive terms cover service usage, responsibilities, and legal agreements.',
   keywords: [
     'terms of service',
@@ -17,14 +17,14 @@ export const metadata: Metadata = {
     'terms of use'
   ],
   openGraph: {
-    title: 'Terms of Service - EduExpress International',
+    title: 'Terms of Service',
     description: 'Read the terms and conditions for using EduExpress International services. Our comprehensive terms cover service usage, responsibilities, and legal agreements.',
     type: 'website',
     url: 'https://www.eduexpressint.com/terms',
     siteName: 'EduExpress International',
   },
   twitter: {
-    title: 'Terms of Service - EduExpress International',
+    title: 'Terms of Service',
     description: 'Read the terms and conditions for using EduExpress International services. Our comprehensive terms cover service usage, responsibilities, and legal agreements.',
     card: 'summary_large_image',
   },

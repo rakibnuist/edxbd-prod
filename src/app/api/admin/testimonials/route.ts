@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Testimonial from '@/models/Testimonial';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    await connectDB();
-
-    const testimonials = await Testimonial.find()
-      .sort({ createdAt: -1 });
+    const testimonials = await prisma.testimonial.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
 
     return NextResponse.json(testimonials);
   } catch (error) {
@@ -21,11 +19,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    await connectDB();
-
     const body = await request.json();
-    const testimonial = new Testimonial(body);
-    await testimonial.save();
+    const testimonial = await prisma.testimonial.create({
+      data: body
+    });
 
     return NextResponse.json(testimonial, { status: 201 });
   } catch (error) {

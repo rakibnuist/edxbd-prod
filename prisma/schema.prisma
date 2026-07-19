@@ -1,0 +1,268 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model University {
+  id                      String    @id @default(cuid())
+  slug                    String    @unique
+  name                    String
+  location                String
+  country                 String
+  city                    String
+  intake                  String    // Comma-separated string
+  degree                  String    // Comma-separated string
+  taught                  String    // Comma-separated string
+  
+  // Rankings
+  rankingCountry          Int?
+  rankingWorld            Int?
+  rankingNational         Int?
+
+  // Details
+  majors                  String    // Comma-separated string
+  tuition                 String
+  tuitionDetails          String    // JSON string
+
+  documents               String    // JSON string
+  
+  // Deadlines
+  deadlineApplication     String?
+  deadlineStartDate       String?
+
+  notes                   String    // JSON string
+  badges                  String    // JSON string
+  logo                    String?
+  isActive                Boolean   @default(true)
+  officialUrl             String?
+  aliases                 String    // JSON string
+  legacySlugs             String    // JSON string
+  
+  relationshipType        String    @default("unverified")
+  relationshipEvidenceUrl String?
+  recognitionAuthority    String?
+  recognitionSourceUrl    String?
+  sourceUrls              String    // JSON string
+  lastVerifiedAt          DateTime?
+  verificationExpiresAt   DateTime?
+  verificationStatus      String    @default("under_verification")
+
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  programs                Program[]
+  fees                    Fee[]
+  scholarships            Scholarship[]
+}
+
+model Program {
+  id                      String     @id @default(cuid())
+  universityId            String
+  university              University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  
+  level                   String
+  name                    String
+  subject                 String?
+  languages               String     // Comma-separated string
+  duration                String?
+  intakes                 String     // Comma-separated string
+  tuition                 String?
+  tuitionAfterScholarship String?
+  applicationDeadline     String?
+  eligibility             String     // JSON string
+  sourceUrl               String?
+  status                  String     @default("active")
+}
+
+model Fee {
+  id                      String     @id @default(cuid())
+  universityId            String
+  university              University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  item                    String
+  cost                    String
+  notes                   String?
+  recipient               String?
+  refundable              String     @default("")
+  validFor                String?
+  sourceUrl               String?
+}
+
+model Scholarship {
+  id                      String     @id @default(cuid())
+  universityId            String
+  university              University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  title                   String
+  type                    String?
+  details                 String     // JSON string
+  amount                  String?
+  condition               String?
+  eligiblePrograms        String     // JSON string
+  coverage                String?
+  renewal                 String?
+  deadline                String?
+  sourceUrl               String?
+  status                  String     @default("active")
+}
+
+model Lead {
+  id                      String    @id @default(cuid())
+  name                    String
+  email                   String
+  phone                   String
+  country                 String
+  program                 String?
+  message                 String?
+  status                  String    @default("new")
+  source                  String
+  leadType                String    @default("contact")
+  destinationInterest     String?
+  assignedTeam            String    @default("general")
+  assignedTo              String?
+  riskFlag                Boolean   @default(false)
+  medicalProgram          Boolean   @default(false)
+  
+  // Assessment fields embedded
+  assessAcademicLevel     String?
+  assessAcademicResults   String?
+  assessSubject           String?
+  assessBudget            String?
+  assessIntake            String?
+  assessLanguage          String?
+  assessCareerGoal        String?
+  assessPreferredCountries String?  // JSON string
+  
+  notes                   String?
+  consentTimestamp        DateTime
+  consentPolicyVersion    String
+  landingPage             String?
+  utm                     String?   // JSON string
+  
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+}
+
+model Content {
+  id                      String    @id @default(cuid())
+  title                   String
+  slug                    String    @unique
+  content                 String
+  excerpt                 String?
+  type                    String
+  category                String?
+  tags                    String?   // JSON string
+  categories              String?   // JSON string
+  featuredImage           String?
+  isPublished             Boolean   @default(false)
+  isFeatured              Boolean   @default(false)
+  metaTitle               String?
+  metaDescription         String?
+  author                  String
+  reviewer                String?
+  sourceUrls              String?   // JSON string
+  lastVerifiedAt          DateTime?
+  nextReviewAt            DateTime?
+  complianceApprovedAt    DateTime?
+  seoApprovedAt           DateTime?
+  publishedAt             DateTime?
+  views                   Int       @default(0)
+
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+}
+
+model Country {
+  id                      String    @id @default(cuid())
+  name                    String    @unique
+  slug                    String    @unique
+  description             String?
+  isActive                Boolean   @default(true)
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+}
+
+model Partnership {
+  id                      String    @id @default(cuid())
+  companyName             String?
+  businessType            String    @default("other")
+  businessRegistrationNumber String?
+  businessLicense         String?
+  website                 String?
+  yearsInBusiness         Int       @default(0)
+  contactPerson           String    @default("Unknown")
+  email                   String    @default("unknown@example.com")
+  phone                   String    @default("0000000000")
+  alternatePhone          String?
+  address                 String?
+  city                    String?
+  state                   String?
+  country                 String?
+  postalCode              String?
+  partnershipType         String    @default("company")
+  targetCountries         String?   // JSON string
+  currentClients          Int       @default(0)
+  monthlyTarget           Int       @default(0)
+  experience              String?
+  currentPartners         String?   // JSON string
+  annualRevenue           String?
+  investmentCapacity      String?
+  expectedCommission      String?
+  marketingChannels       String?   // JSON string
+  socialMediaPresence     String?   // JSON string
+  localNetwork            String?
+  referralSources         String?   // JSON string
+  documents               String?   // JSON string
+  motivation              String?
+  expectations            String?
+  additionalInfo          String?
+  status                  String    @default("pending")
+  priority                String    @default("medium")
+  assignedTo              String?
+  reviewNotes             String?
+  source                  String    @default("website")
+  ipAddress               String?
+  userAgent               String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+}
+
+model Testimonial {
+  id                      String    @id @default(cuid())
+  studentName             String
+  content                 String
+  university              String?
+  country                 String?
+  rating                  Int       @default(5)
+  isPublished             Boolean   @default(true)
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+}
+
+model User {
+  id                      String    @id @default(cuid())
+  name                    String
+  email                   String    @unique
+  password                String
+  role                    String    @default("user")
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+}
+
+model Message {
+  id                      String    @id @default(cuid())
+  fromUserId              String
+  fromName                String
+  toUserId                String
+  toEmail                 String
+  toName                  String
+  subject                 String
+  body                    String
+  readAt                  DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+}

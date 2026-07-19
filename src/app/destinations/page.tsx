@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://www.eduexpressint.com/destinations',
+    canonical: '/destinations',
   },
 };
 
@@ -69,18 +69,18 @@ export default function DestinationsPage() {
     "@type": "EducationalOrganization",
     "name": "EduExpress International",
     "description": "Compare active study destination services with education fit, institution checks, clear costs and visa readiness.",
-    "url": "https://www.eduexpressint.com/destinations",
-    "logo": "https://www.eduexpressint.com/logo.png",
+    "url": "https://eduexpressint.com/destinations",
+    "logo": "https://eduexpressint.com/logo.png",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi",
+      "streetAddress": "House 12/1, Ground Floor, Road 4/A, Dhanmondi",
       "addressLocality": "Dhaka",
       "postalCode": "1209",
       "addressCountry": "BD"
     },
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+880 1983 333566",
+      "telephone": "+880 1983-333566",
       "contactType": "customer service",
       "email": "info@eduexpressint.com"
     },
@@ -93,7 +93,7 @@ export default function DestinationsPage() {
           "@type": "Service",
           "name": `Study in ${country.name} from Bangladesh`,
           "description": country.description,
-          "url": `https://www.eduexpressint.com/destinations/${country.slug}`
+          "url": `https://eduexpressint.com/destinations/${country.slug}`
         }
       }))
     }

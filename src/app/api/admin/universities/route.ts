@@ -1,9 +1,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-
-import University from '@/models/University';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
     try {
@@ -12,8 +10,6 @@ export async function GET(request: NextRequest) {
         if (!decoded || decoded.role !== 'admin') {
             return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
         }
-
-        await connectDB();
 
         const { searchParams } = new URL(request.url);
         const country = searchParams.get('country');
@@ -33,21 +29,23 @@ export async function GET(request: NextRequest) {
         }
 
         if (degree && degree !== 'all') {
-            query.degree = { $in: [degree] };
+            query.degree = { has: degree };
         }
 
         if (search) {
-            query.$or = [
-                { name: { $regex: search, $options: 'i' } },
-                { location: { $regex: search, $options: 'i' } }
+            query.OR = [
+                { name: { contains: search, mode: 'insensitive' } },
+                { location: { contains: search, mode: 'insensitive' } }
             ];
         }
 
-        const total = await University.countDocuments(query);
-        const universities = await University.find(query)
-            .sort({ name: 1 })
-            .skip(skip)
-            .limit(limit);
+        const total = await prisma.university.count({ where: query });
+        const universities = await prisma.university.findMany({
+            where: query,
+            orderBy: { name: 'asc' },
+            skip,
+            take: limit
+        });
 
         return NextResponse.json({
             universities,
@@ -75,8 +73,6 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
         }
 
-        await connectDB();
-
         const body = await request.json();
 
         // Basic validation
@@ -85,13 +81,14 @@ export async function POST(request: NextRequest) {
         }
 
         // Check unique slug
-        const existing = await University.findOne({ slug: body.slug });
+        const existing = await prisma.university.findUnique({ where: { slug: body.slug } });
         if (existing) {
             return NextResponse.json({ error: 'University with this slug already exists' }, { status: 400 });
         }
 
-        const university = new University(body);
-        await university.save();
+        const university = await prisma.university.create({
+            data: body
+        });
 
         return NextResponse.json(university, { status: 201 });
     } catch (error) {

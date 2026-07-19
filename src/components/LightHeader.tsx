@@ -129,7 +129,7 @@ export default function LightHeader() {
         <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between px-6">
           <span className="flex items-center gap-2"><span className="size-1.5 rounded-full bg-[#64b5df]" /> Dhanmondi decision desk is open</span>
           <span>10 active destination services</span>
-          <a href="tel:+8801983333566" className="flex items-center gap-2 hover:text-[#8ed0ee]"><Phone size={12} /> 01983 333566</a>
+          <a href="tel:+8801983333566" className="flex items-center gap-2 hover:text-[#8ed0ee]"><Phone size={12} /> +880 1983-333566</a>
         </div>
       </div>
 
@@ -251,7 +251,7 @@ export default function LightHeader() {
         <div id="mobile-navigation" className="h-[calc(100dvh-76px)] overflow-y-auto border-b border-[#174f7a]/20 bg-[#f4f8fa] min-[1200px]:hidden">
           <div className="mx-auto max-w-2xl px-4 py-5">
             <div className="grid grid-cols-2 gap-2">
-              <a href="tel:+8801983333566" className="flex items-center justify-center gap-2 bg-[#08263c] px-3 py-3 text-xs font-bold text-white"><Phone size={15} /> 01983 333566</a>
+              <a href="tel:+8801983333566" className="flex items-center justify-center gap-2 bg-[#08263c] px-3 py-3 text-xs font-bold text-white"><Phone size={15} /> +880 1983-333566</a>
               <Link href="/education-fit-assessment" className="flex items-center justify-center gap-2 bg-[#64b5df] px-3 py-3 text-center text-xs font-black">Free Fit Assessment <ArrowUpRight size={15} /></Link>
             </div>
 
@@ -278,7 +278,7 @@ export default function LightHeader() {
               <Link href="/universities" className="flex items-center justify-between border-b border-[#174f7a]/20 py-4 font-heading text-xl font-bold">Find education <ArrowRight size={18} /></Link>
               <Link href="/contact" className="flex items-center justify-between border-b border-[#174f7a]/20 py-4 font-heading text-xl font-bold">Contact <ArrowRight size={18} /></Link>
             </div>
-            <p className="py-5 text-center text-[11px] font-bold uppercase leading-5 tracking-[0.14em] text-slate-500">Saturday to Thursday, 11:00 AM to 6:00 PM</p>
+            <p className="py-5 text-center text-[11px] font-bold uppercase leading-5 tracking-[0.14em] text-slate-500">Saturday-Thursday 11:00 AM-6:00 PM, Friday closed</p>
           </div>
         </div>
       )}

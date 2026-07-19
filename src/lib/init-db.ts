@@ -1,19 +1,14 @@
-import connectDB from './mongodb';
-import Lead from '@/models/Lead';
-import Testimonial from '@/models/Testimonial';
-import Country from '@/models/Country';
-import Content from '@/models/Content';
+import prisma from '@/lib/prisma';
 
 export async function initializeDatabase() {
   try {
-    await connectDB();
     // Database connected successfully
 
     // Check if we have any data
-    await Lead.countDocuments();
-    const testimonialCount = await Testimonial.countDocuments();
-    const countryCount = await Country.countDocuments();
-    const contentCount = await Content.countDocuments();
+    const leadCount = await prisma.lead.count();
+    const testimonialCount = await prisma.testimonial.count();
+    const countryCount = await prisma.country.count();
+    const contentCount = await prisma.content.count();
 
     // Current data summary
 
@@ -26,19 +21,19 @@ export async function initializeDatabase() {
           slug: 'united-kingdom',
           flag: '🇬🇧',
           description: 'World-class education with prestigious universities and rich cultural heritage',
-          universities: ['University of Oxford', 'University of Cambridge', 'Imperial College London'],
-          programs: ['Business Administration', 'Engineering', 'Medicine', 'Law', 'Arts & Humanities'],
-          requirements: {
+          universities: JSON.stringify(['University of Oxford', 'University of Cambridge', 'Imperial College London']),
+          programs: JSON.stringify(['Business Administration', 'Engineering', 'Medicine', 'Law', 'Arts & Humanities']),
+          requirements: JSON.stringify({
             language: ['IELTS 6.5+', 'TOEFL 90+', 'PTE 62+'],
             documents: ['Academic Transcripts', 'English Proficiency', 'Personal Statement', 'References'],
             visa: ['Student Visa (Tier 4)', 'Financial Documents', 'CAS Letter']
-          },
-          costs: {
+          }),
+          costs: JSON.stringify({
             tuition: '£15,000 - £35,000 per year',
             living: '£12,000 - £15,000 per year',
             currency: 'GBP'
-          },
-          scholarships: ['Chevening Scholarships', 'Commonwealth Scholarships', 'University-specific Scholarships'],
+          }),
+          scholarships: JSON.stringify(['Chevening Scholarships', 'Commonwealth Scholarships', 'University-specific Scholarships']),
           isActive: true,
           featured: true
         },
@@ -47,25 +42,25 @@ export async function initializeDatabase() {
           slug: 'china',
           flag: '🇨🇳',
           description: 'Rapidly growing education system with modern facilities and affordable costs',
-          universities: ['Tsinghua University', 'Peking University', 'Fudan University'],
-          programs: ['Engineering', 'Business Administration', 'Computer Science', 'Medicine', 'Chinese Language'],
-          requirements: {
+          universities: JSON.stringify(['Tsinghua University', 'Peking University', 'Fudan University']),
+          programs: JSON.stringify(['Engineering', 'Business Administration', 'Computer Science', 'Medicine', 'Chinese Language']),
+          requirements: JSON.stringify({
             language: ['HSK 4+', 'IELTS 6.0+', 'TOEFL 80+'],
             documents: ['Academic Transcripts', 'Language Proficiency', 'Personal Statement', 'Health Certificate'],
             visa: ['Student Visa (X1/X2)', 'JW201/JW202 Form', 'Financial Documents']
-          },
-          costs: {
+          }),
+          costs: JSON.stringify({
             tuition: '$3,000 - $8,000 per year',
             living: '$2,000 - $4,000 per year',
             currency: 'USD'
-          },
-          scholarships: ['Chinese Government Scholarship', 'Confucius Institute Scholarship', 'University Scholarships'],
+          }),
+          scholarships: JSON.stringify(['Chinese Government Scholarship', 'Confucius Institute Scholarship', 'University Scholarships']),
           isActive: true,
           featured: true
         }
       ];
 
-      await Country.insertMany(sampleCountries);
+      await prisma.country.createMany({ data: sampleCountries });
       // Sample countries added
     }
 
@@ -74,32 +69,24 @@ export async function initializeDatabase() {
       // Adding sample testimonials
       const sampleTestimonials = [
         {
-          name: 'Rahman Ahmed',
-          location: 'Dhaka, Bangladesh',
+          studentName: 'Rahman Ahmed',
           university: 'University of Manchester, UK',
-          program: 'Computer Science',
-          quote: 'EduExpress International made my dream of studying in the UK come true. Their guidance was like having a personal mentor throughout the entire process.',
+          content: 'EduExpress International made my dream of studying in the UK come true. Their guidance was like having a personal mentor throughout the entire process.',
           rating: 5,
-          image: '🇧🇩',
           country: 'United Kingdom',
-          isActive: true,
-          featured: true
+          isPublished: true,
         },
         {
-          name: 'Fatima Khan',
-          location: 'Chittagong, Bangladesh',
+          studentName: 'Fatima Khan',
           university: 'Seoul National University, South Korea',
-          program: 'Business Administration',
-          quote: 'The team at EduExpress understood my goals and helped me secure a full scholarship. I couldn\'t have done it without them!',
+          content: 'The team at EduExpress understood my goals and helped me secure a full scholarship. I couldn\'t have done it without them!',
           rating: 5,
-          image: '🇧🇩',
           country: 'South Korea',
-          isActive: true,
-          featured: true
+          isPublished: true,
         }
       ];
 
-      await Testimonial.insertMany(sampleTestimonials);
+      await prisma.testimonial.createMany({ data: sampleTestimonials });
       // Sample testimonials added
     }
 
@@ -135,8 +122,8 @@ export async function initializeDatabase() {
             </div>
           `,
           type: 'page',
-          categories: ['Announcement'],
-          tags: ['welcome', 'about', 'services'],
+          categories: JSON.stringify(['Announcement']),
+          tags: JSON.stringify(['welcome', 'about', 'services']),
           featuredImage: '/logo.png',
           metaDescription: 'Welcome to EduExpress International - Your trusted partner for study abroad opportunities with FREE scholarship assistance since 2018.',
           author: 'Admin',
@@ -200,8 +187,8 @@ export async function initializeDatabase() {
             </div>
           `,
           type: 'destination',
-          categories: ['University'],
-          tags: ['uk', 'united-kingdom', 'study-abroad', 'universities'],
+          categories: JSON.stringify(['University']),
+          tags: JSON.stringify(['uk', 'united-kingdom', 'study-abroad', 'universities']),
           featuredImage: '/uploads/uk-flag.jpg',
           metaDescription: 'Complete guide to studying in the United Kingdom including top universities, requirements, costs, and scholarships.',
           author: 'Admin',
@@ -243,8 +230,8 @@ export async function initializeDatabase() {
             </div>
           `,
           type: 'blog',
-          categories: ['Success'],
-          tags: ['success-story', 'uk', 'computer-science', 'manchester'],
+          categories: JSON.stringify(['Success']),
+          tags: JSON.stringify(['success-story', 'uk', 'computer-science', 'manchester']),
           featuredImage: '/uploads/success-story-1.jpg',
           metaDescription: 'Success story of Rahman Ahmed who secured admission to University of Manchester with EduExpress International assistance.',
           author: 'Admin',
@@ -253,7 +240,7 @@ export async function initializeDatabase() {
         }
       ];
 
-      await Content.insertMany(sampleContent);
+      await prisma.content.createMany({ data: sampleContent });
       // Sample content added
     }
 

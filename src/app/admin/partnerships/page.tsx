@@ -86,8 +86,8 @@ const AdminPartnershipsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [stats, setStats] = useState({
-    statusCounts: [] as Array<{ _id: string; count: number }>,
-    typeCounts: [] as Array<{ _id: string; count: number }>
+    statusCounts: [] as Array<{ id: string; count: number }>,
+    typeCounts: [] as Array<{ id: string; count: number }>
   });
 
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -281,7 +281,7 @@ const AdminPartnershipsPage = () => {
     if (!editingPartnership) return;
 
     try {
-      const response = await authenticatedFetch(`/api/admin/partnerships/${editingPartnership._id}`, {
+      const response = await authenticatedFetch(`/api/admin/partnerships/${editingPartnership.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -382,7 +382,7 @@ const AdminPartnershipsPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {stats.statusCounts.map((stat) => (
           <motion.div
-            key={stat._id}
+            key={stat.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
@@ -390,11 +390,11 @@ const AdminPartnershipsPage = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 capitalize">
-                  {stat._id.replace('_', ' ')}
+                  {stat.id.replace('_', ' ')}
                 </p>
                 <p className="text-2xl font-bold text-gray-900">{stat.count}</p>
               </div>
-              <div className={`p-3 rounded-full ${statusColors[stat._id as keyof typeof statusColors] || 'bg-gray-100'}`}>
+              <div className={`p-3 rounded-full ${statusColors[stat.id as keyof typeof statusColors] || 'bg-gray-100'}`}>
                 <Building2 className="w-6 h-6" />
               </div>
             </div>
@@ -516,7 +516,7 @@ const AdminPartnershipsPage = () => {
               ) : (
                 partnerships.map((partnership) => (
                   <motion.tr
-                    key={partnership._id}
+                    key={partnership.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="hover:bg-gray-50"
@@ -549,7 +549,7 @@ const AdminPartnershipsPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <select
                         value={partnership.status}
-                        onChange={(e) => handleStatusUpdate(partnership._id, e.target.value)}
+                        onChange={(e) => handleStatusUpdate(partnership.id, e.target.value)}
                         className={`text-xs font-medium px-2 py-1 rounded-full border-0 ${statusColors[partnership.status as keyof typeof statusColors]}`}
                       >
                         <option value="pending">Pending</option>
@@ -587,7 +587,7 @@ const AdminPartnershipsPage = () => {
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleDelete(partnership._id)}
+                          onClick={() => handleDelete(partnership.id)}
                           className="text-red-600 hover:text-red-900"
                           title="Delete Partnership"
                         >

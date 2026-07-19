@@ -62,7 +62,7 @@ export default function TestimonialsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const url = editingTestimonial ? `/api/admin/testimonials/${editingTestimonial._id}` : '/api/admin/testimonials';
+      const url = editingTestimonial ? `/api/admin/testimonials/${editingTestimonial.id}` : '/api/admin/testimonials';
       const method = editingTestimonial ? 'PUT' : 'POST';
       
       const response = await fetch(url, {
@@ -76,7 +76,7 @@ export default function TestimonialsPage() {
       if (response.ok) {
         const action = editingTestimonial ? 'update' : 'create';
         trackTestimonialManagement(action, { 
-          testimonial_id: editingTestimonial?._id,
+          testimonial_id: editingTestimonial?.id,
           name: formData.name,
           university: formData.university,
           country: formData.country,
@@ -89,7 +89,7 @@ export default function TestimonialsPage() {
       } else {
         const action = editingTestimonial ? 'update' : 'create';
         trackTestimonialManagement(action, { 
-          testimonial_id: editingTestimonial?._id,
+          testimonial_id: editingTestimonial?.id,
           name: formData.name,
           success: false,
           error: 'api_error'
@@ -213,7 +213,7 @@ export default function TestimonialsPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {testimonials.map((testimonial) => (
-                <tr key={testimonial._id} className="hover:bg-gray-50">
+                <tr key={testimonial.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{testimonial.name}</div>
@@ -265,13 +265,13 @@ export default function TestimonialsPage() {
                       Edit
                     </button>
                     <button
-                      onClick={() => toggleStatus(testimonial._id, testimonial.isActive)}
+                      onClick={() => toggleStatus(testimonial.id, testimonial.isActive)}
                       className="text-yellow-600 hover:text-yellow-900 mr-3"
                     >
                       {testimonial.isActive ? 'Deactivate' : 'Activate'}
                     </button>
                     <button
-                      onClick={() => handleDelete(testimonial._id)}
+                      onClick={() => handleDelete(testimonial.id)}
                       className="text-red-600 hover:text-red-900"
                     >
                       Delete

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import User from '@/models/User';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,9 +10,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    await connectDB();
-    
-    const user = await User.findById(decoded.userId).select('-password');
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true
+      }
+    });
     
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
@@ -21,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       user: {
-        id: user._id,
+        id: user.id,
         name: user.name,
         email: user.email,
         role: user.role

@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Lead from '@/models/Lead';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    await connectDB();
-
     const { searchParams } = new URL(request.url);
     const startDate = searchParams.get('startDate') || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
     const endDate = searchParams.get('endDate') || new Date().toISOString();
@@ -13,18 +10,18 @@ export async function GET(request: NextRequest) {
     const source = searchParams.get('source');
 
     // Build filter
-    const filter: Record<string, unknown> = {
+    const where: any = {
       createdAt: {
-        $gte: new Date(startDate),
-        $lte: new Date(endDate)
+        gte: new Date(startDate),
+        lte: new Date(endDate)
       }
     };
 
-    if (country) filter.country = country;
-    if (source) filter.source = source;
+    if (country) where.country = country;
+    if (source) where.source = source;
 
     // Get leads data
-    const leads = await Lead.find(filter).lean();
+    const leads = await prisma.lead.findMany({ where });
 
     // Calculate metrics
     const totalLeads = leads.length;

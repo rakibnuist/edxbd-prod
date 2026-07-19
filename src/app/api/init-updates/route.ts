@@ -1,14 +1,10 @@
-
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Content from '@/models/Content';
+import prisma from '@/lib/prisma';
 
 export async function GET(_request: Request) {
   try {
-    await connectDB();
-
     // Check if updates already exist
-    const existingUpdates = await Content.countDocuments({ type: 'update' });
+    const existingUpdates = await prisma.content.count({ where: { type: 'update' } });
     if (existingUpdates > 0) {
       return NextResponse.json({
         message: 'Updates already exist in database',
@@ -47,7 +43,7 @@ export async function GET(_request: Request) {
         excerpt: "UK universities are offering 50% tuition waivers for Bangladeshi students in STEM fields. Apply now for the spring 2024 intake.",
         type: "update",
         category: "Scholarships",
-        tags: ["scholarship", "UK", "STEM", "tuition waiver", "2024"],
+        tags: JSON.stringify(["scholarship", "UK", "STEM", "tuition waiver", "2024"]),
         isPublished: true,
         isFeatured: true,
         author: "edXBD Team",
@@ -89,7 +85,7 @@ export async function GET(_request: Request) {
         excerpt: "Join our free IELTS preparation session for students targeting 7.0+ band score. Expert tips and practice tests included.",
         type: "update",
         category: "Events",
-        tags: ["IELTS", "workshop", "free", "preparation", "English test"],
+        tags: JSON.stringify(["IELTS", "workshop", "free", "preparation", "English test"]),
         isPublished: true,
         isFeatured: true,
         author: "IELTS Team",
@@ -129,7 +125,7 @@ export async function GET(_request: Request) {
         excerpt: "Review the current document and funding requirements before preparing a UK or Canada visa application.",
         type: "update",
         category: "Visa Updates",
-        tags: ["visa", "success rate", "approval", "UK", "Canada", "Australia"],
+        tags: JSON.stringify(["visa", "success rate", "approval", "UK", "Canada", "Australia"]),
         isPublished: true,
         isFeatured: false,
         author: "Visa Team",
@@ -170,7 +166,7 @@ export async function GET(_request: Request) {
         excerpt: "We've partnered with 5 top European universities offering direct admission and scholarship opportunities for our students.",
         type: "update",
         category: "Partnerships",
-        tags: ["partnership", "European universities", "direct admission", "scholarships"],
+        tags: JSON.stringify(["partnership", "European universities", "direct admission", "scholarships"]),
         isPublished: true,
         isFeatured: false,
         author: "Partnerships Team",
@@ -217,7 +213,7 @@ export async function GET(_request: Request) {
         excerpt: "Read how our student secured a full scholarship to MIT with our guidance and support. Your success is our mission.",
         type: "update",
         category: "Success Stories",
-        tags: ["success story", "MIT", "scholarship", "computer science", "achievement"],
+        tags: JSON.stringify(["success story", "MIT", "scholarship", "computer science", "achievement"]),
         isPublished: true,
         isFeatured: true,
         author: "Success Stories Team",
@@ -228,13 +224,15 @@ export async function GET(_request: Request) {
     ];
 
     // Insert sample updates
-    const insertedUpdates = await Content.insertMany(sampleUpdates);
+    await prisma.content.createMany({ data: sampleUpdates });
+
+    const insertedUpdates = await prisma.content.findMany({ where: { type: 'update' } });
 
     return NextResponse.json({
       message: 'Sample updates created successfully',
       count: insertedUpdates.length,
       updates: insertedUpdates.map(update => ({
-        id: update._id,
+        id: update.id,
         title: update.title,
         slug: update.slug
       }))

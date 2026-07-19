@@ -1,7 +1,7 @@
 // Shared interfaces to eliminate duplicates across the application
 
 export interface Testimonial {
-  _id: string;
+  id: string;
   name: string;
   displayName?: string;
   location: string;
@@ -30,7 +30,7 @@ export interface Testimonial {
 }
 
 export interface Update {
-  _id: string;
+  id: string;
   title: string;
   slug: string;
   content: string;
@@ -81,7 +81,7 @@ export interface Scholarship {
 }
 
 export interface Lead {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   phone: string;
@@ -97,7 +97,7 @@ export interface Lead {
 }
 
 export interface Content {
-  _id: string;
+  id: string;
   title: string;
   slug: string;
   content: string;
@@ -119,7 +119,7 @@ export interface Content {
 }
 
 export interface Country {
-  _id: string;
+  id: string;
   name: string;
   slug: string;
   flag: string;
@@ -147,7 +147,7 @@ export interface Country {
 }
 
 export interface Partnership {
-  _id: string;
+  id: string;
   // Company Information
   companyName?: string;
   businessType: 'individual' | 'consultancy' | 'agency' | 'institution' | 'other';
@@ -229,7 +229,7 @@ export interface DashboardStats {
   totalPartnerships: number;
   newPartnerships: number;
   recentLeads: Array<{
-    _id: string;
+    id: string;
     name: string;
     email: string;
     country: string;
@@ -238,7 +238,7 @@ export interface DashboardStats {
     createdAt: string;
   }>;
   recentPartnerships: Array<{
-    _id: string;
+    id: string;
     companyName: string;
     contactPerson: string;
     email: string;

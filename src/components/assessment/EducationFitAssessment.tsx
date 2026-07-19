@@ -355,7 +355,7 @@ export default function EducationFitAssessment() {
         {/* Consent */}
         <label className="flex items-start gap-3 text-sm text-slate-600">
           <input type="checkbox" checked={form.consent} onChange={(e) => update({ consent: e.target.checked })} className="mt-1 size-4 shrink-0" />
-          <span>I agree that EduExpress may contact me about this assessment. I have read the <Link href="/student-data-privacy" className="font-bold text-[#174f7a] underline">privacy policy</Link>.</span>
+          <span>I agree that EduExpress may contact me about this assessment. I have read the <Link href="/privacy" className="font-bold text-[#174f7a] underline">privacy policy</Link>.</span>
         </label>
 
         {errorMsg && <p className="border-l-4 border-red-500 bg-red-50 px-4 py-3 text-sm text-red-700">{errorMsg}</p>}

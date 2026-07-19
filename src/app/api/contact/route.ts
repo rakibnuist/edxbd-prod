@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Lead from '@/models/Lead';
+import prisma from '@/lib/prisma';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
 
 export async function POST(request: NextRequest) {
   try {
-    await connectDB();
-
     const body = await request.json();
     
     // Handle both name formats (single name field or firstName/lastName)
@@ -51,23 +48,23 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Create new lead from contact form
-    const lead = new Lead({
-      name: fullName,
-      email: email.trim().toLowerCase(),
-      phone: phone.trim(),
-      country: body.country || 'Not specified',
-      program: body.program || 'Contact Form Inquiry',
-      message: message ? message.trim() : 'Consultation request from ' + (body.country || 'Unknown'),
-      source: body.source || 'contact_form',
-      status: 'new',
-      consentTimestamp: new Date(body.consentTimestamp),
-      consentPolicyVersion: body.consentPolicyVersion,
-      landingPage: body.landingPage,
-      utm: body.utm || {}
+    // Create new lead from contact form using Prisma
+    const lead = await prisma.lead.create({
+      data: {
+        name: fullName,
+        email: email.trim().toLowerCase(),
+        phone: phone.trim(),
+        country: body.country || 'Not specified',
+        program: body.program || 'Contact Form Inquiry',
+        message: message ? message.trim() : 'Consultation request from ' + (body.country || 'Unknown'),
+        source: body.source || 'contact_form',
+        status: 'new',
+        consentTimestamp: new Date(body.consentTimestamp),
+        consentPolicyVersion: body.consentPolicyVersion,
+        landingPage: body.landingPage,
+        utm: body.utm ? JSON.stringify(body.utm) : null
+      }
     });
-    
-    await lead.save();
 
     // Track lead with Meta Conversion API (non-blocking)
     try {
@@ -91,7 +88,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { 
         message: 'Message sent successfully',
-        leadId: lead._id 
+        leadId: lead.id 
       },
       { status: 201 }
     );

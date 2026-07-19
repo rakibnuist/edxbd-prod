@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Lead from '@/models/Lead';
+import prisma from '@/lib/prisma';
 import { routeLead } from '@/lib/lead-routing';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
 
 export async function POST(request: NextRequest) {
   try {
-    await connectDB();
-
     const body = await request.json();
     
     // Validate required fields
@@ -38,24 +35,37 @@ export async function POST(request: NextRequest) {
       budget: body.assessment?.budget,
     });
 
-    // Create new lead
-    const lead = new Lead({
-      ...body,
-      source: body.source || 'website',
-      status: 'new',
-      leadType: body.leadType || 'contact',
-      destinationInterest: body.destinationInterest,
-      assignedTeam: routing.assignedTeam,
-      riskFlag: routing.riskFlag,
-      medicalProgram: routing.medicalProgram,
-      notes: [body.notes, routing.routingNote].filter(Boolean).join(' | '),
-      consentTimestamp: new Date(body.consentTimestamp),
-      consentPolicyVersion: body.consentPolicyVersion,
-      landingPage: body.landingPage,
-      utm: body.utm || {}
+    // Create new lead using Prisma
+    const lead = await prisma.lead.create({
+      data: {
+        name: body.name,
+        email: body.email.trim().toLowerCase(),
+        phone: body.phone.trim(),
+        country: body.country,
+        program: body.program,
+        message: body.message,
+        source: body.source || 'website',
+        status: 'new',
+        leadType: body.leadType || 'contact',
+        destinationInterest: body.destinationInterest ? JSON.stringify(body.destinationInterest) : null,
+        assignedTeam: routing.assignedTeam,
+        riskFlag: routing.riskFlag,
+        medicalProgram: routing.medicalProgram,
+        notes: [body.notes, routing.routingNote].filter(Boolean).join(' | '),
+        consentTimestamp: new Date(body.consentTimestamp),
+        consentPolicyVersion: body.consentPolicyVersion,
+        landingPage: body.landingPage,
+        utm: body.utm ? JSON.stringify(body.utm) : null,
+        assessAcademicLevel: body.assessment?.academicLevel,
+        assessAcademicResults: body.assessment?.academicResults,
+        assessSubject: body.assessment?.subject,
+        assessBudget: body.assessment?.budget,
+        assessIntake: body.assessment?.intake,
+        assessLanguage: body.assessment?.language,
+        assessCareerGoal: body.assessment?.careerGoal,
+        assessPreferredCountries: body.assessment?.preferredCountries ? JSON.stringify(body.assessment.preferredCountries) : null,
+      }
     });
-
-    await lead.save();
 
     // Track lead with Meta Conversion API
     try {
@@ -76,7 +86,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { 
         message: 'Lead submitted successfully',
-        leadId: lead._id 
+        leadId: lead.id 
       },
       { status: 201 }
     );

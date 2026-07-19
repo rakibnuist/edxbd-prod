@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import Partnership from '@/models/Partnership';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,8 +9,6 @@ export async function GET(request: NextRequest) {
     if (!decoded || decoded.role !== 'admin') {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
-
-    await connectDB();
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -23,7 +20,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search');
 
     // Build filter object
-    const filter: Record<string, unknown> = {};
+    const filter: any = {};
     if (status) filter.status = status;
     if (partnershipType) filter.partnershipType = partnershipType;
     if (country) filter.country = country;
@@ -31,12 +28,12 @@ export async function GET(request: NextRequest) {
 
     // Search functionality
     if (search) {
-      filter.$or = [
-        { companyName: { $regex: search, $options: 'i' } },
-        { contactPerson: { $regex: search, $options: 'i' } },
-        { email: { $regex: search, $options: 'i' } },
-        { city: { $regex: search, $options: 'i' } },
-        { state: { $regex: search, $options: 'i' } }
+      filter.OR = [
+        { companyName: { contains: search, mode: 'insensitive' } },
+        { contactPerson: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+        { city: { contains: search, mode: 'insensitive' } },
+        { state: { contains: search, mode: 'insensitive' } }
       ];
     }
 
@@ -44,34 +41,33 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Get partnerships with pagination
-    const partnerships = await Partnership.find(filter)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean();
+    const partnerships = await prisma.partnership.findMany({
+      where: filter,
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit
+    });
 
     // Get total count
-    const totalCount = await Partnership.countDocuments(filter);
+    const totalCount = await prisma.partnership.count({ where: filter });
 
     // Get status counts
-    const statusCounts = await Partnership.aggregate([
-      {
-        $group: {
-          _id: '$status',
-          count: { $sum: 1 }
-        }
+    const statusGroups = await prisma.partnership.groupBy({
+      by: ['status'],
+      _count: {
+        status: true
       }
-    ]);
+    });
+    const statusCounts = statusGroups.map(g => ({ id: g.status, count: g._count.status }));
 
     // Get partnership type counts
-    const typeCounts = await Partnership.aggregate([
-      {
-        $group: {
-          _id: '$partnershipType',
-          count: { $sum: 1 }
-        }
+    const typeGroups = await prisma.partnership.groupBy({
+      by: ['partnershipType'],
+      _count: {
+        partnershipType: true
       }
-    ]);
+    });
+    const typeCounts = typeGroups.map(g => ({ id: g.partnershipType, count: g._count.partnershipType }));
 
     return NextResponse.json({
       partnerships,
@@ -104,8 +100,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-
     const body = await request.json();
     const {
       companyName,
@@ -129,21 +123,21 @@ export async function POST(request: NextRequest) {
     }
 
     // Create new partnership
-    const partnership = new Partnership({
-      companyName,
-      businessType,
-      contactPerson,
-      email,
-      phone,
-      partnershipType,
-      status,
-      priority,
-      assignedTo,
-      reviewNotes,
-      source: 'admin_created'
+    const partnership = await prisma.partnership.create({
+      data: {
+        companyName,
+        businessType,
+        contactPerson,
+        email,
+        phone,
+        partnershipType,
+        status,
+        priority,
+        assignedTo,
+        reviewNotes,
+        source: 'admin_created'
+      }
     });
-
-    await partnership.save();
 
     return NextResponse.json(
       {

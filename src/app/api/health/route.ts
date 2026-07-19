@@ -4,7 +4,7 @@ export async function GET(_request: Request) {
   try {
     // Check environment variables
     const envCheck = {
-      mongodb: !!process.env.MONGODB_URI,
+      databaseUrl: !!process.env.DATABASE_URL,
       jwtSecret: !!process.env.JWT_SECRET,
       nodeEnv: process.env.NODE_ENV,
       vercel: process.env.VERCEL,
@@ -15,12 +15,13 @@ export async function GET(_request: Request) {
     const isProduction = process.env.NODE_ENV === 'production';
     const isVercel = !!process.env.VERCEL;
 
-    // Test database connection if MONGODB_URI is available
+    // Test database connection if DATABASE_URL is available
     let dbStatus = 'not_configured';
-    if (process.env.MONGODB_URI) {
+    if (process.env.DATABASE_URL) {
       try {
-        const connectDB = (await import('@/lib/mongodb')).default;
-        await connectDB();
+        const { default: prisma } = await import('@/lib/prisma');
+        // A simple query to check connection
+        await prisma.$queryRaw`SELECT 1`;
         dbStatus = 'connected';
       } catch (dbError) {
         dbStatus = 'connection_failed';
@@ -29,7 +30,7 @@ export async function GET(_request: Request) {
     }
 
     return NextResponse.json({
-      status: envCheck.mongodb ? 'healthy' : 'missing_env_vars',
+      status: envCheck.databaseUrl ? 'healthy' : 'missing_env_vars',
       timestamp: new Date().toISOString(),
       environment: {
         nodeEnv: process.env.NODE_ENV,
@@ -40,19 +41,19 @@ export async function GET(_request: Request) {
       envCheck,
       database: {
         status: dbStatus,
-        configured: envCheck.mongodb,
+        configured: envCheck.databaseUrl,
       },
       deployment: {
         isProduction,
         isVercel,
         region: process.env.VERCEL_REGION,
       },
-      message: envCheck.mongodb
+      message: envCheck.databaseUrl
         ? 'API is running successfully'
-        : 'Missing required environment variables (MONGODB_URI)',
-      instructions: envCheck.mongodb
+        : 'Missing required environment variables (DATABASE_URL)',
+      instructions: envCheck.databaseUrl
         ? 'All systems operational'
-        : 'Please set MONGODB_URI environment variable in Vercel dashboard'
+        : 'Please set DATABASE_URL environment variable in Vercel dashboard'
     });
   } catch (error) {
     console.error('Health check error:', error);

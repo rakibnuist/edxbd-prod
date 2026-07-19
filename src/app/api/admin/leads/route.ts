@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import Lead from '@/models/Lead';
-import mongoose from 'mongoose';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,8 +9,6 @@ export async function GET(request: NextRequest) {
     if (!decoded || decoded.role !== 'admin') {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
-
-    await connectDB();
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
@@ -30,15 +26,15 @@ export async function GET(request: NextRequest) {
       query = { ...query, country };
     }
 
-    const leads = await Lead.find(query)
-      .sort({ createdAt: -1 });
+    const leads = await prisma.lead.findMany({
+      where: query,
+      orderBy: { createdAt: 'desc' }
+    });
 
     console.log(`Found ${leads.length} leads in database`);
     console.log('Query used:', query);
-    console.log('Database name:', mongoose.connection.db?.databaseName);
-    console.log('Collection name:', Lead.collection.name);
-    console.log('Sample lead:', leads[0] ? { id: leads[0]._id, name: leads[0].name, email: leads[0].email } : 'No leads found');
-    console.log('All lead IDs:', leads.map(lead => lead._id));
+    console.log('Sample lead:', leads[0] ? { id: leads[0].id, name: leads[0].name, email: leads[0].email } : 'No leads found');
+    console.log('All lead IDs:', leads.map(lead => lead.id));
 
     return NextResponse.json(leads);
   } catch (error) {
@@ -58,11 +54,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-
     const body = await request.json();
-    const lead = new Lead(body);
-    await lead.save();
+    const lead = await prisma.lead.create({
+      data: body
+    });
 
     return NextResponse.json(lead, { status: 201 });
   } catch (error) {
@@ -82,8 +77,6 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-
     const { searchParams } = new URL(request.url);
     const leadId = searchParams.get('id');
 
@@ -91,13 +84,15 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Lead ID is required' }, { status: 400 });
     }
 
-    const deletedLead = await Lead.findByIdAndDelete(leadId);
+    const deletedLead = await prisma.lead.delete({
+      where: { id: leadId }
+    }).catch(() => null);
 
     if (!deletedLead) {
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
     }
 
-    console.log(`Lead deleted: ${deletedLead._id} - ${deletedLead.name}`);
+    console.log(`Lead deleted: ${deletedLead.id} - ${deletedLead.name}`);
 
     return NextResponse.json({ message: 'Lead deleted successfully', deletedLead });
   } catch (error) {

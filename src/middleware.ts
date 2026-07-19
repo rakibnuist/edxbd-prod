@@ -1,7 +1,18 @@
 import { NextResponse, NextRequest } from 'next/server';
 
-export function middleware(_request: NextRequest) {
-  // Temporarily disabled middleware to test routing
+export function middleware(request: NextRequest) {
+  const url = request.nextUrl;
+  const hostname = request.headers.get('host') || '';
+
+  // Redirect eduexpress.info or staging to main domain
+  if (
+    hostname === 'eduexpress.info' ||
+    hostname === 'www.eduexpress.info' ||
+    hostname.includes('vercel.app')
+  ) {
+    return NextResponse.redirect(`https://eduexpressint.com${url.pathname}${url.search}`, 301);
+  }
+
   return NextResponse.next();
 }
 

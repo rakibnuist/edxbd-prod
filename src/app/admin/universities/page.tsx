@@ -131,7 +131,7 @@ export default function UniversitiesPage() {
             ) : (
                 <div className="grid grid-cols-1 gap-4">
                     {universities.map((uni) => (
-                        <div key={uni._id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center group hover:border-blue-200 transition-all">
+                        <div key={uni.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center group hover:border-blue-200 transition-all">
                             <div className="flex items-center gap-4">
                                 <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 font-bold text-xl">
                                     {uni.name.charAt(0)}
@@ -153,7 +153,7 @@ export default function UniversitiesPage() {
                                     <Edit size={20} />
                                 </Link>
                                 <button
-                                    onClick={() => handleDeleteClick(uni._id)}
+                                    onClick={() => handleDeleteClick(uni.id)}
                                     className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                 >
                                     <Trash2 size={20} />

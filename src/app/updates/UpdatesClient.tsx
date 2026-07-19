@@ -427,7 +427,7 @@ export default function UpdatesClient({ initialUpdates = [], initialCategories =
 
               return (
                 <article
-                  key={update._id}
+                  key={update.id}
                   className="group bg-white rounded-[2rem] overflow-hidden shadow-sm border border-slate-200 hover:border-blue-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full"
                 >
                   {/* Image Container */}

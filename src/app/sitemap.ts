@@ -1,8 +1,6 @@
 import { MetadataRoute } from 'next';
 import { activeCountries } from '@/lib/countries';
-import connectDB from '@/lib/mongodb';
-import University from '@/models/University';
-import Content from '@/models/Content';
+import prisma from '@/lib/prisma';
 import { evidencePages } from '@/data/evidencePages';
 
 // PHASE 0 FIX:
@@ -41,23 +39,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   try {
-    await connectDB();
+    // Universities
+    const universities = await prisma.university.findMany({
+      where: { isActive: true },
+      select: { slug: true, updatedAt: true }
+    });
+    const universityRoutes = universities.map((uni) => ({
+      url: `${baseUrl}/universities/${uni.slug}`,
+      lastModified: uni.updatedAt ? new Date(uni.updatedAt) : new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }));
 
-  // Universities
-  const universities = await University.find({ isActive: true }, 'slug updatedAt').lean();
-  const universityRoutes = universities.map((uni) => ({
-    url: `${baseUrl}/universities/${uni.slug}`,
-    lastModified: uni.updatedAt ? new Date(uni.updatedAt) : new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
-
-  // Published updates/articles
-  const updates = await Content.find(
-    { type: 'update', isPublished: true },
-    'slug updatedAt publishedAt'
-  ).lean();
-  const updateRoutes = updates.map((post) => ({
+    // Published updates/articles
+    const updates = await prisma.content.findMany({
+      where: { type: 'update', isPublished: true },
+      select: { slug: true, updatedAt: true, publishedAt: true }
+    });
+    const updateRoutes = updates.map((post) => ({
     url: `${baseUrl}/updates/${post.slug}`,
     lastModified: post.updatedAt
       ? new Date(post.updatedAt)

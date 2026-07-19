@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Partnership from '@/models/Partnership';
+import prisma from '@/lib/prisma';
 import { trackPartnershipInquiry } from '@/lib/meta-conversion-api';
 
 export async function POST(request: NextRequest) {
   try {
-    await connectDB();
-
     const body = await request.json();
     const {
       // Company Information
@@ -83,61 +80,61 @@ export async function POST(request: NextRequest) {
       'unknown';
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
-    // Create new partnership application
-    const partnership = new Partnership({
-      // Company Information
-      companyName,
-      businessType,
-      businessRegistrationNumber,
-      businessLicense,
-      website,
-      yearsInBusiness,
+    // Create new partnership application using Prisma
+    const partnership = await prisma.partnership.create({
+      data: {
+        // Company Information
+        companyName,
+        businessType,
+        businessRegistrationNumber,
+        businessLicense,
+        website,
+        yearsInBusiness: Number(yearsInBusiness),
 
-      // Contact Information
-      contactPerson,
-      email,
-      phone,
-      alternatePhone,
-      address,
-      city,
-      state,
-      country,
-      postalCode,
+        // Contact Information
+        contactPerson,
+        email,
+        phone,
+        alternatePhone,
+        address,
+        city,
+        state,
+        country,
+        postalCode,
 
-      // Business Details
-      partnershipType,
-      targetCountries,
-      currentClients,
-      monthlyTarget,
-      experience,
-      currentPartners,
+        // Business Details
+        partnershipType,
+        targetCountries: Array.isArray(targetCountries) ? JSON.stringify(targetCountries) : JSON.stringify([targetCountries].filter(Boolean)),
+        currentClients: Number(currentClients),
+        monthlyTarget: Number(monthlyTarget),
+        experience,
+        currentPartners: Array.isArray(currentPartners) ? JSON.stringify(currentPartners) : currentPartners ? JSON.stringify([currentPartners]) : null,
 
-      // Financial Information
-      annualRevenue,
-      investmentCapacity,
-      expectedCommission,
+        // Financial Information
+        annualRevenue,
+        investmentCapacity,
+        expectedCommission,
 
-      // Marketing & Network
-      marketingChannels,
-      socialMediaPresence,
-      localNetwork,
-      referralSources,
+        // Marketing & Network
+        marketingChannels: Array.isArray(marketingChannels) ? JSON.stringify(marketingChannels) : JSON.stringify([marketingChannels].filter(Boolean)),
+        socialMediaPresence: typeof socialMediaPresence === 'object' ? JSON.stringify(socialMediaPresence) : socialMediaPresence,
+        localNetwork,
+        referralSources,
 
-      // Documents
-      documents,
+        // Documents
+        documents: Array.isArray(documents) ? JSON.stringify(documents) : JSON.stringify([documents].filter(Boolean)),
 
-      // Additional Information
-      motivation,
-      expectations,
-      additionalInfo,
+        // Additional Information
+        motivation,
+        expectations,
+        additionalInfo,
 
-      // System Fields
-      source,
-      ipAddress,
-      userAgent
+        // System Fields
+        source,
+        ipAddress,
+        userAgent
+      }
     });
-
-    await partnership.save();
 
     // Track partnership inquiry with Meta Conversion API
     try {
@@ -159,7 +156,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         message: 'Partnership application submitted successfully',
-        id: partnership._id
+        id: partnership.id
       },
       { status: 201 }
     );
@@ -175,8 +172,6 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    await connectDB();
-
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -185,23 +180,24 @@ export async function GET(request: NextRequest) {
     const country = searchParams.get('country');
 
     // Build filter object
-    const filter: Record<string, unknown> = {};
-    if (status) filter.status = status;
-    if (partnershipType) filter.partnershipType = partnershipType;
-    if (country) filter.country = country;
+    const where: any = {};
+    if (status) where.status = status;
+    if (partnershipType) where.partnershipType = partnershipType;
+    if (country) where.country = country;
 
     // Calculate pagination
     const skip = (page - 1) * limit;
 
     // Get partnerships with pagination
-    const partnerships = await Partnership.find(filter)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean();
+    const partnerships = await prisma.partnership.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit
+    });
 
     // Get total count
-    const totalCount = await Partnership.countDocuments(filter);
+    const totalCount = await prisma.partnership.count({ where });
 
     return NextResponse.json({
       partnerships,

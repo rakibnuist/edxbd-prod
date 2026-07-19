@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Testimonial from '@/models/Testimonial';
+import prisma from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB();
     const { id } = await params;
 
-    const testimonial = await Testimonial.findById(id);
+    const testimonial = await prisma.testimonial.findUnique({ where: { id } });
     if (!testimonial) {
       return NextResponse.json(
         { error: 'Testimonial not found' },
@@ -33,15 +31,13 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB();
     const { id } = await params;
 
     const body = await request.json();
-    const testimonial = await Testimonial.findByIdAndUpdate(
-      id,
-      body,
-      { new: true, runValidators: true }
-    );
+    const testimonial = await prisma.testimonial.update({
+      where: { id },
+      data: body
+    }).catch(() => null);
 
     if (!testimonial) {
       return NextResponse.json(
@@ -65,15 +61,13 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB();
     const { id } = await params;
 
     const body = await request.json();
-    const testimonial = await Testimonial.findByIdAndUpdate(
-      id,
-      body,
-      { new: true, runValidators: true }
-    );
+    const testimonial = await prisma.testimonial.update({
+      where: { id },
+      data: body
+    }).catch(() => null);
 
     if (!testimonial) {
       return NextResponse.json(
@@ -97,10 +91,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB();
     const { id } = await params;
 
-    const testimonial = await Testimonial.findByIdAndDelete(id);
+    const testimonial = await prisma.testimonial.delete({ where: { id } }).catch(() => null);
     if (!testimonial) {
       return NextResponse.json(
         { error: 'Testimonial not found' },

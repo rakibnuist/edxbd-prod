@@ -125,7 +125,7 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
     eyebrow: 'EduExpress International Bangladesh',
     intro: 'Meet the team to compare education quality, total cost, recognition and career fit before choosing an overseas study route.',
     sections: [
-      { heading: 'Office', body: 'Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209\n01983 333566\n01329 663505\nSaturday to Thursday, 11:00 AM to 6:00 PM' },
+      { heading: 'Office', body: 'House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209\n+880 1983-333566\n+880 1329-663505\nSaturday-Thursday 11:00 AM-6:00 PM, Friday closed' },
       { heading: 'What to expect', body: 'An initial Education Fit Assessment, a discussion of decision factors and missing information, and a clear next step. Universities, scholarship bodies and authorities issue the official outcomes.' },
       { heading: 'China fee timing', body: chinaOffer },
     ],

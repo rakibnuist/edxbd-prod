@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import User from '@/models/User';
+import prisma from '@/lib/prisma';
 
 // GET - Fetch single user (Admin only)
 export async function GET(
@@ -16,25 +15,17 @@ export async function GET(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-
     const { id } = await params;
-    const user = await User.findById(id).select('-password');
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: { id: true, name: true, email: true, role: true, createdAt: true, updatedAt: true }
+    });
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    const userResponse = {
-      id: user._id.toString(),
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    };
-
-    return NextResponse.json({ user: userResponse });
+    return NextResponse.json({ user });
   } catch (error) {
     console.error('Fetch user error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
@@ -53,19 +44,19 @@ export async function PUT(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-
     const { name, email, role, password } = await request.json();
     const { id } = await params;
 
-    const user = await User.findById(id);
+    const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
+    const updateData: any = {};
+
     // Update fields
-    if (name) user.name = name.trim();
+    if (name) updateData.name = name.trim();
     if (email) {
       const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
       if (!emailRegex.test(email)) {
@@ -76,7 +67,9 @@ export async function PUT(
       }
 
       // Check if email is already taken by another user
-      const existingUser = await User.findOne({ email: email.toLowerCase().trim(), _id: { $ne: id } });
+      const existingUser = await prisma.user.findFirst({
+        where: { email: email.toLowerCase().trim(), id: { not: id } }
+      });
       if (existingUser) {
         return NextResponse.json(
           { message: 'Email is already taken by another user' },
@@ -84,9 +77,9 @@ export async function PUT(
         );
       }
 
-      user.email = email.toLowerCase().trim();
+      updateData.email = email.toLowerCase().trim();
     }
-    if (role) user.role = role;
+    if (role) updateData.role = role;
 
     if (password) {
       if (password.length < 6) {
@@ -96,24 +89,18 @@ export async function PUT(
         );
       }
       const saltRounds = 12;
-      user.password = await bcrypt.hash(password, saltRounds);
+      updateData.password = await bcrypt.hash(password, saltRounds);
     }
 
-    await user.save();
-
-    // Return user without password
-    const userResponse = {
-      id: user._id.toString(),
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    };
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: updateData,
+      select: { id: true, name: true, email: true, role: true, createdAt: true, updatedAt: true }
+    });
 
     return NextResponse.json({
       message: 'User updated successfully',
-      user: userResponse
+      user: updatedUser
     });
   } catch (error) {
     console.error('Update user error:', error);
@@ -133,24 +120,22 @@ export async function DELETE(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-
     const { id } = await params;
-    const user = await User.findById(id);
+    const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
     // Prevent admin from deleting themselves
-    if (user._id.toString() === decoded.userId) {
+    if (user.id === decoded.userId) {
       return NextResponse.json(
         { message: 'You cannot delete your own account' },
         { status: 400 }
       );
     }
 
-    await User.findByIdAndDelete(id);
+    await prisma.user.delete({ where: { id } });
 
     return NextResponse.json({ message: 'User deleted successfully' });
   } catch (error) {

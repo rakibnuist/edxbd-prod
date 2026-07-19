@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import AboutClient from './AboutClient';
 
 export const metadata: Metadata = {
-  title: 'About EduExpress International - Your Gateway to Global Education',
+  title: 'About Us - Your Gateway to Global Education',
   description: "Learn how EduExpress applies evidence-first education guidance, clear costs and written proof to overseas study decisions.",
   keywords: [
     'about eduexpress international',
@@ -19,14 +19,14 @@ export const metadata: Metadata = {
     'global education consultant'
   ],
   openGraph: {
-    title: 'About EduExpress International - Your Gateway to Global Education',
+    title: 'About Us - Your Gateway to Global Education',
     description: 'Better Education. Clear Costs. Written Proof.',
     type: 'website',
     url: 'https://eduexpressint.com/about',
     siteName: 'EduExpress International',
   },
   twitter: {
-    title: 'About EduExpress International - Your Gateway to Global Education',
+    title: 'About Us - Your Gateway to Global Education',
     description: 'Better Education. Clear Costs. Written Proof.',
     card: 'summary_large_image',
   },
