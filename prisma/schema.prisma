@@ -266,3 +266,11 @@ model Message {
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @updatedAt
 }
+
+// Simple key/value store for editable site + integration settings
+// (e.g. Meta Pixel ID, Meta Access Token, contact details).
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

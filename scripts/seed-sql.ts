@@ -81,21 +81,19 @@ async function seed() {
       }
     });
   }
-  // Guarantee admin user exists even if users.json is empty
-  await prisma.user.upsert({
-    where: { email: 'admin@eduexpressint.com' },
-    update: {
-      password: '$2b$10$gup.2VSpY7w3dYHjJyKBIebhR3PhFuvm8Z6dd9RwKfFkW7rq4YJBm',
-      role: 'admin',
-    },
-    create: {
-      name: 'Admin',
-      email: 'admin@eduexpressint.com',
-      password: '$2b$10$gup.2VSpY7w3dYHjJyKBIebhR3PhFuvm8Z6dd9RwKfFkW7rq4YJBm',
-      role: 'admin',
-    }
-  });
-  console.log(`✅ Seeded ${users.length} users and verified admin account`);
+  // Guarantee the admin user exists — password comes ONLY from ADMIN_PASSWORD env.
+  // No hardcoded credential. If ADMIN_PASSWORD is unset, we leave any existing
+  // admin password untouched rather than resetting it to a known value.
+  if (ADMIN_PASSWORD_HASH) {
+    await prisma.user.upsert({
+      where: { email: ADMIN_EMAIL },
+      update: { password: ADMIN_PASSWORD_HASH, role: 'admin' },
+      create: { name: 'Admin', email: ADMIN_EMAIL, password: ADMIN_PASSWORD_HASH, role: 'admin' },
+    });
+    console.log(`✅ Seeded ${users.length} users and set admin password from ADMIN_PASSWORD`);
+  } else {
+    console.warn('⚠️  ADMIN_PASSWORD not set — admin account left as-is (no password guarantee).');
+  }
 
   // 3. Universities & Programs, Fees, Scholarships
   const universities = await readJson('universities.json');
@@ -285,29 +283,38 @@ async function seed() {
   }
   console.log(`✅ Seeded ${leads.length} leads`);
 
-  // 5. Testimonials
+  // 5. Testimonials — source JSON uses `name`/`quote`, DB uses `studentName`/`content`.
   const testimonials = await readJson('testimonials.json');
-  for (const t of testimonials) {
+  let seededTestimonials = 0;
+  for (let i = 0; i < testimonials.length; i++) {
+    const t = testimonials[i];
     const id = t._id?.$oid || (typeof t._id === 'string' ? t._id : undefined);
-    if (!t.studentName || !t.content) continue;
+    const studentName = t.studentName || t.name || t.displayName;
+    const content = t.content || t.quote || '';
+    if (!studentName || !content) continue;
+
+    const data = {
+      studentName,
+      content,
+      university: t.university || null,
+      country: t.country || t.location || null,
+      rating: t.rating ?? 5,
+      isPublished: t.isPublished ?? true,
+    };
 
     await prisma.testimonial.upsert({
-      where: { id: id || 'testimonial-placeholder' },
-      update: {},
+      where: { id: id || `testimonial-${i}` },
+      update: data,
       create: {
-        id,
-        studentName: t.studentName,
-        content: t.content,
-        university: t.university || null,
-        country: t.country || null,
-        rating: t.rating ?? 5,
-        isPublished: t.isPublished ?? true,
+        id: id || `testimonial-${i}`,
+        ...data,
         createdAt: t.createdAt?.$date ? new Date(t.createdAt.$date) : (t.createdAt ? new Date(t.createdAt) : undefined),
         updatedAt: t.updatedAt?.$date ? new Date(t.updatedAt.$date) : (t.updatedAt ? new Date(t.updatedAt) : undefined),
       }
     });
+    seededTestimonials++;
   }
-  console.log(`✅ Seeded ${testimonials.length} testimonials`);
+  console.log(`✅ Seeded ${seededTestimonials} testimonials`);
 
   // 6. Partnerships
   const partnerships = await readJson('partnerships.json');

@@ -1,17 +1,15 @@
 import { NextResponse } from 'next/server';
+import { getMetaConfig } from '@/lib/settings';
 
 export async function GET() {
   try {
-    // Check Meta Pixel ID
-    const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID || null;
-    
-    // Check Meta Access Token
-    const accessToken = process.env.META_ACCESS_TOKEN || null;
-    
-    // Determine if Meta services are active
+    // DB-configured values (from the admin Settings page) take precedence,
+    // with environment variables as the fallback.
+    const { pixelId, accessToken } = await getMetaConfig();
+
     const pixelActive = !!pixelId;
     const conversionApiActive = !!accessToken;
-    
+
     return NextResponse.json({
       pixelId,
       accessToken: accessToken ? `${accessToken.substring(0, 10)}...` : null, // Show partial token for security
