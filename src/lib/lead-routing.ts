@@ -17,9 +17,10 @@ export type LeadTeam =
 // Destination status drives routing (mirrors the strategy launch waves).
 const FLAGSHIP = ['china'];
 const WAVE1 = ['uk', 'united-kingdom', 'hungary', 'south-korea', 'korea', 'finland', 'malaysia'];
-// Wave 2/3 destinations are "launching" — interest list only, no promises.
+const WAVE2 = ['malta', 'cyprus', 'georgia'];
+// Wave 3 destinations remain launching/interest queue
 const LAUNCHING = [
-  'malta', 'cyprus', 'georgia', 'greece', 'croatia', 'thailand', 'netherlands',
+  'greece', 'croatia', 'thailand', 'netherlands',
 ];
 
 const MEDICAL_PATTERN = /mbbs|medicine|medical|dentistry|dental|pharmacy|nursing|clinical/i;
@@ -57,7 +58,7 @@ export function routeLead(input: RoutingInput): RoutingResult {
   if (FLAGSHIP.includes(dest)) {
     assignedTeam = 'china';
     routingNote = 'China team — show visa-first policy and relevant university context.';
-  } else if (WAVE1.includes(dest)) {
+  } else if (WAVE1.includes(dest) || WAVE2.includes(dest)) {
     assignedTeam = 'wave1_owner';
     routingNote = 'Assigned active country owner — never untrained general sales staff.';
   } else if (LAUNCHING.includes(dest)) {
