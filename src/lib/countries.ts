@@ -555,33 +555,33 @@ export const countries: Country[] = [
       { name: 'Sports Scholarship', amount: '20% - 50% reduction for students representing university athletic teams', deadline: 'Varies', icon: 'School' }
     ],
     serviceStatus: 'Active',
-    valueStatement: 'Malaysia offers world-class UK and Australian degrees at a third of the cost through branch campuses. It is a modern, culturally familiar hub with seamless credit transfer options to the West.',
+    valueStatement: 'Cyprus provides affordable European higher education, specialized hospitality management, and clear pathways with 50% tuition waivers for international applicants. Jurisdiction (Republic vs Northern) is verified before application.',
     whoItFits: [
-      'Students wanting UK/Australian degrees (Monash, Nottingham) on a budget',
-      'Those seeking a Halal-friendly, multicultural environment close to home',
-      'Students planning to transfer credits to Western universities after 1-2 years'
+      'Students looking for affordable European degree programs without strict entrance exams',
+      'Hospitality and Tourism majors seeking paid internships in Mediterranean resorts',
+      'Students planning credit transfer routes into Western European or UK institutions'
     ],
     whoShouldReconsider: [
-      'Students whose primary goal is to work part-time to fund their living expenses',
-      'Those looking for guaranteed Permanent Residency (Malaysia does not offer PR to students)'
+      'Students assuming Northern Cyprus degrees automatically grant EU Schengen travel rights (jurisdiction rules apply)',
+      'Applicants expecting full post-study residency guarantees without job sponsorship'
     ],
-    educationSystemAndRecognition: 'Highly regulated by the MQA. Branch campuses offer the exact same curriculum and degree certificate as their UK/Australian parent universities.',
+    educationSystemAndRecognition: 'Higher education is accredited by CYQAA (Republic of Cyprus) or YÖDAK (Northern Cyprus). Verified based on official university recognition and degree equivalency.',
     workRightsAndCareer: {
-      rights: 'Part-time work is legally restricted for international students (only allowed during long semester breaks with approval).',
-      opportunities: 'Opportunities exist in multinational corporations based in Kuala Lumpur for high-performing graduates.',
-      caveats: 'Do not plan to fund your tuition or living costs through part-time work. Strict visa rules apply.'
+      rights: 'In the Republic of Cyprus, international students can work part-time (20 hours/week) in designated sectors after 6 months. In Northern Cyprus, campus-based work is common.',
+      opportunities: 'Paid seasonal internships are available in hospitality, culinary arts, and tourism during summer breaks.',
+      caveats: 'Verify embassy jurisdiction and visa requirements in writing before depositing any application fees.'
     },
     comparisons: {
-      countryA: 'UK',
-      countryA_description: 'Malaysia offers the exact same UK degree at 60% less cost, but the UK offers a 2-year post-study work visa.',
-      countryB: 'China',
-      countryB_description: 'Malaysia offers more English-medium instruction and Western branch campuses, while China offers more full-ride scholarships.'
+      countryA: 'Malaysia',
+      countryA_description: 'Cyprus offers European regional proximity and Mediterranean hospitality internships, while Malaysia offers direct UK branch campus degrees.',
+      countryB: 'Hungary',
+      countryB_description: 'Hungary offers full Schengen travel rights and Stipendium scholarships, whereas Cyprus provides easier direct admissions and paid resort internships.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
-      role: 'Asia-Pacific Admissions Counselor',
-      lastVerifiedDate: 'July 2026',
-      primarySources: ['EMGS (Education Malaysia Global Services)', 'MQA (Malaysian Qualifications Agency)']
+      role: 'European Admissions Compliance',
+      lastVerifiedDate: 'October 2026',
+      primarySources: ['Ministry of Education, Sport and Youth (Cyprus)', 'CYQAA / YÖDAK Accreditation Portals']
     }
   },
   {
@@ -701,32 +701,34 @@ export const countries: Country[] = [
     scholarshipsList: [
       { name: 'University Merit Discount', amount: '10% - 25% Tuition waiver for students scoring 90%+ in semester GPA', deadline: 'Biannual', icon: 'Award' }
     ],
-    serviceStatus: 'Researching',
-    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    serviceStatus: 'Active',
+    valueStatement: 'Georgia is a premier destination for affordable, English-medium Medical (MD/MBBS) and Dental education following European curriculum guidelines, with WHO and ECFMG recognition.',
     whoItFits: [
-      'Students looking for affordable European/Asian education options',
-      'Those interested in exploring emerging international study destinations'
+      'Students aspiring to study MBBS/MD in English at an affordable tuition fee ($4,500 - $6,500/year)',
+      'Applicants seeking medical qualifications compliant with USMLE (ECFMG), PLAB (UK), and BMDC standards',
+      'Students preferring a safe, Eastern European study environment with low living costs'
     ],
     whoShouldReconsider: [
-      'Students who require an already established, fully verified EduExpress route'
+      'Students assuming local licensing guarantees abroad without passing home-country medical council exams',
+      'Applicants requiring full-ride medical scholarships (tuition discounts exist, but full-rides are rare)'
     ],
-    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    educationSystemAndRecognition: 'Regulated by the National Center for Educational Quality Enhancement (NCEQE) of Georgia. Medical programs follow 6-year integrated ECTS curricula recognized by WHO, WFME, and ECFMG.',
     workRightsAndCareer: {
-      rights: 'Work rights during and after study are being verified with official immigration sources.',
-      opportunities: 'Career pathways are being assessed.',
-      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+      rights: 'Students hold temporary residence permits. Medical students focus heavily on clinical rotations rather than part-time non-medical work.',
+      opportunities: 'Graduates are eligible to sit for USMLE (USA), PLAB (UK), AMC (Australia), or BMDC (Bangladesh) qualifying examinations.',
+      caveats: 'Medical licensing in Bangladesh requires passing the BMDC equivalence examination upon return.'
     },
     comparisons: {
       countryA: 'China',
-      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
+      countryA_description: 'Georgia offers 6-year European-standard medical degrees in English, while China offers CSC scholarship options and extensive hospital infrastructure.',
       countryB: 'UK',
-      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+      countryB_description: 'Georgia MBBS costs 80% less than UK medical schools while allowing graduates to sit for the UK PLAB exam.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
-      role: 'Research & Compliance',
+      role: 'Medical Admissions & Compliance Lead',
       lastVerifiedDate: 'October 2026',
-      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+      primarySources: ['NCEQE Georgia', 'World Directory of Medical Schools (WDOMS)']
     }
   },
   {
@@ -830,32 +832,34 @@ export const countries: Country[] = [
     metaDescription: 'Explore Malta education options with institution checks, clear costs and visa readiness for Bangladeshi students.',
     intakesText: 'Confirmed for the selected institution',
     factText: 'EduExpress has provided active Malta education guidance since 2025.',
-    serviceStatus: 'Researching',
-    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    serviceStatus: 'Active',
+    valueStatement: 'Malta offers official English-medium European education within the Schengen zone, featuring reputable public and private higher education institutions, IT, and business qualifications.',
     whoItFits: [
-      'Students looking for affordable European/Asian education options',
-      'Those interested in exploring emerging international study destinations'
+      'Students looking for English-speaking Schengen European study destinations',
+      'Those interested in Business, IT, Hospitality, and Maritime Studies in a Mediterranean tech hub',
+      'Students seeking European qualification recognition under the Malta Further & Higher Education Authority'
     ],
     whoShouldReconsider: [
-      'Students who require an already established, fully verified EduExpress route'
+      'Students expecting to cover all tuition and living expenses through part-time work alone',
+      'Applicants who cannot meet official Schengen financial proof requirements (€700-€1000/mo)'
     ],
-    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    educationSystemAndRecognition: 'Regulated by the Malta Further & Higher Education Authority (MFHEA). Qualifications follow the European Qualifications Framework (EQF).',
     workRightsAndCareer: {
-      rights: 'Work rights during and after study are being verified with official immigration sources.',
-      opportunities: 'Career pathways are being assessed.',
-      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+      rights: 'International students can work part-time (20 hours/week) after 90 days of study with an approved employment license (Jobsplus).',
+      opportunities: 'Growing career opportunities in iGaming, Financial Technology, Tourism, and Digital Business.',
+      caveats: 'Part-time work licenses require Jobsplus approval and cannot replace primary financial proof.'
     },
     comparisons: {
-      countryA: 'China',
-      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
+      countryA: 'Finland',
+      countryA_description: 'Malta is an English-speaking Schengen nation with warmer climate, while Finland offers tuition waiver scholarships and high-tech research UAS.',
       countryB: 'UK',
-      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+      countryB_description: 'Malta uses EUR currency and grants Schengen access, while the UK offers a 2-year Graduate post-study work visa.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
-      role: 'Research & Compliance',
+      role: 'European Admissions Specialist',
       lastVerifiedDate: 'October 2026',
-      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+      primarySources: ['MFHEA Malta', 'Central Visa Unit Malta']
     }
   },
   {
