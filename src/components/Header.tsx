@@ -41,9 +41,10 @@ const Header = () => {
 
   const navigation = [
     { name: 'Home', href: '/', current: pathname === '/' },
-    { name: 'Destinations', href: '/destinations', current: pathname.startsWith('/destinations') },
-    { name: 'Universities', href: '/universities', current: pathname.startsWith('/universities') },
-    { name: 'Services', href: '/services', current: pathname === '/services' },
+    { name: 'Study in China', href: '/study-in-china-from-bangladesh', current: pathname.includes('china') },
+    { name: 'Destinations', href: '/country-status', current: pathname.startsWith('/destinations') || pathname === '/country-status' },
+    { name: 'Find Education', href: '/universities', current: pathname.startsWith('/universities') },
+    { name: 'Proof & Transparency', href: '/better-education-standard', current: ['/better-education-standard', '/fees-and-transparency', '/how-we-verify-universities'].includes(pathname) },
     { name: 'Updates', href: '/updates', current: pathname === '/updates' },
     { name: 'Contact', href: '/contact', current: pathname === '/contact' },
   ];

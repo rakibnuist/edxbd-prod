@@ -12,7 +12,16 @@ export async function GET(request: NextRequest) {
     const limit = searchParams.get('limit');
 
     // Build query
-    const query: Record<string, unknown> = { isActive: true };
+    const now = new Date();
+    const query: Record<string, unknown> = {
+      isActive: true,
+      consentVerified: true,
+      consentEvidenceId: { $exists: true, $ne: '' },
+      $and: [
+        { $or: [{ consentRevokedAt: { $exists: false } }, { consentRevokedAt: null }] },
+        { $or: [{ consentExpiresAt: { $exists: false } }, { consentExpiresAt: null }, { consentExpiresAt: { $gt: now } }] },
+      ],
+    };
     
     if (featured === 'true') {
       query.featured = true;

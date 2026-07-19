@@ -7,13 +7,13 @@ export default function SettingsPage() {
     siteName: 'EduExpress International',
     siteDescription: 'Study Abroad Consultancy with FREE Scholarship Assistance',
     contactEmail: 'info@eduexpressint.com',
-    contactPhone: '+880 1983-333566',
-    whatsappNumber: '+880 1983-333566',
-    address: 'House: 12/1, Ground Floor, Road: 4/A, Dhanmondi, Dhaka 1209',
+    contactPhone: '01983 333566',
+    whatsappNumber: '01983 333566',
+    address: 'Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209',
     facebookUrl: 'https://www.facebook.com/eduexpressint',
-    linkedinUrl: 'https://www.linkedin.com/company/eduexpress-international',
-    instagramUrl: 'https://www.instagram.com/eduexpressint',
-    twitterUrl: 'https://twitter.com/eduexpressint'
+    linkedinUrl: 'https://www.linkedin.com/company/eduexpress',
+    instagramUrl: 'https://www.instagram.com/eduexpressint/',
+    youtubeUrl: 'https://www.youtube.com/@EduExpressInt'
   });
 
   const [isSaving, setIsSaving] = useState(false);
@@ -175,12 +175,12 @@ export default function SettingsPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Twitter URL
+                  YouTube URL
                 </label>
                 <input
                   type="url"
-                  name="twitterUrl"
-                  value={settings.twitterUrl}
+                  name="youtubeUrl"
+                  value={settings.youtubeUrl}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />

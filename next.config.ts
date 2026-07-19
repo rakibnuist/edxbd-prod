@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  // Disable SWC for offline environments
+  swcMinify: false,
+
   // Aggressive tree-shaking for icon libraries
   modularizeImports: {
     'lucide-react': {
@@ -39,7 +42,7 @@ const nextConfig: NextConfig = {
 
   // Basic security headers
   async headers() {
-    return [
+    const securityHeaders = [
       {
         source: '/(.*)',
         headers: [
@@ -53,7 +56,16 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // Cache static assets aggressively
+    ];
+
+    if (process.env.NODE_ENV !== 'production') {
+      return securityHeaders;
+    }
+
+    return [
+      ...securityHeaders,
+      // Cache static assets aggressively in production only. Development
+      // bundles reuse filenames and must never be marked immutable.
       {
         source: '/images/:path*',
         headers: [

@@ -106,7 +106,7 @@ export async function GET(_request: Request) {
 
                                                                     < h3 > Success Rate Breakdown </h3>
                                                                       < ul >
-                                                                      <li><strong>UK Student Visas: </strong> 98% approval rate</li >
+                                                                      <li><strong>UK Student Visas: </strong> Destination specific readiness review</li >
                                                                         <li><strong>Canada Study Permits: </strong> 97% approval rate</li >
                                                                           <li><strong>Australia Student Visas: </strong> 96% approval rate</li >
                                                                             <li><strong>Germany Student Visas: </strong> 99% approval rate</li >
@@ -126,7 +126,7 @@ export async function GET(_request: Request) {
 
                                                                                               < p > Ready to start your study abroad journey ? Contact us today for a free consultation! </p>
                                                                                                 `,
-        excerpt: "Our December visa approval rate reaches 98% for UK and Canada applications. Trust our expertise for your visa success.",
+        excerpt: "Review the current document and funding requirements before preparing a UK or Canada visa application.",
         type: "update",
         category: "Visa Updates",
         tags: ["visa", "success rate", "approval", "UK", "Canada", "Australia"],
@@ -134,8 +134,8 @@ export async function GET(_request: Request) {
         isFeatured: false,
         author: "Visa Team",
         publishedAt: new Date("2024-12-15"),
-        metaTitle: "Visa Success Rate Update - 98% Approval Rate",
-        metaDescription: "Our December 2024 visa approval rate reaches 98% for UK and Canada applications. Trust our expertise for visa success."
+        metaTitle: "Student Visa Readiness Update",
+        metaDescription: "Review current documents, funding evidence and destination specific requirements before a student visa application."
       },
       {
         title: "New University Partnership - 5 European Universities",

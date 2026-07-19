@@ -85,7 +85,7 @@ export const countries: Country[] = [
     isActive: true,
     featured: true,
     images: ['https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=75&w=1200&auto=format&fit=crop'],
-    metaTitle: 'Best Agency for China in Bangladesh - Full Scholarships 2026',
+    metaTitle: 'Best Agency for China in Bangladesh | Scholarships 2027',
     metaDescription: 'EduExpress is the best education consultancy in Bangladesh for studying in China. Get full free CSC scholarships for MBBS and Engineering.',
     nextDeadline: 'December 15th',
     intakesText: 'March & September',
@@ -157,7 +157,7 @@ export const countries: Country[] = [
     isActive: true,
     featured: true,
     images: ['https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=75&w=1200&auto=format&fit=crop'],
-    metaTitle: 'Study in South Korea from Bangladesh - GKS Scholarship 2026',
+    metaTitle: 'Study in South Korea from Bangladesh | GKS Scholarship 2027',
     metaDescription: 'Apply for GKS Scholarship in South Korea. Study in top tech universities with full funding and living allowance.',
     nextDeadline: 'October 30th',
     intakesText: 'March & September',
@@ -258,7 +258,7 @@ export const countries: Country[] = [
     isActive: true,
     featured: true,
     images: ['https://images.unsplash.com/photo-1516901632977-d141a38d469b?q=75&w=1200&auto=format&fit=crop'],
-    metaTitle: 'Study in Hungary from Bangladesh - Stipendium Hungaricum 2026',
+    metaTitle: 'Study in Hungary from Bangladesh | Stipendium Hungaricum 2027',
     metaDescription: 'Apply for Stipendium Hungaricum Scholarship in Hungary. Full free tuition + Dormitory + Monthly stipend. Easy Schengen travel.',
     nextDeadline: 'January 15th',
     intakesText: 'September (Main Intake)',
@@ -304,8 +304,8 @@ export const countries: Country[] = [
     },
     scholarships: ['Finland Scholarship (100% + €5000)', 'Early Bird Discount (50%)'],
     benefits: ['Exceptional PR & Permanent Residency Pathways', 'Spouse Can Work Full-time (No hours restriction)', 'Voted the Happiest Country in the World 7 years in a row'],
-    isActive: true,
-    featured: true,
+    isActive: false,
+    featured: false,
     images: ['https://images.unsplash.com/photo-1517935706615-2717063c2225?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in Finland - PR Pathways & Huge Scholarships',
     metaDescription: 'Study in Finland with huge scholarships. Easy PR pathway after graduation. Bring your spouse and family.',
@@ -399,12 +399,12 @@ export const countries: Country[] = [
       currency: 'EUR'
     },
     scholarships: ['Ministry of Science Scholarship', 'Erasmus+'],
-    benefits: ['Full Schengen Access (Travel to Germany, France, etc.)', 'High Visa Success Rate (98%) with our legal guidance', 'Right to work part-time (Student service regulations)'],
-    isActive: true,
-    featured: true,
+    benefits: ['Program and institution comparison', 'Destination specific visa readiness review', 'Education fit and total cost planning'],
+    isActive: false,
+    featured: false,
     images: ['https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in Croatia - Schengen Visa & Placements',
-    metaDescription: 'Study in Croatia (Schengen Area). Affordable tuition fees, 98% visa success rate, and rich work opportunities. Learn Tourism and IT.',
+    metaDescription: 'Compare Croatia education options, recognition, total costs and visa readiness for Bangladeshi students.',
     nextDeadline: 'July 15th',
     intakesText: 'October (Winter Intake)',
     factText: 'Croatia is one of the safest countries in the EU. Its capital, Zagreb, has won awards for the best student lifestyle and Christmas markets.',
@@ -449,8 +449,8 @@ export const countries: Country[] = [
     isActive: true,
     featured: true,
     images: ['https://images.unsplash.com/photo-1565008576549-57569a49371d?q=75&w=1200&auto=format&fit=crop'],
-    metaTitle: 'MBBS in Georgia for Bangladeshi Students 2026',
-    metaDescription: 'Study MBBS in Georgia. WHO recognizable degree. No entrance exam. Low cost. Apply now with 98% visa success rate.',
+    metaTitle: 'MBBS in Georgia for Bangladeshi Students 2027',
+    metaDescription: 'Compare medical and other education options in Georgia with recognition, licensing, cost and visa readiness checks.',
     nextDeadline: 'August 15th',
     intakesText: 'March & September',
     factText: 'Georgia is located at the intersection of Eastern Europe and Western Asia. Its medical universities follow European curriculum standards.',
@@ -495,7 +495,7 @@ export const countries: Country[] = [
     featured: true,
     images: ['https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in Malaysia from Bangladesh - Affordable Quality Education',
-    metaDescription: 'Study in Malaysia with affordable tuition fees. Transfer credits to UK/Australia/USA. Apply now with 98% visa success rate.',
+    metaDescription: 'Compare Malaysian universities, program quality, costs and student pass readiness for Bangladeshi students.',
     nextDeadline: 'June 30th',
     intakesText: 'February & September (Multiple intakes year-round)',
     factText: 'Many top universities in the UK and Australia (like Monash, Nottingham, Heriot-Watt) have campuses in Malaysia offering the exact same degree at 1/3 of the cost.',
@@ -519,6 +519,87 @@ export const countries: Country[] = [
       { name: 'Malaysia International Scholarship (MIS)', amount: '100% Tuition Waiver + Monthly Living Allowance + Book allowance', deadline: 'June 15th', icon: 'Crown' },
       { name: 'University Presidential Merit Awards', amount: '20% - 50% Tuition fee discounts based on academic average', deadline: 'Intake Dependent', icon: 'Award' }
     ]
+  },
+  {
+    name: 'Malta',
+    slug: 'malta',
+    flag: '🇲🇹',
+    description: 'Active education service with institution, recognition, cost and visa readiness checks',
+    universities: [],
+    programs: ['Business', 'Information Technology', 'Hospitality', 'Health Sciences'],
+    requirements: {
+      language: ['Program specific English language evidence is checked before application'],
+      documents: ['Academic records', 'Passport', 'Program specific supporting documents'],
+      visa: ['Current student visa documents and financial evidence are checked from official guidance']
+    },
+    costs: {
+      tuition: 'Confirmed for the selected institution and intake',
+      living: 'Prepared in a dated ClearCost Sheet',
+      currency: 'EUR'
+    },
+    scholarships: [],
+    benefits: ['English taught program exploration', 'Active university and study group routes', 'Written education fit and cost review'],
+    isActive: true,
+    featured: true,
+    images: ['/images/partnership.jpg'],
+    metaTitle: 'Study in Malta from Bangladesh',
+    metaDescription: 'Explore Malta education options with institution checks, clear costs and visa readiness for Bangladeshi students.',
+    intakesText: 'Confirmed for the selected institution',
+    factText: 'EduExpress has provided active Malta education guidance since 2025.'
+  },
+  {
+    name: 'Greece',
+    slug: 'greece',
+    flag: '🇬🇷',
+    description: 'Active university collaboration with education fit and application guidance',
+    universities: [],
+    programs: ['Business', 'Tourism and Hospitality', 'Technology', 'International Programs'],
+    requirements: {
+      language: ['Teaching language and program requirements are confirmed before application'],
+      documents: ['Academic records', 'Passport', 'Program specific supporting documents'],
+      visa: ['Current student visa documents and financial evidence are checked from official guidance']
+    },
+    costs: {
+      tuition: 'Confirmed for the selected institution and intake',
+      living: 'Prepared in a dated ClearCost Sheet',
+      currency: 'EUR'
+    },
+    scholarships: [],
+    benefits: ['University collaboration active', 'English taught program exploration', 'Recognition and total cost review'],
+    isActive: true,
+    featured: true,
+    images: ['/images/partnership.jpg'],
+    metaTitle: 'Study in Greece from Bangladesh',
+    metaDescription: 'Explore Greece education options with program fit, university access, clear costs and visa readiness.',
+    intakesText: 'Confirmed for the selected institution',
+    factText: 'University collaboration and destination marketing are active.'
+  },
+  {
+    name: 'Thailand',
+    slug: 'thailand',
+    flag: '🇹🇭',
+    description: 'Active education service for international programs and regional study value',
+    universities: [],
+    programs: ['Business', 'Hospitality', 'Technology', 'International Programs'],
+    requirements: {
+      language: ['Teaching language and program requirements are confirmed before application'],
+      documents: ['Academic records', 'Passport', 'Program specific supporting documents'],
+      visa: ['Current education visa documents and financial evidence are checked from official guidance']
+    },
+    costs: {
+      tuition: 'Confirmed for the selected institution and intake',
+      living: 'Prepared in a dated ClearCost Sheet',
+      currency: 'THB'
+    },
+    scholarships: [],
+    benefits: ['International program exploration', 'Active university and study group routes', 'Quality and total cost review'],
+    isActive: true,
+    featured: true,
+    images: ['/images/partnership.jpg'],
+    metaTitle: 'Study in Thailand from Bangladesh',
+    metaDescription: 'Explore Thailand international education options with university checks, clear costs and visa readiness.',
+    intakesText: 'Confirmed for the selected institution',
+    factText: 'EduExpress provides active education guidance for Thailand.'
   }
 ];
 

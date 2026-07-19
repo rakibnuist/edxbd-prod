@@ -145,9 +145,9 @@ export default function TermsClient() {
                   While we strive to provide the best possible service, please understand that:
                 </p>
                 <ul className="list-disc list-inside space-y-2 mb-6 marker:text-orange-500 bg-orange-50/50 p-6 rounded-2xl border border-orange-100">
-                  <li>We cannot guarantee admission to any specific university or program</li>
+                  <li>Universities issue admission decisions for each applicant and program</li>
                   <li>Visa approval is subject to government discretion and policy changes</li>
-                  <li>Scholarship availability and amounts may vary and are not guaranteed</li>
+                  <li>Scholarship bodies confirm availability, coverage and selection for each intake</li>
                   <li>University admission requirements and deadlines may change</li>
                   <li>Government policies and regulations may affect our services</li>
                   <li>We are not responsible for decisions made by third parties</li>
@@ -186,9 +186,9 @@ export default function TermsClient() {
                       <Scale className="w-5 h-5 text-amber-600" />
                       <strong>EduExpress International</strong>
                     </p>
-                    <p>House: 12/1, Ground Floor, Road: 4/A</p>
-                    <p>Dhanmondi, Dhaka-1209, Bangladesh</p>
-                    <p>Phone: +880-1983-333566</p>
+                    <p>Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor</p>
+                    <p>Dhanmondi, Dhaka 1209, Bangladesh</p>
+                    <p>Phone: 01983 333566</p>
                     <p>Email: info@eduexpressint.com</p>
                   </div>
                 </div>

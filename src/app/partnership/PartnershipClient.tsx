@@ -133,10 +133,10 @@ const PartnershipClient = () => {
   ];
 
   const successStats = [
-    { number: '150+', label: 'Active Partners', icon: Users },
-    { number: '3,000+', label: 'Students Placed', icon: BookOpen },
-    { number: '7 Yrs', label: 'In Market', icon: Award },
-    { number: '24/7', label: 'Support Available', icon: Headphones }
+    { number: 'Written', label: 'Relationship Evidence', icon: Users },
+    { number: 'Dated', label: 'Verification Records', icon: BookOpen },
+    { number: 'Clear', label: 'Responsibilities', icon: Award },
+    { number: 'Tracked', label: 'Application Proof', icon: Headphones }
   ];
 
   const process = [
@@ -182,7 +182,7 @@ const PartnershipClient = () => {
         highlight="Education Consultancy"
         description="Partner with EduExpress International and expand your student placement business with our global network"
         icon={Handshake}
-        badgeText="Global Partner Programme 2026"
+        badgeText="Global Partner Programme 2027"
       >
         <div className="flex flex-col items-center gap-12">
           <motion.div
@@ -335,7 +335,7 @@ const PartnershipClient = () => {
               Service Charge <span className="text-amber-500">Structure</span>
             </h2>
             <p className="text-lg text-slate-600 max-w-3xl mx-auto bg-slate-50 p-6 rounded-2xl border border-slate-200">
-              Unlike Western universities which operate on a commission basis, Chinese Universities <strong className="text-slate-900">do not pay agency commissions</strong>. Instead, charges are determined by the <strong className="text-slate-900">scholarship type secured</strong> and covered by the partner agency. Fees are quoted in <strong>USD</strong> and payment is triggered by JW202 issuance — not before.
+              Chinese university arrangements commonly use a service charge model that is separate from Western commission structures. Charges are determined by the <strong className="text-slate-900">scholarship type secured</strong> and covered by the partner agency. Fees are quoted in <strong>USD</strong> and payment is triggered by JW202 issuance.
             </p>
           </motion.div>
 

@@ -8,9 +8,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'primary-blue': '#2563eb',
-        'primary-blue-dark': '#1d4ed8',
-        'primary-blue-light': '#3b82f6',
+        'primary-blue': '#174f7a',
+        'primary-blue-dark': '#0b2f4a',
+        'primary-blue-light': '#64b5df',
         'secondary-orange': '#f97316',
         'secondary-orange-light': '#fb923c',
         'accent-green': '#10b981',
@@ -52,12 +52,13 @@ module.exports = {
         }
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        mono: ['ui-monospace', 'SFMono-Regular', 'monospace'],
-        heading: ['var(--font-playfair-display)', 'Georgia', 'serif'],
+        sans: ['var(--font-inter)', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-fraunces)', 'Georgia', 'Times New Roman', 'serif'],
         body: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         primary: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-playfair-display)', 'Georgia', 'serif'],
+        serif: ['var(--font-fraunces)', 'Georgia', 'Times New Roman', 'serif'],
+        bengali: ['var(--font-bengali)', 'var(--font-inter)', 'system-ui', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-out',
@@ -172,4 +173,3 @@ module.exports = {
     // No plugins needed for line-clamp functionality
   ],
 }
-

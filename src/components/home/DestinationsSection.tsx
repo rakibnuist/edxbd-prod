@@ -17,7 +17,10 @@ const countryImages: Record<string, string> = {
     'Cyprus': '/images/destinations/cyprus.jpg',
     'Croatia': '/images/destinations/croatia.jpg',
     'Georgia': '/images/destinations/georgia.jpg',
-    'Malaysia': '/images/destinations/malaysia.jpg'
+    'Malaysia': '/images/destinations/malaysia.jpg',
+    'Malta': '/images/partnership.jpg',
+    'Greece': '/images/partnership.jpg',
+    'Thailand': '/images/partnership.jpg'
 };
 
 // Fallback background colors if images fail to load
@@ -48,7 +51,7 @@ const DestinationsSection = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-bold tracking-wide uppercase mb-4"
                     >
-                        Global Network
+                        Service readiness
                     </m.span>
                     <m.h2
                         initial={{ opacity: 0, y: 10 }}
@@ -56,7 +59,7 @@ const DestinationsSection = () => {
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-5xl font-bold text-slate-900 mb-6"
                     >
-                        {featuredCountries.length} World-Class Study Destinations
+                        Flagship and Active Destinations
                     </m.h2>
                     <m.p
                         initial={{ opacity: 0, y: 10 }}
@@ -64,7 +67,7 @@ const DestinationsSection = () => {
                         transition={{ delay: 0.2 }}
                         className="text-lg text-slate-600 max-w-2xl mx-auto"
                     >
-                        Embark on a borderless educational journey. From the innovation hubs of Asia to the historic campuses of Europe, we connect your ambitions with world-class opportunities.
+                        China is our proof flagship. Every listed destination has an active university or study group route, with destination specific guidance and no borrowed success claims.
                     </m.p>
                 </div>
 
@@ -144,7 +147,7 @@ const DestinationsSection = () => {
                                                     onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('openQuickForm')); }}
                                                     className="w-full py-3 lg:py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 group/btn border-2 border-transparent hover:border-blue-200 active:scale-95 touch-manipulation"
                                                 >
-                                                    Start Your Application
+                                                    Get an Education Fit Assessment
                                                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                                                 </button>
                                             </m.div>

@@ -3,6 +3,7 @@ import { activeCountries } from '@/lib/countries';
 import connectDB from '@/lib/mongodb';
 import University from '@/models/University';
 import Content from '@/models/Content';
+import { evidencePages } from '@/data/evidencePages';
 
 // PHASE 0 FIX:
 // - baseUrl moved to apex domain (www redirects -> canonical mismatch before)
@@ -22,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/updates',
     '/partnership',
     '/contact',
-    '/scholarship-assessment',
+    ...Object.keys(evidencePages).map((slug) => `/${slug}`),
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
@@ -38,7 +39,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }));
 
-  await connectDB();
+  try {
+    await connectDB();
 
   // Universities
   const universities = await University.find({ isActive: true }, 'slug updatedAt').lean();
@@ -65,5 +67,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...routes, ...countryRoutes, ...universityRoutes, ...updateRoutes];
+    return [...routes, ...countryRoutes, ...universityRoutes, ...updateRoutes];
+  } catch (error) {
+    console.warn('Sitemap generated without database routes:', error);
+    return [...routes, ...countryRoutes];
+  }
 }

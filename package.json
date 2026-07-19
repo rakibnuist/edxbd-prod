@@ -1,7 +1,7 @@
 {
   "name": "edxbd",
   "version": "1.0.0",
-  "description": "EduExpress International - Your Gateway to Global Education. Expert study abroad consultancy with FREE scholarship assistance since 2018.",
+  "description": "EduExpress International — Bangladesh's Evidence-First Education Consultancy.",
   "private": true,
   "homepage": "https://eduexpressint.com",
   "repository": {
@@ -24,6 +24,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "local": "node server.js",
+    "local:dev": "node server-dev.js",
+    "local:build": "npm run build && npm run local",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "seed:admin": "node scripts/seed-admin.js"
@@ -56,6 +59,8 @@
     "autoprefixer": "^10.4.22",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
+    "node-addon-api": "^8.5.0",
+    "node-gyp": "^11.4.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
@@ -65,5 +70,8 @@
     "firefox >= 115",
     "edge >= 109",
     "safari >= 16.4"
-  ]
+  ],
+  "optionalDependencies": {
+    "@next/swc-linux-arm64-gnu": "*"
+  }
 }

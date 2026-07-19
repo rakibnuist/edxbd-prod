@@ -6,7 +6,7 @@ import { Briefcase } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Study Abroad Services | University Selection, Visa & Scholarship Support',
-  description: 'Expert study abroad services including university selection, visa assistance, scholarship support, and career guidance since 2018. 98% success rate with 150+ partner universities worldwide.',
+  description: 'Evidence-first education guidance covering education fit, written cost comparison, application proof tracking and visa readiness.',
   keywords: [
     'study abroad services',
     'university selection',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'Study Abroad Services | Expert Guidance for International Education',
-    description: 'Comprehensive study abroad solutions with 98% success rate since 2018. Expert guidance for university selection, visa assistance, and scholarship support.',
+    description: 'Compare education quality, recognition, costs and career fit with clear written evidence.',
     type: 'website',
   },
   alternates: {
@@ -52,14 +52,14 @@ export default function ServicesPage() {
         'Document verification',
         'Interview coaching',
         'Appeal support if needed',
-        '98% success rate'
+        'Outcome risks explained in writing'
       ],
       icon: '📋',
       color: 'from-green-500 to-emerald-500'
     },
     {
       title: 'Scholarship Support',
-      description: 'Access to exclusive scholarships and financial aid opportunities worldwide to make your education affordable.',
+      description: 'Assess official funding options after education fit, including eligibility, coverage, conditions and renewal rules.',
       features: [
         'Scholarship research & matching',
         'Application assistance',
@@ -143,8 +143,8 @@ export default function ServicesPage() {
       icon: '👥'
     },
     {
-      title: 'Proven Success',
-      description: '98% visa success rate and 150+ partner universities worldwide ensure your success.',
+      title: 'Written Proof',
+      description: 'Receive clear recommendations, cost responsibilities and application records with official decisions assigned to the responsible institution or authority.',
       icon: '🏆'
     },
     {

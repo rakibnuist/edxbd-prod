@@ -19,6 +19,12 @@ export interface IContent extends Document {
   views: number;
   createdAt: Date;
   updatedAt: Date;
+  reviewer?: string;
+  sourceUrls: string[];
+  lastVerifiedAt?: Date;
+  nextReviewAt?: Date;
+  complianceApprovedAt?: Date;
+  seoApprovedAt?: Date;
 }
 
 const ContentSchema = new Schema<IContent>({
@@ -85,6 +91,12 @@ const ContentSchema = new Schema<IContent>({
     required: true,
     trim: true
   },
+  reviewer: { type: String, trim: true },
+  sourceUrls: [{ type: String, trim: true }],
+  lastVerifiedAt: Date,
+  nextReviewAt: Date,
+  complianceApprovedAt: Date,
+  seoApprovedAt: Date,
   publishedAt: {
     type: Date
   },

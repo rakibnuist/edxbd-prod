@@ -1,378 +1,263 @@
-
 'use client';
 
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import Image from 'next/image';
+import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2, Save, X, Plus, Trash } from 'lucide-react';
+import { BookOpenCheck, Building2, Coins, FileCheck2, GraduationCap, Loader2, Plus, Save, Sparkles, Trash2 } from 'lucide-react';
 
-import { IUniversity, IUniversityFee, IUniversityScholarship } from '@/types/university';
+import type { IUniversity, IUniversityFee, IUniversityProgram, IUniversityScholarship } from '@/types/university';
 
 interface UniversityFormProps {
-    initialData?: IUniversity;
-    isNew?: boolean;
+  initialData?: IUniversity;
+  isNew?: boolean;
+}
+
+const fieldClass = 'mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100';
+const labelClass = 'block text-xs font-extrabold uppercase tracking-[0.08em] text-slate-500';
+
+const splitComma = (value: string) => value.split(',').map(item => item.trim()).filter(Boolean);
+const splitLines = (value: string) => value.split('\n').map(item => item.trim()).filter(Boolean);
+const unique = (values: string[]) => Array.from(new Set(values.map(value => value.trim()).filter(Boolean)));
+
+const blankProgram = (): IUniversityProgram => ({
+  level: 'Bachelor',
+  name: '',
+  subject: '',
+  languages: ['English'],
+  duration: '',
+  intakes: ['September 2027'],
+  tuition: '',
+  tuitionAfterScholarship: '',
+  applicationDeadline: '',
+  eligibility: [],
+  sourceUrl: '',
+  status: 'active',
+});
+
+const blankFee = (): IUniversityFee => ({ item: '', cost: '', notes: '', recipient: '', refundable: '', validFor: '2027 intake', sourceUrl: '' });
+
+const blankScholarship = (): IUniversityScholarship => ({
+  title: '',
+  type: '',
+  amount: '',
+  coverage: '',
+  eligiblePrograms: [],
+  renewal: '',
+  deadline: '',
+  condition: '',
+  details: [],
+  sourceUrl: '',
+  status: 'active',
+});
+
+function EditorSection({ icon, title, description, action, children }: { icon: ReactNode; title: string; description: string; action?: ReactNode; children: ReactNode }) {
+  return (
+    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <header className="flex flex-col gap-4 border-b border-slate-100 bg-slate-50/80 p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-xl bg-blue-100 text-blue-700">{icon}</span><div><h2 className="font-heading text-xl font-bold text-slate-950">{title}</h2><p className="mt-1 max-w-3xl text-xs leading-5 text-slate-500">{description}</p></div></div>
+        {action}
+      </header>
+      <div className="p-5 sm:p-6">{children}</div>
+    </section>
+  );
+}
+
+function Field({ label, children, className = '' }: { label: string; children: ReactNode; className?: string }) {
+  return <label className={className}><span className={labelClass}>{label}</span>{children}</label>;
 }
 
 export default function UniversityForm({ initialData, isNew = false }: UniversityFormProps) {
-    const router = useRouter();
-    const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState<Partial<IUniversity>>({
-        name: '',
-        slug: '',
-        location: '',
-        country: '',
-        city: '',
-        intake: [],
-        degree: [],
-        taught: [],
-        rankings: { country: 0, world: 0 },
-        details: { majors: [], tuition: '', tuitionDetails: [] },
-        fees: [],
-        scholarships: [],
-        documents: [],
-        deadlines: { application: '', startDate: '' },
-        notes: [],
-        badges: [],
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [formData, setFormData] = useState<Partial<IUniversity>>({
+    name: '', slug: '', location: '', country: 'China', city: '', intake: ['September 2027'], degree: [], taught: ['English'],
+    rankings: {}, details: { majors: [], tuition: '', tuitionDetails: [] }, programs: [], fees: [], scholarships: [], documents: [],
+    deadlines: { application: '', startDate: 'September 2027' }, notes: [], badges: [], logo: '', isActive: true,
+    officialUrl: '', aliases: [], relationshipType: 'unverified', relationshipEvidenceUrl: '', recognitionAuthority: '', recognitionSourceUrl: '',
+    sourceUrls: [], verificationStatus: 'under_verification',
+  });
 
-        logo: '',
-        isActive: true,
+  useEffect(() => {
+    if (initialData) setFormData({ ...initialData, programs: initialData.programs || [] });
+  }, [initialData]);
+
+  const programSummary = useMemo(() => {
+    const programs = formData.programs || [];
+    return {
+      levels: unique(programs.map(program => program.level)),
+      names: unique(programs.map(program => program.name)),
+      languages: unique(programs.flatMap(program => program.languages || [])),
+      intakes: unique(programs.flatMap(program => program.intakes || [])),
+    };
+  }, [formData.programs]);
+
+  const setTopLevel = (field: keyof IUniversity, value: unknown) => setFormData(previous => ({ ...previous, [field]: value }));
+
+  const handleNestedChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    const [parent, child] = name.split('.');
+    setFormData(previous => ({ ...previous, [parent]: { ...((previous as Record<string, unknown>)[parent] as object || {}), [child]: value } }));
+  };
+
+  const updateProgram = (index: number, field: keyof IUniversityProgram, value: unknown) => {
+    setFormData(previous => {
+      const programs = [...(previous.programs || [])];
+      programs[index] = { ...programs[index], [field]: value };
+      return { ...previous, programs };
     });
+  };
 
-    useEffect(() => {
-        if (initialData) {
-            setFormData(initialData);
-        }
-    }, [initialData]);
+  const updateFee = (index: number, field: keyof IUniversityFee, value: string) => {
+    setFormData(previous => {
+      const fees = [...(previous.fees || [])];
+      fees[index] = { ...fees[index], [field]: value };
+      return { ...previous, fees };
+    });
+  };
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        if (name.includes('.')) {
-            const [parent, child] = name.split('.');
-            setFormData((prev) => ({
-                ...prev,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                [parent]: { ...(prev as any)[parent], [child]: value }
-            }));
-        } else {
-            setFormData({ ...formData, [name]: value });
-        }
-    };
+  const updateScholarship = (index: number, field: keyof IUniversityScholarship, value: unknown) => {
+    setFormData(previous => {
+      const scholarships = [...(previous.scholarships || [])];
+      scholarships[index] = { ...scholarships[index], [field]: value };
+      return { ...previous, scholarships };
+    });
+  };
 
-    const handleArrayChange = (field: string, value: string) => {
-        setFormData({ ...formData, [field]: value.split(',').map(s => s.trim()) });
-    };
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    setError('');
 
-    // Helper to manage specific fees within the generic fees array
-    const getFeeValue = (itemName: string) => {
-        const fee = formData.fees?.find((f) => f.item === itemName);
-        return fee ? fee.cost : '';
-    };
+    const programs = (formData.programs || []).filter(program => program.name.trim());
+    const synchronized = programs.length ? {
+      ...formData,
+      programs,
+      degree: unique(programs.map(program => program.level)),
+      intake: unique(programs.flatMap(program => program.intakes || [])),
+      taught: unique(programs.flatMap(program => program.languages || [])),
+      details: {
+        ...(formData.details || { majors: [], tuition: '', tuitionDetails: [] }),
+        majors: unique(programs.map(program => program.name)),
+        tuition: formData.details?.tuition || programs.find(program => program.tuition)?.tuition || 'Current tuition confirmed in the ClearCost Sheet',
+      },
+    } : formData;
 
-    const setFeeValue = (itemName: string, cost: string) => {
-        setFormData((prev) => {
-            const existingFees = prev.fees || [];
-            const feeIndex = existingFees.findIndex((f) => f.item === itemName);
+    try {
+      const url = isNew ? '/api/admin/universities' : `/api/admin/universities/${formData._id || formData.slug}`;
+      const response = await fetch(url, {
+        method: isNew ? 'POST' : 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('admin_token') || ''}` },
+        body: JSON.stringify(synchronized),
+      });
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || 'The university record could not be saved.');
+      }
+      router.push('/admin/universities');
+      router.refresh();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : 'The university record could not be saved.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            let newFees;
-            if (feeIndex >= 0) {
-                newFees = [...existingFees];
-                newFees[feeIndex] = { ...newFees[feeIndex], cost };
-            } else {
-                newFees = [...existingFees, { item: itemName, cost }];
-            }
-            return { ...prev, fees: newFees };
-        });
-    };
+  return (
+    <form onSubmit={handleSubmit} className="space-y-7 pb-28">
+      <div className="rounded-2xl bg-[#08263c] p-5 text-white sm:p-7">
+        <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#8ed0ee]">Central university editor</p>
+        <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"><div><h1 className="font-heading text-3xl font-bold">{isNew ? 'Create university record' : `Edit ${formData.name || 'university'}`}</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-white/60">One university can contain many program records. Add each Bachelor, Master’s, MBBS, PhD, foundation, diploma or language option separately so its tuition, intake and eligibility stay aligned.</p></div><div className="grid grid-cols-4 gap-px bg-white/15 text-center"><div className="bg-[#08263c] p-3"><strong className="text-xl text-[#8ed0ee]">{formData.programs?.length || 0}</strong><span className="block text-[9px] text-white/45">Programs</span></div><div className="bg-[#08263c] p-3"><strong className="text-xl text-[#8ed0ee]">{formData.fees?.length || 0}</strong><span className="block text-[9px] text-white/45">Fees</span></div><div className="bg-[#08263c] p-3"><strong className="text-xl text-[#8ed0ee]">{formData.scholarships?.length || 0}</strong><span className="block text-[9px] text-white/45">Awards</span></div><div className="bg-[#08263c] p-3"><strong className="text-xl text-[#8ed0ee]">{programSummary.levels.length}</strong><span className="block text-[9px] text-white/45">Levels</span></div></div></div>
+      </div>
 
-    // Generic list manager (add/remove strings)
-    const addItemToList = (field: string, item: string) => {
-        if (!item) return;
-        setFormData((prev) => ({
-            ...prev,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            [field]: [...((prev as any)[field] || []), item]
-        }));
-    };
+      {error ? <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-bold text-rose-800">{error}</div> : null}
 
-    const removeItemFromList = (field: string, index: number) => {
-        setFormData((prev) => ({
-            ...prev,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            [field]: ((prev as any)[field] as any[]).filter((_: any, i: number) => i !== index)
-        }));
-    };
+      <EditorSection icon={<Building2 size={20} />} title="University identity" description="Core public information and the official university source.">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Official university name"><input className={fieldClass} value={formData.name || ''} onChange={event => setTopLevel('name', event.target.value)} required /></Field>
+          <Field label="Profile URL slug"><input className={fieldClass} value={formData.slug || ''} onChange={event => setTopLevel('slug', event.target.value)} required disabled={!isNew} /></Field>
+          <Field label="Country"><input className={fieldClass} value={formData.country || ''} onChange={event => setTopLevel('country', event.target.value)} required /></Field>
+          <Field label="City"><input className={fieldClass} value={formData.city || ''} onChange={event => setTopLevel('city', event.target.value)} required /></Field>
+          <Field label="Location display"><input className={fieldClass} value={formData.location || ''} onChange={event => setTopLevel('location', event.target.value)} placeholder="Chengdu, Sichuan Province, China" required /></Field>
+          <Field label="Official university website"><input type="url" className={fieldClass} value={formData.officialUrl || ''} onChange={event => setTopLevel('officialUrl', event.target.value)} placeholder="https://..." /></Field>
+          <Field label="Aliases and abbreviations"><input className={fieldClass} value={formData.aliases?.join(', ') || ''} onChange={event => setTopLevel('aliases', splitComma(event.target.value))} placeholder="SCU, Sichuan Uni" /></Field>
+          <Field label="University logo URL"><input type="url" className={fieldClass} value={formData.logo || ''} onChange={event => setTopLevel('logo', event.target.value)} placeholder="https://..." /></Field>
+        </div>
+        {formData.logo ? <div className="mt-5 grid size-24 place-items-center rounded-xl border border-slate-200 bg-white p-2"><Image src={formData.logo} alt="University logo preview" width={80} height={80} unoptimized className="max-h-full object-contain" /></div> : null}
+      </EditorSection>
 
-    // Scholarship manager
-    const addScholarship = () => {
-        setFormData((prev) => ({
-            ...prev,
-            scholarships: [...(prev.scholarships || []), { title: '', type: '', amount: '', details: [] }]
-        }));
-    };
+      <EditorSection
+        icon={<GraduationCap size={20} />}
+        title="Program catalogue"
+        description="Create one record for each exact course. Program level drives the Bachelor, Master’s, MBBS and other groupings on the public profile."
+        action={<button type="button" onClick={() => setTopLevel('programs', [...(formData.programs || []), blankProgram()])} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white"><Plus size={16} /> Add program</button>}
+      >
+        <div className="space-y-5">
+          {(formData.programs || []).map((program, index) => (
+            <article key={program._id || index} className="relative rounded-2xl border border-blue-100 bg-blue-50/35 p-4 sm:p-5">
+              <div className="mb-5 flex items-center justify-between gap-4"><div><p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-blue-700">Program {String(index + 1).padStart(2, '0')}</p><h3 className="mt-1 font-heading text-lg font-bold text-slate-950">{program.name || 'New program option'}</h3></div><button type="button" onClick={() => setTopLevel('programs', (formData.programs || []).filter((_, itemIndex) => itemIndex !== index))} className="grid size-9 place-items-center rounded-lg bg-white text-rose-600 shadow-sm" aria-label={`Remove program ${index + 1}`}><Trash2 size={17} /></button></div>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <Field label="Study level"><select className={fieldClass} value={program.level} onChange={event => updateProgram(index, 'level', event.target.value)}>{['Language', 'Foundation', 'Diploma', 'Bachelor', 'MBBS', "Master's", 'PhD'].map(level => <option key={level}>{level}</option>)}</select></Field>
+                <Field label="Exact program name" className="lg:col-span-2"><input className={fieldClass} value={program.name} onChange={event => updateProgram(index, 'name', event.target.value)} placeholder="Software Engineering" /></Field>
+                <Field label="Subject area"><input className={fieldClass} value={program.subject || ''} onChange={event => updateProgram(index, 'subject', event.target.value)} placeholder="Computing" /></Field>
+                <Field label="Teaching languages"><input className={fieldClass} value={program.languages?.join(', ') || ''} onChange={event => updateProgram(index, 'languages', splitComma(event.target.value))} placeholder="English, Chinese" /></Field>
+                <Field label="Duration"><input className={fieldClass} value={program.duration || ''} onChange={event => updateProgram(index, 'duration', event.target.value)} placeholder="4 years" /></Field>
+                <Field label="2027 intakes"><input className={fieldClass} value={program.intakes?.join(', ') || ''} onChange={event => updateProgram(index, 'intakes', splitComma(event.target.value))} placeholder="March 2027, September 2027" /></Field>
+                <Field label="Original tuition"><input className={fieldClass} value={program.tuition || ''} onChange={event => updateProgram(index, 'tuition', event.target.value)} placeholder="22,000 CNY/Year" /></Field>
+                <Field label="After scholarship tuition"><input className={fieldClass} value={program.tuitionAfterScholarship || ''} onChange={event => updateProgram(index, 'tuitionAfterScholarship', event.target.value)} placeholder="12,000 CNY/Year" /></Field>
+                <Field label="Application deadline"><input className={fieldClass} value={program.applicationDeadline || ''} onChange={event => updateProgram(index, 'applicationDeadline', event.target.value)} placeholder="30 May 2027" /></Field>
+                <Field label="Program status"><select className={fieldClass} value={program.status} onChange={event => updateProgram(index, 'status', event.target.value)}><option value="active">Active option</option><option value="planned">Planned option</option><option value="paused">Paused option</option></select></Field>
+                <Field label="Eligibility, one item per line" className="md:col-span-2"><textarea className={`${fieldClass} min-h-24`} value={program.eligibility?.join('\n') || ''} onChange={event => updateProgram(index, 'eligibility', splitLines(event.target.value))} placeholder={'HSC GPA 4.00+\nIELTS 5.5 or accepted alternative'} /></Field>
+                <Field label="Official program source" className="lg:col-span-3"><input type="url" className={fieldClass} value={program.sourceUrl || ''} onChange={event => updateProgram(index, 'sourceUrl', event.target.value)} placeholder="https://university.edu/program" /></Field>
+              </div>
+            </article>
+          ))}
+          {!formData.programs?.length ? <div className="rounded-2xl border border-dashed border-blue-200 bg-blue-50/30 p-8 text-center"><GraduationCap className="mx-auto text-blue-600" /><h3 className="mt-3 font-heading text-xl font-bold">Build the program catalogue</h3><p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-500">Add each course once. The public profile will group it automatically under Bachelor, Master’s, MBBS or another selected level.</p></div> : null}
+        </div>
+      </EditorSection>
 
-    const updateScholarship = (index: number, field: string, value: string | string[]) => {
-        setFormData((prev) => {
-            const newScholarships = [...(prev.scholarships || [])];
-            newScholarships[index] = { ...newScholarships[index], [field]: value };
-            return { ...prev, scholarships: newScholarships };
-        });
-    };
+      <EditorSection
+        icon={<Coins size={20} />}
+        title="University fee ledger"
+        description="Keep university and other third party amounts itemized with recipient, refund position, valid period and source."
+        action={<button type="button" onClick={() => setTopLevel('fees', [...(formData.fees || []), blankFee()])} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white"><Plus size={16} /> Add fee</button>}
+      >
+        <div className="space-y-4">{(formData.fees || []).map((fee, index) => <article key={`${fee.item}-${index}`} className="rounded-2xl border border-slate-200 p-4"><div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"><Field label="Fee item"><input className={fieldClass} value={fee.item} onChange={event => updateFee(index, 'item', event.target.value)} placeholder="Application fee" /></Field><Field label="Amount"><input className={fieldClass} value={fee.cost} onChange={event => updateFee(index, 'cost', event.target.value)} placeholder="600 CNY" /></Field><Field label="Paid to"><input className={fieldClass} value={fee.recipient || ''} onChange={event => updateFee(index, 'recipient', event.target.value)} placeholder="University" /></Field><Field label="Refund position"><select className={fieldClass} value={fee.refundable || ''} onChange={event => updateFee(index, 'refundable', event.target.value)}><option value="">Select</option><option value="yes">Refundable</option><option value="no">Non refundable</option><option value="conditional">Conditional</option></select></Field><Field label="Valid for"><input className={fieldClass} value={fee.validFor || ''} onChange={event => updateFee(index, 'validFor', event.target.value)} placeholder="2027 intake" /></Field><Field label="Notes" className="lg:col-span-2"><input className={fieldClass} value={fee.notes || ''} onChange={event => updateFee(index, 'notes', event.target.value)} /></Field><Field label="Official source"><input type="url" className={fieldClass} value={fee.sourceUrl || ''} onChange={event => updateFee(index, 'sourceUrl', event.target.value)} placeholder="https://..." /></Field></div><button type="button" onClick={() => setTopLevel('fees', (formData.fees || []).filter((_, itemIndex) => itemIndex !== index))} className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-rose-600"><Trash2 size={14} /> Remove fee</button></article>)}</div>
+      </EditorSection>
 
-    const removeScholarship = (index: number) => {
-        setFormData((prev) => ({
-            ...prev,
-            scholarships: (prev.scholarships || []).filter((_, i) => i !== index)
-        }));
-    };
+      <EditorSection
+        icon={<Sparkles size={20} />}
+        title="China scholarship studio"
+        description="Add coverage, eligible programs, renewal, deadline and source so the public scholarship section can show a complete, visual comparison."
+        action={<button type="button" onClick={() => setTopLevel('scholarships', [...(formData.scholarships || []), blankScholarship()])} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white"><Plus size={16} /> Add scholarship</button>}
+      >
+        <div className="grid gap-5 xl:grid-cols-2">{(formData.scholarships || []).map((scholarship, index) => <article key={`${scholarship.title}-${index}`} className="relative overflow-hidden rounded-2xl border border-cyan-200 bg-gradient-to-br from-[#08263c] to-[#174f7a] p-5 text-white"><div className="absolute -right-10 -top-10 size-32 rounded-full border-[1.5rem] border-white/5" /><div className="relative"><div className="flex items-start justify-between"><div><p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#8ed0ee]">Scholarship {String(index + 1).padStart(2, '0')}</p><h3 className="mt-2 font-heading text-xl font-bold">{scholarship.title || 'New scholarship option'}</h3></div><button type="button" onClick={() => setTopLevel('scholarships', (formData.scholarships || []).filter((_, itemIndex) => itemIndex !== index))} className="grid size-9 place-items-center rounded-lg bg-white/10 text-white" aria-label={`Remove scholarship ${index + 1}`}><Trash2 size={16} /></button></div><div className="mt-5 grid gap-4 md:grid-cols-2"><Field label="Scholarship title"><input className={fieldClass} value={scholarship.title} onChange={event => updateScholarship(index, 'title', event.target.value)} /></Field><Field label="Type"><input className={fieldClass} value={scholarship.type || ''} onChange={event => updateScholarship(index, 'type', event.target.value)} placeholder="Full, partial, tiered" /></Field><Field label="Headline amount"><input className={fieldClass} value={scholarship.amount || ''} onChange={event => updateScholarship(index, 'amount', event.target.value)} placeholder="Up to 100% tuition" /></Field><Field label="Coverage"><input className={fieldClass} value={scholarship.coverage || ''} onChange={event => updateScholarship(index, 'coverage', event.target.value)} placeholder="Tuition, hostel, stipend" /></Field><Field label="Eligible programs" className="md:col-span-2"><input className={fieldClass} value={scholarship.eligiblePrograms?.join(', ') || ''} onChange={event => updateScholarship(index, 'eligiblePrograms', splitComma(event.target.value))} placeholder="Software Engineering, Civil Engineering" /></Field><Field label="Renewal"><input className={fieldClass} value={scholarship.renewal || ''} onChange={event => updateScholarship(index, 'renewal', event.target.value)} placeholder="Annual academic review" /></Field><Field label="2027 deadline"><input className={fieldClass} value={scholarship.deadline || ''} onChange={event => updateScholarship(index, 'deadline', event.target.value)} placeholder="30 May 2027" /></Field><Field label="Eligibility and conditions" className="md:col-span-2"><textarea className={`${fieldClass} min-h-20`} value={scholarship.condition || ''} onChange={event => updateScholarship(index, 'condition', event.target.value)} /></Field><Field label="Benefits, one item per line" className="md:col-span-2"><textarea className={`${fieldClass} min-h-24`} value={scholarship.details?.join('\n') || ''} onChange={event => updateScholarship(index, 'details', splitLines(event.target.value))} /></Field><Field label="Official scholarship source" className="md:col-span-2"><input type="url" className={fieldClass} value={scholarship.sourceUrl || ''} onChange={event => updateScholarship(index, 'sourceUrl', event.target.value)} placeholder="https://..." /></Field><Field label="Status"><select className={fieldClass} value={scholarship.status || 'active'} onChange={event => updateScholarship(index, 'status', event.target.value)}><option value="active">Active option</option><option value="planned">Planned option</option><option value="closed">Closed option</option></select></Field></div></div></article>)}</div>
+      </EditorSection>
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
+      <EditorSection icon={<FileCheck2 size={20} />} title="Admission and evidence" description="Maintain the 2027 timeline, document checklist, recognition source and relationship evidence.">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="University deadline summary"><input name="deadlines.application" className={fieldClass} value={formData.deadlines?.application || ''} onChange={handleNestedChange} placeholder="30 May 2027" /></Field>
+          <Field label="Start date summary"><input name="deadlines.startDate" className={fieldClass} value={formData.deadlines?.startDate || ''} onChange={handleNestedChange} placeholder="September 2027" /></Field>
+          <Field label="Required documents, one per line"><textarea className={`${fieldClass} min-h-36`} value={formData.documents?.join('\n') || ''} onChange={event => setTopLevel('documents', splitLines(event.target.value))} /></Field>
+          <Field label="Student notes, one per line"><textarea className={`${fieldClass} min-h-36`} value={formData.notes?.join('\n') || ''} onChange={event => setTopLevel('notes', splitLines(event.target.value))} /></Field>
+          <Field label="Recognition authority"><input className={fieldClass} value={formData.recognitionAuthority || ''} onChange={event => setTopLevel('recognitionAuthority', event.target.value)} placeholder="Relevant authority or registry" /></Field>
+          <Field label="Recognition source"><input type="url" className={fieldClass} value={formData.recognitionSourceUrl || ''} onChange={event => setTopLevel('recognitionSourceUrl', event.target.value)} placeholder="https://..." /></Field>
+          <Field label="Relationship type"><select className={fieldClass} value={formData.relationshipType || 'unverified'} onChange={event => setTopLevel('relationshipType', event.target.value)}><option value="unverified">Confirm before application</option><option value="direct_partner">Direct partner</option><option value="authorized_representative">Authorized representative</option><option value="network_access">Network access</option><option value="public_direct_application">Public direct application</option></select></Field>
+          <Field label="Relationship evidence"><input type="url" className={fieldClass} value={formData.relationshipEvidenceUrl || ''} onChange={event => setTopLevel('relationshipEvidenceUrl', event.target.value)} placeholder="https://..." /></Field>
+          <Field label="Additional source URLs" className="md:col-span-2"><textarea className={`${fieldClass} min-h-24`} value={formData.sourceUrls?.join('\n') || ''} onChange={event => setTopLevel('sourceUrls', splitLines(event.target.value))} placeholder="One official URL per line" /></Field>
+        </div>
+      </EditorSection>
 
-        try {
-            const url = isNew ? '/api/admin/universities' : `/api/admin/universities/${formData._id || formData.slug}`; // Fallback to slug if _id missing in initialData
-            const method = isNew ? 'POST' : 'PUT';
+      <EditorSection icon={<BookOpenCheck size={20} />} title="Legacy summary and publishing" description="Program records automatically update these summary fields when saved. Use them while completing the full catalogue.">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Summary tuition"><input className={fieldClass} value={formData.details?.tuition || ''} onChange={event => setFormData(previous => ({ ...previous, details: { ...(previous.details || { majors: [], tuitionDetails: [] }), tuition: event.target.value } }))} placeholder="17,500 – 22,000 CNY/Year" /></Field>
+          <Field label="Summary tuition details"><textarea className={`${fieldClass} min-h-24`} value={formData.details?.tuitionDetails?.join('\n') || ''} onChange={event => setFormData(previous => ({ ...previous, details: { ...(previous.details || { majors: [], tuition: '' }), tuitionDetails: splitLines(event.target.value) } }))} /></Field>
+          <div className="rounded-xl bg-slate-50 p-4 text-xs leading-6 text-slate-600"><strong className="text-slate-950">Levels:</strong> {programSummary.levels.join(', ') || formData.degree?.join(', ') || 'Add program records'}<br /><strong className="text-slate-950">Programs:</strong> {programSummary.names.join(', ') || formData.details?.majors?.join(', ') || 'Add program records'}<br /><strong className="text-slate-950">Languages:</strong> {programSummary.languages.join(', ') || formData.taught?.join(', ') || 'Add program records'}<br /><strong className="text-slate-950">Intakes:</strong> {programSummary.intakes.join(', ') || formData.intake?.join(', ') || 'Add program records'}</div>
+          <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 text-sm font-bold text-slate-700"><input type="checkbox" checked={formData.isActive !== false} onChange={event => setTopLevel('isActive', event.target.checked)} className="size-5" /> Publish this university profile</label>
+        </div>
+      </EditorSection>
 
-            const token = localStorage.getItem('admin_token');
-            const res = await fetch(url, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (res.ok) {
-                router.push('/admin/universities');
-                router.refresh();
-            } else {
-                alert('Failed to save');
-            }
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <form onSubmit={handleSubmit} className="space-y-8 pb-12">
-
-            {/* Basic Info */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 className="text-lg font-bold mb-4">Basic Information</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">Name</label>
-                        <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full p-2 border rounded-lg" required />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">Slug (ID)</label>
-                        <input type="text" name="slug" value={formData.slug} onChange={handleChange} className="w-full p-2 border rounded-lg" required disabled={!isNew} />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">Country</label>
-                        <input type="text" name="country" value={formData.country} onChange={handleChange} className="w-full p-2 border rounded-lg" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">City</label>
-                        <input type="text" name="city" value={formData.city} onChange={handleChange} className="w-full p-2 border rounded-lg" />
-                    </div>
-                    <div className="md:col-span-2">
-                        <label className="block text-sm font-bold text-slate-700 mb-1">Location Display String</label>
-                        <input type="text" name="location" value={formData.location} onChange={handleChange} className="w-full p-2 border rounded-lg" placeholder="e.g. Chengdu, China" />
-                    </div>
-                </div>
-            </div>
-
-
-            {/* Logo URL */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 className="text-lg font-bold mb-4">Branding</h2>
-                <div className="grid grid-cols-1">
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">University Logo URL</label>
-                        <input type="text" name="logo" value={formData.logo || ''} onChange={handleChange} className="w-full p-2 border rounded-lg" placeholder="https://example.com/logo.png" />
-                        {formData.logo && (
-                            <div className="mt-2 p-2 border rounded-lg bg-slate-50 w-fit">
-                                <img src={formData.logo} alt="Preview" className="h-16 object-contain" />
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            {/* Rankings & Deadlines */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 className="text-lg font-bold mb-4">Rankings & Deadlines</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">World Rank</label>
-                        <input type="number" name="rankings.world" value={formData.rankings?.world || ''} onChange={handleChange} className="w-full p-2 border rounded-lg" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">National Rank</label>
-                        <input type="number" name="rankings.national" value={formData.rankings?.national || ''} onChange={handleChange} className="w-full p-2 border rounded-lg" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">App Deadline</label>
-                        <input type="text" name="deadlines.application" value={formData.deadlines?.application || ''} onChange={handleChange} className="w-full p-2 border rounded-lg" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">Start Date</label>
-                        <input type="text" name="deadlines.startDate" value={formData.deadlines?.startDate || ''} onChange={handleChange} className="w-full p-2 border rounded-lg" />
-                    </div>
-                </div>
-            </div>
-
-            {/* Tuition & Fees */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 className="text-lg font-bold mb-4">Tuition & Fees</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {/* Standard Fees Inputs */}
-                    {['Annual Tuition', 'Accommodation', 'Medical Insurance', 'Residence Permit', 'Health Check up', 'Registration Fees'].map((feeItem) => (
-                        <div key={feeItem}>
-                            <label className="block text-sm font-bold text-slate-700 mb-1">{feeItem}</label>
-                            <input
-                                type="text"
-                                value={getFeeValue(feeItem)}
-                                onChange={(e) => setFeeValue(feeItem, e.target.value)}
-                                className="w-full p-2 border rounded-lg"
-                                placeholder="e.g. 500 CNY/Year"
-                            />
-                        </div>
-                    ))}
-                </div>
-                {/* Fallback for other custom fees if needed in future */}
-            </div>
-
-            {/* Required Documents */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 className="text-lg font-bold mb-4">Required Documents</h2>
-                <div className="space-y-3">
-                    {formData.documents?.map((doc: string, index: number) => (
-                        <div key={index} className="flex gap-2">
-                            <input
-                                type="text"
-                                value={doc}
-                                onChange={(e) => {
-                                    const newDocs = [...(formData.documents || [])];
-                                    newDocs[index] = e.target.value;
-                                    setFormData({ ...formData, documents: newDocs });
-                                }}
-                                className="w-full p-2 border rounded-lg"
-                            />
-                            <button type="button" onClick={() => removeItemFromList('documents', index)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg">
-                                <Trash size={18} />
-                            </button>
-                        </div>
-                    ))}
-                    <button type="button" onClick={() => addItemToList('documents', 'New Document')} className="text-blue-600 font-bold text-sm flex items-center gap-1">
-                        <Plus size={16} /> Add Document
-                    </button>
-                </div>
-            </div>
-
-            {/* Scholarships */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 className="text-lg font-bold mb-4">Scholarships</h2>
-                <div className="space-y-6">
-                    {formData.scholarships?.map((scholarship: IUniversityScholarship, index: number) => (
-                        <div key={index} className="p-4 border rounded-xl bg-slate-50 relative">
-                            <button type="button" onClick={() => removeScholarship(index)} className="absolute top-4 right-4 text-red-500 hover:bg-red-50 p-1 rounded">
-                                <Trash size={18} />
-                            </button>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-500 mb-1">Scholarship Title</label>
-                                    <input type="text" value={scholarship.title} onChange={(e) => updateScholarship(index, 'title', e.target.value)} className="w-full p-2 border rounded-lg" />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-500 mb-1">Type (e.g. Full, Partial)</label>
-                                    <input type="text" value={scholarship.type} onChange={(e) => updateScholarship(index, 'type', e.target.value)} className="w-full p-2 border rounded-lg" />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-500 mb-1">Amount</label>
-                                    <input type="text" value={scholarship.amount} onChange={(e) => updateScholarship(index, 'amount', e.target.value)} className="w-full p-2 border rounded-lg" />
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-slate-500 mb-1">Details (Comma Separated)</label>
-                                <textarea
-                                    value={scholarship.details?.join(', ')}
-                                    onChange={(e) => updateScholarship(index, 'details', e.target.value.split(',').map((s: string) => s.trim()))}
-                                    className="w-full p-2 border rounded-lg h-20"
-                                />
-                            </div>
-                        </div>
-                    ))}
-                    <button type="button" onClick={addScholarship} className="flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 font-bold text-slate-700">
-                        <Plus size={18} /> Add Scholarship
-                    </button>
-                </div>
-            </div>
-
-            {/* Important Notes */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 className="text-lg font-bold mb-4">Important Notes</h2>
-                <div className="space-y-3">
-                    {formData.notes?.map((note: string, index: number) => (
-                        <div key={index} className="flex gap-2">
-                            <textarea
-                                value={note}
-                                onChange={(e) => {
-                                    const newNotes = [...(formData.notes || [])];
-                                    newNotes[index] = e.target.value;
-                                    setFormData({ ...formData, notes: newNotes });
-                                }}
-                                className="w-full p-2 border rounded-lg"
-                                rows={2}
-                            />
-                            <button type="button" onClick={() => removeItemFromList('notes', index)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg self-start">
-                                <Trash size={18} />
-                            </button>
-                        </div>
-                    ))}
-                    <button type="button" onClick={() => addItemToList('notes', 'New Note')} className="text-blue-600 font-bold text-sm flex items-center gap-1">
-                        <Plus size={16} /> Add Note
-                    </button>
-                </div>
-            </div>
-
-            {/* Other Lists */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h2 className="text-lg font-bold mb-4">Tags & Other Lists (Comma Separated)</h2>
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">Intakes</label>
-                        <input type="text" value={formData.intake?.join(', ')} onChange={(e) => handleArrayChange('intake', e.target.value)} className="w-full p-2 border rounded-lg" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">Degrees</label>
-                        <input type="text" value={formData.degree?.join(', ')} onChange={(e) => handleArrayChange('degree', e.target.value)} className="w-full p-2 border rounded-lg" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">Languages Taught</label>
-                        <input type="text" value={formData.taught?.join(', ')} onChange={(e) => handleArrayChange('taught', e.target.value)} className="w-full p-2 border rounded-lg" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-1">Major List</label>
-                        <textarea value={formData.details?.majors?.join(', ')} onChange={(e) => {
-                            const majors = e.target.value.split(',').map(s => s.trim());
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            setFormData((prev) => ({ ...prev, details: { ...(prev.details || {} as any), majors } }));
-                        }} className="w-full p-2 border rounded-lg h-24" />
-                    </div>
-                </div>
-            </div>
-
-            <div className="flex justify-end gap-4 fixed bottom-0 left-0 right-0 p-4 bg-white border-t z-50">
-                <button type="button" onClick={() => router.back()} className="px-6 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 font-bold">Cancel</button>
-                <button type="submit" disabled={loading} className="px-6 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 flex items-center gap-2">
-                    {loading && <Loader2 className="animate-spin" />}
-                    Save University
-                </button>
-            </div>
-        </form >
-    );
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-10px_30px_rgba(15,23,42,.08)] backdrop-blur"><div className="mx-auto flex max-w-7xl items-center justify-between gap-4"><p className="hidden text-xs text-slate-500 sm:block">Programs, fees and scholarships are synchronized into one university record.</p><div className="ml-auto flex gap-3"><button type="button" onClick={() => router.back()} className="rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-bold text-slate-700">Cancel</button><button type="submit" disabled={loading} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white disabled:opacity-60">{loading ? <Loader2 className="animate-spin" size={17} /> : <Save size={17} />} Save university</button></div></div></div>
+    </form>
+  );
 }

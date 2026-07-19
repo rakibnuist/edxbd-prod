@@ -9,20 +9,8 @@ export async function GET(request: NextRequest) {
     try {
         const decoded = verifyTokenFromRequest(request);
 
-        // Note: Public users also need to fetch universities, but maybe via a different public API?
-        // Or we allow public access to GET but restrict sensitive fields if any?
-        // For now, let's keep this as the ADMIN API. Public API might be separate or we relax auth here.
-        // Actually, the request says "Admin Dashboard to Manage". Public page will also need data.
-        // Let's allow public GET access for now, or check if we need separate public route.
-        // The previous implementation used static data.
-        // Let's require admin for now to match the "Admin API" folder structure.
-        // We will create a separate public API or use this one with conditional auth.
-        // For simplicity, let's allow unauthenticated GET for now but maybe filter out inactive ones for public?
-        // Actually, safest is to require Admin for this `api/admin` route and create a public one later.
-
         if (!decoded || decoded.role !== 'admin') {
-            // return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
-            // Temporarily allowing all access for development ease until Auth is fully checked
+            return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
         }
 
         await connectDB();

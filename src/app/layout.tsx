@@ -1,38 +1,38 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Fraunces, Noto_Sans_Bengali } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { LazyMotion, domAnimation } from "framer-motion";
+import { Analytics } from "@vercel/analytics/next";
 
 import ConditionalHeader from "@/components/ConditionalHeader";
-import ConditionalMain from "@/components/ConditionalMain";
-import PageTransition from "@/components/PageTransition";
 import EducationTracking from "@/components/EducationTracking";
-import DeferredComponents from "@/components/DeferredComponents";
+import Footer from "@/components/Footer";
 
 import WhatsAppWrapper from "@/components/WhatsAppWrapper";
 import CookieConsent from "@/components/CookieConsent";
-import { Preconnect } from "@/components/Preconnect";
 
 import "./globals.css";
 
-// Primary font for body text and UI elements
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap", // Prevent Flash of Invisible Text (FOIT)
+  display: "swap",
 });
 
-// Elegant serif font for headings and special text
-const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair-display",
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-  display: "swap", // Prevent Flash of Invisible Text (FOIT)
+  variable: "--font-fraunces",
+  display: "swap",
+  axes: ["opsz"],
+});
+
+const notoSansBengali = Noto_Sans_Bengali({
+  subsets: ["bengali"],
+  variable: "--font-bengali",
+  display: "swap",
 });
 
 export const viewport: Viewport = {
-  themeColor: "#1e40af",
+  themeColor: "#174f7a",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -43,10 +43,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://eduexpressint.com'),
   title: {
-    default: "EduExpress International - Study Abroad Consultancy | Free Scholarship Assistance",
+    default: "EduExpress International | Evidence First Education Consultancy",
     template: "%s | EduExpress International"
   },
-  description: "Transform your education journey with EduExpress International. Expert study abroad consultancy with FREE scholarship assistance. 98% success rate. Study in UK, China, South Korea, Hungary & more. Free consultation available.",
+  description: "Bangladesh's Evidence First Education Consultancy. Compare education quality, recognition, total costs and career fit with written proof.",
   keywords: [
     "study abroad",
     "education consultancy",
@@ -108,22 +108,22 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://eduexpressint.com",
     siteName: "EduExpress International",
-    title: "EduExpress International - Study Abroad Consultancy | Free Scholarship Assistance",
-    description: "Transform your education journey with expert study abroad consultancy. FREE scholarship assistance with 98% success rate. Study in UK, China, South Korea, Hungary & more.",
+    title: "EduExpress International | Evidence First Education Consultancy",
+    description: "Better Education. Clear Costs. Written Proof. Compare suitable overseas education routes before you commit.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "EduExpress International - Study Abroad Consultancy with Free Scholarship Assistance",
+        alt: "EduExpress International education consultancy",
         type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "EduExpress International - Study Abroad Consultancy | Free Scholarship Assistance",
-    description: "Transform your education journey with expert study abroad consultancy. FREE scholarship assistance with 98% success rate.",
+    title: "EduExpress International | Evidence First Education Consultancy",
+    description: "Better Education. Clear Costs. Written Proof.",
     images: ["/og-image.jpg"],
     creator: "@eduexpressint",
     site: "@eduexpressint",
@@ -131,7 +131,7 @@ export const metadata: Metadata = {
   category: 'education',
   classification: 'Education Services',
   other: {
-    'msapplication-TileColor': '#1e40af',
+    'msapplication-TileColor': '#174f7a',
     'msapplication-config': '/browserconfig.xml',
   },
   appleWebApp: {
@@ -158,10 +158,13 @@ export default function RootLayout({
 }>) {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
+    "@graph": [
+    {
+    "@type": ["Organization", "LocalBusiness"],
+    "@id": "https://eduexpressint.com/#organization",
     "name": "EduExpress International",
     "alternateName": ["EduExpress", "EduExpress International Consultancy"],
-    "description": "Leading study abroad consultancy in Bangladesh providing expert guidance and FREE scholarship assistance for international education. 98% success rate with 3,000+ students helped since 2018.",
+    "description": "Bangladesh's Evidence First Education Consultancy, comparing education quality, costs, recognition and career fit with written proof.",
     "url": "https://eduexpressint.com",
     "logo": {
       "@type": "ImageObject",
@@ -173,10 +176,9 @@ export default function RootLayout({
       "https://eduexpressint.com/og-image.jpg",
       "https://eduexpressint.com/logo.png"
     ],
-    "foundingDate": "2018",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi-1209",
+      "streetAddress": "Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi",
       "addressLocality": "Dhaka",
       "addressRegion": "Dhaka",
       "postalCode": "1209",
@@ -184,27 +186,27 @@ export default function RootLayout({
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": 23.7461,
-      "longitude": 90.3742
+      "latitude": 23.7401435,
+      "longitude": 90.3713009
     },
-    "telephone": "+880 1983-333566",
+    "telephone": ["+880 1983 333566", "+880 1329 663505"],
     "contactPoint": [
       {
         "@type": "ContactPoint",
-        "telephone": "+880 1983-333566",
+        "telephone": "+880 1983 333566",
         "contactType": "customer service",
         "availableLanguage": ["English", "Bengali"],
         "areaServed": "BD",
         "hoursAvailable": {
           "@type": "OpeningHoursSpecification",
           "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
-          "opens": "09:00",
+          "opens": "11:00",
           "closes": "18:00"
         }
       },
       {
         "@type": "ContactPoint",
-        "telephone": "+880 1329-663505",
+        "telephone": "+880 1329 663505",
         "contactType": "customer service",
         "availableLanguage": ["English", "Bengali"],
         "areaServed": "BD"
@@ -212,9 +214,9 @@ export default function RootLayout({
     ],
     "email": "info@eduexpressint.com",
     "sameAs": [
-      "https://www.facebook.com/EduExpressIntBD",
-      "https://www.linkedin.com/company/eduexpress/",
-      "https://www.instagram.com/eduexpressint",
+      "https://www.facebook.com/eduexpressint",
+      "https://www.linkedin.com/company/eduexpress",
+      "https://www.instagram.com/eduexpressint/",
       "https://www.youtube.com/@EduExpressInt"
     ],
     "serviceArea": {
@@ -239,11 +241,9 @@ export default function RootLayout({
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Scholarship Assistance",
-            "description": "Free scholarship application assistance"
-          },
-          "price": "0",
-          "priceCurrency": "BDT"
+            "name": "Education Funding Guidance",
+            "description": "Funding options assessed after education fit; availability and terms depend on the responsible institution."
+          }
         },
         {
           "@type": "Offer",
@@ -263,7 +263,7 @@ export default function RootLayout({
         }
       ]
     },
-    "priceRange": "Free consultation available",
+    "priceRange": "Written cost breakdown provided",
     "knowsAbout": [
       "Study Abroad",
       "Scholarship Applications",
@@ -282,16 +282,17 @@ export default function RootLayout({
         "priceCurrency": "BDT"
       }
     ]
+    }
+    ]
   };
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${notoSansBengali.variable}`} suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${inter.variable} ${playfairDisplay.variable} antialiased`}
+        className="antialiased"
         style={{ marginTop: 0 }}
       >
-        <LazyMotion features={domAnimation}>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -301,22 +302,16 @@ export default function RootLayout({
             phoneSource="header_contact"
           />
           <ConditionalHeader />
-          <ConditionalMain>
-            <PageTransition>
-              {children}
-            </PageTransition>
-          </ConditionalMain>
-          <Preconnect />
+          <main>{children}</main>
           <WhatsAppWrapper
             phoneNumber="+8801983333566"
-            message="Hi! I'm interested in studying abroad. Can you help me with information about universities and scholarships?"
+            message="Hi, I would like an Education Fit Assessment. Please help me compare suitable universities, complete costs, recognition and scholarship availability."
           />
           <CookieConsent />
-          <DeferredComponents />
+          <Footer />
+          <Analytics />
           <SpeedInsights />
-        </LazyMotion>
       </body>
     </html>
   );
 }
-

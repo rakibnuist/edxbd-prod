@@ -1,0 +1,4 @@
+interface:
+  display_name: "EduExpress Local Entity SEO"
+  short_description: "Strengthen local entity trust and reputation"
+  default_prompt: "Use $eduexpress-local-entity-seo to improve EduExpress local visibility, entity consistency, or reputation."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "EduExpress China SEO"
+  short_description: "Create verified China education SEO content"
+  default_prompt: "Use $eduexpress-china-seo to create or review this China-focused EduExpress content."

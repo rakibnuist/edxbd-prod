@@ -99,9 +99,9 @@ export default function ContactClient() {
                 <div className="space-y-4 text-slate-600">
                   <p className="text-lg font-semibold text-slate-800">EduExpress International</p>
                   <div className="space-y-2">
-                    <p>House: 12/1, Ground Floor</p>
-                    <p>Road: 4/A, Dhanmondi</p>
-                    <p>Dhaka - 1209, Bangladesh</p>
+                    <p>Evergreen Latif</p>
+                    <p>House: 12/1, Road: 4/A, Ground Floor</p>
+                    <p>Dhanmondi, Dhaka 1209</p>
                   </div>
                 </div>
               </div>
@@ -109,9 +109,9 @@ export default function ContactClient() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="bg-white border border-slate-200 p-6 rounded-xl hover:border-blue-200 transition-colors shadow-sm">
                   <Phone className="w-8 h-8 text-blue-600 mb-4" />
-                  <h4 className="font-semibold text-slate-900 mb-2">Phone Numbers</h4>
-                  <p className="text-slate-600 text-sm">+880 1983-333566</p>
-                  <p className="text-slate-600 text-sm">+880 1329-663505</p>
+                  <h4 className="font-semibold text-slate-900 mb-2">Phone Number</h4>
+                  <a href="tel:+8801983333566" className="block text-sm font-semibold text-slate-700 hover:text-blue-700">01983 333566</a>
+                  <a href="tel:+8801329663505" className="mt-1 block text-sm text-slate-500 hover:text-blue-700">01329 663505</a>
                 </div>
 
                 <div className="bg-white border border-slate-200 p-6 rounded-xl hover:border-green-200 transition-colors shadow-sm">
@@ -124,8 +124,7 @@ export default function ContactClient() {
               <div className="bg-white border border-slate-200 p-6 rounded-xl hover:border-amber-200 transition-colors shadow-sm">
                 <Clock className="w-8 h-8 text-amber-500 mb-4" />
                 <h4 className="font-semibold text-slate-900 mb-2">Office Hours</h4>
-                <p className="text-slate-600">Saturday - Thursday: 9:00 AM - 6:00 PM</p>
-                <p className="text-slate-600">Friday: Closed</p>
+                <p className="text-slate-600">Saturday to Thursday, 11:00 AM to 6:00 PM</p>
               </div>
             </div>
 

@@ -31,7 +31,7 @@ export const generateSEOData = {
   // Homepage SEO
   homepage: (): SEOData => ({
     title: "Study Abroad Consultancy | Free Scholarship Assistance | EduExpress International",
-    description: "Transform your education journey with EduExpress International. Expert study abroad consultancy with FREE scholarship assistance. 98% success rate. Study in UK, China, South Korea, Hungary & more. Free consultation available.",
+    description: "Compare education quality, recognition, total costs and career fit with EduExpress International. Active destination guidance and a free Education Fit Assessment are available.",
     keywords: [
       "study abroad",
       "education consultancy",
@@ -57,7 +57,7 @@ export const generateSEOData = {
       "@type": "EducationalOrganization",
       "name": "EduExpress International",
       "alternateName": ["EduExpress", "EduExpress International Consultancy"],
-      "description": "Leading study abroad consultancy in Bangladesh providing expert guidance and FREE scholarship assistance for international education. 98% success rate with 3,000+ students helped since 2018.",
+      "description": "Bangladesh education consultancy providing destination specific education fit, cost transparency, application proof and visa readiness guidance.",
       "url": "https://www.eduexpressint.com",
       "logo": {
         "@type": "ImageObject",
@@ -72,8 +72,8 @@ export const generateSEOData = {
       "foundingDate": "2018",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "House: 12/1, Ground Floor, Road: 4/A",
-        "addressLocality": "Dhanmondi",
+        "streetAddress": "Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi",
+        "addressLocality": "Dhaka",
         "addressRegion": "Dhaka",
         "postalCode": "1209",
         "addressCountry": "BD"
@@ -81,24 +81,31 @@ export const generateSEOData = {
       "contactPoint": [
         {
           "@type": "ContactPoint",
-          "telephone": "+880 1983-333566",
+          "telephone": "+880 1983 333566",
           "contactType": "customer service",
           "availableLanguage": ["English", "Bengali"],
           "areaServed": "BD",
           "hoursAvailable": {
             "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-            "opens": "09:00",
+            "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+            "opens": "11:00",
             "closes": "18:00"
           }
+        },
+        {
+          "@type": "ContactPoint",
+          "telephone": "+880 1329 663505",
+          "contactType": "customer service",
+          "availableLanguage": ["English", "Bengali"],
+          "areaServed": "BD"
         }
       ],
       "email": "info@eduexpressint.com",
       "sameAs": [
         "https://www.facebook.com/eduexpressint",
-        "https://www.linkedin.com/company/eduexpress-international",
-        "https://www.instagram.com/eduexpressint",
-        "https://twitter.com/eduexpressint"
+        "https://www.linkedin.com/company/eduexpress",
+        "https://www.instagram.com/eduexpressint/",
+        "https://www.youtube.com/@EduExpressInt"
       ],
       "serviceArea": {
         "@type": "Country",
@@ -223,7 +230,7 @@ export const generateSEOData = {
   // About page
   about: (): SEOData => ({
     title: "About Us | EduExpress International | Study Abroad Consultancy",
-    description: "Learn about EduExpress International - Bangladesh's leading study abroad consultancy. 3,000+ students helped since 2018 with 98% success rate. Expert guidance for international education.",
+    description: "Learn about EduExpress International and its evidence first approach to education fit, clear costs, application proof and destination specific guidance.",
     keywords: [
       "about eduexpress international",
       "study abroad consultancy Bangladesh",
@@ -385,26 +392,26 @@ export const generateLocalBusinessStructuredData = () => ({
   "name": "EduExpress International",
   "description": "Leading study abroad consultancy in Bangladesh",
   "url": "https://www.eduexpressint.com",
-  "telephone": "+880 1983-333566",
+  "telephone": ["+880 1983 333566", "+880 1329 663505"],
   "email": "info@eduexpressint.com",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "House: 12/1, Ground Floor, Road: 4/A",
-    "addressLocality": "Dhanmondi",
+    "streetAddress": "Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi",
+    "addressLocality": "Dhaka",
     "addressRegion": "Dhaka",
     "postalCode": "1209",
     "addressCountry": "BD"
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": "23.8103",
-    "longitude": "90.4125"
+    "latitude": "23.7401435",
+    "longitude": "90.3713009"
   },
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      "opens": "09:00",
+      "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+      "opens": "11:00",
       "closes": "18:00"
     }
   ],

@@ -1,39 +1,30 @@
 
 'use client';
 
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
     Search,
     School,
     MapPin,
     Filter,
-    ArrowRight,
-    TrendingUp,
-    GraduationCap,
-    Loader2
+    ArrowRight
 } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
-import { IUniversity } from '@/types/university';
+import type { CleanUniversityRecord } from '@/lib/university-records';
 import Link from 'next/link';
-
-// Constant Data for Filters
-const COUNTRIES = ['China', 'South Korea', 'UK', 'Hungary', 'Croatia', 'Finland', 'Cyprus', 'Malaysia', 'Georgia'];
-const INTAKES = ['March', 'September'];
-const DEGREES = ['Diploma', 'Bachelor', 'Masters', 'PhD', 'Language', 'Foundation'];
-const TAUGHT_LANGUAGES = ['English', 'Chinese'];
+import Image from 'next/image';
 
 // PHASE 0 FIX: the page (server component) passes the full active university
 // list so every card is server-rendered into the HTML (crawlable by Google and
-// AI bots). The client only fetches when the user changes page/filters.
+// AI bots). Search, filters and pagination use this one central data snapshot.
 interface UniversitiesClientProps {
-    initialUniversities?: IUniversity[];
+    initialUniversities?: CleanUniversityRecord[];
 }
 
 const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProps) => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
-    const [universities, setUniversities] = useState<IUniversity[]>(initialUniversities);
-    const [loading, setLoading] = useState(initialUniversities.length === 0);
+    const universities = initialUniversities;
 
     // Filter States
     const [searchQuery, setSearchQuery] = useState('');
@@ -45,74 +36,14 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
     const [selectedMajor, setSelectedMajor] = useState<string>('');
 
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [jumpToPage, setJumpToPage] = useState('');
 
-
-    const [error, setError] = useState<string | null>(null);
-
-    // PHASE 0 FIX: skip the initial client-side fetch when the server already
-    // provided data — the effect still runs on any page/filter change.
-    const skipInitialFetch = useRef(initialUniversities.length > 0);
-
-    useEffect(() => {
-        if (skipInitialFetch.current) {
-            skipInitialFetch.current = false;
-            setLoading(false);
-            return;
-        }
-        const fetchUniversities = async () => {
-            try {
-                setLoading(true);
-                // Create query parameters
-                const params = new URLSearchParams();
-
-                // When searching, fetch ALL universities for client-side filtering
-                // When not searching, use normal pagination
-                if (searchQuery.trim()) {
-                    params.append('limit', '1000'); // Fetch all for search
-                    params.append('page', '1');
-                } else {
-                    params.append('page', page.toString());
-                    params.append('limit', itemsPerPage.toString());
-                }
-
-                // Only send country/degree to backend for base filtering
-                // Search will be done client-side for all fields
-                if (selectedCountry) params.append('country', selectedCountry);
-                if (selectedDegree) params.append('degree', selectedDegree);
-
-                const res = await fetch(`/api/admin/universities?${params.toString()}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    setUniversities(data.universities);
-
-                    // Only show pagination when NOT searching
-                    if (!searchQuery.trim()) {
-                        setTotalPages(data.pagination.totalPages);
-                    } else {
-                        setTotalPages(1); // Hide pagination during search
-                    }
-                } else {
-                    setError(`Failed to fetch: ${res.status} ${res.statusText}`);
-                }
-            } catch (error) {
-                console.error("Failed to fetch universities", error);
-                setError(error instanceof Error ? error.message : String(error));
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchUniversities();
-    }, [page, selectedCountry, selectedDegree, searchQuery, itemsPerPage]); // Added searchQuery and itemsPerPage
-
-    // Memoize ONLY for fields NOT filtered by backend if mixed (Intake, Taught, Major)
-    // NOTE: This logic is tricky if backend only returns ONE page. 
-    // We will apply client-side filtering to the RECEIVED page which is imperfect but safe.
-    // Or we reset page to 1 when filters change (Added to onChange handlers below).
-
     // Derived Options
+    const countries = useMemo(() => Array.from(new Set(universities.map(university => university.country).filter(Boolean))).sort(), [universities]);
+    const intakes = useMemo(() => Array.from(new Set(universities.flatMap(university => university.intake || []))).sort(), [universities]);
+    const degrees = useMemo(() => Array.from(new Set(universities.flatMap(university => university.degree || []))).sort(), [universities]);
+    const taughtLanguages = useMemo(() => Array.from(new Set(universities.flatMap(university => university.taught || []))).sort(), [universities]);
     const majors = useMemo(() => {
         const allMajors = universities.flatMap(u => u.details?.majors || []);
         return Array.from(new Set(allMajors)).sort();
@@ -162,6 +93,10 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
         selectedMajor
     ]);
 
+    const totalPages = Math.max(1, Math.ceil(filteredUniversities.length / itemsPerPage));
+    const safePage = Math.min(page, totalPages);
+    const visibleUniversities = filteredUniversities.slice((safePage - 1) * itemsPerPage, safePage * itemsPerPage);
+
     const clearFilters = () => {
         setSearchQuery('');
         setSelectedCountry('');
@@ -177,11 +112,11 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900">
             <PageHeader
-                title="Partner"
-                highlight="Universities"
-                description="Search and filter through our global network of partner universities"
+                title="Find"
+                highlight="Education"
+                description="Search the central university database, compare recorded study options, and verify current facts before applying"
                 icon={School}
-                badgeText="University Directory"
+                badgeText="Central University Database"
             />
 
             <section className="py-12 px-6">
@@ -239,7 +174,7 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                                                 }}
                                             >
                                                 <option value="">All Countries</option>
-                                                {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+                                                {countries.map(c => <option key={c} value={c}>{c}</option>)}
                                             </select>
                                         </div>
 
@@ -249,7 +184,7 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                                             <select
                                                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
                                                 value={selectedCity}
-                                                onChange={(e) => setSelectedCity(e.target.value)}
+                                                onChange={(e) => { setSelectedCity(e.target.value); setPage(1); }}
                                                 disabled={cities.length === 0}
                                             >
                                                 <option value="">All Cities</option>
@@ -263,10 +198,10 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                                             <select
                                                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
                                                 value={selectedIntake}
-                                                onChange={(e) => setSelectedIntake(e.target.value)}
+                                                onChange={(e) => { setSelectedIntake(e.target.value); setPage(1); }}
                                             >
                                                 <option value="">Any Intake</option>
-                                                {INTAKES.map(i => <option key={i} value={i}>{i}</option>)}
+                                                {intakes.map(i => <option key={i} value={i}>{i}</option>)}
                                             </select>
                                         </div>
 
@@ -279,7 +214,7 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                                                 onChange={(e) => { setSelectedDegree(e.target.value); setPage(1); }}
                                             >
                                                 <option value="">Any Degree</option>
-                                                {DEGREES.map(d => <option key={d} value={d}>{d}</option>)}
+                                                {degrees.map(d => <option key={d} value={d}>{d}</option>)}
                                             </select>
                                         </div>
 
@@ -289,10 +224,10 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                                             <select
                                                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
                                                 value={selectedTaught}
-                                                onChange={(e) => setSelectedTaught(e.target.value)}
+                                                onChange={(e) => { setSelectedTaught(e.target.value); setPage(1); }}
                                             >
                                                 <option value="">Any Language</option>
-                                                {TAUGHT_LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
+                                                {taughtLanguages.map(l => <option key={l} value={l}>{l}</option>)}
                                             </select>
                                         </div>
 
@@ -302,7 +237,7 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                                             <select
                                                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
                                                 value={selectedMajor}
-                                                onChange={(e) => setSelectedMajor(e.target.value)}
+                                                onChange={(e) => { setSelectedMajor(e.target.value); setPage(1); }}
                                             >
                                                 <option value="">All Majors</option>
                                                 {majors.map(m => <option key={m} value={m}>{m}</option>)}
@@ -345,24 +280,13 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                             {/* Results Count */}
                             <div className="mb-6 flex justify-between items-center">
                                 <p className="text-slate-500">
-                                    Showing <span className="font-bold text-slate-900">{filteredUniversities.length}</span> universities
+                                    Showing <span className="font-bold text-slate-900">{visibleUniversities.length}</span> of <span className="font-bold text-slate-900">{filteredUniversities.length}</span> universities
                                 </p>
                             </div>
 
-                            {/* Grid */}
-                            {/* Grid */}
-                            {loading ? (
-                                <div className="flex justify-center py-20">
-                                    <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
-                                </div>
-                            ) : error ? (
-                                <div className="text-center py-20 text-red-500 font-bold">
-                                    Error loading universities: {error}
-                                </div>
-                            ) : (
-                                <>
+                            <>
                                     <div className="grid md:grid-cols-2 gap-6">
-                                        {filteredUniversities.map((uni, index) => (
+                                        {visibleUniversities.map((uni, index) => (
                                             <motion.div
                                                 key={uni._id || uni.slug}
                                                 layout
@@ -375,10 +299,13 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                                                     {/* Background Logo Watermark */}
                                                     {uni.logo && (
                                                         <div className="absolute right-0 top-0 h-full w-[60%] z-0 flex items-center justify-end opacity-[0.1] pointer-events-none select-none overflow-hidden pr-4">
-                                                            <img
+                                                            <Image
                                                                 src={uni.logo}
                                                                 alt=""
-                                                                className="h-[80%] w-full object-contain object-right"
+                                                                fill
+                                                                unoptimized
+                                                                sizes="(min-width: 768px) 300px, 60vw"
+                                                                className="object-contain object-right p-4"
                                                             />
                                                         </div>
                                                     )}
@@ -411,20 +338,8 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                                                                 </div>
                                                             </div>
 
-                                                            {/* Rankings */}
-                                                            <div className="flex flex-wrap gap-2">
-                                                                {uni.rankings?.world && (
-                                                                    <div className="flex items-center text-xs font-semibold bg-slate-50 border border-slate-100 px-2 py-1.5 rounded text-slate-600">
-                                                                        <GraduationCap className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
-                                                                        World #{uni.rankings.world}
-                                                                    </div>
-                                                                )}
-                                                                {uni.rankings?.national && (
-                                                                    <div className="flex items-center text-xs font-semibold bg-slate-50 border border-slate-100 px-2 py-1.5 rounded text-slate-600">
-                                                                        <TrendingUp className="w-3.5 h-3.5 mr-1.5 text-green-500" />
-                                                                        National #{uni.rankings.national}
-                                                                    </div>
-                                                                )}
+                                                            <div className="inline-flex w-fit items-center bg-amber-50 px-2.5 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-amber-800">
+                                                                {uni.verificationStatus === 'verified' && uni.sourceUrls?.length ? 'Current source record' : '2027 details confirmed before application'}
                                                             </div>
 
                                                             {/* Majors */}
@@ -517,17 +432,17 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                                             <div className="flex justify-center items-center space-x-2">
                                                 <button
                                                     onClick={() => setPage(p => Math.max(1, p - 1))}
-                                                    disabled={page === 1}
+                                                    disabled={safePage === 1}
                                                     className="px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 font-medium"
                                                 >
                                                     Previous
                                                 </button>
                                                 <div className="text-sm font-medium text-slate-600 px-4">
-                                                    Page {page} of {totalPages}
+                                                    Page {safePage} of {totalPages}
                                                 </div>
                                                 <button
                                                     onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                                    disabled={page === totalPages}
+                                                    disabled={safePage === totalPages}
                                                     className="px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 font-medium"
                                                 >
                                                     Next
@@ -553,8 +468,7 @@ const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProp
                                             </button>
                                         </div>
                                     )}
-                                </>
-                            )}
+                            </>
                         </div>
                     </div>
                 </div>
