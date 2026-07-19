@@ -33,6 +33,9 @@ export default function ContentPage() {
 
   // Helper function to get fresh admin token
   const getFreshToken = async (): Promise<string> => {
+    const storedToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+    if (storedToken) return storedToken;
+
     const loginResponse = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
@@ -55,6 +58,9 @@ export default function ContentPage() {
       throw new Error('No token received from login');
     }
 
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin_token', token);
+    }
     return token;
   };
 
