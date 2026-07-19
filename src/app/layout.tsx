@@ -10,6 +10,7 @@ import ConditionalFooter from "@/components/ConditionalFooter";
 import WhatsAppWrapper from "@/components/WhatsAppWrapper";
 import CookieConsent from "@/components/CookieConsent";
 import MetaPixel from "@/components/MetaPixel";
+import GoogleTags from "@/components/GoogleTags";
 
 import "./globals.css";
 
@@ -303,6 +304,7 @@ export default function RootLayout({
             phoneSource="header_contact"
           />
           <MetaPixel />
+          <GoogleTags />
           <ConditionalHeader />
           <main>{children}</main>
           <WhatsAppWrapper

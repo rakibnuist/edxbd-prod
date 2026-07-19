@@ -17,9 +17,9 @@ export default function MetaPixel() {
       if ((window as unknown as { __metaPixelLoaded?: boolean }).__metaPixelLoaded) return;
 
       try {
-        const res = await fetch('/api/meta-config');
+        const res = await fetch('/api/public-config');
         if (!res.ok) return;
-        const { pixelId } = await res.json();
+        const { metaPixelId: pixelId } = await res.json();
         if (cancelled || !pixelId) return;
 
         (window as unknown as { __metaPixelLoaded?: boolean }).__metaPixelLoaded = true;
