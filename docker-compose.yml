@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     build:
-      context: .
+      context: https://github.com/rakibnuist/edxbd-prod.git#main
       dockerfile: Dockerfile
     container_name: edxbd_web
     restart: always
