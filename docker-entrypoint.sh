@@ -5,9 +5,9 @@ set -e
 
 echo "Starting Next.js Docker Entrypoint..."
 
-# Apply Prisma migrations directly using the deployed database
-echo "Deploying Prisma Migrations..."
-npx prisma migrate deploy
+# Apply Prisma schema directly to the deployed database
+echo "Deploying Prisma Schema..."
+npx prisma db push --accept-data-loss
 
 echo "Starting Next.js server..."
 exec node server.js
