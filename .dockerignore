@@ -1,0 +1,8 @@
+node_modules
+.next
+.git
+prisma/dev.db
+npm-debug.log
+README.md
+.vscode
+.DS_Store
