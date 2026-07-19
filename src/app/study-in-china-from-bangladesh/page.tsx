@@ -152,7 +152,7 @@ export default function StudyInChinaFromBangladeshPage() {
         <div className="absolute left-[-9rem] top-[-12rem] size-[34rem] rounded-full border-[5rem] border-[#64b5df]/10" />
         <div className="absolute bottom-0 right-[42%] h-40 w-px bg-gradient-to-b from-transparent to-[#64b5df]/60" />
 
-        <div className="relative mx-auto grid max-w-[1440px] gap-8 px-4 py-8 sm:px-6 sm:py-10 lg:grid-cols-[1.08fr_.92fr] lg:items-center lg:gap-12">
+        <div className="relative mx-auto grid max-w-[1440px] gap-8 px-5 py-8 sm:px-8 lg:px-12 sm:py-10 lg:grid-cols-[1.08fr_.92fr] lg:items-center lg:gap-12">
           <div className="py-2 lg:py-4">
             <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-white/55">
               <Link href="/" className="hover:text-[#8ed0ee]">Home</Link><span aria-hidden="true">/</span><span className="text-[#8ed0ee]">China study desk</span>
@@ -190,7 +190,7 @@ export default function StudyInChinaFromBangladeshPage() {
         </div>
 
         <div className="relative border-t border-white/15 bg-[#061f32]/90">
-          <div className="mx-auto grid max-w-[1440px] divide-y divide-white/10 px-4 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-6">
+          <div className="mx-auto grid max-w-[1440px] divide-y divide-white/10 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
             {[
               ['01', 'No file opening charge'],
               ['02', 'No EduExpress service fee before China visa approval'],
@@ -206,7 +206,7 @@ export default function StudyInChinaFromBangladeshPage() {
       </section>
 
       <section className="border-b border-[#174f7a]/15 bg-white">
-        <div className="mx-auto grid max-w-[1440px] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[.34fr_.66fr] lg:py-16">
+        <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.34fr_.66fr] lg:py-16">
           <div>
             <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">One China desk, six study levels</p>
             <h2 className="mt-3 text-balance font-heading text-3xl font-bold leading-tight sm:text-4xl">Start with your education stage</h2>
@@ -225,7 +225,7 @@ export default function StudyInChinaFromBangladeshPage() {
       </section>
 
       <section className="bg-[#e9f7fd]">
-        <div className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:py-20">
+        <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
           <div className="grid gap-8 lg:grid-cols-[.36fr_.64fr]">
             <div>
               <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Route navigator</p>
@@ -263,7 +263,7 @@ export default function StudyInChinaFromBangladeshPage() {
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:py-20">
+        <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
           <div className="grid gap-10 lg:grid-cols-[.42fr_.58fr] lg:items-end">
             <div>
               <div className="flex items-center gap-4"><strong className="font-heading text-7xl font-bold leading-none text-[#174f7a] sm:text-8xl">134+</strong><span className="max-w-36 text-xs font-black uppercase leading-5 tracking-[0.13em] text-slate-500">Collaborating universities in the China network</span></div>
@@ -286,7 +286,7 @@ export default function StudyInChinaFromBangladeshPage() {
 
       <section className="relative overflow-hidden bg-[#08263c] text-white">
         <div className="absolute right-[-12rem] top-[-12rem] size-[36rem] rounded-full border-[6rem] border-[#64b5df]/10" />
-        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[.42fr_.58fr] lg:py-20">
+        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-14 sm:px-8 lg:px-12 lg:grid-cols-[.42fr_.58fr] lg:py-20">
           <div>
             <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">China record</p>
             <h2 className="mt-3 text-balance font-heading text-3xl font-bold leading-tight sm:text-5xl">Experience shown with context, not used as a promise</h2>
@@ -304,7 +304,7 @@ export default function StudyInChinaFromBangladeshPage() {
       </section>
 
       <section className="bg-[#f6f9fb]">
-        <div className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:py-20">
+        <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
           <div className="grid gap-8 lg:grid-cols-[.34fr_.66fr]">
             <div>
               <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">From lead to readiness</p>
@@ -332,7 +332,7 @@ export default function StudyInChinaFromBangladeshPage() {
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto grid max-w-[1440px] gap-8 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:py-20">
+        <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-14 sm:px-8 lg:px-12 lg:grid-cols-2 lg:py-20">
           <article className="border-t-4 border-[#174f7a] bg-[#e9f7fd] p-6 sm:p-8">
             <span className="grid size-11 place-items-center bg-[#174f7a] text-white"><BadgeCheck size={22} /></span>
             <h2 className="mt-6 font-heading text-2xl font-bold">Why this assessment helps</h2>
@@ -370,7 +370,7 @@ export default function StudyInChinaFromBangladeshPage() {
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:py-20">
+        <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
           <div className="grid gap-8 lg:grid-cols-[.34fr_.66fr]">
             <div>
               <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Continue your research</p>
@@ -395,7 +395,7 @@ export default function StudyInChinaFromBangladeshPage() {
       </section>
 
       <section className="bg-[#174f7a] text-white">
-        <div className="mx-auto grid max-w-[1440px] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[.7fr_.3fr] lg:items-center lg:py-16">
+        <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.7fr_.3fr] lg:items-center lg:py-16">
           <div>
             <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#b7e9ff]">Your next useful step</p>
             <h2 className="mt-3 max-w-3xl text-balance font-heading text-3xl font-bold sm:text-5xl">Turn 134+ possibilities into a shortlist that fits you</h2>
@@ -406,7 +406,7 @@ export default function StudyInChinaFromBangladeshPage() {
       </section>
 
       <section className="border-b border-[#174f7a]/15 bg-[#f6f9fb]">
-        <div className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6">
+        <div className="mx-auto max-w-[1440px] px-5 py-10 sm:px-8 lg:px-12">
           <blockquote className="border-l-4 border-[#174f7a] bg-white p-5 text-sm font-bold leading-7 text-[#08263c] sm:p-6">
             “No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.”
           </blockquote>

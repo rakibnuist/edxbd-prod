@@ -42,7 +42,7 @@ export default function BengaliChinaPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <header className="relative overflow-hidden bg-[#08263c] text-white">
         <div className="absolute right-[-12rem] top-[-14rem] size-[40rem] rounded-full border-[6rem] border-[#64b5df]/10" />
-        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[.68fr_.32fr] lg:items-end lg:py-16">
+        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.68fr_.32fr] lg:items-end lg:py-16">
           <div>
             <nav className="text-xs font-bold text-white/50" aria-label="Breadcrumb"><Link href="/">হোম</Link> <span aria-hidden="true">/</span> চীনে উচ্চশিক্ষা</nav>
             <p className="mt-8 text-xs font-black uppercase tracking-[0.18em] text-[#8ed0ee]">EduExpress-এর প্রধান গন্তব্য</p>
@@ -68,7 +68,7 @@ export default function BengaliChinaPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-[1440px] gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[.28fr_.72fr] lg:py-20">
+      <section className="mx-auto grid max-w-[1440px] gap-8 px-5 py-14 sm:px-8 lg:px-12 lg:grid-cols-[.28fr_.72fr] lg:py-20">
         <aside><div className="sticky top-32 border-t-4 border-[#174f7a] bg-[#e9f7fd] p-5"><BookOpenCheck size={25} className="text-[#174f7a]" /><h2 className="mt-5 font-heading text-2xl font-bold">সিদ্ধান্তের কাঠামো</h2><p className="mt-3 text-sm leading-7 text-slate-600">বিশ্ববিদ্যালয় বাছাই থেকে ভিসা প্রস্তুতি পর্যন্ত প্রতিটি ধাপে বর্তমান সরকারি বা বিশ্ববিদ্যালয় উৎস যাচাই করুন।</p><p className="mt-5 border-t border-[#174f7a]/15 pt-4 text-xs font-bold leading-6 text-slate-500">সর্বশেষ যাচাই: ১৯ জুলাই ২০২৬<br />পরবর্তী পর্যালোচনা: ১৯ অক্টোবর ২০২৬</p></div></aside>
         <div className="border-l border-t border-[#174f7a]/20">
           {sections.map((section, index) => <section key={section.title} className="grid border-b border-r border-[#174f7a]/20 bg-white sm:grid-cols-[5rem_1fr]"><div className="flex items-center justify-between bg-[#08263c] px-4 py-3 text-white sm:flex-col sm:justify-start sm:px-2 sm:py-6"><span className="font-mono text-[9px] font-black text-[#8ed0ee]">{String(index + 1).padStart(2, '0')}</span><FileCheck2 size={18} className="sm:mt-5" /></div><div className="p-5 sm:p-7"><h2 className="font-heading text-2xl font-bold">{section.title}</h2><p className="mt-3 text-sm leading-8 text-slate-600">{section.body}</p>{section.items ? <ul className="mt-5 grid gap-2 sm:grid-cols-2">{section.items.map(item => <li key={item} className="flex gap-3 bg-[#f6f9fb] p-3 text-xs leading-6 text-slate-600"><Check size={15} className="mt-1 shrink-0 text-[#174f7a]" />{item}</li>)}</ul> : null}</div></section>)}
@@ -76,14 +76,14 @@ export default function BengaliChinaPage() {
       </section>
 
       <section className="bg-[#08263c] text-white">
-        <div className="mx-auto grid max-w-[1440px] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[.68fr_.32fr] lg:items-center">
+        <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.68fr_.32fr] lg:items-center">
           <div><p className="text-xs font-black uppercase tracking-[0.17em] text-[#8ed0ee]">আপনার পরবর্তী কার্যকর ধাপ</p><h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">আপনার প্রোফাইলের জন্য চীনের উপযুক্ত রুট যাচাই করুন</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-white/65">শিক্ষাগত যোগ্যতা, লক্ষ্য লেভেল, বিষয়, বাজেট এবং ভাষা প্রস্তুতি জানান।</p></div>
           <Link href="/study-in-china-from-bangladesh#china-fit-form" className="flex min-h-14 items-center justify-center gap-2 bg-[#64b5df] px-5 text-sm font-black text-[#08263c]">China Fit Assessment শুরু করুন <ArrowRight size={17} /></Link>
         </div>
       </section>
 
       <section className="border-b border-[#174f7a]/15 bg-[#f6f9fb]">
-        <div className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6">
+        <div className="mx-auto max-w-[1440px] px-5 py-10 sm:px-8 lg:px-12">
           <blockquote className="border-l-4 border-[#174f7a] bg-white p-5 text-sm font-bold leading-8">{chinaTerms}</blockquote>
           <div className="mt-6 grid gap-6 text-xs leading-6 text-slate-500 lg:grid-cols-2">
             <div><p><strong className="text-[#08263c]">প্রস্তুতকারক:</strong> EduExpress China Admissions Desk</p><p><strong className="text-[#08263c]">পর্যালোচক:</strong> EduExpress Content and Compliance</p></div>

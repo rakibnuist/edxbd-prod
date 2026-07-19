@@ -93,7 +93,7 @@ const chinaFitReasons = [
 
 export default function ChinaFlagshipRecord() {
   return (
-    <section className="relative overflow-hidden bg-[#061b2a] px-4 py-24 text-white md:py-32">
+    <section className="relative overflow-hidden bg-[#061b2a] px-5 sm:px-8 lg:px-12 py-24 text-white md:py-32">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(100,181,223,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(100,181,223,0.08)_1px,transparent_1px)] bg-[size:58px_58px] [mask-image:linear-gradient(to_bottom,black,transparent_80%)]" />
       <div className="pointer-events-none absolute -right-52 top-6 size-[520px] rounded-full border-[76px] border-[#64b5df]/5" />
 
@@ -141,7 +141,7 @@ export default function ChinaFlagshipRecord() {
             <div className="relative flex min-h-[650px] max-w-[760px] flex-col justify-between p-6 sm:min-h-[610px] sm:p-10 lg:p-12">
               <div>
                 <p className="font-mono text-[10px] font-bold uppercase tracking-[0.19em] text-[#8ed0ee]">Record CN 2018 2027</p>
-                <h3 className="mt-5 max-w-xl font-heading text-4xl font-bold leading-[1.02] tracking-tight sm:text-5xl">Eight years of China service, shown with context</h3>
+                <h3 className="mt-5 max-w-lg pr-20 font-heading text-4xl font-bold leading-[1.06] tracking-tight sm:pr-24 sm:text-5xl">Eight years of China service, shown with context</h3>
                 <p className="mt-5 max-w-xl text-sm leading-7 text-white/68 sm:text-base">The record connects university choice, scholarship conditions, full cost, visa readiness and arrival support. EduExpress is a guidance and application support company. No exclusive embassy authority is implied.</p>
               </div>
 

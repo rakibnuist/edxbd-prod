@@ -47,7 +47,7 @@ export default async function ChinaUniversitiesPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <header className="relative overflow-hidden bg-[#08263c] text-white">
         <div className="absolute right-[-12rem] top-[-14rem] size-[40rem] rounded-full border-[6rem] border-[#64b5df]/10" />
-        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[.64fr_.36fr] lg:items-end lg:py-16">
+        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.64fr_.36fr] lg:items-end lg:py-16">
           <div>
             <nav className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/50" aria-label="Breadcrumb"><Link href="/">Home</Link> <span aria-hidden="true">/</span> <Link href="/study-in-china-from-bangladesh">Study in China</Link> <span aria-hidden="true">/</span> China universities</nav>
             <p className="mt-8 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">China university evidence desk</p>
@@ -78,14 +78,14 @@ export default async function ChinaUniversitiesPage() {
       <ChinaUniversityDirectory universities={universities} />
 
       <section className="bg-[#08263c] text-white">
-        <div className="mx-auto grid max-w-[1440px] gap-7 px-4 py-12 sm:px-6 lg:grid-cols-[.7fr_.3fr] lg:items-center">
+        <div className="mx-auto grid max-w-[1440px] gap-7 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.7fr_.3fr] lg:items-center">
           <div><p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Need a shorter list?</p><h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Match the directory to your actual profile</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-white/65">A counselor can screen academic eligibility, CSCA, English proof, cost and scholarship conditions before you choose a university route.</p></div>
           <Link href="/study-in-china-from-bangladesh#china-fit-form" className="flex min-h-14 items-center justify-center gap-2 bg-[#64b5df] px-5 text-sm font-black text-[#08263c]">Get My China Fit Assessment <ArrowRight size={17} /></Link>
         </div>
       </section>
 
       <section className="border-b border-[#174f7a]/15 bg-white">
-        <div className="mx-auto max-w-[1440px] px-4 py-8 text-xs leading-6 text-slate-500 sm:px-6">
+        <div className="mx-auto max-w-[1440px] px-5 py-8 text-xs leading-6 text-slate-500 sm:px-8 lg:px-12">
           <p><strong className="text-[#08263c]">2027 planning status:</strong> {universities.length} active China profiles are available for comparison. Each shortlisted university receives a current program, source, fee, scholarship and deadline check before the student proceeds.</p>
           <p className="mt-2"><strong className="text-[#08263c]">Last data review:</strong> 19 July 2026 <span aria-hidden="true">•</span> <strong className="text-[#08263c]">Next review:</strong> 19 October 2026</p>
         </div>
