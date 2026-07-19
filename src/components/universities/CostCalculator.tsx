@@ -79,13 +79,14 @@ export default function CostCalculator({
       const element = document.getElementById('pdf-export-container');
       
       if (element) {
-        // Force the element into view but behind everything
+        // Force the element into view on top so html2canvas captures it correctly
         element.style.display = 'block';
         element.style.position = 'fixed';
         element.style.top = '0';
         element.style.left = '0';
-        element.style.zIndex = '-9999';
+        element.style.zIndex = '99999';
         element.style.width = '794px';
+        element.style.backgroundColor = '#ffffff';
         
         // Wait for DOM to calculate layout
         await new Promise(resolve => setTimeout(resolve, 300));
@@ -97,7 +98,7 @@ export default function CostCalculator({
           html2canvas:  { 
             scale: 2, 
             useCORS: true, 
-            logging: true,
+            logging: false,
             scrollY: 0,
             scrollX: 0,
             windowWidth: 800
