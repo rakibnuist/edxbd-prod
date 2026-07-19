@@ -172,7 +172,7 @@ export default function UniversityProfile({ university }: Props) {
       </header>
 
       {/* STICKY BROCHURE NAVIGATION */}
-      <div className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 shadow-sm hidden md:block print:hidden">
+      <div className="sticky top-[68px] min-[1200px]:top-[92px] z-30 border-b border-slate-200 bg-white/95 backdrop-blur-xl supports-[backdrop-filter]:bg-white/80 shadow-sm hidden md:block print:hidden">
         <div className="mx-auto max-w-[1200px] px-6">
           <ul className="flex items-center justify-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-500 overflow-x-auto whitespace-nowrap scrollbar-hide py-4">
             {['Overview', 'Programs', 'Costs', 'Scholarships', 'Admission'].map(item => (
