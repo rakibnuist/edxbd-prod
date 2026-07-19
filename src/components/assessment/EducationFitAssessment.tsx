@@ -24,12 +24,18 @@ const BUDGETS = [
 ];
 // China is flagship; Wave 1 is launching. Labels stay honest about status.
 const DESTINATIONS = [
-  { value: 'china', label: 'China — Flagship (active)' },
-  { value: 'uk', label: 'United Kingdom — launching' },
-  { value: 'hungary', label: 'Hungary — launching' },
-  { value: 'south-korea', label: 'South Korea — launching' },
-  { value: 'finland', label: 'Finland — launching' },
-  { value: 'malaysia', label: 'Malaysia — launching' },
+  { value: 'china', label: 'China — Flagship (Visa-first policy)' },
+  { value: 'uk', label: 'United Kingdom — Active' },
+  { value: 'hungary', label: 'Hungary — Active' },
+  { value: 'south-korea', label: 'South Korea — Active' },
+  { value: 'finland', label: 'Finland — Active' },
+  { value: 'malaysia', label: 'Malaysia — Active' },
+  { value: 'malta', label: 'Malta — Active' },
+  { value: 'cyprus', label: 'Cyprus — Active' },
+  { value: 'georgia', label: 'Georgia — Active (MBBS & General)' },
+  { value: 'greece', label: 'Greece — Active' },
+  { value: 'croatia', label: 'Croatia — Active' },
+  { value: 'thailand', label: 'Thailand — Active' },
   { value: 'not-sure', label: 'Not sure — help me compare' },
 ];
 
@@ -88,14 +94,14 @@ function buildSummary(f: FormState): Summary {
     routes.push('MBBS pathway: recognition and licensing are checked first, before cost or promotion.');
     risks.push('Medical study abroad requires licensing checks for practising in Bangladesh — this must be confirmed for each university before you commit.');
   }
-  const launching = f.preferredCountries.filter((c) => !['china', 'not-sure'].includes(c));
-  if (launching.length > 0) {
+  const selectedActive = f.preferredCountries.filter((c) => !['china', 'not-sure'].includes(c));
+  if (selectedActive.length > 0) {
     routes.push(
-      `${launching.map((c) => DESTINATIONS.find((d) => d.value === c)?.label.split(' —')[0]).join(', ')}: assessment now available. These destinations are launching, so we share honest current information and will not promise an application or payment outcome until the destination is fully active.`
+      `${selectedActive.map((c) => DESTINATIONS.find((d) => d.value === c)?.label.split(' —')[0]).join(', ')}: Active education service available. We will map entry rules, tuition, living expenses, recognition, and visa requirements in your custom report.`
     );
   }
   if (routes.length === 0) {
-    routes.push('We will compare at least three suitable routes across active and launching destinations based on your profile.');
+    routes.push('We will compare at least three suitable routes across our active destinations based on your academic profile and budget.');
   }
 
   if (!f.budget || f.budget === 'Not sure yet') {
