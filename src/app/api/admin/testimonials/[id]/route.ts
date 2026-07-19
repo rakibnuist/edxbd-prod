@@ -8,17 +8,24 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const testimonial = await prisma.testimonial.findUnique({ where: { id } });
-    if (!testimonial) {
+    const t = await prisma.testimonial.findUnique({ where: { id } });
+    if (!t) {
       return NextResponse.json(
         { error: 'Testimonial not found' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(testimonial);
+    const formatted = {
+      ...t,
+      name: t.studentName || (t as any).name || 'Student',
+      displayName: t.studentName || (t as any).displayName || 'Student',
+      quote: t.content || (t as any).quote || '',
+      isActive: t.isPublished ?? true,
+    };
+
+    return NextResponse.json(formatted);
   } catch (error) {
-    // Error fetching testimonial
     return NextResponse.json(
       { error: 'Failed to fetch testimonial' },
       { status: 500 }
@@ -32,53 +39,36 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-
     const body = await request.json();
-    const testimonial = await prisma.testimonial.update({
-      where: { id },
-      data: body
-    }).catch(() => null);
 
-    if (!testimonial) {
-      return NextResponse.json(
-        { error: 'Testimonial not found' },
-        { status: 404 }
-      );
+    const studentName = body.name || body.studentName || body.displayName;
+    const content = body.quote || body.content;
+
+    const updateData: any = {};
+    if (studentName) updateData.studentName = studentName;
+    if (content) updateData.content = content;
+    if (body.university !== undefined) updateData.university = body.university;
+    if (body.country !== undefined) updateData.country = body.country;
+    if (body.rating !== undefined) updateData.rating = Number(body.rating);
+    if (body.isActive !== undefined || body.isPublished !== undefined) {
+      updateData.isPublished = body.isActive ?? body.isPublished;
     }
 
-    return NextResponse.json(testimonial);
-  } catch (error) {
-    // Error updating testimonial
-    return NextResponse.json(
-      { error: 'Failed to update testimonial' },
-      { status: 500 }
-    );
-  }
-}
-
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-
-    const body = await request.json();
-    const testimonial = await prisma.testimonial.update({
+    const t = await prisma.testimonial.update({
       where: { id },
-      data: body
-    }).catch(() => null);
+      data: updateData
+    });
 
-    if (!testimonial) {
-      return NextResponse.json(
-        { error: 'Testimonial not found' },
-        { status: 404 }
-      );
-    }
+    const formatted = {
+      ...t,
+      name: t.studentName,
+      displayName: t.studentName,
+      quote: t.content,
+      isActive: t.isPublished,
+    };
 
-    return NextResponse.json(testimonial);
+    return NextResponse.json(formatted);
   } catch (error) {
-    // Error updating testimonial
     return NextResponse.json(
       { error: 'Failed to update testimonial' },
       { status: 500 }
@@ -92,18 +82,10 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-
-    const testimonial = await prisma.testimonial.delete({ where: { id } }).catch(() => null);
-    if (!testimonial) {
-      return NextResponse.json(
-        { error: 'Testimonial not found' },
-        { status: 404 }
-      );
-    }
+    await prisma.testimonial.delete({ where: { id } }).catch(() => null);
 
     return NextResponse.json({ message: 'Testimonial deleted successfully' });
   } catch (error) {
-    // Error deleting testimonial
     return NextResponse.json(
       { error: 'Failed to delete testimonial' },
       { status: 500 }
