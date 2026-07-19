@@ -629,32 +629,34 @@ export const countries: Country[] = [
       { name: 'Croatian Government Scholarship', amount: 'Full Tuition Waiver + HUF 1500+ Stipend support (Varies by bilateral agreements)', deadline: 'May 31st', icon: 'Crown' },
       { name: 'Erasmus+ Exchange Grants', amount: '€400 - €700 / month during exchange semesters in Western Europe', deadline: 'Biannual', icon: 'Globe' }
     ],
-    serviceStatus: 'Researching',
-    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    serviceStatus: 'Active',
+    valueStatement: 'Croatia offers high-quality Schengen European education in IT, Engineering, and Hospitality with affordable tuition (€3,000–€5,500/year) and full EU Schengen travel rights.',
     whoItFits: [
-      'Students looking for affordable European/Asian education options',
-      'Those interested in exploring emerging international study destinations'
+      'Students looking for affordable English-taught degree options in a European Schengen country',
+      'Technology, Engineering, and Digital Business majors seeking EU study-exchange opportunities (Erasmus+)',
+      'Students preferring safe Mediterranean living with reasonable living costs (€500–€700/mo)'
     ],
     whoShouldReconsider: [
-      'Students who require an already established, fully verified EduExpress route'
+      'Students assuming part-time work alone can cover all first-year tuition and living expenses',
+      'Applicants who cannot provide notarized, apostilled academic documents and police clearance'
     ],
-    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    educationSystemAndRecognition: 'Higher education is accredited by the Agency for Science and Higher Education (ASHE) in Croatia. Degrees are recognized across the EU and ECTS system.',
     workRightsAndCareer: {
-      rights: 'Work rights during and after study are being verified with official immigration sources.',
-      opportunities: 'Career pathways are being assessed.',
-      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+      rights: 'International students with a Croatian temporary residence permit can work up to 20 hours/week via the Student Centre (Student Servis).',
+      opportunities: 'Growing career opportunities in IT development, digital marketing, tourism, and European tech startups in Zagreb.',
+      caveats: 'No "Schengen visa selling" language — visa issuance depends on official embassy financial and document verification.'
     },
     comparisons: {
-      countryA: 'China',
-      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
-      countryB: 'UK',
-      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+      countryA: 'Hungary',
+      countryA_description: 'Croatia and Hungary both offer affordable Schengen education, but Hungary offers the Stipendium Hungaricum full scholarship scheme.',
+      countryB: 'Finland',
+      countryB_description: 'Croatia offers significantly lower living expenses and tuition fees than Nordic nations, while Finland offers higher tech research funding.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
-      role: 'Research & Compliance',
+      role: 'European Admissions Compliance',
       lastVerifiedDate: 'October 2026',
-      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+      primarySources: ['Ministry of Science and Education (Croatia)', 'ASHE Accreditation Agency']
     }
   },
   {
@@ -888,32 +890,34 @@ export const countries: Country[] = [
     metaDescription: 'Explore Greece education options with program fit, university access, clear costs and visa readiness.',
     intakesText: 'Confirmed for the selected institution',
     factText: 'University collaboration and destination marketing are active.',
-    serviceStatus: 'Researching',
-    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    serviceStatus: 'Active',
+    valueStatement: 'Greece offers historical academic prestige combined with modern, accredited English-taught undergraduate and postgraduate programs in Business, Tourism, Maritime, and Technology.',
     whoItFits: [
-      'Students looking for affordable European/Asian education options',
-      'Those interested in exploring emerging international study destinations'
+      'Students seeking European Union education in Tourism, Hospitality, Business Administration, and Shipping/Logistics',
+      'Applicants wanting affordable Mediterranean study with Schengen residency rights',
+      'Students looking for joint university degree collaborations and Erasmus+ mobility options'
     ],
     whoShouldReconsider: [
-      'Students who require an already established, fully verified EduExpress route'
+      'Students requiring full-ride scholarships (Greek universities offer merit discounts, but full waivers are limited)',
+      'Applicants who cannot meet Greek student visa financial proof requirements at the embassy'
     ],
-    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    educationSystemAndRecognition: 'Regulated by the Hellenic Authority for Higher Education (HAHE). Public and accredited private university programs follow EU ECTS standards.',
     workRightsAndCareer: {
-      rights: 'Work rights during and after study are being verified with official immigration sources.',
-      opportunities: 'Career pathways are being assessed.',
-      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+      rights: 'International students with a valid Greek student residence permit are allowed to work part-time (20 hours/week) during semesters.',
+      opportunities: 'High demand for bilingual graduates in international tourism, hotel management, shipping companies, and tech startups.',
+      caveats: 'Verify embassy appointment dates early as visa processing times vary.'
     },
     comparisons: {
-      countryA: 'China',
-      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
-      countryB: 'UK',
-      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+      countryA: 'Malta',
+      countryA_description: 'Greece offers larger university campuses and maritime trade specialization, while Malta offers a completely English-speaking nation environment.',
+      countryB: 'Malaysia',
+      countryB_description: 'Greece provides EU Schengen residence rights, while Malaysia offers UK branch campus degree transfers.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
-      role: 'Research & Compliance',
+      role: 'European Admissions Counselor',
       lastVerifiedDate: 'October 2026',
-      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+      primarySources: ['Ministry of Education and Religious Affairs (Greece)', 'HAHE Accreditation Portal']
     }
   },
   {
@@ -942,32 +946,34 @@ export const countries: Country[] = [
     metaDescription: 'Explore Thailand international education options with university checks, clear costs and visa readiness.',
     intakesText: 'Confirmed for the selected institution',
     factText: 'EduExpress provides active education guidance for Thailand.',
-    serviceStatus: 'Researching',
-    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    serviceStatus: 'Active',
+    valueStatement: 'Thailand offers top-tier international university education in Southeast Asia, with accredited English-taught programs in Business, Hospitality, and Technology at regional tuition costs.',
     whoItFits: [
-      'Students looking for affordable European/Asian education options',
-      'Those interested in exploring emerging international study destinations'
+      'Students looking for affordable, high-quality international programs in Asia without Western tuition fees',
+      'Hospitality, Culinary, Business, and IT students seeking modern campus facilities and regional career networking',
+      'Students wanting low living expenses ($300–$450/month) with easy travel from Bangladesh'
     ],
     whoShouldReconsider: [
-      'Students who require an already established, fully verified EduExpress route'
+      'Students seeking Western European post-study work visas (Thailand ED visa is for study duration only)',
+      'Applicants who plan to rely on off-campus part-time work for living expenses'
     ],
-    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    educationSystemAndRecognition: 'Regulated by the Ministry of Higher Education, Science, Research and Innovation (MHESI) of Thailand. Top universities (Chulalongkorn, Mahidol, Assumption, Stamford) hold global accreditations.',
     workRightsAndCareer: {
-      rights: 'Work rights during and after study are being verified with official immigration sources.',
-      opportunities: 'Career pathways are being assessed.',
-      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+      rights: 'ED visa holders are primarily focused on full-time study. Campus-based internships or research assistantships are available.',
+      opportunities: 'Career pathways in multinational corporations across Southeast Asia, hospitality groups, and regional tech hubs.',
+      caveats: 'The ED visa requires regular extension verification with Thai Immigration.'
     },
     comparisons: {
-      countryA: 'China',
-      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
-      countryB: 'UK',
-      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+      countryA: 'Malaysia',
+      countryA_description: 'Thailand offers lower living costs and rich international culture, while Malaysia offers direct Western branch campus degrees.',
+      countryB: 'China',
+      countryB_description: 'Thailand offers a completely English-medium campus environment, while China offers extensive government CSC scholarships.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
-      role: 'Research & Compliance',
+      role: 'Southeast Asia Admissions Lead',
       lastVerifiedDate: 'October 2026',
-      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+      primarySources: ['MHESI Thailand', 'Thai Immigration Bureau']
     }
   }
 ];
