@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { serializeContent, toContentData } from '@/lib/content-serialize';
 
 export async function GET(request: NextRequest) {
   try {
     const decoded = verifyTokenFromRequest(request);
-    
-    console.log('Token verification result:', decoded);
-    
+
     if (!decoded || decoded.role !== 'admin') {
-      console.log('Access denied - decoded:', decoded);
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -17,7 +15,7 @@ export async function GET(request: NextRequest) {
       orderBy: { updatedAt: 'desc' }
     });
 
-    return NextResponse.json(contents);
+    return NextResponse.json(contents.map((c) => serializeContent(c as Record<string, unknown>)));
   } catch (error) {
     console.error('Fetch contents error:', error);
     return NextResponse.json(
@@ -62,11 +60,11 @@ export async function POST(request: NextRequest) {
     }
 
     const savedContent = await prisma.content.create({
-      data: body
+      data: toContentData(body) as never
     });
     console.log('Content created successfully:', savedContent.id);
 
-    return NextResponse.json(savedContent, { status: 201 });
+    return NextResponse.json(serializeContent(savedContent as Record<string, unknown>), { status: 201 });
   } catch (error) {
     console.error('Error creating content:', error);
     return NextResponse.json(

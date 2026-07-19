@@ -1,177 +1,114 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import {
+  LayoutDashboard, FileText, MessageSquareQuote, Users2, Handshake,
+  GraduationCap, Globe2, UserCog, Settings as SettingsIcon, Menu, X,
+} from 'lucide-react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { AuthProvider } from '@/contexts/AuthContext';
 import LogoutButton from '@/components/LogoutButton';
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const NAV = [
+  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+  { name: 'Leads', href: '/admin/leads', icon: Users2 },
+  { name: 'Content', href: '/admin/content', icon: FileText },
+  { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote },
+  { name: 'Universities', href: '/admin/universities', icon: GraduationCap },
+  { name: 'Partnerships', href: '/admin/partnerships', icon: Handshake },
+  { name: 'Countries', href: '/admin/countries', icon: Globe2 },
+  { name: 'Users', href: '/admin/users', icon: UserCog },
+  { name: 'Settings', href: '/admin/settings', icon: SettingsIcon },
+];
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (href: string, exact?: boolean) =>
+    exact ? pathname === href : pathname === href || pathname.startsWith(href + '/');
+
+  const activeItem = NAV.find((n) => isActive(n.href, n.exact));
+
+  const NavLinks = () => (
+    <nav className="flex-1 space-y-1 px-3">
+      {NAV.map((item) => {
+        const active = isActive(item.href, item.exact);
+        const Icon = item.icon;
+        return (
+          <Link
+            key={item.name}
+            href={item.href}
+            onClick={() => setSidebarOpen(false)}
+            className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+              active
+                ? 'bg-white/10 text-white ring-1 ring-white/15'
+                : 'text-white/60 hover:bg-white/5 hover:text-white'
+            }`}
+          >
+            <Icon size={18} className={active ? 'text-[#64b5df]' : ''} />
+            {item.name}
+          </Link>
+        );
+      })}
+    </nav>
+  );
 
   return (
     <AuthProvider>
       <ProtectedRoute>
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-[#f4f8fa]">
           <div className="flex h-screen">
-            {/* Mobile sidebar overlay */}
             {sidebarOpen && (
-              <div
-                className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden"
-                onClick={() => setSidebarOpen(false)}
-              />
+              <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
             )}
 
             {/* Sidebar */}
-            <div className={`
-              fixed inset-y-0 left-0 z-50 w-72 sm:w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0
-              ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-            `}>
-              <div className="flex flex-col h-full">
-                <div className="p-4 sm:p-6">
-                  <div className="flex items-center justify-between">
-                    <h1 className="text-lg sm:text-2xl font-bold text-gray-800">
-                      EduExpress Admin
-                    </h1>
-                    <button
-                      onClick={() => setSidebarOpen(false)}
-                      className="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100"
-                    >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
+            <aside
+              className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-[#08263c] transition-transform duration-300 lg:static lg:translate-x-0 ${
+                sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+              }`}
+            >
+              <div className="flex items-center justify-between px-5 py-5">
+                <div>
+                  <div className="text-base font-bold text-white">EduExpress</div>
+                  <div className="text-[11px] font-medium uppercase tracking-widest text-[#64b5df]">Admin Console</div>
                 </div>
-
-                <nav className="mt-2 sm:mt-6 flex-1 px-2 sm:px-0">
-                  <Link
-                    href="/admin"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-                    </svg>
-                    Dashboard
-                  </Link>
-                  <Link
-                    href="/admin/content"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Content
-                  </Link>
-                  <Link
-                    href="/admin/testimonials"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                    Testimonials
-                  </Link>
-                  <Link
-                    href="/admin/leads"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    Leads
-                  </Link>
-                  <Link
-                    href="/admin/partnerships"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                    Partnerships
-                  </Link>
-                  <Link
-                    href="/admin/universities"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0v6m0-6l-9 5m9-5l9 5" />
-                    </svg>
-                    Universities
-                  </Link>
-                  <Link
-                    href="/admin/countries"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Countries
-                  </Link>
-                  <Link
-                    href="/admin/users"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                    </svg>
-                    Users
-                  </Link>
-                  <Link
-                    href="/admin/settings"
-                    className="flex items-center px-4 sm:px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg mx-2 sm:mx-0 mb-1 text-sm sm:text-base"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Settings
-                  </Link>
-                </nav>
-
-                {/* Logout Button */}
-                <div className="p-4 sm:p-6 border-t border-gray-200">
-                  <LogoutButton />
-                </div>
+                <button onClick={() => setSidebarOpen(false)} className="rounded-md p-1 text-white/60 hover:text-white lg:hidden">
+                  <X size={20} />
+                </button>
               </div>
-            </div>
+              <NavLinks />
+              <div className="border-t border-white/10 p-4">
+                <LogoutButton />
+              </div>
+            </aside>
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
-              {/* Mobile header */}
-              <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 px-4 py-3 sticky top-0 z-30">
-                <div className="flex items-center justify-between">
+            {/* Main */}
+            <div className="flex flex-1 flex-col overflow-hidden">
+              <header className="sticky top-0 z-30 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3 lg:px-8">
+                <div className="flex items-center gap-3">
                   <button
                     onClick={() => setSidebarOpen(true)}
-                    className="p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100 touch-manipulation"
+                    className="rounded-md p-2 text-gray-500 hover:bg-gray-100 lg:hidden"
+                    aria-label="Open menu"
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
+                    <Menu size={22} />
                   </button>
-                  <h1 className="text-lg font-semibold text-gray-800">Admin Dashboard</h1>
-                  <div className="w-10"></div> {/* Spacer for centering */}
+                  <h1 className="text-base font-semibold text-[#08263c] sm:text-lg">
+                    {activeItem?.name ?? 'Admin'}
+                  </h1>
                 </div>
-              </div>
+                <Link href="/" className="text-xs font-medium text-[#174f7a] hover:underline">
+                  View site ↗
+                </Link>
+              </header>
 
-              <div className="flex-1 overflow-auto">
-                <div className="p-3 sm:p-4 lg:p-6 xl:p-8">
-                  {children}
-                </div>
-              </div>
+              <main className="flex-1 overflow-auto">
+                <div className="p-4 sm:p-6 lg:p-8">{children}</div>
+              </main>
             </div>
           </div>
         </div>

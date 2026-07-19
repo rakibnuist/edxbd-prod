@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { serializeContent, toContentData } from '@/lib/content-serialize';
 
 export async function GET(
   request: NextRequest,
@@ -23,7 +24,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(content);
+    return NextResponse.json(serializeContent(content as Record<string, unknown>));
   } catch (error) {
     console.error('Fetch content error:', error);
     return NextResponse.json(
@@ -49,7 +50,7 @@ export async function PUT(
     const body = await request.json();
     const content = await prisma.content.update({
       where: { id },
-      data: body
+      data: toContentData(body, true) as never
     }).catch(() => null);
 
     if (!content) {
@@ -59,7 +60,7 @@ export async function PUT(
       );
     }
 
-    return NextResponse.json(content);
+    return NextResponse.json(serializeContent(content as Record<string, unknown>));
   } catch (error) {
     console.error('Update content error:', error);
     return NextResponse.json(
