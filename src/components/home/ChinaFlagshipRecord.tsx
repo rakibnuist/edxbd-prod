@@ -93,7 +93,7 @@ const chinaFitReasons = [
 
 export default function ChinaFlagshipRecord() {
   return (
-    <section className="relative overflow-hidden bg-[#061b2a] px-5 sm:px-8 lg:px-12 py-24 text-white md:py-32">
+    <section className="relative overflow-hidden bg-[#061b2a] px-5 py-16 text-white sm:px-8 sm:py-24 md:py-32 lg:px-12">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(100,181,223,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(100,181,223,0.08)_1px,transparent_1px)] bg-[size:58px_58px] [mask-image:linear-gradient(to_bottom,black,transparent_80%)]" />
       <div className="pointer-events-none absolute -right-52 top-6 size-[520px] rounded-full border-[76px] border-[#64b5df]/5" />
 
@@ -117,9 +117,9 @@ export default function ChinaFlagshipRecord() {
 
           <div className="grid border-l border-t border-white/20 sm:grid-cols-2 lg:grid-cols-4">
             {chinaFitReasons.map(({ eyebrow, title, copy, link, icon: Icon, featured }) => (
-              <Link key={title} href={link} className={`group relative min-h-56 border-b border-r p-5 transition lg:p-6 ${featured ? 'border-[#08263c] bg-[#64b5df] text-[#08263c] sm:col-span-2' : 'border-white/20 bg-[#08263c]/75 hover:bg-[#0b2f4a]'}`}>
+              <Link key={title} href={link} className={`group relative border-b border-r p-5 transition sm:min-h-56 lg:p-6 ${featured ? 'border-[#08263c] bg-[#64b5df] text-[#08263c] sm:col-span-2' : 'border-white/20 bg-[#08263c]/75 hover:bg-[#0b2f4a]'}`}>
                 <div className="flex items-start justify-between"><p className={`font-mono text-[9px] font-black uppercase tracking-[0.18em] ${featured ? 'text-[#174f7a]' : 'text-[#8ed0ee]'}`}>{eyebrow}</p><Icon size={22} className={featured ? 'text-[#174f7a]' : 'text-[#64b5df]'} /></div>
-                <h4 className={`mt-9 max-w-xl font-heading font-bold leading-tight ${featured ? 'text-3xl sm:text-4xl' : 'text-2xl'}`}>{title}</h4>
+                <h4 className={`mt-5 max-w-xl font-heading font-bold leading-tight sm:mt-9 ${featured ? 'text-3xl sm:text-4xl' : 'text-2xl'}`}>{title}</h4>
                 <p className={`mt-3 max-w-2xl text-xs leading-6 ${featured ? 'text-[#08263c]/75' : 'text-white/50'}`}>{copy}</p>
                 <ArrowUpRight size={15} className={`absolute bottom-5 right-5 transition group-hover:-translate-y-1 group-hover:translate-x-1 ${featured ? 'text-[#08263c]' : 'text-[#64b5df]'}`} />
               </Link>
@@ -129,7 +129,7 @@ export default function ChinaFlagshipRecord() {
         </div>
 
         <div className="mt-10 grid gap-5 xl:grid-cols-[1.08fr_.92fr]">
-          <article className="relative min-h-[650px] overflow-hidden border border-white/20 bg-[#174f7a] sm:min-h-[610px]">
+          <article className="relative overflow-hidden border border-white/20 bg-[#174f7a] sm:min-h-[610px]">
             <Image src="/images/destinations/china.jpg" alt="China education destination record for Bangladeshi students" fill sizes="(max-width: 1280px) 100vw, 55vw" className="object-cover" />
             <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(6,27,42,0.98)_4%,rgba(8,38,60,0.94)_45%,rgba(8,38,60,0.25)_100%)]" />
             <div className="absolute right-5 top-5 flex size-28 rotate-6 flex-col items-center justify-center rounded-full border-2 border-[#8ed0ee]/70 bg-[#08263c]/65 text-center backdrop-blur sm:right-9 sm:top-9 sm:size-36">
@@ -138,7 +138,7 @@ export default function ChinaFlagshipRecord() {
               <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-white/60">to present</span>
             </div>
 
-            <div className="relative flex min-h-[650px] max-w-[760px] flex-col justify-between p-6 sm:min-h-[610px] sm:p-10 lg:p-12">
+            <div className="relative flex max-w-[760px] flex-col justify-between gap-10 p-6 sm:min-h-[610px] sm:p-10 lg:p-12">
               <div>
                 <p className="font-mono text-[10px] font-bold uppercase tracking-[0.19em] text-[#8ed0ee]">Record CN 2018 2027</p>
                 <h3 className="mt-5 max-w-lg pr-20 font-heading text-4xl font-bold leading-[1.06] tracking-tight sm:pr-24 sm:text-5xl">Eight years of China service, shown with context</h3>

@@ -84,7 +84,7 @@ const standards = [
 export default function Home() {
   return (
     <div className="overflow-hidden bg-[#f4f8fa] text-[#08263c]">
-      <section className="relative px-5 sm:px-8 lg:px-12 pb-24 pt-32 md:pt-40">
+      <section className="relative px-5 pb-16 pt-28 sm:px-8 sm:pb-24 sm:pt-32 md:pt-40 lg:px-12">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(23,79,122,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(23,79,122,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
         <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#64b5df]/15 md:size-[460px]" />
 
@@ -146,7 +146,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-white px-5 sm:px-8 lg:px-12 py-24 md:py-32">
+      <section className="bg-white px-5 py-16 sm:px-8 sm:py-24 md:py-32 lg:px-12">
         <div className="mx-auto max-w-[1440px]">
           <div className="grid gap-10 lg:grid-cols-[.75fr_1.25fr]">
             <div className="lg:sticky lg:top-28 lg:self-start">
@@ -161,10 +161,10 @@ export default function Home() {
                 <Link
                   href={link}
                   key={title}
-                  className={`group relative min-h-80 overflow-hidden border-2 border-[#08263c] p-7 transition hover:-translate-y-1 hover:shadow-[10px_10px_0_0_#174f7a] ${index === 0 ? 'bg-[#174f7a] text-white' : index === 3 ? 'bg-[#bde7f8]' : 'bg-[#f4f8fa]'}`}
+                  className={`group relative overflow-hidden border-2 border-[#08263c] p-6 transition hover:-translate-y-1 hover:shadow-[10px_10px_0_0_#174f7a] sm:p-7 md:min-h-80 ${index === 0 ? 'bg-[#174f7a] text-white' : index === 3 ? 'bg-[#bde7f8]' : 'bg-[#f4f8fa]'}`}
                 >
                   <div className="flex items-start justify-between"><span className="font-mono text-sm font-black">DOC {number}</span><Icon size={35} strokeWidth={1.6} /></div>
-                  <div className="mt-20">
+                  <div className="mt-8 md:mt-20">
                     <p className={`text-xs font-black uppercase tracking-[0.18em] ${index === 0 ? 'text-[#bde7f8]' : 'text-[#174f7a]'}`}>{label}</p>
                     <h3 className="mt-3 font-heading text-3xl font-bold tracking-tight">{title}</h3>
                     <p className={`mt-4 leading-7 ${index === 0 ? 'text-white/75' : 'text-slate-700'}`}>{copy}</p>
@@ -177,7 +177,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#08263c] px-5 sm:px-8 lg:px-12 py-24 text-white md:py-32">
+      <section className="bg-[#08263c] px-5 py-16 text-white sm:px-8 sm:py-24 md:py-32 lg:px-12">
         <div className="mx-auto max-w-[1440px]">
           <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr]">
             <div>
@@ -187,9 +187,9 @@ export default function Home() {
             </div>
             <div className="grid border-l border-t border-white/20 sm:grid-cols-2 lg:grid-cols-3">
               {standards.map(({ title, copy, icon: Icon }, index) => (
-                <article key={title} className="min-h-56 border-b border-r border-white/20 p-6">
+                <article key={title} className="border-b border-r border-white/20 p-5 sm:min-h-56 sm:p-6">
                   <span className="font-mono text-xs font-bold text-white/35">0{index + 1}</span>
-                  <Icon className="mt-8 text-[#64b5df]" size={28} strokeWidth={1.5} />
+                  <Icon className="mt-3 text-[#64b5df] sm:mt-8" size={28} strokeWidth={1.5} />
                   <h3 className="mt-4 font-heading text-xl font-bold">{title}</h3>
                   <p className="mt-2 leading-6 text-white/55">{copy}</p>
                 </article>
@@ -201,7 +201,7 @@ export default function Home() {
 
       <ChinaFlagshipRecord />
 
-      <section className="bg-[#64b5df] px-5 sm:px-8 lg:px-12 py-20 text-[#08263c]">
+      <section className="bg-[#64b5df] px-5 py-14 text-[#08263c] sm:px-8 sm:py-20 lg:px-12">
         <div className="mx-auto max-w-[1440px]">
           <div className="grid items-end gap-10 lg:grid-cols-[1fr_auto]">
           <div>
