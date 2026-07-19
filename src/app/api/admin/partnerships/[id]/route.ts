@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import Partnership from '@/models/Partnership';
+import prisma from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
@@ -14,11 +13,9 @@ export async function GET(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-    
     const { id } = await params;
 
-    const partnership = await Partnership.findById(id);
+    const partnership = await prisma.partnership.findUnique({ where: { id } });
     
     if (!partnership) {
       return NextResponse.json(
@@ -49,16 +46,13 @@ export async function PUT(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-    
     const { id } = await params;
     const body = await request.json();
 
-    const partnership = await Partnership.findByIdAndUpdate(
-      id,
-      { ...body, updatedAt: new Date() },
-      { new: true, runValidators: true }
-    );
+    const partnership = await prisma.partnership.update({
+      where: { id },
+      data: { ...body, updatedAt: new Date() }
+    }).catch(() => null);
 
     if (!partnership) {
       return NextResponse.json(
@@ -92,11 +86,9 @@ export async function DELETE(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
-    
     const { id } = await params;
 
-    const partnership = await Partnership.findByIdAndDelete(id);
+    const partnership = await prisma.partnership.delete({ where: { id } }).catch(() => null);
 
     if (!partnership) {
       return NextResponse.json(

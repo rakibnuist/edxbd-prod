@@ -57,7 +57,7 @@ export default function UserPartnershipsPage() {
     setIsSubmitting(true);
 
     try {
-      const url = editingPartnership ? `/api/admin/partnerships/${editingPartnership._id}` : '/api/admin/partnerships';
+      const url = editingPartnership ? `/api/admin/partnerships/${editingPartnership.id}` : '/api/admin/partnerships';
       const method = editingPartnership ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -119,7 +119,7 @@ export default function UserPartnershipsPage() {
         if (response.ok) {
           // Update local state immediately
           setPartnerships(prevPartnerships =>
-            prevPartnerships.filter(partnership => partnership._id !== id)
+            prevPartnerships.filter(partnership => partnership.id !== id)
           );
           showMessage('success', 'Partnership deleted successfully!');
         } else {
@@ -145,7 +145,7 @@ export default function UserPartnershipsPage() {
         // Update local state immediately for better UX
         setPartnerships(prevPartnerships =>
           prevPartnerships.map(partnership =>
-            partnership._id === partnershipId
+            partnership.id === partnershipId
               ? { ...partnership, status: newStatus as Partnership['status'], updatedAt: new Date().toISOString() }
               : partnership
           )
@@ -287,7 +287,7 @@ export default function UserPartnershipsPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {partnerships.map((partnership) => (
-                <tr key={partnership._id} className="hover:bg-gray-50">
+                <tr key={partnership.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{partnership.companyName}</div>
@@ -304,7 +304,7 @@ export default function UserPartnershipsPage() {
                     {partnership.partnershipType}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {editingPartnershipId === partnership._id ? (
+                    {editingPartnershipId === partnership.id ? (
                       <div className="flex items-center space-x-2">
                         <select
                           value={editingStatus}
@@ -318,7 +318,7 @@ export default function UserPartnershipsPage() {
                           <option value="on_hold">On Hold</option>
                         </select>
                         <button
-                          onClick={() => saveStatusEdit(partnership._id)}
+                          onClick={() => saveStatusEdit(partnership.id)}
                           className="text-green-600 hover:text-green-800 text-xs"
                           title="Save"
                         >
@@ -334,7 +334,7 @@ export default function UserPartnershipsPage() {
                       </div>
                     ) : (
                       <button
-                        onClick={() => startEditingStatus(partnership._id, partnership.status)}
+                        onClick={() => startEditingStatus(partnership.id, partnership.status)}
                         className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full cursor-pointer hover:opacity-80 transition-opacity ${getStatusColor(partnership.status)}`}
                         title="Click to edit status"
                       >
@@ -355,7 +355,7 @@ export default function UserPartnershipsPage() {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(partnership._id)}
+                      onClick={() => handleDelete(partnership.id)}
                       className="text-red-600 hover:text-red-900"
                     >
                       Delete

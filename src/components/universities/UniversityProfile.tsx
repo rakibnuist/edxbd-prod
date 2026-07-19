@@ -22,10 +22,16 @@ import {
   Stamp,
   UserRoundCheck,
   WalletCards,
+  CheckCircle2,
+  ChevronRight,
+  Info,
+  Menu,
+  FileText
 } from 'lucide-react';
 
 import type { CleanUniversityRecord } from '@/lib/university-records';
 import { getIntakeStatus } from '@/lib/intake-status';
+import CostCalculator from './CostCalculator';
 
 type Props = { university: CleanUniversityRecord };
 
@@ -44,15 +50,22 @@ const formatDate = (value?: string) => value
 const externalUrls = (values: Array<string | undefined>) => Array.from(new Set(values.filter((value): value is string => Boolean(value && /^https:\/\//i.test(value)))));
 const comparable = (value?: string) => (value || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
 
-function NumberLabel({ number, label, inverted = false }: { number: string; label: string; inverted?: boolean }) {
-  return <p className={`flex items-center gap-3 font-mono text-[9px] font-black uppercase tracking-[0.18em] ${inverted ? 'text-[#8ed0ee]' : 'text-[#174f7a]'}`}><span className={`grid size-7 place-items-center ${inverted ? 'bg-[#8ed0ee] text-[#08263c]' : 'bg-[#174f7a] text-white'}`}>{number}</span>{label}</p>;
+function SectionHeading({ title, subtitle, icon: Icon }: { title: string, subtitle?: string, icon?: any }) {
+  return (
+    <div className="mb-10 flex flex-col items-center text-center gap-3">
+      {subtitle && <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">{subtitle}</span>}
+      {Icon && <div className="grid size-12 place-items-center rounded-2xl bg-[#e9f7fd] text-[#174f7a] mb-2"><Icon size={24} strokeWidth={2} /></div>}
+      <h2 className="font-serif text-3xl font-bold tracking-tight text-[#08263c] sm:text-4xl">{title}</h2>
+      <div className="h-1 w-12 bg-[#64b5df] mt-2 rounded-full" />
+    </div>
+  );
 }
 
 function DataStatus({ verified }: { verified: boolean }) {
   return (
-    <span className={`inline-flex items-center gap-2 px-3 py-2 font-mono text-[9px] font-black uppercase tracking-[0.14em] ${verified ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'}`}>
-      {verified ? <BadgeCheck size={14} /> : <SearchCheck size={14} />}
-      {verified ? 'Current source record' : '2027 details confirmed before application'}
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-[9px] font-black uppercase tracking-[0.15em] shadow-sm ring-1 ring-inset ${verified ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' : 'bg-amber-50 text-amber-700 ring-amber-600/20'}`}>
+      {verified ? <BadgeCheck size={14} className="text-emerald-500" /> : <SearchCheck size={14} className="text-amber-500" />}
+      {verified ? 'Verified Source' : 'Review Required'}
     </span>
   );
 }
@@ -69,7 +82,7 @@ export default function UniversityProfile({ university }: Props) {
     ...university.sourceUrls,
   ]);
   const intakeStatus = getIntakeStatus({ verifiedUntil: university.verificationExpiresAt });
-  const intakeStatusLabel = intakeStatus === 'Under Verification' ? '2027 date check before application' : intakeStatus;
+  const intakeStatusLabel = intakeStatus === 'Under Verification' ? 'Date check before application' : intakeStatus;
   const assessmentHref = isChina
     ? `/study-in-china-from-bangladesh?university=${encodeURIComponent(university.slug)}#china-fit-form`
     : `/contact?university=${encodeURIComponent(university.slug)}`;
@@ -85,264 +98,334 @@ export default function UniversityProfile({ university }: Props) {
   const studyLevels = Array.from(new Set(programs.map(program => program.level))).join(', ') || university.degree.join(', ') || 'Flexible study options';
   const languages = Array.from(new Set(programs.flatMap(program => program.languages))).join(', ') || university.taught.join(', ') || 'Multiple teaching options';
   const intake = university.intake.length ? university.intake.join(', ') : university.deadlines.startDate;
-  const scholarshipTypes = Array.from(new Set(university.scholarships.map(scholarship => scholarship.type).filter(Boolean)));
-  const recordedEligibility = new Set(programs.flatMap(program => program.eligibility).map(comparable));
-  const applicationNotes = university.notes.filter(note => !recordedEligibility.has(comparable(note)));
-  const additionalTuitionNotes = university.details.tuitionDetails.filter(note => !programs.some(program => comparable(note).includes(comparable(program.name))));
-  const additionalFees = university.fees.filter(fee => !/^tuition\s*(fee)?$/i.test(fee.item.trim()));
-  const directAnswer = isMedical
-    ? `Explore ${university.name} in ${location} for 2027 medical and health related study planning from Bangladesh. This university profile organizes recognition, clinical training, future licensing fit, program cost, scholarship and application timing into one clear decision route.`
-    : `Explore ${university.name} in ${location} for 2027 study planning from Bangladesh. This university profile organizes its available programs, shared entry standard, program tuition, scholarship, additional costs and application timing into one clear decision page.`;
 
-  const faq = [
-    {
-      question: `Can Bangladeshi students apply to ${university.name}?`,
-      answer: `Bangladeshi students can complete an eligibility assessment for ${university.name}. The assessment aligns the selected program with academic results, language preparation, age criteria and the 2027 intake, then provides the applicable requirements in writing.`,
-    },
-    {
-      question: `What is the tuition fee at ${university.name}?`,
-      answer: 'Each tuition amount is listed beside its exact program in the Study options section. The ClearCost Sheet then adds scholarship adjusted tuition and every additional fee before the student proceeds.',
-    },
-    {
-      question: `Does ${university.name} offer scholarships?`,
-      answer: university.scholarships.length
-        ? 'The Scholarship planner presents each recorded award once and matches its coverage, eligible programs, selection criteria and renewal terms to the student’s profile.'
-        : 'Scholarship matching is completed after education fit, using the selected program, academic profile and current university options.',
-    },
-    {
-      question: `What is the 2027 deadline for ${university.name}?`,
-      answer: 'The Admission file shows the university deadline once. Seat availability and final submission timing are confirmed for the selected program before application.',
-    },
-  ];
+  const additionalFees = university.fees.filter(fee => !/^tuition\s*(fee)?$/i.test(fee.item.trim()));
 
   return (
-    <article className="bg-[#f4f8fb] pt-[76px] text-[#08263c] min-[1200px]:pt-[104px]">
-      <header className="relative overflow-hidden bg-[#08263c] text-white">
-        <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'linear-gradient(#8ed0ee 1px, transparent 1px), linear-gradient(90deg, #8ed0ee 1px, transparent 1px)', backgroundSize: '64px 64px' }} />
-        <div className="absolute -right-48 -top-52 size-[38rem] rounded-full border-[5rem] border-[#64b5df]/10" />
-        <div className="relative mx-auto max-w-[1440px] px-4 py-9 sm:px-6 lg:py-14">
-          <nav className="flex flex-wrap items-center gap-2 font-mono text-[9px] font-black uppercase tracking-[0.16em] text-white/45" aria-label="Breadcrumb">
-            <Link href="/">Home</Link><span aria-hidden="true">/</span>
-            <Link href="/universities">Find education</Link><span aria-hidden="true">/</span>
-            {isChina ? <><Link href="/china-universities">China universities</Link><span aria-hidden="true">/</span></> : null}
-            <span aria-current="page">{university.name}</span>
-          </nav>
+    <article className="bg-[#fcfdfd] min-h-screen text-slate-900 pb-32">
+      
+      {/* EDITORIAL HERO */}
+      <header className="relative isolate pt-24 pb-20 lg:pt-32 lg:pb-32 overflow-hidden bg-[#050b14] text-white print:hidden">
+        {/* Abstract Background Elements */}
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(23,79,122,0.4),transparent_50%)]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-[800px] h-[800px] opacity-20 bg-[radial-gradient(circle,rgba(100,181,223,0.8),transparent_70%)] blur-3xl" />
+        
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-8">
+          <div className="flex flex-col items-center text-center">
+            
+            <nav className="mb-10 flex items-center gap-2 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-slate-400" aria-label="Breadcrumb">
+              <Link href="/" className="hover:text-white transition-colors">Home</Link>
+              <ChevronRight size={12} />
+              <Link href="/universities" className="hover:text-white transition-colors">Universities</Link>
+              <ChevronRight size={12} />
+              <span aria-current="page" className="text-[#64b5df]">{university.name}</span>
+            </nav>
 
-          <div className="mt-9 grid gap-8 lg:grid-cols-[minmax(0,1fr)_21rem] lg:items-end">
-            <div>
-              <div className="flex flex-wrap items-center gap-3"><DataStatus verified={isVerified} /><span className="font-mono text-[9px] font-black uppercase tracking-[0.16em] text-[#8ed0ee]">2027 university profile</span></div>
-              <h1 className="mt-5 max-w-5xl text-balance font-heading text-4xl font-bold leading-[1.02] tracking-[-0.035em] sm:text-6xl lg:text-[66px]">
-                Study at {university.name} from Bangladesh
-              </h1>
-              <p className="mt-5 flex items-center gap-2 text-sm font-bold text-white/60"><MapPin size={16} className="text-[#8ed0ee]" />{university.location || location}</p>
-              <p className="mt-6 max-w-4xl text-base leading-8 text-white/72">{directAnswer}</p>
+            <div className="mb-6 flex flex-wrap justify-center gap-4">
+              <span className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 font-mono text-[10px] font-black uppercase tracking-[0.15em] bg-white/10 text-white border border-white/20 backdrop-blur-md shadow-xl">
+                Bangladesh's Evidence-First Education Consultancy
+              </span>
+              <DataStatus verified={isVerified} />
             </div>
 
-            <div className="border border-white/15 bg-white/[0.06] p-5 backdrop-blur-sm">
-              <div className="grid grid-cols-[5.5rem_1fr] gap-5">
-                <div className="grid aspect-square place-items-center bg-white p-3">
-                  {university.logo ? <Image src={university.logo} alt={`${university.name} logo`} width={96} height={96} sizes="88px" priority unoptimized className="max-h-full max-w-full object-contain" /> : <span className="font-heading text-4xl font-bold text-[#174f7a]">{university.name.charAt(0)}</span>}
+            {university.logo && (
+              <div className="mb-10 rounded-3xl bg-white/5 p-6 backdrop-blur-xl border border-white/10 shadow-2xl">
+                <div className="bg-white rounded-2xl p-4">
+                  <Image src={university.logo} alt={`${university.name} logo`} width={120} height={120} unoptimized className="object-contain" />
                 </div>
-                <div><p className="font-mono text-[8px] font-black uppercase tracking-[0.15em] text-white/40">Profile purpose</p><p className="mt-2 text-sm font-bold leading-6">Choose the program, align your profile and move forward with a clear plan.</p></div>
               </div>
-              <Link href={assessmentHref} className="mt-5 flex min-h-14 items-center justify-between bg-[#64b5df] px-4 text-sm font-black text-[#08263c]">Check my education fit <ArrowRight size={17} /></Link>
+            )}
+
+            <h1 className="font-serif text-5xl sm:text-6xl lg:text-[80px] font-bold text-white leading-[1.1] tracking-tight max-w-5xl text-balance">
+              Study in <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#64b5df] to-teal-300">{university.name}</span>
+            </h1>
+            
+            <p className="mt-8 flex items-center justify-center gap-2 text-xl font-medium text-slate-300 bg-white/5 py-2 px-6 rounded-full border border-white/10 backdrop-blur-md">
+              <MapPin size={20} className="text-[#64b5df]" /> {university.location || location}
+            </p>
+
+            <p className="mt-8 max-w-3xl text-xl leading-relaxed text-slate-300 text-balance">
+              Explore accredited programs, clear costs, scholarships, and admission readiness for students from Bangladesh.
+            </p>
+
+            {university.lastVerifiedAt && (
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-xs text-slate-400">
+                <span>Last verified: {formatDate(university.lastVerifiedAt)}</span>
+                {university.verificationExpiresAt && (
+                  <>
+                    <span aria-hidden>•</span>
+                    <span>Next review: {formatDate(university.verificationExpiresAt)}</span>
+                  </>
+                )}
+              </div>
+            )}
+
+            <div className="mt-10 flex flex-col sm:flex-row items-center gap-6 text-sm font-medium text-slate-400">
+              <span className="flex items-center gap-2"><CheckCircle2 className="text-teal-400" size={18} /> Better Education</span>
+              <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-slate-600" />
+              <span className="flex items-center gap-2"><CheckCircle2 className="text-teal-400" size={18} /> Clear Costs</span>
+              <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-slate-600" />
+              <span className="flex items-center gap-2"><CheckCircle2 className="text-teal-400" size={18} /> Written Proof</span>
             </div>
           </div>
         </div>
       </header>
 
-      {isMedical ? (
-        <section className="border-b border-rose-900/15 bg-[#fff2ef]">
-          <div className="mx-auto flex max-w-[1440px] gap-4 px-4 py-5 sm:px-6"><Scale className="mt-1 shrink-0 text-rose-800" size={24} /><div><strong className="font-heading text-lg text-rose-950">Start with recognition and future licensing fit</strong><p className="mt-1 text-sm leading-6 text-rose-950/70">The medical route review aligns the institution, exact program, clinical training, internship pathway and current licensing requirements with the student’s intended country of practice before the cost decision.</p></div></div>
-        </section>
-      ) : null}
-
-      <section className="border-b border-[#174f7a]/15 bg-white">
-        <div className="mx-auto grid max-w-[1440px] grid-cols-2 gap-px bg-[#174f7a]/15 lg:grid-cols-5">
-          {[
-            [GraduationCap, 'Study level', studyLevels],
-            [Languages, 'Teaching', languages],
-            [CalendarClock, 'Intake record', intake],
-            [BookOpenCheck, 'Programs', `${programs.length} listed option${programs.length === 1 ? '' : 's'}`],
-            [WalletCards, 'Tuition range', university.details.tuition],
-          ].map(([Icon, label, value]) => (
-            <div key={String(label)} className="bg-white p-4 sm:p-5"><Icon size={18} className="text-[#174f7a]" /><p className="mt-4 font-mono text-[8px] font-black uppercase tracking-[0.15em] text-slate-400">{String(label)}</p><p className="mt-2 text-xs font-black leading-5">{String(value)}</p></div>
-          ))}
+      {/* STICKY BROCHURE NAVIGATION */}
+      <div className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 shadow-sm hidden md:block print:hidden">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <ul className="flex items-center justify-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-500 overflow-x-auto whitespace-nowrap scrollbar-hide py-4">
+            {['Overview', 'Programs', 'Costs', 'Scholarships', 'Admission'].map(item => (
+              <li key={item}>
+                <a href={`#${item.toLowerCase()}`} className="hover:text-[#174f7a] transition-colors focus:outline-none">{item}</a>
+              </li>
+            ))}
+            <li className="ml-auto">
+              <Link href={assessmentHref} className="inline-flex items-center gap-2 rounded-full bg-[#174f7a] px-5 py-2 text-white hover:bg-[#08263c] transition-colors">
+                Apply Now <ArrowRight size={14} />
+              </Link>
+            </li>
+          </ul>
         </div>
-      </section>
-
-      <div className="mx-auto grid max-w-[1440px] gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_21rem] lg:py-16">
-        <main className="space-y-8">
-          <section id="decision-brief" className="border border-[#174f7a]/15 bg-white p-5 sm:p-8">
-            <NumberLabel number="01" label="Decision brief" />
-            <h2 className="mt-5 max-w-3xl font-heading text-3xl font-bold leading-tight sm:text-4xl">How to assess {university.name} for your study plan</h2>
-            <p className="mt-5 max-w-4xl text-sm leading-8 text-slate-600">Use the university record below to choose an exact program first, then align academic eligibility, scholarship coverage, additional costs and the application timeline around that one decision. Shared requirements appear once, while program specific differences stay beside the relevant program.</p>
-            <div className="mt-7 grid gap-px bg-[#174f7a]/15 md:grid-cols-2">
-              <div className="bg-[#e9f7fd] p-5"><UserRoundCheck className="text-[#174f7a]" size={22} /><h3 className="mt-4 font-heading text-lg font-bold">This university may fit your plan when</h3><ul className="mt-4 space-y-3 text-xs leading-6 text-slate-600">{[
-                `Your target level is available across ${studyLevels}`,
-                `You can prepare for study taught in ${languages}`,
-                'You want to compare tuition, living cost and additional fees together',
-                'You value written eligibility and cost confirmation before proceeding',
-              ].map(item => <li key={item} className="flex gap-3"><Check size={15} className="mt-1 shrink-0 text-[#174f7a]" />{item}</li>)}</ul></div>
-              <div className="bg-[#fff7e8] p-5"><SearchCheck className="text-amber-800" size={22} /><h3 className="mt-4 font-heading text-lg font-bold">A strong shortlist also confirms</h3><ul className="mt-4 space-y-3 text-xs leading-6 text-slate-600">{[
-                'Current program entry criteria and available seats',
-                'Scholarship selection and renewal conditions',
-                'Every university and third party payment item',
-                'Recognition and licensing fit for regulated careers',
-              ].map(item => <li key={item} className="flex gap-3"><Check size={15} className="mt-1 shrink-0 text-amber-800" />{item}</li>)}</ul></div>
-            </div>
-          </section>
-
-          <section id="programs" className="border border-[#174f7a]/15 bg-white p-5 sm:p-8">
-            <NumberLabel number="02" label="Study options" />
-            <div className="mt-5 flex flex-col gap-5 md:flex-row md:items-end md:justify-between"><div><h2 className="font-heading text-3xl font-bold sm:text-4xl">{university.name} programs and 2027 tuition</h2><p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">Shared teaching, intake and entry facts appear once. Each exact program then shows only its own tuition and any criteria that differ.</p></div><div className="text-right"><span className="font-heading text-5xl font-bold text-[#174f7a]">{programs.length}</span><span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">Program options</span></div></div>
-            <div className="mt-8 space-y-5">
-              {Object.entries(groupedPrograms).map(([level, levelPrograms], groupIndex) => {
-                const languageSets = levelPrograms.map(program => program.languages.join(', ') || languages);
-                const durationSets = levelPrograms.map(program => program.duration || 'Confirmed for the selected program');
-                const intakeSets = levelPrograms.map(program => program.intakes.join(', ') || intake);
-                const deadlineSets = levelPrograms.map(program => program.applicationDeadline || university.deadlines.application);
-                const sharedLanguages = new Set(languageSets).size === 1 ? languageSets[0] : '';
-                const sharedDuration = new Set(durationSets).size === 1 ? durationSets[0] : '';
-                const sharedIntake = new Set(intakeSets).size === 1 ? intakeSets[0] : '';
-                const sharedDeadline = new Set(deadlineSets).size === 1 ? deadlineSets[0] : '';
-                const sharedEligibility = levelPrograms[0]?.eligibility.filter(item => levelPrograms.every(program => program.eligibility.some(candidate => comparable(candidate) === comparable(item)))) || [];
-                const sharedFacts = [
-                  ...(sharedLanguages && comparable(sharedLanguages) !== comparable(languages) ? [['Teaching', sharedLanguages]] : []),
-                  ...(sharedDuration ? [['Duration', sharedDuration]] : []),
-                  ...(sharedIntake && comparable(sharedIntake) !== comparable(intake) ? [['2027 intake', sharedIntake]] : []),
-                ];
-                const programGroups = Array.from(levelPrograms.reduce<Map<string, typeof levelPrograms>>((groups, program) => {
-                  const additionalCriteria = program.eligibility.filter(item => !sharedEligibility.some(shared => comparable(shared) === comparable(item)));
-                  const signature = JSON.stringify({
-                    tuition: program.tuition || university.details.tuition,
-                    scholarshipTuition: program.tuitionAfterScholarship || '',
-                    languages: sharedLanguages ? '' : program.languages,
-                    duration: sharedDuration ? '' : program.duration,
-                    intakes: sharedIntake ? '' : program.intakes,
-                    deadline: sharedDeadline ? '' : program.applicationDeadline,
-                    eligibility: additionalCriteria,
-                  });
-                  const group = groups.get(signature) || [];
-                  group.push(program);
-                  groups.set(signature, group);
-                  return groups;
-                }, new Map()).values());
-
-                return <article key={level} className="overflow-hidden border border-[#174f7a]/15">
-                  <header className="flex items-center justify-between bg-[#08263c] px-5 py-4 text-white"><div className="flex items-center gap-4"><span className="font-mono text-[9px] font-black text-[#8ed0ee]">{String(groupIndex + 1).padStart(2, '0')}</span><h3 className="font-heading text-2xl font-bold">{level} programs</h3></div><span className="bg-white/10 px-3 py-1.5 text-[10px] font-bold">{levelPrograms.length} option{levelPrograms.length === 1 ? '' : 's'}</span></header>
-                  {sharedFacts.length ? <div className={`grid gap-px bg-[#174f7a]/15 ${sharedFacts.length > 1 ? 'sm:grid-cols-2 lg:grid-cols-3' : ''}`}>{sharedFacts.map(([label, value]) => <div key={label} className="bg-[#e9f7fd] p-4"><span className="font-mono text-[8px] font-black uppercase tracking-[0.14em] text-[#174f7a]">{label}</span><strong className="mt-2 block text-xs leading-5">{value}</strong></div>)}</div> : null}
-                  {sharedEligibility.length ? <div className="border-b border-[#174f7a]/15 bg-white p-5"><p className="font-mono text-[8px] font-black uppercase tracking-[0.15em] text-[#174f7a]">Shared {level} admission standard</p><ul className="mt-4 grid gap-2 sm:grid-cols-2">{sharedEligibility.map(item => <li key={item} className="flex gap-2 text-xs leading-5 text-slate-600"><Check size={13} className="mt-1 shrink-0 text-[#174f7a]" />{item}</li>)}</ul></div> : null}
-                  <div className="grid gap-px bg-[#174f7a]/15 md:grid-cols-2">
-                    {programGroups.map((programGroup, index) => {
-                      const program = programGroup[0];
-                      const additionalCriteria = program.eligibility.filter(item => !sharedEligibility.some(shared => comparable(shared) === comparable(item)));
-                      return <div key={`${level}-${programGroup.map(item => item.name).join('-')}-${index}`} className="bg-[#f8fbfd] p-5">
-                        <div className="flex items-start justify-between gap-4"><div><p className="font-mono text-[8px] font-black uppercase tracking-[0.14em] text-[#174f7a]">Tuition group {String(index + 1).padStart(2, '0')} · {programGroup.length} program{programGroup.length === 1 ? '' : 's'}</p><div className="mt-3 space-y-2">{programGroup.map((option, optionIndex) => <div key={option.name} className="flex items-start gap-3"><span className="mt-1 font-mono text-[8px] font-black text-[#64b5df]">{String(optionIndex + 1).padStart(2, '0')}</span><div><h4 className="font-heading text-xl font-bold">{option.name}</h4>{option.subject ? <p className="mt-1 text-[10px] font-bold text-slate-400">{option.subject}</p> : null}</div></div>)}</div></div><GraduationCap className="shrink-0 text-[#64b5df]" size={24} /></div>
-                        <div className="mt-5 bg-white p-4"><span className="block font-mono text-[8px] font-black uppercase tracking-[0.12em] text-slate-400">Program tuition</span><strong className="mt-2 block text-lg text-[#174f7a]">{program.tuition || university.details.tuition}</strong></div>
-                        {(!sharedLanguages || !sharedDuration || !sharedIntake || !sharedDeadline) ? <div className="mt-2 grid grid-cols-2 gap-2 text-[10px]">{!sharedLanguages ? <div className="bg-white p-3"><span className="block font-bold uppercase tracking-[0.12em] text-slate-400">Teaching</span><strong className="mt-1 block">{program.languages.join(', ') || languages}</strong></div> : null}{!sharedDuration ? <div className="bg-white p-3"><span className="block font-bold uppercase tracking-[0.12em] text-slate-400">Duration</span><strong className="mt-1 block">{program.duration || 'Confirmed for this program'}</strong></div> : null}{!sharedIntake ? <div className="bg-white p-3"><span className="block font-bold uppercase tracking-[0.12em] text-slate-400">2027 intake</span><strong className="mt-1 block">{program.intakes.join(', ') || intake}</strong></div> : null}{!sharedDeadline ? <div className="bg-white p-3"><span className="block font-bold uppercase tracking-[0.12em] text-slate-400">Deadline</span><strong className="mt-1 block">{program.applicationDeadline || university.deadlines.application}</strong></div> : null}</div> : null}
-                        {program.tuitionAfterScholarship ? <p className="mt-3 bg-[#e9f7fd] p-3 text-xs font-bold text-[#174f7a]">Scholarship adjusted tuition: {program.tuitionAfterScholarship}</p> : null}
-                        {additionalCriteria.length ? <div className="mt-4"><p className="font-mono text-[8px] font-black uppercase tracking-[0.14em] text-slate-400">Additional program criteria</p><ul className="mt-2 space-y-2">{additionalCriteria.map(item => <li key={item} className="flex gap-2 text-xs leading-5 text-slate-600"><Check size={13} className="mt-1 shrink-0 text-[#174f7a]" />{item}</li>)}</ul></div> : null}
-                      </div>;
-                    })}
-                  </div>
-                </article>;
-              })}
-            </div>
-          </section>
-
-          <section id="costs" className="overflow-hidden border border-[#174f7a]/15 bg-white">
-            <div className="grid lg:grid-cols-[.38fr_.62fr]">
-              <div className="bg-[#08263c] p-5 text-white sm:p-8"><NumberLabel number="03" label="Cost ledger" inverted /><WalletCards className="mt-10 text-[#8ed0ee]" size={32} /><h2 className="mt-5 font-heading text-3xl font-bold">Additional study costs at {university.name}</h2><p className="mt-4 text-sm leading-7 text-white/60">The ClearCost Sheet connects the program tuition shown above with every university or third party payment required for that route.</p></div>
-              <div className="p-5 sm:p-8">
-                <div className="bg-[#e9f7fd] p-4"><p className="font-mono text-[8px] font-black uppercase tracking-[0.16em] text-[#174f7a]">Tuition location</p><p className="mt-2 text-sm font-bold leading-6">Each exact tuition amount appears once beside its program in Study options.</p></div>
-                {additionalTuitionNotes.length ? <ul className="mt-5 grid gap-2">{additionalTuitionNotes.map(item => <li key={item} className="flex gap-3 bg-[#f4f8fb] p-3 text-xs leading-6 text-slate-600"><Coins size={15} className="mt-1 shrink-0 text-[#174f7a]" />{item}</li>)}</ul> : null}
-                {additionalFees.length ? <div className="mt-7 overflow-x-auto"><table className="w-full min-w-[34rem] border-collapse text-left text-xs"><thead><tr className="border-b-2 border-[#08263c]"><th className="py-3 pr-4 font-mono text-[8px] uppercase tracking-[0.14em] text-slate-400">Additional cost</th><th className="py-3 pr-4 font-mono text-[8px] uppercase tracking-[0.14em] text-slate-400">2027 amount</th><th className="py-3 font-mono text-[8px] uppercase tracking-[0.14em] text-slate-400">Payment context</th></tr></thead><tbody>{additionalFees.map(fee => <tr key={`${fee.item}-${fee.cost}-${fee.notes || ''}`} className="border-b border-[#174f7a]/12"><th className="py-4 pr-4 font-bold">{fee.item}</th><td className="py-4 pr-4 font-black text-[#174f7a]">{fee.cost}</td><td className="py-4 leading-5 text-slate-500">{[fee.recipient ? `Paid to ${fee.recipient}` : '', fee.notes || '', fee.validFor || 'Included in the 2027 cost review'].filter(Boolean).join(' · ')}</td></tr>)}</tbody></table></div> : <p className="mt-5 text-sm leading-7 text-slate-600">The additional university and third party cost lines are prepared in the ClearCost Sheet for the selected program.</p>}
-              </div>
-            </div>
-          </section>
-
-          <section id="scholarships" className="overflow-hidden border border-[#174f7a]/15 bg-white">
-            <div className="relative overflow-hidden bg-[#08263c] p-5 text-white sm:p-8">
-              <div className="absolute -right-20 -top-28 size-72 rounded-full border-[3rem] border-[#64b5df]/10" />
-              <div className="relative grid gap-6 lg:grid-cols-[1fr_22rem] lg:items-end"><div><NumberLabel number="04" label="Scholarship planner" inverted /><h2 className="mt-5 max-w-3xl font-heading text-3xl font-bold sm:text-4xl">{university.name} scholarship planner</h2><p className="mt-4 max-w-3xl text-sm leading-7 text-white/60">Compare coverage, eligible programs, selection conditions, renewal and the 2027 deadline together. Scholarship strengthens an affordable education plan after academic fit is clear.</p></div><div className="grid grid-cols-2 gap-px bg-white/15"><div className="bg-[#08263c] p-4"><span className="font-mono text-[8px] font-black uppercase tracking-[0.14em] text-white/40">Recorded options</span><strong className="mt-2 block font-heading text-4xl text-[#8ed0ee]">{university.scholarships.length}</strong></div><div className="bg-[#08263c] p-4"><span className="font-mono text-[8px] font-black uppercase tracking-[0.14em] text-white/40">Funding types</span><strong className="mt-2 block text-sm leading-5 text-[#8ed0ee]">{scholarshipTypes.join(', ') || 'Profile matched'}</strong></div></div></div>
-            </div>
-            <div className="grid gap-px bg-[#174f7a]/15 sm:grid-cols-4">
-              {['Education fit', 'Eligible program', 'Coverage', 'Renewal'].map((step, index) => <div key={step} className="relative flex items-center gap-3 bg-[#e9f7fd] p-4"><span className="grid size-7 shrink-0 place-items-center rounded-full bg-[#174f7a] font-mono text-[9px] font-black text-white">{index + 1}</span><strong className="text-[10px] uppercase tracking-[0.1em] text-[#174f7a]">{step}</strong>{index < 3 ? <ArrowRight className="absolute -right-2 z-10 hidden text-[#174f7a] sm:block" size={15} /> : null}</div>)}
-            </div>
-            {university.scholarships.length ? (
-              <div className={`grid gap-px bg-[#174f7a]/15 ${university.scholarships.length > 1 ? 'lg:grid-cols-2' : ''}`}>
-                {university.scholarships.map((scholarship, index) => (
-                  <article key={`${scholarship.title}-${index}`} className="relative overflow-hidden bg-[#f8fbfd] p-5 sm:p-7">
-                    <span className="pointer-events-none absolute -bottom-8 right-4 font-heading text-[8rem] font-bold leading-none text-[#174f7a]/[0.035]">{String(index + 1).padStart(2, '0')}</span>
-                    <div className={`absolute inset-y-0 left-0 w-1.5 ${index % 3 === 0 ? 'bg-[#64b5df]' : index % 3 === 1 ? 'bg-amber-400' : 'bg-emerald-400'}`} />
-                    <div className="relative flex items-start justify-between gap-4"><div><p className="font-mono text-[8px] font-black uppercase tracking-[0.15em] text-[#174f7a]">Scholarship {String(index + 1).padStart(2, '0')} · {scholarship.status === 'closed' ? 'Next cycle planning' : scholarship.status === 'planned' ? '2027 planning' : '2027 option'}</p><h3 className="mt-3 font-heading text-2xl font-bold">{scholarship.title}</h3>{scholarship.type ? <span className="mt-3 inline-flex bg-[#08263c] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.12em] text-white">{scholarship.type} funding</span> : null}</div><span className="grid size-12 shrink-0 place-items-center rounded-full bg-[#e9f7fd] text-[#174f7a]"><Award size={23} /></span></div>
-                    {scholarship.amount ? <p className="mt-5 font-heading text-3xl font-bold text-[#174f7a]">{scholarship.amount}</p> : null}
-                    {scholarship.coverage ? <div className="mt-4 bg-white p-4"><p className="font-mono text-[8px] font-black uppercase tracking-[0.14em] text-slate-400">Coverage</p><p className="mt-2 text-sm font-bold leading-6">{scholarship.coverage}</p></div> : null}
-                    <div className="relative mt-4 grid grid-cols-2 gap-2 text-xs"><div className="bg-white p-3"><span className="block text-[8px] font-black uppercase tracking-[0.12em] text-slate-400">Eligible programs</span><strong className="mt-2 block leading-5">{scholarship.eligiblePrograms.length ? scholarship.eligiblePrograms.join(', ') : 'Matched during assessment'}</strong></div><div className="bg-white p-3"><span className="block text-[8px] font-black uppercase tracking-[0.12em] text-slate-400">Renewal</span><strong className="mt-2 block leading-5">{scholarship.renewal || 'Conditions confirmed in writing'}</strong></div><div className="bg-white p-3"><span className="block text-[8px] font-black uppercase tracking-[0.12em] text-slate-400">2027 deadline</span><strong className="mt-2 block leading-5">{scholarship.deadline || 'Aligned to program deadline'}</strong></div><div className="bg-white p-3"><span className="block text-[8px] font-black uppercase tracking-[0.12em] text-slate-400">Selection</span><strong className="mt-2 block leading-5">Profile and seat based</strong></div></div>
-                    {scholarship.details.filter(detail => !scholarship.amount || !comparable(detail).includes(comparable(scholarship.amount))).length ? <ul className="mt-5 space-y-2">{scholarship.details.filter(detail => !scholarship.amount || !comparable(detail).includes(comparable(scholarship.amount))).map(detail => <li key={detail} className="flex gap-3 text-xs leading-6 text-slate-600"><Check size={14} className="mt-1 shrink-0 text-[#174f7a]" />{detail}</li>)}</ul> : null}
-                    {scholarship.condition ? <p className="mt-5 border-t border-[#174f7a]/15 pt-4 text-xs leading-6 text-slate-500"><strong className="text-[#08263c]">Eligibility focus:</strong> {scholarship.condition}</p> : null}
-                    {scholarship.sourceUrl && /^https:\/\//i.test(scholarship.sourceUrl) ? <a href={scholarship.sourceUrl} target="_blank" rel="noreferrer" className="relative mt-5 flex items-center justify-between border-t border-[#174f7a]/15 pt-4 text-xs font-black text-[#174f7a]">Official scholarship source <ExternalLink size={14} /></a> : null}
-                  </article>
-                ))}
-              </div>
-            ) : <div className="p-6 sm:p-8"><div className="grid gap-5 bg-[#e9f7fd] p-6 sm:grid-cols-[auto_1fr] sm:items-center"><span className="grid size-14 place-items-center rounded-full bg-white text-[#174f7a]"><Sparkles size={25} /></span><div><h3 className="font-heading text-2xl font-bold">Scholarship matching is part of your education fit review</h3><p className="mt-2 text-sm leading-7 text-slate-600">Your selected program, academic profile and 2027 intake are used to identify suitable university, provincial or CSC options and prepare the applicable conditions in writing.</p></div></div></div>}
-          </section>
-
-          <section id="admission" className="border border-[#174f7a]/15 bg-white p-5 sm:p-8">
-            <NumberLabel number="05" label="Admission file" />
-            <div className="mt-5 grid gap-8 lg:grid-cols-2">
-              <div><FileCheck2 className="text-[#174f7a]" size={25} /><h2 className="mt-4 font-heading text-3xl font-bold">Program aligned document checklist</h2><p className="mt-3 text-sm leading-7 text-slate-600">Your final checklist combines the selected program, academic history and 2027 application route.</p><ul className="mt-6 grid gap-2">{university.documents.length ? university.documents.map(item => <li key={item} className="flex gap-3 border-b border-[#174f7a]/12 py-3 text-xs font-bold leading-6"><ClipboardCheck size={15} className="mt-1 shrink-0 text-[#174f7a]" />{item}</li>) : <li className="bg-[#e9f7fd] p-4 text-sm text-slate-600">Your tailored checklist is prepared after the program and profile review.</li>}</ul></div>
-              <div><CalendarClock className="text-[#174f7a]" size={25} /><h2 className="mt-4 font-heading text-3xl font-bold">2027 application timing</h2><div className="mt-6 grid gap-px bg-[#174f7a]/15"><div className="bg-[#f8fbfd] p-4"><p className="font-mono text-[8px] font-black uppercase tracking-[0.15em] text-slate-400">University deadline</p><p className="mt-2 text-sm font-black">{university.deadlines.application}</p></div><div className="bg-[#e9f7fd] p-4"><p className="font-mono text-[8px] font-black uppercase tracking-[0.15em] text-[#174f7a]">Next action</p><p className="mt-2 text-sm font-black">{intakeStatusLabel}</p><p className="mt-2 text-xs leading-6 text-slate-600">Seat availability and final submission timing are confirmed for the selected program before the application file proceeds.</p></div></div>{applicationNotes.length ? <div className="mt-6"><h3 className="font-heading text-lg font-bold">Additional application notes</h3><ul className="mt-3 space-y-2">{applicationNotes.map(note => <li key={note} className="flex gap-3 text-xs leading-6 text-slate-600"><Check size={14} className="mt-1 shrink-0 text-[#174f7a]" />{note}</li>)}</ul></div> : null}</div>
-            </div>
-          </section>
-
-          <section id="evidence" className="border border-[#174f7a]/15 bg-white p-5 sm:p-8">
-            <NumberLabel number="06" label="Evidence and responsibility" />
-            <h2 className="mt-5 font-heading text-3xl font-bold sm:text-4xl">Move forward with a clear evidence and responsibility record</h2>
-            <div className="mt-7 grid gap-px bg-[#174f7a]/15 md:grid-cols-3">
-              {[
-                [Stamp, 'Recognition', university.recognitionAuthority ? `${university.recognitionAuthority}. Source shown below.` : 'Recognition and future licensing fit are confirmed for the selected program.'],
-                [Building2, 'Relationship', university.relationshipEvidenceUrl ? relationshipLabels[university.relationshipType] : 'The applicable university access route is confirmed before application.'],
-                [ShieldCheck, 'EduExpress role', 'EduExpress provides education guidance and application support, while universities, embassies and scholarship bodies issue the official decisions.'],
-              ].map(([Icon, title, copy]) => <div key={String(title)} className="bg-[#f8fbfd] p-5"><Icon size={22} className="text-[#174f7a]" /><h3 className="mt-4 font-heading text-lg font-bold">{String(title)}</h3><p className="mt-3 text-xs leading-6 text-slate-600">{String(copy)}</p></div>)}
-            </div>
-
-            <div className="mt-7 border-t border-[#174f7a]/15 pt-7">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><h3 className="font-heading text-2xl font-bold">Source register</h3><p className="mt-2 text-xs leading-6 text-slate-500">Only current official or directly relevant evidence links should appear here.</p></div><DataStatus verified={isVerified} /></div>
-              {sourceLinks.length ? <ul className="mt-5 grid gap-2">{sourceLinks.map((url, index) => <li key={url}><a href={url} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-4 border border-[#174f7a]/15 bg-[#f8fbfd] p-4 text-xs font-bold text-[#174f7a]"><span className="truncate">Source {index + 1}: {new URL(url).hostname}</span><ExternalLink size={15} /></a></li>)}</ul> : <div className="mt-5 bg-[#e9f7fd] p-5"><p className="text-sm font-black text-[#08263c]">Current source confirmation is included in the program review</p><p className="mt-2 text-xs leading-6 text-slate-600">The selected program, fee, scholarship, recognition and 2027 deadline are matched to current official information before the application file proceeds.</p></div>}
-              <div className="mt-5 grid gap-px bg-[#174f7a]/15 sm:grid-cols-3"><div className="bg-white p-4"><p className="font-mono text-[8px] font-black uppercase tracking-[0.14em] text-slate-400">Source verification</p><p className="mt-2 text-xs font-bold">{formatDate(university.lastVerifiedAt)}</p></div><div className="bg-white p-4"><p className="font-mono text-[8px] font-black uppercase tracking-[0.14em] text-slate-400">Database updated</p><p className="mt-2 text-xs font-bold">{formatDate(university.updatedAt)}</p></div><div className="bg-white p-4"><p className="font-mono text-[8px] font-black uppercase tracking-[0.14em] text-slate-400">Publisher and reviewer</p><p className="mt-2 text-xs font-bold">EduExpress International</p></div></div>
-            </div>
-          </section>
-
-          <section id="questions" className="border border-[#174f7a]/15 bg-white p-5 sm:p-8">
-            <NumberLabel number="07" label="Questions students ask" />
-            <h2 className="mt-5 font-heading text-3xl font-bold sm:text-4xl">{university.name} admission FAQ</h2>
-            <div className="mt-7 divide-y divide-[#174f7a]/15 border-y border-[#174f7a]/15">{faq.map(item => <details key={item.question} className="group py-5"><summary className="flex cursor-pointer list-none items-center justify-between gap-5 font-heading text-lg font-bold"><span>{item.question}</span><span className="grid size-7 shrink-0 place-items-center bg-[#e9f7fd] text-[#174f7a] group-open:rotate-45">+</span></summary><p className="mt-4 max-w-4xl text-sm leading-7 text-slate-600">{item.answer}</p></details>)}</div>
-          </section>
-        </main>
-
-        <aside className="space-y-5">
-          <div className="sticky top-32 space-y-5">
-            <section className="border-t-4 border-[#64b5df] bg-[#08263c] p-5 text-white">
-              <p className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-[#8ed0ee]">Your next useful step</p>
-              <h2 className="mt-4 font-heading text-2xl font-bold">Check this university against your profile</h2>
-              <p className="mt-3 text-xs leading-6 text-white/60">Share your results, study goal, budget and language preparation. The assessment builds a focused shortlist and a practical next step.</p>
-              <Link href={assessmentHref} className="mt-5 flex min-h-14 items-center justify-between bg-[#64b5df] px-4 py-3 text-sm font-black text-[#08263c]">Get fit assessment <ArrowRight size={16} /></Link>
-            </section>
-
-            <nav className="border border-[#174f7a]/15 bg-white p-5" aria-label="University profile sections"><p className="font-mono text-[9px] font-black uppercase tracking-[0.16em] text-slate-400">Profile index</p><ol className="mt-4 space-y-1">{[
-              ['Decision brief', '#decision-brief'], ['Programs', '#programs'], ['Costs', '#costs'], ['Scholarships', '#scholarships'], ['Admission file', '#admission'], ['Evidence', '#evidence'], ['FAQ', '#questions'],
-            ].map(([label, href], index) => <li key={href}><a href={href} className="flex items-center justify-between border-b border-[#174f7a]/10 py-3 text-xs font-bold"><span>{String(index + 1).padStart(2, '0')} {label}</span><ArrowRight size={13} className="text-[#174f7a]" /></a></li>)}</ol></nav>
-
-            {isChina ? <section className="border border-[#174f7a]/15 bg-[#e9f7fd] p-5"><BookOpenCheck className="text-[#174f7a]" size={23} /><h2 className="mt-4 font-heading text-xl font-bold">China service terms</h2><p className="mt-3 text-xs font-bold leading-6 text-[#0b2f4a]/75">No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.</p><Link href="/china-visa-first-policy" className="mt-4 inline-flex items-center gap-2 text-xs font-black text-[#174f7a]">Read the full policy <ArrowRight size={14} /></Link></section> : null}
-          </div>
-        </aside>
       </div>
 
-      <section className="bg-[#08263c] text-white">
-        <div className="mx-auto grid max-w-[1440px] gap-7 px-4 py-12 sm:px-6 lg:grid-cols-[.7fr_.3fr] lg:items-center"><div><p className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-[#8ed0ee]">Continue the comparison</p><h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Build a balanced shortlist around education fit</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-white/60">Compare education quality, recognition, total cost, entry fit and career relevance across several suitable options.</p></div><Link href={isChina ? '/china-universities' : '/universities'} className="flex min-h-14 items-center justify-between bg-white px-5 text-sm font-black text-[#08263c]">Compare more universities <ArrowRight size={17} /></Link></div>
-      </section>
+      <main className="mx-auto max-w-[1000px] px-5 sm:px-6 lg:px-8 py-16 space-y-24">
+
+        {/* OVERVIEW (At a Glance) */}
+        <section id="overview" className="scroll-mt-32 print:hidden">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              [GraduationCap, 'Study Level', studyLevels],
+              [Languages, 'Teaching', languages],
+              [CalendarClock, 'Next Intake', intake],
+              [WalletCards, 'Tuition', university.details.tuition],
+            ].map(([Icon, label, value], i) => (
+              <div key={String(label)} className="flex flex-col items-center text-center p-6 rounded-2xl bg-white shadow-sm border border-slate-100">
+                <div className="grid size-12 place-items-center rounded-full bg-[#f4f8fb] text-[#174f7a] mb-4">
+                  <Icon size={24} strokeWidth={1.5} />
+                </div>
+                <p className="font-mono text-[9px] font-black uppercase tracking-[0.15em] text-slate-400">{String(label)}</p>
+                <p className="mt-2 text-sm font-bold text-[#08263c]">{String(value)}</p>
+              </div>
+            ))}
+          </div>
+
+          {isMedical && (
+            <div className="mt-6 flex items-start gap-4 rounded-2xl border border-rose-100 bg-rose-50 p-6">
+              <Scale className="mt-1 shrink-0 text-rose-600" size={24} />
+              <div>
+                <strong className="block font-heading text-lg text-rose-900">Medical Recognition & Licensing</strong>
+                <p className="mt-2 text-sm leading-relaxed text-rose-800">
+                  This institution is reviewed for medical council recognition, clinical hours, and internship pathways suitable for students returning to practice in Bangladesh.
+                </p>
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* PROGRAMS SECTION */}
+        <section id="programs" className="scroll-mt-32 print:hidden">
+          <SectionHeading title="Academic Programs" subtitle="Curriculum & Tuition" icon={BookOpenCheck} />
+          
+          <div className="space-y-12">
+            {Object.entries(groupedPrograms).map(([level, levelPrograms]) => (
+              <div key={level}>
+                <h3 className="font-serif text-2xl font-bold text-[#08263c] mb-6 border-b border-slate-200 pb-2">{level} Degree Options</h3>
+                
+                <div className="grid gap-4">
+                  {levelPrograms.map((program, idx) => (
+                    <div key={idx} className="group relative flex flex-col sm:flex-row sm:items-center justify-between p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-[#174f7a]/30 transition-all">
+                      <div className="pr-6">
+                        <h4 className="font-heading text-lg font-bold text-[#08263c]">{program.name}</h4>
+                        {program.subject && <p className="text-xs font-medium uppercase tracking-wider text-[#174f7a] mt-1">{program.subject}</p>}
+                        
+                        <div className="mt-4 flex flex-wrap gap-3 text-sm text-slate-600">
+                          <span className="flex items-center gap-1.5"><Languages size={14} className="text-slate-400" /> {program.languages.join(', ') || languages}</span>
+                          <span className="flex items-center gap-1.5"><CalendarClock size={14} className="text-slate-400" /> {program.applicationDeadline || university.deadlines.application}</span>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 sm:mt-0 shrink-0 text-left sm:text-right border-t sm:border-t-0 sm:border-l border-slate-100 pt-4 sm:pt-0 sm:pl-6">
+                        <p className="font-mono text-[10px] font-black uppercase tracking-wider text-slate-400">Est. Tuition</p>
+                        <p className="mt-1 font-serif text-xl font-bold text-[#08263c]">{program.tuition || university.details.tuition}</p>
+                        {program.tuitionAfterScholarship && (
+                          <span className="mt-2 inline-block rounded-md bg-emerald-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700 border border-emerald-100">
+                            After Scholarship: {program.tuitionAfterScholarship}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+
+
+        {/* SCHOLARSHIPS */}
+        <section id="scholarships" className="scroll-mt-32 print:hidden">
+          <SectionHeading title="Scholarships & Aid" subtitle="Financial Support" icon={Award} />
+          
+          {university.scholarships.length > 0 ? (
+            <div className="grid gap-6 md:grid-cols-2">
+              {university.scholarships.map((scholarship, index) => (
+                <div key={index} className="group relative rounded-[2rem] bg-[#050b14] p-[1px] shadow-2xl hover:shadow-amber-500/10 transition-all duration-500 overflow-hidden">
+                  {/* Animated border gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-[#174f7a] to-amber-200 opacity-40 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative h-full bg-[#050b14]/95 backdrop-blur-2xl rounded-[calc(2rem-1px)] p-8 overflow-hidden flex flex-col justify-between">
+                    {/* Large glowing background orb */}
+                    <div className="absolute -top-32 -right-32 w-64 h-64 bg-amber-500/20 rounded-full blur-3xl group-hover:bg-amber-400/30 transition-colors duration-500" />
+                    
+                    <div className="relative z-10 mb-8">
+                      <div className="flex justify-between items-start mb-8">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-3 py-1 font-mono text-[10px] font-black uppercase tracking-wider text-amber-400 border border-amber-500/20 shadow-[0_0_15px_rgba(251,191,36,0.1)]">
+                          <Award size={14} /> {scholarship.type || 'Grant'}
+                        </span>
+                        <div className="text-white/10 group-hover:text-amber-400/40 transition-colors duration-500 rotate-12 group-hover:rotate-0">
+                          <Award size={48} />
+                        </div>
+                      </div>
+                      
+                      <h3 className="font-serif text-2xl md:text-3xl font-bold text-white mb-3 text-balance leading-tight">{scholarship.title}</h3>
+                      {scholarship.amount && (
+                        <p className="font-mono text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 drop-shadow-sm">
+                          {scholarship.amount}
+                        </p>
+                      )}
+                    </div>
+                    
+                    <div className="relative z-10 space-y-4 pt-6 border-t border-white/10 mt-auto">
+                      <div className="flex justify-between items-start gap-4">
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 shrink-0">Coverage</span>
+                        <span className="text-sm font-medium text-white text-right">{scholarship.coverage || 'Varies'}</span>
+                      </div>
+                      {scholarship.renewal && (
+                        <div className="flex justify-between items-start gap-4">
+                          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 shrink-0">Renewal</span>
+                          <span className="text-sm font-medium text-white text-right text-balance">{scholarship.renewal}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-start gap-4">
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 shrink-0">Deadline</span>
+                        <span className="text-sm font-medium text-amber-400 text-right">{scholarship.deadline || 'Aligned to intake'}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="group relative rounded-[2rem] bg-[#050b14] p-[1px] shadow-2xl overflow-hidden text-center">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#64b5df] via-[#174f7a] to-teal-400 opacity-40 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative h-full bg-[#050b14]/95 backdrop-blur-2xl rounded-[calc(2rem-1px)] p-12 overflow-hidden">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#64b5df]/10 rounded-full blur-3xl group-hover:bg-[#64b5df]/20 transition-colors duration-500" />
+                <Sparkles size={48} className="mx-auto text-[#64b5df] mb-6 relative z-10" />
+                <h3 className="font-serif text-2xl font-bold text-white mb-3 relative z-10">Dynamic Profile Matching</h3>
+                <p className="text-slate-400 font-medium max-w-lg mx-auto relative z-10">Scholarships are matched dynamically based on your academic profile, English proficiency, and timing during the fit assessment.</p>
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* ADMISSIONS */}
+        <section id="admission" className="scroll-mt-32 print:hidden">
+          <SectionHeading title="Admission Guide" subtitle="Application Process" icon={ClipboardCheck} />
+          
+          <div className="grid gap-8 md:grid-cols-2">
+            <div className="rounded-2xl bg-[#08263c] text-white p-8">
+              <h3 className="font-serif text-2xl font-bold mb-6">Key Dates</h3>
+              <div className="space-y-6">
+                <div>
+                  <p className="font-mono text-[10px] font-black uppercase tracking-wider text-[#64b5df]">University Deadline</p>
+                  <p className="mt-1 text-2xl font-bold">{university.deadlines.application} <span className="text-sm font-normal text-slate-300 block mt-1">(Depends on Seats)</span></p>
+                </div>
+                <div className="h-px bg-white/10" />
+                <div>
+                  <p className="font-mono text-[10px] font-black uppercase tracking-wider text-[#64b5df]">Next Intake Action</p>
+                  <p className="mt-1 text-lg font-bold text-white/90">{intakeStatusLabel}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-8">
+              <h3 className="font-serif text-2xl font-bold mb-6 text-[#08263c]">Required Documents</h3>
+              <ul className="space-y-3">
+                {university.documents.length ? university.documents.map(item => (
+                  <li key={item} className="flex gap-3 text-sm text-slate-700">
+                    <FileCheck2 size={18} className="shrink-0 text-[#174f7a]" /> <span>{item}</span>
+                  </li>
+                )) : (
+                  <li className="text-sm text-slate-500">Tailored checklist provided after assessment.</li>
+                )}
+              </ul>
+              
+              <div className="mt-8 pt-6 border-t border-slate-100">
+                <p className="font-mono text-[10px] font-black uppercase tracking-wider text-slate-400 mb-3">Verified Sources</p>
+                <div className="space-y-2">
+                  {sourceLinks.map((url, i) => (
+                    <a key={url} href={url} target="_blank" rel="noreferrer" className="flex items-center justify-between text-xs font-bold text-slate-500 hover:text-[#174f7a] transition-colors bg-slate-50 p-2 rounded">
+                      <span className="truncate max-w-[200px]">Source {i + 1}: {new URL(url).hostname}</span>
+                      <ExternalLink size={12} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 4-YEAR COSTING CALCULATION (MOVED TO BOTTOM) */}
+        <section id="costs" className="scroll-mt-32">
+          <div className="print:hidden">
+            <SectionHeading title="4-Year Investment Plan" subtitle="Comprehensive Costing" icon={WalletCards} />
+          </div>
+          
+          <CostCalculator 
+            isChina={isChina} 
+            defaultTuition={parseInt(university.details.tuition.replace(/\D/g, ''), 10) || (isChina ? 25000 : 5000)}
+            universityName={university.name}
+            studyLevel={studyLevels}
+            teaching={languages}
+            programs={programs}
+            scholarships={university.scholarships}
+            documents={university.documents}
+          />
+            
+          <div className="mt-8 rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden p-6 print:hidden">
+            <h4 className="text-sm font-bold text-[#08263c] mb-4 uppercase tracking-wider">Other Disclosed University Fees</h4>
+            {additionalFees.length > 0 ? (
+              <div className="divide-y divide-slate-100">
+                {additionalFees.map((fee, idx) => (
+                  <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between py-4 first:pt-0 last:pb-0">
+                    <div>
+                      <strong className="text-slate-900 font-heading">{fee.item}</strong>
+                      <p className="text-xs text-slate-500 mt-1">{fee.recipient ? `Recipient: ${fee.recipient}` : 'Official fee'}</p>
+                    </div>
+                    <span className="font-mono text-sm font-bold text-[#174f7a] bg-[#f4f8fb] px-3 py-1 rounded-lg self-start sm:self-auto mt-2 sm:mt-0">{fee.cost}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6">
+                <Coins size={32} className="mx-auto text-slate-300 mb-3" />
+                <p className="text-sm text-slate-500">Application & Registration fees are currently bundled or variable for this institution. Check with your consultant.</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+      </main>
+
+      {/* MOBILE FLOATING ACTION BUTTON */}
+      <div className="fixed bottom-6 left-0 right-0 z-50 px-4 md:hidden print:hidden">
+        <Link href={assessmentHref} className="flex w-full items-center justify-center gap-2 rounded-full bg-[#08263c] px-6 py-4 font-bold text-white shadow-xl shadow-[#08263c]/20 ring-1 ring-white/10">
+          Apply Now <ArrowRight size={18} />
+        </Link>
+      </div>
+
     </article>
   );
 }

@@ -104,10 +104,10 @@ export default function Footer() {
             <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Visit the decision desk</p>
             <h3 className="mt-2 font-heading text-2xl font-bold">Dhanmondi, Dhaka</h3>
             <div className="mt-6 space-y-5 text-sm leading-6 text-white/65">
-              <p className="flex items-start gap-3"><MapPin className="mt-1 shrink-0 text-[#64b5df]" size={17} /> <span>Evergreen Latif, House: 12/1, Road: 4/A<br />Ground Floor, Dhanmondi, Dhaka 1209</span></p>
-              <div className="flex items-start gap-3"><Phone className="mt-1 shrink-0 text-[#64b5df]" size={17} /><div><a href="tel:+8801983333566" className="block font-black text-white hover:text-[#8ed0ee]">01983 333566</a><a href="tel:+8801329663505" className="mt-1 block text-white/65 hover:text-[#8ed0ee]">01329 663505</a></div></div>
+              <p className="flex items-start gap-3"><MapPin className="mt-1 shrink-0 text-[#64b5df]" size={17} /> <span>House 12/1, Ground Floor, Road 4/A<br />Dhanmondi, Dhaka 1209</span></p>
+              <div className="flex items-start gap-3"><Phone className="mt-1 shrink-0 text-[#64b5df]" size={17} /><div><a href="tel:+8801983333566" className="block font-black text-white hover:text-[#8ed0ee]">+880 1983-333566</a><a href="tel:+8801329663505" className="mt-1 block text-white/65 hover:text-[#8ed0ee]">+880 1329-663505</a></div></div>
               <a href="mailto:info@eduexpressint.com" className="flex items-center gap-3 break-all hover:text-[#8ed0ee]"><Mail className="shrink-0 text-[#64b5df]" size={17} /> info@eduexpressint.com</a>
-              <div className="border-l-2 border-[#64b5df] pl-4"><strong className="block text-white">Saturday to Thursday</strong><span>11:00 AM to 6:00 PM</span></div>
+              <div className="border-l-2 border-[#64b5df] pl-4"><strong className="block text-white">Saturday-Thursday</strong><span>11:00 AM-6:00 PM, Friday closed</span></div>
             </div>
           </div>
         </div>

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import User from '@/models/User';
+import prisma from '@/lib/prisma';
 
 // GET - Fetch all users (Admin only)
 export async function GET(request: NextRequest) {
@@ -13,21 +12,19 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
+    const users = await prisma.user.findMany({
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true
+      }
+    });
 
-    const users = await User.find({}).select('-password').sort({ createdAt: -1 });
-
-    // Convert MongoDB ObjectIds to strings
-    const usersWithStringIds = users.map(user => ({
-      id: user._id.toString(),
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    }));
-
-    return NextResponse.json({ users: usersWithStringIds });
+    return NextResponse.json({ users });
   } catch (error) {
     console.error('Fetch users error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
@@ -42,8 +39,6 @@ export async function POST(request: NextRequest) {
     if (!decoded || !['admin', 'super_admin'].includes(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
-
-    await connectDB();
 
     const { name, email, password, role = 'user' } = await request.json();
 
@@ -73,7 +68,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return NextResponse.json(
         { message: 'User with this email already exists' },
@@ -86,18 +81,18 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Create new user
-    const user = new User({
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
-      password: hashedPassword,
-      role
+    const user = await prisma.user.create({
+      data: {
+        name: name.trim(),
+        email: email.toLowerCase().trim(),
+        password: hashedPassword,
+        role
+      }
     });
-
-    await user.save();
 
     // Return user without password
     const userResponse = {
-      id: user._id.toString(),
+      id: user.id,
       name: user.name,
       email: user.email,
       role: user.role,

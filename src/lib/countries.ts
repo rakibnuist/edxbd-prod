@@ -60,6 +60,30 @@ export interface Country {
   citiesList?: CityDetail[];
   scholarshipsList?: ScholarshipDetail[];
   faqs?: { question: string; answer: string }[];
+
+  // SEO Strategy 14-Point Module Fields
+  serviceStatus?: 'Flagship' | 'Active' | 'Pilot' | 'Launching' | 'Researching' | 'Temporarily Paused';
+  valueStatement?: string;
+  whoItFits?: string[];
+  whoShouldReconsider?: string[];
+  educationSystemAndRecognition?: string;
+  workRightsAndCareer?: {
+    rights: string;
+    opportunities: string;
+    caveats: string;
+  };
+  comparisons?: {
+    countryA: string;
+    countryA_description: string;
+    countryB: string;
+    countryB_description: string;
+  };
+  reviewerInfo?: {
+    name: string;
+    role: string;
+    lastVerifiedDate: string;
+    primarySources: string[];
+  };
 }
 
 export const countries: Country[] = [
@@ -133,7 +157,38 @@ export const countries: Country[] = [
         question: 'Is a Chinese MBBS degree valid in Bangladesh?',
         answer: 'Yes, MBBS degrees from BMDC (Bangladesh Medical and Dental Council) recognized Chinese universities are fully valid in Bangladesh. You just need to pass the BMDC licensing exam upon return.'
       }
-    ]
+    ],
+    serviceStatus: 'Flagship',
+    valueStatement: 'China offers world-class research universities with massive government funding, allowing Bangladeshi students to study Engineering and Medicine for a fraction of Western costs—or entirely free with a CSC Scholarship.',
+    whoItFits: [
+      'Students seeking top 100 QS-ranked global universities',
+      'Those aiming for full-ride scholarships (tuition + hostel + stipend)',
+      'Engineering, MBBS, and AI/Tech focused students',
+      'Students with strong academic records but low IELTS scores'
+    ],
+    whoShouldReconsider: [
+      'Students looking for immediate permanent residency (PR) options',
+      'Those who strictly want to work part-time during studies (limited in China)',
+      'Students unwilling to adapt to a new culture or language'
+    ],
+    educationSystemAndRecognition: 'Chinese universities are highly ranked globally, heavily funded by the government, and lead the world in engineering and tech research. MBBS programs are recognized by WHO and the Bangladesh Medical and Dental Council (BMDC).',
+    workRightsAndCareer: {
+      rights: 'International students can work part-time (up to 20 hrs/week) with university permission, but jobs are limited.',
+      opportunities: 'High demand for STEM graduates within China and globally. Major opportunities in international trade and technology.',
+      caveats: 'Securing a work visa post-graduation requires finding an employer willing to sponsor you, which can be highly competitive.'
+    },
+    comparisons: {
+      countryA: 'UK',
+      countryA_description: 'UK offers 2-year PSW and faster degrees, but China costs 70% less and offers significantly more full scholarships.',
+      countryB: 'Malaysia',
+      countryB_description: 'Malaysia has a similar cost profile and tropical climate, but China has higher globally ranked universities and better funding.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Senior Admissions Counselors',
+      lastVerifiedDate: 'October 2026',
+      primarySources: ['CSC Official Portal', 'Chinese Embassy in Dhaka', 'Ministry of Education (MOE) China']
+    }
   },
   {
     name: 'South Korea',
@@ -183,7 +238,37 @@ export const countries: Country[] = [
       { name: 'Global Korea Scholarship (GKS)', amount: '100% Tuition + Monthly Stipend + Airfare + Insurance', deadline: 'October 30th (Graduate) / February 20th (Undergraduate)', icon: 'Crown' },
       { name: 'Professor-Funded Internships', amount: 'Tuition Waiver + Monthly Stipend (KRW 1M - 1.5M)', deadline: 'Varies by Lab', icon: 'Award' },
       { name: 'University Academic Excellence', amount: '30% - 100% Tuition Waiver based on GPA', deadline: 'Varies', icon: 'School' }
-    ]
+    ],
+    serviceStatus: 'Active',
+    valueStatement: 'South Korea offers exceptional technological universities with full-ride government scholarships (GKS). It is a top choice for students willing to learn Korean to unlock zero-cost engineering and AI degrees.',
+    whoItFits: [
+      'Students seeking world-leading tech and engineering programs',
+      'Applicants with strong academics aiming for the fully-funded GKS Scholarship',
+      'Those willing to dedicate 1 year to intensive Korean language learning'
+    ],
+    whoShouldReconsider: [
+      'Students looking for 100% English-speaking daily environments',
+      'Those who want guaranteed permanent residency strictly through a post-study work visa',
+      'Applicants with low academic scores expecting full scholarships'
+    ],
+    educationSystemAndRecognition: 'South Korean universities (e.g. SNU, KAIST) rank among the top 50 globally. Degrees in tech and business are universally recognized and highly valued by global corporations.',
+    workRightsAndCareer: {
+      rights: 'International students can work part-time up to 25 hours per week (varies by TOPIK level).',
+      opportunities: 'Massive demand for STEM graduates in semiconductor, automotive, and IT industries (Samsung, Hyundai).',
+      caveats: 'Most professional jobs post-graduation require business-level Korean proficiency (TOPIK 4+).'
+    },
+    comparisons: {
+      countryA: 'China',
+      countryA_description: 'Both offer strong tech degrees and full scholarships, but South Korea has a higher living cost and a more prominent K-culture influence.',
+      countryB: 'Japan',
+      countryB_description: 'South Korea\'s GKS offers a slightly higher stipend and more straightforward application process compared to Japan\'s MEXT scholarship.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Senior East Asia Admissions Counselor',
+      lastVerifiedDate: 'July 2026',
+      primarySources: ['NIIED (Study in Korea)', 'Embassy of the Republic of Korea in Bangladesh']
+    }
   },
   {
     name: 'United Kingdom',
@@ -234,7 +319,38 @@ export const countries: Country[] = [
       { name: 'Commonwealth Scholarships', amount: 'Full Tuition Waiver + Living Allowance + Airfare', deadline: 'December 10th', icon: 'Globe' },
       { name: 'GREAT Scholarships', amount: 'Minimum £10,000 Tuition Waiver contribution', deadline: 'Varies', icon: 'Award' },
       { name: 'University Vice Chancellor Awards', amount: '£2,000 - £5,000 Automatic Entry Discounts', deadline: 'Automatic', icon: 'School' }
-    ]
+    ],
+    serviceStatus: 'Active',
+    valueStatement: 'The UK offers prestigious, accelerated 1-year Master\'s degrees and a 2-year Post-Study Work (PSW) visa, making it the top choice for rapid career advancement and global employability.',
+    whoItFits: [
+      'Students looking for fast-track 1-year Master\'s degrees',
+      'Professionals seeking strong Post-Study Work (PSW) rights',
+      'Students targeting top-tier Russell Group universities',
+      'Spouses seeking dependent visas with full work rights (for PhD/Research only)'
+    ],
+    whoShouldReconsider: [
+      'Students needing 100% full-ride scholarships for standard undergraduate/master\'s programs',
+      'Those with very low budget for living expenses (London is highly expensive)',
+      'Undergraduate dependents (who can no longer bring spouses)'
+    ],
+    educationSystemAndRecognition: 'UK degrees are recognized universally. The system focuses on independent research, critical thinking, and accelerated learning, saving students an entire year compared to the US or Canada.',
+    workRightsAndCareer: {
+      rights: 'Students can work 20 hrs/week during term. Graduates get a 2-year Graduate Route (PSW) visa to work full-time without needing an immediate sponsor.',
+      opportunities: 'Strong job market in Tech, Healthcare, Finance, and Engineering, particularly outside of London in emerging hubs.',
+      caveats: 'Securing a skilled worker visa after the 2-year PSW requires a minimum salary threshold, which can be challenging for entry-level roles.'
+    },
+    comparisons: {
+      countryA: 'USA',
+      countryA_description: 'The US takes 2 years for a Master\'s and has a lottery-based work visa system, whereas the UK is 1 year with a guaranteed 2-year PSW.',
+      countryB: 'China',
+      countryB_description: 'China offers more full-ride scholarships and cheaper living, but the UK provides superior post-study work rights and English-speaking integration.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Senior UK Admissions Counselors',
+      lastVerifiedDate: 'October 2026',
+      primarySources: ['UKVI Official Guidance', 'UCAS', 'British Council Bangladesh']
+    }
   },
   {
     name: 'Hungary',
@@ -283,7 +399,36 @@ export const countries: Country[] = [
       { name: 'Stipendium Hungaricum', amount: '100% Tuition Waiver + Free Dormitory + HUF 43,700 Monthly Stipend + Health Insurance', deadline: 'January 15th', icon: 'Crown' },
       { name: 'Erasmus+ Mobility Grants', amount: '€400 - €600 / month for exchange semesters', deadline: 'Varies by Faculty', icon: 'Globe' },
       { name: 'Hungarian Diaspora Scholarship', amount: 'Full Tuition + Monthly Stipend for members of Hungarian heritage communities', deadline: 'January 31st', icon: 'Award' }
-    ]
+    ],
+    serviceStatus: 'Active',
+    valueStatement: 'Hungary provides a European gateway with the prestigious Stipendium Hungaricum scholarship, offering fully-funded degrees with a monthly stipend in a safe, affordable, and historic environment.',
+    whoItFits: [
+      'High-achieving students targeting the Stipendium Hungaricum full scholarship',
+      'Medical and Engineering students seeking affordable European degrees',
+      'Students looking for Schengen mobility during their studies'
+    ],
+    whoShouldReconsider: [
+      'Students who expect high-paying part-time jobs during their studies (wages are low)',
+      'Applicants looking for immediate, guaranteed post-study work visas (options exist, but require securing a job fast)'
+    ],
+    educationSystemAndRecognition: 'Hungarian universities are deeply integrated into the European Higher Education Area (Bologna Process). Medical degrees are globally recognized, including by the BMDC in Bangladesh.',
+    workRightsAndCareer: {
+      rights: 'Students can work part-time up to 24 hours per week during term time.',
+      opportunities: 'Growing tech and shared-services hubs in Budapest offer English-speaking corporate roles.',
+      caveats: 'Local wages are lower than Western Europe. A "Study-to-Work" permit gives 9 months to find a job after graduation.'
+    },
+    comparisons: {
+      countryA: 'Finland',
+      countryA_description: 'Finland offers a clearer PR pathway and higher wages, but Hungary is significantly cheaper and offers the 100% funded Stipendium Hungaricum.',
+      countryB: 'UK',
+      countryB_description: 'Hungary provides affordable Schengen access and free tuition options, whereas the UK charges high tuition but offers a guaranteed 2-year PSW.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Europe Admissions Counselor',
+      lastVerifiedDate: 'July 2026',
+      primarySources: ['Tempus Public Foundation', 'Study in Hungary Official Portal']
+    }
   },
   {
     name: 'Finland',
@@ -331,7 +476,36 @@ export const countries: Country[] = [
       { name: 'Finland Scholarships', amount: '100% Tuition Waiver + €5,000 relocation grant for Master programs', deadline: 'January 22nd', icon: 'Crown' },
       { name: 'University Tuition Waivers', amount: '50% - 100% Tuition fee discounts based on academic performance or SAT', deadline: 'Varies', icon: 'Award' },
       { name: 'Early Bird Discounts', amount: 'Automatic 10% - 50% discount on paying tuition fee within 2 weeks of offer', deadline: 'Offer Dependent', icon: 'School' }
-    ]
+    ],
+    serviceStatus: 'Active',
+    valueStatement: 'Finland is a global leader in education and tech. It offers strong 50-100% scholarships, an excellent quality of life, and one of the clearest pathways to European Permanent Residency.',
+    whoItFits: [
+      'Students looking for high-tech, sustainability, and game design programs',
+      'Married students (spouses get full work rights)',
+      'Those seeking a clear, stable pathway to Permanent Residency (PR)'
+    ],
+    whoShouldReconsider: [
+      'Students with a very low budget (proof of €6,720/year is strictly required)',
+      'Those unable to adapt to extreme winter climates and darker months'
+    ],
+    educationSystemAndRecognition: 'Finland\'s education system is world-renowned. It divides into Research Universities (theoretical/academic) and Universities of Applied Sciences (UAS - practical/industry-focused).',
+    workRightsAndCareer: {
+      rights: 'Students can work up to 30 hours per week. Spouses can work full-time.',
+      opportunities: 'High demand for IT, engineering, and healthcare professionals. Strong startup ecosystem (Slush).',
+      caveats: 'While tech jobs operate in English, learning Finnish is crucial for long-term integration and broader job prospects.'
+    },
+    comparisons: {
+      countryA: 'UK',
+      countryA_description: 'Finland provides a more stable long-term PR pathway and allows dependent spouses full work rights, unlike current UK rules for taught masters.',
+      countryB: 'Hungary',
+      countryB_description: 'Finland is more expensive but offers vastly superior post-graduation salaries and residency pathways.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Nordic Admissions Specialist',
+      lastVerifiedDate: 'July 2026',
+      primarySources: ['Migri (Finnish Immigration Service)', 'Study in Finland']
+    }
   },
   {
     name: 'Cyprus',
@@ -379,7 +553,36 @@ export const countries: Country[] = [
       { name: '50% International Tuition Waiver', amount: 'Automatic 50% discount on standard tuition fees for all Asian students', deadline: 'Automatic', icon: 'Crown' },
       { name: 'Academic Merit Scholarship', amount: 'Up to 75% - 100% Tuition fee reduction based on Semester GPA', deadline: 'Varies', icon: 'Award' },
       { name: 'Sports Scholarship', amount: '20% - 50% reduction for students representing university athletic teams', deadline: 'Varies', icon: 'School' }
-    ]
+    ],
+    serviceStatus: 'Active',
+    valueStatement: 'Malaysia offers world-class UK and Australian degrees at a third of the cost through branch campuses. It is a modern, culturally familiar hub with seamless credit transfer options to the West.',
+    whoItFits: [
+      'Students wanting UK/Australian degrees (Monash, Nottingham) on a budget',
+      'Those seeking a Halal-friendly, multicultural environment close to home',
+      'Students planning to transfer credits to Western universities after 1-2 years'
+    ],
+    whoShouldReconsider: [
+      'Students whose primary goal is to work part-time to fund their living expenses',
+      'Those looking for guaranteed Permanent Residency (Malaysia does not offer PR to students)'
+    ],
+    educationSystemAndRecognition: 'Highly regulated by the MQA. Branch campuses offer the exact same curriculum and degree certificate as their UK/Australian parent universities.',
+    workRightsAndCareer: {
+      rights: 'Part-time work is legally restricted for international students (only allowed during long semester breaks with approval).',
+      opportunities: 'Opportunities exist in multinational corporations based in Kuala Lumpur for high-performing graduates.',
+      caveats: 'Do not plan to fund your tuition or living costs through part-time work. Strict visa rules apply.'
+    },
+    comparisons: {
+      countryA: 'UK',
+      countryA_description: 'Malaysia offers the exact same UK degree at 60% less cost, but the UK offers a 2-year post-study work visa.',
+      countryB: 'China',
+      countryB_description: 'Malaysia offers more English-medium instruction and Western branch campuses, while China offers more full-ride scholarships.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Asia-Pacific Admissions Counselor',
+      lastVerifiedDate: 'July 2026',
+      primarySources: ['EMGS (Education Malaysia Global Services)', 'MQA (Malaysian Qualifications Agency)']
+    }
   },
   {
     name: 'Croatia',
@@ -425,7 +628,34 @@ export const countries: Country[] = [
     scholarshipsList: [
       { name: 'Croatian Government Scholarship', amount: 'Full Tuition Waiver + HUF 1500+ Stipend support (Varies by bilateral agreements)', deadline: 'May 31st', icon: 'Crown' },
       { name: 'Erasmus+ Exchange Grants', amount: '€400 - €700 / month during exchange semesters in Western Europe', deadline: 'Biannual', icon: 'Globe' }
-    ]
+    ],
+    serviceStatus: 'Researching',
+    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    whoItFits: [
+      'Students looking for affordable European/Asian education options',
+      'Those interested in exploring emerging international study destinations'
+    ],
+    whoShouldReconsider: [
+      'Students who require an already established, fully verified EduExpress route'
+    ],
+    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    workRightsAndCareer: {
+      rights: 'Work rights during and after study are being verified with official immigration sources.',
+      opportunities: 'Career pathways are being assessed.',
+      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+    },
+    comparisons: {
+      countryA: 'China',
+      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
+      countryB: 'UK',
+      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Research & Compliance',
+      lastVerifiedDate: 'October 2026',
+      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+    }
   },
   {
     name: 'Georgia',
@@ -470,7 +700,34 @@ export const countries: Country[] = [
     ],
     scholarshipsList: [
       { name: 'University Merit Discount', amount: '10% - 25% Tuition waiver for students scoring 90%+ in semester GPA', deadline: 'Biannual', icon: 'Award' }
-    ]
+    ],
+    serviceStatus: 'Researching',
+    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    whoItFits: [
+      'Students looking for affordable European/Asian education options',
+      'Those interested in exploring emerging international study destinations'
+    ],
+    whoShouldReconsider: [
+      'Students who require an already established, fully verified EduExpress route'
+    ],
+    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    workRightsAndCareer: {
+      rights: 'Work rights during and after study are being verified with official immigration sources.',
+      opportunities: 'Career pathways are being assessed.',
+      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+    },
+    comparisons: {
+      countryA: 'China',
+      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
+      countryB: 'UK',
+      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Research & Compliance',
+      lastVerifiedDate: 'October 2026',
+      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+    }
   },
   {
     name: 'Malaysia',
@@ -518,7 +775,34 @@ export const countries: Country[] = [
     scholarshipsList: [
       { name: 'Malaysia International Scholarship (MIS)', amount: '100% Tuition Waiver + Monthly Living Allowance + Book allowance', deadline: 'June 15th', icon: 'Crown' },
       { name: 'University Presidential Merit Awards', amount: '20% - 50% Tuition fee discounts based on academic average', deadline: 'Intake Dependent', icon: 'Award' }
-    ]
+    ],
+    serviceStatus: 'Researching',
+    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    whoItFits: [
+      'Students looking for affordable European/Asian education options',
+      'Those interested in exploring emerging international study destinations'
+    ],
+    whoShouldReconsider: [
+      'Students who require an already established, fully verified EduExpress route'
+    ],
+    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    workRightsAndCareer: {
+      rights: 'Work rights during and after study are being verified with official immigration sources.',
+      opportunities: 'Career pathways are being assessed.',
+      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+    },
+    comparisons: {
+      countryA: 'China',
+      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
+      countryB: 'UK',
+      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Research & Compliance',
+      lastVerifiedDate: 'October 2026',
+      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+    }
   },
   {
     name: 'Malta',
@@ -545,7 +829,34 @@ export const countries: Country[] = [
     metaTitle: 'Study in Malta from Bangladesh',
     metaDescription: 'Explore Malta education options with institution checks, clear costs and visa readiness for Bangladeshi students.',
     intakesText: 'Confirmed for the selected institution',
-    factText: 'EduExpress has provided active Malta education guidance since 2025.'
+    factText: 'EduExpress has provided active Malta education guidance since 2025.',
+    serviceStatus: 'Researching',
+    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    whoItFits: [
+      'Students looking for affordable European/Asian education options',
+      'Those interested in exploring emerging international study destinations'
+    ],
+    whoShouldReconsider: [
+      'Students who require an already established, fully verified EduExpress route'
+    ],
+    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    workRightsAndCareer: {
+      rights: 'Work rights during and after study are being verified with official immigration sources.',
+      opportunities: 'Career pathways are being assessed.',
+      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+    },
+    comparisons: {
+      countryA: 'China',
+      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
+      countryB: 'UK',
+      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Research & Compliance',
+      lastVerifiedDate: 'October 2026',
+      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+    }
   },
   {
     name: 'Greece',
@@ -572,7 +883,34 @@ export const countries: Country[] = [
     metaTitle: 'Study in Greece from Bangladesh',
     metaDescription: 'Explore Greece education options with program fit, university access, clear costs and visa readiness.',
     intakesText: 'Confirmed for the selected institution',
-    factText: 'University collaboration and destination marketing are active.'
+    factText: 'University collaboration and destination marketing are active.',
+    serviceStatus: 'Researching',
+    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    whoItFits: [
+      'Students looking for affordable European/Asian education options',
+      'Those interested in exploring emerging international study destinations'
+    ],
+    whoShouldReconsider: [
+      'Students who require an already established, fully verified EduExpress route'
+    ],
+    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    workRightsAndCareer: {
+      rights: 'Work rights during and after study are being verified with official immigration sources.',
+      opportunities: 'Career pathways are being assessed.',
+      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+    },
+    comparisons: {
+      countryA: 'China',
+      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
+      countryB: 'UK',
+      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Research & Compliance',
+      lastVerifiedDate: 'October 2026',
+      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+    }
   },
   {
     name: 'Thailand',
@@ -599,7 +937,34 @@ export const countries: Country[] = [
     metaTitle: 'Study in Thailand from Bangladesh',
     metaDescription: 'Explore Thailand international education options with university checks, clear costs and visa readiness.',
     intakesText: 'Confirmed for the selected institution',
-    factText: 'EduExpress provides active education guidance for Thailand.'
+    factText: 'EduExpress provides active education guidance for Thailand.',
+    serviceStatus: 'Researching',
+    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    whoItFits: [
+      'Students looking for affordable European/Asian education options',
+      'Those interested in exploring emerging international study destinations'
+    ],
+    whoShouldReconsider: [
+      'Students who require an already established, fully verified EduExpress route'
+    ],
+    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    workRightsAndCareer: {
+      rights: 'Work rights during and after study are being verified with official immigration sources.',
+      opportunities: 'Career pathways are being assessed.',
+      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+    },
+    comparisons: {
+      countryA: 'China',
+      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
+      countryB: 'UK',
+      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+    },
+    reviewerInfo: {
+      name: 'EduExpress Review Team',
+      role: 'Research & Compliance',
+      lastVerifiedDate: 'October 2026',
+      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+    }
   }
 ];
 

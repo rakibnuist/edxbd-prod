@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Country from '@/models/Country';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    await connectDB();
-
-    const countries = await Country.find()
-      .sort({ name: 1 });
+    const countries = await prisma.country.findMany({
+      orderBy: { name: 'asc' }
+    });
 
     return NextResponse.json(countries);
   } catch (error) {
@@ -21,11 +19,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    await connectDB();
-
     const body = await request.json();
-    const country = new Country(body);
-    await country.save();
+    const country = await prisma.country.create({
+      data: body
+    });
 
     return NextResponse.json(country, { status: 201 });
   } catch (error) {

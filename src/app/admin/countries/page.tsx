@@ -36,7 +36,7 @@ export default function CountriesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const url = editingCountry ? `/api/admin/countries/${editingCountry._id}` : '/api/admin/countries';
+      const url = editingCountry ? `/api/admin/countries/${editingCountry.id}` : '/api/admin/countries';
       const method = editingCountry ? 'PUT' : 'POST';
       
       const response = await fetch(url, {
@@ -128,7 +128,7 @@ export default function CountriesPage() {
       {/* Countries Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {countries.map((country) => (
-          <div key={country._id} className="bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden">
+          <div key={country.id} className="bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden">
             <div className="p-6">
               <div className="text-center mb-4">
                 <div className="text-4xl mb-2">{country.flag}</div>
@@ -157,7 +157,7 @@ export default function CountriesPage() {
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(country._id)}
+                  onClick={() => handleDelete(country.id)}
                   className="text-red-600 hover:text-red-800 text-sm font-medium"
                 >
                   Delete

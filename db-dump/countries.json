@@ -1,0 +1,108 @@
+[
+  {
+    "_id": "68ea1cc81e186179e2ac41f4",
+    "name": "China",
+    "slug": "china",
+    "flag": "🇨🇳",
+    "description": "Rapidly growing education system with modern facilities and affordable costs",
+    "universities": [
+      "Tsinghua University",
+      "Peking University",
+      "Fudan University"
+    ],
+    "programs": [
+      "Engineering",
+      "Business Administration",
+      "Computer Science",
+      "Medicine",
+      "Chinese Language"
+    ],
+    "requirements": {
+      "language": [
+        "HSK 4+",
+        "IELTS 6.0+",
+        "TOEFL 80+"
+      ],
+      "documents": [
+        "Academic Transcripts",
+        "Language Proficiency",
+        "Personal Statement",
+        "Health Certificate"
+      ],
+      "visa": [
+        "Student Visa (X1/X2)",
+        "JW201/JW202 Form",
+        "Financial Documents"
+      ]
+    },
+    "costs": {
+      "tuition": "$3,000 - $8,000 per year",
+      "living": "$2,000 - $4,000 per year",
+      "currency": "USD"
+    },
+    "scholarships": [
+      "Chinese Government Scholarship",
+      "Confucius Institute Scholarship",
+      "University Scholarships"
+    ],
+    "isActive": true,
+    "featured": true,
+    "images": [],
+    "__v": 0,
+    "createdAt": "2025-10-11T09:00:56.606Z",
+    "updatedAt": "2025-10-11T09:00:56.606Z"
+  },
+  {
+    "_id": "68ea1cc81e186179e2ac41f3",
+    "name": "United Kingdom",
+    "slug": "united-kingdom",
+    "flag": "🇬🇧",
+    "description": "World-class education with prestigious universities and rich cultural heritage",
+    "universities": [
+      "University of Oxford",
+      "University of Cambridge",
+      "Imperial College London"
+    ],
+    "programs": [
+      "Business Administration",
+      "Engineering",
+      "Medicine",
+      "Law",
+      "Arts & Humanities"
+    ],
+    "requirements": {
+      "language": [
+        "IELTS 6.5+",
+        "TOEFL 90+",
+        "PTE 62+"
+      ],
+      "documents": [
+        "Academic Transcripts",
+        "English Proficiency",
+        "Personal Statement",
+        "References"
+      ],
+      "visa": [
+        "Student Visa (Tier 4)",
+        "Financial Documents",
+        "CAS Letter"
+      ]
+    },
+    "costs": {
+      "tuition": "£15,000 - £35,000 per year",
+      "living": "£12,000 - £15,000 per year",
+      "currency": "GBP"
+    },
+    "scholarships": [
+      "Chevening Scholarships",
+      "Commonwealth Scholarships",
+      "University-specific Scholarships"
+    ],
+    "isActive": true,
+    "featured": true,
+    "images": [],
+    "__v": 0,
+    "createdAt": "2025-10-11T09:00:56.606Z",
+    "updatedAt": "2025-10-11T09:00:56.606Z"
+  }
+]

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import Content from '@/models/Content';
+import prisma from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
@@ -14,10 +13,9 @@ export async function GET(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
     const { id } = await params;
 
-    const content = await Content.findById(id);
+    const content = await prisma.content.findUnique({ where: { id } });
     if (!content) {
       return NextResponse.json(
         { error: 'Content not found' },
@@ -46,15 +44,13 @@ export async function PUT(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
     const { id } = await params;
 
     const body = await request.json();
-    const content = await Content.findByIdAndUpdate(
-      id,
-      body,
-      { new: true, runValidators: true }
-    );
+    const content = await prisma.content.update({
+      where: { id },
+      data: body
+    }).catch(() => null);
 
     if (!content) {
       return NextResponse.json(
@@ -84,10 +80,9 @@ export async function DELETE(
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    await connectDB();
     const { id } = await params;
 
-    const content = await Content.findByIdAndDelete(id);
+    const content = await prisma.content.delete({ where: { id } }).catch(() => null);
     if (!content) {
       return NextResponse.json(
         { error: 'Content not found' },

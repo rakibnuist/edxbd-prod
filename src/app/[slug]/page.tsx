@@ -9,9 +9,10 @@ import { chinaGuidePages } from '@/data/chinaGuidePages';
 type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return Object.keys(evidencePages)
-    .filter((slug) => !slug.includes('/'))
-    .map((slug) => ({ slug }));
+  const evidenceSlugs = Object.keys(evidencePages).filter((slug) => !slug.includes('/'));
+  const chinaGuideSlugs = Object.keys(chinaGuidePages);
+  
+  return [...evidenceSlugs, ...chinaGuideSlugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

@@ -215,7 +215,7 @@ export default function ContentPage() {
       // Get fresh token
       const token = await getFreshToken();
 
-      const url = editingContent ? `/api/admin/content/${editingContent._id}` : '/api/admin/content';
+      const url = editingContent ? `/api/admin/content/${editingContent.id}` : '/api/admin/content';
       const method = editingContent ? 'PUT' : 'POST';
 
       console.log('Submitting content:', { url, method, formData });
@@ -238,7 +238,7 @@ export default function ContentPage() {
 
         const action = editingContent ? 'update' : 'create';
         trackContentManagement(action, {
-          content_id: editingContent?._id || result._id,
+          content_id: editingContent?.id || result.id,
           title: formData.title,
           type: formData.type,
           has_image: !!formData.featuredImage,
@@ -268,7 +268,7 @@ export default function ContentPage() {
 
         const action = editingContent ? 'update' : 'create';
         trackContentManagement(action, {
-          content_id: editingContent?._id,
+          content_id: editingContent?.id,
           title: formData.title,
           success: false,
           error: 'api_error'
@@ -281,7 +281,7 @@ export default function ContentPage() {
 
       const action = editingContent ? 'update' : 'create';
       trackContentManagement(action, {
-        content_id: editingContent?._id,
+        content_id: editingContent?.id,
         success: false,
         error: 'network_error'
       });
@@ -496,7 +496,7 @@ export default function ContentPage() {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredContents.length > 0 ? (
                 filteredContents.map((content) => (
-                  <tr key={content._id} className="hover:bg-gray-50">
+                  <tr key={content.id} className="hover:bg-gray-50">
                     <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <div>
                         <div className="text-xs sm:text-sm font-medium text-gray-900">{content.title}</div>
@@ -544,7 +544,7 @@ export default function ContentPage() {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(content._id)}
+                          onClick={() => handleDelete(content.id)}
                           className="text-red-600 hover:text-red-900 touch-manipulation"
                         >
                           Delete

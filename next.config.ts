@@ -1,14 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Output standalone for Docker deployments
+  output: "standalone",
+  
   // Simplified configuration for Vercel compatibility
   poweredByHeader: false,
   eslint: {
     ignoreDuringBuilds: true,
   },
-
-  // Disable SWC for offline environments
-  swcMinify: false,
 
   // Aggressive tree-shaking for icon libraries
   modularizeImports: {
@@ -20,9 +20,6 @@ const nextConfig: NextConfig = {
 
   experimental: {
     optimizePackageImports: ['framer-motion'],
-    optimizeCss: {
-      critters: true,
-    },
   },
 
   // Basic image optimization
@@ -95,6 +92,25 @@ const nextConfig: NextConfig = {
         destination: '/',
         permanent: true,
       },
+      {
+        source: '/china-universities',
+        destination: '/universities?country=China',
+        permanent: true,
+      },
+      {
+        source: '/china-success-stories',
+        destination: '/success-stories',
+        permanent: true,
+      }
+    ];
+  },
+
+  async rewrites() {
+    return [
+      {
+        source: '/study-in-:country-from-bangladesh',
+        destination: '/destinations/:country',
+      }
     ];
   },
 };

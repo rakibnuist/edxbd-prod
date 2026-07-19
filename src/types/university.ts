@@ -9,7 +9,7 @@ export interface IUniversityFee {
 }
 
 export interface IUniversityProgram {
-    _id?: string;
+    id?: string;
     level: string;
     name: string;
     subject?: string;
@@ -39,7 +39,7 @@ export interface IUniversityScholarship {
 }
 
 export interface IUniversity {
-    _id: string;
+    id: string;
     slug: string; // Used as ID in frontend (e.g. 'sichuan-university')
     name: string;
     location: string;

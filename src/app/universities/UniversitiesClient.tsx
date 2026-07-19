@@ -1,480 +1,266 @@
-
 'use client';
 
-import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import {
-    Search,
-    School,
-    MapPin,
-    Filter,
-    ArrowRight
-} from 'lucide-react';
-import PageHeader from '@/components/PageHeader';
-import type { CleanUniversityRecord } from '@/lib/university-records';
+import { useMemo, useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
+import { 
+  ArrowRight, BookOpenCheck, CalendarCheck, Check, ChevronDown, 
+  Filter, Languages, MapPin, Search, Sparkles, Wallet, Clock, X, SlidersHorizontal, ArrowUpRight
+} from 'lucide-react';
+import type { CleanUniversityRecord } from '@/lib/university-records';
 
-// PHASE 0 FIX: the page (server component) passes the full active university
-// list so every card is server-rendered into the HTML (crawlable by Google and
-// AI bots). Search, filters and pagination use this one central data snapshot.
-interface UniversitiesClientProps {
-    initialUniversities?: CleanUniversityRecord[];
-}
+type Props = { initialUniversities: CleanUniversityRecord[] };
 
-const UniversitiesClient = ({ initialUniversities = [] }: UniversitiesClientProps) => {
-    const [isFilterOpen, setIsFilterOpen] = useState(false);
-    const universities = initialUniversities;
+export default function UniversitiesClient({ initialUniversities }: Props) {
+  const searchParams = useSearchParams();
+  const initialCountry = searchParams?.get('country');
 
-    // Filter States
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedCountry, setSelectedCountry] = useState<string>('');
-    const [selectedCity, setSelectedCity] = useState<string>('');
-    const [selectedIntake, setSelectedIntake] = useState<string>('');
-    const [selectedDegree, setSelectedDegree] = useState<string>('');
-    const [selectedTaught, setSelectedTaught] = useState<string>('');
-    const [selectedMajor, setSelectedMajor] = useState<string>('');
+  const [query, setQuery] = useState('');
+  const [selectedCountries, setSelectedCountries] = useState<string[]>(initialCountry ? [initialCountry] : []);
+  const [selectedDegrees, setSelectedDegrees] = useState<string[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [selectedIntakes, setSelectedIntakes] = useState<string[]>([]);
 
-    const [page, setPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [jumpToPage, setJumpToPage] = useState('');
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Derived Options
-    const countries = useMemo(() => Array.from(new Set(universities.map(university => university.country).filter(Boolean))).sort(), [universities]);
-    const intakes = useMemo(() => Array.from(new Set(universities.flatMap(university => university.intake || []))).sort(), [universities]);
-    const degrees = useMemo(() => Array.from(new Set(universities.flatMap(university => university.degree || []))).sort(), [universities]);
-    const taughtLanguages = useMemo(() => Array.from(new Set(universities.flatMap(university => university.taught || []))).sort(), [universities]);
-    const majors = useMemo(() => {
-        const allMajors = universities.flatMap(u => u.details?.majors || []);
-        return Array.from(new Set(allMajors)).sort();
-    }, [universities]);
+  const countryOptions = useMemo(() => Array.from(new Set(initialUniversities.map(item => item.country).filter(Boolean))).sort(), [initialUniversities]);
+  const degreeOptions = useMemo(() => Array.from(new Set(initialUniversities.flatMap(item => item.degree || []))).sort(), [initialUniversities]);
+  const languageOptions = useMemo(() => Array.from(new Set(initialUniversities.flatMap(item => item.taught || []))).sort(), [initialUniversities]);
+  const intakeOptions = useMemo(() => Array.from(new Set(initialUniversities.flatMap(item => item.intake || []))).sort(), [initialUniversities]);
 
-    const cities = useMemo(() => {
-        // Filter cities based on selected country if applicable
-        const unis = selectedCountry
-            ? universities.filter(u => u.country === selectedCountry)
-            : universities;
+  const filtered = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    return initialUniversities.filter(item => {
+      const searchText = [item.name, item.city, item.location, item.country, ...(item.details?.majors || []), ...(item.programs || []).flatMap(program => [program.name || '', program.subject || ''])].join(' ').toLowerCase();
+      
+      const matchQuery = !normalized || searchText.includes(normalized);
+      const matchCountry = selectedCountries.length === 0 || selectedCountries.includes(item.country);
+      const matchDegree = selectedDegrees.length === 0 || item.degree?.some(d => selectedDegrees.includes(d));
+      const matchLanguage = selectedLanguages.length === 0 || item.taught?.some(l => selectedLanguages.includes(l));
+      const matchIntake = selectedIntakes.length === 0 || item.intake?.some(i => selectedIntakes.includes(i));
 
-        return Array.from(new Set(unis.map(u => u.city))).sort();
-    }, [selectedCountry, universities]);
+      return matchQuery && matchCountry && matchDegree && matchLanguage && matchIntake;
+    });
+  }, [initialUniversities, query, selectedCountries, selectedDegrees, selectedLanguages, selectedIntakes]);
 
-    // Filter Logic
-    const filteredUniversities = useMemo(() => {
-        return universities.filter(uni => {
-            // 1. Enhanced Multi-Field Search (University name, Major, Degree, Location)
-            const searchLower = searchQuery.toLowerCase();
-            const matchesSearch = searchQuery === '' || (
-                uni.name.toLowerCase().includes(searchLower) ||
-                uni.location.toLowerCase().includes(searchLower) ||
-                uni.degree.some(d => d.toLowerCase().includes(searchLower)) ||
-                uni.details?.majors?.some(m => m.toLowerCase().includes(searchLower)) || false
-            );
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-            // 2. Exact Match Filters
-            const matchesCountry = selectedCountry ? uni.country === selectedCountry : true;
-            const matchesCity = selectedCity ? uni.city === selectedCity : true;
+  const toggleFilter = (setState: React.Dispatch<React.SetStateAction<string[]>>, option: string) => {
+    setState(prev => prev.includes(option) ? prev.filter(item => item !== option) : [...prev, option]);
+  };
 
-            // 3. Array Inclusion Filters
-            const matchesIntake = selectedIntake ? uni.intake.includes(selectedIntake) : true;
-            const matchesDegree = selectedDegree ? uni.degree.includes(selectedDegree) : true;
-            const matchesTaught = selectedTaught ? uni.taught.includes(selectedTaught) : true;
-            const matchesMajor = selectedMajor ? uni.details?.majors?.includes(selectedMajor) : true;
+  const clearAll = () => {
+    setQuery('');
+    setSelectedCountries([]);
+    setSelectedDegrees([]);
+    setSelectedLanguages([]);
+    setSelectedIntakes([]);
+    setActiveDropdown(null);
+  };
 
-            return matchesSearch && matchesCountry && matchesCity && matchesIntake && matchesDegree && matchesTaught && matchesMajor;
-        });
-    }, [
-        universities,
-        searchQuery,
-        selectedCountry,
-        selectedCity,
-        selectedIntake,
-        selectedDegree,
-        selectedTaught,
-        selectedMajor
-    ]);
+  const hasFilters = query || selectedCountries.length || selectedDegrees.length || selectedLanguages.length || selectedIntakes.length;
 
-    const totalPages = Math.max(1, Math.ceil(filteredUniversities.length / itemsPerPage));
-    const safePage = Math.min(page, totalPages);
-    const visibleUniversities = filteredUniversities.slice((safePage - 1) * itemsPerPage, safePage * itemsPerPage);
-
-    const clearFilters = () => {
-        setSearchQuery('');
-        setSelectedCountry('');
-        setSelectedCity('');
-        setSelectedIntake('');
-        setSelectedDegree('');
-        setSelectedTaught('');
-        setSelectedMajor('');
-    };
-
-    const hasActiveFilters = searchQuery || selectedCountry || selectedCity || selectedIntake || selectedDegree || selectedTaught || selectedMajor;
-
+  const FilterDropdown = ({ title, options, selected, setState, id }: { title: string, options: string[], selected: string[], setState: React.Dispatch<React.SetStateAction<string[]>>, id: string }) => {
+    const isOpen = activeDropdown === id;
+    
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-900">
-            <PageHeader
-                title="Find"
-                highlight="Education"
-                description="Search the central university database, compare recorded study options, and verify current facts before applying"
-                icon={School}
-                badgeText="Central University Database"
-            />
+      <div className="relative">
+        <button 
+          onClick={() => setActiveDropdown(isOpen ? null : id)}
+          className={`flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-bold transition-all ${isOpen || selected.length > 0 ? 'border-[#174f7a] bg-[#174f7a]/5 text-[#174f7a]' : 'border-slate-300 bg-white text-slate-700 hover:border-[#174f7a]'}`}
+        >
+          {title} {selected.length > 0 && <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#174f7a] text-[10px] text-white">{selected.length}</span>}
+          <ChevronDown size={14} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        </button>
 
-            <section className="py-12 px-6">
-                <div className="container mx-auto">
-
-                    <div className="flex flex-col lg:flex-row gap-8">
-
-                        {/* Sidebar Filters - Desktop */}
-                        <div className={`lg:w-72 flex-shrink-0 space-y-8 ${isFilterOpen ? 'block' : 'hidden lg:block'}`}>
-                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h3 className="font-bold text-lg flex items-center">
-                                        <Filter className="w-5 h-5 mr-2" />
-                                        Filters
-                                    </h3>
-                                    {hasActiveFilters && (
-                                        <button
-                                            onClick={clearFilters}
-                                            className="text-xs text-blue-600 font-bold hover:underline"
-                                        >
-                                            Clear All
-                                        </button>
-                                    )}
-                                </div>
-
-                                <div className="space-y-6">
-                                    {/* Search */}
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Search</label>
-                                        <div className="relative">
-                                            <Search className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
-                                            <input
-                                                type="text"
-                                                placeholder="Name, Major, Degree, Location..."
-                                                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                                                value={searchQuery}
-                                                onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Filters Group */}
-                                    <div className="space-y-4">
-
-                                        {/* Country */}
-                                        <div className="space-y-1">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Country</label>
-                                            <select
-                                                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-                                                value={selectedCountry}
-                                                onChange={(e) => {
-                                                    setSelectedCountry(e.target.value);
-                                                    setSelectedCity(''); // Reset city when country changes
-                                                    setPage(1);
-                                                }}
-                                            >
-                                                <option value="">All Countries</option>
-                                                {countries.map(c => <option key={c} value={c}>{c}</option>)}
-                                            </select>
-                                        </div>
-
-                                        {/* City (Location) */}
-                                        <div className="space-y-1">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Location (City)</label>
-                                            <select
-                                                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-                                                value={selectedCity}
-                                                onChange={(e) => { setSelectedCity(e.target.value); setPage(1); }}
-                                                disabled={cities.length === 0}
-                                            >
-                                                <option value="">All Cities</option>
-                                                {cities.map(c => <option key={c} value={c}>{c}</option>)}
-                                            </select>
-                                        </div>
-
-                                        {/* Intake */}
-                                        <div className="space-y-1">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Intake</label>
-                                            <select
-                                                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-                                                value={selectedIntake}
-                                                onChange={(e) => { setSelectedIntake(e.target.value); setPage(1); }}
-                                            >
-                                                <option value="">Any Intake</option>
-                                                {intakes.map(i => <option key={i} value={i}>{i}</option>)}
-                                            </select>
-                                        </div>
-
-                                        {/* Degree */}
-                                        <div className="space-y-1">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Degree</label>
-                                            <select
-                                                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-                                                value={selectedDegree}
-                                                onChange={(e) => { setSelectedDegree(e.target.value); setPage(1); }}
-                                            >
-                                                <option value="">Any Degree</option>
-                                                {degrees.map(d => <option key={d} value={d}>{d}</option>)}
-                                            </select>
-                                        </div>
-
-                                        {/* Taught Choice */}
-                                        <div className="space-y-1">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Taught In</label>
-                                            <select
-                                                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-                                                value={selectedTaught}
-                                                onChange={(e) => { setSelectedTaught(e.target.value); setPage(1); }}
-                                            >
-                                                <option value="">Any Language</option>
-                                                {taughtLanguages.map(l => <option key={l} value={l}>{l}</option>)}
-                                            </select>
-                                        </div>
-
-                                        {/* Major */}
-                                        <div className="space-y-1">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Major</label>
-                                            <select
-                                                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
-                                                value={selectedMajor}
-                                                onChange={(e) => { setSelectedMajor(e.target.value); setPage(1); }}
-                                            >
-                                                <option value="">All Majors</option>
-                                                {majors.map(m => <option key={m} value={m}>{m}</option>)}
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Mobile Search (Always Visible) */}
-                        <div className="lg:hidden space-y-4">
-                            {/* Search Bar */}
-                            <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
-                                <div className="relative">
-                                    <Search className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
-                                    <input
-                                        type="text"
-                                        placeholder="Search university, major, degree, location..."
-                                        className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                                        value={searchQuery}
-                                        onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Filter Toggle Button */}
-                            <button
-                                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                                className="flex items-center justify-center w-full bg-white border border-slate-200 p-4 rounded-xl shadow-sm font-bold text-slate-700"
-                            >
-                                <Filter className="w-5 h-5 mr-2" />
-                                {isFilterOpen ? 'Hide Filters' : 'Show Filters'}
-                            </button>
-                        </div>
-
-                        {/* Main Content */}
-                        <div className="flex-1">
-                            {/* Results Count */}
-                            <div className="mb-6 flex justify-between items-center">
-                                <p className="text-slate-500">
-                                    Showing <span className="font-bold text-slate-900">{visibleUniversities.length}</span> of <span className="font-bold text-slate-900">{filteredUniversities.length}</span> universities
-                                </p>
-                            </div>
-
-                            <>
-                                    <div className="grid md:grid-cols-2 gap-6">
-                                        {visibleUniversities.map((uni, index) => (
-                                            <motion.div
-                                                key={uni._id || uni.slug}
-                                                layout
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ duration: 0.3, delay: index * 0.05 }}
-                                                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-200 hover:border-blue-300 transition-all duration-300 group flex flex-col relative"
-                                            >
-                                                <Link href={`/universities/${uni.slug}`} className="flex flex-col flex-1 w-full h-full relative group cursor-pointer block">
-                                                    {/* Background Logo Watermark */}
-                                                    {uni.logo && (
-                                                        <div className="absolute right-0 top-0 h-full w-[60%] z-0 flex items-center justify-end opacity-[0.1] pointer-events-none select-none overflow-hidden pr-4">
-                                                            <Image
-                                                                src={uni.logo}
-                                                                alt=""
-                                                                fill
-                                                                unoptimized
-                                                                sizes="(min-width: 768px) 300px, 60vw"
-                                                                className="object-contain object-right p-4"
-                                                            />
-                                                        </div>
-                                                    )}
-
-                                                    <div className="p-6 flex-1 relative z-10 flex flex-col h-full">
-                                                        {/* Header: Badges */}
-                                                        <div className="flex flex-wrap gap-2 justify-end mb-4">
-                                                            {uni.country && (
-                                                                <span className="bg-slate-100 text-slate-700 text-xs font-bold px-2.5 py-1 rounded-md border border-slate-200 shadow-sm">
-                                                                    {uni.country}
-                                                                </span>
-                                                            )}
-                                                            {uni.degree?.slice(0, 3).map((d) => (
-                                                                <span key={d} className="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-md border border-blue-100 shadow-sm whitespace-nowrap">
-                                                                    {d}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-
-                                                        {/* Main Content */}
-                                                        <div className="space-y-4">
-                                                            <div>
-                                                                <h3 className="text-xl font-extrabold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
-                                                                    {uni.name}
-                                                                </h3>
-
-                                                                <div className="flex items-center text-slate-600 text-sm font-medium mt-2">
-                                                                    <MapPin className="w-4 h-4 mr-1.5 shrink-0 text-slate-400" />
-                                                                    {uni.location}
-                                                                </div>
-                                                            </div>
-
-                                                            <div className="inline-flex w-fit items-center bg-amber-50 px-2.5 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-amber-800">
-                                                                {uni.verificationStatus === 'verified' && uni.sourceUrls?.length ? 'Current source record' : '2027 details confirmed before application'}
-                                                            </div>
-
-                                                            {/* Majors */}
-                                                            <div className="pt-4 mt-auto">
-                                                                <p className="text-[10px] text-slate-400 uppercase font-extrabold tracking-wider mb-2">Available Majors</p>
-                                                                <p className="text-sm text-slate-600 leading-relaxed line-clamp-2">
-                                                                    {uni.details?.majors?.join(', ')}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Footer: Tuition & Action */}
-                                                    <div className="px-6 py-4 bg-white/50 backdrop-blur-sm border-t border-slate-100 flex items-center justify-between relative z-10">
-                                                        <div>
-                                                            <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">Tuition</p>
-                                                            <p className="text-sm font-bold text-slate-900">{uni.details?.tuition}</p>
-                                                        </div>
-                                                        <div
-                                                            className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 border border-slate-200 text-slate-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm"
-                                                        >
-                                                            <ArrowRight className="w-5 h-5" />
-                                                        </div>
-                                                    </div>
-                                                </Link>
-                                            </motion.div>
-                                        ))}
-                                    </div>
-
-                                    {/* Pagination Controls */}
-                                    {totalPages > 1 && (
-                                        <div className="mt-8 space-y-4">
-                                            {/* Results per page and Jump to page */}
-                                            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-4">
-                                                {/* Results per page */}
-                                                <div className="flex items-center gap-2">
-                                                    <label className="text-sm text-slate-600 font-medium">Show:</label>
-                                                    <select
-                                                        value={itemsPerPage}
-                                                        onChange={(e) => {
-                                                            setItemsPerPage(Number(e.target.value));
-                                                            setPage(1); // Reset to page 1 when changing items per page
-                                                        }}
-                                                        className="px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                                                    >
-                                                        <option value={10}>10 per page</option>
-                                                        <option value={25}>25 per page</option>
-                                                        <option value={50}>50 per page</option>
-                                                    </select>
-                                                </div>
-
-                                                {/* Jump to page */}
-                                                <div className="flex items-center gap-2">
-                                                    <label className="text-sm text-slate-600 font-medium">Jump to:</label>
-                                                    <input
-                                                        type="number"
-                                                        min="1"
-                                                        max={totalPages}
-                                                        value={jumpToPage}
-                                                        onChange={(e) => setJumpToPage(e.target.value)}
-                                                        onKeyPress={(e) => {
-                                                            if (e.key === 'Enter') {
-                                                                const pageNum = parseInt(jumpToPage);
-                                                                if (pageNum >= 1 && pageNum <= totalPages) {
-                                                                    setPage(pageNum);
-                                                                    setJumpToPage('');
-                                                                }
-                                                            }
-                                                        }}
-                                                        placeholder="Page"
-                                                        className="w-20 px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                                                    />
-                                                    <button
-                                                        onClick={() => {
-                                                            const pageNum = parseInt(jumpToPage);
-                                                            if (pageNum >= 1 && pageNum <= totalPages) {
-                                                                setPage(pageNum);
-                                                                setJumpToPage('');
-                                                            }
-                                                        }}
-                                                        disabled={!jumpToPage || parseInt(jumpToPage) < 1 || parseInt(jumpToPage) > totalPages}
-                                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                                                    >
-                                                        Go
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            {/* Page navigation */}
-                                            <div className="flex justify-center items-center space-x-2">
-                                                <button
-                                                    onClick={() => setPage(p => Math.max(1, p - 1))}
-                                                    disabled={safePage === 1}
-                                                    className="px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 font-medium"
-                                                >
-                                                    Previous
-                                                </button>
-                                                <div className="text-sm font-medium text-slate-600 px-4">
-                                                    Page {safePage} of {totalPages}
-                                                </div>
-                                                <button
-                                                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                                    disabled={safePage === totalPages}
-                                                    className="px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 font-medium"
-                                                >
-                                                    Next
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {filteredUniversities.length === 0 && (
-                                        <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-300">
-                                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                                <Search className="w-8 h-8 text-slate-400" />
-                                            </div>
-                                            <h3 className="text-xl font-bold text-slate-900 mb-2">No universities found</h3>
-                                            <p className="text-slate-500 max-w-md mx-auto mb-6">
-                                                Try adjusting your search criteria or clearing filters to see more results.
-                                            </p>
-                                            <button
-                                                onClick={clearFilters}
-                                                className="text-blue-600 font-bold hover:underline"
-                                            >
-                                                Clear all filters
-                                            </button>
-                                        </div>
-                                    )}
-                            </>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
+        {isOpen && (
+          <div className="absolute left-0 top-[calc(100%+0.5rem)] z-50 w-64 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-black/10 animate-in fade-in slide-in-from-top-2">
+            <div className="max-h-64 overflow-y-auto p-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-200">
+              {options.map(option => (
+                <label key={option} className="flex cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-slate-50 transition-colors">
+                  <div className={`grid size-5 shrink-0 place-items-center rounded border transition-colors ${selected.includes(option) ? 'border-[#174f7a] bg-[#174f7a] text-white' : 'border-slate-300 bg-white'}`}>
+                    {selected.includes(option) && <Check size={14} strokeWidth={3} />}
+                  </div>
+                  <span className="text-sm font-medium text-slate-700">{option}</span>
+                </label>
+              ))}
+            </div>
+            {selected.length > 0 && (
+              <div className="border-t border-slate-100 p-2 mt-1">
+                <button onClick={() => setState([])} className="w-full rounded-lg bg-slate-100 py-2 text-xs font-bold text-slate-600 hover:bg-slate-200">Clear Selection</button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     );
-};
+  };
 
-export default UniversitiesClient;
+  return (
+    <section id="global-university-directory" className="bg-[#f4f8fa] min-h-screen">
+      {/* Top Filter Bar */}
+      <div className="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60">
+        <div className="mx-auto max-w-[1440px] px-5 py-4 sm:px-8 lg:px-12">
+          
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between" ref={dropdownRef}>
+            
+            {/* Search */}
+            <div className="relative w-full lg:max-w-md">
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input 
+                value={query} 
+                onChange={event => setQuery(event.target.value)} 
+                className="h-12 w-full rounded-full border border-slate-300 bg-white pl-12 pr-4 text-sm font-medium text-[#08263c] shadow-sm outline-none transition focus:border-[#174f7a] focus:ring-4 focus:ring-[#174f7a]/10" 
+                placeholder="Search universities, majors, or cities..." 
+              />
+            </div>
+
+            {/* Dropdowns */}
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="hidden lg:flex items-center gap-2 mr-2 text-slate-400">
+                <SlidersHorizontal size={16} /> <span className="text-xs font-bold uppercase tracking-wider">Filters</span>
+              </div>
+              <FilterDropdown id="dest" title="Destination" options={countryOptions} selected={selectedCountries} setState={setSelectedCountries as any} />
+              <FilterDropdown id="level" title="Study Level" options={degreeOptions} selected={selectedDegrees} setState={setSelectedDegrees as any} />
+              <FilterDropdown id="lang" title="Language" options={languageOptions} selected={selectedLanguages} setState={setSelectedLanguages as any} />
+              <FilterDropdown id="intake" title="Intake" options={intakeOptions} selected={selectedIntakes} setState={setSelectedIntakes as any} />
+            </div>
+
+          </div>
+
+          {/* Active Filter Pills */}
+          {hasFilters && (
+            <div className="mt-4 flex flex-wrap items-center gap-2 animate-in fade-in">
+              <span className="text-xs font-bold text-slate-500 mr-2">Active:</span>
+              
+              {query && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#174f7a] px-3 py-1 text-xs font-medium text-white shadow-sm">
+                  Search: "{query}" <button onClick={() => setQuery('')} className="hover:text-white/70"><X size={14} /></button>
+                </span>
+              )}
+              
+              {selectedCountries.map(c => (
+                <span key={c} className="inline-flex items-center gap-1.5 rounded-full border border-[#174f7a]/20 bg-[#174f7a]/5 px-3 py-1 text-xs font-medium text-[#174f7a]">
+                  {c} <button onClick={() => toggleFilter(setSelectedCountries as any, c)} className="hover:text-[#174f7a]/70"><X size={14} /></button>
+                </span>
+              ))}
+              
+              {selectedDegrees.map(d => (
+                <span key={d} className="inline-flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-50 px-3 py-1 text-xs font-medium text-orange-700">
+                  {d} <button onClick={() => toggleFilter(setSelectedDegrees as any, d)} className="hover:text-orange-700/70"><X size={14} /></button>
+                </span>
+              ))}
+
+              {selectedLanguages.map(l => (
+                <span key={l} className="inline-flex items-center gap-1.5 rounded-full border border-purple-500/20 bg-purple-50 px-3 py-1 text-xs font-medium text-purple-700">
+                  {l} <button onClick={() => toggleFilter(setSelectedLanguages as any, l)} className="hover:text-purple-700/70"><X size={14} /></button>
+                </span>
+              ))}
+
+              <button onClick={clearAll} className="ml-2 text-xs font-bold text-red-500 hover:underline">Clear All</button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content Grid (Rich List) */}
+      <div className="mx-auto max-w-[1440px] px-5 py-10 sm:px-8 lg:px-12">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-sm font-medium text-slate-500">Showing <strong className="text-[#08263c] font-black">{filtered.length}</strong> available records</h2>
+        </div>
+
+        <div className="flex flex-col gap-5">
+          {filtered.map((university) => {
+            const isVerified = university.verificationStatus === 'verified' && university.sourceUrls?.length;
+            
+            return (
+              <article key={university.id} className="group relative flex flex-col md:flex-row items-stretch overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:border-[#64b5df]/50">
+                {/* Visual Accent / Cover Placeholder */}
+                <div className="w-full md:w-64 shrink-0 bg-gradient-to-br from-[#08263c] to-[#174f7a] p-6 text-white flex flex-col justify-between relative overflow-hidden">
+                  <div className="absolute -right-8 -top-8 size-40 rounded-full border-[20px] border-white/5" />
+                  
+                  <div>
+                    <div className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-widest backdrop-blur-md ${isVerified ? 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30' : 'bg-white/10 text-white/80 border border-white/20'}`}>
+                      {isVerified ? <BookOpenCheck size={12} /> : <CalendarCheck size={12} />}
+                      {isVerified ? 'Verified Record' : 'Under Review'}
+                    </div>
+                  </div>
+
+                  <div className="mt-12">
+                    <p className="flex items-center gap-1.5 text-xs font-medium text-white/70 uppercase tracking-widest mb-2">
+                      <MapPin size={14} /> {university.country || university.location}
+                    </p>
+                    <p className="font-heading text-lg font-bold leading-tight">{university.city}</p>
+                  </div>
+                </div>
+                
+                {/* Core Info */}
+                <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {(university.degree || []).map(value => (
+                      <span key={value} className="inline-flex items-center rounded bg-slate-100 px-2 py-1 text-[10px] font-black text-slate-600 tracking-wider uppercase">
+                        {value}
+                      </span>
+                    ))}
+                  </div>
+
+                  <h2 className="font-heading text-2xl md:text-3xl font-bold leading-tight text-[#08263c] transition-colors group-hover:text-[#174f7a]">
+                    <Link href={`/universities/${university.slug}`} className="focus:outline-none">
+                      <span className="absolute inset-0 z-10" aria-hidden="true" />
+                      {university.name}
+                    </Link>
+                  </h2>
+
+                  {/* Feature Grid */}
+                  <div className="mt-8 grid grid-cols-2 gap-y-4 gap-x-6 sm:grid-cols-4 border-t border-slate-100 pt-6">
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Tuition Estimate</p>
+                      <p className="text-sm font-bold text-[#08263c] flex items-center gap-1.5"><Wallet size={14} className="text-slate-400" /> {university.details?.tuition || 'Variable'}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Teaching Lang</p>
+                      <p className="text-sm font-bold text-[#08263c] flex items-center gap-1.5"><Languages size={14} className="text-slate-400" /> {university.taught?.join(', ') || 'Mixed'}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Scholarships</p>
+                      <p className="text-sm font-bold text-[#08263c] flex items-center gap-1.5"><Sparkles size={14} className="text-amber-500" /> {university.scholarships?.length ? `${university.scholarships.length} Types` : 'None'}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Next Intake</p>
+                      <p className="text-sm font-bold text-[#08263c] flex items-center gap-1.5"><Clock size={14} className="text-slate-400" /> {university.intake?.[0] || 'Rolling'}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Arrow CTA */}
+                <div className="hidden lg:flex w-24 shrink-0 border-l border-slate-100 items-center justify-center bg-slate-50 transition-colors group-hover:bg-[#174f7a] text-slate-300 group-hover:text-white">
+                  <ArrowUpRight size={32} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        {!filtered.length && (
+          <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-white px-6 py-32 text-center">
+            <div className="grid size-20 place-items-center rounded-full bg-[#e9f7fd] text-[#174f7a]">
+              <Search size={32} />
+            </div>
+            <h2 className="mt-6 font-heading text-3xl font-bold text-[#08263c]">No results found</h2>
+            <p className="mt-4 max-w-md text-base leading-7 text-slate-500">We couldn't find any institutions matching your exact requirements. Try removing some filters to broaden your search.</p>
+            <button onClick={clearAll} className="mt-8 rounded-full bg-[#174f7a] px-8 py-4 text-sm font-black text-white hover:bg-[#0b2f4a] shadow-lg shadow-[#174f7a]/20 transition-all hover:-translate-y-0.5">Clear all filters</button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}

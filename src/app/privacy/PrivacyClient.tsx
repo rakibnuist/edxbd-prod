@@ -219,9 +219,9 @@ export default function PrivacyClient() {
                       <Shield className="w-5 h-5 text-blue-600" />
                       <strong>EduExpress International</strong>
                     </p>
-                    <p>Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor</p>
-                    <p>Dhanmondi, Dhaka 1209, Bangladesh</p>
-                    <p>Phone: 01983 333566</p>
+                    <p>House 12/1, Ground Floor, Road 4/A</p>
+                    <p>Dhanmondi, Dhaka 1209</p>
+                    <p>Phone: +880 1983-333566</p>
                     <p>Email: info@eduexpressint.com</p>
                   </div>
                 </div>

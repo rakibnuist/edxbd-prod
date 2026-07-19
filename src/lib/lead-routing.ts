@@ -7,7 +7,12 @@
  * staff when the plan requires a specialist.
  */
 
-import type { LeadTeam } from '@/models/Lead';
+export type LeadTeam =
+  | 'general'
+  | 'china'
+  | 'wave1_owner'
+  | 'launching_interest'
+  | 'senior_review';
 
 // Destination status drives routing (mirrors the strategy launch waves).
 const FLAGSHIP = ['china'];

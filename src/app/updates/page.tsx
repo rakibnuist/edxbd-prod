@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
-import connectDB from '@/lib/mongodb';
-import Content from '@/models/Content';
+import prisma from '@/lib/prisma';
 import UpdatesClient from './UpdatesClient';
 import type { Update } from '@/lib/types';
 
@@ -74,23 +73,32 @@ const normalizeList = (values: unknown[]) =>
 
 async function getUpdates(): Promise<{ updates: Update[]; categories: string[] }> {
   try {
-    await connectDB();
+    const rawUpdates = await prisma.content.findMany({
+      where: { type: 'update', isPublished: true },
+      orderBy: [
+        { isFeatured: 'desc' },
+        { publishedAt: 'desc' },
+        { createdAt: 'desc' }
+      ]
+    });
 
-    const [updates, singleCategories, multiCategories] = await Promise.all([
-      Content.find({ type: 'update', isPublished: true })
-        .sort({ isFeatured: -1, publishedAt: -1, createdAt: -1 })
-        .lean(),
-      Content.distinct('category', {
-        type: 'update',
-        isPublished: true,
-        category: { $exists: true, $ne: null },
-      }),
-      Content.distinct('categories', {
-        type: 'update',
-        isPublished: true,
-        categories: { $exists: true, $ne: null },
-      }),
-    ]);
+    const singleCategories = rawUpdates
+      .map(u => u.category)
+      .filter((c): c is string => typeof c === 'string' && c.trim() !== '');
+
+    const multiCategories = rawUpdates
+      .map(u => u.categories ? JSON.parse(u.categories) : [])
+      .flat()
+      .filter((c): c is string => typeof c === 'string' && c.trim() !== '');
+
+    // Map Prisma models to Update type if needed, specifically id
+    const updates = rawUpdates.map(u => ({
+      ...u,
+      id: u.id, // For backward compatibility with UpdatesClient
+      tags: u.tags ? JSON.parse(u.tags) : [],
+      categories: u.categories ? JSON.parse(u.categories) : [],
+      sourceUrls: u.sourceUrls ? JSON.parse(u.sourceUrls) : [],
+    }));
 
     return {
       // Serialize Mongoose documents (ObjectId, Date) for the client component

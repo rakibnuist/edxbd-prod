@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import connectDB from '@/lib/mongodb';
-import Content from '@/models/Content';
+import prisma from '@/lib/prisma';
 import UpdateClient from './UpdateClient';
 
 interface UpdatePageProps {
@@ -13,11 +12,12 @@ interface UpdatePageProps {
 export async function generateMetadata({ params }: UpdatePageProps): Promise<Metadata> {
   try {
     const { slug } = await params;
-    await connectDB();
-    const update = await Content.findOne({ 
-      slug: slug, 
-      type: 'update', 
-      isPublished: true 
+    const update = await prisma.content.findUnique({ 
+      where: { 
+        slug: slug, 
+        type: 'update', 
+        isPublished: true 
+      }
     });
 
     if (!update) {
@@ -27,17 +27,19 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
       };
     }
 
+    const tags = update.tags ? JSON.parse(update.tags) : [];
+
     return {
       title: update.metaTitle || update.title,
       description: update.metaDescription || update.excerpt || update.content.substring(0, 160),
-      keywords: update.tags?.join(', '),
+      keywords: tags.join(', '),
       openGraph: {
         title: update.title,
         description: update.excerpt || update.content.substring(0, 160),
         type: 'article',
         publishedTime: update.publishedAt?.toISOString(),
-        authors: [update.author],
-        tags: update.tags,
+        authors: update.author ? [update.author] : undefined,
+        tags: tags,
       },
       twitter: {
         card: 'summary_large_image',
@@ -56,11 +58,12 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
 export default async function UpdatePage({ params }: UpdatePageProps) {
   try {
     const { slug } = await params;
-    await connectDB();
-    const update = await Content.findOne({ 
-      slug: slug, 
-      type: 'update', 
-      isPublished: true 
+    const update = await prisma.content.findUnique({ 
+      where: { 
+        slug: slug, 
+        type: 'update', 
+        isPublished: true 
+      }
     });
 
     if (!update) {
@@ -68,30 +71,34 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     }
 
     // Increment view count
-    await Content.findByIdAndUpdate(update._id, { 
-      $inc: { views: 1 } 
+    await prisma.content.update({ 
+      where: { id: update.id },
+      data: { views: { increment: 1 } }
     });
 
-    // Convert Mongoose document to plain object for client component
+    const tags = update.tags ? JSON.parse(update.tags) : [];
+    const categories = update.categories ? JSON.parse(update.categories) : [];
+
+    // Convert Prisma document to plain object for client component
     const updateData = {
-      _id: update._id.toString(),
+      id: update.id,
       title: update.title,
       slug: update.slug,
       content: update.content,
-      excerpt: update.excerpt,
-      category: update.category,
-      categories: update.categories,
-      tags: update.tags,
-      featuredImage: update.featuredImage,
+      excerpt: update.excerpt || undefined,
+      category: update.category || undefined,
+      categories: categories,
+      tags: tags,
+      featuredImage: update.featuredImage || undefined,
       isFeatured: update.isFeatured,
-      author: update.author,
-      publishedAt: update.publishedAt,
-      createdAt: update.createdAt,
-      updatedAt: update.updatedAt,
-      views: update.views
+      author: update.author || 'EduExpress',
+      publishedAt: update.publishedAt?.toISOString() || null,
+      createdAt: update.createdAt.toISOString(),
+      updatedAt: update.updatedAt.toISOString(),
+      views: update.views + 1
     };
 
-    return <UpdateClient update={updateData} />;
+    return <UpdateClient update={updateData as any} />;
   } catch (error) {
     console.error('Error fetching update:', error);
     notFound();

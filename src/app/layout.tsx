@@ -178,7 +178,7 @@ export default function RootLayout({
     ],
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi",
+      "streetAddress": "House 12/1, Ground Floor, Road 4/A, Dhanmondi",
       "addressLocality": "Dhaka",
       "addressRegion": "Dhaka",
       "postalCode": "1209",
@@ -189,11 +189,11 @@ export default function RootLayout({
       "latitude": 23.7401435,
       "longitude": 90.3713009
     },
-    "telephone": ["+880 1983 333566", "+880 1329 663505"],
+    "telephone": ["+880 1983-333566", "+880 1329-663505"],
     "contactPoint": [
       {
         "@type": "ContactPoint",
-        "telephone": "+880 1983 333566",
+        "telephone": "+880 1983-333566",
         "contactType": "customer service",
         "availableLanguage": ["English", "Bengali"],
         "areaServed": "BD",
@@ -206,7 +206,7 @@ export default function RootLayout({
       },
       {
         "@type": "ContactPoint",
-        "telephone": "+880 1329 663505",
+        "telephone": "+880 1329-663505",
         "contactType": "customer service",
         "availableLanguage": ["English", "Bengali"],
         "areaServed": "BD"

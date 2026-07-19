@@ -25,12 +25,12 @@ export const config = {
 
   // Contact Information
   contact: {
-    phone: '01983 333566',
-    alternatePhone: '01329 663505',
-    whatsapp: '+8801983333566',
+    phone: '+880 1983-333566',
+    alternatePhone: '+880 1329-663505',
+    whatsapp: '+880 1983-333566',
     email: 'info@eduexpressint.com',
     address: {
-      street: 'Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi',
+      street: 'House 12/1, Ground Floor, Road 4/A, Dhanmondi',
       city: 'Dhaka',
       region: 'Dhaka',
       postalCode: '1209',

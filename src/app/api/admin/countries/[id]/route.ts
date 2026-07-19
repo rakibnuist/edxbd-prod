@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Country from '@/models/Country';
+import prisma from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB();
     const { id } = await params;
 
-    const country = await Country.findById(id);
+    const country = await prisma.country.findUnique({ where: { id } });
     if (!country) {
       return NextResponse.json(
         { error: 'Country not found' },
@@ -33,15 +31,13 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB();
     const { id } = await params;
 
     const body = await request.json();
-    const country = await Country.findByIdAndUpdate(
-      id,
-      body,
-      { new: true, runValidators: true }
-    );
+    const country = await prisma.country.update({
+      where: { id },
+      data: body
+    }).catch(() => null);
 
     if (!country) {
       return NextResponse.json(
@@ -65,10 +61,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB();
     const { id } = await params;
 
-    const country = await Country.findByIdAndDelete(id);
+    const country = await prisma.country.delete({ where: { id } }).catch(() => null);
     if (!country) {
       return NextResponse.json(
         { error: 'Country not found' },

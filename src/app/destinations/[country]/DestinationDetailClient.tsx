@@ -4,31 +4,10 @@ import React, { useRef } from 'react';
 import { Country } from '@/lib/countries';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
-  Building2,
-  Globe,
-  Wallet,
-  Award,
-  BookOpen,
-  MapPin,
-  CheckCircle2,
-  School,
-  Landmark,
-  Languages,
-  FileCheck,
-  Plane,
-  Clock,
-  Sparkles,
-  Scroll,
-  Crown,
-  Star,
-  Calendar,
-  MessageSquare,
-  Briefcase,
-  ArrowRight,
-  ChevronRight,
-  Shield,
-  FileText,
-  GraduationCap
+  Building2, Globe, Wallet, Award, BookOpen, MapPin, CheckCircle2,
+  School, Landmark, Languages, FileCheck, Plane, Clock, Sparkles,
+  Scroll, Crown, Star, Calendar, MessageSquare, Briefcase, ArrowRight,
+  Shield, FileText, GraduationCap, AlertTriangle, Scale, ThumbsUp, ThumbsDown, Info, ExternalLink
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -36,29 +15,10 @@ import ConsultationButton from '@/components/ConsultationButton';
 
 // Icon Map for dynamic rendering
 const iconMap: Record<string, React.ComponentType<any>> = {
-  Building2,
-  Globe,
-  Wallet,
-  Award,
-  BookOpen,
-  MapPin,
-  CheckCircle2,
-  School,
-  Landmark,
-  Languages,
-  FileCheck,
-  Plane,
-  Clock,
-  Sparkles,
-  Scroll,
-  Crown,
-  Star,
-  Calendar,
-  MessageSquare,
-  Briefcase,
-  Shield,
-  FileText,
-  GraduationCap
+  Building2, Globe, Wallet, Award, BookOpen, MapPin, CheckCircle2,
+  School, Landmark, Languages, FileCheck, Plane, Clock, Sparkles,
+  Scroll, Crown, Star, Calendar, MessageSquare, Briefcase, Shield,
+  FileText, GraduationCap
 };
 
 interface DestinationDetailClientProps {
@@ -122,51 +82,6 @@ export default function DestinationDetailClient({ country }: DestinationDetailCl
           iconColor: 'text-emerald-600',
           lineColor: 'bg-emerald-600'
         };
-      case 'finland':
-        return {
-          primary: 'text-sky-600 bg-sky-50 border-sky-200',
-          gradient: 'from-sky-950 via-slate-900 to-slate-900',
-          accent: 'from-sky-400 to-emerald-400',
-          button: 'bg-sky-600 hover:bg-sky-500 shadow-sky-900/40',
-          buttonBorder: 'border-sky-400/50 hover:bg-sky-950/30 hover:border-sky-400',
-          badge: 'bg-sky-100 text-sky-800 border-sky-200',
-          iconColor: 'text-sky-600',
-          lineColor: 'bg-sky-600'
-        };
-      case 'cyprus':
-        return {
-          primary: 'text-orange-600 bg-orange-50 border-orange-200',
-          gradient: 'from-orange-950 via-slate-900 to-slate-900',
-          accent: 'from-orange-400 to-yellow-400',
-          button: 'bg-orange-600 hover:bg-orange-500 shadow-orange-900/40',
-          buttonBorder: 'border-orange-400/50 hover:bg-orange-950/30 hover:border-orange-400',
-          badge: 'bg-orange-100 text-orange-800 border-orange-200',
-          iconColor: 'text-orange-600',
-          lineColor: 'bg-orange-600'
-        };
-      case 'croatia':
-        return {
-          primary: 'text-teal-600 bg-teal-50 border-teal-200',
-          gradient: 'from-teal-950 via-slate-900 to-slate-900',
-          accent: 'from-red-400 via-white to-blue-400',
-          button: 'bg-teal-600 hover:bg-teal-500 shadow-teal-900/40',
-          buttonBorder: 'border-teal-400/50 hover:bg-teal-950/30 hover:border-teal-400',
-          badge: 'bg-teal-100 text-teal-800 border-teal-200',
-          iconColor: 'text-teal-600',
-          lineColor: 'bg-teal-600'
-        };
-      case 'georgia':
-        return {
-          primary: 'text-rose-600 bg-rose-50 border-rose-200',
-          gradient: 'from-rose-950 via-slate-900 to-slate-900',
-          accent: 'from-rose-400 to-amber-400',
-          button: 'bg-rose-600 hover:bg-rose-500 shadow-rose-900/40',
-          buttonBorder: 'border-rose-400/50 hover:bg-rose-950/30 hover:border-rose-400',
-          badge: 'bg-rose-100 text-rose-800 border-rose-200',
-          iconColor: 'text-rose-600',
-          lineColor: 'bg-rose-600'
-        };
-      case 'malaysia':
       default:
         return {
           primary: 'text-blue-600 bg-blue-50 border-blue-200',
@@ -191,346 +106,347 @@ export default function DestinationDetailClient({ country }: DestinationDetailCl
   return (
     <div ref={containerRef} className="bg-slate-50 min-h-screen font-sans selection:bg-blue-100 selection:text-blue-900">
       
-      {/* Hero Section */}
-      <section className="relative h-[95vh] min-h-[650px] flex items-center justify-center overflow-hidden bg-slate-900 text-white">
-        {/* Background Image / Gradient */}
+      {/* 1. Breadcrumbs + Service-Status Badge */}
+      <div className="absolute top-0 left-0 w-full z-40 bg-transparent pt-6 pointer-events-none">
+        <div className="container mx-auto px-6 pointer-events-auto flex items-center justify-between">
+          <nav className="flex items-center space-x-2 text-sm font-medium text-white/80">
+            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+            <span className="text-white/40">/</span>
+            <Link href="/destinations" className="hover:text-white transition-colors">Destinations</Link>
+            <span className="text-white/40">/</span>
+            <span className="text-white">Study in {country.name}</span>
+          </nav>
+          {country.serviceStatus && (
+            <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-white/20 shadow-sm ${
+              country.serviceStatus === 'Flagship' || country.serviceStatus === 'Active' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+            }`}>
+              Service Status: {country.serviceStatus}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 2. Hero Section (H1 + 50-word direct value statement) */}
+      <section className="relative h-[90vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 z-0">
           {country.images[0] ? (
-            <Image
-              src={country.images[0]}
-              alt={`Study in ${country.name}`}
-              fill
-              priority
-              className="object-cover"
-              sizes="100vw"
-            />
+            <Image src={country.images[0]} alt={`Study in ${country.name}`} fill priority className="object-cover" sizes="100vw" />
           ) : (
             <div className={`w-full h-full bg-gradient-to-br ${colors.gradient}`} />
           )}
-          <div className={`absolute inset-0 bg-gradient-to-br ${colors.gradient} opacity-80 mix-blend-multiply z-10`} />
+          <div className={`absolute inset-0 bg-gradient-to-br ${colors.gradient} opacity-85 mix-blend-multiply z-10`} />
         </div>
 
-        {/* Floating Decorative Elements */}
-        <motion.div
-          animate={{ x: [0, 30, 0], y: [0, 20, 0], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className={`absolute top-20 right-20 w-96 h-96 rounded-full blur-[120px] opacity-25 z-0 bg-blue-500`}
-        />
-        <motion.div
-          animate={{ x: [0, -20, 0], y: [0, -30, 0], opacity: [0.1, 0.3, 0.1] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className={`absolute bottom-10 left-10 w-80 h-80 rounded-full blur-[100px] opacity-20 z-0 bg-amber-500`}
-        />
-
-        {/* Content */}
-        <motion.div
-          style={{ y: heroY, opacity: heroOpacity }}
-          className="relative z-20 container mx-auto px-6 text-center"
-        >
-          <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full mb-8 shadow-lg shadow-black/10">
+        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-20 container mx-auto px-6 text-center max-w-4xl mt-12">
+          <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full mb-8 shadow-lg">
             <span className="text-2xl">{country.flag}</span>
-            <span className="text-sm font-bold tracking-wider text-white uppercase">PREMIER STUDY DESTINATION</span>
+            <span className="text-sm font-bold tracking-wider text-white uppercase">{country.name} Admissions</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tight leading-none drop-shadow-2xl">
+          <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tight leading-none drop-shadow-2xl">
             Study in <span className={`text-transparent bg-clip-text bg-gradient-to-r ${colors.accent}`}>{country.name}</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-slate-200 mb-12 max-w-3xl mx-auto font-light leading-relaxed drop-shadow-lg">
-            {country.description}. Compare education fit, institution status, total costs and visa readiness before you proceed.
+          <p className="text-xl md:text-2xl text-slate-200 mb-10 mx-auto font-light leading-relaxed drop-shadow-lg">
+            {country.valueStatement || country.description}
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-            <ConsultationButton
-              text="Apply for Scholarships"
-              source={`${country.slug}_hero_primary`}
-              className={`group px-8 py-4 text-white rounded-xl font-bold text-lg transition-all transform hover:scale-105 active:scale-95 ${colors.button}`}
-            />
-            <ConsultationButton
-              text="Free Assessment"
-              source={`${country.slug}_hero_secondary`}
-              className={`px-8 py-4 bg-transparent border text-white rounded-xl font-semibold text-lg hover:bg-white/10 backdrop-blur-sm transition-all hover:scale-105 active:scale-95 ${colors.buttonBorder}`}
-            />
-          </div>
         </motion.div>
       </section>
 
-      {/* Intakes Banner */}
-      <div className={`${colors.lineColor} text-white py-4 overflow-hidden shadow-inner relative z-30`}>
-        <div className="container mx-auto px-6 flex items-center justify-center space-x-8 animate-marquee whitespace-nowrap">
-          <div className="flex items-center space-x-2">
-            <CheckCircle2 className="w-5 h-5 text-amber-400" />
-            <span className="font-bold tracking-wide uppercase">INTAKES: {country.intakesText || 'February & September'}</span>
-          </div>
-          <div className="w-2 h-2 rounded-full bg-white/20"></div>
-          <div className="flex items-center space-x-2">
-            <CheckCircle2 className="w-5 h-5 text-amber-400" />
-            <span className="font-bold tracking-wide uppercase">FREE SCHOLARSHIP ASSESSMENT OPEN</span>
-          </div>
-          <div className="w-2 h-2 rounded-full bg-white/20"></div>
-          <div className="flex items-center space-x-2">
-            <CheckCircle2 className="w-5 h-5 text-amber-400" />
-            <span className="font-bold tracking-wide uppercase">DESTINATION SPECIFIC VISA READINESS REVIEW</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Stats Bar */}
-      <div className="relative z-30 -mt-16 container mx-auto px-4">
-        <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-slate-200 p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 divide-x divide-slate-100">
-          <div className="flex flex-col items-center text-center p-2">
-            <div className="p-3 bg-blue-50 rounded-xl text-blue-600 mb-3">
-              <Building2 className="w-8 h-8" />
-            </div>
-            <span className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Tuition Fees</span>
-            <span className="text-slate-900 font-bold block text-sm md:text-base">{country.costs.tuition.split('(')[0]}</span>
-          </div>
-          <div className="flex flex-col items-center text-center p-2">
-            <div className="p-3 bg-emerald-50 rounded-xl text-emerald-600 mb-3">
-              <Wallet className="w-8 h-8" />
-            </div>
-            <span className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Living Cost</span>
-            <span className="text-slate-900 font-bold block text-sm md:text-base">{country.costs.living}</span>
-          </div>
-          <div className="flex flex-col items-center text-center p-2">
-            <div className="p-3 bg-amber-50 rounded-xl text-amber-600 mb-3">
-              <Clock className="w-8 h-8" />
-            </div>
-            <span className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Processing Time</span>
-            <span className="text-slate-900 font-bold block text-sm md:text-base">3 - 4 Months</span>
-          </div>
-          <div className="flex flex-col items-center text-center p-2">
-            <div className="p-3 bg-indigo-50 rounded-xl text-indigo-600 mb-3">
-              <Globe className="w-8 h-8" />
-            </div>
-            <span className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Visa Review</span>
-            <span className="text-slate-900 font-bold block text-sm md:text-base">Readiness Checked</span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content Layout */}
-      <div className="container mx-auto px-4 py-24">
+      <div className="container mx-auto px-4 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
 
           {/* Left Column (Main Content) */}
-          <div className="lg:col-span-2 space-y-20">
+          <div className="lg:col-span-2 space-y-24">
 
-            {/* Why Study in [Country] */}
-            <section>
+            {/* 3. Who this country fits — and who should reconsider */}
+            <section id="fit">
               <div className="flex items-center gap-3 mb-10">
-                <div className={`p-3 rounded-xl ${colors.primary}`}>
-                  <Star className="w-6 h-6" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Why Study in {country.name}?</h2>
+                <div className={`p-3 rounded-xl ${colors.primary}`}><Scale className="w-6 h-6" /></div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Is {country.name} Right For You?</h2>
               </div>
-
-              <div className="grid sm:grid-cols-2 gap-8">
-                {country.benefits.map((benefit, i) => (
-                  <motion.div
-                    key={i}
-                    whileHover={{ y: -4 }}
-                    className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all group relative overflow-hidden"
-                  >
-                    <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-600 transform scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300" />
-                    <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 text-blue-600">
-                      <CheckCircle2 className="w-6 h-6" />
-                    </div>
-                    <h3 className="font-bold text-xl text-slate-900 mb-3">{benefit}</h3>
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                      Explore world-class academic courses and build a successful global career in a highly welcoming international student environment.
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
-            </section>
-
-            {/* Degree Levels & Programs */}
-            {country.degreesList && (
-              <section>
-                <div className="flex items-center gap-3 mb-10">
-                  <div className={`p-3 rounded-xl ${colors.primary}`}>
-                    <GraduationCap className="w-6 h-6" />
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-emerald-50 border border-emerald-100 p-8 rounded-3xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl -translate-y-1/2 translate-x-1/2" />
+                  <div className="flex items-center gap-2 mb-6">
+                    <ThumbsUp className="w-6 h-6 text-emerald-600" />
+                    <h3 className="text-xl font-bold text-emerald-900">Who it fits</h3>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Available Degrees & Levels</h2>
+                  <ul className="space-y-4">
+                    {country.whoItFits?.map((point, i) => (
+                      <li key={i} className="flex items-start gap-3 text-emerald-800/80 text-sm font-medium">
+                        <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {country.degreesList.map((degree, idx) => (
-                    <motion.div
-                      key={idx}
-                      whileHover={{ y: -3 }}
-                      className="group relative overflow-hidden bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all"
-                    >
-                      <div className={`absolute top-0 left-0 w-1.5 h-full ${colors.lineColor} opacity-0 group-hover:opacity-100 transition-opacity`} />
-                      <div className="flex items-start space-x-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 border ${degree.color}`}>
-                          {renderIcon(degree.icon, "w-6 h-6")}
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-bold text-slate-900 mb-1 leading-tight">{degree.title}</h3>
-                          <div className="flex items-center text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">
-                            <Clock className="w-3.5 h-3.5 mr-1" />
-                            {degree.duration}
-                          </div>
-                          <p className="text-slate-500 text-xs leading-normal">{degree.desc}</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Partner Universities */}
-            <section>
-              <div className="flex items-center gap-3 mb-10">
-                <div className={`p-3 rounded-xl ${colors.primary}`}>
-                  <School className="w-6 h-6" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Top Partner Universities</h2>
-              </div>
-
-              <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
-                <div className="grid sm:grid-cols-2 gap-y-4 gap-x-8">
-                  {country.universities.map((uni, i) => (
-                    <div key={i} className="flex items-center gap-4 p-4 rounded-xl hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0 sm:border-0">
-                      <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0 text-xl font-bold text-slate-400">
-                        {uni.charAt(0)}
-                      </div>
-                      <span className="font-bold text-slate-800 text-sm md:text-base">{uni}</span>
-                    </div>
-                  ))}
+                <div className="bg-rose-50 border border-rose-100 p-8 rounded-3xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/10 rounded-full blur-xl -translate-y-1/2 translate-x-1/2" />
+                  <div className="flex items-center gap-2 mb-6">
+                    <ThumbsDown className="w-6 h-6 text-rose-600" />
+                    <h3 className="text-xl font-bold text-rose-900">Who should reconsider</h3>
+                  </div>
+                  <ul className="space-y-4">
+                    {country.whoShouldReconsider?.map((point, i) => (
+                      <li key={i} className="flex items-start gap-3 text-rose-800/80 text-sm font-medium">
+                        <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </section>
 
-            {/* Popular Fields of Study */}
-            {country.popularProgramsList && (
-              <section>
-                <div className="flex items-center gap-3 mb-10">
-                  <div className={`p-3 rounded-xl ${colors.primary}`}>
-                    <BookOpen className="w-6 h-6" />
-                  </div>
-                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Popular Fields of Study</h2>
+            {/* 4. Education system and recognition */}
+            <section id="recognition">
+              <div className="flex items-center gap-3 mb-10">
+                <div className={`p-3 rounded-xl ${colors.primary}`}><Shield className="w-6 h-6" /></div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Education & Recognition</h2>
+              </div>
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-slate-600 leading-relaxed font-medium">
+                <p>{country.educationSystemAndRecognition}</p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 font-bold"><Award className="w-4 h-4 text-amber-500"/> BMDC Recognized (Medical)</span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 font-bold"><Globe className="w-4 h-4 text-blue-500"/> WHO Listed</span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 font-bold"><FileCheck className="w-4 h-4 text-emerald-500"/> MOE Approved</span>
                 </div>
+              </div>
+            </section>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {country.popularProgramsList.map((cat, idx) => (
-                    <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
-                      <div className="flex items-center mb-4 pb-4 border-b border-slate-100">
-                        <div className={`p-2.5 rounded-lg mr-3 bg-blue-50 text-blue-600`}>
-                          {renderIcon(cat.icon, "w-5 h-5")}
+            {/* 5. Program/university choices with evidence */}
+            <section id="universities">
+              <div className="flex items-center gap-3 mb-10">
+                <div className={`p-3 rounded-xl ${colors.primary}`}><School className="w-6 h-6" /></div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Universities & Programs</h2>
+              </div>
+              <div className="space-y-8">
+                {/* Popular Fields */}
+                {country.popularProgramsList && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {country.popularProgramsList.map((cat, idx) => (
+                      <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div className="flex items-center mb-4 pb-4 border-b border-slate-100">
+                          <div className={`p-2.5 rounded-lg mr-3 bg-blue-50 text-blue-600`}>{renderIcon(cat.icon, "w-5 h-5")}</div>
+                          <h4 className="font-extrabold text-slate-900">{cat.name}</h4>
                         </div>
-                        <h4 className="font-extrabold text-slate-900">{cat.name}</h4>
-                      </div>
-                      <ul className="grid grid-cols-2 gap-x-4 gap-y-3">
-                        {cat.programs.map((p, i) => (
-                          <li key={i} className="flex items-center text-xs font-semibold text-slate-600">
-                            <span className="w-1.5 h-1.5 bg-blue-200 rounded-full mr-2" />
-                            {p}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Student Cities */}
-            {country.citiesList && (
-              <section>
-                <div className="flex items-center gap-3 mb-10">
-                  <div className={`p-3 rounded-xl ${colors.primary}`}>
-                    <MapPin className="w-6 h-6" />
-                  </div>
-                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Top Student Cities</h2>
-                </div>
-
-                <div className="space-y-6">
-                  {country.citiesList.map((city, idx) => (
-                    <div key={idx} className="group flex flex-col md:flex-row items-center bg-white p-4 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden">
-                      <div className="w-full md:w-44 h-44 md:h-32 rounded-2xl flex-shrink-0 mb-4 md:mb-0 md:mr-6 overflow-hidden relative">
-                        <img
-                          src={city.imageQuery}
-                          alt={city.name}
-                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                        />
-                      </div>
-                      <div className="flex-grow text-center md:text-left px-2">
-                        <h4 className="text-xl font-bold text-slate-900 mb-1">{city.name}</h4>
-                        <p className="text-xs text-slate-500 font-semibold mb-3">{city.stats}</p>
-                        <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                          {city.highlights.map((h, i) => (
-                            <span key={i} className="text-xs px-3 py-1 bg-slate-50 text-slate-600 rounded-full border border-slate-200 font-medium">
-                              {h}
-                            </span>
+                        <ul className="space-y-2">
+                          {cat.programs.map((p, i) => (
+                            <li key={i} className="flex items-center text-sm font-semibold text-slate-600">
+                              <span className="w-1.5 h-1.5 bg-blue-200 rounded-full mr-2" />{p}
+                            </li>
                           ))}
-                        </div>
+                        </ul>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                )}
+                
+                {/* Verified Universities */}
+                <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+                  <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2"><CheckCircle2 className="w-5 h-5 text-emerald-500" /> Verified Partners & Routes</h3>
+                  <div className="grid sm:grid-cols-2 gap-y-4 gap-x-8">
+                    {country.universities.map((uni, i) => (
+                      <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-slate-100 sm:border-0 sm:border-b last:border-0">
+                        <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0 text-sm font-bold text-slate-500">{uni.charAt(0)}</div>
+                        <span className="font-bold text-slate-800 text-sm">{uni}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </section>
-            )}
+              </div>
+            </section>
 
-            {/* Requirements Section */}
+            {/* 6. Admission requirements for Bangladesh */}
             <section id="requirements">
               <div className="flex items-center gap-3 mb-10">
-                <div className={`p-3 rounded-xl ${colors.primary}`}>
-                  <FileText className="w-6 h-6" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Admission & Visa Requirements</h2>
+                <div className={`p-3 rounded-xl ${colors.primary}`}><FileText className="w-6 h-6" /></div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Admission Requirements</h2>
               </div>
-
-              <div className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm overflow-hidden relative">
-                  <div className="absolute top-0 right-0 w-36 h-36 bg-blue-50/50 rounded-bl-[100px] -z-0" />
-                  <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 relative z-10">
-                    <Languages className="w-5 h-5 text-blue-600" />
-                    Language Proficiency
-                  </h3>
-                  <ul className="space-y-3 relative z-10 text-sm">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50/50 rounded-bl-[100px]" />
+                  <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2 relative z-10"><Languages className="w-5 h-5 text-blue-600" /> Language</h3>
+                  <ul className="space-y-4 relative z-10">
                     {country.requirements.language.map((req, i) => (
-                      <li key={i} className="flex items-start gap-3 text-slate-600 font-medium">
-                        <div className="mt-2 w-1.5 h-1.5 rounded-full bg-blue-600 flex-shrink-0" />
-                        {req}
+                      <li key={i} className="flex items-start gap-3 text-slate-600 text-sm font-medium">
+                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />{req}
                       </li>
                     ))}
                   </ul>
                 </div>
-
                 <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm overflow-hidden relative">
-                  <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-50/50 rounded-bl-[100px] -z-0" />
-                  <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 relative z-10">
-                    <FileCheck className="w-5 h-5 text-emerald-600" />
-                    Required Documents
-                  </h3>
-                  <div className="grid sm:grid-cols-2 gap-3 relative z-10">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50/50 rounded-bl-[100px]" />
+                  <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2 relative z-10"><FileCheck className="w-5 h-5 text-emerald-600" /> Documents</h3>
+                  <ul className="space-y-4 relative z-10">
                     {country.requirements.documents.map((req, i) => (
-                      <div key={i} className="flex items-center gap-2 text-slate-700 bg-slate-50 px-4 py-3 rounded-xl border border-slate-100">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                        <span className="text-sm font-semibold text-slate-700">{req}</span>
-                      </div>
+                      <li key={i} className="flex items-start gap-3 text-slate-600 text-sm font-medium">
+                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />{req}
+                      </li>
                     ))}
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            {/* 7. Total cost and funding reality */}
+            <section id="cost">
+              <div className="flex items-center gap-3 mb-10">
+                <div className={`p-3 rounded-xl ${colors.primary}`}><Wallet className="w-6 h-6" /></div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Costs & Funding Reality</h2>
+              </div>
+              <div className="bg-slate-900 text-white rounded-3xl p-8 relative overflow-hidden shadow-xl border border-slate-800">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5" />
+                
+                <div className="grid md:grid-cols-2 gap-8 relative z-10">
+                  <div>
+                    <h3 className="text-slate-400 text-sm font-bold uppercase tracking-wider mb-2">Est. Tuition Fee</h3>
+                    <p className="text-3xl font-black text-white mb-2">{country.costs.tuition.split('(')[0]}</p>
+                    <p className="text-sm text-slate-400 font-medium">*{country.costs.tuition.match(/\((.*?)\)/)?.[1] || 'Varies by program'}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-slate-400 text-sm font-bold uppercase tracking-wider mb-2">Est. Living Cost</h3>
+                    <p className="text-3xl font-black text-white mb-2">{country.costs.living}</p>
+                    <p className="text-sm text-slate-400 font-medium">Includes housing, food, and transport</p>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm overflow-hidden relative">
-                  <div className="absolute top-0 right-0 w-36 h-36 bg-amber-50/50 rounded-bl-[100px] -z-0" />
-                  <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 relative z-10">
-                    <Plane className="w-5 h-5 text-amber-600" />
-                    Visa Requirements
-                  </h3>
-                  <ul className="space-y-3 relative z-10 text-sm">
-                    {country.requirements.visa.map((req, i) => (
-                      <li key={i} className="flex items-start gap-3 text-slate-600 font-medium">
-                        <div className="mt-2 w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
-                        {req}
-                      </li>
+                {country.scholarshipsList && country.scholarshipsList.length > 0 && (
+                  <div className="mt-8 pt-8 border-t border-slate-800 relative z-10">
+                    <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><Crown className="w-5 h-5 text-amber-400" /> Funding Opportunities</h3>
+                    <div className="space-y-4">
+                      {country.scholarshipsList.map((s, i) => (
+                        <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                          <div>
+                            <div className="font-bold text-white text-sm">{s.name}</div>
+                            <div className="text-xs text-slate-400 mt-1">{s.amount}</div>
+                          </div>
+                          <div className="text-xs font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-lg shrink-0 w-fit">Due: {s.deadline}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* 8. Visa/residence process with official sources */}
+            <section id="visa">
+              <div className="flex items-center gap-3 mb-10">
+                <div className={`p-3 rounded-xl ${colors.primary}`}><Plane className="w-6 h-6" /></div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Visa & Residence Process</h2>
+              </div>
+              <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+                <p className="text-slate-600 font-medium mb-6">The visa process for Bangladeshi students requires careful documentation and proof of funds. EduExpress handles the verification before submission.</p>
+                <div className="space-y-4">
+                  {country.requirements.visa.map((req, i) => (
+                    <div key={i} className="flex gap-4 items-start">
+                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold shrink-0">{i+1}</div>
+                      <div className="pt-1.5 text-sm font-semibold text-slate-700">{req}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* 9. Work rights and career pathways with caveats */}
+            <section id="career">
+              <div className="flex items-center gap-3 mb-10">
+                <div className={`p-3 rounded-xl ${colors.primary}`}><Briefcase className="w-6 h-6" /></div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Work Rights & Career</h2>
+              </div>
+              <div className="grid sm:grid-cols-3 gap-6">
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                  <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2"><Clock className="w-4 h-4 text-blue-500"/> Student Rights</h3>
+                  <p className="text-sm text-slate-600 font-medium">{country.workRightsAndCareer?.rights}</p>
+                </div>
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                  <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2"><Sparkles className="w-4 h-4 text-emerald-500"/> Opportunities</h3>
+                  <p className="text-sm text-slate-600 font-medium">{country.workRightsAndCareer?.opportunities}</p>
+                </div>
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm bg-amber-50/50">
+                  <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-amber-500"/> Reality Check</h3>
+                  <p className="text-sm text-slate-600 font-medium">{country.workRightsAndCareer?.caveats}</p>
+                </div>
+              </div>
+            </section>
+
+            {/* 11. Comparison with two alternatives */}
+            <section id="compare">
+              <div className="flex items-center gap-3 mb-10">
+                <div className={`p-3 rounded-xl ${colors.primary}`}><Scale className="w-6 h-6" /></div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">How It Compares</h2>
+              </div>
+              <div className="space-y-4">
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-6">
+                  <div className="w-full sm:w-1/3 border-b sm:border-b-0 sm:border-r border-slate-100 pb-4 sm:pb-0 pr-0 sm:pr-6">
+                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Alternative 1</div>
+                    <div className="text-xl font-black text-slate-900">{country.comparisons?.countryA}</div>
+                  </div>
+                  <div className="w-full sm:w-2/3 text-sm text-slate-600 font-medium flex items-center">
+                    {country.comparisons?.countryA_description}
+                  </div>
+                </div>
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-6">
+                  <div className="w-full sm:w-1/3 border-b sm:border-b-0 sm:border-r border-slate-100 pb-4 sm:pb-0 pr-0 sm:pr-6">
+                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Alternative 2</div>
+                    <div className="text-xl font-black text-slate-900">{country.comparisons?.countryB}</div>
+                  </div>
+                  <div className="w-full sm:w-2/3 text-sm text-slate-600 font-medium flex items-center">
+                    {country.comparisons?.countryB_description}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 12. FAQ with visible answers */}
+            {country.faqs && country.faqs.length > 0 && (
+              <section id="faq">
+                <div className="flex items-center gap-3 mb-10">
+                  <div className={`p-3 rounded-xl ${colors.primary}`}><MessageSquare className="w-6 h-6" /></div>
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-950">Frequently Asked Questions</h2>
+                </div>
+                <div className="space-y-4">
+                  {country.faqs.map((faq, i) => (
+                    <details key={i} className="group bg-white rounded-2xl border border-slate-200 shadow-sm [&_summary::-webkit-details-marker]:hidden">
+                      <summary className="flex items-center justify-between p-6 cursor-pointer font-bold text-slate-900 text-lg">
+                        {faq.question}
+                        <span className="ml-4 flex shrink-0 items-center justify-center w-8 h-8 rounded-full bg-slate-50 group-open:bg-blue-50 group-open:text-blue-600 transition-colors">
+                          <svg className="w-4 h-4 transition duration-300 group-open:-rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                        </span>
+                      </summary>
+                      <div className="px-6 pb-6 text-slate-600 font-medium text-sm leading-relaxed border-t border-slate-50 pt-4">
+                        {faq.answer}
+                      </div>
+                    </details>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* 13. Country reviewer, sources, last verified date */}
+            <section id="verification" className="pt-8 border-t border-slate-200">
+              <div className="bg-slate-100 rounded-3xl p-8 flex flex-col md:flex-row gap-8 items-start">
+                <div className="w-16 h-16 rounded-full bg-blue-200 border-4 border-white shadow-sm shrink-0 flex items-center justify-center text-blue-700 font-bold text-xl">
+                  {country.reviewerInfo?.name?.charAt(0) || 'E'}
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 text-lg mb-1">{country.reviewerInfo?.name}</h3>
+                  <p className="text-sm text-slate-500 font-medium mb-4">{country.reviewerInfo?.role}</p>
+                  
+                  <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold text-slate-600 mb-4">
+                    <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-slate-400"/> Last Verified: {country.reviewerInfo?.lastVerifiedDate}</span>
+                    <span className="flex items-center gap-1.5"><Info className="w-4 h-4 text-slate-400"/> Status: {country.serviceStatus}</span>
+                  </div>
+                  
+                  <div className="text-xs text-slate-500">
+                    <span className="font-bold uppercase tracking-wider mr-2">Primary Sources:</span>
+                    {country.reviewerInfo?.primarySources?.map((s, i) => (
+                      <span key={i} className="inline-flex items-center mr-3 mb-1"><ExternalLink className="w-3 h-3 mr-1"/> {s}</span>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               </div>
             </section>
@@ -538,89 +454,57 @@ export default function DestinationDetailClient({ country }: DestinationDetailCl
           </div>
 
           {/* Right Column: Sticky Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24 space-y-8">
+          <div className="lg:col-span-1 hidden lg:block">
+            <div className="sticky top-24 space-y-6">
 
-              {/* Consultation / Assessment Card */}
-              <div className="bg-[#0b172a] rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/15 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+              {/* 10. Intakes/deadlines with automatic status */}
+              <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm relative overflow-hidden">
+                <div className={`absolute top-0 left-0 w-full h-1.5 ${colors.lineColor}`} />
+                <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                  <Calendar className={`w-5 h-5 ${colors.iconColor}`} />
+                  Upcoming Intakes
+                </h3>
+                
+                <div className="bg-slate-50 rounded-xl p-4 mb-4 border border-slate-100">
+                  <div className="text-xs font-bold text-slate-400 uppercase mb-1">Primary Intakes</div>
+                  <div className="font-black text-slate-900">{country.intakesText || 'Varies'}</div>
+                </div>
 
-                <h3 className="text-2xl font-bold mb-4 relative z-10">Free Assessment</h3>
-                <p className="text-slate-300 mb-8 relative z-10 text-sm leading-relaxed">
-                  Submit your details and get an evaluation of your admission and scholarship prospects in {country.name} directly from our expert team.
-                </p>
-
-                <ConsultationButton
-                  text="Book Consultation Call"
-                  source={`${country.slug}_sidebar`}
-                  className={`w-full text-white font-bold py-4 rounded-xl transition-all shadow-lg relative z-10 hover:scale-[1.02] active:scale-[0.98] ${colors.button}`}
-                />
-
-                <div className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-400 font-medium">
-                  <Shield className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Government-Licensed Partner</span>
+                <div className="flex items-center justify-between text-sm font-bold text-slate-700 bg-red-50 p-4 rounded-xl border border-red-100">
+                  <span>Next Deadline</span>
+                  <span className="text-red-600">{country.nextDeadline || 'Contact Us'}</span>
                 </div>
               </div>
 
-              {/* Available Scholarships List Card */}
-              {country.scholarshipsList && (
-                <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm relative overflow-hidden">
-                  <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                    <Award className="w-5 h-5 text-amber-500" />
-                    Available Scholarships
-                  </h3>
-                  <div className="space-y-4">
-                    {country.scholarshipsList.map((scholarship, i) => (
-                      <div key={i} className="flex gap-3 items-start pb-4 border-b border-slate-100 last:border-0 last:pb-0">
-                        <div className="mt-1 w-6 h-6 rounded-lg bg-amber-50 flex items-center justify-center shrink-0 text-amber-600">
-                          {renderIcon(scholarship.icon, "w-4 h-4")}
-                        </div>
-                        <div>
-                          <div className="text-sm font-bold text-slate-900 mb-1 leading-tight">{scholarship.name}</div>
-                          <div className="text-xs font-semibold text-slate-500 mb-1">{scholarship.amount}</div>
-                          <div className="text-[10px] text-red-500 font-bold bg-red-50 border border-red-100 px-2 py-0.5 rounded w-fit">Deadline: {scholarship.deadline}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+              {/* Consultation / Assessment Card */}
+              <div className="bg-[#0b172a] rounded-3xl p-8 text-white relative overflow-hidden shadow-xl">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/15 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
-                  <div className="mt-6 pt-6 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500">
-                    <span>Next Deadline:</span>
-                    <span className="text-red-600 uppercase">{country.nextDeadline || 'Varies'}</span>
-                  </div>
-                </div>
-              )}
+                <h3 className="text-2xl font-bold mb-4 relative z-10">Education Fit Assessment</h3>
+                <p className="text-slate-300 mb-8 relative z-10 text-sm leading-relaxed">
+                  Submit your details and get an objective evaluation of your admission and scholarship prospects in {country.name}.
+                </p>
 
-              {/* Custom Fact Card */}
-              {country.factText && (
-                <div className="bg-blue-50 border border-blue-100 rounded-3xl p-6 relative overflow-hidden">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-blue-100 p-2.5 rounded-xl text-blue-600 shrink-0">
-                      <Sparkles className="w-5 h-5 animate-pulse" />
-                    </div>
-                    <div>
-                      <div className="font-extrabold text-blue-900 text-sm mb-1">Did you know?</div>
-                      <p className="text-xs text-blue-800 leading-relaxed font-medium">
-                        {country.factText}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
+                <ConsultationButton
+                  text="Book Free Assessment"
+                  source={`${country.slug}_sidebar`}
+                  className={`w-full text-white font-bold py-4 rounded-xl transition-all shadow-lg relative z-10 hover:scale-[1.02] active:scale-[0.98] ${colors.button}`}
+                />
+              </div>
+              
               {/* Need Quick Help Card */}
-              <div className="bg-emerald-50 rounded-3xl p-8 border border-emerald-100 relative overflow-hidden">
-                <h3 className="font-bold text-emerald-900 mb-1 text-lg leading-tight">Need Instant Help?</h3>
-                <p className="text-sm text-emerald-700 mb-6 font-medium">Chat with our counselors on WhatsApp for quick, direct answers.</p>
+              <div className="bg-emerald-50 rounded-3xl p-6 border border-emerald-100">
+                <h3 className="font-bold text-emerald-900 mb-1 leading-tight">Need Instant Help?</h3>
+                <p className="text-xs text-emerald-700 mb-4 font-medium">Chat with our counselors on WhatsApp.</p>
                 <a
                   href={`https://wa.me/8801983333566?text=Hi!%20I'm%20interested%20in%20studying%20in%20${country.name}.%20Can%20you%20help%20me?`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md transition-colors active:scale-95 text-center text-sm"
+                  className="flex items-center justify-center gap-2 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition-colors active:scale-95 text-xs"
                 >
                   <MessageSquare className="w-4 h-4 fill-white" />
-                  WhatsApp Us Now
+                  WhatsApp Us
                 </a>
               </div>
 
@@ -630,43 +514,32 @@ export default function DestinationDetailClient({ country }: DestinationDetailCl
         </div>
       </div>
 
-      {/* CTA Section */}
+      {/* 14. CTA Section */}
       <section className="relative py-32 overflow-hidden flex items-center justify-center text-center">
         <div className="absolute inset-0 bg-slate-900 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-950/90 to-indigo-950/90 z-10" />
+          <div className={`absolute inset-0 bg-gradient-to-r ${colors.gradient} opacity-90 z-10`} />
           {country.images[0] && (
             <div
-              className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay"
+              className="absolute inset-0 bg-cover bg-center opacity-10 mix-blend-overlay grayscale"
               style={{ backgroundImage: `url('${country.images[0]}')` }}
             />
           )}
         </div>
 
         <div className="container mx-auto px-6 relative z-20 text-center max-w-4xl">
-          <div className="mb-8 flex justify-center">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border bg-white/10 border-white/20 backdrop-blur-md shadow-lg shadow-black/10`}>
-              <Plane className="w-8 h-8 text-white" />
-            </div>
-          </div>
-
           <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">
-            Start Your Study Journey Today
+            Compare Before You Commit
           </h2>
 
           <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
-            Scholarship applications are open for upcoming intakes in {country.name}. Secure your admission with our expert counseling.
+            We compare education quality, cost, recognition and career fit before recommending an option. Get your written Proof Pack for {country.name}.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
             <ConsultationButton
-              text="Apply Now"
+              text="Get My Free Education Fit Assessment"
               source={`${country.slug}_footer_cta_primary`}
-              className="px-10 py-5 bg-white text-slate-900 rounded-full font-bold text-lg hover:bg-blue-50 hover:scale-105 active:scale-95 transition-all shadow-2xl min-w-[200px]"
-            />
-            <ConsultationButton
-              text="Talk to a Counselor"
-              source={`${country.slug}_footer_cta_secondary`}
-              className="px-10 py-5 bg-transparent border-2 border-white/30 text-white rounded-full font-bold text-lg hover:bg-white/10 hover:border-white hover:scale-105 active:scale-95 transition-all min-w-[200px]"
+              className="px-10 py-5 bg-white text-slate-900 rounded-full font-bold text-lg hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all shadow-2xl min-w-[200px]"
             />
           </div>
         </div>

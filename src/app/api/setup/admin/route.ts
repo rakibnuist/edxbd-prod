@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import connectDB from '@/lib/mongodb';
-import User from '@/models/User';
+import prisma from '@/lib/prisma';
 
 export async function POST(request: NextRequest) {
   try {
-    await connectDB();
-
     // Check if any admin user already exists
-    const existingAdmin = await User.findOne({ role: 'admin' });
+    const existingAdmin = await prisma.user.findFirst({ where: { role: 'admin' } });
     if (existingAdmin) {
       return NextResponse.json(
         { message: 'Admin user already exists' },
@@ -44,7 +41,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return NextResponse.json(
         { message: 'User with this email already exists' },
@@ -57,19 +54,19 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Create admin user
-    const adminUser = new User({
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
-      password: hashedPassword,
-      role: 'admin'
+    const adminUser = await prisma.user.create({
+      data: {
+        name: name.trim(),
+        email: email.toLowerCase().trim(),
+        password: hashedPassword,
+        role: 'admin'
+      }
     });
-
-    await adminUser.save();
 
     return NextResponse.json({
       message: 'Admin user created successfully',
       user: {
-        id: adminUser._id.toString(),
+        id: adminUser.id,
         name: adminUser.name,
         email: adminUser.email,
         role: adminUser.role
@@ -87,10 +84,8 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    await connectDB();
-
     // Check if any admin user exists
-    const adminExists = await User.findOne({ role: 'admin' });
+    const adminExists = await prisma.user.findFirst({ where: { role: 'admin' } });
     
     return NextResponse.json({
       adminExists: !!adminExists,

@@ -30,7 +30,7 @@ export interface UpdateData {
 export const generateSEOData = {
   // Homepage SEO
   homepage: (): SEOData => ({
-    title: "Study Abroad Consultancy | Free Scholarship Assistance | EduExpress International",
+    title: "Study Abroad Consultancy | Free Scholarship Assistance",
     description: "Compare education quality, recognition, total costs and career fit with EduExpress International. Active destination guidance and a free Education Fit Assessment are available.",
     keywords: [
       "study abroad",
@@ -72,7 +72,7 @@ export const generateSEOData = {
       "foundingDate": "2018",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi",
+        "streetAddress": "House 12/1, Ground Floor, Road 4/A, Dhanmondi",
         "addressLocality": "Dhaka",
         "addressRegion": "Dhaka",
         "postalCode": "1209",
@@ -81,7 +81,7 @@ export const generateSEOData = {
       "contactPoint": [
         {
           "@type": "ContactPoint",
-          "telephone": "+880 1983 333566",
+          "telephone": "+880 1983-333566",
           "contactType": "customer service",
           "availableLanguage": ["English", "Bengali"],
           "areaServed": "BD",
@@ -94,7 +94,7 @@ export const generateSEOData = {
         },
         {
           "@type": "ContactPoint",
-          "telephone": "+880 1329 663505",
+          "telephone": "+880 1329-663505",
           "contactType": "customer service",
           "availableLanguage": ["English", "Bengali"],
           "areaServed": "BD"
@@ -150,7 +150,7 @@ export const generateSEOData = {
 
   // Country destination pages
   country: (countryName: string, countryData: CountryData): SEOData => ({
-    title: `Study in ${countryName} | ${countryName} Universities | EduExpress International`,
+    title: `Study in ${countryName} | ${countryName} Universities`,
     description: `Study in ${countryName} with EduExpress International. Expert guidance for ${countryName} universities, scholarships, and visa assistance. Free consultation available for ${countryName} study programs.`,
     keywords: [
       `study in ${countryName}`,
@@ -210,7 +210,7 @@ export const generateSEOData = {
 
   // Service pages
   service: (serviceName: string, serviceDescription: string): SEOData => ({
-    title: `${serviceName} | Study Abroad Services | EduExpress International`,
+    title: `${serviceName} | Study Abroad Services`,
     description: `${serviceDescription} with EduExpress International. Expert study abroad services including ${serviceName.toLowerCase()}. Free consultation available.`,
     keywords: [
       serviceName.toLowerCase(),
@@ -229,7 +229,7 @@ export const generateSEOData = {
 
   // About page
   about: (): SEOData => ({
-    title: "About Us | EduExpress International | Study Abroad Consultancy",
+    title: "About Us | Study Abroad Consultancy",
     description: "Learn about EduExpress International and its evidence first approach to education fit, clear costs, application proof and destination specific guidance.",
     keywords: [
       "about eduexpress international",
@@ -247,7 +247,7 @@ export const generateSEOData = {
 
   // Contact page
   contact: (): SEOData => ({
-    title: "Contact Us | Free Study Abroad Consultation | EduExpress International",
+    title: "Contact Us | Free Study Abroad Consultation",
     description: "Contact EduExpress International for free study abroad consultation. Expert guidance for international education, scholarships, and visa assistance. Get in touch today!",
     keywords: [
       "contact eduexpress international",
@@ -265,7 +265,7 @@ export const generateSEOData = {
 
   // Updates/Blog posts
   update: (updateData: UpdateData): SEOData => ({
-    title: `${updateData.title} | Study Abroad Updates | EduExpress International`,
+    title: `${updateData.title} | Study Abroad Updates`,
     description: updateData.metaDescription || updateData.excerpt || `Latest study abroad updates from EduExpress International. ${updateData.title} - Expert insights on international education.`,
     keywords: [
       "study abroad updates",
@@ -308,7 +308,7 @@ export const generateSEOData = {
 
   // Partnership page
   partnership: (): SEOData => ({
-    title: "Partnership | Study Abroad Partners | EduExpress International",
+    title: "Partnership | Study Abroad Partners",
     description: "Partner with EduExpress International for study abroad opportunities. Join our network of education partners and help students achieve their international education dreams.",
     keywords: [
       "study abroad partnership",
@@ -392,11 +392,11 @@ export const generateLocalBusinessStructuredData = () => ({
   "name": "EduExpress International",
   "description": "Leading study abroad consultancy in Bangladesh",
   "url": "https://www.eduexpressint.com",
-  "telephone": ["+880 1983 333566", "+880 1329 663505"],
+  "telephone": ["+880 1983-333566", "+880 1329-663505"],
   "email": "info@eduexpressint.com",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi",
+    "streetAddress": "House 12/1, Ground Floor, Road 4/A, Dhanmondi",
     "addressLocality": "Dhaka",
     "addressRegion": "Dhaka",
     "postalCode": "1209",

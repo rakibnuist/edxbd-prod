@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "68e4dd568f1f6f2e938f4b9f",
+    "name": "Rakib",
+    "email": "admin@eduexpressint.com",
+    "password": "$2b$12$T9mfkxAE8lOW/2TPWjPiiOTgehduAYn2xteuxL0/8DHmr2yDwf1ca",
+    "role": "admin",
+    "createdAt": "2025-10-07T09:28:54.142Z",
+    "updatedAt": "2025-10-17T16:15:57.219Z",
+    "__v": 0
+  },
+  {
+    "_id": "68e5269ee7d7cb8482563262",
+    "name": "Ema",
+    "email": "ema@eduexpressint.com",
+    "password": "$2b$12$xDKt.GSEbsyhS.vV3iWEqOKIU77qJzTNQjI/JVHywWvsEBovAarqe",
+    "role": "user",
+    "createdAt": "2025-10-07T14:41:34.949Z",
+    "updatedAt": "2025-10-07T14:41:34.949Z",
+    "__v": 0
+  },
+  {
+    "_id": "68e526b4e7d7cb8482563265",
+    "name": "Mukta",
+    "email": "mukta@eduexpressint.com",
+    "password": "$2b$12$o5.B4esw8G4oikpelfs9XeSEI6rmlrudnWw/KFk0V4b1yPFIxcH.a",
+    "role": "user",
+    "createdAt": "2025-10-07T14:41:56.197Z",
+    "updatedAt": "2025-10-07T14:41:56.197Z",
+    "__v": 0
+  },
+  {
+    "_id": "68e526d3e7d7cb8482563268",
+    "name": "Sakib",
+    "email": "sakib@eduexpressint.com",
+    "password": "$2b$12$eJVLo48Jg68PA85M2XvdvegwLwSknIprRE5pRqvJjHzw5zBk6QNnG",
+    "role": "user",
+    "createdAt": "2025-10-07T14:42:27.438Z",
+    "updatedAt": "2025-10-07T14:42:27.438Z",
+    "__v": 0
+  }
+]

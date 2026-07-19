@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
 
 // Common API response helpers
 export const apiResponse = {
@@ -41,7 +40,6 @@ type ApiHandler = (request: NextRequest, context?: unknown) => Promise<NextRespo
 export const withErrorHandling = (handler: ApiHandler) => {
   return async (request: NextRequest, context?: unknown) => {
     try {
-      await connectDB();
       return await handler(request, context);
     } catch (error) {
       console.error('API Error:', error);

@@ -1,9 +1,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import connectDB from '@/lib/mongodb';
-import mongoose from 'mongoose';
-import University from '@/models/University';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
@@ -12,13 +10,12 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
         if (!decoded || decoded.role !== 'admin') {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }
-        await connectDB();
         let university;
-        if (mongoose.Types.ObjectId.isValid(params.id)) {
-            university = await University.findById(params.id);
+        if (params.id.match(/^[0-9a-fA-F]{24}$/)) {
+            university = await prisma.university.findUnique({ where: { id: params.id } });
         }
         if (!university) {
-            university = await University.findOne({ slug: params.id });
+            university = await prisma.university.findUnique({ where: { slug: params.id } });
         }
 
         if (!university) {
@@ -40,14 +37,22 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
             return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }
 
-        await connectDB();
         const body = await request.json();
-        const { _id: _immutableId, __v: _version, createdAt: _createdAt, updatedAt: _updatedAt, ...update } = body;
+        const { id: _immutableId, _id: _immutableId2, __v: _version, createdAt: _createdAt, updatedAt: _updatedAt, ...update } = body;
 
-        const options = { new: true, runValidators: true };
-        const university = mongoose.Types.ObjectId.isValid(params.id)
-            ? await University.findByIdAndUpdate(params.id, { $set: update }, options)
-            : await University.findOneAndUpdate({ slug: params.id }, { $set: update }, options);
+        let university;
+        if (params.id.match(/^[0-9a-fA-F]{24}$/)) {
+            university = await prisma.university.update({
+                where: { id: params.id },
+                data: update
+            }).catch(() => null);
+        }
+        if (!university) {
+            university = await prisma.university.update({
+                where: { slug: params.id },
+                data: update
+            }).catch(() => null);
+        }
 
         if (!university) {
             return NextResponse.json({ error: 'University not found' }, { status: 404 });
@@ -68,8 +73,7 @@ export async function DELETE(request: NextRequest, props: { params: Promise<{ id
             return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }
 
-        await connectDB();
-        const university = await University.findByIdAndDelete(params.id);
+        const university = await prisma.university.delete({ where: { id: params.id } }).catch(() => null);
 
         if (!university) {
             return NextResponse.json({ error: 'University not found' }, { status: 404 });

@@ -71,7 +71,7 @@ export default function UserLeadsPage() {
 
       if (response.ok) {
         // Track status change with enhanced Meta Conversion API
-        const lead = leads.find(l => l._id === leadId);
+        const lead = leads.find(l => l.id === leadId);
         if (lead) {
           try {
             await trackLeadStatusChange({
@@ -91,14 +91,14 @@ export default function UserLeadsPage() {
         // Update local state immediately for better UX
         setLeads(prevLeads =>
           prevLeads.map(lead =>
-            lead._id === leadId
+            lead.id === leadId
               ? { ...lead, status: newStatus as Lead['status'], updatedAt: new Date().toISOString() }
               : lead
           )
         );
 
         // Update selected lead if it's the one being edited
-        if (selectedLead && selectedLead._id === leadId) {
+        if (selectedLead && selectedLead.id === leadId) {
           setSelectedLead(prev => prev ? { ...prev, status: newStatus as Lead['status'], updatedAt: new Date().toISOString() } : null);
         }
 
@@ -331,7 +331,7 @@ export default function UserLeadsPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {leads.map((lead) => (
-                <tr key={lead._id} className="hover:bg-gray-50">
+                <tr key={lead.id} className="hover:bg-gray-50">
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{lead.name}</div>
@@ -368,7 +368,7 @@ export default function UserLeadsPage() {
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                     <select
                       value={lead.status}
-                      onChange={(e) => updateLeadStatus(lead._id, e.target.value)}
+                      onChange={(e) => updateLeadStatus(lead.id, e.target.value)}
                       className={`text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 ${getStatusColor(lead.status)}`}
                     >
                       <option value="new">New</option>
@@ -399,7 +399,7 @@ export default function UserLeadsPage() {
                         View
                       </button>
                       <button
-                        onClick={() => deleteLead(lead._id)}
+                        onClick={() => deleteLead(lead.id)}
                         className="text-red-600 hover:text-red-900"
                       >
                         Delete
@@ -415,7 +415,7 @@ export default function UserLeadsPage() {
         {/* Mobile Card View */}
         <div className="sm:hidden">
           {leads.map((lead) => (
-            <div key={lead._id} className="border-b border-gray-200 p-4 hover:bg-gray-50">
+            <div key={lead.id} className="border-b border-gray-200 p-4 hover:bg-gray-50">
               <div className="flex justify-between items-start mb-3">
                 <div className="flex-1">
                   <h3 className="text-sm font-medium text-gray-900">{lead.name}</h3>
@@ -434,7 +434,7 @@ export default function UserLeadsPage() {
                     View
                   </button>
                   <button
-                    onClick={() => deleteLead(lead._id)}
+                    onClick={() => deleteLead(lead.id)}
                     className="px-3 py-1 text-xs bg-red-100 text-red-700 rounded-full hover:bg-red-200 touch-manipulation"
                   >
                     Delete
@@ -474,7 +474,7 @@ export default function UserLeadsPage() {
                 </span>
                 <select
                   value={lead.status}
-                  onChange={(e) => updateLeadStatus(lead._id, e.target.value)}
+                  onChange={(e) => updateLeadStatus(lead.id, e.target.value)}
                   className={`text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 touch-manipulation ${getStatusColor(lead.status)}`}
                 >
                   <option value="new">New</option>
@@ -596,7 +596,7 @@ export default function UserLeadsPage() {
                     {['new', 'contacted', 'consultation_scheduled', 'consultation_completed', 'qualified', 'application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved', 'enrolled', 'converted', 'not_interested', 'closed'].map((status) => (
                       <button
                         key={status}
-                        onClick={() => updateLeadStatus(selectedLead._id, status)}
+                        onClick={() => updateLeadStatus(selectedLead.id, status)}
                         className={`px-3 py-2 text-xs font-medium rounded-lg touch-manipulation transition-colors ${selectedLead.status === status
                           ? 'bg-blue-600 text-white shadow-md'
                           : 'bg-gray-200 text-gray-700 hover:bg-gray-300 active:bg-gray-400'

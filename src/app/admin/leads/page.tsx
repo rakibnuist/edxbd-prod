@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import WhatsAppButton from '@/components/WhatsAppButton';
 
 interface Lead {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   phone?: string;
@@ -152,13 +152,13 @@ export default function LeadsPageNew() {
         // Update local state with the actual response from server
         setLeads(prevLeads =>
           prevLeads.map(lead =>
-            lead._id === leadId
+            lead.id === leadId
               ? { ...lead, status: updatedLead.status, updatedAt: updatedLead.updatedAt }
               : lead
           )
         );
 
-        if (selectedLead && selectedLead._id === leadId) {
+        if (selectedLead && selectedLead.id === leadId) {
           setSelectedLead(prev => prev ? { ...prev, status: updatedLead.status, updatedAt: updatedLead.updatedAt } : null);
         }
 
@@ -215,7 +215,7 @@ export default function LeadsPageNew() {
 
       if (response.ok) {
         // Remove from local state
-        setLeads(prevLeads => prevLeads.filter(lead => lead._id !== leadId));
+        setLeads(prevLeads => prevLeads.filter(lead => lead.id !== leadId));
 
         // Close any open modals
         setSelectedLead(null);
@@ -380,7 +380,7 @@ export default function LeadsPageNew() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {leads.map((lead) => (
-                <tr key={lead._id} className="hover:bg-gray-50">
+                <tr key={lead.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-900">{lead.name}</div>
@@ -418,9 +418,9 @@ export default function LeadsPageNew() {
                     <div className="flex items-center space-x-2">
                       <select
                         value={lead.status}
-                        onChange={(e) => updateLeadStatus(lead._id, e.target.value)}
-                        disabled={updatingStatus === lead._id}
-                        className={`text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 ${getStatusColor(lead.status)} ${updatingStatus === lead._id ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        onChange={(e) => updateLeadStatus(lead.id, e.target.value)}
+                        disabled={updatingStatus === lead.id}
+                        className={`text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 ${getStatusColor(lead.status)} ${updatingStatus === lead.id ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <option value="new">New</option>
                         <option value="contacted">Contacted</option>
@@ -437,7 +437,7 @@ export default function LeadsPageNew() {
                         <option value="not_interested">Not Interested</option>
                         <option value="closed">Closed</option>
                       </select>
-                      {updatingStatus === lead._id && (
+                      {updatingStatus === lead.id && (
                         <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                       )}
                     </div>
@@ -598,7 +598,7 @@ export default function LeadsPageNew() {
                   Cancel
                 </button>
                 <button
-                  onClick={() => deleteLead(deleteConfirm._id)}
+                  onClick={() => deleteLead(deleteConfirm.id)}
                   disabled={deleting}
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50"
                 >

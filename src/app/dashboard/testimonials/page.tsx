@@ -57,7 +57,7 @@ export default function UserTestimonialsPage() {
     setIsSubmitting(true);
 
     try {
-      const url = editingTestimonial ? `/api/admin/testimonials/${editingTestimonial._id}` : '/api/admin/testimonials';
+      const url = editingTestimonial ? `/api/admin/testimonials/${editingTestimonial.id}` : '/api/admin/testimonials';
       const method = editingTestimonial ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -213,7 +213,7 @@ export default function UserTestimonialsPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {testimonials.map((testimonial) => (
-                <tr key={testimonial._id} className="hover:bg-gray-50">
+                <tr key={testimonial.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       {testimonial.image && (
@@ -273,7 +273,7 @@ export default function UserTestimonialsPage() {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(testimonial._id)}
+                      onClick={() => handleDelete(testimonial.id)}
                       className="text-red-600 hover:text-red-900"
                     >
                       Delete
