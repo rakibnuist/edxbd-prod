@@ -32,7 +32,7 @@ const itemVariants = {
 
 export default function DestinationsClient() {
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900">
+        <div className="min-h-screen bg-[#f4f8fa] text-[#08263c] font-sans">
             <PageHeader
                 title="Study Abroad"
                 highlight="Destinations"
@@ -42,15 +42,8 @@ export default function DestinationsClient() {
             />
 
             {/* Countries Grid */}
-            <section className="py-24 relative overflow-hidden">
-                {/* Dynamic Background */}
-                <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-blue-100/40 to-indigo-100/40 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
-                    <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-amber-100/40 to-orange-100/40 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
-                    <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
-                </div>
-
-                <div className="container mx-auto px-4 relative z-10">
+            <section className="py-16 sm:py-24 relative overflow-hidden">
+                <div className="container mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
                     <motion.div
                         variants={containerVariants}
                         initial="hidden"
@@ -62,75 +55,76 @@ export default function DestinationsClient() {
                             <motion.div key={country.slug} variants={itemVariants} className="h-full">
                                 <Link
                                     href={country.slug === 'china' ? '/destinations/china' : `/destinations/${country.slug}`}
-                                    className="group relative bg-white rounded-[2rem] border border-slate-200 hover:border-blue-400/50 transition-all duration-500 shadow-sm hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 overflow-hidden flex flex-col h-full"
+                                    className="group relative bg-white border-2 border-[#08263c] transition-all duration-300 hover:-translate-y-1 hover:shadow-[10px_10px_0_0_#174f7a] overflow-hidden flex flex-col h-full"
                                 >
                                     {/* Card Header with Image and Flag */}
-                                    <div className="relative h-56 overflow-hidden bg-slate-900">
+                                    <div className="relative h-52 overflow-hidden bg-[#08263c]">
                                         {country.images[0] && (
                                             <Image
                                                 src={country.images[0]}
                                                 alt={`Study in ${country.name}`}
                                                 fill
                                                 quality={75}
-                                                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                                className="object-cover transition-transform duration-700 group-hover:scale-105"
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
                                         )}
 
                                         {/* Gradient Overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-300" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-[#08263c] via-[#08263c]/40 to-transparent opacity-90" />
+
+                                        {/* Service Status Badge */}
+                                        <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 bg-[#174f7a] px-3 py-1 text-[10px] font-mono font-black uppercase tracking-[0.18em] text-[#8ed0ee]">
+                                            <span className="size-1.5 rounded-full bg-[#64b5df]" />
+                                            {country.serviceStatus || 'Active'}
+                                        </div>
 
                                         {/* Flag Badge */}
-                                        <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-3xl shadow-lg">
+                                        <div className="absolute top-4 right-4 grid size-10 place-items-center bg-white/20 backdrop-blur-md text-2xl border border-white/30">
                                             {country.flag}
                                         </div>
 
                                         <div className="absolute bottom-0 left-0 right-0 p-6">
-                                            <h2 className="text-3xl font-bold text-white group-hover:text-blue-200 transition-colors drop-shadow-md">
+                                            <h2 className="font-heading text-3xl font-bold text-white group-hover:text-[#8ed0ee] transition-colors">
                                                 {country.name}
                                             </h2>
                                         </div>
                                     </div>
 
-                                    <div className="p-8 pt-6 flex flex-col flex-grow relative z-10 bg-white">
-                                        <p className="text-slate-600 mb-8 line-clamp-3 leading-relaxed text-base font-medium">
+                                    <div className="p-6 flex flex-col flex-grow relative z-10 bg-white">
+                                        <p className="text-slate-700 mb-6 line-clamp-3 text-sm leading-6 font-medium">
                                             {country.description}
                                         </p>
 
-                                        {/* Simplified Key Features - Only showing top universities for brevity and impact */}
-                                        <div className="space-y-6 mt-auto">
-
-
-                                            {/* Cost Snapshot */}
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <div className="space-y-1">
-                                                    <div className="flex items-center gap-2 text-slate-500 text-xs font-semibold uppercase tracking-wide">
-                                                        <Building2 className="w-3 h-3" />
-                                                        <span>Tuition</span>
-                                                    </div>
-                                                    <p className="text-sm font-bold text-slate-800 truncate" title={country.costs.tuition}>
-                                                        {country.costs.tuition}
-                                                    </p>
+                                        {/* Cost Snapshot Grid */}
+                                        <div className="mt-auto grid grid-cols-2 gap-2 border-t border-[#174f7a]/15 pt-4 bg-[#f4f8fa] p-3">
+                                            <div className="space-y-1">
+                                                <div className="flex items-center gap-1.5 text-[#174f7a] font-mono text-[9px] font-black uppercase tracking-wider">
+                                                    <Building2 className="w-3 h-3" />
+                                                    <span>Tuition</span>
                                                 </div>
-                                                <div className="space-y-1">
-                                                    <div className="flex items-center gap-2 text-slate-500 text-xs font-semibold uppercase tracking-wide">
-                                                        <Wallet className="w-3 h-3" />
-                                                        <span>Living</span>
-                                                    </div>
-                                                    <p className="text-sm font-bold text-slate-800 truncate" title={country.costs.living}>
-                                                        {country.costs.living}
-                                                    </p>
+                                                <p className="text-xs font-bold text-[#08263c] truncate" title={country.costs.tuition}>
+                                                    {country.costs.tuition}
+                                                </p>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <div className="flex items-center gap-1.5 text-[#174f7a] font-mono text-[9px] font-black uppercase tracking-wider">
+                                                    <Wallet className="w-3 h-3" />
+                                                    <span>Living</span>
                                                 </div>
+                                                <p className="text-xs font-bold text-[#08263c] truncate" title={country.costs.living}>
+                                                    {country.costs.living}
+                                                </p>
                                             </div>
                                         </div>
 
                                         {/* Action Area */}
-                                        <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between group/btn">
-                                            <span className="text-sm font-bold text-slate-500 group-hover/btn:text-blue-600 transition-colors">
-                                                Explore details
+                                        <div className="mt-6 pt-4 border-t border-[#174f7a]/15 flex items-center justify-between group/btn">
+                                            <span className="font-mono text-xs font-black uppercase tracking-wider text-[#174f7a] group-hover/btn:text-[#08263c] transition-colors">
+                                                Inspect {country.name} Route
                                             </span>
-                                            <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200 group-hover/btn:bg-blue-600 group-hover/btn:border-blue-600 transition-all duration-300 shadow-sm group-hover/btn:scale-110">
-                                                <ArrowRight className="w-4 h-4 text-slate-400 group-hover/btn:text-white transition-colors" />
+                                            <div className="grid size-9 place-items-center bg-[#08263c] text-white transition-all group-hover/btn:bg-[#174f7a]">
+                                                <ArrowRight className="w-4 h-4" />
                                             </div>
                                         </div>
                                     </div>
@@ -141,61 +135,17 @@ export default function DestinationsClient() {
                 </div>
             </section>
 
-            {/* Premium CTA Section */}
-            <section className="py-32 relative overflow-hidden bg-[#0A1A2F]">
-                {/* Abstract Background */}
-                <div className="absolute inset-0">
-                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[128px]" />
-                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-[128px]" />
-                    <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.05]" />
-                </div>
-
-                <div className="container mx-auto px-4 text-center relative z-10">
-                    <div className="max-w-4xl mx-auto">
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            <h2 className="text-4xl md:text-6xl font-extrabold mb-8 text-white tracking-tight leading-tight">
-                                Your Global Future <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Starts Here</span>
-                            </h2>
-                            <p className="text-xl md:text-2xl mb-12 text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                                Don&apos;t let paperwork hold you back. We handle the complexity so you can focus on your dreams.
-                            </p>
-
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                                <ConsultationButton
-                                    text="Get Free Consultation"
-                                    source="destinations_page_cta_primary"
-                                    className="w-full sm:w-auto px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold text-lg transition-all duration-300 shadow-[0_0_40px_rgba(37,99,235,0.3)] hover:shadow-[0_0_60px_rgba(37,99,235,0.5)] hover:-translate-y-1"
-                                />
-                                <Link
-                                    href="/contact"
-                                    className="w-full sm:w-auto px-10 py-5 bg-transparent border border-slate-700 hover:border-slate-500 text-white rounded-full font-bold text-lg transition-all duration-300 hover:bg-slate-800/50"
-                                >
-                                    Contact Support
-                                </Link>
-                            </div>
-
-                            {/* Trust Signals */}
-                            <div className="mt-16 flex flex-wrap justify-center gap-x-12 gap-y-6 text-slate-400 font-medium text-sm">
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                                    <span>Visa readiness checked</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                                    <span>Relationship evidence required</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                                    <span>Funding assessed after fit</span>
-                                </div>
-                            </div>
-                        </motion.div>
+            {/* Bring 01-03 CTA Banner */}
+            <section className="bg-[#64b5df] px-5 py-16 text-[#08263c] sm:px-8 sm:py-24 md:py-32 lg:px-12">
+                <div className="mx-auto max-w-[1440px]">
+                    <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto] lg:gap-10">
+                        <div>
+                            <p className="font-mono text-xs font-black uppercase tracking-[0.22em] text-[#174f7a]">Compare before you commit</p>
+                            <h2 className="mt-4 max-w-4xl font-heading text-4xl font-bold leading-tight tracking-tight md:text-6xl">Inspect ten active destination routes with written fee schedules and visa readiness.</h2>
+                        </div>
+                        <Link href="/fees-and-transparency" className="inline-flex w-full items-center justify-center gap-3 bg-[#08263c] px-7 py-5 text-base font-black text-white hover:bg-[#174f7a] sm:text-lg lg:w-auto lg:min-w-64">
+                            Calculate Clear Costs <ArrowRight size={20} />
+                        </Link>
                     </div>
                 </div>
             </section>

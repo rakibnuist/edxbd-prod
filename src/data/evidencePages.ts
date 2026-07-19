@@ -145,6 +145,19 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
     ],
     sources: [{ label: 'Chinese Embassy in Bangladesh', href: 'http://bd.china-embassy.gov.cn/eng/' }, { label: 'Campus China / CSC', href: 'https://www.campuschina.org/' }],
   }),
+  page({
+    slug: 'complaints-and-review',
+    title: 'Complaints and Review',
+    description: 'How to raise a concern with EduExpress International and how each complaint is reviewed and resolved.',
+    eyebrow: 'Accountability in writing',
+    intro: 'If any part of our service falls short, you can raise it directly and expect a written response. This page explains how to submit a complaint, what happens next, and the timelines we hold ourselves to.',
+    sections: [
+      { heading: 'How to raise a concern', body: 'Send the details to our office by email or phone, or in person at the Dhanmondi decision desk. Include your name, contact number, the service or counselor involved, and what outcome you are seeking.', items: ['Email: info@eduexpressint.com', 'Phone: +880 1983-333566', 'In person: House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209'] },
+      { heading: 'What happens next', body: 'We acknowledge every complaint in writing within two working days, review the file and any documents involved, and provide a written response with our findings and next steps within ten working days. Complex cases that need third-party confirmation are updated at each stage.' },
+      { heading: 'Escalation and records', body: 'If you are not satisfied with the first response, you can request a senior review by management. Every complaint, its evidence and its resolution are recorded so patterns can be identified and the service improved.' },
+      { heading: 'What we do not control', body: 'Admission, scholarship and visa decisions are made by universities, scholarship bodies and government authorities. We can explain a decision, check for errors in our own work and correct them, but we cannot overturn an official authority’s decision.' },
+    ],
+  }),
   ...[
     ['china-universities', 'Chinese Universities for Bangladeshi Students', 'Compare verified programs, fees, recognition and intake status—not a “partner” label alone.'],
     ['china-scholarships-bangladesh', 'China Scholarships for Bangladeshi Students', 'Compare CSC, provincial and university funding only after confirming education fit, eligibility, coverage and renewal rules.'],

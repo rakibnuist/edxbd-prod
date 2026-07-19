@@ -1,9 +1,16 @@
 import jwt from 'jsonwebtoken';
 
-const DEFAULT_SECRET = 'eduexpress-international-secure-jwt-secret-key-2026-production-fallback-key';
-const jwtSecret = (process.env.JWT_SECRET && process.env.JWT_SECRET.length >= 32)
-  ? process.env.JWT_SECRET
-  : DEFAULT_SECRET;
+// Dev-only fallback so local work doesn't need a .env; production MUST set JWT_SECRET.
+const DEV_SECRET = 'dev-only-insecure-secret-do-not-use-in-production-000000';
+
+function getJwtSecret(): string {
+  const envSecret = process.env.JWT_SECRET;
+  if (envSecret && envSecret.length >= 32) return envSecret;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET environment variable is missing or too short (min 32 chars). Refusing to sign/verify tokens with an insecure secret.');
+  }
+  return DEV_SECRET;
+}
 
 
 export interface AuthUser {
@@ -14,7 +21,7 @@ export interface AuthUser {
 
 export function verifyToken(token: string): AuthUser | null {
   try {
-    const decoded = jwt.verify(token, jwtSecret) as jwt.JwtPayload;
+    const decoded = jwt.verify(token, getJwtSecret()) as jwt.JwtPayload;
     return {
       userId: decoded.userId,
       email: decoded.email,
@@ -34,7 +41,7 @@ export function verifyTokenFromRequest(request: Request): AuthUser | null {
 }
 
 export function generateToken(user: AuthUser): string {
-  return jwt.sign(user, jwtSecret, { expiresIn: '24h' });
+  return jwt.sign(user, getJwtSecret(), { expiresIn: '24h' });
 }
 
 export function getTokenFromRequest(request: Request): string | null {

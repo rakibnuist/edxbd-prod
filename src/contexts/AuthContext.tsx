@@ -127,24 +127,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const refreshToken = async (): Promise<boolean> => {
+    // Attempt to renew the session using an httpOnly refresh cookie set at login.
+    // No credentials are ever embedded in client code.
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('/api/auth/refresh', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: 'admin@eduexpressint.com',
-          password: 'admin123'
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       });
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('admin_token', data.token);
-        localStorage.setItem('admin_user', JSON.stringify(data.user));
-        setUser(data.user);
-        return true;
+        if (data?.token) {
+          localStorage.setItem('admin_token', data.token);
+          if (data.user) {
+            localStorage.setItem('admin_user', JSON.stringify(data.user));
+            setUser(data.user);
+          }
+          return true;
+        }
       }
       return false;
     } catch (error) {
@@ -185,7 +186,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           headers: retryMergedHeaders,
         });
       } else {
-        console.error('Token refresh failed');
+        console.error('Token refresh failed — logging out');
+        logout();
       }
     }
 

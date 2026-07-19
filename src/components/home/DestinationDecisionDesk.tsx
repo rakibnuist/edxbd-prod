@@ -62,7 +62,7 @@ const destinations = [
     status: 'Active',
     since: 'Serving since 2025',
     image: '/images/destinations/united-kingdom.jpg',
-    href: '/destinations/united-kingdom',
+    href: '/destinations/uk',
     headline: 'Test the program value, not only the destination name',
     detail: 'Review course value, institution status, total funding needs and current visa readiness before applying.',
   },

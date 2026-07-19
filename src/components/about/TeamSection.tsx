@@ -74,49 +74,50 @@ const teamMembers = [
 
 export default function TeamSection() {
     return (
-        <section id="team" className="py-20 bg-white scroll-mt-24">
-            <div className="container mx-auto px-4">
+        <section id="team" className="py-20 bg-[#f4f8fa] border-b border-[#174f7a]/15 scroll-mt-24">
+            <div className="container mx-auto px-5 sm:px-8 lg:px-12">
                 <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold text-gray-900 mb-6">Meet Our Expert Team</h2>
-                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                            Behind every successful student is a team of dedicated professionals committed to your future.
+                    <div className="text-center mb-14">
+                        <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Dedicated Professionals</p>
+                        <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">Meet Our Team</h2>
+                        <p className="text-base text-slate-600 max-w-2xl mx-auto mt-3">
+                            Behind every student outcome is a team of counselors, document specialists, and admissions officers working under written evidence guidelines.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {teamMembers.map((member, index) => (
                             <div
                                 key={index}
-                                className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
+                                className="group relative bg-white border-2 border-[#08263c] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#174f7a]"
                             >
-                                <div className="aspect-[3/4] relative overflow-hidden bg-gray-100">
+                                <div className="aspect-[3/4] relative overflow-hidden bg-[#08263c]">
                                     <Image
                                         src={member.image}
                                         alt={member.name}
                                         fill
-                                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                                        <div className="flex gap-4 justify-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                            <a href="#" className="p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white hover:text-blue-900 transition-colors">
-                                                <Linkedin className="w-5 h-5" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#08263c] via-[#08263c]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                                        <div className="flex gap-3 justify-center text-white">
+                                            <a href="#" className="p-2 bg-[#174f7a] text-[#8ed0ee] hover:bg-white hover:text-[#08263c] transition-colors">
+                                                <Linkedin className="w-4 h-4" />
                                             </a>
-                                            <a href="#" className="p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white hover:text-blue-400 transition-colors">
-                                                <Twitter className="w-5 h-5" />
+                                            <a href="#" className="p-2 bg-[#174f7a] text-[#8ed0ee] hover:bg-white hover:text-[#08263c] transition-colors">
+                                                <Twitter className="w-4 h-4" />
                                             </a>
-                                            <a href="#" className="p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white hover:text-red-500 transition-colors">
-                                                <Mail className="w-5 h-5" />
+                                            <a href="#" className="p-2 bg-[#174f7a] text-[#8ed0ee] hover:bg-white hover:text-[#08263c] transition-colors">
+                                                <Mail className="w-4 h-4" />
                                             </a>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="p-6 text-center">
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">{member.name}</h3>
-                                    <p className="text-blue-600 font-medium mb-3">{member.role}</p>
-                                    <p className="text-gray-600 text-sm line-clamp-3">
+                                <div className="p-5 text-center bg-white border-t border-[#174f7a]/15">
+                                    <h3 className="font-heading text-lg font-bold text-[#08263c] mb-1">{member.name}</h3>
+                                    <p className="font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-2">{member.role}</p>
+                                    <p className="text-slate-600 text-xs leading-5 line-clamp-3">
                                         {member.bio}
                                     </p>
                                 </div>

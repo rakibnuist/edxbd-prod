@@ -100,7 +100,7 @@ export const countries: Country[] = [
       visa: ['JW202/JW201 Government Form', 'X1/X2 Visa Application at China Embassy in Dhaka, Bangladesh']
     },
     costs: {
-      tuition: '$2,500 - $6,000 / year (Fully Waived under CSC Scholarship)',
+      tuition: '$2,500 - $6,000 / year (CSC scholarship may cover full tuition, subject to eligibility)',
       living: '$200 - $400 / month',
       currency: 'USD'
     },
@@ -186,7 +186,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Senior Admissions Counselors',
-      lastVerifiedDate: 'October 2026',
+      lastVerifiedDate: 'July 2026',
       primarySources: ['CSC Official Portal', 'Chinese Embassy in Dhaka', 'Ministry of Education (MOE) China']
     }
   },
@@ -203,7 +203,7 @@ export const countries: Country[] = [
       visa: ['Certificate of Admission (CoA)', 'D-2 Student Visa Application']
     },
     costs: {
-      tuition: '$3,000 - $6,000 / semester (Scholarship offsets up to 100%)',
+      tuition: '$3,000 - $6,000 / semester (scholarships may offset part or all, subject to eligibility)',
       living: '$500 - $800 / month',
       currency: 'USD'
     },
@@ -288,12 +288,12 @@ export const countries: Country[] = [
       currency: 'GBP'
     },
     scholarships: ['Chevening Scholarship', 'Great Scholarship', 'Vice Chancellor Excellence'],
-    benefits: ['2-Year Post-Study Work (PSW) Graduate Route', 'Spouse Visa Integration Options', 'Accelerated 1-Year Masters Programs saving time & cost'],
+    benefits: ['Graduate Route post-study work visa (up to 2 years)', 'Spouse Visa Integration Options', 'Accelerated 1-Year Masters Programs saving time & cost'],
     isActive: true,
     featured: true,
     images: ['https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=75&w=1200&auto=format&fit=crop'],
-    metaTitle: 'Study in UK from Bangladesh - 2-Year Post Study Work',
-    metaDescription: 'Study in UK with 2-year post-study work permit (PSW). Gap accepted. Top Russell Group universities.',
+    metaTitle: 'Study in UK from Bangladesh - Graduate Route Work Visa',
+    metaDescription: 'Study in UK with the Graduate Route post-study work visa. Gap accepted. Top Russell Group universities.',
     nextDeadline: 'August 15th',
     intakesText: 'January & September',
     factText: 'A British Masters degree takes only one year, allowing you to save on living costs and re-enter the workforce much faster than elsewhere.',
@@ -321,7 +321,7 @@ export const countries: Country[] = [
       { name: 'University Vice Chancellor Awards', amount: '£2,000 - £5,000 Automatic Entry Discounts', deadline: 'Automatic', icon: 'School' }
     ],
     serviceStatus: 'Active',
-    valueStatement: 'The UK offers prestigious, accelerated 1-year Master\'s degrees and a 2-year Post-Study Work (PSW) visa, making it the top choice for rapid career advancement and global employability.',
+    valueStatement: 'The UK offers prestigious, accelerated 1-year Master\'s degrees and the Graduate Route post-study work visa, making it a strong choice for rapid career advancement and global employability.',
     whoItFits: [
       'Students looking for fast-track 1-year Master\'s degrees',
       'Professionals seeking strong Post-Study Work (PSW) rights',
@@ -335,20 +335,20 @@ export const countries: Country[] = [
     ],
     educationSystemAndRecognition: 'UK degrees are recognized universally. The system focuses on independent research, critical thinking, and accelerated learning, saving students an entire year compared to the US or Canada.',
     workRightsAndCareer: {
-      rights: 'Students can work 20 hrs/week during term. Graduates get a 2-year Graduate Route (PSW) visa to work full-time without needing an immediate sponsor.',
+      rights: 'Students can work 20 hrs/week during term. Graduates get the Graduate Route visa to work without an immediate sponsor: 2 years for applications on or before 31 December 2026, 18 months from January 2027, and 3 years after a PhD. Confirm the current rule for your intake before applying.',
       opportunities: 'Strong job market in Tech, Healthcare, Finance, and Engineering, particularly outside of London in emerging hubs.',
-      caveats: 'Securing a skilled worker visa after the 2-year PSW requires a minimum salary threshold, which can be challenging for entry-level roles.'
+      caveats: 'Securing a skilled worker visa after the Graduate Route requires a minimum salary threshold, which can be challenging for entry-level roles.'
     },
     comparisons: {
       countryA: 'USA',
-      countryA_description: 'The US takes 2 years for a Master\'s and has a lottery-based work visa system, whereas the UK is 1 year with a guaranteed 2-year PSW.',
+      countryA_description: 'The US takes 2 years for a Master\'s and has a lottery-based work visa system, whereas the UK is 1 year with the Graduate Route work visa afterwards.',
       countryB: 'China',
       countryB_description: 'China offers more full-ride scholarships and cheaper living, but the UK provides superior post-study work rights and English-speaking integration.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Senior UK Admissions Counselors',
-      lastVerifiedDate: 'October 2026',
+      lastVerifiedDate: 'July 2026',
       primarySources: ['UKVI Official Guidance', 'UCAS', 'British Council Bangladesh']
     }
   },
@@ -421,7 +421,7 @@ export const countries: Country[] = [
       countryA: 'Finland',
       countryA_description: 'Finland offers a clearer PR pathway and higher wages, but Hungary is significantly cheaper and offers the 100% funded Stipendium Hungaricum.',
       countryB: 'UK',
-      countryB_description: 'Hungary provides affordable Schengen access and free tuition options, whereas the UK charges high tuition but offers a guaranteed 2-year PSW.'
+      countryB_description: 'Hungary provides affordable Schengen access and free tuition options, whereas the UK charges high tuition but offers the Graduate Route post-study work visa.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
@@ -511,7 +511,7 @@ export const countries: Country[] = [
     name: 'Cyprus',
     slug: 'cyprus',
     flag: '🇨🇾',
-    description: 'Affordable Education & Easy Visa',
+    description: 'Affordable Education & Straightforward Admissions',
     universities: ['European University of Lefke', 'Near East University', 'Eastern Mediterranean University', 'University of Nicosia', 'Frederick University'],
     programs: ['Hotel Management', 'Business', 'Pharmacy', 'Engineering'],
     requirements: {
@@ -520,7 +520,7 @@ export const countries: Country[] = [
       visa: ['On-Arrival Student Pass (Northern Cyprus)', 'Schengen-adjacent Student Visa (Southern Cyprus)']
     },
     costs: {
-      tuition: '€2,500 - €4,500 / year (Typically includes 50% waiver)',
+      tuition: '€2,500 - €4,500 / year (partial waivers available for eligible students)',
       living: '€300 - €400 / month',
       currency: 'EUR'
     },
@@ -580,7 +580,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'European Admissions Compliance',
-      lastVerifiedDate: 'October 2026',
+      lastVerifiedDate: 'July 2026',
       primarySources: ['Ministry of Education, Sport and Youth (Cyprus)', 'CYQAA / YÖDAK Accreditation Portals']
     }
   },
@@ -655,7 +655,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'European Admissions Compliance',
-      lastVerifiedDate: 'October 2026',
+      lastVerifiedDate: 'July 2026',
       primarySources: ['Ministry of Science and Education (Croatia)', 'ASHE Accreditation Agency']
     }
   },
@@ -663,7 +663,7 @@ export const countries: Country[] = [
     name: 'Georgia',
     slug: 'georgia',
     flag: '🇬🇪',
-    description: 'Best for MBBS (No Entrance Exam)',
+    description: 'Popular for MBBS (No Entrance Exam)',
     universities: ['University of Georgia (UG)', 'Tbilisi State Medical University', 'Caucasus International University', 'East European University'],
     programs: ['MBBS (Medicine)', 'Dentistry', 'Business'],
     requirements: {
@@ -677,7 +677,7 @@ export const countries: Country[] = [
       currency: 'USD'
     },
     scholarships: ['Merit based tuition discounts'],
-    benefits: ['Direct MBBS Admission with No Entrance Exam', 'WHO & ECFMG Recognized degrees (Practice in US, UK, Europe)', 'Low tuition fees and very affordable living costs'],
+    benefits: ['Direct MBBS Admission with No Entrance Exam', 'WHO-listed / ECFMG-recognized universities (local licensing exams required to practise abroad)', 'Low tuition fees and very affordable living costs'],
     isActive: true,
     featured: true,
     images: ['https://images.unsplash.com/photo-1565008576549-57569a49371d?q=75&w=1200&auto=format&fit=crop'],
@@ -729,7 +729,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Medical Admissions & Compliance Lead',
-      lastVerifiedDate: 'October 2026',
+      lastVerifiedDate: 'July 2026',
       primarySources: ['NCEQE Georgia', 'World Directory of Medical Schools (WDOMS)']
     }
   },
@@ -804,7 +804,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Research & Compliance',
-      lastVerifiedDate: 'October 2026',
+      lastVerifiedDate: 'July 2026',
       primarySources: ['Official Ministry of Education', 'National Immigration Authority']
     }
   },
@@ -860,7 +860,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'European Admissions Specialist',
-      lastVerifiedDate: 'October 2026',
+      lastVerifiedDate: 'July 2026',
       primarySources: ['MFHEA Malta', 'Central Visa Unit Malta']
     }
   },
@@ -916,7 +916,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'European Admissions Counselor',
-      lastVerifiedDate: 'October 2026',
+      lastVerifiedDate: 'July 2026',
       primarySources: ['Ministry of Education and Religious Affairs (Greece)', 'HAHE Accreditation Portal']
     }
   },
@@ -972,7 +972,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Southeast Asia Admissions Lead',
-      lastVerifiedDate: 'October 2026',
+      lastVerifiedDate: 'July 2026',
       primarySources: ['MHESI Thailand', 'Thai Immigration Bureau']
     }
   }

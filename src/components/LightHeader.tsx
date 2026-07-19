@@ -25,7 +25,7 @@ const destinations = [
   { name: 'Hungary', href: '/destinations/hungary', note: 'Active since 2025', code: 'HU' },
   { name: 'Cyprus', href: '/destinations/cyprus', note: 'Active since 2025', code: 'CY' },
   { name: 'South Korea', href: '/destinations/south-korea', note: 'Active since 2025', code: 'KR' },
-  { name: 'United Kingdom', href: '/destinations/united-kingdom', note: 'Active since 2025', code: 'UK' },
+  { name: 'United Kingdom', href: '/destinations/uk', note: 'Active since 2025', code: 'UK' },
   { name: 'Georgia', href: '/destinations/georgia', note: 'Active since 2025', code: 'GE' },
   { name: 'Greece', href: '/destinations/greece', note: 'University collaboration', code: 'GR' },
   { name: 'Malaysia', href: '/destinations/malaysia', note: 'Active university routes', code: 'MY' },

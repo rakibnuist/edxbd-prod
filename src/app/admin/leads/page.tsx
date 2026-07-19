@@ -19,7 +19,7 @@ interface Lead {
 }
 
 export default function LeadsPageNew() {
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,10 +43,7 @@ export default function LeadsPageNew() {
   };
 
   useEffect(() => {
-    if (isAuthenticated && !authLoading) {
-      fetchLeads();
-    } else if (!isAuthenticated && !authLoading) {
-      // Auto-login for admin access
+    if (!authLoading && isAuthenticated) {
       fetchLeads();
     }
   }, [isAuthenticated, authLoading]);
@@ -56,40 +53,8 @@ export default function LeadsPageNew() {
       setLoading(true);
       setError(null);
 
-      console.log('Making request to /api/admin/leads...');
-
-      // First, try to get a fresh token by logging in (same as dashboard)
-      const loginResponse = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: 'admin@eduexpressint.com',
-          password: 'admin123'
-        })
-      });
-
-      if (!loginResponse.ok) {
-        throw new Error(`Login failed with status: ${loginResponse.status}`);
-      }
-
-      const loginData = await loginResponse.json();
-      const token = loginData.token;
-
-      if (!token) {
-        throw new Error('No token received from login');
-      }
-
-      // Now fetch leads with the fresh token
-      const response = await fetch('/api/admin/leads', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      console.log('Response status:', response.status);
+      // Uses the logged-in admin's stored token (with silent refresh on 403).
+      const response = await authenticatedFetch('/api/admin/leads');
 
       if (response.ok) {
         const data = await response.json();
@@ -111,37 +76,9 @@ export default function LeadsPageNew() {
     try {
       setUpdatingStatus(leadId);
 
-      // Get fresh token (same as fetchLeads)
-      const loginResponse = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: 'admin@eduexpressint.com',
-          password: 'admin123'
-        })
-      });
-
-      if (!loginResponse.ok) {
-        throw new Error(`Login failed with status: ${loginResponse.status}`);
-      }
-
-      const loginData = await loginResponse.json();
-      const token = loginData.token;
-
-      if (!token) {
-        throw new Error('No token received from login');
-      }
-
-      console.log(`Updating lead ${leadId} status to: ${newStatus}`);
-
-      const response = await fetch(`/api/admin/leads/${leadId}`, {
+      const response = await authenticatedFetch(`/api/admin/leads/${leadId}`, {
         method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       });
 
@@ -182,35 +119,9 @@ export default function LeadsPageNew() {
     try {
       setDeleting(true);
 
-      // Get fresh token (same as fetchLeads)
-      const loginResponse = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: 'admin@eduexpressint.com',
-          password: 'admin123'
-        })
-      });
-
-      if (!loginResponse.ok) {
-        throw new Error(`Login failed with status: ${loginResponse.status}`);
-      }
-
-      const loginData = await loginResponse.json();
-      const token = loginData.token;
-
-      if (!token) {
-        throw new Error('No token received from login');
-      }
-
-      const response = await fetch(`/api/admin/leads?id=${leadId}`, {
+      const response = await authenticatedFetch(`/api/admin/leads?id=${leadId}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' },
       });
 
       if (response.ok) {

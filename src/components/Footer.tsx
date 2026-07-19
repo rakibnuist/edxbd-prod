@@ -19,7 +19,7 @@ const destinations = [
   ['Hungary', '/destinations/hungary', '03'],
   ['Cyprus', '/destinations/cyprus', '04'],
   ['South Korea', '/destinations/south-korea', '05'],
-  ['United Kingdom', '/destinations/united-kingdom', '06'],
+  ['United Kingdom', '/destinations/uk', '06'],
   ['Georgia', '/destinations/georgia', '07'],
   ['Greece', '/destinations/greece', '08'],
   ['Malaysia', '/destinations/malaysia', '09'],

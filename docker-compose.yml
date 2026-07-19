@@ -7,10 +7,17 @@ services:
       dockerfile: Dockerfile
     container_name: edxbd_web
     restart: always
+    # Secrets live in a .env file next to this compose file ON THE VPS (never in git).
+    env_file:
+      - .env
     environment:
       # Use a persistent location for the database inside the container
       - DATABASE_URL=file:/app/prisma/data/prod.db
       - NODE_ENV=production
+      # These are interpolated from the VPS .env; the app requires JWT_SECRET in prod.
+      - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
     volumes:
       # Mount a local directory to persist the SQLite database
       - ./prisma/data:/app/prisma/data

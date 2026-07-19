@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  web:
+    image: node:18-alpine
+    container_name: edxbd_web
+    restart: always
+    working_dir: /app
+    command: >
+      sh -c "
+      apk add --no-cache git openssl libc6-compat &&
+      if [ ! -d .git ]; then
+        echo 'Cloning repository...' &&
+        git clone https://github.com/rakibnuist/edxbd-prod.git .
+      else
+        echo 'Pulling latest changes...' &&
+        git fetch origin main &&
+        git reset --hard origin/main
+      fi &&
+      echo 'Installing dependencies...' &&
+      npm install &&
+      echo 'Generating Prisma...' &&
+      npx prisma generate &&
+      echo 'Pushing DB...' &&
+      npx prisma db push --accept-data-loss &&
+      echo 'Building Next.js...' &&
+      npm run build &&
+      echo 'Starting server...' &&
+      npm start
+      "
+    environment:
+      - DATABASE_URL=file:/app/prisma/data/prod.db
+      - NODE_ENV=production
+    volumes:
+      - ./app-data:/app
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.edxbd.rule=Host(`eduexpressint.com`) || Host(`www.eduexpressint.com`)"
+      - "traefik.http.routers.edxbd.entrypoints=websecure"
+      - "traefik.http.routers.edxbd.tls.certresolver=letsencrypt" 
+      - "traefik.http.services.edxbd.loadbalancer.server.port=3000"

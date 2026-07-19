@@ -170,7 +170,7 @@ export default function ChinaFlagshipRecord() {
                   </Link>
                 ))}
               </div>
-              <Link href="/success-stories/china" className="group mt-5 flex items-center justify-between bg-white/5 p-4 text-sm font-black hover:bg-white/10"><span className="flex items-center gap-3"><MapPinCheck size={18} className="text-[#64b5df]" /> View consent based China success stories</span><ArrowRight size={17} className="transition group-hover:translate-x-1" /></Link>
+              <Link href="/success-stories" className="group mt-5 flex items-center justify-between bg-white/5 p-4 text-sm font-black hover:bg-white/10"><span className="flex items-center gap-3"><MapPinCheck size={18} className="text-[#64b5df]" /> View consent based China success stories</span><ArrowRight size={17} className="transition group-hover:translate-x-1" /></Link>
             </article>
 
             <article className="relative overflow-hidden bg-[#64b5df] p-6 text-[#08263c] sm:p-8">

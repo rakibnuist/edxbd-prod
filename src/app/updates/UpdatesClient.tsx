@@ -266,12 +266,10 @@ export default function UpdatesClient({ initialUpdates = [], initialCategories =
       >
         <button
           onClick={handleContactFormOpen}
-          className="group relative inline-flex items-center px-8 py-4 bg-amber-500 text-slate-900 rounded-full font-bold text-lg hover:bg-amber-400 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-amber-500/20 active:scale-95"
+          className="inline-flex items-center justify-center bg-[#08263c] text-white px-6 py-4 font-black text-sm hover:bg-[#174f7a] transition-all shadow-[4px_4px_0_0_#174f7a] mt-4"
         >
-          <span className="relative z-10 flex items-center">
-            Get Updates
-            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-          </span>
+          <span>Get Direct Updates</span>
+          <ArrowRight className="w-4 h-4 ml-2" />
         </button>
       </PageHeader>
 
@@ -428,10 +426,10 @@ export default function UpdatesClient({ initialUpdates = [], initialCategories =
               return (
                 <article
                   key={update.id}
-                  className="group bg-white rounded-[2rem] overflow-hidden shadow-sm border border-slate-200 hover:border-blue-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full"
+                  className="group bg-white border-2 border-[#08263c] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[10px_10px_0_0_#174f7a] flex flex-col h-full"
                 >
                   {/* Image Container */}
-                  <div className="relative h-60 overflow-hidden">
+                  <div className="relative h-56 overflow-hidden bg-[#08263c]">
                     {update.featuredImage ? (
                       <Image
                         src={update.featuredImage}
@@ -442,20 +440,20 @@ export default function UpdatesClient({ initialUpdates = [], initialCategories =
                         priority={false}
                       />
                     ) : (
-                      <div className="w-full h-full bg-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                        <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center text-3xl">
-                          📰
+                      <div className="w-full h-full bg-[#08263c] flex items-center justify-center">
+                        <div className="w-14 h-14 bg-[#174f7a] border border-[#64b5df]/30 text-white flex items-center justify-center text-2xl font-mono">
+                          NEWS
                         </div>
                       </div>
                     )}
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#08263c]/80 via-transparent to-transparent" />
 
                     {/* Featured Badge */}
                     {update.isFeatured && (
-                      <div className="absolute top-4 right-4 z-10">
-                        <span className="bg-white/90 backdrop-blur-sm text-amber-600 px-3 py-1.5 rounded-full text-xs font-bold flex items-center shadow-sm border border-slate-100 transform group-hover:scale-105 transition-transform">
-                          <Star className="w-3.5 h-3.5 mr-1.5 fill-amber-500 text-amber-500" />
+                      <div className="absolute top-3 right-3 z-10">
+                        <span className="bg-[#64b5df] text-[#08263c] px-3 py-1 font-mono text-[10px] font-black uppercase tracking-wider flex items-center shadow-sm border border-[#08263c]">
+                          <Star className="w-3 h-3 mr-1 fill-[#08263c] text-[#08263c]" />
                           Featured
                         </span>
                       </div>
@@ -463,23 +461,23 @@ export default function UpdatesClient({ initialUpdates = [], initialCategories =
 
                     {/* Category Badge overlay */}
                     {primaryCategory && (
-                      <div className="absolute top-4 left-4 z-10">
-                        <span className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm border navbar-glass ${getCategoryColor(primaryCategory)} backdrop-blur-md`}>
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="px-3 py-1 font-mono text-[10px] font-black uppercase tracking-wider bg-[#08263c] text-[#8ed0ee] border border-[#174f7a]">
                           {primaryCategory}
                         </span>
                       </div>
                     )}
                   </div>
 
-                  <div className="p-7 flex-1 flex flex-col">
+                  <div className="p-6 flex-1 flex flex-col bg-white">
                     {/* Date */}
-                    <div className="flex items-center text-slate-500 text-xs font-bold mb-4 uppercase tracking-wider">
-                      <Calendar className="w-4 h-4 mr-2 text-amber-500" />
+                    <div className="flex items-center text-[#174f7a] font-mono text-[10px] font-black uppercase tracking-widest mb-3">
+                      <Calendar className="w-3.5 h-3.5 mr-1.5 text-[#174f7a]" />
                       {formatDate(update.publishedAt || update.createdAt)}
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl font-bold text-slate-900 mb-3 leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">
+                    <h3 className="font-heading text-xl font-bold text-[#08263c] mb-3 leading-snug group-hover:text-[#174f7a] transition-colors line-clamp-2">
                       <Link href={`/updates/${update.slug}`} className="focus:outline-none">
                         {update.title}
                       </Link>
@@ -487,19 +485,19 @@ export default function UpdatesClient({ initialUpdates = [], initialCategories =
 
                     {/* Excerpt */}
                     {update.excerpt && (
-                      <p className="text-slate-600 text-sm mb-6 line-clamp-3 leading-relaxed flex-1">
+                      <p className="text-slate-600 text-xs leading-5 mb-6 line-clamp-3 flex-1">
                         {update.excerpt}
                       </p>
                     )}
 
                     {/* Footer */}
-                    <div className="flex items-center justify-between pt-6 border-t border-slate-100 mt-auto">
+                    <div className="flex items-center justify-between pt-4 border-t border-[#174f7a]/15 mt-auto">
                       <Link
                         href={`/updates/${update.slug}`}
-                        className="inline-flex items-center text-blue-600 hover:text-blue-700 text-sm font-bold transition-all group/link bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg ml-auto"
+                        className="inline-flex items-center text-[#08263c] hover:text-[#174f7a] font-mono text-xs font-black uppercase tracking-wider transition-all group/link bg-[#f4f8fa] hover:bg-[#e9f7fd] border border-[#174f7a]/20 px-4 py-2 ml-auto"
                       >
-                        Read
-                        <ArrowRight className="w-4 h-4 ml-1.5 transform group-hover/link:translate-x-1 transition-transform" />
+                        Read Update
+                        <ArrowRight className="w-3.5 h-3.5 ml-1.5 transform group-hover/link:translate-x-1 transition-transform" />
                       </Link>
                     </div>
                   </div>

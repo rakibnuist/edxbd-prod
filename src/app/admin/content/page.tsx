@@ -31,37 +31,12 @@ export default function ContentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Helper function to get fresh admin token
+  // Returns the logged-in admin's stored token. If there is none, the user must
+  // sign in — no credentials are ever embedded in the client.
   const getFreshToken = async (): Promise<string> => {
     const storedToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
     if (storedToken) return storedToken;
-
-    const loginResponse = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: 'admin@eduexpressint.com',
-        password: 'admin123'
-      })
-    });
-
-    if (!loginResponse.ok) {
-      throw new Error(`Login failed with status: ${loginResponse.status}`);
-    }
-
-    const loginData = await loginResponse.json();
-    const token = loginData.token;
-
-    if (!token) {
-      throw new Error('No token received from login');
-    }
-
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('admin_token', token);
-    }
-    return token;
+    throw new Error('Your session has expired. Please sign in again.');
   };
 
   useEffect(() => {
