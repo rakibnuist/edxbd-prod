@@ -55,7 +55,7 @@ export default async function ChinaUniversitiesPage() {
         title="China Universities"
         highlight="Verified Directory"
         description="Inspect and compare 134+ collaborating Chinese institutions by degree level, taught language, intake deadlines, tuition and scholarship coverage."
-        icon={Database}
+        icon={<Database />}
         badgeText="China Database 2027"
       />
 
