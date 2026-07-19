@@ -67,7 +67,7 @@ export default function Footer() {
             <div>
               <span className="font-mono text-[10px] font-black uppercase tracking-[0.18em]">Assessment pass</span>
               <p className="mt-3 font-heading text-2xl font-bold">Free Education Fit Assessment</p>
-              <Link href="/contact?service=education-fit-assessment" className="mt-6 inline-flex items-center gap-3 bg-[#08263c] px-5 py-4 text-sm font-black text-white hover:bg-[#174f7a]">Start my assessment <ArrowUpRight size={18} /></Link>
+              <Link href="/education-fit-assessment" className="mt-6 inline-flex items-center gap-3 bg-[#08263c] px-5 py-4 text-sm font-black text-white hover:bg-[#174f7a]">Start my assessment <ArrowUpRight size={18} /></Link>
             </div>
           </div>
         </div>

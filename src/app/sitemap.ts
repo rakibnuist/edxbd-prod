@@ -23,12 +23,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/updates',
     '/partnership',
     '/contact',
+    '/education-fit-assessment',
     ...Object.keys(evidencePages).map((slug) => `/${slug}`),
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
-    priority: route === '' ? 1 : 0.8,
+    priority: route === '' ? 1 : route === '/education-fit-assessment' ? 0.9 : 0.8,
   }));
 
   // Dynamic routes (Countries)

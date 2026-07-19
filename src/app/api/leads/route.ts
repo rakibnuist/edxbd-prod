@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Lead from '@/models/Lead';
+import { routeLead } from '@/lib/lead-routing';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
 
 export async function POST(request: NextRequest) {
@@ -26,17 +27,34 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    // Apply plan lead-routing rules server-side.
+    const routing = routeLead({
+      destinationInterest: body.destinationInterest,
+      country: body.country,
+      program: body.program,
+      subject: body.assessment?.subject,
+      careerGoal: body.assessment?.careerGoal,
+      source: body.source,
+      budget: body.assessment?.budget,
+    });
+
     // Create new lead
     const lead = new Lead({
       ...body,
       source: body.source || 'website',
       status: 'new',
+      leadType: body.leadType || 'contact',
+      destinationInterest: body.destinationInterest,
+      assignedTeam: routing.assignedTeam,
+      riskFlag: routing.riskFlag,
+      medicalProgram: routing.medicalProgram,
+      notes: [body.notes, routing.routingNote].filter(Boolean).join(' | '),
       consentTimestamp: new Date(body.consentTimestamp),
       consentPolicyVersion: body.consentPolicyVersion,
       landingPage: body.landingPage,
       utm: body.utm || {}
     });
-    
+
     await lead.save();
 
     // Track lead with Meta Conversion API
