@@ -27,7 +27,7 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
       <header className="relative overflow-hidden bg-[#08263c] text-white">
         <div className="absolute right-[-13rem] top-[-15rem] size-[42rem] rounded-full border-[6rem] border-[#64b5df]/10" />
         <div className="absolute bottom-0 left-[38%] h-44 w-px bg-gradient-to-b from-transparent to-[#64b5df]/50" />
-        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[.68fr_.32fr] lg:items-end lg:py-16">
+        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.68fr_.32fr] lg:items-end lg:py-16">
           <div>
             <nav aria-label="Breadcrumb" className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/50"><Link href="/">Home</Link> <span aria-hidden="true">/</span> <Link href="/study-in-china-from-bangladesh">Study in China</Link> <span aria-hidden="true">/</span> {guide.code}</nav>
             <p className="mt-8 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">{guide.eyebrow}</p>
@@ -41,7 +41,7 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
       </header>
 
       <nav aria-label="China guide navigation" className="border-b border-[#174f7a]/15 bg-white">
-        <div className="mx-auto flex max-w-[1440px] gap-px overflow-x-auto bg-[#174f7a]/15 px-4 sm:px-6">
+        <div className="mx-auto flex max-w-[1440px] gap-px overflow-x-auto bg-[#174f7a]/15 px-5 sm:px-8 lg:px-12">
           {[
             ['Universities', '/china-universities'],
             ['Scholarships', '/china-scholarships-bangladesh'],
@@ -53,7 +53,7 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
         </div>
       </nav>
 
-      <section className="mx-auto grid max-w-[1440px] gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[.28fr_.72fr] lg:py-20">
+      <section className="mx-auto grid max-w-[1440px] gap-8 px-5 sm:px-8 lg:px-12 py-14 sm:px-8 lg:px-12 lg:grid-cols-[.28fr_.72fr] lg:py-20">
         <aside>
           <div className="sticky top-32 border-t-4 border-[#174f7a] bg-[#e9f7fd] p-5">
             <SearchCheck size={25} className="text-[#174f7a]" />
@@ -77,10 +77,10 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
         </div>
       </section>
 
-      {guide.slug === 'study-in-china-cost-bangladesh' ? <section className="mx-auto max-w-[1440px] px-4 pb-14 sm:px-6 lg:pb-20"><ChinaCostCalculator /></section> : null}
+      {guide.slug === 'study-in-china-cost-bangladesh' ? <section className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12 pb-14 sm:px-8 lg:px-12 lg:pb-20"><ChinaCostCalculator /></section> : null}
 
       <section className="bg-[#e9f7fd]">
-        <div className="mx-auto grid max-w-[1440px] gap-6 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:py-20">
+        <div className="mx-auto grid max-w-[1440px] gap-6 px-5 py-14 sm:px-8 lg:px-12 lg:grid-cols-2 lg:py-20">
           <article className="border-t-4 border-amber-500 bg-white p-6 sm:p-8">
             <CircleAlert size={27} className="text-amber-600" />
             <h2 className="mt-5 font-heading text-2xl font-bold">What may change</h2>
@@ -103,14 +103,14 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
       </section>
 
       <section className="bg-[#08263c] text-white">
-        <div className="mx-auto grid max-w-[1440px] gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[.68fr_.32fr] lg:items-center">
+        <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.68fr_.32fr] lg:items-center">
           <div><p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Next useful step</p><h2 className="mt-3 text-balance font-heading text-3xl font-bold sm:text-4xl">{guide.ctaTitle}</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-white/65">{guide.ctaText}</p></div>
           <Link href="/study-in-china-from-bangladesh#china-fit-form" className="flex min-h-14 items-center justify-center gap-2 bg-[#64b5df] px-5 text-sm font-black text-[#08263c]">Get My China Fit Assessment <ArrowRight size={17} /></Link>
         </div>
       </section>
 
       <section className="border-b border-[#174f7a]/15 bg-[#f6f9fb]">
-        <div className="mx-auto grid max-w-[1440px] gap-8 px-4 py-10 sm:px-6 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-10 sm:px-8 lg:px-12 lg:grid-cols-2">
           <div>
             <p className="flex items-center gap-2 font-mono text-[9px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><FileCheck2 size={14} /> Related China decisions</p>
             <div className="mt-4 grid gap-px bg-[#174f7a]/15 sm:grid-cols-2">{guide.related.map(item => <Link key={item.href} href={item.href} className="flex items-center justify-between gap-3 bg-white p-3 text-xs font-black hover:bg-[#e9f7fd]">{item.label}<ArrowRight size={14} className="text-[#174f7a]" /></Link>)}</div>

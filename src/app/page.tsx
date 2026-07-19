@@ -84,7 +84,7 @@ const standards = [
 export default function Home() {
   return (
     <div className="overflow-hidden bg-[#f4f8fa] text-[#08263c]">
-      <section className="relative px-4 pb-24 pt-32 md:pt-40">
+      <section className="relative px-5 sm:px-8 lg:px-12 pb-24 pt-32 md:pt-40">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(23,79,122,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(23,79,122,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
         <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#64b5df]/15 md:size-[460px]" />
 
@@ -101,7 +101,7 @@ export default function Home() {
                 <Fingerprint className="mt-0.5 shrink-0 text-[#8ed0ee] sm:mt-0" size={16} />
                 <span className="min-w-0 whitespace-normal">Bangladesh&apos;s Evidence First Education Consultancy</span>
               </p>
-              <h1 className="mt-7 w-full max-w-4xl break-words text-balance font-heading text-[clamp(2.6rem,7vw,5.25rem)] font-bold leading-[1.04] tracking-[-0.022em]">
+              <h1 className="mt-7 w-full max-w-4xl break-words text-balance font-heading text-[clamp(2.4rem,5.6vw,4.4rem)] font-bold leading-[1.06] tracking-[-0.022em]">
                 Choose better education abroad <span className="relative mt-3 inline-block bg-[#64b5df] px-2 pb-2 text-[#08263c] sm:px-3 sm:pb-3">with clear costs</span> and written proof
               </h1>
               <p className="mt-8 max-w-2xl border-l-4 border-[#64b5df] pl-5 text-base leading-7 text-slate-700 md:text-lg md:leading-8">
@@ -146,7 +146,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-white px-4 py-24 md:py-32">
+      <section className="bg-white px-5 sm:px-8 lg:px-12 py-24 md:py-32">
         <div className="mx-auto max-w-[1440px]">
           <div className="grid gap-10 lg:grid-cols-[.75fr_1.25fr]">
             <div className="lg:sticky lg:top-28 lg:self-start">
@@ -177,7 +177,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#08263c] px-4 py-24 text-white md:py-32">
+      <section className="bg-[#08263c] px-5 sm:px-8 lg:px-12 py-24 text-white md:py-32">
         <div className="mx-auto max-w-[1440px]">
           <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr]">
             <div>
@@ -201,7 +201,7 @@ export default function Home() {
 
       <ChinaFlagshipRecord />
 
-      <section className="bg-[#64b5df] px-4 py-20 text-[#08263c]">
+      <section className="bg-[#64b5df] px-5 sm:px-8 lg:px-12 py-20 text-[#08263c]">
         <div className="mx-auto max-w-[1440px]">
           <div className="grid items-end gap-10 lg:grid-cols-[1fr_auto]">
           <div>

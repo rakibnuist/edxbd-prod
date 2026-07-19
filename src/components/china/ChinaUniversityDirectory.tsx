@@ -56,7 +56,7 @@ export default function ChinaUniversityDirectory({ universities }: Props) {
 
   return (
     <section id="china-university-directory" className="bg-[#f6f9fb]">
-      <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 lg:py-16">
+      <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:px-12 lg:py-16">
         <div className="grid gap-6 border border-[#174f7a]/15 bg-[#e9f7fd] p-5 lg:grid-cols-[1fr_auto] lg:items-end lg:p-7">
           <div>
             <p className="flex items-center gap-2 font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#174f7a]"><Filter size={14} /> Compare current records</p>

@@ -82,7 +82,7 @@ export default async function ChinaSuccessStoriesPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <header className="relative overflow-hidden bg-[#08263c] text-white">
         <div className="absolute left-[-12rem] top-[-14rem] size-[38rem] rounded-full border-[6rem] border-[#64b5df]/10" />
-        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[.66fr_.34fr] lg:items-end lg:py-16">
+        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.66fr_.34fr] lg:items-end lg:py-16">
           <div>
             <nav className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/50" aria-label="Breadcrumb"><Link href="/">Home</Link> <span aria-hidden="true">/</span> <Link href="/study-in-china-from-bangladesh">Study in China</Link> <span aria-hidden="true">/</span> Success stories</nav>
             <p className="mt-8 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Proof with permission</p>
@@ -106,7 +106,7 @@ export default async function ChinaSuccessStoriesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:py-20">
+      <section className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12 py-14 sm:px-8 lg:px-12 lg:py-20">
         {stories.length ? (
           <div className="grid gap-6 lg:grid-cols-2">
             {stories.map(story => (
@@ -156,7 +156,7 @@ export default async function ChinaSuccessStoriesPage() {
       </section>
 
       <section className="border-y border-[#174f7a]/15 bg-[#e9f7fd]">
-        <div className="mx-auto max-w-[1440px] px-4 py-10 text-xs leading-6 text-slate-600 sm:px-6">
+        <div className="mx-auto max-w-[1440px] px-5 py-10 text-xs leading-6 text-slate-600 sm:px-8 lg:px-12">
           <p><strong className="text-[#08263c]">Editorial owner:</strong> EduExpress China Admissions Desk <span aria-hidden="true">•</span> <strong className="text-[#08263c]">Consent reviewer:</strong> EduExpress Content and Compliance</p>
           <p><strong className="text-[#08263c]">Last evidence review:</strong> 19 July 2026 <span aria-hidden="true">•</span> <strong className="text-[#08263c]">Next review:</strong> 19 August 2026</p>
         </div>

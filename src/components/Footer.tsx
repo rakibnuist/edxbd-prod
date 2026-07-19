@@ -45,14 +45,14 @@ const socialLinks = [
 export default function Footer() {
   return (
     <footer className="overflow-hidden bg-[#061b2a] text-white">
-      <div className="border-b border-white/15 bg-[#64b5df] px-4 py-5 text-[#08263c]">
+      <div className="border-b border-white/15 bg-[#64b5df] px-5 py-5 text-[#08263c] sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-[1440px] flex-col justify-between gap-3 sm:flex-row sm:items-center">
           <p className="flex items-center gap-3 text-sm font-black"><span className="grid size-8 place-items-center rounded-full bg-[#08263c] text-white"><ShieldCheck size={16} /></span> Better education. Clear costs. Written proof.</p>
           <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em]">Bangladesh decision desk</p>
         </div>
       </div>
 
-      <div className="relative mx-auto max-w-[1440px] px-4 py-16 sm:px-6 md:py-24">
+      <div className="relative mx-auto max-w-[1440px] px-5 py-16 sm:px-8 md:py-24 lg:px-12">
         <div className="pointer-events-none absolute right-0 top-4 font-heading text-[clamp(5rem,15vw,14rem)] font-bold leading-none tracking-[-0.08em] text-white/[0.025]">EDU</div>
 
         <div className="relative grid overflow-hidden border border-white/20 bg-[#08263c] lg:grid-cols-[1fr_auto]">

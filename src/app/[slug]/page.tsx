@@ -64,7 +64,7 @@ export default async function EvidencePageRoute({ params }: Props) {
   return (
     <article className="bg-slate-50 text-slate-900">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      <header className="bg-slate-950 px-4 pb-20 pt-28 text-white">
+      <header className="bg-slate-950 px-5 pb-20 pt-28 text-white sm:px-8 lg:px-12">
         <div className="mx-auto max-w-4xl">
           <nav aria-label="Breadcrumb" className="mb-8 text-sm text-slate-300"><Link href="/">Home</Link> <span aria-hidden> / </span> {page.title}</nav>
           <p className="mb-4 font-semibold uppercase tracking-[0.2em] text-amber-300">{page.eyebrow}</p>
