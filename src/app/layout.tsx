@@ -9,6 +9,7 @@ import ConditionalFooter from "@/components/ConditionalFooter";
 
 import WhatsAppWrapper from "@/components/WhatsAppWrapper";
 import CookieConsent from "@/components/CookieConsent";
+import MetaPixel from "@/components/MetaPixel";
 
 import "./globals.css";
 
@@ -301,6 +302,7 @@ export default function RootLayout({
             whatsappSource="floating_widget"
             phoneSource="header_contact"
           />
+          <MetaPixel />
           <ConditionalHeader />
           <main>{children}</main>
           <WhatsAppWrapper

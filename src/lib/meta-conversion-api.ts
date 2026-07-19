@@ -1,5 +1,11 @@
 // Meta Conversion API implementation for EduExpress International
+// NOTE: server-only module (imports the DB layer). Client code must call the
+// /api/meta-conversion route instead of importing from here.
 import crypto from 'crypto';
+import { getMetaConfig } from '@/lib/settings';
+
+// Optional explicit credentials; when omitted the DB config is used.
+export type MetaConfigOverride = { pixelId?: string | null; accessToken?: string | null };
 
 // Configuration
 const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || '';
@@ -82,7 +88,8 @@ export const sendConversionAPIEvent = async (
   userData: MetaUserData,
   customData?: Record<string, unknown>,
   eventId?: string,
-  request?: Request
+  request?: Request,
+  metaConfig?: MetaConfigOverride
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   // Skip Meta API calls during build to prevent DNS issues
   if (process.env.NODE_ENV === 'production' && process.env.VERCEL === '1' && !request) {
@@ -92,7 +99,12 @@ export const sendConversionAPIEvent = async (
     };
   }
 
-  if (!META_ACCESS_TOKEN || !META_PIXEL_ID) {
+  // Resolve credentials: explicit override → DB settings → env fallback.
+  const cfg = metaConfig ?? (await getMetaConfig());
+  const activePixelId = cfg.pixelId || META_PIXEL_ID;
+  const activeAccessToken = cfg.accessToken || META_ACCESS_TOKEN;
+
+  if (!activeAccessToken || !activePixelId) {
     return {
       success: false,
       eventId: eventId || generateEventId(),
@@ -165,10 +177,10 @@ export const sendConversionAPIEvent = async (
           action_source: 'website',
         },
       ],
-      access_token: META_ACCESS_TOKEN,
+      access_token: activeAccessToken,
     };
 
-    const response = await fetch(`https://graph.facebook.com/${META_API_VERSION}/${META_PIXEL_ID}/events`, {
+    const response = await fetch(`https://graph.facebook.com/${META_API_VERSION}/${activePixelId}/events`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -212,7 +224,8 @@ export const trackStudyAbroadLead = async (
     zipCode?: string;
   },
   source: string = 'website_contact_form',
-  request?: Request
+  request?: Request,
+  metaConfig?: MetaConfigOverride
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = formData.name.split(' ');
@@ -240,7 +253,7 @@ export const trackStudyAbroadLead = async (
     currency: 'BDT',
   };
 
-  return await sendConversionAPIEvent('Lead', userData, customData, eventId, request);
+  return await sendConversionAPIEvent('Lead', userData, customData, eventId, request, metaConfig);
 };
 
 export const trackConsultationRequest = async (
@@ -251,7 +264,8 @@ export const trackConsultationRequest = async (
     firstName?: string;
     lastName?: string;
   },
-  request?: Request
+  request?: Request,
+  metaConfig?: MetaConfigOverride
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
 
@@ -263,14 +277,15 @@ export const trackConsultationRequest = async (
     currency: 'BDT',
   };
 
-  return await sendConversionAPIEvent('Lead', userData || {}, customData, eventId, request);
+  return await sendConversionAPIEvent('Lead', userData || {}, customData, eventId, request, metaConfig);
 };
 
 export const trackPageView = async (
   pageName: string,
   pageCategory?: string,
   request?: Request,
-  eventId?: string
+  eventId?: string,
+  metaConfig?: MetaConfigOverride
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const finalEventId = eventId || generatePageViewEventId();
 
@@ -281,7 +296,7 @@ export const trackPageView = async (
     page_category: pageCategory || 'general',
   };
 
-  return await sendConversionAPIEvent('PageView', {}, customData, finalEventId, request);
+  return await sendConversionAPIEvent('PageView', {}, customData, finalEventId, request, metaConfig);
 };
 
 export const trackViewContent = async (
@@ -364,7 +379,8 @@ export const trackLeadStatusChange = async (
     previousStatus?: string;
     newStatus: string;
   },
-  request?: Request
+  request?: Request,
+  metaConfig?: MetaConfigOverride
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = leadData.name.split(' ');
@@ -411,7 +427,7 @@ export const trackLeadStatusChange = async (
     education_consultancy_event: true,
   };
 
-  return await sendConversionAPIEvent(mapping.event, userData, customData, eventId, request);
+  return await sendConversionAPIEvent(mapping.event, userData, customData, eventId, request, metaConfig);
 };
 
 // Track consultation booking

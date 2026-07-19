@@ -57,7 +57,9 @@ export const trackEvent = (eventName: string, parameters?: Record<string, unknow
   // FB.getLoginStatus and other methods require HTTPS
   const isHttps = typeof window !== 'undefined' && window.location.protocol === 'https:';
 
-  if (isHttps && typeof window !== 'undefined' && window.fbq && META_PIXEL_ID && META_PIXEL_ID !== '1234567890') {
+  // fbq is only present when MetaPixel initialised it with a valid Pixel ID
+  // (from DB settings or env), so its presence is the correct guard.
+  if (isHttps && typeof window !== 'undefined' && window.fbq) {
     try {
       window.fbq('track', eventName, eventData);
     } catch {
@@ -236,7 +238,7 @@ export const trackStudyAbroadLead = async (
   // Track with Meta Pixel
   const isHttps = typeof window !== 'undefined' && window.location.protocol === 'https:';
 
-  if (isHttps && typeof window !== 'undefined' && window.fbq && META_PIXEL_ID && META_PIXEL_ID !== '1234567890') {
+  if (isHttps && typeof window !== 'undefined' && window.fbq) {
     try {
       window.fbq('track', 'Lead', {
         event_id: eventId,

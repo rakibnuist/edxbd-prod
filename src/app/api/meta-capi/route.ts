@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { getMetaConfig } from '@/lib/settings';
 
 interface ConversionsAPIEvent {
     event_name: string;
@@ -47,8 +48,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
-        const accessToken = process.env.META_ACCESS_TOKEN;
+        // DB-configured values take precedence over env (admin can set without a rebuild).
+        const { pixelId, accessToken } = await getMetaConfig();
 
         if (!pixelId || !accessToken) {
             console.error('Meta Pixel ID or Access Token not configured');

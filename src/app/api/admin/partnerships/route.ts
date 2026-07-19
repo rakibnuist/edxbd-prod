@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { serializePartnership } from '@/lib/partnership-serialize';
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,11 +30,11 @@ export async function GET(request: NextRequest) {
     // Search functionality
     if (search) {
       filter.OR = [
-        { companyName: { contains: search, mode: 'insensitive' } },
-        { contactPerson: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
-        { city: { contains: search, mode: 'insensitive' } },
-        { state: { contains: search, mode: 'insensitive' } }
+        { companyName: { contains: search } },
+        { contactPerson: { contains: search } },
+        { email: { contains: search } },
+        { city: { contains: search } },
+        { state: { contains: search } }
       ];
     }
 
@@ -70,7 +71,7 @@ export async function GET(request: NextRequest) {
     const typeCounts = typeGroups.map(g => ({ id: g.partnershipType, count: g._count.partnershipType }));
 
     return NextResponse.json({
-      partnerships,
+      partnerships: partnerships.map((p) => serializePartnership(p as Record<string, unknown>)),
       pagination: {
         page,
         limit,
