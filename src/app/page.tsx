@@ -201,18 +201,18 @@ export default function Home() {
 
       <ChinaFlagshipRecord />
 
-      <section className="bg-[#64b5df] px-5 py-14 text-[#08263c] sm:px-8 sm:py-20 lg:px-12">
+      <section className="bg-[#64b5df] px-5 py-16 text-[#08263c] sm:px-8 sm:py-24 md:py-32 lg:px-12">
         <div className="mx-auto max-w-[1440px]">
-          <div className="grid items-end gap-10 lg:grid-cols-[1fr_auto]">
+          <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto] lg:gap-10">
           <div>
             <p className="font-mono text-xs font-black uppercase tracking-[0.22em] text-[#174f7a]">Compare before you commit</p>
             <h2 className="mt-4 max-w-4xl font-heading text-4xl font-bold leading-tight tracking-tight md:text-6xl">Bring us your results, budget and ambition. Leave with a clearer decision.</h2>
           </div>
-          <Link href="/contact?service=education-fit-assessment" className="inline-flex min-w-64 items-center justify-center gap-3 bg-[#08263c] px-7 py-5 text-lg font-black text-white hover:bg-[#174f7a]">Get my free fit assessment <ArrowUpRight size={20} /></Link>
+          <Link href="/contact?service=education-fit-assessment" className="inline-flex w-full items-center justify-center gap-3 bg-[#08263c] px-7 py-5 text-base font-black text-white hover:bg-[#174f7a] sm:text-lg lg:w-auto lg:min-w-64">Get my free fit assessment <ArrowUpRight size={20} /></Link>
           </div>
-          <div className="mt-10 grid border-l border-t border-[#08263c]/35 sm:grid-cols-3">
+          <div className="mt-10 grid border-l border-t border-[#08263c]/35 sm:mt-12 sm:grid-cols-3">
             {[['01', 'Academic record', 'Your latest results and study background'], ['02', 'Subject direction', 'The program or career area you want to explore'], ['03', 'Budget reality', 'A practical range for tuition and living costs']].map(([number, title, copy]) => (
-              <div key={number} className="border-b border-r border-[#08263c]/35 p-5"><span className="font-mono text-[10px] font-black text-[#174f7a]">BRING {number}</span><h3 className="mt-3 font-heading text-xl font-bold">{title}</h3><p className="mt-2 text-sm leading-6 text-[#0b2f4a]/70">{copy}</p></div>
+              <div key={number} className="border-b border-r border-[#08263c]/35 p-5 sm:p-6"><span className="font-mono text-[10px] font-black text-[#174f7a]">BRING {number}</span><h3 className="mt-3 font-heading text-xl font-bold">{title}</h3><p className="mt-2 text-sm leading-6 text-[#0b2f4a]/70">{copy}</p></div>
             ))}
           </div>
         </div>
