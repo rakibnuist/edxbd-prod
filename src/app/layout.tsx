@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 
 import ConditionalHeader from "@/components/ConditionalHeader";
 import EducationTracking from "@/components/EducationTracking";
-import Footer from "@/components/Footer";
+import ConditionalFooter from "@/components/ConditionalFooter";
 
 import WhatsAppWrapper from "@/components/WhatsAppWrapper";
 import CookieConsent from "@/components/CookieConsent";
@@ -308,7 +308,7 @@ export default function RootLayout({
             message="Hi, I would like an Education Fit Assessment. Please help me compare suitable universities, complete costs, recognition and scholarship availability."
           />
           <CookieConsent />
-          <Footer />
+          <ConditionalFooter />
           <Analytics />
           <SpeedInsights />
       </body>
