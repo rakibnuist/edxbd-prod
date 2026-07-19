@@ -108,7 +108,7 @@ export default function Home() {
                 We compare education quality, cost, recognition and career fit before recommending an option. Scholarship options are assessed after education fit.
               </p>
               <div className="mt-9 flex min-w-0 flex-col gap-3 sm:flex-row">
-                <Link href="/contact?service=education-fit-assessment" className="group inline-flex w-full items-center justify-center gap-3 bg-[#08263c] px-4 py-4 text-center text-sm font-black text-white hover:bg-[#174f7a] sm:w-auto sm:px-6 sm:text-base">
+                <Link href="/education-fit-assessment" className="group inline-flex w-full items-center justify-center gap-3 bg-[#08263c] px-4 py-4 text-center text-sm font-black text-white hover:bg-[#174f7a] sm:w-auto sm:px-6 sm:text-base">
                   Get My Free Fit Assessment <ArrowUpRight className="shrink-0 transition group-hover:translate-x-1 group-hover:-translate-y-1" size={19} />
                 </Link>
                 <Link href="/study-in-china-from-bangladesh" className="inline-flex w-full items-center justify-center gap-3 border-2 border-[#08263c] bg-white/50 px-4 py-4 text-center text-sm font-black hover:bg-white sm:w-auto sm:px-6 sm:text-base">
@@ -208,7 +208,7 @@ export default function Home() {
             <p className="font-mono text-xs font-black uppercase tracking-[0.22em] text-[#174f7a]">Compare before you commit</p>
             <h2 className="mt-4 max-w-4xl font-heading text-4xl font-bold leading-tight tracking-tight md:text-6xl">Bring us your results, budget and ambition. Leave with a clearer decision.</h2>
           </div>
-          <Link href="/contact?service=education-fit-assessment" className="inline-flex w-full items-center justify-center gap-3 bg-[#08263c] px-7 py-5 text-base font-black text-white hover:bg-[#174f7a] sm:text-lg lg:w-auto lg:min-w-64">Get my free fit assessment <ArrowUpRight size={20} /></Link>
+          <Link href="/education-fit-assessment" className="inline-flex w-full items-center justify-center gap-3 bg-[#08263c] px-7 py-5 text-base font-black text-white hover:bg-[#174f7a] sm:text-lg lg:w-auto lg:min-w-64">Get my free fit assessment <ArrowUpRight size={20} /></Link>
           </div>
           <div className="mt-10 grid border-l border-t border-[#08263c]/35 sm:mt-12 sm:grid-cols-3">
             {[['01', 'Academic record', 'Your latest results and study background'], ['02', 'Subject direction', 'The program or career area you want to explore'], ['03', 'Budget reality', 'A practical range for tuition and living costs']].map(([number, title, copy]) => (

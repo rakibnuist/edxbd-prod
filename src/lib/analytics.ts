@@ -3,7 +3,7 @@ import { getMetaParameters } from './meta-event-quality';
 
 // Configuration
 export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX';
-export const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
+export const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
 export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1234567890';
 export const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || '';
 

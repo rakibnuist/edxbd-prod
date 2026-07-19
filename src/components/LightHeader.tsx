@@ -158,10 +158,10 @@ export default function LightHeader() {
             <Link href="/study-in-china-from-bangladesh" className="flex items-center gap-2 border border-[#174f7a]/20 bg-[#e9f7fd] px-4 py-3 text-xs font-black text-[#174f7a]">
               <span className="grid size-5 place-items-center rounded-full bg-[#174f7a] font-mono text-[8px] text-white">CN</span> China flagship
             </Link>
-            <Link href="/contact?service=education-fit-assessment" className="flex items-center gap-2 bg-[#174f7a] px-4 py-3 text-xs font-black text-white">Free Fit Assessment <ArrowUpRight size={15} /></Link>
+            <Link href="/education-fit-assessment" className="flex items-center gap-2 bg-[#174f7a] px-4 py-3 text-xs font-black text-white">Free Fit Assessment <ArrowUpRight size={15} /></Link>
           </div>
 
-          <Link href="/contact?service=education-fit-assessment" onMouseEnter={closeMenu} onFocus={closeMenu} className="ml-auto hidden shrink-0 items-center gap-2 bg-[#174f7a] px-4 py-3 text-sm font-black text-white transition hover:bg-[#08263c] min-[1200px]:ml-0 min-[1200px]:inline-flex">
+          <Link href="/education-fit-assessment" onMouseEnter={closeMenu} onFocus={closeMenu} className="ml-auto hidden shrink-0 items-center gap-2 bg-[#174f7a] px-4 py-3 text-sm font-black text-white transition hover:bg-[#08263c] min-[1200px]:ml-0 min-[1200px]:inline-flex">
             Free Fit Assessment <ArrowUpRight size={16} />
           </Link>
 
@@ -252,7 +252,7 @@ export default function LightHeader() {
           <div className="mx-auto max-w-2xl px-4 py-5">
             <div className="grid grid-cols-2 gap-2">
               <a href="tel:+8801983333566" className="flex items-center justify-center gap-2 bg-[#08263c] px-3 py-3 text-xs font-bold text-white"><Phone size={15} /> 01983 333566</a>
-              <Link href="/contact?service=education-fit-assessment" className="flex items-center justify-center gap-2 bg-[#64b5df] px-3 py-3 text-center text-xs font-black">Free Fit Assessment <ArrowUpRight size={15} /></Link>
+              <Link href="/education-fit-assessment" className="flex items-center justify-center gap-2 bg-[#64b5df] px-3 py-3 text-center text-xs font-black">Free Fit Assessment <ArrowUpRight size={15} /></Link>
             </div>
 
             <div className="mt-4 border-t border-[#174f7a]/20">
