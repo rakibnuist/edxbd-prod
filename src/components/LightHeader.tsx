@@ -35,10 +35,12 @@ const destinations = [
 const chinaLinks = [
   { name: 'Study in China hub', href: '/study-in-china-from-bangladesh' },
   { name: 'CSC Scholarship BD', href: '/csc-scholarship-bangladesh' },
+  { name: 'China Student Visa', href: '/china-student-visa-bangladesh' },
+  { name: 'Study Cost Breakdown', href: '/study-in-china-cost-bangladesh' },
+  { name: 'Study Without IELTS', href: '/study-in-china-without-ielts' },
+  { name: 'MBBS in China', href: '/mbbs-in-china-bangladesh' },
   { name: 'China universities', href: '/china-universities' },
-  { name: 'Scholarships for Bangladesh', href: '/china-scholarships-bangladesh' },
-  { name: 'X1 and X2 visa guide', href: '/china-student-visa-bangladesh' },
-  { name: 'China cost planner', href: '/study-in-china-cost-bangladesh' },
+  { name: 'Scholarships for BD', href: '/china-scholarships-bangladesh' },
   { name: 'Visa first service terms', href: '/china-visa-first-policy' },
 ];
 
