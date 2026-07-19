@@ -39,9 +39,11 @@ const chinaLinks = [
   { name: 'Study Cost Breakdown', href: '/study-in-china-cost-bangladesh' },
   { name: 'Study Without IELTS', href: '/study-in-china-without-ielts' },
   { name: 'MBBS in China', href: '/mbbs-in-china-bangladesh' },
+  { name: 'Intakes & Deadlines', href: '/china-intakes-deadlines' },
+  { name: 'Life in China', href: '/life-in-china-bangladeshi-students' },
+  { name: 'Success Stories', href: '/china-success-stories' },
+  { name: 'চীনে উচ্চশিক্ষা (বাংলা)', href: '/bn/study-in-china' },
   { name: 'China universities', href: '/china-universities' },
-  { name: 'Scholarships for BD', href: '/china-scholarships-bangladesh' },
-  { name: 'Visa first service terms', href: '/china-visa-first-policy' },
 ];
 
 const proofLinks = [
