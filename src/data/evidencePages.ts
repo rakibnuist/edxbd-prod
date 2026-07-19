@@ -113,9 +113,9 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
     eyebrow: 'Honest service readiness',
     intro: 'Destination status reflects whether EduExpress has verified information, trained ownership, service terms, operational workflows and current content—not simply whether a country is popular.',
     sections: [
-      { heading: 'Flagship', body: 'China — the current proof engine and most developed EduExpress destination service.' },
-      { heading: 'Active since 2025', body: 'Malta, Hungary, Cyprus, South Korea, United Kingdom and Georgia have active education services from 2025.' },
-      { heading: 'Other active services', body: 'Greece has active university collaboration and ongoing destination marketing. Malaysia and Thailand have active university or study group routes. Success statistics and student stories are not borrowed from China.' },
+      { heading: 'Flagship', body: 'China — the current proof engine and most developed EduExpress destination service with visa-first service terms.' },
+      { heading: 'Active Destination Services', body: 'United Kingdom, Hungary, South Korea, Finland, Malaysia, Malta, Cyprus, Georgia, Greece, Croatia, and Thailand have active education services with trained country ownership, clear costs, and institution verification.' },
+      { heading: 'Evidence & Integrity Rule', body: 'Every destination operates under the Better Education Standard. Success statistics and student testimonials are never borrowed from another country.' },
     ],
   }),
   page({
