@@ -28,6 +28,8 @@ export const SETTING_KEYS = [
   'youtubeUrl',
   'metaPixelId',
   'metaAccessToken',
+  'gtmId',
+  'ga4Id',
 ] as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[number];
@@ -67,4 +69,24 @@ export async function getMetaConfig(): Promise<{ pixelId: string | null; accessT
   const pixelId = settings.metaPixelId || process.env.NEXT_PUBLIC_META_PIXEL_ID || null;
   const accessToken = settings.metaAccessToken || process.env.META_ACCESS_TOKEN || null;
   return { pixelId, accessToken };
+}
+
+const clean = (v: string | undefined, ...placeholders: string[]) =>
+  v && !placeholders.includes(v) ? v : null;
+
+/**
+ * Non-sensitive public tag IDs (Meta Pixel, GTM container, GA4). Safe to expose
+ * to the browser. DB values take precedence over environment variables.
+ */
+export async function getPublicTagConfig(): Promise<{
+  metaPixelId: string | null;
+  gtmId: string | null;
+  ga4Id: string | null;
+}> {
+  const s = await getAllSettings();
+  return {
+    metaPixelId: clean(s.metaPixelId || process.env.NEXT_PUBLIC_META_PIXEL_ID, '1234567890'),
+    gtmId: clean(s.gtmId || process.env.NEXT_PUBLIC_GTM_ID, 'GTM-XXXXXXX'),
+    ga4Id: clean(s.ga4Id || process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID, 'G-XXXXXXXXXX'),
+  };
 }

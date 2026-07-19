@@ -16,6 +16,8 @@ interface SettingsState {
   youtubeUrl: string;
   metaPixelId: string;
   metaAccessToken: string;
+  gtmId: string;
+  ga4Id: string;
 }
 
 const DEFAULTS: SettingsState = {
@@ -31,6 +33,8 @@ const DEFAULTS: SettingsState = {
   youtubeUrl: 'https://www.youtube.com/@EduExpressInt',
   metaPixelId: '',
   metaAccessToken: '',
+  gtmId: '',
+  ga4Id: '',
 };
 
 function StatusBadge({ active }: { active: boolean }) {
@@ -190,6 +194,26 @@ export default function SettingsPage() {
                 autoComplete="new-password"
               />
               <p className="mt-1 text-xs text-gray-400">Stored securely; never shown again after saving.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Analytics & Tags */}
+        <section className="rounded-2xl bg-white shadow ring-1 ring-gray-100">
+          <div className="border-b border-gray-100 px-6 py-4">
+            <h2 className="text-lg font-semibold text-[#08263c]">Analytics &amp; Tags</h2>
+            <p className="text-xs text-gray-500">Google Tag Manager &amp; GA4. Loaded on the public site at runtime.</p>
+          </div>
+          <div className="grid gap-5 p-6 sm:grid-cols-2">
+            <div>
+              <label className={label} htmlFor="gtmId">Google Tag Manager ID</label>
+              <input id="gtmId" name="gtmId" value={settings.gtmId} onChange={handleChange} placeholder="GTM-XXXXXXX" className={field} />
+              <p className="mt-1 text-xs text-gray-400">Container ID from tagmanager.google.com.</p>
+            </div>
+            <div>
+              <label className={label} htmlFor="ga4Id">GA4 Measurement ID</label>
+              <input id="ga4Id" name="ga4Id" value={settings.ga4Id} onChange={handleChange} placeholder="G-XXXXXXXXXX" className={field} />
+              <p className="mt-1 text-xs text-gray-400">Only needed if you are not managing GA4 through GTM.</p>
             </div>
           </div>
         </section>

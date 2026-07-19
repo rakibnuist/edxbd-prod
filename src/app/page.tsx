@@ -17,6 +17,25 @@ import {
 } from 'lucide-react';
 import DestinationDecisionDesk from '@/components/home/DestinationDecisionDesk';
 import ChinaFlagshipRecord from '@/components/home/ChinaFlagshipRecord';
+import HomeTestimonials from '@/components/home/HomeTestimonials';
+import prisma from '@/lib/prisma';
+
+// Refresh the homepage (incl. testimonials) at most once an hour.
+export const revalidate = 3600;
+
+async function getHomeTestimonials() {
+  try {
+    const rows = await prisma.testimonial.findMany({
+      where: { isPublished: true },
+      orderBy: { createdAt: 'desc' },
+      take: 6,
+      select: { id: true, studentName: true, content: true, university: true, country: true, rating: true },
+    });
+    return rows;
+  } catch {
+    return [];
+  }
+}
 
 export const metadata: Metadata = {
   title: { absolute: 'Education Consultancy in Bangladesh | EduExpress International' },
@@ -81,7 +100,8 @@ const standards = [
   { title: 'Student support', copy: 'Safety, scope and responsibility', icon: ShieldCheck },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const testimonials = await getHomeTestimonials();
   return (
     <div className="overflow-hidden bg-[#f4f8fa] text-[#08263c]">
       <section className="relative px-5 pb-16 pt-28 sm:px-8 sm:pb-24 sm:pt-32 md:pt-40 lg:px-12">
@@ -200,6 +220,8 @@ export default function Home() {
       </section>
 
       <ChinaFlagshipRecord />
+
+      <HomeTestimonials testimonials={testimonials} />
 
       <section className="bg-[#64b5df] px-5 py-16 text-[#08263c] sm:px-8 sm:py-24 md:py-32 lg:px-12">
         <div className="mx-auto max-w-[1440px]">
