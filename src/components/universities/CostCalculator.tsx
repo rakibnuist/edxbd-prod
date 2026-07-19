@@ -79,37 +79,50 @@ export default function CostCalculator({
       const element = document.getElementById('pdf-export-container');
       
       if (element) {
-        // Force the element into view on top so html2canvas captures it correctly
-        element.style.display = 'block';
-        element.style.position = 'fixed';
-        element.style.top = '0';
-        element.style.left = '0';
-        element.style.zIndex = '99999';
-        element.style.width = '794px';
-        element.style.backgroundColor = '#ffffff';
+        // Create an isolated, visible container appended directly to body
+        const tempContainer = document.createElement('div');
+        tempContainer.style.position = 'fixed';
+        tempContainer.style.top = '0';
+        tempContainer.style.left = '0';
+        tempContainer.style.width = '794px';
+        tempContainer.style.zIndex = '999999';
+        tempContainer.style.backgroundColor = '#ffffff';
+        tempContainer.style.color = '#0f172a';
         
-        // Wait for DOM to calculate layout
-        await new Promise(resolve => setTimeout(resolve, 300));
+        const clone = element.cloneNode(true) as HTMLElement;
+        clone.style.display = 'block';
+        clone.style.visibility = 'visible';
+        clone.style.position = 'relative';
+        clone.style.width = '794px';
+        clone.style.backgroundColor = '#ffffff';
+
+        tempContainer.appendChild(clone);
+        document.body.appendChild(tempContainer);
         
-        const opt: any = {
-          margin:       0.3,
+        // Allow DOM layout and styles to calculate
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        
+        const opt = {
+          margin:       [0.3, 0.3, 0.3, 0.3] as [number, number, number, number],
           filename:     `${universityName?.replace(/\s+/g, '_') || 'University'}_4Year_Investment_Plan.pdf`,
           image:        { type: 'jpeg' as const, quality: 0.98 },
           html2canvas:  { 
             scale: 2, 
             useCORS: true, 
             logging: false,
-            scrollY: 0,
             scrollX: 0,
+            scrollY: 0,
             windowWidth: 800
           },
           jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
 
-        await html2pdf().set(opt).from(element).save();
+        await html2pdf().set(opt as any).from(clone).save();
         
-        // Hide it again
-        element.style.display = 'none';
+        // Clean up
+        if (document.body.contains(tempContainer)) {
+          document.body.removeChild(tempContainer);
+        }
       }
     } catch (error) {
       console.error("Failed to generate PDF", error);
