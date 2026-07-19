@@ -1,0 +1,4 @@
+interface:
+  display_name: "EduExpress SEO Strategy"
+  short_description: "Guide EduExpress evidence-first SEO governance"
+  default_prompt: "Use $eduexpress-seo-strategy to apply EduExpress positioning, governance, and launch rules to this task."

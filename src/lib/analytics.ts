@@ -381,10 +381,18 @@ export const trackAdminEngagement = (engagementType: string, parameters?: Record
 
 // Form tracking functions
 export const trackFormStart = (formType: string) => {
-  trackEvent('form_start', {
+  trackEvent(formType === 'consultation' || formType === 'application' ? 'assessment_start' : 'form_start', {
     event_category: 'form',
     event_label: 'form_start',
     form_type: formType
+  });
+};
+
+export const trackAssessmentSubmit = (parameters?: Record<string, unknown>) => {
+  trackEvent('assessment_submit', {
+    event_category: 'conversion',
+    event_label: 'education_fit_assessment',
+    ...parameters,
   });
 };
 

@@ -1,11 +1,11 @@
 {
   "name": "EduExpress International - Study Abroad Consultancy",
   "short_name": "EduExpress",
-  "description": "Expert study abroad consultancy with FREE scholarship assistance. 97% success rate.",
+  "description": "Better Education. Clear Costs. Written Proof.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#1e40af",
+  "theme_color": "#174f7a",
   "orientation": "portrait-primary",
   "icons": [
     {

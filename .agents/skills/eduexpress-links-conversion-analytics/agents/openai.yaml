@@ -1,0 +1,4 @@
+interface:
+  display_name: "EduExpress Links and Analytics"
+  short_description: "Plan links, conversion tracking, and reporting"
+  default_prompt: "Use $eduexpress-links-conversion-analytics to plan or review EduExpress outreach, conversion, CRM, or analytics work."

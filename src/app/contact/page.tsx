@@ -3,7 +3,7 @@ import ContactClient from './ContactClient';
 
 export const metadata: Metadata = {
   title: 'Contact Us - EduExpress International',
-  description: 'Get in touch with EduExpress International for free study abroad consultation. Call +880-1983-333566 or visit our office in Dhanmondi, Dhaka. Expert guidance for your international education journey.',
+  description: 'Get in touch with EduExpress International for a free Education Fit Assessment. Call 01983 333566 or visit Evergreen Latif in Dhanmondi, Dhaka.',
   keywords: [
     'contact eduexpress international',
     'study abroad consultation bangladesh',

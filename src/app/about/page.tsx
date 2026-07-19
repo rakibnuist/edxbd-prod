@@ -3,7 +3,7 @@ import AboutClient from './AboutClient';
 
 export const metadata: Metadata = {
   title: 'About EduExpress International - Your Gateway to Global Education',
-  description: 'Learn about EduExpress International, Bangladesh\'s trusted study abroad consultancy since 2018. 6+ years of experience, 3,000+ students placed, 98% success rate. Expert guidance for university selection, visa support, and scholarships.',
+  description: "Learn how EduExpress applies evidence-first education guidance, clear costs and written proof to overseas study decisions.",
   keywords: [
     'about eduexpress international',
     'study abroad consultancy bangladesh',
@@ -20,18 +20,18 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'About EduExpress International - Your Gateway to Global Education',
-    description: 'Trusted study abroad consultancy since 2018. 3,000+ students placed, 98% success rate. Expert guidance for university selection, visa support, and scholarships.',
+    description: 'Better Education. Clear Costs. Written Proof.',
     type: 'website',
-    url: 'https://www.eduexpressint.com/about',
+    url: 'https://eduexpressint.com/about',
     siteName: 'EduExpress International',
   },
   twitter: {
     title: 'About EduExpress International - Your Gateway to Global Education',
-    description: 'Trusted study abroad consultancy since 2018. 3,000+ students placed, 98% success rate. Expert guidance for university selection, visa support, and scholarships.',
+    description: 'Better Education. Clear Costs. Written Proof.',
     card: 'summary_large_image',
   },
   alternates: {
-    canonical: 'https://www.eduexpressint.com/about',
+    canonical: 'https://eduexpressint.com/about',
   },
 };
 

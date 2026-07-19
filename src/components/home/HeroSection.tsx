@@ -75,14 +75,14 @@ const HeroSection = () => {
                         >
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 border border-green-200 mb-6 w-fit mx-auto lg:mx-0 shadow-sm">
                                 <span className="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span>
-                                <span className="text-sm font-bold text-green-800 uppercase tracking-wide">Accepting Applications</span>
+                                <span className="text-sm font-bold text-green-800 uppercase tracking-wide">Bangladesh&apos;s Evidence-First Education Consultancy</span>
                             </div>
 
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-tight text-slate-900">
-                                {SLIDES[currentSlide].title}
+                                Choose Better Education Abroad — with Clear Costs and Written Proof
                             </h1>
                             <p className="text-lg md:text-xl text-slate-600 font-medium mb-8 leading-relaxed max-w-lg mx-auto lg:mx-0">
-                                {SLIDES[currentSlide].subtitle}. Start your journey with expert guidance and secured scholarships.
+                                Compare education quality, recognition, total cost and career fit before choosing {SLIDES[currentSlide].title.toLowerCase()}.
                             </p>
 
                             <div className="flex justify-center lg:justify-start">
@@ -90,7 +90,7 @@ const HeroSection = () => {
                                     href={SLIDES[currentSlide].link}
                                     className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group"
                                 >
-                                    Start Your Journey <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                    Explore this destination <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             </div>
                         </motion.div>
@@ -145,8 +145,8 @@ const HeroSection = () => {
                                 </svg>
                             </div>
                             <div>
-                                <div className="text-lg lg:text-xl font-bold text-slate-900">98%</div>
-                                <div className="text-xs text-slate-500 font-medium uppercase tracking-wide">Visa Success</div>
+                                <div className="text-lg lg:text-xl font-bold text-slate-900">Written</div>
+                                <div className="text-xs text-slate-500 font-medium uppercase tracking-wide">Cost breakdown</div>
                             </div>
                         </motion.div>
 
@@ -313,4 +313,3 @@ const HeroWrapper = () => {
 
 // Rewriting Generic component export
 export default HeroWrapper;
-

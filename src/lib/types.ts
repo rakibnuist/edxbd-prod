@@ -3,6 +3,7 @@
 export interface Testimonial {
   _id: string;
   name: string;
+  displayName?: string;
   location: string;
   university: string;
   program: string;
@@ -12,6 +13,18 @@ export interface Testimonial {
   country: string;
   isActive: boolean;
   featured: boolean;
+  academicProfile?: string;
+  decisionFactors?: string;
+  applicationTimeline?: string;
+  serviceProvided?: string;
+  studentPaid?: string;
+  currentUpdate?: string;
+  consentVerified: boolean;
+  consentEvidenceId?: string;
+  consentRecordedAt?: string;
+  consentExpiresAt?: string;
+  consentRevokedAt?: string;
+  consentImageApproved: boolean;
   createdAt: string;
   updatedAt: string;
 }

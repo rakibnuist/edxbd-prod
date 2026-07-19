@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Header from './Header';
+import LightHeader from './LightHeader';
 
 const ConditionalHeader = () => {
   const pathname = usePathname();
@@ -27,7 +27,7 @@ const ConditionalHeader = () => {
   }
 
 
-  return <Header />;
+  return <LightHeader />;
 };
 
 export default ConditionalHeader;

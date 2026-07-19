@@ -42,16 +42,16 @@ export default function AboutClient() {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
               <div className="text-center group">
-                <div className="text-4xl font-bold text-blue-600 mb-2 group-hover:scale-110 transition-transform duration-200">3,000+</div>
-                <div className="text-gray-600 font-medium">Students Placed</div>
+                <div className="text-4xl font-bold text-blue-600 mb-2 group-hover:scale-110 transition-transform duration-200">6</div>
+                <div className="text-gray-600 font-medium">Education Checks</div>
               </div>
               <div className="text-center group">
-                <div className="text-4xl font-bold text-green-600 mb-2 group-hover:scale-110 transition-transform duration-200">98%</div>
-                <div className="text-gray-600 font-medium">Success Rate</div>
+                <div className="text-4xl font-bold text-green-600 mb-2 group-hover:scale-110 transition-transform duration-200">Written</div>
+                <div className="text-gray-600 font-medium">Cost Clarity</div>
               </div>
               <div className="text-center group">
-                <div className="text-4xl font-bold text-orange-500 mb-2 group-hover:scale-110 transition-transform duration-200">150+</div>
-                <div className="text-gray-600 font-medium">Universities</div>
+                <div className="text-4xl font-bold text-orange-500 mb-2 group-hover:scale-110 transition-transform duration-200">3+</div>
+                <div className="text-gray-600 font-medium">Options Compared</div>
               </div>
               <div className="text-center group">
                 <div className="text-4xl font-bold text-purple-600 mb-2 group-hover:scale-110 transition-transform duration-200">25+</div>
@@ -213,7 +213,7 @@ export default function AboutClient() {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Proven Success</h3>
               <p className="text-gray-600 text-lg">
-                98% success rate with over 3,000 students placed in top universities worldwide since 2018.
+                Recommendations explain education fit, recognition, costs and decision factors. Each university, scholarship body and authority issues its official outcome.
               </p>
             </div>
 

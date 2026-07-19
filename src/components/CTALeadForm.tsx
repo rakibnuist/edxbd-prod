@@ -29,14 +29,14 @@ const CTALeadForm = ({ universityName }: CTALeadFormProps) => {
                     Apply to {universityName}
                 </h3>
                 <p className="text-blue-100 text-sm relative z-10">
-                    Get expert guidance, scholarship check & admission support — <span className="font-bold text-white">100% free.</span>
+                    Start with education fit, cost clarity and document-readiness guidance.
                 </p>
 
                 {/* Trust stats */}
                 <div className="grid grid-cols-3 gap-2 mt-5 relative z-10">
                     {[
-                        { icon: <Users className="w-3.5 h-3.5" />, label: '3,000+', sub: 'Placed' },
-                        { icon: <Shield className="w-3.5 h-3.5" />, label: '98%', sub: 'Success' },
+                        { icon: <Users className="w-3.5 h-3.5" />, label: 'EduFit', sub: 'Comparison' },
+                        { icon: <Shield className="w-3.5 h-3.5" />, label: 'Written', sub: 'Proof' },
                         { icon: <Clock className="w-3.5 h-3.5" />, label: '24h', sub: 'Response' },
                     ].map((stat, i) => (
                         <div key={i} className="flex flex-col items-center bg-white/15 rounded-xl py-2 px-1 border border-white/20">
@@ -66,7 +66,7 @@ const CTALeadForm = ({ universityName }: CTALeadFormProps) => {
                 <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-100">
                     <Shield className="w-4 h-4 text-slate-300 flex-shrink-0" />
                     <p className="text-[11px] text-slate-400 leading-snug">
-                        Your data is 100% private. No spam, no obligations.
+                        Your data is handled under our privacy policy and recorded consent.
                     </p>
                 </div>
             </div>
@@ -75,4 +75,3 @@ const CTALeadForm = ({ universityName }: CTALeadFormProps) => {
 };
 
 export default CTALeadForm;
-

@@ -164,7 +164,7 @@ export default function PrivacyClient() {
                   <li>Incident response procedures</li>
                 </ul>
                 <p className="leading-relaxed text-sm text-slate-500 mt-4 italic">
-                  However, no method of transmission over the internet or electronic storage is 100% secure. While we strive to protect your information, we cannot guarantee absolute security.
+                  We apply technical and organizational safeguards to protect your information and continually improve those controls as technology and risk evolve. Internet transmission and electronic storage carry residual risk.
                 </p>
               </div>
 
@@ -219,9 +219,9 @@ export default function PrivacyClient() {
                       <Shield className="w-5 h-5 text-blue-600" />
                       <strong>EduExpress International</strong>
                     </p>
-                    <p>House: 12/1, Ground Floor, Road: 4/A</p>
-                    <p>Dhanmondi, Dhaka-1209, Bangladesh</p>
-                    <p>Phone: +880-1983-333566</p>
+                    <p>Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor</p>
+                    <p>Dhanmondi, Dhaka 1209, Bangladesh</p>
+                    <p>Phone: 01983 333566</p>
                     <p>Email: info@eduexpressint.com</p>
                   </div>
                 </div>

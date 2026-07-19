@@ -35,9 +35,9 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     const { email, phone, message } = body;
     
-    if (!email || !phone) {
+    if (!email || !phone || body.consent !== true || !body.consentTimestamp || !body.consentPolicyVersion) {
       return NextResponse.json(
-        { error: 'Missing required fields: email and phone are required' },
+        { error: 'Email, phone and recorded privacy consent are required' },
         { status: 400 }
       );
     }
@@ -60,7 +60,11 @@ export async function POST(request: NextRequest) {
       program: body.program || 'Contact Form Inquiry',
       message: message ? message.trim() : 'Consultation request from ' + (body.country || 'Unknown'),
       source: body.source || 'contact_form',
-      status: 'new'
+      status: 'new',
+      consentTimestamp: new Date(body.consentTimestamp),
+      consentPolicyVersion: body.consentPolicyVersion,
+      landingPage: body.landingPage,
+      utm: body.utm || {}
     });
     
     await lead.save();

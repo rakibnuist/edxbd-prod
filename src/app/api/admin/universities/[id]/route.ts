@@ -8,6 +8,10 @@ import University from '@/models/University';
 export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
     try {
+        const decoded = verifyTokenFromRequest(request);
+        if (!decoded || decoded.role !== 'admin') {
+            return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
+        }
         await connectDB();
         let university;
         if (mongoose.Types.ObjectId.isValid(params.id)) {
@@ -38,11 +42,12 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
 
         await connectDB();
         const body = await request.json();
+        const { _id: _immutableId, __v: _version, createdAt: _createdAt, updatedAt: _updatedAt, ...update } = body;
 
-        const university = await University.findByIdAndUpdate(params.id, body, {
-            new: true,
-            runValidators: true,
-        });
+        const options = { new: true, runValidators: true };
+        const university = mongoose.Types.ObjectId.isValid(params.id)
+            ? await University.findByIdAndUpdate(params.id, { $set: update }, options)
+            : await University.findOneAndUpdate({ slug: params.id }, { $set: update }, options);
 
         if (!university) {
             return NextResponse.json({ error: 'University not found' }, { status: 404 });

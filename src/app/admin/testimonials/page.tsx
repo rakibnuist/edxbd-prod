@@ -4,23 +4,38 @@ import { useEffect, useState } from 'react';
 import { trackDashboardView, trackTestimonialManagement } from '@/lib/analytics';
 import { Testimonial } from '@/lib/types';
 
+const emptyTestimonialForm = {
+  name: '',
+  displayName: '',
+  location: '',
+  university: '',
+  program: '',
+  quote: '',
+  rating: 5,
+  image: '',
+  country: '',
+  isActive: true,
+  featured: false,
+  academicProfile: '',
+  decisionFactors: '',
+  applicationTimeline: '',
+  serviceProvided: '',
+  studentPaid: '',
+  currentUpdate: '',
+  consentVerified: false,
+  consentEvidenceId: '',
+  consentRecordedAt: '',
+  consentExpiresAt: '',
+  consentRevokedAt: '',
+  consentImageApproved: false,
+};
+
 export default function TestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    location: '',
-    university: '',
-    program: '',
-    quote: '',
-    rating: 5,
-    image: '',
-    country: '',
-    isActive: true,
-    featured: false
-  });
+  const [formData, setFormData] = useState({ ...emptyTestimonialForm });
 
   useEffect(() => {
     trackDashboardView('testimonials_management');
@@ -70,18 +85,7 @@ export default function TestimonialsPage() {
         fetchTestimonials();
         setShowForm(false);
         setEditingTestimonial(null);
-        setFormData({
-          name: '',
-          location: '',
-          university: '',
-          program: '',
-          quote: '',
-          rating: 5,
-          image: '',
-          country: '',
-          isActive: true,
-          featured: false
-        });
+        setFormData({ ...emptyTestimonialForm });
       } else {
         const action = editingTestimonial ? 'update' : 'create';
         trackTestimonialManagement(action, { 
@@ -100,6 +104,7 @@ export default function TestimonialsPage() {
     setEditingTestimonial(testimonial);
     setFormData({
       name: testimonial.name,
+      displayName: testimonial.displayName || '',
       location: testimonial.location,
       university: testimonial.university,
       program: testimonial.program,
@@ -108,7 +113,19 @@ export default function TestimonialsPage() {
       image: testimonial.image || '',
       country: testimonial.country,
       isActive: testimonial.isActive,
-      featured: testimonial.featured
+      featured: testimonial.featured,
+      academicProfile: testimonial.academicProfile || '',
+      decisionFactors: testimonial.decisionFactors || '',
+      applicationTimeline: testimonial.applicationTimeline || '',
+      serviceProvided: testimonial.serviceProvided || '',
+      studentPaid: testimonial.studentPaid || '',
+      currentUpdate: testimonial.currentUpdate || '',
+      consentVerified: testimonial.consentVerified || false,
+      consentEvidenceId: testimonial.consentEvidenceId || '',
+      consentRecordedAt: testimonial.consentRecordedAt?.slice(0, 10) || '',
+      consentExpiresAt: testimonial.consentExpiresAt?.slice(0, 10) || '',
+      consentRevokedAt: testimonial.consentRevokedAt?.slice(0, 10) || '',
+      consentImageApproved: testimonial.consentImageApproved || false,
     });
     setShowForm(true);
   };
@@ -163,18 +180,7 @@ export default function TestimonialsPage() {
           onClick={() => {
             setShowForm(true);
             setEditingTestimonial(null);
-            setFormData({
-              name: '',
-              location: '',
-              university: '',
-              program: '',
-              quote: '',
-              rating: 5,
-              image: '',
-              country: '',
-              isActive: true,
-              featured: false
-            });
+            setFormData({ ...emptyTestimonialForm });
           }}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
@@ -246,6 +252,9 @@ export default function TestimonialsPage() {
                           Featured
                         </span>
                       )}
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${testimonial.consentVerified && testimonial.consentEvidenceId ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-600'}`}>
+                        {testimonial.consentVerified && testimonial.consentEvidenceId ? 'Consent recorded' : 'Not publishable'}
+                      </span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -278,7 +287,7 @@ export default function TestimonialsPage() {
       {/* Add/Edit Form Modal */}
       {showForm && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+          <div className="relative top-4 mx-auto max-h-[calc(100vh-2rem)] w-11/12 overflow-y-auto border bg-white p-5 shadow-lg md:w-3/4 lg:w-2/3">
             <div className="mt-3">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-medium text-gray-900">
@@ -304,6 +313,17 @@ export default function TestimonialsPage() {
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Approved display name</label>
+                    <input
+                      type="text"
+                      value={formData.displayName}
+                      onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                      placeholder="Use only the name approved for public display"
                     />
                   </div>
                   
@@ -387,6 +407,48 @@ export default function TestimonialsPage() {
                     className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+
+                <section className="border border-blue-200 bg-blue-50 p-4">
+                  <h4 className="font-bold text-blue-950">Evidence based story details</h4>
+                  <p className="mt-1 text-xs text-blue-800">Do not enter passport numbers, dates of birth, visa identifiers or unredacted financial data.</p>
+                  <div className="mt-4 grid gap-4 md:grid-cols-2">
+                    {([
+                      ['academicProfile', 'Academic profile, budget and constraints'],
+                      ['decisionFactors', 'Options considered and final decision'],
+                      ['applicationTimeline', 'Application and visa timeline'],
+                      ['serviceProvided', 'Exact EduExpress service provided'],
+                      ['studentPaid', 'What the student paid'],
+                      ['currentUpdate', 'Current update after arrival'],
+                    ] as const).map(([field, label]) => (
+                      <label key={field} className="block text-sm font-medium text-gray-700">{label}
+                        <textarea value={formData[field]} onChange={(e) => setFormData({ ...formData, [field]: e.target.value })} rows={3} className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none" />
+                      </label>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="border border-amber-300 bg-amber-50 p-4">
+                  <h4 className="font-bold text-amber-950">Public consent record</h4>
+                  <p className="mt-1 text-xs text-amber-800">A story remains private until consent is verified and an internal evidence ID is recorded.</p>
+                  <div className="mt-4 grid gap-4 md:grid-cols-2">
+                    <label className="text-sm font-medium text-gray-700">Internal consent evidence ID
+                      <input value={formData.consentEvidenceId} onChange={(e) => setFormData({ ...formData, consentEvidenceId: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" placeholder="Example: CN-STORY-2027-001" />
+                    </label>
+                    <label className="text-sm font-medium text-gray-700">Consent recorded date
+                      <input type="date" value={formData.consentRecordedAt} onChange={(e) => setFormData({ ...formData, consentRecordedAt: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
+                    </label>
+                    <label className="text-sm font-medium text-gray-700">Consent expiry date
+                      <input type="date" value={formData.consentExpiresAt} onChange={(e) => setFormData({ ...formData, consentExpiresAt: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
+                    </label>
+                    <label className="text-sm font-medium text-gray-700">Consent revoked date
+                      <input type="date" value={formData.consentRevokedAt} onChange={(e) => setFormData({ ...formData, consentRevokedAt: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" />
+                    </label>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-5">
+                    <label className="flex items-center text-sm text-gray-700"><input type="checkbox" checked={formData.consentVerified} onChange={(e) => setFormData({ ...formData, consentVerified: e.target.checked })} className="mr-2" />Written public consent verified</label>
+                    <label className="flex items-center text-sm text-gray-700"><input type="checkbox" checked={formData.consentImageApproved} onChange={(e) => setFormData({ ...formData, consentImageApproved: e.target.checked })} className="mr-2" />Photo approved for public display</label>
+                  </div>
+                </section>
                 
                 <div className="flex items-center space-x-4">
                   <label className="flex items-center">

@@ -237,7 +237,7 @@ export default function DestinationDetailClient({ country }: DestinationDetailCl
           </h1>
 
           <p className="text-xl md:text-2xl text-slate-200 mb-12 max-w-3xl mx-auto font-light leading-relaxed drop-shadow-lg">
-            {country.description}. Get comprehensive guidance on admissions, visas, and secure full scholarships with a <strong className="text-white font-bold">98% success rate</strong>.
+            {country.description}. Compare education fit, institution status, total costs and visa readiness before you proceed.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
@@ -270,7 +270,7 @@ export default function DestinationDetailClient({ country }: DestinationDetailCl
           <div className="w-2 h-2 rounded-full bg-white/20"></div>
           <div className="flex items-center space-x-2">
             <CheckCircle2 className="w-5 h-5 text-amber-400" />
-            <span className="font-bold tracking-wide uppercase">98% VISA SUCCESS RATE GUARANTEED</span>
+            <span className="font-bold tracking-wide uppercase">DESTINATION SPECIFIC VISA READINESS REVIEW</span>
           </div>
         </div>
       </div>
@@ -303,8 +303,8 @@ export default function DestinationDetailClient({ country }: DestinationDetailCl
             <div className="p-3 bg-indigo-50 rounded-xl text-indigo-600 mb-3">
               <Globe className="w-8 h-8" />
             </div>
-            <span className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Visa Success</span>
-            <span className="text-slate-900 font-bold block text-sm md:text-base">98% Approval</span>
+            <span className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Visa Review</span>
+            <span className="text-slate-900 font-bold block text-sm md:text-base">Readiness Checked</span>
           </div>
         </div>
       </div>

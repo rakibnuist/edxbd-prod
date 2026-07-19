@@ -1,0 +1,4 @@
+interface:
+  display_name: "EduExpress Technical SEO"
+  short_description: "Audit and repair EduExpress technical SEO"
+  default_prompt: "Use $eduexpress-technical-seo to review and implement this EduExpress technical SEO task."

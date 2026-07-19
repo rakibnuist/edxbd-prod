@@ -1,0 +1,4 @@
+interface:
+  display_name: "EduExpress Content Governance"
+  short_description: "Govern accurate, people-first education content"
+  default_prompt: "Use $eduexpress-content-governance to write or review this EduExpress content against editorial and evidence standards."

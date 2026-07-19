@@ -4,8 +4,8 @@ export const config = {
   // Site Information
   site: {
     name: 'EduExpress International',
-    url: 'https://www.eduexpressint.com',
-    description: 'Expert study abroad consultancy with FREE scholarship assistance. 98% success rate.',
+    url: 'https://eduexpressint.com',
+    description: "Bangladesh's Evidence First Education Consultancy. Better Education. Clear Costs. Written Proof.",
   },
 
   // Tracking IDs (replace with your actual IDs)
@@ -25,12 +25,13 @@ export const config = {
 
   // Contact Information
   contact: {
-    phone: '+880-1983-333566',
-    phoneSecondary: '+880 1329-663505',
+    phone: '01983 333566',
+    alternatePhone: '01329 663505',
+    whatsapp: '+8801983333566',
     email: 'info@eduexpressint.com',
     address: {
-      street: 'House: 12/1, Ground Floor, Road: 4/A',
-      city: 'Dhanmondi',
+      street: 'Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi',
+      city: 'Dhaka',
       region: 'Dhaka',
       postalCode: '1209',
       country: 'BD',
@@ -40,17 +41,19 @@ export const config = {
   // Social Media
   social: {
     facebook: 'https://www.facebook.com/eduexpressint',
-    linkedin: 'https://www.linkedin.com/company/eduexpress-international',
-    instagram: 'https://www.instagram.com/eduexpressint',
+    linkedin: 'https://www.linkedin.com/company/eduexpress',
+    instagram: 'https://www.instagram.com/eduexpressint/',
+    youtube: 'https://www.youtube.com/@EduExpressInt',
     twitter: 'https://twitter.com/eduexpressint',
   },
 
-  // Business Information
+  // Company performance claims remain unpublished until their definitions,
+  // evidence, approval and review dates are stored in the governed CMS.
   business: {
-    founded: '2005',
-    rating: '4.9',
-    reviewCount: '1250',
-    successRate: '98%',
-    studentsHelped: '10000+',
+    founded: null,
+    rating: null,
+    reviewCount: null,
+    successRate: null,
+    studentsHelped: null,
   },
 };

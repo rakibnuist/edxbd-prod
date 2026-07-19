@@ -1,14 +1,14 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Plus, Search, Edit, Trash2, GraduationCap, MapPin, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { IUniversity } from '@/types/university';
 
 export default function UniversitiesPage() {
-    const { user, authenticatedFetch } = useAuth(); // authentication
+    const { authenticatedFetch } = useAuth();
     const [universities, setUniversities] = useState<IUniversity[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
@@ -19,7 +19,7 @@ export default function UniversitiesPage() {
     const [totalItems, setTotalItems] = useState(0);
 
     // Fetch data
-    const fetchUniversities = async () => {
+    const fetchUniversities = useCallback(async () => {
         try {
             setLoading(true);
             // Public endpoint might not need auth, but admin endpoint does
@@ -35,11 +35,11 @@ export default function UniversitiesPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [authenticatedFetch, page, search]);
 
     useEffect(() => {
         fetchUniversities();
-    }, [search, page]);
+    }, [fetchUniversities]);
 
     // Old handleDelete removed as it is replaced by modal logic above
 
@@ -92,7 +92,7 @@ export default function UniversitiesPage() {
             <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900">Universities</h1>
-                    <p className="text-slate-500 text-sm">Manage university partners and programs</p>
+                    <p className="text-slate-500 text-sm">Manage university profiles, programs, fees and scholarships</p>
                 </div>
                 <div className="flex gap-3">
                     <button
@@ -140,7 +140,7 @@ export default function UniversitiesPage() {
                                     <h3 className="font-bold text-slate-900 text-lg group-hover:text-blue-700 transition-colors">{uni.name}</h3>
                                     <div className="flex items-center gap-4 text-sm text-slate-500">
                                         <span className="flex items-center gap-1"><MapPin size={14} /> {uni.location}</span>
-                                        <span className="flex items-center gap-1"><GraduationCap size={14} /> {uni.degree.join(', ')}</span>
+                                        <span className="flex items-center gap-1"><GraduationCap size={14} /> {uni.programs?.length || uni.details?.majors?.length || 0} programs across {new Set((uni.programs || []).map(program => program.level)).size || uni.degree.length} level{(new Set((uni.programs || []).map(program => program.level)).size || uni.degree.length) === 1 ? '' : 's'}</span>
                                     </div>
                                 </div>
                             </div>

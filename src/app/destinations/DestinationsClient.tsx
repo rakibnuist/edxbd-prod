@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import PageHeader from '@/components/PageHeader';
 import ConsultationButton from '@/components/ConsultationButton';
-import { countries } from '@/lib/countries';
+import { activeCountries } from '@/lib/countries';
 import { motion } from 'framer-motion';
 
 const containerVariants = {
@@ -36,7 +36,7 @@ export default function DestinationsClient() {
             <PageHeader
                 title="Study Abroad"
                 highlight="Destinations"
-                description="Explore top global education hubs. From the UK's prestige to Finland's innovation, find the perfect destination for your academic journey."
+                description="Compare ten active destination services through education fit, institution checks, clear costs and visa readiness. China is the flagship proof record."
                 icon={<Globe />}
                 badgeText="Global Opportunities"
             />
@@ -58,7 +58,7 @@ export default function DestinationsClient() {
                         viewport={{ once: true, margin: "-100px" }}
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                     >
-                        {countries.map((country) => (
+                        {activeCountries.map((country) => (
                             <motion.div key={country.slug} variants={itemVariants} className="h-full">
                                 <Link
                                     href={country.slug === 'china' ? '/destinations/china' : `/destinations/${country.slug}`}
@@ -184,15 +184,15 @@ export default function DestinationsClient() {
                             <div className="mt-16 flex flex-wrap justify-center gap-x-12 gap-y-6 text-slate-400 font-medium text-sm">
                                 <div className="flex items-center gap-2">
                                     <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                                    <span>98% Visa Success Rate</span>
+                                    <span>Visa readiness checked</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                                    <span>150+ Partner Universities</span>
+                                    <span>Relationship evidence required</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                                    <span>Free Scholarship Support</span>
+                                    <span>Funding assessed after fit</span>
                                 </div>
                             </div>
                         </motion.div>

@@ -1,0 +1,4 @@
+interface:
+  display_name: "EduExpress Destination Pages"
+  short_description: "Build verified country destination page clusters"
+  default_prompt: "Use $eduexpress-destination-pages to build or review this EduExpress destination page."

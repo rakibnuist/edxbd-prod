@@ -1,52 +1,34 @@
 # EduExpress International
 
-> Study abroad consultancy based in Dhaka, Bangladesh, operating since 2018.
-> FREE scholarship assistance, 98% visa success rate, 3,000+ students placed,
-> 150+ partner universities across 9 countries. Official representative of top
-> universities in Europe and Asia.
+> Bangladesh's Evidence-First Education Consultancy.
+> Better Education. Clear Costs. Written Proof.
 
-## Company Facts
+Canonical website: https://eduexpressint.com
 
-- Founded: 2018
-- Head office: House: 12/1, Ground Floor, Road: 4/A, Dhanmondi, Dhaka 1209, Bangladesh
-- Phone / WhatsApp: +880 1983-333566, +880 1329-663505
-- Email: info@eduexpressint.com
-- Office hours: Saturday-Thursday 9:00 AM - 6:00 PM (Friday closed)
-- Specialty: Study in China with full scholarships (CSC, provincial, university scholarships)
+## What EduExpress does
 
-## Study Destinations
+EduExpress compares education quality, recognition, total cost, academic fit, visa readiness and career fit before recommending an overseas education route. Scholarship options are assessed after education fit. Admission, scholarship, visa and employment outcomes are never guaranteed.
 
-- [China](https://eduexpressint.com/destinations/china): Full scholarships (CSC, Confucius Institute, provincial, university presidential), free tuition and hostel options, no-IELTS admission with MOI, top-100 QS universities. Intakes: March & September. Tuition $2,500-6,000/yr, living $200-400/mo.
-- [South Korea](https://eduexpressint.com/destinations/south-korea): GKS scholarship, top universities (SNU, KAIST, Yonsei).
-- [United Kingdom](https://eduexpressint.com/destinations/united-kingdom): University applications and student visa support.
-- [Hungary](https://eduexpressint.com/destinations/hungary): Stipendium Hungaricum scholarship, Semmelweis, Debrecen, ELTE.
-- [Finland](https://eduexpressint.com/destinations/finland): Affordable quality education.
-- [Cyprus](https://eduexpressint.com/destinations/cyprus): Affordable education and easy visa.
-- [Croatia](https://eduexpressint.com/destinations/croatia): EU study destination.
-- [Georgia](https://eduexpressint.com/destinations/georgia): Medical education (MBBS) focus.
-- [Malaysia](https://eduexpressint.com/destinations/malaysia): Affordable international programs.
+## Verified office information
 
-## Services
+- Address: House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209
+- Phone: 0198 3333 566
+- Hours: Saturday to Thursday, 11:00 AM to 6:00 PM
 
-- [Services overview](https://eduexpressint.com/services): University selection & applications, visa assistance (98% success), scholarship support (free), career guidance, documentation, pre-departure orientation.
-- [Partner universities directory](https://eduexpressint.com/universities): Searchable list of 150+ partner universities with tuition, majors, and intakes.
-- [Scholarship assessment](https://eduexpressint.com/scholarship-assessment): Free eligibility evaluation.
-- [Updates & news](https://eduexpressint.com/updates): Scholarship deadlines, visa updates, university announcements.
-- [B2B partnership program](https://eduexpressint.com/partnership): For education agents and institutions.
-- [Contact](https://eduexpressint.com/contact): Book a free consultation.
+## Core evidence pages
 
-## Scholarships We Process
+- [Better Education Standard](https://eduexpressint.com/better-education-standard)
+- [Fees and Transparency](https://eduexpressint.com/fees-and-transparency)
+- [How Universities Are Verified](https://eduexpressint.com/how-we-verify-universities)
+- [Student Data Privacy](https://eduexpressint.com/student-data-privacy)
+- [Complaints and Resolution](https://eduexpressint.com/complaints-and-resolution)
+- [Country Service Status](https://eduexpressint.com/country-status)
 
-- Chinese Government Scholarship (CSC) - full tuition + stipend + dormitory
-- Confucius Institute Scholarship
-- Chinese Provincial Government Scholarships
-- University Presidential Scholarships (China)
-- Stipendium Hungaricum (Hungary)
-- GKS - Global Korea Scholarship (South Korea)
+## China flagship service
 
-## Social
+- [Study in China from Bangladesh](https://eduexpressint.com/study-in-china-from-bangladesh)
+- [China Visa-First Policy](https://eduexpressint.com/china-visa-first-policy)
 
-- Facebook: https://www.facebook.com/EduExpressIntBD
-- LinkedIn: https://www.linkedin.com/company/eduexpress/
-- Instagram: https://www.instagram.com/eduexpressint
-- YouTube: https://www.youtube.com/@EduExpressInt
+China service wording: "No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds."
+
+This file is a discovery aid, not a claim that llms.txt affects rankings. Time-sensitive education and visa facts should be checked against the official sources and verification dates shown on the relevant page.

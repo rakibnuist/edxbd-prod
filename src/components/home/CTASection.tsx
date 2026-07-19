@@ -32,7 +32,7 @@ const CTASection = () => {
                                 </div>
                                 <div className="text-left pr-4">
                                     <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none mb-1.5">Approaching Deadline</div>
-                                    <div className="text-slate-900 font-black text-lg leading-none">2026 Intake</div>
+                                    <div className="text-slate-900 font-black text-lg leading-none">2027 Intake</div>
                                 </div>
                             </motion.div>
 

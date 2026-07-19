@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { ArrowRight, Users, Trophy, Building2 } from 'lucide-react';
 
 const stats = [
-    { label: 'Students Placed', value: '3,000+', icon: Users },
-    { label: 'Visa Success', value: '98%', icon: Trophy },
-    { label: 'University Partners', value: '150+', icon: Building2 },
+    { label: 'Education checks', value: '6', icon: Users },
+    { label: 'Cost format', value: 'Written', icon: Trophy },
+    { label: 'Decision options', value: '3+', icon: Building2 },
 ];
 
 const AboutPreviewSection = () => {

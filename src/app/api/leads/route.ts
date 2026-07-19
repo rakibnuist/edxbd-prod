@@ -10,9 +10,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     
     // Validate required fields
-    if (!body.name || !body.email || !body.phone || !body.country) {
+    if (!body.name || !body.email || !body.phone || !body.country || body.consent !== true || !body.consentTimestamp || !body.consentPolicyVersion) {
       return NextResponse.json(
-        { error: 'Missing required fields: name, email, phone, and country are required' },
+        { error: 'Name, email, phone, country and recorded privacy consent are required' },
         { status: 400 }
       );
     }
@@ -30,7 +30,11 @@ export async function POST(request: NextRequest) {
     const lead = new Lead({
       ...body,
       source: body.source || 'website',
-      status: 'new'
+      status: 'new',
+      consentTimestamp: new Date(body.consentTimestamp),
+      consentPolicyVersion: body.consentPolicyVersion,
+      landingPage: body.landingPage,
+      utm: body.utm || {}
     });
     
     await lead.save();

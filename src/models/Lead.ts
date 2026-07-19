@@ -11,6 +11,10 @@ export interface ILead extends Document {
   source: string;
   assignedTo?: string;
   notes?: string;
+  consentTimestamp: Date;
+  consentPolicyVersion: string;
+  landingPage?: string;
+  utm?: Record<string, string>;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,6 +68,23 @@ const LeadSchema = new Schema<ILead>({
   notes: {
     type: String,
     trim: true
+  },
+  consentTimestamp: {
+    type: Date,
+    required: true
+  },
+  consentPolicyVersion: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  landingPage: {
+    type: String,
+    trim: true
+  },
+  utm: {
+    type: Schema.Types.Mixed,
+    default: {}
   }
 }, {
   timestamps: true

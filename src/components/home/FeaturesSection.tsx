@@ -57,12 +57,12 @@ const FeaturesSection = () => {
                                 <TrendingUp className="w-10 h-10 text-white" />
                             </div>
                             <div>
-                                <h3 className="text-4xl md:text-5xl font-bold mb-2">98%</h3>
-                                <p className="text-blue-100 font-medium text-lg">Visa Success Rate</p>
+                                <h3 className="text-4xl md:text-5xl font-bold mb-2">6 checks</h3>
+                                <p className="text-blue-100 font-medium text-lg">Better Education Standard</p>
                             </div>
                         </div>
                         <p className="mt-6 text-blue-50/90 text-lg leading-relaxed max-w-sm">
-                            Our rigorous document vetting process ensures your application is flawless, drastically minimizing rejection risks.
+                            We compare recognition, academic fit, career value, total cost, visa readiness and student support before recommending an option.
                         </p>
                     </motion.div>
 
@@ -87,7 +87,7 @@ const FeaturesSection = () => {
                             <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                                 <div className="h-full w-3/4 bg-amber-400 rounded-full" />
                             </div>
-                            <p className="text-xs text-amber-700 mt-2 font-bold uppercase tracking-wider">$5M+ Secured</p>
+                            <p className="text-xs text-amber-700 mt-2 font-bold uppercase tracking-wider">Funding assessed after education fit</p>
                         </div>
                     </motion.div>
 
@@ -102,9 +102,9 @@ const FeaturesSection = () => {
                         <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                             <Globe className="w-7 h-7 text-emerald-600" />
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900 mb-2">Direct Partners</h3>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">Verified Relationships</h3>
                         <p className="text-slate-600 text-sm leading-relaxed">
-                            Official representatives for top universities in Europe & Asia. No middlemen.
+                            We distinguish documented representation, network access and public direct applications instead of using one blanket partner label.
                         </p>
                     </motion.div>
 
@@ -119,9 +119,9 @@ const FeaturesSection = () => {
                         <div className="w-14 h-14 bg-rose-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                             <BadgeCheck className="w-7 h-7 text-rose-600" />
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900 mb-2">No Hidden Fees</h3>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">ClearCost Sheet</h3>
                         <p className="text-slate-600 text-sm leading-relaxed">
-                            100% transparent pricing structure. You pay what we promise.
+                            University, embassy and other third-party costs are separated from EduExpress charges, due dates and refund terms.
                         </p>
                     </motion.div>
 

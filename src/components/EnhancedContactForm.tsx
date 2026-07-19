@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useMetaTracking } from '@/hooks/useMetaTracking';
 import CountryCodePhoneInput from './CountryCodePhoneInput';
 import { ArrowRight, CheckCircle } from 'lucide-react';
-import { trackStudyAbroadLead, trackFormStart, trackFormFieldFocus } from '@/lib/analytics';
+import { trackStudyAbroadLead, trackFormStart, trackFormFieldFocus, trackAssessmentSubmit } from '@/lib/analytics';
+import Link from 'next/link';
 
 interface ContactFormData {
   name: string;
@@ -16,6 +17,7 @@ interface ContactFormData {
   city: string;
   state: string;
   zipCode: string;
+  consent: boolean;
 }
 
 interface EnhancedContactFormProps {
@@ -59,7 +61,8 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
     message: '',
     city: '',
     state: '',
-    zipCode: ''
+    zipCode: '',
+    consent: false
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -126,7 +129,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
     setError(null);
 
     try {
-      if (!formData.name || !formData.email || !formData.phone) {
+      if (!formData.name || !formData.email || !formData.phone || !formData.consent) {
         throw new Error('Please fill in all required fields (Name, Email, Phone)');
       }
 
@@ -139,7 +142,11 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         ...formData,
         message: formData.message || 'Consultation request from ' + formData.country,
         formType,
-        source
+        source,
+        consentTimestamp: new Date().toISOString(),
+        consentPolicyVersion: '2026-07-19',
+        landingPage: window.location.pathname,
+        utm: Object.fromEntries(new URLSearchParams(window.location.search))
       };
 
       // API Request
@@ -155,6 +162,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
       }
 
       setIsSubmitted(true);
+      trackAssessmentSubmit({ destination: formData.country || 'not_specified', source });
 
       // --- CRITICAL TRACKING ---
       trackStudyAbroadLead(
@@ -376,6 +384,18 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
             <p className="text-red-700 text-xs font-bold">{error}</p>
           </div>
         )}
+
+        <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs leading-5 text-slate-600">
+          <input
+            type="checkbox"
+            name="consent"
+            checked={formData.consent}
+            onChange={(event) => setFormData((current) => ({ ...current, consent: event.target.checked }))}
+            required
+            className="mt-1"
+          />
+          <span>I consent to EduExpress using these details to respond to my assessment request under the <Link className="font-bold text-blue-700 underline" href="/student-data-privacy">student data privacy policy</Link>.</span>
+        </label>
 
         {/* Enhanced Submit button - CRYSTAL BLUE */}
         <button

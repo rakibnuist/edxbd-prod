@@ -65,7 +65,7 @@ export const universities: University[] = [
     location: 'Chengdu, Sichuan Province, China',
     country: 'China',
     city: 'Chengdu',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {},
@@ -119,8 +119,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance', 'CV/Resume', 'Study Plan', 'CSCA Exam Score Report'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -181,8 +181,8 @@ export const universities: University[] = [
       'Bank Statement (6000$)', 'Application Form', 'Extra Curriculum Activities', 'Study plan'
     ],
     deadlines: {
-      application: '30th May 2026',
-      startDate: 'September 2026'
+      application: '30th May 2027',
+      startDate: 'September 2027'
     }
   },
   {
@@ -250,8 +250,8 @@ export const universities: University[] = [
       'Study Plan', 'Application Form', 'CSCA Exam Score Report'
     ],
     deadlines: {
-      application: '5th May 2026',
-      startDate: 'September 2026'
+      application: '5th May 2027',
+      startDate: 'September 2027'
     }
   },
   {
@@ -316,8 +316,8 @@ export const universities: University[] = [
       'Application Form', 'Award Certificate', 'Study Plan'
     ],
     deadlines: {
-      application: '10th June 2026',
-      startDate: 'September 2026'
+      application: '10th June 2027',
+      startDate: 'September 2027'
     }
   },
   {
@@ -375,8 +375,8 @@ export const universities: University[] = [
       'CSCA transcript', 'Study plan', 'Blood test report', 'Recommendation letter'
     ],
     deadlines: {
-      application: '30th June 2026',
-      startDate: 'September 2026'
+      application: '30th June 2027',
+      startDate: 'September 2027'
     }
   },
   {
@@ -456,8 +456,8 @@ export const universities: University[] = [
       'CSCA Test Scores', '3-5 minutes self-introduction video'
     ],
     deadlines: {
-      application: '15th May 2026',
-      startDate: 'September 2026'
+      application: '15th May 2027',
+      startDate: 'September 2027'
     }
   },
   {
@@ -521,8 +521,8 @@ export const universities: University[] = [
       'Application Form', 'CSCA transcript', 'Study plan'
     ],
     deadlines: {
-      application: '30th June 2026',
-      startDate: 'September 2026'
+      application: '30th June 2027',
+      startDate: 'September 2027'
     }
   },
   {
@@ -536,7 +536,7 @@ export const universities: University[] = [
     badges: ['QS Rank: 1201-1300', 'Times Higher Edu: 801-1000'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '18,500 CNY/Year',
       majors: [
@@ -577,8 +577,8 @@ export const universities: University[] = [
       'Passport', 'Picture', 'Higher Secondary School /Grade 12th /A Level/ High School Certificate', 'Higher Secondary School /Grade 12th /A Level/ High School Transcript', 'Foreign Physical Medical Examination Form', 'English Proficiency Certificate (IELTS or TOFEL and Duolingo or any other valid English Certificate)', 'Non Criminal Record / Police Clearance', 'Bank Statement', 'Study Plan', 'Application Form'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -592,7 +592,7 @@ export const universities: University[] = [
     badges: ['Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '24,000 CNY/Year',
       majors: [
@@ -633,8 +633,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate/Transcript', 'Medical Report', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'June 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -648,7 +648,7 @@ export const universities: University[] = [
     badges: ['U.S.News: 1354', 'Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '15,000 CNY/Year',
       majors: [
@@ -688,8 +688,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'June 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -703,7 +703,7 @@ export const universities: University[] = [
     badges: ['U.S.News: 1953', 'Masters Degree', 'English Medium', '3 Years'],
     degree: ['Masters'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '24,000 CNY/Year',
       majors: [
@@ -798,14 +798,14 @@ export const universities: University[] = [
       'All scholarship winners must pass an annual review.',
       'Requirements: Bachelor Degree',
       'IELTS: 5.5 or DET: 95',
-      'Deadline: June 30th, 2026 (Depends on Seats)'
+      'Deadline: June 30th, 2027 (Depends on Seats)'
     ],
     documents: [
       'Passport', 'Photo', 'Bachelor Certificate', 'Bachelor Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance', 'Study Plan'
     ],
     deadlines: {
-      application: 'June 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'June 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -819,7 +819,7 @@ export const universities: University[] = [
     badges: ['U.S.News: 1646', 'Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '16,000 - 19,200 CNY/Year',
       majors: [
@@ -862,8 +862,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -883,7 +883,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '30,000 CNY/Year',
       majors: [
@@ -933,8 +933,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 20th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 20th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -953,7 +953,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '10,000 CNY/Year',
       majors: [
@@ -993,8 +993,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'June 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1008,7 +1008,7 @@ export const universities: University[] = [
     badges: ['QS Rank: 851-900', 'CWUR: 770', 'Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '16,000 / 26,000 CNY/Year',
       majors: [
@@ -1051,8 +1051,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1066,7 +1066,7 @@ export const universities: University[] = [
     badges: ['QS Rank: 401-475', 'U.S.News: 913', 'Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '21,500 CNY/Year',
       majors: [
@@ -1104,8 +1104,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 15th, 2026 (Result in July)',
-      startDate: 'September 2026'
+      application: 'June 15th, 2027 (Result in July)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1125,7 +1125,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '26,000 CNY/Year',
       majors: [
@@ -1177,8 +1177,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'July 25th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'July 25th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1192,7 +1192,7 @@ export const universities: University[] = [
     badges: ['CWUR: 1594', 'Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '16,000 - 21,000 CNY/Year',
       majors: [
@@ -1233,8 +1233,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'June 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1254,7 +1254,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '17,800 CNY/Year',
       majors: [
@@ -1304,8 +1304,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'June 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1319,7 +1319,7 @@ export const universities: University[] = [
     badges: ['Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '16,000 CNY/Year',
       majors: [
@@ -1358,8 +1358,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'June 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1373,7 +1373,7 @@ export const universities: University[] = [
     badges: ['Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '12,000 CNY/Year',
       majors: [
@@ -1410,8 +1410,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1425,7 +1425,7 @@ export const universities: University[] = [
     badges: ['Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '14,000 CNY/Year',
       majors: [
@@ -1462,8 +1462,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 15th, 2026 (Result in July)',
-      startDate: 'September 2026'
+      application: 'June 15th, 2027 (Result in July)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1477,7 +1477,7 @@ export const universities: University[] = [
     badges: ['Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '12,000 CNY/Year',
       majors: [
@@ -1512,8 +1512,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 15th, 2026 (Result in July)',
-      startDate: 'September 2026'
+      application: 'June 15th, 2027 (Result in July)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1533,7 +1533,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '20,000 - 22,000 CNY/Year',
       majors: [
@@ -1580,8 +1580,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1600,7 +1600,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '18,000 CNY/Year',
       majors: [
@@ -1642,8 +1642,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1663,7 +1663,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '23,000 - 36,000 CNY/Year',
       majors: [
@@ -1707,8 +1707,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1728,7 +1728,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '14,600 CNY/Year',
       majors: [
@@ -1768,8 +1768,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1789,7 +1789,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '22,900 - 23,900 CNY/Year',
       majors: [
@@ -1832,8 +1832,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1853,7 +1853,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '26,000 CNY/Year',
       majors: [
@@ -1893,8 +1893,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 30th, 2026 (Result in July)',
-      startDate: 'September 2026'
+      application: 'June 30th, 2027 (Result in July)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1912,7 +1912,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '20,000 - 23,000 CNY/Year',
       majors: [
@@ -1954,8 +1954,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -1973,7 +1973,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '18,000 CNY/Year',
       majors: [
@@ -2024,8 +2024,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2044,7 +2044,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '14,000 CNY/Year',
       majors: [
@@ -2094,8 +2094,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2117,7 +2117,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '15,000 CNY/Year',
       majors: [
@@ -2166,8 +2166,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2189,7 +2189,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '10,000-15,000 CNY/Year',
       majors: [
@@ -2242,8 +2242,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2266,7 +2266,7 @@ export const universities: University[] = [
     ],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '19,000-25,000 CNY/Year',
       majors: [
@@ -2322,8 +2322,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2337,7 +2337,7 @@ export const universities: University[] = [
     badges: ['U.S.News: 1651', 'Bachelor Degree', 'English Medium'],
     degree: ['Bachelor'],
     taught: ['English'],
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     details: {
       tuition: '20,000 CNY/Year',
       majors: [
@@ -2395,8 +2395,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2406,7 +2406,7 @@ export const universities: University[] = [
     location: 'Shanghai City, China',
     country: 'China',
     city: 'Shanghai',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {
@@ -2465,8 +2465,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance', 'Study Plan', 'Self-introduction Video'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2476,7 +2476,7 @@ export const universities: University[] = [
     location: 'Shanghai City, China',
     country: 'China',
     city: 'Shanghai',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {},
@@ -2524,8 +2524,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance', 'Study Plan', 'Self-introduction Video'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2535,7 +2535,7 @@ export const universities: University[] = [
     location: 'Hangzhou City, Zhejiang Province, China',
     country: 'China',
     city: 'Hangzhou',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {},
@@ -2601,8 +2601,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance', 'Study Plan', 'Self-introduction Video'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2612,7 +2612,7 @@ export const universities: University[] = [
     location: 'Beijing City, China',
     country: 'China',
     city: 'Beijing',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {},
@@ -2662,8 +2662,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2673,7 +2673,7 @@ export const universities: University[] = [
     location: 'Linyi City, Shandong Province, China',
     country: 'China',
     city: 'Linyi',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {},
@@ -2733,14 +2733,14 @@ export const universities: University[] = [
       'IELTS: 5.5 or DET: 95',
       'Age Limit: 18-25',
       'Performance Bonus: 2nd to 4th Year have a chance to get additional 5,000/year',
-      'Deadline for Application: May 30th, 2026 (Depends on Seats)'
+      'Deadline for Application: May 30th, 2027 (Depends on Seats)'
     ],
     documents: [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2750,7 +2750,7 @@ export const universities: University[] = [
     location: 'Shijiazhuang, Hebei Province, China',
     country: 'China',
     city: 'Shijiazhuang',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {},
@@ -2801,7 +2801,7 @@ export const universities: University[] = [
     ],
     deadlines: {
       application: 'June 30th, 2025 (Depends on Seats)',
-      startDate: 'September 2026'
+      startDate: 'September 2027'
     }
   },
   {
@@ -2811,7 +2811,7 @@ export const universities: University[] = [
     location: 'Hechi City, Guangxi Province, China',
     country: 'China',
     city: 'Hechi',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {},
@@ -2866,7 +2866,7 @@ export const universities: University[] = [
     ],
     deadlines: {
       application: 'June 30th, 2025 (Depends on Seats)',
-      startDate: 'September 2026'
+      startDate: 'September 2027'
     }
   },
   {
@@ -2876,7 +2876,7 @@ export const universities: University[] = [
     location: 'Shijiazhuang, Hebei Province, China',
     country: 'China',
     city: 'Shijiazhuang',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {},
@@ -2930,8 +2930,8 @@ export const universities: University[] = [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -2941,7 +2941,7 @@ export const universities: University[] = [
     location: 'Wuhan City, Hubei Province, China',
     country: 'China',
     city: 'Wuhan',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor'],
     taught: ['English'],
     rankings: {},
@@ -2995,7 +2995,7 @@ export const universities: University[] = [
     ],
     deadlines: {
       application: 'June 30th, 2025 (Depends on Seats)',
-      startDate: 'September 2026'
+      startDate: 'September 2027'
     }
   },
   {
@@ -3005,7 +3005,7 @@ export const universities: University[] = [
     location: 'Zhengzhou City, Henan Province, China',
     country: 'China',
     city: 'Zhengzhou',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor', 'MBBS'],
     taught: ['English'],
     rankings: {},
@@ -3054,14 +3054,14 @@ export const universities: University[] = [
       'CSCA Required',
       'EFSET or MOI Acceptable',
       'Age Limit: 18-23',
-      'Deadline for Application: May 30th, 2026 (Depends on Seats)'
+      'Deadline for Application: May 30th, 2027 (Depends on Seats)'
     ],
     documents: [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -3071,7 +3071,7 @@ export const universities: University[] = [
     location: 'Nantong City, Jiangsu Province, China',
     country: 'China',
     city: 'Nantong',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['Bachelor', 'MBBS', 'Masters'],
     taught: ['English'],
     rankings: {},
@@ -3174,14 +3174,14 @@ export const universities: University[] = [
       'EFSET or MOI Acceptable',
       'Age Limit: 18-24',
       '[ Student have to deposit 2,600 CNY for getting JW202 ]',
-      'Deadline for Application: May 30th, 2026 (Depends on Seats)'
+      'Deadline for Application: May 30th, 2027 (Depends on Seats)'
     ],
     documents: [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'May 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'May 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   },
   {
@@ -3191,7 +3191,7 @@ export const universities: University[] = [
     location: 'Xuzhou City, Jiangsu Province, China',
     country: 'China',
     city: 'Xuzhou',
-    intake: ['Fall 2026'],
+    intake: ['Fall 2027'],
     degree: ['MBBS'],
     taught: ['English'],
     rankings: {
@@ -3242,14 +3242,14 @@ export const universities: University[] = [
       'IELTS: 5.5 or DET: 95',
       'Age Limit: 18-25',
       '[ Student have to deposit 5,200 CNY for getting JW202 ]',
-      'Deadline for Application: June 30th, 2026 (Depends on Seats)'
+      'Deadline for Application: June 30th, 2027 (Depends on Seats)'
     ],
     documents: [
       'Passport', 'Photo', 'HSC Certificate', 'HSC Transcript', 'Medical Form', 'English Proficiency', 'Police Clearance'
     ],
     deadlines: {
-      application: 'June 30th, 2026 (Depends on Seats)',
-      startDate: 'September 2026'
+      application: 'June 30th, 2027 (Depends on Seats)',
+      startDate: 'September 2027'
     }
   }
 ];
