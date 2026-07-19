@@ -34,6 +34,7 @@ const destinations = [
 
 const chinaLinks = [
   { name: 'Study in China hub', href: '/study-in-china-from-bangladesh' },
+  { name: 'CSC Scholarship BD', href: '/csc-scholarship-bangladesh' },
   { name: 'China universities', href: '/china-universities' },
   { name: 'Scholarships for Bangladesh', href: '/china-scholarships-bangladesh' },
   { name: 'X1 and X2 visa guide', href: '/china-student-visa-bangladesh' },
