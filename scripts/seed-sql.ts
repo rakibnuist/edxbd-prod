@@ -49,26 +49,43 @@ async function seed() {
     const id = u._id?.$oid || (typeof u._id === 'string' ? u._id : undefined);
     const email = (u.email || '').toLowerCase().trim();
     if (!email) continue;
+    const pwd = email === 'admin@eduexpressint.com'
+      ? '$2b$10$gup.2VSpY7w3dYHjJyKBIebhR3PhFuvm8Z6dd9RwKfFkW7rq4YJBm' // admin123
+      : u.password;
 
     await prisma.user.upsert({
       where: { email },
       update: {
         name: u.name || 'User',
-        password: u.password,
-        role: u.role || 'user',
+        password: pwd,
+        role: email === 'admin@eduexpressint.com' ? 'admin' : (u.role || 'user'),
       },
       create: {
         id,
         name: u.name || 'User',
         email,
-        password: u.password,
-        role: u.role || 'user',
+        password: pwd,
+        role: email === 'admin@eduexpressint.com' ? 'admin' : (u.role || 'user'),
         createdAt: u.createdAt?.$date ? new Date(u.createdAt.$date) : (u.createdAt ? new Date(u.createdAt) : undefined),
         updatedAt: u.updatedAt?.$date ? new Date(u.updatedAt.$date) : (u.updatedAt ? new Date(u.updatedAt) : undefined),
       }
     });
   }
-  console.log(`✅ Seeded ${users.length} users`);
+  // Guarantee admin user exists even if users.json is empty
+  await prisma.user.upsert({
+    where: { email: 'admin@eduexpressint.com' },
+    update: {
+      password: '$2b$10$gup.2VSpY7w3dYHjJyKBIebhR3PhFuvm8Z6dd9RwKfFkW7rq4YJBm',
+      role: 'admin',
+    },
+    create: {
+      name: 'Admin',
+      email: 'admin@eduexpressint.com',
+      password: '$2b$10$gup.2VSpY7w3dYHjJyKBIebhR3PhFuvm8Z6dd9RwKfFkW7rq4YJBm',
+      role: 'admin',
+    }
+  });
+  console.log(`✅ Seeded ${users.length} users and verified admin account`);
 
   // 3. Universities & Programs, Fees, Scholarships
   const universities = await readJson('universities.json');
