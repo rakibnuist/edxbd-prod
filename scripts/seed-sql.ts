@@ -17,18 +17,23 @@ async function readJson(filename: string) {
 }
 
 async function seed() {
-  console.log('Starting seed...');
+  console.log('Starting full database seed...');
 
   // 1. Countries
   const countries = await readJson('countries.json');
   for (const c of countries) {
+    const id = c._id?.$oid || (typeof c._id === 'string' ? c._id : undefined);
     await prisma.country.upsert({
       where: { name: c.name },
-      update: {},
+      update: {
+        slug: c.slug || c.name.toLowerCase().replace(/\s+/g, '-'),
+        description: c.description || null,
+        isActive: c.isActive ?? true,
+      },
       create: {
-        id: c._id?.$oid || c._id || undefined,
+        id,
         name: c.name,
-        slug: c.slug || c.name.toLowerCase(),
+        slug: c.slug || c.name.toLowerCase().replace(/\s+/g, '-'),
         description: c.description || null,
         isActive: c.isActive ?? true,
         createdAt: c.createdAt?.$date ? new Date(c.createdAt.$date) : undefined,
@@ -36,17 +41,44 @@ async function seed() {
       }
     });
   }
-  console.log(`Seeded ${countries.length} countries`);
+  console.log(`✅ Seeded ${countries.length} countries`);
 
-  // 2. Universities
+  // 2. Users
+  const users = await readJson('users.json');
+  for (const u of users) {
+    const id = u._id?.$oid || (typeof u._id === 'string' ? u._id : undefined);
+    const email = (u.email || '').toLowerCase().trim();
+    if (!email) continue;
+
+    await prisma.user.upsert({
+      where: { email },
+      update: {
+        name: u.name || 'User',
+        password: u.password,
+        role: u.role || 'user',
+      },
+      create: {
+        id,
+        name: u.name || 'User',
+        email,
+        password: u.password,
+        role: u.role || 'user',
+        createdAt: u.createdAt?.$date ? new Date(u.createdAt.$date) : (u.createdAt ? new Date(u.createdAt) : undefined),
+        updatedAt: u.updatedAt?.$date ? new Date(u.updatedAt.$date) : (u.updatedAt ? new Date(u.updatedAt) : undefined),
+      }
+    });
+  }
+  console.log(`✅ Seeded ${users.length} users`);
+
+  // 3. Universities & Programs, Fees, Scholarships
   const universities = await readJson('universities.json');
   for (const u of universities) {
-    // Basic arrays to CSV strings
-    const intake = Array.isArray(u.intake) ? u.intake.join(',') : '';
-    const degree = Array.isArray(u.degree) ? u.degree.join(',') : '';
-    const taught = Array.isArray(u.taught) ? u.taught.join(',') : '';
-    
-    // JSON strings
+    const id = u._id?.$oid || (typeof u._id === 'string' ? u._id : undefined);
+    const intake = Array.isArray(u.intake) ? u.intake.join(',') : (u.intake || '');
+    const degree = Array.isArray(u.degree) ? u.degree.join(',') : (u.degree || '');
+    const taught = Array.isArray(u.taught) ? u.taught.join(',') : (u.taught || '');
+    const majors = Array.isArray(u.majors) ? u.majors.join(',') : (u.majors || '');
+
     const tuitionDetails = JSON.stringify(u.details?.tuitionDetails || []);
     const documents = JSON.stringify(u.documents || []);
     const notes = JSON.stringify(u.notes || []);
@@ -57,26 +89,23 @@ async function seed() {
 
     const createdU = await prisma.university.upsert({
       where: { slug: u.slug },
-      update: {},
-      create: {
-        id: u._id?.$oid || u._id || undefined,
-        slug: u.slug,
+      update: {
         name: u.name,
-        location: u.location,
-        country: u.country,
-        city: u.city,
+        location: u.location || '',
+        country: u.country || '',
+        city: u.city || '',
         intake,
         degree,
         taught,
-        rankingCountry: u.rankings?.country || null,
-        rankingWorld: u.rankings?.world || null,
-        rankingNational: u.rankings?.national || null,
-        majors: Array.isArray(u.details?.majors) ? u.details.majors.join(',') : '',
-        tuition: u.details?.tuition || '0',
+        rankingCountry: u.ranking?.country || u.rankingCountry || null,
+        rankingWorld: u.ranking?.world || u.rankingWorld || null,
+        rankingNational: u.ranking?.national || u.rankingNational || null,
+        majors,
+        tuition: u.tuition || '',
         tuitionDetails,
         documents,
-        deadlineApplication: u.deadlines?.application || null,
-        deadlineStartDate: u.deadlines?.startDate || null,
+        deadlineApplication: u.deadlines?.application || u.deadlineApplication || null,
+        deadlineStartDate: u.deadlines?.startDate || u.deadlineStartDate || null,
         notes,
         badges,
         logo: u.logo || null,
@@ -84,35 +113,59 @@ async function seed() {
         officialUrl: u.officialUrl || null,
         aliases,
         legacySlugs,
-        relationshipType: u.relationshipType || 'unverified',
-        relationshipEvidenceUrl: u.relationshipEvidenceUrl || null,
-        recognitionAuthority: u.recognitionAuthority || null,
-        recognitionSourceUrl: u.recognitionSourceUrl || null,
         sourceUrls,
-        lastVerifiedAt: u.lastVerifiedAt?.$date ? new Date(u.lastVerifiedAt.$date) : null,
-        verificationExpiresAt: u.verificationExpiresAt?.$date ? new Date(u.verificationExpiresAt.$date) : null,
-        verificationStatus: u.verificationStatus || 'under_verification',
+      },
+      create: {
+        id,
+        slug: u.slug,
+        name: u.name,
+        location: u.location || '',
+        country: u.country || '',
+        city: u.city || '',
+        intake,
+        degree,
+        taught,
+        rankingCountry: u.ranking?.country || u.rankingCountry || null,
+        rankingWorld: u.ranking?.world || u.rankingWorld || null,
+        rankingNational: u.ranking?.national || u.rankingNational || null,
+        majors,
+        tuition: u.tuition || '',
+        tuitionDetails,
+        documents,
+        deadlineApplication: u.deadlines?.application || u.deadlineApplication || null,
+        deadlineStartDate: u.deadlines?.startDate || u.deadlineStartDate || null,
+        notes,
+        badges,
+        logo: u.logo || null,
+        isActive: u.isActive ?? true,
+        officialUrl: u.officialUrl || null,
+        aliases,
+        legacySlugs,
+        sourceUrls,
         createdAt: u.createdAt?.$date ? new Date(u.createdAt.$date) : undefined,
         updatedAt: u.updatedAt?.$date ? new Date(u.updatedAt.$date) : undefined,
       }
     });
 
-    // Sub-records for this university
     if (u.programs) {
       for (const p of u.programs) {
+        const languages = Array.isArray(p.languages) ? p.languages.join(',') : (p.languages || '');
+        const pIntakes = Array.isArray(p.intakes) ? p.intakes.join(',') : (p.intakes || '');
+        const eligibility = JSON.stringify(p.eligibility || []);
+
         await prisma.program.create({
           data: {
             universityId: createdU.id,
             level: p.level || 'Bachelor',
             name: p.name,
             subject: p.subject || null,
-            languages: Array.isArray(p.languages) ? p.languages.join(',') : '',
+            languages,
             duration: p.duration || null,
-            intakes: Array.isArray(p.intakes) ? p.intakes.join(',') : '',
+            intakes: pIntakes,
             tuition: p.tuition || null,
             tuitionAfterScholarship: p.tuitionAfterScholarship || null,
             applicationDeadline: p.applicationDeadline || null,
-            eligibility: JSON.stringify(p.eligibility || []),
+            eligibility,
             sourceUrl: p.sourceUrl || null,
             status: p.status || 'active',
           }
@@ -158,12 +211,173 @@ async function seed() {
       }
     }
   }
-  console.log(`Seeded ${universities.length} universities with their programs, fees, and scholarships`);
+  console.log(`✅ Seeded ${universities.length} universities`);
 
-  // Similar loops for leads, contents, partnerships, users, testimonials can be added if needed,
-  // but let's stick to the core first to ensure it works.
+  // 4. Leads
+  const leads = await readJson('leads.json');
+  for (const l of leads) {
+    const id = l._id?.$oid || (typeof l._id === 'string' ? l._id : undefined);
+    if (!l.email || !l.name) continue;
 
-  console.log('Seeding finished.');
+    await prisma.lead.upsert({
+      where: { id: id || 'lead-placeholder' },
+      update: {},
+      create: {
+        id,
+        name: l.name,
+        email: l.email,
+        phone: l.phone || '',
+        country: l.country || 'Not specified',
+        program: l.program || null,
+        message: l.message || null,
+        status: l.status || 'new',
+        source: l.source || 'website',
+        leadType: l.leadType || 'contact',
+        destinationInterest: l.destinationInterest || null,
+        assignedTeam: l.assignedTeam || 'general',
+        assignedTo: l.assignedTo || null,
+        riskFlag: l.riskFlag ?? false,
+        medicalProgram: l.medicalProgram ?? false,
+        assessAcademicLevel: l.assessment?.academicLevel || l.assessAcademicLevel || null,
+        assessAcademicResults: l.assessment?.academicResults || l.assessAcademicResults || null,
+        assessSubject: l.assessment?.subject || l.assessSubject || null,
+        assessBudget: l.assessment?.budget || l.assessBudget || null,
+        assessIntake: l.assessment?.intake || l.assessIntake || null,
+        assessLanguage: l.assessment?.language || l.assessLanguage || null,
+        assessCareerGoal: l.assessment?.careerGoal || l.assessCareerGoal || null,
+        assessPreferredCountries: JSON.stringify(l.assessment?.preferredCountries || []),
+        notes: l.notes || null,
+        consentTimestamp: l.consentTimestamp?.$date ? new Date(l.consentTimestamp.$date) : (l.consentTimestamp ? new Date(l.consentTimestamp) : new Date()),
+        consentPolicyVersion: l.consentPolicyVersion || '2026-07-19',
+        landingPage: l.landingPage || null,
+        utm: JSON.stringify(l.utm || {}),
+        createdAt: l.createdAt?.$date ? new Date(l.createdAt.$date) : (l.createdAt ? new Date(l.createdAt) : undefined),
+        updatedAt: l.updatedAt?.$date ? new Date(l.updatedAt.$date) : (l.updatedAt ? new Date(l.updatedAt) : undefined),
+      }
+    });
+  }
+  console.log(`✅ Seeded ${leads.length} leads`);
+
+  // 5. Testimonials
+  const testimonials = await readJson('testimonials.json');
+  for (const t of testimonials) {
+    const id = t._id?.$oid || (typeof t._id === 'string' ? t._id : undefined);
+    if (!t.studentName || !t.content) continue;
+
+    await prisma.testimonial.upsert({
+      where: { id: id || 'testimonial-placeholder' },
+      update: {},
+      create: {
+        id,
+        studentName: t.studentName,
+        content: t.content,
+        university: t.university || null,
+        country: t.country || null,
+        rating: t.rating ?? 5,
+        isPublished: t.isPublished ?? true,
+        createdAt: t.createdAt?.$date ? new Date(t.createdAt.$date) : (t.createdAt ? new Date(t.createdAt) : undefined),
+        updatedAt: t.updatedAt?.$date ? new Date(t.updatedAt.$date) : (t.updatedAt ? new Date(t.updatedAt) : undefined),
+      }
+    });
+  }
+  console.log(`✅ Seeded ${testimonials.length} testimonials`);
+
+  // 6. Partnerships
+  const partnerships = await readJson('partnerships.json');
+  for (const p of partnerships) {
+    const id = p._id?.$oid || (typeof p._id === 'string' ? p._id : undefined);
+    await prisma.partnership.upsert({
+      where: { id: id || 'partnership-placeholder' },
+      update: {},
+      create: {
+        id,
+        companyName: p.companyName || null,
+        businessType: p.businessType || 'other',
+        businessRegistrationNumber: p.businessRegistrationNumber || null,
+        businessLicense: p.businessLicense || null,
+        website: p.website || null,
+        yearsInBusiness: p.yearsInBusiness ?? 0,
+        contactPerson: p.contactPerson || 'Unknown',
+        email: p.email || 'unknown@example.com',
+        phone: p.phone || '0000000000',
+        alternatePhone: p.alternatePhone || null,
+        address: p.address || null,
+        city: p.city || null,
+        state: p.state || null,
+        country: p.country || null,
+        postalCode: p.postalCode || null,
+        partnershipType: p.partnershipType || 'company',
+        targetCountries: JSON.stringify(p.targetCountries || []),
+        currentClients: p.currentClients ?? 0,
+        monthlyTarget: p.monthlyTarget ?? 0,
+        experience: p.experience || null,
+        currentPartners: JSON.stringify(p.currentPartners || []),
+        annualRevenue: p.annualRevenue || null,
+        investmentCapacity: p.investmentCapacity || null,
+        expectedCommission: p.expectedCommission || null,
+        marketingChannels: JSON.stringify(p.marketingChannels || []),
+        socialMediaPresence: JSON.stringify(p.socialMediaPresence || []),
+        localNetwork: p.localNetwork || null,
+        referralSources: JSON.stringify(p.referralSources || []),
+        documents: JSON.stringify(p.documents || []),
+        motivation: p.motivation || null,
+        expectations: p.expectations || null,
+        additionalInfo: p.additionalInfo || null,
+        status: p.status || 'pending',
+        priority: p.priority || 'medium',
+        assignedTo: p.assignedTo || null,
+        reviewNotes: p.reviewNotes || null,
+        source: p.source || 'website',
+        ipAddress: p.ipAddress || null,
+        userAgent: p.userAgent || null,
+        createdAt: p.createdAt?.$date ? new Date(p.createdAt.$date) : (p.createdAt ? new Date(p.createdAt) : undefined),
+        updatedAt: p.updatedAt?.$date ? new Date(p.updatedAt.$date) : (p.updatedAt ? new Date(p.updatedAt) : undefined),
+      }
+    });
+  }
+  console.log(`✅ Seeded ${partnerships.length} partnerships`);
+
+  // 7. Contents
+  const contents = await readJson('contents.json');
+  for (const cnt of contents) {
+    const id = cnt._id?.$oid || (typeof cnt._id === 'string' ? cnt._id : undefined);
+    if (!cnt.title || !cnt.slug) continue;
+
+    await prisma.content.upsert({
+      where: { slug: cnt.slug },
+      update: {},
+      create: {
+        id,
+        title: cnt.title,
+        slug: cnt.slug,
+        content: cnt.content || '',
+        excerpt: cnt.excerpt || null,
+        type: cnt.type || 'post',
+        category: cnt.category || null,
+        tags: JSON.stringify(cnt.tags || []),
+        categories: JSON.stringify(cnt.categories || []),
+        featuredImage: cnt.featuredImage || null,
+        isPublished: cnt.isPublished ?? false,
+        isFeatured: cnt.isFeatured ?? false,
+        metaTitle: cnt.metaTitle || null,
+        metaDescription: cnt.metaDescription || null,
+        author: cnt.author || 'Admin',
+        reviewer: cnt.reviewer || null,
+        sourceUrls: JSON.stringify(cnt.sourceUrls || []),
+        lastVerifiedAt: cnt.lastVerifiedAt?.$date ? new Date(cnt.lastVerifiedAt.$date) : (cnt.lastVerifiedAt ? new Date(cnt.lastVerifiedAt) : undefined),
+        nextReviewAt: cnt.nextReviewAt?.$date ? new Date(cnt.nextReviewAt.$date) : (cnt.nextReviewAt ? new Date(cnt.nextReviewAt) : undefined),
+        complianceApprovedAt: cnt.complianceApprovedAt?.$date ? new Date(cnt.complianceApprovedAt.$date) : (cnt.complianceApprovedAt ? new Date(cnt.complianceApprovedAt) : undefined),
+        seoApprovedAt: cnt.seoApprovedAt?.$date ? new Date(cnt.seoApprovedAt.$date) : (cnt.seoApprovedAt ? new Date(cnt.seoApprovedAt) : undefined),
+        publishedAt: cnt.publishedAt?.$date ? new Date(cnt.publishedAt.$date) : (cnt.publishedAt ? new Date(cnt.publishedAt) : undefined),
+        views: cnt.views ?? 0,
+        createdAt: cnt.createdAt?.$date ? new Date(cnt.createdAt.$date) : (cnt.createdAt ? new Date(cnt.createdAt) : undefined),
+        updatedAt: cnt.updatedAt?.$date ? new Date(cnt.updatedAt.$date) : (cnt.updatedAt ? new Date(cnt.updatedAt) : undefined),
+      }
+    });
+  }
+  console.log(`✅ Seeded ${contents.length} contents`);
+
+  console.log('🎉 Full database seeding complete.');
 }
 
 seed()
@@ -171,7 +385,7 @@ seed()
     await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e);
+    console.error('Seeding error:', e);
     await prisma.$disconnect();
     process.exit(1);
   });

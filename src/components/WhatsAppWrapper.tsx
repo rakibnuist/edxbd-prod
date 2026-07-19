@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
 const FloatingWhatsApp = dynamic(() => import('./FloatingWhatsApp' /* webpackChunkName: "whatsapp" */), {
@@ -14,6 +15,7 @@ interface WrapperProps {
 }
 
 export default function WhatsAppWrapper(props: WrapperProps) {
+    const pathname = usePathname();
     const [shouldRender, setShouldRender] = useState(false);
 
     useEffect(() => {
@@ -24,6 +26,7 @@ export default function WhatsAppWrapper(props: WrapperProps) {
         return () => clearTimeout(timer);
     }, []);
 
+    if (pathname.startsWith('/admin') || pathname.startsWith('/dashboard')) return null;
     if (!shouldRender) return null;
 
     return <FloatingWhatsApp {...props} />;
