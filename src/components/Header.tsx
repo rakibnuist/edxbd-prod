@@ -44,7 +44,7 @@ const Header = () => {
     { name: 'Study in China', href: '/study-in-china-from-bangladesh', current: pathname.includes('china') },
     { name: 'Destinations', href: '/country-status', current: pathname.startsWith('/destinations') || pathname === '/country-status' },
     { name: 'Find Education', href: '/universities', current: pathname.startsWith('/universities') },
-    { name: 'Proof & Transparency', href: '/better-education-standard', current: ['/better-education-standard', '/fees-and-transparency', '/how-we-verify-universities'].includes(pathname) },
+    { name: 'Proof & Transparency', href: '/fees-and-transparency', current: ['/better-education-standard', '/fees-and-transparency', '/how-we-verify-universities'].includes(pathname) },
     { name: 'Updates', href: '/updates', current: pathname === '/updates' },
     { name: 'Contact', href: '/contact', current: pathname === '/contact' },
   ];
@@ -105,7 +105,7 @@ const Header = () => {
         {/* Inner Texture for Glass Effect */}
         {isScrolled && <div className="absolute inset-0 opacity-[0.4] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay pointer-events-none"></div>}
 
-        <nav className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <nav className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10" aria-label="Primary site navigation">
           <div className="flex justify-between items-center">
 
             {/* Logo */}
@@ -113,11 +113,11 @@ const Header = () => {
               className="flex-shrink-0"
               variants={slideInFromLeft}
             >
-              <Link href="/" className="flex items-center gap-2 group">
+              <Link href="/" className="flex items-center gap-2 group" aria-label="EduExpress International Homepage">
                 <div className={`relative h-10 w-auto transition-transform duration-300 group-hover:scale-105 ${logoFilterClass}`}>
                   <Image
                     src="/logo.png"
-                    alt="EduExpress International"
+                    alt="EduExpress International Logo"
                     width={180}
                     height={50}
                     quality={60}
@@ -259,7 +259,9 @@ const Header = () => {
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className={`p-2 rounded-xl transition-colors ${isMenuOpen ? 'bg-slate-100 text-slate-900' : (isTransparent ? 'bg-white/50 text-slate-900 backdrop-blur-md' : 'text-slate-900')}`}
-                aria-label="Toggle menu"
+                aria-label="Toggle navigation menu"
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-navigation-menu"
               >
                 {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>

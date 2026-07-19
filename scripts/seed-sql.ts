@@ -1,9 +1,16 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 import fs from 'fs/promises';
 import path from 'path';
 import 'dotenv/config';
 
 const prisma = new PrismaClient();
+
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'admin@eduexpressint.com').toLowerCase().trim();
+// Admin password comes from env only; hash it at seed time. No plaintext defaults.
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD
+  ? bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10)
+  : null;
 
 async function readJson(filename: string) {
   const filePath = path.join(process.cwd(), 'db-dump', filename);
@@ -49,9 +56,12 @@ async function seed() {
     const id = u._id?.$oid || (typeof u._id === 'string' ? u._id : undefined);
     const email = (u.email || '').toLowerCase().trim();
     if (!email) continue;
-    const pwd = email === 'admin@eduexpressint.com'
-      ? '$2b$10$gup.2VSpY7w3dYHjJyKBIebhR3PhFuvm8Z6dd9RwKfFkW7rq4YJBm' // admin123
+    const pwd = email === ADMIN_EMAIL
+      ? (ADMIN_PASSWORD_HASH || u.password)
       : u.password;
+    if (email === ADMIN_EMAIL && !ADMIN_PASSWORD_HASH) {
+      console.warn('⚠️  ADMIN_PASSWORD not set — admin password left unchanged from source data.');
+    }
 
     await prisma.user.upsert({
       where: { email },

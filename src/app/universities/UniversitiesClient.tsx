@@ -183,31 +183,31 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
             const isVerified = university.verificationStatus === 'verified' && university.sourceUrls?.length;
             
             return (
-              <article key={university.id} className="group relative flex flex-col md:flex-row items-stretch overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:border-[#64b5df]/50">
-                {/* Visual Accent / Cover Placeholder */}
-                <div className="w-full md:w-64 shrink-0 bg-gradient-to-br from-[#08263c] to-[#174f7a] p-6 text-white flex flex-col justify-between relative overflow-hidden">
+              <article key={university.id} className="group relative flex flex-col md:flex-row items-stretch overflow-hidden border-2 border-[#08263c] bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[10px_10px_0_0_#174f7a]">
+                {/* Visual Accent / Cover Box */}
+                <div className="w-full md:w-64 shrink-0 bg-[#08263c] p-6 text-white flex flex-col justify-between relative overflow-hidden">
                   <div className="absolute -right-8 -top-8 size-40 rounded-full border-[20px] border-white/5" />
                   
                   <div>
-                    <div className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-widest backdrop-blur-md ${isVerified ? 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30' : 'bg-white/10 text-white/80 border border-white/20'}`}>
+                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-mono font-black uppercase tracking-widest ${isVerified ? 'bg-[#174f7a] text-[#8ed0ee] border border-[#64b5df]/30' : 'bg-white/10 text-white/80 border border-white/20'}`}>
                       {isVerified ? <BookOpenCheck size={12} /> : <CalendarCheck size={12} />}
                       {isVerified ? 'Verified Record' : 'Under Review'}
                     </div>
                   </div>
 
-                  <div className="mt-12">
-                    <p className="flex items-center gap-1.5 text-xs font-medium text-white/70 uppercase tracking-widest mb-2">
-                      <MapPin size={14} /> {university.country || university.location}
+                  <div className="mt-10">
+                    <p className="flex items-center gap-1.5 font-mono text-[10px] font-bold text-[#8ed0ee] uppercase tracking-widest mb-1">
+                      <MapPin size={13} /> {university.country || university.location}
                     </p>
-                    <p className="font-heading text-lg font-bold leading-tight">{university.city}</p>
+                    <p className="font-heading text-xl font-bold leading-tight text-white">{university.city}</p>
                   </div>
                 </div>
                 
                 {/* Core Info */}
-                <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
-                  <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex-1 p-6 md:p-8 flex flex-col justify-center bg-white">
+                  <div className="flex flex-wrap gap-2 mb-3">
                     {(university.degree || []).map(value => (
-                      <span key={value} className="inline-flex items-center rounded bg-slate-100 px-2 py-1 text-[10px] font-black text-slate-600 tracking-wider uppercase">
+                      <span key={value} className="inline-flex items-center bg-[#e9f7fd] border border-[#174f7a]/20 px-2.5 py-1 font-mono text-[9px] font-black text-[#174f7a] tracking-wider uppercase">
                         {value}
                       </span>
                     ))}
@@ -221,29 +221,29 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                   </h2>
 
                   {/* Feature Grid */}
-                  <div className="mt-8 grid grid-cols-2 gap-y-4 gap-x-6 sm:grid-cols-4 border-t border-slate-100 pt-6">
+                  <div className="mt-6 grid grid-cols-2 gap-y-4 gap-x-6 sm:grid-cols-4 border-t border-[#174f7a]/15 pt-5 bg-[#f4f8fa] p-4">
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Tuition Estimate</p>
-                      <p className="text-sm font-bold text-[#08263c] flex items-center gap-1.5"><Wallet size={14} className="text-slate-400" /> {university.details?.tuition || 'Variable'}</p>
+                      <p className="font-mono text-[9px] font-black uppercase tracking-wider text-[#174f7a] mb-1">Tuition Est.</p>
+                      <p className="text-xs font-bold text-[#08263c] flex items-center gap-1.5"><Wallet size={13} className="text-[#174f7a]" /> {university.details?.tuition || 'Variable'}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Teaching Lang</p>
-                      <p className="text-sm font-bold text-[#08263c] flex items-center gap-1.5"><Languages size={14} className="text-slate-400" /> {university.taught?.join(', ') || 'Mixed'}</p>
+                      <p className="font-mono text-[9px] font-black uppercase tracking-wider text-[#174f7a] mb-1">Teaching Lang</p>
+                      <p className="text-xs font-bold text-[#08263c] flex items-center gap-1.5"><Languages size={13} className="text-[#174f7a]" /> {university.taught?.join(', ') || 'Mixed'}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Scholarships</p>
-                      <p className="text-sm font-bold text-[#08263c] flex items-center gap-1.5"><Sparkles size={14} className="text-amber-500" /> {university.scholarships?.length ? `${university.scholarships.length} Types` : 'None'}</p>
+                      <p className="font-mono text-[9px] font-black uppercase tracking-wider text-[#174f7a] mb-1">Scholarships</p>
+                      <p className="text-xs font-bold text-[#08263c] flex items-center gap-1.5"><Sparkles size={13} className="text-[#64b5df]" /> {university.scholarships?.length ? `${university.scholarships.length} Types` : 'None'}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Next Intake</p>
-                      <p className="text-sm font-bold text-[#08263c] flex items-center gap-1.5"><Clock size={14} className="text-slate-400" /> {university.intake?.[0] || 'Rolling'}</p>
+                      <p className="font-mono text-[9px] font-black uppercase tracking-wider text-[#174f7a] mb-1">Next Intake</p>
+                      <p className="text-xs font-bold text-[#08263c] flex items-center gap-1.5"><Clock size={13} className="text-[#174f7a]" /> {university.intake?.[0] || 'Rolling'}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Arrow CTA */}
-                <div className="hidden lg:flex w-24 shrink-0 border-l border-slate-100 items-center justify-center bg-slate-50 transition-colors group-hover:bg-[#174f7a] text-slate-300 group-hover:text-white">
-                  <ArrowUpRight size={32} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                <div className="hidden lg:flex w-20 shrink-0 border-l border-[#174f7a]/15 items-center justify-center bg-[#f4f8fa] transition-colors group-hover:bg-[#08263c] text-[#08263c] group-hover:text-white">
+                  <ArrowUpRight size={28} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </div>
               </article>
             );

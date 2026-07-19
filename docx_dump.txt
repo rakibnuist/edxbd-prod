@@ -1,0 +1,903 @@
+Prepared for management, developer, SEO, content and counseling teams
+Research and public-site review date: 18 July 2026 | Version 2.0
+SEO targets in this plan are management goals, not ranking or visa guarantees. All country information must be reverified before publication.
+Executive Decision
+EduExpress should not enter the Bangladesh market as another consultancy advertising scholarships, “easy visa,” large partner counts and generic success-rate claims. Those messages are already common. The stronger market gap is verified education advice, visible fee transparency and written evidence in a sector where students and families increasingly fear misleading promises, lost money and misuse of personal documents. [S8-S12]
+Chosen market position
+Bangladesh's Evidence-First Education Consultancy
+Public brand promise
+Better Education. Clear Costs. Written Proof.
+Campaign line
+Compare Before You Commit.
+China offer - approved wording
+No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.
+Why the wording matters: “All payment after visa” is powerful only when it is literally true. Some universities or official processes may require application fees, deposits or other payments earlier. The website must distinguish EduExpress charges from third-party charges so the promise remains honest and defensible.
+Business and SEO Architecture at a Glance
+Layer
+Decision
+What the website must prove
+Flagship product
+China
+Operational depth, student cases, university knowledge, current admission routes and visa-first service policy.
+Side portfolio
+UK, Hungary, Greece, Malta, South Korea, Finland, Cyprus, Croatia, Georgia, Malaysia and Thailand
+Each destination launches under a visible service-status system and only after readiness gates are met.
+Core product
+Better Education Decision
+A documented comparison method, not a scholarship catalogue.
+Primary lead offer
+Free Education Fit Assessment
+Profile, subject, budget, career goal and risk assessment; produces a written next-step summary.
+Search strategy
+China authority first, then country clusters
+Technical repair, people-first content, local proof, university data, success stories and digital PR.
+Trust strategy
+Make money flow and evidence visible
+Public fee policy, receipts, direct payment where possible, consent-based stories, source links and a complaints process.
+Contents
+1. Bangladesh Market Reality and Competitive White Space
+2. Current State of EduExpress International
+3. The Unique Selling Point and Productized Trust System
+4. Destination Portfolio and Launch Waves
+5. Brand, Homepage and Information Architecture
+6. Technical SEO Repair Plan
+7. China SEO Authority Plan
+8. SEO Plan for the 11 Side Destinations
+9. Content Production and Editorial Governance
+10. On-Page SEO and Page Templates
+11. University Directory and Data Quality
+12. Local SEO and Google Business Profile
+13. Entity SEO, Reputation and Brand Protection
+14. Backlinks, Digital PR and AI Search Visibility
+15. Conversion, CRM and Student Experience
+16. Analytics, KPIs and Reporting
+17. 90-Day Implementation Roadmap
+18. 12-Month Growth Roadmap
+19. Developer Acceptance Criteria and Handover
+20. Research Sources
+1. Bangladesh Market Reality and Competitive White Space
+1.1 What competitors already say
+Bangladesh consultancies commonly promote free counseling, no file-opening fee, scholarship support, payment or service charge after visa, large partner networks and high visa-success claims. Therefore, “no file opening charge,” “transparent” and “pay after visa” are useful conversion features, but none is a defensible category-level USP by itself. Examples include Admission Connect and Vidya International, alongside many other agencies using similar language. [S6-S7]
+Common market message
+Why it is weak as a standalone USP
+EduExpress response
+Free consultation
+Expected entry offer; almost everyone can copy it.
+Make the consultation produce a useful Education Fit Summary.
+No file opening fee
+Strong reassurance but already used by competitors.
+Keep it, then add written cost separation and milestone rules.
+Pay after visa
+Reduces risk, but wording is often vague.
+Make it China-specific, define “EduExpress service fee,” list exceptions and publish terms.
+Scholarship specialist
+Crowded and can make education quality look secondary.
+Sell best-fit education and treat scholarship as one affordability factor.
+98% / 100% success
+Often unverifiable and increasingly distrusted.
+Publish scoped, period-based statistics only when auditable.
+150+ partners
+Does not show whether universities are suitable or relationships are direct.
+Show partner type, evidence, last verification and student-fit rationale.
+Honest and transparent
+Easy to claim, difficult to prove.
+Productize transparency through ClearCost, Proof Pack, receipt rules and public policies.
+1.2 The trust crisis creates an opportunity
+Recent alleged overseas-education fraud cases in Bangladesh involved large sums and hundreds of students, while the UGC has warned about unauthorized foreign-university operations. A Financial Times investigation also highlighted overseas recruitment agencies sharing student passport details online. These events create a market where proof, privacy and payment control can outperform louder promises. [S8-S12]
+Strategic inference
+The open market position is not “the agency with the most scholarships.” It is “the agency that lets families see the evidence, total cost, risks and responsibility before committing money.”
+1.3 The white-space positioning
+Market fear
+EduExpress proof mechanism
+SEO/content expression
+Money disappears or fees change
+ClearCost Sheet, official-vs-service fee separation, receipts, written refund rules
+Public /fees-and-transparency page; “total cost” content; downloadable example.
+Wrong or low-value university
+EduFit 6-Point Check and recognition verification
+University pages with recognition, academic fit, career value and source links.
+Fake partnership or application
+Partner evidence, application record, source URLs and status tracking
+“How we verify universities” page and partner-type labels.
+Visa guarantee pressure
+Readiness scoring and honest risk explanation
+Country-specific visa guides, refusal causes and no guarantee language.
+Personal data exposure
+Privacy-by-design process and redaction rules
+Privacy center, consent records and never publishing visible passport data.
+Consultant pushes commission-paying option
+Comparison report with at least three choices and conflict disclosure
+“Compare before you commit” tools and student decision stories.
+2. Current State of EduExpress International
+2.1 Strengths that should be protected
+Established China positioning and a sizeable public China university directory.
+Visible office address, phones, email and business hours on the contact page.
+Existing China-related updates, scholarship information and university profiles.
+Public claims of 3,000+ students, 150+ universities and operation since 2018 - potentially useful if definitions and evidence are standardized.
+A team page and stated China country responsibility, which can support real expertise when credentials and first-hand experience are documented.
+2.2 Public-site problems that weaken trust and SEO
+Finding
+Current evidence
+Required correction
+Scholarship-first positioning
+Homepage and destination pages emphasize full scholarships, free tuition and “98% visa success.” [S1-S4]
+Rewrite around education quality, fit, total cost and proof; retain scholarship as a supporting factor.
+Inconsistent company scale
+About page says 25+ countries while other pages have used different totals. [S1]
+Create one CMS-controlled statistics source with definitions and review dates.
+Only 9 destinations are currently listed
+Current destination page lists China, South Korea, UK, Hungary, Finland, Cyprus, Croatia, Georgia and Malaysia. [S2]
+Add Greece, Malta and Thailand only under launch-status rules; avoid pretending they are established.
+Duplicate university records and inconsistent program names
+The directory shows repeated institutions and duplicated majors/fee variations. [S15]
+Merge duplicate entities; use one university ID and separate programs/intakes.
+Stale update dates and intake language
+Several 2026 admission posts are shown with 2024 publication dates and old intake language. [S16]
+Add verified dates, automatic open/closed status and yearly refresh workflows.
+Doubled title tags
+Contact and other search results show the brand twice. [S14]
+Fix global metadata template; append brand once.
+Old/secondary brand domain
+eduexpress.info remains live with “100% VISA,” work-study and payment claims. [S5]
+Audit, remove unsupported content and 301 redirect to appropriate main-site pages.
+Outdated LinkedIn entity
+LinkedIn describes EduExpress as Staffing and Recruiting in Wuxi, China. [S3]
+Update industry, headquarters, HTTPS URL, description, logo and Bangladesh office.
+Name confusion
+A separate UK-based EduExpress Ltd. also operates in Bangladesh. [S13]
+Strengthen exact entity name, logo, legal details, sameAs profiles and branded search assets.
+2.3 Priority decision: stop expanding claims before expanding evidence
+Management rule
+No destination may display a success rate, “partner” claim, guaranteed scholarship, easy-visa statement or student testimonial until the supporting record is stored in the CMS and approved by management.
+3. The Unique Selling Point and Productized Trust System
+3.1 Final recommended USP
+Category position
+Bangladesh's Evidence-First Education Consultancy
+Brand promise
+Better Education. Clear Costs. Written Proof.
+This is more defendable than a generic honesty claim because it is tied to visible deliverables. It also fits the user’s stated intention: EduExpress does not sell scholarships; it helps students buy a better education decision.
+3.2 The EduExpress Better Education Standard.
+Check
+Question answered
+Evidence shown to student
+1. Recognition
+Is the institution and qualification officially recognized for the student’s goal?
+Official registry/accreditor source, recognition notes and date checked.
+2. Academic fit
+Does the curriculum match the student’s preparation and interests?
+Program modules, entry requirements and counselor rationale.
+3. Career value
+What skills, progression and realistic career pathways follow?
+Curriculum-to-career map; no guaranteed job language.
+4. Total financial reality
+What will the family pay in year one and over the full program?
+Tuition, living cost, official fees, EduExpress fee, currency assumptions and contingencies.
+5. Visa readiness
+Does the profile meet the documented visa and financial requirements?
+Readiness checklist, gaps and official sources.
+6. Student support and safety
+What happens before departure, on arrival and when problems occur?
+Support scope, contacts, accommodation guidance and limits of responsibility.
+3.3 Four productized trust assets
+EduFit Decision Report
+A one-to-two-page comparison of at least three appropriate options, explaining why each is recommended or rejected.
+ClearCost Sheet
+A written cost schedule separating university/embassy/third-party costs from EduExpress charges, with due dates, payment recipient and refund status.
+Application Proof Pack
+Copies or references for submissions, receipts, offer/verification records, deadline history and responsible staff member.
+China Visa-First Service Terms
+No file-opening charge and no EduExpress service fee before visa approval, with clear disclosure of any official fees required earlier.
+3.4 Website language rules
+Use
+Avoid
+“We compare education quality, cost, recognition and career fit before recommending an option.”
+“Guaranteed admission” or “guaranteed visa.”
+“No EduExpress service fee before China visa approval.”
+“All payment after visa” without explaining third-party fees.
+“Scholarship options are assessed after education fit.”
+“We sell full scholarships.”
+“Current information verified on [date] from [source].”
+Unattributed rankings, fees or visa claims.
+“Launching service for [country] - assessment now available.”
+Borrowing China success statistics for a new destination.
+“Past performance does not guarantee an individual visa outcome.”
+“98% success guaranteed.”
+4. Destination Portfolio and Launch Waves
+4.1 Destination matrix
+Destination
+Portfolio status
+Launch target
+SEO/value angle
+Main guardrail
+China
+Flagship / established
+Now
+Best-fit Chinese education, verified cost and scholarship options, visa-first service
+Over-scholarship positioning; deposits/application fees must be disclosed.
+United Kingdom
+Wave 1
+0-90 days
+Strict profile screening, sponsor verification, program value and updated post-study rules
+UK sponsor compliance tightened in June 2026; Graduate route becomes 18 months for most non-PhD applications from Jan 2027. [S17-S18]
+Hungary
+Wave 1
+0-90 days
+Stipendium Hungaricum plus self-funded education comparison
+Use official country and scholarship guidance; do not promise nomination. [S22-S23]
+South Korea
+Wave 1
+0-90 days
+Technology, research and GKS guidance with Korean-language preparation
+GKS details and deadlines must follow current government notices. [S24]
+Finland
+Wave 1
+0-90 days
+Education quality, realistic funding and employability assessment
+Official living-funds requirement is EUR 800/month; avoid “easy settlement” or scholarship hype. [S19]
+Malaysia
+Wave 1
+0-90 days
+Affordable, structured admissions through verified institutions and EMGS/MYCAS
+Avoid unverified work-study/job guarantees; use official EMGS/MYCAS process. [S25-S26]
+Malta
+Wave 2
+90-180 days
+English-medium European education with full cost and recognition comparison
+Market is crowded with “without IELTS/easy visa” claims; differentiate through proof.
+Cyprus
+Wave 2
+90-180 days
+Clear distinction between Republic of Cyprus and Northern Cyprus pathways
+Recognition and visa language must identify jurisdiction precisely.
+Georgia
+Wave 2
+90-180 days
+Medical and other programs with recognition-first screening
+Medical recognition and licensing routes require program-specific verification.
+Greece
+Wave 3
+180-270 days
+Niche English-taught programs and honest affordability analysis
+Do not build a page until institutions, visa route and student support are operational.
+Croatia
+Wave 3
+180-270 days
+EU/Schengen education options with verified program availability
+Avoid using “Schengen” as the product; lead with education and recognition.
+Thailand
+Wave 3
+180-270 days
+Regional programs, hospitality/business/technology and affordability
+Separate degree education from work/short-course marketing; verify student-visa rules.
+4.2 Country launch gate - all eight items required
+Named country owner and trained backup counselor.
+At least five verified institutions or a documented direct application route.
+Official admission, visa, funds, work-rights and dependent information captured with source URLs.
+Service scope, fee schedule, refund policy and responsibility matrix approved.
+Country-specific SOP, CRM stages, document checklist and escalation process tested.
+At least one expert-reviewed pillar page and three supporting guides ready.
+No success story or performance claim unless it belongs to that destination and consent is recorded.
+Quarterly review owner and expiry date configured in the CMS.
+Public status labels
+Flagship | Active | Pilot | Launching | Researching | Temporarily Paused. The CTA and indexation rule must change automatically with status.
+5. Brand, Homepage and Information Architecture
+5.1 Homepage SEO intent
+The homepage should own the company-level intent: education consultancy in Bangladesh. China should remain the most prominent product section but should not consume the homepage H1. A dedicated China pillar should own “study in China from Bangladesh.”
+Element
+Recommended implementation
+Title
+Education Consultancy in Bangladesh | EduExpress International
+H1
+Choose Better Education Abroad - with Clear Costs and Written Proof
+Meta description
+Compare universities, programs, total costs and visa readiness with EduExpress. China specialists in Bangladesh, with carefully verified routes for the UK, Europe and Asia.
+Primary CTA
+Get My Free Education Fit Assessment
+Secondary CTA
+Explore Study in China
+Trust strip
+No file-opening charge for China | No EduExpress service fee before China visa approval | Written cost breakdown | Verified information
+Proof section
+Scoped China statistics, consent-based student cases, partner evidence and “last verified” dates.
+Destination section
+China as Flagship; other countries grouped by Active/Launching, not displayed as equally established.
+Footer
+Exact NAP, hours, legal name, privacy, terms, fee policy, complaints, social profiles and main-site canonical identity.
+5.2 Recommended navigation
+Top level
+Children / purpose
+Study in China
+Overview, universities, costs, scholarships, visa, intakes, student life, success stories.
+Destinations
+All destinations, clearly labeled by service status.
+Find Education
+University directory, program finder, comparison tool, subject guides.
+How We Help
+Education Fit Assessment, application, affordability, visa preparation, pre-departure.
+Proof & Transparency
+Success stories, fees, how we verify, privacy, complaints, service terms.
+Resources
+Guides, updates, deadlines, webinars, calculators and Bengali resources.
+About / Contact
+Team credentials, offices, company facts, appointment and Google Map.
+5.3 Required new pages
+/better-education-standard
+/fees-and-transparency
+/china-visa-first-policy
+/how-we-verify-universities
+/student-data-privacy
+/complaints-and-resolution
+/success-stories/china
+/education-consultant-dhaka
+/compare-study-destinations
+/country-status
+6. Technical SEO Repair Plan
+6.1 P0 - complete before new-country SEO
+Task
+Implementation
+Definition of done
+SSR/SSG
+Return all main content, metadata, links and structured data in initial HTML for updates, university and destination pages.
+curl/view-source contains H1, body, links, title, description and canonical.
+Canonical repair
+Each indexable page self-canonicals to https://eduexpressint.com preferred URL.
+Crawl shows one valid canonical, 200 response, no homepage canonicals on inner pages.
+Title-template repair
+Append “| EduExpress International” once only.
+No doubled brand titles in full crawl or Search Console samples.
+Old-domain consolidation
+Audit eduexpress.info, remove risky claims and 301 each useful URL to a matching main-site page; otherwise 410.
+No duplicate indexable brand domain; redirects are one hop.
+University deduplication
+Create unique IDs, merge duplicate institutions and redirect old slugs.
+No duplicate institution names/slugs; redirect map approved.
+Intake/deadline status
+Automatic Open/Closing/Closed/Next Intake/Under Verification logic.
+Expired deadlines cannot show “Apply Now.”
+Claim source system
+Move statistics and guarantees into centrally governed CMS fields.
+No hard-coded conflicting claims.
+Privacy and consent
+Add form consent, privacy links, retention rules and sensitive-document handling.
+Every form stores consent timestamp and policy version.
+NAP/entity correction
+One exact business name, address, phone and hours on site and profiles.
+Footer/contact/schema/GBP/LinkedIn match character-for-character.
+Analytics baseline
+GA4, GSC, Bing Webmaster, GBP and CRM conversion tracking.
+Test events and source attribution recorded.
+6.2 P1 - structure and performance
+Generate separate XML sitemaps for pages, countries, universities, guides and success stories; exclude noindex, redirects, duplicates and expired thin pages.
+Create robots.txt with sitemap location. Do not block essential CSS/JS. AI bot controls are a policy choice; llms.txt may be added as an experimental discovery file but must not be presented as a ranking guarantee.
+Use one host (non-www or www), HTTPS, one trailing-slash policy and no redirect chains.
+Implement clean breadcrumbs and crawlable HTML links. Avoid indexable combinations for every directory filter.
+Self-host and compress images; use WebP/AVIF, responsive srcset, descriptive filenames and real alt text.
+Meet mobile Core Web Vitals targets: LCP <=2.5s, INP <=200ms and CLS <=0.1 at the 75th percentile where practical.
+Create true 404/410 responses, helpful 404 page and automated broken-link monitoring.
+Add update timestamps, author/reviewer profiles and source records to education/visa pages.
+Add hreflang only after complete English/Bengali equivalents exist; never point partial translations at each other.
+Keep internal search results noindex,follow; control pagination and parameter URLs.
+6.3 Schema implementation
+Page
+Schema
+Homepage / contact
+Organization plus LocalBusiness in an @graph; PostalAddress, phone, URL, logo, sameAs, opening hours and geo where verified.
+Do not add
+Self-serving aggregateRating/review markup for EduExpress; Google does not show these stars for a business reviewing itself. [S29-S30]
+Country and service pages
+WebPage, BreadcrumbList; FAQPage only when complete visible answers are present and current.
+Guides and updates
+Article with author, reviewer if supported in visible content, datePublished, dateModified and citations in the page.
+University profiles
+WebPage plus CollegeOrUniversity as the subject, clearly showing EduExpress as publisher, not the university.
+Success stories
+Article; consent metadata stays private. Never expose passport or visa numbers.
+Directory
+CollectionPage and ItemList for the visible set; avoid fake product/review markup.
+7. China SEO Authority Plan
+7.1 China is the proof engine
+China should become the strongest, most useful Bangladesh-specific China education resource online. Official 2026/27 scholarship information for Bangladeshi applicants and current China visa notices provide authoritative source material, but EduExpress must present itself as a guidance and application-support company, not as an exclusive embassy or scholarship authority. The Chinese Embassy in Bangladesh states that it has not authorized or recommended an exclusive visa agency. [S20-S21]
+7.2 China pillar and supporting cluster
+Priority URL
+Primary intent
+Required proof/content
+/study-in-china-from-bangladesh
+Pillar: study in China from Bangladesh
+Decision framework, costs, recognition, scholarships, visa, intakes, student life and China service terms.
+/china-universities
+Chinese universities for Bangladeshi students
+Clean directory, verified program/fee/intake data, comparison filters.
+/china-scholarships-bangladesh
+China scholarships for Bangladeshi students
+CSC, provincial and university options; eligibility, renewal and official sources.
+/china-student-visa-bangladesh
+China X1/X2 visa from Bangladesh
+Current documents, embassy links, financial proof, timeline and risk notes.
+/study-in-china-cost-bangladesh
+Cost of studying in China
+Tuition, hostel, food, insurance, visa, flights and BDT conversion assumptions.
+/study-in-china-without-ielts
+MOI/no-IELTS options
+University-specific rules; never promise universal IELTS exemption.
+/mbbs-in-china-bangladesh
+MBBS in China
+Recognition/licensing caveats, university criteria, full cost and student cases.
+/china-intakes-deadlines
+March and September intakes
+Dynamic verified calendar and closed-status logic.
+/life-in-china-bangladeshi-students
+Student life
+Halal food, safety, language, banking, housing, culture and realistic work rules.
+/china-success-stories
+Proof
+Consent-based cases with profile, decision, timeline, university and outcome.
+/china-visa-first-policy
+Commercial reassurance
+Exact payment terms, exceptions, responsibility and example cost sheet.
+/bn/study-in-china
+Bengali pillar
+Full Bengali equivalent with hreflang after quality review.
+7.3 China success-story template
+Student name or approved display name; authentic photo with written consent.
+Academic profile, target subject, budget and constraints.
+Options considered and why the final university/program was selected.
+Offer/scholarship facts with sensitive data redacted.
+Application and visa timeline; no visible passport number, date of birth or visa identifier.
+Exact EduExpress service provided and what the student paid.
+Current student update after arrival, when available.
+Internal evidence ID and consent-expiry/revocation record.
+7.4 China conversion path
+Search guide -> university/program comparison -> Education Fit Assessment -> ClearCost Sheet -> application proof tracking -> visa readiness -> service fee after visa approval -> pre-departure support -> consent-based success story.
+8. SEO Plan for the 11 Side Destinations
+8.1 Page structure per destination
+Each country needs one pillar plus at least five useful supporting pages before serious backlink outreach. Pages must be Bangladesh-specific and based on current official sources. Thin copied country pages should not be indexed.
+Page type
+URL pattern
+Content requirement
+Pillar
+/study-in-{country}-from-bangladesh
+Education fit, entry, total cost, recognition, visa, intakes, realistic benefits/risks and service status.
+Cost
+/{country}-study-cost-bangladesh
+Full first-year and total-program cost in local currency and BDT; assumptions/date.
+Visa
+/{country}-student-visa-bangladesh
+Official process, funds, documents, interview/biometrics and refusal risks.
+Scholarship/funding
+/{country}-scholarships-bangladesh
+Funding as a subset of education options; renewal and conditions.
+Universities
+/{country}-universities-bangladeshi-students
+Verified shortlist and why each type of student may fit.
+Intakes/deadlines
+/{country}-intakes-deadlines
+Dynamic calendar with open/closed logic.
+Career/recognition
+/{country}-degree-recognition-career
+Qualification recognition and realistic progression; no job guarantee.
+Bengali guide
+/bn/...
+Translate only priority pages fully and professionally; implement hreflang.
+8.2 First-year content priority by destination
+Country
+Initial content cluster
+UK
+Sponsor verification; program ROI; updated Graduate route; funds/visa; January vs September intake; dependants rules.
+Hungary
+Stipendium Hungaricum process; self-funded comparison; nomination; living costs; university/program guide.
+South Korea
+GKS; direct admission; Korean-language readiness; research universities; costs; student life.
+Finland
+Real funding requirement; tuition/scholarship renewal; employability; UAS vs university; residence permit.
+Malaysia
+MYCAS/EMGS process; branch campuses; costs; program quality; student pass; realistic work rules.
+Malta
+Recognition; cost; student visa; English requirements; institution verification; work-right limits.
+Cyprus
+Republic vs Northern Cyprus; recognition; costs; visa jurisdiction; institution verification.
+Georgia
+Medical recognition; licensing pathway; fees; admission; safety/student support; non-medical options.
+Greece
+English-taught programs; costs; visa; recognition; intakes; realistic career pathways.
+Croatia
+English programs; costs; visa/residence; recognition; student life; education-first comparison.
+Thailand
+International programs; tuition; ED visa; university quality; hospitality/business/technology; regional value.
+8.3 Indexation rule for incomplete countries
+Do not publish thin placeholders
+A “Launching Soon” lead page may be indexable only when it contains genuine service information, team ownership, launch status, a useful assessment offer and enough original content. Empty country cards or copied generic pages should be noindex or withheld.
+9. Content Production and Editorial Governance
+9.1 People-first standard
+Google recommends content created for people, with clear sourcing, authorship and trust; trust is especially important when content can affect finances, safety or life decisions. Study-abroad decisions meet that practical risk threshold, so the site should behave like a serious education publisher rather than a lead-generation brochure. [S27]
+9.2 Every guide must include
+A direct answer in the first 80-120 words.
+Bangladesh-specific eligibility, costs, documents and timing.
+Official sources and date checked.
+Named author and qualified reviewer; visible bios and relevant first-hand experience.
+“What may change” and “Who this route is not suitable for.”
+Total-cost table, risk section and comparison links where relevant.
+Internal links to country pillar, university profiles, service terms and related guides.
+Visible last-updated date and next review date.
+CTA matched to stage: compare, assess, join next intake or apply - not “Apply Now” everywhere.
+No copied boilerplate across countries.
+9.3 Editorial workflow
+Stage
+Owner
+Required output
+Research brief
+Country owner / researcher
+Official sources, search intent, student questions, data table and risk flags.
+Draft
+Writer / counselor
+Original draft using template and plain language.
+Education review
+Senior counselor / subject reviewer
+Fit, recognition, cost and student-welfare review.
+Compliance review
+Management
+Claims, guarantees, partnerships, privacy and payment terms approved.
+SEO review
+SEO lead
+Title, H1, intent, internal links, schema, media and cannibalization check.
+Publish
+Editor / developer
+Correct status, timestamps, source links, CTA and indexation.
+Refresh
+Country owner
+Quarterly or immediately when policy/deadline changes.
+9.4 Content cadence
+Period
+Minimum output
+Month 1
+Repair and rewrite homepage, services, China pillar, transparency pages and top five China university profiles.
+Months 2-3
+Two China guides/week; two China success stories/month; launch Wave 1 pillars and one supporting guide each.
+Months 4-6
+Complete China cluster; 3-5 supporting pages per Wave 1 country; Bengali versions of top China pages.
+Months 7-9
+Wave 2 launch; refresh China intakes; publish original comparison/data asset.
+Months 10-12
+Wave 3 only if gates pass; build subject clusters and tools; update all high-traffic pages.
+10. On-Page SEO and Page Templates
+10.1 Title templates
+Page type
+Template
+Homepage
+Education Consultancy in Bangladesh | EduExpress International
+Country pillar
+Study in {Country} from Bangladesh: Costs, Visa & Universities
+University
+{University}: Programs, Fees & Admission for Bangladesh Students
+Scholarship guide
+{Scholarship} for Bangladeshi Students {Year}: Eligibility & Steps
+Visa guide
+{Country} Student Visa from Bangladesh {Year}: Documents & Process
+Cost guide
+Cost of Studying in {Country} from Bangladesh {Year}
+Success story
+How {Student} Chose {Program} at {University} | EduExpress
+Local landing page
+Education Consultant in Dhanmondi, Dhaka | EduExpress
+Titles must be concise, unique and aligned with the visible main heading. Google advises avoiding repetitive boilerplate and confusing multiple prominent titles. [S28]
+10.2 Country-page module order
+Breadcrumbs and service-status badge.
+H1 and 50-word direct value statement.
+Who this country fits - and who should reconsider.
+Education system and recognition.
+Program/university choices with evidence.
+Admission requirements for Bangladesh.
+Total cost and funding reality.
+Visa/residence process and official sources.
+Work rights and career pathways with caveats.
+Intakes/deadlines with automatic status.
+Comparison with two alternatives.
+FAQ with visible answers.
+Country reviewer, sources, last verified date.
+CTA: Education Fit Assessment.
+10.3 Internal linking model
+Every supporting guide links to its country pillar, two relevant university/program pages, one transparency/service page and one related guide. Country pillars link to all priority cluster pages. Success stories link to the actual university/program and the decision standard. Avoid exact-match keyword stuffing in every link; use descriptive natural anchors.
+11. University Directory and Data Quality
+11.1 Required data model
+Entity
+Core fields
+University
+Unique ID; official name; aliases; country/city; official URL; institution type; recognition/accreditation; partner type/evidence; last verified.
+Program
+University ID; exact official program name; degree; subject; language; duration; intake; eligibility; tuition; curriculum/source.
+Scholarship
+Coverage; eligible program; conditions; renewal; deadline; official source; status.
+Fee
+Amount; currency; fee type; recipient; refundable status; valid period; source.
+Intake
+Open date; deadline; arrival date; status; source; last verified.
+Ranking
+Publisher; ranking name; year; value; source - never display a naked “World #.”
+Recognition
+Authority/registry; program-specific notes; country of practice; verification date.
+Relationship
+Direct partner / authorized representative / network access / public direct application / unverified; evidence and expiry.
+11.2 Directory cleanup requirements
+Merge duplicate entries such as abbreviated and full-name versions of the same university; 301 old URLs.
+Normalize currencies, degree labels, program spelling, city/province and tuition periods.
+Separate “original tuition,” “after scholarship” and “estimated net cost.”
+Do not use “Partner Universities” as the directory H1 when not every institution is a documented partner; use “Universities and Study Options.”
+Create source and expiry fields; hide or label data “Under verification” after expiry.
+Prevent low-value filter URLs from being indexed; create curated indexable landing pages for genuine search demand.
+Add a compare function that uses the Better Education Standard, not only tuition and scholarship.
+12. Local SEO and Google Business Profile
+12.1 Local positioning
+The local goal is to become the most trusted education consultant in Dhanmondi and then expand city-wide. The public contact page currently lists House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209; +880 1983-333566 and +880 1329-663505; Saturday-Thursday 9:00 AM-6:00 PM and Friday closed. These details should become the single NAP source unless management formally changes them. [S14]
+12.2 GBP implementation
+Primary category: Educational consultant, if available and accurate. Add only genuinely relevant secondary categories.
+Use exact business name; do not add keywords to the name.
+Complete description around better education, China expertise, transparent costs and verified destination advice.
+Add services individually with plain descriptions; avoid guaranteed visa language.
+Upload 20+ real office/team/event/student-sendoff photos initially, then 2-4 per week.
+Publish two useful posts per week: deadlines, student education decisions, policy explanations and events.
+Answer common Q&A using current facts. Do not seed fake user identities or reviews.
+Collect reviews steadily after meaningful milestones; never incentivize or pressure. Ask students to describe the actual service and destination in their own words.
+Reply to every review professionally without exposing private information.
+Build /education-consultant-dhaka and embed map, NAP, team, process, proof and appointment CTA.
+12.3 Local citation list
+Standardize NAP on Facebook, LinkedIn, Bing Places, Apple Business Connect, relevant Bangladesh directories, chamber/association listings and credible event/education profiles. Quality and consistency matter more than a mass directory package.
+13. Entity SEO, Reputation and Brand Protection
+13.1 Entity cleanup
+Asset
+Action
+LinkedIn
+Change industry and headquarters, use HTTPS website, rewrite description, add Dhaka office and current services; remove outdated Wuxi-first positioning unless it remains legally/operationally required.
+eduexpress.info
+Consolidate into the main domain after compliance review. Do not leave 100% visa, job and work-study claims live as a competing brand source.
+Facebook/other profiles
+Use exact logo, name, address, phone, founding year and destination status.
+Legal identity
+Show registered legal name, trade name, address, terms entity and contact for complaints/refunds.
+Brand confusion
+Use “EduExpress International Bangladesh” in entity descriptions where natural, but keep the official display name consistent.
+sameAs
+Link verified profiles from Organization schema; do not include abandoned/inaccurate profiles.
+Company facts
+Central CMS records for founded year, students served, success metrics, destinations and partner counts; publish definitions.
+13.2 Reputation assets
+Public transparency and fee policy.
+How EduExpress verifies institutions and programs.
+Privacy and document-handling policy.
+Complaints and resolution policy with response timeline.
+Refund policy with country-specific annexes.
+Consent-based success story archive.
+Annual Education Outcomes and Transparency Report: students advised, destinations, program levels, service metrics, refunds/complaints summary and methodology.
+14. Backlinks, Digital PR and AI Search Visibility
+14.1 Backlink priorities
+Priority
+Tactic
+Target
+1
+Ask verified university partners to list EduExpress as an official Bangladesh representative, only where true.
+5-15 high-trust institutional links in 12 months.
+2
+Publish original Bangladesh-China education data, cost benchmarks and annual outcome reports.
+Press, education sites, bloggers and AI citations.
+3
+Run seminars with schools, colleges, alumni groups and universities; secure event-page links.
+Local authority and branded searches.
+4
+Pitch expert commentary to credible Bangladesh media on policy changes, fraud prevention and choosing quality education.
+One meaningful earned-media mention per quarter.
+5
+Collaborate with relevant YouTube educators and student communities; provide useful tools and sources.
+Referral traffic and brand demand, not link spam.
+6
+Create link-worthy tools: BDT cost calculator, EduFit comparison, deadline calendar and recognition checklist.
+Natural links and repeat visits.
+14.2 Avoid
+Bulk forum, comment, bookmarking, web-2.0 or directory link packages.
+Paid dofollow placements disguised as editorial recommendations.
+Fake “top consultancy” lists controlled by EduExpress.
+Exact-match anchor campaigns.
+Claiming university partnership simply because applications can be submitted publicly.
+Buying or gating Google reviews.
+14.3 AI search visibility
+AI assistants are more likely to surface a brand when they can retrieve clear, crawlable, well-sourced pages and corroborate the entity across independent sources. The practical plan is SSR/SSG, consistent facts, Bing and Google indexing, Q&A-shaped content, original data, third-party mentions and strong proof pages. llms.txt can be tested as a low-cost discovery aid, but it is not a substitute for normal SEO and should not be presented as a guaranteed AI-ranking mechanism.
+15. Conversion, CRM and Student Experience
+15.1 Primary conversion product
+Free Education Fit Assessment
+Collect academic level/results, subject interest, budget, intake, language, career goal and preferred countries. Return a short written summary: suitable routes, risks, missing information and recommended counseling step.
+15.2 CRM pipeline
+New lead
+Contacted
+Assessment scheduled
+Assessment completed
+Decision report delivered
+Country/program shortlisted
+Documents pending
+Application submitted
+Offer received
+Visa preparation
+Visa submitted
+Visa approved/refused
+Pre-departure
+Enrolled
+Alumni / review requested
+15.3 Lead-routing rules
+Trigger
+Route
+China page or China interest
+China team; show visa-first policy and relevant university/program context.
+Wave 1 country
+Assigned active country owner; do not route to untrained general sales staff.
+Launching country
+Interest list plus honest launch message; no payment/application promise until gate passes.
+High-risk profile
+Senior counselor review before university recommendations or payment.
+Medical program
+Recognition/licensing review required.
+Sensitive documents
+Secure upload; no WhatsApp-only archive as the system of record; access logging and retention rules.
+Complaint/refund
+Dedicated ticket, management owner and timestamped resolution path.
+15.4 Conversion events
+Track: assessment_start, assessment_submit, whatsapp_click, phone_click, appointment_booked, compare_started, compare_completed, cost_sheet_downloaded, university_view, success_story_view, application_started, offer_received and visa_outcome. Use UTM, landing page, destination and counselor fields in CRM.
+16. Analytics, KPIs and Reporting
+16.1 Measurement stack
+Google Search Console: indexing, queries, clicks, pages, Core Web Vitals and structured-data errors.
+GA4: quality conversions, channel attribution and page journeys.
+Bing Webmaster Tools: crawl/indexing and ChatGPT-search discovery support.
+Google Business Profile: calls, website clicks, direction requests and search terms.
+CRM: response time, assessment completion, application rate, offer rate, visa outcome by country and refund/complaint records.
+Rank tracker: branded, local, China and country-cluster keywords - track Bangladesh and Dhaka separately.
+Monthly entity/AI visibility log: fixed prompts, date, location/account conditions and cited source.
+16.2 KPI targets - planning goals, not guarantees
+Period
+SEO / visibility
+Trust / conversion
+Operations
+90 days
+All P0 issues closed; priority pages indexed; first China cluster growth; top local visibility improving.
+Transparency pages live; 20+ authentic new reviews target; assessment tracked.
+China offer terms, CMS verification and Wave 1 owners operational.
+6 months
+Page-one progress for core China queries; 3,000+ qualified organic visits/month management target; 8-10 quality referring domains/month.
+100+ total genuine GBP reviews management target; rising branded searches and assessment conversion.
+China content hub mature; Wave 1 active with refreshed data.
+12 months
+Multiple destination clusters ranking; 10,000+ qualified organic visits/month management target.
+Strong independent mentions, repeat/referral leads and annual transparency report.
+Wave 2 live; Wave 3 only where gates passed.
+18-24 months
+National top-tier visibility for education consultancy searches and category leadership evidence.
+Large corpus of verified stories/reviews and clear public differentiation.
+Reliable country teams, data governance and ongoing content refresh.
+16.3 Monthly report
+Report leads and revenue-quality outcomes, not traffic alone: non-branded clicks, top landing pages, local actions, assessment completion, qualified lead rate, applications, offers, visa outcomes by destination, refund/complaint trends, review growth, content freshness and next-month actions.
+17. 90-Day Implementation Roadmap
+Timing
+Developer
+SEO/content
+Management/counselors
+Definition of done
+Days 1-14
+SSR/SSG, metadata template, canonicals, redirects plan, analytics, privacy forms.
+Crawl inventory; map keywords; identify thin/duplicate/stale pages.
+Approve USP, China payment wording, one source of company facts.
+P0 technical blockers and claim rules signed off.
+Days 15-30
+University unique IDs, status engine, sitemaps, schema, performance fixes, old-domain redirects.
+Rewrite homepage, services, China pillar, fee/transparency and verification pages.
+Verify China evidence, fee exceptions, NAP, LinkedIn and profile facts.
+New brand architecture live; duplicate risk controlled.
+Days 31-60
+Country CMS, comparison modules, success-story model, secure uploads, CRM routing.
+Publish four China guides, five top university pages and two case studies; Wave 1 briefs.
+Train country owners; approve UK/Hungary/Korea/Finland/Malaysia readiness.
+China hub generating measurable leads; Wave 1 gate decisions made.
+Days 61-90
+Launch qualified Wave 1 pillars, Bengali framework, dashboard and QA automation.
+Complete remaining priority China content; first Wave 1 support pages; local landing page and GBP cadence.
+Review first KPI report, complaints/privacy process and launch status.
+Stable, measurable platform with honest multi-country expansion.
+17.1 Weekly operating cadence after launch
+Frequency
+Task
+Owner
+Daily
+Lead response, status updates, review replies and policy-change alerts.
+Counselors / operations
+Twice weekly
+GBP post/photo and one social education explainer.
+Marketing
+Weekly
+One high-quality guide or major refresh; one technical crawl check.
+Content + SEO + developer
+Biweekly
+China success-story interview or student update.
+China team
+Monthly
+Partner/press outreach, KPI review, AI/entity visibility check and claim audit.
+Management + SEO
+Quarterly
+Country source revalidation, fee/deadline refresh, privacy/access audit and content pruning.
+Country owners + compliance
+18. 12-Month Growth Roadmap
+Quarter
+Primary objective
+Deliverables
+Q1
+Repair trust and own China foundations
+Technical P0, USP, transparency system, China pillar, top guides, local SEO restart, Wave 1 readiness.
+Q2
+Build China authority and launch Wave 1
+Complete China cluster, Bengali pages, success stories, institutional links, Wave 1 country clusters and comparison tool.
+Q3
+Prove multi-country quality and launch Wave 2
+Original annual/data asset, stronger PR, Malta/Cyprus/Georgia where gates pass, subject clusters and refresh system.
+Q4
+Scale only what performs
+Wave 3 gate review, program-level SEO, tools/calculators, content pruning, annual transparency/outcomes report and 2027 intake refresh.
+18.1 Decision rules for scaling
+Do not add another country because a competitor has it; add it when EduExpress can verify and service it better.
+Do not increase content volume if pages are stale or unsupported; fix accuracy first.
+Do not use a China success statistic on another destination.
+Do not accept payment without a written purpose, recipient, milestone and refund status.
+Do not publish student documents or identifiable visa pages.
+Do not chase backlinks until the linked page is genuinely useful and current.
+19. Developer Acceptance Criteria and Handover
+19.1 Launch must fail if any condition below fails
+Critical pages do not contain full content in initial HTML.
+Inner pages canonicalize to the homepage or wrong host.
+Doubled titles or duplicate site names remain.
+eduexpress.info or staging domains remain indexable with competing content.
+Expired deadlines show open/apply status.
+Any unscoped guarantee or unsupported partner/success claim remains.
+Forms lack consent, privacy link or secure processing.
+Duplicate universities remain without a documented merge/redirect plan.
+Analytics events are untested or CRM attribution is missing.
+NAP differs across footer, contact, schema and Google Business Profile.
+19.2 Handover package
+Architecture and deployment documentation.
+CMS field dictionary and verification workflow.
+URL inventory, redirect map and canonical rules.
+Schema templates and Rich Results test evidence.
+Analytics event dictionary and GA4/GTM configuration notes.
+Robots/sitemap/indexation policy.
+Image and performance standards.
+Security, backup, privacy and document-retention documentation.
+Editor manual for countries, universities, programs, fees, intakes and success stories.
+Automated tests for titles, canonicals, status codes, broken links and required content fields.
+30-day post-launch bug-fix and monitoring period.
+19.3 Final strategic instruction
+Do not build the biggest-looking consultancy website
+Build the most verifiable education decision platform in Bangladesh. China supplies the first proof. Transparent systems make the promise credible. New destinations expand only when the same standard can be delivered.
+20. Research Sources
+Sources below were reviewed in July 2026. Country rules and deadlines can change; the website CMS must store the source URL and verification date for every time-sensitive fact.
+[S1] EduExpress International - About. https://eduexpressint.com/about Current company claims and team.
+[S2] EduExpress International - Destinations. https://eduexpressint.com/destinations Current nine-country portfolio and scholarship/visa positioning.
+[S3] EduExpress International - LinkedIn. https://www.linkedin.com/company/eduexpress/ Outdated industry/headquarters/entity details.
+[S4] EduExpress International - Homepage. https://eduexpressint.com/ Current homepage positioning and proof claims.
+[S5] EduExpress.info. https://www.eduexpress.info/ Live secondary domain with Malaysia/Estonia work-study and visa/payment claims.
+[S6] Admission Connect - About. https://admissionconnect.org/about-page Competitor example: no file opening fee/no service charge.
+[S7] Vidya International. https://www.vidyaintl.com/ Competitor example: no file opening/hidden charges.
+[S8] The Daily Star - BSB Global Network case. https://www.thedailystar.net/news/bangladesh/crime-justice/news/bsb-global-network-chief-remanded-defrauding-students-tk-1829 Alleged Tk18.29 crore overseas-education fraud.
+[S9] The Business Standard - Just Thought case. https://www.tbsnews.net/bangladesh/crime/education-consultancy-owner-2-others-arrested-over-tk155cr-overseas-study-scam July 2026 alleged consultancy fraud.
+[S10] BSS - BSB cases. https://www.bssnews.net/others/297244 Allegations involving hundreds of students.
+[S11] BSS - UGC fake foreign campuses warning. https://www.bssnews.net/news/322000 UGC warning on unauthorized foreign university operations.
+[S12] Financial Times - student passport data. https://www.ft.com/content/e8b7e3c9-daf1-4657-8ad1-c069ced3fb27 Privacy risks from agency marketing posts.
+[S13] EduExpress Ltd. LinkedIn. https://uk.linkedin.com/company/eduexpress-ltd Separate similarly named consultancy with Bangladesh presence.
+[S14] EduExpress International - Contact. https://eduexpressint.com/contact Current NAP, hours and doubled title.
+[S15] EduExpress International - Universities. https://eduexpressint.com/universities Directory size and duplicate/data issues.
+[S16] EduExpress International - Updates. https://eduexpressint.com/updates Current content dates and intake/update structure.
+[S17] GOV.UK - Student sponsor compliance. https://www.gov.uk/government/publications/student-sponsor-guidance/student-sponsor-compliance-accessible June 2026 sponsor compliance thresholds.
+[S18] GOV.UK - Student visa overview. https://www.gov.uk/student-visa Graduate route duration and current visa information.
+[S19] Finnish Immigration Service - student income. https://migri.fi/en/income-requirement-for-students EUR800/month and EUR9,600/year funding requirement.
+[S20] Chinese Embassy in Bangladesh - Scholarship notice. https://bd.china-embassy.gov.cn/eng/sghd/202512/t20251219_11776194.htm 2026/27 Chinese Government Scholarship notice for Bangladesh.
+[S21] Chinese Embassy in Bangladesh - visa agency notice. https://bd.china-embassy.gov.cn/eng/lsyw/lsxx/202605/t20260520_11914015.htm No exclusive authorized agency; July 2026 agency requirements.
+[S22] Stipendium Hungaricum - Apply. https://stipendiumhungaricum.hu/apply/ Official 2026/27 application information.
+[S23] Stipendium Hungaricum - Bangladesh. https://stipendiumhungaricum.hu/country/bangladesh/ Bangladesh country page.
+[S24] Study in Korea - 2026 GKS Graduate notice. https://www.studyinkorea.go.kr/ko/plan/gksNoticeRead.do?bbsId=BBSMSTR_000000000461&nttId=4420&stat=1 Official 2026 GKS guidance.
+[S25] MYCAS - Malaysia. https://mycas.educationmalaysia.gov.my/ MOHE-mandated admissions portal operated by EMGS.
+[S26] Education Malaysia / EMGS. https://educationmalaysia.gov.my/ Official international student information.
+[S27] Google Search Central - people-first content. https://developers.google.com/search/docs/fundamentals/creating-helpful-content E-E-A-T, sourcing and trust guidance.
+[S28] Google Search Central - title links. https://developers.google.com/search/docs/appearance/title-link Unique, descriptive and concise title guidance.
+[S29] Google Search Central - LocalBusiness. https://developers.google.com/search/docs/appearance/structured-data/local-business Local business structured data.
+[S30] Google Search Central - self-serving reviews. https://developers.google.com/search/blog/2019/09/making-review-rich-results-more-helpful Business self-review rich-result limitation.
+[S31] Google Search Central - JavaScript SEO. https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics Rendering and JavaScript SEO.
+[S32] Google Search Central - canonicalization. https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls Canonical implementation guidance.

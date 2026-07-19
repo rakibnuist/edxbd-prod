@@ -87,6 +87,13 @@ const nextConfig: NextConfig = {
   // Basic redirects
   async redirects() {
     return [
+      // Canonical host: force www → non-www (apex) with a single 301 hop.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.eduexpressint.com' }],
+        destination: 'https://eduexpressint.com/:path*',
+        permanent: true,
+      },
       {
         source: '/home',
         destination: '/',
@@ -100,6 +107,16 @@ const nextConfig: NextConfig = {
       {
         source: '/china-success-stories',
         destination: '/success-stories',
+        permanent: true,
+      },
+      {
+        source: '/success-stories/china',
+        destination: '/success-stories',
+        permanent: true,
+      },
+      {
+        source: '/destinations/united-kingdom',
+        destination: '/destinations/uk',
         permanent: true,
       }
     ];

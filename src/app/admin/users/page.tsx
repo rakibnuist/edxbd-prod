@@ -35,31 +35,11 @@ export default function UsersPage() {
   const [sentMessages, setSentMessages] = useState<any[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
 
-  // Helper function to get fresh admin token
+  // Returns the logged-in admin's stored token. No credentials in client code.
   const getFreshToken = async (): Promise<string> => {
-    const loginResponse = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: 'admin@eduexpressint.com',
-        password: 'admin123'
-      })
-    });
-
-    if (!loginResponse.ok) {
-      throw new Error(`Login failed with status: ${loginResponse.status}`);
-    }
-
-    const loginData = await loginResponse.json();
-    const token = loginData.token;
-
-    if (!token) {
-      throw new Error('No token received from login');
-    }
-
-    return token;
+    const storedToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+    if (storedToken) return storedToken;
+    throw new Error('Your session has expired. Please sign in again.');
   };
 
   const isSuperAdmin = currentUser?.role === 'super_admin';

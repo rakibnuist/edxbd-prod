@@ -21,7 +21,7 @@ export default function PageHeader({
     children
 }: PageHeaderProps) {
     let iconElement: React.ReactNode;
-    const iconClassName = "w-4 h-4 text-blue-600";
+    const iconClassName = "w-4 h-4 text-[#8ed0ee]";
 
     if (React.isValidElement(IconOrElement)) {
         iconElement = React.cloneElement(IconOrElement as React.ReactElement<{ className?: string }>, { className: iconClassName });
@@ -31,35 +31,36 @@ export default function PageHeader({
     }
 
     return (
-        <div className="relative bg-slate-50 overflow-hidden border-b border-slate-200">
-            {/* Dynamic Background with brighter gradients */}
-            <div className="absolute inset-0">
-                <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-100/50 rounded-full mix-blend-multiply filter blur-[120px] animate-pulse"></div>
-                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-amber-100/50 rounded-full mix-blend-multiply filter blur-[120px] animate-pulse delay-1000"></div>
-                {/* Light overlay */}
-                <div className="absolute inset-0 bg-white/30 backdrop-blur-[1px]"></div>
-            </div>
+        <header className="relative overflow-hidden bg-[#f4f8fa] pt-28 pb-16 text-[#08263c] sm:pt-36 sm:pb-24 lg:pt-40 lg:pb-28 border-b border-[#174f7a]/15">
+            {/* Grid Pattern Overlay */}
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(23,79,122,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(23,79,122,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
+            <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#64b5df]/15 md:size-[460px]" />
 
-            {/* Pattern Overlay */}
-            <div className="absolute inset-0 opacity-[0.4]" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-
-            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 pb-24 lg:pt-48 lg:pb-32 text-center z-10">
-                <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white border border-slate-200 text-slate-600 font-bold text-sm mb-8 shadow-sm">
-                    {iconElement}
-                    <span className="tracking-wide">{badgeText}</span>
+            <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12 z-10">
+                <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#174f7a]">
+                    <span>EduExpress International Bangladesh</span>
+                    <span>Evidence-First Education Consultancy</span>
+                    <span>Dhanmondi Decision Desk</span>
                 </div>
 
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-8 tracking-tight leading-tight text-slate-900">
-                    <span className="drop-shadow-sm">{title} </span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 animate-gradient">{highlight}</span>
+                <div className="flex w-full max-w-full items-start gap-3 bg-[#174f7a] px-4 py-2 text-[11px] font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em] mb-7">
+                    {iconElement}
+                    <span className="min-w-0 whitespace-normal">{badgeText}</span>
+                </div>
+
+                <h1 className="w-full max-w-4xl break-words text-balance font-heading text-[clamp(2.4rem,5.6vw,4.2rem)] font-bold leading-[1.06] tracking-[-0.022em]">
+                    {title}{' '}
+                    <span className="relative mt-2 inline-block bg-[#64b5df] px-2 pb-2 text-[#08263c] sm:px-3 sm:pb-3">
+                        {highlight}
+                    </span>
                 </h1>
 
-                <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+                <p className="mt-7 max-w-3xl border-l-4 border-[#64b5df] pl-5 text-base leading-7 text-slate-700 md:text-lg md:leading-8">
                     {description}
                 </p>
 
-                {children}
+                {children && <div className="mt-9">{children}</div>}
             </div>
-        </div>
+        </header>
     );
 }

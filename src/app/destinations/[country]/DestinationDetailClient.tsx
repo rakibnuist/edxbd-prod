@@ -35,65 +35,18 @@ export default function DestinationDetailClient({ country }: DestinationDetailCl
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  // Dynamic Theme Colors based on country slug to give each page a tailored premium aesthetic
-  const getThemeColors = (slug: string) => {
-    switch (slug) {
-      case 'china':
-        return {
-          primary: 'text-red-600 bg-red-50 border-red-200',
-          gradient: 'from-red-950 via-slate-900 to-slate-900',
-          accent: 'from-red-400 to-amber-400',
-          button: 'bg-red-600 hover:bg-red-500 shadow-red-900/40',
-          buttonBorder: 'border-red-400/50 hover:bg-red-950/30 hover:border-red-400',
-          badge: 'bg-red-100 text-red-800 border-red-200',
-          iconColor: 'text-red-600',
-          lineColor: 'bg-red-600'
-        };
-      case 'uk':
-        return {
-          primary: 'text-blue-600 bg-blue-50 border-blue-200',
-          gradient: 'from-blue-950 via-indigo-950 to-slate-900',
-          accent: 'from-red-500 via-white to-blue-400',
-          button: 'bg-blue-600 hover:bg-blue-500 shadow-blue-900/40',
-          buttonBorder: 'border-blue-400/50 hover:bg-blue-950/30 hover:border-blue-400',
-          badge: 'bg-blue-100 text-blue-800 border-blue-200',
-          iconColor: 'text-blue-600',
-          lineColor: 'bg-blue-600'
-        };
-      case 'south-korea':
-        return {
-          primary: 'text-indigo-600 bg-indigo-50 border-indigo-200',
-          gradient: 'from-slate-950 via-indigo-950 to-slate-900',
-          accent: 'from-blue-400 to-pink-400',
-          button: 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-900/40',
-          buttonBorder: 'border-indigo-400/50 hover:bg-indigo-950/30 hover:border-indigo-400',
-          badge: 'bg-indigo-100 text-indigo-800 border-indigo-200',
-          iconColor: 'text-indigo-600',
-          lineColor: 'bg-indigo-600'
-        };
-      case 'hungary':
-        return {
-          primary: 'text-emerald-600 bg-emerald-50 border-emerald-200',
-          gradient: 'from-emerald-950 via-slate-900 to-slate-900',
-          accent: 'from-emerald-400 via-white to-red-400',
-          button: 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/40',
-          buttonBorder: 'border-emerald-400/50 hover:bg-emerald-950/30 hover:border-emerald-400',
-          badge: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-          iconColor: 'text-emerald-600',
-          lineColor: 'bg-emerald-600'
-        };
-      default:
-        return {
-          primary: 'text-blue-600 bg-blue-50 border-blue-200',
-          gradient: 'from-slate-950 via-blue-950 to-slate-900',
-          accent: 'from-blue-400 to-amber-400',
-          button: 'bg-blue-600 hover:bg-blue-500 shadow-blue-900/40',
-          buttonBorder: 'border-blue-400/50 hover:bg-blue-950/30 hover:border-blue-400',
-          badge: 'bg-blue-100 text-blue-800 border-blue-200',
-          iconColor: 'text-blue-600',
-          lineColor: 'bg-blue-600'
-        };
-    }
+  // Unified EduExpress Evidence-First Design System Palette
+  const getThemeColors = (_slug: string) => {
+    return {
+      primary: 'text-[#174f7a] bg-[#e9f7fd] border-[#174f7a]/20',
+      gradient: 'from-[#08263c] via-[#061b2a] to-[#08263c]',
+      accent: 'from-[#64b5df] via-[#8ed0ee] to-white',
+      button: 'bg-[#08263c] hover:bg-[#174f7a] text-white font-black shadow-[4px_4px_0_0_#64b5df]',
+      buttonBorder: 'border-2 border-[#08263c] hover:bg-[#174f7a] hover:text-white',
+      badge: 'bg-[#174f7a] text-[#8ed0ee] border-[#64b5df]/20 font-mono text-[10px] font-black uppercase tracking-[0.2em]',
+      iconColor: 'text-[#174f7a]',
+      lineColor: 'bg-[#64b5df]'
+    };
   };
 
   const colors = getThemeColors(country.slug);

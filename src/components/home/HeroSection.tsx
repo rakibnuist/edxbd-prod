@@ -85,12 +85,19 @@ const HeroSection = () => {
                                 Compare education quality, recognition, total cost and career fit before choosing {SLIDES[currentSlide].title.toLowerCase()}.
                             </p>
 
-                            <div className="flex justify-center lg:justify-start">
+                            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3">
                                 <Link
                                     href={SLIDES[currentSlide].link}
-                                    className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group"
+                                    className="px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group text-sm"
                                 >
-                                    Explore this destination <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                    Explore this destination <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                </Link>
+
+                                <Link
+                                    href="/fees-and-transparency"
+                                    className="px-6 py-3.5 bg-white text-slate-800 hover:bg-slate-50 border-2 border-slate-200 font-bold rounded-full transition-all flex items-center justify-center gap-2 text-sm shadow-sm"
+                                >
+                                    Calculate Clear Costs
                                 </Link>
                             </div>
                         </motion.div>

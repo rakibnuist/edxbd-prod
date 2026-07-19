@@ -15,16 +15,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const normalizedEmail = email.toLowerCase().trim();
+
     // Find user by email
-    let user = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() } });
-    
-    // Auto-provision admin user if missing
-    if (!user && email.toLowerCase().trim() === 'admin@eduexpressint.com') {
-      const hashed = await bcrypt.hash('admin123', 10);
+    let user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+
+    // Auto-provision the admin account ONCE, only if credentials are supplied via
+    // environment variables. No password is ever hardcoded in the codebase.
+    const seedEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim();
+    const seedPassword = process.env.ADMIN_PASSWORD;
+    if (!user && seedEmail && seedPassword && normalizedEmail === seedEmail) {
+      const hashed = await bcrypt.hash(seedPassword, 10);
       user = await prisma.user.create({
         data: {
           name: 'Admin',
-          email: 'admin@eduexpressint.com',
+          email: seedEmail,
           password: hashed,
           role: 'admin',
         }
@@ -38,13 +43,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify password (supports bcrypt and admin fallback)
+    // Verify password with bcrypt only — no plaintext or backdoor fallbacks.
     let isValidPassword = false;
     if (user.password && (user.password.startsWith('$2a$') || user.password.startsWith('$2b$'))) {
       isValidPassword = await bcrypt.compare(password, user.password);
-    }
-    if (!isValidPassword && (user.password === password || (email.toLowerCase().trim() === 'admin@eduexpressint.com' && password === 'admin123'))) {
-      isValidPassword = true;
     }
 
     if (!isValidPassword) {

@@ -109,6 +109,38 @@ textarea {
   }
 }
 
+/* ==========================================================================
+   Readability & accessibility floor (added in audit 2026-07-20)
+   These rules come AFTER @tailwind utilities, so for equal specificity they
+   win the cascade — no !important needed. Purpose: raise sub-11px text to a
+   legible floor, lift very low-contrast white text on dark backgrounds, and
+   respect reduced-motion. Adjust or remove per component if a specific label
+   needs to be smaller.
+   ========================================================================== */
+
+/* 1. Minimum legible font size — 9px/10px labels were hard to read on phones */
+.text-\[9px\],
+.text-\[10px\] {
+  font-size: 11px;
+}
+
+/* 2. Contrast: lift the lowest white-on-dark opacities toward WCAG AA */
+.text-white\/40 { color: rgba(255, 255, 255, 0.7); }
+.text-white\/50 { color: rgba(255, 255, 255, 0.75); }
+.text-white\/60 { color: rgba(255, 255, 255, 0.82); }
+
+/* 3. Respect users who ask for less motion (better on low-end Android too) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

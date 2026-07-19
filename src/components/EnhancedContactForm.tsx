@@ -193,28 +193,28 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
   if (isSubmitted) {
     return (
-      <div className={`bg-blue-50/50 border border-blue-100 rounded-2xl p-6 text-center ${className} animate-in fade-in zoom-in-95`}>
-        <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+      <div className={`bg-[#f4f8fa] border-2 border-[#08263c] p-6 text-center ${className} animate-in fade-in zoom-in-95`}>
+        <div className="w-12 h-12 bg-[#e9f7fd] border border-[#174f7a]/20 text-[#174f7a] flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-8 h-8 text-[#174f7a] mx-auto" />
         </div>
-        <h3 className="text-xl font-black text-blue-900 mb-2">Submission Successful!</h3>
-        <p className="text-slate-600 mb-4 font-medium text-sm max-w-sm mx-auto">
-          Thanks for reaching out, {formData.name.split(' ')[0]}! We will get back to you within 24 hours.
+        <h3 className="font-heading text-xl font-bold text-[#08263c] mb-2">Submission Received!</h3>
+        <p className="text-slate-700 mb-4 font-medium text-xs max-w-sm mx-auto">
+          Thank you, {formData.name.split(' ')[0]}! Our Dhanmondi decision desk will review your details and respond within 24 hours.
         </p>
 
         {autoHide && countdown > 0 ? (
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-blue-100 shadow-sm">
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
-            <p className="text-xs text-blue-600 font-bold">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-[#174f7a]/20">
+            <div className="w-1.5 h-1.5 bg-[#174f7a] animate-pulse"></div>
+            <p className="font-mono text-xs text-[#174f7a] font-bold">
               Closing in {countdown}s...
             </p>
           </div>
         ) : (
           <button
             onClick={() => setIsSubmitted(false)}
-            className="text-blue-600 font-bold hover:underline text-sm"
+            className="text-[#174f7a] font-bold hover:underline text-xs"
           >
-            Send another request
+            Submit another request
           </button>
         )}
       </div>
@@ -222,27 +222,27 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
   }
 
   return (
-    <div className={`bg-white rounded-2xl ${className}`}>
+    <div className={`bg-white border-2 border-[#08263c] p-6 sm:p-8 ${className}`}>
       {(title || description) && (
         <div className="text-center mb-6">
           {title && (
-            <h2 className="text-2xl font-black tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent mb-2">
+            <h2 className="font-heading text-2xl font-bold text-[#08263c] mb-2">
               {title}
             </h2>
           )}
           {description && (
-            <p className="text-slate-500 font-medium text-sm leading-relaxed">
+            <p className="text-slate-600 font-medium text-xs leading-relaxed">
               {description}
             </p>
           )}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-4">
 
         {/* Name */}
         <div>
-          <label htmlFor="name" className="block text-xs font-bold text-slate-700 mb-1 ml-1">
+          <label htmlFor="name" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
             Full Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -253,14 +253,14 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
             onChange={handleInputChange}
             onFocus={() => handleFieldFocus('name')}
             required
-            className="w-full px-4 py-2.5 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all bg-slate-50 text-slate-900 placeholder:text-slate-400 font-semibold"
+            className="w-full px-4 py-2.5 text-xs border-2 border-[#08263c]/30 focus:border-[#08263c] focus:outline-none bg-[#f4f8fa] text-[#08263c] placeholder:text-slate-400 font-semibold"
             placeholder="e.g. John Doe"
           />
         </div>
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-xs font-bold text-slate-700 mb-1 ml-1">
+          <label htmlFor="email" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
             Email Address <span className="text-red-500">*</span>
           </label>
           <input
@@ -271,17 +271,16 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
             onChange={handleInputChange}
             onFocus={() => handleFieldFocus('email')}
             required
-            className="w-full px-4 py-2.5 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all bg-slate-50 text-slate-900 placeholder:text-slate-400 font-semibold"
+            className="w-full px-4 py-2.5 text-xs border-2 border-[#08263c]/30 focus:border-[#08263c] focus:outline-none bg-[#f4f8fa] text-[#08263c] placeholder:text-slate-400 font-semibold"
             placeholder="e.g. john@example.com"
           />
         </div>
 
-        {/* Phone - UNIFIED COMPONENT */}
+        {/* Phone */}
         <div>
-          <label htmlFor="phone" className="block text-xs font-bold text-slate-700 mb-1 ml-1">
+          <label htmlFor="phone" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
             Phone Number <span className="text-red-500">*</span>
           </label>
-          {/* No wrapper needed, component is self-contained pill */}
           <CountryCodePhoneInput
             value={formData.phone}
             onChange={(value) => {
@@ -297,7 +296,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Country */}
         {showCountry && (
           <div>
-            <label htmlFor="country" className="block text-xs font-bold text-slate-700 mb-1 ml-1">
+            <label htmlFor="country" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
               Preferred Destination <span className="text-red-500">*</span>
             </label>
             <div className="relative group">
@@ -308,10 +307,10 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                 onChange={handleInputChange}
                 onFocus={() => handleFieldFocus('country')}
                 required
-                className="w-full px-4 py-2.5 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all bg-slate-50 text-slate-900 font-semibold appearance-none cursor-pointer hover:bg-slate-100"
+                className="w-full px-4 py-2.5 text-xs border-2 border-[#08263c]/30 focus:border-[#08263c] focus:outline-none bg-[#f4f8fa] text-[#08263c] font-semibold appearance-none cursor-pointer"
               >
                 <option value="">Select a country...</option>
-                <option value="China">🇨🇳 China</option>
+                <option value="China">🇨🇳 China (Flagship)</option>
                 <option value="UK">🇬🇧 United Kingdom</option>
                 <option value="South Korea">🇰🇷 South Korea</option>
                 <option value="Hungary">🇭🇺 Hungary</option>
@@ -321,7 +320,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                 <option value="Georgia">🇬🇪 Georgia</option>
                 <option value="Other">🌍 Other</option>
               </select>
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-blue-500 transition-colors">
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#174f7a]">
                 <ArrowRight className="w-4 h-4 rotate-90" />
               </div>
             </div>
@@ -331,7 +330,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Program */}
         {showProgram && (
           <div>
-            <label htmlFor="program" className="block text-xs font-bold text-slate-700 mb-1 ml-1">
+            <label htmlFor="program" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
               Program Level <span className="text-red-500">*</span>
             </label>
             <div className="relative group">
@@ -341,7 +340,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                 value={formData.program}
                 onChange={handleInputChange}
                 onFocus={() => handleFieldFocus('program')}
-                className="w-full px-4 py-2.5 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all bg-slate-50 text-slate-900 font-semibold appearance-none cursor-pointer hover:bg-slate-100"
+                className="w-full px-4 py-2.5 text-xs border-2 border-[#08263c]/30 focus:border-[#08263c] focus:outline-none bg-[#f4f8fa] text-[#08263c] font-semibold appearance-none cursor-pointer"
               >
                 <option value="">Select level...</option>
                 <option value="Bachelor">🎓 Bachelor&apos;s Degree</option>
@@ -351,7 +350,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                 <option value="Certificate">🔖 Certificate</option>
                 <option value="Language Course">🗣 Language Course</option>
               </select>
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-blue-500 transition-colors">
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#174f7a]">
                 <ArrowRight className="w-4 h-4 rotate-90" />
               </div>
             </div>
@@ -361,7 +360,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Message */}
         {showMessage && (
           <div>
-            <label htmlFor="message" className="block text-xs font-bold text-slate-700 mb-1 ml-1">
+            <label htmlFor="message" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
               Message (Optional)
             </label>
             <textarea
@@ -371,54 +370,49 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
               onChange={handleInputChange}
               onFocus={() => handleFieldFocus('message')}
               rows={2}
-              className="w-full px-4 py-2.5 text-sm border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all bg-slate-50 text-slate-900 font-medium resize-none placeholder:text-slate-400"
-              placeholder="Any specific questions?"
+              className="w-full px-4 py-2.5 text-xs border-2 border-[#08263c]/30 focus:border-[#08263c] focus:outline-none bg-[#f4f8fa] text-[#08263c] font-medium resize-none placeholder:text-slate-400"
+              placeholder="Any specific questions or academic requirements?"
             />
           </div>
         )}
 
         {/* Error message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2 animate-in fade-in slide-in-from-top-1">
-            <div className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+          <div className="bg-red-50 border border-red-200 p-3 flex items-center gap-2">
+            <div className="w-1.5 h-1.5 bg-red-500 shrink-0" />
             <p className="text-red-700 text-xs font-bold">{error}</p>
           </div>
         )}
 
-        <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs leading-5 text-slate-600">
+        <label className="flex items-start gap-3 border border-[#174f7a]/20 bg-[#f4f8fa] p-3 text-[11px] leading-4 text-slate-700">
           <input
             type="checkbox"
             name="consent"
             checked={formData.consent}
             onChange={(event) => setFormData((current) => ({ ...current, consent: event.target.checked }))}
             required
-            className="mt-1"
+            className="mt-0.5 accent-[#08263c]"
           />
-          <span>I consent to EduExpress using these details to respond to my assessment request under the <Link className="font-bold text-blue-700 underline" href="/student-data-privacy">student data privacy policy</Link>.</span>
+          <span>I consent to EduExpress using these details to respond to my assessment request under the <Link className="font-bold text-[#174f7a] underline" href="/student-data-privacy">student data privacy policy</Link>.</span>
         </label>
 
-        {/* Enhanced Submit button - CRYSTAL BLUE */}
+        {/* Submit button */}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="group w-full relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white py-3.5 px-6 rounded-xl font-black text-base shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:shadow-blue-600/30 hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 ring-4 ring-transparent hover:ring-blue-100 mt-2"
+          className="w-full bg-[#64b5df] hover:bg-[#08263c] hover:text-white text-[#08263c] py-4 px-6 font-black text-sm uppercase tracking-wider transition-all duration-200 shadow-[4px_4px_0_0_#174f7a] flex items-center justify-center gap-2 mt-2"
         >
-          {/* Shine Effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
-
-          <div className="relative flex items-center justify-center gap-2">
-            {isSubmitting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Processing...</span>
-              </>
-            ) : (
-              <>
-                <span>Get Free Consultation</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </>
-            )}
-          </div>
+          {isSubmitting ? (
+            <>
+              <div className="w-4 h-4 border-2 border-[#08263c]/30 border-t-[#08263c] rounded-full animate-spin" />
+              <span>Processing...</span>
+            </>
+          ) : (
+            <>
+              <span>Get Free Fit Assessment</span>
+              <ArrowRight className="w-4 h-4" />
+            </>
+          )}
         </button>
       </form>
     </div>
