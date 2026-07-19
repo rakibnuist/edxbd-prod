@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { serializePartnership } from '@/lib/partnership-serialize';
 
 export async function GET(
   request: NextRequest,
@@ -24,7 +25,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ partnership });
+    return NextResponse.json({ partnership: serializePartnership(partnership as Record<string, unknown>) });
 
   } catch (error) {
     console.error('Error fetching partnership:', error);

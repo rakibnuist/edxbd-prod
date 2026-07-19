@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { Lead } from '@/lib/types';
-import { trackLeadStatusChange } from '@/lib/meta-conversion-api';
 import WhatsAppButton from '@/components/WhatsAppButton';
 
 export default function UserLeadsPage() {
@@ -74,14 +73,24 @@ export default function UserLeadsPage() {
         const lead = leads.find(l => l.id === leadId);
         if (lead) {
           try {
-            await trackLeadStatusChange({
-              name: lead.name,
-              email: lead.email,
-              phone: lead.phone,
-              country: lead.country,
-              program: lead.program,
-              previousStatus: lead.status,
-              newStatus: newStatus
+            // Fire the server-side Conversions API (token stays on the server).
+            await fetch('/api/meta-conversion', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                eventType: 'lead_status_change',
+                data: {
+                  leadData: {
+                    name: lead.name,
+                    email: lead.email,
+                    phone: lead.phone,
+                    country: lead.country,
+                    program: lead.program,
+                    previousStatus: lead.status,
+                    newStatus: newStatus,
+                  },
+                },
+              }),
             });
           } catch (conversionError) {
             console.error('Meta Conversion API error for status update:', conversionError);
