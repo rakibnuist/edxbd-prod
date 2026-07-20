@@ -122,6 +122,7 @@ export default function Footer() {
           </div>
           <div className="flex flex-col justify-end gap-5 md:items-end">
             <div className="flex flex-wrap gap-x-6 gap-y-3 text-xs font-bold text-white/55">
+              <Link href="/about" className="hover:text-white">About</Link>
               <Link href="/privacy" className="hover:text-white">Privacy policy</Link>
               <Link href="/terms" className="hover:text-white">Terms of service</Link>
               <Link href="/student-data-privacy" className="hover:text-white">Student data privacy</Link>

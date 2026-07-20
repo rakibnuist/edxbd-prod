@@ -61,6 +61,19 @@ const nextConfig: NextConfig = {
 
     return [
       ...securityHeaders,
+      // Tell browsers to always use HTTPS for this host for a year, so a
+      // visitor who typed/bookmarked http:// never hits the insecure page
+      // again. No includeSubDomains: crm/portal/study run on a separate
+      // server and may not have their own certificate.
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000',
+          },
+        ],
+      },
       // Cache static assets aggressively in production only. Development
       // bundles reuse filenames and must never be marked immutable.
       {

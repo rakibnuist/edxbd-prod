@@ -392,6 +392,7 @@ export default function UniversityProfile({ university }: Props) {
             programs={programs}
             scholarships={university.scholarships}
             documents={university.documents}
+            fees={university.fees}
           />
             
           <div className="mt-8 rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden p-6 print:hidden">
