@@ -182,7 +182,7 @@ export default function UniversityProfile({ university }: Props) {
             ))}
             <li className="ml-auto">
               <Link href={assessmentHref} className="inline-flex items-center gap-2 rounded-full bg-[#174f7a] px-5 py-2 text-white hover:bg-[#08263c] transition-colors">
-                Apply Now <ArrowRight size={14} />
+                Check My Fit <ArrowRight size={14} />
               </Link>
             </li>
           </ul>
@@ -422,7 +422,7 @@ export default function UniversityProfile({ university }: Props) {
       {/* MOBILE FLOATING ACTION BUTTON */}
       <div className="fixed bottom-6 left-0 right-0 z-50 px-4 md:hidden print:hidden">
         <Link href={assessmentHref} className="flex w-full items-center justify-center gap-2 rounded-full bg-[#08263c] px-6 py-4 font-bold text-white shadow-xl shadow-[#08263c]/20 ring-1 ring-white/10">
-          Apply Now <ArrowRight size={18} />
+          Get My Fit Assessment <ArrowRight size={18} />
         </Link>
       </div>
 
