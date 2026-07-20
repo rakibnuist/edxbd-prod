@@ -149,7 +149,9 @@ export default function StudyInChinaFromBangladeshPage() {
       <section className="relative isolate overflow-hidden bg-[#08263c] text-white">
         <Image src="/images/destinations/china.jpg" alt="University campus in China" fill priority sizes="100vw" className="object-cover object-center opacity-25" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,#08263c_0%,rgba(8,38,60,.96)_45%,rgba(8,38,60,.75)_100%)]" />
-        <div className="absolute left-[-9rem] top-[-12rem] size-[34rem] rounded-full border-[5rem] border-[#64b5df]/10" />
+        <div className="pointer-events-none absolute left-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
+          <Image src="/emblem-icon.png" width={440} height={440} unoptimized alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+        </div>
         <div className="absolute bottom-0 right-[42%] h-40 w-px bg-gradient-to-b from-transparent to-[#64b5df]/60" />
 
         <div className="relative mx-auto grid max-w-[1440px] gap-8 px-5 py-8 sm:px-8 lg:px-12 sm:py-10 lg:grid-cols-[1.08fr_.92fr] lg:items-center lg:gap-12">

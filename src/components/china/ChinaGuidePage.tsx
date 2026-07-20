@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, BadgeCheck, BookOpenCheck, Check, CircleAlert, FileCheck2, SearchCheck, ShieldCheck, UserRoundCheck } from 'lucide-react';
 import type { ChinaGuidePage as ChinaGuidePageData } from '@/data/chinaGuidePages';
 import ChinaCostCalculator from '@/components/china/ChinaCostCalculator';
@@ -25,7 +26,9 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
       <header className="relative overflow-hidden bg-[#08263c] text-white">
-        <div className="absolute right-[-13rem] top-[-15rem] size-[42rem] rounded-full border-[6rem] border-[#64b5df]/10" />
+        <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
+          <Image src="/emblem-icon.png" width={450} height={450} unoptimized alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+        </div>
         <div className="absolute bottom-0 left-[38%] h-44 w-px bg-gradient-to-b from-transparent to-[#64b5df]/50" />
         <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.68fr_.32fr] lg:items-end lg:py-16">
           <div>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -211,7 +212,9 @@ export default async function MbbsInChinaBangladeshPage() {
 
       {/* HERO */}
       <section className="relative overflow-hidden bg-[#08263c] px-5 pb-16 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
-        <div className="pointer-events-none absolute right-[-10rem] top-[-12rem] size-[34rem] rounded-full border-[5rem] border-[#64b5df]/10" />
+        <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
+          <Image src="/emblem-icon.png" width={440} height={440} unoptimized alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+        </div>
         <div className="relative mx-auto max-w-[1440px]">
           <nav aria-label="Breadcrumb" className="mb-6 font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">
             <Link href="/" className="hover:text-[#8ed0ee]">Home</Link> <span aria-hidden>/</span>{' '}

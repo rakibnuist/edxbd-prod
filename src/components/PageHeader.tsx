@@ -36,18 +36,16 @@ export default function PageHeader({
             {/* Grid Pattern Overlay */}
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(23,79,122,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(23,79,122,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
 
-            {/* EduExpress Watermark Icon replacing the plain 'O' ring */}
-            <div className="pointer-events-none absolute right-[3%] top-1/2 -translate-y-1/2 hidden md:flex size-80 lg:size-[460px] items-center justify-center rounded-3xl border border-[#174f7a]/10 bg-gradient-to-br from-[#64b5df]/10 via-white/50 to-transparent p-8 shadow-[0_20px_50px_rgba(8,38,60,0.06)] backdrop-blur-sm">
-                <div className="relative flex h-full w-full items-center justify-center opacity-30">
-                    <Image
-                        src="/logo.png"
-                        alt="EduExpress"
-                        width={400}
-                        height={115}
-                        unoptimized
-                        className="h-auto w-full object-contain"
-                    />
-                </div>
+            {/* EduExpress Emblem Icon Watermark replacing the plain 'O' ring */}
+            <div className="pointer-events-none absolute right-[4%] top-1/2 -translate-y-1/2 hidden md:flex size-72 lg:size-[420px] items-center justify-center">
+                <Image
+                    src="/emblem-icon.png"
+                    alt=""
+                    width={420}
+                    height={420}
+                    unoptimized
+                    className="h-auto w-full object-contain opacity-20"
+                />
             </div>
 
             <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12 z-10">

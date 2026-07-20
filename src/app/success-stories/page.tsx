@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, BadgeCheck, CameraOff, FileCheck2, LockKeyhole, Quote, ShieldCheck, UserRoundCheck } from 'lucide-react';
 import prisma from '@/lib/prisma';
@@ -95,7 +96,9 @@ export default async function SuccessStoriesPage() {
     <article className="bg-[#f6f9fb] pt-[76px] text-[#08263c] min-[1200px]:pt-[104px]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <header className="relative overflow-hidden bg-[#08263c] text-white">
-        <div className="absolute left-[-12rem] top-[-14rem] size-[38rem] rounded-full border-[6rem] border-[#64b5df]/10" />
+        <div className="pointer-events-none absolute left-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
+          <Image src="/emblem-icon.png" width={450} height={450} unoptimized alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+        </div>
         <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.66fr_.34fr] lg:items-end lg:py-16">
           <div>
             <nav className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/50" aria-label="Breadcrumb"><Link href="/">Home</Link> <span aria-hidden="true">/</span> Success stories</nav>

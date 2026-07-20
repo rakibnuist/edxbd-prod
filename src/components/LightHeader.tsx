@@ -213,7 +213,9 @@ export default function LightHeader() {
           <div id="china-menu" onMouseEnter={clearCloseTimer} onMouseLeave={scheduleMenuClose} className="absolute inset-x-0 top-full hidden border-b border-[#174f7a]/20 bg-[#08263c] text-white shadow-[0_30px_55px_rgba(8,38,60,0.25)] min-[1200px]:block">
             <div className="mx-auto grid max-w-[1440px] grid-cols-[.42fr_.58fr]">
               <div className="relative overflow-hidden border-r border-white/15 p-8">
-                <div className="absolute -right-20 -top-20 size-64 rounded-full border-[40px] border-[#64b5df]/10" />
+                <div className="pointer-events-none absolute -right-6 -top-6 size-48 opacity-15">
+                  <Image src="/emblem-icon.png" width={200} height={200} unoptimized alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+                </div>
                 <p className="font-mono text-[10px] font-black uppercase tracking-[0.22em] text-[#8ed0ee]">China record through 2025</p>
                 <div className="mt-7 grid grid-cols-3 gap-px bg-white/15">
                   {[['2018', 'Operating since'], ['98%', 'Recorded visa success'], ['2000+', 'B2C and B2B students']].map(item => <div key={item[0]} className="bg-[#08263c] p-4"><strong className="font-heading text-3xl text-[#8ed0ee]">{item[0]}</strong><span className="mt-2 block text-[10px] leading-4 text-white/55">{item[1]}</span></div>)}

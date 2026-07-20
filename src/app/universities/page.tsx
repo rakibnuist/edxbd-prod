@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Database, SearchCheck, ShieldCheck } from 'lucide-react';
 import { Suspense } from 'react';
@@ -54,7 +55,9 @@ export default async function UniversitiesPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       
       <header className="relative overflow-hidden bg-[#08263c] text-white">
-        <div className="absolute right-[-12rem] top-[-14rem] size-[40rem] rounded-full border-[6rem] border-[#64b5df]/10" />
+        <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
+          <Image src="/emblem-icon.png" width={450} height={450} unoptimized alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+        </div>
         <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.64fr_.36fr] lg:items-end lg:py-16">
           <div>
             <nav className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/50" aria-label="Breadcrumb"><Link href="/">Home</Link> <span aria-hidden="true">/</span> Universities</nav>
