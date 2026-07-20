@@ -32,6 +32,7 @@ const proofLinks = [
   ['University verification', '/how-we-verify-universities'],
   ['China visa first terms', '/china-visa-first-policy'],
   ['Our services', '/services'],
+  ['Updates and guides', '/updates'],
   ['Partner with EduExpress', '/partnership'],
 ];
 
