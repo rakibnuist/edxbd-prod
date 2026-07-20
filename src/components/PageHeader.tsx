@@ -36,15 +36,15 @@ export default function PageHeader({
             {/* Grid Pattern Overlay */}
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(23,79,122,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(23,79,122,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
 
-            {/* EduExpress Emblem Icon Watermark replacing the plain 'O' ring */}
-            <div className="pointer-events-none absolute right-[4%] top-1/2 -translate-y-1/2 hidden md:flex size-72 lg:size-[420px] items-center justify-center">
+            {/* EduExpress Emblem Icon Watermark (Full Size, Uncropped) */}
+            <div className="pointer-events-none absolute right-4 lg:right-16 top-1/2 -translate-y-1/2 hidden md:flex h-[75%] max-h-[320px] lg:max-h-[380px] aspect-square items-center justify-center p-2">
                 <Image
                     src="/emblem-icon.png"
                     alt=""
-                    width={420}
-                    height={420}
+                    width={380}
+                    height={380}
                     unoptimized
-                    className="h-auto w-full object-contain opacity-20"
+                    className="h-full w-full object-contain opacity-25"
                 />
             </div>
 

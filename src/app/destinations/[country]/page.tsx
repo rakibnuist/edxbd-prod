@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { ArrowRight, Check, X, CircleDollarSign, FileCheck2, GraduationCap, Landmark, ShieldCheck, Briefcase, Calendar, Info, HelpCircle, FileText, Globe } from 'lucide-react';
@@ -90,7 +91,9 @@ export default async function CountryPage({ params }: Props) {
 
         {/* Module 2: H1 + 50-word direct value statement */}
         <header className="relative mt-8 overflow-hidden bg-[#0b2f4a] p-8 text-white md:p-14 rounded-3xl">
-          <div className="absolute right-0 top-0 size-72 rounded-full border-[42px] border-[#64b5df]/15" />
+          <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex h-[75%] max-h-[300px] aspect-square items-center justify-center p-2">
+            <Image src="/emblem-icon.png" width={300} height={300} unoptimized alt="" className="h-full w-full object-contain opacity-20 filter brightness-0 invert" />
+          </div>
           <div className="relative">
             <span className="inline-flex items-center gap-2 bg-[#64b5df] px-3 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#08263c] rounded-sm">
               <Globe size={14} /> {country.serviceStatus || 'Researching'} education service

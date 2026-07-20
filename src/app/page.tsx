@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowDown,
@@ -107,7 +108,18 @@ export default async function Home() {
     <div className="overflow-hidden bg-[#f4f8fa] text-[#08263c]">
       <section className="relative px-5 pb-16 pt-28 sm:px-8 sm:pb-24 sm:pt-32 md:pt-40 lg:px-12">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(23,79,122,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(23,79,122,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
-        <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#64b5df]/15 md:size-[460px]" />
+        
+        {/* EduExpress Emblem Icon Watermark (Uncropped, Full Size) */}
+        <div className="pointer-events-none absolute right-4 lg:right-16 top-1/2 -translate-y-1/2 hidden md:flex h-[75%] max-h-[360px] lg:max-h-[440px] aspect-square items-center justify-center p-2">
+          <Image
+            src="/emblem-icon.png"
+            alt=""
+            width={440}
+            height={440}
+            unoptimized
+            className="h-full w-full object-contain opacity-25"
+          />
+        </div>
 
         <div className="relative mx-auto max-w-[1440px]">
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#174f7a]">
