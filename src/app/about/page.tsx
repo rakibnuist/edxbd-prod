@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import AboutClient from './AboutClient';
 
 export const metadata: Metadata = {
-  title: 'About EduExpress International | Evidence-First Education Consultancy',
+  title: { absolute: 'About EduExpress International | Evidence-First Education Consultancy' },
   description: "Learn how EduExpress applies evidence-first education guidance, clear costs and written proof to overseas study decisions from Dhanmondi, Dhaka.",
   keywords: [
     'about eduexpress international',
