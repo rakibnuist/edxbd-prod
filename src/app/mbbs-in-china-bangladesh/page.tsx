@@ -16,9 +16,42 @@ import {
   FileCheck2,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import { getUniversityRecords } from '@/lib/university-records';
 
 const canonicalUrl = 'https://eduexpressint.com/mbbs-in-china-bangladesh';
 const verifiedDate = '2026-07-20';
+
+// Regenerate from the verified university records hourly.
+export const revalidate = 3600;
+
+type MbbsRow = { name: string; slug: string; city: string; program: string; tuition: string; duration: string };
+
+// Pull real MBBS / Clinical Medicine tuition from the verified China university records.
+async function getMbbsUniversities(): Promise<MbbsRow[]> {
+  try {
+    const unis = await getUniversityRecords('China');
+    const rows: MbbsRow[] = [];
+    for (const u of unis) {
+      for (const p of u.programs || []) {
+        const label = `${p.name || ''} ${p.subject || ''}`.toLowerCase();
+        const isMbbs = /mbbs|clinical medicine/.test(label) && !/veterinary/.test(label);
+        if (isMbbs && p.tuition) {
+          rows.push({
+            name: u.name,
+            slug: u.slug,
+            city: u.city,
+            program: p.name || 'MBBS / Clinical Medicine',
+            tuition: p.tuition,
+            duration: p.duration || '6 years',
+          });
+        }
+      }
+    }
+    return rows.sort((a, b) => a.name.localeCompare(b.name));
+  } catch {
+    return [];
+  }
+}
 
 export const metadata: Metadata = {
   title: { absolute: 'MBBS in China for Bangladeshi Students — Recognition, Licensing & 2026/27 Cost' },
@@ -54,7 +87,6 @@ const standards = [
 
 // Complete cost — current assumptions, confirmed per university during assessment.
 const costRows: [string, string, string][] = [
-  ['Tuition (English MBBS)', '$3,000 – $7,000 / year', 'Varies by university and city'],
   ['On-campus hostel', '$500 – $1,500 / year', 'Cheapest option for international students'],
   ['Living (food, transport, personal)', '$200 – $400 / month', '≈ $2,400 – $4,800 / year'],
   ['Medical insurance (mandatory)', '$100 – $200 / year', 'Required for the residence permit'],
@@ -171,7 +203,8 @@ const structuredData = {
   ],
 };
 
-export default function MbbsInChinaBangladeshPage() {
+export default async function MbbsInChinaBangladeshPage() {
+  const mbbsUniversities = await getMbbsUniversities();
   return (
     <article className="bg-[#f4f8fa] text-[#08263c]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
@@ -261,14 +294,62 @@ export default function MbbsInChinaBangladeshPage() {
         </div>
       </section>
 
+      {/* REAL PER-UNIVERSITY MBBS TUITION */}
+      {mbbsUniversities.length > 0 && (
+        <section className="bg-white px-5 py-16 border-b border-[#174f7a]/15 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-[1200px]">
+            <span className="font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">Verified network — not a brochure estimate</span>
+            <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">MBBS tuition at universities we currently track</h2>
+            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700">
+              These figures come straight from our verified China university records — the exact tuition recorded for each
+              medical programme, not a generic range. Recognition and current status are re-checked before any application.
+            </p>
+
+            <div className="mt-8 overflow-hidden border border-[#174f7a]/15">
+              <table className="w-full border-collapse text-left text-sm">
+                <thead>
+                  <tr className="bg-[#174f7a] text-white">
+                    <th className="p-4 font-heading font-bold">University</th>
+                    <th className="hidden p-4 font-heading font-bold sm:table-cell">Programme</th>
+                    <th className="p-4 font-heading font-bold">Recorded tuition</th>
+                    <th className="hidden p-4 font-heading font-bold md:table-cell">Duration</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mbbsUniversities.map((u, i) => (
+                    <tr key={u.slug + u.program} className={i % 2 ? 'bg-[#f6f9fb]' : 'bg-white'}>
+                      <td className="border-t border-[#174f7a]/10 p-4">
+                        <Link href={`/universities/${u.slug}`} className="font-heading font-bold text-[#08263c] hover:text-[#174f7a] hover:underline">{u.name}</Link>
+                        <span className="block text-xs text-slate-500">{u.city}</span>
+                      </td>
+                      <td className="hidden border-t border-[#174f7a]/10 p-4 text-slate-700 sm:table-cell">{u.program}</td>
+                      <td className="border-t border-[#174f7a]/10 p-4 font-bold text-[#174f7a]">{u.tuition}</td>
+                      <td className="hidden border-t border-[#174f7a]/10 p-4 text-slate-600 md:table-cell">{u.duration}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-4 text-xs leading-5 text-slate-500">
+              Tuition is shown in the currency recorded by each university and covers tuition only. Living, hostel, insurance
+              and third-party costs are added in your ClearCost sheet. Verified {verifiedDate} · confirmed again before application.
+            </p>
+            <Link href="/china-universities" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#174f7a] hover:underline">
+              Compare all China universities <ArrowRight size={15} />
+            </Link>
+          </div>
+        </section>
+      )}
+
       {/* COMPLETE COST */}
       <section className="px-5 py-16 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1200px]">
           <span className="font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">The complete cost, in writing</span>
-          <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">What six years actually costs — not tuition alone</h2>
+          <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Beyond tuition — what six years actually costs</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700">
-            These are current planning ranges, verified {verifiedDate}. Your ClearCost sheet confirms the exact figures for
-            each shortlisted university, separates every third-party charge, and states what EduExpress charges and when.
+            The tuition above is real per-university data. Everything else below is a current planning range, verified {verifiedDate}.
+            Your ClearCost sheet combines both into exact figures for your shortlist, separates every third-party charge, and
+            states what EduExpress charges and when.
           </p>
 
           <div className="mt-8 overflow-hidden border border-[#174f7a]/15 bg-white">
