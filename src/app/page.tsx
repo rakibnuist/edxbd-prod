@@ -18,6 +18,7 @@ import {
 import DestinationDecisionDesk from '@/components/home/DestinationDecisionDesk';
 import ChinaFlagshipRecord from '@/components/home/ChinaFlagshipRecord';
 import HomeTestimonials from '@/components/home/HomeTestimonials';
+import TrustStrip from '@/components/TrustStrip';
 import prisma from '@/lib/prisma';
 
 // Refresh the homepage (incl. testimonials) at most once an hour.
@@ -122,14 +123,14 @@ export default async function Home() {
                 <span className="min-w-0 whitespace-normal">Bangladesh&apos;s Evidence First Education Consultancy</span>
               </p>
               <h1 className="mt-7 w-full max-w-4xl break-words text-balance font-heading text-[clamp(2.4rem,5.6vw,4.4rem)] font-bold leading-[1.06] tracking-[-0.022em]">
-                Choose better education abroad <span className="relative mt-3 inline-block bg-[#64b5df] px-2 pb-2 text-[#08263c] sm:px-3 sm:pb-3">with clear costs</span> and written proof
+                Choose Better Education Abroad — with <span className="relative mt-3 inline-block bg-[#64b5df] px-2 pb-2 text-[#08263c] sm:px-3 sm:pb-3">Clear Costs</span> and Written Proof
               </h1>
               <p className="mt-8 max-w-2xl border-l-4 border-[#64b5df] pl-5 text-base leading-7 text-slate-700 md:text-lg md:leading-8">
                 We compare education quality, cost, recognition and career fit before recommending an option. Scholarship options are assessed after education fit.
               </p>
               <div className="mt-9 flex min-w-0 flex-col gap-3 sm:flex-row">
                 <Link href="/education-fit-assessment" className="group inline-flex w-full items-center justify-center gap-3 bg-[#08263c] px-4 py-4 text-center text-sm font-black text-white hover:bg-[#174f7a] sm:w-auto sm:px-6 sm:text-base">
-                  Get My Free Fit Assessment <ArrowUpRight className="shrink-0 transition group-hover:translate-x-1 group-hover:-translate-y-1" size={19} />
+                  Get My Free Education Fit Assessment <ArrowUpRight className="shrink-0 transition group-hover:translate-x-1 group-hover:-translate-y-1" size={19} />
                 </Link>
                 <Link href="/study-in-china-from-bangladesh" className="inline-flex w-full items-center justify-center gap-3 border-2 border-[#08263c] bg-white/50 px-4 py-4 text-center text-sm font-black hover:bg-white sm:w-auto sm:px-6 sm:text-base">
                   Explore Study in China <ArrowRight className="shrink-0" size={19} />
@@ -148,6 +149,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <TrustStrip />
 
       <section aria-labelledby="every-student-standard" className="border-y border-[#08263c] bg-[#08263c] text-white">
         <div className="mx-auto grid max-w-[1440px] lg:grid-cols-[.8fr_repeat(4,1fr)]">
