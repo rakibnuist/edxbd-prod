@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
       title: update.metaTitle || update.title,
       description: update.metaDescription || update.excerpt || update.content.substring(0, 160),
       keywords: tags.join(', '),
+      alternates: { canonical: `/updates/${slug}` },
       openGraph: {
         title: update.title,
         description: update.excerpt || update.content.substring(0, 160),
@@ -98,7 +99,30 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       views: update.views + 1
     };
 
-    return <UpdateClient update={updateData as any} />;
+    const canonical = `https://eduexpressint.com/updates/${update.slug}`;
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      '@id': `${canonical}#article`,
+      headline: update.title,
+      description: update.excerpt || update.content.substring(0, 160),
+      image: update.featuredImage ? [update.featuredImage] : ['https://eduexpressint.com/og-image.jpg'],
+      datePublished: update.publishedAt?.toISOString() || update.createdAt.toISOString(),
+      dateModified: update.updatedAt.toISOString(),
+      author: { '@type': 'Organization', name: update.author || 'EduExpress International', url: 'https://eduexpressint.com' },
+      publisher: { '@id': 'https://eduexpressint.com/#organization' },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+      inLanguage: 'en-BD',
+      keywords: tags.join(', ') || undefined,
+      articleSection: categories[0] || update.category || undefined,
+    };
+
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+        <UpdateClient update={updateData as any} />
+      </>
+    );
   } catch (error) {
     console.error('Error fetching update:', error);
     notFound();

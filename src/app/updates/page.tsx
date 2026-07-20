@@ -114,5 +114,40 @@ async function getUpdates(): Promise<{ updates: Update[]; categories: string[] }
 
 export default async function UpdatesPage() {
   const { updates, categories } = await getUpdates();
-  return <UpdatesClient initialUpdates={updates} initialCategories={categories} />;
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Blog',
+        '@id': 'https://eduexpressint.com/updates#blog',
+        url: 'https://eduexpressint.com/updates',
+        name: 'EduExpress Updates',
+        description: 'Verified study-abroad updates, intake news and guidance for Bangladeshi students.',
+        inLanguage: 'en-BD',
+        publisher: { '@id': 'https://eduexpressint.com/#organization' },
+        blogPost: updates.slice(0, 20).map((u) => ({
+          '@type': 'BlogPosting',
+          headline: u.title,
+          url: `https://eduexpressint.com/updates/${u.slug}`,
+          datePublished: u.publishedAt || u.createdAt,
+        })),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': 'https://eduexpressint.com/updates#breadcrumb',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://eduexpressint.com/' },
+          { '@type': 'ListItem', position: 2, name: 'Updates', item: 'https://eduexpressint.com/updates' },
+        ],
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <UpdatesClient initialUpdates={updates} initialCategories={categories} />
+    </>
+  );
 }

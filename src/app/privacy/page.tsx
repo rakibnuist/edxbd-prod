@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: 'Privacy Policy',
     description: 'Learn how EduExpress International protects your personal information and privacy. Our comprehensive privacy policy covers data collection, usage, and protection practices.',
     type: 'website',
-    url: 'https://www.eduexpressint.com/privacy',
+    url: 'https://eduexpressint.com/privacy',
     siteName: 'EduExpress International',
   },
   twitter: {
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
   },
   alternates: {
-    canonical: 'https://www.eduexpressint.com/privacy',
+    canonical: 'https://eduexpressint.com/privacy',
   },
 };
 
