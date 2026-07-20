@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: 'Terms of Service',
     description: 'Read the terms and conditions for using EduExpress International services. Our comprehensive terms cover service usage, responsibilities, and legal agreements.',
     type: 'website',
-    url: 'https://www.eduexpressint.com/terms',
+    url: 'https://eduexpressint.com/terms',
     siteName: 'EduExpress International',
   },
   twitter: {
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
   },
   alternates: {
-    canonical: 'https://www.eduexpressint.com/terms',
+    canonical: 'https://eduexpressint.com/terms',
   },
 };
 
