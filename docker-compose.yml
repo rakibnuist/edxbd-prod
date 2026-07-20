@@ -34,6 +34,15 @@ services:
       - "traefik.http.middlewares.edxbd-www.redirectregex.replacement=https://eduexpressint.com/$${1}"
       - "traefik.http.middlewares.edxbd-www.redirectregex.permanent=true"
       - "traefik.http.routers.edxbd.middlewares=edxbd-www"
+      # --- Force HTTP (port 80) → HTTPS. This is the fix for the browser
+      #     "Not Secure" warning: without it the site is served in cleartext
+      #     on port 80 and never upgraded. 'web' is the Hostinger Traefik
+      #     template's port-80 entrypoint; rename if your Traefik differs.
+      - "traefik.http.routers.edxbd-http.rule=Host(`eduexpressint.com`) || Host(`www.eduexpressint.com`)"
+      - "traefik.http.routers.edxbd-http.entrypoints=web"
+      - "traefik.http.routers.edxbd-http.middlewares=edxbd-https-redirect"
+      - "traefik.http.middlewares.edxbd-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.edxbd-https-redirect.redirectscheme.permanent=true"
     networks:
       - traefik-net
 
