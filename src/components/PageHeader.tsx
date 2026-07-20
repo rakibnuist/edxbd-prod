@@ -1,6 +1,7 @@
 'use client';
 
 import { Sparkles, LucideIcon } from 'lucide-react';
+import Image from 'next/image';
 import React from 'react';
 
 interface PageHeaderProps {
@@ -34,7 +35,20 @@ export default function PageHeader({
         <header className="relative overflow-hidden bg-[#f4f8fa] pt-28 pb-16 text-[#08263c] sm:pt-36 sm:pb-24 lg:pt-40 lg:pb-28 border-b border-[#174f7a]/15">
             {/* Grid Pattern Overlay */}
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(23,79,122,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(23,79,122,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
-            <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#64b5df]/15 md:size-[460px]" />
+
+            {/* EduExpress Watermark Icon replacing the plain 'O' ring */}
+            <div className="pointer-events-none absolute right-[3%] top-1/2 -translate-y-1/2 hidden md:flex size-80 lg:size-[460px] items-center justify-center rounded-3xl border border-[#174f7a]/10 bg-gradient-to-br from-[#64b5df]/10 via-white/50 to-transparent p-8 shadow-[0_20px_50px_rgba(8,38,60,0.06)] backdrop-blur-sm">
+                <div className="relative flex h-full w-full items-center justify-center opacity-30">
+                    <Image
+                        src="/logo.png"
+                        alt="EduExpress"
+                        width={400}
+                        height={115}
+                        unoptimized
+                        className="h-auto w-full object-contain"
+                    />
+                </div>
+            </div>
 
             <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12 z-10">
                 <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#174f7a]">
