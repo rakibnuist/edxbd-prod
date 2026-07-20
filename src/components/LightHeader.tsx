@@ -156,6 +156,7 @@ export default function LightHeader() {
               How we decide <ChevronDown size={15} className={`transition ${activeMenu === 'proof' ? 'rotate-180' : ''}`} />
             </button>
             <Link href="/universities" onMouseEnter={closeMenu} onFocus={closeMenu} className="grid h-full place-items-center border-x border-transparent px-3 text-sm font-extrabold hover:bg-[#e9f7fd]">Find education</Link>
+            <Link href="/updates" onMouseEnter={closeMenu} onFocus={closeMenu} className="grid h-full place-items-center border-x border-transparent px-3 text-sm font-extrabold hover:bg-[#e9f7fd]">Updates</Link>
             <Link href="/contact" onMouseEnter={closeMenu} onFocus={closeMenu} className="grid h-full place-items-center border-x border-transparent px-3 text-sm font-extrabold hover:bg-[#e9f7fd]">Contact</Link>
           </div>
 
@@ -281,6 +282,7 @@ export default function LightHeader() {
                 </div>
               ))}
               <Link href="/universities" className="flex items-center justify-between border-b border-[#174f7a]/20 py-4 font-heading text-xl font-bold">Find education <ArrowRight size={18} /></Link>
+              <Link href="/updates" className="flex items-center justify-between border-b border-[#174f7a]/20 py-4 font-heading text-xl font-bold">Updates <ArrowRight size={18} /></Link>
               <Link href="/contact" className="flex items-center justify-between border-b border-[#174f7a]/20 py-4 font-heading text-xl font-bold">Contact <ArrowRight size={18} /></Link>
             </div>
             <p className="py-5 text-center text-[11px] font-bold uppercase leading-5 tracking-[0.14em] text-slate-500">Saturday-Thursday 11:00 AM-6:00 PM, Friday closed</p>
