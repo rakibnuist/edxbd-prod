@@ -95,7 +95,9 @@ export default function ChinaFlagshipRecord() {
   return (
     <section className="relative overflow-hidden bg-[#061b2a] px-5 py-16 text-white sm:px-8 sm:py-24 md:py-32 lg:px-12">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(100,181,223,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(100,181,223,0.08)_1px,transparent_1px)] bg-[size:58px_58px] [mask-image:linear-gradient(to_bottom,black,transparent_80%)]" />
-      <div className="pointer-events-none absolute -right-52 top-6 size-[520px] rounded-full border-[76px] border-[#64b5df]/5" />
+      <div className="pointer-events-none absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 hidden md:flex h-[75%] max-h-[380px] aspect-square items-center justify-center p-2">
+        <Image src="/emblem-icon.png" width={380} height={380} unoptimized alt="" className="h-full w-full object-contain opacity-15 filter brightness-0 invert" />
+      </div>
 
       <div className="relative mx-auto max-w-[1440px]">
         <div className="flex flex-col justify-between gap-8 border-b border-white/20 pb-10 lg:flex-row lg:items-end">
