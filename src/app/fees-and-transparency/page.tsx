@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import FeesAndTransparencyClient from './FeesAndTransparencyClient';
 
 export const metadata: Metadata = {
-  title: 'Fees & Written Transparency | ClearCost Calculator & Proof Assets | EduExpress',
+  title: { absolute: 'Fees & Written Transparency | ClearCost & Proof Assets | EduExpress International' },
   description: 'Calculate your total study abroad cost and inspect EduExpress International\'s 4 written trust assets: EduFit Report, ClearCost Schedule, Application Proof Pack, and China Visa-First Policy.',
   openGraph: {
     title: 'Fees & Written Transparency | EduExpress International',

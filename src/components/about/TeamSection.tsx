@@ -1,76 +1,73 @@
-'use client';
-
 import Image from 'next/image';
-import { Linkedin, Twitter, Mail } from 'lucide-react';
 
-const teamMembers = [
+// To use a real photo, drop it in /public/team/ and set `image: '/team/name.jpg'`.
+// Members without a photo show a clean monogram — never a stock stand-in face.
+type Member = { name: string; role: string; bio: string; image?: string };
+
+const teamMembers: Member[] = [
     {
         name: 'Abdullah Al Rakib',
         role: 'Founder & CEO',
-        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop',
-        bio: 'Visionary leader with a passion for global education, guiding the strategic direction of EduExpress since its inception.',
+        bio: 'Leads the strategic direction of EduExpress. Entered Chinese higher education in 2018 and built the institutional relationships behind the China flagship service.',
     },
     {
         name: 'Sakib Al Jubaer',
         role: 'Managing Director',
-        image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=800&auto=format&fit=crop',
-        bio: 'Overseeing daily operations and ensuring excellence in service delivery across all our branches.',
+        bio: 'Oversees daily operations and service delivery against the written evidence standard across every student file.',
     },
     {
         name: 'Tahmid Al Jamee',
         role: 'Head of Marketing',
-        image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800&auto=format&fit=crop',
-        bio: 'Driving our brand presence and connecting students with opportunities through innovative marketing strategies.',
+        bio: 'Connects students with verified opportunities and keeps public claims aligned with the evidence-first standard.',
     },
     {
         name: 'Md Taj Ahmed',
         role: 'Application Processing',
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop',
-        bio: 'Expert in university admissions, ensuring every application is meticulously prepared for success.',
+        bio: 'Prepares university applications and keeps each submission complete, accurate and on deadline.',
     },
     {
         name: 'Mukta Rahaman',
         role: 'Senior Counselor',
-        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop',
-        bio: 'Experienced mentor providing in-depth career guidance and university selection advice to students.',
+        bio: 'Provides program and university guidance, comparing fit, recognition and total cost before any recommendation.',
     },
     {
         name: 'Jannatun Ema',
         role: 'Counselor',
-        image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800&auto=format&fit=crop',
-        bio: 'Dedicated to helping students navigate their study abroad options with personalized support.',
+        bio: 'Supports students through their study-abroad options with structured, written follow-up.',
     },
     {
         name: 'Md Abdullah Al Razib',
         role: 'Application Processing',
-        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop',
-        bio: 'Specialist in documentation and application tracking, ensuring timely submissions and updates.',
+        bio: 'Handles documentation and application tracking, keeping references and receipts recorded for every step.',
     },
     {
         name: 'Md Tauhidul Islam Nur',
         role: 'Country Manager (China)',
-        image: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800&auto=format&fit=crop',
-        bio: 'Leading our operations in China, building strong relationships with top Chinese universities.',
+        bio: 'Leads China operations and the relationships with Chinese universities behind the flagship record.',
     },
     {
         name: 'Md Infeter Islam',
         role: 'Marketing Executive',
-        image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop',
-        bio: 'Executing dynamic marketing campaigns to reach aspiring students across the country.',
+        bio: 'Runs student outreach campaigns and responds to inquiries from across Bangladesh.',
     },
     {
         name: 'Md Israfil Hossain',
         role: 'Marketing Executive',
-        image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=800&auto=format&fit=crop',
-        bio: 'Passionate about connecting with students and sharing the transformative power of international education.',
+        bio: 'Connects with students and shares verified guidance on international education.',
     },
     {
         name: 'Md Tanver Islam',
         role: 'Marketing Executive',
-        image: 'https://images.unsplash.com/photo-1480429370139-e0132c086e2a?q=80&w=800&auto=format&fit=crop',
-        bio: 'Engaging with our community through events and digital channels to support student queries.',
+        bio: 'Engages the community through events and digital channels and routes student queries to the right desk.',
     },
 ];
+
+function initials(name: string) {
+    const parts = name.trim().split(/\s+/).filter(Boolean);
+    const first = parts[0]?.[0] ?? '';
+    const second = parts.length > 1 ? parts[parts.length - 1][0] : '';
+    return (first + second).toUpperCase();
+}
 
 export default function TeamSection() {
     return (
@@ -78,40 +75,34 @@ export default function TeamSection() {
             <div className="container mx-auto px-5 sm:px-8 lg:px-12">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-14">
-                        <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Dedicated Professionals</p>
+                        <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">The people behind your file</p>
                         <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">Meet Our Team</h2>
                         <p className="text-base text-slate-600 max-w-2xl mx-auto mt-3">
-                            Behind every student outcome is a team of counselors, document specialists, and admissions officers working under written evidence guidelines.
+                            Counselors, document specialists, and admissions officers working under written evidence guidelines from our Dhanmondi decision desk.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {teamMembers.map((member, index) => (
+                        {teamMembers.map((member) => (
                             <div
-                                key={index}
+                                key={member.name}
                                 className="group relative bg-white border-2 border-[#08263c] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#174f7a]"
                             >
                                 <div className="aspect-[3/4] relative overflow-hidden bg-[#08263c]">
-                                    <Image
-                                        src={member.image}
-                                        alt={member.name}
-                                        fill
-                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#08263c] via-[#08263c]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-                                        <div className="flex gap-3 justify-center text-white">
-                                            <a href="#" className="p-2 bg-[#174f7a] text-[#8ed0ee] hover:bg-white hover:text-[#08263c] transition-colors">
-                                                <Linkedin className="w-4 h-4" />
-                                            </a>
-                                            <a href="#" className="p-2 bg-[#174f7a] text-[#8ed0ee] hover:bg-white hover:text-[#08263c] transition-colors">
-                                                <Twitter className="w-4 h-4" />
-                                            </a>
-                                            <a href="#" className="p-2 bg-[#174f7a] text-[#8ed0ee] hover:bg-white hover:text-[#08263c] transition-colors">
-                                                <Mail className="w-4 h-4" />
-                                            </a>
+                                    {member.image ? (
+                                        <Image
+                                            src={member.image}
+                                            alt={member.name}
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(135deg,#08263c_0%,#0b2f4a_60%,#174f7a_100%)]">
+                                            <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] size-40 rounded-full border-[14px] border-[#64b5df]/10" />
+                                            <span className="font-heading text-6xl font-bold text-[#8ed0ee]/90">{initials(member.name)}</span>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
 
                                 <div className="p-5 text-center bg-white border-t border-[#174f7a]/15">
@@ -124,6 +115,10 @@ export default function TeamSection() {
                             </div>
                         ))}
                     </div>
+
+                    <p className="mt-8 text-center font-mono text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                        Real team photos are added as written consent is recorded.
+                    </p>
                 </div>
             </div>
         </section>
