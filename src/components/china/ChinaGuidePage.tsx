@@ -47,13 +47,16 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
             ['Scholarships', '/china-scholarships-bangladesh'],
             ['Visa', '/china-student-visa-bangladesh'],
             ['Costs', '/study-in-china-cost-bangladesh'],
+            ['Without IELTS', '/study-in-china-without-ielts'],
+            ['MBBS', '/mbbs-in-china-bangladesh'],
             ['Intakes', '/china-intakes-deadlines'],
             ['Student life', '/life-in-china-bangladeshi-students'],
+            ['Success stories', '/china-success-stories'],
           ].map(([label, href]) => <Link key={href} href={href} className={`shrink-0 bg-white px-4 py-4 text-xs font-black ${href === `/${guide.slug}` ? 'text-[#174f7a] shadow-[inset_0_-3px_0_#174f7a]' : 'text-slate-500 hover:bg-[#e9f7fd]'}`}>{label}</Link>)}
         </div>
       </nav>
 
-      <section className="mx-auto grid max-w-[1440px] gap-8 px-5 sm:px-8 lg:px-12 py-14 sm:px-8 lg:px-12 lg:grid-cols-[.28fr_.72fr] lg:py-20">
+      <section className="mx-auto grid max-w-[1440px] gap-8 px-5 py-14 sm:px-8 lg:grid-cols-[.28fr_.72fr] lg:px-12 lg:py-20">
         <aside>
           <div className="sticky top-32 border-t-4 border-[#174f7a] bg-[#e9f7fd] p-5">
             <SearchCheck size={25} className="text-[#174f7a]" />
@@ -77,7 +80,7 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
         </div>
       </section>
 
-      {guide.slug === 'study-in-china-cost-bangladesh' ? <section className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12 pb-14 sm:px-8 lg:px-12 lg:pb-20"><ChinaCostCalculator /></section> : null}
+      {guide.slug === 'study-in-china-cost-bangladesh' ? <section className="mx-auto max-w-[1440px] px-5 pb-14 sm:px-8 lg:px-12 lg:pb-20"><ChinaCostCalculator /></section> : null}
 
       <section className="bg-[#e9f7fd]">
         <div className="mx-auto grid max-w-[1440px] gap-6 px-5 py-14 sm:px-8 lg:px-12 lg:grid-cols-2 lg:py-20">
