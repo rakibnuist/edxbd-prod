@@ -103,18 +103,26 @@ export default function CostCalculator({
         await new Promise((resolve) => setTimeout(resolve, 300));
         
         const opt = {
-          margin:       [0.3, 0.3, 0.3, 0.3] as [number, number, number, number],
+          // [top, left, bottom, right] — left/right must be 0 so the page's
+          // inner width (210mm ≈ 794px) matches the 794px template exactly.
+          // Non-zero side margins shrink html2pdf's internal container below
+          // 794px and the fixed-width clone gets clipped on the right.
+          // Horizontal whitespace comes from the template's own p-8 padding.
+          margin:       [0.3, 0, 0.3, 0] as [number, number, number, number],
           filename:     `${universityName?.replace(/\s+/g, '_') || 'University'}_4Year_Investment_Plan.pdf`,
           image:        { type: 'jpeg' as const, quality: 0.98 },
-          html2canvas:  { 
-            scale: 2, 
-            useCORS: true, 
+          html2canvas:  {
+            scale: 2,
+            useCORS: true,
             logging: false,
             scrollX: 0,
             scrollY: 0,
-            windowWidth: 800
+            windowWidth: 794
           },
-          jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+          jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+          // Never slice an element across pages (was cutting the summary
+          // totals in half); whole blocks move to the next page instead.
+          pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
         await html2pdf().set(opt as any).from(clone).save();
