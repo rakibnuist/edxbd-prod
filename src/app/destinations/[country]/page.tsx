@@ -38,8 +38,50 @@ export default async function CountryPage({ params }: Props) {
 
   const programAreas = country.programs.length ? country.programs : ['Business', 'Technology', 'Health and Social Sciences', 'International programs'];
 
+  // Structured data — matches the standard used across the China cluster so
+  // destination pages are eligible for the same rich results.
+  const pageUrl = `https://eduexpressint.com/study-in-${slug}-from-bangladesh`;
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: `Study in ${country.name} from Bangladesh`,
+        description: country.metaDescription || `Education fit, institution checks, clear costs and visa readiness for studying in ${country.name}.`,
+        inLanguage: 'en-BD',
+        dateModified: '2026-07-19',
+        reviewedBy: { '@id': 'https://eduexpressint.com/#organization' },
+        breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
+        isPartOf: { '@id': 'https://eduexpressint.com/#organization' },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${pageUrl}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://eduexpressint.com/' },
+          { '@type': 'ListItem', position: 2, name: 'Destinations', item: 'https://eduexpressint.com/destinations' },
+          { '@type': 'ListItem', position: 3, name: `Study in ${country.name}`, item: pageUrl },
+        ],
+      },
+      ...(country.faqs && country.faqs.length > 0
+        ? [{
+            '@type': 'FAQPage',
+            '@id': `${pageUrl}#faq`,
+            mainEntity: country.faqs.map((faq) => ({
+              '@type': 'Question',
+              name: faq.question,
+              acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+            })),
+          }]
+        : []),
+    ],
+  };
+
   return (
     <article className="min-h-screen bg-[#f4f8fa] px-4 pb-24 pt-32 text-[#08263c]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <div className="mx-auto max-w-4xl">
         {/* Module 1: Breadcrumbs + service-status badge */}
         <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm font-semibold text-[#174f7a]">
