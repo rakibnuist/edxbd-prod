@@ -76,7 +76,7 @@ export default function Footer() {
         <div className="relative mt-16 grid gap-12 border-t border-white/15 pt-12 lg:grid-cols-[.8fr_1.25fr_.95fr]">
           <div>
             <Link href="/" aria-label="EduExpress International home">
-              <Image src="/white-logo.png" alt="EduExpress International" width={220} height={62} className="h-auto w-52" />
+              <Image src="/white-logo.png" alt="EduExpress International" width={220} height={62} unoptimized className="h-auto w-52" />
             </Link>
             <p className="mt-6 max-w-sm text-sm leading-7 text-white/55">Bangladesh&apos;s evidence first education consultancy for students who want the reasoning, cost and responsibility in writing.</p>
             <div className="mt-7 flex gap-2">

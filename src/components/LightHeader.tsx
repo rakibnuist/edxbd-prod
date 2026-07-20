@@ -141,7 +141,7 @@ export default function LightHeader() {
       <nav className="border-b border-[#174f7a]/20 bg-white/95 shadow-[0_12px_35px_rgba(8,38,60,0.08)] backdrop-blur-xl" aria-label="Main navigation">
         <div className="mx-auto flex h-[76px] max-w-[1440px] items-center gap-5 px-4 sm:px-6">
           <Link href="/" className="shrink-0" aria-label="EduExpress International home">
-            <Image src="/logo.png" width={190} height={53} priority alt="EduExpress International" className="h-10 w-auto lg:h-[42px]" />
+            <Image src="/logo.png" width={190} height={53} priority unoptimized alt="EduExpress International" className="h-10 w-auto lg:h-[42px]" />
           </Link>
 
           <div className="ml-auto hidden h-full items-center min-[1200px]:flex">

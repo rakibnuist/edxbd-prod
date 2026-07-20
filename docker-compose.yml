@@ -26,6 +26,7 @@ services:
       # Route for eduexpressint.com and www.eduexpressint.com
       - "traefik.http.routers.edxbd.rule=Host(`eduexpressint.com`) || Host(`www.eduexpressint.com`)"
       - "traefik.http.routers.edxbd.entrypoints=websecure"
+      - "traefik.http.routers.edxbd.tls=true"
       - "traefik.http.routers.edxbd.tls.certresolver=letsencrypt" # Assumes Let's Encrypt resolver is named 'letsencrypt' in Traefik setup
       # Port configuration
       - "traefik.http.services.edxbd.loadbalancer.server.port=3000"

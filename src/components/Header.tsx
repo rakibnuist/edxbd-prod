@@ -121,6 +121,7 @@ const Header = () => {
                     width={180}
                     height={50}
                     quality={60}
+                    unoptimized
                     className="h-10 w-auto object-contain drop-shadow-sm"
                     priority
                     sizes="(max-width: 768px) 140px, 180px"
