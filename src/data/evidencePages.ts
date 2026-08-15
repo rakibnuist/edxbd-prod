@@ -12,7 +12,6 @@ export type EvidencePage = {
 
 const reviewedAt = '2026-07-19';
 const nextReviewAt = '2026-10-19';
-const chinaOffer = 'No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.';
 
 const page = (data: Omit<EvidencePage, 'reviewedAt' | 'nextReviewAt'>): EvidencePage => ({
   ...data,
@@ -32,31 +31,6 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
       { heading: 'What you receive', body: 'Where appropriate, the assessment leads to an EduFit Decision Report comparing at least three suitable options, followed by a ClearCost Sheet and an Application Proof Pack.' },
       { heading: 'Who this process serves best', body: 'This process is designed for students who value an evidence based recommendation and understand that universities, scholarship bodies and government authorities issue the official decisions.' },
     ],
-  }),
-  page({
-    slug: 'fees-and-transparency',
-    title: 'Fees and Transparency',
-    description: 'How EduExpress separates service charges from university, embassy and other third-party costs.',
-    eyebrow: 'Clear costs before commitment',
-    intro: 'Before a student proceeds, each expected payment should identify its purpose, amount or calculation method, recipient, due date and refund status. EduExpress charges must be shown separately from third-party costs.',
-    sections: [
-      { heading: 'ClearCost Sheet', body: 'The written cost schedule separates tuition, deposits, embassy charges, medicals, insurance, translation, courier and other external costs from EduExpress service charges.' },
-      { heading: 'China service terms', body: chinaOffer },
-      { heading: 'Payment and decision clarity', body: 'Payments cover the stated service or third party item, while admission, scholarship and visa decisions remain with the responsible authority. Refund terms and exceptions are recorded in writing before payment.' },
-    ],
-  }),
-  page({
-    slug: 'china-visa-first-policy',
-    title: 'China Visa-First Service Policy',
-    description: 'The exact China service-fee timing, third-party cost exceptions and responsibilities.',
-    eyebrow: 'Written China service terms',
-    intro: chinaOffer,
-    sections: [
-      { heading: 'What may be payable earlier', body: 'A university or authority may require an application fee, deposit, medical, translation, courier, insurance or embassy-related payment before a visa decision. Each item must be disclosed in writing with the recipient and refund status.' },
-      { heading: 'What EduExpress provides', body: 'Education-fit comparison, application guidance, document-readiness checks, proof tracking, visa-readiness support and pre-departure guidance within the agreed scope.' },
-      { heading: 'Shared responsibilities', body: 'Students provide accurate documents and meet deadlines, EduExpress supports the agreed preparation process, and universities, scholarship bodies and Chinese authorities issue each official decision.' },
-    ],
-    sources: [{ label: 'Embassy of the People’s Republic of China in Bangladesh', href: 'http://bd.china-embassy.gov.cn/eng/' }],
   }),
   page({
     slug: 'how-we-verify-universities',
@@ -85,13 +59,14 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
   page({
     slug: 'complaints-and-resolution',
     title: 'Complaints and Resolution',
-    description: 'A timestamped process for raising and resolving an EduExpress service complaint.',
-    eyebrow: 'A clear escalation path',
-    intro: 'Complaints are recorded as dedicated cases with an owner, submission time, supporting evidence and a written resolution trail.',
+    description: 'How to raise a concern with EduExpress International, and the timelines each complaint is reviewed and resolved against.',
+    eyebrow: 'Accountability in writing',
+    intro: 'If any part of our service falls short, you can raise it directly and expect a written response. Complaints are recorded as dedicated cases with an owner, submission time, supporting evidence and a written resolution trail.',
     sections: [
-      { heading: 'How to complain', body: 'Contact EduExpress with your name, contact details, service, relevant dates, the issue and the resolution you seek. Avoid sending sensitive document numbers through public channels.' },
-      { heading: 'What happens next', body: 'The team acknowledges the case, assigns a management owner, reviews the evidence and communicates either a resolution or a reasoned progress update.' },
-      { heading: 'Escalation', body: 'If the first response does not resolve the issue, request management review. Refund questions are assessed against the written fee schedule, recipient, milestone and applicable terms.' },
+      { heading: 'How to raise a concern', body: 'Send the details to our office by email or phone, or in person at the Dhanmondi decision desk. Include your name, contact number, the service or counselor involved, the relevant dates and the outcome you are seeking. Avoid sending sensitive document numbers through public channels.', items: ['Email: info@eduexpressint.com', 'Phone: +880 1983-333566', 'In person: Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209'] },
+      { heading: 'What happens next', body: 'We acknowledge every complaint in writing within two working days, assign a management owner, review the file and any documents involved, and provide a written response with our findings and next steps within ten working days. Complex cases that need third-party confirmation are updated at each stage.' },
+      { heading: 'Escalation and records', body: 'If the first response does not resolve the issue, you can request a senior review by management. Refund questions are assessed against the written fee schedule, recipient, milestone and applicable terms. Every complaint, its evidence and its resolution are recorded so patterns can be identified and the service improved.' },
+      { heading: 'What we do not control', body: 'Admission, scholarship and visa decisions are made by universities, scholarship bodies and government authorities. We can explain a decision, check for errors in our own work and correct them, but we cannot overturn an official authority’s decision.' },
     ],
   }),
   page({
@@ -118,69 +93,4 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
       { heading: 'Evidence & Integrity Rule', body: 'Every destination operates under the Better Education Standard. Success statistics and student testimonials are never borrowed from another country.' },
     ],
   }),
-  page({
-    slug: 'education-consultant-dhaka',
-    title: 'Education Consultant in Dhanmondi, Dhaka',
-    description: 'Visit EduExpress International for evidence-first overseas education guidance in Dhanmondi.',
-    eyebrow: 'EduExpress International Bangladesh',
-    intro: 'Meet the team to compare education quality, total cost, recognition and career fit before choosing an overseas study route.',
-    sections: [
-      { heading: 'Office', body: 'House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209\n+880 1983-333566\n+880 1329-663505\nSaturday-Thursday 11:00 AM-6:00 PM, Friday closed' },
-      { heading: 'What to expect', body: 'An initial Education Fit Assessment, a discussion of decision factors and missing information, and a clear next step. Universities, scholarship bodies and authorities issue the official outcomes.' },
-      { heading: 'China fee timing', body: chinaOffer },
-    ],
-  }),
-  page({
-    slug: 'study-in-china-from-bangladesh',
-    title: 'Study in China from Bangladesh',
-    description: 'Compare Chinese universities, costs, scholarships, recognition, intakes and visa readiness with written evidence.',
-    eyebrow: 'EduExpress flagship destination',
-    intro: 'China can suit Bangladeshi students seeking a broad university choice, technical and research programs, and multiple funding routes—but the decision should start with program quality, recognition, full cost and career fit, not a scholarship promise.',
-    sections: [
-      { heading: 'Who China may fit', body: 'Students prepared to compare program recognition, language of instruction, university-specific entry rules, total costs and the realities of living in China.' },
-      { heading: 'What to verify', body: 'Confirm the official program, teaching language, recognition needs, tuition and hostel terms, scholarship renewal conditions, intake deadline and visa documents directly from current official sources.' },
-      { heading: 'Costs and scholarships', body: 'Scholarships are an affordability factor assessed after education fit. University fees, deposits, medicals, insurance, travel and living costs vary and must be itemized with the source and date checked.' },
-      { heading: 'Visa-first service terms', body: chinaOffer },
-      { heading: 'What may change', body: 'Scholarship notices, university deadlines, fees and embassy procedures can change. Recheck the linked official sources before acting.' },
-    ],
-    sources: [{ label: 'Chinese Embassy in Bangladesh', href: 'http://bd.china-embassy.gov.cn/eng/' }, { label: 'Campus China / CSC', href: 'https://www.campuschina.org/' }],
-  }),
-  page({
-    slug: 'complaints-and-review',
-    title: 'Complaints and Review',
-    description: 'How to raise a concern with EduExpress International and how each complaint is reviewed and resolved.',
-    eyebrow: 'Accountability in writing',
-    intro: 'If any part of our service falls short, you can raise it directly and expect a written response. This page explains how to submit a complaint, what happens next, and the timelines we hold ourselves to.',
-    sections: [
-      { heading: 'How to raise a concern', body: 'Send the details to our office by email or phone, or in person at the Dhanmondi decision desk. Include your name, contact number, the service or counselor involved, and what outcome you are seeking.', items: ['Email: info@eduexpressint.com', 'Phone: +880 1983-333566', 'In person: House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209'] },
-      { heading: 'What happens next', body: 'We acknowledge every complaint in writing within two working days, review the file and any documents involved, and provide a written response with our findings and next steps within ten working days. Complex cases that need third-party confirmation are updated at each stage.' },
-      { heading: 'Escalation and records', body: 'If you are not satisfied with the first response, you can request a senior review by management. Every complaint, its evidence and its resolution are recorded so patterns can be identified and the service improved.' },
-      { heading: 'What we do not control', body: 'Admission, scholarship and visa decisions are made by universities, scholarship bodies and government authorities. We can explain a decision, check for errors in our own work and correct them, but we cannot overturn an official authority’s decision.' },
-    ],
-  }),
-  ...[
-    ['china-universities', 'Chinese Universities for Bangladeshi Students', 'Compare verified programs, fees, recognition and intake status—not a “partner” label alone.'],
-    ['china-scholarships-bangladesh', 'China Scholarships for Bangladeshi Students', 'Compare CSC, provincial and university funding only after confirming education fit, eligibility, coverage and renewal rules.'],
-    ['china-student-visa-bangladesh', 'China X1/X2 Student Visa from Bangladesh', 'Prepare against current embassy guidance. Visa type, documents and timing depend on the study duration and official admission documents.'],
-    ['study-in-china-cost-bangladesh', 'Cost of Studying in China from Bangladesh', 'Build a dated ClearCost Sheet covering tuition, hostel, food, insurance, medicals, visa-related costs, flights and currency assumptions.'],
-    ['study-in-china-without-ielts', 'Study in China Without IELTS', 'Some universities may accept other evidence of English ability, but there is no universal IELTS exemption. Verify the exact program rule in writing.'],
-    ['mbbs-in-china-bangladesh', 'MBBS in China for Bangladeshi Students', 'Start with program-specific recognition and the licensing route for the intended country of practice before comparing price or scholarships.'],
-    ['china-intakes-deadlines', 'China Intakes and Deadlines', 'March and September are common intake periods, but every university and scholarship deadline must be individually verified before showing an open status.'],
-    ['life-in-china-bangladeshi-students', 'Life in China for Bangladeshi Students', 'Plan realistically for housing, halal food, language, banking, insurance, safety, culture and the current rules that affect student work.'],
-    ['china-success-stories', 'China Student Success Stories', 'Only consent-based, evidence-backed stories are published. Sensitive identifiers are always redacted and every outcome is presented as an individual case.'],
-    ['success-stories/china', 'China Education Outcomes and Stories', 'Read consent-based accounts explaining the student profile, options considered, timeline, support provided and outcome.'],
-  ].map(([slug, title, intro]) => page({
-    slug,
-    title,
-    description: intro,
-    eyebrow: 'China evidence guide',
-    intro,
-    sections: [
-      { heading: 'Decision first', body: 'Compare education quality, recognition, academic fit, total cost and career value before treating a scholarship or visa route as the deciding factor.' },
-      { heading: 'Evidence required', body: 'Time-sensitive facts must include an official source URL, a verification date and a next-review date. University-specific rules must not be generalized to all institutions.' },
-      { heading: 'A strong fit for this route', body: 'This route works best for students ready to meet current requirements, review written evidence and make decisions with the responsible institution or authority holding final approval.' },
-      { heading: 'EduExpress China terms', body: chinaOffer },
-    ],
-    sources: [{ label: 'Chinese Embassy in Bangladesh', href: 'http://bd.china-embassy.gov.cn/eng/' }, { label: 'Campus China / CSC', href: 'https://www.campuschina.org/' }],
-  })),
 ].map((item) => [item.slug, item]));
