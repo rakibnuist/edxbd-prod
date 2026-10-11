@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { serializeContent, toContentData } from '@/lib/content-serialize';
+import { contentPublicationErrors } from '@/lib/content-governance';
 
 export async function GET(request: NextRequest) {
   try {
@@ -59,9 +61,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const savedContent = await prisma.content.create({
-      data: toContentData(body) as never
-    });
+    const data = toContentData(body) as Record<string, unknown>;
+    const publicationErrors = contentPublicationErrors(data);
+    if (publicationErrors.length) {
+      return NextResponse.json({ error: 'This content is not ready to publish.', details: publicationErrors }, { status: 400 });
+    }
+    if (body.isPublished === true) data.publishedAt = new Date();
+    const savedContent = await prisma.content.create({ data: data as never });
+    revalidatePath('/updates');
+    revalidatePath('/');
+    revalidatePath(`/updates/${savedContent.slug}`);
     console.log('Content created successfully:', savedContent.id);
 
     return NextResponse.json(serializeContent(savedContent as Record<string, unknown>), { status: 201 });

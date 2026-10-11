@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { trackDashboardView, trackTestimonialManagement } from '@/lib/analytics';
 import { Testimonial } from '@/lib/types';
 
@@ -36,6 +37,8 @@ export default function TestimonialsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
   const [formData, setFormData] = useState({ ...emptyTestimonialForm });
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [formError, setFormError] = useState('');
 
   useEffect(() => {
     trackDashboardView('testimonials_management');
@@ -51,7 +54,7 @@ export default function TestimonialsPage() {
       } else {
         setTestimonials([]);
       }
-    } catch (error) {
+    } catch (_error) {
       // Error fetching testimonials
       setTestimonials([]);
     } finally {
@@ -61,6 +64,7 @@ export default function TestimonialsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError('');
     try {
       const url = editingTestimonial ? `/api/admin/testimonials/${editingTestimonial.id}` : '/api/admin/testimonials';
       const method = editingTestimonial ? 'PUT' : 'POST';
@@ -87,6 +91,8 @@ export default function TestimonialsPage() {
         setEditingTestimonial(null);
         setFormData({ ...emptyTestimonialForm });
       } else {
+        const result = await response.json().catch(() => ({}));
+        setFormError(result.error || 'The testimonial could not be saved.');
         const action = editingTestimonial ? 'update' : 'create';
         trackTestimonialManagement(action, { 
           testimonial_id: editingTestimonial?.id,
@@ -95,8 +101,30 @@ export default function TestimonialsPage() {
           error: 'api_error'
         });
       }
-    } catch (error) {
-      // Error saving testimonial
+    } catch (_error) {
+      setFormError('The testimonial could not be saved. Please try again.');
+    }
+  };
+
+  const handlePhotoUpload = async (file: File) => {
+    setUploadingPhoto(true);
+    setFormError('');
+    const body = new FormData();
+    body.append('image', file);
+    body.append('folder', 'testimonials');
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('admin_token') || ''}` },
+        body,
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) setFormError(result.error || 'The student photo could not be uploaded.');
+      else setFormData(previous => ({ ...previous, image: result.imageUrl }));
+    } catch {
+      setFormError('The student photo could not be uploaded.');
+    } finally {
+      setUploadingPhoto(false);
     }
   };
 
@@ -140,7 +168,7 @@ export default function TestimonialsPage() {
         if (response.ok) {
           fetchTestimonials();
         }
-      } catch (error) {
+      } catch (_error) {
         // Error deleting testimonial
       }
     }
@@ -159,7 +187,7 @@ export default function TestimonialsPage() {
       if (response.ok) {
         fetchTestimonials();
       }
-    } catch (error) {
+    } catch (_error) {
       // Error updating testimonial status
     }
   };
@@ -215,9 +243,14 @@ export default function TestimonialsPage() {
               {testimonials.map((testimonial) => (
                 <tr key={testimonial.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">{testimonial.name}</div>
-                      <div className="text-sm text-gray-500">{testimonial.location}</div>
+                    <div className="flex items-center gap-3">
+                      <div className="relative grid size-12 shrink-0 place-items-center overflow-hidden rounded-full border border-slate-200 bg-slate-100 text-xs font-bold text-slate-500">
+                        {testimonial.image ? <Image src={testimonial.image} alt={testimonial.displayName || testimonial.name} fill sizes="48px" unoptimized className="object-cover" /> : testimonial.name.slice(0, 1)}
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{testimonial.name}</div>
+                        <div className="text-sm text-gray-500">{testimonial.location}</div>
+                      </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -304,6 +337,7 @@ export default function TestimonialsPage() {
               </div>
               
               <form onSubmit={handleSubmit} className="space-y-4">
+                {formError && <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-800">{formError}</div>}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Name</label>
@@ -398,14 +432,25 @@ export default function TestimonialsPage() {
                   />
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Image URL (optional)</label>
-                  <input
-                    type="url"
-                    value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  />
+                <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4">
+                  <label className="block text-sm font-bold text-blue-950">Real student photo</label>
+                  <p className="mt-1 text-xs leading-5 text-blue-800">Upload only the authentic student portrait covered by the written public-consent record below.</p>
+                  <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <div className="relative grid size-28 shrink-0 place-items-center overflow-hidden rounded-2xl border border-blue-200 bg-white text-xs font-bold text-slate-400">
+                      {formData.image ? <Image src={formData.image} alt="Student photo preview" fill sizes="112px" unoptimized className="object-cover" /> : 'No photo'}
+                    </div>
+                    <div className="flex-1">
+                      <label className="inline-flex min-h-11 cursor-pointer items-center rounded-xl bg-[#174f7a] px-5 text-sm font-bold text-white">
+                        {uploadingPhoto ? 'Uploading photo…' : 'Upload real student photo'}
+                        <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" disabled={uploadingPhoto} onChange={event => {
+                          const file = event.target.files?.[0];
+                          if (file) handlePhotoUpload(file);
+                          event.target.value = '';
+                        }} />
+                      </label>
+                      <input type="url" value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} className="mt-3 block w-full rounded-md border border-blue-200 bg-white px-3 py-2 text-xs" placeholder="Or paste an approved image URL" />
+                    </div>
+                  </div>
                 </div>
 
                 <section className="border border-blue-200 bg-blue-50 p-4">

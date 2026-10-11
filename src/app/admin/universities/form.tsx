@@ -3,9 +3,9 @@
 import Image from 'next/image';
 import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookOpenCheck, Building2, Coins, FileCheck2, GraduationCap, Loader2, Plus, Save, Sparkles, Trash2, ShieldCheck, Trophy } from 'lucide-react';
+import { BookOpenCheck, Building2, Coins, FileCheck2, GraduationCap, Loader2, Plus, ReceiptText, Save, Sparkles, Trash2, ShieldCheck, Trophy } from 'lucide-react';
 
-import type { IUniversity, IUniversityFee, IUniversityProgram, IUniversityScholarship } from '@/types/university';
+import type { IUniversity, IUniversityCostPlan, IUniversityFee, IUniversityProgram, IUniversityScholarship } from '@/types/university';
 
 interface UniversityFormProps {
   initialData?: IUniversity;
@@ -50,6 +50,30 @@ const blankScholarship = (): IUniversityScholarship => ({
   status: 'active',
 });
 
+const blankCostPlan = (): IUniversityCostPlan => ({
+  title: '2027 first year cost plan',
+  programName: '',
+  scholarshipTitle: '',
+  intake: 'September 2027',
+  currency: 'CNY',
+  tuitionBeforeScholarship: '',
+  scholarshipValue: '',
+  tuitionAfterScholarship: '',
+  applicationFee: '',
+  hostel: '',
+  insurance: '',
+  medical: '',
+  visa: '',
+  travel: '',
+  living: '',
+  serviceFee: '',
+  otherCosts: [],
+  totalEstimate: '',
+  notes: [],
+  sourceUrl: '',
+  isPublished: false,
+});
+
 function EditorSection({ icon, title, description, action, children }: { icon: ReactNode; title: string; description: string; action?: ReactNode; children: ReactNode }) {
   return (
     <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -72,7 +96,7 @@ export default function UniversityForm({ initialData, isNew = false }: Universit
   const [error, setError] = useState('');
   const [formData, setFormData] = useState<Partial<IUniversity>>({
     name: '', slug: '', location: '', country: 'China', city: '', intake: ['September Intake'], degree: [], taught: ['English'],
-    rankings: {}, details: { majors: [], tuition: '', tuitionDetails: [] }, programs: [], fees: [], scholarships: [], documents: [],
+    rankings: {}, details: { majors: [], tuition: '', tuitionDetails: [] }, programs: [], fees: [], scholarships: [], costPlans: [], documents: [],
     deadlines: { application: '', startDate: 'September Intake' }, notes: [], badges: [], logo: '', isActive: true,
     officialUrl: '', aliases: [], relationshipType: 'unverified', relationshipEvidenceUrl: '', recognitionAuthority: '', recognitionSourceUrl: '',
     sourceUrls: [], verificationStatus: 'under_verification',
@@ -121,6 +145,14 @@ export default function UniversityForm({ initialData, isNew = false }: Universit
       const scholarships = [...(previous.scholarships || [])];
       scholarships[index] = { ...scholarships[index], [field]: value };
       return { ...previous, scholarships };
+    });
+  };
+
+  const updateCostPlan = (index: number, field: keyof IUniversityCostPlan, value: unknown) => {
+    setFormData(previous => {
+      const costPlans = [...(previous.costPlans || [])];
+      costPlans[index] = { ...costPlans[index], [field]: value };
+      return { ...previous, costPlans };
     });
   };
 
@@ -232,6 +264,46 @@ export default function UniversityForm({ initialData, isNew = false }: Universit
         action={<button type="button" onClick={() => setTopLevel('scholarships', [...(formData.scholarships || []), blankScholarship()])} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white"><Plus size={16} /> Add scholarship</button>}
       >
         <div className="grid gap-5 xl:grid-cols-2">{(formData.scholarships || []).map((scholarship, index) => <article key={`${scholarship.title}-${index}`} className="relative overflow-hidden rounded-2xl border border-cyan-200 bg-gradient-to-br from-[#08263c] to-[#174f7a] p-5 text-white"><div className="absolute -right-10 -top-10 size-32 rounded-full border-[1.5rem] border-white/5" /><div className="relative"><div className="flex items-start justify-between"><div><p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#8ed0ee]">Scholarship {String(index + 1).padStart(2, '0')}</p><h3 className="mt-2 font-heading text-xl font-bold">{scholarship.title || 'New scholarship option'}</h3></div><button type="button" onClick={() => setTopLevel('scholarships', (formData.scholarships || []).filter((_, itemIndex) => itemIndex !== index))} className="grid size-9 place-items-center rounded-lg bg-white/10 text-white" aria-label={`Remove scholarship ${index + 1}`}><Trash2 size={16} /></button></div><div className="mt-5 grid gap-4 md:grid-cols-2"><Field label="Scholarship title"><input className={fieldClass} value={scholarship.title} onChange={event => updateScholarship(index, 'title', event.target.value)} /></Field><Field label="Type"><input className={fieldClass} value={scholarship.type || ''} onChange={event => updateScholarship(index, 'type', event.target.value)} placeholder="Full, partial, tiered" /></Field><Field label="Headline amount"><input className={fieldClass} value={scholarship.amount || ''} onChange={event => updateScholarship(index, 'amount', event.target.value)} placeholder="Up to 100% tuition" /></Field><Field label="Coverage"><input className={fieldClass} value={scholarship.coverage || ''} onChange={event => updateScholarship(index, 'coverage', event.target.value)} placeholder="Tuition, hostel, stipend" /></Field><Field label="Eligible programs" className="md:col-span-2"><input className={fieldClass} value={scholarship.eligiblePrograms?.join(', ') || ''} onChange={event => updateScholarship(index, 'eligiblePrograms', splitComma(event.target.value))} placeholder="Software Engineering, Civil Engineering" /></Field><Field label="Renewal"><input className={fieldClass} value={scholarship.renewal || ''} onChange={event => updateScholarship(index, 'renewal', event.target.value)} placeholder="Annual academic review" /></Field><Field label="Deadline"><input className={fieldClass} value={scholarship.deadline || ''} onChange={event => updateScholarship(index, 'deadline', event.target.value)} placeholder="30 May" /></Field><Field label="Eligibility and conditions" className="md:col-span-2"><textarea className={`${fieldClass} min-h-20`} value={scholarship.condition || ''} onChange={event => updateScholarship(index, 'condition', event.target.value)} /></Field><Field label="Benefits, one item per line" className="md:col-span-2"><textarea className={`${fieldClass} min-h-24`} value={scholarship.details?.join('\n') || ''} onChange={event => updateScholarship(index, 'details', splitLines(event.target.value))} /></Field><Field label="Official scholarship source" className="md:col-span-2"><input type="url" className={fieldClass} value={scholarship.sourceUrl || ''} onChange={event => updateScholarship(index, 'sourceUrl', event.target.value)} placeholder="https://..." /></Field><Field label="Status"><select className={fieldClass} value={scholarship.status || 'active'} onChange={event => updateScholarship(index, 'status', event.target.value)}><option value="active">Active option</option><option value="planned">Planned option</option><option value="closed">Closed option</option></select></Field></div></div></article>)}</div>
+      </EditorSection>
+
+      <EditorSection
+        icon={<ReceiptText size={20} />}
+        title="ClearCost plans"
+        description="Build a separate written cost plan for each program and scholarship combination. Publish only after the amounts and source date are checked."
+        action={<button type="button" onClick={() => setTopLevel('costPlans', [...(formData.costPlans || []), blankCostPlan()])} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white"><Plus size={16} /> Add cost plan</button>}
+      >
+        <div className="space-y-5">
+          {(formData.costPlans || []).map((plan, index) => (
+            <article key={plan.id || index} className="rounded-2xl border border-emerald-200 bg-emerald-50/35 p-5">
+              <div className="flex items-start justify-between gap-4"><div><p className="text-[10px] font-extrabold uppercase tracking-[.14em] text-emerald-700">Cost plan {String(index + 1).padStart(2, '0')}</p><h3 className="mt-1 font-heading text-xl font-bold">{plan.title || 'New cost plan'}</h3></div><button type="button" onClick={() => setTopLevel('costPlans', (formData.costPlans || []).filter((_, itemIndex) => itemIndex !== index))} className="grid size-9 place-items-center rounded-lg bg-white text-rose-600"><Trash2 size={16} /></button></div>
+              <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Field label="Plan title" className="lg:col-span-2"><input className={fieldClass} value={plan.title} onChange={event => updateCostPlan(index, 'title', event.target.value)} /></Field>
+                <Field label="Program"><select className={fieldClass} value={plan.programName || ''} onChange={event => updateCostPlan(index, 'programName', event.target.value)}><option value="">All programs</option>{programSummary.names.map(name => <option key={name}>{name}</option>)}</select></Field>
+                <Field label="Scholarship"><select className={fieldClass} value={plan.scholarshipTitle || ''} onChange={event => updateCostPlan(index, 'scholarshipTitle', event.target.value)}><option value="">No scholarship selected</option>{(formData.scholarships || []).map(scholarship => <option key={scholarship.title}>{scholarship.title}</option>)}</select></Field>
+                <Field label="Intake"><input className={fieldClass} value={plan.intake || ''} onChange={event => updateCostPlan(index, 'intake', event.target.value)} /></Field>
+                <Field label="Currency"><input className={fieldClass} value={plan.currency} onChange={event => updateCostPlan(index, 'currency', event.target.value)} /></Field>
+                <Field label="Tuition before scholarship"><input className={fieldClass} value={plan.tuitionBeforeScholarship || ''} onChange={event => updateCostPlan(index, 'tuitionBeforeScholarship', event.target.value)} /></Field>
+                <Field label="Scholarship value"><input className={fieldClass} value={plan.scholarshipValue || ''} onChange={event => updateCostPlan(index, 'scholarshipValue', event.target.value)} /></Field>
+                <Field label="Tuition after scholarship"><input className={fieldClass} value={plan.tuitionAfterScholarship || ''} onChange={event => updateCostPlan(index, 'tuitionAfterScholarship', event.target.value)} /></Field>
+                <Field label="Application fee"><input className={fieldClass} value={plan.applicationFee || ''} onChange={event => updateCostPlan(index, 'applicationFee', event.target.value)} /></Field>
+                <Field label="Hostel"><input className={fieldClass} value={plan.hostel || ''} onChange={event => updateCostPlan(index, 'hostel', event.target.value)} /></Field>
+                <Field label="Insurance"><input className={fieldClass} value={plan.insurance || ''} onChange={event => updateCostPlan(index, 'insurance', event.target.value)} /></Field>
+                <Field label="Medical"><input className={fieldClass} value={plan.medical || ''} onChange={event => updateCostPlan(index, 'medical', event.target.value)} /></Field>
+                <Field label="Visa"><input className={fieldClass} value={plan.visa || ''} onChange={event => updateCostPlan(index, 'visa', event.target.value)} /></Field>
+                <Field label="Travel"><input className={fieldClass} value={plan.travel || ''} onChange={event => updateCostPlan(index, 'travel', event.target.value)} /></Field>
+                <Field label="Living estimate"><input className={fieldClass} value={plan.living || ''} onChange={event => updateCostPlan(index, 'living', event.target.value)} /></Field>
+                <Field label="EduExpress service fee"><input className={fieldClass} value={plan.serviceFee || ''} onChange={event => updateCostPlan(index, 'serviceFee', event.target.value)} /></Field>
+                <Field label="Estimated first year total"><input className={fieldClass} value={plan.totalEstimate || ''} onChange={event => updateCostPlan(index, 'totalEstimate', event.target.value)} /></Field>
+                <Field label="Other costs, one per line" className="md:col-span-2"><textarea className={`${fieldClass} min-h-20`} value={plan.otherCosts?.join('\n') || ''} onChange={event => updateCostPlan(index, 'otherCosts', splitLines(event.target.value))} /></Field>
+                <Field label="Notes, one per line" className="md:col-span-2"><textarea className={`${fieldClass} min-h-20`} value={plan.notes?.join('\n') || ''} onChange={event => updateCostPlan(index, 'notes', splitLines(event.target.value))} /></Field>
+                <Field label="Official source" className="md:col-span-2"><input type="url" className={fieldClass} value={plan.sourceUrl || ''} onChange={event => updateCostPlan(index, 'sourceUrl', event.target.value)} /></Field>
+                <Field label="Last verified"><input type="date" className={fieldClass} value={plan.lastVerifiedAt ? String(plan.lastVerifiedAt).slice(0, 10) : ''} onChange={event => updateCostPlan(index, 'lastVerifiedAt', event.target.value)} /></Field>
+                <label className="flex items-center gap-3 self-end rounded-xl border border-emerald-200 bg-white px-4 py-3 text-sm font-bold"><input type="checkbox" checked={plan.isPublished} onChange={event => updateCostPlan(index, 'isPublished', event.target.checked)} /> Publish ClearCost plan</label>
+              </div>
+            </article>
+          ))}
+          {!formData.costPlans?.length && <div className="rounded-2xl border border-dashed border-emerald-300 p-8 text-center text-sm text-slate-500">No ClearCost plan yet. Add one when the program, scholarship and full first year costs are aligned.</div>}
+        </div>
       </EditorSection>
 
       <EditorSection icon={<FileCheck2 size={20} />} title="Admission and evidence" description="Maintain the admissions timeline, document checklist, recognition source and relationship evidence.">

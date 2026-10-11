@@ -54,18 +54,23 @@ async function getMbbsUniversities(): Promise<MbbsRow[]> {
   }
 }
 
-export const metadata: Metadata = {
-  title: { absolute: 'MBBS in China for Bangladeshi Students — Recognition, Licensing & 2026/27 Cost' },
-  description:
-    'MBBS in China for Bangladeshi students, explained recognition-first: MoE-approved English-medium medical universities, BMDC licensing reality, a full written cost breakdown, eligibility and intakes — verified before you apply.',
-  alternates: { canonical: '/mbbs-in-china-bangladesh' },
-  openGraph: {
-    title: 'MBBS in China for Bangladeshi Students | EduExpress International',
-    description: 'Recognition and BMDC licensing checked first, then the complete cost. MoE-approved English-medium universities, eligibility and intakes for Bangladeshi students.',
-    url: '/mbbs-in-china-bangladesh',
-    type: 'website',
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const count = (await getMbbsUniversities()).length;
+  const description = count > 0
+    ? `MBBS in China for Bangladeshi students, explained recognition-first: ${count} verified MoE-approved English-medium medical university records with real tuition, BMDC licensing reality, a full written cost breakdown, eligibility and intakes.`
+    : 'MBBS in China for Bangladeshi students, explained recognition-first: MoE-approved English-medium medical universities, BMDC licensing reality, a full written cost breakdown, eligibility and intakes — verified before you apply.';
+  return {
+    title: { absolute: 'MBBS in China for Bangladeshi Students — Recognition, Licensing & 2026/27 Cost' },
+    description,
+    alternates: { canonical: '/mbbs-in-china-bangladesh' },
+    openGraph: {
+      title: 'MBBS in China for Bangladeshi Students | EduExpress International',
+      description: 'Recognition and BMDC licensing checked first, then the complete cost. MoE-approved English-medium universities, eligibility and intakes for Bangladeshi students.',
+      url: '/mbbs-in-china-bangladesh',
+      type: 'website',
+    },
+  };
+}
 
 // Recognition / licensing leads (per the evidence-first MBBS rule).
 const standards = [
@@ -168,7 +173,7 @@ const related = [
   { label: 'Study in China hub', href: '/study-in-china-from-bangladesh' },
 ];
 
-const structuredData = {
+const buildStructuredData = (mbbsUniversities: MbbsRow[]) => ({
   '@context': 'https://schema.org',
   '@graph': [
     {
@@ -201,11 +206,24 @@ const structuredData = {
         { '@type': 'ListItem', position: 3, name: 'MBBS in China', item: canonicalUrl },
       ],
     },
+    ...mbbsUniversities.map((row) => ({
+      '@type': 'Course',
+      '@id': `https://eduexpressint.com/universities/${row.slug}#mbbs-course`,
+      name: row.program,
+      description: `MBBS / Clinical Medicine at ${row.name}, ${row.city}, China. Duration ${row.duration}.`,
+      provider: {
+        '@type': 'CollegeOrUniversity',
+        name: row.name,
+        url: `https://eduexpressint.com/universities/${row.slug}`,
+      },
+      offers: { '@type': 'Offer', category: 'Tuition', price: row.tuition },
+    })),
   ],
-};
+});
 
 export default async function MbbsInChinaBangladeshPage() {
   const mbbsUniversities = await getMbbsUniversities();
+  const structuredData = buildStructuredData(mbbsUniversities);
   return (
     <article className="bg-[#f4f8fa] text-[#08263c]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
@@ -213,7 +231,7 @@ export default async function MbbsInChinaBangladeshPage() {
       {/* HERO */}
       <section className="relative overflow-hidden bg-[#08263c] px-5 pb-16 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
         <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
-          <Image src="/emblem-icon.png" width={440} height={440} unoptimized alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+          <Image src="/emblem-icon.png" width={440} height={440} alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
         </div>
         <div className="relative mx-auto max-w-[1440px]">
           <nav aria-label="Breadcrumb" className="mb-6 font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">
@@ -335,7 +353,7 @@ export default async function MbbsInChinaBangladeshPage() {
             </div>
             <p className="mt-4 text-xs leading-5 text-slate-500">
               Tuition is shown in the currency recorded by each university and covers tuition only. Living, hostel, insurance
-              and third-party costs are added in your ClearCost sheet. Verified {verifiedDate} · confirmed again before application.
+              and third-party costs are added in the university ClearCost view. The selected program page is the controlling source.
             </p>
             <Link href="/china-universities" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#174f7a] hover:underline">
               Compare all China universities <ArrowRight size={15} />
@@ -350,8 +368,8 @@ export default async function MbbsInChinaBangladeshPage() {
           <span className="font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">The complete cost, in writing</span>
           <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Beyond tuition — what six years actually costs</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700">
-            The tuition above is real per-university data. Everything else below is a current planning range, verified {verifiedDate}.
-            Your ClearCost sheet combines both into exact figures for your shortlist, separates every third-party charge, and
+            The tuition above comes from the connected university records. Everything else below is a planning range.
+            Your university ClearCost view combines them for the selected program, separates every third-party charge, and
             states what EduExpress charges and when.
           </p>
 
@@ -462,7 +480,7 @@ export default async function MbbsInChinaBangladeshPage() {
       <section className="border-t border-[#174f7a]/15 bg-[#f6f9fb] px-5 py-10 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-[1200px] gap-8 lg:grid-cols-2">
           <div>
-            <p className="flex items-center gap-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><ShieldCheck size={14} /> Official sources checked {verifiedDate}</p>
+            <p className="flex items-center gap-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><ShieldCheck size={14} /> Official sources</p>
             <div className="mt-4 grid gap-2">
               {sources.map((s) => (
                 <a key={s.href} href={s.href} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 border-b border-[#174f7a]/15 bg-white p-3 text-xs font-bold text-[#174f7a] hover:bg-[#e9f7fd]">{s.label}<ArrowRight size={14} /></a>
@@ -478,7 +496,7 @@ export default async function MbbsInChinaBangladeshPage() {
             </div>
           </div>
           <p className="lg:col-span-2 border-t border-[#174f7a]/15 pt-5 text-[10px] leading-5 text-slate-500">
-            <strong className="text-[#08263c]">Prepared by:</strong> EduExpress China Admissions Desk · <strong className="text-[#08263c]">Reviewed by:</strong> EduExpress Content and Compliance · Last verified {verifiedDate}. Cost ranges are planning assumptions; university, program, recognition and licensing facts are confirmed in writing during your assessment.
+            <strong className="text-[#08263c]">Managed by:</strong> EduExpress China Admissions Desk · <strong className="text-[#08263c]">Reviewed by:</strong> EduExpress Content and Compliance. Cost ranges are planning assumptions; university, program, recognition and licensing facts are aligned in writing during your assessment.
           </p>
         </div>
       </section>

@@ -1,11 +1,24 @@
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
-import { ArrowRight, Check, X, CircleDollarSign, FileCheck2, GraduationCap, Landmark, ShieldCheck, Briefcase, Calendar, Info, HelpCircle, FileText, Globe } from 'lucide-react';
+import { ArrowRight, Check, CircleDollarSign, FileCheck2, GraduationCap, Landmark, ShieldCheck, Briefcase, Calendar, Info, HelpCircle, FileText, Globe, type LucideIcon } from 'lucide-react';
 import { countries } from '@/lib/countries';
 
 type Props = { params: Promise<{ country: string }> };
+
+function RouteDetail({ icon: Icon, title, children, open = false }: { icon: LucideIcon; title: string; children: ReactNode; open?: boolean }) {
+  return (
+    <details open={open} className="group mt-4 rounded-2xl border border-[#174f7a]/15 bg-white open:shadow-[0_12px_36px_rgba(8,38,60,.07)]">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-5 p-5 sm:p-6">
+        <span className="flex items-center gap-3 text-[#174f7a]"><span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#e9f7fd]"><Icon size={21} /></span><h2 className="font-heading text-xl font-bold text-[#08263c] sm:text-2xl">{title}</h2></span>
+        <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[#e9f7fd] text-lg font-bold text-[#174f7a] transition group-open:rotate-45">+</span>
+      </summary>
+      <div className="border-t border-[#174f7a]/10 px-5 pb-6 pt-5 sm:px-6">{children}</div>
+    </details>
+  );
+}
 
 export function generateStaticParams() {
   return countries.map(({ slug }) => ({ country: slug }));
@@ -26,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: china ? '/study-in-china-from-bangladesh' : `/study-in-${slug}-from-bangladesh` },
-    robots: { index: country.serviceStatus === 'Active' || country.serviceStatus === 'Flagship', follow: true },
+    robots: { index: true, follow: true },
     openGraph: { title, description, url: china ? '/study-in-china-from-bangladesh' : `/study-in-${slug}-from-bangladesh` },
   };
 }
@@ -92,11 +105,11 @@ export default async function CountryPage({ params }: Props) {
         {/* Module 2: H1 + 50-word direct value statement */}
         <header className="relative mt-8 overflow-hidden bg-[#0b2f4a] p-8 text-white md:p-14 rounded-3xl">
           <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex h-[75%] max-h-[300px] aspect-square items-center justify-center p-2">
-            <Image src="/emblem-icon.png" width={300} height={300} unoptimized alt="" className="h-full w-full object-contain opacity-20 filter brightness-0 invert" />
+            <Image src="/emblem-icon.png" width={300} height={300} alt="" className="h-full w-full object-contain opacity-20 filter brightness-0 invert" />
           </div>
           <div className="relative">
             <span className="inline-flex items-center gap-2 bg-[#64b5df] px-3 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#08263c] rounded-sm">
-              <Globe size={14} /> {country.serviceStatus || 'Researching'} education service
+              <Globe size={14} /> {country.serviceStatus || 'Active'} education service
             </span>
             <h1 className="mt-6 font-heading text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
               Study in {country.name} from Bangladesh
@@ -124,15 +137,15 @@ export default async function CountryPage({ params }: Props) {
             </ul>
           </section>
 
-          <section className="rounded-3xl border border-rose-200 bg-rose-50 p-7 md:p-9">
-            <div className="flex items-center gap-3 text-rose-800">
-              <X size={24} className="rounded-full bg-rose-200 p-1" />
-              <h2 className="font-heading text-2xl font-bold">Who should reconsider</h2>
+          <section className="rounded-3xl border border-amber-200 bg-amber-50 p-7 md:p-9">
+            <div className="flex items-center gap-3 text-amber-900">
+              <Info size={24} className="rounded-full bg-amber-200 p-1" />
+              <h2 className="font-heading text-2xl font-bold">Check before choosing</h2>
             </div>
             <ul className="mt-5 grid gap-4">
               {(country.whoShouldReconsider || ['Students looking for guaranteed visas or jobs without verifying official rules.']).map((point, i) => (
-                <li key={i} className="flex gap-3 text-rose-900 leading-7">
-                  <span className="shrink-0 text-rose-600 mt-1">•</span>
+                <li key={i} className="flex gap-3 text-amber-950 leading-7">
+                  <span className="shrink-0 text-amber-600 mt-1">•</span>
                   <span>{point}</span>
                 </li>
               ))}
@@ -141,23 +154,16 @@ export default async function CountryPage({ params }: Props) {
         </div>
 
         {/* Module 4: Education system and recognition */}
-        <section className="mt-10 rounded-3xl border border-[#174f7a]/20 bg-white p-7 md:p-10 shadow-sm">
-          <div className="flex items-center gap-3 text-[#174f7a]">
-            <Landmark size={28} />
-            <h2 className="font-heading text-3xl font-bold">Education system & recognition</h2>
-          </div>
-          <p className="mt-5 leading-8 text-slate-700 text-lg">
+        <div className="mt-10">
+        <RouteDetail icon={Landmark} title="Education system and recognition" open>
+          <p className="leading-7 text-slate-700">
             {country.educationSystemAndRecognition || 'Education quality, recognition, and accreditation are currently under review by our team against the Better Education Standard.'}
           </p>
-        </section>
+        </RouteDetail>
 
         {/* Module 5: Program/university choices with evidence */}
-        <section className="mt-10 rounded-3xl border border-[#174f7a]/20 bg-white p-7 md:p-10 shadow-sm">
-          <div className="flex items-center gap-3 text-[#174f7a]">
-            <GraduationCap size={28} />
-            <h2 className="font-heading text-3xl font-bold">University & program choices</h2>
-          </div>
-          <p className="mt-5 leading-7 text-slate-700">
+        <RouteDetail icon={GraduationCap} title="University and program choices">
+          <p className="leading-7 text-slate-700">
             EduExpress maintains active verification for specific institutions in {country.name}. Popular study areas for Bangladeshi students include:
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
@@ -175,15 +181,11 @@ export default async function CountryPage({ params }: Props) {
                 </ul>
              </div>
           )}
-        </section>
+        </RouteDetail>
 
         {/* Module 6: Admission requirements for Bangladesh */}
-        <section className="mt-10 rounded-3xl border border-[#174f7a]/20 bg-white p-7 md:p-10 shadow-sm">
-          <div className="flex items-center gap-3 text-[#174f7a]">
-            <FileText size={28} />
-            <h2 className="font-heading text-3xl font-bold">Admission requirements</h2>
-          </div>
-          <p className="mt-4 text-slate-600">Specific requirements vary by institution, but standard expectations for Bangladeshi students include:</p>
+        <RouteDetail icon={FileText} title="Admission requirements">
+          <p className="text-sm text-slate-600">Requirements vary by institution. Start with these common checks:</p>
           <div className="mt-6 grid gap-6 sm:grid-cols-2">
             <div className="bg-slate-50 p-5 rounded-2xl">
               <h3 className="font-bold text-[#08263c] mb-3">Language & Academics</h3>
@@ -202,15 +204,11 @@ export default async function CountryPage({ params }: Props) {
               </ul>
             </div>
           </div>
-        </section>
+        </RouteDetail>
 
         {/* Module 7: Total cost and funding reality */}
-        <section className="mt-10 rounded-3xl border border-[#174f7a]/20 bg-[#f8fbff] p-7 md:p-10 shadow-sm">
-          <div className="flex items-center gap-3 text-[#174f7a]">
-            <CircleDollarSign size={28} />
-            <h2 className="font-heading text-3xl font-bold">Cost & funding reality</h2>
-          </div>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <RouteDetail icon={CircleDollarSign} title="Cost and funding">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl bg-white p-6 border border-blue-100">
               <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Est. Tuition</p>
               <p className="mt-2 text-xl font-bold text-[#08263c]">{country.costs?.tuition || 'Varies widely'}</p>
@@ -233,15 +231,11 @@ export default async function CountryPage({ params }: Props) {
               </div>
             </div>
           )}
-        </section>
+        </RouteDetail>
 
         {/* Module 8: Visa/residence process with official sources */}
-        <section className="mt-10 rounded-3xl border border-[#174f7a]/20 bg-white p-7 md:p-10 shadow-sm">
-          <div className="flex items-center gap-3 text-[#174f7a]">
-            <FileCheck2 size={28} />
-            <h2 className="font-heading text-3xl font-bold">Visa & residence process</h2>
-          </div>
-          <p className="mt-5 leading-7 text-slate-700">
+        <RouteDetail icon={FileCheck2} title="Visa and residence process">
+          <p className="leading-7 text-slate-700">
             Visa decisions are made solely by the relevant immigration authority. Our role is to ensure your application meets current published guidelines.
           </p>
           <ul className="mt-5 grid gap-3">
@@ -252,15 +246,11 @@ export default async function CountryPage({ params }: Props) {
                 </li>
              ))}
           </ul>
-        </section>
+        </RouteDetail>
 
         {/* Module 9: Work rights and career pathways with caveats */}
-        <section className="mt-10 rounded-3xl border border-[#174f7a]/20 bg-white p-7 md:p-10 shadow-sm">
-          <div className="flex items-center gap-3 text-[#174f7a]">
-            <Briefcase size={28} />
-            <h2 className="font-heading text-3xl font-bold">Work rights & career pathways</h2>
-          </div>
-          <div className="mt-6 space-y-6">
+        <RouteDetail icon={Briefcase} title="Work rights and career pathways">
+          <div className="space-y-6">
             <div>
               <h3 className="font-bold text-lg text-[#08263c] flex items-center gap-2"><Check size={18} className="text-emerald-600"/> Legal Work Rights</h3>
               <p className="mt-2 text-slate-700 leading-7">{country.workRightsAndCareer?.rights || 'Verify standard rules with immigration.'}</p>
@@ -274,15 +264,11 @@ export default async function CountryPage({ params }: Props) {
               <p className="mt-2 text-amber-800 leading-7">{country.workRightsAndCareer?.caveats || 'Post-study work rules change frequently. Do not rely entirely on part-time jobs to fund your tuition.'}</p>
             </div>
           </div>
-        </section>
+        </RouteDetail>
 
         {/* Module 10: Intakes/deadlines with automatic status */}
-        <section className="mt-10 rounded-3xl border border-[#174f7a]/20 bg-white p-7 md:p-10 shadow-sm">
-          <div className="flex items-center gap-3 text-[#174f7a]">
-            <Calendar size={28} />
-            <h2 className="font-heading text-3xl font-bold">Intakes & deadlines</h2>
-          </div>
-          <div className="mt-6 flex flex-wrap gap-4">
+        <RouteDetail icon={Calendar} title="Intakes and deadlines">
+          <div className="flex flex-wrap gap-4">
             <div className="flex-1 min-w-[200px] bg-slate-50 p-5 rounded-2xl border border-slate-100">
                <p className="text-sm font-semibold text-slate-500 uppercase">Primary Intakes</p>
                <p className="mt-2 font-bold text-lg text-[#08263c]">{country.intakesText || 'Varies by university'}</p>
@@ -292,15 +278,11 @@ export default async function CountryPage({ params }: Props) {
                <p className="mt-2 font-bold text-lg text-[#08263c]">{country.nextDeadline || 'Contact us for exact dates'}</p>
             </div>
           </div>
-        </section>
+        </RouteDetail>
 
         {/* Module 11: Comparison with two alternatives */}
-        <section className="mt-10 rounded-3xl border border-[#174f7a]/20 bg-white p-7 md:p-10 shadow-sm">
-          <div className="flex items-center gap-3 text-[#174f7a]">
-            <ShieldCheck size={28} />
-            <h2 className="font-heading text-3xl font-bold">Compare destinations</h2>
-          </div>
-          <p className="mt-4 text-slate-600 mb-6">How does {country.name} compare to alternative study destinations for Bangladeshi students?</p>
+        <RouteDetail icon={ShieldCheck} title="Compare destinations">
+          <p className="mb-6 text-sm text-slate-600">Compare {country.name} with two realistic alternatives.</p>
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
               <h3 className="font-bold text-lg">Vs. {country.comparisons?.countryA || 'Alternative'}</h3>
@@ -311,7 +293,8 @@ export default async function CountryPage({ params }: Props) {
               <p className="mt-3 text-slate-700 leading-7 text-sm">{country.comparisons?.countryB_description || 'Assess total cost of attendance and post-study opportunities.'}</p>
             </div>
           </div>
-        </section>
+        </RouteDetail>
+        </div>
 
         {/* Module 12: FAQ with visible answers */}
         {country.faqs && country.faqs.length > 0 && (
@@ -320,12 +303,12 @@ export default async function CountryPage({ params }: Props) {
               <HelpCircle size={28} />
               <h2 className="font-heading text-3xl font-bold">Frequently asked questions</h2>
             </div>
-            <div className="mt-8 space-y-6">
+            <div className="mt-8 grid gap-3">
               {country.faqs.map((faq, i) => (
-                <div key={i} className="border-b border-slate-100 pb-6 last:border-0 last:pb-0">
-                  <h3 className="font-bold text-[#08263c] text-lg">{faq.question}</h3>
-                  <p className="mt-3 text-slate-700 leading-7">{faq.answer}</p>
-                </div>
+                <details key={i} className="group rounded-xl border border-[#174f7a]/12 bg-[#f7fafc] p-5 open:bg-white">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-[#08263c]"><span>{faq.question}</span><span className="text-xl text-[#174f7a] transition group-open:rotate-45">+</span></summary>
+                  <p className="mt-3 text-sm leading-7 text-slate-700">{faq.answer}</p>
+                </details>
               ))}
             </div>
           </section>

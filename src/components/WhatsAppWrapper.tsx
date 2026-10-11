@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { isStandaloneCampaignRoute } from '@/lib/campaign-routes';
 
 const FloatingWhatsApp = dynamic(() => import('./FloatingWhatsApp' /* webpackChunkName: "whatsapp" */), {
     ssr: false
@@ -26,7 +27,7 @@ export default function WhatsAppWrapper(props: WrapperProps) {
         return () => clearTimeout(timer);
     }, []);
 
-    if (pathname.startsWith('/admin') || pathname.startsWith('/dashboard')) return null;
+    if (pathname.startsWith('/admin') || pathname.startsWith('/dashboard') || isStandaloneCampaignRoute(pathname)) return null;
     if (!shouldRender) return null;
 
     return <FloatingWhatsApp {...props} />;

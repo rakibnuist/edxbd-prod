@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import DestinationsClient from './DestinationsClient';
 import { activeCountries } from '@/lib/countries';
+import { SITE_URL, destinationPath } from '@/lib/site-urls';
 
 
 export const metadata: Metadata = {
@@ -73,7 +74,7 @@ export default function DestinationsPage() {
     "logo": "https://eduexpressint.com/logo.png",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "House 12/1, Ground Floor, Road 4/A, Dhanmondi",
+      "streetAddress": "Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi",
       "addressLocality": "Dhaka",
       "postalCode": "1209",
       "addressCountry": "BD"
@@ -93,7 +94,7 @@ export default function DestinationsPage() {
           "@type": "Service",
           "name": `Study in ${country.name} from Bangladesh`,
           "description": country.description,
-          "url": `https://eduexpressint.com/destinations/${country.slug}`
+          "url": `${SITE_URL}${destinationPath(country.slug)}`
         }
       }))
     }

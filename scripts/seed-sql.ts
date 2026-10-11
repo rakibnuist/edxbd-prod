@@ -172,6 +172,14 @@ async function seed() {
       }
     });
 
+    // Keep repeatable development imports idempotent. Without this reset,
+    // every seed run appended another copy of the same child records.
+    await prisma.$transaction([
+      prisma.program.deleteMany({ where: { universityId: createdU.id } }),
+      prisma.fee.deleteMany({ where: { universityId: createdU.id } }),
+      prisma.scholarship.deleteMany({ where: { universityId: createdU.id } }),
+    ]);
+
     if (u.programs) {
       for (const p of u.programs) {
         const languages = Array.isArray(p.languages) ? p.languages.join(',') : (p.languages || '');

@@ -9,18 +9,6 @@ const canonical = 'https://eduexpressint.com/china-universities';
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: { absolute: 'China Universities Database for Bangladeshi Students | EduExpress' },
-  description: 'Search and compare universities in China by study level, teaching language, intake, tuition, and MBBS options.',
-  alternates: { canonical },
-  openGraph: { 
-    title: 'China Universities Database for Bangladeshi Students', 
-    description: 'Compare current Chinese university records before choosing an application route.', 
-    url: canonical, 
-    type: 'website' 
-  },
-};
-
 async function getChinaUniversities() {
   try {
     const allUniversities = await getUniversityRecords();
@@ -31,6 +19,25 @@ async function getChinaUniversities() {
   }
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const universities = await getChinaUniversities();
+  const count = universities.length;
+  const description = count > 0
+    ? `Search and compare ${count} active China university records by study level, teaching language, intake, tuition, and MBBS options.`
+    : 'Search and compare universities in China by study level, teaching language, intake, tuition, and MBBS options.';
+  return {
+    title: { absolute: 'China Universities Database for Bangladeshi Students | EduExpress' },
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title: 'China Universities Database for Bangladeshi Students',
+      description,
+      url: canonical,
+      type: 'website',
+    },
+  };
+}
+
 export default async function ChinaUniversitiesPage() {
   const universities = await getChinaUniversities();
 
@@ -39,6 +46,13 @@ export default async function ChinaUniversitiesPage() {
     '@graph': [
       { '@type': 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: 'China Universities Database', dateModified: '2026-07-19', inLanguage: 'en-BD' },
       { '@type': 'ItemList', '@id': `${canonical}#directory`, numberOfItems: universities.length, itemListElement: universities.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, url: `https://eduexpressint.com/universities/${item.slug}` })) },
+      ...universities.map((item) => ({
+        '@type': 'CollegeOrUniversity',
+        '@id': `https://eduexpressint.com/universities/${item.slug}#university`,
+        name: item.name,
+        url: `https://eduexpressint.com/universities/${item.slug}`,
+        address: { '@type': 'PostalAddress', addressLocality: item.city, addressCountry: 'CN' },
+      })),
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://eduexpressint.com/' },
         { '@type': 'ListItem', position: 2, name: 'Study in China', item: 'https://eduexpressint.com/study-in-china-from-bangladesh' },
@@ -53,8 +67,8 @@ export default async function ChinaUniversitiesPage() {
       
       <PageHeader
         title="China Universities"
-        highlight="Verified Directory"
-        description="Inspect and compare 134+ collaborating Chinese institutions by degree level, taught language, intake deadlines, tuition and scholarship coverage."
+        highlight="Current Directory"
+        description={`Inspect and compare ${universities.length} active Chinese university records by degree level, taught language, intake, tuition and scholarship coverage.`}
         icon={<Database />}
         badgeText="China Database 2027"
       />
@@ -78,7 +92,7 @@ export default async function ChinaUniversitiesPage() {
       <section className="border-b border-[#174f7a]/15 bg-white">
         <div className="mx-auto max-w-[1440px] px-5 py-8 text-xs leading-6 text-slate-500 sm:px-8 lg:px-12">
           <p><strong className="text-[#08263c]">Database status:</strong> {universities.length} active Chinese profiles are available for comparison. Each shortlisted university receives a current program, source, fee, scholarship and deadline check before the student proceeds.</p>
-          <p className="mt-2"><strong className="text-[#08263c]">System update:</strong> Active <span aria-hidden="true">•</span> <strong className="text-[#08263c]">Data integrity:</strong> Verified</p>
+          <p className="mt-2"><strong className="text-[#08263c]">System update:</strong> Active <span aria-hidden="true">•</span> <strong className="text-[#08263c]">Data integrity:</strong> Deduplicated central records</p>
         </div>
       </section>
     </article>

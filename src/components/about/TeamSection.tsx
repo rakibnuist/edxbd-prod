@@ -1,75 +1,10 @@
 import Image from 'next/image';
 
-// To use a real photo, drop it in /public/team/ and set `image: '/team/name.jpg'`.
-// Members without a photo show a clean monogram — never a stock stand-in face.
-type Member = { name: string; role: string; bio: string; image?: string };
+const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase();
 
-const teamMembers: Member[] = [
-    {
-        name: 'Abdullah Al Rakib',
-        role: 'Founder & CEO',
-        bio: 'Leads the strategic direction of EduExpress. Entered Chinese higher education in 2018 and built the institutional relationships behind the China flagship service.',
-    },
-    {
-        name: 'Sakib Al Jubaer',
-        role: 'Managing Director',
-        bio: 'Oversees daily operations and service delivery against the written evidence standard across every student file.',
-    },
-    {
-        name: 'Tahmid Al Jamee',
-        role: 'Head of Marketing',
-        bio: 'Connects students with verified opportunities and keeps public claims aligned with the evidence-first standard.',
-    },
-    {
-        name: 'Md Taj Ahmed',
-        role: 'Application Processing',
-        bio: 'Prepares university applications and keeps each submission complete, accurate and on deadline.',
-    },
-    {
-        name: 'Mukta Rahaman',
-        role: 'Senior Counselor',
-        bio: 'Provides program and university guidance, comparing fit, recognition and total cost before any recommendation.',
-    },
-    {
-        name: 'Jannatun Ema',
-        role: 'Counselor',
-        bio: 'Supports students through their study-abroad options with structured, written follow-up.',
-    },
-    {
-        name: 'Md Abdullah Al Razib',
-        role: 'Application Processing',
-        bio: 'Handles documentation and application tracking, keeping references and receipts recorded for every step.',
-    },
-    {
-        name: 'Md Tauhidul Islam Nur',
-        role: 'Country Manager (China)',
-        bio: 'Leads China operations and the relationships with Chinese universities behind the flagship record.',
-    },
-    {
-        name: 'Md Infeter Islam',
-        role: 'Marketing Executive',
-        bio: 'Runs student outreach campaigns and responds to inquiries from across Bangladesh.',
-    },
-    {
-        name: 'Md Israfil Hossain',
-        role: 'Marketing Executive',
-        bio: 'Connects with students and shares verified guidance on international education.',
-    },
-    {
-        name: 'Md Tanver Islam',
-        role: 'Marketing Executive',
-        bio: 'Engages the community through events and digital channels and routes student queries to the right desk.',
-    },
-];
+type TeamMember = { id: string; name: string; role: string; bio: string | null; photoUrl: string | null; specialties: string[] };
 
-function initials(name: string) {
-    const parts = name.trim().split(/\s+/).filter(Boolean);
-    const first = parts[0]?.[0] ?? '';
-    const second = parts.length > 1 ? parts[parts.length - 1][0] : '';
-    return (first + second).toUpperCase();
-}
-
-export default function TeamSection() {
+export default function TeamSection({ team }: { team: TeamMember[] }) {
     return (
         <section id="team" className="py-20 bg-[#f4f8fa] border-b border-[#174f7a]/15 scroll-mt-24">
             <div className="container mx-auto px-5 sm:px-8 lg:px-12">
@@ -82,16 +17,16 @@ export default function TeamSection() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {teamMembers.map((member) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {team.map((member) => (
                             <div
                                 key={member.name}
                                 className="group relative bg-white border-2 border-[#08263c] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#174f7a]"
                             >
                                 <div className="aspect-[3/4] relative overflow-hidden bg-[#08263c]">
-                                    {member.image ? (
+                                    {member.photoUrl ? (
                                         <Image
-                                            src={member.image}
+                                            src={member.photoUrl}
                                             alt={member.name}
                                             fill
                                             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -111,13 +46,16 @@ export default function TeamSection() {
                                     <p className="text-slate-600 text-xs leading-5 line-clamp-3">
                                         {member.bio}
                                     </p>
+                                    <div className="mt-4 flex flex-wrap justify-center gap-1.5">
+                                        {member.specialties.map(specialty => <span key={specialty} className="bg-[#e9f7fd] px-2 py-1 text-[9px] font-bold text-[#174f7a]">{specialty}</span>)}
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
                     <p className="mt-8 text-center font-mono text-[10px] font-medium uppercase tracking-wider text-slate-400">
-                        Real team photos are added as written consent is recorded.
+                        Team details are maintained in the central public record. Photos appear after consent is recorded.
                     </p>
                 </div>
             </div>

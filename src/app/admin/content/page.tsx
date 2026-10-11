@@ -5,6 +5,15 @@ import Image from 'next/image';
 import { trackDashboardView, trackContentManagement } from '@/lib/analytics';
 import { Content } from '@/lib/types';
 
+const isPubliclyCurrent = (content: Content) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return content.isPublished
+    && Boolean(content.reviewer && content.sourceUrls?.length && content.lastVerifiedAt && content.nextReviewAt && content.complianceApprovedAt && content.seoApprovedAt)
+    && new Date(content.nextReviewAt || 0).getTime() >= today.getTime()
+    && (!content.expiresAt || new Date(content.expiresAt).getTime() >= today.getTime());
+};
+
 export default function ContentPage() {
   const [contents, setContents] = useState<Content[]>([]);
   const [filteredContents, setFilteredContents] = useState<Content[]>([]);
@@ -18,13 +27,23 @@ export default function ContentPage() {
     title: '',
     slug: '',
     content: '',
-    type: 'page',
+    excerpt: '',
+    type: 'update',
+    category: 'Announcement',
     isPublished: false,
+    isFeatured: false,
     featuredImage: '',
     metaDescription: '',
     tags: [] as string[],
     categories: [] as string[],
-    author: 'Admin'
+    author: 'EduExpress Content Team',
+    reviewer: '',
+    sourceUrls: [] as string[],
+    lastVerifiedAt: '',
+    nextReviewAt: '',
+    expiresAt: '',
+    complianceApprovedAt: '',
+    seoApprovedAt: '',
   });
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [editorMode, setEditorMode] = useState<'html' | 'preview'>('html');
@@ -141,6 +160,7 @@ export default function ContentPage() {
 
       const response = await fetch('/api/upload', {
         method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('admin_token') || ''}` },
         body: formData,
       });
 
@@ -192,6 +212,20 @@ export default function ContentPage() {
         showMessage('error', 'Author is required');
         return;
       }
+      if (formData.isPublished) {
+        const missing = [
+          !formData.reviewer.trim() && 'reviewer',
+          formData.sourceUrls.length === 0 && 'official source',
+          !formData.lastVerifiedAt && 'checked date',
+          !formData.nextReviewAt && 'next review date',
+          !formData.complianceApprovedAt && 'management approval',
+          !formData.seoApprovedAt && 'SEO approval',
+        ].filter(Boolean);
+        if (missing.length) {
+          showMessage('error', `Complete the Evidence First checks before publishing: ${missing.join(', ')}.`);
+          return;
+        }
+      }
 
       // Get fresh token
       const token = await getFreshToken();
@@ -234,13 +268,23 @@ export default function ContentPage() {
           title: '',
           slug: '',
           content: '',
-          type: 'page',
+          excerpt: '',
+          type: 'update',
+          category: 'Announcement',
           isPublished: false,
+          isFeatured: false,
           featuredImage: '',
           metaDescription: '',
           tags: [],
           categories: [],
-          author: 'Admin'
+          author: 'EduExpress Content Team',
+          reviewer: '',
+          sourceUrls: [],
+          lastVerifiedAt: '',
+          nextReviewAt: '',
+          expiresAt: '',
+          complianceApprovedAt: '',
+          seoApprovedAt: '',
         });
         setEditorMode('html');
       } else {
@@ -255,7 +299,8 @@ export default function ContentPage() {
           error: 'api_error'
         });
 
-        showMessage('error', `Failed to ${editingContent ? 'update' : 'create'} content: ${errorData.error || 'Unknown error'}`);
+        const details = Array.isArray(errorData.details) ? ` ${errorData.details.join(' ')}` : '';
+        showMessage('error', `Failed to ${editingContent ? 'update' : 'create'} content: ${errorData.error || 'Unknown error'}${details}`);
       }
     } catch (error) {
       console.error('Network Error:', error);
@@ -279,13 +324,23 @@ export default function ContentPage() {
       title: content.title,
       slug: content.slug,
       content: content.content,
+      excerpt: content.excerpt || '',
       type: content.type,
+      category: content.category || content.categories?.[0] || 'Announcement',
       isPublished: content.isPublished,
+      isFeatured: content.isFeatured,
       featuredImage: content.featuredImage || '',
       metaDescription: content.metaDescription || '',
       tags: content.tags || [],
       categories: content.categories || [],
-      author: content.author || 'Admin'
+      author: content.author || 'EduExpress Content Team',
+      reviewer: content.reviewer || '',
+      sourceUrls: content.sourceUrls || [],
+      lastVerifiedAt: content.lastVerifiedAt?.slice(0, 10) || '',
+      nextReviewAt: content.nextReviewAt?.slice(0, 10) || '',
+      expiresAt: content.expiresAt?.slice(0, 10) || '',
+      complianceApprovedAt: content.complianceApprovedAt || '',
+      seoApprovedAt: content.seoApprovedAt || '',
     });
     setShowForm(true);
   };
@@ -365,13 +420,23 @@ export default function ContentPage() {
               title: '',
               slug: '',
               content: '',
-              type: 'page',
+              excerpt: '',
+              type: 'update',
+              category: 'Announcement',
               isPublished: false,
+              isFeatured: false,
               featuredImage: '',
               metaDescription: '',
               tags: [],
               categories: [],
-              author: 'Admin'
+              author: 'EduExpress Content Team',
+              reviewer: '',
+              sourceUrls: [],
+              lastVerifiedAt: '',
+              nextReviewAt: '',
+              expiresAt: '',
+              complianceApprovedAt: '',
+              seoApprovedAt: '',
             });
           }}
           className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 text-xs sm:text-sm font-medium touch-manipulation"
@@ -476,8 +541,9 @@ export default function ContentPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredContents.length > 0 ? (
-                filteredContents.map((content) => (
-                  <tr key={content.id} className="hover:bg-gray-50">
+                filteredContents.map((content) => {
+                  const publiclyCurrent = isPubliclyCurrent(content);
+                  return <tr key={content.id} className="hover:bg-gray-50">
                     <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <div>
                         <div className="text-xs sm:text-sm font-medium text-gray-900">{content.title}</div>
@@ -508,9 +574,9 @@ export default function ContentPage() {
                       </span>
                     </td>
                     <td className="px-2 sm:px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${content.isPublished ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${publiclyCurrent ? 'bg-green-100 text-green-800' : content.isPublished ? 'bg-amber-100 text-amber-900' : 'bg-red-100 text-red-800'
                         }`}>
-                        {content.isPublished ? 'Published' : 'Draft'}
+                        {publiclyCurrent ? 'Public and current' : content.isPublished ? 'Review required' : 'Draft'}
                       </span>
                     </td>
                     <td className="hidden md:table-cell px-3 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
@@ -532,8 +598,8 @@ export default function ContentPage() {
                         </button>
                       </div>
                     </td>
-                  </tr>
-                ))
+                  </tr>;
+                })
               ) : (
                 <tr>
                   <td colSpan={5} className="px-2 sm:px-6 py-8 sm:py-12 text-center text-gray-500">
@@ -555,7 +621,7 @@ export default function ContentPage() {
       {/* Add/Edit Form Modal */}
       {showForm && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-2 sm:top-4 lg:top-20 mx-auto p-3 sm:p-4 lg:p-5 border w-11/12 sm:w-10/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+          <div className="relative top-2 mx-auto max-h-[calc(100vh-1rem)] w-11/12 overflow-y-auto rounded-xl border bg-white p-3 shadow-lg sm:top-4 sm:w-10/12 sm:p-4 md:w-3/4 lg:w-2/3 lg:p-5">
             <div className="mt-2 sm:mt-3">
               <div className="flex justify-between items-center mb-3 sm:mb-4">
                 <h3 className="text-sm sm:text-base lg:text-lg font-medium text-gray-900">
@@ -608,15 +674,24 @@ export default function ContentPage() {
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                   >
-                    <option value="page">Page</option>
-                    <option value="blog">Blog</option>
                     <option value="update">Update</option>
+                    <option value="blog">Guide or article</option>
+                    <option value="page">Standalone page</option>
                     <option value="service">Service</option>
                     <option value="destination">Destination</option>
                   </select>
+                  <p className="mt-1 text-[11px] text-slate-500">Choose Update for university announcements, admission news and student guidance shown in the public Updates library.</p>
                 </div>
 
                 <div>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Primary category</label>
+                  <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm">
+                    {['Announcement', 'University announcement', 'Student guide', 'Scholarship', 'Visa', 'Deadline', 'News'].map(item => <option key={item}>{item}</option>)}
+                  </select>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Author</label>
                   <input
                     type="text"
@@ -625,6 +700,11 @@ export default function ContentPage() {
                     className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                     required
                   />
+                  </div>
+                  <div>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700">Reviewer</label>
+                    <input value={formData.reviewer} onChange={(e) => setFormData({ ...formData, reviewer: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" placeholder="Senior counselor or country lead" />
+                  </div>
                 </div>
 
                 <div>
@@ -669,6 +749,11 @@ export default function ContentPage() {
                       dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-500">No content to preview</p>' }}
                     />
                   )}
+                </div>
+
+                <div>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Short summary</label>
+                  <textarea value={formData.excerpt} onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })} rows={3} maxLength={320} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" placeholder="A direct, useful answer for the update card and article introduction." />
                 </div>
 
                 <div>
@@ -749,9 +834,35 @@ export default function ContentPage() {
                 </div>
 
                 <div>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">Official source URLs, one per line</label>
+                  <textarea value={formData.sourceUrls.join('\n')} onChange={(e) => setFormData({ ...formData, sourceUrls: e.target.value.split('\n').map(item => item.trim()).filter(Boolean) })} rows={3} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" placeholder="https://university-or-government-source.example/..." />
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="block text-xs font-medium text-gray-700 sm:text-sm">Information checked on
+                    <input type="date" value={formData.lastVerifiedAt} onChange={(e) => setFormData({ ...formData, lastVerifiedAt: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" />
+                  </label>
+                  <label className="block text-xs font-medium text-gray-700 sm:text-sm">Next review date
+                    <input type="date" value={formData.nextReviewAt} onChange={(e) => setFormData({ ...formData, nextReviewAt: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" />
+                  </label>
+                  <label className="block text-xs font-medium text-gray-700 sm:text-sm">Public expiry date
+                    <input type="date" value={formData.expiresAt} onChange={(e) => setFormData({ ...formData, expiresAt: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" />
+                  </label>
+                </div>
+
+                <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                  <p className="text-xs font-bold text-amber-950">Publishing approvals</p>
+                  <p className="mt-1 text-[11px] leading-5 text-amber-800">Only confirm these after the source, dates, claims and search presentation have been reviewed.</p>
+                  <div className="mt-3 flex flex-wrap gap-5">
+                    <label className="flex items-center text-xs font-medium text-gray-800 sm:text-sm"><input type="checkbox" checked={Boolean(formData.complianceApprovedAt)} onChange={(e) => setFormData({ ...formData, complianceApprovedAt: e.target.checked ? new Date().toISOString() : '' })} className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />Management compliance approved</label>
+                    <label className="flex items-center text-xs font-medium text-gray-800 sm:text-sm"><input type="checkbox" checked={Boolean(formData.seoApprovedAt)} onChange={(e) => setFormData({ ...formData, seoApprovedAt: e.target.checked ? new Date().toISOString() : '' })} className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />SEO approved</label>
+                  </div>
+                </div>
+
+                <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Categories</label>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-                    {['Announcement', 'University', 'Success', 'Partnership', 'News'].map((category) => (
+                    {['Announcement', 'University', 'Student guide', 'Scholarship', 'Visa', 'Deadline', 'News'].map((category) => (
                       <label key={category} className="flex items-center space-x-1 sm:space-x-2 cursor-pointer">
                         <input
                           type="checkbox"
@@ -791,14 +902,9 @@ export default function ContentPage() {
                   />
                 </div>
 
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={formData.isPublished}
-                    onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <label className="ml-2 text-xs sm:text-sm text-gray-700">Published</label>
+                <div className="flex flex-wrap items-center gap-5 rounded-lg bg-slate-50 p-3">
+                  <label className="flex items-center text-xs text-gray-700 sm:text-sm"><input type="checkbox" checked={formData.isPublished} onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })} className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />Published</label>
+                  <label className="flex items-center text-xs text-gray-700 sm:text-sm"><input type="checkbox" checked={formData.isFeatured} onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })} className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />Feature at the top</label>
                 </div>
 
                 <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">

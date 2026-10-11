@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Keep the live development compiler isolated from `next build`. Without
+  // separate folders, a production build can replace the CSS/chunks currently
+  // being served by localhost and leave the page unstyled until a restart.
+  distDir: process.env.NODE_ENV === 'development' ? '.next-dev' : '.next',
+
+  // Development chunk names are stable across restarts. A versioned local
+  // prefix prevents browsers that once cached those URLs from mixing an old
+  // client bundle with newly rendered HTML.
+  assetPrefix: process.env.NODE_ENV !== 'production' ? '/_dev-assets/20260803-1' : undefined,
+
   // Output standalone for Docker deployments
   output: "standalone",
   
@@ -10,20 +20,11 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
-  // Aggressive tree-shaking for icon libraries
-  modularizeImports: {
-    'lucide-react': {
-      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
-      skipDefaultConversion: true,
-    },
-  },
-
-  experimental: {
-    optimizePackageImports: ['framer-motion'],
-  },
-
   // Basic image optimization
   images: {
+    // The bundled image runtime cannot decode local assets reliably in the
+    // current desktop/Docker environment. Public assets are already resized
+    // and compressed, so serve them directly instead of returning broken 400s.
     unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -37,6 +38,17 @@ const nextConfig: NextConfig = {
     ],
   },
   compress: true,
+
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
+      skipDefaultConversion: true,
+    },
+  },
+
+  experimental: {
+    optimizePackageImports: ['framer-motion'],
+  },
 
   // Basic security headers
   async headers() {
@@ -54,10 +66,37 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: '/admin/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
+      },
+      {
+        source: '/dashboard/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
+      },
+      {
+        source: '/login',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
+      },
+      {
+        source: '/sitemap-submission',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
+      },
     ];
 
     if (process.env.NODE_ENV !== 'production') {
-      return securityHeaders;
+      return [
+        ...securityHeaders,
+        {
+          source: '/_dev-assets/20260803-1/_next/static/:path*',
+          headers: [
+            {
+              key: 'Cache-Control',
+              value: 'no-store, no-cache, must-revalidate, max-age=0',
+            },
+          ],
+        },
+      ];
     }
 
     return [
@@ -114,23 +153,25 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/china-universities',
-        destination: '/universities?country=China',
-        permanent: true,
-      },
-      {
-        source: '/china-success-stories',
-        destination: '/success-stories',
-        permanent: true,
-      },
-      {
         source: '/success-stories/china',
-        destination: '/success-stories',
+        destination: '/china-success-stories',
+        permanent: true,
+      },
+      // Merged 2026-08-16: /complaints-and-review duplicated
+      // /complaints-and-resolution. Content was folded into the approved slug.
+      {
+        source: '/complaints-and-review',
+        destination: '/complaints-and-resolution',
         permanent: true,
       },
       {
         source: '/destinations/united-kingdom',
-        destination: '/destinations/uk',
+        destination: '/study-in-uk-from-bangladesh',
+        permanent: true,
+      },
+      {
+        source: '/destinations/:country',
+        destination: '/study-in-:country-from-bangladesh',
         permanent: true,
       }
     ];
@@ -138,6 +179,10 @@ const nextConfig: NextConfig = {
 
   async rewrites() {
     return [
+      {
+        source: '/_dev-assets/20260803-1/_next/:path*',
+        destination: '/_next/:path*',
+      },
       {
         source: '/study-in-:country-from-bangladesh',
         destination: '/destinations/:country',

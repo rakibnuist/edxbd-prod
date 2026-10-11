@@ -30,7 +30,10 @@
     "local:build": "npm run build && npm run local",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "seed:admin": "node scripts/seed-admin.js"
+    "seed:admin": "node scripts/seed-admin.js",
+    "seed:evidence": "node scripts/seed-drive-evidence.js",
+    "seed:march-2027": "node --experimental-strip-types scripts/seed-march-2027-campaign.mjs",
+    "db:check": "node scripts/check-database-readiness.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

@@ -225,9 +225,10 @@ export const trackStudyAbroadLead = async (
   },
   source: string = 'website_contact_form',
   request?: Request,
-  metaConfig?: MetaConfigOverride
+  metaConfig?: MetaConfigOverride,
+  sharedEventId?: string
 ): Promise<{ success: boolean; eventId: string; error?: string }> => {
-  const eventId = generateEventId();
+  const eventId = sharedEventId || generateEventId();
   const [firstName, ...lastNameParts] = formData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
 

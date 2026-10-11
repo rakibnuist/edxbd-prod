@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/prisma';
 import UpdateClient from './UpdateClient';
+import type { Update } from '@/lib/types';
+import { currentPublishedContentWhere } from '@/lib/content-governance';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -12,11 +14,11 @@ interface UpdatePageProps {
 export async function generateMetadata({ params }: UpdatePageProps): Promise<Metadata> {
   try {
     const { slug } = await params;
-    const update = await prisma.content.findUnique({ 
+    const update = await prisma.content.findFirst({
       where: { 
         slug: slug, 
         type: 'update', 
-        isPublished: true 
+        ...currentPublishedContentWhere(),
       }
     });
 
@@ -59,11 +61,11 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
 export default async function UpdatePage({ params }: UpdatePageProps) {
   try {
     const { slug } = await params;
-    const update = await prisma.content.findUnique({ 
+    const update = await prisma.content.findFirst({
       where: { 
         slug: slug, 
         type: 'update', 
-        isPublished: true 
+        ...currentPublishedContentWhere(),
       }
     });
 
@@ -79,21 +81,30 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
 
     const tags = update.tags ? JSON.parse(update.tags) : [];
     const categories = update.categories ? JSON.parse(update.categories) : [];
+    const sourceUrls = update.sourceUrls ? JSON.parse(update.sourceUrls) : [];
 
-    // Convert Prisma document to plain object for client component
-    const updateData = {
+    const updateData: Update = {
       id: update.id,
       title: update.title,
       slug: update.slug,
+      type: update.type,
       content: update.content,
       excerpt: update.excerpt || undefined,
+      metaDescription: update.metaDescription || undefined,
       category: update.category || undefined,
       categories: categories,
       tags: tags,
+      sourceUrls,
       featuredImage: update.featuredImage || undefined,
       isFeatured: update.isFeatured,
       author: update.author || 'EduExpress',
-      publishedAt: update.publishedAt?.toISOString() || null,
+      reviewer: update.reviewer || undefined,
+      publishedAt: update.publishedAt?.toISOString(),
+      lastVerifiedAt: update.lastVerifiedAt?.toISOString(),
+      nextReviewAt: update.nextReviewAt?.toISOString(),
+      expiresAt: update.expiresAt?.toISOString(),
+      complianceApprovedAt: update.complianceApprovedAt?.toISOString(),
+      seoApprovedAt: update.seoApprovedAt?.toISOString(),
       createdAt: update.createdAt.toISOString(),
       updatedAt: update.updatedAt.toISOString(),
       views: update.views + 1
@@ -120,7 +131,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     return (
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-        <UpdateClient update={updateData as any} />
+        <UpdateClient update={updateData} />
       </>
     );
   } catch (error) {

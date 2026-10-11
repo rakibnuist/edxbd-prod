@@ -33,6 +33,7 @@ export interface Update {
   id: string;
   title: string;
   slug: string;
+  type: string;
   content: string;
   excerpt?: string;
   metaDescription?: string;
@@ -42,6 +43,13 @@ export interface Update {
   featuredImage?: string;
   isFeatured: boolean;
   author: string;
+  reviewer?: string;
+  sourceUrls?: string[];
+  lastVerifiedAt?: string;
+  nextReviewAt?: string;
+  expiresAt?: string;
+  complianceApprovedAt?: string;
+  seoApprovedAt?: string;
   publishedAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -112,6 +120,13 @@ export interface Content {
   tags?: string[];
   categories?: string[];
   author: string;
+  reviewer?: string;
+  sourceUrls?: string[];
+  lastVerifiedAt?: string;
+  nextReviewAt?: string;
+  expiresAt?: string;
+  complianceApprovedAt?: string;
+  seoApprovedAt?: string;
   publishedAt?: string;
   views: number;
   createdAt: string;

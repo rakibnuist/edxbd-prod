@@ -66,22 +66,23 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Track lead with Meta Conversion API (non-blocking)
-    try {
-      // Run tracking in background without awaiting
-      trackStudyAbroadLead({
-        name: fullName,
-        email: email.trim().toLowerCase(),
-        phone: phone.trim(),
-        country: body.country || 'Not specified',
-        program: body.program || 'Contact Form Inquiry',
-        message: message ? message.trim() : 'Consultation request from ' + (body.country || 'Unknown')
-      }, body.source || 'contact_form', request).catch(trackingError => {
-        console.error('Meta Conversion API tracking error (non-blocking):', trackingError);
-      });
-    } catch (trackingError) {
-      console.error('Meta Conversion API tracking error:', trackingError);
-      // Don't fail the request if tracking fails
+    // Contact consent does not automatically authorize advertising tracking.
+    if (body.trackingConsent === true) {
+      try {
+        trackStudyAbroadLead({
+          name: fullName,
+          email: email.trim().toLowerCase(),
+          phone: phone.trim(),
+          country: body.country || 'Not specified',
+          program: body.program || 'Contact Form Inquiry',
+          message: message ? message.trim() : 'Consultation request from ' + (body.country || 'Unknown')
+        }, body.source || 'contact_form', request, undefined, body.metaEventId).catch(trackingError => {
+          console.error('Meta Conversion API tracking error (non-blocking):', trackingError);
+        });
+      } catch (trackingError) {
+        console.error('Meta Conversion API tracking error:', trackingError);
+        // Don't fail the request if tracking fails
+      }
     }
 
     // Return success response

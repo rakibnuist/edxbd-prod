@@ -10,18 +10,26 @@
 export type LeadTeam =
   | 'general'
   | 'china'
-  | 'wave1_owner'
-  | 'launching_interest'
+  | 'active_country_owner'
   | 'senior_review';
 
-// Destination status drives routing (mirrors the strategy launch waves).
+// Every listed destination is open. China keeps its specialist team; the
+// remaining destinations route to a trained active-country owner.
 const FLAGSHIP = ['china'];
-const WAVE1 = ['uk', 'united-kingdom', 'hungary', 'south-korea', 'korea', 'finland', 'malaysia'];
-const WAVE2 = ['malta', 'cyprus', 'georgia'];
-const WAVE3 = ['greece', 'croatia', 'thailand'];
-// Remaining destinations stay in launching/interest queue
-const LAUNCHING = [
-  'netherlands',
+const ACTIVE_DESTINATIONS = [
+  'uk',
+  'united-kingdom',
+  'hungary',
+  'south-korea',
+  'korea',
+  'finland',
+  'malaysia',
+  'malta',
+  'cyprus',
+  'georgia',
+  'greece',
+  'croatia',
+  'thailand',
 ];
 
 const MEDICAL_PATTERN = /mbbs|medicine|medical|dentistry|dental|pharmacy|nursing|clinical/i;
@@ -59,12 +67,9 @@ export function routeLead(input: RoutingInput): RoutingResult {
   if (FLAGSHIP.includes(dest)) {
     assignedTeam = 'china';
     routingNote = 'China team — show visa-first policy and relevant university context.';
-  } else if (WAVE1.includes(dest) || WAVE2.includes(dest) || WAVE3.includes(dest)) {
-    assignedTeam = 'wave1_owner';
+  } else if (ACTIVE_DESTINATIONS.includes(dest)) {
+    assignedTeam = 'active_country_owner';
     routingNote = 'Assigned active country owner — never untrained general sales staff.';
-  } else if (LAUNCHING.includes(dest)) {
-    assignedTeam = 'launching_interest';
-    routingNote = 'Interest list + honest launch message; no payment or application promise until gate passes.';
   }
 
   // A medical/licensing program always needs the recognition/licensing review,

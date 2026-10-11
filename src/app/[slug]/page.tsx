@@ -2,24 +2,32 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { evidencePages } from '@/data/evidencePages';
-import ChinaCostCalculator from '@/components/china/ChinaCostCalculator';
 import ChinaGuidePage from '@/components/china/ChinaGuidePage';
 import { chinaGuidePages } from '@/data/chinaGuidePages';
+import { staticRouteSlugs } from '@/data/staticRoutePages';
 
 type Props = { params: Promise<{ slug: string }> };
+
+// A static segment under src/app/ always beats this catch-all, so any slug that
+// also has a hand-built route would be dead content here: editing it would
+// change nothing on the live site. Exclude those slugs rather than pre-render
+// pages that can never be reached.
+const isOwnedByStaticRoute = (slug: string) => staticRouteSlugs.includes(slug);
 
 export function generateStaticParams() {
   const evidenceSlugs = Object.keys(evidencePages).filter((slug) => !slug.includes('/'));
   const chinaGuideSlugs = Object.keys(chinaGuidePages);
-  
-  return [...evidenceSlugs, ...chinaGuideSlugs].map((slug) => ({ slug }));
+
+  return [...evidenceSlugs, ...chinaGuideSlugs]
+    .filter((slug) => !isOwnedByStaticRoute(slug))
+    .map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const page = evidencePages[slug];
   const chinaGuide = chinaGuidePages[slug];
-  if (!page) return {};
+  if (!page && !chinaGuide) return {};
   if (chinaGuide) {
     return {
       title: { absolute: chinaGuide.metaTitle },
@@ -40,9 +48,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function EvidencePageRoute({ params }: Props) {
   const { slug } = await params;
   const page = evidencePages[slug];
-  if (!page) notFound();
-
   const chinaGuide = chinaGuidePages[slug];
+
+  if (!page && !chinaGuide) notFound();
+
   if (chinaGuide) return <ChinaGuidePage guide={chinaGuide} />;
 
   const structuredData = {
@@ -74,9 +83,7 @@ export default async function EvidencePageRoute({ params }: Props) {
           <p className="mb-3 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">{page.eyebrow}</p>
           <h1 className="max-w-4xl font-heading text-[clamp(2.2rem,4.8vw,4rem)] font-bold leading-[1.06] tracking-[-0.022em] text-white">{page.title}</h1>
           <p className="mt-6 max-w-3xl border-l-4 border-[#64b5df] pl-5 text-base leading-7 text-white/75 md:text-lg md:leading-8">{page.intro}</p>
-          <div className="mt-8 flex flex-wrap gap-4 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-white/50">
-            <span>Last verified: {page.reviewedAt}</span><span aria-hidden>•</span><span>Next review: {page.nextReviewAt}</span>
-          </div>
+          <div className="mt-8 flex flex-wrap gap-4 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-white/50"><span>Owned by EduExpress Content and Compliance</span><span aria-hidden>•</span><span>Official sources and written responsibilities</span></div>
         </div>
       </header>
       
@@ -102,11 +109,9 @@ export default async function EvidencePageRoute({ params }: Props) {
             </section>
           ))}
 
-          {slug === 'study-in-china-cost-bangladesh' ? <ChinaCostCalculator /> : null}
-
           {page.sources?.length ? (
             <section className="border-b border-r border-[#174f7a]/20 bg-[#e9f7fd] p-7 md:p-10">
-              <h2 className="font-heading text-xl font-bold text-[#08263c]">Official sources checked {page.reviewedAt}</h2>
+              <h2 className="font-heading text-xl font-bold text-[#08263c]">Official sources</h2>
               <ul className="mt-4 grid gap-3">
                 {page.sources.map((source) => (
                   <li key={source.href}>

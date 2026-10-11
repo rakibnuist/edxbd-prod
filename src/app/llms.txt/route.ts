@@ -3,27 +3,31 @@ export function GET() {
 > Official portal for Bangladeshi students seeking verified university admissions, clear cost schedules, and visa guidance.
 
 ## Core Services & Verification Standard
+- Find Education: https://eduexpressint.com/find-education
+- Complete Study Journey: https://eduexpressint.com/your-study-journey
+- Scholarship Guidance: https://eduexpressint.com/scholarships
 - Better Education Standard: https://eduexpressint.com/better-education-standard
 - Fees & Transparency: https://eduexpressint.com/fees-and-transparency
 - China Visa-First Policy: https://eduexpressint.com/china-visa-first-policy
 - Free Education Fit Assessment: https://eduexpressint.com/education-fit-assessment
 
-## Active Destination Services
+## Public Destination Services
 - Study in China (Flagship): https://eduexpressint.com/study-in-china-from-bangladesh
-- Study in United Kingdom: https://eduexpressint.com/destinations/uk
-- Study in Hungary: https://eduexpressint.com/destinations/hungary
-- Study in South Korea: https://eduexpressint.com/destinations/south-korea
-- Study in Finland: https://eduexpressint.com/destinations/finland
-- Study in Malaysia: https://eduexpressint.com/destinations/malaysia
-- Study in Malta: https://eduexpressint.com/destinations/malta
-- Study in Cyprus: https://eduexpressint.com/destinations/cyprus
-- Study in Georgia (MBBS & General): https://eduexpressint.com/destinations/georgia
-- Study in Greece: https://eduexpressint.com/destinations/greece
-- Study in Croatia: https://eduexpressint.com/destinations/croatia
-- Study in Thailand: https://eduexpressint.com/destinations/thailand
+- All 12 listed destination services are open: https://eduexpressint.com/destinations
+- United Kingdom: https://eduexpressint.com/study-in-uk-from-bangladesh
+- Hungary: https://eduexpressint.com/study-in-hungary-from-bangladesh
+- South Korea: https://eduexpressint.com/study-in-south-korea-from-bangladesh
+- Finland: https://eduexpressint.com/study-in-finland-from-bangladesh
+- Malaysia: https://eduexpressint.com/study-in-malaysia-from-bangladesh
+- Malta: https://eduexpressint.com/study-in-malta-from-bangladesh
+- Cyprus: https://eduexpressint.com/study-in-cyprus-from-bangladesh
+- Georgia: https://eduexpressint.com/study-in-georgia-from-bangladesh
+- Greece: https://eduexpressint.com/study-in-greece-from-bangladesh
+- Croatia: https://eduexpressint.com/study-in-croatia-from-bangladesh
+- Thailand: https://eduexpressint.com/study-in-thailand-from-bangladesh
 
 ## Head Office & Location
-- Address: House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209, Bangladesh
+- Address: Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209
 - Contact: +880 1983-333566 | +880 1329-663505
 - Website: https://eduexpressint.com
 `;

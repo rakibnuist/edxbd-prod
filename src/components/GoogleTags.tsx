@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { CONSENT_CHANGE_EVENT, CONSENT_STORAGE_KEY } from '@/components/CookieConsent';
 
 // Loads Google Tag Manager and/or GA4 at runtime using IDs from admin Settings
 // (DB) or environment. Changing them in /admin/settings takes effect on next
@@ -9,9 +10,10 @@ export default function GoogleTags() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const flag = window as unknown as { __googleTagsLoaded?: boolean };
-    if (flag.__googleTagsLoaded) return;
 
     const load = async () => {
+      if (localStorage.getItem(CONSENT_STORAGE_KEY) !== 'accepted') return;
+      if (flag.__googleTagsLoaded) return;
       try {
         const res = await fetch('/api/public-config');
         if (!res.ok) return;
@@ -48,7 +50,7 @@ export default function GoogleTags() {
           document.head.appendChild(s);
           const w = window as unknown as { dataLayer?: unknown[]; gtag?: (...a: unknown[]) => void };
           w.dataLayer = w.dataLayer || [];
-          w.gtag = function gtag() { w.dataLayer!.push(arguments); };
+          w.gtag = (...args: unknown[]) => { w.dataLayer!.push(args); };
           w.gtag('js', new Date());
           w.gtag('config', ga4Id);
         }
@@ -57,7 +59,12 @@ export default function GoogleTags() {
       }
     };
 
-    load();
+    void load();
+    const handleConsentChange = (event: Event) => {
+      if ((event as CustomEvent<{ accepted?: boolean }>).detail?.accepted === true) void load();
+    };
+    window.addEventListener(CONSENT_CHANGE_EVENT, handleConsentChange);
+    return () => window.removeEventListener(CONSENT_CHANGE_EVENT, handleConsentChange);
   }, []);
 
   return null;

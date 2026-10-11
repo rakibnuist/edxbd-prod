@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Fraunces, Noto_Sans_Bengali } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 
 import ConditionalHeader from "@/components/ConditionalHeader";
 import EducationTracking from "@/components/EducationTracking";
+import Footer from "@/components/Footer";
 import ConditionalFooter from "@/components/ConditionalFooter";
 
 import WhatsAppWrapper from "@/components/WhatsAppWrapper";
@@ -13,25 +13,7 @@ import MetaPixel from "@/components/MetaPixel";
 import GoogleTags from "@/components/GoogleTags";
 
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-  axes: ["opsz"],
-});
-
-const notoSansBengali = Noto_Sans_Bengali({
-  subsets: ["bengali"],
-  variable: "--font-bengali",
-  display: "swap",
-});
+import { getPublicTrustRecords } from '@/lib/trust-records';
 
 export const viewport: Viewport = {
   themeColor: "#174f7a",
@@ -153,11 +135,14 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { offices } = await getPublicTrustRecords();
+  const office = offices[0];
+  const enableProductionTracking = process.env.NODE_ENV === 'production';
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -180,10 +165,10 @@ export default function RootLayout({
     ],
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "House 12/1, Ground Floor, Road 4/A, Dhanmondi",
-      "addressLocality": "Dhaka",
+      "streetAddress": office?.address,
+      "addressLocality": office?.city,
       "addressRegion": "Dhaka",
-      "postalCode": "1209",
+      "postalCode": office?.postalCode,
       "addressCountry": "BD"
     },
     "geo": {
@@ -191,11 +176,11 @@ export default function RootLayout({
       "latitude": 23.7401435,
       "longitude": 90.3713009
     },
-    "telephone": ["+880 1983-333566", "+880 1329-663505"],
+    "telephone": [office?.phonePrimary, office?.phoneSecondary].filter(Boolean),
     "contactPoint": [
       {
         "@type": "ContactPoint",
-        "telephone": "+880 1983-333566",
+        "telephone": office?.phonePrimary,
         "contactType": "customer service",
         "availableLanguage": ["English", "Bengali"],
         "areaServed": "BD",
@@ -208,13 +193,13 @@ export default function RootLayout({
       },
       {
         "@type": "ContactPoint",
-        "telephone": "+880 1329-663505",
+        "telephone": office?.phoneSecondary,
         "contactType": "customer service",
         "availableLanguage": ["English", "Bengali"],
         "areaServed": "BD"
       }
     ],
-    "email": "info@eduexpressint.com",
+    "email": office?.email,
     "sameAs": [
       "https://www.facebook.com/eduexpressint",
       "https://www.linkedin.com/company/eduexpress",
@@ -289,7 +274,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${notoSansBengali.variable}`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
         className="antialiased"
@@ -299,22 +284,48 @@ export default function RootLayout({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
           />
-          <EducationTracking
-            whatsappSource="floating_widget"
-            phoneSource="header_contact"
-          />
-          <MetaPixel />
-          <GoogleTags />
-          <ConditionalHeader />
-          <main>{children}</main>
+          {enableProductionTracking && (
+            <>
+              <EducationTracking
+                whatsappSource="floating_widget"
+                phoneSource="header_contact"
+              />
+              <MetaPixel />
+              <GoogleTags />
+            </>
+          )}
+          {/*
+            Scroll-reveal blocks are server-rendered with opacity:0 and are
+            brought in by Framer Motion once they enter the viewport. If scripts
+            never run, that opacity would strand real content invisible — so
+            force every reveal target visible when JavaScript is unavailable.
+          */}
+          <noscript>
+            <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+          </noscript>
+
+          {/* WCAG 2.4.1 Bypass Blocks. Visually hidden until focused, so keyboard
+              and screen-reader users can skip the header on every page. */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-5 focus:py-3 focus:text-sm focus:font-bold focus:text-[#08263c] focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#174f7a] focus:ring-offset-2"
+          >
+            Skip to content
+          </a>
+          <ConditionalHeader office={office ? { phonePrimary: office.phonePrimary, hours: office.hours } : undefined} />
+          <main id="main-content" tabIndex={-1}>{children}</main>
           <WhatsAppWrapper
-            phoneNumber="+8801983333566"
+            phoneNumber={office?.phonePrimary || '+8801983333566'}
             message="Hi, I would like an Education Fit Assessment. Please help me compare suitable universities, complete costs, recognition and scholarship availability."
           />
           <CookieConsent />
-          <ConditionalFooter />
-          <Analytics />
-          <SpeedInsights />
+          <ConditionalFooter><Footer /></ConditionalFooter>
+          {enableProductionTracking && (
+            <>
+              <Analytics />
+              <SpeedInsights />
+            </>
+          )}
       </body>
     </html>
   );

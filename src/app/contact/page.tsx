@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import ContactClient from './ContactClient';
+import { getPublicTrustRecords } from '@/lib/trust-records';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Get in touch with EduExpress International for a free Education Fit Assessment. Call +880 1983-333566 or visit our office in Dhanmondi, Dhaka.',
+  description: 'Contact EduExpress International for an Education Fit Assessment, university comparison or a parent conversation at our Dhanmondi office.',
   keywords: [
     'contact eduexpress international',
     'study abroad consultation bangladesh',
@@ -27,6 +28,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Contact() {
-  return <ContactClient />;
+export default async function Contact() {
+  const { offices } = await getPublicTrustRecords();
+  const office = offices[0];
+  return <ContactClient office={office ? { name: office.name, address: office.address, phonePrimary: office.phonePrimary, phoneSecondary: office.phoneSecondary, email: office.email, hours: office.hours, mapUrl: office.mapUrl } : undefined} />;
 }

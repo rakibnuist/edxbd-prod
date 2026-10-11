@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 
 export async function GET() {
-  const sitemapUrl = 'https://www.eduexpressint.com/sitemap.xml'
-  const robotsUrl = 'https://www.eduexpressint.com/robots.txt'
+  const sitemapUrl = 'https://eduexpressint.com/sitemap.xml'
+  const robotsUrl = 'https://eduexpressint.com/robots.txt'
   
   const submissionLinks = {
     sitemap: {
@@ -33,7 +33,7 @@ export async function GET() {
           'Sign in with your Microsoft account',
           'Add your website if not already added',
           'Go to "Sitemaps" section',
-          'Submit sitemap URL: https://www.eduexpressint.com/sitemap.xml'
+          'Submit sitemap URL: https://eduexpressint.com/sitemap.xml'
         ]
       },
       openai: {

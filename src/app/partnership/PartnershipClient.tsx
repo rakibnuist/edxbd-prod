@@ -1,110 +1,53 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import {
-  Handshake,
-  Users,
-  TrendingUp,
-  Award,
-  Globe,
-  Shield,
-  BookOpen,
-  CheckCircle,
-  ArrowRight,
-  ArrowUpRight,
-  Star,
-  Briefcase,
-  Headphones,
-  Zap,
-  GraduationCap,
-  Landmark,
-  Microscope,
-  Languages,
-  Banknote,
-  GraduationCap as GradCap,
-  Link as LinkIcon,
-  MapPin,
-  ClipboardCheck,
-  FileCheck,
-  DollarSign
-} from 'lucide-react';
+import { ArrowRight, ArrowUpRight, GraduationCap, Handshake, Shield, Users } from 'lucide-react';
 import Link from 'next/link';
 import PartnershipForm from '@/components/PartnershipForm';
-import PageHeader from '@/components/PageHeader';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export default function PartnershipClient() {
   const partnershipTypes = [
     {
       number: '01',
-      modelCode: 'MODEL 01',
-      title: 'Global Authorized Agent',
-      label: 'Exclusive Territorial Representation',
-      description: 'Represent EduExpress in your region with exclusive territory rights, complete training, and written agreement.',
+      title: 'Regional Agency Partner',
+      label: 'Territory-based cooperation',
+      description: 'Build a documented regional cooperation arrangement with training, support and responsibilities confirmed in the final agreement.',
       features: [
-        'Exclusive territory rights',
-        'Complete training & support',
-        'Marketing materials & leads',
-        'Commission on global placements',
-        'Priority student support'
+        'Territory and scope confirmed in writing',
+        'Onboarding and process training',
+        'Approved information and campaign materials',
+        'Placement terms defined by destination',
+        'Named support contact'
       ],
       icon: Shield
     },
     {
       number: '02',
-      modelCode: 'MODEL 02',
       title: 'China Strategic Partner',
-      label: 'Flagship Service-Charge Model',
-      description: 'Specialized partnership for China placements via our transparent Service-Charge model and direct university links.',
+      label: 'Flagship China cooperation',
+      description: 'Support China applicants through a written service-charge structure, collaborating university routes and documented application tracking.',
       features: [
-        'Direct access to Chinese Universities',
-        'Transparent Service Charge pricing',
-        'High success rate on Government Scholarships',
-        'End-to-end Visa and on-arrival support',
-        'Dedicated account manager'
+        'Governed China university route records',
+        'Itemized service-charge structure',
+        'Scholarship options matched by profile',
+        'Application and visa-readiness support',
+        'Dedicated partner contact'
       ],
       icon: Handshake
     },
     {
       number: '03',
-      modelCode: 'MODEL 03',
       title: 'Referral Partner',
-      label: 'Education Consultant Referral',
-      description: 'Simple referral program for education consultants and student advocates with zero upfront investment.',
+      label: 'Student referral cooperation',
+      description: 'Refer suitable students through a simple written arrangement with clear ownership, updates and payment terms.',
       features: [
-        'Easy referral process',
-        'No upfront investment required',
-        'Flexible arrangements',
-        'Fixed referral bonuses',
-        'Quick approval process'
+        'Simple student handover process',
+        'No partner setup charge',
+        'Written referral responsibilities',
+        'Defined referral payment terms',
+        'Application status updates'
       ],
       icon: Users
-    }
-  ];
-
-  const benefits = [
-    {
-      icon: TrendingUp,
-      title: 'Revenue Growth',
-      description: 'Earn lucrative commissions globally and competitive margins on China service charges under written terms.',
-      stat: 'High Yield Returns'
-    },
-    {
-      icon: Globe,
-      title: 'Global Network',
-      description: 'Access to universities across 10 active destinations, including directly affiliated Chinese institutions.',
-      stat: 'Direct Institutional Links'
-    },
-    {
-      icon: BookOpen,
-      title: 'Training & Resources',
-      description: 'Receive our complete, current directory for university entry requirements, intakes, and scholarships.',
-      stat: 'Full Documentation'
-    },
-    {
-      icon: Headphones,
-      title: 'Direct Oversight',
-      description: 'Dedicated WhatsApp support and Dhanmondi decision desk monitoring for your student applications.',
-      stat: 'Decision Support'
     }
   ];
 
@@ -124,6 +67,7 @@ export default function PartnershipClient() {
         <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#64b5df]/15 md:size-[460px]" />
 
         <div className="relative mx-auto max-w-[1440px]">
+          <Breadcrumbs items={[{ name: 'Partnership' }]} className="mb-7" />
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#174f7a]">
             <span>EduExpress International Bangladesh</span>
             <span>Global Partner Network</span>
@@ -141,7 +85,7 @@ export default function PartnershipClient() {
             </h1>
 
             <p className="mt-7 max-w-2xl border-l-4 border-[#64b5df] pl-5 text-base leading-7 text-slate-700 md:text-lg md:leading-8">
-              Partner with EduExpress International to expand your student placement business across 10 active destinations and our flagship China service-charge model.
+              Choose a documented cooperation model for ten active destinations or the flagship China route, with responsibilities and commercial terms confirmed before work begins.
             </p>
 
             <div className="mt-9 flex flex-col sm:flex-row gap-4">
@@ -155,37 +99,35 @@ export default function PartnershipClient() {
                 href="/universities"
                 className="inline-flex items-center justify-center gap-3 border-2 border-[#08263c] bg-white/70 px-6 py-4 text-sm font-black text-[#08263c] hover:bg-white"
               >
-                View Verified Universities <GraduationCap className="shrink-0" size={18} />
+                Explore University Records <GraduationCap className="shrink-0" size={18} />
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Universal Promise Dark Section */}
-      <section className="border-y border-[#08263c] bg-[#08263c] text-white">
-        <div className="mx-auto grid max-w-[1440px] lg:grid-cols-[.8fr_repeat(3,1fr)]">
-          <div className="bg-[#64b5df] p-6 text-[#08263c] lg:p-7">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Institutional Models</p>
-            <h2 className="mt-3 font-heading text-2xl font-bold leading-tight">Three Clear Cooperation Frameworks</h2>
-          </div>
-          {partnershipTypes.map(({ number, title, description, icon: Icon }) => (
-            <div key={title} className="group relative border-b border-white/15 p-5 hover:bg-white/5 lg:border-b-0 lg:border-r lg:p-6">
-              <div className="flex items-center justify-between"><span className="font-mono text-[9px] text-[#64b5df]">MODEL {number}</span><Icon size={19} className="text-[#64b5df]" /></div>
-              <h3 className="mt-7 font-heading text-lg font-bold leading-6">{title}</h3>
-              <p className="mt-2 text-xs leading-5 text-white/50">{description}</p>
-            </div>
+      <nav aria-label="Partnership page sections" className="border-y border-[#174f7a]/20 bg-[#08263c] text-white">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-px bg-white/15 sm:flex-row sm:items-stretch sm:justify-center">
+          {[
+            ['01', 'Choose a model', '#partnership-models'],
+            ['02', 'Review China terms', '#china-partner-terms'],
+            ['03', 'Apply for review', '#partnership-form'],
+          ].map(([number, label, href]) => (
+            <a key={href} href={href} className="group flex min-h-16 flex-1 items-center justify-between bg-[#08263c] px-5 text-sm font-black hover:bg-[#174f7a] sm:max-w-sm">
+              <span className="flex items-center gap-3"><span className="font-mono text-[10px] text-[#8ed0ee]">{number}</span>{label}</span>
+              <ArrowRight size={15} className="text-[#8ed0ee] transition group-hover:translate-x-1" />
+            </a>
           ))}
         </div>
-      </section>
+      </nav>
 
       {/* Partnership Models Grid */}
-      <section className="bg-white px-5 py-16 sm:px-8 sm:py-24 md:py-32 lg:px-12 border-b border-[#174f7a]/15">
+      <section id="partnership-models" className="scroll-mt-28 border-b border-[#174f7a]/15 bg-white px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
         <div className="mx-auto max-w-[1440px]">
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            <p className="font-mono text-xs font-black uppercase tracking-[0.22em] text-[#174f7a]">Institutional Models</p>
-            <h2 className="mt-3 font-heading text-4xl font-bold tracking-tight text-[#08263c] md:text-5xl">Partnership Frameworks</h2>
-            <p className="mt-4 text-base text-slate-600">Choose the agreement that fits your agency structure.</p>
+          <div className="mb-12 max-w-3xl">
+            <p className="font-mono text-xs font-black uppercase tracking-[0.22em] text-[#174f7a]">Step 01 · Partnership models</p>
+            <h2 className="mt-3 font-heading text-4xl font-bold tracking-tight text-[#08263c] md:text-5xl">Choose the cooperation route that fits your work</h2>
+            <p className="mt-4 text-base leading-7 text-slate-600">Each route begins with a suitability review. Territory, responsibilities, payments and student-data handling are documented in the final agreement.</p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
@@ -222,17 +164,17 @@ export default function PartnershipClient() {
       </section>
 
       {/* China Service Charges Schedule Table */}
-      <section className="py-20 px-5 sm:px-8 lg:px-12 bg-[#f4f8fa] border-b border-[#174f7a]/15">
+      <section id="china-partner-terms" className="scroll-mt-28 border-b border-[#174f7a]/15 bg-[#f4f8fa] px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
             <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">
               Flagship Specialization
             </span>
             <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">
-              Service Charge Schedule
+              China Partner Service Schedule
             </h2>
             <p className="text-sm text-slate-700 max-w-3xl mx-auto mt-3 bg-white p-5 border-2 border-[#08263c]">
-              Chinese university arrangements use a service charge model separate from Western commission structures. Charges are determined by the <strong className="text-[#08263c]">scholarship type secured</strong> and covered by the partner agency. Fees are quoted in <strong>USD</strong> and payment is triggered by JW202 issuance under our written policy.
+              China cooperation uses a written service schedule separate from destination commission arrangements. The selected scholarship coverage, included support and payment trigger are confirmed on the partner cost sheet before a student proceeds.
             </p>
           </div>
 
@@ -266,17 +208,17 @@ export default function PartnershipClient() {
               </table>
             </div>
             <div className="bg-[#08263c] p-4 text-xs text-white/80 border-t border-[#174f7a]/30">
-              <strong className="text-[#64b5df] font-bold">Verification Note:</strong> The original JW202 will not be dispatched until service charge payment is confirmed. Upon issuance, we provide your agency with a JW202 screenshot for independent verification before any final payment.
+              <strong className="text-[#64b5df] font-bold">Written confirmation:</strong> The applicable coverage, university record, student responsibility and payment stage are confirmed in the case document. University and authority decisions remain independent.
             </div>
           </div>
         </div>
       </section>
 
       {/* Partnership Form Section */}
-      <section id="partnership-form" className="py-20 px-5 sm:px-8 lg:px-12 bg-white border-b border-[#174f7a]/15">
+      <section id="partnership-form" className="scroll-mt-28 border-b border-[#174f7a]/15 bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Cooperation Request</p>
+            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Step 03 · Cooperation request</p>
             <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">
               Apply for Partnership
             </h2>
@@ -297,7 +239,7 @@ export default function PartnershipClient() {
               <h2 className="mt-4 max-w-4xl font-heading text-4xl font-bold leading-tight tracking-tight md:text-6xl">Expand your student placement business with written proof and clear terms.</h2>
             </div>
             <button
-              onClick={() => window.open('https://wa.me/8801410585926?text=Hello%2C%20I%27m%20interested%20in%20the%20EduExpress%20International%20Global%20Partner%20Programme.', '_blank')}
+              onClick={() => window.open('https://wa.me/8801983333566?text=Hello%2C%20I%27m%20interested%20in%20the%20EduExpress%20International%20Global%20Partner%20Programme.', '_blank')}
               className="inline-flex w-full items-center justify-center gap-3 bg-[#08263c] px-7 py-5 text-base font-black text-white hover:bg-[#174f7a] sm:text-lg lg:w-auto lg:min-w-64"
             >
               WhatsApp Partner Desk <ArrowUpRight size={20} />

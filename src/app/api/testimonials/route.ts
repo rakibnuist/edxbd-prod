@@ -8,8 +8,15 @@ export async function GET(request: NextRequest) {
     const limit = searchParams.get('limit');
 
     // Build query
-    const where: any = {
-      isPublished: true
+    const where = {
+      isPublished: true,
+      consentVerified: true,
+      consentImageApproved: true,
+      consentEvidenceId: { not: null },
+      consentRecordedAt: { not: null },
+      consentRevokedAt: null,
+      image: { not: null },
+      OR: [{ consentExpiresAt: null }, { consentExpiresAt: { gte: new Date() } }],
     };
     
     // Execute query

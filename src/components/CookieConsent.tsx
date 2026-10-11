@@ -1,16 +1,22 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Cookie, X } from 'lucide-react';
 import Link from 'next/link';
+
+export const CONSENT_STORAGE_KEY = 'cookie-consent';
+export const CONSENT_CHANGE_EVENT = 'eduexpress:consent-change';
+
+function announceConsent(accepted: boolean) {
+  window.dispatchEvent(new CustomEvent(CONSENT_CHANGE_EVENT, { detail: { accepted } }));
+}
 
 export default function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     // Check if the user has already consented or declined
-    const consent = localStorage.getItem('cookie-consent');
+    const consent = localStorage.getItem(CONSENT_STORAGE_KEY);
     if (!consent) {
       // Small delay for better UX
       const timer = setTimeout(() => {
@@ -21,25 +27,21 @@ export default function CookieConsent() {
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem('cookie-consent', 'accepted');
+    localStorage.setItem(CONSENT_STORAGE_KEY, 'accepted');
+    announceConsent(true);
     setIsVisible(false);
   };
 
   const handleDecline = () => {
-    localStorage.setItem('cookie-consent', 'declined');
+    localStorage.setItem(CONSENT_STORAGE_KEY, 'declined');
+    announceConsent(false);
     setIsVisible(false);
   };
 
+  if (!isVisible) return null;
+
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 20, scale: 0.95 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="fixed bottom-6 left-6 right-6 md:left-6 md:right-auto md:max-w-md z-50 font-sans"
-        >
+        <div className="fixed bottom-6 left-6 right-6 z-50 animate-[cookie-in_.35s_ease-out] font-sans md:left-6 md:right-auto md:max-w-md">
           <div className="bg-white/95 backdrop-blur-md border border-slate-200 shadow-2xl p-6 rounded-[2rem] flex flex-col gap-4 relative overflow-hidden">
             {/* Ambient Background decoration */}
             <div className="absolute -top-12 -right-12 w-24 h-24 bg-blue-500/10 rounded-full blur-xl pointer-events-none" />
@@ -61,7 +63,7 @@ export default function CookieConsent() {
                 </div>
                 <p className="text-slate-600 text-sm leading-relaxed">
                   We use cookies to personalize content, customize ads, and analyze traffic. By clicking{" "}
-                  <strong className="text-slate-900 font-semibold">"Accept All"</strong>, you consent to our use of cookies.
+                  <strong className="text-slate-900 font-semibold">&quot;Accept All&quot;</strong>, you consent to our use of cookies.
                   Learn more in our{" "}
                   <Link href="/privacy" className="text-blue-600 hover:underline hover:text-blue-700 font-semibold">
                     Privacy Policy
@@ -85,8 +87,6 @@ export default function CookieConsent() {
               </button>
             </div>
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        </div>
   );
 }

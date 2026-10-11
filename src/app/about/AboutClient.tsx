@@ -6,7 +6,9 @@ import { trackConsultationRequest } from '@/lib/analytics';
 import PageHeader from '@/components/PageHeader';
 import TeamSection from '@/components/about/TeamSection';
 
-export default function AboutClient() {
+type TeamMember = { id: string; name: string; role: string; bio: string | null; photoUrl: string | null; specialties: string[] };
+
+export default function AboutClient({ team }: { team: TeamMember[] }) {
   return (
     <div className="min-h-screen bg-[#f4f8fa] text-[#08263c] font-sans">
       <PageHeader
@@ -107,7 +109,7 @@ export default function AboutClient() {
                 { year: "Pre-COVID", title: "Institutional Cooperation", desc: "Formal university recruitment relationships were established, including with Linyi University." },
                 { year: "COVID Period", title: "Operations Suspended", desc: "International operations were temporarily paused due to pandemic disruptions." },
                 { year: "2023", title: "Bangladesh Relaunch", desc: "EduExpress resumed operations from RK Tower, Banglamotor." },
-                { year: "Present", title: "Dhanmondi Decision Desk", desc: "Operating from House 12/1, Road 4/A, Dhanmondi, Dhaka under the Evidence-First standard." },
+                { year: "Present", title: "Dhanmondi Decision Desk", desc: "Operating from Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209." },
               ].map((item, idx) => (
                 <div key={idx} className="relative pl-6">
                   <div className="absolute left-[-31px] top-1.5 size-4 bg-[#64b5df] border-2 border-[#08263c]" />
@@ -124,7 +126,7 @@ export default function AboutClient() {
       </section>
 
       {/* Team Section */}
-      <TeamSection />
+      <TeamSection team={team} />
 
       {/* What We Do */}
       <section className="py-20 bg-[#f4f8fa]">

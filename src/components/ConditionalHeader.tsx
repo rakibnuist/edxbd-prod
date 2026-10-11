@@ -1,15 +1,18 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import LightHeader from './LightHeader';
+import { isStandaloneCampaignRoute } from '@/lib/campaign-routes';
 
-const ConditionalHeader = () => {
+const ConditionalHeader = ({ office }: { office?: { phonePrimary: string; hours: string } }) => {
   const pathname = usePathname();
 
   // Hide header for admin and dashboard routes
   // This logic is safe for SSR as usePathname works on initial render
-  const shouldHideHeader = pathname.startsWith('/admin') || pathname.startsWith('/dashboard');
+  const shouldHideHeader = pathname.startsWith('/admin')
+    || pathname.startsWith('/dashboard')
+    || isStandaloneCampaignRoute(pathname);
 
 
   // Add/remove class to body for dashboard routes - this only runs on client
@@ -27,7 +30,7 @@ const ConditionalHeader = () => {
   }
 
 
-  return <LightHeader />;
+  return <LightHeader office={office} />;
 };
 
 export default ConditionalHeader;

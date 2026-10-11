@@ -187,7 +187,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
             type="button"
             onClick={() => !disabled && setIsOpen(!isOpen)}
             disabled={disabled}
-            className="flex items-center space-x-2 focus:outline-none group"
+            className="group flex items-center space-x-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#174f7a] focus-visible:ring-offset-2"
             aria-haspopup="listbox"
             aria-expanded={isOpen}
           >

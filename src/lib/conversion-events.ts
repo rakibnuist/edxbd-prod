@@ -49,6 +49,8 @@ const CONSENT_KEY = 'cookie-consent';
 const META_EVENT_MAP: Partial<Record<ConversionEvent, string>> = {
   assessment_start: 'InitiateCheckout',
   assessment_submit: 'Lead',
+  whatsapp_click: 'Contact',
+  phone_click: 'Contact',
   appointment_booked: 'Schedule',
   application_started: 'SubmitApplication',
   offer_received: 'CompleteRegistration',
@@ -88,7 +90,7 @@ export function getUtmParameters(): Record<string, string> {
 }
 
 /** Respect the cookie banner: only fire to third parties when analytics is accepted. */
-function analyticsAllowed(): boolean {
+export function analyticsAllowed(): boolean {
   if (typeof window === 'undefined') return false;
   try {
     // CookieConsent stores 'accepted' | 'declined' under 'cookie-consent'.
@@ -96,6 +98,14 @@ function analyticsAllowed(): boolean {
   } catch {
     return false;
   }
+}
+
+/** Generate one browser/server event ID so Meta can deduplicate the Lead. */
+export function createConversionEventId(prefix = 'event'): string {
+  const randomPart = typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : Math.random().toString(36).slice(2);
+  return `${prefix}_${Date.now()}_${randomPart}`;
 }
 
 /**
@@ -112,16 +122,16 @@ export function trackConversion(event: ConversionEvent, context: ConversionConte
     ...context,
   };
 
-  // Always populate dataLayer so GTM / server-side tagging can consume it even
-  // if gtag() has not initialised yet.
+  if (!analyticsAllowed()) return;
+
+  // Populate dataLayer only after consent. GTM can process queued events when
+  // it loads, so pre-consent events must not be queued here.
   try {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event, ...payload });
   } catch {
     /* ignore */
   }
-
-  if (!analyticsAllowed()) return;
 
   // GA4
   try {
@@ -137,12 +147,18 @@ export function trackConversion(event: ConversionEvent, context: ConversionConte
     const metaEvent = META_EVENT_MAP[event];
     const isHttps = window.location.protocol === 'https:';
     if (metaEvent && isHttps && typeof window.fbq === 'function') {
-      window.fbq('track', metaEvent, {
+      const eventId = typeof context.eventId === 'string' ? context.eventId : undefined;
+      const eventData = {
         content_name: event,
         content_category: (context.destination as string) || 'general',
         value: context.value ?? 0,
         currency: 'BDT',
-      });
+      };
+      if (eventId) {
+        window.fbq('track', metaEvent, eventData, { eventID: eventId });
+      } else {
+        window.fbq('track', metaEvent, eventData);
+      }
     }
   } catch {
     /* ignore */

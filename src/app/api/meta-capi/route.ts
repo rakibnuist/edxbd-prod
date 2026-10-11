@@ -38,7 +38,11 @@ function hashData(data: string | undefined): string | undefined {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { event_name, event_id, event_source_url, user_data, custom_data } = body;
+        const { event_name, event_id, event_source_url, user_data, custom_data, trackingConsent } = body;
+
+        if (trackingConsent !== true) {
+            return NextResponse.json({ error: 'Advertising consent required' }, { status: 403 });
+        }
 
         // Validate required fields
         if (!event_name || !event_id) {

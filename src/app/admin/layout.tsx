@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import {
-  LayoutDashboard, FileText, MessageSquareQuote, Users2, Handshake,
-  GraduationCap, Globe2, UserCog, Settings as SettingsIcon, Menu, X,
+  LayoutDashboard, FileText, MessageSquareQuote, Users2, Handshake, ContactRound,
+  GraduationCap, Globe2, UserCog, Settings as SettingsIcon, Menu, X, ShieldCheck, Images,
 } from 'lucide-react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -17,6 +17,9 @@ const NAV = [
   { name: 'Content', href: '/admin/content', icon: FileText },
   { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote },
   { name: 'Universities', href: '/admin/universities', icon: GraduationCap },
+  { name: 'Evidence Library', href: '/admin/evidence', icon: Images },
+  { name: 'Team', href: '/admin/teams', icon: ContactRound },
+  { name: 'Company Records', href: '/admin/trust', icon: ShieldCheck },
   { name: 'Partnerships', href: '/admin/partnerships', icon: Handshake },
   { name: 'Countries', href: '/admin/countries', icon: Globe2 },
   { name: 'Users', href: '/admin/users', icon: UserCog },

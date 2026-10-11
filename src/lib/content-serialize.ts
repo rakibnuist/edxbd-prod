@@ -19,6 +19,7 @@ export const serializeContent = (c: Record<string, unknown>) => ({
 // Build a clean Prisma payload from client input (arrays -> JSON strings).
 export const toContentData = (body: Record<string, unknown>, partial = false) => {
   const s = (v: unknown) => JSON.stringify(toArray(v));
+  const date = (value: unknown) => value ? new Date(String(value)) : null;
   const all: Record<string, unknown> = {
     title: body.title,
     slug: body.slug,
@@ -36,6 +37,11 @@ export const toContentData = (body: Record<string, unknown>, partial = false) =>
     author: body.author || 'Admin',
     reviewer: body.reviewer ?? null,
     sourceUrls: s(body.sourceUrls),
+    lastVerifiedAt: date(body.lastVerifiedAt),
+    nextReviewAt: date(body.nextReviewAt),
+    expiresAt: date(body.expiresAt),
+    complianceApprovedAt: date(body.complianceApprovedAt),
+    seoApprovedAt: date(body.seoApprovedAt),
   };
   if (!partial) return all;
   const out: Record<string, unknown> = {};

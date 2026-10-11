@@ -39,38 +39,45 @@ async function getStoryData() {
   try {
     const records = await prisma.testimonial.findMany({
       where: {
-        isPublished: true, // Assuming isActive maps to isPublished or similar? Actually the schema for Testimonial has isPublished: Boolean
+        isPublished: true,
+        consentVerified: true,
+        consentImageApproved: true,
+        consentEvidenceId: { not: null },
+        consentRecordedAt: { not: null },
+        consentRevokedAt: null,
+        image: { not: null },
+        OR: [{ consentExpiresAt: null }, { consentExpiresAt: { gte: new Date() } }],
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: [{ featured: 'desc' }, { createdAt: 'desc' }]
     });
 
-    const totalActive = await prisma.testimonial.count({
-      where: { isPublished: true }
-    });
+    const totalRecords = await prisma.testimonial.count();
 
-    // Map Prisma schema to PublicStory
     const serialized: PublicStory[] = records.map(r => ({
       id: r.id,
       name: r.studentName,
-      displayName: r.studentName,
-      location: r.country || '',
+      displayName: r.displayName || r.studentName,
+      location: r.location || r.country || '',
       university: r.university || '',
-      program: '', // Not in schema
+      program: r.program || '',
       quote: r.content,
-      academicProfile: 'Not migrated yet',
-      decisionFactors: 'Not migrated yet',
-      applicationTimeline: 'Not migrated yet',
-      serviceProvided: 'Not migrated yet',
-      studentPaid: 'Not migrated yet',
-      currentUpdate: '',
-      consentEvidenceId: 'N/A',
-      consentExpiresAt: undefined,
-      consentImageApproved: false
+      image: r.image || undefined,
+      academicProfile: r.academicProfile || undefined,
+      decisionFactors: r.decisionFactors || undefined,
+      applicationTimeline: r.applicationTimeline || undefined,
+      serviceProvided: r.serviceProvided || undefined,
+      studentPaid: r.studentPaid || undefined,
+      currentUpdate: r.currentUpdate || undefined,
+      consentEvidenceId: r.consentEvidenceId || undefined,
+      consentExpiresAt: r.consentExpiresAt?.toISOString(),
+      consentImageApproved: r.consentImageApproved,
     }));
-    
-    // publishable logic
-    const publishable = serialized; // Just show all for now since schema is minimal
-    return { stories: publishable, pendingCount: Math.max(0, totalActive - publishable.length), totalActive };
+
+    const publishable = serialized.filter(story => Boolean(
+      story.image && story.program && story.academicProfile && story.decisionFactors && story.applicationTimeline &&
+      story.serviceProvided && story.studentPaid && story.consentEvidenceId && story.consentImageApproved
+    ));
+    return { stories: publishable, pendingCount: Math.max(0, totalRecords - publishable.length), totalActive: totalRecords };
   } catch (error) {
     console.error('Story evidence unavailable:', error);
     return { stories: [] as PublicStory[], pendingCount: 0, totalActive: 0 };
@@ -97,7 +104,7 @@ export default async function SuccessStoriesPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <header className="relative overflow-hidden bg-[#08263c] text-white">
         <div className="pointer-events-none absolute left-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
-          <Image src="/emblem-icon.png" width={450} height={450} unoptimized alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+          <Image src="/emblem-icon.png" width={450} height={450} alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
         </div>
         <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.66fr_.34fr] lg:items-end lg:py-16">
           <div>
@@ -130,7 +137,7 @@ export default async function SuccessStoriesPage() {
               <article key={story.id} className="overflow-hidden border border-[#174f7a]/20 bg-white">
                 <div className="grid sm:grid-cols-[11rem_1fr]">
                   <div className="relative min-h-44 bg-[#08263c] text-white">
-                    {story.image && story.consentImageApproved ? <img src={story.image} alt={`${story.displayName || story.name}, EduExpress student story`} className="absolute inset-0 size-full object-cover" /> : <div className="flex h-full min-h-44 flex-col items-center justify-center p-5 text-center"><CameraOff size={27} className="text-[#8ed0ee]" /><p className="mt-3 text-[10px] leading-5 text-white/55">Photo not approved for public display</p></div>}
+                    {story.image && story.consentImageApproved ? <Image src={story.image} alt={`${story.displayName || story.name}, EduExpress student story`} fill sizes="(max-width:640px) 100vw, 176px" className="object-cover" /> : <div className="flex h-full min-h-44 flex-col items-center justify-center p-5 text-center"><CameraOff size={27} className="text-[#8ed0ee]" /><p className="mt-3 text-[10px] leading-5 text-white/55">Photo not approved for public display</p></div>}
                   </div>
                   <div className="p-5">
                     <div className="flex items-center gap-2 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-emerald-700"><BadgeCheck size={13} />Consent verified story</div>
@@ -161,7 +168,7 @@ export default async function SuccessStoriesPage() {
               <div><p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Publication gate active</p><h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">No story is public until the evidence record is complete</h2></div>
             </div>
             <div className="p-7 sm:p-10">
-              <p className="text-sm leading-7 text-slate-600">The database currently contains {totalActive} active testimonial record{totalActive === 1 ? '' : 's'}, but none has the required written consent evidence, expiry or revocation record, student profile, decision explanation, service scope and payment disclosure. They remain private until those fields are completed.</p>
+              <p className="text-sm leading-7 text-slate-600">The database currently contains {totalActive} testimonial record{totalActive === 1 ? '' : 's'}, but none has the required real photo, written consent evidence, expiry or revocation record, student profile, decision explanation, service scope and payment disclosure. They remain private until those fields are completed.</p>
               <h3 className="mt-7 font-heading text-xl font-bold">Why this is better than publishing a quote alone</h3>
               <ul className="mt-4 grid gap-3 text-sm text-slate-600">
                 {['The student controls their public name and photo', 'Sensitive identifiers remain redacted', 'Readers can understand the decision and the outcome', 'Every result is presented as an individual case'].map(item => <li key={item} className="flex gap-3"><BadgeCheck size={16} className="mt-1 shrink-0 text-[#174f7a]" />{item}</li>)}
@@ -175,7 +182,7 @@ export default async function SuccessStoriesPage() {
       <section className="border-y border-[#174f7a]/15 bg-[#e9f7fd]">
         <div className="mx-auto max-w-[1440px] px-5 py-10 text-xs leading-6 text-slate-600 sm:px-8 lg:px-12">
           <p><strong className="text-[#08263c]">Editorial owner:</strong> EduExpress Admissions Desk <span aria-hidden="true">•</span> <strong className="text-[#08263c]">Consent reviewer:</strong> EduExpress Content and Compliance</p>
-          <p><strong className="text-[#08263c]">Last evidence review:</strong> 19 July 2026 <span aria-hidden="true">•</span> <strong className="text-[#08263c]">Next review:</strong> 19 August 2026</p>
+          <p><strong className="text-[#08263c]">Publishing standard:</strong> Written consent, sensitive data redaction and a traceable internal evidence record</p>
         </div>
       </section>
     </article>

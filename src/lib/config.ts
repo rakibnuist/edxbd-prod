@@ -30,7 +30,7 @@ export const config = {
     whatsapp: '+880 1983-333566',
     email: 'info@eduexpressint.com',
     address: {
-      street: 'House 12/1, Ground Floor, Road 4/A, Dhanmondi',
+      street: 'Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi',
       city: 'Dhaka',
       region: 'Dhaka',
       postalCode: '1209',
