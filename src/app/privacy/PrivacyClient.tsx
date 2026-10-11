@@ -117,7 +117,7 @@ export default function PrivacyClient() {
 
             <div className="border-t border-[#174f7a]/15 pt-6">
               <h3 className="font-heading text-lg font-bold text-[#08263c] mb-2">Data Protection Officer</h3>
-              <p className="text-xs text-slate-700">EduExpress International — House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209</p>
+              <p className="text-xs text-slate-700">EduExpress International — Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209</p>
             </div>
           </div>
         </div>

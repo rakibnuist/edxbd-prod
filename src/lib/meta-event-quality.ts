@@ -32,6 +32,15 @@ export interface EnhancedUserData {
   program?: string; // Program of interest
 }
 
+const advertisingAllowed = () => {
+  if (typeof window === 'undefined') return false;
+  try {
+    return localStorage.getItem('cookie-consent') === 'accepted';
+  } catch {
+    return false;
+  }
+};
+
 // Utility functions for client-side parameter extraction
 export const getMetaParameters = (): MetaEventQualityParams => {
   if (typeof window === 'undefined') {
@@ -118,7 +127,7 @@ export const sendToConversionsAPI = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   customData: Record<string, any> = {}
 ): Promise<void> => {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || !advertisingAllowed()) return;
 
   try {
     const metaParams = getMetaParameters();
@@ -147,6 +156,7 @@ export const sendToConversionsAPI = async (
           country: userData.country,
         },
         custom_data: customData,
+        trackingConsent: true,
       }),
     });
   } catch (error) {
@@ -160,10 +170,7 @@ export const trackMetaEvent = (
   parameters: Record<string, unknown> = {},
   userData: EnhancedUserData = {}
 ): void => {
-  if (typeof window === 'undefined' || !window.fbq) {
-    console.warn('Meta Pixel not loaded');
-    return;
-  }
+  if (typeof window === 'undefined' || !advertisingAllowed() || !window.fbq) return;
 
   const metaParams = getMetaParameters();
 

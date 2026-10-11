@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import AboutClient from './AboutClient';
+import { getPublicTrustRecords } from '@/lib/trust-records';
 
 export const metadata: Metadata = {
   title: { absolute: 'About EduExpress International | Evidence-First Education Consultancy' },
@@ -60,11 +61,12 @@ const structuredData = {
   ],
 };
 
-export default function About() {
+export default async function About() {
+  const { team } = await getPublicTrustRecords();
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      <AboutClient />
+      <AboutClient team={team} />
     </>
   );
 }

@@ -14,6 +14,9 @@ interface SettingsState {
   linkedinUrl: string;
   instagramUrl: string;
   youtubeUrl: string;
+  introVideoTitle: string;
+  introVideoUrl: string;
+  introVideoPoster: string;
   metaPixelId: string;
   metaAccessToken: string;
   gtmId: string;
@@ -26,11 +29,14 @@ const DEFAULTS: SettingsState = {
   contactEmail: 'info@eduexpressint.com',
   contactPhone: '+880 1983-333566',
   whatsappNumber: '+880 1983-333566',
-  address: 'House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209',
+  address: 'Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209',
   facebookUrl: 'https://www.facebook.com/eduexpressint',
   linkedinUrl: 'https://www.linkedin.com/company/eduexpress',
   instagramUrl: 'https://www.instagram.com/eduexpressint/',
   youtubeUrl: 'https://www.youtube.com/@EduExpressInt',
+  introVideoTitle: 'Meet EduExpress before you visit',
+  introVideoUrl: '',
+  introVideoPoster: '/images/office/dhanmondi-brandwall.webp',
   metaPixelId: '',
   metaAccessToken: '',
   gtmId: '',
@@ -263,6 +269,28 @@ export default function SettingsPage() {
                 <input id={key} name={key} value={settings[key]} onChange={handleChange} className={field} />
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Homepage video */}
+        <section className="rounded-2xl bg-white shadow ring-1 ring-gray-100">
+          <div className="border-b border-gray-100 px-6 py-4">
+            <h2 className="text-lg font-semibold text-[#08263c]">Homepage Video Introduction</h2>
+            <p className="text-xs text-gray-500">Add a YouTube link, YouTube embed link, or direct MP4/WebM URL. Leave the URL empty to show the office poster with a YouTube button.</p>
+          </div>
+          <div className="grid gap-5 p-6 sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <label className={label} htmlFor="introVideoTitle">Section title</label>
+              <input id="introVideoTitle" name="introVideoTitle" value={settings.introVideoTitle} onChange={handleChange} className={field} />
+            </div>
+            <div className="sm:col-span-2">
+              <label className={label} htmlFor="introVideoUrl">Video URL</label>
+              <input id="introVideoUrl" name="introVideoUrl" type="url" value={settings.introVideoUrl} onChange={handleChange} placeholder="https://www.youtube.com/watch?v=..." className={field} />
+            </div>
+            <div className="sm:col-span-2">
+              <label className={label} htmlFor="introVideoPoster">Poster image path or URL</label>
+              <input id="introVideoPoster" name="introVideoPoster" value={settings.introVideoPoster} onChange={handleChange} placeholder="/images/office/dhanmondi-brandwall.webp" className={field} />
+            </div>
           </div>
         </section>
 

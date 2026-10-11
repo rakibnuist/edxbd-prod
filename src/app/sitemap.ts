@@ -1,7 +1,11 @@
 import { MetadataRoute } from 'next';
-import { activeCountries } from '@/lib/countries';
 import prisma from '@/lib/prisma';
 import { evidencePages } from '@/data/evidencePages';
+import { chinaGuidePages } from '@/data/chinaGuidePages';
+import { sitemapStaticRouteSlugs } from '@/data/staticRoutePages';
+import { currentPublishedContentWhere } from '@/lib/content-governance';
+import { activeCountries } from '@/lib/countries';
+import { destinationPath } from '@/lib/site-urls';
 
 // PHASE 0 FIX:
 // - baseUrl moved to apex domain (www redirects -> canonical mismatch before)
@@ -12,36 +16,57 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://eduexpressint.com';
 
   // Static routes
-  const routes = [
+  const staticPaths = Array.from(new Set([
     '',
     '/about',
     '/destinations',
+    '/find-education',
+    '/your-study-journey',
+    '/scholarships',
     '/universities',
     '/services',
     '/updates',
     '/partnership',
     '/contact',
     '/education-fit-assessment',
-    ...Object.keys(evidencePages).map((slug) => `/${slug}`),
-  ].map((route) => ({
+    '/china-march-2027-intake',
+    '/for-parents',
+    '/proof-library',
+    // Pages served by a hand-built route under src/app/
+    ...sitemapStaticRouteSlugs.map((slug) => `/${slug}`),
+    // Pages served by app/[slug] from the two data files
+    ...Object.keys(evidencePages)
+      .filter((slug) => !slug.includes('/'))
+      .map((slug) => `/${slug}`),
+    ...Object.keys(chinaGuidePages).map((slug) => `/${slug}`),
+  ]));
+  const routes = staticPaths.map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: route === '' ? 1 : route === '/education-fit-assessment' ? 0.9 : 0.8,
   }));
 
   // Dynamic routes (Countries)
-  const countryRoutes = activeCountries.map((country) => ({
-    url: `${baseUrl}/destinations/${country.slug}`,
-    lastModified: new Date(),
+  const countryRoutes: MetadataRoute.Sitemap = activeCountries
+    .filter((country) => country.slug !== 'china')
+    .map((country) => ({
+    url: `${baseUrl}${destinationPath(country.slug)}`,
+    lastModified: new Date('2026-08-24'),
     changeFrequency: 'weekly' as const,
-    priority: 0.9,
+    priority: 0.85,
   }));
 
   try {
     // Universities
     const universities = await prisma.university.findMany({
-      where: { isActive: true },
+      where: {
+        isActive: true,
+        verificationStatus: 'verified',
+        officialUrl: { not: null },
+        lastVerifiedAt: { not: null },
+        verificationExpiresAt: { gte: new Date() },
+        AND: [{ sourceUrls: { not: '[]' } }],
+      },
       select: { slug: true, updatedAt: true }
     });
     const universityRoutes = universities.map((uni) => ({
@@ -50,10 +75,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     }));
-
     // Published updates/articles
     const updates = await prisma.content.findMany({
-      where: { type: 'update', isPublished: true },
+      where: { type: 'update', ...currentPublishedContentWhere() },
       select: { slug: true, updatedAt: true, publishedAt: true }
     });
     const updateRoutes = updates.map((post) => ({

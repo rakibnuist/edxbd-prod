@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
-import prisma from '@/lib/prisma';
 import UpdatesClient from './UpdatesClient';
 import type { Update } from '@/lib/types';
+import { getPublishedUpdates } from '@/lib/content-records';
 
 // PHASE 0 FIX: this page now fetches updates on the SERVER and passes them to
 // the client component, so every article title/excerpt is present in the HTML
@@ -73,36 +73,17 @@ const normalizeList = (values: unknown[]) =>
 
 async function getUpdates(): Promise<{ updates: Update[]; categories: string[] }> {
   try {
-    const rawUpdates = await prisma.content.findMany({
-      where: { type: 'update', isPublished: true },
-      orderBy: [
-        { isFeatured: 'desc' },
-        { publishedAt: 'desc' },
-        { createdAt: 'desc' }
-      ]
-    });
-
-    const singleCategories = rawUpdates
+    const updates = await getPublishedUpdates();
+    const singleCategories = updates
       .map(u => u.category)
       .filter((c): c is string => typeof c === 'string' && c.trim() !== '');
-
-    const multiCategories = rawUpdates
-      .map(u => u.categories ? JSON.parse(u.categories) : [])
+    const multiCategories = updates
+      .map(u => u.categories || [])
       .flat()
       .filter((c): c is string => typeof c === 'string' && c.trim() !== '');
 
-    // Map Prisma models to Update type if needed, specifically id
-    const updates = rawUpdates.map(u => ({
-      ...u,
-      id: u.id, // For backward compatibility with UpdatesClient
-      tags: u.tags ? JSON.parse(u.tags) : [],
-      categories: u.categories ? JSON.parse(u.categories) : [],
-      sourceUrls: u.sourceUrls ? JSON.parse(u.sourceUrls) : [],
-    }));
-
     return {
-      // Serialize Mongoose documents (ObjectId, Date) for the client component
-      updates: JSON.parse(JSON.stringify(updates)),
+      updates,
       categories: normalizeList([...singleCategories, ...multiCategories]),
     };
   } catch (error) {

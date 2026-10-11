@@ -1,265 +1,110 @@
 'use client';
 
-import { useMemo, useState, useRef, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
-import { 
-  ArrowRight, BookOpenCheck, CalendarCheck, Check, ChevronDown, 
-  Filter, Languages, MapPin, Search, Sparkles, Wallet, Clock, X, SlidersHorizontal, ArrowUpRight
-} from 'lucide-react';
+import { ArrowRight, BookOpenCheck, CheckCircle2, GraduationCap, Languages, MapPin, Search, Sparkles, X } from 'lucide-react';
 import type { CleanUniversityRecord } from '@/lib/university-records';
 
 type Props = { initialUniversities: CleanUniversityRecord[] };
 
 export default function UniversitiesClient({ initialUniversities }: Props) {
   const searchParams = useSearchParams();
-  const initialCountry = searchParams?.get('country');
+  const initialCountry = searchParams?.get('country') || '';
+  // Lets the homepage hero (and any campaign link) deep-link a search term.
+  const initialQuery = searchParams?.get('search') || '';
+  const [query, setQuery] = useState(initialQuery);
+  const [country, setCountry] = useState(initialCountry);
+  const [level, setLevel] = useState('');
+  const [language, setLanguage] = useState('');
+  const [visible, setVisible] = useState(12);
 
-  const [query, setQuery] = useState('');
-  const [selectedCountries, setSelectedCountries] = useState<string[]>(initialCountry ? [initialCountry] : []);
-  const [selectedDegrees, setSelectedDegrees] = useState<string[]>([]);
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [selectedIntakes, setSelectedIntakes] = useState<string[]>([]);
-
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const countryOptions = useMemo(() => Array.from(new Set(initialUniversities.map(item => item.country).filter(Boolean))).sort(), [initialUniversities]);
-  const degreeOptions = useMemo(() => Array.from(new Set(initialUniversities.flatMap(item => item.degree || []))).sort(), [initialUniversities]);
-  const languageOptions = useMemo(() => Array.from(new Set(initialUniversities.flatMap(item => item.taught || []))).sort(), [initialUniversities]);
-  const intakeOptions = useMemo(() => Array.from(new Set(initialUniversities.flatMap(item => item.intake || []))).sort(), [initialUniversities]);
+  const countries = useMemo(() => Array.from(new Set(initialUniversities.map(item => item.country).filter(Boolean))).sort(), [initialUniversities]);
+  const levels = useMemo(() => Array.from(new Set(initialUniversities.flatMap(item => item.programs.map(program => program.level)).filter(Boolean))).sort(), [initialUniversities]);
+  const languages = useMemo(() => Array.from(new Set(initialUniversities.flatMap(item => item.programs.flatMap(program => program.languages)).filter(Boolean))).sort(), [initialUniversities]);
 
   const filtered = useMemo(() => {
-    const normalized = query.trim().toLowerCase();
-    return initialUniversities.filter(item => {
-      const searchText = [item.name, item.city, item.location, item.country, ...(item.details?.majors || []), ...(item.programs || []).flatMap(program => [program.name || '', program.subject || ''])].join(' ').toLowerCase();
-      
-      const matchQuery = !normalized || searchText.includes(normalized);
-      const matchCountry = selectedCountries.length === 0 || selectedCountries.includes(item.country);
-      const matchDegree = selectedDegrees.length === 0 || item.degree?.some(d => selectedDegrees.includes(d));
-      const matchLanguage = selectedLanguages.length === 0 || item.taught?.some(l => selectedLanguages.includes(l));
-      const matchIntake = selectedIntakes.length === 0 || item.intake?.some(i => selectedIntakes.includes(i));
-
-      return matchQuery && matchCountry && matchDegree && matchLanguage && matchIntake;
+    const search = query.trim().toLowerCase();
+    return initialUniversities.filter(university => {
+      const haystack = [
+        university.name,
+        university.city,
+        university.country,
+        ...university.programs.map(program => program.name),
+        ...university.details.majors,
+      ].join(' ').toLowerCase();
+      const matchesSearch = !search || haystack.includes(search);
+      const matchesCountry = !country || university.country === country;
+      const matchesLevel = !level || university.programs.some(program => program.level === level) || university.degree.includes(level);
+      const matchesLanguage = !language || university.programs.some(program => program.languages.includes(language)) || university.taught.includes(language);
+      return matchesSearch && matchesCountry && matchesLevel && matchesLanguage;
     });
-  }, [initialUniversities, query, selectedCountries, selectedDegrees, selectedLanguages, selectedIntakes]);
+  }, [country, initialUniversities, language, level, query]);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setActiveDropdown(null);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const toggleFilter = (setState: React.Dispatch<React.SetStateAction<string[]>>, option: string) => {
-    setState(prev => prev.includes(option) ? prev.filter(item => item !== option) : [...prev, option]);
-  };
-
-  const clearAll = () => {
+  const clearFilters = () => {
     setQuery('');
-    setSelectedCountries([]);
-    setSelectedDegrees([]);
-    setSelectedLanguages([]);
-    setSelectedIntakes([]);
-    setActiveDropdown(null);
+    setCountry('');
+    setLevel('');
+    setLanguage('');
+    setVisible(12);
   };
 
-  const hasFilters = query || selectedCountries.length || selectedDegrees.length || selectedLanguages.length || selectedIntakes.length;
-
-  const FilterDropdown = ({ title, options, selected, setState, id }: { title: string, options: string[], selected: string[], setState: React.Dispatch<React.SetStateAction<string[]>>, id: string }) => {
-    const isOpen = activeDropdown === id;
-    
-    return (
-      <div className="relative">
-        <button 
-          onClick={() => setActiveDropdown(isOpen ? null : id)}
-          className={`flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-bold transition-all ${isOpen || selected.length > 0 ? 'border-[#174f7a] bg-[#174f7a]/5 text-[#174f7a]' : 'border-slate-300 bg-white text-slate-700 hover:border-[#174f7a]'}`}
-        >
-          {title} {selected.length > 0 && <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#174f7a] text-[10px] text-white">{selected.length}</span>}
-          <ChevronDown size={14} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-        </button>
-
-        {isOpen && (
-          <div className="absolute left-0 top-[calc(100%+0.5rem)] z-50 w-64 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-black/10 animate-in fade-in slide-in-from-top-2">
-            <div className="max-h-64 overflow-y-auto p-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-200">
-              {options.map(option => (
-                <label key={option} className="flex cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-slate-50 transition-colors">
-                  <div className={`grid size-5 shrink-0 place-items-center rounded border transition-colors ${selected.includes(option) ? 'border-[#174f7a] bg-[#174f7a] text-white' : 'border-slate-300 bg-white'}`}>
-                    {selected.includes(option) && <Check size={14} strokeWidth={3} />}
-                  </div>
-                  <span className="text-sm font-medium text-slate-700">{option}</span>
-                </label>
-              ))}
-            </div>
-            {selected.length > 0 && (
-              <div className="border-t border-slate-100 p-2 mt-1">
-                <button onClick={() => setState([])} className="w-full rounded-lg bg-slate-100 py-2 text-xs font-bold text-slate-600 hover:bg-slate-200">Clear Selection</button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    );
-  };
+  const activeFilters = Boolean(query || country || level || language);
 
   return (
-    <section id="global-university-directory" className="bg-[#f4f8fa] min-h-screen">
-      {/* Top Filter Bar */}
-      <div className="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60">
-        <div className="mx-auto max-w-[1440px] px-5 py-4 sm:px-8 lg:px-12">
-          
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between" ref={dropdownRef}>
-            
-            {/* Search */}
-            <div className="relative w-full lg:max-w-md">
+    <section className="min-h-[60vh] bg-[#f7fafc] px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
+      <div className="mx-auto max-w-[1320px]">
+        <div className="rounded-2xl border border-[#174f7a]/15 bg-white p-4 shadow-sm sm:p-5">
+          <div className="grid gap-3 lg:grid-cols-[1fr_repeat(3,.52fr)]">
+            <label className="relative">
+              <span className="sr-only">Search universities and programs</span>
               <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input 
-                value={query} 
-                onChange={event => setQuery(event.target.value)} 
-                className="h-12 w-full rounded-full border border-slate-300 bg-white pl-12 pr-4 text-sm font-medium text-[#08263c] shadow-sm outline-none transition focus:border-[#174f7a] focus:ring-4 focus:ring-[#174f7a]/10" 
-                placeholder="Search universities, majors, or cities..." 
-              />
-            </div>
-
-            {/* Dropdowns */}
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="hidden lg:flex items-center gap-2 mr-2 text-slate-400">
-                <SlidersHorizontal size={16} /> <span className="text-xs font-bold uppercase tracking-wider">Filters</span>
-              </div>
-              <FilterDropdown id="dest" title="Destination" options={countryOptions} selected={selectedCountries} setState={setSelectedCountries as any} />
-              <FilterDropdown id="level" title="Study Level" options={degreeOptions} selected={selectedDegrees} setState={setSelectedDegrees as any} />
-              <FilterDropdown id="lang" title="Language" options={languageOptions} selected={selectedLanguages} setState={setSelectedLanguages as any} />
-              <FilterDropdown id="intake" title="Intake" options={intakeOptions} selected={selectedIntakes} setState={setSelectedIntakes as any} />
-            </div>
-
+              <input value={query} onChange={event => { setQuery(event.target.value); setVisible(12); }} placeholder="Search a university, program or city" className="h-12 w-full rounded-xl border border-slate-200 bg-[#f7fafc] pl-11 pr-10 text-sm font-semibold outline-none transition focus:border-[#174f7a] focus:ring-4 focus:ring-[#174f7a]/10" />
+              {query && <button type="button" onClick={() => setQuery('')} aria-label="Clear search" className="absolute right-3 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-full hover:bg-slate-100"><X size={15} /></button>}
+            </label>
+            {countries.length > 1 && <label><span className="sr-only">Destination</span><select value={country} onChange={event => { setCountry(event.target.value); setVisible(12); }} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold outline-none focus:border-[#174f7a]"><option value="">All destinations</option>{countries.map(item => <option key={item}>{item}</option>)}</select></label>}
+            <label><span className="sr-only">Study level</span><select value={level} onChange={event => { setLevel(event.target.value); setVisible(12); }} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold outline-none focus:border-[#174f7a]"><option value="">All study levels</option>{levels.map(item => <option key={item}>{item}</option>)}</select></label>
+            <label><span className="sr-only">Teaching language</span><select value={language} onChange={event => { setLanguage(event.target.value); setVisible(12); }} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold outline-none focus:border-[#174f7a]"><option value="">All languages</option>{languages.map(item => <option key={item}>{item}</option>)}</select></label>
           </div>
-
-          {/* Active Filter Pills */}
-          {hasFilters && (
-            <div className="mt-4 flex flex-wrap items-center gap-2 animate-in fade-in">
-              <span className="text-xs font-bold text-slate-500 mr-2">Active:</span>
-              
-              {query && (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#174f7a] px-3 py-1 text-xs font-medium text-white shadow-sm">
-                  Search: "{query}" <button onClick={() => setQuery('')} className="hover:text-white/70"><X size={14} /></button>
-                </span>
-              )}
-              
-              {selectedCountries.map(c => (
-                <span key={c} className="inline-flex items-center gap-1.5 rounded-full border border-[#174f7a]/20 bg-[#174f7a]/5 px-3 py-1 text-xs font-medium text-[#174f7a]">
-                  {c} <button onClick={() => toggleFilter(setSelectedCountries as any, c)} className="hover:text-[#174f7a]/70"><X size={14} /></button>
-                </span>
-              ))}
-              
-              {selectedDegrees.map(d => (
-                <span key={d} className="inline-flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-50 px-3 py-1 text-xs font-medium text-orange-700">
-                  {d} <button onClick={() => toggleFilter(setSelectedDegrees as any, d)} className="hover:text-orange-700/70"><X size={14} /></button>
-                </span>
-              ))}
-
-              {selectedLanguages.map(l => (
-                <span key={l} className="inline-flex items-center gap-1.5 rounded-full border border-purple-500/20 bg-purple-50 px-3 py-1 text-xs font-medium text-purple-700">
-                  {l} <button onClick={() => toggleFilter(setSelectedLanguages as any, l)} className="hover:text-purple-700/70"><X size={14} /></button>
-                </span>
-              ))}
-
-              <button onClick={clearAll} className="ml-2 text-xs font-bold text-red-500 hover:underline">Clear All</button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Main Content Grid (Rich List) */}
-      <div className="mx-auto max-w-[1440px] px-5 py-10 sm:px-8 lg:px-12">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-sm font-medium text-slate-500">Showing <strong className="text-[#08263c] font-black">{filtered.length}</strong> available records</h2>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4"><p className="text-sm text-slate-500"><strong className="text-[#08263c]">{filtered.length}</strong> suitable university {filtered.length === 1 ? 'record' : 'records'}</p>{activeFilters && <button type="button" onClick={clearFilters} className="text-xs font-black text-[#174f7a]">Clear all filters</button>}</div>
         </div>
 
-        <div className="flex flex-col gap-5">
-          {filtered.map((university) => {
-            const isVerified = university.verificationStatus === 'verified' && university.sourceUrls?.length;
-            
-            return (
-              <article key={university.id} className="group relative flex flex-col md:flex-row items-stretch overflow-hidden border-2 border-[#08263c] bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[10px_10px_0_0_#174f7a]">
-                {/* Visual Accent / Cover Box */}
-                <div className="w-full md:w-64 shrink-0 bg-[#08263c] p-6 text-white flex flex-col justify-between relative overflow-hidden">
-                  <div className="absolute -right-8 -top-8 size-40 rounded-full border-[20px] border-white/5" />
-                  
-                  <div>
-                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-mono font-black uppercase tracking-widest ${isVerified ? 'bg-[#174f7a] text-[#8ed0ee] border border-[#64b5df]/30' : 'bg-white/10 text-white/80 border border-white/20'}`}>
-                      {isVerified ? <BookOpenCheck size={12} /> : <CalendarCheck size={12} />}
-                      {isVerified ? 'Verified Record' : 'Under Review'}
-                    </div>
+        {filtered.length ? <>
+          <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {filtered.slice(0, visible).map(university => {
+              const verified = university.verificationStatus === 'verified' && university.sourceUrls.length > 0;
+              const studyLevels = Array.from(new Set(university.programs.map(program => program.level))).filter(Boolean);
+              const programNames = Array.from(new Set(university.programs.map(program => program.name))).filter(Boolean);
+              const teaching = Array.from(new Set(university.programs.flatMap(program => program.languages))).filter(Boolean);
+              return <article key={university.id} className="flex flex-col overflow-hidden rounded-2xl border border-[#174f7a]/15 bg-white shadow-sm transition hover:-translate-y-1 hover:border-[#174f7a]/35 hover:shadow-xl">
+                <div className="flex items-center justify-between gap-3 border-b border-[#174f7a]/10 bg-[#f7fafc] px-5 py-3 text-[10px] font-black uppercase tracking-[.12em]"><span className="flex items-center gap-2 text-[#174f7a]"><MapPin size={13} />{university.city}, {university.country}</span><span className={`rounded-full px-2.5 py-1 ${verified ? 'bg-emerald-50 text-emerald-700' : 'bg-[#e9f7fd] text-[#174f7a]'}`}>{verified ? 'Source checked' : 'Fresh check included'}</span></div>
+                <div className="flex flex-1 flex-col p-5">
+                  <div className="flex items-start gap-4">
+                    <span className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl border border-[#174f7a]/12 bg-white p-2 shadow-sm">
+                      {university.logo ? (
+                        <Image src={university.logo} alt={`${university.name} logo`} width={52} height={52} className="max-h-full max-w-full object-contain" />
+                      ) : (
+                        <GraduationCap size={25} className="text-[#174f7a]" />
+                      )}
+                    </span>
+                    <h2 className="font-heading text-2xl font-bold leading-7"><Link href={`/universities/${university.slug}`} className="hover:text-[#174f7a]">{university.name}</Link></h2>
                   </div>
-
-                  <div className="mt-10">
-                    <p className="flex items-center gap-1.5 font-mono text-[10px] font-bold text-[#8ed0ee] uppercase tracking-widest mb-1">
-                      <MapPin size={13} /> {university.country || university.location}
-                    </p>
-                    <p className="font-heading text-xl font-bold leading-tight text-white">{university.city}</p>
+                  <div className="mt-4 flex flex-wrap gap-2">{studyLevels.slice(0, 3).map(item => <span key={item} className="rounded-full bg-[#e9f7fd] px-2.5 py-1 text-[10px] font-bold text-[#174f7a]">{item}</span>)}</div>
+                  <div className="mt-5 space-y-2 text-sm text-slate-600">
+                    {programNames.slice(0, 2).map(program => <p key={program} className="flex items-start gap-2"><BookOpenCheck size={15} className="mt-0.5 shrink-0 text-[#174f7a]" />{program}</p>)}
+                    {programNames.length > 2 && <p className="pl-6 text-xs font-bold text-[#174f7a]">+ {programNames.length - 2} more program options</p>}
                   </div>
+                  <div className="mt-5 grid grid-cols-2 gap-3 rounded-xl bg-[#f7fafc] p-3 text-xs"><div><span className="flex items-center gap-1.5 font-bold text-slate-400"><Languages size={13} />Teaching</span><strong className="mt-1 block text-[#08263c]">{teaching.slice(0, 2).join(', ') || 'Confirmed by program'}</strong></div><div><span className="flex items-center gap-1.5 font-bold text-slate-400"><Sparkles size={13} />Scholarships</span><strong className="mt-1 block text-[#08263c]">{university.scholarships.length ? `${university.scholarships.length} recorded option${university.scholarships.length === 1 ? '' : 's'}` : 'Matched after fit'}</strong></div></div>
+                  <Link href={`/universities/${university.slug}`} className="mt-5 inline-flex min-h-12 items-center justify-between rounded-xl bg-[#08263c] px-4 text-sm font-black text-white transition hover:bg-[#174f7a]">View study options <ArrowRight size={15} /></Link>
                 </div>
-                
-                {/* Core Info */}
-                <div className="flex-1 p-6 md:p-8 flex flex-col justify-center bg-white">
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {(university.degree || []).map(value => (
-                      <span key={value} className="inline-flex items-center bg-[#e9f7fd] border border-[#174f7a]/20 px-2.5 py-1 font-mono text-[9px] font-black text-[#174f7a] tracking-wider uppercase">
-                        {value}
-                      </span>
-                    ))}
-                  </div>
-
-                  <h2 className="font-heading text-2xl md:text-3xl font-bold leading-tight text-[#08263c] transition-colors group-hover:text-[#174f7a]">
-                    <Link href={`/universities/${university.slug}`} className="focus:outline-none">
-                      <span className="absolute inset-0 z-10" aria-hidden="true" />
-                      {university.name}
-                    </Link>
-                  </h2>
-
-                  {/* Feature Grid */}
-                  <div className="mt-6 grid grid-cols-2 gap-y-4 gap-x-6 sm:grid-cols-4 border-t border-[#174f7a]/15 pt-5 bg-[#f4f8fa] p-4">
-                    <div>
-                      <p className="font-mono text-[9px] font-black uppercase tracking-wider text-[#174f7a] mb-1">Tuition Est.</p>
-                      <p className="text-xs font-bold text-[#08263c] flex items-center gap-1.5"><Wallet size={13} className="text-[#174f7a]" /> {university.details?.tuition || 'Variable'}</p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[9px] font-black uppercase tracking-wider text-[#174f7a] mb-1">Teaching Lang</p>
-                      <p className="text-xs font-bold text-[#08263c] flex items-center gap-1.5"><Languages size={13} className="text-[#174f7a]" /> {university.taught?.join(', ') || 'Mixed'}</p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[9px] font-black uppercase tracking-wider text-[#174f7a] mb-1">Scholarships</p>
-                      <p className="text-xs font-bold text-[#08263c] flex items-center gap-1.5"><Sparkles size={13} className="text-[#64b5df]" /> {university.scholarships?.length ? `${university.scholarships.length} Types` : 'None'}</p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[9px] font-black uppercase tracking-wider text-[#174f7a] mb-1">Next Intake</p>
-                      <p className="text-xs font-bold text-[#08263c] flex items-center gap-1.5"><Clock size={13} className="text-[#174f7a]" /> {university.intake?.[0] || 'Rolling'}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Arrow CTA */}
-                <div className="hidden lg:flex w-20 shrink-0 border-l border-[#174f7a]/15 items-center justify-center bg-[#f4f8fa] transition-colors group-hover:bg-[#08263c] text-[#08263c] group-hover:text-white">
-                  <ArrowUpRight size={28} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </div>
-              </article>
-            );
-          })}
-        </div>
-
-        {!filtered.length && (
-          <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-white px-6 py-32 text-center">
-            <div className="grid size-20 place-items-center rounded-full bg-[#e9f7fd] text-[#174f7a]">
-              <Search size={32} />
-            </div>
-            <h2 className="mt-6 font-heading text-3xl font-bold text-[#08263c]">No results found</h2>
-            <p className="mt-4 max-w-md text-base leading-7 text-slate-500">We couldn't find any institutions matching your exact requirements. Try removing some filters to broaden your search.</p>
-            <button onClick={clearAll} className="mt-8 rounded-full bg-[#174f7a] px-8 py-4 text-sm font-black text-white hover:bg-[#0b2f4a] shadow-lg shadow-[#174f7a]/20 transition-all hover:-translate-y-0.5">Clear all filters</button>
+              </article>;
+            })}
           </div>
-        )}
+          {visible < filtered.length && <div className="mt-8 text-center"><button type="button" onClick={() => setVisible(count => count + 12)} className="inline-flex min-h-13 items-center gap-2 rounded-xl border-2 border-[#08263c] bg-white px-6 text-sm font-black">Show 12 more <ArrowRight size={15} /></button></div>}
+        </> : <div className="mt-7 rounded-2xl border border-dashed border-[#174f7a]/30 bg-white px-6 py-16 text-center"><span className="mx-auto grid size-14 place-items-center rounded-full bg-[#e9f7fd] text-[#174f7a]"><Search size={24} /></span><h2 className="mt-5 font-heading text-2xl font-bold">No exact match yet</h2><p className="mx-auto mt-3 max-w-md text-sm leading-6 text-slate-500">Clear one filter or ask a counselor to compare suitable alternatives.</p><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><button type="button" onClick={clearFilters} className="min-h-12 rounded-xl bg-[#08263c] px-5 text-sm font-black text-white">Clear filters</button><Link href="/education-fit-assessment" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border-2 border-[#08263c] px-5 text-sm font-black">Ask for help <ArrowRight size={15} /></Link></div></div>}
+
+        <div className="mt-10 flex items-start gap-3 rounded-2xl bg-[#dff3fb] p-5 text-sm leading-6 text-slate-600"><CheckCircle2 size={19} className="mt-0.5 shrink-0 text-[#174f7a]" /><p><strong className="text-[#08263c]">Before application:</strong> EduExpress aligns the selected program, current deadline, tuition, eligibility and official source in one fresh review.</p></div>
       </div>
     </section>
   );

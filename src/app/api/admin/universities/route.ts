@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { serializeUniversity, universityAdminInclude, universityWriteData } from '@/lib/university-admin';
+import { universityVerificationErrors } from '@/lib/university-governance';
 
 export async function GET(request: NextRequest) {
     try {
@@ -29,26 +31,36 @@ export async function GET(request: NextRequest) {
         }
 
         if (degree && degree !== 'all') {
-            query.degree = { has: degree };
+            query.degree = { contains: degree };
         }
 
         if (search) {
             query.OR = [
                 { name: { contains: search } },
-                { location: { contains: search } }
+                { location: { contains: search } },
+                { country: { contains: search } },
+                { city: { contains: search } }
             ];
         }
 
-        const total = await prisma.university.count({ where: query });
-        const universities = await prisma.university.findMany({
-            where: query,
-            orderBy: { name: 'asc' },
-            skip,
-            take: limit
-        });
+        const [total, universities, filterRecords] = await Promise.all([
+            prisma.university.count({ where: query }),
+            prisma.university.findMany({
+                where: query,
+                orderBy: { name: 'asc' },
+                skip,
+                take: limit,
+                include: universityAdminInclude,
+            }),
+            prisma.university.findMany({ select: { country: true, degree: true } }),
+        ]);
+
+        const countries = Array.from(new Set(filterRecords.map(record => record.country.trim()).filter(Boolean))).sort();
+        const degrees = Array.from(new Set(filterRecords.flatMap(record => record.degree.split(',').map(item => item.trim()).filter(Boolean)))).sort();
 
         return NextResponse.json({
-            universities,
+            universities: universities.map(serializeUniversity),
+            filters: { countries, degrees },
             pagination: {
                 total,
                 page,
@@ -80,17 +92,31 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Name and Slug are required' }, { status: 400 });
         }
 
+        const verificationErrors = universityVerificationErrors(body);
+        if (verificationErrors.length) {
+            return NextResponse.json({ error: `Complete the evidence checks before publishing: ${verificationErrors.join(' ')}` }, { status: 400 });
+        }
+
         // Check unique slug
         const existing = await prisma.university.findUnique({ where: { slug: body.slug } });
         if (existing) {
             return NextResponse.json({ error: 'University with this slug already exists' }, { status: 400 });
         }
 
+        const updateData = universityWriteData(body);
+        if (!('programs' in updateData)) return NextResponse.json({ error: 'Invalid university data.' }, { status: 400 });
         const university = await prisma.university.create({
-            data: body
+            data: {
+                ...updateData,
+                programs: { create: updateData.programs.create },
+                fees: { create: updateData.fees.create },
+                scholarships: { create: updateData.scholarships.create },
+                costPlans: { create: updateData.costPlans.create },
+            },
+            include: universityAdminInclude,
         });
 
-        return NextResponse.json(university, { status: 201 });
+        return NextResponse.json(serializeUniversity(university), { status: 201 });
     } catch (error) {
         console.error('Error creating university:', error);
         return NextResponse.json(

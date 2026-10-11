@@ -1,7 +1,6 @@
 'use client';
 
-import { ArrowRight, Share2, Calendar, Clock, ChevronLeft } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { ArrowRight, Share2, Calendar, Clock, ChevronLeft, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
@@ -9,12 +8,6 @@ import { trackConsultationRequest } from '@/lib/analytics';
 import { UpdateClientProps } from '@/lib/types';
 
 export default function UpdateClient({ update }: UpdateClientProps) {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -36,14 +29,6 @@ export default function UpdateClient({ update }: UpdateClientProps) {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }).format(new Date(dateString));
-  };
-
   // Smart title splitting for PageHeader
   const words = update.title.split(' ');
   const titlePart = words.slice(0, Math.ceil(words.length / 2)).join(' ');
@@ -51,14 +36,6 @@ export default function UpdateClient({ update }: UpdateClientProps) {
 
   // Calculate read time
   const readTime = Math.max(1, Math.ceil((update.content.length || 0) / 1000)) + ' min read';
-
-  if (!isClient) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-slate-200 border-t-amber-500 rounded-full animate-pulse"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-amber-100 selection:text-amber-900">
@@ -76,9 +53,8 @@ export default function UpdateClient({ update }: UpdateClientProps) {
             <Clock className="w-4 h-4 text-amber-500" />
             {readTime}
           </div>
-          <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
-            <Calendar className="w-4 h-4 text-blue-500" />
-            {formatDate(update.publishedAt || update.createdAt)}
+          <div className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
+            By {update.author} · Updated {new Date(update.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
           </div>
         </div>
       </PageHeader>
@@ -126,6 +102,19 @@ export default function UpdateClient({ update }: UpdateClientProps) {
             <div className="update-content-fix prose prose-lg md:prose-xl max-w-none prose-slate prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-slate-900 prose-p:leading-8 prose-p:text-slate-600 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-a:font-semibold prose-img:rounded-2xl prose-img:shadow-md prose-blockquote:border-l-4 prose-blockquote:border-amber-500 prose-blockquote:bg-amber-50 prose-blockquote:text-slate-700 prose-blockquote:px-8 prose-blockquote:py-6 prose-blockquote:my-10 prose-blockquote:not-italic prose-blockquote:rounded-r-xl prose-strong:text-slate-900">
               <div dangerouslySetInnerHTML={{ __html: update.content }} />
             </div>
+
+            {update.sourceUrls?.length ? (
+              <aside className="mt-12 border-t border-slate-200 pt-8">
+                <h2 className="text-xl font-bold text-slate-900">Sources checked</h2>
+                <div className="mt-4 grid gap-2">
+                  {update.sourceUrls.map(source => (
+                    <a key={source} href={source} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:underline">
+                      Official or institutional source <ExternalLink size={14} />
+                    </a>
+                  ))}
+                </div>
+              </aside>
+            ) : null}
           </article>
 
           {/* 6. High-Visibility Gradient CTA Banner */}

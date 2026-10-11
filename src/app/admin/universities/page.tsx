@@ -3,7 +3,8 @@
 
 import { useCallback, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Plus, Search, Edit, Trash2, GraduationCap, MapPin, Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import { Plus, Search, Edit, Trash2, GraduationCap, MapPin, Loader2, RotateCcw } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { IUniversity } from '@/types/university';
 
@@ -12,6 +13,9 @@ export default function UniversitiesPage() {
     const [universities, setUniversities] = useState<IUniversity[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [country, setCountry] = useState('all');
+    const [degree, setDegree] = useState('all');
+    const [filterOptions, setFilterOptions] = useState<{ countries: string[]; degrees: string[] }>({ countries: [], degrees: [] });
 
     // Pagination state
     const [page, setPage] = useState(1);
@@ -22,20 +26,21 @@ export default function UniversitiesPage() {
     const fetchUniversities = useCallback(async () => {
         try {
             setLoading(true);
-            // Public endpoint might not need auth, but admin endpoint does
-            const res = await authenticatedFetch(`/api/admin/universities?search=${search}&page=${page}&limit=10`);
+            const params = new URLSearchParams({ search, country, degree, page: String(page), limit: '10' });
+            const res = await authenticatedFetch(`/api/admin/universities?${params.toString()}`);
             if (res.ok) {
                 const data = await res.json();
                 setUniversities(data.universities);
                 setTotalPages(data.pagination.totalPages);
                 setTotalItems(data.pagination.total);
+                setFilterOptions(data.filters || { countries: [], degrees: [] });
             }
         } catch (error) {
             console.error('Failed to fetch', error);
         } finally {
             setLoading(false);
         }
-    }, [authenticatedFetch, page, search]);
+    }, [authenticatedFetch, country, degree, page, search]);
 
     useEffect(() => {
         fetchUniversities();
@@ -111,16 +116,27 @@ export default function UniversitiesPage() {
                 </div>
             </div>
 
-            {/* Search */}
-            <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                <input
-                    type="text"
-                    placeholder="Search universities..."
-                    value={search}
-                    onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+            {/* Search and destination filters */}
+            <div className="grid gap-3 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm lg:grid-cols-[1fr_220px_220px_auto]">
+                <div className="relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <input
+                        type="text"
+                        placeholder="Search university, city or destination"
+                        value={search}
+                        onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                        className="w-full rounded-xl border border-slate-200 py-3 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <select value={country} onChange={event => { setCountry(event.target.value); setPage(1); }} className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Filter universities by destination">
+                    <option value="all">All destinations</option>
+                    {filterOptions.countries.map(item => <option key={item} value={item}>{item}</option>)}
+                </select>
+                <select value={degree} onChange={event => { setDegree(event.target.value); setPage(1); }} className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Filter universities by study level">
+                    <option value="all">All study levels</option>
+                    {filterOptions.degrees.map(item => <option key={item} value={item}>{item}</option>)}
+                </select>
+                <button type="button" onClick={() => { setSearch(''); setCountry('all'); setDegree('all'); setPage(1); }} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 text-sm font-bold text-slate-600 hover:bg-slate-50"><RotateCcw size={16} />Reset</button>
             </div>
 
             {/* List */}
@@ -133,13 +149,13 @@ export default function UniversitiesPage() {
                     {universities.map((uni) => (
                         <div key={uni.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center group hover:border-blue-200 transition-all">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 font-bold text-xl">
-                                    {uni.name.charAt(0)}
+                                <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-blue-100 bg-white p-1.5 text-xl font-bold text-blue-600">
+                                    {uni.logo ? <Image src={uni.logo} alt={`${uni.name} logo`} fill sizes="56px" unoptimized className="object-contain p-1.5" /> : uni.name.charAt(0)}
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-slate-900 text-lg group-hover:text-blue-700 transition-colors">{uni.name}</h3>
                                     <div className="flex items-center gap-4 text-sm text-slate-500">
-                                        <span className="flex items-center gap-1"><MapPin size={14} /> {uni.location}</span>
+                                        <span className="flex items-center gap-1"><MapPin size={14} /> {[uni.city || uni.location, uni.country].filter(Boolean).join(', ')}</span>
                                         <span className="flex items-center gap-1"><GraduationCap size={14} /> {uni.programs?.length || uni.details?.majors?.length || 0} programs across {new Set((uni.programs || []).map(program => program.level)).size || uni.degree.length} level{(new Set((uni.programs || []).map(program => program.level)).size || uni.degree.length) === 1 ? '' : 's'}</span>
                                     </div>
                                 </div>

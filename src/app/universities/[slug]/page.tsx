@@ -3,6 +3,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 
 import UniversityProfile from '@/components/universities/UniversityProfile';
 import { getUniversityRoute, getUniversityRouteSlugs } from '@/lib/university-records';
+import { universityIsIndexable } from '@/lib/university-governance';
 
 const baseUrl = 'https://eduexpressint.com';
 
@@ -20,7 +21,7 @@ export async function generateStaticParams() {
 }
 
 const descriptionFor = (name: string, city: string, country: string, degrees: string[]) => {
-  const text = `Study in ${name} from Bangladesh for 2027 intake. Explore programs, tuition, scholarships, and admission documents. Bangladesh's Evidence-First Education Consultancy. ${city}, ${country}. ${degrees.join(', ')}.`;
+  const text = `Study at ${name} from Bangladesh for the 2027 intake. Compare programs, tuition, scholarships, requirements, documents and first year costs in ${city}, ${country}. ${degrees.join(', ')}.`;
   return text.length > 158 ? `${text.slice(0, 155).trimEnd()}…` : text;
 };
 
@@ -32,7 +33,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const university = result.record;
   const canonical = `${baseUrl}/universities/${university.slug}`;
   const description = descriptionFor(university.name, university.city, university.country, university.degree);
-  const title = `Study in ${university.name} from Bangladesh (2027) | Fees & Scholarships`;
+  const title = `Study at ${university.name} from Bangladesh | Fees & Scholarships 2027`;
+  const indexable = universityIsIndexable(university);
 
   return {
     title: { absolute: `${title} | EduExpress International` },
@@ -42,11 +44,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       `study in ${university.country} from Bangladesh`,
       `${university.name} tuition fees`,
       `${university.name} scholarship for Bangladeshi students`,
+      `${university.name} admission requirements`,
+      `${university.name} documents`,
       `${university.name} admission`,
-      'Bangladesh Evidence-First Education Consultancy'
+      'China university admission from Bangladesh'
     ],
     alternates: { canonical },
-    robots: { index: true, follow: true },
+    robots: { index: indexable, follow: true },
     openGraph: {
       type: 'website',
       url: canonical,
@@ -80,7 +84,7 @@ export default async function UniversityDetailPage({ params }: { params: Promise
         '@type': 'WebPage',
         '@id': `${canonical}#page`,
         url: canonical,
-        name: `Study in ${university.name} from Bangladesh | Fees & Scholarships`,
+        name: `Study at ${university.name} from Bangladesh | Fees, Scholarships and Requirements`,
         description: descriptionFor(university.name, university.city, university.country, university.degree),
         inLanguage: 'en-BD',
         dateModified: university.updatedAt,
@@ -96,7 +100,7 @@ export default async function UniversityDetailPage({ params }: { params: Promise
         address: { '@type': 'PostalAddress', addressLocality: university.city, addressCountry: university.country },
         ...(university.logo ? { logo: university.logo } : {}),
         ...(university.officialUrl ? { sameAs: university.officialUrl } : {}),
-        hasCourse: university.programs.map(program => ({
+        hasCourse: university.programs.filter(program => Boolean(program.sourceUrl)).map(program => ({
           '@type': 'Course',
           name: program.name,
           educationalLevel: program.level,

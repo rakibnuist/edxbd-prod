@@ -4,7 +4,7 @@
  */
 
 const INDEXNOW_API_KEY = '9303d37873c94ab5a25637e6d1ad9ece'
-const BASE_URL = 'https://www.eduexpressint.com'
+const BASE_URL = 'https://eduexpressint.com'
 
 // IndexNow endpoints for different search engines
 const INDEXNOW_ENDPOINTS = {
@@ -52,7 +52,7 @@ export async function submitToIndexNow(
 
     // Prepare the request body
     const requestBody = {
-      host: 'www.eduexpressint.com',
+      host: 'eduexpressint.com',
       key: INDEXNOW_API_KEY,
       keyLocation: keyLocation || `${BASE_URL}/${INDEXNOW_API_KEY}.txt`,
       urlList: absoluteUrls
@@ -189,21 +189,33 @@ export async function submitUrlsInBatches(
 export async function submitAllImportantPages(): Promise<IndexNowResponse> {
   const importantPages = [
     '/',
+    '/find-education',
     '/destinations',
+    '/your-study-journey',
+    '/scholarships',
     '/services',
     '/updates',
     '/about',
     '/partnership',
     '/contact',
-    '/destinations/uk',
-    '/destinations/china',
-    '/destinations/south-korea',
-    '/destinations/hungary',
-    '/destinations/cyprus',
-    '/destinations/croatia',
-    '/destinations/georgia',
-    '/destinations/finland',
-    '/destinations/netherlands'
+    '/study-in-china-from-bangladesh',
+    '/china-universities',
+    '/china-scholarships-bangladesh',
+    '/china-student-visa-bangladesh',
+    '/study-in-china-cost-bangladesh',
+    '/study-in-uk-from-bangladesh',
+    '/study-in-hungary-from-bangladesh',
+    '/study-in-south-korea-from-bangladesh',
+    '/study-in-finland-from-bangladesh',
+    '/study-in-malaysia-from-bangladesh',
+    '/study-in-malta-from-bangladesh',
+    '/study-in-cyprus-from-bangladesh',
+    '/study-in-georgia-from-bangladesh',
+    '/study-in-greece-from-bangladesh',
+    '/study-in-croatia-from-bangladesh',
+    '/study-in-thailand-from-bangladesh',
+    '/proof-library',
+    '/education-fit-assessment'
   ]
 
   return submitToIndexNow(importantPages)

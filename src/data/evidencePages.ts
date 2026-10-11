@@ -77,7 +77,7 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
     intro: 'A country is not “best” in isolation. The right choice depends on your academic profile, subject, recognition needs, total budget, language readiness, risk tolerance and career goal.',
     sections: [
       { heading: 'Comparison criteria', body: 'Use the Better Education Standard rather than comparing scholarships or tuition alone.', items: ['Recognition and program quality', 'Entry and language fit', 'Full first-year and total-program cost', 'Funding conditions and renewal rules', 'Visa-readiness requirements', 'Student support and realistic career pathways'] },
-      { heading: 'Service status matters', body: 'China is the flagship service. Other countries must pass the eight-part launch gate before EduExpress presents them as active.' },
+      { heading: 'Service status matters', body: 'All 12 listed destination services are open. China is the flagship because it has the deepest published EduExpress evidence base; every other listed country is active for counselling and application support.' },
       { heading: 'Your next step', body: 'Complete the Education Fit Assessment to receive a written summary of suitable routes, risks and missing information.' },
     ],
   }),

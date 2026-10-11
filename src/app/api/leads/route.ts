@@ -67,19 +67,22 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Track lead with Meta Conversion API
-    try {
-      await trackStudyAbroadLead({
-        name: body.name || 'Unknown',
-        email: body.email || '',
-        phone: body.phone || '',
-        country: body.country || 'Not specified',
-        program: body.program || 'Not specified',
-        message: body.message || ''
-      }, body.source || 'website', request);
-    } catch (trackingError) {
-      console.error('Meta Conversion API tracking error:', trackingError);
-      // Don't fail the request if tracking fails
+    // Advertising consent is separate from permission to contact the lead.
+    // Only send hashed lead data to Meta when the visitor explicitly accepted.
+    if (body.trackingConsent === true) {
+      try {
+        await trackStudyAbroadLead({
+          name: body.name || 'Unknown',
+          email: body.email || '',
+          phone: body.phone || '',
+          country: body.country || 'Not specified',
+          program: body.program || 'Not specified',
+          message: body.message || ''
+        }, body.source || 'website', request, undefined, body.metaEventId);
+      } catch (trackingError) {
+        console.error('Meta Conversion API tracking error:', trackingError);
+        // Don't fail the request if tracking fails
+      }
     }
 
     // Return success response

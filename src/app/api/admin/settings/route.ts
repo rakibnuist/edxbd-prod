@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import { getAllSettings, saveSettings } from '@/lib/settings';
 
@@ -41,6 +42,7 @@ export async function PUT(request: NextRequest) {
       delete body.metaAccessToken;
     }
     await saveSettings(body);
+    revalidatePath('/');
     const settings = await getAllSettings();
     return NextResponse.json({ ok: true, settings: presentForClient(settings) });
   } catch (error) {

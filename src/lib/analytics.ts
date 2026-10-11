@@ -14,6 +14,15 @@ const generateEventId = (): string => {
   return `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 };
 
+const analyticsAllowed = () => {
+  if (typeof window === 'undefined') return false;
+  try {
+    return localStorage.getItem('cookie-consent') === 'accepted';
+  } catch {
+    return false;
+  }
+};
+
 // Define UserData interface
 export interface UserData {
   email?: string;
@@ -33,6 +42,7 @@ export interface UserData {
 // Track events
 export const trackEvent = (eventName: string, parameters?: Record<string, unknown>, _userData?: UserData) => {
   const eventId = generateEventId();
+  if (!analyticsAllowed()) return eventId;
   const eventData = {
     event_id: eventId,
     ...parameters
@@ -152,6 +162,7 @@ export const sendConversionAPIEvent = async (
   customData?: Record<string, unknown>,
   eventId?: string
 ) => {
+  if (!analyticsAllowed()) return null;
   try {
     const response = await fetch('/api/meta-capi', {
       method: 'POST',
@@ -166,7 +177,8 @@ export const sendConversionAPIEvent = async (
           ...customData
         },
         source: 'client_side',
-        eventId
+        eventId,
+        trackingConsent: true,
       }),
     });
 

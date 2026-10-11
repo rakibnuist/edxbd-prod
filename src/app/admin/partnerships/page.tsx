@@ -357,7 +357,7 @@ const AdminPartnershipsPage = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Partnership Management</h1>
-          <p className="text-gray-600">Manage B2B partnership applications</p>
+          <p className="text-gray-600">Manage partnership applications</p>
         </div>
         <div className="flex items-center space-x-3">
           <button

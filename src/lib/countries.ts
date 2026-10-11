@@ -62,7 +62,7 @@ export interface Country {
   faqs?: { question: string; answer: string }[];
 
   // SEO Strategy 14-Point Module Fields
-  serviceStatus?: 'Flagship' | 'Active' | 'Pilot' | 'Launching' | 'Researching' | 'Temporarily Paused';
+  serviceStatus?: 'Flagship' | 'Active';
   valueStatement?: string;
   whoItFits?: string[];
   whoShouldReconsider?: string[];
@@ -449,7 +449,7 @@ export const countries: Country[] = [
     },
     scholarships: ['Finland Scholarship (100% + €5000)', 'Early Bird Discount (50%)'],
     benefits: ['Exceptional PR & Permanent Residency Pathways', 'Spouse Can Work Full-time (No hours restriction)', 'Voted the Happiest Country in the World 7 years in a row'],
-    isActive: false,
+    isActive: true,
     featured: false,
     images: ['https://images.unsplash.com/photo-1517935706615-2717063c2225?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in Finland - PR Pathways & Huge Scholarships',
@@ -603,7 +603,7 @@ export const countries: Country[] = [
     },
     scholarships: ['Ministry of Science Scholarship', 'Erasmus+'],
     benefits: ['Program and institution comparison', 'Destination specific visa readiness review', 'Education fit and total cost planning'],
-    isActive: false,
+    isActive: true,
     featured: false,
     images: ['https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=75&w=1200&auto=format&fit=crop'],
     metaTitle: 'Study in Croatia - Schengen Visa & Placements',
@@ -780,8 +780,8 @@ export const countries: Country[] = [
       { name: 'Malaysia International Scholarship (MIS)', amount: '100% Tuition Waiver + Monthly Living Allowance + Book allowance', deadline: 'June 15th', icon: 'Crown' },
       { name: 'University Presidential Merit Awards', amount: '20% - 50% Tuition fee discounts based on academic average', deadline: 'Intake Dependent', icon: 'Award' }
     ],
-    serviceStatus: 'Researching',
-    valueStatement: 'We are actively researching and establishing partnerships in this destination to ensure it meets our Better Education Standard.',
+    serviceStatus: 'Active',
+    valueStatement: 'Malaysia offers internationally recognised degrees, including Western branch-campus programs, with English-taught teaching and living costs well below Western destinations.',
     whoItFits: [
       'Students looking for affordable European/Asian education options',
       'Those interested in exploring emerging international study destinations'
@@ -986,4 +986,17 @@ export const getCountryBySlug = (slug: string): Country | undefined => {
 
 export const featuredCountries = countries.filter(country => country.featured);
 
-export const activeCountries = countries.filter(country => country.isActive);
+// All listed destinations are open for counselling and application support.
+// China carries the Flagship label because it has the deepest published proof,
+// while every other country is shown publicly as Active.
+export const activeCountries = countries
+  .filter(country => country.isActive)
+  .map(country => ({
+    ...country,
+    serviceStatus: country.serviceStatus ?? ('Active' as const),
+  }));
+
+export type ServiceStatus = NonNullable<Country['serviceStatus']>;
+
+export const isEstablishedStatus = (status: ServiceStatus) =>
+  status === 'Flagship' || status === 'Active';

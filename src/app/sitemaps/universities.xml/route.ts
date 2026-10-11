@@ -7,7 +7,10 @@ export async function GET() {
       where: { 
         isActive: true, 
         verificationStatus: 'verified', 
-        verificationExpiresAt: { gte: new Date() } 
+        officialUrl: { not: null },
+        lastVerifiedAt: { not: null },
+        verificationExpiresAt: { gte: new Date() },
+        AND: [{ sourceUrls: { not: '[]' } }],
       },
       select: { slug: true, updatedAt: true }
     });
@@ -19,4 +22,3 @@ export async function GET() {
     return sitemapResponse([]);
   }
 }
-

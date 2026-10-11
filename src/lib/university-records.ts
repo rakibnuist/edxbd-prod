@@ -1,4 +1,5 @@
 import 'server-only';
+/* eslint-disable @typescript-eslint/no-explicit-any -- Legacy database fields are normalized into CleanUniversityRecord here. */
 import { cache } from 'react';
 import prisma from '@/lib/prisma';
 
@@ -32,6 +33,7 @@ export type CleanUniversityRecord = {
   }[];
   fees: { item: string; cost: string; notes?: string; recipient?: string; refundable?: 'yes' | 'no' | 'conditional' | ''; validFor?: string; sourceUrl?: string }[];
   scholarships: { title: string; type?: string; details: string[]; amount?: string; condition?: string; eligiblePrograms: string[]; coverage?: string; renewal?: string; deadline?: string; sourceUrl?: string; status: 'active' | 'planned' | 'closed' }[];
+  costPlans: { id: string; title: string; programName?: string; scholarshipTitle?: string; intake?: string; currency: string; tuitionBeforeScholarship?: string; scholarshipValue?: string; tuitionAfterScholarship?: string; applicationFee?: string; hostel?: string; insurance?: string; medical?: string; visa?: string; travel?: string; living?: string; serviceFee?: string; otherCosts: string[]; totalEstimate?: string; notes: string[]; sourceUrl?: string; lastVerifiedAt?: string; isPublished: boolean }[];
   documents: string[];
   deadlines: { application: string; startDate: string };
   notes: string[];
@@ -60,11 +62,77 @@ const parseJson = (str: string | null | undefined, defaultVal: any = []) => {
 // Utility to parse CSV strings
 const parseCsv = (str: string | null | undefined) => {
   if (!str) return [];
-  return str.split(',').filter(Boolean);
+  return Array.from(new Set(str.split(',').map(value => value.trim()).filter(Boolean)));
+};
+
+const normalizedKey = (...values: Array<string | null | undefined>) => values
+  .map(value => (value || '').trim().toLowerCase().replace(/\s+/g, ' '))
+  .join('|');
+
+const dedupeBy = <T,>(items: T[], keyFor: (item: T) => string) => {
+  const seen = new Set<string>();
+  return items.filter(item => {
+    const key = keyFor(item);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 };
 
 // Map Prisma output to CleanUniversityRecord
 function mapPrismaToClean(record: any): CleanUniversityRecord {
+  type CleanProgram = CleanUniversityRecord['programs'][number];
+  type CleanFee = CleanUniversityRecord['fees'][number];
+  type CleanScholarship = CleanUniversityRecord['scholarships'][number];
+
+  const programs: CleanUniversityRecord['programs'] = dedupeBy<CleanProgram>(
+    record.programs.map((p: any): CleanProgram => ({
+      level: p.level?.trim() || 'Program',
+      name: p.name?.trim() || 'Study option',
+      subject: p.subject?.trim() || undefined,
+      languages: parseCsv(p.languages),
+      duration: p.duration?.trim() || undefined,
+      intakes: parseCsv(p.intakes),
+      tuition: p.tuition?.trim() || undefined,
+      tuitionAfterScholarship: p.tuitionAfterScholarship?.trim() || undefined,
+      applicationDeadline: p.applicationDeadline?.trim() || undefined,
+      eligibility: Array.from(new Set(parseJson(p.eligibility, []).map((value: string) => value.trim()).filter(Boolean))),
+      sourceUrl: p.sourceUrl?.trim() || undefined,
+      status: ['active', 'planned', 'paused'].includes(p.status) ? p.status : 'active',
+    })),
+    program => normalizedKey(program.level, program.name, program.tuition, program.applicationDeadline),
+  );
+
+  const fees: CleanUniversityRecord['fees'] = dedupeBy<CleanFee>(
+    record.fees.map((f: any): CleanFee => ({
+      item: f.item?.trim() || 'Additional fee',
+      cost: f.cost?.trim() || 'Confirmed in the written cost plan',
+      notes: f.notes?.trim() || undefined,
+      recipient: f.recipient?.trim() || undefined,
+      refundable: ['yes', 'no', 'conditional'].includes(f.refundable) ? f.refundable : '',
+      validFor: f.validFor?.trim() || undefined,
+      sourceUrl: f.sourceUrl?.trim() || undefined,
+    })),
+    fee => normalizedKey(fee.item, fee.cost, fee.validFor),
+  );
+
+  const scholarships: CleanUniversityRecord['scholarships'] = dedupeBy<CleanScholarship>(
+    record.scholarships.map((s: any): CleanScholarship => ({
+      title: s.title?.trim() || 'Scholarship option',
+      type: s.type?.trim() || undefined,
+      details: Array.from(new Set(parseJson(s.details, []).map((value: string) => value.trim()).filter(Boolean))),
+      amount: s.amount?.trim() || undefined,
+      condition: s.condition?.trim() || undefined,
+      eligiblePrograms: Array.from(new Set(parseJson(s.eligiblePrograms, []).map((value: string) => value.trim()).filter(Boolean))),
+      coverage: s.coverage?.trim() || undefined,
+      renewal: s.renewal?.trim() || undefined,
+      deadline: s.deadline?.trim() || undefined,
+      sourceUrl: s.sourceUrl?.trim() || undefined,
+      status: ['active', 'planned', 'closed'].includes(s.status) ? s.status : 'planned',
+    })),
+    scholarship => normalizedKey(scholarship.title, scholarship.type, scholarship.amount, scholarship.deadline),
+  );
+
   return {
     id: record.id,
     slug: record.slug,
@@ -87,41 +155,33 @@ function mapPrismaToClean(record: any): CleanUniversityRecord {
       tuition: record.tuition,
       tuitionDetails: parseJson(record.tuitionDetails, []),
     },
-    programs: record.programs.map((p: any) => ({
-      level: p.level,
-      name: p.name,
-      subject: p.subject ?? undefined,
-      languages: parseCsv(p.languages),
-      duration: p.duration ?? undefined,
-      intakes: parseCsv(p.intakes),
-      tuition: p.tuition ?? undefined,
-      tuitionAfterScholarship: p.tuitionAfterScholarship ?? undefined,
-      applicationDeadline: p.applicationDeadline ?? undefined,
-      eligibility: parseJson(p.eligibility, []),
-      sourceUrl: p.sourceUrl ?? undefined,
-      status: p.status as any,
-    })),
-    fees: record.fees.map((f: any) => ({
-      item: f.item,
-      cost: f.cost,
-      notes: f.notes ?? undefined,
-      recipient: f.recipient ?? undefined,
-      refundable: f.refundable as any,
-      validFor: f.validFor ?? undefined,
-      sourceUrl: f.sourceUrl ?? undefined,
-    })),
-    scholarships: record.scholarships.map((s: any) => ({
-      title: s.title,
-      type: s.type ?? undefined,
-      details: parseJson(s.details, []),
-      amount: s.amount ?? undefined,
-      condition: s.condition ?? undefined,
-      eligiblePrograms: parseJson(s.eligiblePrograms, []),
-      coverage: s.coverage ?? undefined,
-      renewal: s.renewal ?? undefined,
-      deadline: s.deadline ?? undefined,
-      sourceUrl: s.sourceUrl ?? undefined,
-      status: s.status as any,
+    programs,
+    fees,
+    scholarships,
+    costPlans: record.costPlans.map((plan: any) => ({
+      id: plan.id,
+      title: plan.title,
+      programName: plan.programName || undefined,
+      scholarshipTitle: plan.scholarshipTitle || undefined,
+      intake: plan.intake || undefined,
+      currency: plan.currency,
+      tuitionBeforeScholarship: plan.tuitionBeforeScholarship || undefined,
+      scholarshipValue: plan.scholarshipValue || undefined,
+      tuitionAfterScholarship: plan.tuitionAfterScholarship || undefined,
+      applicationFee: plan.applicationFee || undefined,
+      hostel: plan.hostel || undefined,
+      insurance: plan.insurance || undefined,
+      medical: plan.medical || undefined,
+      visa: plan.visa || undefined,
+      travel: plan.travel || undefined,
+      living: plan.living || undefined,
+      serviceFee: plan.serviceFee || undefined,
+      otherCosts: parseJson(plan.otherCosts, []),
+      totalEstimate: plan.totalEstimate || undefined,
+      notes: parseJson(plan.notes, []),
+      sourceUrl: plan.sourceUrl || undefined,
+      lastVerifiedAt: plan.lastVerifiedAt?.toISOString(),
+      isPublished: plan.isPublished,
     })),
     documents: parseJson(record.documents, []),
     deadlines: {
@@ -159,6 +219,7 @@ export const getUniversityRecords = cache(async (country?: string): Promise<Clea
       programs: true,
       fees: true,
       scholarships: true,
+      costPlans: true,
     }
   });
 
@@ -180,7 +241,7 @@ export const getUniversityRoute = cache(async (slug: string) => {
   // Actually, since slug is indexed, we'll try slug first.
   let record = await prisma.university.findFirst({
     where: { isActive: true, slug: normalizedSlug },
-    include: { programs: true, fees: true, scholarships: true }
+    include: { programs: true, fees: true, scholarships: true, costPlans: true }
   });
 
   let isLegacySlug = false;
@@ -189,7 +250,7 @@ export const getUniversityRoute = cache(async (slug: string) => {
     // Fallback: fetch all active and check legacySlugs in memory (only 68 records, so it's fast)
     const all = await prisma.university.findMany({
       where: { isActive: true },
-      include: { programs: true, fees: true, scholarships: true }
+      include: { programs: true, fees: true, scholarships: true, costPlans: true }
     });
     
     record = all.find(r => {

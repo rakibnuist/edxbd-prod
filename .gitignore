@@ -15,6 +15,7 @@
 
 # next.js
 /.next/
+/.next-dev/
 /out/
 
 # production
@@ -127,3 +128,4 @@ jspm_packages/
 dev.db
 prisma/dev.db
 prisma/*.db
+prisma/data/*.db

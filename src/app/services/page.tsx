@@ -2,34 +2,46 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import ConsultationButton from '@/components/ConsultationButton';
 import PageHeader from '@/components/PageHeader';
+import ChinaServicePackages from '@/components/china/ChinaServicePackages';
+import { getPublicTrustRecords } from '@/lib/trust-records';
+import { getUniversityRecords } from '@/lib/university-records';
 import { Briefcase, Fingerprint, Search, Wallet, ClipboardCheck, ArrowUpRight, ArrowRight } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Study Abroad Services | University Selection, Visa & Scholarship Support',
-  description: 'Evidence-first education guidance covering education fit, written cost comparison, application proof tracking and visa readiness.',
-  keywords: [
-    'study abroad services',
-    'university selection',
-    'visa assistance',
-    'scholarship support',
-    'career guidance',
-    'study abroad consultancy',
-    'international education',
-    'student visa',
-    'university application',
-    'education consultant'
-  ],
-  openGraph: {
-    title: 'Study Abroad Services | Expert Guidance for International Education',
-    description: 'Compare education quality, recognition, costs and career fit with clear written evidence.',
-    type: 'website',
-  },
-  alternates: {
-    canonical: '/services',
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const universityCount = (await getUniversityRecords()).length;
+  const description = universityCount > 0
+    ? `Evidence-first education guidance covering education fit, written cost comparison and visa readiness, backed by ${universityCount}+ verified university records.`
+    : 'Evidence-first education guidance covering education fit, written cost comparison, application proof tracking and visa readiness.';
+  return {
+    title: 'Study Abroad Services | University Selection, Visa & Scholarship Support',
+    description,
+    keywords: [
+      'study abroad services',
+      'university selection',
+      'visa assistance',
+      'scholarship support',
+      'career guidance',
+      'study abroad consultancy',
+      'international education',
+      'student visa',
+      'university application',
+      'education consultant'
+    ],
+    openGraph: {
+      title: 'Study Abroad Services | Expert Guidance for International Education',
+      description: 'Compare education quality, recognition, costs and career fit with clear written evidence.',
+      type: 'website',
+    },
+    alternates: {
+      canonical: '/services',
+    },
+  };
+}
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const { servicePackages } = await getPublicTrustRecords();
+  const chinaPackages = servicePackages.filter(item => item.destination === 'China');
+
   const mainServices = [
     {
       number: '01',
@@ -221,6 +233,8 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+
+      {chinaPackages.length > 0 && <ChinaServicePackages packages={chinaPackages} />}
 
       {/* Five-Step Process Section */}
       <section className="bg-[#08263c] px-5 py-16 text-white sm:px-8 sm:py-24 lg:px-12">

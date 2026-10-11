@@ -22,13 +22,13 @@ export default function SitemapSubmissionPage() {
               <div>
                 <p className="font-medium text-gray-700">Sitemap URL:</p>
                 <code className="block bg-gray-100 p-3 rounded text-sm break-all">
-                  https://www.eduexpressint.com/sitemap.xml
+                  https://eduexpressint.com/sitemap.xml
                 </code>
               </div>
               <div>
                 <p className="font-medium text-gray-700">Robots.txt URL:</p>
                 <code className="block bg-gray-100 p-3 rounded text-sm break-all">
-                  https://www.eduexpressint.com/robots.txt
+                  https://eduexpressint.com/robots.txt
                 </code>
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function SitemapSubmissionPage() {
                   <li>Sign in with your Microsoft account</li>
                   <li>Add your website if not already added</li>
                   <li>Go to &quot;Sitemaps&quot; section</li>
-                  <li>Submit sitemap URL: <code className="bg-green-100 px-1 rounded">https://www.eduexpressint.com/sitemap.xml</code></li>
+                  <li>Submit sitemap URL: <code className="bg-green-100 px-1 rounded">https://eduexpressint.com/sitemap.xml</code></li>
                 </ol>
               </div>
             </div>

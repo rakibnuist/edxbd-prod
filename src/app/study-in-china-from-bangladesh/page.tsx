@@ -22,34 +22,43 @@ import {
   Target,
 } from 'lucide-react';
 import ChinaCampaignLeadForm from '@/components/china/ChinaCampaignLeadForm';
+import ChinaServicePackages from '@/components/china/ChinaServicePackages';
+import { getPublicTrustRecords } from '@/lib/trust-records';
 
 const canonicalUrl = 'https://eduexpressint.com/study-in-china-from-bangladesh';
 const verifiedDate = '2026-07-19';
 
-export const metadata: Metadata = {
-  title: { absolute: 'Study in China from Bangladesh | EduExpress' },
-  description: 'Compare 134+ China university collaborations, six study levels, scholarship possibilities, IELTS alternatives and CSCA routes with EduExpress.',
-  alternates: {
-    canonical: canonicalUrl,
-    languages: {
-      'en-BD': canonicalUrl,
-      'bn-BD': 'https://eduexpressint.com/bn/study-in-china',
+export async function generateMetadata(): Promise<Metadata> {
+  const { metrics } = await getPublicTrustRecords();
+  const universityMetric = metrics.find((metric) => metric.key === 'china_university_collaborations');
+  const description = universityMetric?.value
+    ? `Compare ${universityMetric.value} China university routes, six study levels, scholarship possibilities, IELTS alternatives and CSCA requirements with EduExpress.`
+    : 'Compare China university routes, six study levels, scholarship possibilities, IELTS alternatives and CSCA requirements with EduExpress.';
+  return {
+    title: { absolute: 'Study in China from Bangladesh | EduExpress' },
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        'en-BD': canonicalUrl,
+        'bn-BD': 'https://eduexpressint.com/bn/study-in-china',
+      },
     },
-  },
-  openGraph: {
-    title: 'Study in China from Bangladesh with a Clear Admission Plan',
-    description: 'Compare university, program, scholarship, English proof and CSCA requirements before applying.',
-    url: canonicalUrl,
-    type: 'website',
-    images: [{ url: '/images/destinations/china.jpg', width: 1200, height: 800, alt: 'Study in China guidance for Bangladeshi students' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Study in China from Bangladesh | EduExpress',
-    description: 'A China university and admission fit assessment for Bangladeshi students.',
-    images: ['/images/destinations/china.jpg'],
-  },
-};
+    openGraph: {
+      title: 'Study in China from Bangladesh with a Clear Admission Plan',
+      description: 'Compare university, program, scholarship, English proof and CSCA requirements before applying.',
+      url: canonicalUrl,
+      type: 'website',
+      images: [{ url: '/images/destinations/china.jpg', width: 1200, height: 800, alt: 'Study in China guidance for Bangladeshi students' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Study in China from Bangladesh | EduExpress',
+      description: 'A China university and admission fit assessment for Bangladeshi students.',
+      images: ['/images/destinations/china.jpg'],
+    },
+  };
+}
 
 const studyLevels = [
   { label: 'Language', detail: 'Chinese language study routes', icon: Languages },
@@ -141,7 +150,15 @@ const structuredData = {
   ],
 };
 
-export default function StudyInChinaFromBangladeshPage() {
+export default async function StudyInChinaFromBangladeshPage() {
+  const { metrics, servicePackages } = await getPublicTrustRecords();
+  const metricByKey = new Map(metrics.map((metric) => [metric.key, metric]));
+  const universityMetric = metricByKey.get('china_university_collaborations');
+  const serviceSinceMetric = metricByKey.get('china_service_since');
+  const studentMetric = metricByKey.get('china_students_supported');
+  const publicChinaRecord = [serviceSinceMetric, studentMetric].filter(Boolean);
+  const chinaPackages = servicePackages.filter(item => item.destination === 'China');
+
   return (
     <article className="overflow-hidden bg-[#f6f9fb] pt-[76px] text-[#08263c] min-[1200px]:pt-[104px]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
@@ -150,7 +167,7 @@ export default function StudyInChinaFromBangladeshPage() {
         <Image src="/images/destinations/china.jpg" alt="University campus in China" fill priority sizes="100vw" className="object-cover object-center opacity-25" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,#08263c_0%,rgba(8,38,60,.96)_45%,rgba(8,38,60,.75)_100%)]" />
         <div className="pointer-events-none absolute left-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
-          <Image src="/emblem-icon.png" width={440} height={440} unoptimized alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+          <Image src="/emblem-icon.png" width={440} height={440} alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
         </div>
         <div className="absolute bottom-0 right-[42%] h-40 w-px bg-gradient-to-b from-transparent to-[#64b5df]/60" />
 
@@ -168,13 +185,13 @@ export default function StudyInChinaFromBangladeshPage() {
               Study in China from Bangladesh with the right route, not a random offer
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-white/75 sm:text-lg">
-              Compare <strong className="text-white">134+ collaborating universities</strong> across Language, Foundation, Diploma, Bachelor, Master and PhD study. We screen English proof, CSCA, scholarship, cost and program fit before an application decision.
+              Compare {universityMetric && <strong className="text-white">{universityMetric.value} collaborating universities</strong>} across Language, Foundation, Diploma, Bachelor, Master and PhD study. We screen English proof, CSCA, scholarship, cost and program fit before an application decision.
             </p>
 
             <div className="mt-6 grid max-w-2xl grid-cols-3 gap-px bg-white/15">
-              <div className="bg-[#08263c]/90 p-3 sm:p-4"><strong className="font-heading text-2xl text-[#8ed0ee] sm:text-3xl">134+</strong><span className="mt-1 block text-[10px] leading-4 text-white/55 sm:text-xs">University collaborations</span></div>
+              <div className="bg-[#08263c]/90 p-3 sm:p-4"><strong className="font-heading text-2xl text-[#8ed0ee] sm:text-3xl">{universityMetric?.value || 'Current'}</strong><span className="mt-1 block text-[10px] leading-4 text-white/55 sm:text-xs">University collaborations</span></div>
               <div className="bg-[#08263c]/90 p-3 sm:p-4"><strong className="font-heading text-2xl text-[#8ed0ee] sm:text-3xl">6</strong><span className="mt-1 block text-[10px] leading-4 text-white/55 sm:text-xs">Study levels supported</span></div>
-              <div className="bg-[#08263c]/90 p-3 sm:p-4"><strong className="font-heading text-2xl text-[#8ed0ee] sm:text-3xl">2018</strong><span className="mt-1 block text-[10px] leading-4 text-white/55 sm:text-xs">China service since</span></div>
+              <div className="bg-[#08263c]/90 p-3 sm:p-4"><strong className="font-heading text-2xl text-[#8ed0ee] sm:text-3xl">{serviceSinceMetric?.value || 'Recorded'}</strong><span className="mt-1 block text-[10px] leading-4 text-white/55 sm:text-xs">China service since</span></div>
             </div>
 
             <div className="mt-6 flex flex-wrap gap-x-5 gap-y-3 text-xs font-bold text-white/75">
@@ -268,7 +285,7 @@ export default function StudyInChinaFromBangladeshPage() {
         <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
           <div className="grid gap-10 lg:grid-cols-[.42fr_.58fr] lg:items-end">
             <div>
-              <div className="flex items-center gap-4"><strong className="font-heading text-7xl font-bold leading-none text-[#174f7a] sm:text-8xl">134+</strong><span className="max-w-36 text-xs font-black uppercase leading-5 tracking-[0.13em] text-slate-500">Collaborating universities in the China network</span></div>
+              <div className="flex items-center gap-4"><strong className="font-heading text-7xl font-bold leading-none text-[#174f7a] sm:text-8xl">{universityMetric?.value || 'Current'}</strong><span className="max-w-36 text-xs font-black uppercase leading-5 tracking-[0.13em] text-slate-500">Collaborating universities in the China network</span></div>
               <h2 className="mt-6 text-balance font-heading text-3xl font-bold leading-tight sm:text-5xl">A larger network only matters when the shortlist gets smaller</h2>
               <p className="mt-5 max-w-xl text-sm leading-7 text-slate-600">We narrow options by academic eligibility, subject strength, language rule, CSCA requirement, total cost and recognition needs. Relationship type, available programs and intake status can vary by university.</p>
             </div>
@@ -282,7 +299,7 @@ export default function StudyInChinaFromBangladeshPage() {
             </div>
           </div>
 
-          <p className="mt-6 border-l-4 border-[#64b5df] bg-[#f6f9fb] px-4 py-3 text-[11px] leading-5 text-slate-500">The 134+ portfolio count is supplied by EduExpress management. It does not mean every university offers every level, subject, scholarship or intake. Current availability is confirmed during assessment.</p>
+          <p className="mt-6 border-l-4 border-[#64b5df] bg-[#f6f9fb] px-4 py-3 text-[11px] leading-5 text-slate-500">{universityMetric?.definition || 'The current China portfolio is maintained in the EduExpress evidence register.'} It does not mean every university offers every level, subject, scholarship or intake. Current availability is confirmed during assessment.</p>
         </div>
       </section>
 
@@ -295,10 +312,10 @@ export default function StudyInChinaFromBangladeshPage() {
             <p className="mt-5 max-w-lg text-sm leading-7 text-white/65">Our recorded China experience helps us identify application and document risks. Every admission, scholarship and visa decision still depends on the responsible institution or authority.</p>
           </div>
           <div>
-            <div className="grid gap-px bg-white/15 sm:grid-cols-3">
-              <div className="bg-[#08263c] p-6"><strong className="font-heading text-4xl text-[#8ed0ee]">2018</strong><span className="mt-3 block text-xs leading-5 text-white/60">China focused service operating since</span></div>
-              <div className="bg-[#08263c] p-6"><strong className="font-heading text-4xl text-[#8ed0ee]">98%</strong><span className="mt-3 block text-xs leading-5 text-white/60">Recorded China visa success through 2025</span></div>
-              <div className="bg-[#08263c] p-6"><strong className="font-heading text-4xl text-[#8ed0ee]">2000+</strong><span className="mt-3 block text-xs leading-5 text-white/60">Students supported through B2C and B2B channels</span></div>
+            <div className="grid gap-px bg-white/15 sm:grid-cols-2">
+              {publicChinaRecord.map((metric) => metric && (
+                <div key={metric.key} className="bg-[#08263c] p-6"><strong className="font-heading text-4xl text-[#8ed0ee]">{metric.value}</strong><span className="mt-3 block text-xs leading-5 text-white/60">{metric.label}</span></div>
+              ))}
             </div>
             <p className="mt-4 text-[10px] leading-5 text-white/45">Company records through 2025. The 2027 cycle is now in planning, with universities, scholarship bodies and authorities issuing their official decisions.</p>
           </div>
@@ -371,6 +388,8 @@ export default function StudyInChinaFromBangladeshPage() {
         </div>
       </section>
 
+      {chinaPackages.length > 0 && <ChinaServicePackages packages={chinaPackages} />}
+
       <section className="bg-white">
         <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
           <div className="grid gap-8 lg:grid-cols-[.34fr_.66fr]">
@@ -404,8 +423,8 @@ export default function StudyInChinaFromBangladeshPage() {
         <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.7fr_.3fr] lg:items-center lg:py-16">
           <div>
             <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#b7e9ff]">Your next useful step</p>
-            <h2 className="mt-3 max-w-3xl text-balance font-heading text-3xl font-bold sm:text-5xl">Turn 134+ possibilities into a shortlist that fits you</h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70">Submit your education stage and target level. We will begin with fit, requirements and missing evidence.</p>
+            <h2 className="mt-3 max-w-3xl text-balance font-heading text-3xl font-bold sm:text-5xl">Turn {universityMetric?.value || 'your'} possibilities into a shortlist that fits you</h2>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70">Submit your education stage and target level. We will return a suitable shortlist, exact requirements and the cost route to compare.</p>
           </div>
           <a href="#china-fit-form" className="flex min-h-14 items-center justify-center gap-2 bg-white px-6 text-sm font-black text-[#174f7a] transition hover:bg-[#e9f7fd]">Start My Assessment <ArrowRight size={18} /></a>
         </div>
@@ -418,12 +437,12 @@ export default function StudyInChinaFromBangladeshPage() {
           </blockquote>
           <div className="mt-7 grid gap-6 text-xs leading-6 text-slate-500 lg:grid-cols-2">
             <div>
-              <p><strong className="text-[#08263c]">Prepared by:</strong> EduExpress China Admissions Desk</p>
+              <p><strong className="text-[#08263c]">Managed by:</strong> EduExpress China Admissions Desk</p>
               <p><strong className="text-[#08263c]">Reviewed by:</strong> EduExpress Content and Compliance</p>
-              <p><strong className="text-[#08263c]">Last verified:</strong> 19 July 2026 <span aria-hidden="true">•</span> <strong className="text-[#08263c]">Next review:</strong> 19 October 2026</p>
+              <p><strong className="text-[#08263c]">Information standard:</strong> Official sources, program aligned costs and written responsibilities</p>
             </div>
             <div>
-              <p className="font-black uppercase tracking-[0.14em] text-[#08263c]">Official reference points checked 19 July 2026</p>
+              <p className="font-black uppercase tracking-[0.14em] text-[#08263c]">Official reference points</p>
               <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2">
                 <a href="https://csca.cn/" target="_blank" rel="noreferrer" className="font-bold text-[#174f7a] underline underline-offset-4">Official CSCA portal</a>
                 <a href="https://english.shanghai.gov.cn/en-FAQs-StudyinShanghai/20251218/134bb78943f640519e2185ff83051f5d.html" target="_blank" rel="noreferrer" className="font-bold text-[#174f7a] underline underline-offset-4">Government CSCA guidance</a>

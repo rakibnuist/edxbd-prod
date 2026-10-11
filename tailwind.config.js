@@ -54,10 +54,10 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
         mono: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        heading: ['var(--font-fraunces)', 'Georgia', 'Times New Roman', 'serif'],
+        heading: ['var(--font-inter)', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
         body: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         primary: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-fraunces)', 'Georgia', 'Times New Roman', 'serif'],
+        serif: ['var(--font-inter)', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
         bengali: ['var(--font-bengali)', 'var(--font-inter)', 'system-ui', 'sans-serif'],
       },
       animation: {

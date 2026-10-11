@@ -1,12 +1,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, BadgeCheck, BookOpenCheck, Check, CircleAlert, FileCheck2, SearchCheck, ShieldCheck, UserRoundCheck } from 'lucide-react';
+import { ArrowRight, Calculator, Check, ChevronDown, CircleAlert, FileCheck2, SearchCheck, ShieldCheck, UserRoundCheck } from 'lucide-react';
 import type { ChinaGuidePage as ChinaGuidePageData } from '@/data/chinaGuidePages';
-import ChinaCostCalculator from '@/components/china/ChinaCostCalculator';
+import ChinaServicePackages from '@/components/china/ChinaServicePackages';
+import { getPublicTrustRecords } from '@/lib/trust-records';
 
 const canonicalBase = 'https://eduexpressint.com';
 
-export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData }) {
+export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData }) {
+  const servicePackages = guide.slug === 'china-visa-first-policy'
+    ? (await getPublicTrustRecords()).servicePackages.filter(item => item.destination === 'China')
+    : [];
   const canonical = `${canonicalBase}/${guide.slug}`;
   const structuredData = {
     '@context': 'https://schema.org',
@@ -27,7 +31,7 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
 
       <header className="relative overflow-hidden bg-[#08263c] text-white">
         <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
-          <Image src="/emblem-icon.png" width={450} height={450} unoptimized alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+          <Image src="/emblem-icon.png" width={450} height={450} alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
         </div>
         <div className="absolute bottom-0 left-[38%] h-44 w-px bg-gradient-to-b from-transparent to-[#64b5df]/50" />
         <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.68fr_.32fr] lg:items-end lg:py-16">
@@ -59,37 +63,40 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
         </div>
       </nav>
 
+      {guide.slug === 'china-visa-first-policy' ? <ChinaServicePackages packages={servicePackages} /> : null}
+
       <section className="mx-auto grid max-w-[1440px] gap-8 px-5 py-14 sm:px-8 lg:grid-cols-[.28fr_.72fr] lg:px-12 lg:py-20">
         <aside>
           <div className="sticky top-32 border-t-4 border-[#174f7a] bg-[#e9f7fd] p-5">
             <SearchCheck size={25} className="text-[#174f7a]" />
             <h2 className="mt-5 font-heading text-2xl font-bold">What this guide does</h2>
-            <p className="mt-3 text-sm leading-6 text-slate-600">It separates a useful education decision from a promotional claim and identifies what must be checked again before action.</p>
-            <div className="mt-5 border-t border-[#174f7a]/15 pt-4 text-[10px] font-bold leading-5 text-slate-500"><p>Last verified: 19 July 2026</p><p>Next review: 19 October 2026</p></div>
+            <p className="mt-3 text-sm leading-6 text-slate-600">It connects the decision, current official sources, costs and responsibilities in one practical explanation.</p>
           </div>
         </aside>
 
-        <div className="border-l border-t border-[#174f7a]/20">
+        <div className="grid gap-3">
           {guide.sections.map((section, index) => (
-            <section key={section.heading} className="grid border-b border-r border-[#174f7a]/20 bg-white sm:grid-cols-[5rem_1fr]">
-              <div className="flex items-center justify-between bg-[#08263c] px-4 py-3 text-white sm:flex-col sm:justify-start sm:px-2 sm:py-6"><span className="font-mono text-[9px] font-black text-[#8ed0ee]">{String(index + 1).padStart(2, '0')}</span><BookOpenCheck size={19} className="sm:mt-5" /></div>
-              <div className="p-5 sm:p-7">
-                <h2 className="font-heading text-2xl font-bold">{section.heading}</h2>
+            <details key={section.heading} open={index === 0} className="group rounded-2xl border border-[#174f7a]/15 bg-white open:shadow-[0_14px_40px_rgba(8,38,60,.08)]">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-5 p-5 sm:p-6">
+                <span className="flex items-center gap-4"><span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#e9f7fd] text-[10px] font-black text-[#174f7a]">{String(index + 1).padStart(2, '0')}</span><h2 className="font-heading text-xl font-bold sm:text-2xl">{section.heading}</h2></span>
+                <ChevronDown size={19} className="shrink-0 text-[#174f7a] transition group-open:rotate-180" />
+              </summary>
+              <div className="border-t border-[#174f7a]/10 px-5 pb-6 pt-5 sm:px-6">
                 <p className="mt-3 text-sm leading-7 text-slate-600">{section.summary}</p>
                 {section.items?.length ? <ul className="mt-5 grid gap-2 sm:grid-cols-2">{section.items.map(item => <li key={item} className="flex gap-3 bg-[#f6f9fb] p-3 text-xs leading-5 text-slate-600"><Check size={15} className="mt-0.5 shrink-0 text-[#174f7a]" />{item}</li>)}</ul> : null}
               </div>
-            </section>
+            </details>
           ))}
         </div>
       </section>
 
-      {guide.slug === 'study-in-china-cost-bangladesh' ? <section className="mx-auto max-w-[1440px] px-5 pb-14 sm:px-8 lg:px-12 lg:pb-20"><ChinaCostCalculator /></section> : null}
+      {guide.slug === 'study-in-china-cost-bangladesh' ? <section className="mx-auto max-w-[1440px] px-5 pb-14 sm:px-8 lg:px-12 lg:pb-20"><div className="grid items-center gap-6 rounded-3xl border-2 border-[#08263c] bg-white p-6 sm:p-8 lg:grid-cols-[auto_1fr_auto]"><Calculator size={36} className="text-[#174f7a]" /><div><h2 className="font-heading text-2xl font-bold">Costs vary by university, program and scholarship</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">A single average number can be misleading. Open a specific university to see its real tuition, apply an available scholarship and get an exact, itemized ClearCost estimate you can download as a PDF.</p></div><Link href="/universities" className="flex min-h-13 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#08263c] px-6 text-sm font-black text-white">Open ClearCost by university <ArrowRight size={16} /></Link></div></section> : null}
 
       <section className="bg-[#e9f7fd]">
         <div className="mx-auto grid max-w-[1440px] gap-6 px-5 py-14 sm:px-8 lg:px-12 lg:grid-cols-2 lg:py-20">
           <article className="border-t-4 border-amber-500 bg-white p-6 sm:p-8">
             <CircleAlert size={27} className="text-amber-600" />
-            <h2 className="mt-5 font-heading text-2xl font-bold">What may change</h2>
+            <h2 className="mt-5 font-heading text-2xl font-bold">Details tied to your selected route</h2>
             <ul className="mt-5 grid gap-3">{guide.changeRisks.map(item => <li key={item} className="flex gap-3 text-sm leading-6 text-slate-600"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-amber-500" />{item}</li>)}</ul>
           </article>
           <article className="border-t-4 border-[#174f7a] bg-white p-6 sm:p-8">
@@ -122,10 +129,10 @@ export default function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData })
             <div className="mt-4 grid gap-px bg-[#174f7a]/15 sm:grid-cols-2">{guide.related.map(item => <Link key={item.href} href={item.href} className="flex items-center justify-between gap-3 bg-white p-3 text-xs font-black hover:bg-[#e9f7fd]">{item.label}<ArrowRight size={14} className="text-[#174f7a]" /></Link>)}</div>
           </div>
           <div>
-            <p className="flex items-center gap-2 font-mono text-[9px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><ShieldCheck size={14} /> Official sources checked 19 July 2026</p>
+            <p className="flex items-center gap-2 font-mono text-[9px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><ShieldCheck size={14} /> Official sources</p>
             <div className="mt-4 grid gap-2">{guide.sources.map(source => <a key={source.href} href={source.href} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 border-b border-[#174f7a]/15 bg-white p-3 text-xs font-bold text-[#174f7a] hover:bg-[#e9f7fd]">{source.label}<ArrowRight size={14} /></a>)}</div>
           </div>
-          <div className="lg:col-span-2 flex flex-wrap items-center justify-between gap-3 border-t border-[#174f7a]/15 pt-5 text-[10px] leading-5 text-slate-500"><span><strong className="text-[#08263c]">Prepared by:</strong> EduExpress China Admissions Desk</span><span><strong className="text-[#08263c]">Reviewed by:</strong> EduExpress Content and Compliance</span><span><BadgeCheck size={12} className="mr-1 inline text-[#174f7a]" />Last verified 19 July 2026 <span aria-hidden="true">•</span> Next review 19 October 2026</span></div>
+          <div className="lg:col-span-2 flex flex-wrap items-center justify-between gap-3 border-t border-[#174f7a]/15 pt-5 text-[10px] leading-5 text-slate-500"><span><strong className="text-[#08263c]">Owned by:</strong> EduExpress China Admissions Desk</span><span><strong className="text-[#08263c]">Information standard:</strong> Official sources, written costs and clear responsibilities</span></div>
         </div>
       </section>
     </article>

@@ -1,6 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { CONSENT_CHANGE_EVENT, CONSENT_STORAGE_KEY } from '@/components/CookieConsent';
+
+type MetaWindow = Window & {
+  __metaPixelLoaded?: boolean;
+  __metaPixelId?: string;
+  __metaPixelLastPath?: string;
+};
 
 // Loads the Meta (Facebook) Pixel at runtime using the Pixel ID stored in the
 // admin Settings (DB) or environment. Because the ID is fetched on the client
@@ -8,21 +16,30 @@ import { useEffect } from 'react';
 // no rebuild required. Once fbq is initialised, all fbq('track', ...) calls
 // elsewhere route to this pixel automatically.
 export default function MetaPixel() {
-  useEffect(() => {
-    let cancelled = false;
+  const pathname = usePathname();
 
-    const init = async () => {
-      // Only run on HTTPS and once.
+  const initialiseOrTrackPage = useCallback(async () => {
       if (typeof window === 'undefined') return;
-      if ((window as unknown as { __metaPixelLoaded?: boolean }).__metaPixelLoaded) return;
+      if (window.location.protocol !== 'https:') return;
+      if (localStorage.getItem(CONSENT_STORAGE_KEY) !== 'accepted') return;
+
+      const metaWindow = window as MetaWindow;
+      if (metaWindow.__metaPixelLoaded) {
+        window.fbq?.('consent', 'grant');
+        if (metaWindow.__metaPixelLastPath !== pathname) {
+          window.fbq?.('track', 'PageView');
+          metaWindow.__metaPixelLastPath = pathname;
+        }
+        return;
+      }
 
       try {
         const res = await fetch('/api/public-config');
         if (!res.ok) return;
         const { metaPixelId: pixelId } = await res.json();
-        if (cancelled || !pixelId) return;
+        if (!pixelId || localStorage.getItem(CONSENT_STORAGE_KEY) !== 'accepted') return;
 
-        (window as unknown as { __metaPixelLoaded?: boolean }).__metaPixelLoaded = true;
+        metaWindow.__metaPixelLoaded = true;
 
         /* eslint-disable */
         // Standard Meta Pixel bootstrap.
@@ -44,22 +61,37 @@ export default function MetaPixel() {
         })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         /* eslint-enable */
 
-        const w = window as unknown as { fbq?: (...args: unknown[]) => void };
-        w.fbq?.('init', pixelId);
-        w.fbq?.('track', 'PageView');
+        window.fbq?.('consent', 'grant');
+        window.fbq?.('init', pixelId);
+        window.fbq?.('track', 'PageView');
 
         // Expose for any code that wants to check configuration at runtime.
-        (window as unknown as { __metaPixelId?: string }).__metaPixelId = pixelId;
+        metaWindow.__metaPixelId = pixelId;
+        metaWindow.__metaPixelLastPath = pathname;
       } catch {
         /* silent — analytics must never break the page */
       }
+  }, [pathname]);
+
+  useEffect(() => {
+    void initialiseOrTrackPage();
+  }, [initialiseOrTrackPage]);
+
+  useEffect(() => {
+    const handleConsentChange = (event: Event) => {
+      const accepted = (event as CustomEvent<{ accepted?: boolean }>).detail?.accepted === true;
+      if (accepted) {
+        void initialiseOrTrackPage();
+      } else {
+        window.fbq?.('consent', 'revoke');
+      }
     };
 
-    init();
+    window.addEventListener(CONSENT_CHANGE_EVENT, handleConsentChange);
     return () => {
-      cancelled = true;
+      window.removeEventListener(CONSENT_CHANGE_EVENT, handleConsentChange);
     };
-  }, []);
+  }, [initialiseOrTrackPage]);
 
   return null;
 }

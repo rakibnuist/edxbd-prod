@@ -10,6 +10,28 @@
   --brand-blue: #174f7a;
   --brand-cyan: #64b5df;
   --brand-mist: #e9f7fd;
+  --font-inter: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-bengali: "Noto Sans Bengali", "Nirmala UI", Vrinda, sans-serif;
+
+  /* Product-led type. No serif anywhere: one geometric sans, cut tight, with
+     weight and size doing the hierarchy work the serif used to do. */
+  --font-display: Inter, "SF Pro Display", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", system-ui, sans-serif;
+
+  /* Cool product surfaces */
+  --paper: #ffffff;
+  --paper-sunk: #f5f7f9;
+  --paper-deep: #eef1f5;
+  --ink: #0a1f33;
+  --ink-soft: #55677a;
+  --rule: #e2e7ee;
+  --rule-strong: #0a1f33;
+  --accent: #174f7a;
+  --accent-bright: #2f7fbf;
+  --amber: #f0a028;
+
+  --radius-plate: 10px;
+  --radius-control: 8px;
 }
 
 body {
@@ -31,11 +53,10 @@ body {
   h6,
   .font-heading,
   .font-serif {
-    font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
-    font-optical-sizing: auto;
+    font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-synthesis: none;
-    letter-spacing: -0.01em;
-    line-height: 1.12;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
   }
 
   /* Bengali typography — applies wherever lang="bn" is set */
@@ -60,9 +81,195 @@ body {
   }
 }
 
+/* Homepage showcase rails. They pause for mouse and keyboard users, and become
+   normal horizontal lists when reduced motion is requested. */
+.home-loop {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.home-loop::before,
+.home-loop::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  z-index: 2;
+  width: clamp(1.25rem, 6vw, 5rem);
+  pointer-events: none;
+}
+
+.home-loop::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--loop-edge, #fff), transparent);
+}
+
+.home-loop::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--loop-edge, #fff), transparent);
+}
+
+.home-loop-track {
+  display: flex;
+  width: max-content;
+  animation: home-loop var(--loop-speed, 48s) linear infinite;
+  will-change: transform;
+}
+
+.home-loop-track.reverse {
+  animation-direction: reverse;
+}
+
+.home-loop-set {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+  padding-right: 1rem;
+}
+
+.home-loop:hover .home-loop-track,
+.home-loop:focus-within .home-loop-track {
+  animation-play-state: paused;
+}
+
+@keyframes home-loop {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .font-mono {
   font-family: var(--font-inter), system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Product system (homepage). One geometric sans, cut tight. Hierarchy comes
+   from size and weight; surfaces are crisp panels rather than paper.
+   ========================================================================== */
+
+.ed-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.036em;
+  line-height: 1.02;
+  font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "ss01" 1;
+}
+
+/* Eyebrows and section labels — small, tight, uppercase sans. */
+.ed-label {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.ed-figure {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.045em;
+}
+
+/* Intro line under a headline. Sans, not serif, and deliberately short. */
+.ed-standfirst {
+  font-family: var(--font-display);
+  font-size: clamp(1.0625rem, 1.35vw, 1.1875rem);
+  font-weight: 450;
+  line-height: 1.6;
+  letter-spacing: -0.012em;
+}
+
+.ed-rule {
+  border-color: var(--rule);
+}
+
+.ed-rule-dark {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Rows read as list items in a product UI: hover fills, arrow advances. */
+.ed-index-row {
+  border-top: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  transition: background-color 0.16s ease;
+}
+
+.ed-index-row:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.ed-index-row:hover {
+  background-color: var(--paper-sunk);
+}
+
+.ed-index-row:hover .ed-index-arrow {
+  transform: translateX(4px);
+}
+
+.ed-index-arrow {
+  transition: transform 0.16s ease;
+}
+
+.ed-index-row-dark {
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-control);
+  transition: background-color 0.16s ease;
+}
+
+.ed-index-row-dark:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.ed-index-row-dark:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Contractual terms, called out as a panel rather than a printed notice. */
+.ed-notice {
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent-bright);
+  background: var(--paper-sunk);
+  border-radius: var(--radius-plate);
+}
+
+/* Panels: universities, evidence documents, any bounded object. */
+.ed-record {
+  border: 1px solid var(--rule);
+  background: #fff;
+  border-radius: var(--radius-plate);
+  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.ed-record:hover {
+  border-color: var(--accent-bright);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(10, 31, 51, 0.1);
+}
+
+.ed-plate {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-plate);
+  overflow: hidden;
+  background: var(--paper-sunk);
+}
+
+.ed-plate-dark {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-plate);
+  overflow: hidden;
+}
+
+:lang(bn) .ed-display,
+:lang(bn) .ed-standfirst,
+:lang(bn) .ed-figure,
+:lang(bn) .ed-label {
+  font-family: var(--font-bengali), var(--font-inter), system-ui, sans-serif;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-transform: none;
 }
 
 button,
@@ -129,7 +336,26 @@ textarea {
 .text-white\/50 { color: rgba(255, 255, 255, 0.75); }
 .text-white\/60 { color: rgba(255, 255, 255, 0.82); }
 
-/* 3. Respect users who ask for less motion (better on low-end Android too) */
+/* 3. WCAG 2.4.7 Focus Visible — keyboard focus floor.
+   Around 90 places across the app clear the native outline with
+   `outline-none` / `focus:outline-none`, many without providing a
+   replacement. Tailwind's utility sits at (0,2,0) specificity, so this rule
+   needs !important to act as a guaranteed floor.
+   Scoped to :focus-visible, so pointer users never see it — only keyboard
+   and other non-pointer input. Components with their own focus ring keep it;
+   this only guarantees no element is ever focused invisibly. */
+:is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid #174f7a !important;
+  outline-offset: 2px !important;
+}
+
+/* The navy ring vanishes on the dark brand surfaces — switch to brand cyan. */
+:is([class*="bg-[#08263c]"], [class*="bg-[#071f31]"], [class*="bg-[#061b2a]"])
+  :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline-color: #8ed0ee !important;
+}
+
+/* 4. Respect users who ask for less motion (better on low-end Android too) */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -139,7 +365,36 @@ textarea {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+
+  .home-loop {
+    overflow-x: auto;
+  }
+
+  .home-loop::before,
+  .home-loop::after,
+  .home-loop-set[aria-hidden="true"] {
+    display: none;
+  }
+
+  .home-loop-track {
+    animation: none !important;
+    transform: none !important;
+  }
 }
+
+/* ==========================================================================
+   Homepage.
+   The homepage now uses the shared product system above (.ed-display,
+   .ed-label, .ed-figure, .ed-standfirst, .ed-record, .ed-plate, .ed-notice,
+   .ed-index-row) and the :root tokens — same type scale, 8px/10px radii and
+   hairline rules as the rest of the site.
+
+   The former .ee-* block lived here: a parallel system with 900-weight
+   headings up to 6rem, 20-40px radii, decorative orbs, floating cards and an
+   animated plane. It was used by src/app/page.tsx and nothing else, so it was
+   removed rather than maintained. Add homepage-only CSS here only when the
+   shared system genuinely cannot express it.
+   ========================================================================== */
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -157,4 +412,689 @@ textarea {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+body.dashboard-mode .site-footer {
+  display: none;
+}
+
+@keyframes cookie-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* EduExpress route experience ------------------------------------------------
+   A subtle instrument-grid and continuous signal ticker make the homepage feel
+   like a decision interface instead of a conventional consultancy brochure. */
+.experience-grid {
+  background-color: #050d14;
+  background-image:
+    linear-gradient(rgba(142, 208, 238, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(142, 208, 238, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.experience-grid-light {
+  background-color: #f4f9fc;
+  background-image:
+    linear-gradient(rgba(23, 79, 122, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 79, 122, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.journey-hero {
+  background-color: #f4f9fc;
+  background-image:
+    linear-gradient(rgba(23, 79, 122, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 79, 122, 0.045) 1px, transparent 1px);
+  background-size: 58px 58px;
+}
+
+/* Living admission file -----------------------------------------------------
+   The homepage behaves like one physical case file. Sheets stack as the
+   student moves from an empty profile to a closed registration record. */
+.casefile-desk-dark {
+  background-image:
+    linear-gradient(rgba(142, 208, 238, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(142, 208, 238, 0.028) 1px, transparent 1px),
+    radial-gradient(circle at 18% 20%, rgba(47, 127, 191, 0.18), transparent 30%);
+  background-size: 52px 52px, 52px 52px, auto;
+}
+
+.casefile-desk {
+  background-color: #dfe8ed;
+  background-image:
+    linear-gradient(rgba(23, 79, 122, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 79, 122, 0.035) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.casefile-folder {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: #f8fbfc;
+  box-shadow: 0 45px 120px rgba(0, 0, 0, 0.34);
+}
+
+.casefile-folder-tab {
+  position: absolute;
+  top: -34px;
+  left: 0;
+  z-index: 3;
+  border-radius: 8px 24px 0 0;
+  background: #d6e3e9;
+  padding: 11px 24px 10px;
+  color: #174f7a;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+}
+
+.casefile-cover-visual {
+  background-image:
+    linear-gradient(rgba(23, 79, 122, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 79, 122, 0.055) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.casefile-photo {
+  animation: photo-float 7s ease-in-out infinite;
+}
+
+.casefile-mono {
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.casefile-stamp {
+  display: inline-flex;
+  transform: rotate(-2deg);
+  align-items: center;
+  border: 2px solid;
+  border-radius: 5px;
+  padding: 7px 10px;
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+
+.casefile-stamp-blue {
+  border-color: rgba(23, 79, 122, 0.42);
+  color: #174f7a;
+}
+
+.casefile-stamp-green {
+  border-color: rgba(37, 134, 95, 0.5);
+  color: #25865f;
+}
+
+.casefile-stamp-red {
+  border-color: rgba(192, 57, 43, 0.48);
+  color: #a8463b;
+}
+
+.casefile-intro-sheet,
+.casefile-sheet {
+  position: relative;
+  border: 1px solid #bdced8;
+  border-radius: 7px;
+  background-color: #f9fbfc;
+  background-image: linear-gradient(rgba(23, 79, 122, 0.028) 1px, transparent 1px);
+  background-size: 100% 31px;
+  box-shadow: 0 32px 90px rgba(8, 27, 41, 0.18);
+}
+
+.casefile-intro-sheet {
+  overflow: hidden;
+  padding: 34px;
+}
+
+.casefile-page-number {
+  position: absolute;
+  top: -34px;
+  right: 18px;
+  color: rgba(23, 79, 122, 0.055);
+  font-family: var(--font-display);
+  font-size: clamp(9rem, 21vw, 19rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.casefile-stage {
+  position: relative;
+  min-height: 115vh;
+  padding-top: 24px;
+}
+
+.casefile-stage-2 { z-index: 2; }
+.casefile-stage-3 { z-index: 3; }
+.casefile-stage-4 { z-index: 4; }
+.casefile-stage-5 { z-index: 5; }
+.casefile-stage-6 { z-index: 6; }
+.casefile-stage-7 { z-index: 7; min-height: auto; }
+
+.casefile-sheet {
+  position: sticky;
+  top: 118px;
+  min-height: 690px;
+  padding: 68px 34px 30px;
+}
+
+.casefile-stage-2 .casefile-sheet { transform: rotate(-0.22deg); }
+.casefile-stage-3 .casefile-sheet { transform: rotate(0.18deg); }
+.casefile-stage-4 .casefile-sheet { transform: rotate(-0.14deg); }
+.casefile-stage-5 .casefile-sheet { transform: rotate(0.12deg); }
+
+.casefile-tab {
+  position: absolute;
+  top: 17px;
+  left: 24px;
+  border-radius: 5px 18px 5px 5px;
+  background: #174f7a;
+  padding: 9px 16px;
+  color: white;
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.casefile-sheet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid #c7d6de;
+  padding-bottom: 22px;
+}
+
+.casefile-code {
+  color: rgba(23, 79, 122, 0.12);
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 900;
+  line-height: 0.8;
+}
+
+.casefile-document {
+  border: 1px solid #c4d4dd;
+  border-radius: 4px;
+  background: white;
+  padding: 24px;
+  box-shadow: 0 18px 50px rgba(8, 27, 41, 0.09);
+}
+
+.casefile-output {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  border-top: 1px solid #c7d6de;
+  background: rgba(232, 243, 248, 0.58);
+  padding: 18px;
+}
+
+.casefile-output > svg {
+  color: #174f7a;
+}
+
+.casefile-proof {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  border: 7px solid white;
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0 18px 45px rgba(8, 27, 41, 0.13);
+}
+
+.casefile-sheet-photo,
+.casefile-sheet-final {
+  overflow: hidden;
+  padding: 0;
+  background: #081b29;
+}
+
+.casefile-sheet-photo .casefile-tab,
+.casefile-sheet-final .casefile-tab {
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.94);
+  color: #174f7a;
+}
+
+.casefile-final-cta {
+  display: grid;
+  gap: 28px;
+  border-top: 1px solid #c7d6de;
+  background: #eef5f8;
+  padding: 34px;
+}
+
+@media (min-width: 1024px) {
+  .casefile-final-cta {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .casefile-folder-tab {
+    max-width: calc(100% - 20px);
+    padding-inline: 14px;
+  }
+
+  .casefile-intro-sheet,
+  .casefile-sheet {
+    padding: 62px 20px 20px;
+  }
+
+  .casefile-stage {
+    min-height: auto;
+    padding: 18px 0;
+  }
+
+  .casefile-sheet {
+    position: relative;
+    top: auto;
+    min-height: 0;
+    transform: none !important;
+  }
+
+  .casefile-sheet-photo,
+  .casefile-sheet-final {
+    padding: 0;
+  }
+
+  .casefile-output {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .casefile-output .casefile-stamp {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-left: 38px;
+  }
+}
+
+.terminal-gallery {
+  background-image:
+    linear-gradient(rgba(142, 208, 238, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(142, 208, 238, 0.035) 1px, transparent 1px);
+  background-size: 58px 58px;
+}
+
+.terminal-board {
+  animation: terminal-glow 4.5s ease-in-out infinite;
+}
+
+.terminal-plane {
+  left: 0;
+  animation: terminal-flight 4.8s ease-in-out infinite;
+}
+
+.terminal-route {
+  position: relative;
+  height: 38px;
+}
+
+.terminal-route::before {
+  position: absolute;
+  top: 18px;
+  right: 0;
+  left: 0;
+  border-top: 1px dashed rgba(142, 208, 238, 0.38);
+  content: '';
+}
+
+.terminal-route::after {
+  position: absolute;
+  top: 13px;
+  right: 0;
+  width: 11px;
+  height: 11px;
+  border: 2px solid #8ed0ee;
+  border-radius: 999px;
+  background: #071622;
+  box-shadow: 0 0 0 7px rgba(142, 208, 238, 0.1);
+  content: '';
+}
+
+.terminal-route-plane {
+  position: absolute;
+  top: 9px;
+  z-index: 2;
+  display: grid;
+  width: 30px;
+  height: 22px;
+  place-items: center;
+  border-radius: 999px;
+  background: #8ed0ee;
+  color: #071622;
+  box-shadow: 0 8px 22px rgba(142, 208, 238, 0.25);
+  animation: terminal-route-flight 7s ease-in-out infinite;
+}
+
+.journey-chapter {
+  position: relative;
+}
+
+.journey-fixed-progress {
+  position: fixed;
+  left: max(3rem, calc((100vw - 1440px) / 2));
+}
+
+.journey-checkpoint {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid #c7dae6;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  padding: 8px 18px 8px 8px;
+  box-shadow: 0 14px 38px rgba(23, 79, 122, 0.08);
+}
+
+.journey-checkpoint > span:first-child {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 999px;
+  background: #174f7a;
+  color: white;
+}
+
+.journey-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  border: 1px solid #c7dae6;
+  border-radius: 999px;
+  background: white;
+  padding: 0 13px;
+  color: #526777;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.journey-output {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  overflow: hidden;
+  border: 1px solid #b9d4e3;
+  border-radius: 26px;
+  background: linear-gradient(135deg, #ffffff, #eaf5fa);
+  padding: 20px;
+  box-shadow: 0 18px 50px rgba(23, 79, 122, 0.08);
+}
+
+.journey-output::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(#8ed0ee, #174f7a);
+  content: '';
+}
+
+.journey-output-icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  place-items: center;
+  border-radius: 17px;
+  background: #174f7a;
+  color: white;
+  box-shadow: 0 12px 28px rgba(23, 79, 122, 0.2);
+}
+
+.journey-stamp {
+  transform: rotate(-3deg);
+  border: 2px solid rgba(37, 134, 95, 0.48);
+  border-radius: 8px;
+  padding: 8px 11px;
+  color: #25865f;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+@media (min-width: 1024px) {
+  .journey-chapter::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -33px;
+    width: 2px;
+    background: linear-gradient(180deg, #b9d3e2, #2f7fbf 48%, #b9d3e2);
+    background-size: 100% 220%;
+    animation: journey-signal-vertical 8s linear infinite;
+    content: '';
+  }
+
+  .journey-checkpoint::before {
+    position: absolute;
+    left: -42px;
+    width: 20px;
+    height: 20px;
+    border: 5px solid #f6fafc;
+    border-radius: 999px;
+    background: #2f7fbf;
+    box-shadow: 0 0 0 1px #8fb8d0, 0 0 0 8px rgba(142, 208, 238, 0.18);
+    content: '';
+  }
+}
+
+@media (max-width: 639px) {
+  .journey-output {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .journey-stamp {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-left: 68px;
+  }
+}
+
+.route-ring-spin {
+  animation: route-ring 26s linear infinite;
+}
+
+.route-node-float {
+  animation: route-node 5.8s ease-in-out infinite;
+}
+
+.route-pulse {
+  animation: route-pulse 2.4s ease-in-out infinite;
+}
+
+.float-photo {
+  animation: photo-float 7s ease-in-out infinite;
+}
+
+.journey-line {
+  background: linear-gradient(
+    90deg,
+    #a9c5d8 0 40%,
+    #2f7fbf 50%,
+    #a9c5d8 60% 100%
+  );
+  background-size: 220% 100%;
+  animation: journey-signal 6s linear infinite;
+}
+
+.journey-line-vertical {
+  background: linear-gradient(
+    180deg,
+    #a9c5d8 0 40%,
+    #2f7fbf 50%,
+    #a9c5d8 60% 100%
+  );
+  background-size: 100% 220%;
+  animation: journey-signal-vertical 6s linear infinite;
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-reveal {
+    animation: experience-reveal both;
+    animation-timeline: view();
+    animation-range: entry 8% cover 30%;
+  }
+}
+
+.route-ticker {
+  animation: route-signal 24s linear infinite;
+}
+
+.route-ticker-wrap:hover .route-ticker,
+.route-ticker-wrap:focus-within .route-ticker {
+  animation-play-state: paused;
+}
+
+.decision-lab select {
+  color-scheme: dark;
+}
+
+@keyframes route-signal {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes route-ring {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes route-node {
+  0%,
+  100% {
+    margin-top: 0;
+  }
+  50% {
+    margin-top: -8px;
+  }
+}
+
+@keyframes route-pulse {
+  0%,
+  100% {
+    box-shadow: 0 10px 30px rgba(23, 79, 122, 0.28);
+  }
+  50% {
+    box-shadow: 0 12px 44px rgba(47, 127, 191, 0.48);
+  }
+}
+
+@keyframes photo-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.25deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(0.25deg);
+  }
+}
+
+@keyframes journey-signal {
+  to {
+    background-position: -220% 0;
+  }
+}
+
+@keyframes journey-signal-vertical {
+  to {
+    background-position: 0 -220%;
+  }
+}
+
+@keyframes experience-reveal {
+  from {
+    opacity: 0.2;
+    transform: translateY(30px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes terminal-flight {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  12%,
+  84% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 18px);
+    opacity: 0;
+  }
+}
+
+@keyframes terminal-route-flight {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 30px);
+    opacity: 0;
+  }
+}
+
+@keyframes terminal-glow {
+  0%,
+  100% {
+    box-shadow: 0 18px 55px rgba(10, 31, 51, 0.28);
+  }
+  50% {
+    box-shadow: 0 20px 65px rgba(47, 127, 191, 0.34);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-ticker {
+    animation: none;
+    transform: none;
+  }
+
+  .route-ring-spin,
+  .route-node-float,
+  .route-pulse,
+  .float-photo,
+  .journey-line,
+  .journey-line-vertical,
+  .journey-chapter::before,
+  .terminal-board,
+  .terminal-plane,
+  .terminal-route-plane,
+  .casefile-photo,
+  .scroll-reveal {
+    animation: none;
+  }
 }

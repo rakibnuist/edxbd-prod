@@ -1,11 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useMetaTracking } from '@/hooks/useMetaTracking';
 import CountryCodePhoneInput from './CountryCodePhoneInput';
 import { ArrowRight, CheckCircle } from 'lucide-react';
-import { trackStudyAbroadLead, trackFormStart, trackFormFieldFocus, trackAssessmentSubmit } from '@/lib/analytics';
+import { trackFormStart, trackFormFieldFocus } from '@/lib/analytics';
+import {
+  analyticsAllowed,
+  createConversionEventId,
+  trackAssessmentSubmit,
+} from '@/lib/conversion-events';
 import Link from 'next/link';
+import { destinationLinks } from '@/data/siteNavigation';
 
 interface ContactFormData {
   name: string;
@@ -73,8 +78,6 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
   const [countdown, setCountdown] = useState<number>(0);
   const [hasStarted, setHasStarted] = useState(false);
 
-  const { trackButtonClick } = useMetaTracking();
-
   // Track form start on first interaction
   const handleInteraction = () => {
     if (!hasStarted) {
@@ -138,6 +141,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         throw new Error('Please enter a valid email address');
       }
 
+      const metaEventId = createConversionEventId('lead');
       const submitData = {
         ...formData,
         message: formData.message || 'Consultation request from ' + formData.country,
@@ -146,7 +150,9 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         consentTimestamp: new Date().toISOString(),
         consentPolicyVersion: '2026-07-19',
         landingPage: window.location.pathname,
-        utm: Object.fromEntries(new URLSearchParams(window.location.search))
+        utm: Object.fromEntries(new URLSearchParams(window.location.search)),
+        trackingConsent: analyticsAllowed(),
+        metaEventId,
       };
 
       // API Request
@@ -162,22 +168,11 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
       }
 
       setIsSubmitted(true);
-      trackAssessmentSubmit({ destination: formData.country || 'not_specified', source });
-
-      // --- CRITICAL TRACKING ---
-      trackStudyAbroadLead(
-        {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          country: formData.country,
-          program: formData.program,
-          message: formData.message
-        },
-        source
-      );
-
-      trackButtonClick('consultation_submit', source);
+      trackAssessmentSubmit({
+        destination: formData.country || 'not_specified',
+        label: source,
+        eventId: metaEventId,
+      });
 
       if (onSubmit) onSubmit();
 
@@ -310,14 +305,11 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                 className="w-full px-4 py-2.5 text-xs border-2 border-[#08263c]/30 focus:border-[#08263c] focus:outline-none bg-[#f4f8fa] text-[#08263c] font-semibold appearance-none cursor-pointer"
               >
                 <option value="">Select a country...</option>
-                <option value="China">🇨🇳 China (Flagship)</option>
-                <option value="UK">🇬🇧 United Kingdom</option>
-                <option value="South Korea">🇰🇷 South Korea</option>
-                <option value="Hungary">🇭🇺 Hungary</option>
-                <option value="Netherlands">🇳🇱 Netherlands</option>
-                <option value="Finland">🇫🇮 Finland</option>
-                <option value="Cyprus">🇨🇾 Cyprus</option>
-                <option value="Georgia">🇬🇪 Georgia</option>
+                {destinationLinks.map(destination => (
+                  <option key={destination.href} value={destination.name}>
+                    {destination.name}{destination.name === 'China' ? ' (Flagship)' : ''}
+                  </option>
+                ))}
                 <option value="Other">🌍 Other</option>
               </select>
               <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#174f7a]">

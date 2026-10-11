@@ -1,4 +1,5 @@
 export interface IUniversityFee {
+    id?: string;
     item: string;
     cost: string;
     notes?: string;
@@ -25,6 +26,7 @@ export interface IUniversityProgram {
 }
 
 export interface IUniversityScholarship {
+    id?: string;
     title: string;
     type?: string;
     details: string[];
@@ -36,6 +38,34 @@ export interface IUniversityScholarship {
     deadline?: string;
     sourceUrl?: string;
     status?: 'active' | 'planned' | 'closed';
+}
+
+export interface IUniversityCostPlan {
+    id?: string;
+    title: string;
+    programName?: string;
+    scholarshipTitle?: string;
+    programId?: string;
+    scholarshipId?: string;
+    intake?: string;
+    currency: string;
+    tuitionBeforeScholarship?: string;
+    scholarshipValue?: string;
+    tuitionAfterScholarship?: string;
+    applicationFee?: string;
+    hostel?: string;
+    insurance?: string;
+    medical?: string;
+    visa?: string;
+    travel?: string;
+    living?: string;
+    serviceFee?: string;
+    otherCosts?: string[];
+    totalEstimate?: string;
+    notes?: string[];
+    sourceUrl?: string;
+    lastVerifiedAt?: Date | string;
+    isPublished: boolean;
 }
 
 export interface IUniversity {
@@ -69,6 +99,7 @@ export interface IUniversity {
     badges?: string[];
     logo?: string;
     programs?: IUniversityProgram[];
+    costPlans?: IUniversityCostPlan[];
     isActive: boolean;
     createdAt?: Date;
     updatedAt?: Date;
