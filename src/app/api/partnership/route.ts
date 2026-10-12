@@ -4,6 +4,7 @@ import { trackPartnershipInquiry } from '@/lib/meta-conversion-api';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import {
   getOptionalString,
+  getRequiredDate,
   getRequiredString,
   jsonBodyErrorResponse,
   readLimitedJson,
@@ -68,6 +69,12 @@ export async function POST(request: NextRequest) {
     const expectations = getRequiredString(body, 'expectations', 4000);
     const additionalInfo = getOptionalString(body, 'additionalInfo', 4000);
     const source = getOptionalString(body, 'source', 100) || 'website';
+    const consentTimestamp = getRequiredDate(body, 'consentTimestamp');
+    const consentPolicyVersion = getRequiredString(body, 'consentPolicyVersion', 100);
+
+    if (body.consent !== true) {
+      return NextResponse.json({ error: 'Recorded privacy consent is required' }, { status: 400 });
+    }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
@@ -149,22 +156,26 @@ export async function POST(request: NextRequest) {
         // System Fields
         source,
         ipAddress,
-        userAgent
+        userAgent,
+        consentTimestamp,
+        consentPolicyVersion
       }
     });
 
     // Track partnership inquiry with Meta Conversion API
-    try {
-      await trackPartnershipInquiry({
-        name: contactPerson,
-        email: email,
-        phone: phone,
-        company: companyName,
-        message: motivation
-      }, request);
-    } catch (trackingError) {
-      console.error('Meta Conversion API tracking error:', trackingError);
-      // Don't fail the request if tracking fails
+    if (body.trackingConsent === true) {
+      try {
+        await trackPartnershipInquiry({
+          name: contactPerson,
+          email,
+          phone,
+          company: companyName,
+          message: motivation
+        }, request);
+      } catch (trackingError) {
+        console.error('Meta Conversion API tracking error:', trackingError);
+        // Don't fail the request if tracking fails
+      }
     }
 
     // Send confirmation email (you can implement this later)

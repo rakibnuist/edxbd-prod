@@ -363,6 +363,8 @@ model Partnership {
   source                     String   @default("website")
   ipAddress                  String?
   userAgent                  String?
+  consentTimestamp           DateTime?
+  consentPolicyVersion       String?
   createdAt                  DateTime @default(now())
   updatedAt                  DateTime @updatedAt
 }
