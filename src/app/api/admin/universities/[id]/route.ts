@@ -4,6 +4,7 @@ import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { serializeUniversity, universityAdminInclude, universityWriteData } from '@/lib/university-admin';
 import { universityVerificationErrors } from '@/lib/university-governance';
+import { revalidateUniversityPages } from '@/lib/university-cache';
 
 const isAdmin = (role?: string) => role === 'admin' || role === 'super_admin';
 
@@ -55,6 +56,8 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
             return NextResponse.json({ error: 'University not found' }, { status: 404 });
         }
 
+        revalidateUniversityPages(university.slug);
+
         return NextResponse.json(serializeUniversity(university));
     } catch (error) {
         console.error('Update error:', error);
@@ -76,6 +79,8 @@ export async function DELETE(request: NextRequest, props: { params: Promise<{ id
         if (!university) {
             return NextResponse.json({ error: 'University not found' }, { status: 404 });
         }
+
+        revalidateUniversityPages(university.slug);
 
         return NextResponse.json({ message: 'University deleted successfully' });
     } catch (_error) {
