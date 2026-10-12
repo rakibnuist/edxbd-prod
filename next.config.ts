@@ -133,6 +133,14 @@ const nextConfig: NextConfig = {
         destination: '/',
         permanent: true,
       },
+      // Retire the unauthenticated legacy dashboard in favor of the secured
+      // admin console. These are operational redirects, not public SEO URLs.
+      { source: '/dashboard', destination: '/admin', permanent: false },
+      { source: '/dashboard/content', destination: '/admin/content', permanent: false },
+      { source: '/dashboard/leads', destination: '/admin/leads', permanent: false },
+      { source: '/dashboard/partnerships', destination: '/admin/partnerships', permanent: false },
+      { source: '/dashboard/testimonials', destination: '/admin/testimonials', permanent: false },
+      { source: '/admin/dashboard', destination: '/admin', permanent: false },
       {
         source: '/success-stories/china',
         destination: '/china-success-stories',

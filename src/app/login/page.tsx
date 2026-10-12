@@ -20,12 +20,7 @@ function LoginForm() {
     const result = await login(email, password);
     
     if (result.success && result.user) {
-      // Redirect based on user role
-      if (result.user.role === 'admin') {
-        router.push('/admin');
-      } else {
-        router.push('/dashboard'); // User dashboard
-      }
+      router.push('/admin');
     } else {
       setError('Invalid credentials. Please try again.');
     }

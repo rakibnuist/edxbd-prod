@@ -59,6 +59,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (user.role !== 'admin' && user.role !== 'super_admin') {
+      return NextResponse.json(
+        { error: 'This account does not have administrator access' },
+        { status: 403 }
+      );
+    }
+
     // Generate JWT token
     const tokenPayload = {
       userId: user.id,
