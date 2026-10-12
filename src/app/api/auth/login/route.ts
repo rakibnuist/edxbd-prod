@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
-import { generateToken } from '@/lib/auth';
+import { generateToken, isAdminRole } from '@/lib/auth';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import { getRequiredString, jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (user.role !== 'admin' && user.role !== 'super_admin') {
+    if (!isAdminRole(user.role)) {
       return NextResponse.json(
         { error: 'This account does not have administrator access' },
         { status: 403 }

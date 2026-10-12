@@ -19,13 +19,22 @@ export interface AuthUser {
   role: string;
 }
 
+export function isAdminRole(role: unknown): role is 'admin' | 'super_admin' {
+  return role === 'admin' || role === 'super_admin';
+}
+
 export function verifyToken(token: string): AuthUser | null {
   try {
     const decoded = jwt.verify(token, getJwtSecret()) as jwt.JwtPayload;
+    if (!isAdminRole(decoded.role)) return null;
+
     return {
       userId: decoded.userId,
       email: decoded.email,
-      role: decoded.role
+      // Protected API routes historically compare against `admin` directly.
+      // Normalize the senior administrator role at the authorization boundary
+      // while /api/auth/me continues to return the stored display role.
+      role: 'admin'
     };
   } catch {
     return null;
@@ -41,7 +50,7 @@ export function verifyTokenFromRequest(request: Request): AuthUser | null {
 }
 
 export function isAdminRequest(request: Request): boolean {
-  return verifyTokenFromRequest(request)?.role === 'admin';
+  return Boolean(verifyTokenFromRequest(request));
 }
 
 export function generateToken(user: AuthUser): string {
