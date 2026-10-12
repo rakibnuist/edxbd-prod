@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import WhatsAppButton from '@/components/WhatsAppButton';
 
@@ -27,13 +27,36 @@ export default function LeadsPageNew() {
   const [deleteConfirm, setDeleteConfirm] = useState<Lead | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [countryFilter, setCountryFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 15;
+
+  const countries = useMemo(
+    () => Array.from(new Set(leads.map((lead) => lead.country).filter(Boolean))).sort(),
+    [leads]
+  );
+
+  const filteredLeads = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    return leads.filter((lead) => {
+      const matchesSearch = !query || [lead.name, lead.email, lead.phone, lead.country, lead.program, lead.source]
+        .some((value) => value?.toLowerCase().includes(query));
+      const matchesStatus = statusFilter === 'all' || lead.status === statusFilter;
+      const matchesCountry = countryFilter === 'all' || lead.country === countryFilter;
+      return matchesSearch && matchesStatus && matchesCountry;
+    });
+  }, [leads, searchQuery, statusFilter, countryFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredLeads.length / pageSize));
+  const effectivePage = Math.min(currentPage, totalPages);
+  const paginatedLeads = filteredLeads.slice((effectivePage - 1) * pageSize, effectivePage * pageSize);
 
   const handleWhatsAppTracking = async (data: unknown) => {
-    // Track WhatsApp interaction for admin dashboard
-    console.log('WhatsApp contact tracked from admin:', data);
-
-    // You can add additional tracking here if needed
-    // For example, send to analytics service or update lead status
+    // Hook retained for analytics integration without logging student data.
+    void data;
   };
 
   const handleCall = (phoneNumber: string) => {
@@ -58,7 +81,6 @@ export default function LeadsPageNew() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Leads fetched:', data);
         setLeads(data);
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -84,8 +106,6 @@ export default function LeadsPageNew() {
 
       if (response.ok) {
         const updatedLead = await response.json();
-        console.log('Lead updated successfully:', updatedLead);
-
         // Update local state with the actual response from server
         setLeads(prevLeads =>
           prevLeads.map(lead =>
@@ -101,8 +121,6 @@ export default function LeadsPageNew() {
 
         setError(null);
 
-        // Show success message (optional)
-        console.log(`✅ Lead status updated to: ${newStatus}`);
       } else {
         const errorData = await response.json();
         throw new Error(errorData.error || `Failed to update lead status: ${response.status}`);
@@ -187,34 +205,6 @@ export default function LeadsPageNew() {
     );
   }
 
-  if (authLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <div className="text-lg text-gray-600">Checking authentication...</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <div className="text-lg text-gray-600">Authentication required</div>
-          <div className="text-sm text-gray-500 mt-2">Please login to access the leads</div>
-          <a
-            href="/login"
-            className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Go to Login
-          </a>
-        </div>
-      </div>
-    );
-  }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -252,15 +242,58 @@ export default function LeadsPageNew() {
         </div>
       </div>
 
-      {/* Debug Info */}
-      <div className="mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded">
-        <h3 className="font-bold text-yellow-800">Debug Info:</h3>
-        <p className="text-sm text-yellow-700">
-          Total Leads: {leads.length} |
-          Auth Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'} |
-          Loading: {loading ? 'Yes' : 'No'} |
-          Error: {error || 'None'}
-        </p>
+      <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+        <label className="sr-only" htmlFor="lead-search">Search leads</label>
+        <input
+          id="lead-search"
+          type="search"
+          value={searchQuery}
+          onChange={(event) => {
+            setSearchQuery(event.target.value);
+            setCurrentPage(1);
+          }}
+          placeholder="Search name, email, phone or source"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+        />
+        <label className="sr-only" htmlFor="lead-status-filter">Filter by status</label>
+        <select
+          id="lead-status-filter"
+          value={statusFilter}
+          onChange={(event) => {
+            setStatusFilter(event.target.value);
+            setCurrentPage(1);
+          }}
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+        >
+          <option value="all">All statuses</option>
+          <option value="new">New</option>
+          <option value="contacted">Contacted</option>
+          <option value="consultation_scheduled">Consultation Scheduled</option>
+          <option value="consultation_completed">Consultation Completed</option>
+          <option value="qualified">Qualified</option>
+          <option value="application_started">Application Started</option>
+          <option value="application_submitted">Application Submitted</option>
+          <option value="admission_received">Admission Received</option>
+          <option value="visa_applied">Visa Applied</option>
+          <option value="visa_approved">Visa Approved</option>
+          <option value="enrolled">Enrolled</option>
+          <option value="converted">Converted</option>
+          <option value="not_interested">Not Interested</option>
+          <option value="closed">Closed</option>
+        </select>
+        <label className="sr-only" htmlFor="lead-country-filter">Filter by country</label>
+        <select
+          id="lead-country-filter"
+          value={countryFilter}
+          onChange={(event) => {
+            setCountryFilter(event.target.value);
+            setCurrentPage(1);
+          }}
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+        >
+          <option value="all">All countries</option>
+          {countries.map((country) => <option key={country} value={country}>{country}</option>)}
+        </select>
       </div>
 
       {/* Leads Table */}
@@ -290,7 +323,7 @@ export default function LeadsPageNew() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {leads.map((lead) => (
+              {paginatedLeads.map((lead) => (
                 <tr key={lead.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
@@ -377,6 +410,34 @@ export default function LeadsPageNew() {
             </tbody>
           </table>
         </div>
+        {filteredLeads.length === 0 ? (
+          <div className="px-6 py-10 text-center text-sm text-gray-500">No leads match the selected filters.</div>
+        ) : (
+          <div className="flex flex-col gap-3 border-t border-gray-200 px-6 py-4 text-sm text-gray-600 sm:flex-row sm:items-center sm:justify-between">
+            <span>
+              Showing {(effectivePage - 1) * pageSize + 1}–{Math.min(effectivePage * pageSize, filteredLeads.length)} of {filteredLeads.length}
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                disabled={effectivePage === 1}
+                className="rounded border border-gray-300 px-3 py-1.5 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Previous
+              </button>
+              <span>Page {effectivePage} of {totalPages}</span>
+              <button
+                type="button"
+                onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                disabled={effectivePage === totalPages}
+                className="rounded border border-gray-300 px-3 py-1.5 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Lead Detail Modal */}
