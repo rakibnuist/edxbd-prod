@@ -2,8 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 import { generateToken } from '@/lib/auth';
+import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
+  const rateLimit = checkRateLimit(request, {
+    name: 'admin-login',
+    maxRequests: 5,
+    windowMs: 15 * 60 * 1000,
+  });
+  if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
+
   try {
     const { email, password } = await request.json();
 

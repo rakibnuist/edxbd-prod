@@ -34,6 +34,7 @@ import {
   extractEventQualityParams
 } from '@/lib/meta-conversion-api';
 import { isAdminRequest } from '@/lib/auth';
+import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 
 const ADMIN_ONLY_EVENTS = new Set([
   'lead_status_change',
@@ -48,6 +49,13 @@ const ADMIN_ONLY_EVENTS = new Set([
 ]);
 
 export async function POST(request: NextRequest) {
+  const rateLimit = checkRateLimit(request, {
+    name: 'meta-conversion',
+    maxRequests: 60,
+    windowMs: 60 * 1000,
+  });
+  if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
+
   try {
     const body = await request.json();
     const { eventType, data, source, trackingConsent } = body;
