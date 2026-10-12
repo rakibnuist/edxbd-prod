@@ -12,6 +12,15 @@ interface User {
   updatedAt: string;
 }
 
+interface SentMessage {
+  id: string;
+  toName: string;
+  toEmail: string;
+  subject: string;
+  body: string;
+  createdAt: string;
+}
+
 export default function UsersPage() {
   const { user: currentUser, authenticatedFetch } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
@@ -32,7 +41,7 @@ export default function UsersPage() {
   const [messageSending, setMessageSending] = useState(false);
   const [messageSuccess, setMessageSuccess] = useState('');
   const [showSentMessagesModal, setShowSentMessagesModal] = useState(false);
-  const [sentMessages, setSentMessages] = useState<any[]>([]);
+  const [sentMessages, setSentMessages] = useState<SentMessage[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
 
   const isSuperAdmin = currentUser?.role === 'super_admin';
@@ -56,11 +65,29 @@ export default function UsersPage() {
     }
   };
 
+  async function fetchUsers() {
+    try {
+      setLoading(true);
+      const response = await authenticatedFetch('/api/admin/users');
+      if (response.ok) {
+        const data = await response.json();
+        setUsers(data.users);
+      } else {
+        setError('Failed to fetch users');
+      }
+    } catch {
+      setError('Failed to fetch users');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     if (currentUser?.role === 'admin' || currentUser?.role === 'super_admin') {
-      fetchUsers();
+      const timeoutId = window.setTimeout(() => void fetchUsers(), 0);
+      return () => window.clearTimeout(timeoutId);
     }
-  }, [currentUser]);
+  }, [currentUser?.role]);
 
   // Check if current user is admin or super_admin
   if (currentUser?.role !== 'admin' && currentUser?.role !== 'super_admin') {
@@ -78,23 +105,6 @@ export default function UsersPage() {
       </div>
     );
   }
-
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const response = await authenticatedFetch('/api/admin/users');
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(data.users);
-      } else {
-        setError('Failed to fetch users');
-      }
-    } catch (error) {
-      setError('Failed to fetch users');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -318,6 +328,7 @@ export default function UsersPage() {
                           <button
                             onClick={() => openMessageModal(user)}
                             title="Send Message"
+                            aria-label={`Send message to ${user.name}`}
                             className="text-green-600 hover:text-green-900"
                           >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -327,6 +338,8 @@ export default function UsersPage() {
                         )}
                         <button
                           onClick={() => openEditModal(user)}
+                          title={`Edit ${user.name}`}
+                          aria-label={`Edit ${user.name}`}
                           className="text-blue-600 hover:text-blue-900"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -336,6 +349,8 @@ export default function UsersPage() {
                         <button
                           onClick={() => handleDeleteUser(user.id)}
                           disabled={user.id === currentUser?.id}
+                          title={user.id === currentUser?.id ? 'You cannot delete your own account' : `Delete ${user.name}`}
+                          aria-label={`Delete ${user.name}`}
                           className="text-red-600 hover:text-red-900 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -380,10 +395,12 @@ export default function UsersPage() {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Password (minimum 12 characters)</label>
                   <input
                     type="password"
                     required
+                    minLength={12}
+                    autoComplete="new-password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -397,7 +414,7 @@ export default function UsersPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="user">User</option>
-                    <option value="admin">Admin</option>
+                    {isSuperAdmin && <option value="admin">Admin</option>}
                     {isSuperAdmin && <option value="super_admin">Super Admin</option>}
                   </select>
                 </div>
@@ -546,9 +563,11 @@ export default function UsersPage() {
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Password (leave blank to keep current)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">New password (minimum 12 characters; leave blank to keep current)</label>
                   <input
                     type="password"
+                    minLength={12}
+                    autoComplete="new-password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -559,12 +578,17 @@ export default function UsersPage() {
                   <select
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value as 'super_admin' | 'admin' | 'user' })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    disabled={editingUser.id === currentUser?.id}
+                    aria-describedby={editingUser.id === currentUser?.id ? 'own-role-help' : undefined}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                   >
                     <option value="user">User</option>
-                    <option value="admin">Admin</option>
+                    {(isSuperAdmin || formData.role === 'admin') && <option value="admin">Admin</option>}
                     {isSuperAdmin && <option value="super_admin">Super Admin</option>}
                   </select>
+                  {editingUser.id === currentUser?.id && (
+                    <p id="own-role-help" className="mt-1 text-xs text-gray-500">Your own role cannot be changed.</p>
+                  )}
                 </div>
                 <div className="flex justify-end space-x-3">
                   <button
@@ -601,6 +625,7 @@ export default function UsersPage() {
                 </h3>
                 <button
                   onClick={() => setShowSentMessagesModal(false)}
+                  aria-label="Close sent messages history"
                   className="text-gray-500 hover:text-gray-700"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
