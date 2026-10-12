@@ -45,13 +45,20 @@ export function isAdminRequest(request: Request): boolean {
 }
 
 export function generateToken(user: AuthUser): string {
-  return jwt.sign(user, getJwtSecret(), { expiresIn: '24h' });
+  return jwt.sign(user, getJwtSecret(), { expiresIn: '8h' });
 }
 
 export function getTokenFromRequest(request: Request): string | null {
   const authHeader = request.headers.get('authorization');
   if (authHeader && authHeader.startsWith('Bearer ')) {
-    return authHeader.substring(7);
+    const bearerToken = authHeader.substring(7).trim();
+    if (bearerToken) return bearerToken;
   }
-  return null;
+
+  const cookieHeader = request.headers.get('cookie') || '';
+  const sessionCookie = cookieHeader
+    .split(';')
+    .map((entry) => entry.trim())
+    .find((entry) => entry.startsWith('admin_session='));
+  return sessionCookie ? decodeURIComponent(sessionCookie.substring('admin_session='.length)) : null;
 }

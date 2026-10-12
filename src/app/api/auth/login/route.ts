@@ -67,10 +67,8 @@ export async function POST(request: NextRequest) {
     };
     const token = generateToken(tokenPayload);
 
-    // Return success response
-    return NextResponse.json({
+    const response = NextResponse.json({
       message: 'Login successful',
-      token,
       user: {
         id: user.id,
         email: user.email,
@@ -78,6 +76,15 @@ export async function POST(request: NextRequest) {
         role: user.role
       }
     });
+    response.cookies.set('admin_session', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 8 * 60 * 60,
+    });
+    response.headers.set('Cache-Control', 'no-store');
+    return response;
 
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);

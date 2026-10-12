@@ -68,7 +68,7 @@ export default function TeamsAdminPage() {
     body.append('folder', 'team');
     const response = await fetch('/api/upload', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${localStorage.getItem('admin_token') || ''}` },
+      credentials: 'include',
       body,
     });
     const result = await response.json().catch(() => ({}));

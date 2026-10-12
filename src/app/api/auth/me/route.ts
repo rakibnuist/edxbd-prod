@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       user: {
         id: user.id,
         name: user.name,
@@ -32,6 +32,8 @@ export async function GET(request: NextRequest) {
         role: user.role
       }
     });
+    response.headers.set('Cache-Control', 'no-store');
+    return response;
   } catch (error) {
     console.error('Auth check error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
