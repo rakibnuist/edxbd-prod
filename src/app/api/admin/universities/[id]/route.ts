@@ -5,11 +5,13 @@ import prisma from '@/lib/prisma';
 import { serializeUniversity, universityAdminInclude, universityWriteData } from '@/lib/university-admin';
 import { universityVerificationErrors } from '@/lib/university-governance';
 
+const isAdmin = (role?: string) => role === 'admin' || role === 'super_admin';
+
 export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
     try {
         const decoded = verifyTokenFromRequest(request);
-        if (!decoded || decoded.role !== 'admin') {
+        if (!decoded || !isAdmin(decoded.role)) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }
         const university = await prisma.university.findFirst({
@@ -32,7 +34,7 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
     const params = await props.params;
     try {
         const decoded = verifyTokenFromRequest(request);
-        if (!decoded || decoded.role !== 'admin') {
+        if (!decoded || !isAdmin(decoded.role)) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }
 
@@ -64,7 +66,7 @@ export async function DELETE(request: NextRequest, props: { params: Promise<{ id
     const params = await props.params;
     try {
         const decoded = verifyTokenFromRequest(request);
-        if (!decoded || decoded.role !== 'admin') {
+        if (!decoded || !isAdmin(decoded.role)) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }
 

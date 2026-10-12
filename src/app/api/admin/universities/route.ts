@@ -3,13 +3,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { serializeUniversity, universityAdminInclude, universityWriteData } from '@/lib/university-admin';
-import { universityVerificationErrors } from '@/lib/university-governance';
+import { universityIndexingErrors, universityIsIndexable, universityVerificationErrors } from '@/lib/university-governance';
+
+const isAdmin = (role?: string) => role === 'admin' || role === 'super_admin';
 
 export async function GET(request: NextRequest) {
     try {
         const decoded = verifyTokenFromRequest(request);
 
-        if (!decoded || decoded.role !== 'admin') {
+        if (!decoded || !isAdmin(decoded.role)) {
             return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
         }
 
@@ -17,10 +19,13 @@ export async function GET(request: NextRequest) {
         const country = searchParams.get('country');
         const degree = searchParams.get('degree');
         const search = searchParams.get('search');
+        const verification = searchParams.get('verification');
 
         // Pagination params
-        const page = parseInt(searchParams.get('page') || '1');
-        const limit = parseInt(searchParams.get('limit') || '10');
+        const requestedPage = Number.parseInt(searchParams.get('page') || '1', 10);
+        const requestedLimit = Number.parseInt(searchParams.get('limit') || '10', 10);
+        const page = Number.isFinite(requestedPage) ? Math.max(1, requestedPage) : 1;
+        const limit = Number.isFinite(requestedLimit) ? Math.min(50, Math.max(1, requestedLimit)) : 10;
         const skip = (page - 1) * limit;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,8 +47,9 @@ export async function GET(request: NextRequest) {
                 { city: { contains: search } }
             ];
         }
+        if (verification && verification !== 'all') query.verificationStatus = verification;
 
-        const [total, universities, filterRecords] = await Promise.all([
+        const [total, universities, filterRecords, governanceRecords] = await Promise.all([
             prisma.university.count({ where: query }),
             prisma.university.findMany({
                 where: query,
@@ -53,14 +59,32 @@ export async function GET(request: NextRequest) {
                 include: universityAdminInclude,
             }),
             prisma.university.findMany({ select: { country: true, degree: true } }),
+            prisma.university.findMany({ include: universityAdminInclude }),
         ]);
 
         const countries = Array.from(new Set(filterRecords.map(record => record.country.trim()).filter(Boolean))).sort();
         const degrees = Array.from(new Set(filterRecords.flatMap(record => record.degree.split(',').map(item => item.trim()).filter(Boolean)))).sort();
 
+        const serialized = universities.map(serializeUniversity);
+        const governed = governanceRecords.map(serializeUniversity);
+        const readiness = {
+            total: governed.length,
+            indexable: governed.filter(university => universityIsIndexable(university) && universityIndexingErrors(university).length === 0).length,
+            underVerification: governed.filter(university => university.verificationStatus === 'under_verification').length,
+            expired: governed.filter(university => university.verificationStatus === 'expired' || (university.verificationExpiresAt && new Date(university.verificationExpiresAt) < new Date())).length,
+        };
+
         return NextResponse.json({
-            universities: universities.map(serializeUniversity),
+            universities: serialized.map(university => {
+                const verificationIssues = universityIndexingErrors(university);
+                return {
+                    ...university,
+                    verificationIssues,
+                    sitemapEligible: universityIsIndexable(university) && verificationIssues.length === 0,
+                };
+            }),
             filters: { countries, degrees },
+            readiness,
             pagination: {
                 total,
                 page,
@@ -81,7 +105,7 @@ export async function POST(request: NextRequest) {
     try {
         const decoded = verifyTokenFromRequest(request);
 
-        if (!decoded || decoded.role !== 'admin') {
+        if (!decoded || !isAdmin(decoded.role)) {
             return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
         }
 

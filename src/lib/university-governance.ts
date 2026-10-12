@@ -20,9 +20,6 @@ const sourceList = (value: unknown): string[] => {
 
 export function universityVerificationErrors(university: Partial<IUniversity>, now = new Date()): string[] {
   const errors: string[] = [];
-  const programs = (university.programs || []).filter(program => program.name?.trim() && program.status === 'active');
-  const fees = (university.fees || []).filter(fee => fee.item?.trim());
-  const scholarships = (university.scholarships || []).filter(item => item.title?.trim() && item.status === 'active');
   const publishedPlans = (university.costPlans || []).filter(plan => plan.isPublished);
 
   publishedPlans.forEach((plan, index) => {
@@ -34,6 +31,15 @@ export function universityVerificationErrors(university: Partial<IUniversity>, n
   });
 
   if (university.verificationStatus !== 'verified') return errors;
+
+  return [...errors, ...universityIndexingErrors(university, now)];
+}
+
+export function universityIndexingErrors(university: Partial<IUniversity>, now = new Date()): string[] {
+  const errors: string[] = [];
+  const programs = (university.programs || []).filter(program => program.name?.trim() && program.status === 'active');
+  const fees = (university.fees || []).filter(fee => fee.item?.trim());
+  const scholarships = (university.scholarships || []).filter(item => item.title?.trim() && item.status === 'active');
 
   if (!hasHttpUrl(university.officialUrl)) errors.push('Add the official university website.');
   if (!sourceList(university.sourceUrls).length) errors.push('Add at least one official university source URL.');

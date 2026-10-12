@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { BookOpenCheck, Building2, Coins, FileCheck2, GraduationCap, Loader2, Plus, ReceiptText, Save, Sparkles, Trash2, ShieldCheck, Trophy } from 'lucide-react';
 
 import type { IUniversity, IUniversityCostPlan, IUniversityFee, IUniversityProgram, IUniversityScholarship } from '@/types/university';
+import { universityIndexingErrors } from '@/lib/university-governance';
 
 interface UniversityFormProps {
   initialData?: IUniversity;
@@ -103,7 +104,9 @@ export default function UniversityForm({ initialData, isNew = false }: Universit
   });
 
   useEffect(() => {
-    if (initialData) setFormData({ ...initialData, programs: initialData.programs || [] });
+    if (!initialData) return;
+    const timer = window.setTimeout(() => setFormData({ ...initialData, programs: initialData.programs || [] }), 0);
+    return () => window.clearTimeout(timer);
   }, [initialData]);
 
   const programSummary = useMemo(() => {
@@ -115,6 +118,7 @@ export default function UniversityForm({ initialData, isNew = false }: Universit
       intakes: unique(programs.flatMap(program => program.intakes || [])),
     };
   }, [formData.programs]);
+  const verificationIssues = useMemo(() => universityIndexingErrors(formData), [formData]);
 
   const setTopLevel = (field: keyof IUniversity, value: unknown) => setFormData(previous => ({ ...previous, [field]: value }));
 
@@ -330,6 +334,11 @@ export default function UniversityForm({ initialData, isNew = false }: Universit
       </EditorSection>
 
       <EditorSection icon={<ShieldCheck size={20} />} title="Governance & Verification" description="Track editorial status to ensure compliance with the Better Education Standard.">
+        <div className={`mb-5 rounded-xl border p-4 ${verificationIssues.length === 0 ? 'border-emerald-200 bg-emerald-50 text-emerald-900' : 'border-amber-200 bg-amber-50 text-amber-950'}`}>
+          <p className="text-sm font-black">{verificationIssues.length === 0 ? 'Evidence checklist complete' : `${verificationIssues.length} requirement${verificationIssues.length === 1 ? '' : 's'} before sitemap eligibility`}</p>
+          {verificationIssues.length > 0 && <ul className="mt-3 grid gap-1.5 text-xs leading-5 sm:grid-cols-2">{verificationIssues.map(issue => <li key={issue}>• {issue}</li>)}</ul>}
+          <p className="mt-3 text-xs">Changing the status to Verified never bypasses these checks; the server will reject incomplete evidence.</p>
+        </div>
         <div className="grid gap-4 md:grid-cols-3 border-t-4 border-t-emerald-500 pt-2">
           <Field label="Verification Status">
             <select className={fieldClass} value={formData.verificationStatus || 'under_verification'} onChange={event => setTopLevel('verificationStatus', event.target.value)}>
