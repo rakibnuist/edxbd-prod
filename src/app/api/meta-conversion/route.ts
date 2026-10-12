@@ -33,12 +33,36 @@ import {
   testConversionAPI,
   extractEventQualityParams
 } from '@/lib/meta-conversion-api';
+import { isAdminRequest } from '@/lib/auth';
+
+const ADMIN_ONLY_EVENTS = new Set([
+  'lead_status_change',
+  'consultation_booking',
+  'application_submission',
+  'admission_received',
+  'visa_approval',
+  'enrollment_completion',
+  'purchase',
+  'submit_application',
+  'test',
+]);
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { eventType, data, source } = body;
+    const { eventType, data, source, trackingConsent } = body;
 
+    if (typeof eventType !== 'string' || !data || typeof data !== 'object' || Array.isArray(data)) {
+      return NextResponse.json({ error: 'Invalid event payload' }, { status: 400 });
+    }
+
+    if (ADMIN_ONLY_EVENTS.has(eventType)) {
+      if (!isAdminRequest(request)) {
+        return NextResponse.json({ error: 'Admin access is required.' }, { status: 403 });
+      }
+    } else if (trackingConsent !== true) {
+      return NextResponse.json({ error: 'Advertising consent required.' }, { status: 403 });
+    }
 
     // Extract Event Quality parameters from the request
     const eventQualityParams = extractEventQualityParams(request);

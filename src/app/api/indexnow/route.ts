@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { submitToIndexNow, submitAllImportantPages, submitNewContent } from '@/lib/indexnow'
+import { isAdminRequest } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
+  if (!isAdminRequest(request)) {
+    return NextResponse.json(
+      { error: 'Admin access is required.' },
+      { status: 403, headers: { 'Cache-Control': 'no-store' } },
+    )
+  }
+
   try {
     const body = await request.json()
     const { urls, action = 'submit' } = body
@@ -54,27 +62,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({
-    message: 'IndexNow API endpoint',
-    usage: {
-      'POST /api/indexnow': 'Submit URLs to IndexNow',
-      body: {
-        action: 'submit | submit-all | submit-new',
-        urls: ['array of URLs (required for submit and submit-new)']
-      }
-    },
-    examples: {
-      'Submit specific URLs': {
-        action: 'submit',
-        urls: ['/new-page', '/updated-content']
-      },
-      'Submit all important pages': {
-        action: 'submit-all'
-      },
-      'Submit new content': {
-        action: 'submit-new',
-        urls: ['/new-blog-post', '/new-service']
-      }
-    }
-  })
+  return NextResponse.json(
+    { error: 'Method not allowed.' },
+    { status: 405, headers: { Allow: 'POST', 'Cache-Control': 'no-store' } },
+  )
 }

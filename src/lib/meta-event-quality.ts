@@ -219,7 +219,8 @@ export const sendToServerSideAPI = async (
           ...eventData,
           eventId: eventId
         },
-        source: 'client_side_enhanced'
+        source: 'client_side_enhanced',
+        trackingConsent: true,
       })
     });
 

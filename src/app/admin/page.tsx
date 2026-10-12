@@ -16,7 +16,7 @@ interface DashboardStats {
 
 interface MetaStatus {
   pixelId: string | null;
-  accessToken: string | null;
+  accessTokenConfigured: boolean;
   pixelActive: boolean;
   conversionApiActive: boolean;
   eventsTracked: number;
@@ -36,7 +36,7 @@ export default function AdminDashboardNew() {
   });
   const [metaStatus, setMetaStatus] = useState<MetaStatus>({
     pixelId: null,
-    accessToken: null,
+    accessTokenConfigured: false,
     pixelActive: false,
     conversionApiActive: false,
     eventsTracked: 0
@@ -91,7 +91,7 @@ export default function AdminDashboardNew() {
   const checkMetaStatus = async () => {
     try {
       setMetaLoading(true);
-      const response = await fetch('/api/meta-status');
+      const response = await authenticatedFetch('/api/meta-status');
       if (response.ok) {
         const data = await response.json();
         setMetaStatus(data);
@@ -101,7 +101,7 @@ export default function AdminDashboardNew() {
         // Set default values if API fails
         setMetaStatus({
           pixelId: null,
-          accessToken: null,
+          accessTokenConfigured: false,
           pixelActive: false,
           conversionApiActive: false,
           eventsTracked: 0
@@ -112,7 +112,7 @@ export default function AdminDashboardNew() {
       // Set default values if API fails
       setMetaStatus({
         pixelId: null,
-        accessToken: null,
+        accessTokenConfigured: false,
         pixelActive: false,
         conversionApiActive: false,
         eventsTracked: 0
@@ -244,7 +244,7 @@ export default function AdminDashboardNew() {
 
           <div className="text-sm">
             <span className="font-medium text-gray-700">Access Token:</span>
-            <span className="text-gray-600 ml-1">{metaStatus.accessToken || 'Not Set'}</span>
+            <span className="text-gray-600 ml-1">{metaStatus.accessTokenConfigured ? 'Configured' : 'Not Set'}</span>
           </div>
         </div>
 
