@@ -4,6 +4,7 @@ import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { serializeUniversity, universityAdminInclude, universityWriteData } from '@/lib/university-admin';
 import { universityIndexingErrors, universityIsIndexable, universityVerificationErrors } from '@/lib/university-governance';
+import { revalidateUniversityPages } from '@/lib/university-cache';
 
 const isAdmin = (role?: string) => role === 'admin' || role === 'super_admin';
 
@@ -139,6 +140,8 @@ export async function POST(request: NextRequest) {
             },
             include: universityAdminInclude,
         });
+
+        revalidateUniversityPages(university.slug);
 
         return NextResponse.json(serializeUniversity(university), { status: 201 });
     } catch (error) {
