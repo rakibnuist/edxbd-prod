@@ -38,6 +38,10 @@ yarn-error.log*
 
 # local backups and reports
 /backup/
+/db-dump/
+/db-dump-new/
+*database-dump*
+*production-export*
 lighthouse-*.json
 lint_results.*
 temp_*.html

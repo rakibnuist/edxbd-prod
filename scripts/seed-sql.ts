@@ -5,6 +5,12 @@ import path from 'path';
 import 'dotenv/config';
 
 const prisma = new PrismaClient();
+const seedDataDir = process.env.SEED_DATA_DIR;
+
+if (!seedDataDir) {
+  throw new Error('SEED_DATA_DIR must point to a local, untracked directory containing sanitized seed JSON.');
+}
+const SEED_DATA_DIR: string = seedDataDir;
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'admin@eduexpressint.com').toLowerCase().trim();
 // Admin password comes from env only; hash it at seed time. No plaintext defaults.
@@ -13,11 +19,11 @@ const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD
   : null;
 
 async function readJson(filename: string) {
-  const filePath = path.join(process.cwd(), 'db-dump', filename);
+  const filePath = path.resolve(SEED_DATA_DIR, filename);
   try {
     const data = await fs.readFile(filePath, 'utf-8');
     return JSON.parse(data);
-  } catch (err) {
+  } catch (_err) {
     console.error(`Could not read ${filename}`);
     return [];
   }
