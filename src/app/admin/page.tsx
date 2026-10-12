@@ -169,11 +169,7 @@ export default function AdminDashboardNew() {
               Retry
             </button>
             <button
-              onClick={() => {
-                localStorage.removeItem('admin_token');
-                localStorage.removeItem('admin_user');
-                fetchData();
-              }}
+              onClick={fetchData}
               className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
             >
               Clear Auth & Retry

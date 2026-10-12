@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { trackDashboardView, trackContentManagement } from '@/lib/analytics';
 import { Content } from '@/lib/types';
+import { useAuth } from '@/contexts/AuthContext';
 
 const isPubliclyCurrent = (content: Content) => {
   const today = new Date();
@@ -15,6 +16,7 @@ const isPubliclyCurrent = (content: Content) => {
 };
 
 export default function ContentPage() {
+  const { authenticatedFetch } = useAuth();
   const [contents, setContents] = useState<Content[]>([]);
   const [filteredContents, setFilteredContents] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
@@ -49,14 +51,6 @@ export default function ContentPage() {
   const [editorMode, setEditorMode] = useState<'html' | 'preview'>('html');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-
-  // Returns the logged-in admin's stored token. If there is none, the user must
-  // sign in — no credentials are ever embedded in the client.
-  const getFreshToken = async (): Promise<string> => {
-    const storedToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
-    if (storedToken) return storedToken;
-    throw new Error('Your session has expired. Please sign in again.');
-  };
 
   useEffect(() => {
     trackDashboardView('content_management');
@@ -109,15 +103,7 @@ export default function ContentPage() {
       console.log('Making request to /api/admin/content...');
 
       // Get fresh token
-      const token = await getFreshToken();
-
-      // Now fetch contents with the fresh token
-      const response = await fetch('/api/admin/content', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await authenticatedFetch('/api/admin/content');
 
       console.log('Content API response status:', response.status);
 
@@ -158,9 +144,8 @@ export default function ContentPage() {
       const formData = new FormData();
       formData.append('image', file);
 
-      const response = await fetch('/api/upload', {
+      const response = await authenticatedFetch('/api/upload', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${localStorage.getItem('admin_token') || ''}` },
         body: formData,
       });
 
@@ -228,17 +213,14 @@ export default function ContentPage() {
       }
 
       // Get fresh token
-      const token = await getFreshToken();
-
       const url = editingContent ? `/api/admin/content/${editingContent.id}` : '/api/admin/content';
       const method = editingContent ? 'PUT' : 'POST';
 
       console.log('Submitting content:', { url, method, formData });
 
-      const response = await fetch(url, {
+      const response = await authenticatedFetch(url, {
         method,
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData),
@@ -349,12 +331,9 @@ export default function ContentPage() {
     if (confirm('Are you sure you want to delete this content?')) {
       try {
         // Get fresh token
-        const token = await getFreshToken();
-
-        const response = await fetch(`/api/admin/content/${id}`, {
+        const response = await authenticatedFetch(`/api/admin/content/${id}`, {
           method: 'DELETE',
           headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
         });

@@ -179,7 +179,8 @@ export default function UniversityForm({ initialData, isNew = false }: Universit
       const url = isNew ? '/api/admin/universities' : `/api/admin/universities/${formData.id || formData.slug}`;
       const response = await fetch(url, {
         method: isNew ? 'POST' : 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('admin_token') || ''}` },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(synchronized),
       });
       if (!response.ok) {

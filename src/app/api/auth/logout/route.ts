@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
-    // In a more sophisticated system, you might want to blacklist the token
-    // For now, we'll just return a success response
-    // The client will handle removing the token from localStorage
-    
-    return NextResponse.json({
+    const response = NextResponse.json({
       message: 'Logout successful'
     });
+    response.cookies.set('admin_session', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 0,
+    });
+    response.headers.set('Cache-Control', 'no-store');
+    return response;
 
   } catch (error) {
     console.error('Logout error:', error);

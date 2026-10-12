@@ -13,7 +13,7 @@ interface User {
 }
 
 export default function UsersPage() {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, authenticatedFetch } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -35,13 +35,6 @@ export default function UsersPage() {
   const [sentMessages, setSentMessages] = useState<any[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
 
-  // Returns the logged-in admin's stored token. No credentials in client code.
-  const getFreshToken = async (): Promise<string> => {
-    const storedToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
-    if (storedToken) return storedToken;
-    throw new Error('Your session has expired. Please sign in again.');
-  };
-
   const isSuperAdmin = currentUser?.role === 'super_admin';
   const isAdmin = currentUser?.role === 'admin';
   const canMessage = isSuperAdmin || isAdmin || currentUser?.email === 'admin@eduexpressint.com';
@@ -49,13 +42,7 @@ export default function UsersPage() {
   const fetchSentMessages = async () => {
     try {
       setLoadingMessages(true);
-      const token = await getFreshToken();
-      const response = await fetch('/api/admin/messages', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await authenticatedFetch('/api/admin/messages');
       if (response.ok) {
         const data = await response.json();
         setSentMessages(data.messages || []);
@@ -95,13 +82,7 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const token = await getFreshToken();
-      const response = await fetch('/api/admin/users', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await authenticatedFetch('/api/admin/users');
       if (response.ok) {
         const data = await response.json();
         setUsers(data.users);
@@ -118,11 +99,9 @@ export default function UsersPage() {
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const token = await getFreshToken();
-      const response = await fetch('/api/admin/users', {
+      const response = await authenticatedFetch('/api/admin/users', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData),
@@ -148,11 +127,9 @@ export default function UsersPage() {
     if (!editingUser) return;
 
     try {
-      const token = await getFreshToken();
-      const response = await fetch(`/api/admin/users/${editingUser.id}`, {
+      const response = await authenticatedFetch(`/api/admin/users/${editingUser.id}`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData),
@@ -178,11 +155,9 @@ export default function UsersPage() {
     if (!confirm('Are you sure you want to delete this user?')) return;
 
     try {
-      const token = await getFreshToken();
-      const response = await fetch(`/api/admin/users/${userId}`, {
+      const response = await authenticatedFetch(`/api/admin/users/${userId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
       });
@@ -235,10 +210,9 @@ export default function UsersPage() {
     if (!messagingUser) return;
     setMessageSending(true);
     try {
-      const token = await getFreshToken();
-      const response = await fetch('/api/admin/messages', {
+      const response = await authenticatedFetch('/api/admin/messages', {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           toUserId: messagingUser.id,
           toEmail: messagingUser.email,
