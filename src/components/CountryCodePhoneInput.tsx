@@ -11,6 +11,8 @@ interface CountryCode {
 }
 
 interface CountryCodePhoneInputProps {
+  id?: string;
+  name?: string;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -63,7 +65,16 @@ const countryCodes: CountryCode[] = [
   { code: 'RU', name: 'Russia', flag: '🇷🇺', dialCode: '+7' },
 ];
 
+function parsePhoneNumber(fullNumber: string) {
+  const country = countryCodes.find(item => fullNumber.startsWith(item.dialCode));
+  return country
+    ? { country, number: fullNumber.substring(country.dialCode.length) }
+    : { country: null, number: fullNumber };
+}
+
 const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
+  id,
+  name,
   value,
   onChange,
 
@@ -88,38 +99,20 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
 
   // Initialize with Bangladesh as default
   useEffect(() => {
-    if (!value) {
-      setSelectedCountry(countryCodes[0]); // Bangladesh
-      setPhoneNumber('');
-    } else {
-      // Parse existing value to extract country and phone number
-      const parsed = parsePhoneNumber(value);
-      if (parsed.country) {
-        setSelectedCountry(parsed.country);
-        setPhoneNumber(parsed.number);
+    const timer = window.setTimeout(() => {
+      if (!value) {
+        setSelectedCountry(countryCodes[0]);
+        setPhoneNumber('');
+      } else {
+        const parsed = parsePhoneNumber(value);
+        if (parsed.country) {
+          setSelectedCountry(parsed.country);
+          setPhoneNumber(parsed.number);
+        }
       }
-    }
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [value]);
-
-  // Parse phone number to extract country and number
-  const parsePhoneNumber = (fullNumber: string) => {
-    for (const country of countryCodes) {
-      if (fullNumber.startsWith(country.dialCode + '')) {
-        return {
-          country,
-          number: fullNumber.substring(country.dialCode.length)
-        };
-      }
-    }
-    const match = countryCodes.find(c => fullNumber.startsWith(c.dialCode));
-    if (match) {
-      return {
-        country: match,
-        number: fullNumber.substring(match.dialCode.length)
-      };
-    }
-    return { country: null, number: fullNumber };
-  };
 
   // Handle country selection
   const handleCountrySelect = (country: CountryCode) => {
@@ -239,6 +232,8 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
 
         {/* Phone Number Input */}
         <input
+          id={id}
+          name={name}
           ref={inputRef}
           type="tel"
           value={phoneNumber}
@@ -247,6 +242,10 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
           placeholder="123 456 7890"
           required={required}
           disabled={disabled}
+          inputMode="tel"
+          autoComplete="tel"
+          maxLength={15}
+          aria-invalid={error ? true : undefined}
           className="flex-1 bg-transparent border-none p-0 text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:outline-none h-full"
         />
       </div>

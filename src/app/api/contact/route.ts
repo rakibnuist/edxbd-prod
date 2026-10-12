@@ -6,6 +6,8 @@ import {
   getOptionalString,
   getRequiredDate,
   getRequiredString,
+  getSafeUtm,
+  getValidatedPhone,
   jsonBodyErrorResponse,
   readLimitedJson,
 } from '@/lib/request-body';
@@ -20,6 +22,9 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await readLimitedJson(request, 32 * 1024);
+    if (getOptionalString(body, 'companyWebsite', 200)) {
+      return NextResponse.json({ message: 'Message sent successfully' }, { status: 201 });
+    }
     
     // Handle both name formats (single name field or firstName/lastName)
     let fullName: string;
@@ -50,7 +55,7 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     const email = getRequiredString(body, 'email', 254);
-    const phone = getRequiredString(body, 'phone', 40);
+    const phone = getValidatedPhone(body);
     const message = getOptionalString(body, 'message', 4000);
     const country = getOptionalString(body, 'country', 120) || 'Not specified';
     const program = getOptionalString(body, 'program', 200) || 'Contact Form Inquiry';
@@ -75,12 +80,28 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    const normalizedEmail = email.trim().toLowerCase();
+    const duplicate = await prisma.lead.findFirst({
+      where: {
+        email: normalizedEmail,
+        phone,
+        createdAt: { gte: new Date(Date.now() - 5 * 60 * 1000) },
+      },
+      orderBy: { createdAt: 'desc' },
+      select: { id: true },
+    });
+    if (duplicate) {
+      return NextResponse.json({ message: 'Message already received', leadId: duplicate.id, duplicate: true }, { status: 200 });
+    }
+
+    const safeUtm = getSafeUtm(body.utm);
+
     // Create new lead from contact form using Prisma
     const lead = await prisma.lead.create({
       data: {
         name: fullName,
-        email: email.trim().toLowerCase(),
-        phone: phone.trim(),
+        email: normalizedEmail,
+        phone,
         country,
         program,
         message: message || 'Consultation request from ' + country,
@@ -89,7 +110,7 @@ export async function POST(request: NextRequest) {
         consentTimestamp,
         consentPolicyVersion,
         landingPage,
-        utm: body.utm ? JSON.stringify(body.utm) : null
+        utm: safeUtm ? JSON.stringify(safeUtm) : null
       }
     });
 
@@ -98,8 +119,8 @@ export async function POST(request: NextRequest) {
       try {
         trackStudyAbroadLead({
           name: fullName,
-          email: email.trim().toLowerCase(),
-          phone: phone.trim(),
+          email: normalizedEmail,
+          phone,
           country,
           program,
           message: message || 'Consultation request from ' + country
