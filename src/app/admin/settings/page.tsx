@@ -62,6 +62,7 @@ export default function SettingsPage() {
   const [pixelActive, setPixelActive] = useState(false);
   const [capiActive, setCapiActive] = useState(false);
   const [tokenIsSet, setTokenIsSet] = useState(false);
+  const [pixelSource, setPixelSource] = useState<'settings' | 'environment' | 'default'>('settings');
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -78,7 +79,8 @@ export default function SettingsPage() {
           metaAccessToken: '', // never prefill the secret
         }));
         setTokenIsSet(!!data.metaAccessTokenSet);
-        setPixelActive(!!data.metaPixelId);
+        setPixelActive(!!data.metaPixelIdSet);
+        setPixelSource(['default', 'environment'].includes(data.metaPixelIdSource) ? data.metaPixelIdSource : 'settings');
         setCapiActive(!!data.metaAccessTokenSet);
       }
     } catch {
@@ -89,7 +91,9 @@ export default function SettingsPage() {
   }, [authenticatedFetch]);
 
   useEffect(() => {
-    if (!authLoading && isAuthenticated) load();
+    if (authLoading || !isAuthenticated) return;
+    const timer = window.setTimeout(() => void load(), 0);
+    return () => window.clearTimeout(timer);
   }, [authLoading, isAuthenticated, load]);
 
   const handleChange = (
@@ -109,16 +113,20 @@ export default function SettingsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.error || 'Failed to save settings.');
+      }
       const data = await res.json();
       const s = data.settings || {};
       setTokenIsSet(!!s.metaAccessTokenSet);
-      setPixelActive(!!s.metaPixelId);
+      setPixelActive(!!s.metaPixelIdSet);
+      setPixelSource(['default', 'environment'].includes(s.metaPixelIdSource) ? s.metaPixelIdSource : 'settings');
       setCapiActive(!!s.metaAccessTokenSet);
       setSettings((prev) => ({ ...prev, metaAccessToken: '' }));
       setMessage({ type: 'success', text: 'Settings saved.' });
-    } catch {
-      setMessage({ type: 'error', text: 'Failed to save settings. Please try again.' });
+    } catch (error) {
+      setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to save settings. Please try again.' });
     } finally {
       setIsSaving(false);
     }
@@ -181,9 +189,12 @@ export default function SettingsPage() {
                 value={settings.metaPixelId}
                 onChange={handleChange}
                 placeholder="e.g. 1234567890123456"
+                inputMode="numeric"
+                pattern="[0-9]{10,32}"
+                maxLength={32}
                 className={field}
               />
-              <p className="mt-1 text-xs text-gray-400">Found in Meta Events Manager → Data Sources.</p>
+              <p className="mt-1 text-xs text-gray-400">Found in Meta Events Manager → Data Sources.{pixelSource === 'default' && !settings.metaPixelId ? ' The approved default Pixel is currently active.' : pixelSource === 'environment' && !settings.metaPixelId ? ' The server-configured Pixel is currently active.' : ''}</p>
             </div>
             <div>
               <label className={label} htmlFor="metaAccessToken">
@@ -209,16 +220,17 @@ export default function SettingsPage() {
           <div className="border-b border-gray-100 px-6 py-4">
             <h2 className="text-lg font-semibold text-[#08263c]">Analytics &amp; Tags</h2>
             <p className="text-xs text-gray-500">Google Tag Manager &amp; GA4. Loaded on the public site at runtime.</p>
+            <p className="mt-2 text-xs text-amber-700">Use either GTM to manage GA4, or enter GA4 directly—not both. Tracking loads only after a visitor accepts cookies.</p>
           </div>
           <div className="grid gap-5 p-6 sm:grid-cols-2">
             <div>
               <label className={label} htmlFor="gtmId">Google Tag Manager ID</label>
-              <input id="gtmId" name="gtmId" value={settings.gtmId} onChange={handleChange} placeholder="GTM-XXXXXXX" className={field} />
+              <input id="gtmId" name="gtmId" value={settings.gtmId} onChange={handleChange} placeholder="GTM-XXXXXXX" pattern="GTM-[A-Za-z0-9]+" maxLength={32} className={field} />
               <p className="mt-1 text-xs text-gray-400">Container ID from tagmanager.google.com.</p>
             </div>
             <div>
               <label className={label} htmlFor="ga4Id">GA4 Measurement ID</label>
-              <input id="ga4Id" name="ga4Id" value={settings.ga4Id} onChange={handleChange} placeholder="G-XXXXXXXXXX" className={field} />
+              <input id="ga4Id" name="ga4Id" value={settings.ga4Id} onChange={handleChange} placeholder="G-XXXXXXXXXX" pattern="G-[A-Za-z0-9]+" maxLength={32} className={field} />
               <p className="mt-1 text-xs text-gray-400">Only needed if you are not managing GA4 through GTM.</p>
             </div>
           </div>
@@ -240,7 +252,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <label className={label} htmlFor="contactEmail">Contact email</label>
-              <input id="contactEmail" name="contactEmail" value={settings.contactEmail} onChange={handleChange} className={field} />
+              <input id="contactEmail" name="contactEmail" type="email" maxLength={254} value={settings.contactEmail} onChange={handleChange} className={field} />
             </div>
             <div>
               <label className={label} htmlFor="contactPhone">Contact phone</label>
@@ -266,7 +278,7 @@ export default function SettingsPage() {
             {(['facebookUrl', 'linkedinUrl', 'instagramUrl', 'youtubeUrl'] as const).map((key) => (
               <div key={key}>
                 <label className={label} htmlFor={key}>{key.replace('Url', '')}</label>
-                <input id={key} name={key} value={settings[key]} onChange={handleChange} className={field} />
+                <input id={key} name={key} type="url" maxLength={500} value={settings[key]} onChange={handleChange} className={field} />
               </div>
             ))}
           </div>

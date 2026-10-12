@@ -41,6 +41,52 @@ export const SETTING_KEYS = [
 
 export type SettingKey = (typeof SETTING_KEYS)[number];
 
+const MAX_LENGTHS: Record<SettingKey, number> = {
+  siteName: 120, siteDescription: 500, contactEmail: 254, contactPhone: 40,
+  whatsappNumber: 40, address: 500, facebookUrl: 500, linkedinUrl: 500,
+  instagramUrl: 500, youtubeUrl: 500, introVideoTitle: 160, introVideoUrl: 500,
+  introVideoPoster: 500, metaPixelId: 32, metaAccessToken: 4096, gtmId: 32, ga4Id: 32,
+};
+
+const URL_KEYS = new Set<SettingKey>([
+  'facebookUrl', 'linkedinUrl', 'instagramUrl', 'youtubeUrl', 'introVideoUrl',
+]);
+
+function isHttpUrl(value: string) {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' || url.protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
+
+export function validateSettings(values: unknown): {
+  values?: Partial<Record<SettingKey, string>>;
+  error?: string;
+} {
+  if (!values || typeof values !== 'object' || Array.isArray(values)) {
+    return { error: 'Settings must be submitted as an object.' };
+  }
+
+  const cleanValues: Partial<Record<SettingKey, string>> = {};
+  for (const [rawKey, rawValue] of Object.entries(values)) {
+    if (!(SETTING_KEYS as readonly string[]).includes(rawKey)) continue;
+    const key = rawKey as SettingKey;
+    if (typeof rawValue !== 'string') return { error: `${key} must be text.` };
+    const value = rawValue.trim();
+    if (value.length > MAX_LENGTHS[key]) return { error: `${key} is too long.` };
+    if (value && URL_KEYS.has(key) && !isHttpUrl(value)) return { error: `${key} must be a valid http or https URL.` };
+    if (key === 'introVideoPoster' && value && !value.startsWith('/') && !isHttpUrl(value)) return { error: 'introVideoPoster must be a site path or valid URL.' };
+    if (key === 'contactEmail' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return { error: 'contactEmail must be a valid email address.' };
+    if (key === 'metaPixelId' && value && !/^\d{10,32}$/.test(value)) return { error: 'Meta Pixel ID must contain 10–32 digits.' };
+    if (key === 'gtmId' && value && !/^GTM-[A-Z0-9]+$/i.test(value)) return { error: 'Google Tag Manager ID must use the format GTM-XXXXXXX.' };
+    if (key === 'ga4Id' && value && !/^G-[A-Z0-9]+$/i.test(value)) return { error: 'GA4 Measurement ID must use the format G-XXXXXXXXXX.' };
+    cleanValues[key] = key === 'gtmId' || key === 'ga4Id' ? value.toUpperCase() : value;
+  }
+  return { values: cleanValues };
+}
+
 /** Read all settings as a plain object. Missing keys are simply absent. */
 export async function getAllSettings(): Promise<Record<string, string>> {
   try {
