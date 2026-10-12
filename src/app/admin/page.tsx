@@ -190,21 +190,6 @@ export default function AdminDashboardNew() {
         </div>
       </div>
 
-      {/* Debug Info */}
-      <div className="mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded">
-        <h3 className="font-bold text-yellow-800">Debug Info:</h3>
-        <p className="text-sm text-yellow-700">
-          Total Leads: {stats.totalLeads} |
-          Total Testimonials: {stats.totalTestimonials} |
-          Total Countries: {stats.totalCountries}
-        </p>
-        <p className="text-xs text-yellow-600 mt-1">
-          Auth Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'} |
-          Loading: {loading ? 'Yes' : 'No'} |
-          Error: {error || 'None'}
-        </p>
-      </div>
-
       {/* Meta Connectivity Status */}
       <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
         <div className="flex items-center justify-between mb-3">
