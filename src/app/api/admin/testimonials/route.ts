@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { isAdminRequest } from '@/lib/auth';
+
+const forbidden = () => NextResponse.json({ error: 'Admin access required' }, { status: 403 });
 
 const optional = (value: unknown) => String(value || '').trim() || null;
 const dateOrNull = (value: unknown) => {
@@ -38,8 +41,9 @@ const testimonialData = (body: Record<string, unknown>) => ({
   isPublished: (body.isActive ?? body.isPublished) === true && publicReady(body),
 });
 
-export async function GET(_request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
+    if (!isAdminRequest(request)) return forbidden();
     const raw = await prisma.testimonial.findMany({
       orderBy: { createdAt: 'desc' }
     });
@@ -64,6 +68,7 @@ export async function GET(_request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!isAdminRequest(request)) return forbidden();
     const body = await request.json() as Record<string, unknown>;
     if ((body.isActive ?? body.isPublished) === true && !publicReady(body)) {
       return NextResponse.json({ error: 'Add the real photo, written-consent evidence, consent date and photo approval before publishing.' }, { status: 400 });
@@ -83,6 +88,7 @@ export async function POST(request: NextRequest) {
 
     revalidatePath('/');
     revalidatePath('/success-stories');
+    revalidatePath('/proof-library');
 
     return NextResponse.json(formatted, { status: 201 });
   } catch (error) {

@@ -40,6 +40,10 @@ export function verifyTokenFromRequest(request: Request): AuthUser | null {
   return verifyToken(token);
 }
 
+export function isAdminRequest(request: Request): boolean {
+  return verifyTokenFromRequest(request)?.role === 'admin';
+}
+
 export function generateToken(user: AuthUser): string {
   return jwt.sign(user, getJwtSecret(), { expiresIn: '24h' });
 }

@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { isAdminRequest } from '@/lib/auth';
+
+const forbidden = () => NextResponse.json({ error: 'Admin access required' }, { status: 403 });
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isAdminRequest(request)) return forbidden();
     const { id } = await params;
 
     const country = await prisma.country.findUnique({ where: { id } });
@@ -31,12 +35,23 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isAdminRequest(request)) return forbidden();
     const { id } = await params;
 
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
+    const name = String(body.name || '').trim();
+    const slug = String(body.slug || '').trim().toLowerCase();
+    if (!name || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+      return NextResponse.json({ error: 'A country name and valid lowercase slug are required' }, { status: 400 });
+    }
     const country = await prisma.country.update({
       where: { id },
-      data: body
+      data: {
+        name,
+        slug,
+        description: String(body.description || '').trim() || null,
+        isActive: body.isActive !== false,
+      }
     }).catch(() => null);
 
     if (!country) {
@@ -61,6 +76,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isAdminRequest(request)) return forbidden();
     const { id } = await params;
 
     const country = await prisma.country.delete({ where: { id } }).catch(() => null);

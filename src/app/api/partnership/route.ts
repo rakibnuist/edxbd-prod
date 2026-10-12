@@ -170,50 +170,18 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const status = searchParams.get('status');
-    const partnershipType = searchParams.get('partnershipType');
-    const country = searchParams.get('country');
-
-    // Build filter object
-    const where: any = {};
-    if (status) where.status = status;
-    if (partnershipType) where.partnershipType = partnershipType;
-    if (country) where.country = country;
-
-    // Calculate pagination
-    const skip = (page - 1) * limit;
-
-    // Get partnerships with pagination
-    const partnerships = await prisma.partnership.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      skip,
-      take: limit
-    });
-
-    // Get total count
-    const totalCount = await prisma.partnership.count({ where });
-
-    return NextResponse.json({
-      partnerships,
-      pagination: {
-        page,
-        limit,
-        totalCount,
-        totalPages: Math.ceil(totalCount / limit)
-      }
-    });
-
-  } catch (error) {
-    console.error('Error fetching partnerships:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch partnerships' },
-      { status: 500 }
-    );
-  }
+export async function GET() {
+  // This is the public application-submission endpoint. Partnership records
+  // contain personal, financial and operational data and must never be read
+  // from here. Authenticated staff use /api/admin/partnerships instead.
+  return NextResponse.json(
+    { error: 'Method not allowed' },
+    {
+      status: 405,
+      headers: {
+        Allow: 'POST',
+        'Cache-Control': 'no-store',
+      },
+    }
+  );
 }
