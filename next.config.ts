@@ -16,9 +16,6 @@ const nextConfig: NextConfig = {
   
   // Simplified configuration for Vercel compatibility
   poweredByHeader: false,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 
   // Basic image optimization
   images: {
@@ -38,13 +35,6 @@ const nextConfig: NextConfig = {
     ],
   },
   compress: true,
-
-  modularizeImports: {
-    'lucide-react': {
-      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
-      skipDefaultConversion: true,
-    },
-  },
 
   experimental: {
     optimizePackageImports: ['framer-motion'],
@@ -118,15 +108,6 @@ const nextConfig: NextConfig = {
       // bundles reuse filenames and must never be marked immutable.
       {
         source: '/images/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      {
-        source: '/_next/static/:path*',
         headers: [
           {
             key: 'Cache-Control',
