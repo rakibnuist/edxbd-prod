@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 import prisma from '@/lib/prisma';
 import UpdateClient from './UpdateClient';
 import type { Update } from '@/lib/types';
@@ -11,21 +12,20 @@ interface UpdatePageProps {
   }>;
 }
 
+const getUpdate = cache((slug: string) => prisma.content.findFirst({
+  where: { slug, type: 'update', ...currentPublishedContentWhere() },
+}));
+
 export async function generateMetadata({ params }: UpdatePageProps): Promise<Metadata> {
   try {
     const { slug } = await params;
-    const update = await prisma.content.findFirst({
-      where: { 
-        slug: slug, 
-        type: 'update', 
-        ...currentPublishedContentWhere(),
-      }
-    });
+    const update = await getUpdate(slug);
 
     if (!update) {
       return {
         title: 'Update Not Found',
-        description: 'The requested update could not be found.'
+        description: 'The requested update could not be found.',
+        robots: { index: false, follow: true },
       };
     }
 
@@ -59,25 +59,12 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
 }
 
 export default async function UpdatePage({ params }: UpdatePageProps) {
-  try {
     const { slug } = await params;
-    const update = await prisma.content.findFirst({
-      where: { 
-        slug: slug, 
-        type: 'update', 
-        ...currentPublishedContentWhere(),
-      }
-    });
+    const update = await getUpdate(slug);
 
     if (!update) {
       notFound();
     }
-
-    // Increment view count
-    await prisma.content.update({ 
-      where: { id: update.id },
-      data: { views: { increment: 1 } }
-    });
 
     const tags = update.tags ? JSON.parse(update.tags) : [];
     const categories = update.categories ? JSON.parse(update.categories) : [];
@@ -107,7 +94,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       seoApprovedAt: update.seoApprovedAt?.toISOString(),
       createdAt: update.createdAt.toISOString(),
       updatedAt: update.updatedAt.toISOString(),
-      views: update.views + 1
+      views: update.views
     };
 
     const canonical = `https://eduexpressint.com/updates/${update.slug}`;
@@ -134,8 +121,4 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
         <UpdateClient update={updateData} />
       </>
     );
-  } catch (error) {
-    console.error('Error fetching update:', error);
-    notFound();
-  }
 }
