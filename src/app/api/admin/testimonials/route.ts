@@ -88,6 +88,7 @@ export async function POST(request: NextRequest) {
 
     revalidatePath('/');
     revalidatePath('/success-stories');
+    revalidatePath('/proof-library');
 
     return NextResponse.json(formatted, { status: 201 });
   } catch (error) {

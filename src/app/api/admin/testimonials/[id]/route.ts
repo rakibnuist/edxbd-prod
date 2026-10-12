@@ -15,6 +15,7 @@ const dateOrNull = (value: unknown) => {
 const refreshTestimonials = () => {
   revalidatePath('/');
   revalidatePath('/success-stories');
+  revalidatePath('/proof-library');
 };
 
 async function updateTestimonial(request: NextRequest, id: string) {
