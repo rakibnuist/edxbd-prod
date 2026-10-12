@@ -3,9 +3,14 @@ const path = require('path');
 const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
+const seedDataDir = process.env.SEED_DATA_DIR;
+
+if (!seedDataDir) {
+  throw new Error('SEED_DATA_DIR must point to a local, untracked directory containing sanitized seed JSON.');
+}
 
 async function main() {
-  const sourcePath = path.join(process.cwd(), 'db-dump', 'testimonials.json');
+  const sourcePath = path.resolve(seedDataDir, 'testimonials.json');
   const records = JSON.parse(fs.readFileSync(sourcePath, 'utf8'));
   let restored = 0;
 

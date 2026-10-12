@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { Country } from '@/lib/types';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function CountriesPage() {
+  const { authenticatedFetch } = useAuth();
   const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -23,7 +25,7 @@ export default function CountriesPage() {
 
   const fetchCountries = async () => {
     try {
-      const response = await fetch('/api/admin/countries');
+      const response = await authenticatedFetch('/api/admin/countries');
       const data = await response.json();
       setCountries(data);
     } catch (error) {
@@ -39,7 +41,7 @@ export default function CountriesPage() {
       const url = editingCountry ? `/api/admin/countries/${editingCountry.id}` : '/api/admin/countries';
       const method = editingCountry ? 'PUT' : 'POST';
       
-      const response = await fetch(url, {
+      const response = await authenticatedFetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +83,7 @@ export default function CountriesPage() {
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this country?')) {
       try {
-        const response = await fetch(`/api/admin/countries/${id}`, {
+        const response = await authenticatedFetch(`/api/admin/countries/${id}`, {
           method: 'DELETE',
         });
 
