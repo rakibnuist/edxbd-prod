@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { trackDashboardView, trackTestimonialManagement } from '@/lib/analytics';
 import { Testimonial } from '@/lib/types';
+import { useAuth } from '@/contexts/AuthContext';
 
 const emptyTestimonialForm = {
   name: '',
@@ -32,6 +33,7 @@ const emptyTestimonialForm = {
 };
 
 export default function TestimonialsPage() {
+  const { authenticatedFetch } = useAuth();
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -47,7 +49,7 @@ export default function TestimonialsPage() {
 
   const fetchTestimonials = async () => {
     try {
-      const response = await fetch('/api/admin/testimonials');
+      const response = await authenticatedFetch('/api/admin/testimonials');
       if (response.ok) {
         const data = await response.json();
         setTestimonials(data);
@@ -69,7 +71,7 @@ export default function TestimonialsPage() {
       const url = editingTestimonial ? `/api/admin/testimonials/${editingTestimonial.id}` : '/api/admin/testimonials';
       const method = editingTestimonial ? 'PUT' : 'POST';
       
-      const response = await fetch(url, {
+      const response = await authenticatedFetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -161,7 +163,7 @@ export default function TestimonialsPage() {
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this testimonial?')) {
       try {
-        const response = await fetch(`/api/admin/testimonials/${id}`, {
+        const response = await authenticatedFetch(`/api/admin/testimonials/${id}`, {
           method: 'DELETE',
         });
 
@@ -176,7 +178,7 @@ export default function TestimonialsPage() {
 
   const toggleStatus = async (id: string, isActive: boolean) => {
     try {
-      const response = await fetch(`/api/admin/testimonials/${id}`, {
+      const response = await authenticatedFetch(`/api/admin/testimonials/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
