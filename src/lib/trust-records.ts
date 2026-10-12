@@ -2,6 +2,7 @@ import 'server-only';
 
 import { cache } from 'react';
 import prisma from '@/lib/prisma';
+import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
 
 const parseList = (value: string) => {
   try { return JSON.parse(value) as string[]; } catch { return []; }
@@ -47,10 +48,17 @@ export const getPublicTrustRecords = cache(async () => {
     }),
   ]);
 
+  const publicOffices = offices.length > 0 ? offices : [{
+    id: 'default-dhanmondi-office',
+    ...DEFAULT_OFFICE_RECORD,
+    createdAt: new Date(0),
+    updatedAt: new Date(0),
+  }];
+
   return {
     metrics,
     evidence,
-    offices,
+    offices: publicOffices,
     team: team.map(member => ({ ...member, specialties: parseList(member.specialties) })),
     servicePackages: servicePackages.map(item => ({
       ...item,

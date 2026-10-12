@@ -1,0 +1,16 @@
+export const DEFAULT_OFFICE_RECORD = {
+  name: 'EduExpress International — Dhanmondi',
+  slug: 'dhanmondi-head-office',
+  address: 'House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209',
+  city: 'Dhaka',
+  postalCode: '1209',
+  phonePrimary: '+880 1983-333566',
+  phoneSecondary: '+880 1329-663505',
+  email: 'info@eduexpressint.com',
+  hours: 'Saturday–Thursday 9:00 AM–6:00 PM, Friday closed',
+  mapUrl: null,
+  photoUrl: null,
+  isHeadOffice: true,
+  isPublished: true,
+  lastVerifiedAt: null,
+} as const;
