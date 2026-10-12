@@ -21,7 +21,7 @@ export async function generateStaticParams() {
 }
 
 const descriptionFor = (name: string, city: string, country: string, degrees: string[]) => {
-  const text = `Study at ${name} from Bangladesh for the 2027 intake. Compare programs, tuition, scholarships, requirements, documents and first year costs in ${city}, ${country}. ${degrees.join(', ')}.`;
+  const text = `Study at ${name} from Bangladesh. Compare verified programs, tuition, scholarships, requirements, documents and first year costs in ${city}, ${country}. ${degrees.join(', ')}.`;
   return text.length > 158 ? `${text.slice(0, 155).trimEnd()}…` : text;
 };
 
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const university = result.record;
   const canonical = `${baseUrl}/universities/${university.slug}`;
   const description = descriptionFor(university.name, university.city, university.country, university.degree);
-  const title = `Study at ${university.name} from Bangladesh | Fees & Scholarships 2027`;
+  const title = `Study at ${university.name} from Bangladesh | Fees, Scholarships & Admissions`;
   const indexable = universityIsIndexable(university);
 
   return {
