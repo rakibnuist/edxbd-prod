@@ -12,6 +12,10 @@ import {
   Handshake
 } from 'lucide-react';
 import { trackFormSubmission, getUserDevice } from '@/lib/vercel-analytics';
+import { analyticsAllowed } from '@/lib/conversion-events';
+import Link from 'next/link';
+
+const PRIVACY_POLICY_VERSION = '2026-10-11';
 
 interface PartnershipFormData {
   // Essential Information Only
@@ -23,6 +27,7 @@ interface PartnershipFormData {
   country: string;
   partnershipType: string;
   motivation: string;
+  privacyConsent: boolean;
 }
 
 const initialFormData: PartnershipFormData = {
@@ -33,7 +38,8 @@ const initialFormData: PartnershipFormData = {
   city: '',
   country: '',
   partnershipType: '',
-  motivation: ''
+  motivation: '',
+  privacyConsent: false
 };
 
 const partnershipTypes = [
@@ -90,6 +96,7 @@ const PartnershipForm = () => {
         if (!formData.partnershipType) newErrors.partnershipType = 'Please select a partnership type';
         if (!formData.motivation.trim()) newErrors.motivation = 'Please tell us why you want to partner with us';
         else if (formData.motivation.trim().length < 20) newErrors.motivation = 'Please provide more details (at least 20 characters)';
+        if (!formData.privacyConsent) newErrors.privacyConsent = 'Please accept the privacy policy to submit';
         break;
     }
 
@@ -161,7 +168,11 @@ const PartnershipForm = () => {
           documents: {},
           expectations: 'Looking forward to a successful partnership',
           additionalInfo: '',
-          source: 'partnership_page'
+          source: 'partnership_page',
+          consent: formData.privacyConsent,
+          consentTimestamp: new Date().toISOString(),
+          consentPolicyVersion: PRIVACY_POLICY_VERSION,
+          trackingConsent: analyticsAllowed()
         }),
       });
 
@@ -398,6 +409,27 @@ const PartnershipForm = () => {
                   </span>
                 </div>
               </div>
+
+              <label className="flex items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={formData.privacyConsent}
+                  onChange={(event) => {
+                    setFormData((previous) => ({ ...previous, privacyConsent: event.target.checked }));
+                    if (errors.privacyConsent) {
+                      setErrors((previous) => ({ ...previous, privacyConsent: '' }));
+                    }
+                  }}
+                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span>
+                  I agree that EduExpress International may use my details to review and respond to this partnership application, as described in the{' '}
+                  <Link href="/privacy" className="font-medium text-blue-700 underline hover:text-blue-800" target="_blank">
+                    Privacy Policy
+                  </Link>.
+                </span>
+              </label>
+              {errors.privacyConsent && <p className="text-red-500 text-xs">{errors.privacyConsent}</p>}
             </div>
           </div>
         );
