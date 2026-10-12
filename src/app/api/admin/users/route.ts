@@ -3,6 +3,9 @@ import bcrypt from 'bcryptjs';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
+const ALLOWED_ROLES = ['user', 'admin', 'super_admin'] as const;
+const MIN_PASSWORD_LENGTH = 12;
+
 // GET - Fetch all users (Admin only)
 export async function GET(request: NextRequest) {
   try {
@@ -50,6 +53,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!ALLOWED_ROLES.includes(role)) {
+      return NextResponse.json({ message: 'Invalid user role' }, { status: 400 });
+    }
+
+    if (role !== 'user' && decoded.role !== 'super_admin') {
+      return NextResponse.json(
+        { message: 'Only a super admin can create privileged accounts' },
+        { status: 403 }
+      );
+    }
+
     // Validate email format
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     if (!emailRegex.test(email)) {
@@ -60,9 +74,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate password length
-    if (password.length < 6) {
+    if (password.length < MIN_PASSWORD_LENGTH) {
       return NextResponse.json(
-        { message: 'Password must be at least 6 characters long' },
+        { message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long` },
         { status: 400 }
       );
     }
