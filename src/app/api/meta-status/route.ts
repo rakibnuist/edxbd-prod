@@ -1,7 +1,15 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getMetaConfig } from '@/lib/settings';
+import { isAdminRequest } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!isAdminRequest(request)) {
+    return NextResponse.json(
+      { error: 'Admin access is required.' },
+      { status: 403, headers: { 'Cache-Control': 'no-store' } },
+    );
+  }
+
   try {
     // DB-configured values (from the admin Settings page) take precedence,
     // with environment variables as the fallback.
@@ -12,7 +20,7 @@ export async function GET() {
 
     return NextResponse.json({
       pixelId,
-      accessToken: accessToken ? `${accessToken.substring(0, 10)}...` : null, // Show partial token for security
+      accessTokenConfigured: !!accessToken,
       pixelActive,
       conversionApiActive,
       eventsTracked: 0, // This would need to be fetched from Meta API in a real implementation
@@ -24,7 +32,7 @@ export async function GET() {
       { 
         error: 'Failed to check Meta status',
         pixelId: null,
-        accessToken: null,
+        accessTokenConfigured: false,
         pixelActive: false,
         conversionApiActive: false,
         eventsTracked: 0
