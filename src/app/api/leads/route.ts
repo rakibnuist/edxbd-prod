@@ -3,6 +3,13 @@ import prisma from '@/lib/prisma';
 import { routeLead } from '@/lib/lead-routing';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
+import {
+  getOptionalString,
+  getRequiredDate,
+  getRequiredString,
+  jsonBodyErrorResponse,
+  readLimitedJson,
+} from '@/lib/request-body';
 
 export async function POST(request: NextRequest) {
   const rateLimit = checkRateLimit(request, {
@@ -13,10 +20,22 @@ export async function POST(request: NextRequest) {
   if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
 
   try {
-    const body = await request.json();
+    const body = await readLimitedJson(request, 48 * 1024);
+    const name = getRequiredString(body, 'name', 120);
+    const email = getRequiredString(body, 'email', 254);
+    const phone = getRequiredString(body, 'phone', 40);
+    const country = getRequiredString(body, 'country', 120);
+    const program = getOptionalString(body, 'program', 200);
+    const message = getOptionalString(body, 'message', 4000);
+    const source = getOptionalString(body, 'source', 100) || 'website';
+    const leadType = getOptionalString(body, 'leadType', 50) || 'contact';
+    const notes = getOptionalString(body, 'notes', 2000);
+    const consentPolicyVersion = getRequiredString(body, 'consentPolicyVersion', 100);
+    const consentTimestamp = getRequiredDate(body, 'consentTimestamp');
+    const landingPage = getOptionalString(body, 'landingPage', 2048);
     
     // Validate required fields
-    if (!body.name || !body.email || !body.phone || !body.country || body.consent !== true || !body.consentTimestamp || !body.consentPolicyVersion) {
+    if (body.consent !== true) {
       return NextResponse.json(
         { error: 'Name, email, phone, country and recorded privacy consent are required' },
         { status: 400 }
@@ -25,7 +44,7 @@ export async function POST(request: NextRequest) {
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(body.email)) {
+    if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
         { status: 400 }
@@ -35,34 +54,34 @@ export async function POST(request: NextRequest) {
     // Apply plan lead-routing rules server-side.
     const routing = routeLead({
       destinationInterest: body.destinationInterest,
-      country: body.country,
-      program: body.program,
+      country,
+      program,
       subject: body.assessment?.subject,
       careerGoal: body.assessment?.careerGoal,
-      source: body.source,
+      source,
       budget: body.assessment?.budget,
     });
 
     // Create new lead using Prisma
     const lead = await prisma.lead.create({
       data: {
-        name: body.name,
-        email: body.email.trim().toLowerCase(),
-        phone: body.phone.trim(),
-        country: body.country,
-        program: body.program,
-        message: body.message,
-        source: body.source || 'website',
+        name,
+        email: email.toLowerCase(),
+        phone,
+        country,
+        program,
+        message,
+        source,
         status: 'new',
-        leadType: body.leadType || 'contact',
+        leadType,
         destinationInterest: body.destinationInterest ? JSON.stringify(body.destinationInterest) : null,
         assignedTeam: routing.assignedTeam,
         riskFlag: routing.riskFlag,
         medicalProgram: routing.medicalProgram,
-        notes: [body.notes, routing.routingNote].filter(Boolean).join(' | '),
-        consentTimestamp: new Date(body.consentTimestamp),
-        consentPolicyVersion: body.consentPolicyVersion,
-        landingPage: body.landingPage,
+        notes: [notes, routing.routingNote].filter(Boolean).join(' | '),
+        consentTimestamp,
+        consentPolicyVersion,
+        landingPage,
         utm: body.utm ? JSON.stringify(body.utm) : null,
         assessAcademicLevel: body.assessment?.academicLevel,
         assessAcademicResults: body.assessment?.academicResults,
@@ -80,13 +99,13 @@ export async function POST(request: NextRequest) {
     if (body.trackingConsent === true) {
       try {
         await trackStudyAbroadLead({
-          name: body.name || 'Unknown',
-          email: body.email || '',
-          phone: body.phone || '',
-          country: body.country || 'Not specified',
-          program: body.program || 'Not specified',
-          message: body.message || ''
-        }, body.source || 'website', request, undefined, body.metaEventId);
+          name,
+          email,
+          phone,
+          country,
+          program: program || 'Not specified',
+          message: message || ''
+        }, source, request, undefined, body.metaEventId);
       } catch (trackingError) {
         console.error('Meta Conversion API tracking error:', trackingError);
         // Don't fail the request if tracking fails
@@ -102,6 +121,8 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error);
+    if (bodyError) return bodyError;
     console.error('Lead submission error:', error);
     
     // Handle specific error types

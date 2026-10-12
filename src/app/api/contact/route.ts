@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
+import {
+  getOptionalString,
+  getRequiredDate,
+  getRequiredString,
+  jsonBodyErrorResponse,
+  readLimitedJson,
+} from '@/lib/request-body';
 
 export async function POST(request: NextRequest) {
   const rateLimit = checkRateLimit(request, {
@@ -12,23 +19,27 @@ export async function POST(request: NextRequest) {
   if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
 
   try {
-    const body = await request.json();
+    const body = await readLimitedJson(request, 32 * 1024);
     
     // Handle both name formats (single name field or firstName/lastName)
     let fullName: string;
     let firstName: string;
     let lastName: string;
     
-    if (body.name) {
+    const submittedName = getOptionalString(body, 'name', 120);
+    const submittedFirstName = getOptionalString(body, 'firstName', 60);
+    const submittedLastName = getOptionalString(body, 'lastName', 60);
+
+    if (submittedName) {
       // Single name field format
-      fullName = body.name.trim();
+      fullName = submittedName;
       const nameParts = fullName.split(' ');
       firstName = nameParts[0] || '';
       lastName = nameParts.slice(1).join(' ') || '';
-    } else if (body.firstName && body.lastName) {
+    } else if (submittedFirstName && submittedLastName) {
       // Separate firstName/lastName format
-      firstName = body.firstName.trim();
-      lastName = body.lastName.trim();
+      firstName = submittedFirstName;
+      lastName = submittedLastName;
       fullName = `${firstName} ${lastName}`;
     } else {
       return NextResponse.json(
@@ -38,7 +49,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate required fields
-    const { email, phone, message } = body;
+    const email = getRequiredString(body, 'email', 254);
+    const phone = getRequiredString(body, 'phone', 40);
+    const message = getOptionalString(body, 'message', 4000);
+    const country = getOptionalString(body, 'country', 120) || 'Not specified';
+    const program = getOptionalString(body, 'program', 200) || 'Contact Form Inquiry';
+    const source = getOptionalString(body, 'source', 100) || 'contact_form';
+    const consentPolicyVersion = getRequiredString(body, 'consentPolicyVersion', 100);
+    const consentTimestamp = getRequiredDate(body, 'consentTimestamp');
+    const landingPage = getOptionalString(body, 'landingPage', 2048);
     
     if (!email || !phone || body.consent !== true || !body.consentTimestamp || !body.consentPolicyVersion) {
       return NextResponse.json(
@@ -62,14 +81,14 @@ export async function POST(request: NextRequest) {
         name: fullName,
         email: email.trim().toLowerCase(),
         phone: phone.trim(),
-        country: body.country || 'Not specified',
-        program: body.program || 'Contact Form Inquiry',
-        message: message ? message.trim() : 'Consultation request from ' + (body.country || 'Unknown'),
-        source: body.source || 'contact_form',
+        country,
+        program,
+        message: message || 'Consultation request from ' + country,
+        source,
         status: 'new',
-        consentTimestamp: new Date(body.consentTimestamp),
-        consentPolicyVersion: body.consentPolicyVersion,
-        landingPage: body.landingPage,
+        consentTimestamp,
+        consentPolicyVersion,
+        landingPage,
         utm: body.utm ? JSON.stringify(body.utm) : null
       }
     });
@@ -81,10 +100,10 @@ export async function POST(request: NextRequest) {
           name: fullName,
           email: email.trim().toLowerCase(),
           phone: phone.trim(),
-          country: body.country || 'Not specified',
-          program: body.program || 'Contact Form Inquiry',
-          message: message ? message.trim() : 'Consultation request from ' + (body.country || 'Unknown')
-        }, body.source || 'contact_form', request, undefined, body.metaEventId).catch(trackingError => {
+          country,
+          program,
+          message: message || 'Consultation request from ' + country
+        }, source, request, undefined, body.metaEventId).catch(trackingError => {
           console.error('Meta Conversion API tracking error (non-blocking):', trackingError);
         });
       } catch (trackingError) {
@@ -102,6 +121,8 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error);
+    if (bodyError) return bodyError;
     console.error('Contact form submission error:', error);
     return NextResponse.json(
       { error: 'Failed to send message' },

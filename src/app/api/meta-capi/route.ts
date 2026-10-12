@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { getMetaConfig } from '@/lib/settings';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
 interface ConversionsAPIEvent {
     event_name: string;
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
 
     try {
-        const body = await request.json();
+        const body = await readLimitedJson(request, 32 * 1024);
         const { event_name, event_id, event_source_url, user_data, custom_data, trackingConsent } = body;
 
         if (trackingConsent !== true) {
@@ -134,6 +135,8 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (error) {
+        const bodyError = jsonBodyErrorResponse(error);
+        if (bodyError) return bodyError;
         console.error('Conversions API Error:', error);
         return NextResponse.json(
             { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },

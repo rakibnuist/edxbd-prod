@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { submitToIndexNow, submitAllImportantPages, submitNewContent } from '@/lib/indexnow'
 import { isAdminRequest } from '@/lib/auth'
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body'
 
 export async function POST(request: NextRequest) {
   if (!isAdminRequest(request)) {
@@ -11,7 +12,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json()
+    const body = await readLimitedJson(request, 64 * 1024)
     const { urls, action = 'submit' } = body
 
     let result
@@ -49,6 +50,8 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error)
+    if (bodyError) return bodyError
     console.error('IndexNow API error:', error)
     return NextResponse.json(
       { 

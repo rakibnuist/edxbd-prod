@@ -35,6 +35,7 @@ import {
 } from '@/lib/meta-conversion-api';
 import { isAdminRequest } from '@/lib/auth';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
 const ADMIN_ONLY_EVENTS = new Set([
   'lead_status_change',
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
   if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
 
   try {
-    const body = await request.json();
+    const body = await readLimitedJson(request, 32 * 1024);
     const { eventType, data, source, trackingConsent } = body;
 
     if (typeof eventType !== 'string' || !data || typeof data !== 'object' || Array.isArray(data)) {
@@ -225,6 +226,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result);
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error);
+    if (bodyError) return bodyError;
     console.error('Meta Conversion API route error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
