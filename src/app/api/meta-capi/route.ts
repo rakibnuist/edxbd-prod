@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { getMetaConfig } from '@/lib/settings';
+import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 
 interface ConversionsAPIEvent {
     event_name: string;
@@ -36,6 +37,13 @@ function hashData(data: string | undefined): string | undefined {
 }
 
 export async function POST(request: NextRequest) {
+    const rateLimit = checkRateLimit(request, {
+        name: 'meta-capi',
+        maxRequests: 60,
+        windowMs: 60 * 1000,
+    });
+    if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
+
     try {
         const body = await request.json();
         const { event_name, event_id, event_source_url, user_data, custom_data, trackingConsent } = body;

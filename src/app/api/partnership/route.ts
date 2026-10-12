@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { trackPartnershipInquiry } from '@/lib/meta-conversion-api';
+import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
+  const rateLimit = checkRateLimit(request, {
+    name: 'partnership-form',
+    maxRequests: 5,
+    windowMs: 60 * 60 * 1000,
+  });
+  if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
+
   try {
     const body = await request.json();
     const {
