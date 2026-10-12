@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { trackPartnershipInquiry } from '@/lib/meta-conversion-api';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
+import {
+  getOptionalString,
+  getRequiredString,
+  jsonBodyErrorResponse,
+  readLimitedJson,
+} from '@/lib/request-body';
 
 export async function POST(request: NextRequest) {
   const rateLimit = checkRateLimit(request, {
@@ -12,10 +18,9 @@ export async function POST(request: NextRequest) {
   if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
 
   try {
-    const body = await request.json();
+    const body = await readLimitedJson(request, 128 * 1024);
     const {
       // Company Information
-      companyName,
       businessType,
       businessRegistrationNumber,
       businessLicense,
@@ -23,15 +28,6 @@ export async function POST(request: NextRequest) {
       yearsInBusiness,
 
       // Contact Information
-      contactPerson,
-      email,
-      phone,
-      alternatePhone,
-      address,
-      city,
-      state,
-      country,
-      postalCode,
 
       // Business Details
       partnershipType,
@@ -56,13 +52,26 @@ export async function POST(request: NextRequest) {
       documents,
 
       // Additional Information
-      motivation,
-      expectations,
-      additionalInfo,
-
-      // System Fields
-      source = 'website'
     } = body;
+
+    const companyName = getOptionalString(body, 'companyName', 200);
+    const contactPerson = getRequiredString(body, 'contactPerson', 120);
+    const email = getRequiredString(body, 'email', 254).toLowerCase();
+    const phone = getRequiredString(body, 'phone', 40);
+    const alternatePhone = getOptionalString(body, 'alternatePhone', 40);
+    const address = getRequiredString(body, 'address', 500);
+    const city = getRequiredString(body, 'city', 100);
+    const state = getRequiredString(body, 'state', 100);
+    const country = getRequiredString(body, 'country', 100);
+    const postalCode = getRequiredString(body, 'postalCode', 32);
+    const motivation = getRequiredString(body, 'motivation', 4000);
+    const expectations = getRequiredString(body, 'expectations', 4000);
+    const additionalInfo = getOptionalString(body, 'additionalInfo', 4000);
+    const source = getOptionalString(body, 'source', 100) || 'website';
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
+    }
 
     // Validate required fields
     const requiredFields = [
@@ -170,6 +179,8 @@ export async function POST(request: NextRequest) {
     );
 
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error);
+    if (bodyError) return bodyError;
     console.error('Partnership submission error:', error);
     return NextResponse.json(
       { error: 'Failed to submit partnership application' },

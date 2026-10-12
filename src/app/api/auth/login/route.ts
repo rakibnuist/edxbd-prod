@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 import { generateToken } from '@/lib/auth';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
+import { getRequiredString, jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
 export async function POST(request: NextRequest) {
   const rateLimit = checkRateLimit(request, {
@@ -13,15 +14,9 @@ export async function POST(request: NextRequest) {
   if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
 
   try {
-    const { email, password } = await request.json();
-
-    // Validate input
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
-      );
-    }
+    const body = await readLimitedJson(request, 4 * 1024);
+    const email = getRequiredString(body, 'email', 254);
+    const password = getRequiredString(body, 'password', 256);
 
     const normalizedEmail = email.toLowerCase().trim();
 
@@ -85,6 +80,8 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error);
+    if (bodyError) return bodyError;
     console.error('Login error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
