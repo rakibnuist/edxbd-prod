@@ -7,6 +7,7 @@ import { trackFormStart, trackFormFieldFocus } from '@/lib/analytics';
 import {
   analyticsAllowed,
   createConversionEventId,
+  getUtmParameters,
   trackAssessmentSubmit,
 } from '@/lib/conversion-events';
 import Link from 'next/link';
@@ -77,6 +78,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
   const [isHidden, setIsHidden] = useState(false);
   const [countdown, setCountdown] = useState<number>(0);
   const [hasStarted, setHasStarted] = useState(false);
+  const [companyWebsite, setCompanyWebsite] = useState('');
 
   // Track form start on first interaction
   const handleInteraction = () => {
@@ -94,7 +96,6 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
   // Auto-hide functionality
   useEffect(() => {
     if (isSubmitted && autoHide) {
-      setCountdown(Math.ceil(autoHideDelay / 1000));
       const interval = setInterval(() => {
         setCountdown(prev => {
           if (prev <= 1) {
@@ -132,8 +133,14 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
     setError(null);
 
     try {
-      if (!formData.name || !formData.email || !formData.phone || !formData.consent) {
-        throw new Error('Please fill in all required fields (Name, Email, Phone)');
+      if (!formData.name.trim() || !formData.email.trim() || !formData.phone || !formData.consent) {
+        throw new Error('Enter your name, email and phone number, then accept the privacy notice.');
+      }
+      if (showCountry && !formData.country) {
+        throw new Error('Select your preferred study destination.');
+      }
+      if (showProgram && !formData.program) {
+        throw new Error('Select the program level you are interested in.');
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -150,7 +157,8 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         consentTimestamp: new Date().toISOString(),
         consentPolicyVersion: '2026-07-19',
         landingPage: window.location.pathname,
-        utm: Object.fromEntries(new URLSearchParams(window.location.search)),
+        utm: getUtmParameters(),
+        companyWebsite,
         trackingConsent: analyticsAllowed(),
         metaEventId,
       };
@@ -167,6 +175,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         throw new Error(errorData.error || 'Failed to submit form');
       }
 
+      if (autoHide) setCountdown(Math.ceil(autoHideDelay / 1000));
       setIsSubmitted(true);
       trackAssessmentSubmit({
         destination: formData.country || 'not_specified',
@@ -234,6 +243,18 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+          <label htmlFor={`${formType}-company-website`}>Company website</label>
+          <input
+            id={`${formType}-company-website`}
+            name="companyWebsite"
+            type="text"
+            value={companyWebsite}
+            onChange={(event) => setCompanyWebsite(event.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
 
         {/* Name */}
         <div>
@@ -277,6 +298,8 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
             Phone Number <span className="text-red-500">*</span>
           </label>
           <CountryCodePhoneInput
+            id="phone"
+            name="phone"
             value={formData.phone}
             onChange={(value) => {
               setFormData(prev => ({ ...prev, phone: value }));
@@ -332,6 +355,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                 value={formData.program}
                 onChange={handleInputChange}
                 onFocus={() => handleFieldFocus('program')}
+                required
                 className="w-full px-4 py-2.5 text-xs border-2 border-[#08263c]/30 focus:border-[#08263c] focus:outline-none bg-[#f4f8fa] text-[#08263c] font-semibold appearance-none cursor-pointer"
               >
                 <option value="">Select level...</option>

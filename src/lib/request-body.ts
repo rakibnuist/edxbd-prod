@@ -107,3 +107,24 @@ export function getRequiredDate(body: Record<string, unknown>, field: string): D
   }
   return date;
 }
+
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;
+
+export function getSafeUtm(value: unknown): Record<string, string> | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const safe: Record<string, string> = {};
+  for (const key of UTM_KEYS) {
+    const item = (value as Record<string, unknown>)[key];
+    if (typeof item === 'string' && item.trim()) safe[key] = item.trim().slice(0, 200);
+  }
+  return Object.keys(safe).length > 0 ? safe : null;
+}
+
+export function getValidatedPhone(body: Record<string, unknown>, field = 'phone'): string {
+  const value = getRequiredString(body, field, 40);
+  const digits = value.replace(/\D/g, '');
+  if (digits.length < 7 || digits.length > 15) {
+    throw new JsonBodyError('Enter a valid phone number including country code.', 400);
+  }
+  return value.trim().startsWith('+') ? `+${digits}` : digits;
+}

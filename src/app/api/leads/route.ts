@@ -7,6 +7,8 @@ import {
   getOptionalString,
   getRequiredDate,
   getRequiredString,
+  getSafeUtm,
+  getValidatedPhone,
   jsonBodyErrorResponse,
   readLimitedJson,
 } from '@/lib/request-body';
@@ -21,9 +23,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await readLimitedJson(request, 48 * 1024);
+    if (getOptionalString(body, 'companyWebsite', 200)) {
+      return NextResponse.json({ message: 'Lead submitted successfully' }, { status: 201 });
+    }
     const name = getRequiredString(body, 'name', 120);
     const email = getRequiredString(body, 'email', 254);
-    const phone = getRequiredString(body, 'phone', 40);
+    const phone = getValidatedPhone(body);
     const country = getRequiredString(body, 'country', 120);
     const program = getOptionalString(body, 'program', 200);
     const message = getOptionalString(body, 'message', 4000);
@@ -51,6 +56,18 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    const normalizedEmail = email.trim().toLowerCase();
+    const duplicate = await prisma.lead.findFirst({
+      where: { email: normalizedEmail, phone, createdAt: { gte: new Date(Date.now() - 5 * 60 * 1000) } },
+      orderBy: { createdAt: 'desc' },
+      select: { id: true },
+    });
+    if (duplicate) {
+      return NextResponse.json({ message: 'Lead already received', leadId: duplicate.id, duplicate: true }, { status: 200 });
+    }
+
+    const safeUtm = getSafeUtm(body.utm);
+
     // Apply plan lead-routing rules server-side.
     const routing = routeLead({
       destinationInterest: body.destinationInterest,
@@ -66,7 +83,7 @@ export async function POST(request: NextRequest) {
     const lead = await prisma.lead.create({
       data: {
         name,
-        email: email.toLowerCase(),
+        email: normalizedEmail,
         phone,
         country,
         program,
@@ -82,7 +99,7 @@ export async function POST(request: NextRequest) {
         consentTimestamp,
         consentPolicyVersion,
         landingPage,
-        utm: body.utm ? JSON.stringify(body.utm) : null,
+        utm: safeUtm ? JSON.stringify(safeUtm) : null,
         assessAcademicLevel: body.assessment?.academicLevel,
         assessAcademicResults: body.assessment?.academicResults,
         assessSubject: body.assessment?.subject,
