@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
 
-const authorized = (request: NextRequest) => verifyTokenFromRequest(request)?.role === 'admin';
+const authorized = (request: NextRequest) => ['admin', 'super_admin'].includes(verifyTokenFromRequest(request)?.role || '');
 const refreshPublicTrustPages = () => {
-  revalidatePath('/');
+  revalidatePath('/', 'layout');
   revalidatePath('/proof-library');
   revalidatePath('/about');
   revalidatePath('/for-parents');
@@ -54,6 +55,17 @@ const officeData = (body: Record<string, unknown>) => ({
   email: optional(body.email), hours: String(body.hours || '').trim(), mapUrl: optional(body.mapUrl), photoUrl: optional(body.photoUrl), isHeadOffice: body.isHeadOffice === true,
   isPublished: body.isPublished !== false, lastVerifiedAt: dateOrNull(body.lastVerifiedAt),
 });
+const validOffice = (body: Record<string, unknown>) => {
+  const required = ['name', 'slug', 'address', 'city', 'phonePrimary', 'hours'];
+  if (required.some(key => !String(body[key] || '').trim())) return 'Office name, slug, address, city, primary phone and hours are required.';
+  const email = optional(body.email);
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Enter a valid office email address.';
+  for (const key of ['mapUrl', 'photoUrl']) {
+    const value = optional(body[key]);
+    if (value && !value.startsWith('/') && !/^https?:\/\//i.test(value)) return `${key} must be a site path or http/https URL.`;
+  }
+  return null;
+};
 
 const teamData = (body: Record<string, unknown>) => ({
   slug: String(body.slug || '').trim(), name: String(body.name || '').trim(), role: String(body.role || '').trim(), shortRole: optional(body.shortRole),
@@ -91,6 +103,15 @@ export async function POST(request: NextRequest) {
     refreshPublicTrustPages();
     return NextResponse.json(record, { status: 201 });
   }
+  if (body.kind === 'office') {
+    const existingOffice = await prisma.office.findFirst();
+    if (existingOffice) return NextResponse.json({ error: 'An office record already exists.' }, { status: 409 });
+    const record = await prisma.office.create({ data: DEFAULT_OFFICE_RECORD });
+    refreshPublicTrustPages();
+    revalidatePath('/contact');
+    revalidatePath('/education-consultant-dhaka');
+    return NextResponse.json(record, { status: 201 });
+  }
   if (body.kind !== 'evidence') return NextResponse.json({ error: 'Unknown record type.' }, { status: 400 });
   if (!body.title) return NextResponse.json({ error: 'Evidence title is required.' }, { status: 400 });
   if (body.isPublished === true && !optional(body.thumbnailUrl)) return NextResponse.json({ error: 'A privacy-safe preview is required before publication.' }, { status: 400 });
@@ -108,6 +129,8 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json(record);
   }
   if (body.kind === 'office') {
+    const error = validOffice(body);
+    if (error) return NextResponse.json({ error }, { status: 400 });
     const record = await prisma.office.update({ where: { id: String(body.id) }, data: officeData(body) });
     refreshPublicTrustPages();
     return NextResponse.json(record);

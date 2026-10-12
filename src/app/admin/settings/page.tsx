@@ -1,15 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface SettingsState {
   siteName: string;
   siteDescription: string;
-  contactEmail: string;
-  contactPhone: string;
-  whatsappNumber: string;
-  address: string;
   facebookUrl: string;
   linkedinUrl: string;
   instagramUrl: string;
@@ -26,10 +23,6 @@ interface SettingsState {
 const DEFAULTS: SettingsState = {
   siteName: 'EduExpress International',
   siteDescription: "Bangladesh's Evidence-First Education Consultancy",
-  contactEmail: 'info@eduexpressint.com',
-  contactPhone: '+880 1983-333566',
-  whatsappNumber: '+880 1983-333566',
-  address: 'Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209',
   facebookUrl: 'https://www.facebook.com/eduexpressint',
   linkedinUrl: 'https://www.linkedin.com/company/eduexpress',
   instagramUrl: 'https://www.instagram.com/eduexpressint/',
@@ -106,6 +99,11 @@ export default function SettingsPage() {
     setMessage(null);
     try {
       const payload: Record<string, string> = { ...settings };
+      // Contact details are managed only by the canonical Office record.
+      delete payload.contactEmail;
+      delete payload.contactPhone;
+      delete payload.whatsappNumber;
+      delete payload.address;
       // Only send the token if the admin typed a new one.
       if (!settings.metaAccessToken) delete payload.metaAccessToken;
       const res = await authenticatedFetch('/api/admin/settings', {
@@ -239,7 +237,7 @@ export default function SettingsPage() {
         {/* Site details */}
         <section className="rounded-2xl bg-white shadow ring-1 ring-gray-100">
           <div className="border-b border-gray-100 px-6 py-4">
-            <h2 className="text-lg font-semibold text-[#08263c]">Site &amp; Contact</h2>
+            <h2 className="text-lg font-semibold text-[#08263c]">Site Identity</h2>
           </div>
           <div className="grid gap-5 p-6 sm:grid-cols-2">
             <div className="sm:col-span-2">
@@ -250,21 +248,9 @@ export default function SettingsPage() {
               <label className={label} htmlFor="siteDescription">Site description</label>
               <textarea id="siteDescription" name="siteDescription" value={settings.siteDescription} onChange={handleChange} rows={2} className={field} />
             </div>
-            <div>
-              <label className={label} htmlFor="contactEmail">Contact email</label>
-              <input id="contactEmail" name="contactEmail" type="email" maxLength={254} value={settings.contactEmail} onChange={handleChange} className={field} />
-            </div>
-            <div>
-              <label className={label} htmlFor="contactPhone">Contact phone</label>
-              <input id="contactPhone" name="contactPhone" value={settings.contactPhone} onChange={handleChange} className={field} />
-            </div>
-            <div>
-              <label className={label} htmlFor="whatsappNumber">WhatsApp number</label>
-              <input id="whatsappNumber" name="whatsappNumber" value={settings.whatsappNumber} onChange={handleChange} className={field} />
-            </div>
-            <div>
-              <label className={label} htmlFor="address">Address</label>
-              <input id="address" name="address" value={settings.address} onChange={handleChange} className={field} />
+            <div className="sm:col-span-2 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+              Phone numbers, email, address and opening hours have one source of truth. Manage them in{' '}
+              <Link href="/admin/trust#office-records" className="font-bold underline">Company Records → Real offices</Link>.
             </div>
           </div>
         </section>

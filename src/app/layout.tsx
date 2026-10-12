@@ -187,7 +187,7 @@ export default async function RootLayout({
         "hoursAvailable": {
           "@type": "OpeningHoursSpecification",
           "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
-          "opens": "11:00",
+          "opens": "09:00",
           "closes": "18:00"
         }
       },
