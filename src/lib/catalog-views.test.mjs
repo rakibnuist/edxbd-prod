@@ -36,3 +36,28 @@ test('program rows only price one explicit yearly CNY figure', () => {
   assert.deepEqual(rows.map(row => row.annualTuitionCny), [15000, null, null, 18000]);
   assert.equal(rows[3].level, 'Master');
 });
+
+test('fees: categories and first-year amounts', () => {
+  assert.equal(views.feeCategory('Tuition Fees'), null);
+  assert.equal(views.feeCategory('Hostel Fee'), 'accommodation');
+  assert.equal(views.feeCategory('Visa Extension Fees'), 'residence');
+  assert.equal(views.feeCategory('Medical Check Up'), 'medical');
+  const rows = views.toFeeRows({ fees: [
+    { item: 'Application Fee', cost: '400 CNY' },
+    { item: 'Insurance Fee', cost: '800 CNY/Year' },
+    { item: 'Medical Check Up', cost: '400 – 800 CNY (1st Year only)' },
+    { item: 'Tuition Fee', cost: '20000 CNY/Year' },
+  ] });
+  assert.deepEqual(rows.map(row => [row.category, row.firstYearCny]), [['application', 400], ['insurance', 800], ['medical', null]]);
+});
+
+test('first-year estimate totals only when every recorded item is explicit', () => {
+  const fee = (category, firstYearCny) => ({ item: category, cost: '', category, firstYearCny });
+  const clear = views.firstYearEstimate({ annualTuitionCny: 20000 }, [fee('application', 400), fee('insurance', 800), fee('accommodation', 6000)]);
+  assert.equal(clear.total, 27200);
+  assert.deepEqual(clear.missing, ['Registration fee', 'Medical check', 'Residence permit']);
+  const unclear = views.firstYearEstimate({ annualTuitionCny: 20000 }, [fee('accommodation', 6000), fee('accommodation', 9000), fee('medical', null)]);
+  assert.equal(unclear.total, null);
+  assert.deepEqual(unclear.unclear, ['Accommodation', 'Medical check']);
+  assert.equal(views.firstYearEstimate({ annualTuitionCny: null }, []).total, null);
+});

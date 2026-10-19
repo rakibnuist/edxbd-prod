@@ -34,6 +34,7 @@ export const findEducationNavigation: SiteLink[] = [
   { name: 'Find education hub', href: '/find-education', note: 'Start with subject, level, budget and intake' },
   { name: 'Find universities', href: '/universities', note: 'Browse verified university records' },
   { name: 'Program & tuition finder', href: '/programs', note: 'Search programs by yearly tuition budget' },
+  { name: 'Compare costs', href: '/compare-costs', note: 'First-year costs for up to 3 programs' },
   { name: 'Scholarship database', href: '/scholarships', note: 'Search recorded coverage and deadlines' },
   { name: 'Compare destinations', href: '/compare-study-destinations', note: 'Compare recognition, cost and readiness' },
   { name: 'Free Education Fit Assessment', href: '/education-fit-assessment', note: 'Turn your profile into a practical shortlist' },

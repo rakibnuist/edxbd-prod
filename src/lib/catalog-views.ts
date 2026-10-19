@@ -82,6 +82,60 @@ export function scholarshipCategory(title: string, type = ''): ScholarshipCatego
   return 'University scholarship';
 }
 
+export type FeeCategory = 'application' | 'registration' | 'accommodation' | 'insurance' | 'medical' | 'residence' | 'other';
+export const FEE_LABELS: Record<FeeCategory, string> = {
+  application: 'Application fee', registration: 'Registration fee', accommodation: 'Accommodation',
+  insurance: 'Insurance', medical: 'Medical check', residence: 'Residence permit', other: 'Other recorded fees',
+};
+/** Charges every student pays in year one; "other" is shown but never added to a total. */
+export const FIRST_YEAR_FEES: FeeCategory[] = ['application', 'registration', 'accommodation', 'insurance', 'medical', 'residence'];
+
+export type FeeRow = { item: string; cost: string; category: FeeCategory; firstYearCny: number | null; sourceUrl?: string };
+
+export function feeCategory(item: string): FeeCategory | null {
+  const text = item.toLowerCase();
+  if (/tuition/.test(text)) return null; // Tuition comes from the program record.
+  if (/application/.test(text)) return 'application';
+  if (/registration/.test(text)) return 'registration';
+  if (/hostel|accommodation|dormitor/.test(text)) return 'accommodation';
+  if (/insurance/.test(text)) return 'insurance';
+  if (/medical|health check|physical exam/.test(text)) return 'medical';
+  if (/residen|visa extension/.test(text)) return 'residence';
+  return 'other';
+}
+
+/** Yearly charges must say "per year"; one-off charges must not name any period. */
+const firstYearAmount = (category: FeeCategory, cost: string) => (['accommodation', 'insurance'].includes(category)
+  ? parseSourceFee(cost, 'CNY', 'year')
+  : parseSourceFee(cost, 'CNY', 'oneoff') ?? parseSourceFee(cost, 'CNY', 'year'));
+
+export function toFeeRows(university: CleanUniversityRecord): FeeRow[] {
+  return university.fees.flatMap(fee => {
+    const category = feeCategory(fee.item);
+    if (!category) return [];
+    return [{ item: fee.item, cost: fee.cost, category, firstYearCny: category === 'other' ? null : firstYearAmount(category, fee.cost), sourceUrl: httpUrl(fee.sourceUrl) }];
+  });
+}
+
+/**
+ * First-year cost from recorded figures. A total is only given when tuition and
+ * every recorded first-year fee are explicit CNY amounts; otherwise the gaps are named.
+ */
+export function firstYearEstimate(program: Pick<ProgramRow, 'annualTuitionCny'>, fees: FeeRow[]) {
+  const unclear: string[] = [];
+  let total = program.annualTuitionCny ?? 0;
+  if (program.annualTuitionCny === null) unclear.push('Tuition');
+  for (const category of FIRST_YEAR_FEES) {
+    const items = fees.filter(fee => fee.category === category);
+    if (!items.length) continue;
+    // Several room types or plans: the student's choice decides, so do not pick one.
+    if (items.length > 1 || items[0].firstYearCny === null) unclear.push(FEE_LABELS[category]);
+    else total += items[0].firstYearCny;
+  }
+  const missing = FIRST_YEAR_FEES.filter(category => !fees.some(fee => fee.category === category)).map(category => FEE_LABELS[category]);
+  return { total: unclear.length ? null : total, partial: total, unclear, missing };
+}
+
 const sentenceList = (value?: string) => (value || '').split(/;\s*/).map(item => item.trim()).filter(Boolean);
 
 export function toProgramRows(universities: CleanUniversityRecord[], now: Date): ProgramRow[] {
