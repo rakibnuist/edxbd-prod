@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "dev", "runtimeExecutable": "sh", "runtimeArgs": ["-c", "DATABASE_URL=file:./prod-copy.db npm run dev"], "port": 3000 }
+  ]
+}
