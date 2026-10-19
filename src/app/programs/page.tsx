@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import ProgramFinder from '@/components/finders/ProgramFinder';
 import { getUniversityRecords } from '@/lib/university-records';
 import { toProgramRows, type ProgramRow } from '@/lib/catalog-views';
+import { programSegments } from '@/lib/program-segments';
 
 const canonical = 'https://eduexpressint.com/programs';
 export const revalidate = 3600;
@@ -65,6 +66,9 @@ export default async function ProgramsPage() {
             </div>
             <Link href="/education-fit-assessment" className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-[#174f7a] px-5 text-sm font-black text-white">Help me shortlist <ArrowRight size={15} /></Link>
           </div>
+          <nav aria-label="Browse by program type" className="mt-6 flex flex-wrap gap-2">
+            {programSegments.map(segment => <Link key={segment.slug} href={`/programs/${segment.slug}`} className="inline-flex min-h-10 items-center rounded-full border border-[#174f7a]/20 bg-[#f7fafc] px-4 text-sm font-bold text-[#174f7a] hover:border-[#174f7a]">{segment.h1}</Link>)}
+          </nav>
         </div>
       </header>
 
