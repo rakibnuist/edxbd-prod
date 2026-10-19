@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import MetaConnectionPanel from '@/components/admin/MetaConnectionPanel';
 
 interface DashboardStats {
   totalLeads: number;
@@ -12,14 +13,6 @@ interface DashboardStats {
   newPartnerships: number;
   recentLeads: { name: string; email: string; country: string }[];
   recentPartnerships: { companyName: string; contactEmail: string; country: string }[];
-}
-
-interface MetaStatus {
-  pixelId: string | null;
-  accessTokenConfigured: boolean;
-  pixelActive: boolean;
-  conversionApiActive: boolean;
-  eventsTracked: number;
 }
 
 export default function AdminDashboardNew() {
@@ -34,21 +27,12 @@ export default function AdminDashboardNew() {
     recentLeads: [],
     recentPartnerships: []
   });
-  const [metaStatus, setMetaStatus] = useState<MetaStatus>({
-    pixelId: null,
-    accessTokenConfigured: false,
-    pixelActive: false,
-    conversionApiActive: false,
-    eventsTracked: 0
-  });
-  const [metaLoading, setMetaLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (isAuthenticated && !authLoading) {
       fetchData();
-      checkMetaStatus();
     }
   }, [isAuthenticated, authLoading]);
 
@@ -65,8 +49,8 @@ export default function AdminDashboardNew() {
       }
 
       const data = await response.json();
-      console.log('Received data:', data);
-      console.log('Dashboard API response status:', response.status);
+
+
 
       // Direct assignment - no complex state management
       setStats({
@@ -85,40 +69,6 @@ export default function AdminDashboardNew() {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const checkMetaStatus = async () => {
-    try {
-      setMetaLoading(true);
-      const response = await authenticatedFetch('/api/meta-status');
-      if (response.ok) {
-        const data = await response.json();
-        setMetaStatus(data);
-        console.log('Meta status fetched:', data);
-      } else {
-        console.error('Failed to fetch Meta status:', response.status);
-        // Set default values if API fails
-        setMetaStatus({
-          pixelId: null,
-          accessTokenConfigured: false,
-          pixelActive: false,
-          conversionApiActive: false,
-          eventsTracked: 0
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching Meta status:', error);
-      // Set default values if API fails
-      setMetaStatus({
-        pixelId: null,
-        accessTokenConfigured: false,
-        pixelActive: false,
-        conversionApiActive: false,
-        eventsTracked: 0
-      });
-    } finally {
-      setMetaLoading(false);
     }
   };
 
@@ -181,7 +131,7 @@ export default function AdminDashboardNew() {
   }
 
   return (
-    <div className="p-6">
+    <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
         <div className="flex items-center space-x-2">
@@ -190,61 +140,7 @@ export default function AdminDashboardNew() {
         </div>
       </div>
 
-      {/* Meta Connectivity Status */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-bold text-blue-800">Meta Connectivity Status</h3>
-          {metaLoading && (
-            <div className="flex items-center space-x-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-              <span className="text-xs text-blue-600">Loading...</span>
-            </div>
-          )}
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="flex items-center space-x-2">
-            <div className={`w-3 h-3 rounded-full ${metaStatus.pixelActive ? 'bg-green-500' : 'bg-red-500'}`}></div>
-            <span className="text-sm font-medium text-gray-700">Meta Pixel</span>
-            <span className={`text-xs px-2 py-1 rounded ${metaStatus.pixelActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-              {metaStatus.pixelActive ? 'Active' : 'Inactive'}
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <div className={`w-3 h-3 rounded-full ${metaStatus.conversionApiActive ? 'bg-green-500' : 'bg-red-500'}`}></div>
-            <span className="text-sm font-medium text-gray-700">Conversion API</span>
-            <span className={`text-xs px-2 py-1 rounded ${metaStatus.conversionApiActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-              {metaStatus.conversionApiActive ? 'Active' : 'Inactive'}
-            </span>
-          </div>
-
-          <div className="text-sm">
-            <span className="font-medium text-gray-700">Pixel ID:</span>
-            <span className="text-gray-600 ml-1">{metaStatus.pixelId || 'Not Set'}</span>
-          </div>
-
-          <div className="text-sm">
-            <span className="font-medium text-gray-700">Access Token:</span>
-            <span className="text-gray-600 ml-1">{metaStatus.accessTokenConfigured ? 'Configured' : 'Not Set'}</span>
-          </div>
-        </div>
-
-        {!metaStatus.pixelActive && (
-          <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded">
-            <p className="text-sm text-yellow-800">
-              <strong>Setup Required:</strong> Add NEXT_PUBLIC_META_PIXEL_ID to your environment variables to enable Meta Pixel tracking.
-            </p>
-          </div>
-        )}
-
-        {!metaStatus.conversionApiActive && (
-          <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded">
-            <p className="text-sm text-yellow-800">
-              <strong>Setup Required:</strong> Add META_ACCESS_TOKEN to your environment variables to enable Meta Conversion API tracking.
-            </p>
-          </div>
-        )}
-      </div>
+      <MetaConnectionPanel />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">

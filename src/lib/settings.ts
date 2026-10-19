@@ -117,11 +117,15 @@ export async function saveSettings(values: Record<string, unknown>): Promise<voi
  * Meta config: DB value takes precedence, environment variable is the fallback.
  * This lets the admin panel override env without a redeploy.
  */
+export function resolveMetaConfig(settings: Record<string, string>): { pixelId: string | null; accessToken: string | null } {
+  return {
+    pixelId: settings.metaPixelId?.trim() || process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || DEFAULT_META_PIXEL_ID,
+    accessToken: settings.metaAccessToken?.trim() || process.env.META_ACCESS_TOKEN?.trim() || null,
+  };
+}
+
 export async function getMetaConfig(): Promise<{ pixelId: string | null; accessToken: string | null }> {
-  const settings = await getAllSettings();
-  const pixelId = settings.metaPixelId || process.env.NEXT_PUBLIC_META_PIXEL_ID || DEFAULT_META_PIXEL_ID;
-  const accessToken = settings.metaAccessToken || process.env.META_ACCESS_TOKEN || null;
-  return { pixelId, accessToken };
+  return resolveMetaConfig(await getAllSettings());
 }
 
 const clean = (v: string | undefined, ...placeholders: string[]) =>

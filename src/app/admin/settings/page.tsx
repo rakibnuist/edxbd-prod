@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import MetaConnectionPanel from '@/components/admin/MetaConnectionPanel';
 
 interface SettingsState {
   siteName: string;
@@ -36,24 +37,11 @@ const DEFAULTS: SettingsState = {
   ga4Id: '',
 };
 
-function StatusBadge({ active }: { active: boolean }) {
-  return (
-    <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
-        active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-500'
-      }`}
-    >
-      <span className={`h-2 w-2 rounded-full ${active ? 'bg-green-500' : 'bg-gray-400'}`} />
-      {active ? 'Active' : 'Inactive'}
-    </span>
-  );
-}
-
 export default function SettingsPage() {
   const { isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
   const [settings, setSettings] = useState<SettingsState>(DEFAULTS);
   const [pixelActive, setPixelActive] = useState(false);
-  const [capiActive, setCapiActive] = useState(false);
+  const [trackingRefresh, setTrackingRefresh] = useState(0);
   const [tokenIsSet, setTokenIsSet] = useState(false);
   const [pixelSource, setPixelSource] = useState<'settings' | 'environment' | 'default'>('settings');
   const [loading, setLoading] = useState(true);
@@ -74,7 +62,7 @@ export default function SettingsPage() {
         setTokenIsSet(!!data.metaAccessTokenSet);
         setPixelActive(!!data.metaPixelIdSet);
         setPixelSource(['default', 'environment'].includes(data.metaPixelIdSource) ? data.metaPixelIdSource : 'settings');
-        setCapiActive(!!data.metaAccessTokenSet);
+
       }
     } catch {
       setMessage({ type: 'error', text: 'Could not load settings.' });
@@ -120,7 +108,7 @@ export default function SettingsPage() {
       setTokenIsSet(!!s.metaAccessTokenSet);
       setPixelActive(!!s.metaPixelIdSet);
       setPixelSource(['default', 'environment'].includes(s.metaPixelIdSource) ? s.metaPixelIdSource : 'settings');
-      setCapiActive(!!s.metaAccessTokenSet);
+      setTrackingRefresh(value => value + 1);
       setSettings((prev) => ({ ...prev, metaAccessToken: '' }));
       setMessage({ type: 'success', text: 'Settings saved.' });
     } catch (error) {
@@ -158,28 +146,19 @@ export default function SettingsPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Meta Connectivity */}
-        <section className="rounded-2xl bg-white shadow ring-1 ring-gray-100">
+        <section id="meta-tracking" className="scroll-mt-6 rounded-xl border border-gray-200 bg-white">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-6 py-4">
             <div>
               <h2 className="text-lg font-semibold text-[#08263c]">Meta Connectivity Status</h2>
               <p className="text-xs text-gray-500">Facebook Pixel &amp; Conversions API for ad tracking.</p>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <div className="text-[11px] font-medium uppercase tracking-wide text-gray-400">Meta Pixel</div>
-                <StatusBadge active={pixelActive} />
-              </div>
-              <div className="text-right">
-                <div className="text-[11px] font-medium uppercase tracking-wide text-gray-400">Conversion API</div>
-                <StatusBadge active={capiActive} />
-              </div>
-            </div>
+            <button type="submit" disabled={isSaving} className="min-h-10 rounded-lg bg-gray-900 px-4 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-60">{isSaving ? 'Saving…' : 'Save settings'}</button>
           </div>
 
           <div className="grid gap-5 p-6 sm:grid-cols-2">
             <div>
               <label className={label} htmlFor="metaPixelId">
-                Pixel ID {pixelActive ? <span className="text-green-600">• Set</span> : <span className="text-gray-400">• Not set</span>}
+                Pixel ID {pixelActive ? <span className="text-green-600">• Set</span> : <span className="text-gray-600">• Not set</span>}
               </label>
               <input
                 id="metaPixelId"
@@ -192,11 +171,11 @@ export default function SettingsPage() {
                 maxLength={32}
                 className={field}
               />
-              <p className="mt-1 text-xs text-gray-400">Found in Meta Events Manager → Data Sources.{pixelSource === 'default' && !settings.metaPixelId ? ' The approved default Pixel is currently active.' : pixelSource === 'environment' && !settings.metaPixelId ? ' The server-configured Pixel is currently active.' : ''}</p>
+              <p className="mt-1 text-xs text-gray-600">Found in Meta Events Manager → Data Sources.{pixelSource === 'default' && !settings.metaPixelId ? ' The approved default Pixel is currently configured.' : pixelSource === 'environment' && !settings.metaPixelId ? ' The server-configured Pixel is currently configured.' : ''}</p>
             </div>
             <div>
               <label className={label} htmlFor="metaAccessToken">
-                Access Token {tokenIsSet ? <span className="text-green-600">• Set</span> : <span className="text-gray-400">• Not set</span>}
+                Access Token {tokenIsSet ? <span className="text-green-600">• Set</span> : <span className="text-gray-600">• Not set</span>}
               </label>
               <input
                 id="metaAccessToken"
@@ -208,10 +187,12 @@ export default function SettingsPage() {
                 className={field}
                 autoComplete="new-password"
               />
-              <p className="mt-1 text-xs text-gray-400">Stored securely; never shown again after saving.</p>
+              <p className="mt-1 text-xs text-gray-600">Kept server-side and never returned to the browser. Generate the token for this dataset in Meta Events Manager → Settings → Conversions API → Set up manually.</p>
             </div>
           </div>
         </section>
+
+        <MetaConnectionPanel refreshKey={trackingRefresh} pendingChanges={Boolean(settings.metaAccessToken)} />
 
         {/* Analytics & Tags */}
         <section className="rounded-2xl bg-white shadow ring-1 ring-gray-100">
@@ -224,12 +205,12 @@ export default function SettingsPage() {
             <div>
               <label className={label} htmlFor="gtmId">Google Tag Manager ID</label>
               <input id="gtmId" name="gtmId" value={settings.gtmId} onChange={handleChange} placeholder="GTM-XXXXXXX" pattern="GTM-[A-Za-z0-9]+" maxLength={32} className={field} />
-              <p className="mt-1 text-xs text-gray-400">Container ID from tagmanager.google.com.</p>
+              <p className="mt-1 text-xs text-gray-600">Container ID from tagmanager.google.com.</p>
             </div>
             <div>
               <label className={label} htmlFor="ga4Id">GA4 Measurement ID</label>
               <input id="ga4Id" name="ga4Id" value={settings.ga4Id} onChange={handleChange} placeholder="G-XXXXXXXXXX" pattern="G-[A-Za-z0-9]+" maxLength={32} className={field} />
-              <p className="mt-1 text-xs text-gray-400">Only needed if you are not managing GA4 through GTM.</p>
+              <p className="mt-1 text-xs text-gray-600">Only needed if you are not managing GA4 through GTM.</p>
             </div>
           </div>
         </section>

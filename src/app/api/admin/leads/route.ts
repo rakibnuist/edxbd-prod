@@ -31,13 +31,13 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' }
     });
 
-    console.log(`Found ${leads.length} leads in database`);
-    console.log('Query used:', query);
-    console.log('Sample lead:', leads[0] ? { id: leads[0].id, name: leads[0].name, email: leads[0].email } : 'No leads found');
-    console.log('All lead IDs:', leads.map(lead => lead.id));
 
-    return NextResponse.json(leads);
-  } catch (error) {
+
+
+
+
+    return NextResponse.json(leads, { headers: { 'Cache-Control': 'no-store, private' } });
+  } catch {
     // Error fetching leads
     return NextResponse.json(
       { error: 'Failed to fetch leads' },

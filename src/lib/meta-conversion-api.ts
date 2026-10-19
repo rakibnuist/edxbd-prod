@@ -3,6 +3,8 @@
 // /api/meta-conversion route instead of importing from here.
 import crypto from 'crypto';
 import { getMetaConfig } from '@/lib/settings';
+import { sendMetaEvents } from '@/lib/meta-api';
+import { recordMetaDelivery } from '@/lib/meta-health';
 
 // Optional explicit credentials; when omitted the DB config is used.
 export type MetaConfigOverride = { pixelId?: string | null; accessToken?: string | null };
@@ -10,7 +12,7 @@ export type MetaConfigOverride = { pixelId?: string | null; accessToken?: string
 // Configuration
 const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || '';
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
-const META_API_VERSION = 'v18.0';
+
 
 // Hash data for Meta Conversion API (server-side)
 export const hashData = (data: string): string => {
@@ -180,28 +182,17 @@ export const sendConversionAPIEvent = async (
       access_token: activeAccessToken,
     };
 
-    const response = await fetch(`https://graph.facebook.com/${META_API_VERSION}/${activePixelId}/events`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(eventData),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Meta Conversion API error: ${response.status} - ${errorText}`);
-    }
-
-    const result = await response.json();
-    console.log('Meta API result:', result);
+    const activeConfig = { pixelId: activePixelId, accessToken: activeAccessToken };
+    const delivery = await sendMetaEvents(activeConfig, eventData.data);
+    await recordMetaDelivery(activeConfig, delivery);
+    if (!delivery.ok) return { success: false, eventId: finalEventId, error: delivery.error };
 
     return {
       success: true,
       eventId: finalEventId,
     };
   } catch (error) {
-    console.error('Meta Conversion API error:', error);
+    console.error('Meta Conversion API delivery failed.');
     return {
       success: false,
       eventId: eventId || generateEventId(),

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { verifyTokenFromRequest } from '@/lib/auth';
-import { DEFAULT_META_PIXEL_ID, getAllSettings, saveSettings, validateSettings } from '@/lib/settings';
+import { DEFAULT_META_PIXEL_ID, getAllSettings, saveSettings, validateSettings, SETTING_KEYS } from '@/lib/settings';
 
 const MASK = '••••••••';
 
@@ -11,7 +11,7 @@ function presentForClient(settings: Record<string, string>) {
   const environmentPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
   const effectivePixelId = settings.metaPixelId || environmentPixelId || DEFAULT_META_PIXEL_ID;
   return {
-    ...settings,
+    ...Object.fromEntries(Object.entries(settings).filter(([key]) => (SETTING_KEYS as readonly string[]).includes(key))),
     metaAccessToken: accessToken ? MASK : '',
     metaAccessTokenSet: !!accessToken,
     metaPixelIdSet: !!effectivePixelId,

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { getMetaConfig } from '@/lib/settings';
+import { sendMetaEvents } from '@/lib/meta-api';
+import { recordMetaDelivery } from '@/lib/meta-health';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import {
     getOptionalString,
@@ -156,35 +158,11 @@ export async function POST(request: NextRequest) {
             custom_data: customData,
         };
 
-        // Send to Meta Conversions API
-        const metaApiUrl = `https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`;
-
-        const metaResponse = await fetch(metaApiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                data: [eventPayload],
-                test_event_code: process.env.NODE_ENV === 'development' ? 'TEST12345' : undefined,
-            }),
-        });
-
-        const metaData = await metaResponse.json();
-
-        if (!metaResponse.ok) {
-            console.error('Meta API Error:', metaData);
-            return NextResponse.json(
-                { error: 'Failed to send event to Meta', details: metaData },
-                { status: 500 }
-            );
-        }
-
-        return NextResponse.json({
-            success: true,
-            event_id: eventId,
-            meta_response: metaData,
-        });
+        const config = { pixelId, accessToken };
+        const result = await sendMetaEvents(config, [eventPayload]);
+        await recordMetaDelivery(config, result);
+        if (!result.ok) return NextResponse.json({ error: result.error }, { status: 502 });
+        return NextResponse.json({ success: true, event_id: eventId, meta_response: { events_received: result.eventsReceived } });
 
     } catch (error) {
         const bodyError = jsonBodyErrorResponse(error);
