@@ -1,0 +1,1165 @@
+{
+  "schemaVersion": 1,
+  "internal": {
+    "checkedAt": "2026-10-19",
+    "reviewStatus": "owner-supplied brochures; extracted and visually cross-checked; human education/compliance approval not recorded",
+    "sourceDocuments": [
+      {
+        "id": "xjtu-language-2027",
+        "filename": "2027年西安交通大学（西安）国际学生汉语进修项目简章-中英(1).pdf",
+        "absolutePath": "/Users/a1/Library/Containers/com.tencent.xinWeChat/Data/Documents/xwechat_files/wxid_0y7pqpxayzjx22_0cdb/temp/drag/2027年西安交通大学（西安）国际学生汉语进修项目简章-中英(1).pdf",
+        "pages": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "xjtu-foundation-2027",
+        "filename": "2027西安交通大学预科（中文授课）招生简章-中英文.pdf",
+        "absolutePath": "/Users/a1/Library/Containers/com.tencent.xinWeChat/Data/Documents/xwechat_files/wxid_0y7pqpxayzjx22_0cdb/temp/drag/2027西安交通大学预科（中文授课）招生简章-中英文.pdf",
+        "pages": [
+          1,
+          2
+        ]
+      }
+    ],
+    "supplementaryChecks": [
+      {
+        "url": "https://sie.xjtu.edu.cn/info/1021/5554.htm",
+        "result": "Linked by language brochure; not accessible during check. No detailed refund rule inferred."
+      },
+      {
+        "url": "https://sie.xjtu.edu.cn/lhzb/zsjs.htm",
+        "result": "Accommodation table inspected. Several campus/room/booking-period prices exist; none assigned to these programmes without confirmed campus/room allocation."
+      }
+    ],
+    "ambiguities": [
+      "Foundation Chinese says age not exceeding 24, English says under 24. Boundary cases require university confirmation.",
+      "Foundation Chinese physical examination entry specifies originals/notarised copies and six-month validity; English omits those details. Retain the stricter complete instruction.",
+      "Language English labels both long study options spring/autumn semester, while the Chinese explicitly labels them an academic year; exact start/end dates and yearly tuition retained."
+    ]
+  },
+  "universities": [
+    {
+      "slug": "xian-jiaotong-university",
+      "name": "Xi'an Jiaotong University",
+      "city": "Xi'an",
+      "province": "Shaanxi",
+      "officialUrl": "https://en.xjtu.edu.cn/",
+      "overview": "Xi'an Jiaotong University in Shaanxi is a public research university founded in 1896 and a member of the C9 League. Its 2027 Xi'an study options below cover Chinese-language learning and Chinese-taught foundation pathways. Each option has its own entry conditions, length and fee basis, so select the route that matches your academic and language preparation.",
+      "programs": [
+        {
+          "id": "language-spring-semester-2027",
+          "name": "Chinese Language Programme - Spring semester",
+          "level": "Language",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "1 semester",
+          "periodLabel": "February 2027 - July 2027",
+          "campus": "Xi'an",
+          "intake": "February 2027",
+          "deadline": "15 January 2027",
+          "qualifications": [
+            "Above 18 and below 45 years old.",
+            "In good health.",
+            "Hold a valid ordinary foreign passport."
+          ],
+          "languageRequirements": [
+            "A placement test is held before classes; students are assigned to elementary, intermediate or advanced classes.",
+            "The brochure does not specify a minimum entry HSK score."
+          ],
+          "documents": [
+            "Valid ordinary foreign passport.",
+            "Confirm the complete upload checklist for this language programme with the admissions office; the brochure does not provide a detailed document list."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Chinese language tuition",
+              "currency": "CNY",
+              "period": "semester",
+              "stage": "in_china",
+              "amount": 8000,
+              "notes": "Published price for one semester."
+            },
+            {
+              "key": "application",
+              "item": "Self-funded application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 500,
+              "notes": "Use the scholarship application fee instead if applying through a scholarship route; do not add both fees."
+            },
+            {
+              "key": "application",
+              "item": "Scholarship application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800,
+              "notes": "Alternative to the CNY 500 self-funded application fee; scholarship eligibility and award are assessed separately.",
+              "optional": true
+            },
+            {
+              "key": "other",
+              "item": "Registration fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "housing",
+              "item": "On-campus accommodation",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "On-campus accommodation is required in principle. The room, campus and accommodation fee must be confirmed before payment."
+            },
+            {
+              "key": "insurance",
+              "item": "Student insurance",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Insurance must be purchased under university rules; the brochure does not state its price."
+            },
+            {
+              "key": "deposit",
+              "item": "Deposit, if required",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "notes": "The brochure does not quote a deposit amount or payment schedule; confirm the written offer.",
+              "optional": true
+            }
+          ],
+          "notes": [
+            "18-22 contact hours each week, with comprehensive Chinese, listening and speaking, reading and writing, and HSK preparation.",
+            "Electives may include calligraphy, painting, business Chinese, poetry, literature, linguistics and cultural activities; availability depends on class arrangements.",
+            "A transcript and completion certificate are issued after successful completion. This is a non-degree language programme.",
+            "Applications may close early when the class quota is filled. The admission letter confirms the exact start date.",
+            "International Chinese Language Teachers Scholarship applications are possible; eligibility, coverage and selection require separate assessment and no award is guaranteed.",
+            "Accommodation, insurance, medical examination, residence permit and any additional costs must be confirmed individually. No all-inclusive price is quoted.",
+            "The brochure refers to a separate university refund policy. Confirm the applicable refund conditions in writing before paying."
+          ],
+          "progression": "A language completion certificate is not a bachelor admission offer. Any subsequent degree application is assessed separately."
+        },
+        {
+          "id": "language-spring-year-2027",
+          "name": "Chinese Language Programme - Spring academic year",
+          "level": "Language",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "1 academic year",
+          "periodLabel": "February 2027 - February 2028",
+          "campus": "Xi'an",
+          "intake": "February 2027",
+          "deadline": "15 January 2027",
+          "qualifications": [
+            "Above 18 and below 45 years old.",
+            "In good health.",
+            "Hold a valid ordinary foreign passport."
+          ],
+          "languageRequirements": [
+            "A placement test is held before classes; students are assigned to elementary, intermediate or advanced classes.",
+            "The brochure does not specify a minimum entry HSK score."
+          ],
+          "documents": [
+            "Valid ordinary foreign passport.",
+            "Confirm the complete upload checklist for this language programme with the admissions office; the brochure does not provide a detailed document list."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Chinese language tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 15000,
+              "notes": "Published price for one academic year."
+            },
+            {
+              "key": "application",
+              "item": "Self-funded application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 500,
+              "notes": "Use the scholarship application fee instead if applying through a scholarship route; do not add both fees."
+            },
+            {
+              "key": "application",
+              "item": "Scholarship application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800,
+              "notes": "Alternative to the CNY 500 self-funded application fee; scholarship eligibility and award are assessed separately.",
+              "optional": true
+            },
+            {
+              "key": "other",
+              "item": "Registration fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "housing",
+              "item": "On-campus accommodation",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "On-campus accommodation is required in principle. The room, campus and accommodation fee must be confirmed before payment."
+            },
+            {
+              "key": "insurance",
+              "item": "Student insurance",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Insurance must be purchased under university rules; the brochure does not state its price."
+            },
+            {
+              "key": "deposit",
+              "item": "Deposit, if required",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "notes": "The brochure does not quote a deposit amount or payment schedule; confirm the written offer.",
+              "optional": true
+            }
+          ],
+          "notes": [
+            "18-22 contact hours each week, with comprehensive Chinese, listening and speaking, reading and writing, and HSK preparation.",
+            "Electives may include calligraphy, painting, business Chinese, poetry, literature, linguistics and cultural activities; availability depends on class arrangements.",
+            "A transcript and completion certificate are issued after successful completion. This is a non-degree language programme.",
+            "Applications may close early when the class quota is filled. The admission letter confirms the exact start date.",
+            "International Chinese Language Teachers Scholarship applications are possible; eligibility, coverage and selection require separate assessment and no award is guaranteed.",
+            "Accommodation, insurance, medical examination, residence permit and any additional costs must be confirmed individually. No all-inclusive price is quoted.",
+            "The brochure refers to a separate university refund policy. Confirm the applicable refund conditions in writing before paying."
+          ],
+          "progression": "A language completion certificate is not a bachelor admission offer. Any subsequent degree application is assessed separately."
+        },
+        {
+          "id": "language-autumn-semester-2027",
+          "name": "Chinese Language Programme - Autumn semester",
+          "level": "Language",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "1 semester",
+          "periodLabel": "September 2027 - February 2028",
+          "campus": "Xi'an",
+          "intake": "September 2027",
+          "deadline": "15 August 2027",
+          "qualifications": [
+            "Above 18 and below 45 years old.",
+            "In good health.",
+            "Hold a valid ordinary foreign passport."
+          ],
+          "languageRequirements": [
+            "A placement test is held before classes; students are assigned to elementary, intermediate or advanced classes.",
+            "The brochure does not specify a minimum entry HSK score."
+          ],
+          "documents": [
+            "Valid ordinary foreign passport.",
+            "Confirm the complete upload checklist for this language programme with the admissions office; the brochure does not provide a detailed document list."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Chinese language tuition",
+              "currency": "CNY",
+              "period": "semester",
+              "stage": "in_china",
+              "amount": 8000,
+              "notes": "Published price for one semester."
+            },
+            {
+              "key": "application",
+              "item": "Self-funded application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 500,
+              "notes": "Use the scholarship application fee instead if applying through a scholarship route; do not add both fees."
+            },
+            {
+              "key": "application",
+              "item": "Scholarship application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800,
+              "notes": "Alternative to the CNY 500 self-funded application fee; scholarship eligibility and award are assessed separately.",
+              "optional": true
+            },
+            {
+              "key": "other",
+              "item": "Registration fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "housing",
+              "item": "On-campus accommodation",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "On-campus accommodation is required in principle. The room, campus and accommodation fee must be confirmed before payment."
+            },
+            {
+              "key": "insurance",
+              "item": "Student insurance",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Insurance must be purchased under university rules; the brochure does not state its price."
+            },
+            {
+              "key": "deposit",
+              "item": "Deposit, if required",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "notes": "The brochure does not quote a deposit amount or payment schedule; confirm the written offer.",
+              "optional": true
+            }
+          ],
+          "notes": [
+            "18-22 contact hours each week, with comprehensive Chinese, listening and speaking, reading and writing, and HSK preparation.",
+            "Electives may include calligraphy, painting, business Chinese, poetry, literature, linguistics and cultural activities; availability depends on class arrangements.",
+            "A transcript and completion certificate are issued after successful completion. This is a non-degree language programme.",
+            "Applications may close early when the class quota is filled. The admission letter confirms the exact start date.",
+            "International Chinese Language Teachers Scholarship applications are possible; eligibility, coverage and selection require separate assessment and no award is guaranteed.",
+            "Accommodation, insurance, medical examination, residence permit and any additional costs must be confirmed individually. No all-inclusive price is quoted.",
+            "The brochure refers to a separate university refund policy. Confirm the applicable refund conditions in writing before paying."
+          ],
+          "progression": "A language completion certificate is not a bachelor admission offer. Any subsequent degree application is assessed separately."
+        },
+        {
+          "id": "language-autumn-year-2027",
+          "name": "Chinese Language Programme - Autumn academic year",
+          "level": "Language",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "1 academic year",
+          "periodLabel": "September 2027 - July 2028",
+          "campus": "Xi'an",
+          "intake": "September 2027",
+          "deadline": "15 August 2027",
+          "qualifications": [
+            "Above 18 and below 45 years old.",
+            "In good health.",
+            "Hold a valid ordinary foreign passport."
+          ],
+          "languageRequirements": [
+            "A placement test is held before classes; students are assigned to elementary, intermediate or advanced classes.",
+            "The brochure does not specify a minimum entry HSK score."
+          ],
+          "documents": [
+            "Valid ordinary foreign passport.",
+            "Confirm the complete upload checklist for this language programme with the admissions office; the brochure does not provide a detailed document list."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Chinese language tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 15000,
+              "notes": "Published price for one academic year."
+            },
+            {
+              "key": "application",
+              "item": "Self-funded application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 500,
+              "notes": "Use the scholarship application fee instead if applying through a scholarship route; do not add both fees."
+            },
+            {
+              "key": "application",
+              "item": "Scholarship application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800,
+              "notes": "Alternative to the CNY 500 self-funded application fee; scholarship eligibility and award are assessed separately.",
+              "optional": true
+            },
+            {
+              "key": "other",
+              "item": "Registration fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "housing",
+              "item": "On-campus accommodation",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "On-campus accommodation is required in principle. The room, campus and accommodation fee must be confirmed before payment."
+            },
+            {
+              "key": "insurance",
+              "item": "Student insurance",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Insurance must be purchased under university rules; the brochure does not state its price."
+            },
+            {
+              "key": "deposit",
+              "item": "Deposit, if required",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "notes": "The brochure does not quote a deposit amount or payment schedule; confirm the written offer.",
+              "optional": true
+            }
+          ],
+          "notes": [
+            "18-22 contact hours each week, with comprehensive Chinese, listening and speaking, reading and writing, and HSK preparation.",
+            "Electives may include calligraphy, painting, business Chinese, poetry, literature, linguistics and cultural activities; availability depends on class arrangements.",
+            "A transcript and completion certificate are issued after successful completion. This is a non-degree language programme.",
+            "Applications may close early when the class quota is filled. The admission letter confirms the exact start date.",
+            "International Chinese Language Teachers Scholarship applications are possible; eligibility, coverage and selection require separate assessment and no award is guaranteed.",
+            "Accommodation, insurance, medical examination, residence permit and any additional costs must be confirmed individually. No all-inclusive price is quoted.",
+            "The brochure refers to a separate university refund policy. Confirm the applicable refund conditions in writing before paying."
+          ],
+          "progression": "A language completion certificate is not a bachelor admission offer. Any subsequent degree application is assessed separately."
+        },
+        {
+          "id": "foundation-ifp-basic-2027",
+          "name": "International Foundation Programme - Basic",
+          "level": "Foundation",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "36 weeks",
+          "periodLabel": "36-week foundation course",
+          "campus": "Xi'an",
+          "intake": "September 2027",
+          "deadline": "15 July 2027",
+          "qualifications": [
+            "Applicants below 24 in good health; the university must confirm eligibility at age 24 because the Chinese and English age wording differs.",
+            "Valid ordinary foreign passport.",
+            "High-school/senior-secondary diploma or equivalent; graduating students may apply with mock-examination results.",
+            "High-school average of at least 60% for the International Foundation Programme.",
+            "Guardian authorisation is required below age 18."
+          ],
+          "languageRequirements": [
+            "No prior Chinese-language requirement is specified for the Basic route."
+          ],
+          "documents": [
+            "Scanned copy of a valid ordinary foreign passport.",
+            "High-school or equivalent graduation diploma, with original and notarised copies in Chinese or English. Graduating students may apply using mock-examination results.",
+            "High-school transcripts covering all subjects and university entrance examination results, including original and notarised copies.",
+            "Chinese-language proficiency certificate such as HSK or HSKK when required. A native Chinese speaker may receive an exemption only after university approval.",
+            "One recommendation letter from a high-school headmaster or teacher, signed and including the referee’s email address and phone number.",
+            "Study plan in Chinese or English, at least 600 Chinese characters or 600 English words.",
+            "Foreigner Physical Examination Record in Chinese or English, with all examinations, a photograph and stamp, doctor’s opinion/signature and hospital seal. The Chinese brochure states a six-month validity and original/notarised copies.",
+            "Non-criminal record certificate with its validity/expiry stated.",
+            "Guardian authorisation for an applicant below 18.",
+            "Other supporting materials, if available."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Foundation tuition",
+              "currency": "CNY",
+              "period": "programme",
+              "stage": "in_china",
+              "amount": 25800,
+              "notes": "Full 36-week foundation tuition; the published rate is the same for humanities/business/social science and science/engineering. Undergraduate tuition is not included."
+            },
+            {
+              "key": "application",
+              "item": "Foundation application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 500,
+              "notes": "Pay after passing the initial review. Non-refundable regardless of the admission result."
+            },
+            {
+              "key": "application",
+              "item": "Five Central Asian Countries scholarship application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800,
+              "notes": "Only for the named scholarship route; this replaces the CNY 500 application fee. This is not a general scholarship offer for Bangladeshi applicants.",
+              "optional": true
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A room type, confirmed housing price and allocation are not specified in the foundation brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Student insurance",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Price and payment period are not stated in the foundation brochure; request the written fee sheet."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A medical examination record is required; examination or re-check charges are not quoted."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Any applicable residence permit price is not stated in the brochure."
+            },
+            {
+              "key": "deposit",
+              "item": "Deposit, if required",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "notes": "No deposit amount or refund conditions are quoted in the foundation brochure.",
+              "optional": true
+            }
+          ],
+          "notes": [
+            "Application window: 1 November 2026 - 15 July 2027.",
+            "Study directions: humanities (business and social science) or science and engineering. Classes are grouped by language level and intended subject.",
+            "The foundation fee covers the preparatory course, not a four-year bachelor degree.",
+            "Submit documents online in Chinese or English. Paper copies are not accepted for the application.",
+            "The programme develops foundational and academic Chinese, core subject knowledge and cross-cultural skills, with university-application guidance.",
+            "The application fee is non-refundable. No tuition refund schedule is stated in this brochure; confirm the relevant written policy before payment."
+          ],
+          "progression": "Apply for a bachelor programme during foundation study and pass its separate admission review. Complete the foundation course with qualifying grades and meet the intended degree programme’s language and valid CSCA requirements. Foundation enrolment alone does not guarantee bachelor admission."
+        },
+        {
+          "id": "foundation-ifp-advanced-2027",
+          "name": "International Foundation Programme - Advanced",
+          "level": "Foundation",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "18 weeks",
+          "periodLabel": "18-week foundation course",
+          "campus": "Xi'an",
+          "intake": "February 2027",
+          "deadline": "15 January 2027",
+          "qualifications": [
+            "Applicants below 24 in good health; the university must confirm eligibility at age 24 because the Chinese and English age wording differs.",
+            "Valid ordinary foreign passport.",
+            "High-school/senior-secondary diploma or equivalent; graduating students may apply with mock-examination results.",
+            "High-school average of at least 60% for the International Foundation Programme.",
+            "Guardian authorisation is required below age 18."
+          ],
+          "languageRequirements": [
+            "HSK 2-3 or equivalent."
+          ],
+          "documents": [
+            "Scanned copy of a valid ordinary foreign passport.",
+            "High-school or equivalent graduation diploma, with original and notarised copies in Chinese or English. Graduating students may apply using mock-examination results.",
+            "High-school transcripts covering all subjects and university entrance examination results, including original and notarised copies.",
+            "Chinese-language proficiency certificate such as HSK or HSKK when required. A native Chinese speaker may receive an exemption only after university approval.",
+            "One recommendation letter from a high-school headmaster or teacher, signed and including the referee’s email address and phone number.",
+            "Study plan in Chinese or English, at least 600 Chinese characters or 600 English words.",
+            "Foreigner Physical Examination Record in Chinese or English, with all examinations, a photograph and stamp, doctor’s opinion/signature and hospital seal. The Chinese brochure states a six-month validity and original/notarised copies.",
+            "Non-criminal record certificate with its validity/expiry stated.",
+            "Guardian authorisation for an applicant below 18.",
+            "Other supporting materials, if available."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Foundation tuition",
+              "currency": "CNY",
+              "period": "programme",
+              "stage": "in_china",
+              "amount": 13800,
+              "notes": "Full 18-week foundation tuition; the published rate is the same for humanities/business/social science and science/engineering. Undergraduate tuition is not included."
+            },
+            {
+              "key": "application",
+              "item": "Foundation application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 500,
+              "notes": "Pay after passing the initial review. Non-refundable regardless of the admission result."
+            },
+            {
+              "key": "application",
+              "item": "Five Central Asian Countries scholarship application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800,
+              "notes": "Only for the named scholarship route; this replaces the CNY 500 application fee. This is not a general scholarship offer for Bangladeshi applicants.",
+              "optional": true
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A room type, confirmed housing price and allocation are not specified in the foundation brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Student insurance",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Price and payment period are not stated in the foundation brochure; request the written fee sheet."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A medical examination record is required; examination or re-check charges are not quoted."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Any applicable residence permit price is not stated in the brochure."
+            },
+            {
+              "key": "deposit",
+              "item": "Deposit, if required",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "notes": "No deposit amount or refund conditions are quoted in the foundation brochure.",
+              "optional": true
+            }
+          ],
+          "notes": [
+            "Application window: 1 October 2026 - 15 January 2027.",
+            "Study directions: humanities (business and social science) or science and engineering. Classes are grouped by language level and intended subject.",
+            "The foundation fee covers the preparatory course, not a four-year bachelor degree.",
+            "Submit documents online in Chinese or English. Paper copies are not accepted for the application.",
+            "The programme develops foundational and academic Chinese, core subject knowledge and cross-cultural skills, with university-application guidance.",
+            "The application fee is non-refundable. No tuition refund schedule is stated in this brochure; confirm the relevant written policy before payment."
+          ],
+          "progression": "Apply for a bachelor programme during foundation study and pass its separate admission review. Complete the foundation course with qualifying grades and meet the intended degree programme’s language and valid CSCA requirements. Foundation enrolment alone does not guarantee bachelor admission."
+        },
+        {
+          "id": "foundation-ifp-intensive-2027",
+          "name": "International Foundation Programme - Intensive",
+          "level": "Foundation",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "11 weeks",
+          "periodLabel": "11-week foundation course",
+          "campus": "Xi'an",
+          "intake": "April 2027",
+          "deadline": "12 March 2027",
+          "qualifications": [
+            "Applicants below 24 in good health; the university must confirm eligibility at age 24 because the Chinese and English age wording differs.",
+            "Valid ordinary foreign passport.",
+            "High-school/senior-secondary diploma or equivalent; graduating students may apply with mock-examination results.",
+            "High-school average of at least 60% for the International Foundation Programme.",
+            "Guardian authorisation is required below age 18."
+          ],
+          "languageRequirements": [
+            "HSK 4 or above, or equivalent."
+          ],
+          "documents": [
+            "Scanned copy of a valid ordinary foreign passport.",
+            "High-school or equivalent graduation diploma, with original and notarised copies in Chinese or English. Graduating students may apply using mock-examination results.",
+            "High-school transcripts covering all subjects and university entrance examination results, including original and notarised copies.",
+            "Chinese-language proficiency certificate such as HSK or HSKK when required. A native Chinese speaker may receive an exemption only after university approval.",
+            "One recommendation letter from a high-school headmaster or teacher, signed and including the referee’s email address and phone number.",
+            "Study plan in Chinese or English, at least 600 Chinese characters or 600 English words.",
+            "Foreigner Physical Examination Record in Chinese or English, with all examinations, a photograph and stamp, doctor’s opinion/signature and hospital seal. The Chinese brochure states a six-month validity and original/notarised copies.",
+            "Non-criminal record certificate with its validity/expiry stated.",
+            "Guardian authorisation for an applicant below 18.",
+            "Other supporting materials, if available."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Foundation tuition",
+              "currency": "CNY",
+              "period": "programme",
+              "stage": "in_china",
+              "amount": 8800,
+              "notes": "Full 11-week foundation tuition; the published rate is the same for humanities/business/social science and science/engineering. Undergraduate tuition is not included."
+            },
+            {
+              "key": "application",
+              "item": "Foundation application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 500,
+              "notes": "Pay after passing the initial review. Non-refundable regardless of the admission result."
+            },
+            {
+              "key": "application",
+              "item": "Five Central Asian Countries scholarship application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800,
+              "notes": "Only for the named scholarship route; this replaces the CNY 500 application fee. This is not a general scholarship offer for Bangladeshi applicants.",
+              "optional": true
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A room type, confirmed housing price and allocation are not specified in the foundation brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Student insurance",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Price and payment period are not stated in the foundation brochure; request the written fee sheet."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A medical examination record is required; examination or re-check charges are not quoted."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Any applicable residence permit price is not stated in the brochure."
+            },
+            {
+              "key": "deposit",
+              "item": "Deposit, if required",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "notes": "No deposit amount or refund conditions are quoted in the foundation brochure.",
+              "optional": true
+            }
+          ],
+          "notes": [
+            "Application window: 1 October 2026 - 12 March 2027.",
+            "Study directions: humanities (business and social science) or science and engineering. Classes are grouped by language level and intended subject.",
+            "The foundation fee covers the preparatory course, not a four-year bachelor degree.",
+            "Submit documents online in Chinese or English. Paper copies are not accepted for the application.",
+            "The programme develops foundational and academic Chinese, core subject knowledge and cross-cultural skills, with university-application guidance.",
+            "The application fee is non-refundable. No tuition refund schedule is stated in this brochure; confirm the relevant written policy before payment."
+          ],
+          "progression": "Apply for a bachelor programme during foundation study and pass its separate admission review. Complete the foundation course with qualifying grades and meet the intended degree programme’s language and valid CSCA requirements. Foundation enrolment alone does not guarantee bachelor admission."
+        },
+        {
+          "id": "foundation-1-plus-4-basic-2027",
+          "name": "1+4 Foundation-Bachelor Pathway - Basic",
+          "level": "Foundation",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "36 weeks",
+          "periodLabel": "36-week foundation course",
+          "campus": "Xi'an",
+          "intake": "September 2027",
+          "deadline": "15 July 2027",
+          "qualifications": [
+            "Applicants below 24 in good health; the university must confirm eligibility at age 24 because the Chinese and English age wording differs.",
+            "Valid ordinary foreign passport.",
+            "High-school/senior-secondary diploma or equivalent; graduating students may apply with mock-examination results.",
+            "High-school average of at least 70% for the 1+4 Foundation-Bachelor pathway.",
+            "Guardian authorisation is required below age 18.",
+            "Comprehensive review and interview are required for pre-foundation bachelor eligibility."
+          ],
+          "languageRequirements": [
+            "No prior Chinese-language requirement is specified for the Basic route."
+          ],
+          "documents": [
+            "Scanned copy of a valid ordinary foreign passport.",
+            "High-school or equivalent graduation diploma, with original and notarised copies in Chinese or English. Graduating students may apply using mock-examination results.",
+            "High-school transcripts covering all subjects and university entrance examination results, including original and notarised copies.",
+            "Chinese-language proficiency certificate such as HSK or HSKK when required. A native Chinese speaker may receive an exemption only after university approval.",
+            "One recommendation letter from a high-school headmaster or teacher, signed and including the referee’s email address and phone number.",
+            "Study plan in Chinese or English, at least 600 Chinese characters or 600 English words.",
+            "Foreigner Physical Examination Record in Chinese or English, with all examinations, a photograph and stamp, doctor’s opinion/signature and hospital seal. The Chinese brochure states a six-month validity and original/notarised copies.",
+            "Non-criminal record certificate with its validity/expiry stated.",
+            "Guardian authorisation for an applicant below 18.",
+            "Other supporting materials, if available."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Foundation tuition",
+              "currency": "CNY",
+              "period": "programme",
+              "stage": "in_china",
+              "amount": 25800,
+              "notes": "Full 36-week foundation tuition; the published rate is the same for humanities/business/social science and science/engineering. Undergraduate tuition is not included."
+            },
+            {
+              "key": "application",
+              "item": "Foundation application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 500,
+              "notes": "Pay after passing the initial review. Non-refundable regardless of the admission result."
+            },
+            {
+              "key": "application",
+              "item": "Five Central Asian Countries scholarship application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800,
+              "notes": "Only for the named scholarship route; this replaces the CNY 500 application fee. This is not a general scholarship offer for Bangladeshi applicants.",
+              "optional": true
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A room type, confirmed housing price and allocation are not specified in the foundation brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Student insurance",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Price and payment period are not stated in the foundation brochure; request the written fee sheet."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A medical examination record is required; examination or re-check charges are not quoted."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Any applicable residence permit price is not stated in the brochure."
+            },
+            {
+              "key": "deposit",
+              "item": "Deposit, if required",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "notes": "No deposit amount or refund conditions are quoted in the foundation brochure.",
+              "optional": true
+            }
+          ],
+          "notes": [
+            "Application window: 1 November 2026 - 15 July 2027.",
+            "Study directions: humanities (business and social science) or science and engineering. Classes are grouped by language level and intended subject.",
+            "The foundation fee covers the preparatory course, not a four-year bachelor degree.",
+            "Submit documents online in Chinese or English. Paper copies are not accepted for the application.",
+            "The programme develops foundational and academic Chinese, core subject knowledge and cross-cultural skills, with university-application guidance.",
+            "The application fee is non-refundable. No tuition refund schedule is stated in this brochure; confirm the relevant written policy before payment."
+          ],
+          "progression": "Bachelor entry is conditional: pass the comprehensive review and interview, complete the foundation programme with qualifying grades, meet the stated Level 4 Chinese-language standard and submit a qualifying valid CSCA report for the intended bachelor subject. The pathway is not unconditional or guaranteed admission."
+        },
+        {
+          "id": "foundation-1-plus-4-advanced-2027",
+          "name": "1+4 Foundation-Bachelor Pathway - Advanced",
+          "level": "Foundation",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "18 weeks",
+          "periodLabel": "18-week foundation course",
+          "campus": "Xi'an",
+          "intake": "February 2027",
+          "deadline": "15 January 2027",
+          "qualifications": [
+            "Applicants below 24 in good health; the university must confirm eligibility at age 24 because the Chinese and English age wording differs.",
+            "Valid ordinary foreign passport.",
+            "High-school/senior-secondary diploma or equivalent; graduating students may apply with mock-examination results.",
+            "High-school average of at least 70% for the 1+4 Foundation-Bachelor pathway.",
+            "Guardian authorisation is required below age 18.",
+            "Comprehensive review and interview are required for pre-foundation bachelor eligibility."
+          ],
+          "languageRequirements": [
+            "HSK 2-3 or equivalent."
+          ],
+          "documents": [
+            "Scanned copy of a valid ordinary foreign passport.",
+            "High-school or equivalent graduation diploma, with original and notarised copies in Chinese or English. Graduating students may apply using mock-examination results.",
+            "High-school transcripts covering all subjects and university entrance examination results, including original and notarised copies.",
+            "Chinese-language proficiency certificate such as HSK or HSKK when required. A native Chinese speaker may receive an exemption only after university approval.",
+            "One recommendation letter from a high-school headmaster or teacher, signed and including the referee’s email address and phone number.",
+            "Study plan in Chinese or English, at least 600 Chinese characters or 600 English words.",
+            "Foreigner Physical Examination Record in Chinese or English, with all examinations, a photograph and stamp, doctor’s opinion/signature and hospital seal. The Chinese brochure states a six-month validity and original/notarised copies.",
+            "Non-criminal record certificate with its validity/expiry stated.",
+            "Guardian authorisation for an applicant below 18.",
+            "Other supporting materials, if available."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Foundation tuition",
+              "currency": "CNY",
+              "period": "programme",
+              "stage": "in_china",
+              "amount": 13800,
+              "notes": "Full 18-week foundation tuition; the published rate is the same for humanities/business/social science and science/engineering. Undergraduate tuition is not included."
+            },
+            {
+              "key": "application",
+              "item": "Foundation application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 500,
+              "notes": "Pay after passing the initial review. Non-refundable regardless of the admission result."
+            },
+            {
+              "key": "application",
+              "item": "Five Central Asian Countries scholarship application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800,
+              "notes": "Only for the named scholarship route; this replaces the CNY 500 application fee. This is not a general scholarship offer for Bangladeshi applicants.",
+              "optional": true
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A room type, confirmed housing price and allocation are not specified in the foundation brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Student insurance",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Price and payment period are not stated in the foundation brochure; request the written fee sheet."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A medical examination record is required; examination or re-check charges are not quoted."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Any applicable residence permit price is not stated in the brochure."
+            },
+            {
+              "key": "deposit",
+              "item": "Deposit, if required",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "notes": "No deposit amount or refund conditions are quoted in the foundation brochure.",
+              "optional": true
+            }
+          ],
+          "notes": [
+            "Application window: 1 October 2026 - 15 January 2027.",
+            "Study directions: humanities (business and social science) or science and engineering. Classes are grouped by language level and intended subject.",
+            "The foundation fee covers the preparatory course, not a four-year bachelor degree.",
+            "Submit documents online in Chinese or English. Paper copies are not accepted for the application.",
+            "The programme develops foundational and academic Chinese, core subject knowledge and cross-cultural skills, with university-application guidance.",
+            "The application fee is non-refundable. No tuition refund schedule is stated in this brochure; confirm the relevant written policy before payment."
+          ],
+          "progression": "Bachelor entry is conditional: pass the comprehensive review and interview, complete the foundation programme with qualifying grades, meet the stated Level 4 Chinese-language standard and submit a qualifying valid CSCA report for the intended bachelor subject. The pathway is not unconditional or guaranteed admission."
+        },
+        {
+          "id": "foundation-1-plus-4-intensive-2027",
+          "name": "1+4 Foundation-Bachelor Pathway - Intensive",
+          "level": "Foundation",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "11 weeks",
+          "periodLabel": "11-week foundation course",
+          "campus": "Xi'an",
+          "intake": "April 2027",
+          "deadline": "12 March 2027",
+          "qualifications": [
+            "Applicants below 24 in good health; the university must confirm eligibility at age 24 because the Chinese and English age wording differs.",
+            "Valid ordinary foreign passport.",
+            "High-school/senior-secondary diploma or equivalent; graduating students may apply with mock-examination results.",
+            "High-school average of at least 70% for the 1+4 Foundation-Bachelor pathway.",
+            "Guardian authorisation is required below age 18.",
+            "Comprehensive review and interview are required for pre-foundation bachelor eligibility."
+          ],
+          "languageRequirements": [
+            "HSK 4 or above, or equivalent."
+          ],
+          "documents": [
+            "Scanned copy of a valid ordinary foreign passport.",
+            "High-school or equivalent graduation diploma, with original and notarised copies in Chinese or English. Graduating students may apply using mock-examination results.",
+            "High-school transcripts covering all subjects and university entrance examination results, including original and notarised copies.",
+            "Chinese-language proficiency certificate such as HSK or HSKK when required. A native Chinese speaker may receive an exemption only after university approval.",
+            "One recommendation letter from a high-school headmaster or teacher, signed and including the referee’s email address and phone number.",
+            "Study plan in Chinese or English, at least 600 Chinese characters or 600 English words.",
+            "Foreigner Physical Examination Record in Chinese or English, with all examinations, a photograph and stamp, doctor’s opinion/signature and hospital seal. The Chinese brochure states a six-month validity and original/notarised copies.",
+            "Non-criminal record certificate with its validity/expiry stated.",
+            "Guardian authorisation for an applicant below 18.",
+            "Other supporting materials, if available."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Foundation tuition",
+              "currency": "CNY",
+              "period": "programme",
+              "stage": "in_china",
+              "amount": 8800,
+              "notes": "Full 11-week foundation tuition; the published rate is the same for humanities/business/social science and science/engineering. Undergraduate tuition is not included."
+            },
+            {
+              "key": "application",
+              "item": "Foundation application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 500,
+              "notes": "Pay after passing the initial review. Non-refundable regardless of the admission result."
+            },
+            {
+              "key": "application",
+              "item": "Five Central Asian Countries scholarship application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800,
+              "notes": "Only for the named scholarship route; this replaces the CNY 500 application fee. This is not a general scholarship offer for Bangladeshi applicants.",
+              "optional": true
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A room type, confirmed housing price and allocation are not specified in the foundation brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Student insurance",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Price and payment period are not stated in the foundation brochure; request the written fee sheet."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "A medical examination record is required; examination or re-check charges are not quoted."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Any applicable residence permit price is not stated in the brochure."
+            },
+            {
+              "key": "deposit",
+              "item": "Deposit, if required",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "notes": "No deposit amount or refund conditions are quoted in the foundation brochure.",
+              "optional": true
+            }
+          ],
+          "notes": [
+            "Application window: 1 October 2026 - 12 March 2027.",
+            "Study directions: humanities (business and social science) or science and engineering. Classes are grouped by language level and intended subject.",
+            "The foundation fee covers the preparatory course, not a four-year bachelor degree.",
+            "Submit documents online in Chinese or English. Paper copies are not accepted for the application.",
+            "The programme develops foundational and academic Chinese, core subject knowledge and cross-cultural skills, with university-application guidance.",
+            "The application fee is non-refundable. No tuition refund schedule is stated in this brochure; confirm the relevant written policy before payment."
+          ],
+          "progression": "Bachelor entry is conditional: pass the comprehensive review and interview, complete the foundation programme with qualifying grades, meet the stated Level 4 Chinese-language standard and submit a qualifying valid CSCA report for the intended bachelor subject. The pathway is not unconditional or guaranteed admission."
+        }
+      ],
+      "internal": {
+        "sourceDocumentIds": [
+          "xjtu-language-2027",
+          "xjtu-foundation-2027"
+        ],
+        "aliases": [
+          "XJTU",
+          "西安交通大学"
+        ],
+        "nationalRanking": {
+          "publisher": "ShanghaiRanking",
+          "name": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": 10,
+          "scope": "national",
+          "sourceDocumentId": "xjtu-foundation-2027"
+        },
+        "sourcePageNotes": {
+          "language": "Pages 1-2: programme, eligibility, timetable, fees and scholarship policy.",
+          "foundation": "Page 1 Chinese and page 2 English: complete admission, fees, dates, document and progression panels."
+        }
+      }
+    }
+  ]
+}

@@ -5,12 +5,13 @@ import { sitemapResponse } from '@/lib/sitemap-xml';
 
 // Guide URLs come from three owners. Each URL appears exactly once, and each
 // owner is the single source of truth for its own pages:
-//   - staticRoutePages : slugs rendered by a hand-built route under src/app/
+//   - staticRouteGuides: slugs rendered by a hand-built route under src/app/
 //   - chinaGuidePages  : slugs rendered by app/[slug] via ChinaGuidePage
 //   - evidencePages    : slugs rendered by app/[slug] as an evidence page
 const guideSlugs = [
   'china-universities',
   'china-scholarships-bangladesh',
+  'china-admission-requirements',
   'china-student-visa-bangladesh',
   'study-in-china-cost-bangladesh',
   'study-in-china-without-ielts',
@@ -25,7 +26,7 @@ export function GET() {
     .filter(slug => slug in staticRouteGuides || slug in chinaGuidePages || slug in evidencePages)
     .map(slug => ({
       loc: `https://eduexpressint.com/${slug}`,
-      lastmod: evidencePages[slug]?.reviewedAt ?? staticRouteGuides[slug] ?? undefined,
+      lastmod: slug in staticRouteGuides ? staticRouteGuides[slug] : slug in chinaGuidePages ? undefined : evidencePages[slug]?.reviewedAt,
     }));
 
   return sitemapResponse(entries);

@@ -1,0 +1,453 @@
+{
+  "version": 1,
+  "checkedAt": "2026-10-19",
+  "nextReviewAt": "2027-01-19",
+  "editorialNote": "Prepared through automated editorial research using the official sources below. A named education reviewer and compliance approval have not yet been recorded. Historical examples explain how to compare offers; they are not current admission or scholarship offers.",
+  "intro": "Bangladeshi students can apply to Chinese universities through a university admission route and, where eligible, a separate scholarship route. Start with your qualification, intended career, teaching language and a budget you can sustain. Then check the exact program notice for entry tests, documents, fees and deadlines. Admission, scholarship selection and the student visa are separate decisions. This guide brings together official examples so you can compare requirements and ask precise questions before paying.",
+  "eligibility": [
+    {
+      "title": "After HSC, A levels or equivalent",
+      "body": "Prepare your school graduation qualification and subject transcripts for an undergraduate assessment. Zhejiang University's 2026 guide required high-school graduation, an ordinary foreign passport and applicants under 25. These were that university's conditions for that cycle, not a universal China admission rule.",
+      "action": "Check whether your qualification and subject combination are accepted for the exact major. Record how predicted results, academic gaps and an applicant under 18 are handled.",
+      "sourceIds": [
+        "zju-2026"
+      ]
+    },
+    {
+      "title": "After a bachelor's or master's degree",
+      "body": "Tsinghua's 2027 graduate guide normally requires a bachelor's qualification for a master's and a master's for a doctorate, with some direct doctoral routes. It also requires authentication of overseas degrees, academic transcripts, language evidence, a personal statement and academic recommendations. Department rules can add further conditions.",
+      "action": "Check subject prerequisites, supervisor requirements, research fit and degree authentication before submitting a postgraduate application.",
+      "sourceIds": [
+        "thu-2027"
+      ]
+    },
+    {
+      "title": "Chinese language or preparatory study",
+      "body": "A language course develops language readiness and may have a different calendar from a degree. USST's 2026 FAQ describes a self-funded Chinese preparatory route excluded from CSC and Shanghai Government Scholarship coverage in that guidance.",
+      "action": "Ask for the progression requirement and the full preparatory cost in writing. Completion of preparation should never be treated as a guaranteed degree place or scholarship.",
+      "sourceIds": [
+        "usst-2026"
+      ]
+    }
+  ],
+  "language": [
+    {
+      "title": "English taught: check the accepted evidence",
+      "body": "USST's 2026 FAQ accepted IELTS 6.0, TOEFL 80, or an officially stamped English medium-of-instruction statement from the previous degree-granting institution. An MOI alternative at one university does not create a China-wide IELTS exemption.",
+      "sourceIds": [
+        "usst-2026"
+      ]
+    },
+    {
+      "title": "Chinese taught: check the major's HSK rule",
+      "body": "BNU's 2026 undergraduate brochure required HSK 4 with 180 for its two specified Chinese-language majors and HSK 5 with 180 for other majors. The admission language threshold and any graduation language requirement need separate checking.",
+      "sourceIds": [
+        "bnu-2026"
+      ]
+    },
+    {
+      "title": "CSCA: prepare at undergraduate level",
+      "body": "Shanghai's official guidance states that international undergraduate applicants at Chinese Government Scholarship universities must submit CSCA results for the 2026 and 2027 academic years. Mathematics is required; Physics and Chemistry depend on the major. Fully English-taught applicants are exempt from Professional Chinese in that guidance, which is not an exemption from CSCA itself. Confirm the subjects, paper language and accepted score submission date with the university, then check registration arrangements on csca.cn.",
+      "sourceIds": [
+        "csca-guidance"
+      ]
+    }
+  ],
+  "scholarships": [
+    {
+      "name": "Chinese Government Scholarship: Type A",
+      "coverage": "A bilateral route applied for through the relevant dispatching authority. Use the notice for applicants from Bangladesh.",
+      "conditions": "The Chinese Embassy in Bangladesh's December 2025 notice listed tuition, campus housing, medical insurance, living allowance and round-trip airfare. Its 10 January 2026 deadline has passed; those terms do not establish a 2027 offer.",
+      "sourceIds": [
+        "cgs-guide",
+        "bd-cgs-2026"
+      ]
+    },
+    {
+      "name": "Chinese Government Scholarship: Type B",
+      "coverage": "A university route through a participating Chinese university. Eligible levels and programs vary by institution.",
+      "conditions": "Follow both the university instructions and CSC application requirements, including the correct program category and agency number. An admission application and a scholarship application can be separate submissions.",
+      "sourceIds": [
+        "cgs-guide"
+      ]
+    },
+    {
+      "name": "Provincial or municipal scholarship",
+      "coverage": "Shanghai's official guide distinguishes Category A coverage of tuition, housing, living costs and insurance from Category B coverage of tuition and insurance.",
+      "conditions": "Shanghai scholarship retention depends on an annual evaluation. Check the participating university's eligible programs, award duration, excluded costs and renewal conditions. These categories are not CSC Type A and Type B.",
+      "sourceIds": [
+        "sgs-guide"
+      ]
+    },
+    {
+      "name": "University or program award",
+      "coverage": "An institution may publish its own awards alongside government schemes. BNU's 2026 brochure, for example, lists new international student and Silk Road Muduo scholarships.",
+      "conditions": "Read the award letter for the exact amount and period. Ask whether it is tuition only, whether it begins immediately, and what happens if you change major or lose eligibility. Budget unawarded applications as self-funded.",
+      "sourceIds": [
+        "bnu-2026"
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "slug": "shandong-university",
+      "name": "Shandong University",
+      "cycle": "Published fee schedule; intake year not specified",
+      "facts": [
+        {
+          "label": "Chinese-taught bachelor's, humanities/economics/management",
+          "value": "CNY 18,000 per academic year"
+        },
+        {
+          "label": "English-taught bachelor's, science and technology",
+          "value": "CNY 30,000 per academic year"
+        },
+        {
+          "label": "Application fee",
+          "value": "CNY 400; non-refundable"
+        },
+        {
+          "label": "Medical insurance",
+          "value": "CNY 800 per year"
+        }
+      ],
+      "takeaway": "These figures show how subject and teaching language affect tuition at the same university. Housing and daily living costs are additional. Obtain confirmation for the intended program and intake.",
+      "sourceIds": [
+        "sdu-fees"
+      ]
+    },
+    {
+      "slug": "zhejiang-university",
+      "name": "Zhejiang University",
+      "cycle": "2026 undergraduate guide — historical admission cycle",
+      "facts": [
+        {
+          "label": "Application fee",
+          "value": "CNY 800; non-refundable"
+        },
+        {
+          "label": "Tuition",
+          "value": "Program-specific; final rate in the official admission notice"
+        },
+        {
+          "label": "Medical insurance",
+          "value": "CNY 800 per academic year"
+        },
+        {
+          "label": "Payment condition",
+          "value": "First-year tuition prepayment required for formal admission"
+        }
+      ],
+      "takeaway": "The 2026 deadlines have passed. Its guide describes strict tuition refund restrictions. Review a new notice and refund terms before paying a deposit or assuming the same conditions for another intake.",
+      "sourceIds": [
+        "zju-2026"
+      ]
+    },
+    {
+      "slug": "tsinghua-university",
+      "name": "Tsinghua University",
+      "cycle": "2027 international graduate guide; published 5 September 2026",
+      "facts": [
+        {
+          "label": "Graduate application fee",
+          "value": "CNY 800"
+        },
+        {
+          "label": "Insurance",
+          "value": "CNY 800 per year"
+        },
+        {
+          "label": "Beijing campus double dormitory room",
+          "value": "CNY 40 per bed per day"
+        },
+        {
+          "label": "Beijing campus triple dormitory room",
+          "value": "CNY 30 per bed per day"
+        }
+      ],
+      "takeaway": "Tuition depends on the graduate program. Campus rooms require a successful reservation and are limited; Beijing room prices do not describe Shenzhen accommodation. Check department-specific application deadlines.",
+      "sourceIds": [
+        "thu-2027"
+      ]
+    }
+  ],
+  "costChecklist": [
+    {
+      "item": "Application and assessment",
+      "include": "Each university application, required language or academic tests, document translation, notarisation and degree authentication.",
+      "evidence": "Official fee notice; payment recipient; refund rule."
+    },
+    {
+      "item": "Tuition and preparatory study",
+      "include": "Published tuition for every study year, any language or foundation period, and any deposit paid before enrollment.",
+      "evidence": "Exact program fee; covered years; prepayment conditions."
+    },
+    {
+      "item": "Housing",
+      "include": "Room type, the period actually charged, deposit, utilities, bedding and a backup if campus housing is unavailable.",
+      "evidence": "Campus allocation or rental terms; holiday availability."
+    },
+    {
+      "item": "Everyday living",
+      "include": "Food, local transport, phone/data, books, personal care and clothing suited to the destination's weather.",
+      "evidence": "A city and campus budget matched to your own habits."
+    },
+    {
+      "item": "Health and immigration",
+      "include": "Insurance, health checks or verification, visa centre and visa charges, and applicable residence procedures.",
+      "evidence": "Current official charges and the insurer's coverage/exclusions."
+    },
+    {
+      "item": "Travel and contingency",
+      "include": "Airfare, baggage, onward transport, arrival funds and an emergency reserve. Check when any scholarship stipend first becomes payable.",
+      "evidence": "Travel quote; disbursement date; family backup plan."
+    },
+    {
+      "item": "Currency and service charges",
+      "include": "Keep university costs in CNY. Convert to BDT using a dated bank/remittance quote with transfer charges; review EduExpress charges separately.",
+      "evidence": "Exchange-rate date; bank charges; written ClearCost Sheet."
+    }
+  ],
+  "preparation": [
+    {
+      "stage": "Before selecting an intake",
+      "task": "Choose a degree and career goal, check recognition needs, and compare campuses, teaching language, entry requirements and the full funding plan.",
+      "deliverable": "A shortlist with the official program notice attached."
+    },
+    {
+      "stage": "Before the application window",
+      "task": "Organise academic records and passport details, request references, prepare your statement or research plan, and schedule any required language test or CSCA.",
+      "deliverable": "A document checklist with the university's accepted formats."
+    },
+    {
+      "stage": "When the official notice opens",
+      "task": "Enter each admission deadline, scholarship deadline, test-result deadline and time zone separately. Check whether both university and scholarship portals must be completed.",
+      "deliverable": "A calendar based on current notices, not last year's dates."
+    },
+    {
+      "stage": "After a decision or conditional offer",
+      "task": "Read outstanding conditions, verify award coverage and refund terms, confirm the payment recipient and make a housing plan before accepting financial commitments.",
+      "deliverable": "An offer, scholarship terms and a signed-off personal budget."
+    },
+    {
+      "stage": "Before departure and on arrival",
+      "task": "Follow the current visa checklist, university registration instructions and local residence requirements. Arrange the correct campus arrival, accommodation and health/insurance documents.",
+      "deliverable": "An arrival file and contact details for the international office."
+    }
+  ],
+  "visa": {
+    "body": "The Chinese Embassy in Bangladesh distinguishes X1 study of more than 180 days from X2 study of no more than 180 days. Its September 2025 notice lists the study confirmation form JW201/JW202 and admission letter for higher-education applicants, with scholarship evidence or bank evidence for self-funded study. The published bank-evidence minimum is USD 2,500 per study year; that is a document threshold, not a realistic total study budget. Follow the current visa centre prompts and Embassy notice when applying.",
+    "checklist": [
+      "Match your name, passport number, campus and study dates across all documents.",
+      "Confirm outstanding offer conditions and the required study confirmation form with the university.",
+      "After arrival, ask the international office to help complete university registration and the applicable residence procedures."
+    ],
+    "sourceIds": [
+      "bd-visa"
+    ]
+  },
+  "life": [
+    {
+      "title": "Housing and arrival",
+      "body": "Confirm the room allocation, move-in time, campus address and late-arrival contact before travel. Shanghai's student guide brings together local registration, health checks and accommodation instructions; students in another city should follow their own university and local authority.",
+      "sourceIds": [
+        "shanghai-student-life"
+      ]
+    },
+    {
+      "title": "Food, language and support",
+      "body": "Ask the campus directly about halal dining, cooking facilities, dietary needs, prayer arrangements and the distance from housing to classes. Build practical Mandarin skills even on an English-taught course. Request contacts for academic advising, disability support and wellbeing services.",
+      "sourceIds": []
+    },
+    {
+      "title": "Banking and everyday payments",
+      "body": "Shanghai's official payment guide explains mobile payment, eligible overseas cards and currency exchange. Check your card's foreign-use settings and fees before departure, arrange a backup payment method, and ask the university which documents are needed for a local bank account.",
+      "sourceIds": [
+        "shanghai-payments"
+      ]
+    },
+    {
+      "title": "Work and internships",
+      "body": "National Immigration Administration guidance requires university approval and the appropriate residence-permit remarks for off-campus part-time work or internships. A study permit alone does not authorise these activities. Do not rely on an assumed student job to close a funding gap.",
+      "sourceIds": [
+        "nia-residence"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "title": "Medicine: verify the route to practice first",
+      "body": "Before an MBBS payment, ask BMDC about your eligibility and the requirements applicable to the exact foreign qualification, internship and return-to-practice route. BMDC publishes an eligibility-certificate application requiring SSC/HSC records and medical admission-test documents. A university listing or a scholarship is not proof that you can practise medicine in Bangladesh.",
+      "sourceIds": [
+        "bmdc-eligibility"
+      ]
+    },
+    {
+      "title": "Recognition and career portability",
+      "body": "For any regulated profession, ask the relevant regulator in the country where you intend to work about the exact degree. Compare curriculum, practical training, language of placements and any licensing examinations. General university reputation cannot answer a program-specific recognition question.",
+      "sourceIds": []
+    },
+    {
+      "title": "Scholarship dependence and payment risk",
+      "body": "Reconsider the route if your budget only works with an award you have not received, a campus room you have not secured, or earnings you are not authorised to make. Request the official payee and written cancellation terms; retain receipts and access to your own application account.",
+      "sourceIds": []
+    },
+    {
+      "title": "What can change before enrollment",
+      "body": "Programs, language evidence, test subjects, tuition, housing availability, scholarship coverage and deadlines can change. This page separates historical examples from a published 2027 guide. Recheck the exact program notice before submission, payment and travel; older dates should not be rolled forward.",
+      "sourceIds": []
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Is there one minimum GPA for every China university?",
+      "answer": "Use the requirements for the exact university, major and funding route. Do not convert a Bangladeshi GPA into an assumed percentage or treat admission eligibility as a scholarship selection guarantee. Submit the official grading scale when requested.",
+      "sourceIds": []
+    },
+    {
+      "question": "Can I study in China without IELTS?",
+      "answer": "Only consider an alternative if the program expressly accepts it. Check whether an MOI letter must come from your school or degree-granting institution, whether it needs a stamp, and whether an interview or another test is also required. Obtain a written answer for your intake.",
+      "sourceIds": []
+    },
+    {
+      "question": "Does English-taught admission mean I do not need CSCA?",
+      "answer": "No. The official undergraduate guidance distinguishes the Professional Chinese subject exemption from the CSCA requirement. Ask the university which fundamental subjects and test language your major requires.",
+      "sourceIds": [
+        "csca-guidance"
+      ]
+    },
+    {
+      "question": "Does a full tuition scholarship cover the whole cost?",
+      "answer": "Tuition coverage and a fully funded package are different. Compare housing, insurance, living allowance, travel, deposits and the covered period line by line. Keep money available for costs due before any award payment arrives.",
+      "sourceIds": []
+    },
+    {
+      "question": "Is there a March intake for every degree?",
+      "answer": "No. USST's 2026 FAQ states that its degree intake was September only, while its preparatory calendar differed. Check the exact program's new intake notice; do not carry an earlier degree or language-course calendar into another cycle.",
+      "sourceIds": [
+        "usst-2026"
+      ]
+    },
+    {
+      "question": "Does an admission offer guarantee a student visa?",
+      "answer": "No. Admission, scholarship assessment and the visa are separate decisions. Complete the current Embassy and visa-centre process and respond to any request for further evidence. Ask the university how it handles a delayed arrival before booking travel.",
+      "sourceIds": [
+        "bd-visa"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "zju-2026",
+      "title": "2026 undergraduate application guide",
+      "publisher": "Zhejiang University",
+      "scope": "Historical 2026 requirements, payment and insurance examples",
+      "url": "https://iczu.zju.edu.cn/admissionsen/2024/1030/c68988a2981659/page.htm",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "thu-2027",
+      "title": "2027 international graduate admission guide",
+      "publisher": "Tsinghua University",
+      "scope": "2027 graduate eligibility, fees and Beijing dormitory prices",
+      "url": "https://yz.tsinghua.edu.cn/en/info/1035/1581.htm",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "usst-2026",
+      "title": "2026 admissions questions and answers",
+      "publisher": "University of Shanghai for Science and Technology",
+      "scope": "Historical English proof, preparation and intake example",
+      "url": "https://isoe.usst.edu.cn/2025/1128/c9774a352906/page.htm",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "bnu-2026",
+      "title": "2026 international undergraduate brochure",
+      "publisher": "Beijing Normal University",
+      "scope": "Historical HSK and institution scholarship examples",
+      "url": "https://admission-is.bnu.edu.cn/english/admissionprogram/bachelordegreeprogram/admissionbrochure/index.html",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "csca-guidance",
+      "title": "China Scholastic Competency Assessment FAQs",
+      "publisher": "Shanghai Municipal Government",
+      "scope": "2026/2027 undergraduate assessment and subject rules",
+      "url": "https://english.shanghai.gov.cn/en-FAQs-StudyinShanghai/20251218/134bb78943f640519e2185ff83051f5d.html",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "bd-cgs-2026",
+      "title": "Chinese Government Scholarship Type A announcement",
+      "publisher": "Chinese Embassy in Bangladesh",
+      "scope": "Closed January 2026 application and Bangladesh-specific coverage",
+      "url": "https://bd.china-embassy.gov.cn/eng/sghd/202512/t20251219_11776194.htm",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "cgs-guide",
+      "title": "Chinese Government Scholarship guide",
+      "publisher": "Shanghai Municipal Government",
+      "scope": "Distinction between CSC bilateral and university routes",
+      "url": "https://english.shanghai.gov.cn/en-FAQs-StudyinShanghai/20241015/239b38683117430d9e5a1376214699bc.html",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "sgs-guide",
+      "title": "Shanghai Government Scholarship application guide",
+      "publisher": "Shanghai Municipal Government",
+      "scope": "Municipal Category A/B coverage and annual evaluation",
+      "url": "https://english.shanghai.gov.cn/en-Individuals-HigherEducation-Scholarships/20260813/f1060aadeac645bfa23ac14a0ae29af2.html",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "sdu-fees",
+      "title": "International student fee schedule",
+      "publisher": "Shandong University",
+      "scope": "Published fee examples; intake year not stated",
+      "url": "https://istudy.sdu.edu.cn/English/Fees1.htm",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "bd-visa",
+      "title": "Important notices for Chinese visa application",
+      "publisher": "Chinese Embassy in Bangladesh",
+      "scope": "Bangladesh X1/X2 categories and required evidence",
+      "url": "https://bd.china-embassy.gov.cn/eng/sghd/202509/t20250912_11707745.htm",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "shanghai-student-life",
+      "title": "A guide for new students",
+      "publisher": "Shanghai Municipal Government",
+      "scope": "Local arrival, registration and practical student services",
+      "url": "https://english.shanghai.gov.cn/en-GuideforNewStudents/index.html",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "shanghai-payments",
+      "title": "Banking and payment options",
+      "publisher": "Shanghai Municipal Government",
+      "scope": "Mobile payments, overseas cards and currency exchange",
+      "url": "https://english.shanghai.gov.cn/en-Individuals-BankingandPayments-Payments/index.html",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "nia-residence",
+      "title": "Entry, exit and residence of foreigners",
+      "publisher": "National Immigration Administration",
+      "scope": "Approval and residence-permit remarks for off-campus work/internships",
+      "url": "https://en.nia.gov.cn/n147423/n147478/n147715/c158270/content.html",
+      "checkedAt": "2026-10-19"
+    },
+    {
+      "id": "bmdc-eligibility",
+      "title": "Eligibility certificate application",
+      "publisher": "Bangladesh Medical and Dental Council",
+      "scope": "Documents requested for an eligibility-certificate application",
+      "url": "https://www.bmdc.org.bd/upl/doc/form/7Bq4V6anURf3.pdf",
+      "checkedAt": "2026-10-19"
+    }
+  ]
+}

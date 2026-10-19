@@ -54,7 +54,7 @@ export default function UpdateClient({ update }: UpdateClientProps) {
             {readTime}
           </div>
           <div className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
-            By {update.author} · Updated {new Date(update.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+            By {update.author}
           </div>
         </div>
       </PageHeader>
@@ -105,7 +105,7 @@ export default function UpdateClient({ update }: UpdateClientProps) {
 
             {update.sourceUrls?.length ? (
               <aside className="mt-12 border-t border-slate-200 pt-8">
-                <h2 className="text-xl font-bold text-slate-900">Sources checked</h2>
+                <h2 className="text-xl font-bold text-slate-900">Official sources</h2>
                 <div className="mt-4 grid gap-2">
                   {update.sourceUrls.map(source => (
                     <a key={source} href={source} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:underline">

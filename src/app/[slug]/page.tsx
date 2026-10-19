@@ -3,22 +3,21 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { evidencePages } from '@/data/evidencePages';
 import ChinaGuidePage from '@/components/china/ChinaGuidePage';
-import { chinaGuidePages } from '@/data/chinaGuidePages';
+import { chinaGuideMetadata, chinaGuidePages } from '@/data/chinaGuidePages';
 import { staticRouteSlugs } from '@/data/staticRoutePages';
 
 type Props = { params: Promise<{ slug: string }> };
 
 // A static segment under src/app/ always beats this catch-all, so any slug that
-// also has a hand-built route would be dead content here: editing it would
-// change nothing on the live site. Exclude those slugs rather than pre-render
-// pages that can never be reached.
+// also has a hand-built route must not be pre-rendered here. Static wrappers
+// may reuse the shared guide data, but each URL has only one rendering owner.
 const isOwnedByStaticRoute = (slug: string) => staticRouteSlugs.includes(slug);
 
 export function generateStaticParams() {
   const evidenceSlugs = Object.keys(evidencePages).filter((slug) => !slug.includes('/'));
   const chinaGuideSlugs = Object.keys(chinaGuidePages);
 
-  return [...evidenceSlugs, ...chinaGuideSlugs]
+  return [...new Set([...evidenceSlugs, ...chinaGuideSlugs])]
     .filter((slug) => !isOwnedByStaticRoute(slug))
     .map((slug) => ({ slug }));
 }
@@ -29,19 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const chinaGuide = chinaGuidePages[slug];
   if (!page && !chinaGuide) return {};
   if (chinaGuide) {
-    return {
-      title: { absolute: chinaGuide.metaTitle },
-      description: chinaGuide.description,
-      alternates: { canonical: `/${slug}` },
-      openGraph: { title: chinaGuide.title, description: chinaGuide.description, url: `/${slug}`, type: 'website' },
-    };
+    return chinaGuideMetadata(slug);
   }
   return {
     title: page.title,
     description: page.description,
     alternates: { canonical: `/${slug}` },
     openGraph: { title: page.title, description: page.description, url: `/${slug}`, type: 'article' },
-    ...(slug === 'study-in-china-from-bangladesh' ? { alternates: { canonical: `/${slug}`, languages: { en: `/${slug}`, bn: '/bn/study-in-china' } } } : {}),
   };
 }
 

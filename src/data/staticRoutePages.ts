@@ -1,13 +1,13 @@
 // Slugs owned by a hand-built route under src/app/.
 //
 // In the Next.js App Router a static segment always beats the [slug] catch-all,
-// so a slug listed here can never be served from data/evidencePages.ts or
-// data/chinaGuidePages.ts. Keeping the list explicit stops a second copy of the
-// same page being reintroduced in a data file, where edits would silently do
-// nothing on the live site.
+// so a slug listed here must not also be pre-rendered by app/[slug]. A static
+// route can still reuse the shared chinaGuidePages record; the static wrapper
+// remains the single route owner, while its content has one shared data source.
 //
-// The value is the content review date, used for sitemap <lastmod>.
-export const staticRouteGuides: Record<string, string> = {
+// Values are recorded content review dates used for sitemap <lastmod>. New
+// routes without a recorded review date omit it rather than inventing one.
+export const staticRouteGuides: Record<string, string | undefined> = {
   'china-universities': '2026-07-19',
   'china-student-visa-bangladesh': '2026-07-19',
   'study-in-china-cost-bangladesh': '2026-07-19',
@@ -16,6 +16,7 @@ export const staticRouteGuides: Record<string, string> = {
   'china-intakes-deadlines': '2026-07-19',
   'life-in-china-bangladeshi-students': '2026-07-19',
   'study-in-china-from-bangladesh': '2026-07-19',
+  'china-admission-requirements': undefined,
 };
 
 // Non-guide pages that also own their slug via a static route.

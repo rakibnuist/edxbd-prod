@@ -1,0 +1,51 @@
+{
+  "slug": "nuist",
+  "sourceCheckedAt": "2026-10-19",
+  "scope": "Corrections from public university sources. This research does not establish current application availability, recognition verification, institutional representation or completion of education/compliance review.",
+  "sources": {
+    "programmes": "https://gjy.nuist.edu.cn/english/NUISTExcellentFreshmenScholarship/listm.htm",
+    "catalogue": "https://gjy.nuist.edu.cn/english/BachelorPrograms_3745/listm.htm",
+    "entry": "https://gjy.nuist.edu.cn/english/EntryRequirements/listm.htm",
+    "fees": "https://gjy.nuist.edu.cn/english/FeeswPayment/listm.htm"
+  },
+  "university": {
+    "intake": "September",
+    "tuition": "CNY 15,000 / year (published schedule; confirm selected intake)",
+    "deadlineApplication": "Current-cycle application deadline to be confirmed",
+    "deadlineStartDate": "September (published programme intake; current cycle to be confirmed)",
+    "notes": [
+      "Official undergraduate entry requirements: high-school graduate under 25; applicants under 18 need guardian documentation in China.",
+      "English entry requirements: TOEFL iBT 80, IELTS 6.0 or Duolingo 100. Confirm the selected programme's current admission notice.",
+      "CSCA is required. English science/engineering programmes require Mathematics and Physics; economics/management programmes require Mathematics.",
+      "The official undergraduate page links a 2027 catalogue; confirm current application availability and deadlines for the selected programme.",
+      "The scholarship page lists four-year English bachelor programmes with a September intake. Annual scholarship review applies; no guaranteed renewal percentage is established.",
+      "Check recognition in the country where you plan to work, and confirm the application route before proceeding."
+    ],
+    "badges": ["Bachelor programmes", "English-medium programme listing"]
+  },
+  "programmes": [
+    { "existingName": "Artificial Intelligence", "name": "Artificial Intelligence", "subject": "Artificial Intelligence", "csca": "Mathematics and Physics" },
+    { "existingName": "Computer Science and Technology", "name": "Computer Science and Technology", "subject": "Computer Science", "csca": "Mathematics and Physics" },
+    { "existingName": "Electronic Information Engineering", "name": "Electronic Information Engineering", "subject": "Engineering", "csca": "Mathematics and Physics" },
+    { "existingName": "International Economics and Trade", "name": "International Economy and Trade", "subject": "Economics and Business", "csca": "Mathematics" }
+  ],
+  "fees": [
+    { "existingItem": "Application Fee", "cost": "CNY 500", "refundable": "no", "notes": "Payment follows application submission; the published application fee is non-refundable." },
+    { "existingItem": "Tuition Fee", "cost": "CNY 15,000 / year", "refundable": "", "notes": "Published undergraduate schedule; confirm selected intake and programme." },
+    { "existingItem": "Hostel Fee", "cost": "CNY 2,000–2,500 / year (twin room); CNY 4,000 / year (single room)", "refundable": "", "notes": "The fee page also lists a CNY 200 refundable room deposit. Room availability and eligibility must be confirmed." },
+    { "existingItem": "Insurance Fee", "cost": "CNY 600 / year", "refundable": "", "notes": "Published international-student insurance charge." },
+    { "existingItem": "Medical Fee", "cost": "CNY 526 per examination", "refundable": "", "notes": "The fee page requires new students to undergo a medical check after registration." },
+    { "existingItem": "Residence Permit Fee", "cost": "CNY 400 for up to one year", "refundable": "", "notes": "Published residence-permit charge; separate from embassy visa fees." }
+  ],
+  "scholarship": {
+    "existingTitle": "NUIST Freshman Excellent Scholarship",
+    "title": "NUIST Excellent Freshmen Scholarship",
+    "amount": "First class: tuition waiver; second class: 50% tuition waiver",
+    "coverage": "Undergraduate tuition only; award and current-cycle availability must be confirmed.",
+    "condition": "Published criteria include CGPA 3.0/4.0 or 70/100 and meeting university admission requirements; selection is competitive.",
+    "renewal": "Annual university review; continued funding is conditional.",
+    "deadline": "May 31 (published scholarship page; applicable intake year to be confirmed)",
+    "details": ["Undergraduate first-class award waives tuition; second-class award waives 50% of tuition.", "Applicants cannot hold another Chinese government, local government or organization scholarship simultaneously.", "No guaranteed renewal percentage or current-cycle award is established by this record."],
+    "status": "planned"
+  }
+}

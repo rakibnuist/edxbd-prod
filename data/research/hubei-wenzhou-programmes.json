@@ -1,0 +1,2129 @@
+{
+  "schemaVersion": 1,
+  "internal": {
+    "checkedAt": "2026-10-19",
+    "sourceDocuments": [
+      {
+        "id": "hue-2026-admission-brochure",
+        "filename": "Hubei University of Education Admission Brochure 2026 .pdf",
+        "absolutePath": "/Users/a1/Library/Containers/com.tencent.xinWeChat/Data/Documents/xwechat_files/wxid_0y7pqpxayzjx22_0cdb/temp/RWTemp/2026-10/81c8afdd-245e-4bee-9a49-73b4ae08bf12/Hubei University of Education Admission Brochure 2026 .pdf",
+        "pages": 12
+      },
+      {
+        "id": "wzu-2026-undergraduate-brochure",
+        "filename": "2026温州大学本科招生简章 2026 Wenzhou University Admission Brochure.pdf",
+        "absolutePath": "/Users/a1/Library/Containers/com.tencent.xinWeChat/Data/Documents/xwechat_files/wxid_0y7pqpxayzjx22_0cdb/temp/RWTemp/2026-10/2ee27500-f0f3-47d1-bc60-9805eaa9e794/2026温州大学本科招生简章 2026 Wenzhou University Admission Brochure.pdf",
+        "pages": 8
+      }
+    ],
+    "extractionNotes": [
+      "Both source PDFs were read in full; programme, scholarship, fee and eligibility pages were visually checked.",
+      "No editorial maintenance dates or source file paths are part of public programme fields.",
+      "Fee stages are budgeting categories, not an assertion of a payment deadline.",
+      "No EduExpress service package price, deposit amount or unspecified fee was invented."
+    ]
+  },
+  "universities": [
+    {
+      "slug": "hubei-university-of-education",
+      "name": "Hubei University of Education",
+      "city": "Wuhan",
+      "province": "Hubei",
+      "country": "China",
+      "officialUrl": "https://coop.hue.edu.cn/",
+      "overview": "Hubei University of Education is a provincial undergraduate institution in Wuhan, Hubei. Its 2026 international admission brochure lists English-taught degrees in International Economics and Trade and Electronic Information Science and Technology, a Chinese-taught degree in Teaching Chinese to Speakers of Other Languages, and a one-year Chinese language route.",
+      "programs": [
+        {
+          "id": "hue-international-economics-and-trade-2026",
+          "name": "International Economics and Trade",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "periodLabel": "2026 admission cycle",
+          "qualifications": [
+            "Non-Chinese citizen with a valid foreign passport and in good health.",
+            "High-school graduation or equivalent with good academic performance; the official graduation certificate must be available before enrolment.",
+            "For the 2026 cycle: age 18 or above, born before 1 September 2008. Applicants under 18 must supply a power of attorney from their guardian.",
+            "Nationality eligibility is subject to the relevant Chinese Ministry of Education regulations."
+          ],
+          "languageRequirements": [
+            "For applicants from countries where English is neither the native nor an official language: IELTS 5.5+, TOEFL 75+ or Duolingo 95+.",
+            "Applicants without a standardised English certificate must take and pass the university language test."
+          ],
+          "documents": [
+            "Hubei University of Education international student application form.",
+            "Registration photograph.",
+            "Passport.",
+            "Highest education certificate and academic transcript. Documents outside Chinese or English require notarised translations.",
+            "Financial guarantee letter from a sponsor with a bank deposit certificate or other proof of funds for tuition and living costs.",
+            "Health certificate.",
+            "Non-criminal record certificate.",
+            "A self-introduction video lasting 1-3 minutes.",
+            "English proficiency certificate where relevant to the teaching language.",
+            "Optional: recommendation letters, award certificates and academic performance certificates."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 15000
+            },
+            {
+              "key": "housing",
+              "item": "Student dormitory (double room)",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000,
+              "notes": "Choose one accommodation option; this room is CNY 3,000 per year."
+            },
+            {
+              "key": "housing",
+              "item": "Foreign Faculty Building (double room)",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3500,
+              "notes": "Alternative accommodation option; choose this room or the student dormitory, not both."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            },
+            {
+              "key": "application",
+              "item": "Registration fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 400,
+              "notes": "The brochure calls this a registration fee; the payment deadline is not specified."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            },
+            {
+              "key": "other",
+              "item": "Textbooks",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            }
+          ],
+          "notes": [
+            "2026 admission information. Current intake availability must be confirmed separately.",
+            "Selection uses document review, interviews and other university assessments.",
+            "The university checks original qualifications and identity during registration; failure of the qualification review can revoke admission.",
+            "Applicants with CSCA scores receive priority under otherwise equal admission conditions."
+          ],
+          "scholarships": [
+            "The 2026 Liberal Arts freshman scholarship is CNY 10,000 for admitted students. It is shown separately from the published tuition and must not be treated as an unconditional upfront fee reduction.",
+            "Scholarships in years 2-4 require university assessment: CNY 10,000 for the top 10%, CNY 5,000 for the top 15%, and CNY 3,000 for the top 20% of enrolled international students."
+          ]
+        },
+        {
+          "id": "hue-electronic-information-science-and-technology-2026",
+          "name": "Electronic Information Science and Technology",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "periodLabel": "2026 admission cycle",
+          "qualifications": [
+            "Non-Chinese citizen with a valid foreign passport and in good health.",
+            "High-school graduation or equivalent with good academic performance; the official graduation certificate must be available before enrolment.",
+            "For the 2026 cycle: age 18 or above, born before 1 September 2008. Applicants under 18 must supply a power of attorney from their guardian.",
+            "Nationality eligibility is subject to the relevant Chinese Ministry of Education regulations."
+          ],
+          "languageRequirements": [
+            "For applicants from countries where English is neither the native nor an official language: IELTS 5.5+, TOEFL 75+ or Duolingo 95+.",
+            "Applicants without a standardised English certificate must take and pass the university language test."
+          ],
+          "documents": [
+            "Hubei University of Education international student application form.",
+            "Registration photograph.",
+            "Passport.",
+            "Highest education certificate and academic transcript. Documents outside Chinese or English require notarised translations.",
+            "Financial guarantee letter from a sponsor with a bank deposit certificate or other proof of funds for tuition and living costs.",
+            "Health certificate.",
+            "Non-criminal record certificate.",
+            "A self-introduction video lasting 1-3 minutes.",
+            "English proficiency certificate where relevant to the teaching language.",
+            "Optional: recommendation letters, award certificates and academic performance certificates."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 18000
+            },
+            {
+              "key": "housing",
+              "item": "Student dormitory (double room)",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000,
+              "notes": "Choose one accommodation option; this room is CNY 3,000 per year."
+            },
+            {
+              "key": "housing",
+              "item": "Foreign Faculty Building (double room)",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3500,
+              "notes": "Alternative accommodation option; choose this room or the student dormitory, not both."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            },
+            {
+              "key": "application",
+              "item": "Registration fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 400,
+              "notes": "The brochure calls this a registration fee; the payment deadline is not specified."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            },
+            {
+              "key": "other",
+              "item": "Textbooks",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            }
+          ],
+          "notes": [
+            "2026 admission information. Current intake availability must be confirmed separately.",
+            "Selection uses document review, interviews and other university assessments.",
+            "The university checks original qualifications and identity during registration; failure of the qualification review can revoke admission.",
+            "Applicants with CSCA scores receive priority under otherwise equal admission conditions."
+          ],
+          "scholarships": [
+            "The 2026 Polytechnic freshman scholarship is CNY 13,000 for admitted students. It is shown separately from the published tuition and must not be treated as an unconditional upfront fee reduction.",
+            "Scholarships in years 2-4 require university assessment: CNY 10,000 for the top 10%, CNY 5,000 for the top 15%, and CNY 3,000 for the top 20% of enrolled international students."
+          ]
+        },
+        {
+          "id": "hue-teaching-chinese-to-speakers-of-other-languages-2026",
+          "name": "Teaching Chinese to Speakers of Other Languages",
+          "level": "Bachelor",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "4 years",
+          "periodLabel": "2026 admission cycle",
+          "qualifications": [
+            "Non-Chinese citizen with a valid foreign passport and in good health.",
+            "High-school graduation or equivalent with good academic performance; the official graduation certificate must be available before enrolment.",
+            "For the 2026 cycle: age 18 or above, born before 1 September 2008. Applicants under 18 must supply a power of attorney from their guardian.",
+            "Nationality eligibility is subject to the relevant Chinese Ministry of Education regulations."
+          ],
+          "languageRequirements": [
+            "HSK 3 or above for Chinese-taught majors."
+          ],
+          "documents": [
+            "Hubei University of Education international student application form.",
+            "Registration photograph.",
+            "Passport.",
+            "Highest education certificate and academic transcript. Documents outside Chinese or English require notarised translations.",
+            "Financial guarantee letter from a sponsor with a bank deposit certificate or other proof of funds for tuition and living costs.",
+            "Health certificate.",
+            "Non-criminal record certificate.",
+            "A self-introduction video lasting 1-3 minutes.",
+            "English proficiency certificate where relevant to the teaching language.",
+            "Optional: recommendation letters, award certificates and academic performance certificates."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 15000
+            },
+            {
+              "key": "housing",
+              "item": "Student dormitory (double room)",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000,
+              "notes": "Choose one accommodation option; this room is CNY 3,000 per year."
+            },
+            {
+              "key": "housing",
+              "item": "Foreign Faculty Building (double room)",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3500,
+              "notes": "Alternative accommodation option; choose this room or the student dormitory, not both."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            },
+            {
+              "key": "application",
+              "item": "Registration fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 400,
+              "notes": "The brochure calls this a registration fee; the payment deadline is not specified."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            },
+            {
+              "key": "other",
+              "item": "Textbooks",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            }
+          ],
+          "notes": [
+            "2026 admission information. Current intake availability must be confirmed separately.",
+            "Selection uses document review, interviews and other university assessments.",
+            "The university checks original qualifications and identity during registration; failure of the qualification review can revoke admission.",
+            "Applicants with CSCA scores receive priority under otherwise equal admission conditions."
+          ],
+          "scholarships": [
+            "The 2026 Liberal Arts freshman scholarship is CNY 10,000 for admitted students. It is shown separately from the published tuition and must not be treated as an unconditional upfront fee reduction.",
+            "Scholarships in years 2-4 require university assessment: CNY 10,000 for the top 10%, CNY 5,000 for the top 15%, and CNY 3,000 for the top 20% of enrolled international students."
+          ]
+        },
+        {
+          "id": "hue-chinese-language-advanced-study-2026",
+          "name": "Chinese Language Advanced Study Program",
+          "level": "Language",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "1 year",
+          "periodLabel": "2026 admission cycle",
+          "qualifications": [
+            "Non-Chinese citizen with a valid foreign passport and in good health.",
+            "High-school graduation or equivalent with good academic performance; the official graduation certificate must be available before enrolment.",
+            "For the 2026 cycle: age 18 or above, born before 1 September 2008. Applicants under 18 must supply a power of attorney from their guardian.",
+            "Nationality eligibility is subject to the relevant Chinese Ministry of Education regulations."
+          ],
+          "languageRequirements": [
+            "The Chinese language study section does not state an HSK entry threshold."
+          ],
+          "documents": [
+            "Hubei University of Education international student application form.",
+            "Registration photograph.",
+            "Passport.",
+            "Highest education certificate and academic transcript. Documents outside Chinese or English require notarised translations.",
+            "Financial guarantee letter from a sponsor with a bank deposit certificate or other proof of funds for tuition and living costs.",
+            "Health certificate.",
+            "Non-criminal record certificate.",
+            "A self-introduction video lasting 1-3 minutes."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 15000
+            },
+            {
+              "key": "housing",
+              "item": "Student dormitory (double room)",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000,
+              "notes": "Choose one accommodation option; this room is CNY 3,000 per year."
+            },
+            {
+              "key": "housing",
+              "item": "Foreign Faculty Building (double room)",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3500,
+              "notes": "Alternative accommodation option; choose this room or the student dormitory, not both."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Charged at the actual applicable standard; no amount is specified."
+            }
+          ],
+          "notes": [
+            "2026 admission information. Current intake availability must be confirmed separately.",
+            "Selection uses document review, interviews and other university assessments.",
+            "The university checks original qualifications and identity during registration; failure of the qualification review can revoke admission.",
+            "The programme catalogue labels this route Teaching Chinese to Speakers of Other Languages; the admission section describes it as the Chinese Language Advanced Study Program.",
+            "The language programme fee table lists insurance and medical examination at actual cost; it does not specify a registration fee or residence permit amount."
+          ],
+          "scholarships": [
+            "The 2026 language programme scholarship is CNY 8,000 per academic year; the brochure does not state the selection or renewal conditions. It is separate from the published CNY 15,000 annual tuition."
+          ]
+        }
+      ],
+      "internal": {
+        "sourceDocumentIds": [
+          "hue-2026-admission-brochure"
+        ],
+        "sourcePages": {
+          "identity": [
+            2,
+            12
+          ],
+          "programmeCatalogue": [
+            3
+          ],
+          "bachelorQualifications": [
+            4
+          ],
+          "bachelorDocuments": [
+            5
+          ],
+          "languageQualificationsAndDocuments": [
+            6
+          ],
+          "application": [
+            7
+          ],
+          "bachelorFeesScholarships": [
+            8
+          ],
+          "languageFeesScholarship": [
+            9
+          ]
+        },
+        "relationship": "Public direct application; no partnership evidence. The brochure states the university has not entrusted any individuals or agencies with student recruitment.",
+        "identityNote": "Distinct from Hubei University and Hubei University of Technology.",
+        "intakeStatus": "2026 historical cycle; application deadline and arrival date not specified."
+      }
+    },
+    {
+      "slug": "wzu",
+      "name": "Wenzhou University",
+      "city": "Wenzhou",
+      "province": "Zhejiang",
+      "country": "China",
+      "officialUrl": "https://cic.wzu.edu.cn/",
+      "overview": "Wenzhou University is a comprehensive university in Wenzhou, Zhejiang. The 2026 undergraduate brochure lists international study options in business, languages, education, science and engineering, with programme-specific CSCA examination subjects and annual tuition of CNY 18,000, CNY 20,000 or CNY 22,000. The 2026 application window has closed.",
+      "programs": [
+        {
+          "id": "wzu-international-economics-and-trade-2026",
+          "name": "International Economics and Trade",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 18000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-business-administration-2026",
+          "name": "Business Administration",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 18000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-applied-psychology-2026",
+          "name": "Applied Psychology",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 18000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-translation-2026",
+          "name": "Translation",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 18000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-japanese-2026",
+          "name": "Japanese",
+          "level": "Bachelor",
+          "languages": [
+            "Japanese"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics."
+          ],
+          "languageRequirements": [
+            "The brochure identifies Japanese as the teaching language but does not specify a Japanese proficiency threshold."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 18000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-english-2026",
+          "name": "English",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 18000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-chinese-language-and-literature-2026",
+          "name": "Chinese Language and Literature",
+          "level": "Bachelor",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics."
+          ],
+          "languageRequirements": [
+            "HSK 4 or above for Chinese-taught bachelor programmes."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 18000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-calligraphy-2026",
+          "name": "Calligraphy",
+          "level": "Bachelor",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Humanities Chinese and Mathematics."
+          ],
+          "languageRequirements": [
+            "HSK 4 or above for Chinese-taught bachelor programmes."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 18000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-material-science-and-engineering-2026",
+          "name": "Material Science and Engineering",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics and Chemistry."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 20000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-chemistry-2026",
+          "name": "Chemistry",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics and Chemistry."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 20000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-biotechnology-2026",
+          "name": "Biotechnology",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 20000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-mechanical-engineering-2026",
+          "name": "Mechanical Engineering",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics and Physics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 20000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-electrical-engineering-and-automation-2026",
+          "name": "Electrical Engineering and Automation",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics and Physics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 20000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-electronic-information-science-and-technology-2026",
+          "name": "Electronic Information Science and Technology",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics and Physics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 20000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-computer-science-and-technology-2026",
+          "name": "Computer Science and Technology",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics and Physics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 20000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date.",
+            "Computer Science and Technology applicants must bring their own laptop."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-civil-engineering-2026",
+          "name": "Civil Engineering",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 20000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        },
+        {
+          "id": "wzu-music-education-normal-2026",
+          "name": "Music Education (Normal)",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "Duration not specified",
+          "periodLabel": "2026 admission cycle",
+          "deadline": "30 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen holding a valid passport and in good health.",
+            "Age 18 or above; applicants under 18 must provide a certificate of guardianship.",
+            "High-school graduation certificate.",
+            "All international applicants for undergraduate programmes must provide valid CSCA results. The required examination subjects depend on the programme.",
+            "Required CSCA subjects: Mathematics."
+          ],
+          "languageRequirements": [
+            "Non-native English speakers: TOEFL greater than 70, IELTS greater than 6, Duolingo greater than 105, or other evidence of English proficiency. The brochure uses strict greater-than signs."
+          ],
+          "documents": [
+            "Photocopy of passport.",
+            "Highest graduation certificate and official transcript in Chinese or English; other languages need notarised Chinese or English translations.",
+            "Health report issued within six months, using the university medical examination form.",
+            "Non-criminal record certificate issued within six months.",
+            "Bank statement issued within six months. A signed sponsorship letter is required when the account belongs to another person.",
+            "Valid China Scholastic Competency Assessment (CSCA) transcript.",
+            "For applicants already in China, a copy of the residence permit and a performance statement from the previous school, where applicable.",
+            "Optional: study plan and recommendation letter."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 22000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 800
+            },
+            {
+              "key": "housing",
+              "item": "Accommodation",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "notes": "Accommodation charges are not specified in this brochure."
+            },
+            {
+              "key": "insurance",
+              "item": "Insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "amount": 400,
+              "notes": "Approximate amount in the brochure."
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "notes": "Brochure amounts: CNY 400 for less than one year or CNY 800 for one year. Confirm the applicable duration before budgeting."
+            }
+          ],
+          "notes": [
+            "2026 application window: 3 March to 30 June 2026. This application window is closed.",
+            "The brochure does not specify the programme duration or an arrival date."
+          ],
+          "scholarships": [
+            "Wenzhou University Freshman Scholarship: Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000. Awards are paid after successful registration and are not an automatic upfront tuition discount.",
+            "Zhejiang Provincial Scholarship and Wenzhou University International Student Academic Scholarship are listed for non-freshmen; amounts and eligibility follow the relevant policies and university notices."
+          ]
+        }
+      ],
+      "internal": {
+        "sourceDocumentIds": [
+          "wzu-2026-undergraduate-brochure"
+        ],
+        "sourcePages": {
+          "identity": [
+            1,
+            2,
+            8
+          ],
+          "programmesAndTuition": [
+            4
+          ],
+          "scholarshipsAndOtherFees": [
+            5
+          ],
+          "eligibility": [
+            5,
+            6
+          ],
+          "documents": [
+            6,
+            7
+          ],
+          "applicationWindow": [
+            7
+          ]
+        },
+        "intakeStatus": "Closed; application window 3 March to 30 June 2026.",
+        "rankingsExcludedReason": "The Chinese and English brochure sections disagree about ranking years and mainland positions. No ranking from this brochure was imported; verify directly with each ranking publisher.",
+        "normalisations": [
+          "Programme table English spelling Calligraph is rendered as Calligraphy.",
+          "Programme table International Economics and Trade is broken across lines; reconstructed without changing meaning."
+        ],
+        "residencePermitCaveat": "Brochure says CNY 400 for less than one year or CNY 800 for one year; not converted into a single automatic budget amount.",
+        "replaceProgramListing": true,
+        "replaceScholarshipListing": true,
+        "scholarshipListing": [
+          {
+            "id": "wzu-freshman-scholarship-2026",
+            "title": "Wenzhou University Freshman Scholarship (2026 closed cycle)",
+            "type": "Freshman award",
+            "details": [
+              "Type A: CNY 18,000; Type B: CNY 10,000; Type C: CNY 6,000.",
+              "Awards are paid after successful registration. They are not an automatic upfront reduction of tuition.",
+              "The 2026 application window was 3 March to 30 June 2026 and is closed.",
+              "Selection and award type are determined by the university; no award is guaranteed."
+            ],
+            "amount": "Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000",
+            "condition": "For the university’s assessed freshman scholarship recipients, with payment after successful registration; not an unconditional tuition waiver.",
+            "eligiblePrograms": [
+              "International Economics and Trade",
+              "Business Administration",
+              "Applied Psychology",
+              "Translation",
+              "Japanese",
+              "English",
+              "Chinese Language and Literature",
+              "Calligraphy",
+              "Material Science and Engineering",
+              "Chemistry",
+              "Biotechnology",
+              "Mechanical Engineering",
+              "Electrical Engineering and Automation",
+              "Electronic Information Science and Technology",
+              "Computer Science and Technology",
+              "Civil Engineering",
+              "Music Education (Normal)"
+            ],
+            "coverage": "Cash award after successful registration; tuition must be budgeted without assuming an upfront discount.",
+            "renewal": "Future scholarships follow university notices and assessment; no automatic renewal is stated for this freshman award.",
+            "deadline": "30 June 2026 (closed)",
+            "status": "closed",
+            "sourceDocumentId": "wzu-2026-undergraduate-brochure",
+            "sourcePages": [
+              5,
+              7
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

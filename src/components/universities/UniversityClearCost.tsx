@@ -1,240 +1,208 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, Calculator, Check, Download, GraduationCap, ReceiptText, Sparkles } from 'lucide-react';
-import { trackCostSheetDownloaded } from '@/lib/conversion-events';
+import { useId, useState } from 'react';
+import { ArrowRight, Calculator, Printer, RotateCcw } from 'lucide-react';
+import { applyScholarshipFeeWaivers, BEFORE_CHINA_FIELDS, buildCostPrefills, buildProgramCostPrefills, calculateClearCost, convertCostTotalsToBdt, COST_CURRENCIES, COST_LABELS, emptyCostValues, IN_CHINA_FIELDS, parseServicePackagePrice, readCostNumber, scholarshipScenarioReduction, servicePackageSelection, type CostCurrency, type CostCurrencyTotals, type CostField, type CostScenario, type ScholarshipCostScenario, type TuitionPeriod } from '@/lib/clear-cost';
+import type { UniversityProgramDetail } from '@/types/university-profile';
+import type { UniversityScholarshipOption } from '@/types/university-scholarship';
 
-type Program = {
-  name: string;
-  level: string;
-  tuition?: string;
-  tuitionAfterScholarship?: string;
-};
-
+type Program = { name: string; level: string; tuition?: string; tuitionAfterScholarship?: string; sourceUrl?: string };
 type Fee = { item: string; cost: string; recipient?: string; sourceUrl?: string };
-type Scholarship = {
-  title: string;
-  type?: string;
-  amount?: string;
-  coverage?: string;
-  condition?: string;
-  eligiblePrograms: string[];
-  status: 'active' | 'planned' | 'closed';
-  sourceUrl?: string;
-};
 type CostPlan = {
-  id: string;
-  title: string;
-  programName?: string;
-  scholarshipTitle?: string;
-  currency: string;
-  tuitionBeforeScholarship?: string;
-  scholarshipValue?: string;
-  tuitionAfterScholarship?: string;
-  applicationFee?: string;
-  hostel?: string;
-  insurance?: string;
-  medical?: string;
-  visa?: string;
-  travel?: string;
-  living?: string;
-  serviceFee?: string;
-  otherCosts: string[];
-  totalEstimate?: string;
-  notes: string[];
-  sourceUrl?: string;
-  lastVerifiedAt?: string;
-  isPublished: boolean;
+  id: string; title: string; programName?: string; scholarshipTitle?: string; currency: string;
+  tuitionBeforeScholarship?: string; scholarshipValue?: string; tuitionAfterScholarship?: string;
+  applicationFee?: string; hostel?: string; insurance?: string; medical?: string; visa?: string;
+  travel?: string; living?: string; serviceFee?: string; otherCosts: string[]; totalEstimate?: string;
+  notes: string[]; sourceUrl?: string; lastVerifiedAt?: string; isPublished: boolean;
 };
-
 type Props = {
   university: { name: string; slug: string; city: string; country: string; logo?: string };
   programs: Program[];
+  programDetails?: UniversityProgramDetail[];
+  hideProgramPicker?: boolean;
+  servicePackages?: { title: string; priceLabel: string; summary?: string }[];
+  scholarshipScenario?: ScholarshipCostScenario;
+  scholarshipOptions?: UniversityScholarshipOption[];
+  selectedScholarshipId?: string;
+  onScholarshipChange?: (option: UniversityScholarshipOption | null) => void;
   fees: Fee[];
-  scholarships: Scholarship[];
+  scholarships: { title: string; eligiblePrograms: string[]; status: 'active' | 'planned' | 'closed'; sourceUrl?: string }[];
   costPlans: CostPlan[];
   assessmentHref: string;
 };
-
-type Range = { min: number; max: number };
-type CostRow = { label: string; value: string; recipient: string; range: Range | null };
-
-const emptyRange = (): Range => ({ min: 0, max: 0 });
-
-function readRange(value?: string): Range | null {
-  if (!value) return null;
-  if (/\bfree\b/i.test(value)) return emptyRange();
-  const range = value.match(/(\d[\d,]*(?:\.\d+)?)\s*(?:-|–|—|to)\s*(\d[\d,]*(?:\.\d+)?)/i);
-  if (range) return { min: Number(range[1].replaceAll(',', '')), max: Number(range[2].replaceAll(',', '')) };
-  const first = value.match(/\d[\d,]*(?:\.\d+)?/);
-  if (!first) return null;
-  const amount = Number(first[0].replaceAll(',', ''));
-  return Number.isFinite(amount) ? { min: amount, max: amount } : null;
-}
-
-const formatAmount = (amount: number, currency: string) => `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Math.round(amount))} ${currency}`;
-const formatRange = (range: Range, currency: string) => range.min === range.max
-  ? formatAmount(range.min, currency)
-  : `${formatAmount(range.min, currency)} to ${formatAmount(range.max, currency)}`;
-
-function scholarshipPercentage(scholarship?: Scholarship) {
-  if (!scholarship) return null;
-  const source = `${scholarship.amount || ''} ${scholarship.coverage || ''}`;
-  if (/full\s+tuition|tuition\s+fully|free\s*\(?\s*(?:first|1st)\s+year/i.test(source)) return 100;
-  const match = source.match(/(\d+(?:\.\d+)?)\s*%/);
-  return match ? Math.min(100, Number(match[1])) : null;
-}
-
-const feeFor = (fees: Fee[], pattern: RegExp) => fees.find(fee => pattern.test(fee.item));
+const formatAmount = (amount: number, currency: string) => `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(amount)} ${currency}`;
+const formatTotals = (totals: CostCurrencyTotals) => Object.entries(totals).map(([currency, amount]) => formatAmount(amount!, currency)).join(' + ');
+const periodLabel = (period?: string) => ({ programme: 'for the programme', semester: 'per semester', year: 'per year', monthly: 'per month', month: 'per month', day: 'per day', oneoff: 'one-time' })[period || ''] || '';
+const inputClass = 'mt-2 min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none focus:border-[#174f7a] focus:ring-2 focus:ring-[#174f7a]/10';
 
 export default function UniversityClearCost(props: Props) {
-  const publishedPlans = props.costPlans.filter(plan => plan.isPublished && Boolean(plan.sourceUrl) && Boolean(plan.lastVerifiedAt));
-  if (!publishedPlans.length) {
-    return (
-      <section id="costs" className="scroll-mt-28 px-5 pb-12 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1240px] rounded-[2rem] border border-[#174f7a]/15 bg-white p-6 shadow-[0_24px_70px_rgba(8,38,60,.08)] sm:p-8">
-          <p className="text-[10px] font-black uppercase tracking-[.16em] text-[#174f7a]">Program specific ClearCost</p>
-          <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div><h2 className="font-heading text-3xl font-bold">Receive the current written cost plan</h2><p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">The downloadable plan becomes available after the selected program, scholarship, official costs, source URL and verification date are aligned. No estimated PDF is generated from incomplete records.</p></div>
-            <Link href={props.assessmentHref} className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-[#08263c] px-5 text-sm font-black text-white">Request this ClearCost <ArrowRight size={16} /></Link>
-          </div>
-          <p className="mt-6 border-t border-[#174f7a]/15 pt-4 text-[11px] leading-5 text-slate-500">No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.</p>
-        </div>
-      </section>
-    );
-  }
-  return <VerifiedUniversityClearCost {...props} costPlans={publishedPlans} />;
+  return <UniversityCostPicker key={props.university.slug} {...props} />;
 }
 
-function VerifiedUniversityClearCost({ university, programs, fees, scholarships, costPlans, assessmentHref }: Props) {
-  const activePrograms = programs.length ? programs : [{ name: 'Current study option', level: 'Program' }];
-  const [programName, setProgramName] = useState(activePrograms[0].name);
-  const [scholarshipTitle, setScholarshipTitle] = useState('none');
-  const [downloading, setDownloading] = useState(false);
-  const pdfRef = useRef<HTMLDivElement>(null);
+function UniversityCostPicker(props: Props) {
+  const programs: Program[] = props.programDetails?.length
+    ? props.programDetails.map(detail => ({ name: detail.name, level: detail.level }))
+    : props.programs.length ? props.programs : [{ name: 'My study option', level: 'Program' }];
+  const [programIndex, setProgramIndex] = useState(0);
+  const activeProgramIndex = programIndex < programs.length ? programIndex : 0;
+  const program = programs[activeProgramIndex];
+  const detail = props.programDetails?.[activeProgramIndex];
+  const recordedCurrency = props.programs[0]?.tuition?.match(/\b(CNY|BDT|USD|EUR|GBP)\b/i)?.[1].toUpperCase() as CostCurrency | undefined;
+  const [currency, setCurrency] = useState<CostCurrency>(props.university.country.toLowerCase() === 'china' ? 'CNY' : recordedCurrency || 'USD');
+  const selectedScholarshipId = props.selectedScholarshipId ?? props.scholarshipScenario?.id ?? '';
+  const selectedScholarship = props.scholarshipOptions?.find(option => option.id === selectedScholarshipId);
+  const id = useId();
+  return <section id="costs" className="clearcost-calculator scroll-mt-36">
+    <div className="rounded-xl border border-slate-200 bg-white">
+      <div className="clearcost-no-print border-b border-slate-200 p-5 sm:p-7">
+        <h2 className="flex items-center gap-2.5 text-xl font-semibold text-[#102b40]"><Calculator size={21} className="text-[#174f7a]" />ClearCost calculator</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-500">See what you pay before travelling and after arriving in China.</p>
+        <div className={`mt-5 grid gap-4 ${props.hideProgramPicker ? 'max-w-[120px]' : 'sm:grid-cols-[1fr_120px]'}`}>
+          {!props.hideProgramPicker && <label htmlFor={`${id}-program`} className="text-xs font-semibold text-slate-600">Choose your program<select id={`${id}-program`} value={activeProgramIndex} onChange={event => setProgramIndex(Number(event.target.value))} className={inputClass}>{programs.map((item, index) => <option key={`${index}-${item.name}`} value={index}>{item.level} · {item.name}</option>)}</select></label>}
+          <label htmlFor={`${id}-currency`} className="text-xs font-semibold text-slate-600">Currency<select id={`${id}-currency`} value={currency} onChange={event => setCurrency(event.target.value as CostCurrency)} className={inputClass}>{COST_CURRENCIES.map(item => <option key={item}>{item}</option>)}</select></label>
+        </div>
+        {detail?.duration && <p className="mt-3 text-xs text-slate-500">{detail.duration}</p>}
+        {!!props.scholarshipOptions?.length && <div className="mt-5 border-t border-slate-100 pt-5">
+          <label htmlFor={`${id}-scholarship`} className="block text-xs font-semibold text-slate-600">Scholarship option<select id={`${id}-scholarship`} value={selectedScholarshipId} onChange={event => props.onScholarshipChange?.(props.scholarshipOptions?.find(option => option.id === event.target.value) || null)} className={inputClass}><option value="">Self-funded · no scholarship selected</option>{props.scholarshipOptions.map(option => <option key={option.id} value={option.id}>{option.title}</option>)}</select></label>
+          {selectedScholarship ? <div className="mt-3 text-xs leading-6 text-slate-500">
+            <p>{props.scholarshipScenario ? 'The selected award is included as a planning scenario. Confirm your eligibility and award before relying on a reduction.' : 'Enter only the payable amounts and tuition reduction confirmed in your scholarship award.'}</p>
+            <details className="mt-2"><summary className="cursor-pointer font-semibold text-[#174f7a]">Coverage & scholarship conditions</summary><dl className="mt-3 space-y-3 rounded-lg bg-slate-50 p-4">{selectedScholarship.coverage.length > 0 && <div><dt className="font-semibold text-slate-700">Coverage</dt><dd>{selectedScholarship.coverage.join(' ')}</dd></div>}{selectedScholarship.conditions.length > 0 && <div><dt className="font-semibold text-slate-700">Conditions</dt><dd>{selectedScholarship.conditions.join(' ')}</dd></div>}{selectedScholarship.renewal.length > 0 && <div><dt className="font-semibold text-slate-700">Renewal</dt><dd>{selectedScholarship.renewal.join(' ')}</dd></div>}</dl></details>
+          </div> : <p className="mt-2 text-xs leading-6 text-slate-500">Compare the listed awards, or use the full tuition fee for a self-funded plan.</p>}
+        </div>}
+      </div>
+      <CostCalculator key={`${props.university.slug}-${detail?.id || `${program.level}:${program.name}`}-${currency}-${selectedScholarshipId || 'self-funded'}`} {...props} program={program} programDetail={detail} currency={currency} />
+    </div>
+    <style jsx global>{`
+      @media print {
+        body * { visibility: hidden; }
+        body *:has(.clearcost-calculator) { display: contents !important; }
+        body *:not(.clearcost-calculator):not(.clearcost-calculator *):not(:has(.clearcost-calculator)) { display: none !important; }
+        .clearcost-calculator, .clearcost-calculator * { visibility: visible; }
+        .clearcost-calculator { position: absolute; inset: 0 auto auto 0; width: 100%; padding: 0; background: white; }
+        .clearcost-calculator .clearcost-no-print { display: none !important; }
+        .clearcost-calculator .clearcost-print-only { display: block !important; }
+        .clearcost-calculator > div { border: 0; border-radius: 0; box-shadow: none; }
+        .clearcost-calculator aside { position: static; break-inside: avoid; background: white !important; border: 1px solid #cbd5e1; }
+      }
+    `}</style>
+  </section>;
+}
 
-  const program = activePrograms.find(item => item.name === programName) || activePrograms[0];
-  const eligibleScholarships = useMemo(() => scholarships.filter(scholarship => (
-    scholarship.status === 'active'
-    && Boolean(scholarship.sourceUrl)
-    && (!scholarship.eligiblePrograms.length || scholarship.eligiblePrograms.some(item => item.toLowerCase() === programName.toLowerCase()))
-  )), [programName, scholarships]);
-
-  useEffect(() => {
-    if (scholarshipTitle !== 'none' && !eligibleScholarships.some(item => item.title === scholarshipTitle)) setScholarshipTitle('none');
-  }, [eligibleScholarships, scholarshipTitle]);
-
-  const scholarship = eligibleScholarships.find(item => item.title === scholarshipTitle);
-  const publishedPlans = costPlans;
-  const selectedPlan = publishedPlans.find(plan => plan.programName === programName && (
-    scholarship ? plan.scholarshipTitle === scholarship.title : !plan.scholarshipTitle
-  )) || publishedPlans.find(plan => plan.programName === programName);
-  const currency = selectedPlan?.currency || (program.tuition?.match(/\b(CNY|BDT|USD|EUR|GBP)\b/i)?.[1].toUpperCase()) || 'CNY';
-  const tuitionBefore = selectedPlan?.tuitionBeforeScholarship || program.tuition || 'Included in the written university plan';
-  const tuitionRange = readRange(tuitionBefore);
-  const percentage = scholarshipPercentage(scholarship);
-  const fixedScholarship = scholarship && percentage === null ? readRange(scholarship.amount) : null;
-  const calculatedTuition = tuitionRange && percentage !== null
-    ? { min: tuitionRange.min * (1 - percentage / 100), max: tuitionRange.max * (1 - percentage / 100) }
-    : tuitionRange && fixedScholarship
-      ? { min: Math.max(0, tuitionRange.min - fixedScholarship.max), max: Math.max(0, tuitionRange.max - fixedScholarship.min) }
-      : null;
-  const tuitionAfter = selectedPlan?.tuitionAfterScholarship
-    || (scholarship ? program.tuitionAfterScholarship : undefined)
-    || (calculatedTuition ? formatRange(calculatedTuition, currency) : tuitionBefore);
-
-  const rows = useMemo<CostRow[]>(() => {
-    const planRows: Array<[string, string | undefined, string]> = [
-      ['Tuition after selected scholarship', tuitionAfter, 'University'],
-      ['Application fee', selectedPlan?.applicationFee || feeFor(fees.filter(fee => fee.sourceUrl), /application/i)?.cost, feeFor(fees.filter(fee => fee.sourceUrl), /application/i)?.recipient || 'University'],
-      ['Accommodation or hostel', selectedPlan?.hostel || feeFor(fees.filter(fee => fee.sourceUrl), /hostel|accommodation/i)?.cost, feeFor(fees.filter(fee => fee.sourceUrl), /hostel|accommodation/i)?.recipient || 'University or housing provider'],
-      ['Insurance', selectedPlan?.insurance || feeFor(fees.filter(fee => fee.sourceUrl), /insurance/i)?.cost, feeFor(fees.filter(fee => fee.sourceUrl), /insurance/i)?.recipient || 'Insurance provider'],
-      ['Medical', selectedPlan?.medical || feeFor(fees.filter(fee => fee.sourceUrl), /medical|health check/i)?.cost, feeFor(fees.filter(fee => fee.sourceUrl), /medical|health check/i)?.recipient || 'Medical provider'],
-      ['Visa and official charges', selectedPlan?.visa || feeFor(fees.filter(fee => fee.sourceUrl), /visa|embassy|residence permit/i)?.cost, feeFor(fees.filter(fee => fee.sourceUrl), /visa|embassy|residence permit/i)?.recipient || 'Responsible authority'],
-      ['Travel', selectedPlan?.travel || feeFor(fees.filter(fee => fee.sourceUrl), /travel|air ticket|flight/i)?.cost, feeFor(fees.filter(fee => fee.sourceUrl), /travel|air ticket|flight/i)?.recipient || 'Travel provider'],
-      ['Living plan', selectedPlan?.living || feeFor(fees.filter(fee => fee.sourceUrl), /living|food|personal/i)?.cost, feeFor(fees.filter(fee => fee.sourceUrl), /living|food|personal/i)?.recipient || 'Student budget'],
-      ['EduExpress service', selectedPlan?.serviceFee || feeFor(fees.filter(fee => fee.sourceUrl), /service.*edu|eduexpress/i)?.cost, 'EduExpress'],
-    ];
-    const used = new Set(planRows.map(([, value]) => value).filter(Boolean));
-    const extraRows = fees.filter(fee => fee.sourceUrl)
-      .filter(fee => !used.has(fee.cost) && !/(tuition|application|hostel|accommodation|insurance|medical|health check|visa|embassy|residence permit|travel|air ticket|flight|living|food|personal|service.*edu|eduexpress)/i.test(fee.item))
-      .map(fee => [fee.item, fee.cost, fee.recipient || 'Third party'] as [string, string, string]);
-    const planExtras = (selectedPlan?.otherCosts || []).map(item => {
-      const [label, ...value] = item.split(':');
-      return [label || 'Other cost', value.join(':').trim() || item, 'Third party'] as [string, string, string];
-    });
-    return [...planRows, ...extraRows, ...planExtras]
-      .filter((item): item is [string, string, string] => Boolean(item[1]))
-      .map(([label, value, recipient]) => ({ label, value, recipient, range: readRange(value) }));
-  }, [fees, selectedPlan, tuitionAfter]);
-
-  const total = rows.reduce<Range>((sum, row) => row.range
-    ? { min: sum.min + row.range.min, max: sum.max + row.range.max }
-    : sum, emptyRange());
-  const displayedTotal = selectedPlan?.totalEstimate || formatRange(total, currency);
-
-  const downloadPdf = async () => {
-    if (!pdfRef.current) return;
-    setDownloading(true);
-    try {
-      const { default: html2pdf } = await import('html2pdf.js');
-      trackCostSheetDownloaded({ destination: university.country, university: university.name, program: program.name });
-      await html2pdf().set({
-        margin: 8,
-        filename: `${university.slug}-${program.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-clearcost.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'] },
-      }).from(pdfRef.current).save();
-    } finally {
-      setDownloading(false);
-    }
+function CostCalculator({ university, program, programDetail, currency, fees, costPlans, servicePackages = [], scholarshipScenario, assessmentHref }: Props & { program: Program; programDetail?: UniversityProgramDetail; currency: CostCurrency }) {
+  const cmsProgram = programDetail ? { name: program.name } : program;
+  const prefills = { ...buildCostPrefills(cmsProgram, currency, programDetail ? [] : fees, programDetail ? [] : costPlans), ...buildProgramCostPrefills(programDetail, currency) };
+  const recordedTuitionPeriod = prefills.tuition?.period || programDetail?.fees.find(fee => fee.key === 'tuition' && !fee.optional)?.period;
+  const initialTuitionPeriod: TuitionPeriod = recordedTuitionPeriod === 'semester' || recordedTuitionPeriod === 'programme' ? recordedTuitionPeriod : 'year';
+  const selectedReduction = scholarshipScenarioReduction(scholarshipScenario, currency, initialTuitionPeriod);
+  const createScenario = (): CostScenario => ({
+    values: applyScholarshipFeeWaivers({ ...emptyCostValues(), ...Object.fromEntries(Object.entries(prefills).map(([field, prefill]) => [field, prefill.value])) }, scholarshipScenario?.feeWaivers),
+    currency, serviceCurrency: currency,
+    scholarshipType: selectedReduction?.type || 'fixed', scholarship: selectedReduction?.value || '0', tuitionPeriod: initialTuitionPeriod,
+    housingPeriod: scholarshipScenario?.feeWaivers?.includes('housing') ? 'programme' : prefills.housing?.period === 'monthly' ? 'monthly' : prefills.housing?.period === 'semester' ? 'semester' : prefills.housing?.period === 'programme' || prefills.housing?.period === 'oneoff' ? 'programme' : 'year',
+    housingMonths: '', housingDays: '', depositRequired: !!prefills.deposit, depositCreditedToTuition: false, otherCostsApply: !!prefills.other,
+  });
+  const [scenario, setScenario] = useState<CostScenario>(createScenario);
+  const [edited, setEdited] = useState<CostField[]>([]);
+  const [packageIndex, setPackageIndex] = useState('');
+  const [housingIndex, setHousingIndex] = useState('');
+  const [exchangeRate, setExchangeRate] = useState('');
+  const id = useId();
+  const result = calculateClearCost(scenario);
+  const converted = currency === 'BDT' ? null : convertCostTotalsToBdt(result.currencyTotals, currency, exchangeRate);
+  const exchangeValue = readCostNumber(exchangeRate);
+  const exchangeError = exchangeRate !== '' && (exchangeValue.status !== 'valid' || exchangeValue.value <= 0);
+  const selectedPackage = packageIndex === '' ? undefined : servicePackages[Number(packageIndex)];
+  const packagePrice = parseServicePackagePrice(selectedPackage?.priceLabel);
+  const serviceCurrency = scenario.serviceCurrency || currency;
+  const hasSeparatePackage = serviceCurrency !== currency && result.entries.service !== undefined;
+  const housingChoices = programDetail?.fees.filter(fee => fee.key === 'housing' && fee.currency.toUpperCase() === currency && fee.amount !== undefined) || [];
+  const update = (field: CostField, value: string) => {
+    setScenario(current => ({ ...current, values: { ...current.values, [field]: value } }));
+    setEdited(current => current.includes(field) ? current : [...current, field]);
   };
+  const reset = () => { setScenario(createScenario()); setEdited([]); setPackageIndex(''); setHousingIndex(''); setExchangeRate(''); };
+  const selectPackage = (index: string) => {
+    const selection = servicePackageSelection(index === '' ? undefined : servicePackages[Number(index)]?.priceLabel, currency);
+    setPackageIndex(index);
+    setScenario(current => ({ ...current, serviceCurrency: selection.currency, values: { ...current.values, service: selection.value } }));
+    setEdited(current => current.includes('service') ? current : [...current, 'service']);
+  };
+  const field = (name: CostField, helper?: string) => {
+    const invalid = readCostNumber(scenario.values[name]).status === 'invalid';
+    const covered = (name === 'housing' || name === 'insurance') && scholarshipScenario?.feeWaivers?.includes(name);
+    const recorded = !edited.includes(name) ? covered ? 'Covered by the selected scholarship. Edit if your award letter states a different payable amount.' : prefills[name]?.recorded : undefined;
+    const help = invalid ? 'Enter a valid amount of zero or more.' : [recorded, helper].filter(Boolean).join(' ');
+    return <div key={name}>
+      <label htmlFor={`${id}-${name}`} className="block text-xs font-semibold text-slate-600">{COST_LABELS[name]}
+        <span className="relative mt-2 block"><input id={`${id}-${name}`} type="number" inputMode="decimal" min="0" max="1000000000000" step="0.01" value={scenario.values[name]} placeholder="Enter amount" aria-invalid={invalid} aria-describedby={`${id}-${name}-help`} onChange={event => update(name, event.target.value)} className={`${inputClass} mt-0 pr-14 ${invalid ? 'border-red-500' : ''}`} /><span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[10px] font-medium text-slate-500">{name === 'service' ? serviceCurrency : currency}</span></span>
+      </label>
+      {help.length > 160 && !invalid ? <details id={`${id}-${name}-help`} className="mt-1.5 text-[11px] leading-5 text-slate-500"><summary className="cursor-pointer font-medium">Fee conditions</summary><p className="mt-1.5">{help}</p></details> : <p id={`${id}-${name}-help`} className={`mt-1.5 text-[11px] leading-5 ${invalid ? 'text-red-600' : 'text-slate-500'}`}>{help}</p>}
+    </div>;
+  };
+  const subtotal = (label: string, amount: string) => <div className="mt-5 flex items-center justify-between gap-3 border-t border-slate-200 pt-4 text-sm"><span className="font-medium text-slate-600">{label}</span><strong className="text-right font-semibold text-[#102b40]">{amount}</strong></div>;
+  const summaryRows = (fields: CostField[]) => fields.map(name => {
+    const optional = (name === 'deposit' && !scenario.depositRequired) || (name === 'other' && !scenario.otherCostsApply);
+    if (optional) return null;
+    return <div key={name} className="flex items-start justify-between gap-4 py-1.5 text-xs"><span className="text-slate-500">{name === 'tuition' ? `Tuition balance · ${periodLabel(scenario.tuitionPeriod)}` : name === 'housing' && scenario.housingPeriod === 'monthly' ? `Accommodation · ${scenario.housingMonths || '?'} months` : name === 'housing' && scenario.housingPeriod === 'daily' ? `Accommodation · ${scenario.housingDays || '?'} days` : COST_LABELS[name]}{name === 'service' && selectedPackage && <span className="mt-0.5 block text-[10px] leading-4">{selectedPackage.title}</span>}</span><span className="text-right font-medium text-slate-800">{result.entries[name] === undefined ? name === 'service' && selectedPackage ? 'Quote required' : 'Not entered' : formatAmount(result.entries[name]!, name === 'service' ? serviceCurrency : currency)}</span></div>;
+  });
 
-  const selectionSummary = scholarship
-    ? `${scholarship.title}: ${scholarship.amount || scholarship.coverage || 'program conditions apply'}`
-    : 'No scholarship selected';
-
-  return (
-    <section id="costs" className="scroll-mt-28 px-5 pb-12 sm:px-8 lg:px-12">
-      <div className="mx-auto max-w-[1240px] overflow-hidden rounded-[2rem] border border-[#174f7a]/15 bg-white shadow-[0_24px_70px_rgba(8,38,60,.1)]">
-        <div className="grid bg-[#08263c] text-white lg:grid-cols-[.75fr_1.25fr]">
-          <div className="p-6 sm:p-8"><div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[.16em] text-[#8ed0ee]"><Calculator size={16} /> Interactive ClearCost</div><h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">Build your university cost view</h2><p className="mt-4 text-sm leading-7 text-white/65">Choose one program and one scholarship. Tuition and other recorded costs stay aligned in a single view.</p></div>
-          <div className="grid gap-4 bg-[#0b304a] p-6 sm:grid-cols-2 sm:p-8">
-            <label className="text-xs font-bold"><span className="mb-2 flex items-center gap-2 text-white/65"><GraduationCap size={15} /> Program</span><select value={programName} onChange={event => setProgramName(event.target.value)} className="min-h-12 w-full rounded-xl border border-white/15 bg-white px-3 text-sm font-bold text-[#08263c]">{activePrograms.map(item => <option key={`${item.level}-${item.name}`} value={item.name}>{item.level}: {item.name}</option>)}</select></label>
-            <label className="text-xs font-bold"><span className="mb-2 flex items-center gap-2 text-white/65"><Sparkles size={15} /> Scholarship</span><select value={scholarshipTitle} onChange={event => setScholarshipTitle(event.target.value)} className="min-h-12 w-full rounded-xl border border-white/15 bg-white px-3 text-sm font-bold text-[#08263c]"><option value="none">No scholarship selected</option>{eligibleScholarships.map(item => <option key={item.title} value={item.title}>{item.title}</option>)}</select></label>
-          </div>
+  return <div className="grid items-start gap-7 p-5 sm:p-7 xl:grid-cols-[minmax(0,1fr)_290px]">
+    <div className="clearcost-no-print space-y-7">
+      <fieldset>
+        <legend className="mb-4 flex items-center gap-3 text-base font-semibold text-[#102b40]"><span className="grid size-7 place-items-center rounded-full bg-[#edf4f9] text-xs text-[#174f7a]">1</span>Before China</legend>
+        <div className="grid gap-4 sm:grid-cols-2">{field('application')}
+          <div><label htmlFor={`${id}-deposit-required`} className="flex min-h-6 items-center gap-2 text-xs font-semibold text-slate-600"><input id={`${id}-deposit-required`} type="checkbox" checked={scenario.depositRequired} onChange={event => setScenario(current => ({ ...current, depositRequired: event.target.checked }))} className="size-4 accent-[#174f7a]" />Deposit required</label>{scenario.depositRequired ? <div className="mt-3">{field('deposit')}<label htmlFor={`${id}-deposit-credit`} className="mt-3 flex items-start gap-2 text-[11px] leading-5 text-slate-500"><input id={`${id}-deposit-credit`} type="checkbox" checked={scenario.depositCreditedToTuition} onChange={event => setScenario(current => ({ ...current, depositCreditedToTuition: event.target.checked }))} className="mt-0.5 size-4 shrink-0 accent-[#174f7a]" />This deposit is credited toward tuition</label></div> : <p className="mt-3 text-xs text-slate-500">No deposit included.</p>}</div>
         </div>
-
-        <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.2fr_.8fr]">
-          <div>
-            <div className="mb-4 flex items-end justify-between gap-4"><div><p className="text-[10px] font-black uppercase tracking-[.14em] text-[#174f7a]">Selected cost breakdown</p><h3 className="mt-2 font-heading text-2xl font-bold">{program.name}</h3></div><ReceiptText className="text-[#174f7a]" /></div>
-            <div className="overflow-hidden rounded-2xl border border-[#174f7a]/15">{rows.map(row => <div key={`${row.label}-${row.value}`} className="grid gap-1 border-b border-[#174f7a]/10 p-4 last:border-0 sm:grid-cols-[1fr_auto] sm:items-center"><div><strong className="text-sm">{row.label}</strong><span className="mt-1 block text-[10px] font-bold uppercase tracking-[.08em] text-slate-400">Paid to {row.recipient}</span></div><span className="text-sm font-black text-[#174f7a]">{row.value}</span></div>)}</div>
-          </div>
-
-          <aside className="rounded-2xl bg-[#e9f7fd] p-6">
-            <p className="text-[10px] font-black uppercase tracking-[.14em] text-[#174f7a]">Recorded first year subtotal</p><strong className="mt-3 block font-heading text-4xl leading-tight">{displayedTotal}</strong><p className="mt-3 text-xs leading-5 text-slate-600">{selectionSummary}</p>
-            {scholarship?.condition && <p className="mt-4 rounded-xl bg-white p-3 text-xs leading-5 text-slate-600"><strong className="text-[#08263c]">Scholarship condition:</strong> {scholarship.condition}</p>}
-            <div className="mt-5 space-y-2 text-xs leading-5 text-slate-600"><p className="flex gap-2"><Check size={14} className="mt-1 shrink-0 text-[#174f7a]" /> University and third party items are shown separately.</p><p className="flex gap-2"><Check size={14} className="mt-1 shrink-0 text-[#174f7a]" /> Scholarship coverage changes with the selected award.</p></div>
-            <button type="button" onClick={downloadPdf} disabled={downloading} className="mt-6 flex min-h-13 w-full items-center justify-center gap-2 rounded-xl bg-[#08263c] px-4 text-sm font-black text-white disabled:opacity-60"><Download size={16} />{downloading ? 'Creating PDF…' : 'Download branded PDF'}</button>
-            <Link href={assessmentHref} className="mt-3 flex min-h-12 items-center justify-center gap-2 rounded-xl border-2 border-[#08263c] px-4 text-sm font-black">Check my eligibility <ArrowRight size={15} /></Link>
-          </aside>
+        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50/70 p-4">
+          {servicePackages.length > 0 && <label htmlFor={`${id}-package`} className="block text-xs font-semibold text-slate-600">Select an EduExpress Package<select id={`${id}-package`} value={packageIndex} onChange={event => selectPackage(event.target.value)} className={inputClass}><option value="">Enter agreed package fee</option>{servicePackages.map((item, index) => <option key={`${item.title}-${index}`} value={index}>{item.title}{item.priceLabel ? ` · ${item.priceLabel}` : ''}</option>)}</select></label>}
+          {selectedPackage?.summary && <p className="mt-2 text-xs leading-5 text-slate-500">{selectedPackage.summary}</p>}
+          <div className={`grid gap-4 sm:grid-cols-[minmax(0,1fr)_110px] ${servicePackages.length ? 'mt-4' : ''}`}>{field('service', packagePrice ? 'The selected package price is included automatically. Edit only for an agreed quote.' : selectedPackage ? 'Enter your written package quote to complete the estimate.' : 'Enter the agreed package fee.')}<label htmlFor={`${id}-package-currency`} className="text-xs font-semibold text-slate-600">Package currency<select id={`${id}-package-currency`} value={serviceCurrency} onChange={event => setScenario(current => ({ ...current, serviceCurrency: event.target.value as CostCurrency, values: { ...current.values, service: '' } }))} className={inputClass}>{COST_CURRENCIES.map(item => <option key={item}>{item}</option>)}</select></label></div>
+          {serviceCurrency !== currency && <p className="mt-2 text-[11px] leading-5 text-slate-500">The package stays in {serviceCurrency}. {serviceCurrency === 'BDT' ? 'Add a BDT exchange rate in your cost breakdown to combine the totals.' : 'Amounts in different currencies are shown separately.'}</p>}
+          <p className="mt-2 text-[11px] leading-5 text-slate-500">Payable after China visa approval, before departure.</p>
         </div>
+        {subtotal('Before China subtotal', formatTotals(result.beforeCurrencyTotals))}
+      </fieldset>
 
-        <div className="border-t border-[#174f7a]/15 bg-[#f7fafc] px-6 py-4 text-[11px] leading-5 text-slate-500 sm:px-8">No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.</div>
-      </div>
+      <fieldset className="border-t border-slate-200 pt-7">
+        <legend className="mb-4 flex items-center gap-3 pt-7 text-base font-semibold text-[#102b40]"><span className="grid size-7 place-items-center rounded-full bg-[#edf4f9] text-xs text-[#174f7a]">2</span>In China</legend>
+        <div className="grid gap-4 sm:grid-cols-2">{field('tuition', result.tuitionWaivedWithoutGross ? '100% tuition waiver: the gross fee is not needed for this estimate.' : 'Full fee before any tuition reduction.')}
+          <label htmlFor={`${id}-tuition-period`} className="text-xs font-semibold text-slate-600">Tuition period<select id={`${id}-tuition-period`} value={scenario.tuitionPeriod} onChange={event => { setScenario(current => ({ ...current, tuitionPeriod: event.target.value as TuitionPeriod, scholarship: '0', values: { ...current.values, tuition: '' } })); setEdited(current => [...current, 'tuition']); }} className={inputClass}><option value="year">One year</option><option value="semester">One semester</option><option value="programme">Full programme</option></select><span className="mt-1.5 block text-[11px] font-normal leading-5 text-slate-500">The entered tuition is used once.</span></label>
+        </div>
+        <div className="mt-3 grid gap-4 rounded-lg bg-slate-50 p-4 sm:grid-cols-2">
+          {scholarshipScenario && <div className="text-xs leading-5 text-slate-600 sm:col-span-2"><p className="font-semibold text-[#102b40]">{scholarshipScenario.title}</p><p className="mt-1">{selectedReduction ? 'This estimate applies the selected scholarship tuition reduction and any explicitly covered accommodation or insurance. Eligibility and the final award remain subject to the scholarship conditions.' : 'Enter a reduction that matches this currency and study period. No fixed reduction has been converted automatically.'}</p></div>}
+          <label htmlFor={`${id}-reduction-type`} className="text-xs font-semibold text-slate-600">Tuition reduction<select id={`${id}-reduction-type`} value={scenario.scholarshipType} onChange={event => setScenario(current => ({ ...current, scholarshipType: event.target.value as 'fixed' | 'percent', scholarship: '0' }))} className={inputClass}><option value="fixed">Amount ({currency})</option><option value="percent">Percentage (%)</option></select></label>
+          <label htmlFor={`${id}-reduction`} className="text-xs font-semibold text-slate-600">Reduction {scenario.scholarshipType === 'percent' ? '(%)' : `(${currency})`}<input id={`${id}-reduction`} type="number" min="0" max="1000000000000" step="0.01" value={scenario.scholarship} aria-invalid={readCostNumber(scenario.scholarship).status === 'invalid'} onChange={event => setScenario(current => ({ ...current, scholarship: event.target.value }))} className={inputClass} /></label>
+          <p className="text-[11px] leading-5 text-slate-500 sm:col-span-2">Enter a confirmed reduction, or keep zero.</p>
+        </div>
+        {result.scholarshipCapped && <p role="status" className="mt-2 text-xs text-amber-700">The reduction is capped at the tuition fee.</p>}
+        {(housingChoices.length > 1 || housingChoices.some(fee => fee.period === 'day' || fee.optional)) && <label htmlFor={`${id}-housing-choice`} className="mt-5 block text-xs font-semibold text-slate-600">Accommodation option<select id={`${id}-housing-choice`} value={housingIndex} onChange={event => { const choice = housingChoices[Number(event.target.value)]; setHousingIndex(event.target.value); if (event.target.value === '' || !choice) { update('housing', ''); return; } update('housing', String(choice.amount)); setScenario(current => ({ ...current, housingPeriod: choice.period === 'month' ? 'monthly' : choice.period === 'day' ? 'daily' : choice.period === 'oneoff' ? 'programme' : choice.period })); }} className={inputClass}><option value="">Choose a room or enter your own fee</option>{housingChoices.map((fee, index) => <option key={`${fee.item}-${index}`} value={index}>{fee.item} · {formatAmount(fee.amount!, currency)} {periodLabel(fee.period)}</option>)}</select></label>}
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">{field('housing')}
+          <label htmlFor={`${id}-housing-period`} className="text-xs font-semibold text-slate-600">Accommodation period<select id={`${id}-housing-period`} value={scenario.housingPeriod} onChange={event => { setScenario(current => ({ ...current, housingPeriod: event.target.value as CostScenario['housingPeriod'], values: { ...current.values, housing: '' } })); setHousingIndex(''); setEdited(current => [...current, 'housing']); }} className={inputClass}><option value="year">One year</option><option value="semester">One semester</option><option value="programme">Full programme</option><option value="monthly">Monthly × months</option><option value="daily">Daily × days</option></select></label>
+          {scenario.housingPeriod === 'monthly' && <label htmlFor={`${id}-housing-months`} className="text-xs font-semibold text-slate-600">Accommodation months<input id={`${id}-housing-months`} type="number" min="1" max="120" step="1" value={scenario.housingMonths} onChange={event => setScenario(current => ({ ...current, housingMonths: event.target.value }))} placeholder="Enter months" className={inputClass} /></label>}
+          {scenario.housingPeriod === 'daily' && <label htmlFor={`${id}-housing-days`} className="text-xs font-semibold text-slate-600">Accommodation days<input id={`${id}-housing-days`} type="number" min="1" max="4000" step="1" value={scenario.housingDays || ''} onChange={event => setScenario(current => ({ ...current, housingDays: event.target.value }))} placeholder="Enter days" className={inputClass} /></label>}
+          {field('insurance')}{field('medical')}{field('residence')}
+        </div>
+        <div className="mt-4"><label htmlFor={`${id}-other-required`} className="flex items-center gap-2 text-xs font-semibold text-slate-600"><input id={`${id}-other-required`} type="checkbox" checked={scenario.otherCostsApply} onChange={event => setScenario(current => ({ ...current, otherCostsApply: event.target.checked }))} className="size-4 accent-[#174f7a]" />Include other costs</label>{scenario.otherCostsApply && <div className="mt-4">{field('other', 'For example, utilities, books and personal living expenses.')}</div>}</div>
+        {subtotal('In China subtotal', formatAmount(result.inChinaTotal, currency))}
+      </fieldset>
+      <div className="flex flex-wrap items-center gap-4 border-t border-slate-200 pt-4"><button type="button" onClick={reset} className="inline-flex min-h-10 items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#174f7a]"><RotateCcw size={14} />Reset amounts</button><p className="text-[11px] leading-5 text-slate-500">Changing program or currency starts a new estimate.</p></div>
+    </div>
 
-      <div ref={pdfRef} aria-hidden="true" className="fixed left-[-12000px] top-0 w-[760px] bg-white p-10 text-[#08263c]">
-        <div className="flex items-center justify-between border-b-4 border-[#64b5df] pb-5"><Image src="/logo.png" alt="EduExpress International" width={190} height={60} className="h-auto w-[190px]" /><div className="text-right"><strong className="block text-lg">University ClearCost Sheet</strong><span className="text-xs text-slate-500">Program and scholarship aligned</span></div></div>
-        <div className="mt-8 rounded-2xl bg-[#08263c] p-7 text-white"><p className="text-xs font-bold uppercase tracking-[.15em] text-[#8ed0ee]">{university.city}, {university.country}</p><h2 className="mt-3 text-3xl font-bold">{university.name}</h2><p className="mt-3 text-sm text-white/70">{program.level}: {program.name}</p></div>
-        <div className="mt-6 grid grid-cols-2 gap-4"><div className="rounded-xl bg-[#e9f7fd] p-4"><span className="text-xs font-bold text-slate-500">Scholarship selection</span><strong className="mt-2 block">{selectionSummary}</strong></div><div className="rounded-xl bg-[#64b5df] p-4"><span className="text-xs font-bold text-[#174f7a]">Recorded subtotal</span><strong className="mt-2 block text-2xl">{displayedTotal}</strong></div></div>
-        <div className="mt-7 overflow-hidden rounded-xl border border-slate-200">{rows.map(row => <div key={`pdf-${row.label}-${row.value}`} className="grid grid-cols-[1fr_190px] border-b border-slate-200 p-3 last:border-0"><div><strong className="text-sm">{row.label}</strong><span className="mt-1 block text-[10px] text-slate-500">Recipient: {row.recipient}</span></div><strong className="text-right text-sm text-[#174f7a]">{row.value}</strong></div>)}</div>
-        <div className="mt-7 rounded-xl bg-[#f7fafc] p-5 text-xs leading-5 text-slate-600"><strong className="text-[#08263c]">China service terms</strong><p className="mt-2">No file opening charge. No EduExpress service fee before China visa approval. University, embassy and other third party items are separately itemized before the student proceeds.</p></div>
-        <div className="mt-8 flex items-end justify-between border-t border-slate-200 pt-5 text-xs text-slate-500"><div><strong className="block text-[#08263c]">EduExpress International</strong><span>Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209</span></div><span>eduexpressint.com</span></div>
-      </div>
-    </section>
-  );
+    <aside className="rounded-xl border border-slate-200 bg-[#f7f9fb] p-5 xl:sticky xl:top-[184px]">
+      <div className="clearcost-print-only mb-5 hidden border-b border-slate-200 pb-4"><h2 className="text-xl font-semibold">EduExpress ClearCost</h2><p className="mt-2 text-sm">{university.name}</p><p className="mt-1 text-xs">{program.level} · {program.name}</p></div>
+      <h3 className="text-sm font-semibold text-[#102b40]">Your cost breakdown</h3>
+      <div className="mt-5"><h4 className="mb-1 text-xs font-semibold text-[#174f7a]">Before China</h4>{summaryRows(BEFORE_CHINA_FIELDS)}<div className="mt-2 flex justify-between gap-3 border-t border-slate-200 pt-3 text-sm font-semibold text-[#102b40]"><span>Subtotal</span><span className="text-right">{formatTotals(result.beforeCurrencyTotals)}</span></div></div>
+      <div className="mt-5"><h4 className="mb-1 text-xs font-semibold text-[#174f7a]">In China</h4>{summaryRows(IN_CHINA_FIELDS)}<div className="mt-2 flex justify-between gap-3 border-t border-slate-200 pt-3 text-sm font-semibold text-[#102b40]"><span>Subtotal</span><span>{formatAmount(result.inChinaTotal, currency)}</span></div></div>
+      {result.depositCredit > 0 && <p className="mt-4 text-[11px] leading-5 text-slate-500">{formatAmount(result.depositCredit, currency)} of your deposit is deducted from the tuition balance.</p>}
+      {result.depositExceedsTuition && <p role="status" className="mt-3 text-[11px] leading-5 text-amber-700">Your deposit exceeds the tuition balance. Confirm how the excess will be credited or refunded.</p>}
+      <div className="mt-5 border-t border-slate-200 pt-5" aria-live="polite" aria-atomic="true"><p className="text-xs font-medium text-slate-500">{!result.isComplete ? 'Entered amounts subtotal' : hasSeparatePackage && converted === null ? 'Cash estimate by currency' : 'Combined cash estimate'}</p><strong className={`mt-1 block font-semibold tracking-tight text-[#102b40] ${hasSeparatePackage && converted === null ? 'text-xl' : 'text-2xl'}`}>{hasSeparatePackage && converted !== null ? formatAmount(converted, 'BDT') : formatTotals(result.currencyTotals)}</strong>{hasSeparatePackage && converted !== null && <p className="mt-2 text-[11px] leading-5 text-slate-500">{formatTotals(result.currencyTotals)}</p>}<p className="mt-2 text-[11px] leading-5 text-slate-500">{result.isComplete ? 'All required items entered.' : `${result.missing.length + result.invalid.length} ${result.missing.length + result.invalid.length === 1 ? 'item still needs' : 'items still need'} an amount.`}</p></div>
+      {!result.isComplete && <details className="clearcost-no-print mt-3 text-[11px] leading-5 text-slate-500"><summary className="cursor-pointer font-medium">View incomplete items</summary><p className="mt-2">{result.missing.length > 0 && `Enter: ${result.missing.join(', ')}.`} {result.invalid.length > 0 && `Check: ${result.invalid.join(', ')}.`}</p></details>}
+      {currency !== 'BDT' && <div className="clearcost-no-print mt-5 border-t border-slate-200 pt-5"><label htmlFor={`${id}-exchange`} className="text-xs font-medium text-slate-600">Optional BDT conversion<input id={`${id}-exchange`} type="number" inputMode="decimal" min="0.000001" max="1000000000000" step="any" value={exchangeRate} placeholder={`1 ${currency} = ? BDT`} aria-invalid={exchangeError} onChange={event => setExchangeRate(event.target.value)} className={inputClass} /></label>{converted !== null && !hasSeparatePackage && <p className="mt-3 text-base font-semibold text-[#102b40]">{formatAmount(converted, 'BDT')}</p>}{hasSeparatePackage && serviceCurrency === 'BDT' && <p className="mt-2 text-[11px] leading-5 text-slate-500">University costs are converted at your rate. The package is added once in BDT.</p>}{exchangeError && <p role="status" className="mt-2 text-[11px] text-red-600">Enter a rate greater than zero.</p>}</div>}
+      {converted !== null && <p className="clearcost-print-only mt-4 hidden text-xs">BDT equivalent: {formatAmount(converted, 'BDT')} at 1 {currency} = {exchangeRate} BDT.</p>}
+      <p className="mt-5 text-[11px] leading-5 text-slate-500">An editable planning estimate for the entered study period. Travel and personal expenses are included only if you add them to other costs.</p>
+      <button type="button" onClick={() => window.print()} className="clearcost-no-print mt-5 flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-3 text-xs font-semibold text-[#174f7a]"><Printer size={15} />Print / save PDF</button>
+      <Link href={assessmentHref} className="clearcost-no-print mt-3 flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#174f7a] px-3 py-3 text-center text-xs font-semibold text-white">Apply with EduExpress International<ArrowRight size={14} className="shrink-0" /></Link>
+    </aside>
+  </div>;
 }

@@ -314,18 +314,14 @@ export default async function CountryPage({ params }: Props) {
           </section>
         )}
 
-        {/* Module 13: Country reviewer, sources, last verified date */}
+        {/* Module 13: Country reviewer and sources */}
         <section className="mt-10 rounded-3xl bg-slate-100 p-7 md:p-10">
           <h2 className="font-heading text-xl font-bold mb-4 text-[#08263c]">Trust & Verification</h2>
-          <div className="grid gap-4 text-sm text-slate-600 sm:grid-cols-3">
+          <div className="grid gap-4 text-sm text-slate-600 sm:grid-cols-2">
              <div>
                <p className="font-bold uppercase tracking-wider text-xs mb-1">Reviewed By</p>
                <p>{country.reviewerInfo?.name || 'EduExpress Review Team'}</p>
                <p className="text-slate-500">{country.reviewerInfo?.role || 'Compliance'}</p>
-             </div>
-             <div>
-               <p className="font-bold uppercase tracking-wider text-xs mb-1">Last Verified</p>
-               <p>{country.reviewerInfo?.lastVerifiedDate || 'Current'}</p>
              </div>
              <div>
                <p className="font-bold uppercase tracking-wider text-xs mb-1">Primary Sources</p>

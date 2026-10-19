@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "internal": {
+    "checkedAt": "2026-10-19",
+    "reviewStatus": "Official-source research cross-checked; no human editorial approval fabricated.",
+    "requestedCatalogue": "https://www.campuschina.org/scholarships/index.html",
+    "catalogueAccess": "The requested index returned 502 through web retrieval and an empty browser page. A Campus China application PDF was accessible. General CSC guidance was checked through official government republications; no claim that the complete live catalogue was scraped.",
+    "sources": [
+      { "id": "csc-application", "url": "https://www.campuschina.org/Upload/file/20240408/20240408111909_5912.pdf", "publisher": "China Scholarship Council / Campus China", "scope": "Type B scholar application mechanics: account, category, five-digit agency number, university match, supporting files, submission and withdrawal/resubmission. The document's non-degree category and single-university guidance are not generalised to all CSC applications." },
+      { "id": "csc-overview", "url": "https://english.shanghai.gov.cn/en-Individuals-HigherEducation-Scholarships/20260813/305c553a1e5946929d81b3715bff50e0.html", "publisher": "Shanghai Municipal Government, citing CSC", "scope": "Standard full CGS benefits, monthly stipend and policy insurance values; student categories. Values are not a promise for partial or other awards." },
+      { "id": "csc-bilateral", "url": "https://english.shanghai.gov.cn/en-FAQs-StudyinShanghai/20260304/d488b4ae5965420cbd486fa5657f9942.html", "publisher": "Shanghai Municipal Government, republishing CSC guidance", "scope": "Qualifications, age limits, HSK baseline and documents; degree/preparatory period. General institutional criteria can be higher. This guide gives 1000 words for graduate plans, while another overview gives 800: no universal length is published on the page." },
+      { "id": "csc-programmes", "url": "https://studychina.chinaservicesinfo.com/s/202508/06/WS6131d0f1498e6a12c1205424/introduction-to-chinese-government-scholarships.html", "publisher": "China Daily China Services Info, credited to campuschina.org", "scope": "Bilateral/university/designated scheme families and EU/AUN/PIF recipient restrictions. Older generic Great Wall category restrictions are superseded by UNESCO's own programme guidance." },
+      { "id": "bd-csc", "url": "https://bd.china-embassy.gov.cn/eng/sghd/202512/t20251219_11776194.htm", "publisher": "Chinese Embassy in Bangladesh", "scope": "Bangladesh Type A example, degree/language categories and route-specific airfare. Deadline already passed; no dates, live availability or universal airfare entitlement asserted publicly." },
+      { "id": "unesco-great-wall", "url": "https://www.unesco.org/sites/default/files/medias/fichiers/2024/12/Application%20Guidelines%20for%20the%202025-2026%20UNESCO%20China%20-%20the%20Great%20Wall%20Co-sponsored%20Fellowships%20Programme_0.pdf", "publisher": "UNESCO", "scope": "National Commission nomination, invited-country requirement, visiting scholar and listed graduate routes. No quota or open call claimed." },
+      { "id": "nuist-wmo", "url": "https://gjy.nuist.edu.cn/english/NUISTwWMOFellowshipsEducationProgram/list.htm", "publisher": "NUIST", "scope": "Specialist meteorology master/PhD fellowship and annual-review condition; do not equate all WMO schemes with this exact fellowship." },
+      { "id": "sgs", "url": "https://english.shanghai.gov.cn/en-Individuals-HigherEducation-Scholarships/20260813/f1060aadeac645bfa23ac14a0ae29af2.html", "publisher": "Shanghai Municipal Education Commission", "scope": "Shanghai Category A/B coverage, concurrent-award restriction, annual performance/attendance/conduct evaluation, suspension/revocation." },
+      { "id": "clec", "url": "https://english.shanghai.gov.cn/en-ApplyforScholarships/20250320/4761d359cddb44db9ff3dc6e3fcc906e.html", "publisher": "Center for Language Education and Cooperation via Shanghai Government", "scope": "Chinese language teacher education mission, recommending/host institutions, HSK/HSKK requirements varying by programme; not a universal language-course award." },
+      { "id": "mofcom", "url": "https://www.campuschina.org/Upload/file/20180410/20180410110924_1211.pdf", "publisher": "Campus China / MOFCOM programme brochure", "scope": "Selected postgraduate professional-development scheme, programme-specific nomination/benefits. Historical brochure not treated as a live offer." },
+      { "id": "nuist-freshmen", "url": "https://gjy.nuist.edu.cn/english/NUISTExcellentFreshmenScholarship/listm.htm", "publisher": "NUIST", "scope": "Six Excellent Freshmen award tiers; exact amounts/conditions reused from owner-supplied internally preserved brochure dataset." }
+    ]
+  },
+  "standardCsc": {
+    "currency": "CNY",
+    "stipendPeriod": "month",
+    "fullCoverage": ["Tuition waiver", "University dormitory or approved accommodation subsidy", "Monthly living stipend", "Comprehensive medical insurance"],
+    "categories": [
+      { "id": "bachelor", "label": "Bachelor’s", "qualification": "High-school diploma or accepted equivalent; strong academic results", "ageLimitExclusive": 25, "monthlyStipend": 2500 },
+      { "id": "master", "label": "Master’s", "qualification": "Bachelor’s degree or accepted equivalent", "ageLimitExclusive": 35, "monthlyStipend": 3000 },
+      { "id": "phd", "label": "PhD", "qualification": "Master’s degree or accepted equivalent", "ageLimitExclusive": 40, "monthlyStipend": 3500 },
+      { "id": "general-scholar", "label": "General scholar", "qualification": "High-school diploma or higher, with the host’s relevant study prerequisites", "ageLimitExclusive": 45, "monthlyStipend": 3000 },
+      { "id": "senior-scholar", "label": "Senior scholar", "qualification": "Master’s degree or an associate professorship or higher", "ageLimitExclusive": 50, "monthlyStipend": 3500 }
+    ],
+    "insurance": { "annualPolicyValue": 800, "shortProgrammePolicyValue": 400, "shortProgrammeMonthsExclusive": 6, "cashStipend": false },
+    "language": { "chineseGeneralSeniorBaseline": "HSK 3; Chinese-language major exceptions and host rules apply", "chineseMasterPhdBaseline": "HSK 4; the chosen university can require a higher level or score", "otherTeachingLanguages": "Evidence specified by the university and scholarship route; no universal IELTS or MOI waiver" }
+  },
+  "regionalSchemes": [
+    { "name": "EU Programme", "scope": "Students from EU member countries", "receiver": "Relevant China–EU education office" },
+    { "name": "AUN Programme", "scope": "Eligible nationals of ASEAN member countries", "receiver": "ASEAN University Network Secretariat" },
+    { "name": "PIF Programme", "scope": "Eligible applicants from Pacific island countries", "receiver": "Pacific Islands Forum Secretariat" }
+  ]
+}

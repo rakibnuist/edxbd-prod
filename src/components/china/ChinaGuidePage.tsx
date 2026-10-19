@@ -1,22 +1,56 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowRight, Calculator, Check, ChevronDown, CircleAlert, FileCheck2, SearchCheck, ShieldCheck, UserRoundCheck } from 'lucide-react';
-import type { ChinaGuidePage as ChinaGuidePageData } from '@/data/chinaGuidePages';
-import ChinaServicePackages from '@/components/china/ChinaServicePackages';
+import { ArrowRight, ChevronDown, ChevronRight } from 'lucide-react';
+import type { ChinaGuidePage as ChinaGuidePageData, ChinaGuideSection } from '@/data/chinaGuidePages';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
 const canonicalBase = 'https://eduexpressint.com';
+const applyHref = '/apply?country=China';
+const topics = [
+  { label: 'Admission requirements', href: '/china-admission-requirements' },
+  { label: 'Scholarships', href: '/china-scholarships-bangladesh' },
+  { label: 'Costs & budget', href: '/study-in-china-cost-bangladesh' },
+  { label: 'Student visa', href: '/china-student-visa-bangladesh' },
+  { label: 'English & IELTS', href: '/study-in-china-without-ielts' },
+  { label: 'Life in China', href: '/life-in-china-bangladeshi-students' },
+];
+
+const sectionId = (heading: string, index: number) => `guide-${index + 1}-${heading.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+const headingClass = 'text-xl font-semibold leading-snug tracking-tight text-[#102b40] sm:text-2xl';
+const bodyClass = 'text-sm leading-7 text-slate-600 sm:text-[15px] sm:leading-8';
+const buttonClass = 'inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#174f7a] px-4 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-[#103d60] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#174f7a]';
+
+function GuideSection({ section, index }: { section: ChinaGuideSection; index: number }) {
+  return <section id={sectionId(section.heading, index)} className="scroll-mt-36 space-y-4 xl:scroll-mt-44">
+    <h2 className={headingClass}>{section.heading}</h2>
+    <div className="space-y-3">{section.summary.split(/\n\s*\n/).map((paragraph, paragraphIndex) => <p key={paragraphIndex} className={bodyClass}>{paragraph}</p>)}</div>
+    {section.table && <div className="overflow-x-auto rounded-lg border border-slate-200"><table className="w-full min-w-[460px] border-collapse text-left text-sm leading-6"><caption className="sr-only">{section.heading}</caption><thead className="bg-[#f3f6f8]"><tr>{section.table.columns.map((column, columnIndex) => <th key={`${columnIndex}-${column}`} scope="col" className="px-4 py-3 align-top font-semibold text-[#102b40]">{column}</th>)}</tr></thead><tbody>{section.table.rows.map((row, rowIndex) => <tr key={rowIndex} className="border-t border-slate-200">{row.map((cell, cellIndex) => cellIndex === 0 ? <th key={cellIndex} scope="row" className="min-w-[140px] px-4 py-4 align-top font-medium text-slate-800">{cell}</th> : <td key={cellIndex} className="px-4 py-4 align-top text-slate-600">{cell}</td>)}</tr>)}</tbody></table></div>}
+    {section.cards?.length ? <div className={`grid gap-4 ${section.cards.length === 3 ? 'md:grid-cols-3' : 'sm:grid-cols-2'}`}>{section.cards.map((card, cardIndex) => <div key={`${cardIndex}-${card.title}`} className={`rounded-lg bg-[#f2f6f8] p-5 ${section.cards!.length > 1 && section.cards!.length % 2 !== 0 && section.cards!.length !== 3 && cardIndex === section.cards!.length - 1 ? 'sm:col-span-2' : ''}`}><h3 className="text-sm font-semibold leading-6 text-[#102b40]">{card.title}</h3><p className="mt-2 text-sm leading-7 text-slate-600">{card.body}</p></div>)}</div> : null}
+    {section.steps?.length ? <ol className="space-y-5">{section.steps.map((step, stepIndex) => <li key={`${stepIndex}-${step.title}`} className="flex gap-4"><span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-[#eaf2f6] text-xs font-semibold tabular-nums text-[#174f7a]" aria-hidden="true">{stepIndex + 1}</span><div><h3 className="text-sm font-semibold leading-7 text-[#102b40]">{step.title}</h3><p className="mt-1 text-sm leading-7 text-slate-600">{step.body}</p></div></li>)}</ol> : null}
+    {section.disclosures?.length ? <div className="space-y-3">{section.disclosures.map(entry => <details key={entry.title} className="group rounded-lg bg-[#f2f6f8] px-5"><summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-3 text-sm font-semibold leading-7 [&::-webkit-details-marker]:hidden">{entry.title}<ChevronDown size={16} className="shrink-0 text-[#174f7a] transition-transform group-open:rotate-180 motion-reduce:transform-none" aria-hidden="true" /></summary><p className="pb-5 text-sm leading-7 text-slate-600">{entry.body}</p></details>)}</div> : null}
+    {section.items?.length ? <ul className={`grid list-disc gap-x-8 gap-y-2 pl-5 marker:text-[#477a98] ${section.items.length > 3 && section.items.every(item => item.length < 150) ? 'sm:grid-cols-2' : ''}`}>{section.items.map((item, itemIndex) => <li key={`${itemIndex}-${item}`} className="pl-1 text-sm leading-7 text-slate-600">{item}</li>)}</ul> : null}
+  </section>;
+}
+
+function ApplyLink({ className = '' }: { className?: string }) {
+  return <Link href={applyHref} className={`${buttonClass} ${className}`}>Apply with EduExpress International<ArrowRight size={16} className="shrink-0" aria-hidden="true" /></Link>;
+}
 
 export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageData }) {
   const servicePackages = guide.slug === 'china-visa-first-policy'
     ? (await getPublicTrustRecords()).servicePackages.filter(item => item.destination === 'China')
     : [];
   const canonical = `${canonicalBase}/${guide.slug}`;
+  const contents = [
+    ...guide.sections.map((section, index) => ({ label: section.heading, href: `#${sectionId(section.heading, index)}` })),
+    ...(servicePackages.length ? [{ label: 'EduExpress service packages', href: '#service-packages' }] : []),
+    ...(guide.faqs.length ? [{ label: 'Frequently asked questions', href: '#guide-faq' }] : []),
+  ];
+  const related = [...new Map([...guide.related, ...topics].filter(item => item.href !== `/${guide.slug}`).map(item => [item.href, item])).values()];
   const structuredData = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: guide.title, description: guide.description, dateModified: '2026-07-19', inLanguage: 'en-BD', reviewedBy: { '@id': 'https://eduexpressint.com/#organization' } },
-      { '@type': 'FAQPage', '@id': `${canonical}#faq`, mainEntity: guide.faqs.map(item => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })) },
+      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: guide.title, description: guide.description, inLanguage: 'en-BD', isPartOf: { '@id': `${canonicalBase}/#website` } },
+      ...(guide.faqs.length ? [{ '@type': 'FAQPage', '@id': `${canonical}#faq`, mainEntity: guide.faqs.map(item => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })) }] : []),
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: `${canonicalBase}/` },
         { '@type': 'ListItem', position: 2, name: 'Study in China', item: `${canonicalBase}/study-in-china-from-bangladesh` },
@@ -25,116 +59,38 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
     ],
   };
 
-  return (
-    <article className="bg-[#f6f9fb] pt-[76px] text-[#08263c] min-[1200px]:pt-[104px]">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+  return <article className="bg-[#f5f7f7] pb-12 pt-[76px] text-[#102b40] xl:pt-[112px]">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }} />
+    <header className="bg-white"><div className="mx-auto max-w-[1200px] px-5 pb-8 pt-6 sm:px-8 lg:pb-9 lg:pt-7">
+      <nav aria-label="Breadcrumb" className="mb-5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-5 text-slate-500"><Link href="/" className="hover:text-[#174f7a]">Home</Link><ChevronRight size={12} aria-hidden="true" /><Link href="/study-in-china-from-bangladesh" className="hover:text-[#174f7a]">Study in China</Link><ChevronRight size={12} aria-hidden="true" /><span className="text-slate-700">{guide.title}</span></nav>
+      <div className="max-w-4xl"><h1 className="text-[30px] font-semibold leading-[1.18] tracking-tight sm:text-[36px] lg:text-[40px]">{guide.title}</h1><p className="mt-4 max-w-3xl text-[15px] leading-8 text-slate-600 sm:text-base">{guide.directAnswer}</p></div>
+      <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3"><ApplyLink /><Link href="/universities?country=china" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#174f7a] hover:underline">Explore Chinese universities<ArrowRight size={15} aria-hidden="true" /></Link></div>
+      {guide.facts.length ? <dl className="mt-7 grid gap-x-6 gap-y-5 rounded-lg bg-[#f2f6f8] p-5 sm:grid-cols-3">{guide.facts.map((fact, index) => <div key={`${index}-${fact.label}`}><dt className="text-xs font-medium leading-5 text-slate-600">{fact.label}</dt><dd className="mt-1.5 text-lg font-semibold leading-7 tracking-tight text-[#102b40]">{fact.value}</dd><dd className="mt-1 text-xs leading-6 text-slate-500">{fact.note}</dd></div>)}</dl> : null}
+    </div></header>
 
-      <header className="relative overflow-hidden bg-[#08263c] text-white">
-        <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
-          <Image src="/emblem-icon.png" width={450} height={450} alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
+    <nav aria-label="China study topics" className="border-y border-slate-200 bg-white"><div className="mx-auto flex max-w-[1200px] gap-6 overflow-x-auto px-5 sm:px-8">{topics.map(topic => <Link key={topic.href} href={topic.href} aria-current={topic.href === `/${guide.slug}` ? 'page' : undefined} className={`inline-flex min-h-12 shrink-0 items-center border-b-2 text-sm font-medium ${topic.href === `/${guide.slug}` ? 'border-[#174f7a] text-[#174f7a]' : 'border-transparent text-slate-600 hover:text-[#174f7a]'}`}>{topic.label}</Link>)}</div></nav>
+
+    {/* 1200px frame minus 64px padding = 1136px: 220px contents + 40px gap + 876px article. */}
+    <div className="mx-auto grid max-w-[1200px] items-start gap-7 px-5 pt-7 sm:px-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-10 lg:pt-9">
+      <aside className="min-w-0 lg:sticky lg:top-36 lg:max-h-[calc(100svh-160px)] lg:overflow-y-auto lg:pr-2">
+        <details className="rounded-lg border border-slate-200 bg-white lg:hidden"><summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 px-4 text-sm font-semibold">On this page<ChevronDown size={16} aria-hidden="true" /></summary><nav aria-label="Guide contents" className="px-4 pb-3">{contents.map(item => <a key={item.href} href={item.href} className="flex min-h-11 items-center py-2 text-sm leading-6 text-slate-600 hover:text-[#174f7a]">{item.label}</a>)}</nav></details>
+        <div className="hidden lg:block"><nav aria-label="Guide contents"><h2 className="mb-3 text-sm font-semibold">On this page</h2><div className="space-y-1">{contents.map(item => <a key={item.href} href={item.href} className="flex min-h-11 items-center rounded-md px-3 py-2 text-sm leading-6 text-slate-600 transition-colors hover:bg-[#edf3f6] hover:text-[#174f7a]">{item.label}</a>)}</div></nav><div className="mt-6 rounded-lg bg-[#eaf2f6] p-4"><h2 className="text-base font-semibold leading-6">Plan your next step</h2><p className="mt-2 text-sm leading-7 text-slate-600">Get help matching your subject, qualifications and budget to a study route.</p><ApplyLink className="mt-4 w-full text-xs leading-6" /><Link href="/china-visa-first-policy" className="mt-3 inline-flex min-h-11 items-center gap-2 text-xs font-semibold leading-6 text-[#174f7a] hover:underline">Our China service terms<ArrowRight size={14} className="shrink-0" aria-hidden="true" /></Link></div></div>
+      </aside>
+
+      <div className="min-w-0 space-y-7">
+        <div className="space-y-10 rounded-xl border border-slate-200 bg-white p-5 sm:p-7 lg:p-8">
+          {guide.sections.map((section, index) => <GuideSection key={`${index}-${section.heading}`} section={section} index={index} />)}
+          {guide.slug === 'study-in-china-cost-bangladesh' ? <section className="rounded-lg bg-[#eaf2f6] p-5"><h2 className="text-lg font-semibold leading-7">Build your university budget</h2><p className="mt-2 text-sm leading-7 text-slate-600">Choose a university and program to use ClearCost. Compare listed scholarship reductions, separate before-China and in-China payments, and include your EduExpress Package in its published currency.</p><Link href="/universities?country=china" className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#174f7a] hover:underline">Find a university & open ClearCost<ArrowRight size={16} className="shrink-0" aria-hidden="true" /></Link></section> : null}
+
+          {servicePackages.length ? <section id="service-packages" className="scroll-mt-36 xl:scroll-mt-44"><h2 className={headingClass}>EduExpress China service packages</h2><p className={`mt-3 ${bodyClass}`}>The university award defines your scholarship coverage. Your EduExpress Package defines the agreed support, service fee and responsibilities.</p><div className="mt-5 space-y-4">{servicePackages.map(item => <article key={item.id} className="rounded-lg border border-slate-200 p-5"><div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2"><h3 className="max-w-md text-base font-semibold leading-7">{item.title}</h3><p className="text-base font-semibold tabular-nums text-[#174f7a]">{item.priceLabel}</p></div><p className="mt-3 text-sm leading-7 text-slate-600">{item.summary}</p>{item.outcomeScope && <p className="mt-2 text-sm leading-7 text-slate-600">{item.outcomeScope}</p>}<details className="group mt-3"><summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-[#174f7a]">Included support, payment & return terms<ChevronDown size={16} className="shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" /></summary><div className="mt-3 space-y-5">{[['Included support', item.includedItems], ['Paid separately', item.excludedItems], ['Payment protection', item.securityOptions]].map(([label, values]) => (values as string[]).length ? <div key={label as string}><h4 className="text-sm font-semibold">{label as string}</h4><ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-7 text-slate-600">{(values as string[]).map((value, index) => <li key={`${index}-${value}`} className="pl-1">{value}</li>)}</ul></div> : null)}{[['Payment terms', item.paymentTerms], ['Return terms', item.refundTerms], ['Responsibilities', item.complianceNote]].map(([label, value]) => value ? <div key={label}><h4 className="text-sm font-semibold">{label}</h4><p className="mt-2 text-sm leading-7 text-slate-600">{value}</p></div> : null)}</div></details></article>)}</div></section> : null}
+
+          {(guide.changeRisks.length || guide.notSuitable.length) ? <section className="grid gap-6 rounded-lg bg-[#f5f7f6] p-5 sm:grid-cols-2">{guide.changeRisks.length ? <div><h2 className="text-base font-semibold leading-7">Confirm for your chosen route</h2><ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-600">{guide.changeRisks.map((item, index) => <li key={`${index}-${item}`} className="pl-1">{item}</li>)}</ul></div> : null}{guide.notSuitable.length ? <div><h2 className="text-base font-semibold leading-7">A good fit for your plans</h2><ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-600">{guide.notSuitable.map((item, index) => <li key={`${index}-${item}`} className="pl-1">{item}</li>)}</ul></div> : null}</section> : null}
+
+          {guide.faqs.length ? <section id="guide-faq" className="scroll-mt-36 xl:scroll-mt-44"><h2 className={headingClass}>Frequently asked questions</h2><div className="mt-4 divide-y divide-slate-200">{guide.faqs.map((faq, index) => <details key={`${index}-${faq.question}`} className="group"><summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-sm font-semibold leading-7 text-[#102b40]">{faq.question}<ChevronDown size={16} className="shrink-0 text-[#174f7a] transition-transform group-open:rotate-180" aria-hidden="true" /></summary><p className="pb-5 pr-6 text-sm leading-7 text-slate-600">{faq.answer}</p></details>)}</div></section> : null}
         </div>
-        <div className="absolute bottom-0 left-[38%] h-44 w-px bg-gradient-to-b from-transparent to-[#64b5df]/50" />
-        <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.68fr_.32fr] lg:items-end lg:py-16">
-          <div>
-            <nav aria-label="Breadcrumb" className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/50"><Link href="/">Home</Link> <span aria-hidden="true">/</span> <Link href="/study-in-china-from-bangladesh">Study in China</Link> <span aria-hidden="true">/</span> {guide.code}</nav>
-            <p className="mt-8 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">{guide.eyebrow}</p>
-            <h1 className="mt-4 max-w-5xl text-balance font-heading text-4xl font-bold leading-tight sm:text-6xl">{guide.title}</h1>
-            <p className="mt-6 max-w-4xl text-base leading-8 text-white/75">{guide.directAnswer}</p>
-          </div>
-          <div className="grid gap-px bg-white/15">
-            {guide.facts.map(item => <div key={item.label} className="grid grid-cols-[6rem_1fr] bg-[#08263c] p-4"><strong className="font-heading text-2xl text-[#8ed0ee]">{item.value}</strong><span><b className="block text-xs">{item.label}</b><small className="mt-1 block text-[10px] leading-4 text-white/45">{item.note}</small></span></div>)}
-          </div>
-        </div>
-      </header>
-
-      <nav aria-label="China guide navigation" className="border-b border-[#174f7a]/15 bg-white">
-        <div className="mx-auto flex max-w-[1440px] gap-px overflow-x-auto bg-[#174f7a]/15 px-5 sm:px-8 lg:px-12">
-          {[
-            ['Universities', '/china-universities'],
-            ['Scholarships', '/china-scholarships-bangladesh'],
-            ['Visa', '/china-student-visa-bangladesh'],
-            ['Costs', '/study-in-china-cost-bangladesh'],
-            ['Without IELTS', '/study-in-china-without-ielts'],
-            ['MBBS', '/mbbs-in-china-bangladesh'],
-            ['Intakes', '/china-intakes-deadlines'],
-            ['Student life', '/life-in-china-bangladeshi-students'],
-            ['Success stories', '/china-success-stories'],
-          ].map(([label, href]) => <Link key={href} href={href} className={`shrink-0 bg-white px-4 py-4 text-xs font-black ${href === `/${guide.slug}` ? 'text-[#174f7a] shadow-[inset_0_-3px_0_#174f7a]' : 'text-slate-500 hover:bg-[#e9f7fd]'}`}>{label}</Link>)}
-        </div>
-      </nav>
-
-      {guide.slug === 'china-visa-first-policy' ? <ChinaServicePackages packages={servicePackages} /> : null}
-
-      <section className="mx-auto grid max-w-[1440px] gap-8 px-5 py-14 sm:px-8 lg:grid-cols-[.28fr_.72fr] lg:px-12 lg:py-20">
-        <aside>
-          <div className="sticky top-32 border-t-4 border-[#174f7a] bg-[#e9f7fd] p-5">
-            <SearchCheck size={25} className="text-[#174f7a]" />
-            <h2 className="mt-5 font-heading text-2xl font-bold">What this guide does</h2>
-            <p className="mt-3 text-sm leading-6 text-slate-600">It connects the decision, current official sources, costs and responsibilities in one practical explanation.</p>
-          </div>
-        </aside>
-
-        <div className="grid gap-3">
-          {guide.sections.map((section, index) => (
-            <details key={section.heading} open={index === 0} className="group rounded-2xl border border-[#174f7a]/15 bg-white open:shadow-[0_14px_40px_rgba(8,38,60,.08)]">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-5 p-5 sm:p-6">
-                <span className="flex items-center gap-4"><span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#e9f7fd] text-[10px] font-black text-[#174f7a]">{String(index + 1).padStart(2, '0')}</span><h2 className="font-heading text-xl font-bold sm:text-2xl">{section.heading}</h2></span>
-                <ChevronDown size={19} className="shrink-0 text-[#174f7a] transition group-open:rotate-180" />
-              </summary>
-              <div className="border-t border-[#174f7a]/10 px-5 pb-6 pt-5 sm:px-6">
-                <p className="mt-3 text-sm leading-7 text-slate-600">{section.summary}</p>
-                {section.items?.length ? <ul className="mt-5 grid gap-2 sm:grid-cols-2">{section.items.map(item => <li key={item} className="flex gap-3 bg-[#f6f9fb] p-3 text-xs leading-5 text-slate-600"><Check size={15} className="mt-0.5 shrink-0 text-[#174f7a]" />{item}</li>)}</ul> : null}
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      {guide.slug === 'study-in-china-cost-bangladesh' ? <section className="mx-auto max-w-[1440px] px-5 pb-14 sm:px-8 lg:px-12 lg:pb-20"><div className="grid items-center gap-6 rounded-3xl border-2 border-[#08263c] bg-white p-6 sm:p-8 lg:grid-cols-[auto_1fr_auto]"><Calculator size={36} className="text-[#174f7a]" /><div><h2 className="font-heading text-2xl font-bold">Costs vary by university, program and scholarship</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">A single average number can be misleading. Open a specific university to see its real tuition, apply an available scholarship and get an exact, itemized ClearCost estimate you can download as a PDF.</p></div><Link href="/universities" className="flex min-h-13 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#08263c] px-6 text-sm font-black text-white">Open ClearCost by university <ArrowRight size={16} /></Link></div></section> : null}
-
-      <section className="bg-[#e9f7fd]">
-        <div className="mx-auto grid max-w-[1440px] gap-6 px-5 py-14 sm:px-8 lg:px-12 lg:grid-cols-2 lg:py-20">
-          <article className="border-t-4 border-amber-500 bg-white p-6 sm:p-8">
-            <CircleAlert size={27} className="text-amber-600" />
-            <h2 className="mt-5 font-heading text-2xl font-bold">Details tied to your selected route</h2>
-            <ul className="mt-5 grid gap-3">{guide.changeRisks.map(item => <li key={item} className="flex gap-3 text-sm leading-6 text-slate-600"><span className="mt-2 size-1.5 shrink-0 rounded-full bg-amber-500" />{item}</li>)}</ul>
-          </article>
-          <article className="border-t-4 border-[#174f7a] bg-white p-6 sm:p-8">
-            <UserRoundCheck size={27} className="text-[#174f7a]" />
-            <h2 className="mt-5 font-heading text-2xl font-bold">A strong fit for this route</h2>
-            <ul className="mt-5 grid gap-3">{guide.notSuitable.map(item => <li key={item} className="flex gap-3 text-sm leading-6 text-slate-600"><Check size={15} className="mt-1.5 shrink-0 text-[#174f7a]" />{item}</li>)}</ul>
-          </article>
-        </div>
-      </section>
-
-      <section className="bg-white">
-        <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6 lg:py-20">
-          <p className="text-center font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Questions before action</p>
-          <h2 className="mt-3 text-center font-heading text-3xl font-bold sm:text-5xl">Frequently asked questions</h2>
-          <div className="mt-9 grid gap-3">{guide.faqs.map((item, index) => <details key={item.question} className="group border border-[#174f7a]/15 bg-[#f6f9fb] p-5 open:bg-white open:shadow-[0_15px_45px_rgba(8,38,60,0.08)]"><summary className="flex cursor-pointer list-none items-start justify-between gap-5 font-heading text-base font-bold"><span className="flex gap-4"><span className="font-mono text-[9px] text-[#174f7a]">0{index + 1}</span>{item.question}</span><span className="grid size-7 shrink-0 place-items-center bg-[#e9f7fd] text-[#174f7a] transition group-open:rotate-45">+</span></summary><p className="mt-4 max-w-3xl pl-8 text-sm leading-7 text-slate-600">{item.answer}</p></details>)}</div>
-        </div>
-      </section>
-
-      <section className="bg-[#08263c] text-white">
-        <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.68fr_.32fr] lg:items-center">
-          <div><p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Next useful step</p><h2 className="mt-3 text-balance font-heading text-3xl font-bold sm:text-4xl">{guide.ctaTitle}</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-white/65">{guide.ctaText}</p></div>
-          <Link href="/study-in-china-from-bangladesh#china-fit-form" className="flex min-h-14 items-center justify-center gap-2 bg-[#64b5df] px-5 text-sm font-black text-[#08263c]">Get My China Fit Assessment <ArrowRight size={17} /></Link>
-        </div>
-      </section>
-
-      <section className="border-b border-[#174f7a]/15 bg-[#f6f9fb]">
-        <div className="mx-auto grid max-w-[1440px] gap-8 px-5 py-10 sm:px-8 lg:px-12 lg:grid-cols-2">
-          <div>
-            <p className="flex items-center gap-2 font-mono text-[9px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><FileCheck2 size={14} /> Related China decisions</p>
-            <div className="mt-4 grid gap-px bg-[#174f7a]/15 sm:grid-cols-2">{guide.related.map(item => <Link key={item.href} href={item.href} className="flex items-center justify-between gap-3 bg-white p-3 text-xs font-black hover:bg-[#e9f7fd]">{item.label}<ArrowRight size={14} className="text-[#174f7a]" /></Link>)}</div>
-          </div>
-          <div>
-            <p className="flex items-center gap-2 font-mono text-[9px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><ShieldCheck size={14} /> Official sources</p>
-            <div className="mt-4 grid gap-2">{guide.sources.map(source => <a key={source.href} href={source.href} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 border-b border-[#174f7a]/15 bg-white p-3 text-xs font-bold text-[#174f7a] hover:bg-[#e9f7fd]">{source.label}<ArrowRight size={14} /></a>)}</div>
-          </div>
-          <div className="lg:col-span-2 flex flex-wrap items-center justify-between gap-3 border-t border-[#174f7a]/15 pt-5 text-[10px] leading-5 text-slate-500"><span><strong className="text-[#08263c]">Owned by:</strong> EduExpress China Admissions Desk</span><span><strong className="text-[#08263c]">Information standard:</strong> Official sources, written costs and clear responsibilities</span></div>
-        </div>
-      </section>
-    </article>
-  );
+        <section className="rounded-xl bg-[#eaf2f6] p-5 sm:p-7"><h2 className={headingClass}>{guide.ctaTitle}</h2><p className={`mt-3 ${bodyClass}`}>{guide.ctaText}</p><ApplyLink className="mt-5" /></section>
+        <nav aria-label="Related China guides" className="rounded-xl border border-slate-200 bg-white p-5 sm:p-7"><h2 className="text-lg font-semibold">Continue exploring China</h2><div className="mt-3 grid gap-x-6 sm:grid-cols-2">{related.map(item => <Link key={item.href} href={item.href} className="flex min-h-12 items-center justify-between gap-4 py-2 text-sm font-medium leading-6 text-[#174f7a] hover:underline">{item.label}<ArrowRight size={15} className="shrink-0" aria-hidden="true" /></Link>)}</div></nav>
+      </div>
+    </div>
+  </article>;
 }

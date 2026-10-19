@@ -1,0 +1,814 @@
+{
+  "version": 1,
+  "editorialStatus": "Source research completed; human education and compliance review pending",
+  "universities": [
+    {
+      "slug": "jiangsu-university-of-science-and-technology",
+      "name": "Jiangsu University of Science and Technology",
+      "city": "Zhenjiang",
+      "province": "Jiangsu",
+      "officialUrl": "https://admission.just.edu.cn/",
+      "cycle": "2026 guide — application window closed",
+      "overview": "Compare the computer science and business routes in the university’s published international admissions guide.",
+      "facts": [
+        [
+          "Bachelor’s options",
+          "Computer Science and Technology; Business Administration. Four years."
+        ],
+        [
+          "Language evidence",
+          "Undergraduate English route: IELTS 5.5 or TOEFL iBT 75; Chinese route: recent HSK 4."
+        ],
+        [
+          "Recorded application window",
+          "10 April–10 June 2026; closed."
+        ]
+      ],
+      "fees": [
+        [
+          "English bachelor’s tuition",
+          "CNY 11,250 / academic year"
+        ],
+        [
+          "Application",
+          "CNY 400"
+        ],
+        [
+          "Double-room accommodation",
+          "CNY 3,000 / academic year"
+        ],
+        [
+          "Insurance estimate",
+          "CNY 600 / academic year"
+        ]
+      ],
+      "sources": [
+        {
+          "label": "2026 international admissions guide",
+          "url": "https://admission.just.edu.cn/2026/0409/c10116a372087/page.htm"
+        }
+      ],
+      "checks": [
+        "English undergraduate classes depend on minimum enrollment.",
+        "Awards require selection; a scholarship and an admission are separate decisions.",
+        "Confirm new-cycle requirements before using these historical figures."
+      ],
+      "programs": [
+        {
+          "level": "Bachelor",
+          "name": "Computer Science and Technology",
+          "subject": "Computer science",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 11,250 / academic year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-06-10",
+          "eligibility": [
+            "2026 undergraduate route: high-school qualification; age no more than 24.",
+            "2026 English evidence: IELTS 5.5 or TOEFL iBT 75, with interview for non-native English speakers.",
+            "Class opening depends on minimum enrollment."
+          ],
+          "sourceUrl": "https://admission.just.edu.cn/2026/0409/c10116a372087/page.htm",
+          "status": "planned"
+        },
+        {
+          "level": "Bachelor",
+          "name": "Bachelor of Business Administration (BBA)",
+          "subject": "Business",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 11,250 / academic year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-06-10",
+          "eligibility": [
+            "2026 undergraduate route: high-school qualification; age no more than 24.",
+            "2026 English evidence: IELTS 5.5 or TOEFL iBT 75, with interview for non-native English speakers.",
+            "Class opening depends on minimum enrollment."
+          ],
+          "sourceUrl": "https://admission.just.edu.cn/2026/0409/c10116a372087/page.htm",
+          "status": "planned"
+        }
+      ],
+      "checkedAt": "2026-10-19",
+      "nextReviewAt": "2027-01-19",
+      "replaceProgramListing": true
+    },
+    {
+      "slug": "jiangsu-university-of-technology",
+      "name": "Jiangsu University of Technology",
+      "city": "Changzhou",
+      "province": "Jiangsu",
+      "officialUrl": "https://lxszs.jsut.edu.cn/",
+      "cycle": "2026 guide — application window closed",
+      "overview": "JSUT’s guide separates four-year undergraduate study, postgraduate study, language study and transfer routes.",
+      "facts": [
+        [
+          "Four-year undergraduate options",
+          "International Economics and Trade; Cross-border E-commerce; Energy Storage Science and Engineering."
+        ],
+        [
+          "Teaching language",
+          "The listed four-year majors offer English/Chinese instruction."
+        ],
+        [
+          "English evidence",
+          "IELTS 5.5, TOEFL 60, or the university’s English assessment under the guide."
+        ],
+        [
+          "Chinese evidence",
+          "HSK 4 with at least 180."
+        ],
+        [
+          "Recorded window",
+          "10 May–10 July 2026; closed."
+        ]
+      ],
+      "fees": [
+        [
+          "Application",
+          "CNY 500"
+        ],
+        [
+          "Arts/history bachelor’s tuition",
+          "CNY 14,000 / academic year"
+        ],
+        [
+          "Science/engineering bachelor’s tuition",
+          "CNY 16,000 / academic year"
+        ],
+        [
+          "Art bachelor’s tuition",
+          "CNY 18,000 / academic year"
+        ]
+      ],
+      "sources": [
+        {
+          "label": "2026 international enrollment guide",
+          "url": "https://lxszs.jsut.edu.cn/2026/0509/c6101a212137/pagem.htm"
+        }
+      ],
+      "checks": [
+        "Confirm instruction language for the exact major and class.",
+        "Transfer-entry requirements differ from first-year undergraduate admission.",
+        "Request the next-cycle fee schedule and scholarship conditions."
+      ],
+      "programs": [
+        {
+          "level": "Bachelor",
+          "name": "International Economics and Trade",
+          "subject": "Business",
+          "languages": [
+            "English",
+            "Chinese"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 14,000 / academic year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-07-10",
+          "eligibility": [
+            "2026 English route: IELTS 5.5, TOEFL 60, or school assessment. Chinese route: HSK 4, at least 180.",
+            "High-school qualification; confirm class language and exact major requirements."
+          ],
+          "sourceUrl": "https://lxszs.jsut.edu.cn/2026/0509/c6101a212137/pagem.htm",
+          "status": "planned"
+        },
+        {
+          "level": "Bachelor",
+          "name": "Cross-border E-commerce",
+          "subject": "Business",
+          "languages": [
+            "English",
+            "Chinese"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 14,000 / academic year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-07-10",
+          "eligibility": [
+            "2026 English route: IELTS 5.5, TOEFL 60, or school assessment. Chinese route: HSK 4, at least 180.",
+            "High-school qualification; confirm class language and exact major requirements."
+          ],
+          "sourceUrl": "https://lxszs.jsut.edu.cn/2026/0509/c6101a212137/pagem.htm",
+          "status": "planned"
+        },
+        {
+          "level": "Bachelor",
+          "name": "Energy Storage Science and Engineering",
+          "subject": "Engineering",
+          "languages": [
+            "English",
+            "Chinese"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 16,000 / academic year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-07-10",
+          "eligibility": [
+            "2026 English route: IELTS 5.5, TOEFL 60, or school assessment. Chinese route: HSK 4, at least 180.",
+            "High-school qualification; confirm class language and exact major requirements."
+          ],
+          "sourceUrl": "https://lxszs.jsut.edu.cn/2026/0509/c6101a212137/pagem.htm",
+          "status": "planned"
+        }
+      ],
+      "checkedAt": "2026-10-19",
+      "nextReviewAt": "2027-01-19",
+      "replaceProgramListing": true
+    },
+    {
+      "slug": "zhejiang-normal-university",
+      "name": "Zhejiang Normal University",
+      "city": "Jinhua",
+      "province": "Zhejiang",
+      "officialUrl": "https://iso.zjnu.edu.cn/",
+      "cycle": "2026 undergraduate guide — application window closed",
+      "overview": "The undergraduate guide gives separate tuition, housing, meals and insurance figures, useful for checking the full budget.",
+      "facts": [
+        [
+          "Academic preparation",
+          "High-school completion, language evidence and a CSCA score report."
+        ],
+        [
+          "Program length",
+          "Four to five years, depending on the major."
+        ],
+        [
+          "Recorded window",
+          "1 March–15 July 2026; closed."
+        ],
+        [
+          "Accommodation rule",
+          "First-year students must live on campus under this guide."
+        ]
+      ],
+      "fees": [
+        [
+          "Tuition",
+          "CNY 18,000 / academic year"
+        ],
+        [
+          "Double-room housing",
+          "CNY 450–600 / person / month"
+        ],
+        [
+          "Meals estimate",
+          "About CNY 1,000 / month"
+        ],
+        [
+          "Insurance",
+          "CNY 1,000 / year"
+        ],
+        [
+          "Application",
+          "CNY 400; non-refundable"
+        ]
+      ],
+      "sources": [
+        {
+          "label": "2026 undergraduate guide",
+          "url": "https://wsc.zjnu.edu.cn/2025/0427/c19262a516441/page.htm"
+        }
+      ],
+      "checks": [
+        "Housing depends on room allocation.",
+        "Confirm major-specific language and CSCA subjects in the official catalogue.",
+        "Do not carry the closed application dates into another year."
+      ],
+      "programs": [],
+      "checkedAt": "2026-10-19",
+      "nextReviewAt": "2027-01-19"
+    },
+    {
+      "slug": "nuaa",
+      "name": "Nanjing University of Aeronautics and Astronautics",
+      "city": "Nanjing",
+      "province": "Jiangsu",
+      "officialUrl": "https://cie.nuaa.edu.cn/",
+      "cycle": "2026 undergraduate guide — application window closed",
+      "overview": "NUAA publishes engineering and business routes with separate annual tuition and scholarship renewal conditions.",
+      "facts": [
+        [
+          "Example majors",
+          "Aeronautical Engineering, Artificial Intelligence, Mechanical Engineering, International Business."
+        ],
+        [
+          "CSCA",
+          "Engineering: mathematics and physics; business: mathematics, in English."
+        ],
+        [
+          "English evidence",
+          "IELTS 6.0, TOEFL 80 or equivalent proficiency evidence in the guide."
+        ],
+        [
+          "Award duration",
+          "Fly-High and Nanjing Government awards are single-year awards in the 2026 guide."
+        ],
+        [
+          "Recorded deadline",
+          "30 May 2026; closed."
+        ]
+      ],
+      "fees": [
+        [
+          "Engineering tuition",
+          "CNY 23,900 / year"
+        ],
+        [
+          "Business tuition",
+          "CNY 22,900 / year"
+        ],
+        [
+          "Dormitory",
+          "CNY 4,000–14,000 / year by room category"
+        ],
+        [
+          "Application",
+          "CNY 400; non-refundable"
+        ]
+      ],
+      "sources": [
+        {
+          "label": "2026 undergraduate admission brochure",
+          "url": "https://cie.nuaa.edu.cn/2025/1121/c16499a388281/page.htm"
+        }
+      ],
+      "checks": [
+        "A first-year tuition waiver does not fund the whole degree.",
+        "Check the degree title, class language and later-year costs.",
+        "Medical and professional recognition need separate checks where applicable."
+      ],
+      "programs": [
+        {
+          "level": "Bachelor",
+          "name": "Aeronautical Engineering",
+          "subject": "Engineering",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 23,900 / year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-05-30",
+          "eligibility": [
+            "2026 guide: IELTS 6.0, TOEFL 80 or equivalent English proficiency evidence.",
+            "CSCA mathematics and physics."
+          ],
+          "sourceUrl": "https://cie.nuaa.edu.cn/2025/1121/c16499a388281/page.htm",
+          "status": "planned"
+        },
+        {
+          "level": "Bachelor",
+          "name": "Artificial Intelligence",
+          "subject": "Engineering",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 23,900 / year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-05-30",
+          "eligibility": [
+            "2026 guide: IELTS 6.0, TOEFL 80 or equivalent English proficiency evidence.",
+            "CSCA mathematics and physics."
+          ],
+          "sourceUrl": "https://cie.nuaa.edu.cn/2025/1121/c16499a388281/page.htm",
+          "status": "planned"
+        },
+        {
+          "level": "Bachelor",
+          "name": "Mechanical Engineering",
+          "subject": "Engineering",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 23,900 / year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-05-30",
+          "eligibility": [
+            "2026 guide: IELTS 6.0, TOEFL 80 or equivalent English proficiency evidence.",
+            "CSCA mathematics and physics."
+          ],
+          "sourceUrl": "https://cie.nuaa.edu.cn/2025/1121/c16499a388281/page.htm",
+          "status": "planned"
+        },
+        {
+          "level": "Bachelor",
+          "name": "Electrical & Electronic Engineering",
+          "subject": "Engineering",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 23,900 / year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-05-30",
+          "eligibility": [
+            "2026 guide: IELTS 6.0, TOEFL 80 or equivalent English proficiency evidence.",
+            "CSCA mathematics and physics."
+          ],
+          "sourceUrl": "https://cie.nuaa.edu.cn/2025/1121/c16499a388281/page.htm",
+          "status": "planned"
+        },
+        {
+          "level": "Bachelor",
+          "name": "International Business",
+          "subject": "Business",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 22,900 / year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-05-30",
+          "eligibility": [
+            "2026 guide: IELTS 6.0, TOEFL 80 or equivalent English proficiency evidence.",
+            "CSCA mathematics."
+          ],
+          "sourceUrl": "https://cie.nuaa.edu.cn/2025/1121/c16499a388281/page.htm",
+          "status": "planned"
+        },
+        {
+          "level": "Bachelor",
+          "name": "Civil Engineering",
+          "subject": "Engineering",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 23,900 / year (2026 guide)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-05-30",
+          "eligibility": [
+            "2026 guide: IELTS 6.0, TOEFL 80 or equivalent English proficiency evidence.",
+            "CSCA mathematics and physics."
+          ],
+          "sourceUrl": "https://cie.nuaa.edu.cn/2025/1121/c16499a388281/page.htm",
+          "status": "planned"
+        }
+      ],
+      "checkedAt": "2026-10-19",
+      "nextReviewAt": "2027-01-19",
+      "replaceProgramListing": true
+    },
+    {
+      "slug": "nuist",
+      "name": "Nanjing University of Information Science and Technology",
+      "city": "Nanjing",
+      "province": "Jiangsu",
+      "officialUrl": "https://gjy.nuist.edu.cn/",
+      "cycle": "2027 catalogue links; published fee schedule",
+      "overview": "NUIST’s official pages now link 2027 catalogues and list CSCA subjects by teaching language and subject group.",
+      "facts": [
+        [
+          "English undergraduate CSCA",
+          "Science/engineering/agriculture: mathematics and physics; humanities/economics/management: mathematics."
+        ],
+        [
+          "Chinese undergraduate CSCA",
+          "Subjects include academic Chinese; chemistry/materials routes specify chemistry."
+        ],
+        [
+          "Doctoral route",
+          "September intake; four years or longer, Chinese or English."
+        ]
+      ],
+      "fees": [
+        [
+          "Undergraduate tuition",
+          "CNY 15,000 / year"
+        ],
+        [
+          "Master’s tuition",
+          "CNY 20,000 / year"
+        ],
+        [
+          "Doctoral tuition",
+          "CNY 25,000 / year"
+        ],
+        [
+          "Twin-room accommodation",
+          "CNY 2,000–2,500 / year"
+        ],
+        [
+          "Single-room accommodation",
+          "CNY 4,000 / year"
+        ],
+        [
+          "Application",
+          "CNY 500; non-refundable"
+        ],
+        [
+          "Insurance",
+          "CNY 600 / year"
+        ]
+      ],
+      "sources": [
+        {
+          "label": "Undergraduate catalogue and CSCA subjects",
+          "url": "https://gjy.nuist.edu.cn/english/BachelorPrograms_3745/listm.htm"
+        },
+        {
+          "label": "Official fees and payment",
+          "url": "https://gjy.nuist.edu.cn/english/FeeswPayment/listm.htm"
+        },
+        {
+          "label": "Doctoral study information",
+          "url": "https://gjy.nuist.edu.cn/english/PhwDPrograms/listm.htm"
+        }
+      ],
+      "checks": [
+        "A catalogue listing alone does not confirm that applications are open.",
+        "Check the program list, supervisor consent where required, and current deadlines.",
+        "Room availability and deposits must be checked separately."
+      ],
+      "programs": [],
+      "checkedAt": "2026-10-19",
+      "nextReviewAt": "2027-01-19"
+    },
+    {
+      "slug": "lyu",
+      "name": "Linyi University",
+      "city": "Linyi",
+      "province": "Shandong",
+      "officialUrl": "https://www.lyu.edu.cn/",
+      "cycle": "2026 brochure link located; fee details require confirmation",
+      "overview": "Linyi’s official international school links its admission brochure, application portal, scholarship section and student-life information.",
+      "facts": [
+        [
+          "Official application route",
+          "Use the application portal linked by the university’s international school."
+        ],
+        [
+          "Admissions office",
+          "siee@lyu.edu.cn"
+        ],
+        [
+          "Location",
+          "Linyi, Shandong Province."
+        ],
+        [
+          "Research status",
+          "Official brochure page found; the retrieved page did not expose fee and program tables."
+        ]
+      ],
+      "fees": [],
+      "sources": [
+        {
+          "label": "Official international admissions hub",
+          "url": "https://isba-en.lyu.edu.cn/Admissions/list.htm"
+        },
+        {
+          "label": "Official 2026 brochure page",
+          "url": "https://isba-en.lyu.edu.cn/2026/0112/c13547a256141/page.htm"
+        },
+        {
+          "label": "Official scholarship section",
+          "url": "https://isba-en.lyu.edu.cn/Scholarshiptypes/list.htm"
+        }
+      ],
+      "checks": [
+        "Obtain a current official fee sheet and exact program notice.",
+        "Third-party listings contain conflicting application charges; those figures were not imported.",
+        "The scholarship listing includes older material; check the new award notice."
+      ],
+      "programs": [],
+      "checkedAt": "2026-10-19",
+      "nextReviewAt": "2027-01-19"
+    },
+    {
+      "slug": "shandong-university",
+      "name": "Shandong University",
+      "city": "Jinan",
+      "province": "Shandong",
+      "officialUrl": "https://istudy.sdu.edu.cn/",
+      "cycle": "Published fee schedule; confirm current program and campus",
+      "overview": "Compare fees by subject and teaching language before choosing a route.",
+      "facts": [
+        [
+          "Fee scope",
+          "The schedule distinguishes Chinese- and English-taught subjects."
+        ]
+      ],
+      "fees": [
+        [
+          "Chinese humanities bachelor’s",
+          "CNY 18,000 / year"
+        ],
+        [
+          "English science/technology bachelor’s",
+          "CNY 30,000 / year"
+        ],
+        [
+          "Application",
+          "CNY 400; non-refundable"
+        ],
+        [
+          "Insurance",
+          "CNY 800 / year"
+        ]
+      ],
+      "sources": [
+        {
+          "label": "International student fee schedule",
+          "url": "https://istudy.sdu.edu.cn/English/Fees1.htm"
+        },
+        {
+          "label": "2026 undergraduate instructions",
+          "url": "https://istudy.sdu.edu.cn/info/1291/3973.htm"
+        }
+      ],
+      "checks": [
+        "Confirm the exact major and campus.",
+        "Tuition excludes housing, meals, travel and additional charges."
+      ],
+      "programs": [],
+      "checkedAt": "2026-10-19",
+      "nextReviewAt": "2027-01-19"
+    },
+    {
+      "slug": "zhejiang-university",
+      "name": "Zhejiang University",
+      "city": "Hangzhou",
+      "province": "Zhejiang",
+      "officialUrl": "https://iczu.zju.edu.cn/admissionsen/",
+      "cycle": "2026 catalogue — historical; individual campuses differ",
+      "overview": "The English programme catalogue distinguishes tuition and study location by course.",
+      "facts": [
+        [
+          "Campus check",
+          "Biomedical Engineering is listed at the International School of Medicine in Yiwu."
+        ]
+      ],
+      "fees": [
+        [
+          "Biomedical Engineering",
+          "CNY 42,800 / year; four years"
+        ],
+        [
+          "Global Communication and Management",
+          "CNY 65,000 / year; four years"
+        ]
+      ],
+      "sources": [
+        {
+          "label": "2026 English-taught catalogue",
+          "url": "https://iczu.zju.edu.cn/_upload/article/files/e7/8c/1be7b2df433fb9427df707571d84/f8f1cb33-05a5-4fec-a602-3eac6caf8e14.pdf"
+        }
+      ],
+      "checks": [
+        "Use the current catalogue before applying.",
+        "The institutional city does not identify every programme campus."
+      ],
+      "programs": [
+        {
+          "level": "Bachelor",
+          "name": "Biomedical Engineering",
+          "subject": "Engineering",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 42,800 / year (2026 catalogue)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-05-31",
+          "eligibility": [
+            "2026 catalogue: IELTS 6.0 overall, minimum 5.0 each component; accepted alternatives listed in source.",
+            "2026 CSCA subjects: mathematics and chemistry; teaching campus: Yiwu.",
+            "2026 catalogue: at least 70% in high-school mathematics, physics, chemistry and biology (Zoology & Botany)."
+          ],
+          "sourceUrl": "https://iczu.zju.edu.cn/_upload/article/files/e7/8c/1be7b2df433fb9427df707571d84/f8f1cb33-05a5-4fec-a602-3eac6caf8e14.pdf",
+          "status": "planned"
+        },
+        {
+          "level": "Bachelor",
+          "name": "Communication (Global Communication and Management)",
+          "subject": "Business and communication",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "tuition": "CNY 65,000 / year (2026 catalogue)",
+          "intakes": [
+            "September 2026"
+          ],
+          "applicationDeadline": "2026-05-31",
+          "eligibility": [
+            "2026 catalogue: IELTS 6.5, TOEFL 80 or Duolingo 120; CSCA mathematics.",
+            "Teaching location: Haining International Campus."
+          ],
+          "sourceUrl": "https://iczu.zju.edu.cn/_upload/article/files/e7/8c/1be7b2df433fb9427df707571d84/f8f1cb33-05a5-4fec-a602-3eac6caf8e14.pdf",
+          "status": "planned"
+        }
+      ],
+      "checkedAt": "2026-10-19",
+      "nextReviewAt": "2027-01-19"
+    },
+    {
+      "slug": "university-of-shanghai-for-science-and-technology",
+      "name": "University of Shanghai for Science and Technology",
+      "city": "Shanghai",
+      "province": "Shanghai",
+      "officialUrl": "https://isoe.usst.edu.cn/",
+      "cycle": "2026 FAQ — historical; confirm next-cycle availability",
+      "overview": "USST’s official FAQ distinguishes main-campus study from cooperative programmes.",
+      "facts": [
+        [
+          "Degree study",
+          "September only in the 2026 FAQ."
+        ]
+      ],
+      "fees": [],
+      "sources": [
+        {
+          "label": "Official 2026 admissions FAQ",
+          "url": "https://isoe.usst.edu.cn/2025/1128/c9774a352906/page.htm"
+        }
+      ],
+      "checks": [
+        "English master’s availability requires supervisor confirmation.",
+        "Check the new catalogue and scholarship rules."
+      ],
+      "programs": [
+        {
+          "level": "Master",
+          "name": "Software Engineering",
+          "subject": "Computer science",
+          "languages": [
+            "English"
+          ],
+          "duration": "3 years",
+          "tuition": "CNY 35,000 / year (2026 FAQ)",
+          "intakes": [
+            "September 2026"
+          ],
+          "eligibility": [
+            "English instruction subject to an official supervisor acceptance letter.",
+            "English-medium degree graduation requires HSK 3 under the published FAQ."
+          ],
+          "sourceUrl": "https://isoe.usst.edu.cn/2025/1128/c9774a352906/page.htm",
+          "status": "planned"
+        }
+      ],
+      "checkedAt": "2026-10-19",
+      "nextReviewAt": "2027-01-19"
+    },
+    {
+      "slug": "tsinghua-university",
+      "name": "Tsinghua University",
+      "city": "Beijing",
+      "province": "Beijing",
+      "officialUrl": "https://yz.tsinghua.edu.cn/en/",
+      "cycle": "2027 international graduate guide; department deadlines vary",
+      "overview": "Review the graduate admissions guide alongside the department’s requirements and programme catalogue.",
+      "facts": [
+        [
+          "Application scope",
+          "Graduate admission; exact programmes and deadlines require department-level review."
+        ]
+      ],
+      "fees": [],
+      "sources": [
+        {
+          "label": "Official 2027 international graduate guide",
+          "url": "https://yz.tsinghua.edu.cn/en/info/1035/1581.htm"
+        }
+      ],
+      "checks": [
+        "Check campus, degree authentication, supervisor requirements and current programme fees.",
+        "No programme-specific offer has been imported for this profile."
+      ],
+      "programs": [],
+      "checkedAt": "2026-10-19",
+      "nextReviewAt": "2027-01-19"
+    }
+  ]
+}

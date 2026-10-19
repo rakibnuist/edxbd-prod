@@ -159,7 +159,7 @@ export default function SitemapSubmissionPage() {
               <li>Country destinations: 9 countries</li>
               <li>Service pages: 7 services</li>
               <li>Update pages: Dynamic content</li>
-              <li>Last updated: Auto-generated daily</li>
+              <li>Sitemap generated automatically</li>
             </ul>
           </div>
 

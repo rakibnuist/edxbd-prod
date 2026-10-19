@@ -26,6 +26,7 @@ const PRIVACY_VERSION = '2026-07-19';
 
 const ACADEMIC_LEVELS = ['SSC / O Level', 'HSC / A Level', "Bachelor's", "Master's", 'Diploma', 'Other'];
 const INTAKES = ['Spring 2027', 'Autumn 2027', 'Spring 2028', 'Not sure yet'];
+const APPLICATION_INTAKES = ['Next available intake', 'Spring intake', 'Autumn intake', 'Flexible / discuss with counselor'];
 const LANGUAGES = ['IELTS / TOEFL ready', 'English — no test yet', 'Willing to learn another language', 'Not sure yet'];
 const BUDGETS = [
   'Under 5 lakh BDT / year',
@@ -161,8 +162,15 @@ function buildSummary(form: FormState): Summary {
   return { routes: routes.slice(0, 3), checks, missing };
 }
 
-export default function EducationFitAssessment() {
-  const [form, setForm] = useState<FormState>(EMPTY);
+type InitialContext = { university?: string; program?: string; country?: string; intent?: 'application' };
+
+export default function EducationFitAssessment({ initialContext }: { initialContext?: InitialContext } = {}) {
+  const isApplication = initialContext?.intent === 'application';
+  const eventLabel = isApplication ? 'university_application' : 'homepage_discovery';
+  const [form, setForm] = useState<FormState>(() => {
+    const country = initialContext?.country ? destinationValue(initialContext.country) : '';
+    return { ...EMPTY, subject: initialContext?.program || '', preferredCountries: DESTINATIONS.some(destination => destination.value === country) ? [country] : [] };
+  });
   const [screen, setScreen] = useState<Screen>('profile');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
@@ -176,8 +184,8 @@ export default function EducationFitAssessment() {
   const markStarted = () => {
     if (startedRef.current) return;
     startedRef.current = true;
-    trackAssessmentStart({ destination: form.preferredCountries[0] || 'unspecified', label: 'homepage_discovery' });
-    trackCompareStarted({ destination: form.preferredCountries[0] || 'unspecified', label: 'homepage_discovery' });
+    trackAssessmentStart({ destination: form.preferredCountries[0] || 'unspecified', label: eventLabel });
+    if (!isApplication) trackCompareStarted({ destination: form.preferredCountries[0] || 'unspecified', label: eventLabel });
   };
 
   const update = (patch: Partial<FormState>) => {
@@ -215,8 +223,8 @@ export default function EducationFitAssessment() {
     setErrorMsg('');
     const nextSummary = buildSummary(form);
     setSummary(nextSummary);
-    setScreen('results');
-    trackCompareCompleted({
+    setScreen(isApplication ? 'contact' : 'results');
+    if (!isApplication) trackCompareCompleted({
       destination: form.preferredCountries[0] || 'not-sure',
       label: 'homepage_discovery',
       route_count: nextSummary.routes.length,
@@ -249,9 +257,10 @@ export default function EducationFitAssessment() {
           phone: form.phone,
           country: getDestination(primaryDestination)?.label || 'Not specified',
           program: form.subject || 'Not specified',
-          message: `Career goal: ${form.careerGoal || 'not provided'}`,
-          source: 'homepage_admissions_discovery',
-          leadType: 'assessment',
+          message: [isApplication && 'University application support request', initialContext?.university && `University: ${initialContext.university}`, initialContext?.program && `Selected program: ${initialContext.program}`, `Career goal: ${form.careerGoal || 'not provided'}`].filter(Boolean).join('\n'),
+          notes: isApplication ? ['Application support requested through the university profile', initialContext?.university && `University: ${initialContext.university}`, initialContext?.program && `Selected program: ${initialContext.program}`, initialContext?.country && `Selected country: ${initialContext.country}`].filter(Boolean).join(' | ') : undefined,
+          source: isApplication ? 'university_profile_application' : 'homepage_admissions_discovery',
+          leadType: isApplication ? 'application' : 'assessment',
           destinationInterest: primaryDestination,
           assessment: {
             academicLevel: form.academicLevel,
@@ -277,7 +286,7 @@ export default function EducationFitAssessment() {
         throw new Error(data.error || 'Submission failed');
       }
 
-      trackAssessmentSubmit({ destination: primaryDestination, label: 'homepage_discovery' });
+      trackAssessmentSubmit({ destination: primaryDestination, label: eventLabel });
       setStatus('idle');
       setScreen('done');
     } catch (error) {
@@ -293,10 +302,10 @@ export default function EducationFitAssessment() {
       <div className="overflow-hidden rounded-[22px] border border-[#174f7a]/20 bg-white shadow-[0_24px_70px_rgba(8,38,60,.14)]">
         <div className="bg-[#0a1f33] p-7 text-white sm:p-9">
           <CheckCircle2 className="text-[#8ed0ee]" size={34} />
-          <p className="ed-label mt-6 text-[#8ed0ee]">Assessment received</p>
+          <p className="ed-label mt-6 text-[#8ed0ee]">{isApplication ? 'Application support request received' : 'Assessment received'}</p>
           <h2 className="ed-display mt-3 text-3xl">Your profile is ready for counselor review.</h2>
           <p className="mt-4 text-sm leading-6 text-white/70">
-            We have your study plan and starting routes. A counselor can now check the exact university, cost and document details.
+            {isApplication ? 'A counselor will review your preferred university, program and academic profile, then help with eligibility, documents and the application process. This request is not a university admission offer.' : 'We have your study plan and starting routes. A counselor can now check the exact university, cost and document details.'}
           </p>
         </div>
         <div className="grid gap-3 p-6 sm:grid-cols-2 sm:p-8">
@@ -320,14 +329,14 @@ export default function EducationFitAssessment() {
               <SearchCheck size={22} />
             </span>
             <div>
-              <p className="ed-label text-[#8ed0ee]">Free admissions discovery</p>
-              <h2 className="ed-display mt-1 text-2xl sm:text-[1.75rem]">See your starting routes</h2>
+              <p className="ed-label text-[#8ed0ee]">{isApplication ? 'University application support' : 'Free admissions discovery'}</p>
+              <h2 className="ed-display mt-1 text-2xl sm:text-[1.75rem]">{isApplication ? 'Tell us about your study plans' : 'See your starting routes'}</h2>
             </div>
           </div>
           <span className="shrink-0 rounded-full border border-white/20 px-3 py-1.5 text-[11px] font-semibold text-white/70">2 min</span>
         </div>
         <div className="mt-6 grid grid-cols-3 gap-2" aria-label={`Step ${progress} of 3`}>
-          {['Profile', 'Routes', 'Review'].map((label, index) => (
+          {(isApplication ? ['Profile', 'Study plan', 'Contact'] : ['Profile', 'Routes', 'Review']).map((label, index) => (
             <div key={label}>
               <div className={`h-1.5 rounded-full ${index + 1 <= progress ? 'bg-[#8ed0ee]' : 'bg-white/15'}`} />
               <span className={`mt-2 block text-[11px] font-semibold ${index + 1 === progress ? 'text-white' : 'text-white/50'}`}>{label}</span>
@@ -366,8 +375,8 @@ export default function EducationFitAssessment() {
         {screen === 'plan' && (
           <div className="space-y-5">
             <div>
-              <h3 className="ed-display text-2xl text-[#0a1f33]">What should the route fit?</h3>
-              <p className="mt-2 text-sm leading-6 text-[#55677a]">Choose “not sure” whenever you want us to compare.</p>
+              <h3 className="ed-display text-2xl text-[#0a1f33]">{isApplication ? 'Plan your study preferences' : 'What should the route fit?'}</h3>
+              <p className="mt-2 text-sm leading-6 text-[#55677a]">{isApplication ? 'Add your budget, preferred intake and language readiness to guide the application review.' : 'Choose “not sure” whenever you want us to compare.'}</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="Yearly budget">
@@ -379,7 +388,7 @@ export default function EducationFitAssessment() {
               <Field label="Target intake">
                 <select value={form.intake} onChange={event => update({ intake: event.target.value })} className={inputClass}>
                   <option value="">Choose an intake</option>
-                  {INTAKES.map(value => <option key={value} value={value}>{value}</option>)}
+                  {(isApplication ? APPLICATION_INTAKES : INTAKES).map(value => <option key={value} value={value}>{value}</option>)}
                 </select>
               </Field>
               <Field label="English readiness">
@@ -390,7 +399,7 @@ export default function EducationFitAssessment() {
               </Field>
             </div>
             <div>
-              <p className="ed-label text-[#174f7a]">Destinations to compare · choose up to 3</p>
+              <p className="ed-label text-[#174f7a]">{isApplication ? 'Preferred destinations · choose up to 3' : 'Destinations to compare · choose up to 3'}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {DESTINATIONS.map(destination => {
                   const active = form.preferredCountries.includes(destination.value);
@@ -451,9 +460,9 @@ export default function EducationFitAssessment() {
         {screen === 'contact' && (
           <div className="space-y-5">
             <div>
-              <p className="ed-label text-[#2f7fbf]">Optional counselor review</p>
-              <h3 className="ed-display mt-2 text-2xl text-[#0a1f33]">Get a written shortlist checked by a person.</h3>
-              <p className="mt-2 text-sm leading-6 text-[#55677a]">Your instant result stays free. Share contact details only if you want a counselor to review it.</p>
+              <p className="ed-label text-[#2f7fbf]">{isApplication ? 'Contact details' : 'Optional counselor review'}</p>
+              <h3 className="ed-display mt-2 text-2xl text-[#0a1f33]">{isApplication ? 'Start your application with EduExpress.' : 'Get a written shortlist checked by a person.'}</h3>
+              <p className="mt-2 text-sm leading-6 text-[#55677a]">{isApplication ? 'Share your contact details so a counselor can review your eligibility and help with the university application.' : 'Your instant result stays free. Share contact details only if you want a counselor to review it.'}</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="Full name" required><input value={form.name} onChange={event => update({ name: event.target.value })} className={inputClass} placeholder="Your name" /></Field>
@@ -462,7 +471,7 @@ export default function EducationFitAssessment() {
             </div>
             <label className="flex items-start gap-3 rounded-2xl bg-[#f5f7f9] p-4 text-sm leading-6 text-[#55677a]">
               <input type="checkbox" checked={form.consent} onChange={event => update({ consent: event.target.checked })} className="mt-1 size-4 shrink-0 accent-[#174f7a]" />
-              <span>I agree that EduExpress may contact me about this assessment. I have read the <Link href="/privacy" className="font-bold text-[#174f7a] underline">privacy policy</Link>.</span>
+              <span>I agree that EduExpress may contact me about this {isApplication ? 'application request' : 'assessment'}. I have read the <Link href="/privacy" className="font-bold text-[#174f7a] underline">privacy policy</Link>.</span>
             </label>
           </div>
         )}
@@ -479,7 +488,7 @@ export default function EducationFitAssessment() {
           {screen === 'plan' && (
             <>
               <button type="button" onClick={() => { setErrorMsg(''); setScreen('profile'); }} className={secondaryButton}><ArrowLeft size={16} /> Back</button>
-              <button type="button" onClick={showResults} className={`ml-auto ${primaryButton}`}>Show my starting routes <SearchCheck size={17} /></button>
+              <button type="button" onClick={showResults} className={`ml-auto ${primaryButton}`}>{isApplication ? 'Continue to contact details' : 'Show my starting routes'} <SearchCheck size={17} /></button>
             </>
           )}
           {screen === 'results' && (
@@ -490,9 +499,9 @@ export default function EducationFitAssessment() {
           )}
           {screen === 'contact' && (
             <>
-              <button type="button" onClick={() => { setErrorMsg(''); setScreen('results'); }} className={secondaryButton}><ArrowLeft size={16} /> Back</button>
+              <button type="button" onClick={() => { setErrorMsg(''); setScreen(isApplication ? 'plan' : 'results'); }} className={secondaryButton}><ArrowLeft size={16} /> Back</button>
               <button type="submit" disabled={status === 'submitting'} className={`ml-auto ${primaryButton} disabled:opacity-60`}>
-                {status === 'submitting' ? <><Loader2 className="animate-spin" size={17} /> Sending…</> : <><ClipboardCheck size={17} /> Request counselor review</>}
+                {status === 'submitting' ? <><Loader2 className="animate-spin" size={17} /> Sending…</> : <><ClipboardCheck size={17} /> {isApplication ? 'Request application support' : 'Request counselor review'}</>}
               </button>
             </>
           )}
