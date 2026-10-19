@@ -33,7 +33,8 @@ export const destinationLinks: SiteLink[] = [
 export const findEducationNavigation: SiteLink[] = [
   { name: 'Find education hub', href: '/find-education', note: 'Start with subject, level, budget and intake' },
   { name: 'Find universities', href: '/universities', note: 'Browse verified university records' },
-  { name: 'Scholarship guidance', href: '/scholarships', note: 'Understand fit, coverage and conditions' },
+  { name: 'Program & tuition finder', href: '/programs', note: 'Search programs by yearly tuition budget' },
+  { name: 'Scholarship database', href: '/scholarships', note: 'Search recorded coverage and deadlines' },
   { name: 'Compare destinations', href: '/compare-study-destinations', note: 'Compare recognition, cost and readiness' },
   { name: 'Free Education Fit Assessment', href: '/education-fit-assessment', note: 'Turn your profile into a practical shortlist' },
 ];
@@ -59,6 +60,7 @@ export const serviceNavigation: SiteLink[] = [
 export const chinaNavigation: SiteLink[] = [
   { name: 'Study in China hub', href: '/study-in-china-from-bangladesh', note: 'Start with the complete decision guide' },
   { name: 'China universities', href: '/china-universities', note: 'Compare university and program records' },
+  { name: 'Programs by budget', href: '/programs', note: 'Find programs within your yearly tuition' },
   { name: 'China scholarships', href: '/china-scholarships-bangladesh', note: 'Explore documented scholarship routes' },
   { name: 'Student visa guide', href: '/china-student-visa-bangladesh', note: 'Prepare for the X1 or X2 route' },
   { name: 'Cost planner', href: '/study-in-china-cost-bangladesh', note: 'Plan tuition and living costs' },
