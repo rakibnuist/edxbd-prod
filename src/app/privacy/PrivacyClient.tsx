@@ -39,14 +39,14 @@ export default function PrivacyClient() {
         <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#64b5df]/15 md:size-[460px]" />
 
         <div className="relative mx-auto max-w-[1440px]">
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#174f7a]">
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#174f7a]">
             <span>EduExpress International Bangladesh</span>
             <span>Data Protection Standard</span>
             <span>Policy Version 2026-07-19</span>
           </div>
 
           <div className="max-w-4xl">
-            <p className="flex w-full max-w-full items-start gap-3 bg-[#174f7a] px-4 py-2 text-[11px] font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
+            <p className="flex w-full max-w-full items-start gap-3 bg-[#174f7a] px-4 py-2 text-xs font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
               <Shield className="mt-0.5 shrink-0 text-[#8ed0ee] sm:mt-0" size={16} />
               <span className="min-w-0 whitespace-normal">Written Data Governance</span>
             </p>
@@ -66,12 +66,12 @@ export default function PrivacyClient() {
       <section className="border-y border-[#08263c] bg-[#08263c] text-white">
         <div className="mx-auto grid max-w-[1440px] lg:grid-cols-[.8fr_repeat(4,1fr)]">
           <div className="bg-[#64b5df] p-6 text-[#08263c] lg:p-7">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Four Privacy Standards</p>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#174f7a]">Four Privacy Standards</p>
             <h2 className="mt-3 font-heading text-2xl font-bold leading-tight">Data Security Principles</h2>
           </div>
           {privacyPillars.map(({ num, title, copy, icon: Icon }) => (
             <div key={title} className="group relative border-b border-white/15 p-5 hover:bg-white/5 lg:border-b-0 lg:border-r lg:p-6">
-              <div className="flex items-center justify-between"><span className="font-mono text-[9px] text-[#64b5df]">SEC {num}</span><Icon size={19} className="text-[#64b5df]" /></div>
+              <div className="flex items-center justify-between"><span className="font-mono text-xs text-[#64b5df]">SEC {num}</span><Icon size={19} className="text-[#64b5df]" /></div>
               <h3 className="mt-7 font-heading text-lg font-bold leading-6">{title}</h3>
               <p className="mt-2 text-xs leading-5 text-white/50">{copy}</p>
             </div>

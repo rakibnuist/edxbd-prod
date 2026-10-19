@@ -108,8 +108,8 @@ export default async function SuccessStoriesPage() {
         </div>
         <div className="relative mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:grid-cols-[.66fr_.34fr] lg:items-end lg:py-16">
           <div>
-            <nav className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/50" aria-label="Breadcrumb"><Link href="/">Home</Link> <span aria-hidden="true">/</span> Success stories</nav>
-            <p className="mt-8 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Proof with permission</p>
+            <nav className="font-mono text-xs font-black uppercase tracking-[0.18em] text-white/50" aria-label="Breadcrumb"><Link href="/">Home</Link> <span aria-hidden="true">/</span> Success stories</nav>
+            <p className="mt-8 font-mono text-xs font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Proof with permission</p>
             <h1 className="mt-4 max-w-4xl text-balance font-heading text-4xl font-bold leading-tight sm:text-6xl">Student Success Stories, Published Only with Evidence and Consent</h1>
             <p className="mt-5 max-w-3xl text-base leading-7 text-white/70">A real story should explain the student profile, options considered, university decision, timeline, EduExpress service and cost responsibility. Passport numbers, birth dates and visa identifiers never belong on this page.</p>
           </div>
@@ -137,7 +137,7 @@ export default async function SuccessStoriesPage() {
               <article key={story.id} className="overflow-hidden border border-[#174f7a]/20 bg-white">
                 <div className="grid sm:grid-cols-[11rem_1fr]">
                   <div className="relative min-h-44 bg-[#08263c] text-white">
-                    {story.image && story.consentImageApproved ? <Image src={story.image} alt={`${story.displayName || story.name}, EduExpress student story`} fill sizes="(max-width:640px) 100vw, 176px" className="object-cover" /> : <div className="flex h-full min-h-44 flex-col items-center justify-center p-5 text-center"><CameraOff size={27} className="text-[#8ed0ee]" /><p className="mt-3 text-[10px] leading-5 text-white/55">Photo not approved for public display</p></div>}
+                    {story.image && story.consentImageApproved ? <Image src={story.image} alt={`${story.displayName || story.name}, EduExpress student story`} fill sizes="(max-width:640px) 100vw, 176px" className="object-cover" /> : <div className="flex h-full min-h-44 flex-col items-center justify-center p-5 text-center"><CameraOff size={27} className="text-[#8ed0ee]" /><p className="mt-3 text-xs leading-5 text-white/55">Photo not approved for public display</p></div>}
                   </div>
                   <div className="p-5">
                     <div className="flex items-center gap-2 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-emerald-700"><BadgeCheck size={13} />Consent verified story</div>
@@ -157,7 +157,7 @@ export default async function SuccessStoriesPage() {
                     ['Current update', story.currentUpdate || 'Arrival update not yet recorded.'],
                   ].map(([label, value]) => <div key={label} className="border-b border-r border-[#174f7a]/15 p-4"><h3 className="font-mono text-[8px] font-black uppercase tracking-[0.15em] text-[#174f7a]">{label}</h3><p className="mt-2 text-xs leading-5 text-slate-600">{value}</p></div>)}
                 </div>
-                <div className="flex flex-wrap items-center justify-between gap-3 bg-[#e9f7fd] px-5 py-3 text-[10px] font-bold text-slate-600"><span>Evidence ID: {story.consentEvidenceId}</span><span>Consent expiry: {story.consentExpiresAt ? new Date(story.consentExpiresAt).toLocaleDateString('en-GB') : 'No expiry recorded'}</span></div>
+                <div className="flex flex-wrap items-center justify-between gap-3 bg-[#e9f7fd] px-5 py-3 text-xs font-bold text-slate-600"><span>Evidence ID: {story.consentEvidenceId}</span><span>Consent expiry: {story.consentExpiresAt ? new Date(story.consentExpiresAt).toLocaleDateString('en-GB') : 'No expiry recorded'}</span></div>
               </article>
             ))}
           </div>
@@ -165,7 +165,7 @@ export default async function SuccessStoriesPage() {
           <div className="grid overflow-hidden border border-[#174f7a]/20 bg-white lg:grid-cols-[.42fr_.58fr]">
             <div className="flex min-h-80 flex-col justify-between bg-[#08263c] p-7 text-white sm:p-10">
               <ShieldCheck size={34} className="text-[#8ed0ee]" />
-              <div><p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Publication gate active</p><h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">No story is public until the evidence record is complete</h2></div>
+              <div><p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Publication gate active</p><h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">No story is public until the evidence record is complete</h2></div>
             </div>
             <div className="p-7 sm:p-10">
               <p className="text-sm leading-7 text-slate-600">The database currently contains {totalActive} testimonial record{totalActive === 1 ? '' : 's'}, but none has the required real photo, written consent evidence, expiry or revocation record, student profile, decision explanation, service scope and payment disclosure. They remain private until those fields are completed.</p>

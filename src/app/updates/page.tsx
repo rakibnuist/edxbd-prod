@@ -14,16 +14,6 @@ export const metadata: Metadata = {
   // (was causing "| EduExpress International | EduExpress International")
   title: 'Latest Study Abroad Updates & News',
   description: 'Stay updated with the latest study abroad news, scholarship opportunities, visa updates, and university announcements. Get expert guidance for your international education journey.',
-  keywords: [
-    'study abroad updates',
-    'scholarship news',
-    'visa updates',
-    'university announcements',
-    'study abroad opportunities',
-    'education news',
-    'study abroad Bangladesh',
-    'international education updates'
-  ],
   authors: [{ name: 'EduExpress International' }],
   creator: 'EduExpress International',
   publisher: 'EduExpress International',

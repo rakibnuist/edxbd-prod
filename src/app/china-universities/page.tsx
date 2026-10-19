@@ -5,6 +5,8 @@ import PageHeader from '@/components/PageHeader';
 import UniversitiesClient from '@/app/universities/UniversitiesClient';
 import { getUniversityRecords } from '@/lib/university-records';
 import { filterUniversities, readDirectoryFilters } from '@/lib/university-directory';
+import Link from 'next/link';
+import { chinaCities } from '@/lib/city-pages';
 
 const canonical = 'https://eduexpressint.com/china-universities';
 
@@ -52,6 +54,7 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
   const rawLimit = params.get('limit') || '12';
   const limit = /^\d+$/.test(rawLimit) ? Math.max(12, Math.min(Number(rawLimit), universities.length || 12)) : 12;
   const visibleUniversities = matching.slice(0, limit);
+  const cities = chinaCities(universities);
   const sourceLinkedCount = universities.filter(item => [item.officialUrl, ...item.sourceUrls, ...item.programs.map(program => program.sourceUrl)].some(url => url && /^https?:\/\//i.test(url))).length;
 
   const structuredData = {
@@ -97,6 +100,10 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
           ))}
         </div>
       </section>
+
+      {cities.length > 0 && <nav aria-labelledby="browse-cities" className="border-b border-[#174f7a]/15 bg-white px-5 py-6 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-[1440px]"><h2 id="browse-cities" className="text-sm font-black">Browse universities by city</h2><ul className="mt-3 flex flex-wrap gap-2">{cities.map(item => <li key={item.slug}><Link href={`/china-universities/${item.slug}`} className="inline-flex min-h-10 items-center rounded-full border border-[#174f7a]/20 bg-[#f7fafc] px-4 text-sm font-bold text-[#174f7a] hover:border-[#174f7a]">{item.city} <span className="ml-1.5 text-slate-500">({item.universities.length})</span></Link></li>)}</ul></div>
+      </nav>}
 
       <Suspense fallback={<div className="py-20 text-center">Loading China directory...</div>}>
         <UniversitiesClient initialUniversities={universities} />

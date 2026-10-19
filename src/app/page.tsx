@@ -333,7 +333,7 @@ export default async function Home() {
           <article className="rounded-[1.75rem] bg-white p-6 text-[#102a43] shadow-[0_25px_70px_rgba(0,0,0,.22)] sm:p-8">
             <div className="flex flex-col justify-between gap-5 border-b border-slate-200 pb-6 sm:flex-row sm:items-start">
               <div>
-                <span className="inline-flex rounded-full bg-[#e9f5fc] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[.12em] text-[#1767a0]">Full Scholarship Support Package</span>
+                <span className="inline-flex rounded-full bg-[#e9f5fc] px-3 py-1 text-xs font-extrabold uppercase tracking-[.12em] text-[#1767a0]">Full Scholarship Support Package</span>
                 <h3 className="mt-4 text-2xl font-bold tracking-[-.035em]">Application-to-arrival support</h3>
                 <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">The scholarship letter defines whether tuition, accommodation, stipend or a combination is covered.</p>
               </div>

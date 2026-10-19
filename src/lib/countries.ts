@@ -478,7 +478,7 @@ export const countries: Country[] = [
       { name: 'Early Bird Discounts', amount: 'Automatic 10% - 50% discount on paying tuition fee within 2 weeks of offer', deadline: 'Offer Dependent', icon: 'School' }
     ],
     serviceStatus: 'Active',
-    valueStatement: 'Finland is a global leader in education and tech. It offers strong 50-100% scholarships, an excellent quality of life, and one of the clearest pathways to European Permanent Residency.',
+    valueStatement: 'Finland is a global leader in education and tech. Many universities publish tuition scholarships for non-EU students, and the coverage and conditions differ by university and program. It also offers a high quality of life and documented post-study residence routes.',
     whoItFits: [
       'Students looking for high-tech, sustainability, and game design programs',
       'Married students (spouses get full work rights)',
@@ -525,7 +525,7 @@ export const countries: Country[] = [
       currency: 'EUR'
     },
     scholarships: ['50% Scholarship for All International Students', 'Academic Merit Scholarship'],
-    benefits: ['100% Guaranteed Admission with No IELTS', 'Paid Hospitality Internships at luxury Mediterranean hotels', 'Credit Transfer options to UK, USA & Europe'],
+    benefits: ['Some programs accept alternatives to IELTS; entry rules vary by institution', 'Hospitality programs that may include paid internships, subject to placement terms', 'Credit Transfer options to UK, USA & Europe'],
     isActive: true,
     featured: true,
     images: ['https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=75&w=1200&auto=format&fit=crop'],
@@ -663,7 +663,7 @@ export const countries: Country[] = [
     name: 'Georgia',
     slug: 'georgia',
     flag: '🇬🇪',
-    description: 'Popular for MBBS (No Entrance Exam)',
+    description: 'Popular for MBBS; entry rules vary by university',
     universities: ['University of Georgia (UG)', 'Tbilisi State Medical University', 'Caucasus International University', 'East European University'],
     programs: ['MBBS (Medicine)', 'Dentistry', 'Business'],
     requirements: {
@@ -677,7 +677,7 @@ export const countries: Country[] = [
       currency: 'USD'
     },
     scholarships: ['Merit based tuition discounts'],
-    benefits: ['Direct MBBS Admission with No Entrance Exam', 'WHO-listed / ECFMG-recognized universities (local licensing exams required to practise abroad)', 'Low tuition fees and very affordable living costs'],
+    benefits: ['Many MBBS programs admit on school results and an interview rather than a separate entrance exam; confirm the current rule for each university', 'WHO-listed / ECFMG-recognized universities (local licensing exams required to practise abroad)', 'Low tuition fees and very affordable living costs'],
     isActive: true,
     featured: true,
     images: ['https://images.unsplash.com/photo-1565008576549-57569a49371d?q=75&w=1200&auto=format&fit=crop'],

@@ -74,7 +74,7 @@ const defaultTypeForGroup: Record<EvidenceGroup, string> = {
 };
 
 function Field({ label, children, className = '' }: { label: string; children: React.ReactNode; className?: string }) {
-  return <label className={className}><span className="block text-[11px] font-extrabold uppercase tracking-[0.08em] text-slate-500">{label}</span>{children}</label>;
+  return <label className={className}><span className="block text-xs font-extrabold uppercase tracking-[0.08em] text-slate-500">{label}</span>{children}</label>;
 }
 
 function Preview({ record }: { record: Pick<EvidenceRecord, 'thumbnailUrl' | 'title'> }) {
@@ -222,7 +222,7 @@ export default function EvidenceAdminPage() {
         <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end">
           <div><p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#8ed0ee]">Public evidence portal</p><h1 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Admission outcomes and authorization letters</h1><p className="mt-3 max-w-3xl text-sm leading-6 text-white/70">Add one approved preview, connect it to the university or organization, then control whether it appears on the homepage and proof library.</p></div>
           <div className="grid grid-cols-4 gap-px overflow-hidden rounded-2xl bg-white/15 text-center">
-            {[['Public', counts.public], ['Letters', counts.authorizations], ['Admission', counts.admissions], ['JW202', counts.jw202]].map(([label, value]) => <div key={label} className="min-w-20 bg-[#08263c] p-3"><strong className="block text-xl text-[#8ed0ee]">{value}</strong><span className="mt-1 block text-[10px] text-white/55">{label}</span></div>)}
+            {[['Public', counts.public], ['Letters', counts.authorizations], ['Admission', counts.admissions], ['JW202', counts.jw202]].map(([label, value]) => <div key={label} className="min-w-20 bg-[#08263c] p-3"><strong className="block text-xl text-[#8ed0ee]">{value}</strong><span className="mt-1 block text-xs text-white/55">{label}</span></div>)}
           </div>
         </div>
       </header>
@@ -286,7 +286,7 @@ export default function EvidenceAdminPage() {
             <article key={record.id} className="grid gap-6 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm lg:grid-cols-[190px_1fr] sm:p-6">
               <div><Preview record={record} />{uploadInput(record.id)}</div>
               <div>
-                <div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.1em] text-blue-800">{record.type.replaceAll('_', ' ')}</span>{record.isPublished ? <span className="rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.1em] text-emerald-800">Public</span> : <span className="rounded-full bg-slate-100 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.1em] text-slate-600">Hidden</span>}{isArchive(record.type) && <span className="rounded-full bg-amber-50 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.1em] text-amber-800">Archive</span>}</div>
+                <div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-extrabold uppercase tracking-[0.1em] text-blue-800">{record.type.replaceAll('_', ' ')}</span>{record.isPublished ? <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-extrabold uppercase tracking-[0.1em] text-emerald-800">Public</span> : <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-extrabold uppercase tracking-[0.1em] text-slate-600">Hidden</span>}{isArchive(record.type) && <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-extrabold uppercase tracking-[0.1em] text-amber-800">Archive</span>}</div>
                 <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   <Field label="Public title" className="md:col-span-2"><input className={fieldClass} value={record.title} onChange={event => updateRecord(record.id, 'title', event.target.value)} /></Field>
                   <Field label="Record type"><select className={fieldClass} value={record.type} onChange={event => updateRecord(record.id, 'type', event.target.value)}><option value="authorization_current">Current authorization</option><option value="representation_current">Current representation</option><option value="authorization_record">Authorization record</option><option value="authorization_archive">Archived authorization</option><option value="pre_admission_notice">Pre admission notice</option><option value="admission_notice">Admission notice</option><option value="admission_notice_archive">Archived admission notice</option><option value="jw202_record">JW202 record</option><option value="jw202">JW202 outcome</option><option value="jw202_archive">Archived JW202 outcome</option></select></Field>

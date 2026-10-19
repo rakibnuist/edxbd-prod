@@ -659,7 +659,7 @@ export default function ContentPage() {
                     <option value="service">Service</option>
                     <option value="destination">Destination</option>
                   </select>
-                  <p className="mt-1 text-[11px] text-slate-500">Choose Update for university announcements, admission news and student guidance shown in the public Updates library.</p>
+                  <p className="mt-1 text-xs text-slate-500">Choose Update for university announcements, admission news and student guidance shown in the public Updates library.</p>
                 </div>
 
                 <div>
@@ -831,7 +831,7 @@ export default function ContentPage() {
 
                 <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
                   <p className="text-xs font-bold text-amber-950">Publishing approvals</p>
-                  <p className="mt-1 text-[11px] leading-5 text-amber-800">Only confirm these after the source, dates, claims and search presentation have been reviewed.</p>
+                  <p className="mt-1 text-xs leading-5 text-amber-800">Only confirm these after the source, dates, claims and search presentation have been reviewed.</p>
                   <div className="mt-3 flex flex-wrap gap-5">
                     <label className="flex items-center text-xs font-medium text-gray-800 sm:text-sm"><input type="checkbox" checked={Boolean(formData.complianceApprovedAt)} onChange={(e) => setFormData({ ...formData, complianceApprovedAt: e.target.checked ? new Date().toISOString() : '' })} className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />Management compliance approved</label>
                     <label className="flex items-center text-xs font-medium text-gray-800 sm:text-sm"><input type="checkbox" checked={Boolean(formData.seoApprovedAt)} onChange={(e) => setFormData({ ...formData, seoApprovedAt: e.target.checked ? new Date().toISOString() : '' })} className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />SEO approved</label>

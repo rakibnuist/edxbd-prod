@@ -39,7 +39,7 @@ const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]
 const dateValue = (value?: string | null) => value ? value.slice(0, 10) : '';
 
 function Field({ label, children, className = '' }: { label: string; children: React.ReactNode; className?: string }) {
-  return <label className={className}><span className="block text-[11px] font-extrabold uppercase tracking-[0.08em] text-slate-500">{label}</span>{children}</label>;
+  return <label className={className}><span className="block text-xs font-extrabold uppercase tracking-[0.08em] text-slate-500">{label}</span>{children}</label>;
 }
 
 export default function TeamsAdminPage() {

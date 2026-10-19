@@ -124,7 +124,7 @@ const QuickContactForm = () => {
                 </div>
 
                 {/* Trust indicators */}
-                <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-wide">
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-wide">
                   <div className="flex items-center space-x-1 bg-green-50 text-green-700 border border-green-100 px-2 py-1 rounded-md">
                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                     <span>100% Free</span>

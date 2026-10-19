@@ -1,12 +1,21 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, BadgeDollarSign, CheckCircle2, CircleAlert, FileSearch, GraduationCap, WalletCards } from 'lucide-react';
+import ScholarshipFinder from '@/components/finders/ScholarshipFinder';
+import { getUniversityRecords } from '@/lib/university-records';
+import { toScholarshipRows } from '@/lib/catalog-views';
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Scholarship Guidance for Bangladeshi Students',
-  description: 'Understand scholarship eligibility, coverage, renewal conditions, remaining costs and application readiness before choosing an overseas education route.',
+  title: { absolute: 'China Scholarships for Bangladeshi Students: Searchable List | EduExpress' },
+  description: 'Search CSC, provincial, Belt and Road and university scholarships at Chinese universities. See recorded coverage, stipends, deadlines and source links, then check the cost that remains.',
   alternates: { canonical: '/scholarships' },
 };
+
+async function loadRows() {
+  try { return toScholarshipRows(await getUniversityRecords('China'), new Date()); } catch { return []; }
+}
 
 const checks = [
   { icon: GraduationCap, title: 'Education fit', copy: 'The program and university still need to fit your academic direction, recognition needs and career goal.' },
@@ -15,19 +24,23 @@ const checks = [
   { icon: WalletCards, title: 'Remaining family cost', copy: 'Calculate what remains after the award, including living, travel, official and document-related costs.' },
 ];
 
-export default function ScholarshipsPage() {
+export default async function ScholarshipsPage() {
+  const rows = await loadRows();
+  const open = rows.filter(row => !row.deadlinePassed).length;
   return (
     <main className="min-h-screen bg-white text-[#08263c]">
       <section className="relative overflow-hidden bg-[#08263c] px-5 pb-20 pt-32 text-white sm:px-8 sm:pt-40 lg:px-12">
         <div className="absolute right-[-7rem] top-20 size-[420px] rounded-full border-[5rem] border-[#64b5df]/10" />
         <div className="relative mx-auto max-w-[1260px]">
           <nav aria-label="Breadcrumb" className="text-xs font-bold text-white/60"><Link href="/">Home</Link> <span aria-hidden>/</span> Scholarships</nav>
-          <p className="mt-10 text-xs font-black uppercase tracking-[.18em] text-[#8ed0ee]">Scholarship guidance</p>
-          <h1 className="mt-5 max-w-[12ch] text-[clamp(3.5rem,7vw,7rem)] font-black leading-[.87] tracking-[-.07em]">Funding should improve a good decision—not create a bad one.</h1>
-          <p className="mt-7 max-w-3xl text-lg leading-8 text-white/70">We assess scholarships after education fit. The useful question is not only “how much?” It is also what the award covers, what keeps it active and what your family still needs to pay.</p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row"><Link href="/education-fit-assessment" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-[#e34c43] px-7 text-sm font-black text-white">Check my education and funding fit <ArrowRight size={17} /></Link><Link href="/china-scholarships-bangladesh" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/5 px-7 text-sm font-black text-white">Explore China scholarships <ArrowRight size={17} /></Link></div>
+          <p className="mt-10 text-xs font-black uppercase tracking-[.18em] text-[#8ed0ee]">Funding should improve a good decision, not create a bad one</p>
+          <h1 className="mt-5 max-w-[16ch] text-[clamp(2.75rem,6vw,5.5rem)] font-black leading-[.95] tracking-[-.05em]">China scholarships for Bangladeshi students</h1>
+          <p className="mt-7 max-w-3xl text-lg leading-8 text-white/80">{rows.length ? `${rows.length} scholarships recorded at Chinese universities, ${open} with a deadline that has not passed. ` : ''}We assess scholarships after education fit. The useful question is not only “how much?” It is also what the award covers, what keeps it active and what your family still needs to pay.</p>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row"><a href="#scholarship-database" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-white px-7 text-sm font-black text-[#08263c]">Search the scholarship list <ArrowRight size={17} /></a><Link href="/education-fit-assessment" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-[#e34c43] px-7 text-sm font-black text-white">Check my education and funding fit <ArrowRight size={17} /></Link><Link href="/china-scholarships-bangladesh" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/5 px-7 text-sm font-black text-white">Explore China scholarships <ArrowRight size={17} /></Link></div>
         </div>
       </section>
+
+      {rows.length > 0 && <ScholarshipFinder rows={rows} />}
 
       <section className="px-5 py-20 sm:px-8 sm:py-24 lg:px-12">
         <div className="mx-auto max-w-[1260px]">

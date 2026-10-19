@@ -22,7 +22,9 @@ import { getPublicTrustRecords } from '@/lib/trust-records';
 const exploreLinks = [
   ['Find education', '/find-education'],
   ['Find universities', '/universities'],
-  ['Scholarship guidance', '/scholarships'],
+  ['Programs by budget', '/programs'],
+  ['Compare costs', '/compare-costs'],
+  ['Scholarship database', '/scholarships'],
   ['Explore destinations', '/destinations'],
   ['Compare destinations', '/compare-study-destinations'],
   ['Study in China', '/study-in-china-from-bangladesh'],
@@ -75,7 +77,7 @@ export default async function Footer() {
           </div>
 
           <div>
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Explore</p>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Explore</p>
             <h3 className="mt-2 font-heading text-xl font-bold">Find education</h3>
             <div className="mt-5">
               {exploreLinks.map(([name, href]) => <FooterLink key={href} href={href}>{name}</FooterLink>)}
@@ -83,7 +85,7 @@ export default async function Footer() {
           </div>
 
           <div>
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Your journey</p>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Your journey</p>
             <h3 className="mt-2 font-heading text-xl font-bold">From fit to campus</h3>
             <div className="mt-5">
               {journeyLinks.map(([name, href]) => <FooterLink key={href} href={href}>{name}</FooterLink>)}
@@ -91,7 +93,7 @@ export default async function Footer() {
           </div>
 
           <div>
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Proof and resources</p>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Proof and resources</p>
             <h3 className="mt-2 font-heading text-xl font-bold">Inspect the process</h3>
             <div className="mt-5">
               {proofNavigation.slice(0, 3).map(link => <FooterLink key={link.href} href={link.href}>{link.name}</FooterLink>)}
@@ -100,7 +102,7 @@ export default async function Footer() {
           </div>
 
           <div>
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Dhanmondi decision desk</p>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Dhanmondi decision desk</p>
             <h3 className="mt-2 font-heading text-xl font-bold">Talk to EduExpress</h3>
             {office ? <div className="mt-5 space-y-4 text-sm leading-6 text-white/75"><p className="flex items-start gap-3"><MapPin className="mt-1 shrink-0 text-[#64b5df]" size={16} /><span>{office.address}</span></p><div className="flex items-start gap-3"><Phone className="mt-1 shrink-0 text-[#64b5df]" size={16} /><div><a href={`tel:${office.phonePrimary}`} className="block font-black text-white hover:text-[#8ed0ee]">{formatBangladeshPhone(office.phonePrimary)}</a>{office.phoneSecondary && <a href={`tel:${office.phoneSecondary}`} className="mt-1 block hover:text-[#8ed0ee]">{formatBangladeshPhone(office.phoneSecondary)}</a>}</div></div>{office.email && <a href={`mailto:${office.email}`} className="flex items-center gap-3 break-all hover:text-[#8ed0ee]"><Mail className="shrink-0 text-[#64b5df]" size={16} /> {office.email}</a>}<p className="border-l-2 border-white/20 pl-4">{office.hours}</p></div> : <Link href="/contact" className="mt-5 inline-flex items-center gap-2 text-sm font-black text-[#8ed0ee]">Open contact details <ArrowRight size={14} /></Link>}
           </div>
@@ -109,7 +111,7 @@ export default async function Footer() {
         <div className="mt-12 border-y border-white/15 py-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
             <div className="shrink-0">
-              <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Active destinations</p>
+              <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Active destinations</p>
               <Link href="/destinations" className="mt-1 inline-flex items-center gap-2 text-xs font-black text-white">Compare all <ArrowRight size={12} /></Link>
             </div>
             <div className="flex flex-wrap gap-x-5 gap-y-2 lg:border-l lg:border-white/15 lg:pl-6">

@@ -59,7 +59,7 @@ export default function RouteUniverse() {
               aria-pressed={selected}
               aria-label={`Explore ${route.name}`}
             >
-              <span className="ed-label text-[10px]">{route.code}</span>
+              <span className="ed-label text-xs">{route.code}</span>
             </button>
           );
         })}

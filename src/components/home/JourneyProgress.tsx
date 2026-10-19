@@ -82,7 +82,7 @@ export default function JourneyProgress() {
               return (
                 <li key={stage.id} className="relative">
                   <a href={`#${stage.id}`} aria-current={current ? 'step' : undefined} className={`flex items-center gap-3 rounded-2xl px-2 py-2.5 text-sm transition ${current ? 'bg-[#e8f5fb] text-[#0a1f33]' : 'text-[#6b7c89] hover:bg-[#f2f7fa] hover:text-[#174f7a]'}`}>
-                    <span className={`relative z-10 grid size-[35px] shrink-0 place-items-center rounded-full border text-[10px] font-black transition ${current ? 'border-[#174f7a] bg-[#174f7a] text-white shadow-[0_8px_20px_rgba(23,79,122,.25)]' : complete ? 'border-[#2f7fbf] bg-[#e8f5fb] text-[#174f7a]' : 'border-[#c9dbe7] bg-white text-[#7d8e9a]'}`}>
+                    <span className={`relative z-10 grid size-[35px] shrink-0 place-items-center rounded-full border text-xs font-black transition ${current ? 'border-[#174f7a] bg-[#174f7a] text-white shadow-[0_8px_20px_rgba(23,79,122,.25)]' : complete ? 'border-[#2f7fbf] bg-[#e8f5fb] text-[#174f7a]' : 'border-[#c9dbe7] bg-white text-[#7d8e9a]'}`}>
                       {complete ? <Check size={14} strokeWidth={3} /> : stage.number}
                     </span>
                     <span className={current ? 'font-extrabold' : 'font-semibold'}>{stage.short}</span>

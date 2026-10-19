@@ -1,5 +1,7 @@
 import prisma from '@/lib/prisma';
 import { sitemapResponse } from '@/lib/sitemap-xml';
+import { getUniversityRecords } from '@/lib/university-records';
+import { chinaCities } from '@/lib/city-pages';
 
 export async function GET() {
   try {
@@ -14,10 +16,14 @@ export async function GET() {
       },
       select: { slug: true, updatedAt: true }
     });
-    return sitemapResponse(universities.map((university) => ({ 
-      loc: `https://eduexpressint.com/universities/${university.slug}`, 
-      lastmod: university.updatedAt?.toISOString() 
-    })));
+    const cities = chinaCities(await getUniversityRecords('China'));
+    return sitemapResponse([
+      ...universities.map((university) => ({
+        loc: `https://eduexpressint.com/universities/${university.slug}`,
+        lastmod: university.updatedAt?.toISOString()
+      })),
+      ...cities.map((city) => ({ loc: `https://eduexpressint.com/china-universities/${city.slug}` })),
+    ]);
   } catch {
     return sitemapResponse([]);
   }

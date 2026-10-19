@@ -90,7 +90,7 @@ export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProp
           <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {currentGuides.map(guide => (
               <Link key={guide.href} href={guide.href} className="group rounded-[1.5rem] border border-[#174f7a]/12 bg-[#f4f8fb] p-5 transition hover:-translate-y-1 hover:border-[#174f7a]/35">
-                <span className="text-[10px] font-black uppercase tracking-[0.13em] text-[#174f7a]">{guide.label}</span>
+                <span className="text-xs font-black uppercase tracking-[0.13em] text-[#174f7a]">{guide.label}</span>
                 <h3 className="mt-3 text-lg font-extrabold leading-7">{guide.title}</h3>
                 <ArrowRight size={15} className="mt-5 text-[#174f7a] transition group-hover:translate-x-1" />
               </Link>
@@ -133,7 +133,7 @@ export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProp
                     {update.featuredImage ? <Image src={update.featuredImage} alt={update.title} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover transition duration-700 group-hover:scale-[1.03]" /> : <div className="grid h-full place-items-center text-sm font-black uppercase tracking-[0.15em] text-[#9bd8f3]">EduExpress update</div>}
                   </div>
                   <div className="p-5">
-                    <span className="text-[10px] font-black uppercase tracking-[0.13em] text-[#174f7a]">{primaryCategory(update)}</span>
+                    <span className="text-xs font-black uppercase tracking-[0.13em] text-[#174f7a]">{primaryCategory(update)}</span>
                     <h3 className="mt-3 line-clamp-2 text-xl font-extrabold leading-7 tracking-[-0.025em]">{update.title}</h3>
                     <span className="mt-5 inline-flex items-center gap-2 text-sm font-black text-[#174f7a]">Read update <ArrowRight size={14} className="transition group-hover:translate-x-1" /></span>
                   </div>

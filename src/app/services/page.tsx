@@ -15,18 +15,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Study Abroad Services | University Selection, Visa & Scholarship Support',
     description,
-    keywords: [
-      'study abroad services',
-      'university selection',
-      'visa assistance',
-      'scholarship support',
-      'career guidance',
-      'study abroad consultancy',
-      'international education',
-      'student visa',
-      'university application',
-      'education consultant'
-    ],
     openGraph: {
       title: 'Study Abroad Services | Expert Guidance for International Education',
       description: 'Compare education quality, recognition, costs and career fit with clear written evidence.',
@@ -125,14 +113,14 @@ export default async function ServicesPage() {
         <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#64b5df]/15 md:size-[460px]" />
 
         <div className="relative mx-auto max-w-[1440px]">
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#174f7a]">
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#174f7a]">
             <span>EduExpress International Bangladesh</span>
             <span>Productized Trust System</span>
             <span>Four Written Documents</span>
           </div>
 
           <div className="max-w-4xl">
-            <p className="flex w-full max-w-full items-start gap-3 bg-[#174f7a] px-4 py-2 text-[11px] font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
+            <p className="flex w-full max-w-full items-start gap-3 bg-[#174f7a] px-4 py-2 text-xs font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
               <Fingerprint className="mt-0.5 shrink-0 text-[#8ed0ee] sm:mt-0" size={16} />
               <span className="min-w-0 whitespace-normal">Evidence-First Guidance & Services</span>
             </p>
@@ -167,12 +155,12 @@ export default async function ServicesPage() {
       <section aria-labelledby="services-promise-standard" className="border-y border-[#08263c] bg-[#08263c] text-white">
         <div className="mx-auto grid max-w-[1440px] lg:grid-cols-[.8fr_repeat(4,1fr)]">
           <div className="bg-[#64b5df] p-6 text-[#08263c] lg:p-7">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Four Written Proof Assets</p>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#174f7a]">Four Written Proof Assets</p>
             <h2 id="services-promise-standard" className="mt-3 font-heading text-2xl font-bold leading-tight">Zero Unwritten Promises</h2>
           </div>
           {mainServices.map(({ number, title, copy, icon: Icon, link }) => (
             <Link key={title} href={link} className="group relative border-b border-white/15 p-5 hover:bg-white/5 lg:border-b-0 lg:border-r lg:p-6">
-              <div className="flex items-center justify-between"><span className="font-mono text-[9px] text-[#64b5df]">DOC {number}</span><Icon size={19} className="text-[#64b5df]" /></div>
+              <div className="flex items-center justify-between"><span className="font-mono text-xs text-[#64b5df]">DOC {number}</span><Icon size={19} className="text-[#64b5df]" /></div>
               <h3 className="mt-7 font-heading text-lg font-bold leading-6">{title}</h3>
               <p className="mt-2 text-xs leading-5 text-white/50">{copy}</p>
               <ArrowUpRight size={14} className="absolute bottom-5 right-5 text-white/20 transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-[#8ed0ee]" />
@@ -273,7 +261,7 @@ export default async function ServicesPage() {
               ['03', 'Budget reality', 'A practical range for tuition and living costs']
             ].map(([number, title, copy]) => (
               <div key={number} className="border-b border-r border-[#08263c]/35 p-5 sm:p-6">
-                <span className="font-mono text-[10px] font-black text-[#174f7a]">BRING {number}</span>
+                <span className="font-mono text-xs font-black text-[#174f7a]">BRING {number}</span>
                 <h3 className="mt-3 font-heading text-xl font-bold">{title}</h3>
                 <p className="mt-2 text-sm leading-6 text-[#0b2f4a]/70">{copy}</p>
               </div>

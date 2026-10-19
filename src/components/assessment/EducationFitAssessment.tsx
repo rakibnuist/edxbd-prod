@@ -333,13 +333,13 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
               <h2 className="ed-display mt-1 text-2xl sm:text-[1.75rem]">{isApplication ? 'Tell us about your study plans' : 'See your starting routes'}</h2>
             </div>
           </div>
-          <span className="shrink-0 rounded-full border border-white/20 px-3 py-1.5 text-[11px] font-semibold text-white/70">2 min</span>
+          <span className="shrink-0 rounded-full border border-white/20 px-3 py-1.5 text-xs font-semibold text-white/70">2 min</span>
         </div>
         <div className="mt-6 grid grid-cols-3 gap-2" aria-label={`Step ${progress} of 3`}>
           {(isApplication ? ['Profile', 'Study plan', 'Contact'] : ['Profile', 'Routes', 'Review']).map((label, index) => (
             <div key={label}>
               <div className={`h-1.5 rounded-full ${index + 1 <= progress ? 'bg-[#8ed0ee]' : 'bg-white/15'}`} />
-              <span className={`mt-2 block text-[11px] font-semibold ${index + 1 === progress ? 'text-white' : 'text-white/50'}`}>{label}</span>
+              <span className={`mt-2 block text-xs font-semibold ${index + 1 === progress ? 'text-white' : 'text-white/50'}`}>{label}</span>
             </div>
           ))}
         </div>
@@ -518,7 +518,7 @@ const secondaryButton = 'inline-flex min-h-12 items-center justify-center gap-2 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.09em] text-[#174f7a]">{label}{required && <span className="text-[#c0392b]"> *</span>}</span>
+      <span className="mb-2 block text-xs font-bold uppercase tracking-[0.09em] text-[#174f7a]">{label}{required && <span className="text-[#c0392b]"> *</span>}</span>
       {children}
     </label>
   );

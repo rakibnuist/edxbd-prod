@@ -4,18 +4,6 @@ import TermsClient from './TermsClient';
 export const metadata: Metadata = {
   title: 'Terms of Service',
   description: 'Read the terms and conditions for using EduExpress International services. Our comprehensive terms cover service usage, responsibilities, and legal agreements.',
-  keywords: [
-    'terms of service',
-    'terms and conditions',
-    'service agreement',
-    'EduExpress International terms',
-    'study abroad terms',
-    'education consultancy terms',
-    'legal terms',
-    'service conditions',
-    'user agreement',
-    'terms of use'
-  ],
   openGraph: {
     title: 'Terms of Service',
     description: 'Read the terms and conditions for using EduExpress International services. Our comprehensive terms cover service usage, responsibilities, and legal agreements.',
