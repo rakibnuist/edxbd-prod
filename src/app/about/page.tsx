@@ -5,20 +5,6 @@ import { getPublicTrustRecords } from '@/lib/trust-records';
 export const metadata: Metadata = {
   title: { absolute: 'About EduExpress International | Evidence-First Education Consultancy' },
   description: "Learn how EduExpress applies evidence-first education guidance, clear costs and written proof to overseas study decisions from Dhanmondi, Dhaka.",
-  keywords: [
-    'about eduexpress international',
-    'study abroad consultancy bangladesh',
-    'education consultant dhaka',
-    'international education services',
-    'study abroad experience',
-    'education consultancy team',
-    'overseas education experts',
-    'university selection bangladesh',
-    'visa support bangladesh',
-    'scholarship assistance bangladesh',
-    'study abroad success rate',
-    'global education consultant'
-  ],
   openGraph: {
     title: 'About EduExpress International | Evidence-First Education Consultancy',
     description: 'Better Education. Clear Costs. Written Proof.',

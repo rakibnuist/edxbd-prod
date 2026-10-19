@@ -70,13 +70,13 @@ export default async function EvidencePageRoute({ params }: Props) {
       <header className="relative overflow-hidden bg-[#08263c] px-5 pb-16 pt-28 text-white sm:px-8 sm:pb-20 sm:pt-36 lg:px-12">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(23,79,122,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(23,79,122,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
         <div className="relative mx-auto max-w-[1440px]">
-          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-white/50">
+          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white/50">
             <Link href="/" className="hover:text-white">Home</Link> <span aria-hidden> / </span> {page.title}
           </nav>
-          <p className="mb-3 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">{page.eyebrow}</p>
+          <p className="mb-3 font-mono text-xs font-black uppercase tracking-[0.2em] text-[#8ed0ee]">{page.eyebrow}</p>
           <h1 className="max-w-4xl font-heading text-[clamp(2.2rem,4.8vw,4rem)] font-bold leading-[1.06] tracking-[-0.022em] text-white">{page.title}</h1>
           <p className="mt-6 max-w-3xl border-l-4 border-[#64b5df] pl-5 text-base leading-7 text-white/75 md:text-lg md:leading-8">{page.intro}</p>
-          <div className="mt-8 flex flex-wrap gap-4 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-white/50"><span>Owned by EduExpress Content and Compliance</span><span aria-hidden>•</span><span>Official sources and written responsibilities</span></div>
+          <div className="mt-8 flex flex-wrap gap-4 font-mono text-xs font-bold uppercase tracking-[0.16em] text-white/50"><span>Owned by EduExpress Content and Compliance</span><span aria-hidden>•</span><span>Official sources and written responsibilities</span></div>
         </div>
       </header>
       
@@ -84,7 +84,7 @@ export default async function EvidencePageRoute({ params }: Props) {
         <div className="grid gap-8 border-l border-t border-[#174f7a]/20">
           {page.sections.map((section, idx) => (
             <section key={section.heading} className="border-b border-r border-[#174f7a]/20 bg-white p-7 shadow-sm md:p-10">
-              <div className="mb-4 inline-flex items-center gap-2 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">
+              <div className="mb-4 inline-flex items-center gap-2 font-mono text-xs font-black uppercase tracking-[0.2em] text-[#174f7a]">
                 <span>SECTION 0{idx + 1}</span>
               </div>
               <h2 className="font-heading text-2xl font-bold tracking-tight text-[#08263c] md:text-3xl">{section.heading}</h2>
@@ -110,7 +110,7 @@ export default async function EvidencePageRoute({ params }: Props) {
                   <li key={source.href}>
                     <a className="inline-flex items-center gap-2 font-mono text-xs font-bold text-[#174f7a] hover:underline" href={source.href} rel="noreferrer" target="_blank">
                       <span>{source.label}</span>
-                      <span className="text-[10px] text-slate-500">(External Official Source)</span>
+                      <span className="text-xs text-slate-500">(External Official Source)</span>
                     </a>
                   </li>
                 ))}
@@ -119,7 +119,7 @@ export default async function EvidencePageRoute({ params }: Props) {
           ) : null}
 
           <aside className="border-2 border-[#08263c] bg-[#08263c] p-8 text-white md:p-12">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#64b5df]">Compare before you commit</p>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#64b5df]">Compare before you commit</p>
             <h2 className="mt-3 font-heading text-3xl font-bold tracking-tight md:text-4xl">Get your free Education Fit Assessment</h2>
             <p className="mt-4 max-w-2xl text-base leading-7 text-white/75">Share your academic profile, subject, budget, intake, language readiness and career goal. We’ll identify suitable routes, risks and missing information in writing.</p>
             <Link href="/contact?service=education-fit-assessment" className="mt-8 inline-flex items-center gap-3 bg-[#64b5df] px-6 py-4 text-sm font-black text-[#08263c] transition hover:bg-white">

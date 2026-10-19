@@ -99,7 +99,7 @@ export default function ProgramFinder({ rows }: { rows: ProgramRow[] }) {
                 </dl>
                 <div className="mt-auto pt-5">
                   <div className="flex flex-wrap gap-2">
-                    <Link href={`/universities/${row.universitySlug}/clear-cost`} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#08263c] px-4 text-sm font-black text-white hover:bg-[#174f7a]">Full cost breakdown <ArrowRight size={15} /></Link>
+                    <Link href={`/universities/${row.universitySlug}#costs`} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#08263c] px-4 text-sm font-black text-white hover:bg-[#174f7a]">Full cost breakdown <ArrowRight size={15} /></Link>
                     <Link href={`/compare-costs?p=${encodeURIComponent(row.key)}`} className="inline-flex min-h-11 items-center rounded-xl border border-[#174f7a]/25 px-3 text-sm font-bold text-[#174f7a]">Compare</Link>
                     {row.sourceUrl && <a href={row.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-[#174f7a]/25 px-3 text-sm font-bold text-[#174f7a]">Source <ExternalLink size={14} /></a>}
                   </div>

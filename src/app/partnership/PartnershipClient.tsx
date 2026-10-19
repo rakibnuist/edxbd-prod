@@ -68,14 +68,14 @@ export default function PartnershipClient() {
 
         <div className="relative mx-auto max-w-[1440px]">
           <Breadcrumbs items={[{ name: 'Partnership' }]} className="mb-7" />
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#174f7a]">
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#174f7a]">
             <span>EduExpress International Bangladesh</span>
             <span>Global Partner Network</span>
             <span>Institutional Cooperation 2027</span>
           </div>
 
           <div className="max-w-4xl">
-            <p className="flex w-full max-w-full items-start gap-3 bg-[#174f7a] px-4 py-2 text-[11px] font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
+            <p className="flex w-full max-w-full items-start gap-3 bg-[#174f7a] px-4 py-2 text-xs font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
               <Handshake className="mt-0.5 shrink-0 text-[#8ed0ee] sm:mt-0" size={16} />
               <span className="min-w-0 whitespace-normal">Global Partner Programme 2027</span>
             </p>
@@ -114,7 +114,7 @@ export default function PartnershipClient() {
             ['03', 'Apply for review', '#partnership-form'],
           ].map(([number, label, href]) => (
             <a key={href} href={href} className="group flex min-h-16 flex-1 items-center justify-between bg-[#08263c] px-5 text-sm font-black hover:bg-[#174f7a] sm:max-w-sm">
-              <span className="flex items-center gap-3"><span className="font-mono text-[10px] text-[#8ed0ee]">{number}</span>{label}</span>
+              <span className="flex items-center gap-3"><span className="font-mono text-xs text-[#8ed0ee]">{number}</span>{label}</span>
               <ArrowRight size={15} className="text-[#8ed0ee] transition group-hover:translate-x-1" />
             </a>
           ))}
@@ -167,7 +167,7 @@ export default function PartnershipClient() {
       <section id="china-partner-terms" className="scroll-mt-28 border-b border-[#174f7a]/15 bg-[#f4f8fa] px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
-            <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">
+            <span className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#174f7a]">
               Flagship Specialization
             </span>
             <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">
@@ -182,7 +182,7 @@ export default function PartnershipClient() {
             <div className="overflow-x-auto">
               <table className="w-full text-left min-w-[600px]">
                 <thead>
-                  <tr className="bg-[#08263c] text-white font-mono text-[10px] font-black uppercase tracking-wider">
+                  <tr className="bg-[#08263c] text-white font-mono text-xs font-black uppercase tracking-wider">
                     <th className="px-6 py-4">Scholarship Type</th>
                     <th className="px-6 py-4">Coverage</th>
                     <th className="px-6 py-4 text-right">Fee (USD)</th>
@@ -218,7 +218,7 @@ export default function PartnershipClient() {
       <section id="partnership-form" className="scroll-mt-28 border-b border-[#174f7a]/15 bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Step 03 · Cooperation request</p>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#174f7a]">Step 03 · Cooperation request</p>
             <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">
               Apply for Partnership
             </h2>

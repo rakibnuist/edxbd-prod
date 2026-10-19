@@ -58,7 +58,7 @@ export default function DestinationsClient() {
                   <div className="pointer-events-none absolute -right-14 -top-16 size-56 rounded-full border-[2.5rem] border-white/10" />
                   <div className="absolute inset-0 flex flex-col justify-between p-6 text-white sm:p-7">
                     <div className="flex items-start justify-between gap-4">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#08263c]/70 px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] backdrop-blur-sm">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#08263c]/70 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] backdrop-blur-sm">
                         <span className="size-1.5 rounded-full bg-[#64b5df]" /> {china ? 'Flagship destination' : 'Active route'}
                       </span>
                       <span className="grid size-12 place-items-center rounded-xl border border-white/20 bg-white/10 text-3xl backdrop-blur-sm" aria-hidden="true">{country.flag}</span>

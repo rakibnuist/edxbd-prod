@@ -10,7 +10,7 @@ export default function TeamSection({ team }: { team: TeamMember[] }) {
             <div className="container mx-auto px-5 sm:px-8 lg:px-12">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-14">
-                        <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">The people behind your file</p>
+                        <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#174f7a]">The people behind your file</p>
                         <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">Meet Our Team</h2>
                         <p className="text-base text-slate-600 max-w-2xl mx-auto mt-3">
                             Counselors, document specialists, and admissions officers working under written evidence guidelines from our Dhanmondi decision desk.
@@ -42,19 +42,19 @@ export default function TeamSection({ team }: { team: TeamMember[] }) {
 
                                 <div className="p-5 text-center bg-white border-t border-[#174f7a]/15">
                                     <h3 className="font-heading text-lg font-bold text-[#08263c] mb-1">{member.name}</h3>
-                                    <p className="font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-2">{member.role}</p>
+                                    <p className="font-mono text-xs font-black uppercase tracking-wider text-[#174f7a] mb-2">{member.role}</p>
                                     <p className="text-slate-600 text-xs leading-5 line-clamp-3">
                                         {member.bio}
                                     </p>
                                     <div className="mt-4 flex flex-wrap justify-center gap-1.5">
-                                        {member.specialties.map(specialty => <span key={specialty} className="bg-[#e9f7fd] px-2 py-1 text-[9px] font-bold text-[#174f7a]">{specialty}</span>)}
+                                        {member.specialties.map(specialty => <span key={specialty} className="bg-[#e9f7fd] px-2 py-1 text-xs font-bold text-[#174f7a]">{specialty}</span>)}
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <p className="mt-8 text-center font-mono text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                    <p className="mt-8 text-center font-mono text-xs font-medium uppercase tracking-wider text-slate-400">
                         Team details are maintained in the central public record. Photos appear after consent is recorded.
                     </p>
                 </div>

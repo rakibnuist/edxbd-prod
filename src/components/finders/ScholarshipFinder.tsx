@@ -63,7 +63,7 @@ export default function ScholarshipFinder({ rows }: { rows: ScholarshipRow[] }) 
                 {row.renewal && <p className="mt-2 text-xs leading-5 text-slate-500"><strong>Renewal:</strong> {row.renewal}</p>}
                 <p className="mt-4 flex gap-2 text-sm text-slate-600"><CalendarClock size={16} className="mt-0.5 shrink-0 text-[#174f7a]" />{row.deadline || 'Deadline not recorded'}</p>
                 <div className="mt-auto flex flex-wrap gap-2 pt-5">
-                  <Link href={`/universities/${row.universitySlug}/clear-cost`} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#08263c] px-4 text-sm font-black text-white hover:bg-[#174f7a]">Cost after scholarship <ArrowRight size={15} /></Link>
+                  <Link href={`/universities/${row.universitySlug}#costs`} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#08263c] px-4 text-sm font-black text-white hover:bg-[#174f7a]">Cost after scholarship <ArrowRight size={15} /></Link>
                   {row.sourceUrl ? <a href={row.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-[#174f7a]/25 px-3 text-sm font-bold text-[#174f7a]">Source <ExternalLink size={14} /></a> : <span className="inline-flex min-h-11 items-center px-1 text-xs text-slate-500">Source link pending</span>}
                 </div>
               </li>

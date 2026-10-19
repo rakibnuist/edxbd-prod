@@ -234,13 +234,13 @@ export default async function MbbsInChinaBangladeshPage() {
           <Image src="/emblem-icon.png" width={440} height={440} alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
         </div>
         <div className="relative mx-auto max-w-[1440px]">
-          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">
+          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-white/55">
             <Link href="/" className="hover:text-[#8ed0ee]">Home</Link> <span aria-hidden>/</span>{' '}
             <Link href="/study-in-china-from-bangladesh" className="hover:text-[#8ed0ee]">Study in China</Link> <span aria-hidden>/</span> MBBS in China
           </nav>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 border border-[#8ed0ee]/30 bg-[#174f7a]/40 px-4 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-[#8ed0ee]">
+            <div className="inline-flex items-center gap-2 border border-[#8ed0ee]/30 bg-[#174f7a]/40 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-[#8ed0ee]">
               <Stethoscope size={14} /> Recognition &amp; licensing checked first
             </div>
             <h1 className="mt-5 font-heading text-4xl font-bold leading-[1.06] tracking-tight sm:text-5xl md:text-6xl">
@@ -251,7 +251,7 @@ export default async function MbbsInChinaBangladeshPage() {
               university recognised, and can you licence and practise afterwards? Then we show the complete, written cost.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3 font-mono text-[11px] font-bold uppercase tracking-wider text-white/70">
+            <div className="mt-8 flex flex-wrap gap-3 font-mono text-xs font-bold uppercase tracking-wider text-white/70">
               <span className="flex items-center gap-2"><Check size={14} className="text-[#64b5df]" /> MoE-approved list</span>
               <span className="flex items-center gap-2"><Check size={14} className="text-[#64b5df]" /> BMDC eligibility</span>
               <span className="flex items-center gap-2"><Check size={14} className="text-[#64b5df]" /> Full ClearCost sheet</span>
@@ -267,7 +267,7 @@ export default async function MbbsInChinaBangladeshPage() {
       {/* RECOGNITION & LICENSING FIRST */}
       <section className="px-5 py-16 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1200px]">
-          <span className="font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">Before price — recognition &amp; licensing</span>
+          <span className="font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">Before price — recognition &amp; licensing</span>
           <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Three checks that decide whether the degree is worth it</h2>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {standards.map((s) => {
@@ -319,7 +319,7 @@ export default async function MbbsInChinaBangladeshPage() {
       {mbbsUniversities.length > 0 && (
         <section className="bg-white px-5 py-16 border-b border-[#174f7a]/15 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-[1200px]">
-            <span className="font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">Verified network — not a brochure estimate</span>
+            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">Verified network — not a brochure estimate</span>
             <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">MBBS tuition at universities we currently track</h2>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700">
               These figures come straight from our verified China university records — the exact tuition recorded for each
@@ -365,7 +365,7 @@ export default async function MbbsInChinaBangladeshPage() {
       {/* COMPLETE COST */}
       <section className="px-5 py-16 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1200px]">
-          <span className="font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">The complete cost, in writing</span>
+          <span className="font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">The complete cost, in writing</span>
           <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Beyond tuition — what six years actually costs</h2>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700">
             The tuition above comes from the connected university records. Everything else below is a planning range.
@@ -437,13 +437,13 @@ export default async function MbbsInChinaBangladeshPage() {
       {/* FAQ */}
       <section className="px-5 py-16 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-4xl">
-          <p className="text-center font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">Questions before you apply</p>
+          <p className="text-center font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">Questions before you apply</p>
           <h2 className="mt-3 text-center font-heading text-3xl font-bold sm:text-4xl">MBBS in China FAQ</h2>
           <div className="mt-9 grid gap-3">
             {faqs.map((item, index) => (
               <details key={item.question} className="group border border-[#174f7a]/15 bg-white p-5 open:shadow-[0_15px_45px_rgba(8,38,60,0.08)]">
                 <summary className="flex cursor-pointer list-none items-start justify-between gap-5 font-heading text-base font-bold">
-                  <span className="flex gap-4"><span className="font-mono text-[10px] text-[#174f7a]">{String(index + 1).padStart(2, '0')}</span>{item.question}</span>
+                  <span className="flex gap-4"><span className="font-mono text-xs text-[#174f7a]">{String(index + 1).padStart(2, '0')}</span>{item.question}</span>
                   <span className="grid size-7 shrink-0 place-items-center bg-[#e9f7fd] text-[#174f7a] transition group-open:rotate-45">+</span>
                 </summary>
                 <p className="mt-4 pl-8 text-sm leading-7 text-slate-600">{item.answer}</p>
@@ -480,7 +480,7 @@ export default async function MbbsInChinaBangladeshPage() {
       <section className="border-t border-[#174f7a]/15 bg-[#f6f9fb] px-5 py-10 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-[1200px] gap-8 lg:grid-cols-2">
           <div>
-            <p className="flex items-center gap-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><ShieldCheck size={14} /> Official sources</p>
+            <p className="flex items-center gap-2 font-mono text-xs font-black uppercase tracking-[0.16em] text-[#174f7a]"><ShieldCheck size={14} /> Official sources</p>
             <div className="mt-4 grid gap-2">
               {sources.map((s) => (
                 <a key={s.href} href={s.href} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 border-b border-[#174f7a]/15 bg-white p-3 text-xs font-bold text-[#174f7a] hover:bg-[#e9f7fd]">{s.label}<ArrowRight size={14} /></a>
@@ -488,14 +488,14 @@ export default async function MbbsInChinaBangladeshPage() {
             </div>
           </div>
           <div>
-            <p className="flex items-center gap-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><FileCheck2 size={14} /> Related China decisions</p>
+            <p className="flex items-center gap-2 font-mono text-xs font-black uppercase tracking-[0.16em] text-[#174f7a]"><FileCheck2 size={14} /> Related China decisions</p>
             <div className="mt-4 grid gap-px bg-[#174f7a]/15 sm:grid-cols-2">
               {related.map((r) => (
                 <Link key={r.href} href={r.href} className="flex items-center justify-between gap-3 bg-white p-3 text-xs font-black hover:bg-[#e9f7fd]">{r.label}<ArrowRight size={14} className="text-[#174f7a]" /></Link>
               ))}
             </div>
           </div>
-          <p className="lg:col-span-2 border-t border-[#174f7a]/15 pt-5 text-[10px] leading-5 text-slate-500">
+          <p className="lg:col-span-2 border-t border-[#174f7a]/15 pt-5 text-xs leading-5 text-slate-500">
             <strong className="text-[#08263c]">Managed by:</strong> EduExpress China Admissions Desk · <strong className="text-[#08263c]">Reviewed by:</strong> EduExpress Content and Compliance. Cost ranges are planning assumptions; university, program, recognition and licensing facts are aligned in writing during your assessment.
           </p>
         </div>

@@ -7,26 +7,6 @@ import { SITE_URL, destinationPath } from '@/lib/site-urls';
 export const metadata: Metadata = {
   title: 'Study Abroad Destinations for Bangladeshi Students',
   description: 'Compare active EduExpress destination services for China, Malta, Hungary, Cyprus, South Korea, the United Kingdom, Georgia, Greece, Malaysia and Thailand.',
-  keywords: [
-    'study abroad destinations',
-    'international universities',
-    'scholarship opportunities',
-    'UK universities',
-    'China universities',
-    'South Korea education',
-    'Hungary study',
-    'Cyprus universities',
-    'Georgia universities',
-    'Malta education',
-    'Greece education',
-    'Malaysia education',
-    'Thailand education',
-    'study abroad programs',
-    'international education',
-    'student visa assistance',
-    'education consultancy',
-    'overseas education'
-  ],
   openGraph: {
     title: 'Study Abroad Destinations for Bangladeshi Students',
     description: 'Compare ten active destination services with education fit, clear costs and visa readiness.',

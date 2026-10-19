@@ -44,27 +44,27 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
               <div className="font-heading text-4xl font-bold text-[#8ed0ee] mb-1">06</div>
-              <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">Better Education Checks</div>
+              <div className="font-mono text-xs font-black uppercase tracking-wider text-white/65">Better Education Checks</div>
             </div>
             <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
               <div className="font-heading text-4xl font-bold text-[#64b5df] mb-1">Written</div>
-              <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">ClearCost Schedule</div>
+              <div className="font-mono text-xs font-black uppercase tracking-wider text-white/65">ClearCost Schedule</div>
             </div>
             <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
               <div className="font-heading text-4xl font-bold text-[#8ed0ee] mb-1">3+</div>
-              <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">Routes Compared</div>
+              <div className="font-mono text-xs font-black uppercase tracking-wider text-white/65">Routes Compared</div>
             </div>
             <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
               <div className="font-heading text-4xl font-bold text-[#64b5df] mb-1">10</div>
-              <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">Active Destinations</div>
+              <div className="font-mono text-xs font-black uppercase tracking-wider text-white/65">Active Destinations</div>
             </div>
             <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
               <div className="font-heading text-4xl font-bold text-[#8ed0ee] mb-1">Flagship</div>
-              <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">China Proof Engine</div>
+              <div className="font-mono text-xs font-black uppercase tracking-wider text-white/65">China Proof Engine</div>
             </div>
             <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
               <div className="font-heading text-4xl font-bold text-[#64b5df] mb-1">2018</div>
-              <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">Founded Year</div>
+              <div className="font-mono text-xs font-black uppercase tracking-wider text-white/65">Founded Year</div>
             </div>
           </div>
         </div>
@@ -74,7 +74,7 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
       <section className="py-20 bg-white border-b border-[#174f7a]/15">
         <div className="container mx-auto px-5 sm:px-8 lg:px-12 max-w-5xl">
           <div className="text-center mb-16">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Institutional Evolution</p>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#174f7a]">Institutional Evolution</p>
             <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">Our Story & Purpose</h2>
             <div className="mt-6 text-base leading-8 text-slate-700 text-left space-y-6 max-w-4xl mx-auto border-l-4 border-[#174f7a] pl-6">
               <p>
@@ -88,7 +88,7 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
 
           {/* China Specialist Positioning Callout */}
           <div className="border-2 border-[#08263c] bg-[#08263c] p-8 md:p-12 mb-20 text-[#08263c] shadow-[10px_10px_0_0_#64b5df]">
-            <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Flagship Specialization</span>
+            <span className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Flagship Specialization</span>
             <h3 className="mt-2 font-heading text-2xl md:text-3xl font-bold text-white">
               EduExpress International — Bangladesh’s China Admission and Scholarship Specialist
             </h3>
@@ -114,7 +114,7 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
                 <div key={idx} className="relative pl-6">
                   <div className="absolute left-[-31px] top-1.5 size-4 bg-[#64b5df] border-2 border-[#08263c]" />
                   <div className="border border-[#174f7a]/20 bg-[#f4f8fa] p-5 shadow-sm">
-                    <span className="inline-block px-3 py-1 bg-[#174f7a] text-[#8ed0ee] font-mono text-[10px] font-black uppercase tracking-wider mb-2">{item.year}</span>
+                    <span className="inline-block px-3 py-1 bg-[#174f7a] text-[#8ed0ee] font-mono text-xs font-black uppercase tracking-wider mb-2">{item.year}</span>
                     <h4 className="font-heading text-xl font-bold text-[#08263c] mb-1">{item.title}</h4>
                     <p className="text-sm text-slate-700 leading-relaxed">{item.desc}</p>
                   </div>
@@ -132,7 +132,7 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
       <section className="py-20 bg-[#f4f8fa]">
         <div className="container mx-auto px-5 sm:px-8 lg:px-12 max-w-5xl">
           <div className="text-center mb-14">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Our Core Pillars</p>
+            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#174f7a]">Our Core Pillars</p>
             <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">What We Do</h2>
           </div>
 
@@ -183,7 +183,7 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
       {/* Call to Action */}
       <section className="py-20 bg-[#08263c] text-white">
         <div className="container mx-auto px-5 sm:px-8 lg:px-12 text-center max-w-3xl">
-          <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee] mb-3">Compare Before You Commit</p>
+          <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#8ed0ee] mb-3">Compare Before You Commit</p>
           <h2 className="font-heading text-4xl font-bold mb-6">Ready to inspect your options?</h2>
           <p className="text-base text-white/75 mb-10 leading-relaxed">
             Visit our Dhanmondi decision desk or submit your Education Fit Assessment online for a written summary of suitable routes.

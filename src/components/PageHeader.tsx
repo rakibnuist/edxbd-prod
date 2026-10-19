@@ -39,7 +39,7 @@ export default function PageHeader({
             <div className="relative z-10 mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
                 <Breadcrumbs items={[{ name: breadcrumbLabel || `${title} ${highlight}`.trim() }]} className="mb-5" />
 
-                <div className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-[#174f7a]/15 bg-white px-4 py-2 text-[11px] font-black uppercase leading-5 tracking-[0.12em] text-[#174f7a] shadow-sm sm:text-xs">
+                <div className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-[#174f7a]/15 bg-white px-4 py-2 text-xs font-black uppercase leading-5 tracking-[0.12em] text-[#174f7a] shadow-sm sm:text-xs">
                     {iconElement}
                     <span className="min-w-0 whitespace-normal">{badgeText}</span>
                 </div>

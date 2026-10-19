@@ -258,7 +258,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
         {/* Name */}
         <div>
-          <label htmlFor="name" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
+          <label htmlFor="name" className="block font-mono text-xs font-black uppercase tracking-wider text-[#174f7a] mb-1">
             Full Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -276,7 +276,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
+          <label htmlFor="email" className="block font-mono text-xs font-black uppercase tracking-wider text-[#174f7a] mb-1">
             Email Address <span className="text-red-500">*</span>
           </label>
           <input
@@ -294,7 +294,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
         {/* Phone */}
         <div>
-          <label htmlFor="phone" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
+          <label htmlFor="phone" className="block font-mono text-xs font-black uppercase tracking-wider text-[#174f7a] mb-1">
             Phone Number <span className="text-red-500">*</span>
           </label>
           <CountryCodePhoneInput
@@ -314,7 +314,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Country */}
         {showCountry && (
           <div>
-            <label htmlFor="country" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
+            <label htmlFor="country" className="block font-mono text-xs font-black uppercase tracking-wider text-[#174f7a] mb-1">
               Preferred Destination <span className="text-red-500">*</span>
             </label>
             <div className="relative group">
@@ -345,7 +345,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Program */}
         {showProgram && (
           <div>
-            <label htmlFor="program" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
+            <label htmlFor="program" className="block font-mono text-xs font-black uppercase tracking-wider text-[#174f7a] mb-1">
               Program Level <span className="text-red-500">*</span>
             </label>
             <div className="relative group">
@@ -376,7 +376,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Message */}
         {showMessage && (
           <div>
-            <label htmlFor="message" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#174f7a] mb-1">
+            <label htmlFor="message" className="block font-mono text-xs font-black uppercase tracking-wider text-[#174f7a] mb-1">
               Message (Optional)
             </label>
             <textarea
@@ -400,7 +400,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
           </div>
         )}
 
-        <label className="flex items-start gap-3 border border-[#174f7a]/20 bg-[#f4f8fa] p-3 text-[11px] leading-4 text-slate-700">
+        <label className="flex items-start gap-3 border border-[#174f7a]/20 bg-[#f4f8fa] p-3 text-xs leading-4 text-slate-700">
           <input
             type="checkbox"
             name="consent"
