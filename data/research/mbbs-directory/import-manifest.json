@@ -1,0 +1,594 @@
+{
+  "key": "eduexpress-china-mbbs-45-v1",
+  "source": "EduExpress_China_MBBS.xlsx",
+  "checkedAt": "2026-10-24",
+  "entries": [
+    {
+      "row": 4,
+      "slug": "peking-university-health-science-center",
+      "name": "Peking University Health Science Center",
+      "action": "merge",
+      "publishedTuition": "CNY 45,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine",
+      "languages": [
+        "Chinese"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 5,
+      "slug": "capital-medical-university",
+      "name": "Capital Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 50,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 6,
+      "slug": "fudan-university",
+      "name": "Fudan University",
+      "action": "merge",
+      "publishedTuition": "CNY 75,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 7,
+      "slug": "shanghai-jiao-tong-university",
+      "name": "Shanghai Jiao Tong University",
+      "action": "merge",
+      "publishedTuition": "CNY 75,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 8,
+      "slug": "tongji-university",
+      "name": "Tongji University",
+      "action": "merge",
+      "publishedTuition": "CNY 45,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 9,
+      "slug": "tianjin-medical-university",
+      "name": "Tianjin Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 48,000 / year (estimate)",
+      "feeBasis": "owner-planning-estimate",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": false
+    },
+    {
+      "row": 10,
+      "slug": "nankai-university",
+      "name": "Nankai University",
+      "action": "merge",
+      "publishedTuition": "CNY 35,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Ophthalmological and Optometric Medicine",
+      "languages": [
+        "Chinese"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 11,
+      "slug": "jilin-university",
+      "name": "Jilin University",
+      "action": "merge",
+      "publishedTuition": "CNY 36,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 12,
+      "slug": "beihua-university",
+      "name": "Beihua University",
+      "action": "merge",
+      "publishedTuition": "CNY 26,000 / year (estimate)",
+      "feeBasis": "owner-planning-estimate",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": false
+    },
+    {
+      "row": 13,
+      "slug": "china-medical-university",
+      "name": "China Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 40,000 / year (estimate)",
+      "feeBasis": "owner-planning-estimate",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": false
+    },
+    {
+      "row": 14,
+      "slug": "dalian-medical-university",
+      "name": "Dalian Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 42,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 15,
+      "slug": "jinzhou-medical-university",
+      "name": "Jinzhou Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 38,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 16,
+      "slug": "harbin-medical-university",
+      "name": "Harbin Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 30,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 17,
+      "slug": "shandong-university",
+      "name": "Shandong University",
+      "action": "merge",
+      "publishedTuition": "CNY 45,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 18,
+      "slug": "qingdao-university",
+      "name": "Qingdao University",
+      "action": "merge",
+      "publishedTuition": "CNY 30,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 19,
+      "slug": "nanjing-medical-university",
+      "name": "Nanjing Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 34,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 20,
+      "slug": "southeast-university",
+      "name": "Southeast University",
+      "action": "merge",
+      "publishedTuition": "CNY 32,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 21,
+      "slug": "jiangsu-university",
+      "name": "Jiangsu University",
+      "action": "merge",
+      "publishedTuition": "CNY 34,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 22,
+      "slug": "soochow-university",
+      "name": "Soochow University",
+      "action": "merge",
+      "publishedTuition": "CNY 32,500 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 23,
+      "slug": "yangzhou-university",
+      "name": "Yangzhou University",
+      "action": "merge",
+      "publishedTuition": "CNY 30,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 24,
+      "slug": "ntu",
+      "name": "Nantong University",
+      "action": "merge",
+      "publishedTuition": "CNY 26,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 25,
+      "slug": "xuzhou-medical-university",
+      "name": "Xuzhou Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 33,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 26,
+      "slug": "zhejiang-university",
+      "name": "Zhejiang University",
+      "action": "merge",
+      "publishedTuition": "CNY 42,800 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 27,
+      "slug": "wenzhou-medical-university",
+      "name": "Wenzhou Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 33,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 28,
+      "slug": "ningbo-university",
+      "name": "Ningbo University",
+      "action": "merge",
+      "publishedTuition": "CNY 30,000 / year (estimate)",
+      "feeBasis": "owner-planning-estimate",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": false
+    },
+    {
+      "row": 29,
+      "slug": "anhui-medical-university",
+      "name": "Anhui Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 30,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 30,
+      "slug": "fujian-medical-university",
+      "name": "Fujian Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 35,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 31,
+      "slug": "xiamen-university",
+      "name": "Xiamen University",
+      "action": "merge",
+      "publishedTuition": "CNY 38,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 32,
+      "slug": "zzu",
+      "name": "Zhengzhou University",
+      "action": "merge",
+      "publishedTuition": "CNY 35,000 / year (estimate)",
+      "feeBasis": "owner-planning-estimate",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": false
+    },
+    {
+      "row": 33,
+      "slug": "wuhan-university",
+      "name": "Wuhan University",
+      "action": "merge",
+      "publishedTuition": "CNY 40,000 / year (estimate)",
+      "feeBasis": "owner-planning-estimate",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": false
+    },
+    {
+      "row": 34,
+      "slug": "huazhong-university-of-science-and-technology",
+      "name": "Huazhong University of Science and Technology",
+      "action": "merge",
+      "publishedTuition": "CNY 40,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 35,
+      "slug": "ctgu",
+      "name": "China Three Gorges University",
+      "action": "merge",
+      "publishedTuition": "CNY 24,000 / year (estimate)",
+      "feeBasis": "owner-planning-estimate",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": false
+    },
+    {
+      "row": 36,
+      "slug": "sun-yat-sen-university",
+      "name": "Sun Yat-sen University",
+      "action": "merge",
+      "publishedTuition": "CNY 48,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine",
+      "languages": [
+        "Chinese"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 37,
+      "slug": "southern-medical-university",
+      "name": "Southern Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 50,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 38,
+      "slug": "jinan-university",
+      "name": "Jinan University",
+      "action": "merge",
+      "publishedTuition": "CNY 40,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 39,
+      "slug": "guangzhou-medical-university",
+      "name": "Guangzhou Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 30,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 40,
+      "slug": "shantou-university",
+      "name": "Shantou University",
+      "action": "merge",
+      "publishedTuition": "CNY 40,000 / year (estimate)",
+      "feeBasis": "owner-planning-estimate",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": false
+    },
+    {
+      "row": 41,
+      "slug": "guangxi-medical-university",
+      "name": "Guangxi Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 35,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 42,
+      "slug": "sichuan-university",
+      "name": "Sichuan University",
+      "action": "merge",
+      "publishedTuition": "CNY 45,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 43,
+      "slug": "southwest-medical-university",
+      "name": "Southwest Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 31,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 44,
+      "slug": "north-sichuan-medical-college",
+      "name": "North Sichuan Medical College",
+      "action": "merge",
+      "publishedTuition": "CNY 26,000 / year (estimate)",
+      "feeBasis": "owner-planning-estimate",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": false
+    },
+    {
+      "row": 45,
+      "slug": "chongqing-medical-university",
+      "name": "Chongqing Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 30,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 46,
+      "slug": "kunming-medical-university",
+      "name": "Kunming Medical University",
+      "action": "merge",
+      "publishedTuition": "CNY 35,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 47,
+      "slug": "xian-jiaotong-university",
+      "name": "Xi'an Jiaotong University",
+      "action": "merge",
+      "publishedTuition": "CNY 40,000 / year",
+      "feeBasis": "university-published",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": true
+    },
+    {
+      "row": 48,
+      "slug": "shihezi-university",
+      "name": "Shihezi University",
+      "action": "merge",
+      "publishedTuition": "CNY 28,000 / year (estimate)",
+      "feeBasis": "owner-planning-estimate",
+      "programme": "Clinical Medicine (MBBS)",
+      "languages": [
+        "English"
+      ],
+      "indexEligible": false
+    }
+  ],
+  "created": 0,
+  "merged": 45
+}

@@ -6,6 +6,9 @@ import { getUniversityRoute, getUniversityRouteSlugs } from '@/lib/university-re
 import { universityIsIndexable } from '@/lib/university-governance';
 import { getUniversityProfileDetails } from '@/lib/university-profile-details';
 import { profilePrograms } from '@/lib/university-profile-view';
+import { prepareUniversityPrograms } from '@/lib/university-profile-public';
+import { getIndexableUniversityGuides } from '@/lib/university-guide-publication';
+import { universityProfileLogo } from '@/lib/university-profile-assets';
 import { UNIVERSITY_SITE_URL, universityProfileSeo, universityProfileStructuredData } from '@/lib/university-profile-seo';
 
 export const revalidate = 3600;
@@ -27,8 +30,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!result) return { title: { absolute: 'University Record Not Found | EduExpress International' }, robots: { index: false, follow: true } };
 
   const university = result.record;
-  const { canonical, description, title } = universityProfileSeo(university);
-  const indexable = universityIsIndexable(university);
+  const [details, guides] = await Promise.all([getUniversityProfileDetails(university.slug), getIndexableUniversityGuides()]);
+  const { canonical, description, title } = universityProfileSeo(university, prepareUniversityPrograms(profilePrograms(university, details)));
+  const indexable = guides.has(university.slug) || universityIsIndexable(university);
 
   return {
     title: { absolute: `${title} | EduExpress International` },
@@ -55,7 +59,7 @@ export default async function UniversityDetailPage({ params }: { params: Promise
 
   const university = result.record;
   const details = await getUniversityProfileDetails(university.slug);
-  const structuredData = universityProfileStructuredData(university, profilePrograms(university, details));
+  const structuredData = universityProfileStructuredData({ ...university, logo: universityProfileLogo(university) }, prepareUniversityPrograms(profilePrograms(university, details)));
 
   return (
     <>

@@ -162,14 +162,14 @@ function buildSummary(form: FormState): Summary {
   return { routes: routes.slice(0, 3), checks, missing };
 }
 
-type InitialContext = { university?: string; program?: string; country?: string; intent?: 'application' };
+type InitialContext = { intake?: string; university?: string; program?: string; country?: string; intent?: 'application' };
 
 export default function EducationFitAssessment({ initialContext }: { initialContext?: InitialContext } = {}) {
   const isApplication = initialContext?.intent === 'application';
   const eventLabel = isApplication ? 'university_application' : 'homepage_discovery';
   const [form, setForm] = useState<FormState>(() => {
     const country = initialContext?.country ? destinationValue(initialContext.country) : '';
-    return { ...EMPTY, subject: initialContext?.program || '', preferredCountries: DESTINATIONS.some(destination => destination.value === country) ? [country] : [] };
+    return { ...EMPTY, intake: initialContext?.intake || '', subject: initialContext?.program || '', preferredCountries: DESTINATIONS.some(destination => destination.value === country) ? [country] : [] };
   });
   const [screen, setScreen] = useState<Screen>('profile');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
@@ -388,7 +388,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
               <Field label="Target intake">
                 <select value={form.intake} onChange={event => update({ intake: event.target.value })} className={inputClass}>
                   <option value="">Choose an intake</option>
-                  {(isApplication ? APPLICATION_INTAKES : INTAKES).map(value => <option key={value} value={value}>{value}</option>)}
+                  {form.intake && !(isApplication ? APPLICATION_INTAKES : INTAKES).includes(form.intake) && <option value={form.intake}>{form.intake}</option>}{(isApplication ? APPLICATION_INTAKES : INTAKES).map(value => <option key={value} value={value}>{value}</option>)}
                 </select>
               </Field>
               <Field label="English readiness">

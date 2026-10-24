@@ -1,505 +1,95 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  ArrowRight,
-  Stethoscope,
-  ShieldCheck,
-  Building2,
-  AlertTriangle,
-  CircleDollarSign,
-  GraduationCap,
-  Languages,
-  CalendarClock,
-  Check,
-  X,
-  BadgeCheck,
-  FileCheck2,
-} from 'lucide-react';
-import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
-import { getUniversityRecords } from '@/lib/university-records';
+import { ArrowRight, BookOpen, Check, ChevronDown, ChevronRight, GraduationCap, Stethoscope } from 'lucide-react';
+import MbbsUniversityFinder from '@/components/china/MbbsUniversityFinder';
+import { getChinaMbbsGuide } from '@/lib/china-mbbs-guide';
+import { mbbsApplyHref } from '@/lib/mbbs-enquiry';
 
-const canonicalUrl = 'https://eduexpressint.com/mbbs-in-china-bangladesh';
-const verifiedDate = '2026-07-20';
-
-// Regenerate from the verified university records hourly.
 export const revalidate = 3600;
-
-type MbbsRow = { name: string; slug: string; city: string; program: string; tuition: string; duration: string };
-
-// Pull real MBBS / Clinical Medicine tuition from the verified China university records.
-async function getMbbsUniversities(): Promise<MbbsRow[]> {
-  try {
-    const unis = await getUniversityRecords('China');
-    const rows: MbbsRow[] = [];
-    for (const u of unis) {
-      for (const p of u.programs || []) {
-        const label = `${p.name || ''} ${p.subject || ''}`.toLowerCase();
-        const isMbbs = /mbbs|clinical medicine/.test(label) && !/veterinary/.test(label);
-        if (isMbbs && p.tuition) {
-          rows.push({
-            name: u.name,
-            slug: u.slug,
-            city: u.city,
-            program: p.name || 'MBBS / Clinical Medicine',
-            tuition: p.tuition,
-            duration: p.duration || '6 years',
-          });
-        }
-      }
-    }
-    return rows.sort((a, b) => a.name.localeCompare(b.name));
-  } catch {
-    return [];
-  }
-}
-
+const site = 'https://eduexpressint.com';
+const canonical = `${site}/mbbs-in-china-bangladesh`;
+const wrap = 'mx-auto max-w-[1120px]';
+const section = 'scroll-mt-36 px-5 py-9 sm:px-8 lg:px-10 lg:py-12';
+const heading = 'text-2xl font-bold leading-tight tracking-tight sm:text-[30px]';
+const body = 'text-sm leading-7 text-slate-600';
+const action = 'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#174f7a] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0b2f4a]';
+const textLink = 'inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#174f7a] hover:underline underline-offset-4';
+const contents = [['Universities & fees','mbbs-universities'],['Scholarships','mbbs-scholarships'],['Eligibility & CSCA','mbbs-eligibility'],['Total cost','mbbs-cost'],['BMDC pathway','mbbs-bmdc'],['FAQs','mbbs-faq']];
+const documents = ['Passport and recent photograph','SSC and HSC certificates and full transcripts','English-language evidence','Required CSCA score report','Personal statement or study plan','Medical examination and police clearance','Financial support documents'];
+const related = [
+  {title:'Study in China from Bangladesh',body:'Explore degrees, education quality and the wider China study plan.',href:'/study-in-china-from-bangladesh'},
+  {title:'Scholarships in China',body:'Understand coverage, selection and renewal before applying.',href:'/china-scholarships-bangladesh'},
+  {title:'China admission requirements',body:'Prepare your qualifications, language evidence and CSCA.',href:'/china-admission-requirements'},
+  {title:'Life in China',body:'Plan accommodation, halal food, language and everyday life.',href:'/life-in-china-bangladeshi-students'},
+];
 export async function generateMetadata(): Promise<Metadata> {
-  const count = (await getMbbsUniversities()).length;
-  const description = count > 0
-    ? `MBBS in China for Bangladeshi students, explained recognition-first: ${count} verified MoE-approved English-medium medical university records with real tuition, BMDC licensing reality, a full written cost breakdown, eligibility and intakes.`
-    : 'MBBS in China for Bangladeshi students, explained recognition-first: MoE-approved English-medium medical universities, BMDC licensing reality, a full written cost breakdown, eligibility and intakes — verified before you apply.';
-  return {
-    title: { absolute: 'MBBS in China for Bangladeshi Students — Recognition, Licensing & 2026/27 Cost' },
-    description,
-    alternates: { canonical: '/mbbs-in-china-bangladesh' },
-    openGraph: {
-      title: 'MBBS in China for Bangladeshi Students | EduExpress International',
-      description: 'Recognition and BMDC licensing checked first, then the complete cost. MoE-approved English-medium universities, eligibility and intakes for Bangladeshi students.',
-      url: '/mbbs-in-china-bangladesh',
-      type: 'website',
-    },
+  const guide = await getChinaMbbsGuide();
+  return { title: { absolute: guide.metaTitle }, description: guide.description,
+    alternates: { canonical }, robots: { index:true, follow:true },
+    openGraph: { title:guide.metaTitle, description:guide.description, url:canonical, type:'website', images:[{url:'/images/real/china_campus/cie_campus_visit.webp',width:1600,height:1200,alt:'Campus visit at a College of International Education in China'}] },
+    twitter: {card:'summary_large_image',title:guide.metaTitle,description:guide.description,images:['/images/real/china_campus/cie_campus_visit.webp']},
   };
 }
+export default async function MbbsChinaPage() {
+  const guide = await getChinaMbbsGuide();
+  const schema = {'@context':'https://schema.org','@graph':[
+    {'@type':'WebPage','@id':`${canonical}#webpage`,url:canonical,name:guide.metaTitle,description:guide.description,inLanguage:'en',isPartOf:{'@id':`${site}/#website`},publisher:{'@type':'Organization',name:'EduExpress International',url:site},breadcrumb:{'@id':`${canonical}#breadcrumb`}},
+    {'@type':'BreadcrumbList','@id':`${canonical}#breadcrumb`,itemListElement:[{ '@type':'ListItem',position:1,name:'Home',item:site},{'@type':'ListItem',position:2,name:'Study in China',item:`${site}/study-in-china-from-bangladesh`},{'@type':'ListItem',position:3,name:'MBBS in China',item:canonical}]},
+    {'@type':'ItemList',name:'MBBS university options in China',itemListElement:guide.universities.map((item,i)=>({'@type':'ListItem',position:i+1,name:item.name,url:`${canonical}#mbbs-${item.id}`}))},
+    {'@type':'FAQPage','@id':`${canonical}#faq`,mainEntity:guide.faqs.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))},
+  ]};
+  return <article lang="en" className="bg-white pt-[76px] text-[#0b2f4a] xl:pt-[112px]">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
+    <header className="bg-[#edf4f8] px-5 pb-8 pt-5 sm:px-8 lg:px-10 lg:pb-10"><div className={wrap}>
+      <nav aria-label="Breadcrumb" className="mb-5 flex flex-wrap items-center gap-2 text-xs leading-6 text-slate-500"><Link href="/">Home</Link><ChevronRight size={12}/><Link href="/study-in-china-from-bangladesh" className="hover:underline">Study in China</Link><ChevronRight size={12}/><span>MBBS</span></nav>
+      <div className="grid items-center gap-7 lg:grid-cols-[1.15fr_.85fr] lg:gap-10"><div>
+        <p className="mb-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.1em] text-[#17624f]"><Stethoscope size={16}/>Your medical education starts here</p>
+        <h1 className="max-w-xl text-[36px] font-bold leading-[1.1] tracking-tight sm:text-[46px]">MBBS in China<br/>for Bangladeshi Students</h1>
+        <p className="mt-5 max-w-xl text-[15px] leading-7 text-slate-700">Find an English-taught medical programme that fits your science background, career plans and family budget. Compare universities, tuition and scholarships in one place.</p>
+        <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600"><strong className="text-[#0b2f4a]">Choose an authorised medical programme.</strong> Meet the university’s admission requirements, complete your degree and clinical training, then follow the BMDC examination and registration pathway for practice in Bangladesh.</p>
+        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2"><Link href={mbbsApplyHref()} className={action}>Build my MBBS shortlist<ArrowRight size={16}/></Link><a href="#mbbs-universities" className={textLink}>Explore universities<ArrowRight size={16}/></a></div>
+      </div><figure className="overflow-hidden rounded-xl border border-white bg-white"><Image src="/images/real/china_campus/cie_campus_visit.webp" alt="Campus visit outside a College of International Education in China" width={1600} height={1200} priority sizes="(max-width:1023px) 100vw, 480px" className="h-[220px] w-full object-cover object-[68%_43%] sm:h-[270px]"/><figcaption className="px-4 py-3 text-xs text-slate-500">Exploring university life in China</figcaption><dl className="grid grid-cols-3 border-t border-slate-200 p-4 text-center"><div><dt className="text-xs text-slate-500">Duration</dt><dd className="mt-1 text-sm font-bold">6 years</dd></div><div><dt className="text-xs text-slate-500">Teaching</dt><dd className="mt-1 text-sm font-bold">English</dd></div><div><dt className="text-xs text-slate-500">Qualification</dt><dd className="mt-1 text-sm font-bold">MBBS</dd></div></dl></figure></div>
+    </div></header>
+    <nav aria-label="On this page" className="border-b border-slate-200 px-5 sm:px-8 lg:px-10"><div className={`${wrap} flex flex-wrap gap-x-5 py-2`}>{contents.map(([label,id])=><a key={id} href={`#${id}`} className="inline-flex min-h-10 items-center text-xs font-semibold text-[#174f7a] hover:underline">{label}</a>)}</div></nav>
 
-// Recognition / licensing leads (per the evidence-first MBBS rule).
-const standards = [
-  {
-    icon: Building2,
-    title: 'MoE-approved English-medium list',
-    detail: "China's Ministry of Education publishes an annual list of universities authorised to enrol international students for English-taught undergraduate clinical medicine (MBBS). A university outside that list, or a program not on it, is a red flag we check first.",
-  },
-  {
-    icon: BadgeCheck,
-    title: 'WHO / WDOMS listing',
-    detail: 'A medical school should appear in the World Directory of Medical Schools (WDOMS). Listing supports later licensing steps abroad — but listing alone is not a licence to practise anywhere.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'BMDC licensing reality',
-    detail: 'To practise in Bangladesh, a foreign medical graduate must meet Bangladesh Medical & Dental Council (BMDC) eligibility and pass its registration examination. We confirm your eligibility BEFORE you apply, not after you graduate.',
-  },
-];
+    <section id="mbbs-universities" className={section}><div className={wrap}><div className="flex flex-wrap items-end justify-between gap-3"><div><h2 className={heading}>Find your MBBS university in China</h2><p className={`mt-3 max-w-2xl ${body}`}>Start with these six medical programme options. Open the details for accommodation, academic entry, English requirements and funding.</p></div><Link href={mbbsApplyHref()} className={textLink}>Get a personal shortlist<ArrowRight size={16}/></Link></div><MbbsUniversityFinder universities={guide.universities}/>
+      <div className="mt-7 border-t border-slate-200 pt-5"><div className="flex flex-wrap items-center justify-between gap-3"><h3 className="text-base font-bold">More medical universities to explore</h3><Link href="/universities?country=China&search=medicine" className={textLink}>Browse the full medical directory<ArrowRight size={15}/></Link></div><div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{[
+        {name:'Shanghai Jiao Tong University',slug:'shanghai-jiao-tong-university',city:'Shanghai',fee:'75,000'},
+        {name:'Capital Medical University',slug:'capital-medical-university',city:'Beijing',fee:'50,000'},
+        {name:'Zhejiang University',slug:'zhejiang-university',city:'Hangzhou',fee:'42,800'},
+        {name:'Nanjing Medical University',slug:'nanjing-medical-university',city:'Nanjing',fee:'34,000'},
+      ].map(item=><Link key={item.slug} href={`/universities/${item.slug}#programs`} className="rounded-lg border border-slate-200 p-4 transition-colors hover:border-[#174f7a] hover:bg-[#f7fafc]"><h4 className="text-sm font-bold leading-6">{item.name}</h4><p className="mt-1 text-xs text-slate-500">{item.city} · English MBBS · 6 years</p><p className="mt-3 text-sm font-semibold text-[#174f7a]">CNY {item.fee}<span className="text-xs font-normal text-slate-500"> /year tuition</span></p><span className="mt-3 inline-flex items-center gap-2 text-xs font-semibold text-[#174f7a]">View programmes<ArrowRight size={13}/></span></Link>)}</div></div>
+    </div></section>
 
-// Complete cost — current assumptions, confirmed per university during assessment.
-const costRows: [string, string, string][] = [
-  ['On-campus hostel', '$500 – $1,500 / year', 'Cheapest option for international students'],
-  ['Living (food, transport, personal)', '$200 – $400 / month', '≈ $2,400 – $4,800 / year'],
-  ['Medical insurance (mandatory)', '$100 – $200 / year', 'Required for the residence permit'],
-  ['Visa & residence permit', '$100 – $200', 'Initial issuance and conversion'],
-  ['Medical check, translation, courier', 'Itemised', 'Third-party, listed in writing before payment'],
-  ['Return airfare', '$300 – $800', 'Depends on season and route'],
-];
+    <section id="mbbs-scholarships" className={`${section} bg-[#f1f7f3]`}><div className={wrap}><div className="flex flex-wrap items-end justify-between gap-3"><div><h2 className={heading}>MBBS scholarships: make your budget go further</h2><p className={`mt-3 max-w-2xl ${body}`}>Match the award to your medical programme, then compare coverage, selection and payment timing.</p></div><Link href="/china-scholarships-bangladesh" className={textLink}>Full scholarship guide<ArrowRight size={16}/></Link></div>
+      <div className="mt-6 grid gap-5 md:grid-cols-3"><div className="border-t-2 border-[#94b6a6] pt-4"><p className="text-xs font-semibold text-[#17624f]">Wenzhou Medical University</p><h3 className="mt-2 text-2xl font-bold">Up to CNY 20,000</h3><p className={`mt-2 ${body}`}>Freshman awards of CNY 20,000, 10,000 or 5,000. Assessment follows registration and full tuition payment.</p><a href="#mbbs-wmu" className={textLink}>View WMU details<ArrowRight size={15}/></a></div><div className="border-t-2 border-[#94b6a6] pt-4"><p className="text-xs font-semibold text-[#17624f]">Chongqing Medical University</p><h3 className="mt-2 text-2xl font-bold">CNY 15,000</h3><p className={`mt-2 ${body}`}>First-year award for selected freshmen, covering 30% of the enrolment quota. Academic documents support selection.</p><a href="#mbbs-cqmu" className={textLink}>View CQMU details<ArrowRight size={15}/></a></div><div className="border-t-2 border-[#94b6a6] pt-4"><p className="text-xs font-semibold text-[#17624f]">Your funding plan</p><h3 className="mt-2 text-lg font-bold">Plan each year separately</h3><p className={`mt-2 ${body}`}>Keep freshman awards, later merit awards and government funding as separate routes. Check medical-programme eligibility and continuation terms.</p><Link href={mbbsApplyHref()} className={textLink}>Find my scholarship fit<ArrowRight size={15}/></Link></div></div>
+    </div></section>
 
-const eligibility = [
-  'HSC (or equivalent) with Biology, Chemistry and Physics',
-  'Competitive marks in 12th-grade science (many universities look for ~60%+)',
-  'Age within the university and MoE range (commonly 17–25)',
-  'For practice in Bangladesh: combined SSC + HSC GPA meeting BMDC guidance (check before applying)',
-  'English evidence as required by the specific program (no universal IELTS exemption)',
-];
+    <section id="mbbs-eligibility" className={section}><div className={`${wrap} grid gap-7 lg:grid-cols-2 lg:gap-12`}><div><h2 className={heading}>MBBS admission requirements<br/>for Bangladeshi students</h2><p className={`mt-4 ${body}`}>Prepare SSC and HSC or equivalent science qualifications, including Biology, Chemistry and Physics. Universities assess academic results, age, English evidence and entrance performance individually. Choose a programme authorised for its stated teaching language and degree.</p><div className="mt-5 divide-y divide-slate-200"><div className="py-3"><h3 className="text-base font-bold">CSCA: prepare the right subjects</h3><p className={`mt-2 ${body}`}>WMU and JSU list Mathematics and Chemistry; Fudan lists Mathematics, Physics and Chemistry. CQMU lists Mathematics in English for English-medium programmes.</p><Link href="/china-admission-requirements#guide-3-understand-csca-and-language-proof" className={textLink}>Explore CSCA preparation<ArrowRight size={15}/></Link></div><div className="py-3"><h3 className="text-base font-bold">English teaching, Chinese clinical communication</h3><p className={`mt-2 ${body}`}>Check accepted English evidence when applying. Build Chinese and medical Chinese alongside your degree for patient communication; HSK requirements follow your university.</p><Link href="/study-in-china-without-ielts" className={textLink}>English & MOI options<ArrowRight size={15}/></Link></div></div></div>
+      <aside className="self-start rounded-xl border border-slate-200 bg-[#f7fafc] p-5 sm:p-6"><h3 className="text-lg font-bold">Your application file</h3><p className={`mt-2 ${body}`}>Prepare these for your selected route. Academic documents apply to both self-funded and scholarship applicants.</p><ul className="mt-4 space-y-2">{documents.map(item=><li key={item} className="flex items-start gap-2 text-sm leading-6 text-slate-600"><Check size={15} className="mt-1 shrink-0 text-[#17624f]"/>{item}</li>)}</ul><p className="mt-4 border-t border-slate-200 pt-3 text-xs leading-6 text-slate-500">Use English or Chinese translations where required. Add award-specific evidence and any programme-specific documents to this file.</p><Link href={mbbsApplyHref()} className={`mt-3 ${textLink}`}>Get help with my application<ArrowRight size={15}/></Link></aside>
+    </div></section>
 
-const fits = [
-  'Students who want a recognised medical route and will meet the licensing requirements to practise',
-  'Applicants ready to verify the university, program and BMDC eligibility in writing before applying',
-  'Families budgeting for the full six-year cost, not tuition alone',
-];
+    <section id="mbbs-cost" className={`${section} border-y border-slate-200 bg-[#f7fafc]`}><div className={wrap}><div className="grid gap-7 lg:grid-cols-2 lg:gap-12"><div><h2 className={heading}>MBBS in China fees:<br/>a clear family budget</h2><p className={`mt-4 ${body}`}>The featured universities list <strong className="text-[#0b2f4a]">CNY 30,000–75,000 per year in tuition</strong>. CNY and RMB are the same currency. Build a first-year and later-year plan around your actual room, scholarship and living arrangements.</p><div className="mt-5 rounded-xl border border-[#d7e2ea] bg-white p-5"><h3 className="text-sm font-bold">Example: WMU annual study charges</h3><dl className="mt-3 divide-y divide-slate-200 text-sm">{[['Tuition','CNY 33,000'],['Twin-room accommodation','CNY 4,400'],['Insurance','CNY 800']].map(([label,value])=><div key={label} className="flex justify-between gap-3 py-2"><dt className="text-slate-600">{label}</dt><dd className="shrink-0 font-semibold">{value}</dd></div>)}<div className="flex justify-between gap-3 py-3"><dt className="font-bold">Annual subtotal</dt><dd className="font-bold text-[#174f7a]">CNY 38,200</dd></div></dl><p className="text-xs leading-6 text-slate-500">Before scholarship. Add first-year registration CNY 600, textbooks, living expenses, travel and other applicable charges. Freshman awards are assessed after payment and registration.</p></div><Link href="/study-in-china-cost-bangladesh" className={`mt-3 ${textLink}`}>Explore the full China cost guide<ArrowRight size={15}/></Link></div>
+      <div className="self-start rounded-xl bg-[#edf4f8] p-5 sm:p-6"><h3 className="text-lg font-bold">Your ClearCost breakdown</h3><dl className="mt-3 divide-y divide-[#cfdee8]"><div className="py-3"><dt className="text-sm font-bold text-[#174f7a]">Before China</dt><dd className={`mt-2 ${body}`}>Application fee, deposit or tuition prepayment if required, document preparation, visa, travel and the agreed EduExpress Package.</dd></div><div className="py-3"><dt className="text-sm font-bold text-[#174f7a]">In China</dt><dd className={`mt-2 ${body}`}>Remaining tuition after any confirmed reduction, accommodation, insurance, medical examination, residence permit, meals and personal expenses.</dd></div></dl><p className="mt-3 text-xs leading-6 text-slate-500">Keep BDT service charges separate from CNY university costs. Include preparation courses as a separate stage and ask how tuition and housing are charged during internship.</p><Link href={mbbsApplyHref()} className={`mt-4 ${action}`}>Request my written cost plan<ArrowRight size={16}/></Link></div></div></div></section>
 
-const reconsider = [
-  'Anyone promised a "guaranteed" seat, scholarship or visa — no one can guarantee those',
-  'Students who cannot currently meet BMDC eligibility to practise in Bangladesh',
-  'Applicants choosing purely on the lowest tuition without checking recognition and licensing',
-];
+    <section id="mbbs-course" className={section}><div className={`${wrap} grid gap-7 lg:grid-cols-[.8fr_1.2fr] lg:gap-12`}><div><BookOpen size={26} className="mb-4 text-[#174f7a]"/><h2 className={heading}>What will you study?</h2><p className={`mt-4 ${body}`}>Medical education brings together scientific knowledge, practical skills and patient care. Compare curriculum, hospital training and graduation requirements alongside university reputation.</p></div><div className="divide-y divide-slate-200">{[
+        ['Build the medical sciences','Anatomy, physiology, biochemistry, pathology, microbiology and pharmacology establish the scientific foundation.'],
+        ['Develop clinical skills','Diagnostics, internal medicine, surgery, paediatrics and obstetrics and gynaecology connect learning with patient assessment.'],
+        ['Complete clinical training','Follow the university’s required rotations, supervised internship and graduation assessments. Keep placement and training records for your licensing route.'],
+      ].map(([title,copy],i)=><div key={title} className="flex gap-4 py-4 first:pt-0"><span className="mt-1 text-lg font-bold text-[#174f7a]">0{i+1}</span><div><h3 className="text-base font-bold">{title}</h3><p className={`mt-1 ${body}`}>{copy}</p></div></div>)}</div></div></section>
 
-const faqs = [
-  {
-    question: 'Is an MBBS from China recognised in Bangladesh?',
-    answer: 'Recognition of the university — MoE-approved and WHO/WDOMS-listed — is the starting point, not the finish line. To practise in Bangladesh you must meet BMDC eligibility and pass its registration examination. We verify the specific university\'s standing and your BMDC eligibility before you apply.',
-  },
-  {
-    question: 'How much does MBBS in China cost for a Bangladeshi student?',
-    answer: 'Tuition is typically about $3,000–$7,000 per year. A realistic all-in estimate for the full programme — tuition, hostel, living, insurance and travel over roughly six years — is about $25,000–$50,000, depending on the university and city. We prepare a written ClearCost sheet with current figures for your shortlisted universities.',
-  },
-  {
-    question: 'Can I study MBBS in China without IELTS?',
-    answer: 'Some English-medium programmes accept other evidence of English ability, but this is decided program by program — there is no universal IELTS exemption. We confirm the exact rule for each university before recommending it.',
-  },
-  {
-    question: 'How long is the MBBS programme?',
-    answer: 'Usually six years: five years of academic and pre-clinical/clinical coursework plus one year of compulsory internship at affiliated university hospitals.',
-  },
-  {
-    question: 'Is the programme taught in English?',
-    answer: 'At MoE-designated universities the undergraduate clinical medicine programme is English-medium. Basic Chinese is still useful — and sometimes expected — for the hospital and clinical years, so it is worth planning for.',
-  },
-  {
-    question: 'Can I practise in the US or UK after MBBS in China?',
-    answer: 'Only after completing that country\'s own licensing route — for example USMLE and ECFMG certification for the United States, or PLAB and GMC registration for the United Kingdom. The degree\'s recognition and the licensing examination are separate steps.',
-  },
-  {
-    question: 'When do MBBS intakes start?',
-    answer: 'Most MBBS intakes begin in September; a few universities also run other intakes. Every deadline must be confirmed per university before it is treated as open.',
-  },
-  {
-    question: 'Does EduExpress charge before the China visa is approved?',
-    answer: 'No file-opening charge and no EduExpress service fee before your China visa is approved. Any university, embassy, medical, translation, courier or deposit fee required earlier is a third-party charge and is itemised in writing before you proceed.',
-  },
-];
+    <section id="mbbs-bmdc" className={`${section} bg-[#0b2f4a] text-white`}><div className={wrap}><div className="max-w-2xl"><h2 className={`${heading} text-white`}>Your route back to medical practice in Bangladesh</h2><p className="mt-4 text-sm leading-7 text-white/80">Connect your university choice to the Bangladesh Medical & Dental Council pathway from the beginning. Academic admission, medical-school listing and professional registration each serve a different purpose.</p></div><ol className="mt-6 grid gap-5 md:grid-cols-3">{[
+      ['Choose your programme','Match English-taught MBBS to Chinese Ministry of Education authorisation. Meet the university’s science, language and entrance requirements, and understand its clinical-training arrangements.'],
+      ['During your degree','Complete the curriculum and required clinical training. Retain transcripts, degree documents, internship records and passport and visa evidence of study abroad.'],
+      ['Return & register','Apply for and pass the BMDC Registration Qualifying Examination. Complete document assessment, applicable internship and registration steps before starting medical practice in Bangladesh.'],
+    ].map(([title,copy],i)=><li key={title} className="border-t border-white/25 pt-4"><span className="text-xs font-semibold text-[#f2b544]">Step {i+1}</span><h3 className="mt-2 text-base font-bold text-white">{title}</h3><p className="mt-2 text-sm leading-7 text-white/75">{copy}</p></li>)}</ol><p className="mt-6 border-t border-white/20 pt-4 text-xs leading-6 text-white/70">Keep your degree, transcripts, clinical-training records, university recognition evidence and passport and visa history organised for your BMDC application.</p></div></section>
 
-const sources = [
-  { label: 'Bangladesh Medical & Dental Council (BMDC)', href: 'https://www.bmdc.org.bd/' },
-  { label: 'BMDC foreign-graduate requirements', href: 'https://www.bmdc.org.bd/forms-foreign' },
-  { label: 'Campus China / Chinese Government Scholarship', href: 'https://www.campuschina.org/' },
-  { label: 'World Directory of Medical Schools (WDOMS)', href: 'https://www.wdoms.org/' },
-  { label: 'Chinese Embassy in Bangladesh', href: 'https://bd.china-embassy.gov.cn/eng/' },
-];
+    <section id="mbbs-pathways" className={section}><div className={`${wrap} grid gap-7 lg:grid-cols-2 lg:gap-12`}><div><h2 className={heading}>Need preparation before MBBS?</h2><p className={`mt-4 ${body}`}>A foundation or Chinese language course can strengthen academic and language skills. Choose preparation that aligns with the medical programme’s own entrance requirements, and budget separately for the course and living expenses.</p><Link href="/china-intakes-deadlines" className={textLink}>Explore preparation routes<ArrowRight size={15}/></Link></div><div><h3 className="text-xl font-bold">Considering another health-science degree?</h3><p className={`mt-3 ${body}`}>Dentistry, pharmacy, biotechnology, nursing and rehabilitation lead to different qualifications and career paths. Compare the intended profession, curriculum and registration route before choosing your degree.</p><Link href="/universities?country=China" className={textLink}>Find other university programmes<ArrowRight size={15}/></Link></div></div></section>
 
-const related = [
-  { label: 'Compare China universities', href: '/china-universities' },
-  { label: 'Full study cost planner', href: '/study-in-china-cost-bangladesh' },
-  { label: 'Scholarships for Bangladeshi students', href: '/china-scholarships-bangladesh' },
-  { label: 'X1 / X2 student visa guide', href: '/china-student-visa-bangladesh' },
-  { label: 'How we verify universities', href: '/how-we-verify-universities' },
-  { label: 'Study in China hub', href: '/study-in-china-from-bangladesh' },
-];
+    <section id="mbbs-apply" className={`${section} border-y border-slate-200 bg-[#edf4f8]`}><div className={`${wrap} grid items-center gap-7 lg:grid-cols-[.7fr_1.3fr] lg:gap-10`}><Image src="/images/real/counseling/counseling_global_ambitions.webp" alt="University study counselling at EduExpress International" width={1280} height={960} sizes="(max-width:1023px) 100vw, 400px" className="aspect-[4/3] h-auto w-full rounded-xl object-cover"/><div><GraduationCap size={27} className="mb-4 text-[#174f7a]"/><h2 className={heading}>Turn your medical ambition<br/>into a practical plan.</h2><p className={`mt-4 ${body}`}>Share your SSC and HSC results, science subjects, preferred budget and career goal. EduExpress helps you build a university shortlist, prepare your file and understand your full cost. Parents are welcome to join.</p><Link href={mbbsApplyHref()} className={`mt-5 ${action}`}>Apply with EduExpress International<ArrowRight size={16}/></Link><p className="mt-5 text-xs leading-6 text-slate-600">No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.</p><Link href="/china-visa-first-policy" className={textLink}>Support package & payment terms<ArrowRight size={15}/></Link></div></div></section>
 
-const buildStructuredData = (mbbsUniversities: MbbsRow[]) => ({
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'MedicalWebPage',
-      '@id': `${canonicalUrl}#webpage`,
-      url: canonicalUrl,
-      name: 'MBBS in China for Bangladeshi Students',
-      description: 'Recognition, BMDC licensing, complete cost, eligibility and intakes for studying MBBS in China from Bangladesh.',
-      inLanguage: 'en-BD',
-      dateModified: verifiedDate,
-      reviewedBy: { '@id': 'https://eduexpressint.com/#organization' },
-      breadcrumb: { '@id': `${canonicalUrl}#breadcrumb` },
-      isPartOf: { '@id': 'https://eduexpressint.com/#organization' },
-    },
-    {
-      '@type': 'FAQPage',
-      '@id': `${canonicalUrl}#faq`,
-      mainEntity: faqs.map((f) => ({
-        '@type': 'Question',
-        name: f.question,
-        acceptedAnswer: { '@type': 'Answer', text: f.answer },
-      })),
-    },
-    {
-      '@type': 'BreadcrumbList',
-      '@id': `${canonicalUrl}#breadcrumb`,
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://eduexpressint.com/' },
-        { '@type': 'ListItem', position: 2, name: 'Study in China', item: 'https://eduexpressint.com/study-in-china-from-bangladesh' },
-        { '@type': 'ListItem', position: 3, name: 'MBBS in China', item: canonicalUrl },
-      ],
-    },
-    ...mbbsUniversities.map((row) => ({
-      '@type': 'Course',
-      '@id': `https://eduexpressint.com/universities/${row.slug}#mbbs-course`,
-      name: row.program,
-      description: `MBBS / Clinical Medicine at ${row.name}, ${row.city}, China. Duration ${row.duration}.`,
-      provider: {
-        '@type': 'CollegeOrUniversity',
-        name: row.name,
-        url: `https://eduexpressint.com/universities/${row.slug}`,
-      },
-      offers: { '@type': 'Offer', category: 'Tuition', price: row.tuition },
-    })),
-  ],
-});
-
-export default async function MbbsInChinaBangladeshPage() {
-  const mbbsUniversities = await getMbbsUniversities();
-  const structuredData = buildStructuredData(mbbsUniversities);
-  return (
-    <article className="bg-[#f4f8fa] text-[#08263c]">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-[#08263c] px-5 pb-16 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
-        <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] hidden md:block size-[28rem] opacity-15">
-          <Image src="/emblem-icon.png" width={440} height={440} alt="" className="h-auto w-full object-contain filter brightness-0 invert" />
-        </div>
-        <div className="relative mx-auto max-w-[1440px]">
-          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">
-            <Link href="/" className="hover:text-[#8ed0ee]">Home</Link> <span aria-hidden>/</span>{' '}
-            <Link href="/study-in-china-from-bangladesh" className="hover:text-[#8ed0ee]">Study in China</Link> <span aria-hidden>/</span> MBBS in China
-          </nav>
-
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 border border-[#8ed0ee]/30 bg-[#174f7a]/40 px-4 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-[#8ed0ee]">
-              <Stethoscope size={14} /> Recognition &amp; licensing checked first
-            </div>
-            <h1 className="mt-5 font-heading text-4xl font-bold leading-[1.06] tracking-tight sm:text-5xl md:text-6xl">
-              MBBS in China from Bangladesh — the recognised route, verified before you pay
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-white/80">
-              Most guides open with the cheapest tuition. We open with the question that decides your career: is the
-              university recognised, and can you licence and practise afterwards? Then we show the complete, written cost.
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-3 font-mono text-[11px] font-bold uppercase tracking-wider text-white/70">
-              <span className="flex items-center gap-2"><Check size={14} className="text-[#64b5df]" /> MoE-approved list</span>
-              <span className="flex items-center gap-2"><Check size={14} className="text-[#64b5df]" /> BMDC eligibility</span>
-              <span className="flex items-center gap-2"><Check size={14} className="text-[#64b5df]" /> Full ClearCost sheet</span>
-            </div>
-
-            <a href="#mbbs-assessment" className="mt-8 inline-flex items-center gap-2 bg-[#64b5df] px-7 py-4 text-sm font-black text-[#08263c] transition hover:bg-white">
-              Check My Medical Eligibility <ArrowRight size={16} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* RECOGNITION & LICENSING FIRST */}
-      <section className="px-5 py-16 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1200px]">
-          <span className="font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">Before price — recognition &amp; licensing</span>
-          <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Three checks that decide whether the degree is worth it</h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {standards.map((s) => {
-              const Icon = s.icon;
-              return (
-                <div key={s.title} className="border border-[#174f7a]/15 bg-white p-7 shadow-sm">
-                  <span className="grid size-11 place-items-center bg-[#e9f7fd] text-[#174f7a]"><Icon size={22} /></span>
-                  <h3 className="mt-5 font-heading text-xl font-bold">{s.title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-600">{s.detail}</p>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-8 flex items-start gap-4 border border-amber-300 bg-amber-50 p-6 text-sm leading-6 text-amber-900">
-            <AlertTriangle className="mt-0.5 shrink-0 text-amber-600" size={20} />
-            <div>
-              <strong>The honest caveat:</strong> a WHO-listed, MoE-approved university is necessary but not sufficient.
-              Practising in Bangladesh still requires meeting BMDC eligibility and passing its registration examination;
-              practising elsewhere requires that country&apos;s own licensing exams. We map this pathway for you before you apply.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* WHO IT FITS / RECONSIDER */}
-      <section className="bg-white px-5 py-16 border-y border-[#174f7a]/15 sm:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-[1200px] gap-6 lg:grid-cols-2">
-          <div className="border-t-4 border-[#174f7a] bg-[#f6f9fb] p-7">
-            <h2 className="font-heading text-2xl font-bold">A strong fit for this route</h2>
-            <ul className="mt-5 grid gap-3">
-              {fits.map((f) => (
-                <li key={f} className="flex gap-3 text-sm leading-6 text-slate-700"><Check size={16} className="mt-0.5 shrink-0 text-[#174f7a]" />{f}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="border-t-4 border-amber-500 bg-[#f6f9fb] p-7">
-            <h2 className="font-heading text-2xl font-bold">Who should reconsider</h2>
-            <ul className="mt-5 grid gap-3">
-              {reconsider.map((f) => (
-                <li key={f} className="flex gap-3 text-sm leading-6 text-slate-700"><X size={16} className="mt-0.5 shrink-0 text-amber-600" />{f}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* REAL PER-UNIVERSITY MBBS TUITION */}
-      {mbbsUniversities.length > 0 && (
-        <section className="bg-white px-5 py-16 border-b border-[#174f7a]/15 sm:px-8 lg:px-12">
-          <div className="mx-auto max-w-[1200px]">
-            <span className="font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">Verified network — not a brochure estimate</span>
-            <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">MBBS tuition at universities we currently track</h2>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700">
-              These figures come straight from our verified China university records — the exact tuition recorded for each
-              medical programme, not a generic range. Recognition and current status are re-checked before any application.
-            </p>
-
-            <div className="mt-8 overflow-hidden border border-[#174f7a]/15">
-              <table className="w-full border-collapse text-left text-sm">
-                <thead>
-                  <tr className="bg-[#174f7a] text-white">
-                    <th className="p-4 font-heading font-bold">University</th>
-                    <th className="hidden p-4 font-heading font-bold sm:table-cell">Programme</th>
-                    <th className="p-4 font-heading font-bold">Recorded tuition</th>
-                    <th className="hidden p-4 font-heading font-bold md:table-cell">Duration</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mbbsUniversities.map((u, i) => (
-                    <tr key={u.slug + u.program} className={i % 2 ? 'bg-[#f6f9fb]' : 'bg-white'}>
-                      <td className="border-t border-[#174f7a]/10 p-4">
-                        <Link href={`/universities/${u.slug}`} className="font-heading font-bold text-[#08263c] hover:text-[#174f7a] hover:underline">{u.name}</Link>
-                        <span className="block text-xs text-slate-500">{u.city}</span>
-                      </td>
-                      <td className="hidden border-t border-[#174f7a]/10 p-4 text-slate-700 sm:table-cell">{u.program}</td>
-                      <td className="border-t border-[#174f7a]/10 p-4 font-bold text-[#174f7a]">{u.tuition}</td>
-                      <td className="hidden border-t border-[#174f7a]/10 p-4 text-slate-600 md:table-cell">{u.duration}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <p className="mt-4 text-xs leading-5 text-slate-500">
-              Tuition is shown in the currency recorded by each university and covers tuition only. Living, hostel, insurance
-              and third-party costs are added in the university ClearCost view. The selected program page is the controlling source.
-            </p>
-            <Link href="/china-universities" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#174f7a] hover:underline">
-              Compare all China universities <ArrowRight size={15} />
-            </Link>
-          </div>
-        </section>
-      )}
-
-      {/* COMPLETE COST */}
-      <section className="px-5 py-16 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1200px]">
-          <span className="font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">The complete cost, in writing</span>
-          <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Beyond tuition — what six years actually costs</h2>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700">
-            The tuition above comes from the connected university records. Everything else below is a planning range.
-            Your university ClearCost view combines them for the selected program, separates every third-party charge, and
-            states what EduExpress charges and when.
-          </p>
-
-          <div className="mt-8 overflow-hidden border border-[#174f7a]/15 bg-white">
-            <table className="w-full border-collapse text-left text-sm">
-              <thead>
-                <tr className="bg-[#08263c] text-white">
-                  <th className="p-4 font-heading font-bold">Cost item</th>
-                  <th className="p-4 font-heading font-bold">Typical range</th>
-                  <th className="hidden p-4 font-heading font-bold sm:table-cell">Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {costRows.map(([item, range, note], i) => (
-                  <tr key={item} className={i % 2 ? 'bg-[#f6f9fb]' : 'bg-white'}>
-                    <td className="border-t border-[#174f7a]/10 p-4 font-semibold text-[#08263c]">{item}</td>
-                    <td className="border-t border-[#174f7a]/10 p-4 font-bold text-[#174f7a]">{range}</td>
-                    <td className="hidden border-t border-[#174f7a]/10 p-4 text-slate-600 sm:table-cell">{note}</td>
-                  </tr>
-                ))}
-                <tr className="bg-[#e9f7fd]">
-                  <td className="border-t-2 border-[#174f7a]/30 p-4 font-heading font-bold text-[#08263c]">Six-year all-in estimate</td>
-                  <td className="border-t-2 border-[#174f7a]/30 p-4 font-heading font-bold text-[#08263c]">≈ $25,000 – $50,000</td>
-                  <td className="hidden border-t-2 border-[#174f7a]/30 p-4 text-slate-600 sm:table-cell">Confirmed per university on your ClearCost sheet</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="mt-6 flex flex-wrap items-center gap-4">
-            <Link href="/study-in-china-cost-bangladesh" className="inline-flex items-center gap-2 border-2 border-[#08263c] px-6 py-3 text-sm font-black hover:bg-white">
-              <CircleDollarSign size={16} /> Open the full cost planner
-            </Link>
-            <Link href="/china-scholarships-bangladesh" className="text-sm font-bold text-[#174f7a] hover:underline">
-              Scholarships are assessed after education fit →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ELIGIBILITY + PROGRAM */}
-      <section className="bg-white px-5 py-16 border-y border-[#174f7a]/15 sm:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-[1200px] gap-10 lg:grid-cols-2">
-          <div>
-            <div className="flex items-center gap-3 text-[#174f7a]"><GraduationCap size={24} /><h2 className="font-heading text-2xl font-bold text-[#08263c]">Eligibility &amp; entry</h2></div>
-            <ul className="mt-6 grid gap-3">
-              {eligibility.map((e) => (
-                <li key={e} className="flex gap-3 border border-[#174f7a]/12 bg-[#f6f9fb] p-4 text-sm leading-6 text-slate-700"><Check size={16} className="mt-0.5 shrink-0 text-[#174f7a]" />{e}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="grid gap-5 content-start">
-            <div className="border border-[#174f7a]/15 bg-[#f6f9fb] p-6">
-              <div className="flex items-center gap-3 text-[#174f7a]"><CalendarClock size={22} /><h3 className="font-heading text-lg font-bold text-[#08263c]">Programme &amp; intake</h3></div>
-              <p className="mt-3 text-sm leading-6 text-slate-700">Six years: five years of academic and clinical coursework plus one year of internship at affiliated hospitals. Most intakes begin in September — each deadline is verified per university before it is shown as open.</p>
-            </div>
-            <div className="border border-[#174f7a]/15 bg-[#f6f9fb] p-6">
-              <div className="flex items-center gap-3 text-[#174f7a]"><Languages size={22} /><h3 className="font-heading text-lg font-bold text-[#08263c]">Language of study</h3></div>
-              <p className="mt-3 text-sm leading-6 text-slate-700">The clinical medicine programme is English-medium at MoE-designated universities. Basic Chinese is valuable — sometimes expected — for the hospital years, so we build language planning into your route.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="px-5 py-16 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-4xl">
-          <p className="text-center font-mono text-[11px] font-black uppercase tracking-widest text-[#174f7a]">Questions before you apply</p>
-          <h2 className="mt-3 text-center font-heading text-3xl font-bold sm:text-4xl">MBBS in China FAQ</h2>
-          <div className="mt-9 grid gap-3">
-            {faqs.map((item, index) => (
-              <details key={item.question} className="group border border-[#174f7a]/15 bg-white p-5 open:shadow-[0_15px_45px_rgba(8,38,60,0.08)]">
-                <summary className="flex cursor-pointer list-none items-start justify-between gap-5 font-heading text-base font-bold">
-                  <span className="flex gap-4"><span className="font-mono text-[10px] text-[#174f7a]">{String(index + 1).padStart(2, '0')}</span>{item.question}</span>
-                  <span className="grid size-7 shrink-0 place-items-center bg-[#e9f7fd] text-[#174f7a] transition group-open:rotate-45">+</span>
-                </summary>
-                <p className="mt-4 pl-8 text-sm leading-7 text-slate-600">{item.answer}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* VISA-FIRST TERMS */}
-      <section className="bg-[#08263c] px-5 py-14 text-white sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1000px] text-center">
-          <ShieldCheck size={34} className="mx-auto text-[#64b5df]" />
-          <h2 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">Our China visa-first service terms</h2>
-          <p className="mt-4 leading-7 text-white/75">
-            No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical,
-            translation, courier, deposit or other third-party fee required earlier must be itemised in writing before the
-            student proceeds.
-          </p>
-          <Link href="/china-visa-first-policy" className="mt-6 inline-flex items-center gap-2 border border-white/30 px-6 py-3 text-sm font-black hover:bg-white/10">
-            Read the complete service terms <ArrowRight size={15} />
-          </Link>
-        </div>
-      </section>
-
-      {/* ASSESSMENT */}
-      <section id="mbbs-assessment" className="bg-[#e9f7fd] px-5 py-16 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1100px]">
-          <EducationFitAssessment />
-        </div>
-      </section>
-
-      {/* SOURCES + RELATED */}
-      <section className="border-t border-[#174f7a]/15 bg-[#f6f9fb] px-5 py-10 sm:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-[1200px] gap-8 lg:grid-cols-2">
-          <div>
-            <p className="flex items-center gap-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><ShieldCheck size={14} /> Official sources</p>
-            <div className="mt-4 grid gap-2">
-              {sources.map((s) => (
-                <a key={s.href} href={s.href} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 border-b border-[#174f7a]/15 bg-white p-3 text-xs font-bold text-[#174f7a] hover:bg-[#e9f7fd]">{s.label}<ArrowRight size={14} /></a>
-              ))}
-            </div>
-          </div>
-          <div>
-            <p className="flex items-center gap-2 font-mono text-[10px] font-black uppercase tracking-[0.16em] text-[#174f7a]"><FileCheck2 size={14} /> Related China decisions</p>
-            <div className="mt-4 grid gap-px bg-[#174f7a]/15 sm:grid-cols-2">
-              {related.map((r) => (
-                <Link key={r.href} href={r.href} className="flex items-center justify-between gap-3 bg-white p-3 text-xs font-black hover:bg-[#e9f7fd]">{r.label}<ArrowRight size={14} className="text-[#174f7a]" /></Link>
-              ))}
-            </div>
-          </div>
-          <p className="lg:col-span-2 border-t border-[#174f7a]/15 pt-5 text-[10px] leading-5 text-slate-500">
-            <strong className="text-[#08263c]">Managed by:</strong> EduExpress China Admissions Desk · <strong className="text-[#08263c]">Reviewed by:</strong> EduExpress Content and Compliance. Cost ranges are planning assumptions; university, program, recognition and licensing facts are aligned in writing during your assessment.
-          </p>
-        </div>
-      </section>
-    </article>
-  );
+    <section id="mbbs-faq" className={section}><div className={`${wrap} grid gap-7 lg:grid-cols-[.32fr_.68fr] lg:gap-10`}><div><h2 className={heading}>MBBS in China:<br/>your questions answered.</h2><p className={`mt-3 ${body}`}>Practical answers for Bangladeshi students and families.</p></div><div className="divide-y divide-slate-200 border-y border-slate-200">{guide.faqs.map(item=><details key={item.question} className="group"><summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-sm font-semibold leading-7 [&::-webkit-details-marker]:hidden">{item.question}<ChevronDown size={17} className="shrink-0 text-[#174f7a] transition-transform group-open:rotate-180 motion-reduce:transform-none"/></summary><p className={`pb-5 pr-4 ${body}`}>{item.answer}</p></details>)}</div></div></section>
+    <nav aria-label="Related China study guides" className={`${section} border-t border-slate-200 bg-[#f7fafc]`}><div className={wrap}><h2 className="text-xl font-bold">Keep planning your study in China</h2><div className="mt-5 grid gap-x-7 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">{related.map(item=><Link key={item.href} href={item.href} className="border-t border-slate-200 pt-4"><h3 className="flex items-start justify-between gap-2 text-sm font-bold">{item.title}<ArrowRight size={16} className="shrink-0 text-[#174f7a]"/></h3><p className="mt-2 text-xs leading-6 text-slate-500">{item.body}</p></Link>)}</div></div></nav>
+  </article>;
 }

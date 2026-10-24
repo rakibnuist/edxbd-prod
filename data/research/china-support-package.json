@@ -1,0 +1,17 @@
+{
+  "slug": "china-complete-support-package",
+  "destination": "China",
+  "title": "Complete China Support Package",
+  "packageType": "complete_support",
+  "priceLabel": "2,00,000 BDT",
+  "summary": "One complete package for your China application, visa preparation, travel and arrival support.",
+  "outcomeScope": "The university award determines scholarship coverage. University tuition, accommodation and other study costs are itemised separately from the EduExpress support package.",
+  "includedItems": "[\"Application fees until successful admission\",\"Admission Notice\",\"Scholarship assistance\",\"JW202 Form\",\"Visa application processing\",\"Embassy fee\",\"Medical checkup in Bangladesh\",\"Pre-departure briefing and travel guidance\",\"One-way air ticket\",\"Airport pickup\"]",
+  "excludedItems": "[\"University registration or seat deposit\",\"Tuition deposit required directly by the university\",\"Any university or third party amount not listed as included in the signed package schedule\"]",
+  "paymentTerms": "No Success, No Service Charge. Route 1: no upfront deposit; original academic documents and passport are held as documented security and the package is paid after visa issuance. Route 2: the student deposits BDT 15,000, retains the original documents and deducts the deposit from the final package price. Any university deposit or other excluded third-party payment is itemized separately before the student proceeds.",
+  "refundTerms": "If EduExpress fails to secure the contracted admission or visa outcome, the original documents are returned or the BDT 15,000 deposit is refunded unconditionally. University and third-party amounts follow the receiving organization’s refund rules and are recorded separately in the signed ClearCost schedule.",
+  "securityOptions": "[\"No upfront deposit: the student provides original academic documents and original passport as documented security, then pays the package after visa issuance\",\"BDT 15,000 deposit: the student retains the original documents, and the deposit is deducted from the final package price\"]",
+  "complianceNote": "Original documents are accepted only under the student-selected no-deposit security route and must be recorded with a custody receipt and return procedure. Students using the BDT 15,000 deposit route retain their originals. EduExpress does not claim embassy authorization, special access or a guaranteed official decision.",
+  "isPublished": true,
+  "displayOrder": 1
+}

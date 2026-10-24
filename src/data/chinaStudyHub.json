@@ -1,0 +1,352 @@
+{
+  "version": 1,
+  "metaTitle": "Study in China from Bangladesh: Guide | EduExpress International",
+  "description": "Study in China from Bangladesh: explore education quality, university rankings, scholarships, MBBS, CSCA, admission requirements, tuition and student life.",
+  "intro": "Study in China from Bangladesh through bachelor’s, master’s, PhD, Chinese-language and foundation routes. Choose from English- and Chinese-taught programmes in engineering, computing, business, medicine and more, with government and university scholarships available to eligible applicants.",
+  "introDetail": "Start with your SSC and HSC or university qualifications, your career goal and a sustainable budget. This guide helps you compare education quality, understand funding and prepare a clear application plan.",
+  "quality": [
+    {
+      "title": "A strong research environment",
+      "body": "China’s Double First-Class initiative supports the development of leading universities and academic disciplines. For students, the useful comparison is the chosen department: its curriculum, laboratories, supervisors and research opportunities."
+    },
+    {
+      "title": "Strength in your subject",
+      "body": "Engineering, computer science, business and clinical medicine offer different study experiences. Compare subject reputation, practical learning, course content and facilities alongside a university’s overall position."
+    },
+    {
+      "title": "A degree that fits your next step",
+      "body": "Choose a programme around your plans for employment, further study or professional practice. Check the awarding university, teaching language and any recognition requirements in the country where you intend to use the qualification."
+    }
+  ],
+  "rankings": [
+    {
+      "name": "Tsinghua University",
+      "rank": "18",
+      "scope": "World",
+      "publisher": "ShanghaiRanking",
+      "rankingName": "Academic Ranking of World Universities",
+      "edition": 2026,
+      "sourceUrl": "https://www.shanghairanking.com/universities/tsinghua-university"
+    },
+    {
+      "name": "Peking University",
+      "rank": "22",
+      "scope": "World",
+      "publisher": "ShanghaiRanking",
+      "rankingName": "Academic Ranking of World Universities",
+      "edition": 2026,
+      "sourceUrl": "https://www.shanghairanking.com/universities/peking-university"
+    },
+    {
+      "name": "Shanghai Jiao Tong University",
+      "rank": "27",
+      "scope": "World",
+      "publisher": "ShanghaiRanking",
+      "rankingName": "Academic Ranking of World Universities",
+      "edition": 2026,
+      "sourceUrl": "https://www.shanghairanking.com/universities/shanghai-jiao-tong-university"
+    }
+  ],
+  "fundingRoutes": [
+    {
+      "title": "Chinese Government Scholarship (CSC)",
+      "body": "Explore the bilateral Type A route through the relevant dispatching authority and university Type B routes. Full awards can cover tuition, accommodation, medical insurance and a monthly stipend."
+    },
+    {
+      "title": "Provincial & city scholarships",
+      "body": "Regional schemes offer full or partial support at participating universities. Compare the eligible degree, covered costs and academic renewal requirements."
+    },
+    {
+      "title": "University scholarships",
+      "body": "Universities may offer tuition waivers, fixed awards, accommodation support or stipends. Check whether the award starts in the first year or after enrolment, and how it continues in later years."
+    }
+  ],
+  "stipends": [
+    {
+      "level": "Bachelor’s",
+      "amount": "CNY 2,500",
+      "period": "per month"
+    },
+    {
+      "level": "Master’s",
+      "amount": "CNY 3,000",
+      "period": "per month"
+    },
+    {
+      "level": "PhD",
+      "amount": "CNY 3,500",
+      "period": "per month"
+    }
+  ],
+  "mbbs": {
+    "intro": "Explore authorised English-medium Clinical Medicine programmes, science entry requirements, clinical training and a clear budget. Plan your degree alongside the Bangladesh medical registration pathway.",
+    "points": [
+      {
+        "title": "Six-year English-medium route",
+        "body": "China’s undergraduate medical education standards set a six-year course for English-medium Clinical Medicine. Review the university’s curriculum, clinical placements and Chinese-language training for patient communication."
+      },
+      {
+        "title": "Science and language preparation",
+        "body": "Bring your HSC or equivalent science records, including Biology, Chemistry and Physics. Check the programme’s grades, English evidence, CSCA subjects and interview requirements."
+      },
+      {
+        "title": "Your Bangladesh registration pathway",
+        "body": "Complete your medical degree and clinical training in China, then follow BMDC’s Registration Qualifying Examination, applicable internship and registration steps for practice in Bangladesh."
+      }
+    ]
+  },
+  "qualifications": [
+    {
+      "level": "Bachelor’s",
+      "qualification": "HSC, A levels or an accepted equivalent",
+      "prepare": "SSC and HSC records, required subjects, language evidence and programme-specific CSCA results."
+    },
+    {
+      "level": "Master’s",
+      "qualification": "A relevant bachelor’s degree",
+      "prepare": "Degree certificate, transcripts, study plan, references and accepted language evidence."
+    },
+    {
+      "level": "PhD",
+      "qualification": "A relevant master’s degree for the standard route",
+      "prepare": "Research proposal, academic references, supervisor fit and university-specific requirements."
+    },
+    {
+      "level": "Language / foundation",
+      "qualification": "The selected preparation course’s entry requirements",
+      "prepare": "Starting language level, course cost and the academic conditions for later degree progression."
+    }
+  ],
+  "documents": [
+    "Passport & photograph",
+    "SSC / HSC or degree certificates",
+    "Academic transcripts",
+    "Language & entrance results",
+    "Study plan / references when required",
+    "Medical, police & financial records when required"
+  ],
+  "costExamples": [
+    {
+      "name": "NUIST",
+      "programme": "Undergraduate tuition",
+      "amount": "CNY 15,000",
+      "period": "per year, before scholarship",
+      "href": "/universities/nuist#clear-cost"
+    },
+    {
+      "name": "Chongqing Medical University",
+      "programme": "English-medium MBBS tuition",
+      "amount": "CNY 30,000",
+      "period": "per year, before scholarship",
+      "href": "/mbbs-in-china-bangladesh"
+    }
+  ],
+  "life": [
+    {
+      "title": "Your room and everyday budget",
+      "body": "Compare campus room types, utility charges and travel to class. Budget meals, local transport, phone service and personal expenses alongside tuition."
+    },
+    {
+      "title": "Food, language and community",
+      "body": "Ask the international office about halal food, kitchens, prayer arrangements and student communities on your campus. Basic Mandarin helps with shopping, travel and daily conversations."
+    },
+    {
+      "title": "Arrival and student support",
+      "body": "Prepare your accommodation registration, local phone and payment access, insurance and residence procedures. Keep the university international office and your family informed of your arrival plan."
+    }
+  ],
+  "steps": [
+    {
+      "title": "Choose your direction",
+      "body": "Match your qualification, subject interests and career goal to a study level and teaching language."
+    },
+    {
+      "title": "Build your shortlist",
+      "body": "Compare programmes, admission requirements, scholarship routes and the full cost with your family."
+    },
+    {
+      "title": "Prepare and apply",
+      "body": "Complete the university file and any separate scholarship application. Keep copies of your submitted documents."
+    },
+    {
+      "title": "Plan your departure",
+      "body": "Review your offer, complete the applicable visa process and arrange travel, housing and arrival support."
+    }
+  ],
+  "guides": [
+    {
+      "title": "Scholarships in China",
+      "href": "/china-scholarships-bangladesh",
+      "summary": "CSC, regional and university awards; coverage, eligibility and renewal."
+    },
+    {
+      "title": "Tuition & total costs",
+      "href": "/study-in-china-cost-bangladesh",
+      "summary": "Fees, accommodation, living expenses and a complete family budget."
+    },
+    {
+      "title": "Admission & CSCA",
+      "href": "/china-admission-requirements",
+      "summary": "Qualifications, documents, entrance subjects and application preparation."
+    },
+    {
+      "title": "MBBS in China",
+      "href": "/mbbs-in-china-bangladesh",
+      "summary": "Medical programmes, clinical training, fees and the BMDC registration pathway."
+    },
+    {
+      "title": "English, IELTS & MOI",
+      "href": "/study-in-china-without-ielts",
+      "summary": "Accepted language evidence for English- and Chinese-medium routes."
+    },
+    {
+      "title": "Student life in China",
+      "href": "/life-in-china-bangladeshi-students",
+      "summary": "Housing, halal food, payments, campus support and daily life."
+    },
+    {
+      "title": "Student visa from Bangladesh",
+      "href": "/china-student-visa-bangladesh",
+      "summary": "X1 and X2 study visas, supporting paperwork and arrival formalities."
+    },
+    {
+      "title": "Study routes & intakes",
+      "href": "/china-intakes-deadlines",
+      "summary": "Compare degree starts with Chinese-language and preparation routes."
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Is China a good choice for Bangladeshi students?",
+      "answer": "China offers research universities, English- and Chinese-taught degrees and several scholarship routes. A strong choice matches your subject, academic qualifications, teaching language, full budget and future career plans. Compare the department and programme alongside the university’s world or subject ranking."
+    },
+    {
+      "question": "What qualifications do I need to study in China after HSC?",
+      "answer": "For bachelor’s assessment, prepare your SSC and HSC or equivalent certificates and transcripts. The selected university sets subject prerequisites, grades, age conditions, language evidence and CSCA requirements. Use the exact programme requirements when building your application."
+    },
+    {
+      "question": "Can Bangladeshi students get a full scholarship in China?",
+      "answer": "Eligible applicants can apply for full or partial government, regional and university scholarships. A full CSC award can include tuition, accommodation, insurance and a monthly stipend. Selection, supported degree, award duration and renewal conditions follow the scholarship rules."
+    },
+    {
+      "question": "Can I study MBBS in China and practise in Bangladesh?",
+      "answer": "Plan the route with BMDC before enrolling: eligibility, the exact university and medical qualification, clinical training, internship and return-to-practice requirements all matter. Foreign medical graduates follow the applicable BMDC Registration Qualifying Examination, internship and registration process."
+    },
+    {
+      "question": "Do I need IELTS or CSCA for China admission?",
+      "answer": "English-taught programmes may accept IELTS, TOEFL, an approved medium-of-instruction letter or another specified form of evidence. Chinese-taught programmes have their own Chinese-language requirements. CSCA is a separate undergraduate academic assessment; select the subjects and test language required by the university."
+    },
+    {
+      "question": "How much does it cost to study in China from Bangladesh?",
+      "answer": "Costs depend on the university, major, city, room and scholarship. For example, NUIST undergraduate tuition is CNY 15,000 per year before scholarship, while Chongqing Medical University lists English-medium MBBS tuition of CNY 30,000 per year. Add housing, living expenses, insurance, travel and applicable procedures to build your total budget."
+    },
+    {
+      "question": "When do Chinese universities admit international students?",
+      "answer": "Autumn is a common degree-entry period. Spring options include Chinese-language and foundation courses, with selected degree routes depending on the university. Match the start to the specific programme and distinguish preparation study from the later degree application."
+    }
+  ],
+  "research": {
+    "checkedAt": "2026-10-24",
+    "scope": "Evergreen China hub. Source chronology, ranking editions and research records remain internal. No current admissions opening or scholarship guarantee inferred.",
+    "sources": [
+      {
+        "id": "quality",
+        "publisher": "Ministry of Education of China",
+        "url": "https://en.moe.gov.cn/news/press_releases/202203/t20220301_603547.html",
+        "facts": "Double First-Class focuses university and discipline quality, talent development and research."
+      },
+      {
+        "id": "arwu",
+        "publisher": "ShanghaiRanking",
+        "url": "https://www.shanghairanking.com/rankings/arwu/2026",
+        "facts": "Tsinghua18, Peking22, SJTU27. World ranking; editions internal."
+      },
+      {
+        "id": "csc",
+        "publisher": "Study in China / Beijing Normal University",
+        "url": "https://apply.studyinchina.edu.cn/upload/school/4028868472e9601a0173e70caaf201fd/20201216160822CPh0WvxL.pdf",
+        "facts": "Full CSC scholarship: tuition, housing/subsidy, insurance and monthly stipends 2500 bachelor,3000 master,3500 PhD."
+      },
+      {
+        "id": "bangladesh-csc",
+        "publisher": "Chinese Embassy in Bangladesh",
+        "url": "https://bd.china-embassy.gov.cn/eng/sghd/202512/t20251219_11776194.htm",
+        "facts": "Bangladesh participation and full TypeA coverage. Closed cycle not displayed or rebranded as open; airfare not made universal."
+      },
+      {
+        "id": "csca",
+        "publisher": "CSCA",
+        "url": "https://csca.cn/about/examintro",
+        "facts": "Undergraduate academic assessment. Math, Physics,Chemistry; ProfessionalChinese; subjects and languages depend on route."
+      },
+      {
+        "id": "medical-standard",
+        "publisher": "Ministry of Education of China",
+        "url": "https://en.moe.gov.cn/documents/laws_policies/201506/t20150626_191398.html",
+        "facts": "English-medium undergraduate clinical medicine6years, standards for training and clinical skills."
+      },
+      {
+        "id": "bmdc-eligibility",
+        "publisher": "BMDC",
+        "url": "https://www.bmdc.org.bd/upl/doc/news/MMcv1hDupkvE.pdf",
+        "facts": "Eligibility before overseas medical study and return RQE/internship/registration requirements."
+      },
+      {
+        "id": "bmdc-rqe",
+        "publisher": "BMDC",
+        "url": "https://www.bmdc.org.bd/upl/doc/form/QSPRfvjJ5NtF.pdf",
+        "facts": "RQE requirements include eligibility certificate,qualification,transcripts,SSC/HSC and related evidence."
+      },
+      {
+        "id": "nuist-fees",
+        "publisher": "NUIST",
+        "url": "https://gjy.nuist.edu.cn/english/FeeswPayment/listm.htm",
+        "facts": "Undergraduate tuition15000/year retained from governed university source record."
+      },
+      {
+        "id": "cqmu-fees",
+        "publisher": "Chongqing Medical University",
+        "url": "https://english.cqmu.edu.cn/info/1148/3038.htm",
+        "facts": "English MBBS30000/year. Source downloaded and checked in prior campaign revision."
+      },
+      {
+        "id": "seo",
+        "publisher": "Google Search Central",
+        "url": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content",
+        "facts": "People-first useful content, descriptive titles and substantive topical coverage. No promise of first-place ranking."
+      }
+    ],
+    "photography": {
+      "basis": "Owner requested use of supplied public-folder photographs. Images inspected before use; no inferred testimonial, scholarship outcome or institutional partnership.",
+      "used": [
+        "/images/real/china_campus/cie_campus_visit.webp",
+        "/images/home/china-campus-group.webp",
+        "/images/real/counseling/counseling_global_ambitions.webp"
+      ]
+    }
+  },
+  "photos": {
+    "hero": {
+      "src": "/images/real/china_campus/cie_campus_visit.webp",
+      "alt": "Campus visit at a College of International Education in China",
+      "caption": "College of International Education",
+      "detail": "A campus visit in China",
+      "width": 1600,
+      "height": 1200
+    },
+    "life": {
+      "src": "/images/home/china-campus-group.webp",
+      "alt": "A group gathered together on a university campus in China",
+      "caption": "On campus in China",
+      "width": 1600,
+      "height": 1308
+    },
+    "support": {
+      "src": "/images/real/counseling/counseling_global_ambitions.webp",
+      "alt": "A study-planning conversation at the EduExpress International office",
+      "caption": "Study planning at EduExpress International, Dhanmondi",
+      "width": 1280,
+      "height": 960
+    }
+  }
+}

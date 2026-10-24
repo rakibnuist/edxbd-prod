@@ -61,3 +61,69 @@ test('comparison accepts only three distinct known active records', () => {
   records.push(university({ slug: 'inactive', isActive: false }));
   assert.deepEqual(directory.selectedComparisonSlugs(new URLSearchParams('compare=one,inactive,two,invalid,one,three,four'), records), ['one', 'two', 'three']);
 });
+
+test('unified search matches levels, language, destination and scholarship text', () => {
+  assert.equal(directory.universityMatchesFilters(record, filters({ search: 'China masters English' })), true);
+  assert.equal(directory.universityMatchesFilters(record, filters({ search: 'China PhD' })), false);
+  const funded = university({ scholarships: [{ status: 'planned', title: 'Merit scholarship', coverage: 'Full tuition' }] });
+  assert.equal(directory.universityMatchesFilters(funded, filters({ search: 'China scholarship tuition' })), true);
+});
+
+test('unified search must match one program and must not combine different degree/language options', () => {
+  assert.equal(directory.universityMatchesFilters(record, filters({ search: 'Bachelor English' })), false);
+  assert.equal(directory.universityMatchesFilters(record, filters({ search: 'Engineering March' })), false);
+  assert.equal(directory.universityMatchesFilters(record, filters({ search: 'China Masters English' })), true);
+  assert.deepEqual(directory.matchingPrograms(record, filters({ search: 'China Masters English' })).map(item => item.name), ['Management']);
+});
+
+test('published guide funding routes are informational and must fit the matching program', () => {
+  const closed = { status: 'closed', title: 'University scholarship' };
+  const uni = university({ scholarships: [closed], programs: [program('Trade', 'Bachelor', ['English'], ['September']), program('Chinese language', 'Language', ['Chinese'], [])], fundingRoutes: [{ title: 'Government scholarship', value: 'CNY 20,000 / year', levels: ['Bachelor'] }] });
+  assert.equal(directory.universityMatchesFilters(uni, filters({ scholarship: true, level: 'Bachelor' })), true);
+  assert.equal(directory.universityMatchesFilters(uni, filters({ scholarship: true, level: 'Language' })), false);
+  assert.equal(uni.scholarships[0].status, 'closed');
+  assert.equal(directory.universityMatchesFilters(uni, filters({ search: 'scholarship Bachelor English' })), true);
+  assert.equal(directory.universityMatchesFilters(uni, filters({ search: 'scholarships Bachelor English' })), true);
+  assert.equal(directory.universityMatchesFilters(uni, filters({ search: 'Language scholarship' })), false);
+});
+
+test('a degree mentioned in another scholarship cannot make a different program match a search', () => {
+  const uni = university({ programs: [program('Business', 'Bachelor', ['English'], []), program('Trade', 'Master', ['English'], [])], fundingRoutes: [{ title: 'Bachelor Government Scholarship', value: 'CNY 20,000 / year', levels: ['Bachelor'] }, { title: 'Master Government Scholarship', value: 'CNY 30,000 / year', levels: ['Master'] }] });
+  assert.deepEqual(directory.matchingPrograms(uni, filters({ search: 'Master English' })).map(item => item.name), ['Trade']);
+});
+
+test('tuition summaries format comparable fees without mixing periods, currencies or award values', () => {
+  assert.equal(directory.directoryTuitionSummary(['7500 CNY/Year']), 'CNY 7,500 / year');
+  assert.equal(directory.directoryTuitionSummary(['CNY 15,000 / year', '18000 RMB/Year']), 'CNY 15,000–18,000 / year');
+  assert.equal(directory.directoryTuitionSummary(['CNY 8,000 / semester', 'CNY 15,000 / year']), 'View program fees');
+  assert.equal(directory.directoryTuitionSummary(['USD 5,000 / year', 'CNY 15,000 / year']), 'View program fees');
+  assert.equal(directory.directoryTuitionSummary(['Approximately CNY 10,000 / year']), 'Approximately CNY 10,000 / year');
+  assert.equal(directory.directoryTuitionSummary(['CNY 0 / year']), 'CNY 0 / year');
+});
+
+test('CSCA exemption requires explicit sourced evidence on the matching China program', () => {
+  const exempt = { ...program('Engineering', 'Bachelor', ['English'], ['September']), sourceUrl: 'https://example.edu/admission', eligibility: ['CSCA exam is not required.'] };
+  const required = { ...program('Management', 'Bachelor', ['Chinese'], ['March']), sourceUrl: 'https://example.edu/admission', eligibility: ['CSCA required.'] };
+  const uni = university({ programs: [exempt, required] });
+  assert.equal(directory.universityMatchesFilters(uni, filters({ cscaFree: true })), true);
+  assert.equal(directory.universityMatchesFilters(uni, filters({ cscaFree: true, language: 'Chinese' })), false);
+  assert.equal(directory.universityMatchesFilters(university(), filters({ cscaFree: true })), false);
+  for (const eligibility of [[], ['English applicants are exempt from Professional Chinese in CSCA.'], ['CSCA may not be required.'], ['CSCA not required for some applicants.']]) {
+    assert.equal(directory.programIsCscaFree({ ...exempt, eligibility }), false);
+  }
+  assert.equal(directory.programIsCscaFree({ ...exempt, sourceUrl: '' }), false);
+  assert.equal(directory.universityMatchesFilters({ ...uni, country: 'Malaysia' }, filters({ cscaFree: true })), false);
+  const params = directory.writeDirectoryFilters(new URLSearchParams('compare=one'), filters({ cscaFree: true }));
+  assert.equal(directory.readDirectoryFilters(params).cscaFree, true);
+  assert.equal(directory.writeDirectoryFilters(params, filters()).get('cscaFree'), null);
+});
+
+test('intakes use complete month names and ignore source years and study-end months', () => {
+  assert.deepEqual(directory.intakeMonths(['Sep 2026 (closed)', 'Feb. or March', 'Jan, Apr, May', 'September 2026 to July 2028', 'September 2026–July 2028']), ['January', 'February', 'March', 'April', 'May', 'September']);
+  const uni = university({ programs: [program('Trade', 'Bachelor', ['English'], ['September 2026 (closed) or March 2027 (confirm deadline)'])] });
+  assert.equal(directory.universityMatchesFilters(uni, filters({ intake: 'September' })), true);
+  assert.equal(directory.universityMatchesFilters(uni, filters({ intake: 'March' })), true);
+  assert.equal(directory.universityMatchesFilters(uni, filters({ intake: 'May' })), false);
+  assert.equal(directory.readDirectoryFilters(new URLSearchParams('intake=September+2026')).intake, 'September');
+  assert.equal(directory.directoryOptions([uni], '').intakes.some(label => /\d|closed|deadline/.test(label)), false);
+});

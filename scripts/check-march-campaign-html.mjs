@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+const html = await readFile(process.argv[2] || '/tmp/china-campaign-after.html','utf8');
+assert.equal((html.match(/<h1\b/g)||[]).length,1);
+assert.equal((html.match(/<main\b/g)||[]).length,1);
+assert.equal((html.match(/<form\b/g)||[]).length,1);
+assert.match(html,/<form[^>]*action="\/api\/leads"[^>]*method="post"|<form[^>]*method="post"[^>]*action="\/api\/leads"/);
+assert.equal((html.match(/rel="canonical"/g)||[]).length,1);
+assert.match(html,/rel="canonical" href="https:\/\/eduexpressint.com\/china-march-2027-intake"/);
+assert.match(html,/name="robots" content="index, follow"/);
+assert.match(html,/name="twitter:card" content="summary_large_image"/);
+assert.match(html,/property="og:locale" content="en_GB"/);
+const title=html.match(/<title>(.*?)<\/title>/)?.[1];
+assert.equal((title.match(/EduExpress International/g)||[]).length,1);
+for(const amount of ['CNY 8,000','CNY 10,500','CNY 18,000','2,00,000 BDT']) assert.ok(html.includes(amount),amount);
+for(const oldCopy of ['Project-sheet target','Under verification','Sources checked','lastReviewedAt','checkedAt']) assert.ok(!html.includes(oldCopy),oldCopy);
+const scripts=[...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/g)].map(match=>JSON.parse(match[1]));
+const entities=scripts.flatMap(item=>item['@graph']||[item]);
+assert.ok(entities.some(item=>item['@type']==='WebPage'&&item.url==='https://eduexpressint.com/china-march-2027-intake'));
+assert.ok(entities.some(item=>item['@type']==='BreadcrumbList'));
+const faqs=entities.find(item=>item['@type']==='FAQPage').mainEntity;
+assert.equal(faqs.length,6);
+for(const item of faqs) { assert.ok(html.includes(item.name)); assert.ok(html.includes(item.acceptedAnswer.text)); }
+assert.equal((html.match(/<article/g)||[]).length,19);
+assert.equal(entities.find(item=>item['@type']==='ItemList'&&item.numberOfItems===17).itemListElement.length,17);
+assert.ok(html.includes('ভিসার আগে এক টাকাও না।'));
+assert.ok(html.includes('Complete China Support Package'));
+assert.ok(!html.includes('Partial Scholarship Service Package'));
+assert.ok(!html.includes('Full Scholarship Service Package'));
+assert.equal((html.match(/id="support-package"/g)||[]).length,1);
+console.log('Campaign SSR, form, costs, source privacy, metadata, canonical and six visible FAQ answers passed.');
+
+assert.ok(!html.includes('CNY 12,300'));
+assert.ok(!html.includes('Preparation does not guarantee medical-degree admission'));
+assert.ok(html.includes('Shandong University of Technology'));
+assert.ok(html.includes('Chongqing Medical University'));
+assert.ok(html.includes('Sort by'));
+assert.ok(html.includes('Bachelor scholarship'));

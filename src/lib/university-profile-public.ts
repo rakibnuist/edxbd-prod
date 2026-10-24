@@ -71,6 +71,7 @@ function prepareFee(fee: UniversityProfileFee): UniversityProfileFee {
     ...(fee.amount !== undefined ? { amount: fee.amount } : {}),
     ...(displayAmount ? { displayAmount } : {}), ...(notes ? { notes } : {}),
     ...(fee.optional !== undefined ? { optional: fee.optional } : {}),
+    ...(fee.creditToward ? { creditToward: fee.creditToward } : {}),
   };
 }
 

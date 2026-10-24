@@ -31,6 +31,7 @@ export default async function ApplyPage({ searchParams }: Props) {
   const university = contextValue(query.university);
   const program = contextValue(query.program, 300);
   const country = contextValue(query.country, 80);
+  const intake = contextValue(query.intake, 80);
 
   return <main className="min-h-screen bg-[#f6f8fa] px-5 pb-20 pt-28 text-[#102b40] sm:px-8 xl:pt-40">
     <div className="mx-auto max-w-[1000px]">
@@ -39,13 +40,14 @@ export default async function ApplyPage({ searchParams }: Props) {
         <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#287465]">University applications</p>
         <h1 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Apply with EduExpress International</h1>
         <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">Share your academic background and study preferences. Our counselors can help you check eligibility, prepare documents and plan your university application.</p>
-        {(university || program || country) && <dl className="mt-7 grid gap-5 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-2 sm:p-6">
+        {(university || program || country || intake) && <dl className="mt-7 grid gap-5 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-2 sm:p-6">
           {university && <div className="sm:col-span-2"><dt className="text-xs font-medium text-slate-500">Preferred university</dt><dd className="mt-1.5 text-base font-semibold">{university}</dd></div>}
           {program && <div><dt className="text-xs font-medium text-slate-500">Selected program</dt><dd className="mt-1.5 text-sm leading-6 text-slate-700">{program}</dd></div>}
           {country && <div><dt className="text-xs font-medium text-slate-500">Destination</dt><dd className="mt-1.5 text-sm leading-6 text-slate-700">{country}</dd></div>}
+          {intake && <div><dt className="text-xs font-medium text-slate-500">Preferred intake</dt><dd className="mt-1.5 text-sm leading-6 text-slate-700">{intake}</dd></div>}
         </dl>}
       </header>
-      <EducationFitAssessment key={JSON.stringify([university, program, country])} initialContext={{ university, program, country, intent: 'application' }} />
+      <EducationFitAssessment key={JSON.stringify([university, program, country, intake])} initialContext={{ university, program, country, intake, intent: 'application' }} />
       <p className="mx-auto mt-6 max-w-2xl text-center text-xs leading-6 text-slate-500">This form requests application support from EduExpress International. Admission and scholarship decisions are made by the university and the relevant awarding body.</p>
     </div>
   </main>;

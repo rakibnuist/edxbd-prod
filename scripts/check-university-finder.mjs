@@ -1,0 +1,48 @@
+/** Read-only checks of the local directory, its semantic list and CTA context. */
+import assert from 'node:assert/strict';
+const origin = 'http://127.0.0.1:3000';
+async function page(path) {
+  const response = await fetch(origin + path);
+  assert.equal(response.status, 200, path);
+  const html = await response.text();
+  assert.match(html, /<link rel="canonical" href="https:\/\/eduexpressint.com\/universities"/);
+  const graphs = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map(match => JSON.parse(match[1]));
+  const list = graphs.flatMap(value => value['@graph'] || []).find(item => item['@type'] === 'ItemList');
+  assert.ok(list, 'Directory item list');
+  assert.equal(list.numberOfItems, (html.match(/<article aria-label=/g) || []).length, 'Visible cards match the semantic list');
+  return { html, list };
+}
+const root = await page('/universities');
+assert.equal((root.html.match(/<h1\b/g) || []).length, 1);
+assert.equal(root.list.numberOfItems, 12);
+assert.equal((root.html.match(/>View programs</g) || []).length, 12);
+assert.equal((root.html.match(/>Apply</g) || []).length, 12);
+assert.ok(!root.html.includes('>View profile<'));
+assert.match(root.html, /id="university-search"/);
+const ahutCard = html => html.match(/<article aria-label="Anhui University of Technology"[\s\S]*?<\/article>/)?.[0];
+assert.ok(ahutCard(root.html).includes('CNY 26,000 / year'));
+assert.ok(ahutCard(root.html).includes('CNY 20,000 / year'));
+assert.ok(ahutCard(root.html).includes('/universities/ahut#programs'));
+const master = await page('/universities?search=AHUT+masters+English');
+assert.equal(master.list.numberOfItems, 1);
+assert.match(master.html, /<meta name="robots" content="noindex, follow"/);
+const card = ahutCard(master.html);
+assert.ok(card.includes('Master’s tuition'));
+assert.ok(card.includes('CNY 30,000 / year'));
+assert.ok(card.includes('Anhui Government Scholarship — Master'));
+const href = card.match(/href="(\/apply\?[^"]*)"/)[1].replaceAll('&amp;', '&');
+const application = new URL(href, origin);
+assert.equal(application.searchParams.get('university'), 'Anhui University of Technology');
+assert.equal(application.searchParams.get('program'), 'Master’s · International Trade');
+assert.equal(application.searchParams.get('country'), 'China');
+assert.equal(application.searchParams.get('intake'), '2027 planning');
+const more = await page('/universities?limit=24');
+assert.equal(more.list.numberOfItems, 24);
+const empty = await page('/universities?search=NoSuchUniversityForLocalCheck');
+assert.equal(empty.list.numberOfItems, 0);
+assert.ok(empty.html.includes('No matches for this search'));
+const malaysia = await page('/universities?country=Malaysia');
+assert.equal(malaysia.list.numberOfItems, 0);
+assert.ok(malaysia.html.includes('href="/study-in-malaysia-from-bangladesh"'));
+assert.ok(malaysia.html.includes('View destination guide'));
+console.log('Finder checks passed: visible program/apply actions, matching course and funding facts, application context, canonical/noindex handling, list schema, pagination and destination empty states.');

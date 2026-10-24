@@ -22,6 +22,7 @@ function publicFee(value: unknown): UniversityProfileFee | null {
     ...(typeof fee.notes === 'string' ? { notes: fee.notes } : {}),
     ...(typeof fee.displayAmount === 'string' ? { displayAmount: fee.displayAmount } : {}),
     ...(typeof fee.optional === 'boolean' ? { optional: fee.optional } : {}),
+    ...(fee.creditToward === 'tuition' || fee.creditToward === 'housing' ? { creditToward: fee.creditToward } : {}),
   };
 }
 

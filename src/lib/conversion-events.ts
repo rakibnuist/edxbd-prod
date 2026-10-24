@@ -20,6 +20,7 @@
 
 export type ConversionEvent =
   | 'assessment_start'
+  | 'assessment_step_completed'
   | 'assessment_submit'
   | 'whatsapp_click'
   | 'phone_click'
@@ -28,6 +29,8 @@ export type ConversionEvent =
   | 'compare_completed'
   | 'cost_sheet_downloaded'
   | 'university_view'
+  | 'university_programs_click'
+  | 'university_apply_click'
   | 'success_story_view'
   | 'application_started'
   | 'offer_received'

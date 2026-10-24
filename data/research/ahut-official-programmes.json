@@ -1,0 +1,1092 @@
+{
+  "schemaVersion": 1,
+  "universities": [
+    {
+      "slug": "ahut",
+      "name": "Anhui University of Technology",
+      "city": "Ma'anshan",
+      "province": "Anhui",
+      "officialUrl": "https://www.ahut.edu.cn/",
+      "overview": "Anhui University of Technology (AHUT) is located in Ma’anshan, Anhui, China. Its international study routes bring together business, engineering and science, with English-taught degrees in international trade, metallurgy, materials, chemistry and environmental science.\n\nFor students from Bangladesh, the right starting point is the degree and teaching language. Compare the course duration, entry qualifications and scholarship conditions, then plan tuition, accommodation and other required costs together. Chinese language study is also listed separately from the degree routes.",
+      "highlights": [
+        {
+          "title": "Business and research degrees",
+          "description": "International economics and trade at bachelor’s level, international trade at master’s level, and research routes in engineering and science."
+        },
+        {
+          "title": "English and Chinese study routes",
+          "description": "English-taught degrees and Chinese language courses have their own tuition periods and admission requirements."
+        }
+      ],
+      "programs": [
+        {
+          "id": "ahut-bachelor-international-trade-business",
+          "name": "International Economics and Trade",
+          "level": "Bachelor",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "intake": "September 2026",
+          "deadline": "15 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen; valid passport; good health.",
+            "High-school qualification. Under-18 applicants need a guardian guarantee in China."
+          ],
+          "languageRequirements": [
+            "IELTS 5.5 or TOEFL iBT 70 or accepted equivalent; university testing may apply.",
+            "Official evidence of prior English-medium study can waive the language-test requirement."
+          ],
+          "documents": [
+            "Passport and digital photo.",
+            "Notarized highest qualification and transcripts.",
+            "Physical examination form and blood-test report.",
+            "English proficiency certificate or official medium-of-instruction evidence.",
+            "Bank statement: CNY 30,000 or USD 5,000; validity six months.",
+            "Notarized Chinese or English translations where needed."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition fee",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 26000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 400,
+              "notes": "Non-refundable."
+            },
+            {
+              "key": "deposit",
+              "item": "Accommodation reservation deposit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "creditToward": "housing",
+              "amount": 2000,
+              "notes": "Non-refundable; credited toward accommodation on registration."
+            },
+            {
+              "key": "housing",
+              "item": "Double-bed room, per bed",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000
+            },
+            {
+              "key": "insurance",
+              "item": "Medical insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 400 / one-time",
+              "notes": "Published estimate: approximately CNY 400; enter the amount confirmed for your examination."
+            },
+            {
+              "key": "other",
+              "item": "Books",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 500 / year",
+              "optional": true,
+              "notes": "Published estimate; include in other costs if applicable."
+            },
+            {
+              "key": "other",
+              "item": "Living expenses",
+              "currency": "CNY",
+              "period": "month",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 1,000 / month",
+              "optional": true,
+              "notes": "Personal spending varies; include a budget for your planned number of months."
+            }
+          ],
+          "notes": [
+            "Final-year applicants may provide a pre-graduation certificate and bring the original diploma at registration."
+          ],
+          "sourceUrl": "https://en.ahut.edu.cn/__local/F/D3/7E/578103C4BAAF67705ACD91BDE10_62FA323B_81E57.pdf"
+        },
+        {
+          "id": "ahut-master-international-trade-business",
+          "name": "International Trade",
+          "level": "Master",
+          "languages": [
+            "English"
+          ],
+          "duration": "3 years",
+          "intake": "September 2026",
+          "deadline": "15 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen; valid passport; good health.",
+            "Bachelor’s degree; over 18."
+          ],
+          "languageRequirements": [
+            "IELTS 6.0 or TOEFL iBT 80 or accepted equivalent; university testing may apply.",
+            "Official evidence of prior English-medium study can waive the language-test requirement."
+          ],
+          "documents": [
+            "Passport and digital photo.",
+            "Notarized highest qualification and transcripts.",
+            "Physical examination form and blood-test report.",
+            "English proficiency certificate or official medium-of-instruction evidence.",
+            "Bank statement: CNY 30,000 or USD 5,000; validity six months.",
+            "Notarized Chinese or English translations where needed.",
+            "Two recommendation letters."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition fee",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 30000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 400,
+              "notes": "Non-refundable."
+            },
+            {
+              "key": "deposit",
+              "item": "Accommodation reservation deposit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "creditToward": "housing",
+              "amount": 2000,
+              "notes": "Non-refundable; credited toward accommodation on registration."
+            },
+            {
+              "key": "housing",
+              "item": "Double-bed room, per bed",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000
+            },
+            {
+              "key": "insurance",
+              "item": "Medical insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 400 / one-time",
+              "notes": "Published estimate: approximately CNY 400; enter the amount confirmed for your examination."
+            },
+            {
+              "key": "other",
+              "item": "Books",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 500 / year",
+              "optional": true,
+              "notes": "Published estimate; include in other costs if applicable."
+            },
+            {
+              "key": "other",
+              "item": "Living expenses",
+              "currency": "CNY",
+              "period": "month",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 1,000 / month",
+              "optional": true,
+              "notes": "Personal spending varies; include a budget for your planned number of months."
+            }
+          ],
+          "notes": [
+            "Final-year applicants may provide a pre-graduation certificate and bring the original diploma at registration."
+          ],
+          "sourceUrl": "https://en.ahut.edu.cn/__local/F/D3/7E/578103C4BAAF67705ACD91BDE10_62FA323B_81E57.pdf"
+        },
+        {
+          "id": "ahut-phd-metallurgical-engineering",
+          "name": "Metallurgical Engineering",
+          "level": "PhD",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "intake": "September 2026",
+          "deadline": "15 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen; valid passport; good health.",
+            "Master’s degree; over 18."
+          ],
+          "languageRequirements": [
+            "IELTS 6.5 or TOEFL iBT 90 or accepted equivalent; university testing may apply.",
+            "Official evidence of prior English-medium study can waive the language-test requirement."
+          ],
+          "documents": [
+            "Passport and digital photo.",
+            "Notarized highest qualification and transcripts.",
+            "Physical examination form and blood-test report.",
+            "English proficiency certificate or official medium-of-instruction evidence.",
+            "Bank statement: CNY 30,000 or USD 5,000; validity six months.",
+            "Notarized Chinese or English translations where needed.",
+            "Two recommendation letters.",
+            "Research proposal."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition fee",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 30000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 400,
+              "notes": "Non-refundable."
+            },
+            {
+              "key": "deposit",
+              "item": "Accommodation reservation deposit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "creditToward": "housing",
+              "amount": 2000,
+              "notes": "Non-refundable; credited toward accommodation on registration."
+            },
+            {
+              "key": "housing",
+              "item": "Double-bed room, per bed",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000
+            },
+            {
+              "key": "insurance",
+              "item": "Medical insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 400 / one-time",
+              "notes": "Published estimate: approximately CNY 400; enter the amount confirmed for your examination."
+            },
+            {
+              "key": "other",
+              "item": "Books",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 500 / year",
+              "optional": true,
+              "notes": "Published estimate; include in other costs if applicable."
+            },
+            {
+              "key": "other",
+              "item": "Living expenses",
+              "currency": "CNY",
+              "period": "month",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 1,000 / month",
+              "optional": true,
+              "notes": "Personal spending varies; include a budget for your planned number of months."
+            }
+          ],
+          "notes": [
+            "Final-year applicants may provide a pre-graduation certificate and bring the original diploma at registration."
+          ],
+          "sourceUrl": "https://en.ahut.edu.cn/__local/F/D3/7E/578103C4BAAF67705ACD91BDE10_62FA323B_81E57.pdf"
+        },
+        {
+          "id": "ahut-phd-materials-science-and-engineering",
+          "name": "Materials Science and Engineering",
+          "level": "PhD",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "intake": "September 2026",
+          "deadline": "15 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen; valid passport; good health.",
+            "Master’s degree; over 18."
+          ],
+          "languageRequirements": [
+            "IELTS 6.5 or TOEFL iBT 90 or accepted equivalent; university testing may apply.",
+            "Official evidence of prior English-medium study can waive the language-test requirement."
+          ],
+          "documents": [
+            "Passport and digital photo.",
+            "Notarized highest qualification and transcripts.",
+            "Physical examination form and blood-test report.",
+            "English proficiency certificate or official medium-of-instruction evidence.",
+            "Bank statement: CNY 30,000 or USD 5,000; validity six months.",
+            "Notarized Chinese or English translations where needed.",
+            "Two recommendation letters.",
+            "Research proposal."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition fee",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 30000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 400,
+              "notes": "Non-refundable."
+            },
+            {
+              "key": "deposit",
+              "item": "Accommodation reservation deposit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "creditToward": "housing",
+              "amount": 2000,
+              "notes": "Non-refundable; credited toward accommodation on registration."
+            },
+            {
+              "key": "housing",
+              "item": "Double-bed room, per bed",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000
+            },
+            {
+              "key": "insurance",
+              "item": "Medical insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 400 / one-time",
+              "notes": "Published estimate: approximately CNY 400; enter the amount confirmed for your examination."
+            },
+            {
+              "key": "other",
+              "item": "Books",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 500 / year",
+              "optional": true,
+              "notes": "Published estimate; include in other costs if applicable."
+            },
+            {
+              "key": "other",
+              "item": "Living expenses",
+              "currency": "CNY",
+              "period": "month",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 1,000 / month",
+              "optional": true,
+              "notes": "Personal spending varies; include a budget for your planned number of months."
+            }
+          ],
+          "notes": [
+            "Final-year applicants may provide a pre-graduation certificate and bring the original diploma at registration."
+          ],
+          "sourceUrl": "https://en.ahut.edu.cn/__local/F/D3/7E/578103C4BAAF67705ACD91BDE10_62FA323B_81E57.pdf"
+        },
+        {
+          "id": "ahut-phd-chemistry",
+          "name": "Chemistry",
+          "level": "PhD",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "intake": "September 2026",
+          "deadline": "15 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen; valid passport; good health.",
+            "Master’s degree; over 18."
+          ],
+          "languageRequirements": [
+            "IELTS 6.5 or TOEFL iBT 90 or accepted equivalent; university testing may apply.",
+            "Official evidence of prior English-medium study can waive the language-test requirement."
+          ],
+          "documents": [
+            "Passport and digital photo.",
+            "Notarized highest qualification and transcripts.",
+            "Physical examination form and blood-test report.",
+            "English proficiency certificate or official medium-of-instruction evidence.",
+            "Bank statement: CNY 30,000 or USD 5,000; validity six months.",
+            "Notarized Chinese or English translations where needed.",
+            "Two recommendation letters.",
+            "Research proposal."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition fee",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 30000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 400,
+              "notes": "Non-refundable."
+            },
+            {
+              "key": "deposit",
+              "item": "Accommodation reservation deposit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "creditToward": "housing",
+              "amount": 2000,
+              "notes": "Non-refundable; credited toward accommodation on registration."
+            },
+            {
+              "key": "housing",
+              "item": "Double-bed room, per bed",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000
+            },
+            {
+              "key": "insurance",
+              "item": "Medical insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 400 / one-time",
+              "notes": "Published estimate: approximately CNY 400; enter the amount confirmed for your examination."
+            },
+            {
+              "key": "other",
+              "item": "Books",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 500 / year",
+              "optional": true,
+              "notes": "Published estimate; include in other costs if applicable."
+            },
+            {
+              "key": "other",
+              "item": "Living expenses",
+              "currency": "CNY",
+              "period": "month",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 1,000 / month",
+              "optional": true,
+              "notes": "Personal spending varies; include a budget for your planned number of months."
+            }
+          ],
+          "notes": [
+            "Final-year applicants may provide a pre-graduation certificate and bring the original diploma at registration."
+          ],
+          "sourceUrl": "https://en.ahut.edu.cn/__local/F/D3/7E/578103C4BAAF67705ACD91BDE10_62FA323B_81E57.pdf"
+        },
+        {
+          "id": "ahut-phd-environmental-science-and-engineering",
+          "name": "Environmental Science and Engineering",
+          "level": "PhD",
+          "languages": [
+            "English"
+          ],
+          "duration": "4 years",
+          "intake": "September 2026",
+          "deadline": "15 June 2026 (closed)",
+          "qualifications": [
+            "Non-Chinese citizen; valid passport; good health.",
+            "Master’s degree; over 18."
+          ],
+          "languageRequirements": [
+            "IELTS 6.5 or TOEFL iBT 90 or accepted equivalent; university testing may apply.",
+            "Official evidence of prior English-medium study can waive the language-test requirement."
+          ],
+          "documents": [
+            "Passport and digital photo.",
+            "Notarized highest qualification and transcripts.",
+            "Physical examination form and blood-test report.",
+            "English proficiency certificate or official medium-of-instruction evidence.",
+            "Bank statement: CNY 30,000 or USD 5,000; validity six months.",
+            "Notarized Chinese or English translations where needed.",
+            "Two recommendation letters.",
+            "Research proposal."
+          ],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Tuition fee",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 30000
+            },
+            {
+              "key": "application",
+              "item": "Application fee",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "amount": 400,
+              "notes": "Non-refundable."
+            },
+            {
+              "key": "deposit",
+              "item": "Accommodation reservation deposit",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "before_china",
+              "creditToward": "housing",
+              "amount": 2000,
+              "notes": "Non-refundable; credited toward accommodation on registration."
+            },
+            {
+              "key": "housing",
+              "item": "Double-bed room, per bed",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000
+            },
+            {
+              "key": "insurance",
+              "item": "Medical insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 400 / one-time",
+              "notes": "Published estimate: approximately CNY 400; enter the amount confirmed for your examination."
+            },
+            {
+              "key": "other",
+              "item": "Books",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 500 / year",
+              "optional": true,
+              "notes": "Published estimate; include in other costs if applicable."
+            },
+            {
+              "key": "other",
+              "item": "Living expenses",
+              "currency": "CNY",
+              "period": "month",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 1,000 / month",
+              "optional": true,
+              "notes": "Personal spending varies; include a budget for your planned number of months."
+            }
+          ],
+          "notes": [
+            "Final-year applicants may provide a pre-graduation certificate and bring the original diploma at registration."
+          ],
+          "sourceUrl": "https://en.ahut.edu.cn/__local/F/D3/7E/578103C4BAAF67705ACD91BDE10_62FA323B_81E57.pdf"
+        },
+        {
+          "id": "ahut-language-year",
+          "name": "Chinese language (one year)",
+          "level": "Language",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "1 year",
+          "qualifications": [],
+          "languageRequirements": [],
+          "documents": [],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Language tuition",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 15000
+            },
+            {
+              "key": "housing",
+              "item": "Double-bed room, per bed",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000
+            },
+            {
+              "key": "insurance",
+              "item": "Medical insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 400 / one-time",
+              "notes": "Published estimate: approximately CNY 400; enter the amount confirmed for your examination."
+            },
+            {
+              "key": "other",
+              "item": "Books",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 500 / year",
+              "optional": true,
+              "notes": "Published estimate; include in other costs if applicable."
+            },
+            {
+              "key": "other",
+              "item": "Living expenses",
+              "currency": "CNY",
+              "period": "month",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 1,000 / month",
+              "optional": true,
+              "notes": "Personal spending varies; include a budget for your planned number of months."
+            }
+          ],
+          "notes": [
+            "Confirm admission requirements, intake and any additional application charges with the university."
+          ],
+          "sourceUrl": "https://en.ahut.edu.cn/ad/Fees.htm"
+        },
+        {
+          "id": "ahut-language-semester",
+          "name": "Chinese language (one semester)",
+          "level": "Language",
+          "languages": [
+            "Chinese"
+          ],
+          "duration": "1 semester",
+          "qualifications": [],
+          "languageRequirements": [],
+          "documents": [],
+          "fees": [
+            {
+              "key": "tuition",
+              "item": "Language tuition",
+              "currency": "CNY",
+              "period": "semester",
+              "stage": "in_china",
+              "amount": 8000
+            },
+            {
+              "key": "housing",
+              "item": "Double-bed room, per bed",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 3000
+            },
+            {
+              "key": "insurance",
+              "item": "Medical insurance",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 800
+            },
+            {
+              "key": "residence",
+              "item": "Residence permit",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "amount": 400
+            },
+            {
+              "key": "medical",
+              "item": "Medical examination",
+              "currency": "CNY",
+              "period": "oneoff",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 400 / one-time",
+              "notes": "Published estimate: approximately CNY 400; enter the amount confirmed for your examination."
+            },
+            {
+              "key": "other",
+              "item": "Books",
+              "currency": "CNY",
+              "period": "year",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 500 / year",
+              "optional": true,
+              "notes": "Published estimate; include in other costs if applicable."
+            },
+            {
+              "key": "other",
+              "item": "Living expenses",
+              "currency": "CNY",
+              "period": "month",
+              "stage": "in_china",
+              "displayAmount": "Approximately CNY 1,000 / month",
+              "optional": true,
+              "notes": "Personal spending varies; include a budget for your planned number of months."
+            }
+          ],
+          "notes": [
+            "Confirm admission requirements, intake and any additional application charges with the university.",
+            "Groups of at least 10 can request the published CNY 6,000 per-person semester rate."
+          ],
+          "sourceUrl": "https://en.ahut.edu.cn/ad/Fees.htm"
+        }
+      ],
+      "scholarshipOptions": [
+        {
+          "id": "ahut-anhui-government-scholarship-bachelor",
+          "title": "Anhui Government Scholarship — Bachelor",
+          "type": "Anhui Government Scholarship",
+          "levels": [
+            "Bachelor"
+          ],
+          "coverage": [
+            "CNY 20,000 / year"
+          ],
+          "conditions": [
+            "Award selection applies. Main scholarships cannot be combined."
+          ],
+          "renewal": [],
+          "documents": [],
+          "applicationSteps": [
+            "Apply through the university application system."
+          ],
+          "status": "closed",
+          "notes": [
+            "Award value is not automatically treated as a tuition deduction. Confirm the payable fees in your award."
+          ]
+        },
+        {
+          "id": "ahut-anhui-government-scholarship-master",
+          "title": "Anhui Government Scholarship — Master",
+          "type": "Anhui Government Scholarship",
+          "levels": [
+            "Master"
+          ],
+          "coverage": [
+            "CNY 30,000 / year"
+          ],
+          "conditions": [
+            "Award selection applies. Main scholarships cannot be combined."
+          ],
+          "renewal": [],
+          "documents": [],
+          "applicationSteps": [
+            "Apply through the university application system."
+          ],
+          "status": "closed",
+          "notes": [
+            "Award value is not automatically treated as a tuition deduction. Confirm the payable fees in your award."
+          ]
+        },
+        {
+          "id": "ahut-anhui-government-scholarship-phd",
+          "title": "Anhui Government Scholarship — PhD",
+          "type": "Anhui Government Scholarship",
+          "levels": [
+            "PhD"
+          ],
+          "coverage": [
+            "CNY 50,000 / year"
+          ],
+          "conditions": [
+            "Award selection applies. Main scholarships cannot be combined."
+          ],
+          "renewal": [],
+          "documents": [],
+          "applicationSteps": [
+            "Apply through the university application system."
+          ],
+          "status": "closed",
+          "notes": [
+            "Award value is not automatically treated as a tuition deduction. Confirm the payable fees in your award."
+          ]
+        },
+        {
+          "id": "ahut-study-at-ahut-scholarship-bachelor",
+          "title": "Study at AHUT Scholarship — Bachelor",
+          "type": "Study at AHUT Scholarship",
+          "levels": [
+            "Bachelor"
+          ],
+          "coverage": [
+            "CNY 5,000–20,000 / year"
+          ],
+          "conditions": [
+            "Award selection applies. Main scholarships cannot be combined."
+          ],
+          "renewal": [],
+          "documents": [],
+          "applicationSteps": [
+            "Apply through the university application system."
+          ],
+          "status": "closed",
+          "notes": [
+            "Award value is not automatically treated as a tuition deduction. Confirm the payable fees in your award."
+          ]
+        },
+        {
+          "id": "ahut-study-at-ahut-scholarship-master",
+          "title": "Study at AHUT Scholarship — Master",
+          "type": "Study at AHUT Scholarship",
+          "levels": [
+            "Master"
+          ],
+          "coverage": [
+            "CNY 5,000–20,000 / year"
+          ],
+          "conditions": [
+            "Award selection applies. Main scholarships cannot be combined."
+          ],
+          "renewal": [],
+          "documents": [],
+          "applicationSteps": [
+            "Apply through the university application system."
+          ],
+          "status": "closed",
+          "notes": [
+            "Award value is not automatically treated as a tuition deduction. Confirm the payable fees in your award."
+          ]
+        },
+        {
+          "id": "ahut-study-at-ahut-scholarship-phd",
+          "title": "Study at AHUT Scholarship — PhD",
+          "type": "Study at AHUT Scholarship",
+          "levels": [
+            "PhD"
+          ],
+          "coverage": [
+            "CNY 42,000 / year"
+          ],
+          "conditions": [
+            "Award selection applies. Main scholarships cannot be combined."
+          ],
+          "renewal": [],
+          "documents": [],
+          "applicationSteps": [
+            "Apply through the university application system."
+          ],
+          "status": "closed",
+          "notes": [
+            "Award value is not automatically treated as a tuition deduction. Confirm the payable fees in your award."
+          ]
+        },
+        {
+          "id": "ahut-talent",
+          "title": "Talent Scholarship",
+          "type": "Current-student award",
+          "levels": [
+            "Bachelor",
+            "Master",
+            "PhD"
+          ],
+          "coverage": [
+            "CNY 300–5,000 / year"
+          ],
+          "conditions": [
+            "For current students; award depends on the program."
+          ],
+          "renewal": [],
+          "documents": [],
+          "applicationSteps": [
+            "Follow the university award notice."
+          ],
+          "status": "confirm",
+          "notes": [
+            "May be combined with another scholarship under the published exception."
+          ]
+        }
+      ],
+      "internal": {
+        "replaceProgramListing": true,
+        "programStatus": "planned",
+        "checkedAt": "2026-10-23",
+        "sourceUrls": [
+          "https://en.ahut.edu.cn/__local/F/D3/7E/578103C4BAAF67705ACD91BDE10_62FA323B_81E57.pdf",
+          "https://en.ahut.edu.cn/ad/Fees.htm",
+          "https://en.ahut.edu.cn/info/1050/1648.htm",
+          "https://en.ahut.edu.cn/ad/Scholarships.htm"
+        ],
+        "sourceCycle": "2026; degree application deadline 15 June, closed. September month retained from prior sourced intake record.",
+        "notes": [
+          "Legacy course rows retained as paused by the importer. Brochure fees replace legacy tuition. Scholarship amounts are award values, not confirmed tuition reductions. Language fees from separate university fee page; language application/entry data not supplied."
+        ],
+        "conversionResearch": {
+          "checkedAt": "2026-10-23",
+          "sources": [
+            "https://en.ahut.edu.cn/info/1050/1648.htm",
+            "https://en.ahut.edu.cn/ad/Fees.htm",
+            "https://www.shanghairanking.com/universities/anhui-university-of-technology"
+          ],
+          "note": "Rechecked official degree and fee evidence for the conversion redesign. No separate official international 2027 offer was established. A domestic graduate-school notice is not international admission evidence. Campus-image downloads timed out and were not published."
+        },
+        "searchPublication": {
+          "mode": "evergreen_guide",
+          "index": true,
+          "researchedAt": "2026-10-23",
+          "sources": [
+            "https://en.ahut.edu.cn/info/1050/1648.htm",
+            "https://en.ahut.edu.cn/ad/Fees.htm",
+            "https://en.ahut.edu.cn/__local/F/D3/7E/578103C4BAAF67705ACD91BDE10_62FA323B_81E57.pdf",
+            "https://gjc.ahut.edu.cn/info/1778/2425.htm"
+          ],
+          "rationale": "Owner authorized researched evergreen guides to be indexed separately from admission availability. Institution, programme levels, tuition, qualifications, documents and award values are supported by university materials. This publishes an informational guide; historical admission cycles and original evidence remain internal, and planned programme/closed award statuses are preserved. No 2027 opening or institutional partnership is asserted."
+        },
+        "seoResearch": {
+          "checkedAt": "2026-10-23",
+          "queryIntent": [
+            "Anhui University of Technology",
+            "AHUT",
+            "Anhui University of Technology fees",
+            "AHUT scholarship",
+            "Anhui University of Technology admission Bangladesh"
+          ],
+          "notes": [
+            "Full name and recorded acronym retained in title and H1.",
+            "Bachelor name follows the official international admissions summary: International Economics and Trade. Master name: International Trade.",
+            "Sources and chronology remain private. Public guide sections are linked and available in the initial HTML.",
+            "No numerical outcome, review star, admission guarantee or search ranking guarantee is published."
+          ]
+        }
+      }
+    }
+  ],
+  "internal": {
+    "checkedAt": "2026-10-23",
+    "source": "Official AHUT prospectus, admissions summary and fee schedule"
+  }
+}

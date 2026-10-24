@@ -1,0 +1,2479 @@
+{
+  "EduExpress Dashboard": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "EDUEXPRESS INTERNATIONAL — CHINA MEDICAL & ALLIED HEALTH MASTER DASHBOARD (2026/2027)"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "Executive Operations & Counseling Hub for Bangladeshi Students | 45 MOE MBBS Schools, Pre-Med Foundation, Pharmacy/Biotech & BMDC RQE"
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": "PORTFOLIO BENCHMARKS (LIVE FORMULAS)",
+        "F": "EDUEXPRESS BDT / USD PACKAGE CALCULATOR (MBBS + PRE-MED)"
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": "Total MOE-Authorized English MBBS Universities",
+        "C": "=COUNTA('45 MOE MBBS + Foundation'!B4:B48)",
+        "D": "100% Complete MOE List",
+        "F": "Exchange Rate: 1 RMB to BDT (Editable)",
+        "G": 19.25,
+        "H": "BDT / 1 RMB"
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": "Universities Offering March/Sep Pre-Med Foundation",
+        "C": "=COUNTIF('45 MOE MBBS + Foundation'!I4:I48,\"Yes*\")",
+        "D": "Out of 45 MOE Schools",
+        "F": "Selected 6-Month Pre-Med Fee (Set 0 if Direct Sep)",
+        "G": 9000,
+        "H": "RMB (Optional March Prep)"
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": "Average 6-Month Pre-Med / Foundation Tuition",
+        "C": "=AVERAGEIF('45 MOE MBBS + Foundation'!J4:J48,\">0\")",
+        "D": "RMB (1 Semester Prep)",
+        "F": "Selected Annual MBBS Tuition (RMB/yr)",
+        "G": 30000,
+        "H": "RMB / Year"
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": "Average Annual MBBS Tuition Fee",
+        "C": "=AVERAGE('45 MOE MBBS + Foundation'!L4:L48)",
+        "D": "RMB / Year",
+        "F": "Selected Annual Hostel + Misc (RMB/yr)",
+        "G": 6000,
+        "H": "RMB / Year"
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": "Lowest Annual MBBS Tuition (China Three Gorges)",
+        "C": "=MIN('45 MOE MBBS + Foundation'!L4:L48)",
+        "D": "RMB / Year",
+        "F": "Expected 1st-Year Scholarship Deduction (RMB)",
+        "G": 10000,
+        "H": "RMB (Freshman Grant)"
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": "English Pharmacy, Biotech & BDS Programs Tracked",
+        "C": "=COUNTA('Pharmacy Biotech & Allied'!B4:B18)",
+        "D": "High-Scholarship Majors",
+        "F": "Net 1st-Year MBBS Cost (After Scholarship) in BDT",
+        "G": "=(G7+G8-G9)*G5",
+        "H": "BDT (Year 1 MBBS Net)"
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "A": "Average Net Tuition in Pharmacy/Biotech (After Scholarship)",
+        "C": "=AVERAGE('Pharmacy Biotech & Allied'!L4:L18)",
+        "D": "RMB / Year (With Scholarship)",
+        "F": "Total 6-Year MBBS Cost (With Pre-Med) in BDT",
+        "G": "=(G6+((G7+G8)*6)-G9)*G5",
+        "H": "BDT (Full Journey)"
+      }
+    },
+    {
+      "row": 14,
+      "cells": {
+        "A": "PROVINCIAL DISTRIBUTION OF MOE MBBS UNIVERSITIES"
+      }
+    },
+    {
+      "row": 15,
+      "cells": {
+        "A": "Province / Municipality",
+        "B": "MOE Universities",
+        "C": "Total Annual Quota",
+        "D": "Avg Annual Tuition (RMB)"
+      }
+    },
+    {
+      "row": 16,
+      "cells": {
+        "A": "Jiangsu",
+        "B": "=COUNTIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Jiangsu\")",
+        "C": "=SUMIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Jiangsu\",'45 MOE MBBS + Foundation'!$G$4:$G$48)",
+        "D": "=AVERAGEIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Jiangsu\",'45 MOE MBBS + Foundation'!$L$4:$L$48)"
+      }
+    },
+    {
+      "row": 17,
+      "cells": {
+        "A": "Guangdong",
+        "B": "=COUNTIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Guangdong\")",
+        "C": "=SUMIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Guangdong\",'45 MOE MBBS + Foundation'!$G$4:$G$48)",
+        "D": "=AVERAGEIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Guangdong\",'45 MOE MBBS + Foundation'!$L$4:$L$48)"
+      }
+    },
+    {
+      "row": 18,
+      "cells": {
+        "A": "Shanghai",
+        "B": "=COUNTIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Shanghai\")",
+        "C": "=SUMIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Shanghai\",'45 MOE MBBS + Foundation'!$G$4:$G$48)",
+        "D": "=AVERAGEIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Shanghai\",'45 MOE MBBS + Foundation'!$L$4:$L$48)"
+      }
+    },
+    {
+      "row": 19,
+      "cells": {
+        "A": "Zhejiang",
+        "B": "=COUNTIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Zhejiang\")",
+        "C": "=SUMIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Zhejiang\",'45 MOE MBBS + Foundation'!$G$4:$G$48)",
+        "D": "=AVERAGEIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Zhejiang\",'45 MOE MBBS + Foundation'!$L$4:$L$48)"
+      }
+    },
+    {
+      "row": 20,
+      "cells": {
+        "A": "Liaoning",
+        "B": "=COUNTIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Liaoning\")",
+        "C": "=SUMIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Liaoning\",'45 MOE MBBS + Foundation'!$G$4:$G$48)",
+        "D": "=AVERAGEIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Liaoning\",'45 MOE MBBS + Foundation'!$L$4:$L$48)"
+      }
+    },
+    {
+      "row": 21,
+      "cells": {
+        "A": "Sichuan",
+        "B": "=COUNTIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Sichuan\")",
+        "C": "=SUMIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Sichuan\",'45 MOE MBBS + Foundation'!$G$4:$G$48)",
+        "D": "=AVERAGEIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Sichuan\",'45 MOE MBBS + Foundation'!$L$4:$L$48)"
+      }
+    },
+    {
+      "row": 22,
+      "cells": {
+        "A": "Hubei",
+        "B": "=COUNTIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Hubei\")",
+        "C": "=SUMIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Hubei\",'45 MOE MBBS + Foundation'!$G$4:$G$48)",
+        "D": "=AVERAGEIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Hubei\",'45 MOE MBBS + Foundation'!$L$4:$L$48)"
+      }
+    },
+    {
+      "row": 23,
+      "cells": {
+        "A": "Beijing",
+        "B": "=COUNTIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Beijing\")",
+        "C": "=SUMIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Beijing\",'45 MOE MBBS + Foundation'!$G$4:$G$48)",
+        "D": "=AVERAGEIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Beijing\",'45 MOE MBBS + Foundation'!$L$4:$L$48)"
+      }
+    },
+    {
+      "row": 24,
+      "cells": {
+        "A": "Tianjin",
+        "B": "=COUNTIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Tianjin\")",
+        "C": "=SUMIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Tianjin\",'45 MOE MBBS + Foundation'!$G$4:$G$48)",
+        "D": "=AVERAGEIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Tianjin\",'45 MOE MBBS + Foundation'!$L$4:$L$48)"
+      }
+    },
+    {
+      "row": 25,
+      "cells": {
+        "A": "Shandong",
+        "B": "=COUNTIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Shandong\")",
+        "C": "=SUMIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Shandong\",'45 MOE MBBS + Foundation'!$G$4:$G$48)",
+        "D": "=AVERAGEIF('45 MOE MBBS + Foundation'!$D$4:$D$48,\"Shandong\",'45 MOE MBBS + Foundation'!$L$4:$L$48)"
+      }
+    }
+  ],
+  "45 MOE MBBS + Foundation": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "EDUEXPRESS INTERNATIONAL — CHINA MOE 45 ENGLISH-MBBS UNIVERSITIES, PRE-MEDICAL FOUNDATION & SCHOLARSHIP MASTER LIST (2026/2027)"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "Prepared for EduExpress International Counselors (Bangladesh Market) | Includes 6-Month March Pre-Med/Foundation Options, CSCA Rules & Scholarships"
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": "MOE No.",
+        "B": "University Name (English)",
+        "C": "Chinese Name",
+        "D": "Province",
+        "E": "City",
+        "F": "University Tier",
+        "G": "Annual MBBS Quota",
+        "H": "MBBS Degree Intake",
+        "I": "Pre-Med / Foundation Intake (6-Mo / 1-Yr)",
+        "J": "Pre-Med / Language Fee (RMB)",
+        "K": "MBBS Application Deadline",
+        "L": "Annual MBBS Tuition (RMB)",
+        "M": "Annual Hostel (RMB)",
+        "N": "Other Annual Fees (RMB)",
+        "O": "Est. 1st Year MBBS Total (RMB)",
+        "P": "Est. 6-Yr MBBS Total (RMB)",
+        "Q": "Scholarship Availability (MBBS)",
+        "R": "Scholarship Details & Max Award (RMB)",
+        "S": "Min BD SSC+HSC GPA (EduExpress Target)",
+        "T": "Min PCB Marks",
+        "U": "Strict Age Rule",
+        "V": "English & Entrance Exam",
+        "W": "CSCA Exam Status (2026+)",
+        "X": "HSK Requirement (Clinical & Grad)",
+        "Y": "Final Year Internship (BD vs China)",
+        "Z": "WDOMS & BMDC Status",
+        "AA": "Official Website",
+        "AB": "EduExpress Counselor Strategy & Operational Notes"
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": 1,
+        "B": "Peking University Health Science Center",
+        "C": "北京大学医学部",
+        "D": "Beijing",
+        "E": "Beijing",
+        "F": "985 / 211 / Double First-Class",
+        "G": 30,
+        "H": "September (Fall)",
+        "I": "Yes (1-Yr Pre-Med at PKU)",
+        "J": 48000,
+        "K": "March 31",
+        "L": 75000,
+        "M": 12000,
+        "N": 2000,
+        "O": "=L4+M4+N4",
+        "P": "=(L4+M4+N4)*6",
+        "Q": "High (CSC / Beijing Govt)",
+        "R": "Beijing Govt Scholarship (20,000-40,000 RMB) + CSC Type A",
+        "S": "GPA 5.0 (90%+ Marks)",
+        "T": "PCB >= 90%",
+        "U": "18 - 25",
+        "V": "IELTS 6.5+ / TOEFL 90+",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 Clinical, HSK-5 Grad",
+        "Y": "Must complete in China",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://bygj.bjmu.edu.cn",
+        "AB": "Ultra-elite; best via Embassy CSC Type-A or 1-Yr Chinese Pre-Med pathway."
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": 2,
+        "B": "Capital Medical University",
+        "C": "首都医科大学",
+        "D": "Beijing",
+        "E": "Beijing",
+        "F": "Double First-Class",
+        "G": 50,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo / Sep 1-Yr Foundation)",
+        "J": 15000,
+        "K": "May 31",
+        "L": 50000,
+        "M": 9000,
+        "N": 2000,
+        "O": "=L5+M5+N5",
+        "P": "=(L5+M5+N5)*6",
+        "Q": "Moderate (Beijing Govt)",
+        "R": "Beijing Foreign Student Scholarship (15,000-25,000 RMB/yr)",
+        "S": "GPA 4.8+ (85%+ Marks)",
+        "T": "PCB >= 85%",
+        "U": "18 - 25",
+        "V": "IELTS 6.0+ or Test",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 before Year 3",
+        "Y": "China or Approved BD Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://international.ccmu.edu.cn",
+        "AB": "Strong Beijing clinical exposure; 6-month March foundation helps students pass CSCA & HSK early."
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": 3,
+        "B": "Fudan University",
+        "C": "复旦大学",
+        "D": "Shanghai",
+        "E": "Shanghai",
+        "F": "985 / 211 / C9 League",
+        "G": 45,
+        "H": "September (Fall)",
+        "I": "Yes (1-Yr Pre-Univ Program)",
+        "J": 32000,
+        "K": "April 15",
+        "L": 75000,
+        "M": 10000,
+        "N": 2000,
+        "O": "=L6+M6+N6",
+        "P": "=(L6+M6+N6)*6",
+        "Q": "High (Shanghai Govt Class A/B)",
+        "R": "Shanghai Govt Scholarship Type A (Full) / Type B (Tuition)",
+        "S": "GPA 5.0 (90%+ Marks)",
+        "T": "PCB >= 88%",
+        "U": "18 - 25",
+        "V": "IELTS 6.5+ / TOEFL 90+",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 Clinical, HSK-5 Grad",
+        "Y": "Must complete in Shanghai",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://iso.fudan.edu.cn",
+        "AB": "Shanghai Govt Scholarship covers full or partial tuition for top-1% Bangladeshi A-Level/HSC students."
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": 4,
+        "B": "Shanghai Jiao Tong University",
+        "C": "上海交通大学",
+        "D": "Shanghai",
+        "E": "Shanghai",
+        "F": "985 / 211 / C9 League",
+        "G": 40,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo / Sep 1-Yr Pre-Univ)",
+        "J": 16500,
+        "K": "April 15",
+        "L": 75000,
+        "M": 11000,
+        "N": 2000,
+        "O": "=L7+M7+N7",
+        "P": "=(L7+M7+N7)*6",
+        "Q": "High (Shanghai Govt / SJTU)",
+        "R": "Shanghai Govt Scholarship + SJTU Excellence Award (20,000 RMB)",
+        "S": "GPA 5.0 (90%+ Marks)",
+        "T": "PCB >= 88%",
+        "U": "18 - 25",
+        "V": "IELTS 6.5+ / TOEFL 90+",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 Clinical, HSK-5 Grad",
+        "Y": "Must complete in China",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://isc.sjtu.edu.cn",
+        "AB": "SJTU Pre-University foundation in March/Sep gives priority seating for September MBBS degree."
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": 5,
+        "B": "Tongji University",
+        "C": "同济大学",
+        "D": "Shanghai",
+        "E": "Shanghai",
+        "F": "985 / 211 / Double First-Class",
+        "G": 45,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo / Sep 1-Yr Prep)",
+        "J": 15000,
+        "K": "May 15",
+        "L": 45000,
+        "M": 9000,
+        "N": 2000,
+        "O": "=L8+M8+N8",
+        "P": "=(L8+M8+N8)*6",
+        "Q": "Moderate (Shanghai Govt)",
+        "R": "Shanghai Municipal Scholarship (Partial Tuition Waiver)",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 25",
+        "V": "IELTS 6.0+ + Interview",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 Clinical, HSK-5 Grad",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://study.tongji.edu.cn",
+        "AB": "Best tuition value in Shanghai; March 6-month preparatory course is ideal for students who miss Fall deadline."
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": 6,
+        "B": "Tianjin Medical University",
+        "C": "天津医科大学",
+        "D": "Tianjin",
+        "E": "Tianjin",
+        "F": "211 / Double First-Class",
+        "G": 100,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo / Sep 1-Yr Pre-Med)",
+        "J": 13000,
+        "K": "June 15",
+        "L": 48000,
+        "M": 7000,
+        "N": 1800,
+        "O": "=L9+M9+N9",
+        "P": "=(L9+M9+N9)*6",
+        "Q": "High (Tianjin Govt)",
+        "R": "Tianjin Govt Scholarship (20,000-30,000 RMB) + Annual Merit",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA / Univ Test",
+        "X": "HSK-4 before Year 4",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://www.tmu.edu.cn",
+        "AB": "Massive Bangladeshi alumni base; very high BMDC RQE pass rate."
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": 7,
+        "B": "Nankai University",
+        "C": "南开大学",
+        "D": "Tianjin",
+        "E": "Tianjin",
+        "F": "985 / 211 / Double First-Class",
+        "G": 30,
+        "H": "September (Fall)",
+        "I": "Yes (Language Prep Available)",
+        "J": 12000,
+        "K": "May 30",
+        "L": 42000,
+        "M": 7500,
+        "N": 1800,
+        "O": "=L10+M10+N10",
+        "P": "=(L10+M10+N10)*6",
+        "Q": "Moderate (Tianjin Govt)",
+        "R": "Tianjin Govt Scholarship (15,000-30,000 RMB)",
+        "S": "GPA 4.8+ (85%+ Marks)",
+        "T": "PCB >= 85%",
+        "U": "18 - 25",
+        "V": "IELTS 6.0+ + Interview",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 Clinical, HSK-5 Grad",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://sie.nankai.edu.cn",
+        "AB": "Small quota; verify annual MOE English-MBBS seat allocation every January."
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "A": 8,
+        "B": "Jilin University",
+        "C": "吉林大学",
+        "D": "Jilin",
+        "E": "Changchun",
+        "F": "985 / 211 / Double First-Class",
+        "G": 90,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Med / Chinese)",
+        "J": 11000,
+        "K": "June 30",
+        "L": 33000,
+        "M": 5500,
+        "N": 1800,
+        "O": "=L11+M11+N11",
+        "P": "=(L11+M11+N11)*6",
+        "Q": "Moderate (Univ Merit)",
+        "R": "JLU Outstanding International Student Award (5,000-15,000 RMB)",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://cie.jlu.edu.cn",
+        "AB": "Top-selling 985 university for Bangladeshi students due to low 33,000 RMB tuition."
+      }
+    },
+    {
+      "row": 12,
+      "cells": {
+        "A": 9,
+        "B": "Beihua University",
+        "C": "北华大学",
+        "D": "Jilin",
+        "E": "Jilin City",
+        "F": "Provincial Comprehensive",
+        "G": 50,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Foundation)",
+        "J": 8500,
+        "K": "July 15",
+        "L": 26000,
+        "M": 4000,
+        "N": 1600,
+        "O": "=L12+M12+N12",
+        "P": "=(L12+M12+N12)*6",
+        "Q": "Low (Annual Performance)",
+        "R": "Merit Scholarship Years 2-5 (2,000-5,000 RMB/yr)",
+        "S": "GPA 3.8+ (65%+ Marks)",
+        "T": "PCB >= 65%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Graduation",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://cie.beihua.edu.cn",
+        "AB": "Very low tuition (26,000 RMB); easy admission for mid-tier Bangladeshi HSC students."
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "A": 10,
+        "B": "China Medical University",
+        "C": "中国医科大学",
+        "D": "Liaoning",
+        "E": "Shenyang",
+        "F": "Provincial Flagship Medical",
+        "G": 100,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Medical)",
+        "J": 12500,
+        "K": "June 20",
+        "L": 40000,
+        "M": 6000,
+        "N": 1800,
+        "O": "=L13+M13+N13",
+        "P": "=(L13+M13+N13)*6",
+        "Q": "Moderate (First-Year & Merit)",
+        "R": "CMU Freshman & Annual Merit Award (5,000-15,000 RMB)",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 78%",
+        "U": "18 - 25",
+        "V": "Written Science Test",
+        "W": "CSCA / CMU Exam",
+        "X": "HSK-4 required by Year 3",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://www.cmu.edu.cn",
+        "AB": "One of China's oldest specialized medical schools; offers a structured March 6-month Pre-Med track."
+      }
+    },
+    {
+      "row": 14,
+      "cells": {
+        "A": 11,
+        "B": "Dalian Medical University",
+        "C": "大连医科大学",
+        "D": "Liaoning",
+        "E": "Dalian",
+        "F": "Provincial Key Medical",
+        "G": 100,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Med Foundation)",
+        "J": 12000,
+        "K": "June 30",
+        "L": 42000,
+        "M": 6500,
+        "N": 1800,
+        "O": "=L14+M14+N14",
+        "P": "=(L14+M14+N14)*6",
+        "Q": "Moderate (Dalian Merit)",
+        "R": "DMU Academic Scholarship (3,000-10,000 RMB/yr in Yrs 2-5)",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://ies.dmu.edu.cn",
+        "AB": "Extremely popular in Bangladesh; March 6-month Pre-Med program allows Spring visa entry."
+      }
+    },
+    {
+      "row": 15,
+      "cells": {
+        "A": 12,
+        "B": "Jinzhou Medical University",
+        "C": "锦州医科大学",
+        "D": "Liaoning",
+        "E": "Jinzhou",
+        "F": "Provincial Medical",
+        "G": 80,
+        "H": "Sep (Fall) & Mar (Spring*)",
+        "I": "Yes (Mar 6-Mo Foundation / Pre-Med)",
+        "J": 9000,
+        "K": "July 20",
+        "L": 32000,
+        "M": 4500,
+        "N": 1600,
+        "O": "=L15+M15+N15",
+        "P": "=(L15+M15+N15)*6",
+        "Q": "High (Liaoning / JZMU Freshman)",
+        "R": "Freshman Scholarship up to 10,000 RMB + Annual Merit",
+        "S": "GPA 3.8+ (65%+ Marks)",
+        "T": "PCB >= 65%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 for Graduation",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://cie.jzmu.edu.cn",
+        "AB": "One of the very few MOE universities offering March Pre-Med + leftover Spring MBBS seats."
+      }
+    },
+    {
+      "row": 16,
+      "cells": {
+        "A": 13,
+        "B": "Harbin Medical University",
+        "C": "哈尔滨医科大学",
+        "D": "Heilongjiang",
+        "E": "Harbin",
+        "F": "Provincial Flagship Medical",
+        "G": 60,
+        "H": "September (Fall)",
+        "I": "Yes (Language Prep Available)",
+        "J": 10000,
+        "K": "June 30",
+        "L": 30000,
+        "M": 4500,
+        "N": 1600,
+        "O": "=L16+M16+N16",
+        "P": "=(L16+M16+N16)*6",
+        "Q": "Moderate (Provincial)",
+        "R": "Heilongjiang Govt & HMU Merit Award (5,000-10,000 RMB)",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA / Interview",
+        "X": "HSK-4 before Clinical",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://www.hrbmu.edu.cn",
+        "AB": "Prestigious medical university; warn students about Harbin winter (-25°C)."
+      }
+    },
+    {
+      "row": 17,
+      "cells": {
+        "A": 14,
+        "B": "Shandong University",
+        "C": "山东大学",
+        "D": "Shandong",
+        "E": "Jinan",
+        "F": "985 / 211 / Double First-Class",
+        "G": 60,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Med / Chinese)",
+        "J": 11000,
+        "K": "May 31",
+        "L": 45000,
+        "M": 6000,
+        "N": 1800,
+        "O": "=L17+M17+N17",
+        "P": "=(L17+M17+N17)*6",
+        "Q": "High (SDU Freshman Scholarship)",
+        "R": "SDU International Student Scholarship (10,000-30,000 RMB)",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 25",
+        "V": "IELTS 6.0 / Interview",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://www.istudy.sdu.edu.cn",
+        "AB": "Cheeloo College of Medicine; generous freshman & annual scholarships for high-GPA Bangladeshi students."
+      }
+    },
+    {
+      "row": 18,
+      "cells": {
+        "A": 15,
+        "B": "Qingdao University",
+        "C": "青岛大学",
+        "D": "Shandong",
+        "E": "Qingdao",
+        "F": "Provincial Key Comprehensive",
+        "G": 60,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Foundation)",
+        "J": 9500,
+        "K": "June 30",
+        "L": 34000,
+        "M": 5000,
+        "N": 1700,
+        "O": "=L18+M18+N18",
+        "P": "=(L18+M18+N18)*6",
+        "Q": "Moderate (Qingdao Govt)",
+        "R": "Qingdao Govt & Presidential Scholarship (5,000-15,000 RMB)",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA / Interview",
+        "X": "HSK-4 before Year 4",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://istudy.qdu.edu.cn",
+        "AB": "Coastal city; March 6-month Chinese/Pre-Med course available for students under 18 turning 18 by Sep."
+      }
+    },
+    {
+      "row": 19,
+      "cells": {
+        "A": 16,
+        "B": "Nanjing Medical University",
+        "C": "南京医科大学",
+        "D": "Jiangsu",
+        "E": "Nanjing",
+        "F": "Double First-Class",
+        "G": 100,
+        "H": "September (Fall)",
+        "I": "Yes (Pre-Med via Jiangsu Consortium)",
+        "J": 12000,
+        "K": "May 30",
+        "L": 34000,
+        "M": 6000,
+        "N": 1800,
+        "O": "=L19+M19+N19",
+        "P": "=(L19+M19+N19)*6",
+        "Q": "High (Jasmine Jiangsu / NJMU)",
+        "R": "Jasmine Jiangsu Govt Scholarship (30,000 RMB) + NJMU Freshman (10,000-20,000 RMB)",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 24",
+        "V": "English Interview",
+        "W": "CSCA Mandatory + Exam",
+        "X": "HSK-4 before Year 4",
+        "Y": "China or BD (Strict Rules)",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://ies.njmu.edu.cn",
+        "AB": "Right in Nanjing! EduExpress local hub advantage; accepts under-18 ONLY with Nanjing local guardian."
+      }
+    },
+    {
+      "row": 20,
+      "cells": {
+        "A": 17,
+        "B": "Southeast University",
+        "C": "东南大学",
+        "D": "Jiangsu",
+        "E": "Nanjing",
+        "F": "985 / 211 / Double First-Class",
+        "G": 50,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo / Sep 1-Yr Prep)",
+        "J": 11000,
+        "K": "May 30",
+        "L": 32800,
+        "M": 5500,
+        "N": 1800,
+        "O": "=L20+M20+N20",
+        "P": "=(L20+M20+N20)*6",
+        "Q": "High (Jasmine Jiangsu / SEU)",
+        "R": "Jasmine Jiangsu Govt + SEU Scholarship (10,000-30,000 RMB)",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 Clinical, HSK-5 Grad",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://cis.seu.edu.cn",
+        "AB": "Located in Nanjing; top 985 university with 32,800 RMB tuition and March 6-month foundation intake."
+      }
+    },
+    {
+      "row": 21,
+      "cells": {
+        "A": 18,
+        "B": "Jiangsu University",
+        "C": "江苏大学",
+        "D": "Jiangsu",
+        "E": "Zhenjiang",
+        "F": "Provincial Key Comprehensive",
+        "G": 80,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Medical)",
+        "J": 9500,
+        "K": "June 30",
+        "L": 34000,
+        "M": 4500,
+        "N": 1700,
+        "O": "=L21+M21+N21",
+        "P": "=(L21+M21+N21)*6",
+        "Q": "High (Jasmine / UJS Presidential)",
+        "R": "UJS Presidential Freshman Scholarship (10,000 RMB) + Annual Merit",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "Entrance Test + Interview",
+        "W": "UJS Test / CSCA",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://oec.ujs.edu.cn",
+        "AB": "25 mins from Nanjing; very active March 6-month Pre-Medical intake for Bangladeshi students."
+      }
+    },
+    {
+      "row": 22,
+      "cells": {
+        "A": 19,
+        "B": "Soochow University",
+        "C": "苏州大学",
+        "D": "Jiangsu",
+        "E": "Suzhou",
+        "F": "211 / Double First-Class",
+        "G": 60,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Prep)",
+        "J": 11000,
+        "K": "June 15",
+        "L": 35000,
+        "M": 6000,
+        "N": 1800,
+        "O": "=L22+M22+N22",
+        "P": "=(L22+M22+N22)*6",
+        "Q": "High (Jasmine / Soochow Merit)",
+        "R": "Soochow Jasmine Scholarship (10,000-25,000 RMB)",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA / Assessment",
+        "X": "HSK-4 before Year 4",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://international.suda.edu.cn",
+        "AB": "High-ranking 211 university in Jiangsu; strong biomedical research reputation."
+      }
+    },
+    {
+      "row": 23,
+      "cells": {
+        "A": 20,
+        "B": "Yangzhou University",
+        "C": "扬州大学",
+        "D": "Jiangsu",
+        "E": "Yangzhou",
+        "F": "Provincial Key Comprehensive",
+        "G": 70,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Med Foundation)",
+        "J": 9000,
+        "K": "June 30",
+        "L": 30000,
+        "M": 4500,
+        "N": 1700,
+        "O": "=L23+M23+N23",
+        "P": "=(L23+M23+N23)*6",
+        "Q": "High (YZU Freshman & Merit)",
+        "R": "YZU Freshman & Annual Scholarship (5,000-15,000 RMB)",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "Online Test + Interview",
+        "W": "YZU Test / Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://coe.yzu.edu.cn",
+        "AB": "Close to Nanjing; huge Bangladeshi student community; reliable March 6-month Pre-Med pathway."
+      }
+    },
+    {
+      "row": 24,
+      "cells": {
+        "A": 21,
+        "B": "Nantong University",
+        "C": "南通大学",
+        "D": "Jiangsu",
+        "E": "Nantong",
+        "F": "Provincial Comprehensive",
+        "G": 80,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Foundation)",
+        "J": 8000,
+        "K": "July 10",
+        "L": 26000,
+        "M": 4000,
+        "N": 1600,
+        "O": "=L24+M24+N24",
+        "P": "=(L24+M24+N24)*6",
+        "Q": "High (Nantong / Jasmine)",
+        "R": "NTU Freshman & Merit Scholarship (4,000-12,000 RMB/yr)",
+        "S": "GPA 4.0+ (70%+ Marks)",
+        "T": "PCB >= 70%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://sie.ntu.edu.cn",
+        "AB": "Lowest tuition in Jiangsu (26,000 RMB); high conversion rate for EduExpress Bangladeshi students."
+      }
+    },
+    {
+      "row": 25,
+      "cells": {
+        "A": 22,
+        "B": "Xuzhou Medical University",
+        "C": "徐州医科大学",
+        "D": "Jiangsu",
+        "E": "Xuzhou",
+        "F": "Provincial Medical",
+        "G": 70,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Medical)",
+        "J": 9000,
+        "K": "July 10",
+        "L": 33000,
+        "M": 4500,
+        "N": 1700,
+        "O": "=L25+M25+N25",
+        "P": "=(L25+M25+N25)*6",
+        "Q": "High (XZHMU Freshman Award)",
+        "R": "First-Year Scholarship (10,000-15,000 RMB) + Annual Merit",
+        "S": "GPA 4.0+ (70%+ Marks)",
+        "T": "PCB >= 70%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://cie.xzhmu.edu.cn",
+        "AB": "Provides substantial 1st-year tuition discount/scholarship to strong Bangladeshi applicants."
+      }
+    },
+    {
+      "row": 26,
+      "cells": {
+        "A": 23,
+        "B": "Zhejiang University",
+        "C": "浙江大学",
+        "D": "Zhejiang",
+        "E": "Hangzhou",
+        "F": "985 / 211 / C9 League",
+        "G": 60,
+        "H": "September (Fall)",
+        "I": "Yes (Sep 1-Yr Foundation)",
+        "J": 22000,
+        "K": "March 31",
+        "L": 42800,
+        "M": 8000,
+        "N": 2000,
+        "O": "=L26+M26+N26",
+        "P": "=(L26+M26+N26)*6",
+        "Q": "High (Zhejiang Govt Class A/B)",
+        "R": "Zhejiang Govt Scholarship (30,000 RMB) + ZJU Scholarship",
+        "S": "GPA 5.0 (88%+ Marks)",
+        "T": "PCB >= 85%",
+        "U": "18 - 25",
+        "V": "IELTS 6.0+ / TOEFL 80+",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 Clinical, HSK-5 Grad",
+        "Y": "Must complete in ZJU Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://iczu.zju.edu.cn",
+        "AB": "Top-50 world university; deadline is very early (March 31)."
+      }
+    },
+    {
+      "row": 27,
+      "cells": {
+        "A": 24,
+        "B": "Wenzhou Medical University",
+        "C": "温州医科大学",
+        "D": "Zhejiang",
+        "E": "Wenzhou",
+        "F": "Provincial Flagship Medical",
+        "G": 90,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Medical)",
+        "J": 10000,
+        "K": "June 20",
+        "L": 30000,
+        "M": 4500,
+        "N": 1700,
+        "O": "=L27+M27+N27",
+        "P": "=(L27+M27+N27)*6",
+        "Q": "High (Zhejiang Govt / WMU)",
+        "R": "Zhejiang Provincial Scholarship (30,000 RMB) + WMU Merit (8,000-15,000 RMB)",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "WMU Assessment",
+        "X": "HSK-4 before Year 4",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://sis.wmu.edu.cn",
+        "AB": "Top specialized medical school in Zhejiang; reasonable 30,000 RMB tuition."
+      }
+    },
+    {
+      "row": 28,
+      "cells": {
+        "A": 25,
+        "B": "Ningbo University",
+        "C": "宁波大学",
+        "D": "Zhejiang",
+        "E": "Ningbo",
+        "F": "Double First-Class",
+        "G": 60,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Foundation)",
+        "J": 10000,
+        "K": "June 30",
+        "L": 30000,
+        "M": 4500,
+        "N": 1700,
+        "O": "=L28+M28+N28",
+        "P": "=(L28+M28+N28)*6",
+        "Q": "High (Zhejiang / Ningbo Govt)",
+        "R": "Ningbo Municipal Scholarship (30,000 RMB) + NBU Merit",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA / Interview",
+        "X": "HSK-4 before Year 4",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://is.nbu.edu.cn",
+        "AB": "Double First-Class university at 30,000 RMB/yr; very popular with Bangladeshi students."
+      }
+    },
+    {
+      "row": 29,
+      "cells": {
+        "A": 26,
+        "B": "Anhui Medical University",
+        "C": "安徽医科大学",
+        "D": "Anhui",
+        "E": "Hefei",
+        "F": "Provincial Key Medical",
+        "G": 70,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Prep)",
+        "J": 8500,
+        "K": "July 10",
+        "L": 30000,
+        "M": 4000,
+        "N": 1600,
+        "O": "=L29+M29+N29",
+        "P": "=(L29+M29+N29)*6",
+        "Q": "Moderate (Anhui Govt)",
+        "R": "Anhui Provincial Scholarship (15,000-20,000 RMB)",
+        "S": "GPA 4.0+ (70%+ Marks)",
+        "T": "PCB >= 70%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://cie.ahmu.edu.cn",
+        "AB": "Only 1 hour from Nanjing by high-speed train; low living costs in Hefei."
+      }
+    },
+    {
+      "row": 30,
+      "cells": {
+        "A": 27,
+        "B": "Fujian Medical University",
+        "C": "福建医科大学",
+        "D": "Fujian",
+        "E": "Fuzhou",
+        "F": "Provincial Key Medical",
+        "G": 60,
+        "H": "September (Fall)",
+        "I": "Yes (Language Prep Available)",
+        "J": 9000,
+        "K": "June 30",
+        "L": 35000,
+        "M": 4500,
+        "N": 1700,
+        "O": "=L30+M30+N30",
+        "P": "=(L30+M30+N30)*6",
+        "Q": "High (Fujian Govt Scholarship)",
+        "R": "Fujian Govt Scholarship (30,000 RMB) + FJMU Freshman Award",
+        "S": "GPA 4.0+ (70%+ Marks)",
+        "T": "PCB >= 70%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://overseas.fjmu.edu.cn",
+        "AB": "Fujian Provincial Scholarship frequently covers ~85% of first-year tuition for strong applicants."
+      }
+    },
+    {
+      "row": 31,
+      "cells": {
+        "A": 28,
+        "B": "Xiamen University",
+        "C": "厦门大学",
+        "D": "Fujian",
+        "E": "Xiamen",
+        "F": "985 / 211 / Double First-Class",
+        "G": 40,
+        "H": "September (Fall)",
+        "I": "Yes (Pre-Univ Prep)",
+        "J": 14000,
+        "K": "April 30",
+        "L": 38000,
+        "M": 5000,
+        "N": 1800,
+        "O": "=L31+M31+N31",
+        "P": "=(L31+M31+N31)*6",
+        "Q": "High (XMU / Fujian Govt)",
+        "R": "XMU Presidential & Fujian Govt Scholarship (30,000-50,000 RMB)",
+        "S": "GPA 4.8+ (85%+ Marks)",
+        "T": "PCB >= 82%",
+        "U": "18 - 25",
+        "V": "IELTS 6.0+ + Interview",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 Clinical, HSK-5 Grad",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://admissions.xmu.edu.cn",
+        "AB": "Warm climate similar to Bangladesh; world-class campus facilities."
+      }
+    },
+    {
+      "row": 32,
+      "cells": {
+        "A": 29,
+        "B": "Zhengzhou University",
+        "C": "郑州大学",
+        "D": "Henan",
+        "E": "Zhengzhou",
+        "F": "211 / Double First-Class",
+        "G": 100,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo / Sep 1-Yr Pre-Med)",
+        "J": 9500,
+        "K": "June 30",
+        "L": 35000,
+        "M": 4500,
+        "N": 1700,
+        "O": "=L32+M32+N32",
+        "P": "=(L32+M32+N32)*6",
+        "Q": "Moderate (Henan Govt / ZZU)",
+        "R": "Henan Govt Scholarship (15,000 RMB) + ZZU President Award",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA / Interview",
+        "X": "HSK-4 before Year 4",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://international.zzu.edu.cn",
+        "AB": "Has a dedicated March 6-month Pre-Medical batch; largest teaching hospital in the world (10,000+ beds)."
+      }
+    },
+    {
+      "row": 33,
+      "cells": {
+        "A": 30,
+        "B": "Wuhan University",
+        "C": "武汉大学",
+        "D": "Hubei",
+        "E": "Wuhan",
+        "F": "985 / 211 / Double First-Class",
+        "G": 70,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Medical)",
+        "J": 12000,
+        "K": "May 31",
+        "L": 40000,
+        "M": 6000,
+        "N": 1800,
+        "O": "=L33+M33+N33",
+        "P": "=(L33+M33+N33)*6",
+        "Q": "Moderate (Hubei Govt / WHU)",
+        "R": "Hubei Provincial & WHU Merit Scholarship (10,000-25,000 RMB)",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 before Year 4",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://admission.whu.edu.cn",
+        "AB": "Top-10 Chinese university; offers March 6-month foundation for international medical aspirants."
+      }
+    },
+    {
+      "row": 34,
+      "cells": {
+        "A": 31,
+        "B": "Huazhong University of Science and Technology",
+        "C": "华中科技大学",
+        "D": "Hubei",
+        "E": "Wuhan",
+        "F": "985 / 211 / Double First-Class",
+        "G": 70,
+        "H": "September (Fall)",
+        "I": "Yes (1-Yr Pre-Univ)",
+        "J": 18000,
+        "K": "May 31",
+        "L": 40000,
+        "M": 6000,
+        "N": 1800,
+        "O": "=L34+M34+N34",
+        "P": "=(L34+M34+N34)*6",
+        "Q": "Moderate (Hubei Govt / HUST)",
+        "R": "HUST Academic Excellence Award (5,000-20,000 RMB)",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 25",
+        "V": "IELTS 6.0 / Interview",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 before Year 4",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://iso.hust.edu.cn",
+        "AB": "Tongji Medical College of HUST is ranked among China's Top 5 medical schools."
+      }
+    },
+    {
+      "row": 35,
+      "cells": {
+        "A": 32,
+        "B": "China Three Gorges University",
+        "C": "三峡大学",
+        "D": "Hubei",
+        "E": "Yichang",
+        "F": "Provincial Comprehensive",
+        "G": 70,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Med Foundation)",
+        "J": 7500,
+        "K": "July 15",
+        "L": 24000,
+        "M": 3600,
+        "N": 1500,
+        "O": "=L35+M35+N35",
+        "P": "=(L35+M35+N35)*6",
+        "Q": "High (Hubei / CTGU Merit)",
+        "R": "CTGU Scholarship covers 20%-50% tuition for top students",
+        "S": "GPA 3.8+ (65%+ Marks)",
+        "T": "PCB >= 65%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://iro.ctgu.edu.cn",
+        "AB": "#1 Lowest Tuition MOE-Approved University in China (24,000 RMB/yr); huge demand in Bangladesh."
+      }
+    },
+    {
+      "row": 36,
+      "cells": {
+        "A": 33,
+        "B": "Sun Yat-sen University",
+        "C": "中山大学",
+        "D": "Guangdong",
+        "E": "Guangzhou",
+        "F": "985 / 211 / Double First-Class",
+        "G": 50,
+        "H": "September (Fall)",
+        "I": "Yes (Pre-Univ Prep)",
+        "J": 16000,
+        "K": "April 30",
+        "L": 48000,
+        "M": 7000,
+        "N": 2000,
+        "O": "=L36+M36+N36",
+        "P": "=(L36+M36+N36)*6",
+        "Q": "High (Guangdong Govt / SYSU)",
+        "R": "Guangdong Govt Scholarship (20,000 RMB) + SYSU Belt & Road",
+        "S": "GPA 4.8+ (85%+ Marks)",
+        "T": "PCB >= 85%",
+        "U": "18 - 25",
+        "V": "IELTS 6.5 / TOEFL 85",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 Clinical, HSK-5 Grad",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://iso.sysu.edu.cn",
+        "AB": "Direct Dhaka-Guangzhou flights; Belt & Road Scholarship available for top Bangladeshi students."
+      }
+    },
+    {
+      "row": 37,
+      "cells": {
+        "A": 34,
+        "B": "Southern Medical University",
+        "C": "南方医科大学",
+        "D": "Guangdong",
+        "E": "Guangzhou",
+        "F": "Provincial Flagship Medical",
+        "G": 90,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Foundation)",
+        "J": 11000,
+        "K": "June 20",
+        "L": 40000,
+        "M": 6000,
+        "N": 1800,
+        "O": "=L37+M37+N37",
+        "P": "=(L37+M37+N37)*6",
+        "Q": "High (Guangdong Govt / SMU)",
+        "R": "Guangdong Govt Scholarship (20,000 RMB) + SMU Freshman",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA / Interview",
+        "X": "HSK-4 before Year 4",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://www.smu.edu.cn",
+        "AB": "Direct flight from Dhaka; warm climate; very strong Bangladeshi alumni network."
+      }
+    },
+    {
+      "row": 38,
+      "cells": {
+        "A": 35,
+        "B": "Jinan University",
+        "C": "暨南大学",
+        "D": "Guangdong",
+        "E": "Guangzhou",
+        "F": "211 / Double First-Class",
+        "G": 60,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo / Sep 1-Yr Prep)",
+        "J": 11500,
+        "K": "June 10",
+        "L": 42000,
+        "M": 6000,
+        "N": 1800,
+        "O": "=L38+M38+N38",
+        "P": "=(L38+M38+N38)*6",
+        "Q": "High (Guangdong / JNU Belt & Road)",
+        "R": "Guangdong Govt (20,000 RMB) + JNU Freshman Scholarship",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "IELTS 5.5+ / Interview",
+        "W": "CSCA / JNU Exam",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://international.jnu.edu.cn",
+        "AB": "Has a dedicated College of Chinese Language & Culture for 6-month March Pre-University foundation."
+      }
+    },
+    {
+      "row": 39,
+      "cells": {
+        "A": 36,
+        "B": "Guangzhou Medical University",
+        "C": "广州医科大学",
+        "D": "Guangdong",
+        "E": "Guangzhou",
+        "F": "Double First-Class",
+        "G": 60,
+        "H": "September (Fall)",
+        "I": "No (Direct Sep Intake Only)",
+        "J": 0,
+        "K": "June 30",
+        "L": 30000,
+        "M": 5000,
+        "N": 1800,
+        "O": "=L39+M39+N39",
+        "P": "=(L39+M39+N39)*6",
+        "Q": "High (Guangdong Govt)",
+        "R": "Guangdong Govt Scholarship (20,000 RMB/yr)",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Year 4",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://www.gzhmu.edu.cn",
+        "AB": "30,000 RMB tuition in Guangzhou (Double First-Class); direct Dhaka flights make it a top seller."
+      }
+    },
+    {
+      "row": 40,
+      "cells": {
+        "A": 37,
+        "B": "Shantou University",
+        "C": "汕头大学",
+        "D": "Guangdong",
+        "E": "Shantou",
+        "F": "Provincial Key (Li Ka-shing)",
+        "G": 40,
+        "H": "September (Fall)",
+        "I": "No (Direct Sep Intake Only)",
+        "J": 0,
+        "K": "June 20",
+        "L": 40000,
+        "M": 5000,
+        "N": 1700,
+        "O": "=L40+M40+N40",
+        "P": "=(L40+M40+N40)*6",
+        "Q": "High (Li Ka-shing / STU Merit)",
+        "R": "STU Medical Scholarship (10,000-20,000 RMB) + Guangdong Govt",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 25",
+        "V": "IELTS / Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://www.med.stu.edu.cn",
+        "AB": "USMLE-aligned curriculum funded by Li Ka-shing Foundation."
+      }
+    },
+    {
+      "row": 41,
+      "cells": {
+        "A": 38,
+        "B": "Guangxi Medical University",
+        "C": "广西医科大学",
+        "D": "Guangxi",
+        "E": "Nanning",
+        "F": "Provincial Flagship Medical",
+        "G": 80,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Foundation)",
+        "J": 8500,
+        "K": "July 10",
+        "L": 30000,
+        "M": 4000,
+        "N": 1600,
+        "O": "=L41+M41+N41",
+        "P": "=(L41+M41+N41)*6",
+        "Q": "Moderate (Guangxi Govt / ASEAN)",
+        "R": "Guangxi Govt Scholarship (10,000-20,000 RMB)",
+        "S": "GPA 4.0+ (70%+ Marks)",
+        "T": "PCB >= 70%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://www.gxmu.edu.cn",
+        "AB": "Tropical weather identical to Bangladesh; very experienced with South Asian clinical pathology."
+      }
+    },
+    {
+      "row": 42,
+      "cells": {
+        "A": 39,
+        "B": "Sichuan University",
+        "C": "四川大学",
+        "D": "Sichuan",
+        "E": "Chengdu",
+        "F": "985 / 211 / Double First-Class",
+        "G": 100,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Medical)",
+        "J": 12000,
+        "K": "May 31",
+        "L": 42000,
+        "M": 5500,
+        "N": 1800,
+        "O": "=L42+M42+N42",
+        "P": "=(L42+M42+N42)*6",
+        "Q": "High (Sichuan Belt & Road / SCU)",
+        "R": "Belt & Road Initiative Scholarship (20,000 RMB/yr)",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 before Year 4",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://www.sculaban.com",
+        "AB": "West China Medical Center is Top-2 in China; huge Bangladeshi student & doctor alumni network."
+      }
+    },
+    {
+      "row": 43,
+      "cells": {
+        "A": 40,
+        "B": "Southwest Medical University",
+        "C": "西南医科大学",
+        "D": "Sichuan",
+        "E": "Luzhou",
+        "F": "Provincial Medical",
+        "G": 70,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Foundation)",
+        "J": 8000,
+        "K": "July 15",
+        "L": 28000,
+        "M": 4000,
+        "N": 1600,
+        "O": "=L43+M43+N43",
+        "P": "=(L43+M43+N43)*6",
+        "Q": "High (Sichuan Govt / SWMU)",
+        "R": "Sichuan Govt Scholarship (15,000 RMB) + SWMU Freshman Award",
+        "S": "GPA 3.8+ (65%+ Marks)",
+        "T": "PCB >= 65%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://cie.swmu.edu.cn",
+        "AB": "Affordable 28,000 RMB tuition; popular in Bangladesh for mid-budget families."
+      }
+    },
+    {
+      "row": 44,
+      "cells": {
+        "A": 41,
+        "B": "North Sichuan Medical College",
+        "C": "川北医学院",
+        "D": "Sichuan",
+        "E": "Nanchong",
+        "F": "Provincial Medical",
+        "G": 70,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Medical)",
+        "J": 7500,
+        "K": "July 15",
+        "L": 26000,
+        "M": 3800,
+        "N": 1500,
+        "O": "=L44+M44+N44",
+        "P": "=(L44+M44+N44)*6",
+        "Q": "Moderate (Sichuan / NSMC)",
+        "R": "NSMC Merit & Freshman Scholarship (3,000-10,000 RMB)",
+        "S": "GPA 3.8+ (65%+ Marks)",
+        "T": "PCB >= 65%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://cie.nsmc.edu.cn",
+        "AB": "26,000 RMB tuition; offers a smooth 6-month March Pre-Medical entry for Spring recruitment."
+      }
+    },
+    {
+      "row": 45,
+      "cells": {
+        "A": 42,
+        "B": "Chongqing Medical University",
+        "C": "重庆医科大学",
+        "D": "Chongqing",
+        "E": "Chongqing",
+        "F": "Provincial Flagship Medical",
+        "G": 100,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Medical)",
+        "J": 10000,
+        "K": "June 30",
+        "L": 35000,
+        "M": 5000,
+        "N": 1700,
+        "O": "=L45+M45+N45",
+        "P": "=(L45+M45+N45)*6",
+        "Q": "High (Chongqing Mayor / CQMU)",
+        "R": "Chongqing Mayor Scholarship (25,000 RMB) + CQMU Merit",
+        "S": "GPA 4.2+ (75%+ Marks)",
+        "T": "PCB >= 75%",
+        "U": "18 - 25",
+        "V": "Entrance Test + Interview",
+        "W": "CQMU Exam / CSCA",
+        "X": "HSK-4 before Year 4",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://international.cqmu.edu.cn",
+        "AB": "Top-tier clinical hospital system; offers structured Pre-Medical foundation program."
+      }
+    },
+    {
+      "row": 46,
+      "cells": {
+        "A": 43,
+        "B": "Kunming Medical University",
+        "C": "昆明医科大学",
+        "D": "Yunnan",
+        "E": "Kunming",
+        "F": "Provincial Flagship Medical",
+        "G": 80,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Foundation)",
+        "J": 8500,
+        "K": "July 10",
+        "L": 30000,
+        "M": 4000,
+        "N": 1600,
+        "O": "=L46+M46+N46",
+        "P": "=(L46+M46+N46)*6",
+        "Q": "High (Yunnan Govt / KMMU)",
+        "R": "Yunnan Govt Scholarship (Full/Partial) + KMMU Merit (5,000-15,000 RMB)",
+        "S": "GPA 4.0+ (70%+ Marks)",
+        "T": "PCB >= 70%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "https://www.kmmu.edu.cn",
+        "AB": "#1 Geographical match for Bangladesh (2.5 hr direct flight from Dhaka to Kunming); mild weather all year."
+      }
+    },
+    {
+      "row": 47,
+      "cells": {
+        "A": 44,
+        "B": "Xi'an Jiaotong University",
+        "C": "西安交通大学",
+        "D": "Shaanxi",
+        "E": "Xi'an",
+        "F": "985 / 211 / C9 League",
+        "G": 80,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo / Sep 1-Yr Pre-Med)",
+        "J": 11000,
+        "K": "May 31",
+        "L": 42000,
+        "M": 5500,
+        "N": 1800,
+        "O": "=L47+M47+N47",
+        "P": "=(L47+M47+N47)*6",
+        "Q": "High (Xi'an Belt & Road / XJTU)",
+        "R": "XJTU Siyuan Scholarship (10,000-25,000 RMB) + Shaanxi Govt",
+        "S": "GPA 4.5+ (80%+ Marks)",
+        "T": "PCB >= 80%",
+        "U": "18 - 25",
+        "V": "IELTS 6.0 / Interview",
+        "W": "CSCA Mandatory",
+        "X": "HSK-4 before Year 4",
+        "Y": "China Affiliated Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://sie.xjtu.edu.cn",
+        "AB": "C9 League university; huge Muslim quarter & Halal food in Xi'an; dedicated Pre-Med foundation track."
+      }
+    },
+    {
+      "row": 48,
+      "cells": {
+        "A": 45,
+        "B": "Shihezi University",
+        "C": "石河子大学",
+        "D": "Xinjiang",
+        "E": "Shihezi",
+        "F": "211 / Double First-Class",
+        "G": 60,
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Prep)",
+        "J": 7500,
+        "K": "July 15",
+        "L": 28000,
+        "M": 4000,
+        "N": 1600,
+        "O": "=L48+M48+N48",
+        "P": "=(L48+M48+N48)*6",
+        "Q": "Moderate (Xinjiang Govt)",
+        "R": "Xinjiang Govt & SHZU Merit Award (5,000-15,000 RMB)",
+        "S": "GPA 4.0+ (70%+ Marks)",
+        "T": "PCB >= 70%",
+        "U": "18 - 25",
+        "V": "English Interview",
+        "W": "University Interview",
+        "X": "HSK-4 before Internship",
+        "Y": "China or BD Approved Hosp.",
+        "Z": "WDOMS & BMDC Listed",
+        "AA": "http://cie.shzu.edu.cn",
+        "AB": "Lowest tuition 211 Project university (28,000 RMB); abundant Halal food across campus."
+      }
+    },
+    {
+      "row": 49,
+      "cells": {
+        "B": "TOTAL / AVERAGE BENCHMARKS",
+        "G": "=SUM(G4:G48)",
+        "J": "=AVERAGE(J4:J48)",
+        "L": "=AVERAGE(L4:L48)",
+        "M": "=AVERAGE(M4:M48)",
+        "N": "=AVERAGE(N4:N48)",
+        "O": "=AVERAGE(O4:O48)",
+        "P": "=AVERAGE(P4:P48)"
+      }
+    }
+  ],
+  "Pharmacy Biotech & Allied": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "ENGLISH-TAUGHT PHARMACY, BIOTECHNOLOGY, BIOMEDICINE, BDS & HEALTH SCIENCES IN CHINA (2026/2027)"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "High-Scholarship Alternative Pathways for Bangladeshi Science Students (Ideal for students with lower budget, study gaps, or seeking full tuition scholarships)"
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": "No.",
+        "B": "University Name",
+        "C": "Chinese Name",
+        "D": "City & Province",
+        "E": "University Tier",
+        "F": "English-Taught Major / Program",
+        "G": "Degree Level & Duration",
+        "H": "Available Intakes",
+        "I": "Pre-University / 6-Mo Foundation",
+        "J": "Annual Tuition (RMB)",
+        "K": "Annual Hostel (RMB)",
+        "L": "Net Tuition After Scholarship (RMB)",
+        "M": "Scholarship Policy & Coverage",
+        "N": "Min BD GPA (SSC+HSC)",
+        "O": "Subject Requirements",
+        "P": "Age Limit",
+        "Q": "BMDC / PCB / Council Note (Bangladesh)",
+        "R": "Career & Global Postgrad Pathway",
+        "S": "Official Admissions Website",
+        "T": "EduExpress Sales Pitch for Counselors"
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": 1,
+        "B": "China Pharmaceutical University (CPU)",
+        "C": "中国药科大学",
+        "D": "Nanjing, Jiangsu",
+        "E": "211 / Double First-Class (#1 Pharmacy)",
+        "F": "B.Sc. in Pharmacy / Clinical Pharmacy",
+        "G": "Bachelor (4 Years)",
+        "H": "Sep (Fall) & Mar (Foundation)",
+        "I": "Yes (Mar 6-Mo Foundation: 9,000 RMB)",
+        "J": 27000,
+        "K": 4500,
+        "L": 0,
+        "M": "CPU Presidential & Nanjing Govt Scholarship: 50% to 100% Tuition Waiver + Stipend for top GPA",
+        "N": "Combined GPA 7.5+ (HSC 3.8+)",
+        "O": "Chemistry & Biology >= 70%",
+        "P": "18 - 25",
+        "Q": "Recognized for Pharmacy Council of Bangladesh (PCB) & global M.Pharm",
+        "R": "Top-tier Pharma R&D, Clinical Pharmacist, direct M.S./Ph.D. in USA/Europe",
+        "S": "http://international.cpu.edu.cn",
+        "T": "Located in Nanjing! #1 Pharmaceutical University in China; huge scholarship rate for Bangladeshi students."
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": 2,
+        "B": "Shenyang Pharmaceutical University",
+        "C": "沈阳药科大学",
+        "D": "Shenyang, Liaoning",
+        "E": "Premier Specialized Pharma Univ.",
+        "F": "B.Sc. in Pharmacy / Pharmaceutical Science",
+        "G": "Bachelor (4 Years)",
+        "H": "Sep (Fall) & Mar (Foundation)",
+        "I": "Yes (Mar 6-Mo Chinese+Science Prep)",
+        "J": 25000,
+        "K": 4000,
+        "L": 5000,
+        "M": "SPU Belt & Road Scholarship covers 80%-100% tuition for GPA 4.5+ students",
+        "N": "Combined GPA 7.0+",
+        "O": "Chemistry & Biology >= 65%",
+        "P": "18 - 25",
+        "Q": "Eligible for pharmaceutical industry & PCB registration review",
+        "R": "Multinational pharma companies in BD (Square, Incepta, Beximco) & abroad",
+        "S": "https://www.syphu.edu.cn",
+        "T": "One of China's two oldest specialized pharmacy universities; very high scholarship approval."
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": 3,
+        "B": "Nanjing Tech University",
+        "C": "南京工业大学",
+        "D": "Nanjing, Jiangsu",
+        "E": "Double First-Class / Top 100 China",
+        "F": "B.Sc. in Pharmaceutical Engineering / Biotechnology",
+        "G": "Bachelor (4 Years)",
+        "H": "Sep (Fall) & Mar (Spring)",
+        "I": "Yes (Mar 6-Mo Foundation Available)",
+        "J": 18000,
+        "K": 3000,
+        "L": 0,
+        "M": "100% Free Tuition + Free Hostel under NJTech Belt & Road Scholarship (Yr 1-4 based on GPA)",
+        "N": "Combined GPA 7.0+",
+        "O": "Chemistry, Biology or Math >= 65%",
+        "P": "17 - 25",
+        "Q": "Engineering/Biotech degree (No BMDC exam needed)",
+        "R": "Biotech manufacturing, Biopharma engineering, funded Master's in China/West",
+        "S": "http://isa.njtech.edu.cn",
+        "T": "Located right in Nanjing! Accepts March & September intake; near-zero tuition after scholarship."
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": 4,
+        "B": "China Pharmaceutical University (CPU)",
+        "C": "中国药科大学",
+        "D": "Nanjing, Jiangsu",
+        "E": "211 / Double First-Class",
+        "F": "B.Sc. in Bioengineering / Biopharmaceuticals",
+        "G": "Bachelor (4 Years)",
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Foundation)",
+        "J": 27000,
+        "K": 4500,
+        "L": 13500,
+        "M": "50% to 100% Tuition Waiver via CPU Belt & Road Scholarship",
+        "N": "Combined GPA 7.5+",
+        "O": "Biology & Chemistry >= 70%",
+        "P": "18 - 25",
+        "Q": "Non-clinical Biotech/Biopharma degree",
+        "R": "Vaccine development, genomics, global biotech labs",
+        "S": "http://international.cpu.edu.cn",
+        "T": "Ideal for Bangladeshi students who love Biology/Chemistry but want a 4-year scholarship-funded degree in Nanjing."
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": 5,
+        "B": "Zhejiang University (ZJU-UoE Institute)",
+        "C": "浙江大学爱丁堡大学联合学院",
+        "D": "Haining / Hangzhou, Zhejiang",
+        "E": "C9 League + Univ. of Edinburgh Dual Degree",
+        "F": "B.Sc. in Biomedical Sciences / Biomedical Informatics",
+        "G": "Bachelor (4 Years - Dual UK/China Degree)",
+        "H": "September (Fall)",
+        "I": "No (Direct Fall Entry)",
+        "J": 160000,
+        "K": 8000,
+        "L": 80000,
+        "M": "ZJU-UoE Dean's Scholarship: 50% to 100% tuition waiver (80,000-160,000 RMB/yr) for A-Level/top HSC",
+        "N": "GPA 5.0 / Top A-Levels",
+        "O": "Biology, Chemistry, Math >= 85%",
+        "P": "18 - 25",
+        "Q": "Awards both University of Edinburgh (UK) & Zhejiang University degrees",
+        "R": "Direct entry to UK/US Ph.D., MD graduate-entry, or global biomedical research",
+        "S": "https://zje.intl.zju.edu.cn",
+        "T": "Premium pitch for wealthy/elite English-medium (A-Level) students in Dhaka wanting a UK degree in China."
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": 6,
+        "B": "Jiangsu University",
+        "C": "江苏大学",
+        "D": "Zhenjiang, Jiangsu",
+        "E": "Provincial Key Comprehensive",
+        "F": "B.Sc. in Pharmacy (4-Yr) & BDS Dentistry (5-Yr)",
+        "G": "Bachelor (4 Yrs Pharmacy / 5 Yrs BDS)",
+        "H": "Sep (Fall) & Mar (Pre-Med)",
+        "I": "Yes (Mar 6-Mo Pre-Med: 9,500 RMB)",
+        "J": 22000,
+        "K": 4500,
+        "L": 12000,
+        "M": "UJS Presidential Scholarship: 10,000 RMB deduction in Year 1 + annual merit",
+        "N": "Combined GPA 7.0+",
+        "O": "PCB >= 65% (Pharmacy) / 70% (BDS)",
+        "P": "18 - 25",
+        "Q": "BDS requires BMDC Dental RQE; Pharmacy under PCB",
+        "R": "Clinical Dentist (BDS) or Hospital/Industrial Pharmacist",
+        "S": "https://oec.ujs.edu.cn",
+        "T": "Great backup for students who miss Jiangsu University's MBBS quota or want lower tuition (22,000 RMB)."
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": 7,
+        "B": "Yangzhou University",
+        "C": "扬州大学",
+        "D": "Yangzhou, Jiangsu",
+        "E": "Provincial Key Comprehensive",
+        "F": "B.Sc. in Biotechnology / Pharmacy",
+        "G": "Bachelor (4 Years)",
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Foundation: 9,000 RMB)",
+        "J": 18000,
+        "K": 4000,
+        "L": 6000,
+        "M": "YZU Scholarship covers 50%-100% tuition (only 0-6,000 RMB/yr net tuition for good GPA)",
+        "N": "Combined GPA 7.0+",
+        "O": "Biology & Chemistry >= 65%",
+        "P": "18 - 25",
+        "Q": "Biotech / Pharmacy track",
+        "R": "Agri-biotech, medical genetics, pharmaceutical quality assurance",
+        "S": "http://coe.yzu.edu.cn",
+        "T": "Extremely affordable in Jiangsu; very close to EduExpress Nanjing headquarters."
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "A": 8,
+        "B": "Nanjing Medical University",
+        "C": "南京医科大学",
+        "D": "Nanjing, Jiangsu",
+        "E": "Double First-Class",
+        "F": "BDS (Stomatology/Dentistry) & B.Sc. Nursing / Public Health",
+        "G": "Bachelor (5 Yrs BDS / 4 Yrs Nursing)",
+        "H": "September (Fall)",
+        "I": "Yes (Jiangsu Foundation)",
+        "J": 34000,
+        "K": 6000,
+        "L": 20000,
+        "M": "Jasmine Jiangsu & NJMU Freshman Scholarship (10,000-20,000 RMB)",
+        "N": "Combined GPA 8.0+",
+        "O": "PCB >= 75%",
+        "P": "18 - 25",
+        "Q": "BDS listed under WDOMS/BMDC Dental; Nursing under BNMC",
+        "R": "Dental Surgeon (BDS) or International Registered Nurse (RN pathway to UK/USA/Aus)",
+        "S": "https://ies.njmu.edu.cn",
+        "T": "Dentistry (BDS) is 5 years instead of 6, saving 1 full year of tuition and living costs."
+      }
+    },
+    {
+      "row": 12,
+      "cells": {
+        "A": 9,
+        "B": "Wenzhou Medical University",
+        "C": "温州医科大学",
+        "D": "Wenzhou, Zhejiang",
+        "E": "Provincial Flagship Medical",
+        "F": "BDS (Dentistry - 5 Yrs) & B.Sc. Pharmacy (4 Yrs)",
+        "G": "Bachelor (5 Yrs BDS / 4 Yrs Pharm)",
+        "H": "Sep (Fall) & Mar (Pre-Med)",
+        "I": "Yes (Mar 6-Mo Pre-Medical)",
+        "J": 30000,
+        "K": 4500,
+        "L": 15000,
+        "M": "Zhejiang Govt & WMU Scholarship (10,000-20,000 RMB)",
+        "N": "Combined GPA 7.5+",
+        "O": "PCB >= 70%",
+        "P": "18 - 25",
+        "Q": "BMDC Recognized for BDS; Pharmacy recognized globally",
+        "R": "Dental practice, cosmetic dentistry, or pharmaceutical industry",
+        "S": "http://sis.wmu.edu.cn",
+        "T": "Strong clinical dental hospital; Pharmacy tuition is only 20,000 RMB/yr before scholarship."
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "A": 10,
+        "B": "Sichuan University",
+        "C": "四川大学",
+        "D": "Chengdu, Sichuan",
+        "E": "985 / 211 / Double First-Class (#1 Dentistry in China)",
+        "F": "BDS in Stomatology (West China School of Stomatology) & Medical Informatics",
+        "G": "Bachelor (5 Yrs BDS / 4 Yrs B.Sc.)",
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Pre-Medical)",
+        "J": 42000,
+        "K": 5500,
+        "L": 22000,
+        "M": "Sichuan Belt & Road Scholarship (20,000 RMB/yr)",
+        "N": "Combined GPA 8.5+",
+        "O": "PCB >= 80%",
+        "P": "18 - 25",
+        "Q": "Ranked #1 Dental School in all of China; BMDC recognized",
+        "R": "Elite Dental Surgeon, Maxillofacial specialist",
+        "S": "http://www.sculaban.com",
+        "T": "West China School of Stomatology is the gold standard for Dentistry in Asia."
+      }
+    },
+    {
+      "row": 14,
+      "cells": {
+        "A": 11,
+        "B": "Dalian Medical University",
+        "C": "大连医科大学",
+        "D": "Dalian, Liaoning",
+        "E": "Provincial Key Medical",
+        "F": "BDS (Dentistry - 5 Yrs) & B.Sc. Pharmacy / Medical Lab Science",
+        "G": "Bachelor (4-5 Years)",
+        "H": "Sep (Fall) & Mar (Pre-Med)",
+        "I": "Yes (Mar 6-Mo Foundation)",
+        "J": 32000,
+        "K": 6000,
+        "L": 22000,
+        "M": "DMU Merit & Liaoning Scholarship (5,000-15,000 RMB)",
+        "N": "Combined GPA 7.5+",
+        "O": "PCB >= 70%",
+        "P": "18 - 25",
+        "Q": "Recognized for BDS & Allied Health",
+        "R": "Dentistry, Clinical Pathology Lab Director, Pharma R&D",
+        "S": "https://ies.dmu.edu.cn",
+        "T": "Great coastal campus; Pharmacy tuition is ~25,000 RMB/yr vs 42,000 RMB for MBBS."
+      }
+    },
+    {
+      "row": 15,
+      "cells": {
+        "A": 12,
+        "B": "Zhengzhou University",
+        "C": "郑州大学",
+        "D": "Zhengzhou, Henan",
+        "E": "211 / Double First-Class",
+        "F": "B.Sc. in Pharmacy (4 Yrs) & BDS Stomatology (5 Yrs)",
+        "G": "Bachelor (4-5 Years)",
+        "H": "Sep (Fall) & Mar (Pre-Med)",
+        "I": "Yes (Mar 6-Mo Foundation: 9,500 RMB)",
+        "J": 23000,
+        "K": 4500,
+        "L": 11500,
+        "M": "Henan Govt & ZZU Scholarship covers up to 50% tuition for Pharmacy/Biotech",
+        "N": "Combined GPA 7.0+",
+        "O": "PCB >= 65%",
+        "P": "18 - 25",
+        "Q": "211 University degree; high global weight",
+        "R": "Clinical Pharmacist, Dental Surgeon, Academic Researcher",
+        "S": "http://international.zzu.edu.cn",
+        "T": "Students with a 2-3 year study gap who cannot get BMDC MBBS eligibility can pivot to ZZU Pharmacy!"
+      }
+    },
+    {
+      "row": 16,
+      "cells": {
+        "A": 13,
+        "B": "Shandong University",
+        "C": "山东大学",
+        "D": "Jinan, Shandong",
+        "E": "985 / 211 / Double First-Class",
+        "F": "B.Sc. in Nursing / Pharmacy / Biological Sciences",
+        "G": "Bachelor (4 Years)",
+        "H": "September (Fall)",
+        "I": "Yes (Mar 6-Mo Prep)",
+        "J": 30000,
+        "K": 6000,
+        "L": 10000,
+        "M": "SDU Freshman Scholarship (50% to 100% Tuition Waiver for Allied Health/Science)",
+        "N": "Combined GPA 7.5+",
+        "O": "Biology & Chemistry >= 70%",
+        "P": "18 - 25",
+        "Q": "BNMC / PCB / Global NCLEX-RN eligible",
+        "R": "NCLEX-RN Nursing pathway to USA/UK/Australia or Pharma career",
+        "S": "https://www.istudy.sdu.edu.cn",
+        "T": "B.Sc. Nursing in English at a 985 university with scholarship is a fast-track migration route to USA/UK/Australia."
+      }
+    },
+    {
+      "row": 17,
+      "cells": {
+        "A": 14,
+        "B": "South China University of Technology (SCUT)",
+        "C": "华南理工大学",
+        "D": "Guangzhou, Guangdong",
+        "E": "985 / 211 / Double First-Class",
+        "F": "B.Sc. in Biotechnology / Biomedical Engineering",
+        "G": "Bachelor (4 Years)",
+        "H": "September (Fall)",
+        "I": "Yes (Language/Foundation Prep)",
+        "J": 26000,
+        "K": 5000,
+        "L": 6000,
+        "M": "Guangdong Govt (20,000 RMB) + SCUT Scholarship (up to 100% tuition waiver)",
+        "N": "Combined GPA 8.0+",
+        "O": "Math, Physics, Chemistry/Biology >= 75%",
+        "P": "18 - 25",
+        "Q": "Biomedical Engineering / Biotech degree",
+        "R": "Medical device engineering (Mindray, Siemens), Bioinformatics, Genetic Engineering",
+        "S": "http://sie.scut.edu.cn",
+        "T": "Direct flight from Dhaka to Guangzhou; ideal for students strong in both Biology and Math/Physics."
+      }
+    },
+    {
+      "row": 18,
+      "cells": {
+        "A": 15,
+        "B": "Nantong University",
+        "C": "南通大学",
+        "D": "Nantong, Jiangsu",
+        "E": "Provincial Comprehensive",
+        "F": "B.Sc. in Pharmacy / Biotechnology / Nursing",
+        "G": "Bachelor (4 Years)",
+        "H": "Sep (Fall) & Mar (Foundation)",
+        "I": "Yes (Mar 6-Mo Foundation: 8,000 RMB)",
+        "J": 16000,
+        "K": 4000,
+        "L": 0,
+        "M": "100% Full Tuition Scholarship in Year 1-4 for Pharmacy/Biotech (Student pays only Hostel 4,000 RMB)",
+        "N": "Combined GPA 6.5+",
+        "O": "Science background (Biology/Chem)",
+        "P": "18 - 26",
+        "Q": "Accepts up to 3-year gap for Pharmacy/Biotech",
+        "R": "Pharmaceutical industry, QC/QA Chemist, Masters abroad",
+        "S": "https://sie.ntu.edu.cn",
+        "T": "Best low-cost package in Jiangsu: 100% tuition waiver available for Pharmacy & Biotech!"
+      }
+    }
+  ],
+  "Scholarships & Financial Aid": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "CHINA MEDICAL, PHARMACY & BIOTECH SCHOLARSHIP MASTER MATRIX FOR BANGLADESHI STUDENTS"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "Realistic counselor breakdown: Why English-MBBS scholarships are mostly partial/provincial while Pharmacy & Biotech offer 100% Tuition Waivers"
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": "Scholarship Name",
+        "B": "Funding Authority",
+        "C": "Applicable Programs",
+        "D": "Coverage & Monetary Value (RMB)",
+        "E": "Application Window",
+        "F": "Min BD Academic Requirement",
+        "G": "Renewal Criteria",
+        "H": "EduExpress Counseling Strategy"
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": "Chinese Government Scholarship (CSC Type-A / Bilateral)",
+        "B": "China Scholarship Council & Ministry of Education (Bangladesh)",
+        "C": "MBBS ( mostly Chinese-medium + 1-Yr Language ), Pharmacy, Biotech, Masters/PhD",
+        "D": "100% Tuition + Free Hostel + Medical Insurance + Monthly Stipend (2,500 RMB Undergrad / 3,000 RMB Master / 3,500 RMB PhD)",
+        "E": "Nov – Feb (via BD Ministry of Education BANBEIS / Embassy)",
+        "F": "SSC + HSC GPA 5.00 + Top National Ranking",
+        "G": "Annual academic review + pass HSK-4 after 1-year preparatory Chinese",
+        "H": "Very few seats for Undergrad MBBS; use this for top-1% students or Master's/Ph.D. applicants."
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": "Jasmine Jiangsu Government Scholarship",
+        "B": "Jiangsu Provincial Department of Education",
+        "C": "English MBBS, BDS, Pharmacy, Biotech at Nanjing Med, SEU, Jiangsu Univ, CPU, Yangzhou, Nantong, Xuzhou",
+        "D": "Full Scholarship: Tuition + Hostel + Stipend | Partial Scholarship: 10,000 to 30,000 RMB one-time or annual",
+        "E": "March – May each year",
+        "F": "GPA 4.5+ in SSC & HSC + IELTS 6.0 (or strong English interview)",
+        "G": "Annual review based on top 15% class rank",
+        "H": "Since EduExpress operates directly in Nanjing/Jiangsu, leverage Jasmine Scholarship heavily in marketing!"
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": "Shanghai Government Scholarship (SGS Type A & B)",
+        "B": "Shanghai Municipal Education Commission",
+        "C": "English MBBS & Biomedical Sciences at Fudan, Shanghai Jiao Tong, Tongji",
+        "D": "Type A: 100% Tuition + Hostel + 2,500 RMB/mo | Type B: 100% Tuition Waiver (Student pays hostel & living)",
+        "E": "Jan – April 15",
+        "F": "GPA 5.00 / 3 A's in A-Level + CSCA Top Score + IELTS 6.5+",
+        "G": "Maintain GPA >= 3.2/4.0 every year",
+        "H": "Best option to make 75,000 RMB Shanghai tuition affordable for brilliant Bangladeshi students."
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": "Beijing Government Scholarship (BGS)",
+        "B": "Beijing Municipal Commission of Education",
+        "C": "English MBBS at Peking Univ Health Science Center & Capital Medical University",
+        "D": "Tuition grant covering 15,000 to 40,000 RMB/year",
+        "E": "Feb – May",
+        "F": "GPA 4.8+ to 5.00 + CSCA pass",
+        "G": "Re-applied annually based on exam scores",
+        "H": "Reduces Capital Medical University's 50,000 RMB tuition down to ~25,000-35,000 RMB for high achievers."
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": "Zhejiang Provincial Government Scholarship (Class C for Undergrad)",
+        "B": "Zhejiang Provincial Education Dept",
+        "C": "English MBBS, BDS, Pharmacy at Zhejiang Univ, Wenzhou Medical Univ, Ningbo Univ",
+        "D": "20,000 RMB one-time award in Year 1",
+        "E": "March – May",
+        "F": "GPA 4.5+ (80%+ PCB marks)",
+        "G": "One-time freshman grant (followed by university merit awards in Yrs 2-5)",
+        "H": "Wenzhou Medical Univ & Ningbo Univ tuition drops from 30,000 RMB to just 10,000 RMB in Year 1 if won!"
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": "Guangdong Government Outstanding International Student Scholarship",
+        "B": "Guangdong Provincial Dept of Education",
+        "C": "English MBBS, Biotech, Pharmacy at Sun Yat-sen, Southern Med, Jinan, Guangzhou Med, Shantou, SCUT",
+        "D": "10,000 RMB/year for Undergraduate students (renewable annually)",
+        "E": "April – June",
+        "F": "GPA 4.2+ (Freshman) or Top 20% class rank (Current students)",
+        "G": "Can be applied for every year of the 6-year MBBS program",
+        "H": "Brings Guangzhou Medical University's net tuition down to 20,000 RMB/yr."
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": "Fujian Provincial Government Scholarship",
+        "B": "Fujian Provincial Dept of Education",
+        "C": "English MBBS at Xiamen University & Fujian Medical University",
+        "D": "30,000 RMB/year for Undergraduate programs",
+        "E": "March – May",
+        "F": "GPA 4.5+ + strong interview",
+        "G": "Annual evaluation",
+        "H": "Covers 85% of Fujian Medical University's 35,000 RMB tuition."
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "A": "Belt & Road / University Freshman Scholarships (MBBS)",
+        "B": "Individual MOE Universities (Sichuan, Xuzhou, Jiangsu, Jinzhou, Shandong)",
+        "C": "English-Medium MBBS (Year 1 Entry Grant)",
+        "D": "5,000 RMB to 20,000 RMB deducted directly from 1st-year tuition",
+        "E": "March – June (Early Bird applications)",
+        "F": "GPA 4.2+ to 4.8+ (First-come, first-served quota)",
+        "G": "Year 1 grant; Years 2-5 switch to Academic Merit Scholarship",
+        "H": "Always submit Bangladeshi student files before May 15 to lock in University Freshman Scholarship quotas."
+      }
+    },
+    {
+      "row": 12,
+      "cells": {
+        "A": "Annual Academic Merit Scholarship (Years 2 to 5 of MBBS)",
+        "B": "All 45 MOE Medical Universities",
+        "C": "Continuing MBBS Students (Years 2, 3, 4, 5)",
+        "D": "1st Prize: 10,000-15,000 RMB | 2nd Prize: 5,000-8,000 RMB | 3rd Prize: 2,000-4,000 RMB",
+        "E": "Evaluated every October based on previous year's grades",
+        "F": "90%+ attendance, zero failed subjects, HSK pass",
+        "G": "Awarded to top 20%-30% of international medical class every year",
+        "H": "Tell parents honestly: MBBS is rarely 100% free for all 6 years, but diligent students win 5,000-15,000 RMB every year."
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "A": "100% Tuition Waiver Scholarships (Pharmacy & Biotechnology)",
+        "B": "CPU, Nanjing Tech, Nantong, Yangzhou, Shenyang Pharm",
+        "C": "4-Year English-Taught B.Sc. Pharmacy, Biotechnology, Pharmaceutical Engineering",
+        "D": "50% to 100% Tuition Waiver for all 4 years (Net tuition: 0 to 6,000 RMB/year)",
+        "E": "Feb – July (Both March Foundation & Sep Degree)",
+        "F": "Combined SSC+HSC GPA 7.0+ to 8.0+",
+        "G": "Maintain 75%+ marks and 90% attendance",
+        "H": "Best upsell for students who cannot afford 30,000+ RMB MBBS tuition—give them a 100% scholarship in Pharmacy/Biotech!"
+      }
+    }
+  ],
+  "BMDC RQE & Eligibility Audit": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "BMDC REGISTRATION QUALIFYING EXAMINATION (RQE) & ELIGIBILITY CERTIFICATE FACT-CHECK (BANGLADESH)"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "Critical Regulatory Verification for EduExpress International — Separating Agency Rumors from Legal BMDC Requirements"
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": "1. FACT-CHECK ON 'NO PRE-DEPARTURE BMDC ELIGIBILITY CERTIFICATE NEEDED' (CRITICAL WARNING FOR EDUEXPRESS)"
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": "Regulatory Aspect",
+        "B": "Why Sub-Agents Claim 'It Is Not Needed'",
+        "C": "The Actual Legal Reality at BMDC (Dhaka)",
+        "D": "EduExpress Operational Policy"
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": "Visa & University Admission Stage",
+        "B": "Chinese universities and the Chinese Embassy in Dhaka do NOT ask for a BMDC Eligibility Certificate to issue an Offer Letter, JW202, or X1 Student Visa. Therefore, students CAN fly to China without it.",
+        "C": "While you can fly to China without it, the official BMDC Registration Qualifying Examination (RQE) Application Form explicitly lists Item 6: 'Eligibility Certificate Sl. No. & Date of Issue' and Item 12(c): 'Original Eligibility Certificate from BM&DC with photocopy'.",
+        "D": "Never confuse 'not needed for China Visa' with 'not needed for BMDC Doctor Registration'."
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": "When the Eligibility Certificate is Checked",
+        "B": "Some students apply for the BMDC Eligibility Certificate AFTER returning to Bangladesh or during a vacation by paying a late/processing fee, leading to the rumor that pre-departure check doesn't matter.",
+        "C": "Even if a student obtains the Eligibility Certificate later, BMDC checks their original SSC & HSC marksheets against the DGHS/BMDC eligibility criteria of their admission year (Combined GPA, Biology GPA >= 3.50, and study gap limit).",
+        "D": "If a student's HSC Biology GPA is < 3.50 or their SSC+HSC GPA is below the BMDC minimum, they will NEVER get the Eligibility Certificate—neither before departure nor after 6 years!"
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": "DGHS / BMDC Baseline Academic Criteria",
+        "B": "Unscrupulous agencies tell students with GPA 6.0 or Biology GPA 2.5 that 'BMDC Eligibility Certificate is abolished' just to collect service charges.",
+        "C": "To be eligible for BMDC RQE after graduating abroad, a Bangladeshi student MUST meet the national minimum (SSC+HSC Combined GPA >= 7.00–8.00, individual GPA >= 3.50, HSC Biology GPA >= 3.50, max 1–2 yr gap). Students who want to practice in Bangladesh MUST apply for the Eligibility Certificate at BMDC Bijoy Nagar (Fee: ~1,000 BDT).",
+        "D": "For students who do NOT meet BMDC GPA criteria: either have parents sign a 'Non-BMDC Practice Waiver' (if they plan to settle abroad/do MPH) OR enroll them in 4-Yr Pharmacy / Biotechnology instead of MBBS!"
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": "2. COMPLETE GUIDE TO BMDC REGISTRATION QUALIFYING EXAMINATION (RQE) FOR CHINA MBBS GRADUATES"
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "A": "RQE Parameter",
+        "B": "Official BMDC Specification",
+        "C": "Detailed Breakdown for Students & Parents",
+        "D": "How EduExpress Prepares Students"
+      }
+    },
+    {
+      "row": 12,
+      "cells": {
+        "A": "What is the BMDC RQE?",
+        "B": "Mandatory Licensing Exam for all Foreign Medical (MBBS) & Dental (BDS) Graduates",
+        "C": "Under the Bangladesh Medical and Dental Council Act (2010), no Bangladeshi citizen who graduated with an MBBS/BDS degree outside Bangladesh can practice medicine or do a registered internship in Bangladesh without passing the RQE.",
+        "D": "Explain RQE clearly during counseling so parents trust EduExpress's transparency."
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "A": "Exam Frequency & Schedule",
+        "B": "Held Twice a Year (Typically April/May and October/November)",
+        "C": "BMDC publishes notices on www.bmdc.org.bd twice annually. Document verification takes place physically at BMDC Office (203 Shaheed Syed Nazrul Islam Sarani, Bijoy Nagar, Dhaka).",
+        "D": "Remind graduating batches 3 months before April and October sessions."
+      }
+    },
+    {
+      "row": 14,
+      "cells": {
+        "A": "Exam Format & Syllabus",
+        "B": "100 Multiple Choice Questions (MCQs) | Duration: ~1.5 to 2 Hours",
+        "C": "Core Subjects Tested: Medicine, Surgery, Obstetrics & Gynecology, Physiology, Anatomy, Pathology, Pharmacology, and Microbiology (aligned with the standard Bangladesh Final Prof MBBS curriculum).",
+        "D": "Provide Bangladeshi MBBS books/guidelines to China MBBS students starting from Year 4."
+      }
+    },
+    {
+      "row": 15,
+      "cells": {
+        "A": "Passing Score & Retake Policy",
+        "B": "Minimum Passing Mark: 40% to 50% (Per BMDC Exam Committee benchmark; no negative marking in standard sessions)",
+        "C": "If a candidate does not pass on the first attempt, they are allowed to re-appear in subsequent RQE sessions by paying the re-examination fee (5,000 BDT).",
+        "D": "Graduates from the 45 MOE English-medium universities have a significantly higher pass rate than bilingual/non-MOE schools."
+      }
+    },
+    {
+      "row": 16,
+      "cells": {
+        "A": "Mandatory Attestation & Document Checklist for RQE",
+        "B": "13-Point Mandatory Document Dossier required by BMDC Registrar",
+        "C": "1. Original MBBS Degree & Transcripts (Chinese & English)\n2. Attestation by Bangladesh Embassy in Beijing + Ministry of Foreign Affairs (MoFA) in Dhaka\n3. Downloaded MOE List proof showing the university name\n4. Original Passport with all 5-6 years of China Visa & Entry-Exit stamps (proving physical in-person study)\n5. Original SSC & HSC Certificates + BMDC Eligibility Certificate\n6. Processing Fee: 8,000 BDT Pay Order.",
+        "D": "Warn students in China NEVER to lose their old passports containing their X1/Residence Permit visas—BMDC checks physical stay in China!"
+      }
+    },
+    {
+      "row": 17,
+      "cells": {
+        "A": "Post-RQE Internship & Full Registration",
+        "B": "Temporary Registration -> 1-Year Internship -> Full BMDC Registration",
+        "C": "1. If the student completed their 1-year internship in China AND passes RQE: BMDC evaluates clinical logs (may require 6–12 months acclimatization internship in BD).\n2. If the student returns to BD after 5 years of theory: They sit for RQE, get Temporary Registration, complete 1-year internship at a BMDC-approved hospital in Bangladesh, and then receive Full BMDC Registration.",
+        "D": "Most Bangladeshi students prefer doing the 6th-year internship in Bangladesh or in top Chinese affiliated hospitals after clearing HSK-4."
+      }
+    },
+    {
+      "row": 19,
+      "cells": {
+        "A": "3. MEDICAL FOUNDATION / PRE-MEDICAL / 6-MONTH MARCH PREPARATORY PROGRAMS EXPLAINED"
+      }
+    },
+    {
+      "row": 20,
+      "cells": {
+        "A": "Program Type",
+        "B": "Duration & Intake",
+        "C": "Who Needs This Program?",
+        "D": "How Progression to MBBS Works"
+      }
+    },
+    {
+      "row": 21,
+      "cells": {
+        "A": "6-Month Pre-Medical / Foundation Program",
+        "B": "March to July (Spring Intake) -> Joins Year 1 MBBS in September",
+        "C": "1. Bangladeshi HSC students who missed the September intake and don't want to waste a full year at home.\n2. Students who are 17 years old in March and will turn 18 by September.\n3. Students needing preparation for the mandatory CSCA (Math, Physics, Chemistry) & English interview.",
+        "D": "Student flies to China in March on an X1/X2 study visa, studies Medical English, Basic Chinese (HSK 1-2), Physics, Chemistry & Biology for 1 semester, and transitions directly into the 6-Year English MBBS in September."
+      }
+    },
+    {
+      "row": 22,
+      "cells": {
+        "A": "1-Year Pre-University / Chinese Preparatory Program",
+        "B": "September to July (1 Academic Year)",
+        "C": "1. Students applying for Chinese Government Scholarship (CSC Type-A) or top C9 universities (Peking, Fudan, SJTU, ZJU).\n2. Students whose PCB or Chinese/English foundation needs strengthening before entering rigorous 985 medical schools.",
+        "D": "After passing the final foundation exam and CSCA/HSK requirements in June, the student automatically begins Year 1 of the MBBS degree in September."
+      }
+    }
+  ]
+}

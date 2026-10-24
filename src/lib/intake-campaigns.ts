@@ -2,6 +2,7 @@ import 'server-only';
 
 import { cache } from 'react';
 import prisma from '@/lib/prisma';
+import researchedLanding from '../../data/research/china-march-2027-landing.json';
 import {
   chinaMarch2027Routes,
   march2027Faqs,
@@ -62,4 +63,19 @@ export const getChinaMarch2027Campaign = cache(async (): Promise<ChinaMarch2027C
   } catch {
     return fallbackCampaign;
   }
+});
+
+export type MarchCampaignExample = typeof researchedLanding.examples[number];
+export type MarchCampaignUniversity = typeof researchedLanding.universities[number];
+export const getChinaMarch2027Landing = cache(async () => {
+  try {
+    const record = await prisma.intakeCampaign.findUnique({ where: { slug: 'china-march-2027-intake' } });
+    if (record?.isPublished) {
+      const content = JSON.parse(record.contentJson).researchedLanding as typeof researchedLanding | undefined;
+      if (content?.version === 1 && Array.isArray(content.examples) && content.examples.length > 0
+        && content.examples.every(item => typeof item.id === 'string' && typeof item.university === 'string' && typeof item.tuition === 'string')
+        && Array.isArray(content.faqs) && Array.isArray(content.universities) && content.universities.length > 0) return content;
+    }
+  } catch { /* Keep the researched fallback available if the CMS is temporarily unavailable. */ }
+  return researchedLanding;
 });

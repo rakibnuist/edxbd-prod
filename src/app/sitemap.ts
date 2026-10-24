@@ -6,6 +6,7 @@ import { sitemapStaticRouteSlugs } from '@/data/staticRoutePages';
 import { currentPublishedContentWhere } from '@/lib/content-governance';
 import { activeCountries } from '@/lib/countries';
 import { destinationPath } from '@/lib/site-urls';
+import { getIndexableUniversitySitemapRecords } from '@/lib/university-guide-publication';
 
 // PHASE 0 FIX:
 // - baseUrl moved to apex domain (www redirects -> canonical mismatch before)
@@ -58,17 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // Universities
-    const universities = await prisma.university.findMany({
-      where: {
-        isActive: true,
-        verificationStatus: 'verified',
-        officialUrl: { not: null },
-        lastVerifiedAt: { not: null },
-        verificationExpiresAt: { gte: new Date() },
-        AND: [{ sourceUrls: { not: '[]' } }],
-      },
-      select: { slug: true, updatedAt: true }
-    });
+    const universities = await getIndexableUniversitySitemapRecords();
     const universityRoutes = universities.map((uni) => ({
       url: `${baseUrl}/universities/${uni.slug}`,
       lastModified: uni.updatedAt ? new Date(uni.updatedAt) : new Date(),

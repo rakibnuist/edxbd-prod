@@ -1,0 +1,392 @@
+{
+  "checkedAt": "2026-10-24",
+  "rows": {
+    "4": {
+      "tuition": 45000,
+      "sourceUrl": "https://oic.bjmu.edu.cn/English/International_Students/Admission/79194c881e8b42619aadc893ee39609d.htm",
+      "languages": [
+        "Chinese"
+      ],
+      "name": "Clinical Medicine",
+      "duration": "6 years",
+      "acronym": "PKUHSC",
+      "fact": "Its medical curriculum combines basic medical sciences, diagnostics and clinical specialties.",
+      "housing": "Arrange off-campus accommodation for the self-funded undergraduate route.",
+      "insurance": 800
+    },
+    "5": {
+      "tuition": 50000,
+      "sourceUrl": "https://www.ccmu.edu.cn/docs/2026-01/eb99b5d483bc4a4a9d3baeb3a49ac522.pdf",
+      "acronym": "CCMU",
+      "housing": "Triple room CNY 7,500/bed/year or twin room CNY 15,000/bed/year.",
+      "fact": "The English-taught Clinical Medicine route is offered through its international medical education provision."
+    },
+    "7": {
+      "tuition": 75000,
+      "sourceUrl": "https://www.shsmu.edu.cn/iso/ENGLISH/Admission/Undergraduate_Programs.htm",
+      "acronym": "SJTU",
+      "housing": "Twin room CNY 40/day/bed.",
+      "application": 800,
+      "insurance": 800,
+      "fact": "The School of Medicine provides an English-taught undergraduate medical programme with academic review and interview selection."
+    },
+    "10": {
+      "tuition": 35000,
+      "sourceUrl": "https://ensie.nankai.edu.cn/__local/B/A8/40/97EDB6712E8FD18F1F455432EFD_032F2D2F_1E08A.pdf",
+      "languages": [
+        "Chinese"
+      ],
+      "name": "Ophthalmological and Optometric Medicine",
+      "duration": "5 years",
+      "acronym": "NKU",
+      "fact": "Its international undergraduate catalogue includes a Chinese-taught Ophthalmological and Optometric Medicine route at the School of Medicine.",
+      "csca": "Chinese, Mathematics, Physics and Chemistry, as specified in the programme catalogue.",
+      "correction": "The workbook English MBBS route is not represented as a current offer. The published medical route is shown separately."
+    },
+    "11": {
+      "tuition": 36000,
+      "sourceUrl": "https://cie.jlu.edu.cn/info/1079/3655.htm",
+      "acronym": "JLU",
+      "application": 600,
+      "housing": "Daxuecheng CNY 25–50/day/bed; Youyi Guesthouse CNY 40–60/day/bed. Choose one accommodation option.",
+      "fact": "The English-taught MBBS programme draws on the university’s medical teaching and clinical-training resources.",
+      "qualifications": [
+        "High school diploma or equivalent; general age range 18–30."
+      ],
+      "csca": "Submit the CSCA transcript required for the selected undergraduate programme."
+    },
+    "14": {
+      "tuition": 42000,
+      "sourceUrl": "https://iec.dmu.edu.cn/info/1014/1447.htm",
+      "acronym": "DMU",
+      "fact": "Its six-year medical programme includes one year of internship and combines basic medicine with clinical training."
+    },
+    "15": {
+      "tuition": 38000,
+      "sourceUrl": "https://gjjyxy.jzmu.edu.cn/__local/B/96/84/C109D8FFB11D317C211ADD4066B_CF1DB231_3D0BCBC.pdf",
+      "acronym": "JZMU",
+      "fact": "The international education catalogue includes a six-year English-taught Clinical Medicine degree.",
+      "correction": "Published university fee replaces the workbook estimate; source chronology retained internally."
+    },
+    "16": {
+      "tuition": 30000,
+      "sourceUrl": "https://cie.hrbmu.edu.cn/info/1048/1150.htm",
+      "acronym": "HMU",
+      "housing": "CNY 3,600 or CNY 5,400 per academic year, according to accommodation allocation.",
+      "fact": "The international college publishes an MBBS tuition schedule and separate accommodation options."
+    },
+    "17": {
+      "tuition": 45000,
+      "sourceUrl": "https://www.istudy.sdu.edu.cn/__local/E/F1/88/25A9D42A40C6B38E3225C624A07_0226E56E_17768.pdf",
+      "acronym": "SDU",
+      "fact": "Clinical Medicine is taught in English at the School of Basic Medical Sciences on the Baotuquan Campus in Jinan.",
+      "application": 400,
+      "insurance": 800,
+      "secondarySource": "https://istudy.sdu.edu.cn/English/Fees1.htm"
+    },
+    "18": {
+      "tuition": 30000,
+      "sourceUrl": "https://istudy.qdu.edu.cn/en/article?cid=12&detail=66&pid=7",
+      "acronym": "QDU",
+      "housing": "Twin room CNY 10,000–13,000/year.",
+      "application": 800,
+      "insurance": 800,
+      "fact": "The international college offers an English-taught six-year MBBS programme in the coastal city of Qingdao."
+    },
+    "19": {
+      "tuition": 34000,
+      "sourceUrl": "https://xxgk.njmu.edu.cn/2026/0115/c20169a296923/page.htm",
+      "acronym": "NMU",
+      "housing": "Jiangning twin room CNY 6,000/year; Wutai room options CNY 6,000–8,000/year.",
+      "registration": 500,
+      "insurance": 600,
+      "deposit": 13000,
+      "csca": "CSCA Mathematics and Chemistry.",
+      "language": [
+        "IELTS 6.0 with each component at least 5.0, TOEFL 85 with each section at least 15, Duolingo 115, or accepted high-school English instruction evidence."
+      ],
+      "fact": "The six-year English-taught medical programme includes a one-year internship and pre-internship intensive training.",
+      "secondarySource": "https://sie.njmu.edu.cn/_t335/cjwt/list.htm"
+    },
+    "20": {
+      "tuition": 32000,
+      "sourceUrl": "https://cis.seu.edu.cn/_upload/article/files/df/e6/06f412af4d00a5df7919d8529c68/8b9a68a2-c42c-4df7-b25d-25d441a1ca23.pdf",
+      "acronym": "SEU",
+      "application": 400,
+      "insurance": 800,
+      "housing": "CNY 6,000–9,000/year for one place in a twin room.",
+      "language": [
+        "TOEFL 80 or IELTS 6.0 for applicants whose mother tongue or official language is not English."
+      ],
+      "fact": "Its medical undergraduate programme combines English instruction with clinical-skills training.",
+      "secondarySource": "https://cis.seu.edu.cn/hwenglish/2008/0508/c13933a137794/page.htm"
+    },
+    "22": {
+      "tuition": 32500,
+      "sourceUrl": "https://isso.medical.suda.edu.cn/c7/20260702/i14013.shtml",
+      "acronym": "SUDA",
+      "housing": "Twin room CNY 600, 800 or 900/month, depending on residence building.",
+      "fact": "Suzhou Medical College provides MBBS education within Soochow University, with tuition and dormitory billing recorded separately."
+    },
+    "23": {
+      "tuition": 30000,
+      "sourceUrl": "https://coe.yzu.edu.cn/__local/8/6F/FF/96179AED51117856EE718C0189C_6F4EF6EB_D6D7.pdf?e=.pdf",
+      "acronym": "YZU",
+      "fact": "The international undergraduate catalogue includes a six-year English-taught Clinical Medicine programme."
+    },
+    "24": {
+      "tuition": 26000,
+      "sourceUrl": "https://sie.ntu.edu.cn/uploads/20240328/0cf521ea181824fb0599ccb9061fd30d.pdf",
+      "acronym": "NTU",
+      "housing": "Twin CNY 6,000/year; triple CNY 4,000/year; four-person CNY 3,000/year.",
+      "insurance": 800,
+      "fact": "Nantong’s School of Medicine lists an English-taught Clinical Medicine degree; its dentistry route is a separate qualification.",
+      "secondarySource": "https://sie.ntu.edu.cn/ntu_web/html/enrollment-information/enrollment-information.html?Hid=information&lang=en&timid=63"
+    },
+    "25": {
+      "tuition": 33000,
+      "sourceUrl": "https://gjjyen.xzhmu.edu.cn/__local/2/A3/05/0C35A698C8B7C6807A2C4427AE8_0E3968F3_3AAD9.pdf",
+      "acronym": "XZMU",
+      "registration": 400,
+      "housing": "CNY 4,800/person/academic year for a twin room.",
+      "fact": "Its School of International Education offers MBBS and other health-science routes with separate degree requirements.",
+      "secondarySource": "https://gjjyen.xzhmu.edu.cn/__local/D/35/E4/651AB329091BF9855E6059A11F1_F8A6A707_26780.pdf"
+    },
+    "26": {
+      "tuition": 42800,
+      "sourceUrl": "https://ism.zju.edu.cn/_upload/article/files/b9/0b/0b1ff5c14e70aaf4e7e774ed3a25/e2333ce5-be5e-472d-98cd-b03be6027609.pdf",
+      "acronym": "ZJU",
+      "application": 800,
+      "housing": "CNY 8,000/year for the listed single-bedroom option with shared bathroom.",
+      "fact": "The International School of Medicine publishes a six-year English-medium medical degree and programme-specific entry requirements."
+    },
+    "29": {
+      "tuition": 30000,
+      "sourceUrl": "https://english.ahmu.edu.cn/5321/list.htm",
+      "acronym": "AHMU",
+      "housing": "CNY 4,000/person/year for a double room.",
+      "fact": "Its MBBS curriculum includes medical Chinese, foundational sciences, clinical subjects and internship rotations.",
+      "secondarySource": "https://english.ahmu.edu.cn/5316/list.htm",
+      "housingAmount": 4000
+    },
+    "30": {
+      "tuition": 35000,
+      "sourceUrl": "https://oec.fjmu.edu.cn/_upload/article/files/3d/85/b27d55d244078685053514c58217/5b07e981-ffbd-4c5b-a6da-bf70c88d1646.pdf",
+      "acronym": "FJMU",
+      "application": 800,
+      "housing": "CNY 4,000/person/year for a double room.",
+      "fact": "The overseas education fee schedule separates English-medium undergraduate tuition from Chinese-medium programmes.",
+      "housingAmount": 4000
+    },
+    "31": {
+      "tuition": 38000,
+      "sourceUrl": "https://admissions.xmu.edu.cn/Admissions/Undergraduate_Students.htm",
+      "acronym": "XMU",
+      "application": 400,
+      "insurance": 800,
+      "housing": "Xiang’an campus: CNY 1,200–4,000/person/academic year, depending on room allocation.",
+      "fact": "Its English-medium Clinical Medicine programme is taught through the MBBS Center at the School of Medicine on Xiang’an Campus.",
+      "secondarySource": "https://admissions.xmu.edu.cn/info/1061/2189.htm"
+    },
+    "34": {
+      "tuition": 40000,
+      "sourceUrl": "https://iso.hust.edu.cn/info/1194/4638.htm",
+      "acronym": "HUST",
+      "application": 600,
+      "insurance": 800,
+      "housing": "CNY 700–1,200/month; room allocation determines the rate.",
+      "fact": "The English-taught Clinical Medicine degree sits within a comprehensive university that also offers pharmacy and biomedical engineering.",
+      "secondarySource": "https://iso.hust.edu.cn/Policies___Regulations/Fee_Policy.htm"
+    },
+    "36": {
+      "tuition": 48000,
+      "sourceUrl": "https://iso.sysu.edu.cn/docs/2025-12/20251216151112045540.pdf",
+      "languages": [
+        "Chinese"
+      ],
+      "duration": "5 years",
+      "name": "Clinical Medicine",
+      "acronym": "SYSU",
+      "language": [
+        "HSK 5 with a score of at least 180."
+      ],
+      "csca": "STEM Chinese, Mathematics and the science subjects specified in the medical programme catalogue.",
+      "fact": "The Zhongshan School of Medicine offers a five-year Chinese-taught Clinical Medicine route at the Guangzhou campus.",
+      "correction": "Chinese-medium five-year degree replaces the workbook assumption of universal English six-year MBBS."
+    },
+    "37": {
+      "tuition": 50000,
+      "sourceUrl": "https://istudy.smu.edu.cn/pc/article.html?id=y0m529gfj4",
+      "acronym": "SMU",
+      "application": 800,
+      "housing": "Twin CNY 9,000/person/academic year; triple CNY 5,000/person/academic year. One academic year is billed as 10 months.",
+      "language": [
+        "IELTS Academic 6.0 with each component at least 5.5 or TOEFL iBT 80 with each component at least 15; accepted full English-medium schooling evidence can support exemption.",
+        "Provide introductory Chinese-learning evidence or complete the university’s introductory training."
+      ],
+      "fact": "Its English-taught Clinical Medicine programme combines foundational medicine, diagnostics and clinical specialties."
+    },
+    "38": {
+      "tuition": 40000,
+      "sourceUrl": "https://zsb.jnu.edu.cn/2026/0113/c40322a849403/page.htm",
+      "acronym": "JNU",
+      "application": 500,
+      "csca": "Mathematics and Chemistry for English-taught Clinical Medicine.",
+      "fact": "The International College lists a six-year English-taught Clinical Medicine route at Shipai Campus in Guangzhou."
+    },
+    "39": {
+      "tuition": 30000,
+      "sourceUrl": "https://fao.gzhmu.edu.cn/info/1301/9532.htm",
+      "acronym": "GMU",
+      "fact": "The international undergraduate Clinical Medicine programme uses English instruction and academic review with entrance assessment."
+    },
+    "40": {
+      "tuition": 40000,
+      "sourceUrl": "https://sie.stu.edu.cn/upload/file/20220407/6378494039526102862185350.pdf",
+      "acronym": "STU",
+      "fact": "Its international education provision includes an English-taught MBBS route with tuition billed separately from accommodation.",
+      "feeVerified": false
+    },
+    "41": {
+      "tuition": 35000,
+      "sourceUrl": "https://gjy.gxmu.edu.cn/en/NN/Notice/t224270.html",
+      "acronym": "GXMU",
+      "registration": 800,
+      "insurance": 800,
+      "housing": "CNY 6,000/person/year for a twin room, plus a CNY 1,000 accommodation deposit.",
+      "fact": "The undergraduate catalogue distinguishes six-year English MBBS from five-year Chinese-taught Clinical Medicine and other health-science degrees."
+    },
+    "42": {
+      "tuition": 45000,
+      "sourceUrl": "https://global.scu.edu.cn/oso/article/index/1095?lang=zh",
+      "acronym": "SCU",
+      "application": 600,
+      "insurance": 800,
+      "fact": "Its English medical degree plan develops medical-science knowledge, clinical skills and evidence-based clinical judgement.",
+      "secondarySource": "https://global.scu.edu.cn/oso/article/index/1056?lang=en"
+    },
+    "43": {
+      "tuition": 31000,
+      "sourceUrl": "https://gjjl.swmu.edu.cn/en/info/1007/1611.htm",
+      "acronym": "SWMU",
+      "registration": 2400,
+      "housing": "CNY 8,000/room/year, shared by two students; this is a room price.",
+      "language": [
+        "IELTS Academic 6.0 with no band below 5.0, TOEFL iBT 70 with no section below 15, or an accepted equivalent.",
+        "Accepted English-medium secondary education evidence supports an exemption."
+      ],
+      "qualifications": [
+        "Senior high school diploma or equivalent with satisfactory results; age 18–30.",
+        "Pass the university interview and entrance assessment in English, Mathematics, Physics, Chemistry and Biology."
+      ],
+      "fact": "Its six-year Clinical Medicine degree includes five years of medical coursework and a one-year internship."
+    },
+    "46": {
+      "tuition": 35000,
+      "sourceUrl": "https://www.kmmu.edu.cn/upload/20251111/2025111111371682.pdf",
+      "acronym": "KMU",
+      "housing": "Twin room CNY 2,400/person/year or four-person room CNY 1,200/person/year; listed rooms have no air conditioning.",
+      "insurance": 800,
+      "medical": 500,
+      "residence": 400,
+      "fact": "The English-taught MBBS route has separate tuition, residence and student-support provisions."
+    },
+    "45": {
+      "tuition": 30000,
+      "sourceUrl": "https://english.cqmu.edu.cn/info/1148/3038.htm",
+      "acronym": "CQMU",
+      "housing": "CNY 4,800/year · twin room; CNY 9,600/year · single room",
+      "qualifications": [
+        "Science-stream high school with Mathematics, English, Biology, Chemistry and Physics. Applicants from Bangladesh: minimum 70% in the high-school exit examination. General age range: 18–25."
+      ],
+      "language": [
+        "IELTS 6.0 with each component at least 5.0, TOEFL 85 with each component at least 15, Duolingo 105, or accepted evidence of a fully English-taught high school."
+      ],
+      "csca": "Mathematics in English.",
+      "fact": "Freshman scholarship: CNY 15,000.",
+      "application": 450,
+      "insurance": 800,
+      "housingAmount": 4800
+    },
+    "27": {
+      "tuition": 33000,
+      "sourceUrl": "https://sis.wmu.edu.cn/zw24/lxwy/bksxm/bkszsjz.htm",
+      "acronym": "WMU",
+      "housing": "CNY 4,400/year · twin room",
+      "qualifications": [
+        "High school qualification with Physics, Chemistry and Biology. General age range: 18–30."
+      ],
+      "language": [
+        "Prepare the programme’s accepted English-language evidence and entrance assessment."
+      ],
+      "csca": "Mathematics and Chemistry in English.",
+      "fact": "Freshman scholarships up to CNY 20,000.",
+      "registration": 600,
+      "insurance": 800,
+      "housingAmount": 4400
+    },
+    "21": {
+      "tuition": 34000,
+      "sourceUrl": "https://oec.ujs.edu.cn/en/PROGRAMS/Bachelor/Clinical_Medicine_MBBS_.htm",
+      "acronym": "JSU",
+      "housing": "CNY 4,900/academic year or CNY 3,000/semester · double room",
+      "qualifications": [
+        "High school degree with results above 70%, B or equivalent. HSK 4 at 180 or above is a graduation requirement."
+      ],
+      "language": [
+        "IELTS above 6.0, TOEFL above 80 or Duolingo above 100."
+      ],
+      "csca": "Mathematics and Chemistry.",
+      "fact": "Clinical Medicine · six-year programme.",
+      "application": 200,
+      "registration": 400,
+      "insurance": 600,
+      "medical": 550,
+      "residence": 425,
+      "housingAmount": 4900,
+      "intake": "March, September"
+    },
+    "47": {
+      "tuition": 40000,
+      "sourceUrl": "https://sie.xjtu.edu.cn/en/info/1119/2943.htm",
+      "acronym": "XJTU",
+      "housing": "CNY 8,000–19,000/year · campus and room dependent",
+      "qualifications": [
+        "High school qualification, academic review, language evidence, CSCA results and a comprehensive interview form the selection process."
+      ],
+      "language": [
+        "Prepare English-language evidence for the MBBS route."
+      ],
+      "csca": "Prepare the subjects specified for Medicine in your selected programme requirements.",
+      "fact": "Health Science Center · English MBBS."
+    },
+    "8": {
+      "tuition": 45000,
+      "sourceUrl": "https://study.tongji.edu.cn/en/CURRENT_STUDENTS/Free_Costs.htm",
+      "acronym": "Tongji",
+      "housing": "Choose campus accommodation when preparing your room-specific budget.",
+      "qualifications": [
+        "High school qualification and programme admission assessment. General age range: 18–35."
+      ],
+      "language": [
+        "IELTS 6.5 or TOEFL 85; accepted English-medium schooling exemptions follow the programme rules."
+      ],
+      "csca": "Prepare the university’s required CSCA score report for your medical application.",
+      "fact": "English-taught medicine in Shanghai."
+    },
+    "6": {
+      "tuition": 75000,
+      "sourceUrl": "https://iso.fudan.edu.cn/_upload/article/files/5f/66/4aee2d0c4b389ec2d922de9dc6d3/f3254ec3-a06d-43bb-8c5c-8b05daf9124b.pdf",
+      "acronym": "Fudan",
+      "housing": "Plan accommodation using your assigned campus and room category.",
+      "qualifications": [
+        "High school graduate with a strong science background. Academic and programme assessment form part of selection."
+      ],
+      "language": [
+        "English-taught MBBS with Chinese and medical Chinese included in the curriculum."
+      ],
+      "csca": "Mathematics, Physics and Chemistry.",
+      "fact": "Medicine, clinical skills and research."
+    }
+  }
+}

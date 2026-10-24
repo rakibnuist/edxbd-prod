@@ -24,7 +24,7 @@ export default function ChinaServicePackages({ packages }: { packages: ServicePa
   return (
     <section className="bg-white px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
       <div className="mx-auto max-w-[1240px]">
-        <div className="max-w-3xl"><p className="text-[10px] font-black uppercase tracking-[.17em] text-[#174f7a]">Choose the service route that matches the award</p><h2 className="mt-3 font-heading text-3xl font-bold sm:text-5xl">Two China packages. One written responsibility plan.</h2><p className="mt-4 text-sm leading-7 text-slate-600">The university scholarship letter defines the education benefit. The EduExpress package defines the application support, included costs, payment timing and responsibilities.</p></div>
+        <div className="max-w-3xl"><p className="text-[10px] font-black uppercase tracking-[.17em] text-[#174f7a]">Your complete China support package</p><h2 className="mt-3 font-heading text-3xl font-bold sm:text-5xl">One China package. A clear responsibility plan.</h2><p className="mt-4 text-sm leading-7 text-slate-600">The university scholarship letter defines the education benefit. The EduExpress package defines the application support, included costs, payment timing and responsibilities.</p></div>
 
         <div className="mt-9 grid gap-5 lg:grid-cols-2">
           {packages.map((item, index) => (
@@ -35,7 +35,7 @@ export default function ChinaServicePackages({ packages }: { packages: ServicePa
         </div>
 
         <div className="mt-6 grid gap-5 lg:grid-cols-[1.15fr_.85fr]">
-          <article className="rounded-[2rem] border border-[#174f7a]/15 bg-[#f7fafc] p-6 sm:p-8"><div className="flex items-center gap-3"><FileCheck2 className="text-[#174f7a]" /><h3 className="font-heading text-2xl font-bold">Included in both packages</h3></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{shared.includedItems.map(item => <p key={item} className="flex gap-3 rounded-xl bg-white p-3 text-xs leading-5 text-slate-600"><Check size={15} className="mt-0.5 shrink-0 text-[#2f8f6b]" />{item}</p>)}</div></article>
+          <article className="rounded-[2rem] border border-[#174f7a]/15 bg-[#f7fafc] p-6 sm:p-8"><div className="flex items-center gap-3"><FileCheck2 className="text-[#174f7a]" /><h3 className="font-heading text-2xl font-bold">Included in your package</h3></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{shared.includedItems.map(item => <p key={item} className="flex gap-3 rounded-xl bg-white p-3 text-xs leading-5 text-slate-600"><Check size={15} className="mt-0.5 shrink-0 text-[#2f8f6b]" />{item}</p>)}</div></article>
           <div className="grid gap-5">
             <article className="rounded-[2rem] bg-[#e9f7fd] p-6"><Plane className="text-[#174f7a]" /><h3 className="mt-4 font-heading text-xl font-bold">Paid separately</h3><ul className="mt-4 space-y-2">{shared.excludedItems.map(item => <li key={item} className="text-xs leading-5 text-slate-600">{item}</li>)}</ul></article>
             <article className="rounded-[2rem] bg-[#08263c] p-6 text-white"><RotateCcw className="text-[#8ed0ee]" /><h3 className="mt-4 font-heading text-xl font-bold">Payment and return terms</h3><p className="mt-3 text-xs leading-6 text-white/65">{shared.paymentTerms}</p><p className="mt-3 text-xs leading-6 text-white/65">{shared.refundTerms}</p></article>

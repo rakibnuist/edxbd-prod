@@ -1,0 +1,269 @@
+{
+  "version": 1,
+  "metaTitle": "MBBS in China for Bangladeshi Students | EduExpress International",
+  "description": "MBBS in China for Bangladeshi students: compare tuition fees, scholarships, university entry requirements, CSCA and the BMDC registration pathway.",
+  "universities": [
+    {
+      "id": "cqmu",
+      "name": "Chongqing Medical University",
+      "acronym": "CQMU",
+      "city": "Chongqing",
+      "tuition": 30000,
+      "duration": "6 years",
+      "medium": "English",
+      "logo": "/images/campaigns/march-2027/chongqing-medical-university.png",
+      "highlight": "Freshman scholarship: CNY 15,000",
+      "funding": true,
+      "housing": "CNY 4,800/year · twin room; CNY 9,600/year · single room",
+      "expenses": "Application CNY 450; insurance CNY 800/year.",
+      "admission": "Science-stream high school with Mathematics, English, Biology, Chemistry and Physics. Applicants from Bangladesh: minimum 70% in the high-school exit examination. General age range: 18–25.",
+      "language": "IELTS 6.0 with each component at least 5.0, TOEFL 85 with each component at least 15, Duolingo 105, or accepted evidence of a fully English-taught high school.",
+      "csca": "Mathematics in English.",
+      "scholarship": "CNY 15,000 for the first year, awarded to 30% of the freshman enrolment quota through university selection. Submit academic evidence with your application; this is a first-year award.",
+      "profileSlug": "chongqing-medical-university"
+    },
+    {
+      "id": "wmu",
+      "name": "Wenzhou Medical University",
+      "acronym": "WMU",
+      "city": "Wenzhou",
+      "tuition": 33000,
+      "duration": "6 years",
+      "medium": "English",
+      "logo": "/images/campaigns/march-2027/wenzhou-medical-university.png",
+      "highlight": "Freshman scholarships up to CNY 20,000",
+      "funding": true,
+      "housing": "CNY 4,400/year · twin room",
+      "expenses": "Registration CNY 600 in the first year; insurance CNY 800/year; textbooks at actual cost.",
+      "admission": "High school qualification with Physics, Chemistry and Biology. General age range: 18–30.",
+      "language": "Prepare the programme’s accepted English-language evidence and entrance assessment.",
+      "csca": "Mathematics and Chemistry in English.",
+      "scholarship": "Freshman awards: CNY 20,000, 10,000 or 5,000; allocation 25%, 25% and 50%. Assessment follows full tuition payment and registration, using entrance performance and CSCA results. Later academic awards have separate assessment.",
+      "profileSlug": "wenzhou-medical-university"
+    },
+    {
+      "id": "jsu",
+      "name": "Jiangsu University",
+      "acronym": "JSU",
+      "city": "Zhenjiang",
+      "tuition": 34000,
+      "duration": "6 years",
+      "medium": "English",
+      "logo": "/images/universities/medical-logos/jiangsu-university.png",
+      "highlight": "Clinical Medicine · six-year programme",
+      "funding": false,
+      "housing": "CNY 4,900/academic year or CNY 3,000/semester · double room",
+      "expenses": "Application CNY 200; first-year registration CNY 400 and medical examination CNY 550; insurance CNY 600/year. Residence permit CNY 425 per issuance.",
+      "admission": "High school degree with results above 70%, B or equivalent. HSK 4 at 180 or above is a graduation requirement.",
+      "language": "IELTS above 6.0, TOEFL above 80 or Duolingo above 100.",
+      "csca": "Mathematics and Chemistry.",
+      "scholarship": "Build your base budget using the published tuition. Match any funding application to an award that explicitly includes Clinical Medicine.",
+      "profileSlug": "jiangsu-university"
+    },
+    {
+      "id": "xjtu",
+      "name": "Xi’an Jiaotong University",
+      "acronym": "XJTU",
+      "city": "Xi’an",
+      "tuition": 40000,
+      "duration": "6 years",
+      "medium": "English",
+      "logo": "/images/universities/medical-logos/xian-jiaotong-university.png",
+      "highlight": "Health Science Center · English MBBS",
+      "funding": false,
+      "housing": "CNY 8,000–19,000/year · campus and room dependent",
+      "expenses": "Application CNY 500 for self-funded applications or CNY 800 for scholarship applications.",
+      "admission": "High school qualification, academic review, language evidence, CSCA results and a comprehensive interview form the selection process.",
+      "language": "Prepare English-language evidence for the MBBS route.",
+      "csca": "Prepare the subjects specified for Medicine in your selected programme requirements.",
+      "scholarship": "The university’s percentage-based International Undergraduate Freshman Scholarship is for non-medical programmes. Medical applicants can explore eligible city and enrolled-student awards under their separate terms.",
+      "profileSlug": "xian-jiaotong-university"
+    },
+    {
+      "id": "tongji",
+      "name": "Tongji University",
+      "acronym": "Tongji",
+      "city": "Shanghai",
+      "tuition": 45000,
+      "duration": "6 years",
+      "medium": "English",
+      "logo": "/images/universities/medical-logos/tongji-university.svg",
+      "highlight": "English-taught medicine in Shanghai",
+      "funding": false,
+      "housing": "Choose campus accommodation when preparing your room-specific budget.",
+      "expenses": "Application CNY 600; insurance CNY 400/semester. Add accommodation and living expenses separately.",
+      "admission": "High school qualification and programme admission assessment. General age range: 18–35.",
+      "language": "IELTS 6.5 or TOEFL 85; accepted English-medium schooling exemptions follow the programme rules.",
+      "csca": "Prepare the university’s required CSCA score report for your medical application.",
+      "scholarship": "Match scholarship coverage to the English-taught MBBS programme when planning your application.",
+      "profileSlug": "tongji-university"
+    },
+    {
+      "id": "fudan",
+      "name": "Fudan University",
+      "acronym": "Fudan",
+      "city": "Shanghai",
+      "tuition": 75000,
+      "duration": "6 years",
+      "medium": "English",
+      "logo": "/images/universities/medical-logos/fudan-university.svg",
+      "highlight": "Medicine, clinical skills and research",
+      "funding": false,
+      "housing": "Plan accommodation using your assigned campus and room category.",
+      "expenses": "Application CNY 800. Add housing, insurance, living and travel to the tuition budget.",
+      "admission": "High school graduate with a strong science background. Academic and programme assessment form part of selection.",
+      "language": "English-taught MBBS with Chinese and medical Chinese included in the curriculum.",
+      "csca": "Mathematics, Physics and Chemistry.",
+      "scholarship": "Prepare a programme-specific funding enquiry alongside your academic application; budget using the full tuition before any award.",
+      "profileSlug": "fudan-university"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "How much does MBBS in China cost?",
+      "answer": "The six university examples in this guide list annual tuition from CNY 30,000 to CNY 75,000. Accommodation, insurance, living expenses, documents, travel and service charges are separate. Compare a first-year budget with later years, and apply a scholarship reduction only after an award is confirmed."
+    },
+    {
+      "question": "How long is MBBS in China?",
+      "answer": "The English-taught MBBS programmes featured here last six years, including the programme’s required clinical training and internship. The selected university determines the placement, assessment and graduation requirements."
+    },
+    {
+      "question": "Can Bangladeshi students practise in Bangladesh after studying medicine in China?",
+      "answer": "Yes, graduates can follow the Bangladesh Medical & Dental Council registration pathway. Choose an appropriately authorised medical programme in China, complete the degree and clinical training, and retain your academic and study records. On return, pass the BMDC Registration Qualifying Examination and complete the applicable internship and registration steps before practising."
+    },
+    {
+      "question": "What GPA is required for MBBS in China?",
+      "answer": "Each university sets its own academic entry requirements. Submit SSC and HSC or equivalent results with Biology, Chemistry and Physics, together with the programme’s language and entrance evidence. For example, Chongqing Medical University specifies at least 70% in the high-school exit examination for applicants from Bangladesh; use the selected university’s assessment for your qualification."
+    },
+    {
+      "question": "Is CSCA required for MBBS in China?",
+      "answer": "Prepare for the subjects required by your selected programme. Wenzhou Medical University and Jiangsu University list Mathematics and Chemistry; Fudan lists Mathematics, Physics and Chemistry; Chongqing Medical University lists Mathematics in English for English-medium programmes."
+    },
+    {
+      "question": "Can I study MBBS in China without IELTS?",
+      "answer": "Some programmes accept alternatives. Chongqing Medical University lists TOEFL, Duolingo and accepted evidence of fully English-taught high school study alongside IELTS. Use the English requirements of the university you select."
+    },
+    {
+      "question": "Are scholarships available for MBBS in China?",
+      "answer": "Yes. Examples include Wenzhou Medical University freshman awards up to CNY 20,000 and Chongqing Medical University’s CNY 15,000 first-year award for selected new students. Compare selection, payment timing and continuation conditions; an award for another major may have different eligibility."
+    },
+    {
+      "question": "Is a foundation or Chinese language course the same as MBBS admission?",
+      "answer": "Foundation and language courses develop academic or language skills. Progression to MBBS follows the medical programme’s own science, language, CSCA and selection requirements. Include preparation tuition and living expenses as a separate stage in your plan."
+    },
+    {
+      "question": "Do I need Chinese for an English-taught MBBS?",
+      "answer": "Chinese helps you communicate with patients and clinical teams. Universities include language learning and may set an HSK threshold for clinical training or graduation. Jiangsu University specifies HSK 4 with a score of at least 180 for graduation."
+    },
+    {
+      "question": "Does a WDOMS listing mean a university is BMDC approved?",
+      "answer": "WDOMS identifies medical schools. For English-taught MBBS, match the exact programme to China’s Ministry of Education authorisation. After completing the degree, follow BMDC’s examination, internship and registration requirements for medical practice in Bangladesh."
+    },
+    {
+      "question": "Is Chinese Ministry of Education recognition enough for English-taught MBBS?",
+      "answer": "Choose a university authorised by China’s Ministry of Education to enrol international students in English-taught undergraduate Clinical Medicine, and meet that programme’s academic, language and entrance requirements. General university recognition and permission to run English-taught MBBS are distinct. Your route to practice in Bangladesh continues through BMDC’s qualifying examination and registration process."
+    }
+  ],
+  "research": {
+    "checkedAt": "2026-10-24",
+    "workbook": "/Users/a1/Downloads/EduExpress_China_MBBS.xlsx",
+    "sha256": "316481e348bad64672bab9d3c8f5868a1aef23332e4c80b2879a890e2e250445",
+    "rawSnapshot": "data/research/china-mbbs-workbook.json",
+    "ranges": [
+      "45 MOE MBBS + Foundation!A3:AB48",
+      "Scholarships & Financial Aid!A3:H13",
+      "BMDC RQE & Eligibility Audit!A4:D22",
+      "Pharmacy Biotech & Allied!A3:T18"
+    ],
+    "corrections": [
+      "Do not publish 45 as a verified current MOE list or blanket WDOMS/BMDC approval.",
+      "Wenzhou tuition corrected from 30000 to 33000 and hostel 4500 to 4400.",
+      "CQMU tuition corrected from 35000 to 30000 and twin hostel 5000 to 4800.",
+      "JSU annual double hostel corrected from 4500 to 4900; semester fee is an alternative billing route.",
+      "XJTU tuition corrected from 42000 to 40000 and hostel to 8000–19000. Its freshman percentage award excludes Medicine.",
+      "Workbook GPA thresholds are counsellor targets, not BMDC law. No mechanical GPA conversion, fixed live FX rate, automatic pathway progression, or universal MBBS scholarship eligibility.",
+      "Retain all workbook records internally. Publish six programme examples with checked fee sources. No full-course cost derived by multiplying partial annual costs.",
+      "BMDC website redirects to maintenance on research day. Use archived official requirements and avoid publishing unconfirmed numeric eligibility cutoffs or examination pass marks.",
+      "Removed a universal pre-enrolment Eligibility Certificate instruction from public copy and Chinese academic entry lists. Newer official BMDC notice located but its attachment is inaccessible during maintenance; preserve old requirements internally for cohort-specific review. Public route retains RQE, applicable internship and registration."
+    ],
+    "sources": [
+      {
+        "key": "cqmu",
+        "url": "https://english.cqmu.edu.cn/info/1148/3038.htm",
+        "edition": "2026 undergraduate guide",
+        "supports": "Tuition, accommodation, entrance rules, language, freshman award and conditions"
+      },
+      {
+        "key": "wmu",
+        "url": "https://sis.wmu.edu.cn/zw24/lxwy/bksxm/bkszsjz.htm",
+        "edition": "2026 undergraduate guide",
+        "supports": "English MBBS, annual tuition and hostel, CSCA, freshman scholarship amounts and post-registration assessment"
+      },
+      {
+        "key": "jsu",
+        "url": "https://oec.ujs.edu.cn/en/PROGRAMS/Bachelor/Clinical_Medicine_MBBS_.htm",
+        "edition": "2026 programme page",
+        "supports": "Six-year English MBBS, fees, English scores, CSCA and HSK graduation requirement"
+      },
+      {
+        "key": "xjtu",
+        "url": "https://sie.xjtu.edu.cn/en/info/1119/2943.htm",
+        "edition": "2026 international undergraduate guide",
+        "supports": "Medicine annual tuition, accommodation, award exclusions and six-year English MBBS"
+      },
+      {
+        "key": "tongji",
+        "url": "https://study.tongji.edu.cn/en/CURRENT_STUDENTS/Free_Costs.htm",
+        "supports": "English MBBS annual tuition, application and insurance"
+      },
+      {
+        "key": "tongji-admission",
+        "url": "https://study.tongji.edu.cn/__local/7/F3/BB/C0BD5398885666DBDC4FB4C2007_31B4DDB5_4E0E8.pdf",
+        "edition": "2026 MBBS guide",
+        "supports": "Duration, English, age and curriculum"
+      },
+      {
+        "key": "fudan",
+        "url": "https://iso.fudan.edu.cn/_upload/article/files/5f/66/4aee2d0c4b389ec2d922de9dc6d3/f3254ec3-a06d-43bb-8c5c-8b05daf9124b.pdf",
+        "edition": "2026 MBBS guide",
+        "supports": "Tuition, application fee, six-year English degree, curriculum and CSCA"
+      },
+      {
+        "key": "bmdc-rqe",
+        "url": "https://www.bmdc.org.bd/upl/doc/form/QSPRfvjJ5NtF.pdf",
+        "supports": "Eligibility certificate, foreign medical qualification and study/visa records for Registration Qualifying Examination"
+      },
+      {
+        "key": "bmdc-eligibility",
+        "url": "https://www.bmdc.org.bd/docs/ELIGIBILITY_CERTIFICATE.pdf",
+        "supports": "Eligibility application and science qualification documents; current numeric cutoffs intentionally not published"
+      },
+      {
+        "key": "wdoms",
+        "url": "https://www.wdoms.org/about/",
+        "supports": "Listing is not accreditation, recognition or endorsement"
+      },
+      {
+        "key": "moe",
+        "url": "https://en.moe.gov.cn/documents/laws_policies/201506/t20150626_191398.html",
+        "supports": "English undergraduate medical education standards; six-year structure"
+      },
+      {
+        "key": "bmdc-certificate-notice",
+        "url": "https://www.bmdc.org.bd/news-events/202602000001",
+        "edition": "Notice listed 10 February 2026; heading contains 2025",
+        "supports": "Official notice exists. Attachment iCqLeVnNmDcT.pdf currently redirects to maintenance; full waiver text not independently retrieved. Do not assert a universal waiver or apply the old pre-enrolment mandate to all applicants."
+      },
+      {
+        "key": "moe-english-authorisation",
+        "url": "https://en.moe.gov.cn/documents/laws_policies/201506/t20150626_191405.html",
+        "supports": "Article 30 requires programme-specific authorisation for English-medium international undergraduate medicine."
+      },
+      {
+        "key": "csca-reference",
+        "url": "https://csca.app/en/scholarships/countries/bangladesh/clinical-medicine",
+        "supports": "Owner-supplied secondary reference reviewed in browser: useful comparison themes, university comparison choices, full-course budgeting, clinical Chinese and return-to-practice planning. Do not import blanket eligibility-certificate, all-three-CSCA-subject, automatic recognition or cost-conversion claims."
+      }
+    ]
+  }
+}
