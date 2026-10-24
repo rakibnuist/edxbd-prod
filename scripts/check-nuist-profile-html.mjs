@@ -27,7 +27,9 @@ assert.match(publicText, /Your admission checklist/);
 assert.match(publicText, /whether you apply as a self-funded student or through a scholarship/);
 assert.match(publicText, /Programs, teaching languages, duration and tuition before scholarship/);
 assert.match(publicText, /Filter programs by degree, subject and teaching language/);
-assert.match(content, /href="\/apply\?university=/);
+assert.match(content, /href="#university-enquiry"/);
+assert.match(content, /<form[^>]*method="post"[^>]*action="\/api\/leads"/);
+assert.match(content, /<select[^>]*name="program"/);
 assert.match(publicText, /Apply with EduExpress International/);
 // The compact design mounts the interactive calculator and filters when opened.
 // All programme/award facts remain in initial HTML; browser QA checks the controls.
