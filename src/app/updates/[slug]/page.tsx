@@ -8,6 +8,7 @@ import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { teamMembers } from '@/data/teamMembers';
 import { serializeUpdate } from '@/lib/content-records';
 import { categorySlug } from '@/lib/update-categories';
+import { chinaIntakeOverview } from '@/lib/china-intakes';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -121,6 +122,9 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     // Stale-intake routing (server-computed): posts older than a year point
     // readers at the live verified intake calendar.
     const stalePost = isStalePost(update.publishedAt || update.createdAt);
+    const stale = stalePost
+      ? { enabled: true, windows: chinaIntakeOverview() }
+      : { enabled: false };
 
     const tags = update.tags ? JSON.parse(update.tags) : [];
     const categories = update.categories ? JSON.parse(update.categories) : [];
@@ -184,7 +188,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     return (
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-        <UpdateClient update={updateData} related={related} stale={{ enabled: stalePost }} />
+        <UpdateClient update={updateData} related={related} stale={stale} />
       </>
     );
 }

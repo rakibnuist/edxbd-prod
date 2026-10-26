@@ -158,14 +158,26 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
               </aside>
             )}
 
-            {/* Stale-post care — old posts stay useful by pointing at the
-                live, auto-verified intake calendar instead of dead dates. */}
+            {/* Stale-post care — old posts stay useful by showing the LIVE,
+                auto-verified intake windows plus the calendar link instead
+                of dead dates. */}
             {stalePost ? (
               <aside className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6">
                 <h2 className="text-base font-bold text-slate-900">Intake dates change every cycle</h2>
                 <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
                   This post was published on {fmtDate(update.publishedAt || update.createdAt)}. Before you act on any deadline shown, check the live application calendar — it carries the current 2026/27 windows and their verification dates.
                 </p>
+                {(stale?.windows ?? []).length > 0 ? (
+                  <ul className="mt-4 grid gap-2">
+                    {(stale?.windows ?? []).map(window => (
+                      <li key={window.name} className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm">
+                        <span className="font-bold text-slate-900">{window.name}</span>
+                        <span className="rounded-full border border-[#174f7a]/15 px-2 py-0.5 text-xs font-black uppercase tracking-[0.08em] text-[#174f7a]">{window.status}</span>
+                        <span className="text-slate-500">{window.summary}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
                 <Link href="/china-intakes-deadlines" className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#08263c] px-4 py-2 text-sm font-bold text-white">
                   Check intake deadlines <ArrowRight size={14} />
                 </Link>

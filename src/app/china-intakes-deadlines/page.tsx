@@ -6,7 +6,9 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
-import { getIntakeStatus, canApplyToIntake, type IntakeStatus } from '@/lib/intake-status';
+import { chinaIntakes, CHINA_INTAKE_VERIFIED_ON, CHINA_INTAKE_NEXT_REVIEW } from '@/lib/china-intakes';
+import { canApplyToIntake } from '@/lib/intake-status';
+import type { IntakeStatus } from '@/lib/intake-status';
 
 export const revalidate = 3600;
 
@@ -28,37 +30,10 @@ export const metadata: Metadata = {
 // getIntakeStatus() derives Open/Closing/Next Intake automatically; if verification
 // expires before a counselor re-checks the window, the card flips to
 // "Under Verification" instead of showing a stale promise.
-const VERIFIED_ON = '26 October 2026';
-const NEXT_SCHEDULED_REVIEW = 'January 2027 (before the March deadline window)';
+const VERIFIED_ON = CHINA_INTAKE_VERIFIED_ON;
+const NEXT_SCHEDULED_REVIEW = CHINA_INTAKE_NEXT_REVIEW;
 
-function intakeStatus(detail: { opensAt: string; deadline: string; verifiedUntil: string }): IntakeStatus {
-  return getIntakeStatus({ opensAt: detail.opensAt, deadline: detail.deadline, verifiedUntil: detail.verifiedUntil });
-}
-
-const intakes = [
-  {
-    name: 'September 2027 Intake (Autumn) — Main Intake',
-    applicationsOpen: 'October / November (Previous Year)',
-    cscDeadline: 'December – March',
-    universityDeadline: 'April – June',
-    classesStart: 'September',
-    programs: 'All Bachelor’s, Master’s, PhD, and MBBS degree programs.',
-    badge: 'Largest Selection & Full CSC Allocation',
-    status: intakeStatus({ opensAt: '2026-10-31', deadline: '2027-06-30', verifiedUntil: '2027-02-28' }),
-    activeCampaignHref: null,
-  },
-  {
-    name: 'March 2027 Intake (Spring) — Secondary Intake',
-    applicationsOpen: 'July / August (Previous Year)',
-    cscDeadline: 'Limited CSC Quotas',
-    universityDeadline: 'December – January',
-    classesStart: 'March',
-    programs: 'Select Bachelor’s, Master’s, and Chinese Language preparatory courses.',
-    badge: 'Faster Entry (No 1-Year Gap)',
-    status: intakeStatus({ opensAt: '2026-08-01', deadline: '2027-01-31', verifiedUntil: '2027-01-31' }),
-    activeCampaignHref: '/china-march-2027-intake',
-  },
-];
+const intakes = chinaIntakes;
 
 const statusStyles: Record<IntakeStatus, string> = {
   Open: 'bg-[#e5f2eb] text-[#17624f] border-[#b9d8c9]',

@@ -296,5 +296,9 @@ export interface ConsultationButtonProps {
 export interface UpdateClientProps {
   update: Update;
   related?: Update[];
-  stale?: { enabled: boolean };
+  stale?: {
+    enabled: boolean;
+    // Current intake windows from the verified calendar module
+    windows?: { name: string; status: string; summary: string }[];
+  };
 }
