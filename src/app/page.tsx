@@ -408,7 +408,7 @@ export default async function Home() {
       {testimonials.length > 0 && (
         <section className="border-y border-slate-200 bg-[#f5f9fc] px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
           <div className="mx-auto max-w-[1240px]">
-            <SectionHeading centered eyebrow="Student experiences" title="Stories shared with permission" copy="Every published story uses an approved display name and consented image." />
+            <SectionHeading centered eyebrow="Student experiences" title="Stories from our students" copy="Every published story shares a real student's experience in their own words." />
             <div className="mt-9 grid gap-4 md:grid-cols-3">
               {testimonials.map(item => (
                 <figure key={item.id} className="rounded-[1.4rem] border border-slate-200 bg-white p-6 shadow-sm">

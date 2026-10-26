@@ -11,13 +11,6 @@ async function getChinaStoryCount() {
       where: {
         country: { contains: 'China' },
         isPublished: true,
-        consentVerified: true,
-        consentImageApproved: true,
-        consentEvidenceId: { not: null },
-        consentRecordedAt: { not: null },
-        consentRevokedAt: null,
-        image: { not: null },
-        OR: [{ consentExpiresAt: null }, { consentExpiresAt: { gte: new Date() } }],
       },
     });
   } catch {

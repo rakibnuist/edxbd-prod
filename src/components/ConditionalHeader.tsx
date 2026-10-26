@@ -5,7 +5,9 @@ import { useEffect } from 'react';
 import LightHeader from './LightHeader';
 import { isStandaloneCampaignRoute } from '@/lib/campaign-routes';
 
-const ConditionalHeader = ({ office }: { office?: { phonePrimary: string; hours: string } }) => {
+type ConditionalHeaderOffice = { phonePrimary: string; phoneSecondary?: string | null; hours: string };
+
+const ConditionalHeader = ({ office }: { office?: ConditionalHeaderOffice }) => {
   const pathname = usePathname();
 
   // Hide header for admin and dashboard routes

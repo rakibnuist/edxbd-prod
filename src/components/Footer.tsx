@@ -9,6 +9,8 @@ import {
   Linkedin,
   Mail,
   MapPin,
+  MessageCircle,
+  Navigation,
   Phone,
   Youtube,
 } from 'lucide-react';
@@ -55,6 +57,13 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
 export default async function Footer() {
   const { offices } = await getPublicTrustRecords();
   const office = offices[0];
+  // Same WhatsApp entry point as the header: identical number and intent,
+  // so both tracked whatsapp_click events carry the same contact data.
+  const officeWhatsApp = office?.phonePrimary
+    ? `https://wa.me/${office.phonePrimary.replace(/\D/g, '')}?text=${encodeURIComponent(
+        'Assalamu alaikum. I would like counselling for studying abroad.',
+      )}`
+    : null;
   return (
     <footer id="site-footer" className="site-footer overflow-hidden bg-[#061b2a] text-white">
       <FooterCta />
@@ -102,7 +111,14 @@ export default async function Footer() {
           <div>
             <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Dhanmondi decision desk</p>
             <h3 className="mt-2 font-heading text-xl font-bold">Talk to EduExpress</h3>
-            {office ? <div className="mt-5 space-y-4 text-sm leading-6 text-white/75"><p className="flex items-start gap-3"><MapPin className="mt-1 shrink-0 text-[#64b5df]" size={16} /><span>{office.address}</span></p><div className="flex items-start gap-3"><Phone className="mt-1 shrink-0 text-[#64b5df]" size={16} /><div><a href={`tel:${office.phonePrimary}`} className="block font-black text-white hover:text-[#8ed0ee]">{formatBangladeshPhone(office.phonePrimary)}</a>{office.phoneSecondary && <a href={`tel:${office.phoneSecondary}`} className="mt-1 block hover:text-[#8ed0ee]">{formatBangladeshPhone(office.phoneSecondary)}</a>}</div></div>{office.email && <a href={`mailto:${office.email}`} className="flex items-center gap-3 break-all hover:text-[#8ed0ee]"><Mail className="shrink-0 text-[#64b5df]" size={16} /> {office.email}</a>}<p className="border-l-2 border-white/20 pl-4">{office.hours}</p></div> : <Link href="/contact" className="mt-5 inline-flex items-center gap-2 text-sm font-black text-[#8ed0ee]">Open contact details <ArrowRight size={14} /></Link>}
+            {office ? <div className="mt-5 space-y-4 text-sm leading-6 text-white/75">
+              <p className="flex items-start gap-3"><MapPin className="mt-1 shrink-0 text-[#64b5df]" size={16} /><span>{office.address}</span></p>
+              <div className="flex items-start gap-3"><Phone className="mt-1 shrink-0 text-[#64b5df]" size={16} /><div><a href={`tel:${office.phonePrimary}`} className="block font-black text-white hover:text-[#8ed0ee]">{formatBangladeshPhone(office.phonePrimary)}</a>{office.phoneSecondary && <a href={`tel:${office.phoneSecondary}`} className="mt-1 block hover:text-[#8ed0ee]">{formatBangladeshPhone(office.phoneSecondary)}</a>}</div></div>
+              {officeWhatsApp && <a href={officeWhatsApp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 font-bold text-white transition hover:text-[#8ed0ee]"><MessageCircle className="shrink-0 text-[#8fe5ac]" size={16} /> WhatsApp {formatBangladeshPhone(office.phonePrimary)}</a>}
+              {office.email && <a href={`mailto:${office.email}`} className="flex items-center gap-3 break-all hover:text-[#8ed0ee]"><Mail className="shrink-0 text-[#64b5df]" size={16} /> {office.email}</a>}
+              <p className="border-l-2 border-white/20 pl-4">{office.hours}</p>
+              {office.mapUrl && <a href={office.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-bold text-[#8ed0ee] transition hover:text-white"><Navigation className="shrink-0" size={15} /> Get directions — Google Maps</a>}
+            </div> : <Link href="/contact" className="mt-5 inline-flex items-center gap-2 text-sm font-black text-[#8ed0ee]">Open contact details <ArrowRight size={14} /></Link>}
           </div>
         </div>
 
@@ -131,7 +147,7 @@ export default async function Footer() {
             <Link href="/student-data-privacy" className="hover:text-white">Student data</Link>
             <Link href="/complaints-and-resolution" className="hover:text-white">Complaints</Link>
           </div>
-          <p>© EduExpress International. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} EduExpress International Bangladesh. All rights reserved.</p>
         </div>
       </div>
     </footer>

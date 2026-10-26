@@ -34,13 +34,6 @@ export const getPublicTrustRecords = cache(async () => {
       where: {
         isPublished: true,
         content: { not: '' },
-        image: { not: null },
-        consentVerified: true,
-        consentImageApproved: true,
-        consentEvidenceId: { not: null },
-        consentRecordedAt: { not: null },
-        consentRevokedAt: null,
-        OR: [{ consentExpiresAt: null }, { consentExpiresAt: { gte: new Date() } }],
       },
       orderBy: [{ featured: 'desc' }, { updatedAt: 'desc' }],
       take: 6,
@@ -66,6 +59,6 @@ export const getPublicTrustRecords = cache(async () => {
       excludedItems: parseList(item.excludedItems),
       securityOptions: parseList(item.securityOptions),
     })),
-    testimonials: testimonials.filter(testimonial => Boolean(testimonial.image?.trim())),
+    testimonials,
   };
 });

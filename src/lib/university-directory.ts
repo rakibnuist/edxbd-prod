@@ -5,7 +5,12 @@ export type DirectoryFundingRoute = {
 };
 export type DirectoryUniversity = Pick<CleanUniversityRecord,
   'id' | 'slug' | 'name' | 'aliases' | 'city' | 'country' | 'isActive' | 'logo' | 'publishedRankings' | 'programs' | 'degree' | 'taught' | 'intake' | 'details' | 'scholarships'
-> & { fundingRoutes?: DirectoryFundingRoute[] };
+> & {
+  fundingRoutes?: DirectoryFundingRoute[];
+  verification?: { status: 'verified' | 'under_verification' | 'expired'; lastVerifiedAt?: string };
+  relationship?: 'Direct university partner' | 'Authorized representative' | 'Network access' | 'Public direct application';
+  clearCost?: boolean;
+};
 
 export type DirectoryFilters = {
   search: string;
@@ -17,7 +22,7 @@ export type DirectoryFilters = {
   intake: string;
   scholarship: boolean;
   cscaFree: boolean;
-  sort: 'name' | 'city';
+  sort: 'name' | 'city' | 'fee' | 'ranking' | 'scholarship';
 };
 
 export const emptyDirectoryFilters: DirectoryFilters = {
@@ -73,7 +78,7 @@ export function readDirectoryFilters(params: Pick<URLSearchParams, 'get'>): Dire
     search: params.get('search') || '', country: params.get('country') || '', city: params.get('city') || '',
     level: params.get('level') || '', language: params.get('language') || '', subject: params.get('subject') || '',
     intake: intakeMonths([params.get('intake') || ''])[0] || params.get('intake') || '', scholarship: params.get('scholarship') === '1', cscaFree: params.get('cscaFree') === '1',
-    sort: params.get('sort') === 'city' ? 'city' : 'name',
+    sort: ['city', 'fee', 'ranking', 'scholarship'].includes(params.get('sort') || '') ? (params.get('sort') as DirectoryFilters['sort']) : 'name',
   };
 }
 
@@ -84,8 +89,7 @@ export function writeDirectoryFilters(params: URLSearchParams, filters: Director
     const value = filters[key];
     if (key === 'scholarship' || key === 'cscaFree') {
       if (value) next.set(key, '1');
-    } else if (value && !(key === 'sort' && value === 'name')) next.set(key, String(value));
-  }
+    } else if (value && !(key === 'sort' && value === 'name')) next.set(key, String(value));  }
   next.delete('limit');
   return next;
 }
@@ -163,11 +167,75 @@ export function universityMatchesFilters(university: DirectoryUniversity, filter
     && (!filters.intake || matchesIntake(university.intake, filters.intake));
 }
 
+// Lowest verifiable annual tuition across recorded programs, grouped by
+// currency. Only full-year fees count: semester/month amounts are excluded so
+// sort groups stay honest. Unparseable fees sort after every currency group.
+export function directoryFeeSortKey(university: DirectoryUniversity): [string, number] | undefined {
+  const amounts: Array<{ currency: string; amount: number }> = [];
+  for (const program of availablePrograms(university)) {
+    // Trailing parentheticals such as '(Bachelor)' don't affect the fee itself.
+    const tuition = (program.tuition || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+    // Ranges such as '39,800–43,300 / year' sort by their lower bound.
+    const match = tuition.match(/^(?:(CNY|RMB|BDT|USD|EUR|GBP)\s*)?(\d[\d,]*(?:\.\d+)?)(?:\s*[–—-]\s*(?:CNY|RMB|BDT|USD|EUR|GBP)?\s*[\d,]+(?:\.\d+)?)?\s*(CNY|RMB|BDT|USD|EUR|GBP)?\s*(?:\/|per)\s*year$/i);
+    const currency = (match?.[1] || match?.[3] || '').toUpperCase().replace('RMB', 'CNY');
+    if (match && Boolean(match[1]) !== Boolean(match[3]) && currency) {
+      amounts.push({ currency, amount: Number(match[2].replaceAll(',', '')) });
+    }
+  }
+  if (!amounts.length) return undefined;
+  const currency = amounts.map(fee => fee.currency).sort((a, b) => a.localeCompare(b))[0];
+  return [currency, Math.min(...amounts.filter(fee => fee.currency === currency).map(fee => fee.amount))];
+}
+
+// Best published ranking position: world first, then national, then any listed
+// subject record. Ranges such as '251-300' or '=142' use their first number;
+// universities without a ranking sort after every ranked record (999_999).
+export function directoryRankingSortKey(university: DirectoryUniversity): number {
+  const ranks = university.publishedRankings || [];
+  const ranked = ranks.find(rank => rank.scope === 'world') || ranks.find(rank => rank.scope === 'national') || ranks[0];
+  const parsed = ranked?.rank?.match(/=?(\d+)/);
+  return parsed ? Number(parsed[1]) : 999999;
+}
+
+// Strings such as 'September 2026' are normalized to the month itself so the
+// directory stays evergreen: intake facts repeat usefully every year.
+export function evergreenIntakes(values: string[]): string[] {
+  const parsed = intakeMonths(values);
+  if (parsed.length) return parsed;
+  // Unknown formats keep their wording with year digits stripped so the list
+  // stays evergreen without inventing facts.
+  return values.map((value) => value.replace(/\b\d{4}\b/g, '').trim()).filter(Boolean);
+}
+
+// Universities with live funding options lead; unlisted records keep their
+// alphabetical position so the sort never invents a ranking.
+export function directoryScholarshipSortKey(university: DirectoryUniversity): number {
+  return university.fundingRoutes?.length || university.scholarships.some(item => item.status !== 'closed') ? 0 : 1;
+}
+
 export function filterUniversities(universities: DirectoryUniversity[], filters: DirectoryFilters) {
-  return universities.filter(university => universityMatchesFilters(university, filters))
-    .sort((a, b) => filters.sort === 'city'
-      ? a.city.localeCompare(b.city) || a.name.localeCompare(b.name)
-      : a.name.localeCompare(b.name));
+  const byName = (a: DirectoryUniversity, b: DirectoryUniversity) => a.name.localeCompare(b.name);
+  const matching = universities.filter(university => universityMatchesFilters(university, filters));
+  if (filters.sort === 'city') {
+    return matching.sort((a, b) => a.city.localeCompare(b.city) || byName(a, b));
+  }
+  if (filters.sort === 'fee') {
+    // Currency groups sort before unparseable records; inside a group by the
+    // lowest annually countable fee so no mixed-currency comparison occurs.
+    return matching.sort((a, b) => {
+      const keyA = directoryFeeSortKey(a), keyB = directoryFeeSortKey(b);
+      const groupA = keyA ? 'a' + keyA[0] + String(keyA[1]).padStart(10, '0') : 'z';
+      const groupB = keyB ? 'a' + keyB[0] + String(keyB[1]).padStart(10, '0') : 'z';
+      return groupA < groupB ? -1 : groupA > groupB ? 1 : byName(a, b);
+    });
+  }
+  if (filters.sort === 'scholarship') {
+    return matching.sort((a, b) => directoryScholarshipSortKey(a) - directoryScholarshipSortKey(b) || directoryRankingSortKey(a) - directoryRankingSortKey(b) || byName(a, b));
+  }
+  if (filters.sort === 'ranking') {
+    return matching.sort((a, b) => directoryRankingSortKey(a) - directoryRankingSortKey(b) || byName(a, b));
+  }
+  return matching.sort(byName);
 }
 
 export function directoryOptions(universities: DirectoryUniversity[], country: string) {

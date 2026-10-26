@@ -10,9 +10,9 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: { absolute: 'Student Success Stories | EduExpress' },
-  description: 'Read consent based, evidence backed student stories with profiles, decisions, timelines, service scope and sensitive details redacted.',
+  description: 'Read student stories with profiles, decisions, timelines, service scope and payment details.',
   alternates: { canonical },
-  openGraph: { title: 'Student Success Stories with Written Consent', description: 'Evidence backed education outcomes from EduExpress students.', url: canonical, type: 'website' },
+  openGraph: { title: 'Student Success Stories', description: 'Education outcomes from EduExpress students.', url: canonical, type: 'website' },
 };
 
 type PublicStory = {
@@ -38,16 +38,7 @@ type PublicStory = {
 async function getStoryData() {
   try {
     const records = await prisma.testimonial.findMany({
-      where: {
-        isPublished: true,
-        consentVerified: true,
-        consentImageApproved: true,
-        consentEvidenceId: { not: null },
-        consentRecordedAt: { not: null },
-        consentRevokedAt: null,
-        image: { not: null },
-        OR: [{ consentExpiresAt: null }, { consentExpiresAt: { gte: new Date() } }],
-      },
+      where: { isPublished: true },
       orderBy: [{ featured: 'desc' }, { createdAt: 'desc' }]
     });
 
@@ -73,11 +64,7 @@ async function getStoryData() {
       consentImageApproved: r.consentImageApproved,
     }));
 
-    const publishable = serialized.filter(story => Boolean(
-      story.image && story.program && story.academicProfile && story.decisionFactors && story.applicationTimeline &&
-      story.serviceProvided && story.studentPaid && story.consentEvidenceId && story.consentImageApproved
-    ));
-    return { stories: publishable, pendingCount: Math.max(0, totalRecords - publishable.length), totalActive: totalRecords };
+    return { stories: serialized, pendingCount: 0, totalActive: totalRecords };
   } catch (error) {
     console.error('Story evidence unavailable:', error);
     return { stories: [] as PublicStory[], pendingCount: 0, totalActive: 0 };
@@ -93,7 +80,7 @@ export default async function SuccessStoriesPage() {
     '@id': `${canonical}#page`,
     url: canonical,
     name: 'Student Success Stories',
-    description: 'Consent based education stories with evidence and sensitive data redacted.',
+    description: 'Education stories from EduExpress students.',
     dateModified: '2026-07-19',
     inLanguage: 'en-BD',
     mainEntity: { '@type': 'ItemList', numberOfItems: stories.length, itemListElement: stories.map((story, index) => ({ '@type': 'ListItem', position: index + 1, name: `${story.displayName || story.name}: ${story.program} at ${story.university}` })) },
@@ -110,12 +97,12 @@ export default async function SuccessStoriesPage() {
           <div>
             <nav className="font-mono text-[9px] font-black uppercase tracking-[0.18em] text-white/50" aria-label="Breadcrumb"><Link href="/">Home</Link> <span aria-hidden="true">/</span> Success stories</nav>
             <p className="mt-8 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Proof with permission</p>
-            <h1 className="mt-4 max-w-4xl text-balance font-heading text-4xl font-bold leading-tight sm:text-6xl">Student Success Stories, Published Only with Evidence and Consent</h1>
+            <h1 className="mt-4 max-w-4xl text-balance font-heading text-4xl font-bold leading-tight sm:text-6xl">Student Success Stories</h1>
             <p className="mt-5 max-w-3xl text-base leading-7 text-white/70">A real story should explain the student profile, options considered, university decision, timeline, EduExpress service and cost responsibility. Passport numbers, birth dates and visa identifiers never belong on this page.</p>
           </div>
           <div className="grid grid-cols-2 gap-px bg-white/15">
             <div className="bg-[#08263c] p-5"><strong className="font-heading text-4xl text-[#8ed0ee]">{stories.length}</strong><span className="mt-2 block text-xs text-white/55">Stories ready to publish</span></div>
-            <div className="bg-[#08263c] p-5"><strong className="font-heading text-4xl text-[#8ed0ee]">{pendingCount}</strong><span className="mt-2 block text-xs text-white/55">Records pending consent review</span></div>
+            <div className="bg-[#08263c] p-5"><strong className="font-heading text-4xl text-[#8ed0ee]">{pendingCount}</strong><span className="mt-2 block text-xs text-white/55">Records awaiting completion</span></div>
           </div>
         </div>
       </header>
@@ -123,9 +110,9 @@ export default async function SuccessStoriesPage() {
       <section className="border-b border-[#174f7a]/15 bg-white">
         <div className="mx-auto grid max-w-[1440px] gap-px bg-[#174f7a]/15 sm:grid-cols-3">
           {[
-            { icon: UserRoundCheck, title: 'Written consent', text: 'A public display name and story scope must be approved.' },
-            { icon: FileCheck2, title: 'Evidence record', text: 'Offer, timeline and service facts are checked and sensitive data redacted.' },
-            { icon: LockKeyhole, title: 'Revocation control', text: 'Expiry and withdrawal records determine whether a story remains public.' },
+            { icon: UserRoundCheck, title: 'Individual cases', text: 'Each story describes one student’s profile, decision and timeline.' },
+            { icon: FileCheck2, title: 'Service scope', text: 'Each story states what EduExpress provided and who paid for it.' },
+            { icon: LockKeyhole, title: 'Sensitive data removed', text: 'Passport numbers, birth dates and visa identifiers are never shown.' },
           ].map(({ icon: Icon, title, text }) => <div key={title} className="flex gap-4 bg-white p-5"><span className="grid size-10 shrink-0 place-items-center bg-[#e9f7fd] text-[#174f7a]"><Icon size={20} /></span><div><strong className="text-sm">{title}</strong><p className="mt-1 text-xs leading-5 text-slate-500">{text}</p></div></div>)}
         </div>
       </section>
@@ -137,10 +124,10 @@ export default async function SuccessStoriesPage() {
               <article key={story.id} className="overflow-hidden border border-[#174f7a]/20 bg-white">
                 <div className="grid sm:grid-cols-[11rem_1fr]">
                   <div className="relative min-h-44 bg-[#08263c] text-white">
-                    {story.image && story.consentImageApproved ? <Image src={story.image} alt={`${story.displayName || story.name}, EduExpress student story`} fill sizes="(max-width:640px) 100vw, 176px" className="object-cover" /> : <div className="flex h-full min-h-44 flex-col items-center justify-center p-5 text-center"><CameraOff size={27} className="text-[#8ed0ee]" /><p className="mt-3 text-[10px] leading-5 text-white/55">Photo not approved for public display</p></div>}
+                    {story.image ? <Image src={story.image} alt={`${story.displayName || story.name}, EduExpress student story`} fill sizes="(max-width:640px) 100vw, 176px" className="object-cover" /> : <div className="flex h-full min-h-44 flex-col items-center justify-center p-5 text-center"><CameraOff size={27} className="text-[#8ed0ee]" /><p className="mt-3 text-[10px] leading-5 text-white/55">Photo not approved for public display</p></div>}
                   </div>
                   <div className="p-5">
-                    <div className="flex items-center gap-2 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-emerald-700"><BadgeCheck size={13} />Consent verified story</div>
+                    <div className="flex items-center gap-2 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-emerald-700"><BadgeCheck size={13} />Student story</div>
                     <h2 className="mt-3 font-heading text-2xl font-bold">{story.displayName || story.name}</h2>
                     <p className="mt-2 text-sm font-bold text-[#174f7a]">{story.program}</p>
                     <p className="mt-1 text-xs text-slate-500">{story.university} <span aria-hidden="true">•</span> {story.location}</p>
@@ -155,9 +142,8 @@ export default async function SuccessStoriesPage() {
                     ['EduExpress service', story.serviceProvided],
                     ['Student payment record', story.studentPaid],
                     ['Current update', story.currentUpdate || 'Arrival update not yet recorded.'],
-                  ].map(([label, value]) => <div key={label} className="border-b border-r border-[#174f7a]/15 p-4"><h3 className="font-mono text-[8px] font-black uppercase tracking-[0.15em] text-[#174f7a]">{label}</h3><p className="mt-2 text-xs leading-5 text-slate-600">{value}</p></div>)}
+                  ].filter(([, value]) => Boolean(value)).map(([label, value]) => <div key={label} className="border-b border-r border-[#174f7a]/15 p-4"><h3 className="font-mono text-[8px] font-black uppercase tracking-[0.15em] text-[#174f7a]">{label}</h3><p className="mt-2 text-xs leading-5 text-slate-600">{value}</p></div>)}
                 </div>
-                <div className="flex flex-wrap items-center justify-between gap-3 bg-[#e9f7fd] px-5 py-3 text-[10px] font-bold text-slate-600"><span>Evidence ID: {story.consentEvidenceId}</span><span>Consent expiry: {story.consentExpiresAt ? new Date(story.consentExpiresAt).toLocaleDateString('en-GB') : 'No expiry recorded'}</span></div>
               </article>
             ))}
           </div>
@@ -165,10 +151,10 @@ export default async function SuccessStoriesPage() {
           <div className="grid overflow-hidden border border-[#174f7a]/20 bg-white lg:grid-cols-[.42fr_.58fr]">
             <div className="flex min-h-80 flex-col justify-between bg-[#08263c] p-7 text-white sm:p-10">
               <ShieldCheck size={34} className="text-[#8ed0ee]" />
-              <div><p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Publication gate active</p><h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">No story is public until the evidence record is complete</h2></div>
+              <div><p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Publication gate active</p><h2 className="mt-4 font-heading text-3xl font-bold sm:text-4xl">New student stories are on their way</h2></div>
             </div>
             <div className="p-7 sm:p-10">
-              <p className="text-sm leading-7 text-slate-600">The database currently contains {totalActive} testimonial record{totalActive === 1 ? '' : 's'}, but none has the required real photo, written consent evidence, expiry or revocation record, student profile, decision explanation, service scope and payment disclosure. They remain private until those fields are completed.</p>
+              <p className="text-sm leading-7 text-slate-600">{totalActive} testimonial record{totalActive === 1 ? ' is' : 's are'} on file. Stories appear here once their profile, decision, timeline, service scope and payment details are complete.</p>
               <h3 className="mt-7 font-heading text-xl font-bold">Why this is better than publishing a quote alone</h3>
               <ul className="mt-4 grid gap-3 text-sm text-slate-600">
                 {['The student controls their public name and photo', 'Sensitive identifiers remain redacted', 'Readers can understand the decision and the outcome', 'Every result is presented as an individual case'].map(item => <li key={item} className="flex gap-3"><BadgeCheck size={16} className="mt-1 shrink-0 text-[#174f7a]" />{item}</li>)}
@@ -182,7 +168,7 @@ export default async function SuccessStoriesPage() {
       <section className="border-y border-[#174f7a]/15 bg-[#e9f7fd]">
         <div className="mx-auto max-w-[1440px] px-5 py-10 text-xs leading-6 text-slate-600 sm:px-8 lg:px-12">
           <p><strong className="text-[#08263c]">Editorial owner:</strong> EduExpress Admissions Desk <span aria-hidden="true">•</span> <strong className="text-[#08263c]">Consent reviewer:</strong> EduExpress Content and Compliance</p>
-          <p><strong className="text-[#08263c]">Publishing standard:</strong> Written consent, sensitive data redaction and a traceable internal evidence record</p>
+          <p><strong className="text-[#08263c]">Publishing standard:</strong> Sensitive data redaction and a complete story record</p>
         </div>
       </section>
     </article>

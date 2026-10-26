@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "checkedAt": "2026-10-19T00:00:00+06:00",
-  "nextReviewAt": "2027-01-19T00:00:00+06:00",
+  "checkedAt": "2026-10-26T00:00:00+06:00",
+  "nextReviewAt": "2027-01-26T00:00:00+06:00",
   "editorialStatus": "Primary ranking-publisher profiles researched; publication of a rank does not verify admission, recognition or institutional relationship.",
   "universities": [
     {
@@ -404,6 +404,2608 @@
       ],
       "checkedAt": "2026-10-23",
       "researchNote": "Publisher profile takes precedence over older brochure ranking descriptions. World, national and subject scopes remain separate."
+    },
+    {
+      "slug": "anhui-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "14",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/anhui-medical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "76-100",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Nursing",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Public Health",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        }
+      ]
+    },
+    {
+      "slug": "beihua-university",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "1301-1400",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/beihua-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026",
+          "year": 2026,
+          "rank": "308",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        }
+      ]
+    },
+    {
+      "slug": "capital-medical-university",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2026",
+          "year": 2026,
+          "rank": "601–800",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/world-ranking"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings by Subject 2026 — Clinical and Health",
+          "year": 2026,
+          "rank": "401–500",
+          "scope": "subject",
+          "subject": "Clinical and Health",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/subject-ranking/clinical-pre-clinical-health"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "2",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/capital-medical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "42",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Nursing",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Public Health",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        }
+      ]
+    },
+    {
+      "slug": "china-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "501-600",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "6",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/china-medical-university-shenyang"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "76-100",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Nursing",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        }
+      ]
+    },
+    {
+      "slug": "china-three-gorges-university",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "851-900",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/china-three-gorges-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026",
+          "year": 2026,
+          "rank": "174",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        }
+      ]
+    },
+    {
+      "slug": "chongqing-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "9",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/chongqing-medical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "76-100",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Nursing",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Public Health",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        }
+      ]
+    },
+    {
+      "slug": "dalian-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "801-900",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "13",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/dalian-medical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        }
+      ]
+    },
+    {
+      "slug": "fudan-university",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2026",
+          "year": 2026,
+          "rank": "36",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/world-ranking"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings by Subject 2026 — Clinical and Health",
+          "year": 2026,
+          "rank": "=34",
+          "scope": "subject",
+          "subject": "Clinical and Health",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/subject-ranking/clinical-pre-clinical-health"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "41",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "16",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "7",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Public Health",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Nursing",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2026",
+          "year": 2026,
+          "rank": "30",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/fudan-university"
+        }
+      ]
+    },
+    {
+      "slug": "fujian-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "15",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/fujian-medical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Nursing",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        }
+      ]
+    },
+    {
+      "slug": "guangxi-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "701-800",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "18",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/guangxi-medical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        }
+      ]
+    },
+    {
+      "slug": "guangzhou-medical-university",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2026",
+          "year": 2026,
+          "rank": "801–1000",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/world-ranking"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings by Subject 2026 — Clinical and Health",
+          "year": 2026,
+          "rank": "601–800",
+          "scope": "subject",
+          "subject": "Clinical and Health",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/subject-ranking/clinical-pre-clinical-health"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "7",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/guangzhou-medical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Nursing",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Public Health",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        }
+      ]
+    },
+    {
+      "slug": "harbin-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "601-700",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "8",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/harbin-medical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        }
+      ]
+    },
+    {
+      "slug": "huazhong-university-of-science-and-technology",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2026",
+          "year": 2026,
+          "rank": "=176",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/world-ranking"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings by Subject 2026 — Clinical and Health",
+          "year": 2026,
+          "rank": "101–125",
+          "scope": "subject",
+          "subject": "Clinical and Health",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/subject-ranking/clinical-pre-clinical-health"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "72",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026",
+          "year": 2026,
+          "rank": "9",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "20",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Public Health",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Nursing",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        }
+      ]
+    },
+    {
+      "slug": "hubei-university-of-education",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026",
+          "year": 2026,
+          "rank": "364",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        }
+      ]
+    },
+    {
+      "slug": "jiangsu-university",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2026",
+          "year": 2026,
+          "rank": "501–600",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/world-ranking"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings by Subject 2026 — Clinical and Health",
+          "year": 2026,
+          "rank": "301–400",
+          "scope": "subject",
+          "subject": "Clinical and Health",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/subject-ranking/clinical-pre-clinical-health"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026",
+          "year": 2026,
+          "rank": "81",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Public Health",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        }
+      ]
+    },
+    {
+      "slug": "jilin-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026",
+          "year": 2026,
+          "rank": "26",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "33",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        }
+      ]
+    },
+    {
+      "slug": "jinan-university",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2026",
+          "year": 2026,
+          "rank": "501–600",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/world-ranking"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings by Subject 2026 — Clinical and Health",
+          "year": 2026,
+          "rank": "301–400",
+          "scope": "subject",
+          "subject": "Clinical and Health",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/subject-ranking/clinical-pre-clinical-health"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026",
+          "year": 2026,
+          "rank": "59",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "43",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "36",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Nursing",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Public Health",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        }
+      ]
+    },
+    {
+      "slug": "jinzhou-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "32",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/jinzhou-medical-university"
+        }
+      ]
+    },
+    {
+      "slug": "kunming-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "701-800",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "22",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/kunming-medical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        }
+      ]
+    },
+    {
+      "slug": "nanjing-medical-university",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2026",
+          "year": 2026,
+          "rank": "801–1000",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/world-ranking"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings by Subject 2026 — Clinical and Health",
+          "year": 2026,
+          "rank": "401–500",
+          "scope": "subject",
+          "subject": "Clinical and Health",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/2026/subject-ranking/clinical-pre-clinical-health"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU) 2026",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026 — Ranking of Chinese Medical Universities",
+          "year": 2026,
+          "rank": "4",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-medical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "31",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Biomedical Engineering",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Biomedical Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Nursing",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Public Health",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Global Ranking of Academic Subjects 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        }
+      ]
+    },
+    {
+      "slug": "nantong-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "147",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "851-900",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/nantong-university"
+        }
+      ]
+    },
+    {
+      "slug": "ningbo-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "78",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "1001-1200",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/ningbo-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "=480",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/ningbo-university"
+        }
+      ]
+    },
+    {
+      "slug": "north-sichuan-medical-college",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Ranking of Chinese Medical Universities 2026",
+          "year": 2026,
+          "rank": "37",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "1301-1400",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/north-sichuan-medical-college"
+        }
+      ]
+    },
+    {
+      "slug": "peking-university-health-science-center",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "22",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "2",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "50",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "76-100",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "9",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "13",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/peking-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "13",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/peking-university"
+        }
+      ]
+    },
+    {
+      "slug": "qingdao-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "108",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "701–800",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/qingdao-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "=337",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/qingdao-university"
+        }
+      ]
+    },
+    {
+      "slug": "shanghai-jiao-tong-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "27",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "4",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "21",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "76-100",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "37",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "18",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "39",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/shanghai-jiao-tong-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "36",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/shanghai-jiao-tong-university"
+        }
+      ]
+    },
+    {
+      "slug": "shantou-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "701-800",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "173",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "801–1000",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/shantou-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "=526",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/shantou-university"
+        }
+      ]
+    },
+    {
+      "slug": "shihezi-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "801-900",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "135",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "1001-1100",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/shihezi-university"
+        }
+      ]
+    },
+    {
+      "slug": "sichuan-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "77",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "16",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "4",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "37",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "11",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "=224",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/sichuan-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "=300",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/sichuan-university"
+        }
+      ]
+    },
+    {
+      "slug": "soochow-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "46",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "551–600",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/soochow-university-china"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "711-720",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/soochow-university"
+        }
+      ]
+    },
+    {
+      "slug": "southeast-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "89",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "15",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "=247",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/southeast-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "=335",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/southeast-university"
+        }
+      ]
+    },
+    {
+      "slug": "southern-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Ranking of Chinese Medical Universities 2026",
+          "year": 2026,
+          "rank": "3",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "=284",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/southern-medical-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings by Subject 2026",
+          "year": 2026,
+          "rank": "51-150",
+          "scope": "subject",
+          "subject": "Medicine",
+          "sourceUrl": "https://www.topuniversities.com/universities/southern-medical-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "353",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/southern-medical-university"
+        }
+      ]
+    },
+    {
+      "slug": "southwest-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "601-700",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Ranking of Chinese Medical Universities 2026",
+          "year": 2026,
+          "rank": "24",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        }
+      ]
+    },
+    {
+      "slug": "sun-yat-sen-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "62",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "13",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "76-100",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "76-100",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "76-100",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "24",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "=205",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/sun-yat-sen-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "=258",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/sun-yat-sen-university"
+        }
+      ]
+    },
+    {
+      "slug": "tianjin-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Ranking of Chinese Medical Universities 2026",
+          "year": 2026,
+          "rank": "5",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings by Subject 2026",
+          "year": 2026,
+          "rank": "601-650",
+          "scope": "subject",
+          "subject": "Medicine",
+          "sourceUrl": "https://www.topuniversities.com/universities/tianjin-medical-university"
+        }
+      ]
+    },
+    {
+      "slug": "tongji-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "18",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "124",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/tongji-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "146",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/tongji-university"
+        }
+      ]
+    },
+    {
+      "slug": "wenzhou-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Ranking of Chinese Medical Universities 2026",
+          "year": 2026,
+          "rank": "11",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "1001–1200",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/wenzhou-medical-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings by Subject 2026",
+          "year": 2026,
+          "rank": "601-650",
+          "scope": "subject",
+          "subject": "Medicine",
+          "sourceUrl": "https://www.topuniversities.com/universities/wenzhou-medical-university"
+        }
+      ]
+    },
+    {
+      "slug": "wuhan-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "77",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "8",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "=121",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/wuhan-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "=165",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/wuhan-university"
+        }
+      ]
+    },
+    {
+      "slug": "xiamen-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "101-150",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "25",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "=224",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/xiamen-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "=303",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/xiamen-university"
+        }
+      ]
+    },
+    {
+      "slug": "xuzhou-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "601-700",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Ranking of Chinese Medical Universities 2026",
+          "year": 2026,
+          "rank": "19",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2025",
+          "year": 2025,
+          "rank": "1201–1500",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/xuzhou-medical-university"
+        }
+      ]
+    },
+    {
+      "slug": "yangzhou-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "93",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "551–600",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/yangzhou-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "=322",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/yangzhou-university"
+        }
+      ]
+    },
+    {
+      "slug": "zhengzhou-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "44",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Clinical Medicine",
+          "year": 2026,
+          "rank": "301-400",
+          "scope": "subject",
+          "subject": "Clinical Medicine",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0401"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Public Health",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Public Health",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0402"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Dentistry & Oral Sciences",
+          "year": 2026,
+          "rank": "201-300",
+          "scope": "subject",
+          "subject": "Dentistry & Oral Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Nursing",
+          "year": 2026,
+          "rank": "76-100",
+          "scope": "subject",
+          "subject": "Nursing",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0404"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Medical Technology",
+          "year": 2026,
+          "rank": "151-200",
+          "scope": "subject",
+          "subject": "Medical Technology",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0405"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking GRAS 2026 — Pharmacy & Pharmaceutical Sciences",
+          "year": 2026,
+          "rank": "51-75",
+          "scope": "subject",
+          "subject": "Pharmacy & Pharmaceutical Sciences",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "THE World University Rankings 2027",
+          "year": 2027,
+          "rank": "651–700",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhengzhou-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "=581",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/zhengzhou-university"
+        }
+      ]
+    },
+    {
+      "slug": "nankai-university",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "=329",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/nankai-university"
+        }
+      ]
     }
   ]
 }

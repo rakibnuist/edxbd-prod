@@ -187,7 +187,7 @@ export default async function RootLayout({
         "hoursAvailable": {
           "@type": "OpeningHoursSpecification",
           "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
-          "opens": "09:00",
+          "opens": "11:00",
           "closes": "18:00"
         }
       },
@@ -312,7 +312,7 @@ export default async function RootLayout({
           >
             Skip to content
           </a>
-          <ConditionalHeader office={office ? { phonePrimary: office.phonePrimary, hours: office.hours } : undefined} />
+          <ConditionalHeader office={office ? { phonePrimary: office.phonePrimary, phoneSecondary: office.phoneSecondary, hours: office.hours } : undefined} />
           <main id="main-content" tabIndex={-1}>{children}</main>
           <WhatsAppWrapper
             phoneNumber={office?.phonePrimary || '+8801983333566'}

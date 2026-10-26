@@ -83,7 +83,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     '@graph': [
       {
         '@type': 'Blog',
-        '@id': `https://eduexpressint.com/updates/category/${slug}#blog`,
         url: `https://eduexpressint.com/updates/category/${slug}`,
         name: `EduExpress Updates — ${label}`,
         description: `Verified ${label.toLowerCase()} posts for Bangladeshi students.`,
@@ -98,7 +97,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       },
       {
         '@type': 'BreadcrumbList',
-        '@id': `https://eduexpressint.com/updates/category/${slug}#breadcrumb`,
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://eduexpressint.com/' },
           { '@type': 'ListItem', position: 2, name: 'Updates', item: 'https://eduexpressint.com/updates' },
