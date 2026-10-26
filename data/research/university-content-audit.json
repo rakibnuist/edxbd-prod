@@ -1,0 +1,231 @@
+{
+  "purpose": "University profile-route QA fixture: every active CMS university must render its profile page with the ClearCost, documents and enquiry sections.",
+  "generatedAt": "2026-10-26T10:27:43.787Z",
+  "source": "regenerated from the local CMS (prisma University where isActive) after the original research fixture was lost between sessions",
+  "universities": [
+    {
+      "slug": "anhui-medical-university",
+      "name": "Anhui Medical University"
+    },
+    {
+      "slug": "ahut",
+      "name": "Anhui University of Technology"
+    },
+    {
+      "slug": "beihua-university",
+      "name": "Beihua University"
+    },
+    {
+      "slug": "capital-medical-university",
+      "name": "Capital Medical University"
+    },
+    {
+      "slug": "china-medical-university",
+      "name": "China Medical University"
+    },
+    {
+      "slug": "china-three-gorges-university",
+      "name": "China Three Gorges University"
+    },
+    {
+      "slug": "chongqing-medical-university",
+      "name": "Chongqing Medical University"
+    },
+    {
+      "slug": "dalian-medical-university",
+      "name": "Dalian Medical University"
+    },
+    {
+      "slug": "fudan-university",
+      "name": "Fudan University"
+    },
+    {
+      "slug": "fujian-medical-university",
+      "name": "Fujian Medical University"
+    },
+    {
+      "slug": "guangxi-medical-university",
+      "name": "Guangxi Medical University"
+    },
+    {
+      "slug": "guangzhou-medical-university",
+      "name": "Guangzhou Medical University"
+    },
+    {
+      "slug": "harbin-medical-university",
+      "name": "Harbin Medical University"
+    },
+    {
+      "slug": "huazhong-university-of-science-and-technology",
+      "name": "Huazhong University of Science and Technology"
+    },
+    {
+      "slug": "hubei-university-of-education",
+      "name": "Hubei University of Education"
+    },
+    {
+      "slug": "jiangsu-university",
+      "name": "Jiangsu University"
+    },
+    {
+      "slug": "jiangsu-university-of-science-and-technology",
+      "name": "Jiangsu University of Science and Technology"
+    },
+    {
+      "slug": "jiangsu-university-of-technology",
+      "name": "Jiangsu University of Technology"
+    },
+    {
+      "slug": "jilin-university",
+      "name": "Jilin University"
+    },
+    {
+      "slug": "jinan-university",
+      "name": "Jinan University"
+    },
+    {
+      "slug": "jinzhou-medical-university",
+      "name": "Jinzhou Medical University"
+    },
+    {
+      "slug": "kunming-medical-university",
+      "name": "Kunming Medical University"
+    },
+    {
+      "slug": "lyu",
+      "name": "Linyi University"
+    },
+    {
+      "slug": "nanjing-medical-university",
+      "name": "Nanjing Medical University"
+    },
+    {
+      "slug": "nuaa",
+      "name": "Nanjing University of Aeronautics and Astronautics"
+    },
+    {
+      "slug": "nuist",
+      "name": "Nanjing University of Information Science and Technology"
+    },
+    {
+      "slug": "nankai-university",
+      "name": "Nankai University"
+    },
+    {
+      "slug": "nantong-university",
+      "name": "Nantong University"
+    },
+    {
+      "slug": "ningbo-university",
+      "name": "Ningbo University"
+    },
+    {
+      "slug": "north-sichuan-medical-college",
+      "name": "North Sichuan Medical College"
+    },
+    {
+      "slug": "peking-university-health-science-center",
+      "name": "Peking University Health Science Center"
+    },
+    {
+      "slug": "qingdao-university",
+      "name": "Qingdao University"
+    },
+    {
+      "slug": "shandong-university",
+      "name": "Shandong University"
+    },
+    {
+      "slug": "shanghai-jiao-tong-university",
+      "name": "Shanghai Jiao Tong University"
+    },
+    {
+      "slug": "shantou-university",
+      "name": "Shantou University"
+    },
+    {
+      "slug": "shihezi-university",
+      "name": "Shihezi University"
+    },
+    {
+      "slug": "sichuan-university",
+      "name": "Sichuan University"
+    },
+    {
+      "slug": "soochow-university",
+      "name": "Soochow University"
+    },
+    {
+      "slug": "southeast-university",
+      "name": "Southeast University"
+    },
+    {
+      "slug": "southern-medical-university",
+      "name": "Southern Medical University"
+    },
+    {
+      "slug": "southwest-medical-university",
+      "name": "Southwest Medical University"
+    },
+    {
+      "slug": "sun-yat-sen-university",
+      "name": "Sun Yat-sen University"
+    },
+    {
+      "slug": "tianjin-medical-university",
+      "name": "Tianjin Medical University"
+    },
+    {
+      "slug": "tongji-university",
+      "name": "Tongji University"
+    },
+    {
+      "slug": "tsinghua-university",
+      "name": "Tsinghua University"
+    },
+    {
+      "slug": "university-of-shanghai-for-science-and-technology",
+      "name": "University of Shanghai for Science and Technology"
+    },
+    {
+      "slug": "wenzhou-medical-university",
+      "name": "Wenzhou Medical University"
+    },
+    {
+      "slug": "wzu",
+      "name": "Wenzhou University"
+    },
+    {
+      "slug": "wuhan-university",
+      "name": "Wuhan University"
+    },
+    {
+      "slug": "xian-jiaotong-university",
+      "name": "Xi'an Jiaotong University"
+    },
+    {
+      "slug": "xiamen-university",
+      "name": "Xiamen University"
+    },
+    {
+      "slug": "xuzhou-medical-university",
+      "name": "Xuzhou Medical University"
+    },
+    {
+      "slug": "yangzhou-university",
+      "name": "Yangzhou University"
+    },
+    {
+      "slug": "zhejiang-normal-university",
+      "name": "Zhejiang Normal University"
+    },
+    {
+      "slug": "zhejiang-university",
+      "name": "Zhejiang University"
+    },
+    {
+      "slug": "zhengzhou-university",
+      "name": "Zhengzhou University"
+    }
+  ]
+}
