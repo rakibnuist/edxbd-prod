@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     'overseas education consultation'
   ],
   openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
     title: 'Contact Us - Free Study Abroad Consultation',
     description: 'Get expert study abroad guidance from our experienced consultants. Free consultation available. Located in Dhanmondi, Dhaka.',
     type: 'website',

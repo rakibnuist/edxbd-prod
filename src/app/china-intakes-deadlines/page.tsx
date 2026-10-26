@@ -18,6 +18,7 @@ export const metadata: Metadata = {
     'March (Spring) and September (Autumn) intake deadlines for Chinese universities. Verified application calendar, document submission windows, and scholarship deadlines for Bangladeshi applicants.',
   alternates: { canonical: '/china-intakes-deadlines' },
   openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
     title: 'China University Intakes & Deadlines | EduExpress International',
     description: 'Verified calendar of March and September intake application windows and CSC scholarship deadlines.',
     url: '/china-intakes-deadlines',

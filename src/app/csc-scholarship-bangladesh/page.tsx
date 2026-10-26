@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     'Complete Bangladesh guide to Chinese Government Scholarships (CSC). Learn Type A & Type B eligibility, agency numbers, monthly stipends, document checklists, and application timelines with written evidence.',
   alternates: { canonical: '/csc-scholarship-bangladesh' },
   openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
     title: 'CSC Scholarship from Bangladesh (2026/27) | EduExpress International',
     description: 'Verified guide to CSC Chinese Government Scholarships for Bangladeshi students. Full tuition waivers, monthly stipends, and step-by-step application guidance.',
     url: '/csc-scholarship-bangladesh',

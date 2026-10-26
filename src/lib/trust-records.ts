@@ -37,7 +37,7 @@ export const getPublicTrustRecords = cache(async () => {
       },
       orderBy: [{ featured: 'desc' }, { updatedAt: 'desc' }],
       take: 6,
-      select: { id: true, studentName: true, displayName: true, content: true, university: true, country: true, image: true, rating: true },
+      select: { id: true, studentName: true, displayName: true, content: true, university: true, country: true, image: true, rating: true, consentImageApproved: true },
     }),
   ]);
 

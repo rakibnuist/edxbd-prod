@@ -9,7 +9,7 @@ const toArray = (v: unknown): string[] => {
   return [];
 };
 
-export const serializeContent = (c: Record<string, unknown>) => ({
+export const serializeContent = (c: Record<string, unknown>): Record<string, unknown> => ({
   ...c,
   tags: toArray(c.tags),
   categories: toArray(c.categories),

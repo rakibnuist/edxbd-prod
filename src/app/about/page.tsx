@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     'global education consultant'
   ],
   openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
     title: 'About EduExpress International | Evidence-First Education Consultancy',
     description: 'Better Education. Clear Costs. Written Proof.',
     type: 'website',

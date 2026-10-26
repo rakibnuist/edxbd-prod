@@ -25,7 +25,13 @@ export async function generateMetadata(): Promise<Metadata> {
     description: 'Consent-based China student outcomes with evidence records and sensitive details redacted.',
     alternates: { canonical },
     robots: { index: count > 0, follow: true },
-    openGraph: { title: 'China Student Success Stories', description: 'Proof with permission and privacy controls.', url: canonical, type: 'website' },
+    openGraph: {
+      title: 'China Student Success Stories',
+      description: 'Proof with permission and privacy controls.',
+      url: canonical,
+      type: 'website',
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
+    },
   };
 }
 

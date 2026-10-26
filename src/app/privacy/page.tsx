@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     'data security'
   ],
   openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
     title: 'Privacy Policy',
     description: 'Learn how EduExpress International protects your personal information and privacy. Our comprehensive privacy policy covers data collection, usage, and protection practices.',
     type: 'website',

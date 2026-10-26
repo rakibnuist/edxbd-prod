@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     'Get a free, written Education Fit Assessment. Share your results, budget, intake and goals — we compare suitable study-abroad routes, risks and missing information before you commit.',
   alternates: { canonical: '/education-fit-assessment' },
   openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
     title: 'Free Education Fit Assessment | EduExpress International',
     description: 'Compare before you commit. A written read on your suitable routes, risks and next step.',
     url: '/education-fit-assessment',

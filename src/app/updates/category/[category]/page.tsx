@@ -61,6 +61,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       googleBot: { 'max-image-preview': 'large', 'max-snippet': -1 },
     },
     openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
       title: `${data.label} — Updates & Guides`,
       description: `Verified ${data.label.toLowerCase()} posts for Bangladeshi students.`,
       url: `/updates/category/${slug}`,

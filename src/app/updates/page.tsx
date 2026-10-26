@@ -39,6 +39,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
     title: 'Latest Study Abroad Updates & News',
     description: 'Stay updated with the latest study abroad news, scholarship opportunities, visa updates, and university announcements.',
     type: 'website',

@@ -34,7 +34,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: page.title,
     description: page.description,
     alternates: { canonical: `/${slug}` },
-    openGraph: { title: page.title, description: page.description, url: `/${slug}`, type: 'article' },
+    openGraph: {
+      title: page.title,
+      description: page.description,
+      url: `/${slug}`,
+      type: 'article',
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
+    },
   };
 }
 

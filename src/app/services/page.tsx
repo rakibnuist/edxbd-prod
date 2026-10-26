@@ -28,6 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
       'education consultant'
     ],
     openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
       title: 'Study Abroad Services | Expert Guidance for International Education',
       description: 'Compare education quality, recognition, costs and career fit with clear written evidence.',
       type: 'website',

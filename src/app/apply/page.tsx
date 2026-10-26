@@ -18,6 +18,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     alternates: { canonical: '/apply' },
     robots: Object.keys(query).length > 0 ? { index: false, follow: true } : undefined,
     openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
       title: 'Apply with EduExpress International',
       description: 'University application support, starting with your academic profile and study preferences.',
       url: '/apply',

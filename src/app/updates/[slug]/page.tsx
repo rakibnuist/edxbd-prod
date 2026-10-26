@@ -90,6 +90,7 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
       keywords: tags.join(', '),
       alternates: { canonical: `/updates/${slug}` },
       openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
         title: update.title,
         description: update.excerpt || plainBody.slice(0, 160),
         type: 'article',

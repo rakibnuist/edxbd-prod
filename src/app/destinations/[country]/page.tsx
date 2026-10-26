@@ -40,7 +40,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical: china ? '/study-in-china-from-bangladesh' : `/study-in-${slug}-from-bangladesh` },
     robots: { index: true, follow: true },
-    openGraph: { title, description, url: china ? '/study-in-china-from-bangladesh' : `/study-in-${slug}-from-bangladesh` },
+    openGraph: {
+      title,
+      description,
+      url: china ? '/study-in-china-from-bangladesh' : `/study-in-${slug}-from-bangladesh`,
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
+    },
   };
 }
 

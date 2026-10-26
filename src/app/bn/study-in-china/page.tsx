@@ -18,6 +18,7 @@ export const metadata: Metadata = {
     'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে ব্যাচেলর, মাস্টার্স, স্কলারশিপ ও ভিসা প্রসেসিং গাইড। ভিসা অনুমোদনের পূর্বে কোনো ফাইল ওপেনিং চার্জ বা সার্ভিস ফি নেই।',
   alternates: { canonical: '/bn/study-in-china' },
   openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
     title: 'বাংলাদেশে শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা | EduExpress International',
     description: 'চীনে স্কলারশিপ, বিশ্ববিদ্যালয়ের তালিকা, টিউশন ফি এবং ভিসা প্রসেসিং তথ্য।',
     url: '/bn/study-in-china',

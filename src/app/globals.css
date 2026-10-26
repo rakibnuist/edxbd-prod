@@ -826,3 +826,76 @@ body.dashboard-mode .site-footer {
     animation: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Homepage polish
+   - Reveal-on-scroll: content is visible by default; the Reveal client island
+     only arms blocks that start below the fold, so the hero/LCP never hides.
+   - Ambient hero motion + entrance rise are decorative; the global
+     prefers-reduced-motion rules above disable them for users who ask.
+   - Carousel tracks hide the native scrollbar (buttons + progress bar carry
+     the affordance) while remaining fully keyboard/touch scrollable.
+--------------------------------------------------------------------------- */
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+[data-reveal="shown"] {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.6s ease-out var(--reveal-delay, 0ms),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes home-aura {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(14px, -18px, 0) scale(1.08);
+    opacity: 0.8;
+  }
+}
+
+.home-aura {
+  animation: home-aura 18s ease-in-out infinite;
+}
+
+@keyframes home-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-rise {
+  animation: home-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal="hidden"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-reveal="shown"] {
+    transition: none;
+  }
+}

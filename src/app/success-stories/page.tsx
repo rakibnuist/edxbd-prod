@@ -12,7 +12,13 @@ export const metadata: Metadata = {
   title: { absolute: 'Student Success Stories | EduExpress' },
   description: 'Read student stories with profiles, decisions, timelines, service scope and payment details.',
   alternates: { canonical },
-  openGraph: { title: 'Student Success Stories', description: 'Education outcomes from EduExpress students.', url: canonical, type: 'website' },
+  openGraph: {
+    title: 'Student Success Stories',
+    description: 'Education outcomes from EduExpress students.',
+    url: canonical,
+    type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
+  },
 };
 
 type PublicStory = {

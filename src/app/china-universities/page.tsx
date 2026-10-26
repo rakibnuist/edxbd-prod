@@ -36,6 +36,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     alternates: { canonical },
     ...(Object.values(query).some(value => Array.isArray(value) ? value.some(Boolean) : Boolean(value)) ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
       title: 'China Universities Database for Bangladeshi Students',
       description,
       url: canonical,
