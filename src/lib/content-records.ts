@@ -47,7 +47,7 @@ const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content.findFi
 
 export const getPublishedUpdates = cache(async (take?: number, prioritizeFeatured = true): Promise<Update[]> => {
   const records = await prisma.content.findMany({
-    where: { type: 'update', ...currentPublishedContentWhere() },
+    where: { type: { in: ['update', 'article'] }, ...currentPublishedContentWhere() },
     orderBy: prioritizeFeatured
       ? [{ isFeatured: 'desc' }, { publishedAt: 'desc' }, { updatedAt: 'desc' }]
       : [{ publishedAt: 'desc' }, { updatedAt: 'desc' }],

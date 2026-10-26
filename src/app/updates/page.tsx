@@ -52,6 +52,7 @@ export const metadata: Metadata = {
   alternates: {
     // PHASE 0 FIX: relative canonical, resolved against apex metadataBase
     canonical: '/updates',
+    types: { 'application/rss+xml': '/updates/feed.xml' },
   },
   other: {
     'geo.region': 'BD-DH',

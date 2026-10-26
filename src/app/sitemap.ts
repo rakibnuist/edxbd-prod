@@ -4,6 +4,7 @@ import { evidencePages } from '@/data/evidencePages';
 import { chinaGuidePages } from '@/data/chinaGuidePages';
 import { sitemapStaticRouteSlugs } from '@/data/staticRoutePages';
 import { currentPublishedContentWhere } from '@/lib/content-governance';
+import { categoriesFromUpdate, categorySlug } from '@/lib/update-categories';
 import { activeCountries } from '@/lib/countries';
 import { destinationPath } from '@/lib/site-urls';
 import { getIndexableUniversitySitemapRecords } from '@/lib/university-guide-publication';
@@ -68,8 +69,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
     // Published updates/articles
     const updates = await prisma.content.findMany({
-      where: { type: 'update', ...currentPublishedContentWhere() },
-      select: { slug: true, updatedAt: true, publishedAt: true }
+      where: { type: { in: ['update', 'article'] }, ...currentPublishedContentWhere() },
+      select: { slug: true, updatedAt: true, publishedAt: true, category: true, categories: true }
     });
     const updateRoutes = updates.map((post) => ({
     url: `${baseUrl}/updates/${post.slug}`,
@@ -82,7 +83,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-    return [...routes, ...countryRoutes, ...universityRoutes, ...updateRoutes];
+    // Category archives, derived from the same rows (no extra query)
+    const categoryPaths = Array.from(new Set(
+      updates
+        .flatMap(post => categoriesFromUpdate(post))
+        .map(label => categorySlug(label)),
+    ));
+    const categoryRoutes: MetadataRoute.Sitemap = categoryPaths.map((slug) => ({
+      url: `${baseUrl}/updates/category/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }));
+
+    return [...routes, ...countryRoutes, ...universityRoutes, ...updateRoutes, ...categoryRoutes];
   } catch (error) {
     console.warn('Sitemap generated without database routes:', error);
     return [...routes, ...countryRoutes];

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { trackDashboardView, trackContentManagement } from '@/lib/analytics';
 import { Content } from '@/lib/types';
+import { teamMembers } from '@/data/teamMembers';
 import { useAuth } from '@/contexts/AuthContext';
 
 const isPubliclyCurrent = (content: Content) => {
@@ -455,7 +456,7 @@ export default function ContentPage() {
             >
               <option value="all">All Types</option>
               <option value="page">Page</option>
-              <option value="blog">Blog</option>
+              <option value="article">Article / Guide</option>
               <option value="update">Update</option>
               <option value="service">Service</option>
               <option value="destination">Destination</option>
@@ -654,12 +655,12 @@ export default function ContentPage() {
                     className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                   >
                     <option value="update">Update</option>
-                    <option value="blog">Guide or article</option>
+                    <option value="article">Guide or article (blog)</option>
                     <option value="page">Standalone page</option>
                     <option value="service">Service</option>
                     <option value="destination">Destination</option>
                   </select>
-                  <p className="mt-1 text-[11px] text-slate-500">Choose Update for university announcements, admission news and student guidance shown in the public Updates library.</p>
+                  <p className="mt-1 text-[11px] text-slate-500">Update = intake news and announcements. Guide or article = blog-style posts. Both publish to the same public Updates library at /updates once verification details are complete.</p>
                 </div>
 
                 <div>
@@ -674,11 +675,15 @@ export default function ContentPage() {
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Author</label>
                   <input
                     type="text"
+                    list="team-author-names"
                     value={formData.author}
                     onChange={(e) => setFormData({ ...formData, author: e.target.value })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                     required
                   />
+                  <datalist id="team-author-names">
+                    {teamMembers.map(member => <option key={member.name} value={member.name} />)}
+                  </datalist>
                   </div>
                   <div>
                     <label className="block text-xs sm:text-sm font-medium text-gray-700">Reviewer</label>

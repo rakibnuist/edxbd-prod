@@ -145,6 +145,15 @@ Owner: developer (mostly) · Definition of done: campaign page converting + typo
 - [ ] **Baseline dashboard:** capture organic sessions for China cluster / EFA completions / WhatsApp taps / B2B partner inquiries (needed before the 15 Dec review, or nothing is provable then). — GA4/GSC config, management + ops task.
 - [x] **`outline-none` focus-visible floor** — already implemented globally in `globals.css` (`:focus-visible` outline rules + dark-surface cyan variant), verified present.
 - [x] **Status badges on destination tiles live** — `[country]` pages and DestinationsClient render status pills; homepage Wave-1 tiles now carry the shared badge vocabulary too.
+- [x] **`/updates` upgraded into the blog hub (same URL space, one authority sink)** — content type vocabulary unified on `update` (news) + `article` (guides/blog; the old `blog` value in admin/seed is gone since nothing public ever matched it); serializer no longer defaults new rows to a phantom `post` type; list API, list page, detail page and sitemap all query both types; cards and detail pages show type badge, author byline and date; bylines match the team directory and BlogPosting schema now emits a `Person` author with the verified role when the byline is a team member (falls back to Organization); visible governance stamp on every post ("Verified on … · reviewed by … · N official sources · next review …"); new server-rendered category archives at `/updates/category/[category]` (canonical, ISR 300, breadcrumb schema, same publication gate as the list) added to sitemap.xml; RSS 2.0 feed at `/updates/feed.xml` (governance-gated, linked from `/updates` via RSS discovery meta); admin author field now suggestions from the team directory.
+
+#### Blog decision record — 26 Oct 2026
+
+User decision: **upgrade `/updates` into the blog** (no separate `/blog` URL space). One content section, one sitemap, one governance gate = one authority sink. Principle behind it: never split the site into two half-authored content sections while Wave-1 authority is being built.
+
+Deferred (needs a Prisma schema change + migration on SQLite):
+- **Bengali `language` field on Content** — needed for the Stage-2 bn track (bn pillar + 3 money pages). `toContentData` already passes arbitrary fields, but the column does not exist. When added: default `en`, filter all public queries to `language: 'en'` or the active locale, add `hreflang` pairs on detail pages, and extend the RSS/XML surface (separate `bn` feed, or `language` in item metadata).
+- Follow-ups small enough to batch later: sources listed show a generic label (print hostnames), related-posts module for articles, admin list type filter is tolerance-OK for historical rows (DB is empty, so no backfill needed).
 
 #### Stage 0 progress log — 26 Oct 2026 (build day)
 

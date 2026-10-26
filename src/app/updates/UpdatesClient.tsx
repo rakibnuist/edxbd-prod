@@ -6,8 +6,16 @@ import Link from 'next/link';
 import { ArrowRight, ChevronLeft, ChevronRight, Search, Sparkles } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import type { Update, UpdatesResponse } from '@/lib/types';
+import { categoryHref } from '@/lib/update-categories';
 
 const ITEMS_PER_PAGE = 9;
+
+const fmtDate = (update: Update) => {
+  const iso = update.publishedAt || update.createdAt;
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date);
+};
 
 const currentGuides = [
   { label: '2027 intakes', title: 'Application windows and deadlines', href: '/china-intakes-deadlines' },
@@ -133,9 +141,17 @@ export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProp
                     {update.featuredImage ? <Image src={update.featuredImage} alt={update.title} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover transition duration-700 group-hover:scale-[1.03]" /> : <div className="grid h-full place-items-center text-sm font-black uppercase tracking-[0.15em] text-[#9bd8f3]">EduExpress update</div>}
                   </div>
                   <div className="p-5">
-                    <span className="text-[10px] font-black uppercase tracking-[0.13em] text-[#174f7a]">{primaryCategory(update)}</span>
+                    <div className="flex items-center justify-between gap-2">
+                      <Link href={categoryHref(primaryCategory(update))} className="text-[10px] font-black uppercase tracking-[0.13em] text-[#174f7a] hover:underline">{primaryCategory(update)}</Link>
+                      <span className="shrink-0 rounded-full border border-[#174f7a]/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-slate-500">{update.type === 'article' ? 'Article' : 'Update'}</span>
+                    </div>
                     <h3 className="mt-3 line-clamp-2 text-xl font-extrabold leading-7 tracking-[-0.025em]">{update.title}</h3>
-                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-black text-[#174f7a]">Read update <ArrowRight size={14} className="transition group-hover:translate-x-1" /></span>
+                    {update.excerpt ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{update.excerpt}</p> : null}
+                    <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-3 text-sm text-slate-500">
+                      <span className="truncate">{update.author}</span>
+                      <span className="shrink-0">{fmtDate(update)}</span>
+                    </div>
+                    <span className="mt-4 inline-flex items-center gap-2 text-sm font-black text-[#174f7a]">{update.type === 'article' ? 'Read article' : 'Read update'} <ArrowRight size={14} className="transition group-hover:translate-x-1" /></span>
                   </div>
                 </Link>
               </article>

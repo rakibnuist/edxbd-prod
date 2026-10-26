@@ -1,13 +1,23 @@
 'use client';
 
-import { ArrowRight, Share2, Calendar, Clock, ChevronLeft, ExternalLink } from 'lucide-react';
+import { ArrowRight, Share2, Calendar, Clock, ChevronLeft, ExternalLink, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
 import { trackConsultationRequest } from '@/lib/analytics';
 import { UpdateClientProps } from '@/lib/types';
+import { teamMembers } from '@/data/teamMembers';
+
+// Deterministic date formatting (avoid locale-dependent server/client mismatch)
+const fmtDate = (iso?: string) => {
+  if (!iso) return null;
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return null;
+  return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
+};
 
 export default function UpdateClient({ update }: UpdateClientProps) {
+  const teamMember = teamMembers.find(m => m.name.toLowerCase() === (update.author || '').trim().toLowerCase());
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -54,7 +64,7 @@ export default function UpdateClient({ update }: UpdateClientProps) {
             {readTime}
           </div>
           <div className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
-            By {update.author}
+            By {update.author}{teamMember ? ` · ${teamMember.role}` : ''}
           </div>
         </div>
       </PageHeader>
@@ -115,6 +125,24 @@ export default function UpdateClient({ update }: UpdateClientProps) {
                 </div>
               </aside>
             ) : null}
+
+            {/* Visible governance stamp — the publication gate guarantees these
+                dates, so this block is the human-readable proof layer for
+                readers and AI assistants without extra work at render time */}
+            {(update.lastVerifiedAt || update.nextReviewAt) && (
+              <aside className="mt-10 rounded-2xl border border-emerald-200 bg-emerald-50/60 p-6">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="size-5 text-emerald-600" />
+                  <h2 className="text-base font-bold text-emerald-900">Content verification</h2>
+                </div>
+                <p className="mt-3 text-sm font-medium leading-6 text-emerald-900/80">
+                  {fmtDate(update.lastVerifiedAt) ? <>Verified on {fmtDate(update.lastVerifiedAt)}</> : 'Verification in progress'}
+                  {update.reviewer ? <> · Content reviewed by {update.reviewer}</> : null}
+                  {update.sourceUrls?.length ? <> · {update.sourceUrls.length} official source{update.sourceUrls.length === 1 ? '' : 's'} listed above</> : null}
+                  {fmtDate(update.nextReviewAt) ? <> · Next scheduled review: {fmtDate(update.nextReviewAt)}</> : null}
+                </p>
+              </aside>
+            )}
           </article>
 
           {/* 6. High-Visibility Gradient CTA Banner */}
@@ -130,7 +158,7 @@ export default function UpdateClient({ update }: UpdateClientProps) {
                 Start your study abroad journey
               </h2>
               <p className="text-slate-300 mb-10 max-w-2xl mx-auto text-lg/relaxed font-medium">
-                Join thousands of students who have realized their dreams. Our expert counselors are here to guide you through every step.
+                Talk to a counsellor who reviews your profile, explains the real total costs and helps you choose the right route before you commit to anything.
               </p>
 
               <button

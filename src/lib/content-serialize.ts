@@ -25,7 +25,7 @@ export const toContentData = (body: Record<string, unknown>, partial = false) =>
     slug: body.slug,
     content: body.content,
     excerpt: body.excerpt ?? null,
-    type: body.type || 'post',
+    type: body.type || 'update',
     category: body.category ?? null,
     tags: s(body.tags),
     categories: s(body.categories),

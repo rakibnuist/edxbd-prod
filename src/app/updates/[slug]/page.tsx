@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma';
 import UpdateClient from './UpdateClient';
 import type { Update } from '@/lib/types';
 import { currentPublishedContentWhere } from '@/lib/content-governance';
+import { teamMembers } from '@/data/teamMembers';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -13,7 +14,7 @@ interface UpdatePageProps {
 }
 
 const getUpdate = cache((slug: string) => prisma.content.findFirst({
-  where: { slug, type: 'update', ...currentPublishedContentWhere() },
+  where: { slug, type: { in: ['update', 'article'] }, ...currentPublishedContentWhere() },
 }));
 
 export async function generateMetadata({ params }: UpdatePageProps): Promise<Metadata> {
@@ -98,6 +99,9 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     };
 
     const canonical = `https://eduexpressint.com/updates/${update.slug}`;
+    // E-E-A-T: posts signed by a listed team member get a Person author with
+    // their verified role; anonymous bylines stay attributed to the organization.
+    const teamMember = teamMembers.find(m => m.name.toLowerCase() === (update.author || '').trim().toLowerCase());
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
@@ -107,7 +111,14 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       image: update.featuredImage ? [update.featuredImage] : ['https://eduexpressint.com/og-image.jpg'],
       datePublished: update.publishedAt?.toISOString() || update.createdAt.toISOString(),
       dateModified: update.updatedAt.toISOString(),
-      author: { '@type': 'Organization', name: update.author || 'EduExpress International', url: 'https://eduexpressint.com' },
+      author: teamMember
+        ? {
+            '@type': 'Person',
+            name: teamMember.name,
+            jobTitle: teamMember.role,
+            worksFor: { '@type': 'Organization', '@id': 'https://eduexpressint.com/#organization' },
+          }
+        : { '@type': 'Organization', name: update.author || 'EduExpress International', url: 'https://eduexpressint.com' },
       publisher: { '@id': 'https://eduexpressint.com/#organization' },
       mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
       inLanguage: 'en-BD',
