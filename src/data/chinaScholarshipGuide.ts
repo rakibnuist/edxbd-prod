@@ -135,7 +135,9 @@ export const chinaScholarshipGuide: ChinaGuidePage = {
   sources: [{ label: 'Campus China scholarship catalogue', href: facts.internal.requestedCatalogue }, ...facts.internal.sources.map(source => ({ label: source.publisher, href: source.url }))],
   related: [
     { label: 'Study in China', href: '/study-in-china-from-bangladesh' },
+    { label: 'CSC scholarship — complete guide', href: '/csc-scholarship-bangladesh' },
     { label: 'Admission documents and CSCA', href: '/china-admission-requirements' },
+    { label: 'Intakes and deadlines', href: '/china-intakes-deadlines' },
     { label: 'NUIST scholarship coverage', href: '/universities/nuist#scholarships' },
     { label: 'Compare Chinese universities', href: '/china-universities' },
     { label: 'Study costs and ClearCost', href: '/study-in-china-cost-bangladesh' },
