@@ -157,6 +157,23 @@ Follow-up same day — **back end → client flow + interlinking** (user: "resto
 - `llms.txt` now lists the library, a topic archive and the RSS feed so AI assistants can discover the whole surface.
 - Link audit result: header "Advice" + footer "Advice and updates" already pointed at `/updates`; category archives breadcrumb back to the list; sitemap section unchanged in structure.
 
+#### Production data restored locally — 26 Oct 2026 (afternoon)
+
+Source: `data/vps-snapshot/prod-snapshot.db` (Hostinger VPS `prisma/data/prod.db`, snapshot pulled 13:18 today; `crm-snapshot.db` turned out to be a foreign-schema DB — not the app). Import: `scripts/import-prod-snapshot.mjs` (id-conservative fill-in, never overwrites local rows; DB files are gitignored).
+
+| Table | Restored | Note |
+|---|---|---|
+| Content | 18 | All `isPublished=true`, none carry reviewer/sources/verification dates → **0 pass the public gate** |
+| Testimonial | 7 | consent fields came along; public rendering follows existing consent gating |
+| Partnership | 12 | |
+| Setting | 15 | site name, GA4/GTM/socials, Meta tokens |
+| Country | 2 | |
+| Lead | 123 | personal data — local copy only (gitignored) |
+
+Deliberately NOT imported: User (local admin login stays), University/Program/Fee/Scholarship/CostPlan (the local curation sessions own these tables; wholesale swap would drop 56 curated universities for 110 legacy rows).
+
+**Caution recorded:** most of the 18 legacy posts are expired intake announcements (March 2026 intake, dates from Jan 2024). They must NOT be bulk-stamped with verification data to force-publish stale intake claims. Counselor action: re-verify only what is still true for the 2027 cycle; rewrite the rest as fresh 2027 posts; archive the expired ones (expiresAt). The gate working as intended is the deliverable — it just blocked 18 unverified posts.
+
 Deferred (needs a Prisma schema change + migration on SQLite):
 - **Bengali `language` field on Content** — needed for the Stage-2 bn track (bn pillar + 3 money pages). `toContentData` already passes arbitrary fields, but the column does not exist. When added: default `en`, filter all public queries to `language: 'en'` or the active locale, add `hreflang` pairs on detail pages, and extend the RSS/XML surface (separate `bn` feed, or `language` in item metadata).
 - Follow-ups small enough to batch later: sources listed show a generic label (print hostnames), related-posts module for articles, admin list type filter is tolerance-OK for historical rows (DB is empty, so no backfill needed).
