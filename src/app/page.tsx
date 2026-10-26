@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     description: 'Clear costs, written proof and human guidance from profile assessment to departure.',
     url: '/',
     type: 'website',
-    images: [{ url: '/images/home/consultation-family.webp', width: 1280, height: 960, alt: 'Student and parent consultation at the EduExpress Dhanmondi office' }],
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
   },
 };
 

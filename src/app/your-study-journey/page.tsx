@@ -7,6 +7,19 @@ export const metadata: Metadata = {
   title: 'Your Complete Study Abroad Journey',
   description: 'See the seven-stage EduExpress journey from education fit and applications to visa readiness, departure, arrival and university registration.',
   alternates: { canonical: '/your-study-journey' },
+  openGraph: {
+    title: 'Your Complete Study Abroad Journey',
+    description: 'See every stage from education fit and applications to visa readiness, departure and university registration.',
+    url: '/your-study-journey',
+    type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — the complete study journey' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Your Complete Study Abroad Journey',
+    description: 'See every stage from education fit and applications to visa readiness, departure and university registration.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 type JourneyStage = {

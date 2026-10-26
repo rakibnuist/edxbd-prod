@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { categoriesFromUpdate } from '@/lib/update-categories';
+import { htmlToText } from '@/lib/content-html';
 
 // RSS 2.0 feed for the /updates library (updates + articles). Every entry has
 // already passed the publication gate (reviewer, official sources,
@@ -40,7 +41,7 @@ export async function GET() {
     const items = posts.map(post => {
       const link = `${SITE_URL}/updates/${post.slug}`;
       const pubDate = (post.publishedAt || post.updatedAt).toUTCString();
-      const description = post.excerpt || post.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 280);
+      const description = post.excerpt || htmlToText(post.content, 280);
       const categories = Array.from(new Set(categoriesFromUpdate(post)));
       return [
         '    <item>',

@@ -9,6 +9,7 @@ import { teamMembers } from '@/data/teamMembers';
 import { serializeUpdate } from '@/lib/content-records';
 import { categorySlug } from '@/lib/update-categories';
 import { chinaIntakeOverview } from '@/lib/china-intakes';
+import { htmlToText, sanitizeUpdateHtml } from '@/lib/content-html';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -81,15 +82,16 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
     }
 
     const tags = update.tags ? JSON.parse(update.tags) : [];
+    const plainBody = htmlToText(update.content, 300);
 
     return {
       title: update.metaTitle || update.title,
-      description: update.metaDescription || update.excerpt || update.content.substring(0, 160),
+      description: update.metaDescription || update.excerpt || plainBody.slice(0, 160),
       keywords: tags.join(', '),
       alternates: { canonical: `/updates/${slug}` },
       openGraph: {
         title: update.title,
-        description: update.excerpt || update.content.substring(0, 160),
+        description: update.excerpt || plainBody.slice(0, 160),
         type: 'article',
         publishedTime: update.publishedAt?.toISOString(),
         authors: update.author ? [update.author] : undefined,
@@ -98,7 +100,7 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
       twitter: {
         card: 'summary_large_image',
         title: update.title,
-        description: update.excerpt || update.content.substring(0, 160),
+        description: update.excerpt || plainBody.slice(0, 160),
       }
     };
   } catch {
@@ -135,7 +137,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       title: update.title,
       slug: update.slug,
       type: update.type,
-      content: update.content,
+      content: sanitizeUpdateHtml(update.content),
       excerpt: update.excerpt || undefined,
       metaDescription: update.metaDescription || undefined,
       category: update.category || undefined,
@@ -166,7 +168,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       '@type': 'BlogPosting',
       '@id': `${canonical}#article`,
       headline: update.title,
-      description: update.excerpt || update.content.substring(0, 160),
+      description: update.excerpt || htmlToText(update.content, 300).slice(0, 160),
       image: update.featuredImage ? [update.featuredImage] : ['https://eduexpressint.com/og-image.jpg'],
       datePublished: update.publishedAt?.toISOString() || update.createdAt.toISOString(),
       dateModified: update.updatedAt.toISOString(),

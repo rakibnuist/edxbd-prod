@@ -4,6 +4,7 @@ import { cache } from 'react';
 import prisma from '@/lib/prisma';
 import type { Update } from '@/lib/types';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
+import { sanitizeUpdateHtml } from '@/lib/content-html';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -22,7 +23,7 @@ export const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content
     title: record.title,
     slug: record.slug,
     type: record.type,
-    content: record.content,
+    content: sanitizeUpdateHtml(record.content),
     excerpt: record.excerpt || undefined,
     metaDescription: record.metaDescription || undefined,
     category: record.category || undefined,

@@ -4,7 +4,7 @@ import { ArrowRight, CircleDollarSign, FileCheck2, MapPin, Phone, ShieldCheck } 
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
 export const metadata: Metadata = {
-  title: 'Education Consultant in Dhanmondi, Dhaka | EduExpress International',
+  title: { absolute: 'Education Consultant in Dhanmondi, Dhaka | EduExpress International' },
   description: 'Visit EduExpress International in Dhanmondi for education fit guidance, university comparison, complete cost planning and application support.',
   alternates: { canonical: '/education-consultant-dhaka' },
 };

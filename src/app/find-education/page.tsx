@@ -9,6 +9,19 @@ export const metadata: Metadata = {
   title: 'Find Universities, Programs and Scholarships',
   description: 'Explore universities, destinations and scholarship guidance, then match options to your level, subject, budget and intake.',
   alternates: { canonical: '/find-education' },
+  openGraph: {
+    title: 'Find Universities, Programs and Scholarships',
+    description: 'Match universities, destinations and funding options to your level, subject, budget and intake.',
+    url: '/find-education',
+    type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — find education' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Find Universities, Programs and Scholarships',
+    description: 'Match universities, destinations and funding options to your level, subject, budget and intake.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 const discoveryPaths = [

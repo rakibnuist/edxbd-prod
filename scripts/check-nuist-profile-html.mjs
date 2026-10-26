@@ -20,7 +20,7 @@ assert.equal(missingScholarships.length, 0, `Missing HTML scholarships: ${missin
 assert.equal(courses.length, profile.programs.length);
 assert.match(html, /<link rel="canonical" href="https:\/\/eduexpressint.com\/universities\/nuist"/);
 assert.match(content, /Nanjing University of Information Science and Technology \(NUIST\)/);
-assert.match(content, /NUIST<!-- --> scholarships|NUIST scholarships/);
+assert.match(content, /NUIST Excellent Freshmen Scholarship|NUIST Longshan Scholarship/);
 assert.doesNotMatch(content, /Sources checked|Next review|Last verified|\/Users\/a1\/|xwechat_files/);
 assert.doesNotMatch(publicText, /\bdeadline\b|closed (?:admission )?cycle|\b202[6-9]\b/i);
 assert.match(publicText, /Your admission checklist/);

@@ -26,6 +26,19 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     title: { absolute: 'University & Program Finder 2027 | EduExpress International' },
     description: 'Find and compare 2027 universities, programs, tuition and scholarships across destinations. Verified fees, rankings and intake months with sources.',
     alternates: { canonical },
+    openGraph: {
+      title: 'University & Program Finder 2027',
+      description: 'Compare 2027 universities, programs, tuition, scholarships and intake months with source records.',
+      url: canonical,
+      type: 'website',
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — university and program finder' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'University & Program Finder 2027',
+      description: 'Compare 2027 universities, programs, tuition, scholarships and intake months with source records.',
+      images: ['/og-image.jpg'],
+    },
     ...(Object.values(query).some(value => Array.isArray(value) ? value.some(Boolean) : Boolean(value)) ? { robots: { index: false, follow: true } } : {}),
   };
 }

@@ -53,6 +53,7 @@ export const serviceNavigation: SiteLink[] = [
   { name: 'Application support', href: '/your-study-journey#application-file', note: 'Document checks and application records' },
   { name: 'Visa readiness', href: '/your-study-journey#visa-to-registration', note: 'A checklist, not a visa guarantee' },
   { name: 'Parents and families', href: '/for-parents', note: 'Costs, safety and responsibilities explained' },
+  { name: 'Education consultant in Dhaka', href: '/education-consultant-dhaka', note: 'Visit the Dhanmondi office or call the team' },
   { name: 'Visit or contact us', href: '/contact', note: 'Dhanmondi office, phone and WhatsApp' },
 ];
 
@@ -71,6 +72,7 @@ export const proofNavigation: SiteLink[] = [
   { name: 'Fees and transparency', href: '/fees-and-transparency', note: 'Know who receives each payment' },
   { name: 'University verification', href: '/how-we-verify-universities', note: 'How recognition and records are checked' },
   { name: 'Student success stories', href: '/success-stories', note: 'Consent-based student outcomes' },
+  { name: 'Country service status', href: '/country-status', note: 'Which destinations are open and how they are verified' },
   { name: 'Complaints and resolution', href: '/complaints-and-resolution', note: 'Accountability and written response times' },
 ];
 

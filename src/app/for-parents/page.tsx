@@ -20,6 +20,19 @@ export const metadata: Metadata = {
   title: { absolute: 'Study Abroad Guide for Parents in Bangladesh | EduExpress International' },
   description: 'A practical guide for Bangladeshi parents comparing recognition, full study costs, student safety, application proof and visa responsibility.',
   alternates: { canonical: '/for-parents' },
+  openGraph: {
+    title: 'Study Abroad Guide for Parents in Bangladesh',
+    description: 'Compare recognition, full study costs, student safety, application proof and visa responsibility before your child commits.',
+    url: '/for-parents',
+    type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — parent and student guidance in Dhanmondi' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Study Abroad Guide for Parents in Bangladesh',
+    description: 'Compare recognition, full study costs, student safety, application proof and visa responsibility before your child commits.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 const parentChecks = [

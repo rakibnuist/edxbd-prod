@@ -7,6 +7,19 @@ export const metadata: Metadata = {
   title: { absolute: 'University Costs, Scholarships and ClearCost | EduExpress' },
   description: 'Choose a university and program, compare scholarship options, see itemized first year costs and download a branded ClearCost PDF.',
   alternates: { canonical: 'https://eduexpressint.com/fees-and-transparency' },
+  openGraph: {
+    title: 'University Costs, Scholarships and ClearCost',
+    description: 'Choose a program, apply a scholarship and see the itemized first-year cost in one branded sheet.',
+    url: '/fees-and-transparency',
+    type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — ClearCost breakdown' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'University Costs, Scholarships and ClearCost',
+    description: 'Choose a program, apply a scholarship and see the itemized first-year cost in one branded sheet.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default async function FeesAndTransparencyPage() {

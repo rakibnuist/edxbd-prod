@@ -6,6 +6,19 @@ export const metadata: Metadata = {
   title: 'Scholarship Guidance for Bangladeshi Students',
   description: 'Understand scholarship eligibility, coverage, renewal conditions, remaining costs and application readiness before choosing an overseas education route.',
   alternates: { canonical: '/scholarships' },
+  openGraph: {
+    title: 'Scholarship Guidance for Bangladeshi Students',
+    description: 'Understand eligibility, coverage, renewal conditions and the costs that remain after an award.',
+    url: '/scholarships',
+    type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — scholarship guidance' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Scholarship Guidance for Bangladeshi Students',
+    description: 'Understand eligibility, coverage, renewal conditions and the costs that remain after an award.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 const checks = [

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { serializeContent } from '@/lib/content-serialize';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
+import { sanitizeUpdateHtml } from '@/lib/content-html';
 
 export async function GET(request: NextRequest) {
   try {
@@ -98,7 +99,10 @@ export async function GET(request: NextRequest) {
     const normalizedAuthors = normalizeList(authors);
 
     return NextResponse.json({
-      updates: updates.map(update => serializeContent(update as unknown as Record<string, unknown>)),
+      updates: updates.map(update => {
+        const serialized = serializeContent(update as unknown as Record<string, unknown>);
+        return { ...serialized, content: sanitizeUpdateHtml(String(serialized.content ?? '')) };
+      }),
       totalCount,
       categories: ['All', ...normalizedCategories],
       authors: ['All', ...normalizedAuthors],

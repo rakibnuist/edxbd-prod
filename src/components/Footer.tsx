@@ -140,14 +140,17 @@ export default async function Footer() {
           <div className="flex flex-wrap gap-x-5 gap-y-2 font-semibold">
             <Link href="/about" className="hover:text-white">About</Link>
             <Link href="/contact" className="hover:text-white">Contact</Link>
+            <Link href="/education-consultant-dhaka" className="hover:text-white">Dhanmondi office</Link>
+            <Link href="/bn/study-in-china" className="hover:text-white" lang="bn">বাংলা গাইড</Link>
             <Link href="/partnership" className="hover:text-white">Partnership</Link>
             <Link href="/privacy" className="hover:text-white">Privacy</Link>
             <Link href="/terms" className="hover:text-white">Terms</Link>
             <Link href="/fees-and-transparency" className="hover:text-white">Fee policy</Link>
+            <Link href="/country-status" className="hover:text-white">Country status</Link>
             <Link href="/student-data-privacy" className="hover:text-white">Student data</Link>
             <Link href="/complaints-and-resolution" className="hover:text-white">Complaints</Link>
           </div>
-          <p>© {new Date().getFullYear()} EduExpress International Bangladesh. All rights reserved.</p>
+          <p>© EduExpress International Bangladesh. All rights reserved.</p>
         </div>
       </div>
     </footer>

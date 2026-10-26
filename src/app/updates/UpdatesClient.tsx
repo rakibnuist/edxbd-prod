@@ -8,7 +8,9 @@ import PageHeader from '@/components/PageHeader';
 import type { Update, UpdatesResponse } from '@/lib/types';
 import { categoryHref } from '@/lib/update-categories';
 
-const ITEMS_PER_PAGE = 9;
+// Keep the whole current library crawlable in one server-rendered page. The
+// pagination controls below remain for when the library grows past this size.
+const ITEMS_PER_PAGE = 24;
 
 const fmtDate = (update: Update) => {
   const iso = update.publishedAt || update.createdAt;

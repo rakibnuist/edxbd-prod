@@ -5,7 +5,7 @@ const get = async path => { const res = await fetch(origin + path); assert.equal
 const ahut = await get('/universities/ahut');
 assert.match(ahut, /<meta name="robots" content="index, follow"/);
 assert.match(ahut, /<link rel="canonical" href="https:\/\/eduexpressint.com\/universities\/ahut"/);
-assert.match(ahut, /<title>Anhui University of Technology \(AHUT\): Fees &amp; Scholarships \| EduExpress International<\/title>/);
+assert.match(ahut, /<title>Anhui University of Technology: Fees &amp; Scholarships \| EduExpress International<\/title>/);
 assert.equal((ahut.match(/<h1\b/g) || []).length, 1);
 for (const id of ['overview', 'programs', 'scholarships', 'fees', 'admission', 'documents', 'rankings']) {
   assert.ok(ahut.includes('href="#' + id + '"'), 'Crawlable link: ' + id);

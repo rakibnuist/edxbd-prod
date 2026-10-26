@@ -10,6 +10,19 @@ export const metadata: Metadata = {
   title: 'EduExpress Proof Library | Authorizations, Outcomes and Office Records',
   description: 'Inspect EduExpress company metrics, privacy-safe authorization and admission evidence, student feedback and real office details.',
   alternates: { canonical: '/proof-library' },
+  openGraph: {
+    title: 'EduExpress Proof Library — Authorizations, Outcomes and Office Records',
+    description: 'Inspect privacy-safe authorizations, admission evidence, student feedback and real office records.',
+    url: '/proof-library',
+    type: 'website',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — proof library' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'EduExpress Proof Library — Authorizations, Outcomes and Office Records',
+    description: 'Inspect privacy-safe authorizations, admission evidence, student feedback and real office records.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default async function ProofLibraryPage() {
