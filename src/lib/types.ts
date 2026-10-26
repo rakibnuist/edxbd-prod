@@ -291,8 +291,10 @@ export interface ConsultationButtonProps {
 }
 
 // Detail page passes the post plus its interlinked neighbors; clients must
-// tolerate `related` being absent (older call sites).
+// tolerate the optional extras being absent (time-sensitive values are
+// computed server-side to keep this component render-pure).
 export interface UpdateClientProps {
   update: Update;
   related?: Update[];
+  stale?: { enabled: boolean };
 }

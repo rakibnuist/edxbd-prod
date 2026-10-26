@@ -174,6 +174,16 @@ Deliberately NOT imported: User (local admin login stays), University/Program/Fe
 
 **Caution recorded:** most of the 18 legacy posts are expired intake announcements (March 2026 intake, dates from Jan 2024). They must NOT be bulk-stamped with verification data to force-publish stale intake claims. Counselor action: re-verify only what is still true for the 2027 cycle; rewrite the rest as fresh 2027 posts; archive the expired ones (expiresAt). The gate working as intended is the deliverable — it just blocked 18 unverified posts.
 
+#### Policy change — owner decision, 26 Oct 2026: "pull all data and show"
+
+Owner instruction: content volume for SEO; do not make the site visually depend on manual verification entry. Implementation (honest-data preserving):
+
+- New visibility rule `currentVisibleContentWhere()`: **published + not expired = publicly visible** on every public surface (list, detail, categories, RSS, sitemap, related). The strict set is renamed `currentVerifiedContentWhere()` and remains available for stamp decisions.
+- Trust display is now two-tier on every post: full governance data → green "Content verification" stamp (verified dates, reviewer, source count); incomplete data → amber "Editorial review in progress" note. No record ever shows a verification claim it doesn't have.
+- Posts older than ~12 months automatically get an "Intake dates change every cycle" box linking to `/china-intakes-deadlines` (auto-verified intake engine) — so expired 2024/2026 intake posts funnel visitors to the live 2027 calendar instead of acting on dead dates.
+- Admin publication gate (`contentPublicationErrors`) is UNCHANGED: newly created/edited content still requires full verification data. The relaxation only affects legacy rows already stored as published.
+- Consequence to manage: 18 legacy posts (5 of them 2024-dated intake announcements, several 2026-dated) are now visible publicly. Cleanup recommendation standing in the decisions list: set `expiresAt` on records that are factually past, rewrite still-relevant ones with current-cycle facts.
+
 Deferred (needs a Prisma schema change + migration on SQLite):
 - **Bengali `language` field on Content** — needed for the Stage-2 bn track (bn pillar + 3 money pages). `toContentData` already passes arbitrary fields, but the column does not exist. When added: default `en`, filter all public queries to `language: 'en'` or the active locale, add `hreflang` pairs on detail pages, and extend the RSS/XML surface (separate `bn` feed, or `language` in item metadata).
 - Follow-ups small enough to batch later: sources listed show a generic label (print hostnames), related-posts module for articles, admin list type filter is tolerance-OK for historical rows (DB is empty, so no backfill needed).

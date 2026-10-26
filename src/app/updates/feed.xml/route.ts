@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { currentPublishedContentWhere } from '@/lib/content-governance';
+import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { categoriesFromUpdate } from '@/lib/update-categories';
 
 // RSS 2.0 feed for the /updates library (updates + articles). Every entry has
@@ -21,7 +21,7 @@ const SITE_URL = 'https://eduexpressint.com';
 export async function GET() {
   try {
     const posts = await prisma.content.findMany({
-      where: { type: { in: ['update', 'article'] }, ...currentPublishedContentWhere() },
+      where: { type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
       orderBy: [{ publishedAt: 'desc' }, { updatedAt: 'desc' }],
       take: 30,
       select: {

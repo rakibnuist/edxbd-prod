@@ -4,7 +4,7 @@ import { cache } from 'react';
 import prisma from '@/lib/prisma';
 import UpdateClient from './UpdateClient';
 import type { Update } from '@/lib/types';
-import { currentPublishedContentWhere } from '@/lib/content-governance';
+import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { teamMembers } from '@/data/teamMembers';
 import { serializeUpdate } from '@/lib/content-records';
 import { categorySlug } from '@/lib/update-categories';
@@ -14,6 +14,14 @@ interface UpdatePageProps {
     slug: string;
   }>;
 }
+
+// Stale-intake helper (kept at module scope: render bodies must not call
+// impure clock functions directly — this plain helper owns them).
+const isStalePost = (iso: Date | string | null | undefined) => {
+  if (!iso) return false;
+  const time = iso instanceof Date ? iso.getTime() : new Date(iso).getTime();
+  return !Number.isNaN(time) && Date.now() - time > 365 * 24 * 60 * 60 * 1000;
+};
 
 const parseJsonCategories = (value: string | null): string[] => {
   try {
@@ -32,7 +40,7 @@ const getRelated = cache(async (current: NonNullable<Awaited<ReturnType<typeof g
     where: {
       id: { not: current.id },
       type: { in: ['update', 'article'] },
-      ...currentPublishedContentWhere(),
+      ...currentVisibleContentWhere(),
     },
     orderBy: [{ isFeatured: 'desc' }, { publishedAt: 'desc' }, { updatedAt: 'desc' }],
     take: 30,
@@ -55,7 +63,7 @@ const getRelated = cache(async (current: NonNullable<Awaited<ReturnType<typeof g
 });
 
 const getUpdate = cache((slug: string) => prisma.content.findFirst({
-  where: { slug, type: { in: ['update', 'article'] }, ...currentPublishedContentWhere() },
+  where: { slug, type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
 }));
 
 export async function generateMetadata({ params }: UpdatePageProps): Promise<Metadata> {
@@ -109,6 +117,10 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     }
 
     const related = await getRelated(update);
+
+    // Stale-intake routing (server-computed): posts older than a year point
+    // readers at the live verified intake calendar.
+    const stalePost = isStalePost(update.publishedAt || update.createdAt);
 
     const tags = update.tags ? JSON.parse(update.tags) : [];
     const categories = update.categories ? JSON.parse(update.categories) : [];
@@ -172,7 +184,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     return (
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-        <UpdateClient update={updateData} related={related} />
+        <UpdateClient update={updateData} related={related} stale={{ enabled: stalePost }} />
       </>
     );
 }

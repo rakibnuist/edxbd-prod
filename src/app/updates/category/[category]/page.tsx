@@ -10,8 +10,9 @@ import { categorySlug, categoriesFromUpdate } from '@/lib/update-categories';
 
 // Server-rendered category archive. Unlike the /updates list (client-side
 // filter), these URLs exist per category so Google and AI crawlers can land
-// directly on a topic. Same governance gate as the list: only
-// currentPublishedContentWhere() records render here.
+// directly on a topic. Visibility policy: every published, unexpired record
+// renders here (currentVisibleContentWhere) — verified ones carry the
+// verification stamp, others show the editorial-review note on their pages.
 export const revalidate = 300;
 
 type CategoryPageProps = { params: Promise<{ category: string }> };

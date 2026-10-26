@@ -142,24 +142,24 @@ export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProp
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {visible.map(update => (
               <article key={update.id} className="group overflow-hidden rounded-[1.5rem] border border-[#174f7a]/12 bg-white shadow-[0_8px_28px_rgba(8,38,60,.06)] transition hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(8,38,60,.11)]">
-                <Link href={`/updates/${update.slug}`} className="block">
+                <Link href={`/updates/${update.slug}`} className="block" aria-label={`Open ${update.type === 'article' ? 'article' : 'update'}: ${update.title}`}>
                   <div className="relative aspect-[16/9] overflow-hidden bg-[#08263c]">
                     {update.featuredImage ? <Image src={update.featuredImage} alt={update.title} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover transition duration-700 group-hover:scale-[1.03]" /> : <div className="grid h-full place-items-center text-sm font-black uppercase tracking-[0.15em] text-[#9bd8f3]">EduExpress update</div>}
                   </div>
-                  <div className="p-5">
-                    <div className="flex items-center justify-between gap-2">
-                      <Link href={categoryHref(primaryCategory(update))} className="text-[10px] font-black uppercase tracking-[0.13em] text-[#174f7a] hover:underline">{primaryCategory(update)}</Link>
-                      <span className="shrink-0 rounded-full border border-[#174f7a]/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-slate-500">{update.type === 'article' ? 'Article' : 'Update'}</span>
-                    </div>
-                    <h3 className="mt-3 line-clamp-2 text-xl font-extrabold leading-7 tracking-[-0.025em]">{update.title}</h3>
-                    {update.excerpt ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{update.excerpt}</p> : null}
-                    <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-3 text-sm text-slate-500">
-                      <span className="truncate">{update.author}</span>
-                      <span className="shrink-0">{fmtDate(update)}</span>
-                    </div>
-                    <span className="mt-4 inline-flex items-center gap-2 text-sm font-black text-[#174f7a]">{update.type === 'article' ? 'Read article' : 'Read update'} <ArrowRight size={14} className="transition group-hover:translate-x-1" /></span>
-                  </div>
                 </Link>
+                <div className="p-5">
+                  <div className="flex items-center justify-between gap-2">
+                    <Link href={categoryHref(primaryCategory(update))} className="text-[10px] font-black uppercase tracking-[0.13em] text-[#174f7a] hover:underline">{primaryCategory(update)}</Link>
+                    <span className="shrink-0 rounded-full border border-[#174f7a]/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-slate-500">{update.type === 'article' ? 'Article' : 'Update'}</span>
+                  </div>
+                  <h3 className="mt-3 line-clamp-2 text-xl font-extrabold leading-7 tracking-[-0.025em]"><Link href={update.slug ? `/updates/${update.slug}` : '#'} className="hover:underline">{update.title}</Link></h3>
+                  {update.excerpt ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{update.excerpt}</p> : null}
+                  <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-3 text-sm text-slate-500">
+                    <span className="truncate">{update.author}</span>
+                    <span className="shrink-0">{fmtDate(update)}</span>
+                  </div>
+                  <Link href={`/updates/${update.slug}`} className="mt-4 inline-flex items-center gap-2 text-sm font-black text-[#174f7a]">{update.type === 'article' ? 'Read article' : 'Read update'} <ArrowRight size={14} className="transition group-hover:translate-x-1" /></Link>
+                </div>
               </article>
             ))}
           </div>

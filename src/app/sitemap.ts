@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma';
 import { evidencePages } from '@/data/evidencePages';
 import { chinaGuidePages } from '@/data/chinaGuidePages';
 import { sitemapStaticRouteSlugs } from '@/data/staticRoutePages';
-import { currentPublishedContentWhere } from '@/lib/content-governance';
+import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { categoriesFromUpdate, categorySlug } from '@/lib/update-categories';
 import { activeCountries } from '@/lib/countries';
 import { destinationPath } from '@/lib/site-urls';
@@ -69,7 +69,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
     // Published updates/articles
     const updates = await prisma.content.findMany({
-      where: { type: { in: ['update', 'article'] }, ...currentPublishedContentWhere() },
+      where: { type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
       select: { slug: true, updatedAt: true, publishedAt: true, category: true, categories: true }
     });
     const updateRoutes = updates.map((post) => ({

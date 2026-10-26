@@ -3,7 +3,7 @@ import 'server-only';
 import { cache } from 'react';
 import prisma from '@/lib/prisma';
 import type { Update } from '@/lib/types';
-import { currentPublishedContentWhere } from '@/lib/content-governance';
+import { currentVisibleContentWhere } from '@/lib/content-governance';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -47,7 +47,7 @@ export const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content
 
 export const getPublishedUpdates = cache(async (take?: number, prioritizeFeatured = true): Promise<Update[]> => {
   const records = await prisma.content.findMany({
-    where: { type: { in: ['update', 'article'] }, ...currentPublishedContentWhere() },
+    where: { type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
     orderBy: prioritizeFeatured
       ? [{ isFeatured: 'desc' }, { publishedAt: 'desc' }, { updatedAt: 'desc' }]
       : [{ publishedAt: 'desc' }, { updatedAt: 'desc' }],

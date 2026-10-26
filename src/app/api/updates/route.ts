@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { serializeContent } from '@/lib/content-serialize';
-import { currentPublishedContentWhere } from '@/lib/content-governance';
+import { currentVisibleContentWhere } from '@/lib/content-governance';
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     // Build query — serve both updates (news) and articles (guides/blog posts)
     const where: any = {
       type: { in: ['update', 'article'] },
-      ...currentPublishedContentWhere(),
+      ...currentVisibleContentWhere(),
     };
     
     // Add search functionality
@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
     // Get unique categories and authors for filters (since SQLite doesn't have distinct for multiple fields, we fetch all unique from matching or all published)
     // To be efficient, just fetching the fields we need across all published updates.
     const allPublished = await prisma.content.findMany({
-      where: { type: { in: ['update', 'article'] }, ...currentPublishedContentWhere() },
+      where: { type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
       select: { category: true, categories: true, author: true }
     });
 

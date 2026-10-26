@@ -16,7 +16,7 @@ const fmtDate = (iso?: string) => {
   return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
 };
 
-export default function UpdateClient({ update, related = [] }: UpdateClientProps) {
+export default function UpdateClient({ update, related = [], stale }: UpdateClientProps) {
   const teamMember = teamMembers.find(m => m.name.toLowerCase() === (update.author || '').trim().toLowerCase());
   const handleShare = async () => {
     if (navigator.share) {
@@ -46,6 +46,10 @@ export default function UpdateClient({ update, related = [] }: UpdateClientProps
 
   // Calculate read time
   const readTime = Math.max(1, Math.ceil((update.content.length || 0) / 1000)) + ' min read';
+
+  // Posts older than ~12 months route readers to the live, verified intake
+  // calendar instead of dead dates (computed server-side in page.tsx).
+  const stalePost = stale?.enabled ?? false;
 
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-amber-100 selection:text-amber-900">
@@ -126,10 +130,10 @@ export default function UpdateClient({ update, related = [] }: UpdateClientProps
               </aside>
             ) : null}
 
-            {/* Visible governance stamp — the publication gate guarantees these
-                dates, so this block is the human-readable proof layer for
-                readers and AI assistants without extra work at render time */}
-            {(update.lastVerifiedAt || update.nextReviewAt) && (
+            {/* Trust block — two tiers. Fully verified records show the stamp;
+                everything else states plainly that editorial review is under
+                way. This renders on every post (the visible-content policy). */}
+            {update.lastVerifiedAt && update.nextReviewAt && update.reviewer && update.sourceUrls?.length ? (
               <aside className="mt-10 rounded-2xl border border-emerald-200 bg-emerald-50/60 p-6">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="size-5 text-emerald-600" />
@@ -142,7 +146,31 @@ export default function UpdateClient({ update, related = [] }: UpdateClientProps
                   {fmtDate(update.nextReviewAt) ? <> · Next scheduled review: {fmtDate(update.nextReviewAt)}</> : null}
                 </p>
               </aside>
+            ) : (
+              <aside className="mt-10 rounded-2xl border border-amber-200 bg-amber-50/60 p-6">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="size-5 text-amber-600" />
+                  <h2 className="text-base font-bold text-amber-900">Editorial review in progress</h2>
+                </div>
+                <p className="mt-3 text-sm font-medium leading-6 text-amber-900/80">
+                  Verified dates, the named reviewer and the official source list for this post will appear here as the content is re-checked for the current admissions cycle.
+                </p>
+              </aside>
             )}
+
+            {/* Stale-post care — old posts stay useful by pointing at the
+                live, auto-verified intake calendar instead of dead dates. */}
+            {stalePost ? (
+              <aside className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                <h2 className="text-base font-bold text-slate-900">Intake dates change every cycle</h2>
+                <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
+                  This post was published on {fmtDate(update.publishedAt || update.createdAt)}. Before you act on any deadline shown, check the live application calendar — it carries the current 2026/27 windows and their verification dates.
+                </p>
+                <Link href="/china-intakes-deadlines" className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#08263c] px-4 py-2 text-sm font-bold text-white">
+                  Check intake deadlines <ArrowRight size={14} />
+                </Link>
+              </aside>
+            ) : null}
           </article>
 
           {/* Related posts — interlinks the library by shared categories,
