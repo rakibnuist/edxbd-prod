@@ -101,11 +101,11 @@ const journey = [
 ];
 
 const otherDestinations = [
-  { name: 'Malaysia', image: '/images/destinations/malaysia.jpg', href: '/study-in-malaysia-from-bangladesh' },
-  { name: 'United Kingdom', image: '/images/destinations/united-kingdom.jpg', href: '/study-in-uk-from-bangladesh' },
-  { name: 'South Korea', image: '/images/destinations/south-korea.jpg', href: '/study-in-south-korea-from-bangladesh' },
-  { name: 'Hungary', image: '/images/destinations/hungary.jpg', href: '/study-in-hungary-from-bangladesh' },
-  { name: 'Finland', image: '/images/destinations/finland.jpg', href: '/study-in-finland-from-bangladesh' },
+  { name: 'Malaysia', image: '/images/destinations/malaysia.jpg', href: '/study-in-malaysia-from-bangladesh', status: 'Active destination' },
+  { name: 'United Kingdom', image: '/images/destinations/united-kingdom.jpg', href: '/study-in-uk-from-bangladesh', status: 'Active destination' },
+  { name: 'South Korea', image: '/images/destinations/south-korea.jpg', href: '/study-in-south-korea-from-bangladesh', status: 'Active destination' },
+  { name: 'Hungary', image: '/images/destinations/hungary.jpg', href: '/study-in-hungary-from-bangladesh', status: 'Active destination' },
+  { name: 'Finland', image: '/images/destinations/finland.jpg', href: '/study-in-finland-from-bangladesh', status: 'Active destination' },
 ];
 
 const faqs = [
@@ -477,6 +477,7 @@ export default async function Home() {
                 <Link key={destination.name} href={destination.href} className={`group relative min-h-[205px] overflow-hidden rounded-[1.5rem] ${index === 4 ? 'sm:col-span-2' : ''}`}>
                   <Image src={destination.image} alt={`Study in ${destination.name} from Bangladesh`} fill sizes={index === 4 ? '(max-width:1024px) 100vw, 45vw' : '(max-width:640px) 100vw, 23vw'} className="object-cover transition duration-500 group-hover:scale-[1.025]" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/90 via-transparent to-transparent" />
+                  <span className="absolute left-4 top-4 rounded-full border border-white/25 bg-[#08263c]/70 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm">{destination.status}</span>
                   <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-5 text-white"><strong className="text-lg">{destination.name}</strong><ArrowUpRight size={17} /></div>
                 </Link>
               ))}

@@ -3,15 +3,12 @@ import Link from 'next/link';
 import {
   ArrowRight,
   Calendar,
-  CheckCircle2,
-  Clock,
-  HelpCircle,
   ShieldCheck,
-  Building2,
-  FileCheck2,
-  AlertCircle,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import { getIntakeStatus, canApplyToIntake, type IntakeStatus } from '@/lib/intake-status';
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: { absolute: 'China University Intakes & Deadlines 2026/27 for Bangladesh Students' },
@@ -26,26 +23,50 @@ export const metadata: Metadata = {
   },
 };
 
+// 2027 windows follow each intake's typical admissions cycle (applications open
+// the previous autumn; university deadlines as tracked with admissions offices).
+// getIntakeStatus() derives Open/Closing/Next Intake automatically; if verification
+// expires before a counselor re-checks the window, the card flips to
+// "Under Verification" instead of showing a stale promise.
+const VERIFIED_ON = '26 October 2026';
+const NEXT_SCHEDULED_REVIEW = 'January 2027 (before the March deadline window)';
+
+function intakeStatus(detail: { opensAt: string; deadline: string; verifiedUntil: string }): IntakeStatus {
+  return getIntakeStatus({ opensAt: detail.opensAt, deadline: detail.deadline, verifiedUntil: detail.verifiedUntil });
+}
+
 const intakes = [
   {
-    name: 'September Intake (Autumn Intake) — Main Intake',
+    name: 'September 2027 Intake (Autumn) — Main Intake',
     applicationsOpen: 'October / November (Previous Year)',
     cscDeadline: 'December – March',
     universityDeadline: 'April – June',
     classesStart: 'September',
     programs: 'All Bachelor’s, Master’s, PhD, and MBBS degree programs.',
     badge: 'Largest Selection & Full CSC Allocation',
+    status: intakeStatus({ opensAt: '2026-10-31', deadline: '2027-06-30', verifiedUntil: '2027-02-28' }),
+    activeCampaignHref: null,
   },
   {
-    name: 'March Intake (Spring Intake) — Secondary Intake',
+    name: 'March 2027 Intake (Spring) — Secondary Intake',
     applicationsOpen: 'July / August (Previous Year)',
     cscDeadline: 'Limited CSC Quotas',
     universityDeadline: 'December – January',
     classesStart: 'March',
     programs: 'Select Bachelor’s, Master’s, and Chinese Language preparatory courses.',
     badge: 'Faster Entry (No 1-Year Gap)',
+    status: intakeStatus({ opensAt: '2026-08-01', deadline: '2027-01-31', verifiedUntil: '2027-01-31' }),
+    activeCampaignHref: '/china-march-2027-intake',
   },
 ];
+
+const statusStyles: Record<IntakeStatus, string> = {
+  Open: 'bg-[#e5f2eb] text-[#17624f] border-[#b9d8c9]',
+  Closing: 'bg-amber-50 text-[#8a5a00] border-amber-200',
+  Closed: 'bg-slate-100 text-slate-500 border-slate-200',
+  'Next Intake': 'bg-[#e9f7fd] text-[#174f7a] border-[#c3dcec]',
+  'Under Verification': 'bg-slate-100 text-slate-600 border-slate-200',
+};
 
 const timelineSteps = [
   { step: '1. Fit Assessment & Document Prep', window: '4-6 Months Before Intake', detail: 'Gather SSC/HSC/Degree transcripts, passport, physical exam, and police clearance.' },
@@ -99,9 +120,15 @@ export default function ChinaIntakesDeadlinesPage() {
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             {intakes.map((i) => (
               <div key={i.name} className="rounded-3xl border-2 border-[#08263c] bg-white p-8 shadow-sm">
-                <span className="inline-block rounded-full bg-[#174f7a] px-4 py-1 text-xs font-bold text-white uppercase tracking-wider mb-4">
-                  {i.badge}
-                </span>
+                <div className="mb-4 flex flex-wrap items-center gap-2">
+                  <span className="inline-block rounded-full bg-[#174f7a] px-4 py-1 text-xs font-bold text-white uppercase tracking-wider">
+                    {i.badge}
+                  </span>
+                  <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider ${statusStyles[i.status]}`} data-intake-status={i.status}>
+                    <Calendar size={12} aria-hidden="true" />
+                    {i.status}
+                  </span>
+                </div>
                 <h3 className="font-serif text-2xl font-bold text-[#08263c]">{i.name}</h3>
                 <div className="mt-6 space-y-3 text-sm text-slate-700">
                   <p><strong>Applications Open:</strong> {i.applicationsOpen}</p>
@@ -110,9 +137,22 @@ export default function ChinaIntakesDeadlinesPage() {
                   <p><strong>Classes Start:</strong> {i.classesStart}</p>
                   <p className="border-t border-slate-200 pt-3 text-xs text-slate-600"><strong>Available Courses:</strong> {i.programs}</p>
                 </div>
+                {canApplyToIntake(i.status) && (
+                  i.activeCampaignHref
+                    ? <Link href={i.activeCampaignHref} className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-[#f2b544] px-5 text-sm font-bold text-[#08263c] transition hover:bg-[#e9a92f]">See the March 2027 university shortlist <ArrowRight size={16} /></Link>
+                    : <a href="#intake-assessment" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg border-2 border-[#174f7a] px-5 text-sm font-bold text-[#174f7a] transition hover:bg-[#e9f7fd]">Start your September 2027 plan <ArrowRight size={16} /></a>
+                )}
+                {i.status === 'Under Verification' && (
+                  <p className="mt-6 rounded-lg bg-slate-50 p-3 text-xs leading-5 text-slate-600">We are re-verifying this application window with admissions offices. Ask a counsellor for the current deadline.</p>
+                )}
               </div>
             ))}
           </div>
+
+          <p className="mt-8 text-center text-xs leading-6 text-slate-500">
+            Window status checked on <strong>{VERIFIED_ON}</strong> against university admissions-office updates, re-checked {NEXT_SCHEDULED_REVIEW}.
+            If a window is awaiting re-verification we label it &ldquo;Under Verification&rdquo; rather than show a stale deadline.
+          </p>
         </div>
       </section>
 
@@ -144,9 +184,9 @@ export default function ChinaIntakesDeadlinesPage() {
       <section className="px-5 py-16 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1000px] text-center">
           <ShieldCheck size={36} className="mx-auto text-[#174f7a]" />
-          <h2 className="mt-4 font-serif text-3xl font-bold text-[#08263c]">Visa-First Guarantee</h2>
+          <h2 className="mt-4 font-serif text-3xl font-bold text-[#08263c]">Visa-First Service Terms</h2>
           <p className="mt-4 text-slate-600 leading-relaxed">
-            EduExpress International tracks intake windows directly with university admissions offices. No file opening charge, and zero service fee until your visa is approved.
+            EduExpress International tracks intake windows directly with university admissions offices. No file opening charge, and no EduExpress service fee before your China visa approval. University, embassy and other third-party charges required earlier are itemised in writing before you proceed.
           </p>
         </div>
       </section>
