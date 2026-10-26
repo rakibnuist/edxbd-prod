@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { ArrowRight, CheckCircle2, Loader2, MessageCircle } from 'lucide-react';
-import { captureUtmParameters, getUtmParameters, trackAssessmentStart, trackAssessmentSubmit } from '@/lib/conversion-events';
+import { analyticsAllowed, captureUtmParameters, createConversionEventId, getUtmParameters, trackAssessmentStart, trackAssessmentSubmit } from '@/lib/conversion-events';
 import { universityEnquiryPayload, validateUniversityEnquiry, type UniversityEnquiryFields, type UniversityEnquiryErrors } from '@/lib/university-enquiry';
 
 type Props = {
@@ -27,7 +27,11 @@ export default function UniversityEnquiryForm({ university, programs, selectedPr
   const submitting = useRef(false);
   const formRef = useRef<HTMLFormElement>(null);
   const selected = programs.find(program => program.id === selectedProgramId);
-  useEffect(() => { captureUtmParameters(); setReady(true); }, []);
+  useEffect(() => {
+    captureUtmParameters();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- gate submission until after hydration
+    setReady(true);
+  }, []);
   const start = () => {
     if (started.current) return;
     started.current = true;
@@ -46,13 +50,14 @@ export default function UniversityEnquiryForm({ university, programs, selectedPr
     const firstError = Object.keys(nextErrors)[0];
     if (firstError) { (formRef.current?.elements.namedItem(firstError) as HTMLElement | null)?.focus(); return; }
     submitting.current = true; setStatus('pending');
+    const metaEventId = createConversionEventId('lead');
     try {
       const response = await fetch('/api/leads', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...universityEnquiryPayload(fields, { university: university.name, country: university.country, program: selected?.name, level: selected?.level, scholarship }, new Date().toISOString()), landingPage: window.location.pathname, utm: getUtmParameters() }),
+        body: JSON.stringify({ ...universityEnquiryPayload(fields, { university: university.name, country: university.country, program: selected?.name, level: selected?.level, scholarship }, new Date().toISOString(), { eventId: metaEventId, trackingConsent: analyticsAllowed() }), landingPage: window.location.pathname, utm: getUtmParameters() }),
       });
       if (!response.ok) throw new Error('We couldn’t send your enquiry. Your details are saved here; please try again.');
-      trackAssessmentSubmit({ destination: university.country, label: 'university_profile_enquiry', university_slug: university.slug });
+      trackAssessmentSubmit({ destination: university.country, label: 'university_profile_enquiry', university_slug: university.slug, eventId: metaEventId });
       setStatus('success');
     } catch (error) {
       setRequestError(error instanceof Error ? error.message : 'Please try sending your enquiry again.');

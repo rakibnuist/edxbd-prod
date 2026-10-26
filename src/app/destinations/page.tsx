@@ -6,47 +6,20 @@ import { SITE_URL, destinationPath } from '@/lib/site-urls';
 
 export const metadata: Metadata = {
   title: 'Study Abroad Destinations for Bangladeshi Students',
-  description: 'Compare active EduExpress destination services for China, Malta, Hungary, Cyprus, South Korea, the United Kingdom, Georgia, Greece, Malaysia and Thailand.',
-  keywords: [
-    'study abroad destinations',
-    'international universities',
-    'scholarship opportunities',
-    'UK universities',
-    'China universities',
-    'South Korea education',
-    'Hungary study',
-    'Cyprus universities',
-    'Georgia universities',
-    'Malta education',
-    'Greece education',
-    'Malaysia education',
-    'Thailand education',
-    'study abroad programs',
-    'international education',
-    'student visa assistance',
-    'education consultancy',
-    'overseas education'
-  ],
+  description: 'Compare 12 active EduExpress destination services across Asia and Europe on education fit, recognition, clear costs and visa readiness.',
   openGraph: {
     title: 'Study Abroad Destinations for Bangladeshi Students',
-    description: 'Compare ten active destination services with education fit, clear costs and visa readiness.',
+    description: 'Compare 12 active destination services with education fit, clear costs and visa readiness.',
     type: 'website',
     locale: 'en_US',
     siteName: 'EduExpress International',
-    images: [
-      {
-        url: '/images/study-abroad-destinations.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Study Abroad Destinations - Top Universities & Scholarship Opportunities',
-      },
-    ],
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — study abroad destinations' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Study Abroad Destinations for Bangladeshi Students',
-    description: 'Compare ten active destination services with education fit, clear costs and visa readiness.',
-    images: ['/images/study-abroad-destinations.jpg'],
+    description: 'Compare 12 active destination services with education fit, clear costs and visa readiness.',
+    images: ['/og-image.jpg'],
   },
   robots: {
     index: true,

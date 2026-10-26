@@ -30,12 +30,6 @@ export default function AdminDashboardNew() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isAuthenticated && !authLoading) {
-      fetchData();
-    }
-  }, [isAuthenticated, authLoading]);
-
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -71,6 +65,13 @@ export default function AdminDashboardNew() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated && !authLoading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- initial async data load
+      fetchData();
+    }
+  }, [isAuthenticated, authLoading]);
 
   if (authLoading) {
     return (

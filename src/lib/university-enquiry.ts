@@ -10,7 +10,12 @@ export function validateUniversityEnquiry(fields: UniversityEnquiryFields): Univ
   if (!fields.consent) errors.consent = 'Please agree so a counselor can contact you about this enquiry.';
   return errors;
 }
-export function universityEnquiryPayload(fields: UniversityEnquiryFields, context: { university: string; country: string; program?: string; level?: string; scholarship?: string }, consentTimestamp: string) {
+export function universityEnquiryPayload(
+  fields: UniversityEnquiryFields,
+  context: { university: string; country: string; program?: string; level?: string; scholarship?: string },
+  consentTimestamp: string,
+  options: { eventId?: string; trackingConsent?: boolean } = {},
+) {
   const destination = context.country === 'United Kingdom' ? 'uk' : context.country.toLowerCase().replace(/\s+/g, '-');
   return {
     name: fields.name.trim(), email: fields.email.trim().toLowerCase(), phone: fields.phone.trim(), country: context.country,
@@ -20,6 +25,7 @@ export function universityEnquiryPayload(fields: UniversityEnquiryFields, contex
     notes: `University: ${context.university} | University profile enquiry`,
     assessment: { subject: context.program || '', intake: '2027 planning', preferredCountries: [destination] },
     consent: fields.consent, consentTimestamp, consentPolicyVersion: UNIVERSITY_ENQUIRY_PRIVACY_VERSION,
-    trackingConsent: false,
+    trackingConsent: options.trackingConsent === true,
+    ...(options.eventId ? { metaEventId: options.eventId } : {}),
   };
 }

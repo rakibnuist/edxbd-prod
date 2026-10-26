@@ -16,7 +16,9 @@ import {
   Sparkles,
 } from 'lucide-react';
 import {
+  analyticsAllowed,
   captureUtmParameters,
+  createConversionEventId,
   getUtmParameters,
   trackAssessmentStart,
   trackAssessmentSubmit,
@@ -158,6 +160,7 @@ export default function DecisionLab() {
     if (!form.name || !form.email || !form.phone) return setError('Add your name, email and WhatsApp or phone number.');
     if (!form.consent) return setError('Agree to the privacy policy so a counselor can contact you.');
     setSubmitting(true);
+    const metaEventId = createConversionEventId('lead');
     try {
       const response = await fetch('/api/leads', {
         method: 'POST',
@@ -185,13 +188,15 @@ export default function DecisionLab() {
           consentPolicyVersion: '2026-07-19',
           landingPage: window.location.pathname,
           utm: getUtmParameters(),
+          trackingConsent: analyticsAllowed(),
+          metaEventId,
         }),
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         throw new Error(data.error || 'Submission failed');
       }
-      trackAssessmentSubmit({ destination: form.destination, label: 'decision_lab', priority: form.priority });
+      trackAssessmentSubmit({ destination: form.destination, label: 'decision_lab', priority: form.priority, eventId: metaEventId });
       setScreen('done');
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : 'Something went wrong. Please try again.');

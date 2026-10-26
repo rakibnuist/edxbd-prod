@@ -23,7 +23,11 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
   const busy = useRef(false);
   const started = useRef(false);
   const currentFields = { ...fields, route };
-  useEffect(() => { captureUtmParameters(); setReady(true); }, []);
+  useEffect(() => {
+    captureUtmParameters();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- gate submission until after hydration
+    setReady(true);
+  }, []);
   useEffect(() => { if (status === 'done') headingRef.current?.focus(); }, [status]);
   const start = () => { if (!started.current) { started.current = true; trackAssessmentStart(context()); } };
   const update = <K extends keyof MarchEnquiryFields>(key: K, value: MarchEnquiryFields[K]) => {

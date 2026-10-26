@@ -31,38 +31,6 @@ export const metadata: Metadata = {
     template: "%s | EduExpress International"
   },
   description: "Bangladesh's Evidence First Education Consultancy. Compare education quality, recognition, total costs and career fit with written proof.",
-  keywords: [
-    "study abroad",
-    "education consultancy",
-    "scholarship assistance",
-    "UK universities",
-    "China universities",
-    "South Korea education",
-    "Hungary study",
-    "visa assistance",
-    "international education",
-    "Bangladesh students",
-    "EduExpress International",
-    "free consultation",
-    "study abroad Bangladesh",
-    "overseas education",
-    "university admission",
-    "student visa",
-    "education consultant",
-    "study abroad consultant",
-    "scholarship consultant",
-    "international student advisor",
-    "study visa consultant",
-    "education abroad",
-    "foreign education",
-    "study overseas",
-    "university application",
-    "student visa application",
-    "education migration",
-    "study permit",
-    "student visa help",
-    "education guidance"
-  ],
   authors: [{ name: "EduExpress International", url: "https://eduexpressint.com" }],
   creator: "EduExpress International",
   publisher: "EduExpress International",
@@ -114,6 +82,17 @@ export const metadata: Metadata = {
   },
   category: 'education',
   classification: 'Education Services',
+  verification: {
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : {}),
+    ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION
+      ? {
+          other: {
+            ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } : {}),
+            ...(process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION ? { 'facebook-domain-verification': process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION } : {}),
+          },
+        }
+      : {}),
+  },
   other: {
     'msapplication-TileColor': '#174f7a',
     'msapplication-config': '/browserconfig.xml',

@@ -59,6 +59,7 @@ export default function TeamsAdminPage() {
     setLoading(false);
   }, [authenticatedFetch]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- load() resolves state through async data fetch
   useEffect(() => { load(); }, [load]);
 
   const uploadPhoto = async (file: File, id: string | 'new') => {

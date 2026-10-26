@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { trackDashboardView, trackContentManagement } from '@/lib/analytics';
 import { Content } from '@/lib/types';
@@ -19,7 +19,6 @@ const isPubliclyCurrent = (content: Content) => {
 export default function ContentPage() {
   const { authenticatedFetch } = useAuth();
   const [contents, setContents] = useState<Content[]>([]);
-  const [filteredContents, setFilteredContents] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingContent, setEditingContent] = useState<Content | null>(null);
@@ -53,13 +52,7 @@ export default function ContentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  useEffect(() => {
-    trackDashboardView('content_management');
-    fetchContents();
-  }, []);
-
-  // Filter contents based on selected filters
-  useEffect(() => {
+  const filteredContents = useMemo(() => {
     let filtered = [...contents];
 
     // Filter by category
@@ -80,7 +73,7 @@ export default function ContentPage() {
       filtered = filtered.filter(content => content.isPublished === isPublished);
     }
 
-    setFilteredContents(filtered);
+    return filtered;
   }, [contents, selectedCategory, selectedType, selectedStatus]);
 
   const showMessage = (type: 'success' | 'error', text: string) => {
@@ -138,6 +131,12 @@ export default function ContentPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    trackDashboardView('content_management');
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial async data load
+    fetchContents();
+  }, []);
 
   const handleImageUpload = async (file: File) => {
     setIsUploadingImage(true);

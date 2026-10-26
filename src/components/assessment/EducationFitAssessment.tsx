@@ -13,7 +13,9 @@ import {
   Sparkles,
 } from 'lucide-react';
 import {
+  analyticsAllowed,
   captureUtmParameters,
+  createConversionEventId,
   getUtmParameters,
   trackAssessmentStart,
   trackAssessmentSubmit,
@@ -246,6 +248,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
 
     setStatus('submitting');
     const primaryDestination = form.preferredCountries.find(country => country !== 'not-sure') || 'not-sure';
+    const metaEventId = createConversionEventId('lead');
 
     try {
       const response = await fetch('/api/leads', {
@@ -278,6 +281,8 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
           consentPolicyVersion: PRIVACY_VERSION,
           landingPage: window.location.pathname,
           utm: getUtmParameters(),
+          trackingConsent: analyticsAllowed(),
+          metaEventId,
         }),
       });
 
@@ -286,7 +291,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
         throw new Error(data.error || 'Submission failed');
       }
 
-      trackAssessmentSubmit({ destination: primaryDestination, label: eventLabel });
+      trackAssessmentSubmit({ destination: primaryDestination, label: eventLabel, eventId: metaEventId });
       setStatus('idle');
       setScreen('done');
     } catch (error) {

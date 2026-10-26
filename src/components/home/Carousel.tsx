@@ -80,7 +80,7 @@ export default function Carousel({ label, items, itemClassName = '', className =
             role="group"
             aria-roledescription="slide"
             aria-label={`${index + 1} of ${items.length}`}
-            className={`snap-start ${itemClassName}`}
+            className={`snap-start shrink-0 ${itemClassName}`}
           >
             {item}
           </div>

@@ -85,7 +85,7 @@ export default function PartnershipClient() {
             </h1>
 
             <p className="mt-7 max-w-2xl border-l-4 border-[#64b5df] pl-5 text-base leading-7 text-slate-700 md:text-lg md:leading-8">
-              Choose a documented cooperation model for ten active destinations or the flagship China route, with responsibilities and commercial terms confirmed before work begins.
+              Choose a documented cooperation model for 12 active destinations — China plus 11 side destinations — or the flagship China route, with responsibilities and commercial terms confirmed before work begins.
             </p>
 
             <div className="mt-9 flex flex-col sm:flex-row gap-4">

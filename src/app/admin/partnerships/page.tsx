@@ -150,9 +150,10 @@ const AdminPartnershipsPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, statusFilter, typeFilter, countryFilter, priorityFilter, searchTerm]);
+  }, [authenticatedFetch, currentPage, statusFilter, typeFilter, countryFilter, priorityFilter, searchTerm]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial async data load
     fetchPartnerships();
   }, [fetchPartnerships]);
 

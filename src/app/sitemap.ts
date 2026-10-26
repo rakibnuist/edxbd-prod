@@ -69,7 +69,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
     // Published updates/articles
     const updates = await prisma.content.findMany({
-      where: { type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
+      where: { type: { in: ['update', 'article'] }, archivedAt: null, ...currentVisibleContentWhere() },
       select: { slug: true, updatedAt: true, publishedAt: true, category: true, categories: true }
     });
     const updateRoutes = updates.map((post) => ({

@@ -60,6 +60,12 @@ export default async function CountryPage({ params }: Props) {
   // Structured data — matches the standard used across the China cluster so
   // destination pages are eligible for the same rich results.
   const pageUrl = `https://eduexpressint.com/study-in-${slug}-from-bangladesh`;
+  // Keep schema freshness aligned with the published verification month rather
+  // than a hard-coded date.
+  const verifiedDate = country.reviewerInfo?.lastVerifiedDate ? new Date(`${country.reviewerInfo.lastVerifiedDate} 1`) : null;
+  const dateModified = verifiedDate && !Number.isNaN(verifiedDate.getTime())
+    ? verifiedDate.toISOString().slice(0, 10)
+    : '2026-07-19';
   const structuredData = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -70,7 +76,7 @@ export default async function CountryPage({ params }: Props) {
         name: `Study in ${country.name} from Bangladesh`,
         description: country.metaDescription || `Education fit, institution checks, clear costs and visa readiness for studying in ${country.name}.`,
         inLanguage: 'en-BD',
-        dateModified: '2026-07-19',
+        dateModified,
         reviewedBy: { '@id': 'https://eduexpressint.com/#organization' },
         breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
         isPartOf: { '@id': 'https://eduexpressint.com/#organization' },

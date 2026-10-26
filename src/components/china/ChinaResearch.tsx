@@ -17,6 +17,7 @@ function Sources({ ids, sources }: { ids: string[]; sources: ChinaStudyResearch[
 export default async function ChinaResearch() {
   const research = await getChinaStudyResearch();
   if (!research) return null;
+  // eslint-disable-next-line react-hooks/purity -- async server component: runs once per request, not on client re-renders
   const stale = new Date(research.nextReviewAt).getTime() < Date.now();
 
   return <section className="bg-white px-5 py-12 text-[#08263c] sm:px-8 lg:px-12" id="china-study-guide">

@@ -42,11 +42,6 @@ export default function TestimonialsPage() {
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [formError, setFormError] = useState('');
 
-  useEffect(() => {
-    trackDashboardView('testimonials_management');
-    fetchTestimonials();
-  }, []);
-
   const fetchTestimonials = async () => {
     try {
       const response = await authenticatedFetch('/api/admin/testimonials');
@@ -63,6 +58,12 @@ export default function TestimonialsPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    trackDashboardView('testimonials_management');
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial async data load
+    fetchTestimonials();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

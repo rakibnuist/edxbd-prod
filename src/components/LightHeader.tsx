@@ -94,6 +94,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset menu state when the route changes
     setMobileOpen(false);
     setOpenMenu(null);
   }, [pathname]);
@@ -132,6 +133,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
             <span className="flex items-center gap-2 text-white/70"><Clock3 size={13} /> {hours}</span>
           </div>
           <div className="flex items-center gap-6">
+            <Link href="/bn/study-in-china" hrefLang="bn-BD" lang="bn" className="font-bold text-white/90 transition-colors hover:text-white">বাংলা</Link>
             <a href={`tel:${phone.replace(/\s/g, '')}`} className="flex items-center gap-2 font-semibold text-white/90 transition-colors hover:text-white"><Phone size={13} /> {formatBangladeshPhone(phone)}</a>
             {office?.phoneSecondary && <a href={`tel:${office.phoneSecondary}`} className="hidden font-semibold text-white/90 transition-colors hover:text-white 2xl:flex"><Phone size={13} /> {formatBangladeshPhone(office.phoneSecondary)}</a>}
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-bold text-[#8fe5ac] transition-colors hover:text-white"><MessageCircle size={13} /> WhatsApp</a>
@@ -233,6 +235,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
               <Link href="/education-fit-assessment" className="flex min-h-14 items-center justify-center gap-2 rounded-xl bg-[#f4a024] px-3 text-center text-sm font-extrabold text-[#08263c]">Free assessment <ArrowRight size={15} /></Link>
               <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex min-h-14 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-3 text-center text-sm font-extrabold text-[#07301a]"><MessageCircle size={17} /> WhatsApp</a>
             </div>
+            <Link href="/bn/study-in-china" hrefLang="bn-BD" lang="bn" className="mt-3 flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#1767a0]/20 bg-[#eef8fe] px-3 text-center text-sm font-extrabold text-[#1767a0]">বাংলায় চীনে পড়াশোনার গাইড</Link>
 
             <div className="mt-6 divide-y divide-slate-100 border-y border-slate-100">
               {menus.map(menu => {

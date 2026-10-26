@@ -14,7 +14,15 @@ export async function generateMetadata(): Promise<Metadata> {
   const content = await getChinaStudyHub();
   return {
     title: { absolute: content.metaTitle }, description: content.description,
-    alternates: { canonical }, robots: { index: true, follow: true },
+    alternates: {
+      canonical,
+      languages: {
+        'en-BD': canonical,
+        'bn-BD': `${siteUrl}/bn/study-in-china`,
+        'x-default': canonical,
+      },
+    },
+    robots: { index: true, follow: true },
     openGraph: { title: 'Study in China from Bangladesh', description: content.description, url: canonical, type: 'website', locale: 'en_GB', siteName: 'EduExpress International', images: [{ url: content.photos.hero.src, width: content.photos.hero.width, height: content.photos.hero.height, alt: content.photos.hero.alt }] },
     twitter: { card: 'summary_large_image', title: 'Study in China from Bangladesh', description: content.description, images: [content.photos.hero.src] },
   };

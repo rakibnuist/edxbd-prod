@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FormEvent, useRef, useState } from 'react';
 import { ArrowRight, CheckCircle2, LockKeyhole, ShieldCheck } from 'lucide-react';
 import { trackAssessmentSubmit, trackFormFieldFocus, trackFormStart } from '@/lib/analytics';
+import { analyticsAllowed, createConversionEventId } from '@/lib/conversion-events';
 
 type FormState = {
   name: string;
@@ -62,6 +63,7 @@ export default function ChinaCampaignLeadForm() {
     if (!formData.consent) return setError('Please confirm that we may contact you about this assessment.');
 
     setIsSubmitting(true);
+    const metaEventId = createConversionEventId('lead');
 
     try {
       const response = await fetch('/api/contact', {
@@ -81,6 +83,8 @@ export default function ChinaCampaignLeadForm() {
           consentPolicyVersion: '2026-07-19',
           landingPage: window.location.pathname,
           utm: Object.fromEntries(new URLSearchParams(window.location.search)),
+          trackingConsent: analyticsAllowed(),
+          metaEventId,
         }),
       });
 
@@ -94,6 +98,7 @@ export default function ChinaCampaignLeadForm() {
         target_level: formData.program,
         qualification: formData.qualification,
         source: 'china_campaign_landing',
+        eventId: metaEventId,
       });
       setIsSubmitted(true);
     } catch (submissionError) {

@@ -60,7 +60,7 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
         highlight={highlightPart}
         description={update.excerpt || "Latest updates and opportunities from EduExpress International"}
         icon={Calendar}
-        badgeText={update.category || "Update"}
+        badgeText={stale?.archived ? 'Closed intake · Archive' : update.category || 'Update'}
       >
         <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm font-medium text-slate-600">
           <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
@@ -111,6 +111,22 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
               </div>
             )}
+
+            {/* Closed-intake notice — shown above the article so nobody acts on
+                an expired deadline. The URL stays live for transparency. */}
+            {stale?.archived ? (
+              <aside className="mb-10 rounded-2xl border-2 border-amber-300 bg-amber-50 p-5 sm:p-6" aria-label="Closed intake notice">
+                <p className="text-xs font-black uppercase tracking-[.14em] text-amber-800">Archive · closed intake</p>
+                <h2 className="mt-2 text-xl font-extrabold tracking-tight text-slate-900">This intake has closed</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-700">
+                  This page records an earlier admissions window and is kept for transparency. The deadlines, fees and scholarship terms below may no longer be available. Use the live calendar before you act.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <Link href="/china-march-2027-intake" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[#08263c] px-4 text-sm font-bold text-white">See the March 2027 intake <ArrowRight size={14} /></Link>
+                  <Link href="/china-intakes-deadlines" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#08263c]/20 bg-white px-4 text-sm font-bold text-[#08263c]">Check live deadlines <ArrowRight size={14} /></Link>
+                </div>
+              </aside>
+            ) : null}
 
             {/* Content - Prose Slate (Dark text) */}
             <div className="update-content-fix prose prose-lg md:prose-xl max-w-none prose-slate prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-slate-900 prose-p:leading-8 prose-p:text-slate-600 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-a:font-semibold prose-img:rounded-2xl prose-img:shadow-md prose-blockquote:border-l-4 prose-blockquote:border-amber-500 prose-blockquote:bg-amber-50 prose-blockquote:text-slate-700 prose-blockquote:px-8 prose-blockquote:py-6 prose-blockquote:my-10 prose-blockquote:not-italic prose-blockquote:rounded-r-xl prose-strong:text-slate-900">
@@ -163,7 +179,7 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
                 of dead dates. */}
             {stalePost ? (
               <aside className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-                <h2 className="text-base font-bold text-slate-900">Intake dates change every cycle</h2>
+                <h2 className="text-base font-bold text-slate-900">{stale?.archived ? 'This post is from an earlier intake' : 'Intake dates change every cycle'}</h2>
                 <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
                   This post was published on {fmtDate(update.publishedAt || update.createdAt)}. Before you act on any deadline shown, check the live application calendar — it carries the current 2026/27 windows and their verification dates.
                 </p>

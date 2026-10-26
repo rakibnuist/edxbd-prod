@@ -78,7 +78,7 @@ export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProp
       const matchesCategory = category === 'All' || primaryCategory(update).toLowerCase() === category.toLowerCase() || update.categories?.some(item => item.toLowerCase() === category.toLowerCase());
       const matchesSearch = !query || `${update.title} ${update.excerpt || ''} ${update.content || ''}`.toLowerCase().includes(query);
       return matchesCategory && matchesSearch;
-    });
+    }).sort((a, b) => Number(Boolean(a.archived)) - Number(Boolean(b.archived)));
   }, [category, currentUpdates, search]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
@@ -152,7 +152,11 @@ export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProp
                 <div className="p-5">
                   <div className="flex items-center justify-between gap-2">
                     <Link href={categoryHref(primaryCategory(update))} className="text-[10px] font-black uppercase tracking-[0.13em] text-[#174f7a] hover:underline">{primaryCategory(update)}</Link>
-                    <span className="shrink-0 rounded-full border border-[#174f7a]/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-slate-500">{update.type === 'article' ? 'Article' : 'Update'}</span>
+                    {update.archived ? (
+                      <span className="shrink-0 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-amber-800">Archive · closed</span>
+                    ) : (
+                      <span className="shrink-0 rounded-full border border-[#174f7a]/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-slate-500">{update.type === 'article' ? 'Article' : 'Update'}</span>
+                    )}
                   </div>
                   <h3 className="mt-3 line-clamp-2 text-xl font-extrabold leading-7 tracking-[-0.025em]"><Link href={update.slug ? `/updates/${update.slug}` : '#'} className="hover:underline">{update.title}</Link></h3>
                   {update.excerpt ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{update.excerpt}</p> : null}

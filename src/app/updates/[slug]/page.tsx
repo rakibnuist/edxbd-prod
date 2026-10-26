@@ -87,10 +87,12 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
     return {
       title: update.metaTitle || update.title,
       description: update.metaDescription || update.excerpt || plainBody.slice(0, 160),
-      keywords: tags.join(', '),
       alternates: { canonical: `/updates/${slug}` },
+      // Closed intakes stay reachable for transparency and backlinks, but they
+      // must not compete in search with the current intake pages.
+      robots: { index: !update.archivedAt, follow: true },
       openGraph: {
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
+        images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
         title: update.title,
         description: update.excerpt || plainBody.slice(0, 160),
         type: 'article',
@@ -125,9 +127,10 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     // Stale-intake routing (server-computed): posts older than a year point
     // readers at the live verified intake calendar.
     const stalePost = isStalePost(update.publishedAt || update.createdAt);
-    const stale = stalePost
-      ? { enabled: true, windows: chinaIntakeOverview() }
-      : { enabled: false };
+    const archived = Boolean(update.archivedAt);
+    const stale = stalePost || archived
+      ? { enabled: true, archived, windows: chinaIntakeOverview() }
+      : { enabled: false, archived: false };
 
     const tags = update.tags ? JSON.parse(update.tags) : [];
     const categories = update.categories ? JSON.parse(update.categories) : [];
@@ -157,6 +160,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       seoApprovedAt: update.seoApprovedAt?.toISOString(),
       createdAt: update.createdAt.toISOString(),
       updatedAt: update.updatedAt.toISOString(),
+      archived,
       views: update.views
     };
 

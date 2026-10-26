@@ -53,6 +53,7 @@ export interface Update {
   publishedAt?: string;
   createdAt: string;
   updatedAt: string;
+  archived?: boolean;
   views?: number;
 }
 
@@ -298,6 +299,8 @@ export interface UpdateClientProps {
   related?: Update[];
   stale?: {
     enabled: boolean;
+    // True when the intake this post announced has closed.
+    archived?: boolean;
     // Current intake windows from the verified calendar module
     windows?: { name: string; status: string; summary: string }[];
   };

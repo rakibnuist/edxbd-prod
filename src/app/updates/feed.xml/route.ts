@@ -22,7 +22,7 @@ const SITE_URL = 'https://eduexpressint.com';
 export async function GET() {
   try {
     const posts = await prisma.content.findMany({
-      where: { type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
+      where: { type: { in: ['update', 'article'] }, archivedAt: null, ...currentVisibleContentWhere() },
       orderBy: [{ publishedAt: 'desc' }, { updatedAt: 'desc' }],
       take: 30,
       select: {

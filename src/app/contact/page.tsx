@@ -5,15 +5,6 @@ import { getPublicTrustRecords } from '@/lib/trust-records';
 export const metadata: Metadata = {
   title: 'Contact Us',
   description: 'Contact EduExpress International for an Education Fit Assessment, university comparison or a parent conversation at our Dhanmondi office.',
-  keywords: [
-    'contact eduexpress international',
-    'study abroad consultation bangladesh',
-    'education consultant contact',
-    'free consultation dhaka',
-    'study abroad office bangladesh',
-    'international education contact',
-    'overseas education consultation'
-  ],
   openGraph: {
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
     title: 'Contact Us - Free Study Abroad Consultation',

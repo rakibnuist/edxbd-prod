@@ -16,7 +16,14 @@ export const metadata: Metadata = {
   title: { absolute: 'বাংলাদেশে শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা ও স্কলারশিপ ২০২৬ | EduExpress' },
   description:
     'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে ব্যাচেলর, মাস্টার্স, স্কলারশিপ ও ভিসা প্রসেসিং গাইড। ভিসা অনুমোদনের পূর্বে কোনো ফাইল ওপেনিং চার্জ বা সার্ভিস ফি নেই।',
-  alternates: { canonical: '/bn/study-in-china' },
+  alternates: {
+    canonical: '/bn/study-in-china',
+    languages: {
+      'en-BD': '/study-in-china-from-bangladesh',
+      'bn-BD': '/bn/study-in-china',
+      'x-default': '/study-in-china-from-bangladesh',
+    },
+  },
   openGraph: {
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
     title: 'বাংলাদেশে শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা | EduExpress International',
@@ -100,7 +107,7 @@ export default function BengaliStudyInChinaPage() {
           <ShieldCheck size={36} className="mx-auto text-[#174f7a]" />
           <h2 className="mt-4 font-serif text-3xl font-bold text-[#08263c]">ভিসা-ফার্স্ট সার্ভিস পলিসি</h2>
           <div className="mt-6 rounded-2xl bg-[#e9f7fd] p-6 text-base font-semibold leading-relaxed text-[#08263c] border border-blue-200">
-            "কোনো ফাইল ওপেনিং চার্জ নেই। চায়না স্টুডেন্ট ভিসা অনুমোদনের পূর্বে এজু এক্সপ্রেসের কোনো সার্ভিস ফি নেই। বিশ্ববিদ্যালয়, এম্বাসি, মেডিকেল, অনুবাদ বা অন্যান্য থার্ড-পার্টি ফি লিখিতভাবে প্রদান করা হয়।"
+            “কোনো ফাইল ওপেনিং চার্জ নেই। চায়না স্টুডেন্ট ভিসা অনুমোদনের পূর্বে এজু এক্সপ্রেসের কোনো সার্ভিস ফি নেই। বিশ্ববিদ্যালয়, এম্বাসি, মেডিকেল, অনুবাদ বা অন্যান্য থার্ড-পার্টি ফি লিখিতভাবে প্রদান করা হয়।”
           </div>
         </div>
       </section>

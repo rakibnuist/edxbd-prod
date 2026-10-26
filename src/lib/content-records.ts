@@ -35,6 +35,7 @@ export const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content
     author: record.author,
     reviewer: record.reviewer || undefined,
     publishedAt: record.publishedAt?.toISOString(),
+    archived: Boolean(record.archivedAt),
     lastVerifiedAt: record.lastVerifiedAt?.toISOString(),
     nextReviewAt: record.nextReviewAt?.toISOString(),
     expiresAt: record.expiresAt?.toISOString(),

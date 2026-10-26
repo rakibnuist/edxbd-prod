@@ -46,7 +46,7 @@ export default function UsersPage() {
 
   const isSuperAdmin = currentUser?.role === 'super_admin';
   const isAdmin = currentUser?.role === 'admin';
-  const canMessage = isSuperAdmin || isAdmin || currentUser?.email === 'admin@eduexpressint.com';
+  const canMessage = isSuperAdmin || isAdmin;
 
   const fetchSentMessages = async () => {
     try {

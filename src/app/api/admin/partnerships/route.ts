@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { serializePartnership } from '@/lib/partnership-serialize';
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search');
 
     // Build filter object
-    const filter: any = {};
+    const filter: Prisma.PartnershipWhereInput = {};
     if (status) filter.status = status;
     if (partnershipType) filter.partnershipType = partnershipType;
     if (country) filter.country = country;

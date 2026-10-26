@@ -15,18 +15,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Study Abroad Services | University Selection, Visa & Scholarship Support',
     description,
-    keywords: [
-      'study abroad services',
-      'university selection',
-      'visa assistance',
-      'scholarship support',
-      'career guidance',
-      'study abroad consultancy',
-      'international education',
-      'student visa',
-      'university application',
-      'education consultant'
-    ],
     openGraph: {
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
       title: 'Study Abroad Services | Expert Guidance for International Education',

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { serializeContent } from '@/lib/content-serialize';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
     const page = searchParams.get('page');
 
     // Build query — serve both updates (news) and articles (guides/blog posts)
-    const where: any = {
+    const where: Prisma.ContentWhereInput = {
       type: { in: ['update', 'article'] },
       ...currentVisibleContentWhere(),
     };

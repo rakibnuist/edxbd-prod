@@ -179,7 +179,7 @@ export const countries: Country[] = [
     },
     comparisons: {
       countryA: 'UK',
-      countryA_description: 'UK offers 2-year PSW and faster degrees, but China costs 70% less and offers significantly more full scholarships.',
+      countryA_description: 'The UK offers the Graduate Route for eligible graduates (2 years for applications on or before 31 December 2026; 18 months from January 2027) and 1-year master’s degrees. China’s published tuition and living costs are often lower — compare the exact university, city and scholarship, not a country average.',
       countryB: 'Malaysia',
       countryB_description: 'Malaysia has a similar cost profile and tropical climate, but China has higher globally ranked universities and better funding.'
     },
@@ -288,7 +288,7 @@ export const countries: Country[] = [
       currency: 'GBP'
     },
     scholarships: ['Chevening Scholarship', 'Great Scholarship', 'Vice Chancellor Excellence'],
-    benefits: ['Graduate Route post-study work visa (up to 2 years)', 'Spouse Visa Integration Options', 'Accelerated 1-Year Masters Programs saving time & cost'],
+    benefits: ['Graduate Route post-study work visa (2 years for applications on or before 31 December 2026; 18 months from January 2027)', 'Spouse Visa Integration Options', 'Accelerated 1-Year Masters Programs saving time & cost'],
     isActive: true,
     featured: true,
     images: ['https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=75&w=1200&auto=format&fit=crop'],
@@ -343,12 +343,12 @@ export const countries: Country[] = [
       countryA: 'USA',
       countryA_description: 'The US takes 2 years for a Master\'s and has a lottery-based work visa system, whereas the UK is 1 year with the Graduate Route work visa afterwards.',
       countryB: 'China',
-      countryB_description: 'China offers more full-ride scholarships and cheaper living, but the UK provides superior post-study work rights and English-speaking integration.'
+      countryB_description: 'China publishes a larger number of full-funding scholarship routes and often has lower living costs. The UK offers the Graduate Route, English-speaking study and 1-year master’s degrees, at a higher cost.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Senior UK Admissions Counselors',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'October 2026',
       primarySources: ['UKVI Official Guidance', 'UCAS', 'British Council Bangladesh']
     }
   },
@@ -855,12 +855,12 @@ export const countries: Country[] = [
       countryA: 'Finland',
       countryA_description: 'Malta is an English-speaking Schengen nation with warmer climate, while Finland offers tuition waiver scholarships and high-tech research UAS.',
       countryB: 'UK',
-      countryB_description: 'Malta uses EUR currency and grants Schengen access, while the UK offers a 2-year Graduate post-study work visa.'
+      countryB_description: 'Malta uses EUR and grants Schengen access. The UK’s Graduate Route runs for 2 years only for applications on or before 31 December 2026, and 18 months from January 2027.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'European Admissions Specialist',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'October 2026',
       primarySources: ['MFHEA Malta', 'Central Visa Unit Malta']
     }
   },

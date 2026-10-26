@@ -110,6 +110,7 @@ export default function EvidenceAdminPage() {
     setLoading(false);
   }, [authenticatedFetch]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- load() resolves state through async data fetch
   useEffect(() => { load(); }, [load]);
 
   const counts = useMemo(() => ({

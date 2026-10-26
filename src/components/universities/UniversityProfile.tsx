@@ -7,7 +7,7 @@ import { intakeMonths } from '@/lib/university-directory';
 import { prepareUniversityScholarship } from '@/lib/university-profile-public';
 import type { UniversityScholarshipOption } from '@/types/university-scholarship';
 import { profilePrograms } from '@/lib/university-profile-view';
-import { universitySearchIdentity } from '@/lib/university-profile-seo';
+import { universitySearchIdentity, universityProfileFaq, universityFaqStructuredData } from '@/lib/university-profile-seo';
 import { evergreenText, prepareUniversityProfile, prepareUniversityPrograms } from '@/lib/university-profile-public';
 import type { CleanUniversityRecord } from '@/lib/university-records';
 import type { UniversityProgramDetail } from '@/types/university-profile';
@@ -49,7 +49,19 @@ export default async function UniversityProfile({ university }: { university: Cl
   })).map(prepareUniversityScholarship);
   const publicPrograms = shareProgramFields(publicDetails?.programs.length ? publicDetails.programs : prepareUniversityPrograms(profilePrograms(university, details, research?.fees)));
   const logo = universityProfileLogo(university);
-  return <UniversityProfileClient
+  const scholarshipOptions = publicDetails?.scholarshipOptions?.length ? publicDetails.scholarshipOptions : legacyAwards;
+  const profileIntakeMonths = intakeMonths(details?.programs.length ? details.programs.flatMap(program => program.intake ? [program.intake] : []) : university.programs.length ? university.programs.flatMap(program => program.intakes) : university.intake);
+  // One FAQ source of truth: the same items render visibly and in FAQPage
+  // structured data, so assistants and the page can never disagree.
+  const faq = universityProfileFaq(university, publicPrograms, {
+    intakeMonths: profileIntakeMonths,
+    scholarshipOptions: scholarshipOptions.map(option => ({ title: option.title, coverage: option.coverage })),
+    rankings: rankings.map(({ publisher, rank, scope }) => ({ publisher, rank, scope })),
+  });
+  const faqSchema = universityFaqStructuredData(university, faq, `https://eduexpressint.com/universities/${university.slug}`);
+  return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, '\\u003c') }} />
+    <UniversityProfileClient
     university={{
       name: university.name, slug: university.slug, city: university.city, country: university.country, logo,
       location: university.location,
@@ -62,7 +74,7 @@ export default async function UniversityProfile({ university }: { university: Cl
     }}
     overview={publicDetails?.overview || evergreenText(research?.overview || `${university.name} is located in ${university.city}, ${university.country}. Explore its listed study options and compare program requirements, fees and available support.`)}
     highlights={publicDetails?.highlights?.length ? publicDetails.highlights : (research?.facts || []).filter(([title]) => !/window|deadline|cycle|intake|rank|statistic/i.test(title)).map(([title, description]) => ({ title: evergreenText(title), description: evergreenText(description) })).filter(item => item.title && item.description)}
-    intakeMonths={intakeMonths(details?.programs.length ? details.programs.flatMap(program => program.intake ? [program.intake] : []) : university.programs.length ? university.programs.flatMap(program => program.intakes) : university.intake)}
+    intakeMonths={profileIntakeMonths}
     campusImage={university.slug === 'nuist' ? { src: '/images/universities/nuist-campus.webp', alt: 'NUIST campus building and meteorological radar dome in Nanjing' } : undefined}
     generalDetails={{
       majors: university.details.majors.map(evergreenText).filter(Boolean),
@@ -74,10 +86,10 @@ export default async function UniversityProfile({ university }: { university: Cl
     }}
     shortName={universitySearchIdentity(university).shortName}
     displayName={universitySearchIdentity(university).displayName}
-    scholarshipOptions={publicDetails?.scholarshipOptions?.length ? publicDetails.scholarshipOptions : legacyAwards}
+    scholarshipOptions={scholarshipOptions}
     programs={publicPrograms}
     hasDetailedPrograms={Boolean(details?.programs.length)}
     rankings={rankings.map(({ publisher, rankingName, year, rank, scope, subject, note }) => ({ publisher, rankingName: evergreenText(rankingName), year, rank, scope, subject, note: note ? evergreenText(note) : undefined }))}
     servicePackages={packages.map(item => ({ title: item.title, priceLabel: item.priceLabel, summary: item.summary }))}
-  />;
+  />;</>
 }

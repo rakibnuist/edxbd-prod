@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 const cscCoverage = [
   {
     title: 'Full Tuition Waiver',
-    detail: '100% tuition fees covered directly by the Chinese Ministry of Education for the entire degree duration.',
+    detail: 'Tuition is covered by the Chinese Government Scholarship for awarded scholars, subject to the annual CSC review and the university’s programme terms.',
     icon: GraduationCap,
   },
   {
@@ -139,7 +139,7 @@ export default function CscScholarshipBangladeshPage() {
                 CSC Scholarship from Bangladesh
               </h1>
               <p className="mt-6 text-lg leading-8 text-white/80 md:text-xl">
-                The Chinese Government Scholarship (CSC) offers 100% full tuition waivers, free university housing, and monthly stipends up to 56,000 BDT/month for Bangladeshi undergraduate and postgraduate students.
+                For awarded scholars, the Chinese Government Scholarship (CSC) covers tuition and university housing and provides a monthly stipend of up to 56,000 BDT/month for Bangladeshi undergraduate and postgraduate students. Awards are renewed through the annual CSC review.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4 text-sm font-semibold">
