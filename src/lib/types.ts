@@ -290,6 +290,9 @@ export interface ConsultationButtonProps {
   source: string;
 }
 
+// Detail page passes the post plus its interlinked neighbors; clients must
+// tolerate `related` being absent (older call sites).
 export interface UpdateClientProps {
   update: Update;
+  related?: Update[];
 }

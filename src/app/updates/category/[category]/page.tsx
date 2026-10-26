@@ -116,15 +116,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         description={`${posts.length} verified ${label.toLowerCase()} post${posts.length === 1 ? '' : 's'} from EduExpress International, each carrying checked dates and official sources.`}
         icon={<Sparkles />}
         badgeText="Information centre"
+        breadcrumbs={[{ name: 'Updates', href: '/updates' }, { name: label }]}
       />
 
       <main className="mx-auto max-w-[1320px] px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
-        <nav aria-label="Breadcrumb" className="mb-10 flex items-center gap-2 text-sm text-slate-500">
-          <Link href="/updates" className="font-bold text-[#174f7a] hover:underline">All updates</Link>
-          <span aria-hidden="true">/</span>
-          <span className="font-semibold text-[#08263c]">{label}</span>
-        </nav>
-
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {posts.map(update => (
             <article key={update.id} className="group overflow-hidden rounded-[1.5rem] border border-[#174f7a]/12 bg-white shadow-[0_8px_28px_rgba(8,38,60,.06)] transition hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(8,38,60,.11)]">

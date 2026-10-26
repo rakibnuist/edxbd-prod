@@ -16,7 +16,7 @@ const fmtDate = (iso?: string) => {
   return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
 };
 
-export default function UpdateClient({ update }: UpdateClientProps) {
+export default function UpdateClient({ update, related = [] }: UpdateClientProps) {
   const teamMember = teamMembers.find(m => m.name.toLowerCase() === (update.author || '').trim().toLowerCase());
   const handleShare = async () => {
     if (navigator.share) {
@@ -144,6 +144,40 @@ export default function UpdateClient({ update }: UpdateClientProps) {
               </aside>
             )}
           </article>
+
+          {/* Related posts — interlinks the library by shared categories,
+              every entry already passing the publication gate */}
+          {related.length > 0 ? (
+            <nav aria-label="Related posts" className="mb-12">
+              <div className="flex items-end justify-between gap-4 mb-5 px-1">
+                <h2 className="text-2xl md:text-3xl font-extrabold tracking-[-0.03em] text-slate-900">Keep reading</h2>
+                <Link href="/updates" className="inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900">
+                  All updates <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-3">
+                {related.map(post => {
+                  const postCategory = post.category || post.categories?.[0];
+                  return (
+                    <Link key={post.id} href={`/updates/${post.slug}`} className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
+                      <div className="relative aspect-[16/10] bg-slate-800">
+                        {post.featuredImage
+                          ? <Image src={post.featuredImage} alt={post.title} fill sizes="(max-width:640px) 100vw, 33vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
+                          : <div className="grid h-full place-items-center text-xs font-bold uppercase tracking-[0.15em] text-slate-300">EduExpress</div>}
+                      </div>
+                      <div className="p-4">
+                        <div className="flex items-center justify-between gap-2">
+                          {postCategory ? <span className="truncate text-xs font-bold uppercase tracking-[0.08em] text-amber-600">{postCategory}</span> : null}
+                          <span className="shrink-0 text-xs font-semibold text-slate-400">{post.type === 'article' ? 'Article' : 'Update'}</span>
+                        </div>
+                        <h3 className="mt-2 line-clamp-2 text-base font-bold text-slate-900">{post.title}</h3>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </nav>
+          ) : null}
 
           {/* 6. High-Visibility Gradient CTA Banner */}
           <div className="bg-slate-900 rounded-[2rem] p-10 md:p-16 text-center shadow-2xl relative overflow-hidden mb-12 group">

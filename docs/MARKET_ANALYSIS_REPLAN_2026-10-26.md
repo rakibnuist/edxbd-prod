@@ -151,6 +151,12 @@ Owner: developer (mostly) · Definition of done: campaign page converting + typo
 
 User decision: **upgrade `/updates` into the blog** (no separate `/blog` URL space). One content section, one sitemap, one governance gate = one authority sink. Principle behind it: never split the site into two half-authored content sections while Wave-1 authority is being built.
 
+Follow-up same day — **back end → client flow + interlinking** (user: "restore all updates from backend to client side and link them together"):
+- `/updates` list now re-pulls fresh records from `/api/updates` on every visit (server snapshot still renders first for crawlers; the client refresh closes the 5-min ISR gap so a new post shows immediately).
+- Detail pages gained a "Keep reading" related-posts block: same-category posts first (slug-matched), freshest published pool fills remaining slots — posts no longer dead-end; an "All updates" link tops the block.
+- `llms.txt` now lists the library, a topic archive and the RSS feed so AI assistants can discover the whole surface.
+- Link audit result: header "Advice" + footer "Advice and updates" already pointed at `/updates`; category archives breadcrumb back to the list; sitemap section unchanged in structure.
+
 Deferred (needs a Prisma schema change + migration on SQLite):
 - **Bengali `language` field on Content** — needed for the Stage-2 bn track (bn pillar + 3 money pages). `toContentData` already passes arbitrary fields, but the column does not exist. When added: default `en`, filter all public queries to `language: 'en'` or the active locale, add `hreflang` pairs on detail pages, and extend the RSS/XML surface (separate `bn` feed, or `language` in item metadata).
 - Follow-ups small enough to batch later: sources listed show a generic label (print hostnames), related-posts module for articles, admin list type filter is tolerance-OK for historical rows (DB is empty, so no backfill needed).

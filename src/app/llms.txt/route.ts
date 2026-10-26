@@ -11,6 +11,12 @@ export function GET() {
 - China Visa-First Policy: https://eduexpressint.com/china-visa-first-policy
 - Free Education Fit Assessment: https://eduexpressint.com/education-fit-assessment
 
+## Updates, Guides & RSS
+- Advice and updates library (news + verified guides): https://eduexpressint.com/updates
+- Topic archives: https://eduexpressint.com/updates/category/announcement (one archive per category)
+- Everything as an RSS feed: https://eduexpressint.com/updates/feed.xml
+- 2027 intake deadlines & status: https://eduexpressint.com/china-intakes-deadlines
+
 ## Public Destination Services
 - Study in China (Flagship): https://eduexpressint.com/study-in-china-from-bangladesh
 - All 12 listed destination services are open: https://eduexpressint.com/destinations

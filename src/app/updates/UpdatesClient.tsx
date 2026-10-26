@@ -39,12 +39,18 @@ export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProp
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    if (initialUpdates.length > 0) return;
+    // The server snapshot above covers crawlers and first paint; this refresh
+    // pulls the freshest backend records so a new post shows immediately
+    // instead of waiting for the 5-minute ISR window.
     let active = true;
     fetch('/api/updates')
       .then(response => response.ok ? response.json() as Promise<UpdatesResponse> : Promise.reject(new Error('Unable to load updates')))
-      .then(data => { if (active) setUpdates(data.updates || []); })
-      .catch(() => { if (active) setUpdates([]); })
+      .then(data => {
+        if (!active) return;
+        const fresh = data.updates || [];
+        if (fresh.length > 0 || initialUpdates.length === 0) setUpdates(fresh);
+      })
+      .catch(() => { /* keep the server snapshot */ })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
   }, [initialUpdates.length]);

@@ -15,7 +15,7 @@ const parseList = (value?: string | null): string[] => {
   }
 };
 
-const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content.findFirst>>): Update | null => {
+export const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content.findFirst>>): Update | null => {
   if (!record) return null;
   return {
     id: record.id,

@@ -6,12 +6,53 @@ import UpdateClient from './UpdateClient';
 import type { Update } from '@/lib/types';
 import { currentPublishedContentWhere } from '@/lib/content-governance';
 import { teamMembers } from '@/data/teamMembers';
+import { serializeUpdate } from '@/lib/content-records';
+import { categorySlug } from '@/lib/update-categories';
 
 interface UpdatePageProps {
   params: Promise<{
     slug: string;
   }>;
 }
+
+const parseJsonCategories = (value: string | null): string[] => {
+  try {
+    const parsed = JSON.parse(value || '[]');
+    return Array.isArray(parsed) ? parsed.map(String) : [];
+  } catch {
+    return [];
+  }
+};
+
+// Posts interlink through shared categories so the library never strands a
+// reader on a dead end; when too few share categories, the freshest published
+// pool fills the remaining slots.
+const getRelated = cache(async (current: NonNullable<Awaited<ReturnType<typeof getUpdate>>>, limit = 3): Promise<Update[]> => {
+  const pool = await prisma.content.findMany({
+    where: {
+      id: { not: current.id },
+      type: { in: ['update', 'article'] },
+      ...currentPublishedContentWhere(),
+    },
+    orderBy: [{ isFeatured: 'desc' }, { publishedAt: 'desc' }, { updatedAt: 'desc' }],
+    take: 30,
+  });
+  if (pool.length === 0) return [];
+
+  const currentSlugs = new Set([
+    current.category,
+    ...parseJsonCategories(current.categories),
+  ].filter((label): label is string => Boolean(label?.trim())).map(label => categorySlug(label)));
+
+  const shared = currentSlugs.size === 0 ? [] : pool.filter(post =>
+    [post.category, ...parseJsonCategories(post.categories)].some(label => label?.trim() && currentSlugs.has(categorySlug(label))),
+  );
+
+  return [...shared, ...pool]
+    .slice(0, limit)
+    .map(record => serializeUpdate(record))
+    .filter((record): record is Update => Boolean(record));
+});
 
 const getUpdate = cache((slug: string) => prisma.content.findFirst({
   where: { slug, type: { in: ['update', 'article'] }, ...currentPublishedContentWhere() },
@@ -66,6 +107,8 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     if (!update) {
       notFound();
     }
+
+    const related = await getRelated(update);
 
     const tags = update.tags ? JSON.parse(update.tags) : [];
     const categories = update.categories ? JSON.parse(update.categories) : [];
@@ -129,7 +172,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     return (
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-        <UpdateClient update={updateData} />
+        <UpdateClient update={updateData} related={related} />
       </>
     );
 }
