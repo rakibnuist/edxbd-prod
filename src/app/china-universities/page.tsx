@@ -6,6 +6,7 @@ import UniversitiesClient from '@/app/universities/UniversitiesClient';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getUniversityRecords } from '@/lib/university-records';
 import { filterUniversities, readDirectoryFilters } from '@/lib/university-directory';
+import { chinaCities } from '@/lib/city-pages';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
@@ -56,6 +57,7 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
   const query = await searchParams;
   const params = new URLSearchParams(Object.entries(query).flatMap(([key, value]) => value ? [[key, Array.isArray(value) ? value[0] : value]] : []));
   const matching = filterUniversities(universities, readDirectoryFilters(params));
+  const cities = chinaCities(universities);
   const rawLimit = params.get('limit') || '12';
   const limit = /^\d+$/.test(rawLimit) ? Math.max(12, Math.min(Number(rawLimit), universities.length || 12)) : 12;
   const visibleUniversities = matching.slice(0, limit);
@@ -120,6 +122,15 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
             </li>
           ))}
         </ul>
+        {cities.length > 0 && (
+          <nav aria-labelledby="browse-cities" className={`${kit.wrap} mt-8`}>
+            <h2 id="browse-cities" className="text-[17px] font-semibold text-petrol-800">Browse universities by city</h2>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {cities.map(item => <li key={item.slug}><Link href={`/china-universities/${item.slug}`} className="ed-btn ed-btn-soft min-h-11 text-[15px]">{item.city} <span className="text-ink-soft">({item.universities.length})</span></Link></li>)}
+            </ul>
+            <p className="mt-4 text-[15px] text-ink-soft">Or search by budget: <Link href="/programs" className={kit.link}>program and tuition finder</Link> · <Link href="/compare-costs" className={kit.link}>compare first-year costs</Link></p>
+          </nav>
+        )}
       </section>
 
       <div id="china-directory" className="scroll-mt-28">

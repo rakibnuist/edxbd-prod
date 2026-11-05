@@ -9,6 +9,9 @@ import { activeCountries } from '@/lib/countries';
 import { destinationPath } from '@/lib/site-urls';
 import { getIndexableUniversitySitemapRecords } from '@/lib/university-guide-publication';
 import { DESTINATION_PHOTOS } from '@/components/destinations/DestinationCover';
+import { programSegments } from '@/lib/program-segments';
+import { chinaCities } from '@/lib/city-pages';
+import { getUniversityRecords } from '@/lib/university-records';
 
 const SITE = 'https://eduexpressint.com';
 const abs = (src: string) => (src.startsWith('http') ? src : `${SITE}${src}`);
@@ -55,6 +58,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/proof-library',
     '/csc-scholarship-bangladesh',
     '/bn/study-in-china',
+    '/programs',
+    ...programSegments.map((segment) => `/programs/${segment.slug}`),
+    '/compare-costs',
     // Pages served by a hand-built route under src/app/
     ...sitemapStaticRouteSlugs.map((slug) => `/${slug}`),
     // Pages served by app/[slug] from the two data files
@@ -123,7 +129,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }));
 
-    return [...routes, ...countryRoutes, ...universityRoutes, ...updateRoutes, ...categoryRoutes];
+    // China city landing pages, built from the same university records
+    const cityRoutes: MetadataRoute.Sitemap = chinaCities(await getUniversityRecords('China')).map((city) => ({
+      url: `${baseUrl}/china-universities/${city.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.75,
+    }));
+
+    return [...routes, ...countryRoutes, ...universityRoutes, ...cityRoutes, ...updateRoutes, ...categoryRoutes];
   } catch (error) {
     console.warn('Sitemap generated without database routes:', error);
     return [...routes, ...countryRoutes];

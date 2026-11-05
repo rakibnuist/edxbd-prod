@@ -3,7 +3,10 @@ import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, BadgeDollarSign, CheckCircle2, CircleAlert, FileSearch, GraduationCap, WalletCards } from 'lucide-react';
 
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import ScholarshipFinder from '@/components/finders/ScholarshipFinder';
+import { toScholarshipRows } from '@/lib/catalog-views';
 import { pageMetadata } from '@/lib/seo';
+import { getUniversityRecords } from '@/lib/university-records';
 import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
 
 const PATH = '/scholarships';
@@ -113,7 +116,14 @@ const structuredData = {
   ],
 };
 
-export default function ScholarshipsPage() {
+export const revalidate = 3600;
+
+async function loadScholarshipRows() {
+  try { return toScholarshipRows(await getUniversityRecords('China'), new Date()); } catch { return []; }
+}
+
+export default async function ScholarshipsPage() {
+  const scholarshipRows = await loadScholarshipRows();
   return (
     <>
       <JsonLd data={structuredData} />
@@ -234,6 +244,8 @@ export default function ScholarshipsPage() {
           </div>
         </div>
       </Section>
+
+      {scholarshipRows.length > 0 && <ScholarshipFinder rows={scholarshipRows} />}
 
       <Section>
         <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-14">

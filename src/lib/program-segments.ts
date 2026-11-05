@@ -16,9 +16,9 @@ export const MIN_SEGMENT_PROGRAMS = 10;
 export const programSegments: ProgramSegment[] = [
   {
     slug: 'english-taught-bachelor-china',
-    title: 'English-Taught Bachelor Programs in China for Bangladeshi Students',
+    title: 'English-Taught Bachelor Programs in China',
     h1: 'English-taught bachelor programs in China',
-    description: 'Compare recorded English-taught bachelor programs at Chinese universities: yearly tuition, city, duration and deadline, with source links and a full cost breakdown.',
+    description: 'Compare recorded English-taught bachelor programs at Chinese universities: yearly tuition, city, duration and deadline, with source links and full costs.',
     intro: 'Bachelor programs taught in English, so you can start without learning Chinese first. Most still expect an HSC result, an English test or English-medium certificate, and a short interview.',
     match: row => row.level === 'Bachelor' && row.languages.includes('English'),
     faqs: [
@@ -28,7 +28,7 @@ export const programSegments: ProgramSegment[] = [
   },
   {
     slug: 'chinese-taught-bachelor-china',
-    title: 'Chinese-Taught Bachelor Programs in China: Tuition and Universities',
+    title: 'Chinese-Taught Bachelor Programs in China',
     h1: 'Chinese-taught bachelor programs in China',
     description: 'Recorded Chinese-medium bachelor programs at Chinese universities, usually with lower tuition than English-taught options. Compare tuition, city and deadline.',
     intro: 'Chinese-medium degrees are often cheaper and open more subjects, but you need HSK (usually level 4 or above) or a preparatory language year before the degree starts.',
@@ -40,7 +40,7 @@ export const programSegments: ProgramSegment[] = [
   },
   {
     slug: 'masters-in-china',
-    title: "Master's Programs in China for Bangladeshi Students: Tuition and Deadlines",
+    title: "Master's Programs in China: Tuition, Deadlines",
     h1: "Master's programs in China",
     description: "Search recorded master's programs at Chinese universities by tuition, teaching language and city. See deadlines, duration and the source for each figure.",
     intro: "Master's programs usually last two to three years. Many universities ask for a study plan and two recommendation letters, and some ask you to contact a supervisor before applying.",
@@ -52,9 +52,9 @@ export const programSegments: ProgramSegment[] = [
   },
   {
     slug: 'phd-in-china',
-    title: 'PhD Programs in China for Bangladeshi Students: Tuition and Universities',
+    title: 'PhD Programs in China: Tuition and Universities',
     h1: 'PhD programs in China',
-    description: 'Recorded PhD programs at Chinese universities with yearly tuition, teaching language, duration and deadline. Check scholarship options and the source for each record.',
+    description: 'Recorded PhD programs at Chinese universities with yearly tuition, teaching language, duration and deadline. Check scholarships and the source for each record.',
     intro: 'Doctoral programs usually last three to four years. A supervisor acceptance letter is often the deciding step, so start contacting supervisors early.',
     match: row => row.level === 'PhD',
     faqs: [
@@ -64,7 +64,7 @@ export const programSegments: ProgramSegment[] = [
   },
   {
     slug: 'chinese-language-programs-china',
-    title: 'Chinese Language Programs in China: One-Year and Semester Courses',
+    title: 'Chinese Language Programs in China: Tuition',
     h1: 'Chinese language programs in China',
     description: 'Recorded Chinese language and preparatory programs at Chinese universities, from four weeks to one year. Compare tuition, intakes and deadlines.',
     intro: 'Language programs prepare you for a Chinese-taught degree or HSK, and some lead into a degree at the same university. Durations range from a few weeks to a full year.',

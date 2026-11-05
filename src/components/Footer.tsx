@@ -12,7 +12,9 @@ import { getPublicTrustRecords } from '@/lib/trust-records';
 // you, how do I reach you), then legal links on their own line.
 const planLinks = [
   ['University finder', '/universities'],
-  ['Scholarships', '/scholarships'],
+  ['Programs by budget', '/programs'],
+  ['Compare costs', '/compare-costs'],
+  ['Scholarship database', '/scholarships#scholarship-database'],
   ['Cost of studying in China', '/study-in-china-cost-bangladesh'],
   ['Intakes and deadlines', '/china-intakes-deadlines'],
   ['Student visa guide', '/china-student-visa-bangladesh'],

@@ -34,7 +34,9 @@ Key facts:
 ## Plan and compare
 
 - [University and programme finder](https://eduexpressint.com/universities): search universities by subject, level, intake and scholarship
-- [Scholarship guidance](https://eduexpressint.com/scholarships): what awards cover and what still has to be paid
+- [China program and tuition finder](https://eduexpressint.com/programs): every recorded China programme filtered by yearly tuition, language, city and deadline
+- [Compare first-year costs](https://eduexpressint.com/compare-costs): up to three China programmes side by side, fee by fee
+- [Scholarship guidance and database](https://eduexpressint.com/scholarships): what awards cover, plus a searchable list of recorded China scholarships
 - [All destinations](https://eduexpressint.com/destinations): China, United Kingdom, South Korea, Malaysia, Hungary, Finland, Cyprus, Croatia, Georgia, Malta, Greece, Thailand
 - [Compare study destinations](https://eduexpressint.com/compare-study-destinations): cost and entry side by side
 - [Your study journey](https://eduexpressint.com/your-study-journey): the seven stages from assessment to arrival
