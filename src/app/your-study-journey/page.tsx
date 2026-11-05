@@ -203,7 +203,7 @@ export default function StudyJourneyPage() {
                   Inspect the proof library <ArrowUpRight size={16} aria-hidden="true" />
                 </Link>
               </div>
-              <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11.5px] text-ink-mute">
+              <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-mute">
                 <li className="inline-flex items-center gap-1.5">
                   <CheckCircle2 size={13} className="text-jade" aria-hidden="true" />
                   7 stages, 7 written outputs
@@ -223,8 +223,8 @@ export default function StudyJourneyPage() {
                   href={`#${stage.id}`}
                   className="group rounded-2xl border border-rule bg-white p-4 shadow-[0_16px_36px_-32px_rgba(15,53,87,0.45)] transition hover:border-petrol-400/40 hover:bg-mint-100"
                 >
-                  <span className="ed-figure text-[10px] font-bold tracking-[0.14em] text-petrol-600">{stage.number}</span>
-                  <strong className="mt-2 block text-[13px] leading-5 text-ink group-hover:text-petrol-700">{stage.title}</strong>
+                  <span className="ed-figure text-[12px] font-bold tracking-[0.14em] text-petrol-600">{stage.number}</span>
+                  <strong className="mt-2 block text-[15px] leading-5 text-ink group-hover:text-petrol-700">{stage.title}</strong>
                 </a>
               ))}
             </div>
@@ -235,10 +235,10 @@ export default function StudyJourneyPage() {
       {/* Principle strip */}
       <section className="border-b border-rule bg-white px-4 py-5 sm:px-6 lg:px-10">
         <div className="mx-auto flex max-w-shell flex-wrap items-center justify-between gap-4">
-          <p className="max-w-[70ch] text-[13px] leading-6 text-ink-soft">
+          <p className="max-w-[70ch] text-[15px] leading-6 text-ink-soft">
             Every stage answers three questions: what happens, what you receive, who owns the decision.
           </p>
-          <Link href="/proof-library" className="inline-flex items-center gap-1.5 text-[12.5px] font-bold text-petrol-700 hover:text-petrol-900">
+          <Link href="/proof-library" className="inline-flex items-center gap-1.5 text-[14px] font-bold text-petrol-700 hover:text-petrol-900">
             Inspect real work proof <ArrowRight size={14} aria-hidden="true" />
           </Link>
         </div>
@@ -278,7 +278,7 @@ export default function StudyJourneyPage() {
                           className="object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-petrol-900/50 to-transparent" aria-hidden="true" />
-                        <figcaption className="absolute bottom-4 left-4 rounded-full bg-white/95 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-petrol-700 backdrop-blur">
+                        <figcaption className="absolute bottom-4 left-4 rounded-full bg-white/95 px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.14em] text-petrol-700 backdrop-blur">
                           Stage {stage.number}
                         </figcaption>
                       </figure>
@@ -288,13 +288,13 @@ export default function StudyJourneyPage() {
                         <span className="grid size-11 place-items-center rounded-2xl bg-mint-100 text-petrol-700 ring-1 ring-petrol-400/10">
                           <Icon size={22} aria-hidden="true" />
                         </span>
-                        <span className="ed-figure text-[11px] font-bold tracking-[0.16em] text-ink-mute">{stage.number} / 07</span>
+                        <span className="ed-figure text-[13px] font-bold tracking-[0.16em] text-ink-mute">{stage.number} / 07</span>
                       </div>
                       <h3 className="ed-home-display mt-6 text-[clamp(1.5rem,2.6vw,2rem)] leading-[1.08] text-ink">{stage.title}</h3>
-                      <p className="mt-3 text-[13.5px] leading-7 text-ink-soft">{stage.promise}</p>
+                      <p className="mt-3 text-[15px] leading-7 text-ink-soft">{stage.promise}</p>
                       <ul className="mt-5 grid gap-2.5">
                         {stage.work.map((item) => (
-                          <li key={item} className="flex gap-2.5 text-[13px] leading-6 text-ink">
+                          <li key={item} className="flex gap-2.5 text-[15px] leading-6 text-ink">
                             <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-jade" aria-hidden="true" />
                             {item}
                           </li>
@@ -302,12 +302,12 @@ export default function StudyJourneyPage() {
                       </ul>
                       <div className="mt-6 grid gap-2 sm:grid-cols-2">
                         <div className="rounded-xl border border-rule bg-chalk-100 p-4">
-                          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-ink-mute">What you receive</p>
-                          <strong className="mt-1.5 block text-[13px] text-ink">{stage.output}</strong>
+                          <p className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">What you receive</p>
+                          <strong className="mt-1.5 block text-[15px] text-ink">{stage.output}</strong>
                         </div>
                         <div className="rounded-xl border border-rule bg-chalk-100 p-4">
-                          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-ink-mute">Responsibility</p>
-                          <strong className="mt-1.5 block text-[13px] text-ink">{stage.owner}</strong>
+                          <p className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">Responsibility</p>
+                          <strong className="mt-1.5 block text-[15px] text-ink">{stage.owner}</strong>
                         </div>
                       </div>
                     </div>
@@ -329,7 +329,7 @@ export default function StudyJourneyPage() {
             <h2 className="ed-home-display mt-5 text-[clamp(1.6rem,2.8vw,2.2rem)] leading-[1.08] text-ink">
               Proof travels with the journey
             </h2>
-            <p className="mt-3 text-[13.5px] leading-7 text-ink-soft">
+            <p className="mt-3 text-[15px] leading-7 text-ink-soft">
               EduExpress publishes privacy-safe examples of admission work, document records and institutional evidence. Your own file remains private.
             </p>
             <Link href="/proof-library" className="ed-btn ed-btn-outline mt-5 min-h-11">
@@ -342,7 +342,7 @@ export default function StudyJourneyPage() {
             <h2 className="ed-home-display mt-4 text-[clamp(1.6rem,2.8vw,2.2rem)] leading-[1.08] text-ink">
               Support is not a guarantee
             </h2>
-            <p className="mt-3 text-[13.5px] leading-7 text-ink-soft">
+            <p className="mt-3 text-[15px] leading-7 text-ink-soft">
               Universities decide admission and scholarships. Government authorities decide visas and permits. EduExpress can compare, prepare, check, explain and support—but cannot replace an official decision.
             </p>
             <Link href="/better-education-standard" className="ed-btn ed-btn-primary mt-5 min-h-11">
@@ -358,13 +358,13 @@ export default function StudyJourneyPage() {
           <div className="pointer-events-none absolute inset-0 ed-grid-lines" aria-hidden="true" />
           <div className="relative grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div>
-              <p className="inline-flex items-center gap-2.5 text-[12px] font-bold text-mint-300">
+              <p className="inline-flex items-center gap-2.5 text-[14px] font-bold text-mint-300">
                 <span className="h-px w-7 bg-mint-300" aria-hidden="true" /> Your next honest step
               </p>
               <h2 className="ed-home-display mt-4 max-w-[24ch] text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.04] text-white">
                 Open stage one with your real profile.
               </h2>
-              <p className="mt-3 max-w-[50ch] text-[13.5px] leading-7 text-white/80">
+              <p className="mt-3 max-w-[50ch] text-[15px] leading-7 text-white/80">
                 The free assessment gives your counselor the context needed to compare education routes responsibly.
               </p>
             </div>

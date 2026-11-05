@@ -60,7 +60,7 @@ export default function PartnershipClient() {
   ];
 
   return (
-    <div className="overflow-hidden bg-[#f5efe6] text-ed-ink font-sans">
+    <div className="overflow-hidden bg-[#f1f5f9] text-ed-ink font-sans">
       {/* Homepage Hero Header Style */}
       <section className="relative px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32 md:pt-40 lg:px-12 border-b border-[#12436b]/10">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(18,67,107,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(18,67,107,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
@@ -68,14 +68,14 @@ export default function PartnershipClient() {
 
         <div className="relative mx-auto max-w-[1440px]">
           <Breadcrumbs items={[{ name: 'Partnership' }]} className="mb-7" />
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#12436b]/18 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-ed-navy">
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#12436b]/18 py-3 font-mono text-[13px] font-bold uppercase tracking-[0.2em] text-ed-navy">
             <span>EduExpress International Bangladesh</span>
             <span>Global Partner Network</span>
             <span>Institutional Cooperation 2027</span>
           </div>
 
           <div className="max-w-4xl">
-            <p className="flex w-full max-w-full items-start gap-3 bg-[#12436b] px-4 py-2 text-[11px] font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
+            <p className="flex w-full max-w-full items-start gap-3 bg-[#12436b] px-4 py-2 text-[13px] font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
               <Handshake className="mt-0.5 shrink-0 text-ed-mist sm:mt-0" size={16} />
               <span className="min-w-0 whitespace-normal">Global Partner Programme 2027</span>
             </p>
@@ -114,7 +114,7 @@ export default function PartnershipClient() {
             ['03', 'Apply for review', '#partnership-form'],
           ].map(([number, label, href]) => (
             <a key={href} href={href} className="group flex min-h-16 flex-1 items-center justify-between bg-ed-navy px-5 text-sm font-black hover:bg-[#12436b] sm:max-w-sm">
-              <span className="flex items-center gap-3"><span className="font-mono text-[10px] text-ed-mist">{number}</span>{label}</span>
+              <span className="flex items-center gap-3"><span className="font-mono text-[12px] text-ed-mist">{number}</span>{label}</span>
               <ArrowRight size={15} className="text-ed-mist transition group-hover:translate-x-1" />
             </a>
           ))}
@@ -135,7 +135,7 @@ export default function PartnershipClient() {
               <article
                 key={title}
                 className={`group relative overflow-hidden border-2 border-[#0f3a5c] p-8 transition duration-300 hover:-translate-y-1 hover:shadow-[10px_10px_0_0_#12436b] ${
-                  index === 1 ? 'bg-[#12436b] text-white' : 'bg-[#f5efe6] text-ed-ink'
+                  index === 1 ? 'bg-[#12436b] text-white' : 'bg-[#f1f5f9] text-ed-ink'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -164,10 +164,10 @@ export default function PartnershipClient() {
       </section>
 
       {/* China Service Charges Schedule Table */}
-      <section id="china-partner-terms" className="scroll-mt-28 border-b border-[#12436b]/10 bg-[#f5efe6] px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
+      <section id="china-partner-terms" className="scroll-mt-28 border-b border-[#12436b]/10 bg-[#f1f5f9] px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
-            <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-ed-navy">
+            <span className="font-mono text-[12px] font-black uppercase tracking-[0.2em] text-ed-navy">
               Flagship Specialization
             </span>
             <h2 className="mt-2 ed-home-display text-4xl font-bold text-ed-ink">
@@ -182,7 +182,7 @@ export default function PartnershipClient() {
             <div className="overflow-x-auto">
               <table className="w-full text-left min-w-[600px]">
                 <thead>
-                  <tr className="bg-ed-navy text-white font-mono text-[10px] font-black uppercase tracking-wider">
+                  <tr className="bg-ed-navy text-white font-mono text-[12px] font-black uppercase tracking-wider">
                     <th className="px-6 py-4">Scholarship Type</th>
                     <th className="px-6 py-4">Coverage</th>
                     <th className="px-6 py-4 text-right">Fee (USD)</th>
@@ -190,7 +190,7 @@ export default function PartnershipClient() {
                 </thead>
                 <tbody className="divide-y divide-[#12436b]/15">
                   {pricingTable.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-[#f5efe6]">
+                    <tr key={idx} className="hover:bg-[#f1f5f9]">
                       <td className="px-6 py-4">
                         <span className="inline-block px-3 py-1 bg-[#12436b] text-ed-mist font-mono text-xs font-black uppercase">
                           {row.type}
@@ -218,13 +218,13 @@ export default function PartnershipClient() {
       <section id="partnership-form" className="scroll-mt-28 border-b border-[#12436b]/10 bg-white px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-ed-navy">Step 03 · Cooperation request</p>
+            <p className="font-mono text-[12px] font-black uppercase tracking-[0.2em] text-ed-navy">Step 03 · Cooperation request</p>
             <h2 className="mt-2 ed-home-display text-4xl font-bold text-ed-ink">
               Apply for Partnership
             </h2>
           </div>
 
-          <div className="bg-[#f5efe6] border-2 border-[#0f3a5c] p-6 md:p-10 max-w-4xl mx-auto shadow-[8px_8px_0_0_#12436b]">
+          <div className="bg-[#f1f5f9] border-2 border-[#0f3a5c] p-6 md:p-10 max-w-4xl mx-auto shadow-[8px_8px_0_0_#12436b]">
             <PartnershipForm />
           </div>
         </div>

@@ -118,11 +118,11 @@ export default async function SuccessStoriesPage() {
             <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-[20px] border border-rule bg-rule shadow-[0_22px_50px_-44px_rgba(15,53,87,0.45)]">
               <div className="bg-white p-6">
                 <dd className="ed-numeral text-[38px] text-petrol-700">{stories.length}</dd>
-                <dt className="mt-2 text-[11.5px] leading-4 text-ink-mute">Stories ready to publish</dt>
+                <dt className="mt-2 text-[13px] leading-4 text-ink-mute">Stories ready to publish</dt>
               </div>
               <div className="bg-white p-6">
                 <dd className="ed-numeral text-[38px] text-petrol-700">{pendingCount}</dd>
-                <dt className="mt-2 text-[11.5px] leading-4 text-ink-mute">Records awaiting completion</dt>
+                <dt className="mt-2 text-[13px] leading-4 text-ink-mute">Records awaiting completion</dt>
               </div>
             </dl>
           </div>
@@ -146,7 +146,7 @@ export default async function SuccessStoriesPage() {
               <article key={story.id} className="overflow-hidden border border-[#12436b]/20 bg-white">
                 <div className="grid sm:grid-cols-[11rem_1fr]">
                   <div className="relative min-h-44 bg-ed-navy text-white">
-                    {story.image ? <Image src={story.image} alt={`${story.displayName || story.name}, EduExpress student story`} fill sizes="(max-width:640px) 100vw, 176px" className="object-cover" /> : <div className="flex h-full min-h-44 flex-col items-center justify-center p-5 text-center"><CameraOff size={27} className="text-ed-mist" /><p className="mt-3 text-[10px] leading-5 text-white/55">Photo not approved for public display</p></div>}
+                    {story.image ? <Image src={story.image} alt={`${story.displayName || story.name}, EduExpress student story`} fill sizes="(max-width:640px) 100vw, 176px" className="object-cover" /> : <div className="flex h-full min-h-44 flex-col items-center justify-center p-5 text-center"><CameraOff size={27} className="text-ed-mist" /><p className="mt-3 text-[12px] leading-5 text-white/55">Photo not approved for public display</p></div>}
                   </div>
                   <div className="p-5">
                     <div className="flex items-center gap-2 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-emerald-700"><BadgeCheck size={13} />Student story</div>
@@ -173,7 +173,7 @@ export default async function SuccessStoriesPage() {
           <div className="grid overflow-hidden border border-[#12436b]/20 bg-white lg:grid-cols-[.42fr_.58fr]">
             <div className="flex min-h-80 flex-col justify-between bg-ed-navy p-7 text-white sm:p-10">
               <ShieldCheck size={34} className="text-ed-mist" />
-              <div><p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-ed-mist">Publication gate active</p><h2 className="mt-4 ed-home-display text-3xl leading-[1.05] sm:text-[2.4rem]">New student stories are on their way</h2></div>
+              <div><p className="font-mono text-[12px] font-black uppercase tracking-[0.2em] text-ed-mist">Publication gate active</p><h2 className="mt-4 ed-home-display text-3xl leading-[1.05] sm:text-[2.4rem]">New student stories are on their way</h2></div>
             </div>
             <div className="p-7 sm:p-10">
               <p className="text-sm leading-7 text-slate-600">{totalActive} testimonial record{totalActive === 1 ? ' is' : 's are'} on file. Stories appear here once their profile, decision, timeline, service scope and payment details are complete.</p>

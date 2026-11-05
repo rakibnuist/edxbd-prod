@@ -253,7 +253,7 @@ export default async function CountryPage({ params }: Props) {
                 </Link>
               </div>
 
-              <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11.5px] text-ink-mute">
+              <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-mute">
                 <li className="inline-flex items-center gap-1.5">
                   <BadgeCheck size={13} className="text-jade" aria-hidden="true" />
                   Institution checks &amp; recognition review
@@ -281,8 +281,8 @@ export default async function CountryPage({ params }: Props) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-petrol-900/55 via-transparent to-transparent" aria-hidden="true" />
                   <figcaption className="absolute inset-x-3 bottom-3 rounded-xl bg-white/95 px-4 py-3 backdrop-blur">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-petrol-600">Evidence-first guidance</p>
-                    <p className="mt-1 text-[12.5px] font-semibold leading-5 text-ink">
+                    <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-petrol-600">Evidence-first guidance</p>
+                    <p className="mt-1 text-[14px] font-semibold leading-5 text-ink">
                       Recognition • Total costs • Visa readiness • Realistic fit
                     </p>
                   </figcaption>
@@ -290,8 +290,8 @@ export default async function CountryPage({ params }: Props) {
               </figure>
 
               <div className="absolute -left-2 -top-4 hidden rounded-2xl border border-rule bg-white px-4 py-3 shadow-[0_18px_40px_-20px_rgba(7,28,46,0.35)] sm:block">
-                <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-ink-mute">Next deadline</span>
-                <strong className="mt-1 block text-[13px] text-ink">{country.nextDeadline || 'Check current cycle'}</strong>
+                <span className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">Next deadline</span>
+                <strong className="mt-1 block text-[15px] text-ink">{country.nextDeadline || 'Check current cycle'}</strong>
               </div>
             </div>
           </div>
@@ -302,19 +302,19 @@ export default async function CountryPage({ params }: Props) {
       <section aria-label="Quick facts" className="relative z-20 -mt-8 px-4 sm:px-6 lg:px-10">
         <dl className="mx-auto grid max-w-shell grid-cols-2 gap-px overflow-hidden rounded-[24px] border border-rule bg-rule shadow-[0_30px_70px_-48px_rgba(15,53,87,0.5)] sm:grid-cols-4">
           <div className="bg-white px-5 py-5">
-            <dt className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Primary intakes</dt>
+            <dt className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Primary intakes</dt>
             <dd className="mt-2 text-[14px] font-semibold text-ink">{country.intakesText || 'Confirmed per intake'}</dd>
           </div>
           <div className="bg-white px-5 py-5">
-            <dt className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Next major deadline</dt>
+            <dt className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Next major deadline</dt>
             <dd className="mt-2 text-[14px] font-semibold text-ink">{country.nextDeadline || 'Check current cycle'}</dd>
           </div>
           <div className="bg-white px-5 py-5">
-            <dt className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Indicative tuition</dt>
+            <dt className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Indicative tuition</dt>
             <dd className="mt-2 text-[14px] font-semibold text-ink">{country.costs?.tuition || 'Varies by institution'}</dd>
           </div>
           <div className="bg-white px-5 py-5">
-            <dt className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Indicative living</dt>
+            <dt className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Indicative living</dt>
             <dd className="mt-2 text-[14px] font-semibold text-ink">{country.costs?.living || 'Varies by city'}</dd>
           </div>
         </dl>
@@ -383,7 +383,7 @@ export default async function CountryPage({ params }: Props) {
               {programAreas.map((program) => (
                 <span
                   key={program}
-                  className="rounded-full border border-rule-strong bg-chalk-100 px-4 py-2 text-[12.5px] font-semibold text-petrol-700"
+                  className="rounded-full border border-rule-strong bg-chalk-100 px-4 py-2 text-[14px] font-semibold text-petrol-700"
                 >
                   {program}
                 </span>
@@ -397,13 +397,13 @@ export default async function CountryPage({ params }: Props) {
                 </div>
                 <ul className="mt-4 grid gap-2 sm:grid-cols-2">
                   {country.universities.map((university) => (
-                    <li key={university} className="flex items-center gap-2 text-[13.5px] text-ink-soft">
+                    <li key={university} className="flex items-center gap-2 text-[15px] text-ink-soft">
                       <Check size={16} className="shrink-0 text-jade" aria-hidden="true" />
                       <span>{university}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="mt-4 text-[11.5px] text-ink-mute">
+                <p className="mt-4 text-[13px] text-ink-mute">
                   Availability changes by intake. Always confirm current admission status for your chosen intake.
                 </p>
               </div>
@@ -427,7 +427,7 @@ export default async function CountryPage({ params }: Props) {
                 <h3 className="ed-home-display text-[18px] text-ink">Language & academics</h3>
                 <ul className="mt-4 grid gap-3">
                   {(country.requirements?.language || []).map((req, i) => (
-                    <li key={i} className="flex gap-3 text-[13.5px] leading-7 text-ink-soft">
+                    <li key={i} className="flex gap-3 text-[15px] leading-7 text-ink-soft">
                       <span className="mt-2 inline-block size-1.5 shrink-0 rounded-full bg-petrol-500" aria-hidden="true" />
                       <span>{req}</span>
                     </li>
@@ -438,7 +438,7 @@ export default async function CountryPage({ params }: Props) {
                 <h3 className="ed-home-display text-[18px] text-ink">Documents to prepare</h3>
                 <ul className="mt-4 grid gap-3">
                   {(country.requirements?.documents || []).map((req, i) => (
-                    <li key={i} className="flex gap-3 text-[13.5px] leading-7 text-ink-soft">
+                    <li key={i} className="flex gap-3 text-[15px] leading-7 text-ink-soft">
                       <span className="mt-2 inline-block size-1.5 shrink-0 rounded-full bg-petrol-500" aria-hidden="true" />
                       <span>{req}</span>
                     </li>
@@ -451,14 +451,14 @@ export default async function CountryPage({ params }: Props) {
           <RouteDetail icon={CircleDollarSign} title="Cost, fees and funding reality">
             <div className="grid gap-4 sm:grid-cols-2">
               <article className="rounded-[22px] border border-rule bg-white p-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Indicative tuition</p>
+                <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Indicative tuition</p>
                 <p className="mt-2 ed-home-display text-[20px] leading-snug text-ink">{country.costs?.tuition || 'Varies widely by institution'}</p>
-                <p className="mt-2 text-[12.5px] text-ink-mute">Currency: {country.costs?.currency || 'Check with institution'}</p>
+                <p className="mt-2 text-[14px] text-ink-mute">Currency: {country.costs?.currency || 'Check with institution'}</p>
               </article>
               <article className="rounded-[22px] border border-rule bg-white p-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Indicative living costs</p>
+                <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Indicative living costs</p>
                 <p className="mt-2 ed-home-display text-[20px] leading-snug text-ink">{country.costs?.living || 'Varies by city and lifestyle'}</p>
-                <p className="mt-2 text-[12.5px] text-ink-mute">Prepare a dated, itemised cost sheet</p>
+                <p className="mt-2 text-[14px] text-ink-mute">Prepare a dated, itemised cost sheet</p>
               </article>
             </div>
             {country.scholarships && country.scholarships.length > 0 && (
@@ -469,13 +469,13 @@ export default async function CountryPage({ params }: Props) {
                 </div>
                 <div className="mt-4 grid gap-2 sm:grid-cols-2">
                   {country.scholarships.map((scholarship) => (
-                    <div key={scholarship} className="flex items-center gap-3 rounded-xl border border-white bg-white px-4 py-3 text-[13.5px] font-semibold text-ink">
+                    <div key={scholarship} className="flex items-center gap-3 rounded-xl border border-white bg-white px-4 py-3 text-[15px] font-semibold text-ink">
                       <Check size={16} className="shrink-0 text-jade" aria-hidden="true" />
                       <span>{scholarship}</span>
                     </div>
                   ))}
                 </div>
-                <p className="mt-4 text-[11.5px] text-ink-mute">
+                <p className="mt-4 text-[13px] text-ink-mute">
                   Eligibility changes by intake. Always confirm coverage, renewal conditions and costs that remain.
                 </p>
               </div>
@@ -496,13 +496,13 @@ export default async function CountryPage({ params }: Props) {
             </p>
             <ul className="mt-5 grid gap-3">
               {(country.requirements?.visa || []).map((visa, i) => (
-                <li key={i} className="flex gap-3 rounded-2xl border border-rule bg-chalk-100 p-4 text-[13.5px] leading-7 text-ink-soft">
+                <li key={i} className="flex gap-3 rounded-2xl border border-rule bg-chalk-100 p-4 text-[15px] leading-7 text-ink-soft">
                   <ArrowRight size={16} className="mt-1 shrink-0 text-petrol-600" aria-hidden="true" />
                   <span>{visa}</span>
                 </li>
               ))}
             </ul>
-            <p className="mt-4 text-[11.5px] text-ink-mute">
+            <p className="mt-4 text-[13px] text-ink-mute">
               Processing times, fees and forms change. Always verify against the official embassy/consulate website for your intake.
             </p>
           </RouteDetail>
@@ -514,7 +514,7 @@ export default async function CountryPage({ params }: Props) {
                   <CheckCircle2 size={18} aria-hidden="true" />
                   <h3 className="ed-home-display text-[18px] text-ink">Work rights</h3>
                 </div>
-                <p className="mt-3 text-[13.5px] leading-7 text-ink-soft">
+                <p className="mt-3 text-[15px] leading-7 text-ink-soft">
                   {country.workRightsAndCareer?.rights || 'Check current student work rules with the official immigration source.'}
                 </p>
               </article>
@@ -523,7 +523,7 @@ export default async function CountryPage({ params }: Props) {
                   <ArrowUpRight size={18} aria-hidden="true" />
                   <h3 className="ed-home-display text-[18px] text-ink">Career opportunities</h3>
                 </div>
-                <p className="mt-3 text-[13.5px] leading-7 text-ink-soft">
+                <p className="mt-3 text-[15px] leading-7 text-ink-soft">
                   {country.workRightsAndCareer?.opportunities || 'Outcomes depend on skills, language, networking and the job market at graduation.'}
                 </p>
               </article>
@@ -532,7 +532,7 @@ export default async function CountryPage({ params }: Props) {
                   <Info size={18} aria-hidden="true" />
                   <h3 className="ed-home-display text-[18px] text-ink">Reality check</h3>
                 </div>
-                <p className="mt-3 text-[13.5px] leading-7 text-ink-soft">
+                <p className="mt-3 text-[15px] leading-7 text-ink-soft">
                   {country.workRightsAndCareer?.caveats ||
                     'Do not rely on part-time work to cover tuition. Post-study rules change frequently — verify for your exact intake.'}
                 </p>
@@ -543,15 +543,15 @@ export default async function CountryPage({ params }: Props) {
           <RouteDetail icon={Calendar} title="Intakes, deadlines and timing">
             <div className="grid gap-4 sm:grid-cols-2">
               <article className="rounded-[22px] border border-rule bg-chalk-100 p-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Primary intakes</p>
+                <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Primary intakes</p>
                 <p className="mt-2 ed-home-display text-[20px] text-ink">{country.intakesText || 'Confirmed per institution'}</p>
               </article>
               <article className="rounded-[22px] border border-rule bg-chalk-100 p-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Next major deadline</p>
+                <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Next major deadline</p>
                 <p className="mt-2 ed-home-display text-[20px] text-ink">{country.nextDeadline || 'Contact us for current deadlines'}</p>
               </article>
             </div>
-            <p className="mt-4 text-[12.5px] text-ink-mute">
+            <p className="mt-4 text-[14px] text-ink-mute">
               Deadlines are often tied to scholarship rounds and visa processing. Start early to avoid last-minute document gaps.
             </p>
           </RouteDetail>
@@ -563,14 +563,14 @@ export default async function CountryPage({ params }: Props) {
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <article className="rounded-[22px] border border-rule bg-white p-6">
                 <h3 className="ed-home-display text-[19px] text-ink">vs {country.comparisons?.countryA || 'Another destination'}</h3>
-                <p className="mt-3 text-[13.5px] leading-7 text-ink-soft">
+                <p className="mt-3 text-[15px] leading-7 text-ink-soft">
                   {country.comparisons?.countryA_description ||
                     'Consider recognition, total cost, visa rules and career fit side by side for your goals.'}
                 </p>
               </article>
               <article className="rounded-[22px] border border-rule bg-white p-6">
                 <h3 className="ed-home-display text-[19px] text-ink">vs {country.comparisons?.countryB || 'Another destination'}</h3>
-                <p className="mt-3 text-[13.5px] leading-7 text-ink-soft">
+                <p className="mt-3 text-[15px] leading-7 text-ink-soft">
                   {country.comparisons?.countryB_description ||
                     'Compare realistic scholarship access, living costs and application timelines before deciding.'}
                 </p>
@@ -613,7 +613,7 @@ export default async function CountryPage({ params }: Props) {
                       +
                     </span>
                   </summary>
-                  <p className="pb-5 pr-10 text-[13px] leading-7 text-ink-soft">{faq.answer}</p>
+                  <p className="pb-5 pr-10 text-[15px] leading-7 text-ink-soft">{faq.answer}</p>
                 </details>
               ))}
             </div>
@@ -634,23 +634,23 @@ export default async function CountryPage({ params }: Props) {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-[22px] border border-rule bg-chalk-100 p-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Reviewed by</p>
+                <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Reviewed by</p>
                 <p className="mt-2 ed-home-display text-[18px] text-ink">{country.reviewerInfo?.name || 'EduExpress Review Team'}</p>
-                <p className="mt-1 text-[13px] text-ink-soft">{country.reviewerInfo?.role || 'Admissions & Compliance'}</p>
-                <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-rule-strong bg-white px-3 py-1 text-[11px] font-semibold text-petrol-700">
+                <p className="mt-1 text-[15px] text-ink-soft">{country.reviewerInfo?.role || 'Admissions & Compliance'}</p>
+                <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-rule-strong bg-white px-3 py-1 text-[13px] font-semibold text-petrol-700">
                   <BadgeCheck size={13} aria-hidden="true" />
                   Last verified: {lastReviewed}
                 </p>
               </div>
               <div className="rounded-[22px] border border-rule bg-chalk-100 p-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Primary sources</p>
+                <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Primary sources</p>
                 <ul className="mt-3 grid gap-2">
                   {(country.reviewerInfo?.primarySources || [
                     'Official embassy/consulate guidance',
                     'Higher education authority',
                     'Immigration authority',
                   ]).map((source, i) => (
-                    <li key={i} className="flex items-start gap-2 text-[13px] leading-6 text-ink-soft">
+                    <li key={i} className="flex items-start gap-2 text-[15px] leading-6 text-ink-soft">
                       <Check size={16} className="mt-0.5 shrink-0 text-jade" aria-hidden="true" />
                       <span>{source}</span>
                     </li>
@@ -678,7 +678,7 @@ export default async function CountryPage({ params }: Props) {
           <div className="pointer-events-none absolute -right-24 -top-28 size-[420px] rounded-full bg-sky-500/25 blur-[110px]" aria-hidden="true" />
           <div className="relative grid gap-9 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
             <div>
-              <p className="inline-flex items-center gap-2.5 text-[12px] font-bold text-mint-300">
+              <p className="inline-flex items-center gap-2.5 text-[14px] font-bold text-mint-300">
                 <span className="h-px w-7 bg-mint-300" aria-hidden="true" /> Next step
               </p>
               <h2 className="ed-display mt-4 max-w-[26ch] text-[clamp(2.1rem,4vw,3.2rem)] leading-[1.04] text-white">
@@ -695,22 +695,22 @@ export default async function CountryPage({ params }: Props) {
                   Explore other destinations <ArrowUpRight size={16} aria-hidden="true" />
                 </Link>
               </div>
-              <p className="mt-4 text-[11px] text-white/60">
+              <p className="mt-4 text-[13px] text-white/60">
                 No obligation. For China, no EduExpress service fee before China visa approval.
               </p>
             </div>
 
-            <ol className="grid gap-3 text-[13px] text-white/85">
+            <ol className="grid gap-3 text-[15px] text-white/85">
               {[
                 ['01', 'Profile review', 'Level, results, subject, budget and preferred intake.'],
                 ['02', 'Written shortlist', 'Recognition, costs, entry rules and realistic fit compared.'],
                 ['03', 'Clear next steps', 'Apply only when fit, timeline and costs are clear in writing.'],
               ].map(([number, title, copy]) => (
                 <li key={title} className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3.5">
-                  <span className="ed-figure text-[11px] font-bold tracking-[0.12em] text-mint-300">{number}</span>
+                  <span className="ed-figure text-[13px] font-bold tracking-[0.12em] text-mint-300">{number}</span>
                   <span>
-                    <strong className="block text-[13.5px] font-semibold text-white">{title}</strong>
-                    <span className="mt-0.5 block text-[11.5px] leading-5 text-white/70">{copy}</span>
+                    <strong className="block text-[15px] font-semibold text-white">{title}</strong>
+                    <span className="mt-0.5 block text-[13px] leading-5 text-white/70">{copy}</span>
                   </span>
                 </li>
               ))}

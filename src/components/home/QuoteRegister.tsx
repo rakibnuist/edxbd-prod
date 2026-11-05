@@ -29,7 +29,7 @@ export default function QuoteRegister({ quotes }: { quotes: RegisterQuote[] }) {
               <Star key={star} size={14} className="fill-current" aria-hidden="true" />
             ))}
           </div>
-          <span className="home-stamp rotate-[-1.4deg] !border-jade/60 !px-2 !py-1 text-[9px] !text-jade">
+          <span className="home-stamp rotate-[-1.4deg] !border-jade/60 !px-2 !py-1 text-[12px] !text-jade">
             Consent on file
           </span>
         </div>
@@ -54,9 +54,9 @@ export default function QuoteRegister({ quotes }: { quotes: RegisterQuote[] }) {
           )}
           <div>
             <p className="text-[14px] font-semibold text-ink">{active.name}</p>
-            <p className="mt-0.5 text-[12px] text-ink-mute">{active.detail}</p>
+            <p className="mt-0.5 text-[14px] text-ink-mute">{active.detail}</p>
           </div>
-          <span className="ml-auto hidden text-[10.5px] text-ink-mute sm:block">Published with consent</span>
+          <span className="ml-auto hidden text-[12px] text-ink-mute sm:block">Published with consent</span>
         </div>
       </div>
 
@@ -80,7 +80,7 @@ export default function QuoteRegister({ quotes }: { quotes: RegisterQuote[] }) {
               <ChevronRight size={16} />
             </button>
           </div>
-          <span className="ed-figure text-[12px] text-ink-mute">
+          <span className="ed-figure text-[14px] text-ink-mute">
             {String(index + 1).padStart(2, '0')} / {String(quotes.length).padStart(2, '0')}
           </span>
         </div>
@@ -92,7 +92,7 @@ export default function QuoteRegister({ quotes }: { quotes: RegisterQuote[] }) {
                 type="button"
                 onClick={() => setIndex(position)}
                 aria-current={position === index ? 'true' : undefined}
-                className={`w-full truncate border-l-2 py-1.5 pl-3 text-left text-[12px] transition-colors ${
+                className={`w-full truncate border-l-2 py-1.5 pl-3 text-left text-[14px] transition-colors ${
                   position === index
                     ? 'border-marigold font-semibold text-petrol-700'
                     : 'border-transparent text-ink-mute hover:border-rule-strong hover:text-ink'

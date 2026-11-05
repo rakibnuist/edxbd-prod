@@ -77,7 +77,7 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
   };
 
   return (
-    <article className="bg-[#f5efe6] text-[#0f3a5c] font-sans">
+    <article className="bg-[#f1f5f9] text-[#0f3a5c] font-sans">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
       
       <PageHeader

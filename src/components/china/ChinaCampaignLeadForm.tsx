@@ -114,7 +114,7 @@ export default function ChinaCampaignLeadForm() {
         <span className="mx-auto grid size-16 place-items-center rounded-full bg-[#e3f0f9] text-[#12436b]">
           <CheckCircle2 size={34} />
         </span>
-        <p className="mt-6 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#12436b]">Assessment request received</p>
+        <p className="mt-6 font-mono text-[12px] font-black uppercase tracking-[0.2em] text-[#12436b]">Assessment request received</p>
         <h2 className="mt-3 font-heading text-3xl font-bold text-[#0f3a5c]">Your China profile is in the review queue</h2>
         <p className="mx-auto mt-4 max-w-sm text-sm leading-6 text-slate-600">
           A China admissions counselor will review your study level, eligibility and likely next documents, then contact you during office hours.
@@ -131,7 +131,7 @@ export default function ChinaCampaignLeadForm() {
     <form id="china-fit-form" onSubmit={handleSubmit} className="scroll-mt-[92px] bg-white p-5 text-[#0f3a5c] shadow-[0_25px_80px_rgba(11,43,69,0.22)] sm:p-7 min-[1200px]:scroll-mt-[120px]" noValidate>
       <div className="flex items-start justify-between gap-4 border-b border-[#12436b]/15 pb-4">
         <div>
-          <p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#12436b]">Free first step</p>
+          <p className="font-mono text-[12px] font-black uppercase tracking-[0.2em] text-[#12436b]">Free first step</p>
           <h2 className="mt-1 font-heading text-2xl font-bold leading-tight">Get your China Fit Assessment</h2>
         </div>
         <span className="grid size-10 shrink-0 place-items-center bg-[#e3f0f9] text-[#12436b]" aria-hidden="true"><ShieldCheck size={21} /></span>
@@ -183,7 +183,7 @@ export default function ChinaCampaignLeadForm() {
         </div>
       </div>
 
-      <div className="mt-4 flex items-start gap-3 text-[11px] leading-5 text-slate-600">
+      <div className="mt-4 flex items-start gap-3 text-[13px] leading-5 text-slate-600">
         <input id="consent" name="consent" type="checkbox" checked={formData.consent} onFocus={() => recordInteraction('consent')} onChange={(event) => setFormData({ ...formData, consent: event.target.checked })} className="mt-1 size-4 shrink-0 accent-[#12436b]" required />
         <label htmlFor="consent" className="cursor-pointer">I agree that EduExpress may contact me about this assessment. I have read the <Link href="/privacy" className="font-bold text-[#12436b] underline">privacy policy</Link>.</label>
       </div>
@@ -194,7 +194,7 @@ export default function ChinaCampaignLeadForm() {
         {isSubmitting ? 'Sending your profile' : 'Get My China Fit Assessment'} <ArrowRight size={17} aria-hidden="true" />
       </button>
 
-      <div className="mt-3 flex items-center justify-center gap-2 text-[10px] font-bold text-slate-500">
+      <div className="mt-3 flex items-center justify-center gap-2 text-[12px] font-bold text-slate-500">
         <LockKeyhole size={12} aria-hidden="true" /> No file opening charge. Your details are used only for this request.
       </div>
     </form>

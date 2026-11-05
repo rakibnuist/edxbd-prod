@@ -105,13 +105,13 @@ export default function JourneyRoute() {
                 </span>
 
                 <h3 className="font-heading text-[20px] leading-snug text-white">{stage.title}</h3>
-                <p className="mt-2 text-[12.5px] leading-[1.7] text-white/60">{stage.copy}</p>
+                <p className="mt-2 text-[14px] leading-[1.7] text-white/60">{stage.copy}</p>
               </motion.li>
             ))}
           </ol>
         </div>
 
-        <p className="mt-10 border-t border-white/12 pt-5 text-[11.5px] leading-6 text-white/50">
+        <p className="mt-10 border-t border-white/12 pt-5 text-[13px] leading-6 text-white/50">
           No consultancy controls an embassy decision. The final decision belongs to the relevant university and authority.
         </p>
       </div>

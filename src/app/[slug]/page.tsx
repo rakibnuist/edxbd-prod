@@ -170,7 +170,7 @@ export default async function EvidencePageRoute({ params }: Props) {
                 </Link>
               </div>
 
-              <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11.5px] text-ink-mute">
+              <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-mute">
                 <li className="inline-flex items-center gap-1.5">
                   <BadgeCheck size={13} className="text-jade" aria-hidden="true" />
                   Owned by Content &amp; Compliance
@@ -189,28 +189,28 @@ export default async function EvidencePageRoute({ params }: Props) {
               <p className="ed-label">The record</p>
               <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-rule bg-rule">
                 <div className="bg-white p-4">
-                  <dt className="text-[10px] font-bold uppercase tracking-[0.12em] text-ink-mute">Owner</dt>
-                  <dd className="mt-1 text-[13px] font-semibold text-ink">Content &amp; Compliance</dd>
+                  <dt className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">Owner</dt>
+                  <dd className="mt-1 text-[15px] font-semibold text-ink">Content &amp; Compliance</dd>
                 </div>
                 <div className="bg-white p-4">
-                  <dt className="text-[10px] font-bold uppercase tracking-[0.12em] text-ink-mute">Reviewed</dt>
-                  <dd className="mt-1 text-[13px] font-semibold text-ink">
+                  <dt className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">Reviewed</dt>
+                  <dd className="mt-1 text-[15px] font-semibold text-ink">
                     {new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(page.reviewedAt))}
                   </dd>
                 </div>
                 <div className="bg-white p-4">
-                  <dt className="text-[10px] font-bold uppercase tracking-[0.12em] text-ink-mute">Sources</dt>
-                  <dd className="mt-1 text-[13px] font-semibold text-ink">Official</dd>
+                  <dt className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">Sources</dt>
+                  <dd className="mt-1 text-[15px] font-semibold text-ink">Official</dd>
                 </div>
                 <div className="bg-white p-4">
-                  <dt className="text-[10px] font-bold uppercase tracking-[0.12em] text-ink-mute">Status</dt>
-                  <dd className="mt-1 text-[13px] font-semibold text-jade">Public</dd>
+                  <dt className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">Status</dt>
+                  <dd className="mt-1 text-[15px] font-semibold text-jade">Public</dd>
                 </div>
               </dl>
-              <p className="mt-4 text-[12px] leading-6 text-ink-soft">
+              <p className="mt-4 text-[14px] leading-6 text-ink-soft">
                 Every claim here is tied to a written responsibility or an official source. Private student records are never published.
               </p>
-              <Link href="/proof-library" className="mt-4 inline-flex items-center gap-1.5 text-[12.5px] font-bold text-petrol-700 hover:text-petrol-900">
+              <Link href="/proof-library" className="mt-4 inline-flex items-center gap-1.5 text-[14px] font-bold text-petrol-700 hover:text-petrol-900">
                 Inspect the proof library <ArrowRight size={14} aria-hidden="true" />
               </Link>
             </aside>
@@ -230,7 +230,7 @@ export default async function EvidencePageRoute({ params }: Props) {
                 <div className="flex flex-col gap-4 border-b border-rule p-7 sm:flex-row sm:items-start sm:justify-between sm:p-9">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="ed-figure text-[11px] font-bold tracking-[0.14em] text-ink-mute">
+                      <span className="ed-figure text-[13px] font-bold tracking-[0.14em] text-ink-mute">
                         SECTION {String(idx + 1).padStart(2, '0')}
                       </span>
                       <span className="h-px w-6 bg-rule-strong" aria-hidden="true" />
@@ -239,7 +239,7 @@ export default async function EvidencePageRoute({ params }: Props) {
                       {section.heading}
                     </h2>
                   </div>
-                  <div className="flex items-center gap-2 rounded-full border border-rule-strong bg-chalk-100 px-3 py-1.5 text-[11px] font-semibold text-petrol-700">
+                  <div className="flex items-center gap-2 rounded-full border border-rule-strong bg-chalk-100 px-3 py-1.5 text-[13px] font-semibold text-petrol-700">
                     <FileText size={13} aria-hidden="true" />
                     EduExpress standard
                   </div>
@@ -251,7 +251,7 @@ export default async function EvidencePageRoute({ params }: Props) {
                       {section.items.map((item) => (
                         <li
                           key={item}
-                          className="flex items-start gap-3 rounded-2xl border border-rule bg-chalk-100 px-4 py-3 text-[13px] font-semibold leading-6 text-ink"
+                          className="flex items-start gap-3 rounded-2xl border border-rule bg-chalk-100 px-4 py-3 text-[15px] font-semibold leading-6 text-ink"
                         >
                           <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-jade" aria-hidden="true" />
                           <span>{item}</span>
@@ -271,7 +271,7 @@ export default async function EvidencePageRoute({ params }: Props) {
                     <h2 className="ed-display mt-4 text-[clamp(1.6rem,2.8vw,2.2rem)] leading-[1.08] text-ink">
                       Official sources
                     </h2>
-                    <p className="mt-2 text-[13px] text-ink-soft">
+                    <p className="mt-2 text-[15px] text-ink-soft">
                       Links to official authorities referenced in this policy.
                     </p>
                   </div>
@@ -285,7 +285,7 @@ export default async function EvidencePageRoute({ params }: Props) {
                         rel="noreferrer noopener"
                         target="_blank"
                       >
-                        <span className="text-[13.5px] font-semibold text-ink">{source.label}</span>
+                        <span className="text-[15px] font-semibold text-ink">{source.label}</span>
                         <ArrowUpRight size={16} className="shrink-0 text-petrol-600 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
                       </a>
                     </li>
@@ -316,17 +316,17 @@ export default async function EvidencePageRoute({ params }: Props) {
                   </div>
                 </div>
 
-                <ol className="grid gap-2.5 text-[13px]">
+                <ol className="grid gap-2.5 text-[15px]">
                   {[
                     ['01', 'Profile review', 'Results, goals, budget and preferred intake.'],
                     ['02', 'Written comparison', 'Recognition, costs, risks and realistic options.'],
                     ['03', 'Clear next steps', 'Apply only when fit and costs are clear in writing.'],
                   ].map(([number, title, copy]) => (
                     <li key={title} className="flex gap-4 rounded-2xl border border-white bg-white px-4 py-3.5 shadow-[0_16px_36px_-32px_rgba(15,53,87,0.45)]">
-                      <span className="ed-figure text-[11px] font-bold tracking-[0.12em] text-petrol-600">{number}</span>
+                      <span className="ed-figure text-[13px] font-bold tracking-[0.12em] text-petrol-600">{number}</span>
                       <span>
-                        <strong className="block text-[13.5px] font-semibold text-ink">{title}</strong>
-                        <span className="mt-0.5 block text-[11.5px] leading-5 text-ink-soft">{copy}</span>
+                        <strong className="block text-[15px] font-semibold text-ink">{title}</strong>
+                        <span className="mt-0.5 block text-[13px] leading-5 text-ink-soft">{copy}</span>
                       </span>
                     </li>
                   ))}

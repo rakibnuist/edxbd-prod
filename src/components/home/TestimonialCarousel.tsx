@@ -67,10 +67,10 @@ export default function TestimonialCarousel({ quotes }: { quotes: CarouselQuote[
       <div className="relative z-10 overflow-hidden rounded-[26px] border border-rule bg-white shadow-[0_30px_70px_-48px_rgba(15,53,87,0.5)]">
         {/* Header */}
         <div className="flex items-center justify-between gap-3 border-b border-rule bg-chalk-100 px-5 py-3.5">
-          <div className="flex items-center gap-2 text-[12.5px] font-semibold text-ink">
+          <div className="flex items-center gap-2 text-[14px] font-semibold text-ink">
             <span className="size-1.5 rounded-full bg-marigold" aria-hidden="true" />
             Student stories
-            <span className="ml-0.5 rounded-full bg-mint-100 px-2 py-0.5 text-[10px] font-semibold normal-case tracking-normal text-petrol-600">
+            <span className="ml-0.5 rounded-full bg-mint-100 px-2 py-0.5 text-[12px] font-semibold normal-case tracking-normal text-petrol-600">
               {quotes.length} verified
             </span>
           </div>
@@ -120,7 +120,7 @@ export default function TestimonialCarousel({ quotes }: { quotes: CarouselQuote[
                     <Star key={star} size={14} className="fill-current" aria-hidden="true" />
                   ))}
                 </div>
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-jade">
+                <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-jade">
                   <ShieldCheck size={12} aria-hidden="true" /> Consent on file
                 </span>
               </div>
@@ -148,7 +148,7 @@ export default function TestimonialCarousel({ quotes }: { quotes: CarouselQuote[
                 )}
                 <div className="min-w-0">
                   <p className="truncate text-[14px] font-semibold text-ink">{active.name}</p>
-                  <p className="truncate text-[12px] text-ink-mute">{active.detail}</p>
+                  <p className="truncate text-[14px] text-ink-mute">{active.detail}</p>
                 </div>
               </div>
             </motion.div>
@@ -173,14 +173,14 @@ export default function TestimonialCarousel({ quotes }: { quotes: CarouselQuote[
                 {quote.image ? (
                   <Image src={quote.image} alt="" width={36} height={36} className="h-full w-full object-cover" />
                 ) : (
-                  <span className="grid h-full w-full place-items-center bg-mint-100 text-[12px] font-semibold text-petrol-700">
+                  <span className="grid h-full w-full place-items-center bg-mint-100 text-[14px] font-semibold text-petrol-700">
                     {quote.name.slice(0, 1)}
                   </span>
                 )}
               </button>
             );
           })}
-          <span className="ed-figure ml-auto text-[11px] text-ink-mute">
+          <span className="ed-figure ml-auto text-[13px] text-ink-mute">
             {String(index + 1).padStart(2, '0')} / {String(quotes.length).padStart(2, '0')}
           </span>
         </div>

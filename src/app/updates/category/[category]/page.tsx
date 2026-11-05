@@ -132,8 +132,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 </div>
                 <div className="p-5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-[0.13em] text-[#12436b]">{update.category || update.categories?.[0] || 'Update'}</span>
-                    <span className="shrink-0 rounded-full border border-[#12436b]/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-slate-500">{update.type === 'article' ? 'Article' : 'Update'}</span>
+                    <span className="text-[12px] font-black uppercase tracking-[0.13em] text-[#12436b]">{update.category || update.categories?.[0] || 'Update'}</span>
+                    <span className="shrink-0 rounded-full border border-[#12436b]/15 px-2 py-0.5 text-[12px] font-black uppercase tracking-[0.13em] text-slate-500">{update.type === 'article' ? 'Article' : 'Update'}</span>
                   </div>
                   <h2 className="mt-3 line-clamp-2 text-xl font-extrabold leading-7 tracking-[-0.025em]">{update.title}</h2>
                   {update.excerpt ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{update.excerpt}</p> : null}

@@ -26,10 +26,10 @@ export default function March2027Experience({ universities, whatsappNumber }: { 
     requestAnimationFrame(()=>{const form = document.getElementById('march-2027-assessment'); form?.scrollIntoView({ behavior: 'auto', block: 'start' }); (form?.querySelector('input, select') as HTMLElement | null)?.focus({ preventScroll: true });});
   };
   return <>
-    <section className="border-b border-[#e3f0f9] bg-[#fbf7f1] px-5 py-8 sm:px-8 lg:py-11">
+    <section className="border-b border-[#e3f0f9] bg-[#f8fafc] px-5 py-8 sm:px-8 lg:py-11">
       <div className="mx-auto grid max-w-[1180px] gap-7 lg:grid-cols-[1.22fr_1fr] lg:gap-14">
         <div className="min-w-0">
-          <p className="inline-flex items-center gap-2 rounded-md border border-[#f6e9da] bg-white px-3 py-1.5 text-xs font-semibold text-[#a8452c]"><span className="size-2 rounded-full bg-[#a8452c]"/>Spring study routes for Bangladeshi students</p>
+          <p className="inline-flex items-center gap-2 rounded-md border border-[#f1f5f9] bg-white px-3 py-1.5 text-xs font-semibold text-[#a8452c]"><span className="size-2 rounded-full bg-[#a8452c]"/>Spring study routes for Bangladeshi students</p>
           <h1 style={{ fontSynthesis: 'weight' }} className="mt-5 text-[clamp(2.5rem,5vw,4.1rem)] font-extrabold leading-[1.08] tracking-[-.045em] text-[#0b2b45]">Study in China.<br/>March 2027 intake.</h1>
           <p className="mt-4 max-w-xl text-xl font-semibold leading-relaxed text-[#0b2b45]">Find your programme.<br className="hidden sm:block"/> Know your costs. Plan your next step.</p>
           <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600">Explore universities, scholarship options and study routes. Get a personalised shortlist and a clear application plan with EduExpress International.</p>

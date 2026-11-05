@@ -67,8 +67,8 @@ export default function DestinationRegister({ rows }: { rows: DestinationRow[] }
                     row.established
                       ? isActive
                         ? 'border-[#2c6a97] text-[#2c6a97]'
-                        : 'border-[#5e4f40]/35 text-[#5e4f40]'
-                      : 'border-[#4a9cc8] bg-[#f6e9da] text-[#256994]'
+                        : 'border-[#475569]/35 text-[#475569]'
+                      : 'border-[#4a9cc8] bg-[#f1f5f9] text-[#256994]'
                   }`}
                 >
                   {row.status}

@@ -18,7 +18,7 @@ import "./globals.css";
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
 export const viewport: Viewport = {
-  themeColor: "#f6e9da",
+  themeColor: "#f1f5f9",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,

@@ -53,23 +53,23 @@ const timelineSteps = [
 export default function ChinaIntakesDeadlinesPage() {
   const intakes = getChinaIntakes();
   return (
-    <div className="bg-[#f5efe6] text-[#0f3a5c]">
+    <div className="bg-[#f1f5f9] text-[#0f3a5c]">
       {/* HERO */}
-      <section className="relative overflow-hidden bg-[#0f3a5c] px-5 pb-20 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
+      <section className="relative overflow-hidden bg-gradient-to-b from-mint-100/70 to-white px-5 pb-20 pt-28 text-ink sm:px-8 sm:pt-32 lg:px-12">
         <div className="relative mx-auto max-w-[1440px]">
-          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-white/50">
-            <Link href="/" className="hover:text-white">Home</Link> <span aria-hidden>/</span>{' '}
-            <Link href="/study-in-china-from-bangladesh" className="hover:text-white">Study in China</Link> <span aria-hidden>/</span> Intakes & Deadlines
+          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-ink-mute">
+            <Link href="/" className="hover:text-ink">Home</Link> <span aria-hidden>/</span>{' '}
+            <Link href="/study-in-china-from-bangladesh" className="hover:text-ink">Study in China</Link> <span aria-hidden>/</span> Intakes & Deadlines
           </nav>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#a9d6ee]/30 bg-[#a9d6ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-[#a9d6ee]">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#a9d6ee]/30 bg-[#a9d6ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-petrol-600">
               <Calendar size={14} /> Dynamic Intake Calendar 2026/27
             </div>
             <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
               China University Intakes & Application Deadlines
             </h1>
-            <p className="mt-6 text-lg leading-8 text-white/80 md:text-xl">
+            <p className="mt-6 text-lg leading-8 text-ink-soft md:text-xl">
               Plan your application timeline for March and September intakes. Stay ahead of CSC scholarship deadlines, university admission rounds, and visa processing windows.
             </p>
 
@@ -142,7 +142,7 @@ export default function ChinaIntakesDeadlinesPage() {
 
           <div className="mt-12 space-y-6">
             {timelineSteps.map((t, idx) => (
-              <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-2xl bg-[#f5efe6] p-6 border border-slate-200 gap-4">
+              <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-2xl bg-[#f1f5f9] p-6 border border-slate-200 gap-4">
                 <div>
                   <h3 className="font-bold text-lg text-[#0f3a5c]">{t.step}</h3>
                   <p className="mt-1 text-sm text-slate-600">{t.detail}</p>

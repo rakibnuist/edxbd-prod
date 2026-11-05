@@ -93,3 +93,24 @@ export const primaryNavigation = [
   { name: 'Proof', href: '/better-education-standard', menu: 'proof' as const },
   { name: 'Advice', href: '/updates', menu: 'resources' as const },
 ];
+
+// Header groups for the simplified primary navigation (5 items). Plain labels
+// a first-time student or parent recognises without decoding the brand terms.
+export const costNavigation: SiteLink[] = [
+  { name: 'Scholarship guidance', href: '/scholarships', note: 'What awards really cover and who qualifies' },
+  { name: 'China scholarships', href: '/china-scholarships-bangladesh', note: 'CSC, provincial and university awards' },
+  { name: 'Cost of studying in China', href: '/study-in-china-cost-bangladesh', note: 'Tuition, hostel, insurance, visa and travel' },
+  { name: 'Our fees, in writing', href: '/fees-and-transparency', note: 'What you pay us, when, and what is refundable' },
+  { name: 'Compare destinations', href: '/compare-study-destinations', note: 'Cost and entry side by side' },
+];
+
+export const aboutNavigation: SiteLink[] = [
+  { name: 'About EduExpress', href: '/about', note: 'Our team and Dhanmondi office, since 2018' },
+  { name: 'How it works', href: '/your-study-journey', note: 'From free assessment to arrival' },
+  { name: 'What we do for you', href: '/services', note: 'Counselling, applications and visa support' },
+  { name: 'Student success stories', href: '/success-stories', note: 'Published with student consent' },
+  { name: 'Proof library', href: '/proof-library', note: 'Redacted evidence and company records' },
+  { name: 'For parents', href: '/for-parents', note: 'Costs, safety and responsibilities' },
+  { name: 'Advice and updates', href: '/updates', note: 'Dated intake and visa news' },
+  { name: 'Contact and visit us', href: '/contact', note: 'Phone, WhatsApp and office hours' },
+];

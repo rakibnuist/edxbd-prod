@@ -57,7 +57,7 @@ export default async function ParentsPage() {
           <Breadcrumbs items={[{ name: 'For Parents' }]} />
           <div className="mt-8 grid items-center gap-10 lg:grid-cols-[1fr_.72fr]">
             <div>
-              <p className="inline-flex items-center gap-2 rounded-full border border-[#12436b]/12 bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-ed-navy">
+              <p className="inline-flex items-center gap-2 rounded-full border border-[#12436b]/12 bg-white px-4 py-2 text-[13px] font-bold uppercase tracking-[0.12em] text-ed-navy">
                 <HeartHandshake size={15} className="text-ed-teal" /> A parent-friendly decision guide
               </p>
               <h1 className="ed-home-display mt-6 max-w-4xl text-[clamp(2.4rem,5vw,4.5rem)] leading-[1.02] tracking-[-0.03em]">
@@ -78,7 +78,7 @@ export default async function ParentsPage() {
               </div>
             </div>
             <aside className="rounded-[28px] border border-[#12436b]/12 bg-ed-navy p-7 text-white shadow-[0_24px_70px_-40px_rgba(18,67,107,0.45)] sm:p-9">
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ed-mist">Bring these to the conversation</p>
+              <p className="text-[13px] font-bold uppercase tracking-[0.16em] text-ed-mist">Bring these to the conversation</p>
               <ul className="mt-6 space-y-4 text-sm text-white/78">
                 {['Latest academic results', 'Preferred subject or career area', 'Family budget range', 'Questions about recognition or safety'].map(item => (
                   <li key={item} className="flex items-center gap-3">
@@ -123,7 +123,7 @@ export default async function ParentsPage() {
         <div className="mx-auto max-w-[1240px]">
           <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ed-teal">Speak with a real person</p>
+              <p className="text-[13px] font-bold uppercase tracking-[0.16em] text-ed-teal">Speak with a real person</p>
               <h2 className="ed-home-display mt-3 text-3xl leading-[1.05] sm:text-[2.5rem]">The counseling team welcomes parents.</h2>
             </div>
             <Link href="/about#team" className="inline-flex items-center gap-2 text-sm font-bold text-ed-navy">

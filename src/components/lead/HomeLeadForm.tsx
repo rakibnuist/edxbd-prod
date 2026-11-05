@@ -129,7 +129,7 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
             Browse universities <ArrowRight size={15} aria-hidden="true" />
           </Link>
         </div>
-        <button type="button" onClick={reset} className="mt-4 text-[12px] font-semibold text-ink-mute underline underline-offset-4">
+        <button type="button" onClick={reset} className="mt-4 text-[14px] font-semibold text-ink-mute underline underline-offset-4">
           Submit another profile
         </button>
       </div>
@@ -143,19 +143,19 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-petrol-600">Free profile assessment</p>
+          <p className="text-[15px] font-bold uppercase tracking-[0.1em] text-petrol-600">Free profile assessment</p>
           <h2 className="mt-1.5 font-heading text-[27px] font-semibold leading-tight text-ink">Start with your profile.</h2>
         </div>
-        <span className="shrink-0 rounded-full bg-mint-100 px-3 py-1.5 text-[10.5px] font-bold text-petrol-700">2 min</span>
+        <span className="shrink-0 rounded-full bg-mint-100 px-3 py-1.5 text-[15px] font-bold text-petrol-700">2 min</span>
       </div>
 
-      <p className="mt-2 text-[13px] leading-6 text-ink-soft">
+      <p className="mt-2 text-[15px] leading-6 text-ink-soft">
         Tell us where you are and where you want to go. A counsellor will call you within one working day.
       </p>
 
       <div className="mt-5 grid gap-3.5">
         <div>
-          <label htmlFor="lead-name" className="block text-[12px] font-semibold text-ink">
+          <label htmlFor="lead-name" className="block text-[14px] font-semibold text-ink">
             Full name
           </label>
           <input
@@ -173,7 +173,7 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
 
         <div className="grid gap-3.5 sm:grid-cols-2">
           <div>
-            <label htmlFor="lead-phone" className="block text-[12px] font-semibold text-ink">
+            <label htmlFor="lead-phone" className="block text-[14px] font-semibold text-ink">
               Phone / WhatsApp
             </label>
             <input
@@ -190,7 +190,7 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
             />
           </div>
           <div>
-            <label htmlFor="lead-email" className="block text-[12px] font-semibold text-ink">
+            <label htmlFor="lead-email" className="block text-[14px] font-semibold text-ink">
               Email
             </label>
             <input
@@ -209,7 +209,7 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
 
         <div className="grid gap-3.5 sm:grid-cols-2">
           <div>
-            <label htmlFor="lead-level" className="block text-[12px] font-semibold text-ink">
+            <label htmlFor="lead-level" className="block text-[14px] font-semibold text-ink">
               Current study level
             </label>
             <select
@@ -229,7 +229,7 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
             </select>
           </div>
           <div>
-            <label htmlFor="lead-destination" className="block text-[12px] font-semibold text-ink">
+            <label htmlFor="lead-destination" className="block text-[14px] font-semibold text-ink">
               Preferred destination
             </label>
             <select
@@ -248,7 +248,7 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
           </div>
         </div>
 
-        <label className="flex items-start gap-2.5 text-[11.5px] leading-5 text-ink-soft">
+        <label className="flex items-start gap-2.5 text-[14px] leading-5 text-ink-soft">
           <input
             type="checkbox"
             required
@@ -266,7 +266,7 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
         </label>
 
         {error && (
-          <p role="alert" className="flex items-start gap-2 rounded-xl border border-clay/25 bg-clay/5 px-3.5 py-2.5 text-[12px] leading-5 text-clay">
+          <p role="alert" className="flex items-start gap-2 rounded-xl border border-clay/25 bg-clay/5 px-3.5 py-2.5 text-[14px] leading-5 text-clay">
             <AlertCircle size={14} className="mt-0.5 shrink-0" aria-hidden="true" /> {error}
           </p>
         )}
@@ -283,12 +283,12 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
           )}
         </button>
 
-        <p className="text-center text-[10.5px] leading-5 text-ink-mute">
+        <p className="text-center text-[15px] leading-5 text-ink-mute">
           No obligation. No service fee before China visa approval.
         </p>
       </div>
 
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-rule pt-4 text-[11.5px] text-ink-soft">
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-rule pt-4 text-[14px] text-ink-soft">
         <span className="font-semibold text-ink">Prefer to talk?</span>
         <a
           href="tel:+8801983333566"

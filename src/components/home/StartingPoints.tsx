@@ -72,7 +72,7 @@ export default function StartingPoints({ items }: { items: StartingPoint[] }) {
             </motion.div>
           </AnimatePresence>
         </div>
-        <div className="mt-4 min-h-[3.5rem] border-t border-[#e6dccd] pt-4">
+        <div className="mt-4 min-h-[3.5rem] border-t border-[#e2e8f0] pt-4">
           <AnimatePresence mode="wait" initial={false}>
             <motion.p
               key={current.caption}
@@ -80,7 +80,7 @@ export default function StartingPoints({ items }: { items: StartingPoint[] }) {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0 }}
               transition={{ duration: 0.28 }}
-              className="text-sm leading-6 text-[#5e4f40]"
+              className="text-sm leading-6 text-[#475569]"
             >
               {current.caption}
             </motion.p>

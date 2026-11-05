@@ -39,7 +39,7 @@ export default function HomeHero({ universityCount, whatsappHref }: HomeHeroProp
                 </h1>
               </div>
 
-              <p className="mt-3 max-w-[44ch] text-[13.5px] leading-6 text-white/85 sm:mt-4 sm:text-[14px] sm:leading-7">
+              <p className="mt-3 max-w-[44ch] text-[15px] leading-6 text-white/85 sm:mt-4 sm:text-[14px] sm:leading-7">
                 Compare universities, tuition, scholarships and visa requirements with a counsellor. You leave with
                 the full cost, the documents and the next step in writing.
               </p>
@@ -50,7 +50,7 @@ export default function HomeHero({ universityCount, whatsappHref }: HomeHeroProp
                   'No service fee before China visa approval',
                   'Parents welcome in every session',
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-[11.5px] leading-5 text-white/80 sm:text-[12px]">
+                  <li key={item} className="flex items-start gap-2 text-[13px] leading-5 text-white/80 sm:text-[14px]">
                     <span className="mt-0.5 grid size-[17px] shrink-0 place-items-center rounded-full bg-mint-300/20 text-mint-300">
                       <Check size={10} aria-hidden="true" />
                     </span>
@@ -60,20 +60,20 @@ export default function HomeHero({ universityCount, whatsappHref }: HomeHeroProp
               </ul>
 
               <div className="mt-5 flex flex-col gap-2 sm:mt-6 sm:flex-row sm:gap-2.5">
-                <a href="#assessment" className="ed-btn ed-btn-signal min-h-11 px-5 text-[13px] sm:min-h-12 sm:text-[14px]">
+                <a href="#assessment" className="ed-btn ed-btn-signal min-h-11 px-5 text-[15px] sm:min-h-12 sm:text-[14px]">
                   Get my free assessment <ArrowRight size={15} aria-hidden="true" />
                 </a>
                 <a
                   href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ed-btn ed-btn-on-dark min-h-11 bg-white/10 px-5 text-[13px] backdrop-blur-sm sm:min-h-12 sm:text-[14px]"
+                  className="ed-btn ed-btn-on-dark min-h-11 bg-white/10 px-5 text-[15px] backdrop-blur-sm sm:min-h-12 sm:text-[14px]"
                 >
                   <MessageCircle size={15} aria-hidden="true" /> WhatsApp a counsellor
                 </a>
               </div>
 
-              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-white/15 pt-3 text-[10.5px] text-white/65 sm:mt-5 sm:pt-4 sm:text-[11px]">
+              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-white/15 pt-3 text-[12px] text-white/65 sm:mt-5 sm:pt-4 sm:text-[13px]">
                 <span className="inline-flex items-center gap-1.5">
                   <ShieldCheck size={12} className="text-mint-300" aria-hidden="true" /> {universityCount} university records
                 </span>
@@ -94,11 +94,11 @@ export default function HomeHero({ universityCount, whatsappHref }: HomeHeroProp
             <div id="assessment" className="scroll-mt-28 sm:scroll-mt-32">
               <HomeLeadForm whatsappHref={whatsappHref} embedded />
             </div>
-            <p className="mt-3 flex items-center justify-center gap-1.5 text-[10.5px] font-semibold text-ink-soft">
+            <p className="mt-3 flex items-center justify-center gap-1.5 text-[12px] font-semibold text-ink-soft">
               <BadgeCheck size={12} className="text-jade" aria-hidden="true" />
               Free assessment · no payment details requested
             </p>
-            <p className="mt-2 text-center text-[10.5px] leading-5 text-ink-mute">
+            <p className="mt-2 text-center text-[12px] leading-5 text-ink-mute">
               Your details are used only to review your enquiry. Read the{' '}
               <Link href="/privacy" className="font-semibold text-petrol-700 underline underline-offset-2">
                 privacy policy

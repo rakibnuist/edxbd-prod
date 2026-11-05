@@ -158,7 +158,7 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
         <>
           <div className="flex items-start justify-between gap-5">
             <div>
-              <span className="inline-flex rounded-full bg-[#f6e9da] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[.12em] text-[#256994]">
+              <span className="inline-flex rounded-full bg-[#f1f5f9] px-3 py-1 text-[13px] font-extrabold uppercase tracking-[.12em] text-[#256994]">
                 Free profile assessment
               </span>
               <h2 className="mt-3 text-2xl font-bold tracking-[-.03em] text-[#14212e]">Tell us where you want to go</h2>

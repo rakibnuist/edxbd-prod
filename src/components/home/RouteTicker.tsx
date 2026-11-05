@@ -15,7 +15,7 @@ export default function RouteTicker() {
               className="flex items-center"
               aria-hidden={index >= stops.length ? 'true' : undefined}
             >
-              <span className={`px-4 text-[11px] font-semibold uppercase tracking-[0.16em] ${index % 4 === 0 ? 'font-semibold text-mint-300' : 'text-white/65'}`}>
+              <span className={`px-4 text-[13px] font-semibold uppercase tracking-[0.16em] ${index % 4 === 0 ? 'font-semibold text-mint-300' : 'text-white/65'}`}>
                 {city}
               </span>
               <Plane size={12} className="rotate-45 text-marigold" aria-hidden="true" />

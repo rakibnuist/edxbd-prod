@@ -58,7 +58,7 @@ export default function RouteUniverse() {
               aria-pressed={selected}
               aria-label={`Explore ${route.name}`}
             >
-              <span className="ed-label text-[10px]">{route.code}</span>
+              <span className="ed-label text-[12px]">{route.code}</span>
             </button>
           );
         })}
@@ -71,7 +71,7 @@ export default function RouteUniverse() {
               {active.image ? (
                 <Image src={active.image} alt="" fill sizes="64px" className="object-cover" />
               ) : (
-                <span className="grid h-full w-full place-items-center bg-petrol-800 text-[11px] font-bold tracking-[0.12em] text-mint-300">
+                <span className="grid h-full w-full place-items-center bg-petrol-800 text-[13px] font-bold tracking-[0.12em] text-mint-300">
                   {active.code}
                 </span>
               )}

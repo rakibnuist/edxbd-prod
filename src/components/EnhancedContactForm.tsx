@@ -197,7 +197,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
   if (isSubmitted) {
     return (
-      <div className={`bg-[#f5efe6] border-2 border-[#0f3a5c] p-6 text-center ${className} animate-in fade-in zoom-in-95`}>
+      <div className={`bg-[#f1f5f9] border-2 border-[#0f3a5c] p-6 text-center ${className} animate-in fade-in zoom-in-95`}>
         <div className="w-12 h-12 bg-[#e3f0f9] border border-[#12436b]/20 text-[#12436b] flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-[#12436b] mx-auto" />
         </div>
@@ -258,7 +258,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
         {/* Name */}
         <div>
-          <label htmlFor="name" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#12436b] mb-1">
+          <label htmlFor="name" className="block font-mono text-[12px] font-black uppercase tracking-wider text-[#12436b] mb-1">
             Full Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -269,7 +269,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
             onChange={handleInputChange}
             onFocus={() => handleFieldFocus('name')}
             required
-            className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f5efe6] text-[#0f3a5c] placeholder:text-slate-500 font-semibold"
+            className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f1f5f9] text-[#0f3a5c] placeholder:text-slate-500 font-semibold"
             autoComplete="name"
             placeholder="e.g. Tahmid Rahman"
           />
@@ -277,7 +277,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#12436b] mb-1">
+          <label htmlFor="email" className="block font-mono text-[12px] font-black uppercase tracking-wider text-[#12436b] mb-1">
             Email Address <span className="text-red-500">*</span>
           </label>
           <input
@@ -288,7 +288,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
             onChange={handleInputChange}
             onFocus={() => handleFieldFocus('email')}
             required
-            className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f5efe6] text-[#0f3a5c] placeholder:text-slate-500 font-semibold"
+            className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f1f5f9] text-[#0f3a5c] placeholder:text-slate-500 font-semibold"
             autoComplete="email"
             placeholder="e.g. yourname@gmail.com"
           />
@@ -296,7 +296,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
         {/* Phone */}
         <div>
-          <label htmlFor="phone" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#12436b] mb-1">
+          <label htmlFor="phone" className="block font-mono text-[12px] font-black uppercase tracking-wider text-[#12436b] mb-1">
             Phone Number <span className="text-red-500">*</span>
           </label>
           <CountryCodePhoneInput
@@ -316,7 +316,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Country */}
         {showCountry && (
           <div>
-            <label htmlFor="country" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#12436b] mb-1">
+            <label htmlFor="country" className="block font-mono text-[12px] font-black uppercase tracking-wider text-[#12436b] mb-1">
               Preferred Destination <span className="text-red-500">*</span>
             </label>
             <div className="relative group">
@@ -327,7 +327,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                 onChange={handleInputChange}
                 onFocus={() => handleFieldFocus('country')}
                 required
-                className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f5efe6] text-[#0f3a5c] font-semibold appearance-none cursor-pointer"
+                className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f1f5f9] text-[#0f3a5c] font-semibold appearance-none cursor-pointer"
               >
                 <option value="">Select a country...</option>
                 {destinationLinks.map(destination => (
@@ -347,7 +347,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Program */}
         {showProgram && (
           <div>
-            <label htmlFor="program" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#12436b] mb-1">
+            <label htmlFor="program" className="block font-mono text-[12px] font-black uppercase tracking-wider text-[#12436b] mb-1">
               Program Level <span className="text-red-500">*</span>
             </label>
             <div className="relative group">
@@ -358,7 +358,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
                 onChange={handleInputChange}
                 onFocus={() => handleFieldFocus('program')}
                 required
-                className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f5efe6] text-[#0f3a5c] font-semibold appearance-none cursor-pointer"
+                className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f1f5f9] text-[#0f3a5c] font-semibold appearance-none cursor-pointer"
               >
                 <option value="">Select level...</option>
                 <option value="Bachelor">🎓 Bachelor&apos;s Degree</option>
@@ -378,7 +378,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         {/* Message */}
         {showMessage && (
           <div>
-            <label htmlFor="message" className="block font-mono text-[10px] font-black uppercase tracking-wider text-[#12436b] mb-1">
+            <label htmlFor="message" className="block font-mono text-[12px] font-black uppercase tracking-wider text-[#12436b] mb-1">
               Message (Optional)
             </label>
             <textarea
@@ -388,7 +388,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
               onChange={handleInputChange}
               onFocus={() => handleFieldFocus('message')}
               rows={2}
-              className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f5efe6] text-[#0f3a5c] font-medium resize-none placeholder:text-slate-500"
+              className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f1f5f9] text-[#0f3a5c] font-medium resize-none placeholder:text-slate-500"
               placeholder="Any specific questions or academic requirements?"
             />
           </div>
@@ -402,7 +402,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
           </div>
         )}
 
-        <label className="flex items-start gap-3 border border-[#12436b]/20 bg-[#f5efe6] p-3 text-[11px] leading-4 text-slate-700">
+        <label className="flex items-start gap-3 border border-[#12436b]/20 bg-[#f1f5f9] p-3 text-[13px] leading-4 text-slate-700">
           <input
             type="checkbox"
             name="consent"

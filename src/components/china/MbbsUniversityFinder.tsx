@@ -20,7 +20,7 @@ export default function MbbsUniversityFinder({ universities }: { universities: U
   }).sort((a,b) => sort === 'name' ? a.name.localeCompare(b.name) : a.tuition - b.tuition), [universities, query, budget, funding, sort]);
   const reset = () => { setQuery(''); setBudget('all'); setFunding(false); setSort('fees'); };
   return <div>
-    <form onSubmit={event => event.preventDefault()} role="search" aria-label="Find an MBBS university" className="mt-6 rounded-xl border border-[#e6dccd] bg-[#f5efe6] p-4 sm:p-5">
+    <form onSubmit={event => event.preventDefault()} role="search" aria-label="Find an MBBS university" className="mt-6 rounded-xl border border-[#e2e8f0] bg-[#f1f5f9] p-4 sm:p-5">
       <div className="grid gap-3 md:grid-cols-[1.5fr_1fr_1fr]">
         <div><label htmlFor="mbbs-search" className="mb-2 block text-xs font-semibold">University or city</label><div className="relative"><Search size={17} className="pointer-events-none absolute left-3 top-3.5 text-slate-500"/><input id="mbbs-search" type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Try Wenzhou, Shanghai or CQMU" className="min-h-11 w-full rounded-lg border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-800 outline-offset-2 focus:outline-[#12436b]"/></div></div>
         <div><label htmlFor="mbbs-budget" className="mb-2 block text-xs font-semibold">Annual tuition budget</label><select id="mbbs-budget" value={budget} onChange={event => setBudget(event.target.value)} className="min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-800"><option value="all">All tuition fees</option><option value="35000">Up to CNY 35,000</option><option value="45000">Up to CNY 45,000</option></select></div>
@@ -30,9 +30,9 @@ export default function MbbsUniversityFinder({ universities }: { universities: U
     </form>
     <p role="status" aria-live="polite" className="my-4 text-xs text-slate-500">{filtered.length} university {filtered.length === 1 ? 'option' : 'options'} · English-taught MBBS · Tuition before scholarship</p>
     <div className="grid items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {filtered.map(item => <article key={item.id} id={`mbbs-${item.id}`} className="scroll-mt-40 overflow-hidden rounded-xl border border-[#e6dccd] bg-white">
+      {filtered.map(item => <article key={item.id} id={`mbbs-${item.id}`} className="scroll-mt-40 overflow-hidden rounded-xl border border-[#e2e8f0] bg-white">
         <div className="p-5"><div className="flex min-h-[60px] items-start gap-3">{item.logo && <Image src={item.logo} alt={`${item.name} logo`} width={52} height={52} className="size-[52px] shrink-0 rounded-lg border border-slate-100 object-contain p-1"/>}<div><h3 className="text-base font-bold leading-6">{item.name}</h3><p className="mt-1 inline-flex items-center gap-1 text-xs text-slate-500"><MapPin size={12}/>{item.city}, China</p></div></div>
-          <p className={`mt-4 min-h-11 rounded-lg px-3 py-2 text-xs font-semibold leading-5 ${item.funding ? 'bg-[#e3f0f9] text-[#276b55]' : 'bg-[#f5efe6] text-[#12436b]'}`}>{item.highlight}</p>
+          <p className={`mt-4 min-h-11 rounded-lg px-3 py-2 text-xs font-semibold leading-5 ${item.funding ? 'bg-[#e3f0f9] text-[#276b55]' : 'bg-[#f1f5f9] text-[#12436b]'}`}>{item.highlight}</p>
           <dl className="mt-4"><dt className="text-xs text-slate-500">Annual tuition</dt><dd className="mt-1 text-[26px] font-bold tracking-tight">CNY {money(item.tuition)}<span className="ml-1 text-xs font-normal tracking-normal text-slate-500">/year</span></dd></dl>
           <p className="mt-2 text-xs text-slate-500">{item.duration} · {item.medium} · Clinical Medicine</p>
           {item.profileSlug && <Link href={`/universities/${item.profileSlug}#programs`} className="mt-2 inline-flex min-h-10 items-center gap-2 text-xs font-semibold text-[#12436b] hover:underline">View university profile<ArrowRight size={14}/></Link>}

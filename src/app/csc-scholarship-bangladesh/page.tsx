@@ -119,27 +119,27 @@ export default function CscScholarshipBangladeshPage() {
   };
 
   return (
-    <div className="bg-[#f5efe6] text-[#0f3a5c]">
+    <div className="bg-[#f1f5f9] text-[#0f3a5c]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
 
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-[#0f3a5c] px-5 pb-20 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
+      <section className="relative overflow-hidden bg-gradient-to-b from-mint-100/70 to-white px-5 pb-20 pt-28 text-ink sm:px-8 sm:pt-32 lg:px-12">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(127,168,191,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(127,168,191,0.07)_1px,transparent_1px)] bg-[size:58px_58px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
         <div className="relative mx-auto max-w-[1440px]">
-          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-white/50">
-            <Link href="/" className="hover:text-white">Home</Link> <span aria-hidden>/</span>{' '}
-            <Link href="/study-in-china-from-bangladesh" className="hover:text-white">Study in China</Link> <span aria-hidden>/</span> CSC Scholarship
+          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-ink-mute">
+            <Link href="/" className="hover:text-ink">Home</Link> <span aria-hidden>/</span>{' '}
+            <Link href="/study-in-china-from-bangladesh" className="hover:text-ink">Study in China</Link> <span aria-hidden>/</span> CSC Scholarship
           </nav>
 
           <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_.8fr]">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#a9d6ee]/30 bg-[#a9d6ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-[#a9d6ee]">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#a9d6ee]/30 bg-[#a9d6ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-petrol-600">
                 <Award size={14} /> Official 2026/27 Guide
               </div>
               <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
                 CSC Scholarship from Bangladesh
               </h1>
-              <p className="mt-6 text-lg leading-8 text-white/80 md:text-xl">
+              <p className="mt-6 text-lg leading-8 text-ink-soft md:text-xl">
                 For awarded scholars, the Chinese Government Scholarship (CSC) covers tuition and university housing and provides a monthly stipend of up to 56,000 BDT/month for Bangladeshi undergraduate and postgraduate students. Awards are renewed through the annual CSC review.
               </p>
 
@@ -154,7 +154,7 @@ export default function CscScholarshipBangladeshPage() {
                   href="https://www.campuschina.org/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-white transition-all hover:bg-white/10"
+                  className="inline-flex items-center gap-2 rounded-full border border-rule bg-white px-6 py-3.5 text-ink transition-all hover:bg-white"
                 >
                   Official Portal (campuschina.org) <ExternalLink size={14} />
                 </a>
@@ -162,23 +162,23 @@ export default function CscScholarshipBangladeshPage() {
             </div>
 
             {/* QUICK STATS CARD */}
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
-              <h3 className="font-mono text-xs font-black uppercase tracking-widest text-[#a9d6ee]">At a Glance for BD Students</h3>
+            <div className="rounded-3xl border border-rule bg-white p-8 backdrop-blur-xl">
+              <h3 className="font-mono text-xs font-black uppercase tracking-widest text-petrol-600">At a Glance for BD Students</h3>
               <ul className="mt-6 space-y-4 text-sm">
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#a9d6ee]" size={18} />
+                  <CheckCircle2 className="mt-0.5 shrink-0 text-petrol-600" size={18} />
                   <span><strong>Tuition:</strong> 100% Free (Full Waiver)</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#a9d6ee]" size={18} />
+                  <CheckCircle2 className="mt-0.5 shrink-0 text-petrol-600" size={18} />
                   <span><strong>Stipend:</strong> 40,000 – 56,000 BDT / month</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#a9d6ee]" size={18} />
+                  <CheckCircle2 className="mt-0.5 shrink-0 text-petrol-600" size={18} />
                   <span><strong>Housing:</strong> Free On-Campus Dormitory</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#a9d6ee]" size={18} />
+                  <CheckCircle2 className="mt-0.5 shrink-0 text-petrol-600" size={18} />
                   <span><strong>EduExpress Terms:</strong> No service fee before visa approval</span>
                 </li>
               </ul>
@@ -225,7 +225,7 @@ export default function CscScholarshipBangladeshPage() {
 
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             {cscTypes.map((t) => (
-              <div key={t.type} className="rounded-3xl border-2 border-[#0f3a5c] p-8 bg-[#f5efe6]">
+              <div key={t.type} className="rounded-3xl border-2 border-[#0f3a5c] p-8 bg-[#f1f5f9]">
                 <div className="inline-block rounded-full bg-[#12436b] px-4 py-1 text-xs font-bold text-white uppercase tracking-wider mb-4">
                   {t.type}
                 </div>

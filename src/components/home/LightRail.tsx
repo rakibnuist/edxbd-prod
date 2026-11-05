@@ -41,7 +41,7 @@ function Tile({ destination }: { destination: RailDestination }) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent" />
         <span
-          className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[11px] font-bold tracking-[-0.005em] ${
+          className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[13px] font-bold tracking-[-0.005em] ${
             flagship ? 'bg-marigold text-petrol-900 shadow-sm' : 'bg-white/90 text-petrol-600 backdrop-blur-sm'
           }`}
         >
@@ -50,12 +50,12 @@ function Tile({ destination }: { destination: RailDestination }) {
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <span className="ed-figure text-[10.5px] font-bold tracking-[0.12em] text-petrol-500">
+        <span className="ed-figure text-[12px] font-bold tracking-[0.12em] text-petrol-500">
           {countryCode(destination.slug)}
         </span>
         <h3 className="mt-1.5 font-heading text-[19px] font-semibold leading-snug text-ink">{destination.name}</h3>
-        <p className="mt-1.5 line-clamp-2 text-[12.5px] leading-5 text-ink-soft">{destination.description}</p>
-        <span className="mt-auto flex items-center gap-1 pt-4 text-[11.5px] font-bold text-petrol-600">
+        <p className="mt-1.5 line-clamp-2 text-[14px] leading-5 text-ink-soft">{destination.description}</p>
+        <span className="mt-auto flex items-center gap-1 pt-4 text-[13px] font-bold text-petrol-600">
           View route
           <ArrowUpRight
             size={12}
@@ -87,7 +87,7 @@ export default function LightRail({
       role="region"
       aria-label="Study destinations"
       className={`home-loop light-rail ${className}`}
-      style={{ '--loop-speed': '52s', '--loop-edge': '#f6e9da' } as CSSProperties}
+      style={{ '--loop-speed': '52s', '--loop-edge': '#f1f5f9' } as CSSProperties}
     >
       <div className="light-rail-glow" aria-hidden="true" />
       <div className="home-loop-track light-rail-track">

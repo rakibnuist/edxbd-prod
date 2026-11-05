@@ -8,23 +8,23 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Brand-led palette. The logo is a deep navy (#12436b) with a sky-blue
-        // mark (#66b5e0); those two carry the identity. The grounds stay warm
-        // parchment so the consultancy reads human rather than corporate, and
-        // legacy token names are preserved so long-tail pages inherit the new
-        // look without a class-by-class rewrite.
+        // "Clean & bright" palette. The logo navy (#12436b) and sky blue
+        // (#66b5e0) carry the identity on white and cool light-grey grounds;
+        // green (#0b7a53, 5.3:1 with white text) is reserved for primary
+        // actions and anything verified. Legacy token names are kept so
+        // long-tail pages inherit the look without a class-by-class rewrite.
         chalk: {
-          DEFAULT: '#fbf7f1',
+          DEFAULT: '#ffffff',
           50: '#ffffff',
-          100: '#fefcf9',
-          200: '#f5efe6',
-          300: '#ece2d5',
-          400: '#e6dccd',
+          100: '#f8fafc',
+          200: '#f1f5f9',
+          300: '#e2e8f0',
+          400: '#cbd5e1',
         },
         ink: {
           DEFAULT: '#14212e',
-          soft: '#46586a',
-          mute: '#55677a',
+          soft: '#475569',
+          mute: '#64748b',
         },
         petrol: {
           900: '#071c2e',
@@ -71,16 +71,16 @@ module.exports = {
           950: '#071c2e',
         },
         green: {
-          50: '#ecf5f1',
-          100: '#d8ebe3',
-          200: '#b3d8c9',
-          300: '#85bfa9',
-          400: '#4f9e82',
-          500: '#276b55',
-          600: '#21604c',
-          700: '#1b503f',
-          800: '#164133',
-          900: '#113428',
+          50: '#ecf8f2',
+          100: '#d4efe2',
+          200: '#a9dec5',
+          300: '#6fc39e',
+          400: '#2f9f72',
+          500: '#0b7a53',
+          600: '#096845',
+          700: '#08573a',
+          800: '#064530',
+          900: '#053626',
         },
         terra: {
           DEFAULT: '#2f7fb0',
@@ -89,13 +89,27 @@ module.exports = {
           400: '#5aa3c9',
           100: '#e8f1f8',
         },
-        blush: '#f6e9da',
-        sand: '#f2e8db',
+        blush: '#f1f5f9',
+        sand: '#f1f5f9',
         sage: '#a9d6ee',
-        jade: '#276b55',
+        jade: '#0b7a53',
         clay: '#a8452c',
-        rule: '#e6dccd',
-        'rule-strong': '#d5c8b5',
+        rule: '#e2e8f0',
+        'rule-strong': '#cbd5e1',
+
+        // `ed-*` utilities (bg-ed-navy, text-ed-mist, ...) are used by ~270
+        // classes across About, Contact, Partnership and other pages but were
+        // never defined, so those elements rendered with no colour at all
+        // (white text on white). Mapped onto the brand palette here.
+        ed: {
+          navy: '#12436b',
+          ink: '#14212e',
+          mist: '#a9d6ee',
+          paper: '#f8fafc',
+          sky: '#66b5e0',
+          teal: '#2f7fb0',
+          sand: '#f1f5f9',
+        },
 
         // Legacy aliases: still referenced by long-tail screens and admin.
         'primary-blue': '#12436b',
@@ -103,42 +117,41 @@ module.exports = {
         'primary-blue-light': '#a9d6ee',
         'secondary-orange': '#66b5e0',
         'secondary-orange-light': '#8cc6e6',
-        'accent-green': '#2d7a5f',
+        'accent-green': '#0b7a53',
         'accent-purple': '#175180',
         'text-dark': '#14212e',
-        'text-medium': '#46586a',
-        'text-light': '#55677a',
+        'text-medium': '#475569',
+        'text-light': '#64748b',
         'bg-white': '#ffffff',
-        'bg-gray-50': '#fbf7f1',
-        'bg-gray-100': '#fefcf9',
-        'border-light': '#e6dccd',
+        'bg-gray-50': '#f8fafc',
+        'bg-gray-100': '#f1f5f9',
+        'border-light': '#e2e8f0',
 
-        // Neutrals are warm sand, tuned so untouched utilities still land
-        // inside the parchment system.
+        // Neutrals are Tailwind's cool slate so untouched utilities stay clean.
         slate: {
-          50: '#fbf7f1',
-          100: '#f5efe6',
-          200: '#ece2d5',
-          300: '#dccdb8',
-          400: '#c0ab92',
-          500: '#6f5f4d',
-          600: '#5e4f40',
-          700: '#4c4035',
-          800: '#3a3129',
-          900: '#241d18',
-          950: '#1a1512',
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e293b',
+          900: '#0f172a',
+          950: '#020617',
         },
         gray: {
-          50: '#fbf7f1',
-          100: '#f5efe6',
-          200: '#ece2d5',
-          300: '#dccdb8',
-          400: '#c0ab92',
-          500: '#6f5f4d',
-          600: '#5e4f40',
-          700: '#4c4035',
-          800: '#3a3129',
-          900: '#241d18',
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e293b',
+          900: '#0f172a',
         },
         emerald: {
           50: '#e3f0f9',
@@ -168,13 +181,13 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-text)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-text)', 'system-ui', 'sans-serif'],
-        heading: ['var(--font-display)', 'Georgia', 'serif'],
-        display: ['var(--font-display)', 'Georgia', 'serif'],
+        heading: ['var(--font-display)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'system-ui', 'sans-serif'],
         body: ['var(--font-text)', 'system-ui', 'sans-serif'],
         primary: ['var(--font-text)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-display)', 'Georgia', 'serif'],
+        serif: ['var(--font-display)', 'system-ui', 'sans-serif'],
         bengali: ['var(--font-bengali)', 'var(--font-text)', 'sans-serif'],
-        'bengali-display': ['var(--font-bengali-display)', 'var(--font-bengali)', 'serif'],
+        'bengali-display': ['var(--font-bengali-display)', 'var(--font-bengali)', 'sans-serif'],
       },
       borderRadius: {
         DEFAULT: '10px',

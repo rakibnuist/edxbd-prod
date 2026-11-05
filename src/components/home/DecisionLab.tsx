@@ -222,7 +222,7 @@ export default function DecisionLab() {
       <div className="relative min-h-[570px] px-6 py-9 sm:px-9 sm:py-11 lg:px-12">
         {screen === 'priority' && (
           <div>
-            <p className="ed-label text-[#dccdb8]">Question 01</p>
+            <p className="ed-label text-[#cbd5e1]">Question 01</p>
             <h2 className="ed-display mt-4 max-w-[16ch] text-[clamp(2.1rem,5vw,4rem)]">What matters most in your next decision?</h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">Do not choose a country yet. Choose the problem you want the route to solve.</p>
             <div className="mt-9 grid gap-3 sm:grid-cols-2">
@@ -241,7 +241,7 @@ export default function DecisionLab() {
 
         {screen === 'profile' && (
           <div>
-            <p className="ed-label text-[#dccdb8]">Question 02</p>
+            <p className="ed-label text-[#cbd5e1]">Question 02</p>
             <h2 className="ed-display mt-4 max-w-[16ch] text-[clamp(2.1rem,5vw,4rem)]">Where are you starting from?</h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">This turns a vague ambition into an academic route.</p>
             <div className="mt-9 grid gap-5 lg:grid-cols-[1fr_1fr]">
@@ -254,7 +254,7 @@ export default function DecisionLab() {
 
         {screen === 'limits' && (
           <div>
-            <p className="ed-label text-[#dccdb8]">Question 03</p>
+            <p className="ed-label text-[#cbd5e1]">Question 03</p>
             <h2 className="ed-display mt-4 max-w-[17ch] text-[clamp(2.1rem,5vw,4rem)]">Give the dream some real boundaries.</h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">A route is only useful when timing and money make sense.</p>
             <div className="mt-9 grid gap-5 sm:grid-cols-2">

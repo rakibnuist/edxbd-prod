@@ -62,7 +62,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <AuthProvider>
       <ProtectedRoute>
-        <div className="min-h-screen bg-[#f5efe6]">
+        <div className="min-h-screen bg-[#f1f5f9]">
           <div className="flex h-[100dvh]">
             {sidebarOpen && (
               <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
@@ -70,7 +70,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* Sidebar */}
             <aside
-              className={`fixed inset-y-0 left-0 z-50 flex w-56 flex-col bg-[#f5efe6] transition-transform duration-300 lg:static lg:translate-x-0 ${
+              className={`fixed inset-y-0 left-0 z-50 flex w-56 flex-col bg-[#f1f5f9] transition-transform duration-300 lg:static lg:translate-x-0 ${
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full'
               }`}
             >
@@ -91,7 +91,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* Main */}
             <div className="flex flex-1 flex-col overflow-hidden">
-              <header className="sticky top-0 z-30 flex items-center justify-between bg-[#f5efe6] px-4 py-3 lg:px-6">
+              <header className="sticky top-0 z-30 flex items-center justify-between bg-[#f1f5f9] px-4 py-3 lg:px-6">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setSidebarOpen(true)}

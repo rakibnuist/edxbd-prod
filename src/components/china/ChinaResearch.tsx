@@ -28,7 +28,7 @@ export default async function ChinaResearch() {
           <h2 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">What to know before you choose a university</h2>
           <p className="mt-5 text-base leading-8 text-slate-600">Explore eligibility, teaching language, scholarships and the costs you will actually need to cover. Every dated example below identifies its official source and admission cycle.</p>
         </div>
-        <aside className="self-start border-l-4 border-[#a9d6ee] bg-[#fbf7f1] p-5 text-xs leading-6 text-slate-600">
+        <aside className="self-start border-l-4 border-[#a9d6ee] bg-[#f8fafc] p-5 text-xs leading-6 text-slate-600">
           {stale && <p className="mt-2 font-bold text-amber-800">Source recheck is due. Confirm every dated requirement before applying.</p>}
           <p className="mt-3">{research.editorialNote}</p>
         </aside>
@@ -54,7 +54,7 @@ export default async function ChinaResearch() {
 
       <section id="china-language" className={sectionClass}>
         <h3 className={headingClass}>Language evidence and CSCA are different checks</h3>
-        <div className="mt-6 grid gap-5 lg:grid-cols-3">{research.language.map(item => <article key={item.title} className="rounded-xl bg-[#fbf7f1] p-5">
+        <div className="mt-6 grid gap-5 lg:grid-cols-3">{research.language.map(item => <article key={item.title} className="rounded-xl bg-[#f8fafc] p-5">
           <h4 className="font-bold">{item.title}</h4><p className={bodyClass}>{item.body}</p><Sources ids={item.sourceIds} sources={research.sources} />
         </article>)}</div>
         <Link href="/study-in-china-without-ielts" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#12436b] underline underline-offset-4">Read the English-proof guide <ArrowRight size={15} /></Link>

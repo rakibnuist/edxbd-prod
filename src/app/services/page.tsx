@@ -105,28 +105,28 @@ export default async function ServicesPage() {
             <h2 id="service-documents" className="ed-home-display text-[22px] leading-tight text-ink">
               What every student receives
             </h2>
-            <p className="text-[12px] text-ink-mute">Delivered before any payment or commitment</p>
+            <p className="text-[14px] text-ink-mute">Delivered before any payment or commitment</p>
           </div>
 
           <ul className="border-t border-rule">
             {mainServices.map(({ number, title, label, copy, icon: Icon, features, link }) => (
               <li key={title} className="border-b border-rule">
                 <article className="grid gap-5 py-7 lg:grid-cols-[56px_minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
-                  <p className="ed-figure text-[13px] text-petrol-500">{number}</p>
+                  <p className="ed-figure text-[15px] text-petrol-500">{number}</p>
                   <div>
                     <div className="flex items-center gap-2.5">
                       <Icon size={17} className="text-petrol-500" aria-hidden="true" />
                       <h3 className="ed-home-display text-[24px] leading-tight text-ink">{title}</h3>
                     </div>
-                    <p className="mt-1 text-[12px] text-ink-mute">{label}</p>
-                    <p className="mt-3 max-w-[46ch] text-[13.5px] leading-7 text-ink-soft">{copy}</p>
-                    <Link href={link} className="mt-4 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-petrol-600 underline-offset-4 hover:underline">
+                    <p className="mt-1 text-[14px] text-ink-mute">{label}</p>
+                    <p className="mt-3 max-w-[46ch] text-[15px] leading-7 text-ink-soft">{copy}</p>
+                    <Link href={link} className="mt-4 inline-flex items-center gap-1.5 text-[14px] font-semibold text-petrol-600 underline-offset-4 hover:underline">
                       Inspect what this document contains <ArrowUpRight size={13} aria-hidden="true" />
                     </Link>
                   </div>
                   <ul className="grid gap-1.5 self-start border-l border-rule pl-5 sm:grid-cols-2 lg:grid-cols-1">
                     {features.map(feature => (
-                      <li key={feature} className="flex gap-2 text-[12.5px] leading-6 text-ink-soft">
+                      <li key={feature} className="flex gap-2 text-[14px] leading-6 text-ink-soft">
                         <span aria-hidden="true" className="mt-[7px] size-1 shrink-0 bg-jade" />
                         {feature}
                       </li>
@@ -146,15 +146,15 @@ export default async function ServicesPage() {
         <div className="mx-auto max-w-shell">
           <div className="flex flex-col justify-between gap-3 border-b border-white/15 pb-3 sm:flex-row sm:items-baseline">
             <p className="ed-label !text-mint-300">The working sequence</p>
-            <p className="text-[12px] text-white/55">Five stages, each with a document attached</p>
+            <p className="text-[14px] text-white/55">Five stages, each with a document attached</p>
           </div>
 
           <ol className="mt-8 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
             {processSteps.map(({ step, title, copy }) => (
               <li key={step} className="border-t border-white/20 pt-4">
-                <span className="ed-figure text-[12px] text-petrol-500">{step}</span>
+                <span className="ed-figure text-[14px] text-mint-300">{step}</span>
                 <h3 className="mt-2 ed-home-display text-[18px] leading-tight text-white">{title}</h3>
-                <p className="mt-2 text-[12.5px] leading-6 text-white/65">{copy}</p>
+                <p className="mt-2 text-[14px] leading-6 text-white/65">{copy}</p>
               </li>
             ))}
           </ol>
@@ -180,10 +180,10 @@ export default async function ServicesPage() {
                 ['Budget reality', 'A practical range for tuition and living costs'],
               ].map(([title, copy], index) => (
                 <li key={title} className="flex gap-4">
-                  <span className="ed-figure text-[12px] text-petrol-500">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="ed-figure text-[14px] text-petrol-500">{String(index + 1).padStart(2, '0')}</span>
                   <div>
                     <h3 className="ed-home-display text-[17px] leading-tight text-ink">{title}</h3>
-                    <p className="mt-1 text-[12.5px] leading-6 text-ink-soft">{copy}</p>
+                    <p className="mt-1 text-[14px] leading-6 text-ink-soft">{copy}</p>
                   </div>
                 </li>
               ))}

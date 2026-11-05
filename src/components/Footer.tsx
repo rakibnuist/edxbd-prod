@@ -59,7 +59,7 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
   return (
     <Link
       href={href}
-      className="group flex items-center justify-between gap-3 border-b border-white/10 py-2 text-[13.5px] font-medium text-white/75 transition-colors hover:text-white"
+      className="group flex items-center justify-between gap-3 py-1.5 text-[15px] font-medium text-white/85 transition-colors hover:text-white"
     >
       <span>{children}</span>
       <ArrowUpRight size={12} className="shrink-0 text-mint-300 opacity-0 transition group-hover:opacity-100" aria-hidden="true" />
@@ -70,7 +70,7 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
 function Column({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="ed-label !text-mint-300 before:!bg-marigold">{title}</p>
+      <p className="text-[15px] font-bold text-white">{title}</p>
       <div className="mt-3">{children}</div>
     </div>
   );
@@ -86,29 +86,8 @@ export default async function Footer() {
     : null;
 
   return (
-    <footer id="site-footer" className="site-footer mt-4 overflow-hidden rounded-t-[36px] bg-petrol-800 text-white">
+    <footer id="site-footer" className="site-footer overflow-hidden bg-petrol-800 text-white">
       <FooterCta />
-
-      {/* Three routes out of the page, set as a register rather than three cards. */}
-      <div className="grid border-b border-white/12 sm:grid-cols-3">
-        {[
-          { title: 'Compare universities', href: '/universities', note: '56 records with fees, intakes and sources' },
-          { title: 'See the complete cost', href: '/study-in-china-cost-bangladesh', note: 'Tuition, hostel, visa and travel, separated' },
-          { title: 'Talk to a counsellor', href: '/contact', note: 'Dhanmondi office, Saturday to Thursday' },
-        ].map((item, index) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`group flex items-center justify-between gap-4 px-5 py-6 transition-colors hover:bg-white/[0.04] sm:px-8 ${index < 2 ? 'border-b border-white/12 sm:border-b-0 sm:border-r' : ''}`}
-          >
-            <span>
-              <span className="block font-heading text-[19px] leading-tight text-white">{item.title}</span>
-              <span className="mt-1 block text-[12px] text-white/55">{item.note}</span>
-            </span>
-            <ArrowUpRight size={17} className="shrink-0 text-marigold transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
-          </Link>
-        ))}
-      </div>
 
       <div className="mx-auto max-w-shell px-5 py-14 sm:px-8 lg:px-12">
         <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-[1.1fr_.7fr_.7fr_.8fr_1fr] xl:gap-10">
@@ -116,11 +95,10 @@ export default async function Footer() {
             <Link href="/" aria-label="EduExpress International home">
               <Image src="/white-logo.png" alt="EduExpress International" width={210} height={59} className="h-auto w-44" />
             </Link>
-            <p className="mt-5 max-w-sm text-[13.5px] leading-6 text-white/65">
+            <p className="mt-5 max-w-sm text-[15px] leading-7 text-white/80">
               Bangladesh&apos;s evidence-first education consultancy. We publish costs, sources and verification dates so a family can check the decision instead of trusting a brochure.
             </p>
-            <p className="mt-5 border-l-2 border-marigold pl-4 font-heading text-[17px] text-white">Compare before you commit.</p>
-            <div className="mt-6 flex gap-2">
+                        <div className="mt-6 flex gap-2">
               {socialLinks.map(({ name, href, icon: Icon }) => (
                 <a
                   key={name}
@@ -168,7 +146,7 @@ export default async function Footer() {
           <div>
             <Column title="Dhanmondi office">
               {office ? (
-                <div className="mt-1 space-y-3.5 text-[13px] leading-6 text-white/70">
+                <div className="mt-1 space-y-3.5 text-[15px] leading-6 text-white/80">
                   <p className="flex items-start gap-2.5">
                     <MapPin className="mt-1 shrink-0 text-mint-300" size={15} aria-hidden="true" />
                     <span>{office.address}</span>
@@ -196,7 +174,7 @@ export default async function Footer() {
                       <Mail className="shrink-0 text-mint-300" size={15} aria-hidden="true" /> {office.email}
                     </a>
                   )}
-                  <p className="border-l-2 border-white/20 pl-3 text-white/60">{office.hours}</p>
+                  <p className="text-white/80">{office.hours}</p>
                   {office.mapUrl && (
                     <a href={office.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-semibold text-mint-300 hover:text-white">
                       <Navigation className="shrink-0" size={14} aria-hidden="true" /> Directions on Google Maps
@@ -204,7 +182,7 @@ export default async function Footer() {
                   )}
                 </div>
               ) : (
-                <Link href="/contact" className="mt-1 inline-flex items-center gap-2 text-[13px] font-semibold text-mint-300">
+                <Link href="/contact" className="mt-1 inline-flex items-center gap-2 text-[15px] font-semibold text-mint-300">
                   Open contact details <ArrowUpRight size={13} />
                 </Link>
               )}
@@ -214,10 +192,10 @@ export default async function Footer() {
 
         <div className="mt-12 border-t border-white/12 pt-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-            <p className="shrink-0 text-[12px] font-semibold text-white/55">Active destinations</p>
+            <p className="shrink-0 text-[14px] font-semibold text-white/80">Destinations</p>
             <div className="flex flex-wrap gap-x-5 gap-y-2 lg:border-l lg:border-white/12 lg:pl-6">
               {destinationLinks.map(link => (
-                <Link key={link.href} href={link.href} className="text-[12px] text-white/60 transition-colors hover:text-mint-300">
+                <Link key={link.href} href={link.href} className="text-[14px] text-white/75 transition-colors hover:text-white">
                   {link.name}
                 </Link>
               ))}
@@ -225,7 +203,7 @@ export default async function Footer() {
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col justify-between gap-5 text-[12px] text-white/50 md:flex-row md:items-center">
+        <div className="mt-6 flex flex-col justify-between gap-5 text-[14px] text-white/70 md:flex-row md:items-center">
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             {legalLinks.map(([name, href]) => (
               <Link key={href} href={href} className="transition-colors hover:text-white">

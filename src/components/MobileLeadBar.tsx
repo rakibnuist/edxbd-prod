@@ -62,7 +62,7 @@ export default function MobileLeadBar() {
         <div className="grid grid-cols-3 gap-1.5 rounded-2xl border border-rule bg-white/95 p-1.5 shadow-[0_-20px_60px_-30px_rgba(15,53,87,0.5)] backdrop-blur-md">
           <a
             href={`tel:${PHONE}`}
-            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-2 text-[12px] font-bold text-petrol-700 transition-colors hover:bg-mint-100"
+            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-2 text-[14px] font-bold text-petrol-700 transition-colors hover:bg-mint-100"
           >
             <Phone size={15} aria-hidden="true" />
             Call
@@ -71,14 +71,14 @@ export default function MobileLeadBar() {
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-2 text-[12px] font-bold text-jade transition-colors hover:bg-mint-100"
+            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-2 text-[14px] font-bold text-jade transition-colors hover:bg-mint-100"
           >
             <MessageCircle size={15} aria-hidden="true" />
             WhatsApp
           </a>
           <Link
             href={assessmentHref}
-            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-petrol-700 px-2 text-[12px] font-bold text-white transition-colors hover:bg-petrol-600"
+            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-petrol-700 px-2 text-[14px] font-bold text-white transition-colors hover:bg-petrol-600"
           >
             Assess
             <ArrowRight size={14} aria-hidden="true" />

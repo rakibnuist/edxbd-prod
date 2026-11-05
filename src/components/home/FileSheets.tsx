@@ -67,16 +67,16 @@ export default function FileSheets() {
               <span className={`home-sheet-tab ${doc.tab}`} aria-hidden="true" />
 
               <div className="flex items-baseline justify-between gap-3">
-                <span className="ed-figure text-[12px] tracking-[0.08em] text-ink-mute">{doc.number}</span>
-                <span className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-ink-mute">{doc.kicker}</span>
+                <span className="ed-figure text-[14px] tracking-[0.08em] text-ink-mute">{doc.number}</span>
+                <span className="text-[12px] font-semibold uppercase tracking-[0.1em] text-ink-mute">{doc.kicker}</span>
               </div>
 
               <h3 className="mt-5 font-heading text-[clamp(1.5rem,2.2vw,1.85rem)] leading-snug text-ink">{doc.title}</h3>
-              <p className="mt-3 flex-1 text-[13.5px] leading-[1.75] text-ink-soft">{doc.copy}</p>
+              <p className="mt-3 flex-1 text-[15px] leading-[1.75] text-ink-soft">{doc.copy}</p>
 
               <ul className="mt-5 space-y-2 border-t border-rule pt-4">
                 {doc.points.map(point => (
-                  <li key={point} className="flex items-start gap-2 text-[12.5px] leading-5 text-ink-soft">
+                  <li key={point} className="flex items-start gap-2 text-[14px] leading-5 text-ink-soft">
                     <Check size={13} className="mt-1 shrink-0 text-jade" aria-hidden="true" />
                     {point}
                   </li>
@@ -85,7 +85,7 @@ export default function FileSheets() {
 
               <Link
                 href={doc.href}
-                className="mt-5 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-petrol-600 underline-offset-4 hover:underline"
+                className="mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-petrol-600 underline-offset-4 hover:underline"
               >
                 {doc.link} <ArrowUpRight size={12} aria-hidden="true" />
               </Link>

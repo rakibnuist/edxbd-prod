@@ -61,7 +61,7 @@ function UniversityMark({ university, size = 44 }: { university: DirectoryUniver
           className="h-full w-full object-contain"
         />
       ) : (
-        <span className="text-center text-[11px] font-semibold leading-tight text-petrol-600">{initials}</span>
+        <span className="text-center text-[13px] font-semibold leading-tight text-petrol-600">{initials}</span>
       )}
     </span>
   );
@@ -176,11 +176,11 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[720px] border-collapse text-left text-[13px]">
+          <table className="w-full min-w-[720px] border-collapse text-left text-[15px]">
             <caption className="sr-only">Comparison of selected universities by record fields</caption>
             <thead>
               <tr>
-                <th scope="col" className="sticky left-0 w-[150px] border-b border-rule bg-chalk-100 px-4 py-3 text-[11.5px] font-semibold text-ink-mute">
+                <th scope="col" className="sticky left-0 w-[150px] border-b border-rule bg-chalk-100 px-4 py-3 text-[13px] font-semibold text-ink-mute">
                   Field
                 </th>
                 {rows.map(row => (
@@ -191,7 +191,7 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
                         <Link href={`/universities/${row.university.slug}`} className="block ed-home-display text-[15px] leading-tight text-ink hover:text-petrol-700">
                           {row.university.name}
                         </Link>
-                        <button type="button" onClick={() => onRemove(row.university.slug)} className="mt-1 text-[11px] text-ink-mute underline underline-offset-2 hover:text-clay">
+                        <button type="button" onClick={() => onRemove(row.university.slug)} className="mt-1 text-[13px] text-ink-mute underline underline-offset-2 hover:text-clay">
                           Remove
                         </button>
                       </span>
@@ -203,7 +203,7 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
             <tbody>
               {fields.map(field => (
                 <tr key={field.label} className="border-b border-rule">
-                  <th scope="row" className="sticky left-0 bg-chalk px-4 py-3 align-top text-[12px] font-semibold text-ink-soft">
+                  <th scope="row" className="sticky left-0 bg-chalk px-4 py-3 align-top text-[14px] font-semibold text-ink-soft">
                     {field.label}
                   </th>
                   {rows.map(row => (
@@ -218,8 +218,8 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-rule bg-white px-5 py-4">
-          <p className="text-[12px] leading-5 text-ink-mute">Figures come from each university record. Where a figure is under verification, the profile says so.</p>
-          <Link href="/education-fit-assessment" className="ed-btn ed-btn-primary min-h-10 text-[13px]">
+          <p className="text-[14px] leading-5 text-ink-mute">Figures come from each university record. Where a figure is under verification, the profile says so.</p>
+          <Link href="/education-fit-assessment" className="ed-btn ed-btn-primary min-h-10 text-[15px]">
             Ask a counsellor to review these <ArrowUpRight size={14} aria-hidden="true" />
           </Link>
         </div>
@@ -326,9 +326,9 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
           {/* Facet rail */}
           <form role="search" aria-label="Filter universities" action="/universities" method="get" onSubmit={submitSearch} className="lg:sticky lg:top-[124px] lg:self-start">
             <div className="flex items-center justify-between border-b border-rule pb-2">
-              <p className="text-[12px] font-semibold text-petrol-600">Filter the directory</p>
+              <p className="text-[14px] font-semibold text-petrol-600">Filter the directory</p>
               {chips.length > 0 && (
-                <button type="button" onClick={clearFilters} className="text-[11.5px] font-semibold text-ink-mute underline underline-offset-4 hover:text-clay">
+                <button type="button" onClick={clearFilters} className="text-[13px] font-semibold text-ink-mute underline underline-offset-4 hover:text-clay">
                   Clear
                 </button>
               )}
@@ -355,12 +355,12 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                   className="ed-field ed-field-icon"
                 />
               </div>
-              <p className="mt-1.5 text-[11px] text-ink-mute">Press / to search, Esc to clear.</p>
+              <p className="mt-1.5 text-[13px] text-ink-mute">Press / to search, Esc to clear.</p>
             </div>
 
             <div className="mt-4 grid gap-3">
               <div>
-                <label htmlFor="filter-country" className="block text-[11.5px] font-semibold text-ink-soft">
+                <label htmlFor="filter-country" className="block text-[13px] font-semibold text-ink-soft">
                   Destination
                 </label>
                 <select
@@ -379,7 +379,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
               </div>
 
               <div>
-                <label htmlFor="filter-level" className="block text-[11.5px] font-semibold text-ink-soft">
+                <label htmlFor="filter-level" className="block text-[13px] font-semibold text-ink-soft">
                   Study level
                 </label>
                 <select id="filter-level" className="ed-field mt-1" value={filters.level} onChange={event => setFilters({ level: event.target.value })}>
@@ -399,18 +399,18 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                 aria-expanded={advancedOpen}
                 aria-controls="advanced-university-filters"
                 onClick={() => setAdvancedOpen(value => !value)}
-                className="flex min-h-9 items-center justify-between border border-rule-strong px-3 text-[12px] font-semibold text-petrol-700 hover:bg-white"
+                className="flex min-h-9 items-center justify-between border border-rule-strong px-3 text-[14px] font-semibold text-petrol-700 hover:bg-white"
               >
                 <span className="inline-flex items-center gap-2">
                   <SlidersHorizontal size={13} aria-hidden="true" /> More filters
-                  {advancedCount > 0 && <span className="grid size-4 place-items-center rounded-full bg-petrol-600 text-[10px] text-white">{advancedCount}</span>}
+                  {advancedCount > 0 && <span className="grid size-4 place-items-center rounded-full bg-petrol-600 text-[12px] text-white">{advancedCount}</span>}
                 </span>
                 <ChevronDown size={13} className={advancedOpen ? 'rotate-180' : ''} aria-hidden="true" />
               </button>
 
               <div id="advanced-university-filters" hidden={!advancedOpen} className="grid gap-3 border-t border-rule pt-3">
                 <div>
-                  <label htmlFor="filter-subject" className="block text-[11.5px] font-semibold text-ink-soft">
+                  <label htmlFor="filter-subject" className="block text-[13px] font-semibold text-ink-soft">
                     Subject
                   </label>
                   <select id="filter-subject" className="ed-field mt-1" value={filters.subject} onChange={event => setFilters({ subject: event.target.value })}>
@@ -423,7 +423,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="filter-city" className="block text-[11.5px] font-semibold text-ink-soft">
+                  <label htmlFor="filter-city" className="block text-[13px] font-semibold text-ink-soft">
                     City
                   </label>
                   <select id="filter-city" className="ed-field mt-1" value={filters.city} onChange={event => setFilters({ city: event.target.value })}>
@@ -436,7 +436,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="filter-intake" className="block text-[11.5px] font-semibold text-ink-soft">
+                  <label htmlFor="filter-intake" className="block text-[13px] font-semibold text-ink-soft">
                     Intake month
                   </label>
                   <select id="filter-intake" className="ed-field mt-1" value={filters.intake} onChange={event => setFilters({ intake: event.target.value })}>
@@ -448,11 +448,11 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                     ))}
                   </select>
                 </div>
-                <label className="flex min-h-9 items-center gap-2 text-[13px] text-ink">
+                <label className="flex min-h-9 items-center gap-2 text-[15px] text-ink">
                   <input type="checkbox" checked={filters.scholarship} onChange={event => setFilters({ scholarship: event.target.checked })} className="size-4 accent-[#175180]" />
                   Scholarship on file
                 </label>
-                <label className="flex min-h-9 items-center gap-2 text-[13px] text-ink">
+                <label className="flex min-h-9 items-center gap-2 text-[15px] text-ink">
                   <input type="checkbox" checked={filters.cscaFree} onChange={event => setFilters({ cscaFree: event.target.checked })} className="size-4 accent-[#175180]" />
                   CSCA exam not required
                 </label>
@@ -467,7 +467,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                       key={chip.key}
                       type="button"
                       onClick={() => removeFilter(chip.key)}
-                      className="inline-flex min-h-7 max-w-full items-center gap-1.5 border border-rule-strong bg-white px-2 text-[11.5px] text-petrol-700 hover:border-clay hover:text-clay"
+                      className="inline-flex min-h-7 max-w-full items-center gap-1.5 border border-rule-strong bg-white px-2 text-[13px] text-petrol-700 hover:border-clay hover:text-clay"
                       aria-label={`Remove filter ${chip.label}`}
                     >
                       <span className="truncate">{chip.label}</span>
@@ -482,12 +482,12 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
           {/* Results */}
           <div>
             <div id="university-results" className="flex scroll-mt-32 flex-wrap items-baseline justify-between gap-3 border-b border-rule pb-3 xl:scroll-mt-40">
-              <p role="status" aria-live="polite" className="text-[13px] text-ink-soft">
+              <p role="status" aria-live="polite" className="text-[15px] text-ink-soft">
                 <strong className="ed-figure text-[17px] text-ink">{filtered.length}</strong> {filtered.length === 1 ? 'university' : 'universities'}
                 {filters.country ? ` in ${filters.country}` : ''}
                 {filtered.length > visibleCount ? ` · showing ${visibleCount}` : ''}
               </p>
-              <div className="flex items-center gap-2 text-[12px] text-ink-mute">
+              <div className="flex items-center gap-2 text-[14px] text-ink-mute">
                 <label htmlFor="university-sort">Sort</label>
                 <select
                   id="university-sort"
@@ -495,7 +495,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                   onChange={event =>
                     setFilters({ sort: ['city', 'fee', 'ranking', 'scholarship'].includes(event.target.value) ? (event.target.value as DirectoryFilters['sort']) : 'name' })
                   }
-                  className="h-8 border border-rule-strong bg-white px-2 text-[12px] font-medium text-ink"
+                  className="h-8 border border-rule-strong bg-white px-2 text-[14px] font-medium text-ink"
                 >
                   <option value="name">Name</option>
                   <option value="ranking">Best ranking</option>
@@ -512,16 +512,16 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                 <h2 className="mt-4 ed-home-display text-[22px] text-ink">
                   {destinationNotListed ? `Find your university in ${filters.country}` : 'No record matches this combination'}
                 </h2>
-                <p className="mx-auto mt-2 max-w-lg text-[13.5px] leading-7 text-ink-soft">
+                <p className="mx-auto mt-2 max-w-lg text-[15px] leading-7 text-ink-soft">
                   {destinationNotListed
                     ? 'That destination is served by counselling, but has no verified directory records yet. Read the destination guide or ask us to check a specific university.'
                     : 'Loosen one filter, or tell a counsellor the subject and budget you are working with — we will check the route directly.'}
                 </p>
                 <div className="mt-5 flex flex-wrap justify-center gap-3">
-                  <button type="button" onClick={clearFilters} className="ed-btn ed-btn-outline min-h-10 text-[13px]">
+                  <button type="button" onClick={clearFilters} className="ed-btn ed-btn-outline min-h-10 text-[15px]">
                     Clear all filters
                   </button>
-                  <Link href="/education-fit-assessment" className="ed-btn ed-btn-primary min-h-10 text-[13px]">
+                  <Link href="/education-fit-assessment" className="ed-btn ed-btn-primary min-h-10 text-[15px]">
                     Ask for a shortlist
                   </Link>
                 </div>
@@ -548,15 +548,15 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                                   {university.name}
                                 </Link>
                               </h2>
-                              <p className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[12px] text-ink-mute">
+                              <p className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[14px] text-ink-mute">
                                 <span className="inline-flex items-center gap-1">
                                   <MapPin size={12} className="shrink-0" aria-hidden="true" />
                                   {[university.city, university.country].filter(Boolean).join(', ')}
                                 </span>
-                                {row.relationship && <span className="border border-rule-strong px-1.5 py-0.5 text-[10.5px] font-semibold text-petrol-600">{row.relationship}</span>}
-                                {row.englishTaught && <span className="text-[10.5px] font-semibold text-jade">English-taught</span>}
+                                {row.relationship && <span className="border border-rule-strong px-1.5 py-0.5 text-[12px] font-semibold text-petrol-600">{row.relationship}</span>}
+                                {row.englishTaught && <span className="text-[12px] font-semibold text-jade">English-taught</span>}
                               </p>
-                              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11.5px] text-ink-soft">
+                              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-ink-soft">
                                 <span>{row.levels.slice(0, 3).join(' · ') || 'Levels on profile'}</span>
                                 {row.awardValue && <span className="font-semibold text-jade">{row.awardValue}</span>}
                                 {university.clearCost && (
@@ -571,22 +571,22 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                             </div>
                           </div>
 
-                          <dl className="grid grid-cols-3 gap-3 border-t border-rule pt-3 text-[12px] lg:grid-cols-1 lg:gap-1.5 lg:border-t-0 lg:pt-0">
+                          <dl className="grid grid-cols-3 gap-3 border-t border-rule pt-3 text-[14px] lg:grid-cols-1 lg:gap-1.5 lg:border-t-0 lg:pt-0">
                             <div>
-                              <dt className="text-[10.5px] text-ink-mute">Tuition</dt>
-                              <dd className="mt-0.5 text-[12.5px] font-semibold leading-5 text-ink">{row.showTuition ? row.tuition : 'View programme fees'}</dd>
+                              <dt className="text-[12px] text-ink-mute">Tuition</dt>
+                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-ink">{row.showTuition ? row.tuition : 'View programme fees'}</dd>
                             </div>
                             <div>
-                              <dt className="text-[10.5px] text-ink-mute">Intake</dt>
-                              <dd className="mt-0.5 text-[12.5px] font-semibold leading-5 text-ink">{row.intake.length ? row.intake.join(', ') : 'On profile'}</dd>
+                              <dt className="text-[12px] text-ink-mute">Intake</dt>
+                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-ink">{row.intake.length ? row.intake.join(', ') : 'On profile'}</dd>
                             </div>
                             <div>
-                              <dt className="flex items-center gap-1 text-[10.5px] text-ink-mute">
+                              <dt className="flex items-center gap-1 text-[12px] text-ink-mute">
                                 <Trophy size={10} aria-hidden="true" /> Ranking
                               </dt>
-                              <dd className="mt-0.5 text-[12.5px] font-semibold leading-5 text-ink">
+                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-ink">
                                 {row.ranking ? `#${row.ranking.rank}` : 'Not recorded'}
-                                {row.ranking && <span className="ml-1 font-normal text-[10.5px] text-ink-mute">{row.ranking.publisher}</span>}
+                                {row.ranking && <span className="ml-1 font-normal text-[12px] text-ink-mute">{row.ranking.publisher}</span>}
                               </dd>
                             </div>
                           </dl>
@@ -597,7 +597,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                                 type="button"
                                 onClick={() => toggleCompare(university.slug)}
                                 aria-pressed={selected}
-                                className={`inline-flex min-h-9 flex-1 items-center justify-center gap-1.5 border px-2 text-[11.5px] font-semibold transition-colors ${
+                                className={`inline-flex min-h-9 flex-1 items-center justify-center gap-1.5 border px-2 text-[13px] font-semibold transition-colors ${
                                   selected ? 'border-petrol-600 bg-petrol-600 text-white' : 'border-rule-strong text-petrol-700 hover:border-petrol-500'
                                 }`}
                               >
@@ -609,7 +609,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                               <Link
                                 href={`/universities/${university.slug}`}
                                 onClick={() => recordClick('university_programs_click', university)}
-                                className="ed-btn ed-btn-primary min-h-9 flex-1 px-2 text-[12px]"
+                                className="ed-btn ed-btn-primary min-h-9 flex-1 px-2 text-[14px]"
                                 aria-label={`View programmes at ${university.name}`}
                               >
                                 Programmes
@@ -617,7 +617,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                               <Link
                                 href={applicationHref}
                                 onClick={() => recordClick('university_apply_click', university)}
-                                className="ed-btn min-h-9 flex-1 border border-marigold bg-marigold/10 px-2 text-[12px] font-semibold text-petrol-900 hover:bg-marigold"
+                                className="ed-btn min-h-9 flex-1 border border-marigold bg-marigold/10 px-2 text-[14px] font-semibold text-petrol-900 hover:bg-marigold"
                                 aria-label={`Apply to ${university.name} with EduExpress International`}
                               >
                                 Apply
@@ -632,16 +632,16 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
 
                 {visibleCount < filtered.length && (
                   <div className="mt-6 flex flex-col items-center gap-2">
-                    <p className="text-[12px] text-ink-mute">
+                    <p className="text-[14px] text-ink-mute">
                       Showing {Math.min(visibleCount, filtered.length)} of {filtered.length} universities
                     </p>
-                    <Link href={moreHref} scroll={false} prefetch={false} className="ed-btn ed-btn-outline min-h-10 text-[13px]">
+                    <Link href={moreHref} scroll={false} prefetch={false} className="ed-btn ed-btn-outline min-h-10 text-[15px]">
                       Show {Math.min(12, filtered.length - visibleCount)} more
                     </Link>
                   </div>
                 )}
 
-                <p className="mt-8 border-t border-rule pt-4 text-[11.5px] leading-6 text-ink-mute">
+                <p className="mt-8 border-t border-rule pt-4 text-[13px] leading-6 text-ink-mute">
                   Tuition, scholarship and ranking entries link to the official source record inside each profile. Where a figure is under verification, the profile says so — we do not publish estimates as facts.
                 </p>
               </>
@@ -655,14 +655,14 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
         <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-petrol-900/20 bg-petrol-900 px-4 py-3 text-white shadow-deep">
           <div className="mx-auto flex max-w-shell flex-wrap items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
-              <span className="ed-figure text-[13px] text-mint-300">{compare.length}/4</span>
-              <p className="truncate text-[12.5px] text-white/80">{compareRows.map(row => row.university.name).join(' · ')}</p>
+              <span className="ed-figure text-[15px] text-mint-300">{compare.length}/4</span>
+              <p className="truncate text-[14px] text-white/80">{compareRows.map(row => row.university.name).join(' · ')}</p>
             </div>
             <div className="flex items-center gap-2">
-              <button type="button" onClick={() => setCompare([])} className="px-2 text-[12px] font-semibold text-white/60 hover:text-white">
+              <button type="button" onClick={() => setCompare([])} className="px-2 text-[14px] font-semibold text-white/60 hover:text-white">
                 Clear
               </button>
-              <button type="button" onClick={() => setCompareOpen(true)} className="ed-btn ed-btn-signal min-h-9 px-4 text-[12.5px]">
+              <button type="button" onClick={() => setCompareOpen(true)} className="ed-btn ed-btn-signal min-h-9 px-4 text-[14px]">
                 Compare {compare.length}
               </button>
             </div>

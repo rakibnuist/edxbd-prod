@@ -155,30 +155,30 @@ export default function EducationFitAssessmentPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
 
       {/* Hero */}
-      <section className="ed-band ed-band-navy relative overflow-hidden border-b border-white/10 px-4 pb-16 pt-[104px] sm:px-6 lg:px-10 lg:pb-20 lg:pt-[142px]">
-        <div className="pointer-events-none absolute inset-0 ed-grid-lines" aria-hidden="true" />
+      <section className="bg-gradient-to-b from-mint-100/70 to-white relative overflow-hidden border-b border-rule px-4 pb-16 pt-[104px] sm:px-6 lg:px-10 lg:pb-20 lg:pt-[142px]">
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="pointer-events-none absolute -right-28 -top-24 size-[420px] rounded-full bg-sky-500/25 blur-[100px]" aria-hidden="true" />
         <div className="pointer-events-none absolute -left-40 bottom-[-30%] size-[520px] rounded-full bg-petrol-400/20 blur-[120px]" aria-hidden="true" />
 
         <div className="relative mx-auto max-w-shell">
           <Breadcrumbs
             items={[{ name: 'Education Fit Assessment' }]}
-            className="text-white/80 [&_a]:text-white/80 [&_a:hover]:text-white [&_span]:text-white/60"
+            className="text-ink-soft [&_a]:text-ink-soft [&_a:hover]:text-ink [&_span]:text-ink-soft"
           />
 
           <div className="mt-8 grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-14">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="ed-chip-dark">
-                  <span className="ed-chip-dark-dot" aria-hidden="true" />
+                <span className="ed-chip-light">
+                  <span className="ed-chip-light-dot" aria-hidden="true" />
                   Free · Written · No obligation
                 </span>
-                <span className="ed-chip-dark">Compare before you commit</span>
+                <span className="ed-chip-light">Compare before you commit</span>
               </div>
-              <h1 className="ed-display mt-6 max-w-[18ch] text-[clamp(2.6rem,5vw,4.4rem)] leading-[1.01] text-white">
+              <h1 className="ed-display mt-6 max-w-[18ch] text-[clamp(2.6rem,5vw,4.4rem)] leading-[1.01] text-ink">
                 Compare before you commit — with a written read on your fit
               </h1>
-              <p className="mt-6 max-w-[58ch] text-[15px] leading-8 text-white/80">
+              <p className="mt-6 max-w-[58ch] text-[15px] leading-8 text-ink-soft">
                 Share a few details about your results, budget, intake and goals. We return the suitable routes for you, the risks to weigh, and the information we still need — before any money or application is involved.
               </p>
 
@@ -186,22 +186,22 @@ export default function EducationFitAssessmentPage() {
                 <Link href="#assessment-form" className="ed-btn ed-btn-signal min-h-12 px-6">
                   Start my assessment <ArrowRight size={16} aria-hidden="true" />
                 </Link>
-                <Link href="/find-education" className="ed-btn ed-btn-on-dark min-h-12 px-6">
+                <Link href="/find-education" className="ed-btn ed-btn-outline min-h-12 px-6">
                   Research destinations & universities <ArrowUpRight size={16} aria-hidden="true" />
                 </Link>
               </div>
 
-              <ul className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11.5px] text-white/70">
+              <ul className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-soft">
                 <li className="inline-flex items-center gap-1.5">
-                  <BadgeCheck size={13} className="text-mint-300" aria-hidden="true" />
+                  <BadgeCheck size={13} className="text-petrol-600" aria-hidden="true" />
                   Compare at least 3 routes
                 </li>
-                <li aria-hidden="true" className="text-white/40">·</li>
+                <li aria-hidden="true" className="text-ink-mute">·</li>
                 <li className="inline-flex items-center gap-1.5">
-                  <ShieldCheck size={13} className="text-mint-300" aria-hidden="true" />
+                  <ShieldCheck size={13} className="text-petrol-600" aria-hidden="true" />
                   Costs in writing
                 </li>
-                <li aria-hidden="true" className="text-white/40">·</li>
+                <li aria-hidden="true" className="text-ink-mute">·</li>
                 <li>Reviewed {new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(LAST_REVIEWED))}</li>
               </ul>
             </div>
@@ -217,9 +217,9 @@ export default function EducationFitAssessmentPage() {
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-petrol-900/90 via-petrol-900/15 to-transparent" aria-hidden="true" />
-                  <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl bg-white/95 px-4 py-3 backdrop-blur">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-petrol-600">Written before you commit</p>
-                    <p className="mt-1 text-[13px] font-semibold leading-6 text-ink">
+                  <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl bg-white px-4 py-3 backdrop-blur">
+                    <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-petrol-600">Written before you commit</p>
+                    <p className="mt-1 text-[15px] font-semibold leading-6 text-ink">
                       Routes • Risks • Costs • Next steps
                     </p>
                   </figcaption>
@@ -236,7 +236,7 @@ export default function EducationFitAssessmentPage() {
           {promises.map((promise) => (
             <div key={promise} className="flex items-start gap-3 bg-white px-5 py-5">
               <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-jade" aria-hidden="true" />
-              <p className="text-[13px] leading-6 text-ink">{promise}</p>
+              <p className="text-[15px] leading-6 text-ink">{promise}</p>
             </div>
           ))}
         </div>
@@ -264,7 +264,7 @@ export default function EducationFitAssessmentPage() {
                 className="flex items-center gap-3 rounded-2xl border border-rule bg-white px-5 py-4 shadow-[0_16px_36px_-32px_rgba(15,53,87,0.45)]"
               >
                 <CheckCircle2 size={18} className="shrink-0 text-jade" aria-hidden="true" />
-                <span className="text-[13.5px] font-semibold leading-6 text-ink">{item}</span>
+                <span className="text-[15px] font-semibold leading-6 text-ink">{item}</span>
               </div>
             ))}
           </div>
@@ -320,7 +320,7 @@ export default function EducationFitAssessmentPage() {
                     +
                   </span>
                 </summary>
-                <p className="pb-5 pr-10 text-[13px] leading-7 text-ink-soft">{item.answer}</p>
+                <p className="pb-5 pr-10 text-[15px] leading-7 text-ink-soft">{item.answer}</p>
               </details>
             ))}
           </div>

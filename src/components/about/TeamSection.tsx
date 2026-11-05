@@ -6,11 +6,11 @@ type TeamMember = { id: string; name: string; role: string; bio: string | null; 
 
 export default function TeamSection({ team }: { team: TeamMember[] }) {
     return (
-        <section id="team" className="py-20 bg-[#f5efe6] border-b border-[#12436b]/15 scroll-mt-24">
+        <section id="team" className="py-20 bg-[#f1f5f9] border-b border-[#12436b]/15 scroll-mt-24">
             <div className="container mx-auto px-5 sm:px-8 lg:px-12">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-14">
-                        <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#12436b]">The people behind your file</p>
+                        <p className="font-mono text-[12px] font-black uppercase tracking-[0.2em] text-[#12436b]">The people behind your file</p>
                         <h2 className="mt-2 font-heading text-4xl font-bold text-[#0f3a5c]">Meet Our Team</h2>
                         <p className="text-base text-slate-600 max-w-2xl mx-auto mt-3">
                             Counselors, document specialists, and admissions officers working under written evidence guidelines from our Dhanmondi decision desk.
@@ -42,19 +42,19 @@ export default function TeamSection({ team }: { team: TeamMember[] }) {
 
                                 <div className="p-5 text-center bg-white border-t border-[#12436b]/15">
                                     <h3 className="font-heading text-lg font-bold text-[#0f3a5c] mb-1">{member.name}</h3>
-                                    <p className="font-mono text-[10px] font-black uppercase tracking-wider text-[#12436b] mb-2">{member.role}</p>
+                                    <p className="font-mono text-[12px] font-black uppercase tracking-wider text-[#12436b] mb-2">{member.role}</p>
                                     <p className="text-slate-600 text-xs leading-5 line-clamp-3">
                                         {member.bio}
                                     </p>
                                     <div className="mt-4 flex flex-wrap justify-center gap-1.5">
-                                        {member.specialties.map(specialty => <span key={specialty} className="bg-[#e3f0f9] px-2 py-1 text-[9px] font-bold text-[#12436b]">{specialty}</span>)}
+                                        {member.specialties.map(specialty => <span key={specialty} className="bg-[#e3f0f9] px-2 py-1 text-[12px] font-bold text-[#12436b]">{specialty}</span>)}
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <p className="mt-8 text-center font-mono text-[10px] font-medium uppercase tracking-wider text-slate-500">
+                    <p className="mt-8 text-center font-mono text-[12px] font-medium uppercase tracking-wider text-slate-500">
                         Team details are maintained in the central public record. Photos appear after consent is recorded.
                     </p>
                 </div>

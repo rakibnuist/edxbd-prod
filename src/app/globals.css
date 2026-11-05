@@ -106,16 +106,16 @@
    a data plate never reads like a marketing card.
 --------------------------------------------------------------------------- */
 :root {
-  /* Brand-led system: champagne parchment ground, logo navy for authority,
-     sky blue for the signal colour. Warm neutrals keep the practice feeling
-     human; the navy keeps it credible for guardians who are paying. */
-  --chalk: #fbf7f1;
+  /* Clean & bright: white and cool light-grey grounds, logo navy for
+     authority, sky blue as the brand signal, green only for primary actions
+     and verified facts. */
+  --chalk: #ffffff;
   --chalk-raised: #ffffff;
-  --chalk-sunk: #f5efe6;
-  --chalk-deep: #ece2d5;
+  --chalk-sunk: #f8fafc;
+  --chalk-deep: #f1f5f9;
   --ink: #14212e;
-  --ink-soft: #46586a;
-  --ink-mute: #55677a;
+  --ink-soft: #475569;
+  --ink-mute: #64748b;
   --petrol-900: #071c2e;
   --petrol-800: #0b2b45;
   --petrol-700: #0f3a5c;
@@ -125,18 +125,20 @@
   --mint-300: #a9d6ee;
   --mint-200: #cfe7f5;
   --mint-100: #e3f0f9;
-  --rule: #e6dccd;
-  --rule-strong: #d5c8b5;
+  --rule: #e2e8f0;
+  --rule-strong: #cbd5e1;
   --marigold: #66b5e0;
   --marigold-soft: #8cc6e6;
   --terra: #2f7fb0;
-  --jade: #276b55;
+  --jade: #0b7a53;
+  --action: #0b7a53;
+  --action-hover: #096845;
   --clay: #a8452c;
 
-  --font-display: "Lora", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-text: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-bengali: "Hind Siliguri", "Noto Sans Bengali", "Nirmala UI", Vrinda, sans-serif;
-  --font-bengali-display: "Noto Serif Bengali", "Hind Siliguri", "Nirmala UI", Vrinda, sans-serif;
+  --font-bengali-display: "Hind Siliguri", "Noto Sans Bengali", "Nirmala UI", Vrinda, sans-serif;
 
   --radius-plate: 14px;
   --radius-control: 999px;
@@ -166,10 +168,10 @@ body {
   h6,
   .font-heading,
   .font-serif {
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-display), system-ui, sans-serif;
     font-synthesis: none;
-    letter-spacing: -0.018em;
-    font-weight: 600;
+    letter-spacing: -0.022em;
+    font-weight: 700;
     line-height: 1.12;
     color: inherit;
   }
@@ -352,7 +354,8 @@ body {
   overflow: hidden;
 }
 
-/* Buttons: one shape, four weights. Fully rounded, sentence case, action-named. */
+/* Buttons: one shape, four weights. Sentence case, action-named. Green is
+   reserved for the primary action so visitors always know the next step. */
 .ed-btn {
   display: inline-flex;
   align-items: center;
@@ -360,9 +363,9 @@ body {
   gap: 0.5rem;
   min-height: 2.9rem;
   padding: 0 1.35rem;
-  border-radius: 999px;
+  border-radius: 10px;
   font-family: var(--font-text), system-ui, sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: -0.005em;
   text-align: center;
@@ -377,7 +380,6 @@ body {
 .ed-btn-primary {
   background: var(--petrol-600);
   color: #fff;
-  box-shadow: 0 12px 24px -16px rgba(15,58,92, 0.7);
 }
 
 .ed-btn-primary:hover {
@@ -385,19 +387,19 @@ body {
 }
 
 .ed-btn-signal {
-  background: var(--marigold);
-  color: var(--petrol-900);
-  box-shadow: 0 14px 28px -18px rgba(102,181,224, 0.9);
+  background: var(--action);
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
 }
 
 .ed-btn-signal:hover {
-  background: var(--marigold-soft);
+  background: var(--action-hover);
 }
 
 .ed-btn-outline {
   border: 1px solid var(--rule-strong);
   color: var(--petrol-600);
-  background: transparent;
+  background: #fff;
 }
 
 .ed-btn-outline:hover {
@@ -448,11 +450,11 @@ body {
   width: 100%;
   min-height: 2.9rem;
   border: 1px solid var(--rule-strong);
-  border-radius: 12px;
+  border-radius: 10px;
   background: #ffffff;
   padding: 0 0.9rem;
   font-family: var(--font-text), system-ui, sans-serif;
-  font-size: 0.92rem;
+  font-size: 1rem;
   color: var(--ink);
   transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
 }
@@ -721,7 +723,7 @@ select.ed-field {
 }
 
 .ed-band-sand {
-  background-color: #f2e8db;
+  background-color: #f1f5f9;
   background-image:
     radial-gradient(760px 420px at 100% 0%, rgba(102, 181, 224, 0.18), transparent 60%),
     radial-gradient(600px 380px at 0% 100%, rgba(18, 67, 107, 0.08), transparent 62%);
@@ -731,7 +733,7 @@ select.ed-field {
   background-color: #e3f0f9;
   background-image:
     radial-gradient(720px 420px at 92% 8%, rgba(102, 181, 224, 0.45), transparent 62%),
-    linear-gradient(180deg, #eaf4fb 0%, #fbf7f1 78%);
+    linear-gradient(180deg, #eaf4fb 0%, #f8fafc 78%);
 }
 
 /* Fine architectural grid, clipped to the band edges. */
@@ -858,6 +860,28 @@ select.ed-field {
   .ed-photo-settle {
     animation: none;
   }
+}
+
+/* Chip on a light surface (hero badges). */
+.ed-chip-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: #fff;
+  padding: 0.4rem 0.85rem;
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--petrol-600);
+}
+
+.ed-chip-light-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--action);
 }
 
 /* Chip on a dark surface. */

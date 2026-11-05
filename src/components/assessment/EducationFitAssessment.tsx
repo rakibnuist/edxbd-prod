@@ -327,7 +327,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
 
   return (
     <form onSubmit={handleSubmit} className="overflow-hidden rounded-[22px] border border-[#12436b]/20 bg-white shadow-[0_24px_70px_rgba(11,43,69,.14)]">
-      <div className="border-b border-[#e6dccd] bg-[#14212e] p-6 text-white sm:p-7">
+      <div className="border-b border-[#e2e8f0] bg-[#14212e] p-6 text-white sm:p-7">
         <div className="flex items-start justify-between gap-4">
           <div className="flex gap-3">
             <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#a9d6ee] text-[#14212e]">
@@ -338,13 +338,13 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
               <h2 className="ed-display mt-1 text-2xl sm:text-[1.75rem]">{isApplication ? 'Tell us about your study plans' : 'See your starting routes'}</h2>
             </div>
           </div>
-          <span className="shrink-0 rounded-full border border-white/20 px-3 py-1.5 text-[11px] font-semibold text-white/70">2 min</span>
+          <span className="shrink-0 rounded-full border border-white/20 px-3 py-1.5 text-[13px] font-semibold text-white/70">2 min</span>
         </div>
         <div className="mt-6 grid grid-cols-3 gap-2" aria-label={`Step ${progress} of 3`}>
           {(isApplication ? ['Profile', 'Study plan', 'Contact'] : ['Profile', 'Routes', 'Review']).map((label, index) => (
             <div key={label}>
               <div className={`h-1.5 rounded-full ${index + 1 <= progress ? 'bg-[#a9d6ee]' : 'bg-white/15'}`} />
-              <span className={`mt-2 block text-[11px] font-semibold ${index + 1 === progress ? 'text-white' : 'text-white/50'}`}>{label}</span>
+              <span className={`mt-2 block text-[13px] font-semibold ${index + 1 === progress ? 'text-white' : 'text-white/50'}`}>{label}</span>
             </div>
           ))}
         </div>
@@ -355,7 +355,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
           <div className="space-y-5">
             <div>
               <h3 className="ed-display text-2xl text-[#14212e]">What do you want to study?</h3>
-              <p className="mt-2 text-sm leading-6 text-[#5e4f40]">Start with what you know. Exact documents can come later.</p>
+              <p className="mt-2 text-sm leading-6 text-[#475569]">Start with what you know. Exact documents can come later.</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Current level" required>
@@ -381,7 +381,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
           <div className="space-y-5">
             <div>
               <h3 className="ed-display text-2xl text-[#14212e]">{isApplication ? 'Plan your study preferences' : 'What should the route fit?'}</h3>
-              <p className="mt-2 text-sm leading-6 text-[#5e4f40]">{isApplication ? 'Add your budget, preferred intake and language readiness to guide the application review.' : 'Choose “not sure” whenever you want us to compare.'}</p>
+              <p className="mt-2 text-sm leading-6 text-[#475569]">{isApplication ? 'Add your budget, preferred intake and language readiness to guide the application review.' : 'Choose “not sure” whenever you want us to compare.'}</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="Yearly budget">
@@ -413,7 +413,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
                       type="button"
                       key={destination.value}
                       onClick={() => toggleCountry(destination.value)}
-                      className={`rounded-full border px-3.5 py-2 text-sm font-semibold transition ${active ? 'border-[#14212e] bg-[#14212e] text-white' : 'border-[#e3f0f9] bg-[#fbf7f1] text-[#5e4f40] hover:border-[#12436b]'}`}
+                      className={`rounded-full border px-3.5 py-2 text-sm font-semibold transition ${active ? 'border-[#14212e] bg-[#14212e] text-white' : 'border-[#e3f0f9] bg-[#f8fafc] text-[#475569] hover:border-[#12436b]'}`}
                     >
                       {destination.label}
                     </button>
@@ -441,7 +441,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
                     <strong className="text-base text-[#14212e]">{route.title}</strong>
                     <ArrowRight size={16} className="shrink-0 text-[#2c6a97] transition group-hover:translate-x-1" />
                   </span>
-                  <span className="mt-2 block text-sm leading-6 text-[#5e4f40]">{route.note}</span>
+                  <span className="mt-2 block text-sm leading-6 text-[#475569]">{route.note}</span>
                 </Link>
               ))}
             </div>
@@ -467,14 +467,14 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
             <div>
               <p className="ed-label text-[#2c6a97]">{isApplication ? 'Contact details' : 'Optional counselor review'}</p>
               <h3 className="ed-display mt-2 text-2xl text-[#14212e]">{isApplication ? 'Start your application with EduExpress.' : 'Get a written shortlist checked by a person.'}</h3>
-              <p className="mt-2 text-sm leading-6 text-[#5e4f40]">{isApplication ? 'Share your contact details so a counselor can review your eligibility and help with the university application.' : 'Your instant result stays free. Share contact details only if you want a counselor to review it.'}</p>
+              <p className="mt-2 text-sm leading-6 text-[#475569]">{isApplication ? 'Share your contact details so a counselor can review your eligibility and help with the university application.' : 'Your instant result stays free. Share contact details only if you want a counselor to review it.'}</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="Full name" required><input value={form.name} onChange={event => update({ name: event.target.value })} className={inputClass} placeholder="Your name" /></Field>
               <Field label="Email" required><input type="email" value={form.email} onChange={event => update({ email: event.target.value })} className={inputClass} placeholder="you@example.com" /></Field>
               <Field label="WhatsApp / phone" required><input value={form.phone} onChange={event => update({ phone: event.target.value })} className={inputClass} placeholder="01XXXXXXXXX" /></Field>
             </div>
-            <label className="flex items-start gap-3 rounded-2xl bg-[#e3f0f9] p-4 text-sm leading-6 text-[#5e4f40]">
+            <label className="flex items-start gap-3 rounded-2xl bg-[#e3f0f9] p-4 text-sm leading-6 text-[#475569]">
               <input type="checkbox" checked={form.consent} onChange={event => update({ consent: event.target.checked })} className="mt-1 size-4 shrink-0 accent-[#12436b]" />
               <span>I agree that EduExpress may contact me about this {isApplication ? 'application request' : 'assessment'}. I have read the <Link href="/privacy" className="font-bold text-[#12436b] underline">privacy policy</Link>.</span>
             </label>
@@ -483,7 +483,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
 
         {errorMsg && <p role="alert" className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{errorMsg}</p>}
 
-        <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-[#e6dccd] pt-5">
+        <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-[#e2e8f0] pt-5">
           {screen === 'profile' && (
             <>
               <span className="mr-auto text-xs text-ink-mute">No contact details required</span>
@@ -523,7 +523,7 @@ const secondaryButton = 'inline-flex min-h-12 items-center justify-center gap-2 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.09em] text-[#12436b]">{label}{required && <span className="text-[#66b5e0]"> *</span>}</span>
+      <span className="mb-2 block text-[13px] font-bold uppercase tracking-[0.09em] text-[#12436b]">{label}{required && <span className="text-[#b42318]" aria-hidden="true"> *</span>}</span>
       {children}
     </label>
   );

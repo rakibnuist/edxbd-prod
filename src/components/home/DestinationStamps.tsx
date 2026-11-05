@@ -30,7 +30,7 @@ export default function DestinationStamps({ destinations }: { destinations: Stam
             <h2 className="mt-4 font-heading text-[clamp(2rem,4vw,3.2rem)] leading-[1.05] text-ink">
               China first, then the routes we can evidence.
             </h2>
-            <p className="mt-4 max-w-[54ch] text-[13.5px] leading-7 text-ink-soft">
+            <p className="mt-4 max-w-[54ch] text-[15px] leading-7 text-ink-soft">
               Every destination carries its current counselling status. China holds our deepest evidence base; the
               others are offered only where we can answer recognition, cost and visa questions honestly.
             </p>
@@ -52,13 +52,13 @@ export default function DestinationStamps({ destinations }: { destinations: Stam
             <div className="absolute inset-0 bg-gradient-to-t from-petrol-900/95 via-petrol-900/55 to-petrol-900/15" />
 
             <div className="absolute left-5 top-5 flex items-center gap-2">
-              <span className="home-stamp bg-petrol-900/85 text-[11px] !text-marigold">Flagship route</span>
+              <span className="home-stamp bg-petrol-900/85 text-[13px] !text-marigold">Flagship route</span>
             </div>
 
             <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-7">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-mint-300">{countryCode(flagship.slug)} · Deepest evidence base</p>
+              <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-mint-300">{countryCode(flagship.slug)} · Deepest evidence base</p>
               <h3 className="mt-2 font-heading text-[clamp(1.8rem,3vw,2.5rem)] leading-tight">{flagship.name}</h3>
-              <p className="mt-3 max-w-[44ch] text-[13px] leading-6 text-white/70 line-clamp-3">{flagship.description}</p>
+              <p className="mt-3 max-w-[44ch] text-[15px] leading-6 text-white/70 line-clamp-3">{flagship.description}</p>
               <Link href={flagship.href} className="ed-btn ed-btn-signal mt-5 min-h-11">
                 Open the China guide <ArrowUpRight size={15} aria-hidden="true" />
               </Link>
@@ -74,11 +74,11 @@ export default function DestinationStamps({ destinations }: { destinations: Stam
                   style={{ '--tilt': tilts[index % tilts.length] } as CSSProperties}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="ed-figure text-[13px] font-semibold tracking-[0.08em] text-petrol-700">
+                    <span className="ed-figure text-[15px] font-semibold tracking-[0.08em] text-petrol-700">
                       {countryCode(destination.slug)}
                     </span>
                     <span
-                      className={`text-[9.5px] font-semibold uppercase tracking-[0.08em] ${
+                      className={`text-[12px] font-semibold uppercase tracking-[0.08em] ${
                         destination.status.toLowerCase().includes('paused') ? 'text-clay' : 'text-petrol-600'
                       }`}
                     >
@@ -93,7 +93,7 @@ export default function DestinationStamps({ destinations }: { destinations: Stam
                     <h3 className="mt-2 font-heading text-[17px] leading-tight text-ink group-hover:text-petrol-700">
                       {destination.name}
                     </h3>
-                    <p className="mt-1.5 line-clamp-2 text-[10.5px] leading-[1.55] text-ink-mute">{destination.description}</p>
+                    <p className="mt-1.5 line-clamp-2 text-[12px] leading-[1.55] text-ink-mute">{destination.description}</p>
                   </div>
 
                   <ArrowUpRight

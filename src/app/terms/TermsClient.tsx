@@ -33,21 +33,21 @@ export default function TermsClient() {
   ];
 
   return (
-    <div className="overflow-hidden bg-[#f5efe6] text-ed-ink font-sans">
+    <div className="overflow-hidden bg-[#f1f5f9] text-ed-ink font-sans">
       {/* Homepage Hero Header Style */}
       <section className="relative px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32 md:pt-40 lg:px-12 border-b border-[#12436b]/10">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(18,67,107,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(18,67,107,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
         <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#a9d6ee]/15 md:size-[460px]" />
 
         <div className="relative mx-auto max-w-[1440px]">
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#12436b]/18 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-ed-navy">
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#12436b]/18 py-3 font-mono text-[13px] font-bold uppercase tracking-[0.2em] text-ed-navy">
             <span>EduExpress International Bangladesh</span>
             <span>Terms of Service Agreement</span>
             <span>Policy Version 2026-07-19</span>
           </div>
 
           <div className="max-w-4xl">
-            <p className="flex w-full max-w-full items-start gap-3 bg-[#12436b] px-4 py-2 text-[11px] font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
+            <p className="flex w-full max-w-full items-start gap-3 bg-[#12436b] px-4 py-2 text-[13px] font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
               <Scale className="mt-0.5 shrink-0 text-ed-mist sm:mt-0" size={16} />
               <span className="min-w-0 whitespace-normal">Evidence-First Terms of Service</span>
             </p>
@@ -67,12 +67,12 @@ export default function TermsClient() {
       <section className="border-y border-[#0f3a5c] bg-ed-navy text-white">
         <div className="mx-auto grid max-w-[1440px] lg:grid-cols-[.8fr_repeat(4,1fr)]">
           <div className="bg-ed-mist p-6 text-ed-ink lg:p-7">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-ed-navy">Four Operational Clauses</p>
+            <p className="font-mono text-[12px] font-black uppercase tracking-[0.2em] text-ed-navy">Four Operational Clauses</p>
             <h2 className="mt-3 ed-home-display text-2xl leading-[1.05] leading-tight">Service Framework</h2>
           </div>
           {termsPillars.map(({ num, title, copy, icon: Icon }) => (
             <div key={title} className="group relative border-b border-white/15 p-5 hover:bg-white/5 lg:border-b-0 lg:border-r lg:p-6">
-              <div className="flex items-center justify-between"><span className="font-mono text-[9px] text-ed-mist">TERM {num}</span><Icon size={19} className="text-ed-mist" /></div>
+              <div className="flex items-center justify-between"><span className="font-mono text-[12px] text-ed-mist">TERM {num}</span><Icon size={19} className="text-ed-mist" /></div>
               <h3 className="mt-7 ed-home-display text-lg font-bold leading-6">{title}</h3>
               <p className="mt-2 text-xs leading-5 text-white/50">{copy}</p>
             </div>
@@ -82,7 +82,7 @@ export default function TermsClient() {
 
       {/* Terms Content */}
       <section className="bg-white px-5 py-16 sm:px-8 sm:py-24 border-b border-[#12436b]/10">
-        <div className="container mx-auto max-w-4xl bg-[#f5efe6] border-2 border-[#0f3a5c] p-8 md:p-12 shadow-[8px_8px_0_0_#12436b]">
+        <div className="container mx-auto max-w-4xl bg-[#f1f5f9] border-2 border-[#0f3a5c] p-8 md:p-12 shadow-[8px_8px_0_0_#12436b]">
           <div className="space-y-10">
             <div>
               <h2 className="ed-home-display text-2xl leading-[1.05] mb-4 flex items-center text-ed-ink">

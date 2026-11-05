@@ -49,7 +49,7 @@ export default function MobileLeadBar({ whatsappHref }: { whatsappHref: string }
         <a
           href="tel:+8801983333566"
           onClick={() => trackPhoneClick({ label: 'home_mobile_bar_phone' })}
-          className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-rule-strong px-2 text-[12px] font-bold text-petrol-700"
+          className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-rule-strong px-2 text-[14px] font-bold text-petrol-700"
         >
           <Phone size={14} aria-hidden="true" /> Call
         </a>
@@ -58,13 +58,13 @@ export default function MobileLeadBar({ whatsappHref }: { whatsappHref: string }
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackWhatsAppClick({ label: 'home_mobile_bar_whatsapp' })}
-          className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full bg-[#25d366] px-2 text-[12px] font-bold text-[#06251a]"
+          className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full bg-[#25d366] px-2 text-[14px] font-bold text-[#06251a]"
         >
           <MessageCircle size={14} aria-hidden="true" /> WhatsApp
         </a>
         <a
           href="#assessment"
-          className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full bg-marigold px-2 text-[12px] font-bold text-petrol-900"
+          className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full bg-green-500 px-2 text-[14px] font-bold text-white"
         >
           <CalendarCheck size={14} aria-hidden="true" /> Assessment
         </a>

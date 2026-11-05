@@ -112,7 +112,7 @@ export default function Carousel({ label, items, itemClassName = '', className =
             <div className="h-1 flex-1 overflow-hidden rounded-full bg-rule">
               <div className="h-full rounded-full bg-marigold transition-[width] duration-300" style={{ width: `${Math.max(6, progress)}%` }} />
             </div>
-            <span className="text-[10.5px] font-medium text-ink-mute">Swipe or drag</span>
+            <span className="text-[12px] font-medium text-ink-mute">Swipe or drag</span>
           </div>
         </>
       )}

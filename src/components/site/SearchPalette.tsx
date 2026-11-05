@@ -102,18 +102,18 @@ export default function SearchPalette() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="hidden items-center gap-2 rounded-full border border-rule bg-chalk-50 px-3 py-2 text-[13px] font-medium text-ink-soft transition hover:border-petrol-400 hover:text-petrol-700 lg:inline-flex"
+        className="hidden items-center gap-2 rounded-full border border-rule bg-chalk-50 px-3 py-2 text-[15px] font-medium text-ink-soft transition hover:border-petrol-400 hover:text-petrol-700 lg:inline-flex"
         aria-label="Search universities, programmes and guides"
       >
         <Search size={15} aria-hidden="true" />
         <span>Search</span>
-        <kbd className="ml-1 rounded border border-rule bg-white px-1.5 py-0.5 text-[10px] font-semibold text-ink-mute">⌘K</kbd>
+        <kbd className="ml-1 rounded border border-rule bg-white px-1.5 py-0.5 text-[12px] font-semibold text-ink-mute">⌘K</kbd>
       </button>
 
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="grid size-10 place-items-center rounded-full border border-rule text-petrol-700 lg:hidden"
+        className="grid size-10 place-items-center rounded-full border border-rule bg-white text-petrol-700 lg:hidden"
         aria-label="Search"
       >
         <Search size={17} aria-hidden="true" />
@@ -164,18 +164,18 @@ export default function SearchPalette() {
                   onMouseEnter={() => setActive(index)}
                   className={`flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors ${index === active ? 'bg-mint-100' : 'hover:bg-chalk-100'}`}
                 >
-                  <span className="mt-0.5 w-[74px] shrink-0 text-[11px] font-semibold text-petrol-500">{kindLabel[hit.kind]}</span>
+                  <span className="mt-0.5 w-[74px] shrink-0 text-[13px] font-semibold text-petrol-500">{kindLabel[hit.kind]}</span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[14px] font-semibold text-ink">{hit.title}</span>
-                    <span className="mt-0.5 block truncate text-[12px] text-ink-mute">{hit.context}</span>
+                    <span className="mt-0.5 block truncate text-[14px] text-ink-mute">{hit.context}</span>
                   </span>
-                  {hit.meta && <span className="hidden shrink-0 text-[11px] text-ink-mute sm:block">{hit.meta}</span>}
+                  {hit.meta && <span className="hidden shrink-0 text-[13px] text-ink-mute sm:block">{hit.meta}</span>}
                   <ArrowUpRight size={14} className="mt-1 shrink-0 text-petrol-400" aria-hidden="true" />
                 </Link>
               ))}
             </div>
 
-            <div className="flex items-center justify-between border-t border-rule bg-chalk-50 px-4 py-2.5 text-[11px] text-ink-mute">
+            <div className="flex items-center justify-between border-t border-rule bg-chalk-50 px-4 py-2.5 text-[13px] text-ink-mute">
               <span className="flex items-center gap-3">
                 <span className="inline-flex items-center gap-1"><CornerDownLeft size={12} /> open</span>
                 <span>↑ ↓ move</span>

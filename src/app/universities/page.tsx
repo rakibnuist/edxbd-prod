@@ -128,15 +128,15 @@ export default async function UniversitiesPage({ searchParams }: Props) {
             <dl className="grid grid-cols-3 gap-6 border-t border-rule pt-4 lg:border-t-0 lg:pt-0">
               <div>
                 <dd className="ed-figure text-[28px] leading-none text-petrol-700">{universities.filter(u => u.isActive).length}</dd>
-                <dt className="mt-1 text-[11.5px] text-ink-mute">universities</dt>
+                <dt className="mt-1 text-[13px] text-ink-mute">universities</dt>
               </div>
               <div>
                 <dd className="ed-figure text-[28px] leading-none text-petrol-700">{universities.reduce((count, u) => count + u.programs.length, 0)}</dd>
-                <dt className="mt-1 text-[11.5px] text-ink-mute">programmes</dt>
+                <dt className="mt-1 text-[13px] text-ink-mute">programmes</dt>
               </div>
               <div>
                 <dd className="ed-figure text-[28px] leading-none text-petrol-700">{listedDestinations.length}</dd>
-                <dt className="mt-1 text-[11.5px] text-ink-mute">destinations with data</dt>
+                <dt className="mt-1 text-[13px] text-ink-mute">destinations with data</dt>
               </div>
             </dl>
           </div>
@@ -146,19 +146,19 @@ export default async function UniversitiesPage({ searchParams }: Props) {
               <Link
                 key={item.name}
                 href={item.href}
-                className="inline-flex min-h-8 items-center gap-2 border border-rule-strong bg-white px-2.5 text-[12px] font-medium text-ink transition-colors hover:border-petrol-500 hover:text-petrol-700"
+                className="inline-flex min-h-8 items-center gap-2 border border-rule-strong bg-white px-2.5 text-[14px] font-medium text-ink transition-colors hover:border-petrol-500 hover:text-petrol-700"
               >
-                <span aria-hidden="true" className="text-[10.5px] font-semibold text-ink-mute">{countryCode(item.name.toLowerCase().replace(/\s+/g, '-'))}</span>
+                <span aria-hidden="true" className="text-[12px] font-semibold text-ink-mute">{countryCode(item.name.toLowerCase().replace(/\s+/g, '-'))}</span>
                 {item.name}
-                <span className="ed-figure text-[11px] text-ink-mute">{item.count}</span>
+                <span className="ed-figure text-[13px] text-ink-mute">{item.count}</span>
               </Link>
             ))}
             {guideDestinations.length > 0 && (
-              <span className="text-[11.5px] text-ink-mute">{guideDestinations.length} further destinations are counselling-only — see the destinations menu</span>
+              <span className="text-[13px] text-ink-mute">{guideDestinations.length} further destinations are counselling-only — see the destinations menu</span>
             )}
           </nav>
 
-          <nav aria-label="Popular university study routes" className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[12px] font-semibold">
+          <nav aria-label="Popular university study routes" className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[14px] font-semibold">
             <Link href="/universities?country=China&search=medicine" className="inline-flex min-h-9 items-center text-petrol-600 underline-offset-4 hover:underline">
               Medicine in China
             </Link>
@@ -172,16 +172,16 @@ export default async function UniversitiesPage({ searchParams }: Props) {
         </div>
       </header>
 
-      <Suspense fallback={<div className="px-5 py-20 text-center text-[13px] text-ink-mute sm:px-8">Loading the directory…</div>}>
+      <Suspense fallback={<div className="px-5 py-20 text-center text-[15px] text-ink-mute sm:px-8">Loading the directory…</div>}>
         <UniversitiesClient initialUniversities={universities} />
       </Suspense>
 
       <footer className="border-t border-rule bg-white px-5 py-6 sm:px-8 lg:px-12">
         <div className="mx-auto flex max-w-shell flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <p className="max-w-3xl text-[11.5px] leading-6 text-ink-mute">
+          <p className="max-w-3xl text-[13px] leading-6 text-ink-mute">
             Tuition, scholarship and ranking entries link to their official source records inside each profile. Where a figure is under verification, the profile says so — we do not publish estimates as facts.
           </p>
-          <nav aria-label="Directory transparency" className="flex shrink-0 flex-wrap gap-x-5 gap-y-1 text-[12px] font-semibold">
+          <nav aria-label="Directory transparency" className="flex shrink-0 flex-wrap gap-x-5 gap-y-1 text-[14px] font-semibold">
             <Link href="/fees-and-transparency" className="inline-flex min-h-8 items-center text-petrol-600 hover:underline">
               Fee policy
             </Link>

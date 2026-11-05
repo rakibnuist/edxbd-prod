@@ -49,45 +49,45 @@ export default function CostTicket({ priceLabel, included, excluded }: CostTicke
         >
           <div className="flex items-start justify-between gap-4 border-b border-rule/70 px-6 pb-4 pt-5 sm:px-7">
             <div>
-              <p className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-mute">EduExpress International</p>
-              <p className="mt-1 text-[13px] font-semibold text-petrol-700">China service package</p>
+              <p className="whitespace-nowrap text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-mute">EduExpress International</p>
+              <p className="mt-1 text-[15px] font-semibold text-petrol-700">China service package</p>
             </div>
-            <span className="whitespace-nowrap rounded-full border border-petrol-600/30 px-2.5 py-1 text-[9.5px] font-semibold uppercase tracking-[0.1em] text-petrol-600">
+            <span className="whitespace-nowrap rounded-full border border-petrol-600/30 px-2.5 py-1 text-[12px] font-semibold uppercase tracking-[0.1em] text-petrol-600">
               Visa-first
             </span>
           </div>
 
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 px-6 pb-5 pt-5 sm:px-7">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-mute">From</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-mute">From</p>
               <p className="ed-figure mt-1 text-[30px] leading-none text-ink">DAC</p>
-              <p className="mt-1 text-[11px] text-ink-soft">Dhaka, Bangladesh</p>
+              <p className="mt-1 text-[13px] text-ink-soft">Dhaka, Bangladesh</p>
             </div>
             <div className="flex flex-col items-center gap-1 text-petrol-600" aria-hidden="true">
               <Plane size={14} className="rotate-45" />
               <span className="w-12 border-t border-dashed border-rule-strong sm:w-20" />
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-mute">To</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-mute">To</p>
               <p className="ed-figure mt-1 text-[30px] leading-none text-ink">CHN</p>
-              <p className="mt-1 text-[11px] text-ink-soft">Your campus</p>
+              <p className="mt-1 text-[13px] text-ink-soft">Your campus</p>
             </div>
           </div>
 
           <div className="flex items-end justify-between gap-4 border-y border-rule/70 bg-chalk-50 px-6 py-4 sm:px-7">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-mute">Package price</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-ink-mute">Package price</p>
               <p className="ed-figure mt-1 text-[clamp(1.9rem,3.4vw,2.6rem)] leading-none text-petrol-700">{priceLabel}</p>
             </div>
-            <p className="max-w-[18ch] text-right text-[11px] leading-5 text-ink-mute">No service fee before visa approval</p>
+            <p className="max-w-[18ch] text-right text-[13px] leading-5 text-ink-mute">No service fee before visa approval</p>
           </div>
 
           <div className="grid gap-6 px-6 py-5 sm:grid-cols-2 sm:px-7">
             <div>
-              <p className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-jade">Included</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.1em] text-jade">Included</p>
               <ul className="mt-3 space-y-1.5">
                 {included.map(item => (
-                  <li key={item} className="flex gap-1.5 text-[11.5px] leading-[1.55] text-ink-soft">
+                  <li key={item} className="flex gap-1.5 text-[13px] leading-[1.55] text-ink-soft">
                     <Check size={12} className="mt-[3px] shrink-0 text-jade" aria-hidden="true" />
                     {item}
                   </li>
@@ -95,16 +95,16 @@ export default function CostTicket({ priceLabel, included, excluded }: CostTicke
               </ul>
             </div>
             <div>
-              <p className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-clay">Paid separately</p>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.1em] text-clay">Paid separately</p>
               <ul className="mt-3 space-y-1.5">
                 {excluded.map(item => (
-                  <li key={item} className="flex gap-1.5 text-[11.5px] leading-[1.55] text-ink-soft">
+                  <li key={item} className="flex gap-1.5 text-[13px] leading-[1.55] text-ink-soft">
                     <X size={12} className="mt-[3px] shrink-0 text-clay" aria-hidden="true" />
                     {item}
                   </li>
                 ))}
               </ul>
-              <p className="mt-4 border-l-2 border-marigold pl-2.5 text-[10.5px] leading-[1.6] text-ink-mute">
+              <p className="mt-4 border-l-2 border-marigold pl-2.5 text-[12px] leading-[1.6] text-ink-mute">
                 University registration, seat or tuition deposits are paid separately when required.
               </p>
             </div>
@@ -116,7 +116,7 @@ export default function CostTicket({ priceLabel, included, excluded }: CostTicke
                 <span key={index} className="block h-5 bg-ink/70" style={{ width: `${width}px` }} />
               ))}
             </div>
-            <p className="text-[10px] uppercase tracking-[0.16em] text-ink-mute">EDX · BD · 2027</p>
+            <p className="text-[12px] uppercase tracking-[0.16em] text-ink-mute">EDX · BD · 2027</p>
           </div>
         </article>
       </div>

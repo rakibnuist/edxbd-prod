@@ -38,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ChinaSuccessStoriesPage() {
   const count = await getChinaStoryCount();
   return (
-    <article className="min-h-screen bg-[#f5efe6] px-5 pb-20 pt-32 text-ed-ink sm:px-8 lg:px-12">
+    <article className="min-h-screen bg-[#f1f5f9] px-5 pb-20 pt-32 text-ed-ink sm:px-8 lg:px-12">
       <div className="mx-auto max-w-[1100px]">
         <nav aria-label="Breadcrumb" className="text-xs font-bold text-ed-navy"><Link href="/">Home</Link> <span aria-hidden>/</span> <Link href="/study-in-china-from-bangladesh">Study in China</Link> <span aria-hidden>/</span> Success stories</nav>
         <header className="mt-8 overflow-hidden rounded-[2rem] bg-ed-navy p-7 text-white sm:p-10 lg:p-14">

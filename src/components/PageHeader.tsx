@@ -48,7 +48,7 @@ export default function PageHeader({
                 <Breadcrumbs items={trail} className="mb-5" />
 
                 {badgeText && (
-                    <p className="inline-flex items-center gap-2 rounded-full border border-[#12436b]/12 bg-white px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ed-navy shadow-[0_12px_28px_-24px_rgba(18,67,107,0.35)]">
+                    <p className="inline-flex items-center gap-2 rounded-full border border-[#12436b]/12 bg-white px-3.5 py-1.5 text-[13px] font-bold uppercase tracking-[0.12em] text-ed-navy shadow-[0_12px_28px_-24px_rgba(18,67,107,0.35)]">
                         {IconComp ? <IconComp size={13} className="text-ed-teal" aria-hidden="true" /> : null}
                         {badgeText}
                     </p>

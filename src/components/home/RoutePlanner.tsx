@@ -52,13 +52,13 @@ export default function RoutePlanner({ universities }: { universities: PlannerUn
   return (
     <div className="border border-rule bg-chalk-50">
       <div className="flex items-center justify-between border-b border-rule bg-white px-5 py-3">
-        <p className="text-[12.5px] font-semibold text-petrol-700">Route planner</p>
-        <span className="text-[10.5px] text-ink-mute">Live directory · {universities.length} records</span>
+        <p className="text-[14px] font-semibold text-petrol-700">Route planner</p>
+        <span className="text-[12px] text-ink-mute">Live directory · {universities.length} records</span>
       </div>
 
       <div className="space-y-4 p-5">
         <div>
-          <label htmlFor="planner-level" className="block text-[12px] font-semibold text-ink-soft">
+          <label htmlFor="planner-level" className="block text-[14px] font-semibold text-ink-soft">
             What are you applying for?
           </label>
           <select id="planner-level" value={level} onChange={event => setLevel(event.target.value)} className="ed-field mt-1.5">
@@ -73,7 +73,7 @@ export default function RoutePlanner({ universities }: { universities: PlannerUn
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label htmlFor="planner-country" className="block text-[12px] font-semibold text-ink-soft">
+            <label htmlFor="planner-country" className="block text-[14px] font-semibold text-ink-soft">
               Destination
             </label>
             <select id="planner-country" value={country} onChange={event => setCountry(event.target.value)} className="ed-field mt-1.5">
@@ -86,8 +86,8 @@ export default function RoutePlanner({ universities }: { universities: PlannerUn
             </select>
           </div>
           <div>
-            <span className="block text-[12px] font-semibold text-ink-soft">Funding</span>
-            <label className="mt-1.5 flex min-h-[2.75rem] cursor-pointer items-center gap-2 border border-rule-strong bg-white px-3 text-[13px] text-ink">
+            <span className="block text-[14px] font-semibold text-ink-soft">Funding</span>
+            <label className="mt-1.5 flex min-h-[2.75rem] cursor-pointer items-center gap-2 border border-rule-strong bg-white px-3 text-[15px] text-ink">
               <input type="checkbox" checked={funding} onChange={event => setFunding(event.target.checked)} className="size-4 accent-[#175180]" />
               Scholarship on file
             </label>
@@ -96,7 +96,7 @@ export default function RoutePlanner({ universities }: { universities: PlannerUn
 
         <div className="border-t border-rule pt-4" aria-live="polite">
           <div className="flex items-baseline justify-between gap-3">
-            <p className="text-[13px] text-ink-soft">
+            <p className="text-[15px] text-ink-soft">
               <strong className="ed-figure text-[26px] leading-none text-petrol-700">{result.count}</strong>{' '}{result.count === 1 ? 'university matches' : 'universities match'}
             </p>
             {dirty && (
@@ -107,7 +107,7 @@ export default function RoutePlanner({ universities }: { universities: PlannerUn
                   setCountry('');
                   setFunding(false);
                 }}
-                className="inline-flex items-center gap-1 text-[12px] font-semibold text-ink-mute hover:text-petrol-600"
+                className="inline-flex items-center gap-1 text-[14px] font-semibold text-ink-mute hover:text-petrol-600"
               >
                 <RotateCcw size={12} aria-hidden="true" /> Reset
               </button>
@@ -120,8 +120,8 @@ export default function RoutePlanner({ universities }: { universities: PlannerUn
                 <li key={university.slug}>
                   <Link href={`/universities/${university.slug}`} className="group flex items-baseline justify-between gap-3 py-2">
                     <span className="min-w-0">
-                      <span className="block truncate text-[13.5px] font-semibold text-ink group-hover:text-petrol-700">{university.name}</span>
-                      <span className="block text-[11.5px] text-ink-mute">
+                      <span className="block truncate text-[15px] font-semibold text-ink group-hover:text-petrol-700">{university.name}</span>
+                      <span className="block text-[13px] text-ink-mute">
                         {university.city}, {university.country}
                       </span>
                     </span>
@@ -131,7 +131,7 @@ export default function RoutePlanner({ universities }: { universities: PlannerUn
               ))}
             </ul>
           ) : (
-            <p className="mt-3 border border-dashed border-rule-strong px-3 py-4 text-[12.5px] leading-6 text-ink-soft">
+            <p className="mt-3 border border-dashed border-rule-strong px-3 py-4 text-[14px] leading-6 text-ink-soft">
               No stored record matches that combination. Reset, or ask a counsellor to check the route with you.
             </p>
           )}

@@ -178,30 +178,30 @@ export default function ScholarshipsPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
 
       {/* Hero */}
-      <section className="ed-band ed-band-navy relative overflow-hidden border-b border-white/10 px-4 pb-16 pt-[104px] sm:px-6 lg:px-10 lg:pb-20 lg:pt-[142px]">
-        <div className="pointer-events-none absolute inset-0 ed-grid-lines" aria-hidden="true" />
+      <section className="bg-gradient-to-b from-mint-100/70 to-white relative overflow-hidden border-b border-rule px-4 pb-16 pt-[104px] sm:px-6 lg:px-10 lg:pb-20 lg:pt-[142px]">
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="pointer-events-none absolute -right-28 -top-24 size-[420px] rounded-full bg-sky-500/25 blur-[100px]" aria-hidden="true" />
         <div className="pointer-events-none absolute -left-40 bottom-[-30%] size-[520px] rounded-full bg-petrol-400/20 blur-[120px]" aria-hidden="true" />
 
         <div className="relative mx-auto max-w-shell">
           <Breadcrumbs
             items={[{ name: 'Scholarships' }]}
-            className="text-white/80 [&_a]:text-white/80 [&_a:hover]:text-white [&_span]:text-white/60"
+            className="text-ink-soft [&_a]:text-ink-soft [&_a:hover]:text-ink [&_span]:text-ink-soft"
           />
 
           <div className="mt-8 grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-14">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="ed-chip-dark">
-                  <span className="ed-chip-dark-dot" aria-hidden="true" />
+                <span className="ed-chip-light">
+                  <span className="ed-chip-light-dot" aria-hidden="true" />
                   Scholarship guidance
                 </span>
-                <span className="ed-chip-dark">Evidence-first comparison</span>
+                <span className="ed-chip-light">Evidence-first comparison</span>
               </div>
-              <h1 className="ed-display mt-6 max-w-[18ch] text-[clamp(2.6rem,5vw,4.4rem)] leading-[1.01] text-white">
+              <h1 className="ed-display mt-6 max-w-[18ch] text-[clamp(2.6rem,5vw,4.4rem)] leading-[1.01] text-ink">
                 Funding should improve a good decision—not create a bad one.
               </h1>
-              <p className="mt-6 max-w-[58ch] text-[15px] leading-8 text-white/80">
+              <p className="mt-6 max-w-[58ch] text-[15px] leading-8 text-ink-soft">
                 We assess scholarships after education fit. The useful question isn&apos;t just &ldquo;how much?&rdquo; It&apos;s what the award covers, what keeps it active, and what your family still needs to pay.
               </p>
 
@@ -209,22 +209,22 @@ export default function ScholarshipsPage() {
                 <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-12 px-6">
                   Check my education & funding fit <ArrowRight size={16} aria-hidden="true" />
                 </Link>
-                <Link href="/china-scholarships-bangladesh" className="ed-btn ed-btn-on-dark min-h-12 px-6">
+                <Link href="/china-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-12 px-6">
                   Explore China scholarships <ArrowUpRight size={16} aria-hidden="true" />
                 </Link>
               </div>
 
-              <ul className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11.5px] text-white/70">
+              <ul className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-soft">
                 <li className="inline-flex items-center gap-1.5">
-                  <BadgeCheck size={13} className="text-mint-300" aria-hidden="true" />
+                  <BadgeCheck size={13} className="text-petrol-600" aria-hidden="true" />
                   Itemised coverage in writing
                 </li>
-                <li aria-hidden="true" className="text-white/40">·</li>
+                <li aria-hidden="true" className="text-ink-mute">·</li>
                 <li className="inline-flex items-center gap-1.5">
-                  <ShieldCheck size={13} className="text-mint-300" aria-hidden="true" />
+                  <ShieldCheck size={13} className="text-petrol-600" aria-hidden="true" />
                   No scholarship guarantee
                 </li>
-                <li aria-hidden="true" className="text-white/40">·</li>
+                <li aria-hidden="true" className="text-ink-mute">·</li>
                 <li>Reviewed {new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(LAST_REVIEWED))}</li>
               </ul>
             </div>
@@ -241,9 +241,9 @@ export default function ScholarshipsPage() {
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-petrol-900/90 via-petrol-900/15 to-transparent" aria-hidden="true" />
-                  <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl bg-white/95 px-4 py-3 backdrop-blur">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-petrol-600">Read past the headline</p>
-                    <p className="mt-1 text-[13px] font-semibold leading-6 text-ink">
+                  <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl bg-white px-4 py-3 backdrop-blur">
+                    <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-petrol-600">Read past the headline</p>
+                    <p className="mt-1 text-[15px] font-semibold leading-6 text-ink">
                       Coverage • Conditions • Remaining costs • Fit
                     </p>
                   </figcaption>
@@ -279,7 +279,7 @@ export default function ScholarshipsPage() {
                 key={title}
                 className="group relative overflow-hidden rounded-[28px] border border-rule bg-white shadow-[0_24px_60px_-52px_rgba(15,53,87,0.5)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_34px_70px_-40px_rgba(15,53,87,0.42)]"
               >
-                <div className="absolute right-6 top-6 text-[11px] font-bold tracking-[0.16em] text-ink-mute">
+                <div className="absolute right-6 top-6 text-[13px] font-bold tracking-[0.16em] text-ink-mute">
                   0{index + 1}
                 </div>
                 <div className="p-7 sm:p-8">
@@ -320,7 +320,7 @@ export default function ScholarshipsPage() {
                 className="flex items-center gap-3 rounded-2xl border border-white bg-white px-5 py-4 shadow-[0_16px_36px_-32px_rgba(15,53,87,0.45)]"
               >
                 <CheckCircle2 size={18} className="shrink-0 text-jade" aria-hidden="true" />
-                <span className="text-[13.5px] font-semibold leading-6 text-ink">{item}</span>
+                <span className="text-[15px] font-semibold leading-6 text-ink">{item}</span>
               </div>
             ))}
           </div>
@@ -355,7 +355,7 @@ export default function ScholarshipsPage() {
                     +
                   </span>
                 </summary>
-                <p className="pb-5 pr-10 text-[13px] leading-7 text-ink-soft">{item.answer}</p>
+                <p className="pb-5 pr-10 text-[15px] leading-7 text-ink-soft">{item.answer}</p>
               </details>
             ))}
           </div>
@@ -373,7 +373,7 @@ export default function ScholarshipsPage() {
                 <span className="grid size-11 place-items-center rounded-2xl bg-white/10 text-mint-300">
                   <CircleAlert size={22} aria-hidden="true" />
                 </span>
-                <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-mint-300">Important</p>
+                <p className="text-[14px] font-bold uppercase tracking-[0.14em] text-mint-300">Important</p>
               </div>
               <h2 className="ed-display mt-5 text-[clamp(2rem,4vw,2.8rem)] leading-[1.06] text-white">
                 No scholarship guarantee

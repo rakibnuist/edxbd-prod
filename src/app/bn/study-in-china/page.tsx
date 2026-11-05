@@ -57,23 +57,23 @@ const bnFeatures = [
 
 export default function BengaliStudyInChinaPage() {
   return (
-    <div lang="bn" className="bg-[#f5efe6] text-[#0f3a5c] font-sans">
+    <div lang="bn" className="bg-[#f1f5f9] text-[#0f3a5c] font-sans">
       {/* HERO */}
-      <section className="relative overflow-hidden bg-[#0f3a5c] px-5 pb-20 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
+      <section className="relative overflow-hidden bg-gradient-to-b from-mint-100/70 to-white px-5 pb-20 pt-28 text-ink sm:px-8 sm:pt-32 lg:px-12">
         <div className="relative mx-auto max-w-[1440px]">
-          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-white/50">
-            <Link href="/" className="hover:text-white">হোম</Link> <span aria-hidden>/</span>{' '}
-            <Link href="/study-in-china-from-bangladesh" className="hover:text-white">Study in China (EN)</Link> <span aria-hidden>/</span> চীনে উচ্চশিক্ষা (বাংলা)
+          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-ink-mute">
+            <Link href="/" className="hover:text-ink">হোম</Link> <span aria-hidden>/</span>{' '}
+            <Link href="/study-in-china-from-bangladesh" className="hover:text-ink">Study in China (EN)</Link> <span aria-hidden>/</span> চীনে উচ্চশিক্ষা (বাংলা)
           </nav>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#a9d6ee]/30 bg-[#a9d6ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-[#a9d6ee]">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#a9d6ee]/30 bg-[#a9d6ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-petrol-600">
               <Globe2 size={14} /> ফ্ল্যাগশিপ চায়না উচ্চশিক্ষা পোর্টাল
             </div>
             <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.15] tracking-tight sm:text-5xl md:text-6xl">
               বাংলাদেশী শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা ২০২৭
             </h1>
-            <p className="mt-6 text-lg leading-8 text-white/80 md:text-xl">
+            <p className="mt-6 text-lg leading-8 text-ink-soft md:text-xl">
               টিউশন ফি waiver, স্কলারশিপ, বিশ্ববিদ্যালয় পছন্দ, খরচ এবং ভিসা আবেদনের সঠিক ও লিখিত তথ্যভিত্তিক গাইডলাইন।
             </p>
 

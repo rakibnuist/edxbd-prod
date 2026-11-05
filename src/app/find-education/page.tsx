@@ -242,7 +242,7 @@ export default async function FindEducationPage() {
                 </Link>
               </div>
 
-              <ul className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11.5px] text-ink-mute">
+              <ul className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-mute">
                 <li className="inline-flex items-center gap-1.5">
                   <ShieldCheck size={13} className="text-jade" aria-hidden="true" />
                   {universityCount > 0 ? `${universityCount} university records` : 'Source-based university records'}
@@ -269,8 +269,8 @@ export default async function FindEducationPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-petrol-900/80 via-petrol-900/10 to-transparent" aria-hidden="true" />
                   <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl bg-white/95 px-4 py-3 backdrop-blur">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-petrol-600">The EduExpress sequence</p>
-                    <p className="mt-1 text-[13px] font-semibold leading-6 text-ink">
+                    <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-petrol-600">The EduExpress sequence</p>
+                    <p className="mt-1 text-[15px] font-semibold leading-6 text-ink">
                       Profile → comparison → clear cost → application decision
                     </p>
                   </figcaption>
@@ -281,7 +281,7 @@ export default async function FindEducationPage() {
                 <span className="ed-numeral block text-[30px] leading-none text-mint-300">
                   {String(destinations.length).padStart(2, '0')}
                 </span>
-                <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.14em] text-white/80">destinations</span>
+                <span className="mt-1 block text-[12px] font-bold uppercase tracking-[0.14em] text-white/80">destinations</span>
               </div>
             </div>
           </div>
@@ -295,11 +295,11 @@ export default async function FindEducationPage() {
             <div key={item.label} className="bg-white px-5 py-5">
               <div className="flex items-baseline justify-between gap-2">
                 <dd className="ed-numeral text-[32px] text-petrol-700">{item.value}</dd>
-                <span className="ed-figure text-[10px] font-bold tracking-[0.14em] text-ink-mute">
+                <span className="ed-figure text-[12px] font-bold tracking-[0.14em] text-ink-mute">
                   {String(index + 1).padStart(2, '0')}
                 </span>
               </div>
-              <dt className="mt-2 text-[11.5px] leading-4 text-ink-mute">{item.label}</dt>
+              <dt className="mt-2 text-[13px] leading-4 text-ink-mute">{item.label}</dt>
             </div>
           ))}
         </dl>
@@ -335,14 +335,14 @@ export default async function FindEducationPage() {
                   <span className="absolute bottom-4 left-6 grid size-11 place-items-center rounded-2xl bg-white/20 ring-1 ring-white/30">
                     <Icon size={21} aria-hidden="true" />
                   </span>
-                  <span className="absolute bottom-5 right-6 text-[10px] font-bold uppercase tracking-[0.16em] opacity-80">
+                  <span className="absolute bottom-5 right-6 text-[12px] font-bold uppercase tracking-[0.16em] opacity-80">
                     Path {number}
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col p-6 sm:p-7">
                   <h3 className="ed-home-display text-[24px] leading-snug text-ink">{title}</h3>
-                  <p className="mt-2.5 flex-1 text-[13.5px] leading-6 text-ink-soft">{copy}</p>
-                  <span className="mt-5 inline-flex items-center justify-between gap-2 border-t border-rule pt-4 text-[12.5px] font-bold text-petrol-600">
+                  <p className="mt-2.5 flex-1 text-[15px] leading-6 text-ink-soft">{copy}</p>
+                  <span className="mt-5 inline-flex items-center justify-between gap-2 border-t border-rule pt-4 text-[14px] font-bold text-petrol-600">
                     {cta}
                     <span className="grid size-7 place-items-center rounded-full bg-mint-100 transition-colors group-hover:bg-mint-200">
                       <ArrowUpRight size={13} aria-hidden="true" />
@@ -365,7 +365,7 @@ export default async function FindEducationPage() {
                 Go straight to the question you are researching.
               </h2>
             </div>
-            <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-mute">2027 cycle</span>
+            <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink-mute">2027 cycle</span>
           </div>
 
           <ul className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -373,7 +373,7 @@ export default async function FindEducationPage() {
               <li key={point.href}>
                 <Link
                   href={point.href}
-                  className="group flex items-center justify-between gap-3 rounded-xl border border-rule bg-chalk-100 px-4 py-3 text-[13px] font-semibold text-ink transition-colors hover:border-petrol-400/40 hover:bg-mint-100"
+                  className="group flex items-center justify-between gap-3 rounded-xl border border-rule bg-chalk-100 px-4 py-3 text-[15px] font-semibold text-ink transition-colors hover:border-petrol-400/40 hover:bg-mint-100"
                 >
                   {point.label}
                   <ArrowUpRight size={14} className="shrink-0 text-petrol-600 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
@@ -414,8 +414,8 @@ export default async function FindEducationPage() {
                   <span className="flex min-w-0 items-center gap-3">
                     <span className="text-xl" aria-hidden="true">{country.flag}</span>
                     <span className="min-w-0">
-                      <strong className="block truncate text-[13.5px] font-semibold text-white">{country.name}</strong>
-                      <span className="mt-0.5 block text-[10px] font-bold uppercase tracking-[0.12em] text-mint-300">
+                      <strong className="block truncate text-[15px] font-semibold text-white">{country.name}</strong>
+                      <span className="mt-0.5 block text-[12px] font-bold uppercase tracking-[0.12em] text-mint-300">
                         {country.serviceStatus}
                       </span>
                     </span>
@@ -443,12 +443,12 @@ export default async function FindEducationPage() {
             <Link href="/education-fit-assessment" className="ed-btn ed-btn-primary mt-7 min-h-11">
               Review my profile <ArrowRight size={15} aria-hidden="true" />
             </Link>
-            <p className="mt-3 text-[11px] leading-5 text-ink-mute">Free assessment · no payment details requested</p>
+            <p className="mt-3 text-[13px] leading-5 text-ink-mute">Free assessment · no payment details requested</p>
           </div>
 
           <ul className="grid gap-3 sm:grid-cols-2">
             {readinessItems.map(item => (
-              <li key={item} className="flex gap-3 rounded-2xl border border-white bg-white px-4 py-4 text-[13px] font-semibold leading-6 text-ink shadow-[0_14px_30px_-30px_rgba(15,53,87,0.5)]">
+              <li key={item} className="flex gap-3 rounded-2xl border border-white bg-white px-4 py-4 text-[15px] font-semibold leading-6 text-ink shadow-[0_14px_30px_-30px_rgba(15,53,87,0.5)]">
                 <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-jade" aria-hidden="true" />
                 {item}
               </li>
@@ -482,7 +482,7 @@ export default async function FindEducationPage() {
                     +
                   </span>
                 </summary>
-                <p className="pb-5 pr-10 text-[13px] leading-7 text-ink-soft">{item.answer}</p>
+                <p className="pb-5 pr-10 text-[15px] leading-7 text-ink-soft">{item.answer}</p>
               </details>
             ))}
           </div>
@@ -496,7 +496,7 @@ export default async function FindEducationPage() {
           <div className="pointer-events-none absolute -right-24 -top-28 size-[420px] rounded-full bg-sky-500/25 blur-[110px]" aria-hidden="true" />
           <div className="relative grid gap-9 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
             <div>
-              <p className="inline-flex items-center gap-2.5 text-[12px] font-bold text-mint-300">
+              <p className="inline-flex items-center gap-2.5 text-[14px] font-bold text-mint-300">
                 <span className="h-px w-7 bg-mint-300" aria-hidden="true" /> Next step
               </p>
               <h2 className="ed-home-display mt-4 max-w-[24ch] text-[clamp(2.1rem,4vw,3.2rem)] leading-[1.04] text-white">
@@ -516,17 +516,17 @@ export default async function FindEducationPage() {
               </div>
             </div>
 
-            <ol className="grid gap-3 text-[13px] text-white/85">
+            <ol className="grid gap-3 text-[15px] text-white/85">
               {[
                 ['01', 'Profile review', 'Level, results, subject, budget and intake.'],
                 ['02', 'Options in writing', 'Recognition, costs and entry requirements compared.'],
                 ['03', 'Your decision', 'Apply only when the fit and the cost are clear.'],
               ].map(([number, title, copy]) => (
                 <li key={title} className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3.5">
-                  <span className="ed-figure text-[11px] font-bold tracking-[0.12em] text-mint-300">{number}</span>
+                  <span className="ed-figure text-[13px] font-bold tracking-[0.12em] text-mint-300">{number}</span>
                   <span>
-                    <strong className="block text-[13.5px] font-semibold text-white">{title}</strong>
-                    <span className="mt-0.5 block text-[11.5px] leading-5 text-white/70">{copy}</span>
+                    <strong className="block text-[15px] font-semibold text-white">{title}</strong>
+                    <span className="mt-0.5 block text-[13px] leading-5 text-white/70">{copy}</span>
                   </span>
                 </li>
               ))}

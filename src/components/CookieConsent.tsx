@@ -61,7 +61,7 @@ export default function CookieConsent() {
     <div className="fixed inset-x-4 bottom-4 z-[65] animate-[cookie-in_.3s_ease-out] sm:inset-x-auto sm:bottom-5 sm:left-5 sm:max-w-[380px]">
       <div className="relative overflow-hidden border border-rule bg-chalk shadow-deep">
         <div className="flex items-start justify-between gap-3 border-b border-rule bg-chalk-100 px-4 py-2.5">
-          <p className="inline-flex items-center gap-2 text-[12px] font-semibold text-petrol-700">
+          <p className="inline-flex items-center gap-2 text-[14px] font-semibold text-petrol-700">
             <Cookie className="size-3.5" aria-hidden="true" /> Cookies and measurement
           </p>
           <button type="button" onClick={handleDecline} className="text-ink-mute transition-colors hover:text-ink" aria-label="Dismiss cookie notice">
@@ -70,7 +70,7 @@ export default function CookieConsent() {
         </div>
 
         <div className="px-4 py-3.5">
-          <p className="text-[12.5px] leading-6 text-ink-soft">
+          <p className="text-[14px] leading-6 text-ink-soft">
             We use cookies to measure traffic and advertising performance. Nothing non-essential loads until you accept. Read the{' '}
             <Link href="/privacy" className="font-semibold text-petrol-600 underline underline-offset-2 hover:text-petrol-800">
               privacy policy
@@ -78,10 +78,10 @@ export default function CookieConsent() {
             .
           </p>
           <div className="mt-3 flex items-center gap-2">
-            <button type="button" onClick={handleAccept} className="ed-btn ed-btn-primary min-h-9 flex-1 px-3 text-[12.5px]">
+            <button type="button" onClick={handleAccept} className="ed-btn ed-btn-primary min-h-9 flex-1 px-3 text-[14px]">
               Accept all
             </button>
-            <button type="button" onClick={handleDecline} className="ed-btn ed-btn-outline min-h-9 flex-1 px-3 text-[12.5px]">
+            <button type="button" onClick={handleDecline} className="ed-btn ed-btn-outline min-h-9 flex-1 px-3 text-[14px]">
               Essential only
             </button>
           </div>

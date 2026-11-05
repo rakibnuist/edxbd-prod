@@ -27,11 +27,11 @@ export default function DestinationsClient() {
           <div className="mt-8 grid gap-10 lg:grid-cols-[1.04fr_0.96fr] lg:items-center lg:gap-12">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-2 rounded-full border border-rule bg-white px-3 py-1.5 text-[11px] font-semibold text-petrol-700">
+                <span className="inline-flex items-center gap-2 rounded-full border border-rule bg-white px-3 py-1.5 text-[13px] font-semibold text-petrol-700">
                   <span className="size-1.5 rounded-full bg-jade" aria-hidden="true" />
                   {activeCountries.length} active destination services
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-rule bg-white px-3 py-1.5 text-[11px] font-semibold text-ink-soft">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-rule bg-white px-3 py-1.5 text-[13px] font-semibold text-ink-soft">
                   <Globe2 size={13} aria-hidden="true" /> Asia &amp; Europe
                 </span>
               </div>
@@ -51,7 +51,7 @@ export default function DestinationsClient() {
                 </Link>
               </div>
 
-              <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11.5px] text-ink-mute">
+              <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-mute">
                 <li className="inline-flex items-center gap-1.5">
                   <BadgeCheck size={13} className="text-jade" aria-hidden="true" />
                   Evidence-based reviews
@@ -79,8 +79,8 @@ export default function DestinationsClient() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-petrol-900/55 via-transparent to-transparent" aria-hidden="true" />
                   <figcaption className="absolute inset-x-3 bottom-3 rounded-xl bg-white/95 px-4 py-3 backdrop-blur">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-petrol-600">Compare before you commit</p>
-                    <p className="mt-1 text-[12.5px] font-semibold leading-5 text-ink">
+                    <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-petrol-600">Compare before you commit</p>
+                    <p className="mt-1 text-[14px] font-semibold leading-5 text-ink">
                       Fit • Recognition • Total cost • Visa readiness
                     </p>
                   </figcaption>
@@ -88,7 +88,7 @@ export default function DestinationsClient() {
               </figure>
               <div className="absolute -left-2 -top-4 hidden rounded-2xl border border-rule bg-white px-4 py-3 shadow-[0_18px_40px_-20px_rgba(7,28,46,0.35)] sm:block">
                 <span className="ed-figure block text-[26px] leading-none text-petrol-700">{String(activeCountries.length).padStart(2, '0')}</span>
-                <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.12em] text-ink-mute">active routes</span>
+                <span className="mt-1 block text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">active routes</span>
               </div>
             </div>
           </div>
@@ -99,19 +99,19 @@ export default function DestinationsClient() {
       <section aria-label="Directory facts" className="relative z-20 -mt-8 px-4 sm:px-6 lg:px-10">
         <dl className="mx-auto grid max-w-shell grid-cols-2 gap-px overflow-hidden rounded-[24px] border border-rule bg-rule shadow-[0_30px_70px_-48px_rgba(15,53,87,0.5)] sm:grid-cols-4">
           <div className="bg-white px-5 py-5">
-            <dt className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Active routes</dt>
+            <dt className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Active routes</dt>
             <dd className="mt-2 ed-home-display text-[32px] text-petrol-700">{activeCountries.length}</dd>
           </div>
           <div className="bg-white px-5 py-5">
-            <dt className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Regions</dt>
+            <dt className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Regions</dt>
             <dd className="mt-2 ed-home-display text-[32px] text-petrol-700">Asia & Europe</dd>
           </div>
           <div className="bg-white px-5 py-5">
-            <dt className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Focus</dt>
+            <dt className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Focus</dt>
             <dd className="mt-2 text-[14px] font-semibold text-ink">Recognition • Costs • Visa</dd>
           </div>
           <div className="bg-white px-5 py-5">
-            <dt className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-mute">Guidance</dt>
+            <dt className="text-[13px] font-bold uppercase tracking-[0.12em] text-ink-mute">Guidance</dt>
             <dd className="mt-2 text-[14px] font-semibold text-ink">Written, evidence-first</dd>
           </div>
         </dl>
@@ -160,7 +160,7 @@ export default function DestinationsClient() {
                       <span className="text-3xl" aria-hidden="true">
                         {flagship.flag}
                       </span>
-                      <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-ink-mute">
+                      <p className="text-[14px] font-bold uppercase tracking-[0.14em] text-ink-mute">
                         {countryCode(flagship.slug)} • Deepest evidence base
                       </p>
                     </div>
@@ -172,7 +172,7 @@ export default function DestinationsClient() {
                       {flagship.programs.slice(0, 6).map((program) => (
                         <li
                           key={program}
-                          className="rounded-full border border-rule-strong bg-chalk-100 px-3.5 py-1.5 text-[12px] font-semibold text-petrol-700"
+                          className="rounded-full border border-rule-strong bg-chalk-100 px-3.5 py-1.5 text-[14px] font-semibold text-petrol-700"
                         >
                           {program}
                         </li>
@@ -180,7 +180,7 @@ export default function DestinationsClient() {
                     </ul>
                   </div>
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex items-center gap-3 text-[13px] text-ink-soft">
+                    <div className="flex items-center gap-3 text-[15px] text-ink-soft">
                       <BadgeCheck size={16} className="text-jade" aria-hidden="true" />
                       CSC scholarships • University records • Visa-first guidance
                     </div>
@@ -201,7 +201,7 @@ export default function DestinationsClient() {
                   Browse every route we actively support
                 </h2>
               </div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-mute">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink-mute">
                 Sorted by current focus
               </p>
             </div>
@@ -228,11 +228,11 @@ export default function DestinationsClient() {
                           <span className="text-xl" aria-hidden="true">
                             {country.flag}
                           </span>
-                          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80">
+                          <span className="text-[13px] font-bold uppercase tracking-[0.14em] text-white/80">
                             {countryCode(country.slug)}
                           </span>
                         </div>
-                        <span className="rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur">
+                        <span className="rounded-full bg-white/15 px-2.5 py-1 text-[12px] font-bold uppercase tracking-[0.12em] text-white/80 backdrop-blur">
                           {country.serviceStatus || 'Active'}
                         </span>
                       </div>
@@ -244,12 +244,12 @@ export default function DestinationsClient() {
                         </h3>
                         <ArrowUpRight size={18} className="mt-1 shrink-0 text-petrol-600 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
                       </div>
-                      <p className="mt-2 flex-1 text-[13.5px] leading-6 text-ink-soft line-clamp-3">{country.description}</p>
+                      <p className="mt-2 flex-1 text-[15px] leading-6 text-ink-soft line-clamp-3">{country.description}</p>
                       <div className="mt-5 flex flex-wrap gap-2">
                         {country.programs.slice(0, 3).map((program) => (
                           <span
                             key={program}
-                            className="rounded-full border border-rule bg-chalk-100 px-2.5 py-1 text-[11px] font-semibold text-ink-mute"
+                            className="rounded-full border border-rule bg-chalk-100 px-2.5 py-1 text-[13px] font-semibold text-ink-mute"
                           >
                             {program}
                           </span>
@@ -269,7 +269,7 @@ export default function DestinationsClient() {
               </span>
               <div>
                 <h2 className="ed-home-display text-[21px] leading-tight text-ink">Not sure which country fits?</h2>
-                <p className="mt-1 max-w-[56ch] text-[13.5px] leading-6 text-ink-soft">
+                <p className="mt-1 max-w-[56ch] text-[15px] leading-6 text-ink-soft">
                   Compare education quality, recognition, affordability and entry requirements side by side, then get a written shortlist based on your profile.
                 </p>
               </div>

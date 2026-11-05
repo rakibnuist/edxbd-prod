@@ -73,8 +73,8 @@ export default function DestinationCover({
       {!compact && (
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
           {flag && <span className="text-5xl leading-none">{flag}</span>}
-          <span className="mt-3 text-[12px] font-bold uppercase tracking-[0.16em] text-white/90">{name}</span>
-          <span className="mt-1 text-[10px] font-medium uppercase tracking-[0.16em] text-mint-300">
+          <span className="mt-3 text-[14px] font-bold uppercase tracking-[0.16em] text-white/90">{name}</span>
+          <span className="mt-1 text-[12px] font-medium uppercase tracking-[0.16em] text-mint-300">
             Destination profile
           </span>
         </div>

@@ -50,7 +50,7 @@ export default function JourneyProgress() {
 
   return (
     <>
-      <div className="sticky top-[74px] z-30 -mx-5 border-y border-[#dccdb8] bg-white/95 px-5 py-3 shadow-[0_12px_30px_rgba(18,67,107,.08)] backdrop-blur-xl sm:-mx-8 sm:px-8 lg:hidden xl:top-[106px]">
+      <div className="sticky top-[74px] z-30 -mx-5 border-y border-[#cbd5e1] bg-white/95 px-5 py-3 shadow-[0_12px_30px_rgba(18,67,107,.08)] backdrop-blur-xl sm:-mx-8 sm:px-8 lg:hidden xl:top-[106px]">
         <div className="mx-auto flex max-w-[760px] items-center gap-4">
           <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#12436b] text-white"><MapPin size={16} /></span>
           <div className="min-w-0 flex-1">
@@ -66,7 +66,7 @@ export default function JourneyProgress() {
       </div>
 
       <aside className={`journey-fixed-progress top-36 z-30 hidden w-[250px] transition duration-300 lg:block ${inJourney ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0'}`} aria-label="Complete student journey">
-        <div className="rounded-[28px] border border-[#dccdb8] bg-white p-5 shadow-[0_20px_55px_rgba(18,67,107,.09)]">
+        <div className="rounded-[28px] border border-[#cbd5e1] bg-white p-5 shadow-[0_20px_55px_rgba(18,67,107,.09)]">
           <p className="ed-label text-[#2c6a97]">Your complete journey</p>
           <p className="mt-2 text-xs leading-5 text-[#a9d6ee]">From the first question to university registration.</p>
           <ol className="relative mt-6 space-y-1">
@@ -81,8 +81,8 @@ export default function JourneyProgress() {
               const complete = index < active;
               return (
                 <li key={stage.id} className="relative">
-                  <a href={`#${stage.id}`} aria-current={current ? 'step' : undefined} className={`flex items-center gap-3 rounded-2xl px-2 py-2.5 text-sm transition ${current ? 'bg-[#e3f0f9] text-[#14212e]' : 'text-[#a9d6ee] hover:bg-[#fbf7f1] hover:text-[#12436b]'}`}>
-                    <span className={`relative z-10 grid size-[35px] shrink-0 place-items-center rounded-full border text-[10px] font-black transition ${current ? 'border-[#12436b] bg-[#12436b] text-white shadow-[0_8px_20px_rgba(18,67,107,.25)]' : complete ? 'border-[#2c6a97] bg-[#e3f0f9] text-[#12436b]' : 'border-[#dccdb8] bg-white text-[#a9d6ee]'}`}>
+                  <a href={`#${stage.id}`} aria-current={current ? 'step' : undefined} className={`flex items-center gap-3 rounded-2xl px-2 py-2.5 text-sm transition ${current ? 'bg-[#e3f0f9] text-[#14212e]' : 'text-[#a9d6ee] hover:bg-[#f8fafc] hover:text-[#12436b]'}`}>
+                    <span className={`relative z-10 grid size-[35px] shrink-0 place-items-center rounded-full border text-[12px] font-black transition ${current ? 'border-[#12436b] bg-[#12436b] text-white shadow-[0_8px_20px_rgba(18,67,107,.25)]' : complete ? 'border-[#2c6a97] bg-[#e3f0f9] text-[#12436b]' : 'border-[#cbd5e1] bg-white text-[#a9d6ee]'}`}>
                       {complete ? <Check size={14} strokeWidth={3} /> : stage.number}
                     </span>
                     <span className={current ? 'font-extrabold' : 'font-semibold'}>{stage.short}</span>
