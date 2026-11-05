@@ -62,7 +62,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <AuthProvider>
       <ProtectedRoute>
-        <div className="min-h-screen bg-[#f4f6f7]">
+        <div className="min-h-screen bg-[#f5efe6]">
           <div className="flex h-[100dvh]">
             {sidebarOpen && (
               <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
@@ -70,13 +70,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* Sidebar */}
             <aside
-              className={`fixed inset-y-0 left-0 z-50 flex w-56 flex-col bg-[#f4f6f7] transition-transform duration-300 lg:static lg:translate-x-0 ${
+              className={`fixed inset-y-0 left-0 z-50 flex w-56 flex-col bg-[#f5efe6] transition-transform duration-300 lg:static lg:translate-x-0 ${
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full'
               }`}
             >
               <div className="flex items-center justify-between px-5 py-5">
                 <div>
-                  <div className="text-base font-semibold text-[#174f7a]">EduExpress</div>
+                  <div className="text-base font-semibold text-[#12436b]">EduExpress</div>
                   <div className="text-xs text-gray-600">Admissions workspace</div>
                 </div>
                 <button aria-label="Close menu" onClick={() => setSidebarOpen(false)} className="rounded-md p-1 text-gray-600 hover:text-gray-900 lg:hidden">
@@ -91,7 +91,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             {/* Main */}
             <div className="flex flex-1 flex-col overflow-hidden">
-              <header className="sticky top-0 z-30 flex items-center justify-between bg-[#f4f6f7] px-4 py-3 lg:px-6">
+              <header className="sticky top-0 z-30 flex items-center justify-between bg-[#f5efe6] px-4 py-3 lg:px-6">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setSidebarOpen(true)}
@@ -101,10 +101,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <Menu size={22} />
                   </button>
                   <span className="text-sm font-medium text-gray-600">
-                    <span className="mr-2 text-[#174f7a] lg:hidden">EduExpress</span>{activeItem?.name ?? 'Admin'}
+                    <span className="mr-2 text-[#12436b] lg:hidden">EduExpress</span>{activeItem?.name ?? 'Admin'}
                   </span>
                 </div>
-                <Link href="/" className="text-xs font-medium text-[#174f7a] hover:underline">
+                <Link href="/" className="text-xs font-medium text-[#12436b] hover:underline">
                   View site ↗
                 </Link>
               </header>

@@ -125,8 +125,8 @@ export default function TeamsAdminPage() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-7 pb-16">
-      <header className="rounded-3xl bg-[#08263c] p-7 text-white sm:p-9">
-        <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#8ed0ee]">People and expertise</p>
+      <header className="rounded-3xl bg-[#0f3a5c] p-7 text-white sm:p-9">
+        <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#a9d6ee]">People and expertise</p>
         <h1 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Team profiles</h1>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-white/70">Manage the real people shown on the homepage and About page. Publish only approved names, roles, bios and photos.</p>
       </header>
@@ -137,7 +137,7 @@ export default function TeamsAdminPage() {
         <div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-xl bg-blue-100 text-blue-700"><Plus /></span><div><h2 className="font-heading text-2xl font-bold">Add team member</h2><p className="text-sm text-slate-500">A profile remains hidden until you deliberately publish it.</p></div></div>
         <div className="mt-7 grid gap-6 lg:grid-cols-[170px_1fr]">
           <div>
-            <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 text-slate-400">{draft.photoUrl ? <Image src={draft.photoUrl} alt="New team member preview" fill sizes="170px" unoptimized className="object-cover" /> : <UserRound size={40} />}</div>
+            <div className="relative grid aspect-square place-items-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 text-slate-500">{draft.photoUrl ? <Image src={draft.photoUrl} alt="New team member preview" fill sizes="170px" unoptimized className="object-cover" /> : <UserRound size={40} />}</div>
             {uploadControl('new')}
           </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -160,7 +160,7 @@ export default function TeamsAdminPage() {
           {members.map(member => (
             <article key={member.id} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
               <div className="flex gap-4">
-                <div className="relative grid size-20 shrink-0 place-items-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 text-slate-400">{member.photoUrl ? <Image src={member.photoUrl} alt={member.name} fill sizes="80px" unoptimized className="object-cover" /> : <UserRound size={28} />}</div>
+                <div className="relative grid size-20 shrink-0 place-items-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 text-slate-500">{member.photoUrl ? <Image src={member.photoUrl} alt={member.name} fill sizes="80px" unoptimized className="object-cover" /> : <UserRound size={28} />}</div>
                 <div className="min-w-0 flex-1"><input className={inputClass} value={member.name} onChange={event => updateMember(member.id, 'name', event.target.value)} aria-label="Team member name" />{uploadControl(member.id)}</div>
               </div>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -172,7 +172,7 @@ export default function TeamsAdminPage() {
                 <Field label="Specialties, one per line"><textarea className={`${inputClass} min-h-24`} value={member.specialties.join('\n')} onChange={event => updateMember(member.id, 'specialties', event.target.value.split('\n').map(item => item.trim()).filter(Boolean))} /></Field>
                 <div className="grid gap-3"><Field label="Display order"><input type="number" className={inputClass} value={member.displayOrder} onChange={event => updateMember(member.id, 'displayOrder', Number(event.target.value))} /></Field><label className="flex min-h-11 items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm font-bold"><input type="checkbox" checked={member.isPublished} onChange={event => updateMember(member.id, 'isPublished', event.target.checked)} />Show publicly</label></div>
               </div>
-              <div className="mt-5 flex justify-end gap-2 border-t border-slate-100 pt-5"><button type="button" onClick={() => deleteMember(member)} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-rose-200 px-4 text-sm font-bold text-rose-700">{busy === `delete-${member.id}` ? <Loader2 size={15} className="animate-spin" /> : <Trash2 size={15} />}Delete</button><button type="button" onClick={() => saveMember(member)} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#08263c] px-5 text-sm font-bold text-white">{busy === `save-${member.id}` ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}Save</button></div>
+              <div className="mt-5 flex justify-end gap-2 border-t border-slate-100 pt-5"><button type="button" onClick={() => deleteMember(member)} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-rose-200 px-4 text-sm font-bold text-rose-700">{busy === `delete-${member.id}` ? <Loader2 size={15} className="animate-spin" /> : <Trash2 size={15} />}Delete</button><button type="button" onClick={() => saveMember(member)} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#0f3a5c] px-5 text-sm font-bold text-white">{busy === `save-${member.id}` ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}Save</button></div>
             </article>
           ))}
         </div>

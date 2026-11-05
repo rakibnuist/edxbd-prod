@@ -12,6 +12,7 @@ import { scholarshipReductionLabel } from '@/lib/university-scholarship-view';
 import { universityProfileLogo } from '@/lib/university-profile-assets';
 import { activeCountries } from '@/lib/countries';
 import { destinationPath } from '@/lib/site-urls';
+import { countryCode } from '@/lib/country-code';
 
 const canonical = 'https://eduexpressint.com/universities';
 export const revalidate = 3600;
@@ -108,37 +109,84 @@ export default async function UniversitiesPage({ searchParams }: Props) {
   };
 
   return (
-    <article className="bg-[#f4f6f7] pt-[76px] text-[#08263c] xl:pt-[112px]">
+    <article className="bg-chalk pt-[74px] text-ink lg:pt-[108px]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      <header className="bg-[#082d45] px-5 py-5 text-white sm:px-8 sm:py-7 lg:px-10">
-        <div className="mx-auto max-w-[1280px]">
-          <p className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#f0bc6a]"><span aria-hidden="true">🎓</span>Program Finder 2027</p>
-          <h1 className="max-w-3xl font-heading text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-[1.18] tracking-[-.025em]">Universities and Study Options</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-[#c4d6e2]">Find and compare universities, programs, tuition and scholarships for your 2027 study plan across every destination we assess.</p>
-          <dl className="mt-5 flex flex-wrap gap-x-7 gap-y-2 text-xs">
-            <div className="flex items-baseline gap-1.5"><dt className="sr-only">Universities listed</dt><dd className="text-lg font-bold tabular-nums">{universities.filter(u => u.isActive).length}</dd><dd className="text-[#8fa8b8]">universities</dd></div>
-            <div className="flex items-baseline gap-1.5 border-l border-white/10 pl-5"><dt className="sr-only">Programs listed</dt><dd className="text-lg font-bold tabular-nums">{universities.reduce((count, u) => count + u.programs.length, 0)}</dd><dd className="text-[#8fa8b8]">programs</dd></div>
-            <div className="flex items-baseline gap-1.5 border-l border-white/10 pl-5"><dt className="sr-only">Destinations with verified data</dt><dd className="text-lg font-bold tabular-nums">{listedDestinations.length}</dd><dd className="text-[#8fa8b8]">destinations with verified data</dd></div>
-          </dl>
-          <p className="mt-3 flex max-w-2xl items-start gap-1.5 text-[11px] leading-5 text-[#8fa8b8]"><span aria-hidden="true">✔</span>Fees, scholarships and rankings carry source records and verification dates in every university profile.</p>
-                    <nav aria-label="Browse verified universities by destination" className="mt-4 flex flex-wrap gap-2">
+      <header className="border-b border-rule px-5 pb-8 pt-10 sm:px-8 lg:px-12">
+        <div className="mx-auto max-w-shell">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+            <div>
+              <p className="ed-label">Programme finder · 2027 cycle</p>
+              <h1 className="mt-4 max-w-[24ch] ed-home-display text-[clamp(2.1rem,4.4vw,3.5rem)] leading-[1.02] text-ink">
+                Universities and study options, without the brochure.
+              </h1>
+              <p className="mt-4 max-w-[58ch] text-[14.5px] leading-7 text-ink-soft">
+                Every record below carries its own fee, intake, scholarship and ranking source. Filter it like a directory, compare up to four, and read the profile before you shortlist.
+              </p>
+            </div>
+
+            <dl className="grid grid-cols-3 gap-6 border-t border-rule pt-4 lg:border-t-0 lg:pt-0">
+              <div>
+                <dd className="ed-figure text-[28px] leading-none text-petrol-700">{universities.filter(u => u.isActive).length}</dd>
+                <dt className="mt-1 text-[11.5px] text-ink-mute">universities</dt>
+              </div>
+              <div>
+                <dd className="ed-figure text-[28px] leading-none text-petrol-700">{universities.reduce((count, u) => count + u.programs.length, 0)}</dd>
+                <dt className="mt-1 text-[11.5px] text-ink-mute">programmes</dt>
+              </div>
+              <div>
+                <dd className="ed-figure text-[28px] leading-none text-petrol-700">{listedDestinations.length}</dd>
+                <dt className="mt-1 text-[11.5px] text-ink-mute">destinations with data</dt>
+              </div>
+            </dl>
+          </div>
+
+          <nav aria-label="Browse verified universities by destination" className="mt-7 flex flex-wrap items-center gap-2">
             {listedDestinations.map(item => (
-              <Link key={item.name} href={item.href} className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-white/20">
-                <span aria-hidden="true">{item.flag}</span>{item.name}<span className="rounded-md bg-[#efa93d] px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-[#08263c]">{item.count}</span>
+              <Link
+                key={item.name}
+                href={item.href}
+                className="inline-flex min-h-8 items-center gap-2 border border-rule-strong bg-white px-2.5 text-[12px] font-medium text-ink transition-colors hover:border-petrol-500 hover:text-petrol-700"
+              >
+                <span aria-hidden="true" className="text-[10.5px] font-semibold text-ink-mute">{countryCode(item.name.toLowerCase().replace(/\s+/g, '-'))}</span>
+                {item.name}
+                <span className="ed-figure text-[11px] text-ink-mute">{item.count}</span>
               </Link>
             ))}
-            {guideDestinations.length > 0 && <span className="inline-flex min-h-9 items-center gap-1 text-xs font-semibold text-[#8fa8b8]">{guideDestinations.length} more destinations are launching — see the destinations menu</span>}
+            {guideDestinations.length > 0 && (
+              <span className="text-[11.5px] text-ink-mute">{guideDestinations.length} further destinations are counselling-only — see the destinations menu</span>
+            )}
           </nav>
-<nav aria-label="Popular university study routes" className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs font-semibold"><Link href="/universities?country=China&search=medicine" className="inline-flex min-h-10 items-center text-[#f0bc6a] hover:underline">Explore medicine in China</Link><Link href="/mbbs-in-china-bangladesh" className="inline-flex min-h-10 items-center text-white hover:underline">MBBS fees & admission guide</Link></nav>
+
+          <nav aria-label="Popular university study routes" className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[12px] font-semibold">
+            <Link href="/universities?country=China&search=medicine" className="inline-flex min-h-9 items-center text-petrol-600 underline-offset-4 hover:underline">
+              Medicine in China
+            </Link>
+            <Link href="/mbbs-in-china-bangladesh" className="inline-flex min-h-9 items-center text-petrol-600 underline-offset-4 hover:underline">
+              MBBS fees and admission
+            </Link>
+            <Link href="/how-we-verify-universities" className="inline-flex min-h-9 items-center text-ink-mute underline-offset-4 hover:text-petrol-600 hover:underline">
+              How records are verified
+            </Link>
+          </nav>
         </div>
       </header>
-      <Suspense fallback={<div className="py-20 text-center text-sm text-slate-500">Loading study options…</div>}><UniversitiesClient initialUniversities={universities} /></Suspense>
-      <footer className="border-t border-[#d8e2e8] bg-white px-5 py-7 sm:px-8 lg:px-10">
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <p className="max-w-3xl text-xs leading-6 text-slate-500">Tuition, scholarship and ranking entries in this directory link to their official source records inside each university profile. Where a figure is under verification, the profile says so — we do not publish estimates as facts. Compare before you commit.</p>
-          <nav aria-label="Directory transparency" className="flex shrink-0 flex-wrap gap-x-5 gap-y-1 text-xs font-semibold">
-            <Link href="/fees-and-transparency" className="inline-flex min-h-8 items-center text-[#174f7a] hover:underline">Fee &amp; transparency policy</Link>
-            <Link href="/how-we-verify-universities" className="inline-flex min-h-8 items-center text-[#174f7a] hover:underline">How we verify universities</Link>
+
+      <Suspense fallback={<div className="px-5 py-20 text-center text-[13px] text-ink-mute sm:px-8">Loading the directory…</div>}>
+        <UniversitiesClient initialUniversities={universities} />
+      </Suspense>
+
+      <footer className="border-t border-rule bg-white px-5 py-6 sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-shell flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <p className="max-w-3xl text-[11.5px] leading-6 text-ink-mute">
+            Tuition, scholarship and ranking entries link to their official source records inside each profile. Where a figure is under verification, the profile says so — we do not publish estimates as facts.
+          </p>
+          <nav aria-label="Directory transparency" className="flex shrink-0 flex-wrap gap-x-5 gap-y-1 text-[12px] font-semibold">
+            <Link href="/fees-and-transparency" className="inline-flex min-h-8 items-center text-petrol-600 hover:underline">
+              Fee policy
+            </Link>
+            <Link href="/how-we-verify-universities" className="inline-flex min-h-8 items-center text-petrol-600 hover:underline">
+              Verification method
+            </Link>
           </nav>
         </div>
       </footer>

@@ -1,10 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ChevronLeft, ChevronRight, Search, Sparkles } from 'lucide-react';
-import PageHeader from '@/components/PageHeader';
+import { ArrowUpRight, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import type { Update, UpdatesResponse } from '@/lib/types';
 import { categoryHref } from '@/lib/update-categories';
 
@@ -46,22 +44,27 @@ export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProp
     // instead of waiting for the 5-minute ISR window.
     let active = true;
     fetch('/api/updates')
-      .then(response => response.ok ? response.json() as Promise<UpdatesResponse> : Promise.reject(new Error('Unable to load updates')))
+      .then(response => (response.ok ? (response.json() as Promise<UpdatesResponse>) : Promise.reject(new Error('Unable to load updates'))))
       .then(data => {
         if (!active) return;
         const fresh = data.updates || [];
         if (fresh.length > 0 || initialUpdates.length === 0) setUpdates(fresh);
       })
-      .catch(() => { /* keep the server snapshot */ })
-      .finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
+      .catch(() => {
+        /* keep the server snapshot */
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, [initialUpdates.length]);
 
   const currentUpdates = updates;
 
   const categories = useMemo(() => {
-    const values = currentUpdates.flatMap(update => [update.category, ...(update.categories || [])])
-      .filter((value): value is string => Boolean(value?.trim()));
+    const values = currentUpdates.flatMap(update => [update.category, ...(update.categories || [])]).filter((value): value is string => Boolean(value?.trim()));
     const labels = new Map<string, string>();
     values.forEach(value => {
       const clean = value.trim();
@@ -74,113 +77,214 @@ export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProp
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return currentUpdates.filter(update => {
-      const matchesCategory = category === 'All' || primaryCategory(update).toLowerCase() === category.toLowerCase() || update.categories?.some(item => item.toLowerCase() === category.toLowerCase());
-      const matchesSearch = !query || `${update.title} ${update.excerpt || ''} ${update.content || ''}`.toLowerCase().includes(query);
-      return matchesCategory && matchesSearch;
-    }).sort((a, b) => Number(Boolean(a.archived)) - Number(Boolean(b.archived)));
+    return currentUpdates
+      .filter(update => {
+        const matchesCategory =
+          category === 'All' ||
+          primaryCategory(update).toLowerCase() === category.toLowerCase() ||
+          update.categories?.some(item => item.toLowerCase() === category.toLowerCase());
+        const matchesSearch = !query || `${update.title} ${update.excerpt || ''} ${update.content || ''}`.toLowerCase().includes(query);
+        return matchesCategory && matchesSearch;
+      })
+      .sort((a, b) => Number(Boolean(a.archived)) - Number(Boolean(b.archived)));
   }, [category, currentUpdates, search]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
   const visible = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  const [lead, ...rest] = visible;
 
-  const chooseCategory = (value: string) => { setCategory(value); setPage(1); };
+  const chooseCategory = (value: string) => {
+    setCategory(value);
+    setPage(1);
+  };
   const choosePage = (value: number) => {
     setPage(Math.max(1, Math.min(value, totalPages)));
-    window.scrollTo({ top: 360, behavior: 'smooth' });
+    window.scrollTo({ top: 320, behavior: 'smooth' });
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#08263c]">
-      <PageHeader
-        title="Education"
-        highlight="Updates"
-        description="Find admissions, scholarships, university news and practical study guidance in one place."
-        icon={<Sparkles />}
-        badgeText="Information centre"
-      />
-
-      <main className="mx-auto max-w-[1320px] px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
-        <section>
-          <div className="flex items-end justify-between gap-4"><div><p className="text-xs font-black uppercase tracking-[0.14em] text-[#174f7a]">Check before you apply</p><h2 className="mt-2 text-3xl font-extrabold tracking-[-0.04em]">Current study information</h2></div></div>
-          <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {currentGuides.map(guide => (
-              <Link key={guide.href} href={guide.href} className="group rounded-[1.5rem] border border-[#174f7a]/12 bg-[#f4f8fb] p-5 transition hover:-translate-y-1 hover:border-[#174f7a]/35">
-                <span className="text-[10px] font-black uppercase tracking-[0.13em] text-[#174f7a]">{guide.label}</span>
-                <h3 className="mt-3 text-lg font-extrabold leading-7">{guide.title}</h3>
-                <ArrowRight size={15} className="mt-5 text-[#174f7a] transition group-hover:translate-x-1" />
-              </Link>
-            ))}
+    <div className="bg-chalk text-ink">
+      <header className="border-b border-rule px-5 pb-10 pt-[104px] sm:px-8 lg:px-12 lg:pt-[140px]">
+        <div className="mx-auto max-w-shell">
+          <p className="ed-label">Information centre</p>
+          <div className="mt-4 grid gap-7 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end lg:gap-16">
+            <div>
+              <h1 className="max-w-[24ch] ed-home-display text-[clamp(2.2rem,4.6vw,3.6rem)] leading-[1.02] text-ink">
+                Advice that carries a date and a source.
+              </h1>
+              <p className="mt-4 max-w-[56ch] text-[14.5px] leading-7 text-ink-soft">
+                Admissions news, scholarship changes and practical study guidance. Every entry shows when it was published and who wrote it — old intake notices stay online, visibly closed.
+              </p>
+            </div>
+            <div className="border-t border-rule pt-4 lg:border-t-0 lg:pt-0">
+              <p className="text-[11.5px] font-semibold text-petrol-600">{filtered.length} records in the library</p>
+              <p className="mt-1 text-[12px] leading-6 text-ink-mute">Refreshed from the backend on every visit.</p>
+            </div>
           </div>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <label className="relative block flex-1">
+              <span className="sr-only">Search updates</span>
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-mute" size={16} aria-hidden="true" />
+              <input
+                value={search}
+                onChange={event => {
+                  setSearch(event.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search the library — intake, visa, cost, scholarship"
+                className="ed-field ed-field-icon"
+              />
+            </label>
+            <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar" role="group" aria-label="Filter by category">
+              {categories.map(item => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => chooseCategory(item)}
+                  aria-pressed={category === item}
+                  className={`shrink-0 min-h-8 border px-2.5 text-[12px] font-medium transition-colors ${
+                    category === item ? 'border-petrol-600 bg-petrol-600 text-white' : 'border-rule-strong bg-white text-ink-soft hover:border-petrol-400 hover:text-petrol-700'
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-shell px-5 py-12 sm:px-8 lg:px-12">
+        <section aria-labelledby="current-information">
+          <h2 id="current-information" className="text-[12px] font-semibold text-petrol-600">
+            Check before you apply
+          </h2>
+          <ul className="mt-3 grid border-t border-rule sm:grid-cols-2 xl:grid-cols-4">
+            {currentGuides.map((guide, index) => (
+              <li key={guide.href} className={`border-b border-rule ${index < 3 ? 'xl:border-r' : ''}`}>
+                <Link href={guide.href} className="group flex h-full flex-col justify-between gap-6 px-1 py-4 transition-colors hover:bg-white xl:px-4">
+                  <span className="text-[11px] text-ink-mute">{guide.label}</span>
+                  <span className="flex items-end justify-between gap-3">
+                    <span className="ed-home-display text-[17px] leading-snug text-ink group-hover:text-petrol-700">{guide.title}</span>
+                    <ArrowUpRight size={14} className="shrink-0 text-petrol-500" aria-hidden="true" />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
 
-        {(loading || currentUpdates.length > 0) && <section className="mt-12">
-        <div className="rounded-[1.5rem] border border-[#174f7a]/12 bg-[#f4f8fb] p-4 sm:p-5">
-          <label className="relative block">
-            <span className="sr-only">Search updates</span>
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#174f7a]" size={19} />
-            <input
-              value={search}
-              onChange={event => { setSearch(event.target.value); setPage(1); }}
-              placeholder="Search updates"
-              className="min-h-13 w-full rounded-xl border border-[#174f7a]/15 bg-white pl-12 pr-4 text-base outline-none focus:border-[#174f7a]/50"
-            />
-          </label>
-          <div className="mt-4 flex gap-2 overflow-x-auto pb-1" aria-label="Update categories">
-            {categories.map(item => (
-              <button key={item} onClick={() => chooseCategory(item)} className={`shrink-0 rounded-full px-4 py-2 text-sm font-bold transition ${category === item ? 'bg-[#08263c] text-white' : 'border border-[#174f7a]/15 bg-white text-[#174f7a] hover:bg-[#e8f5fb]'}`}>{item}</button>
-            ))}
+        <section className="mt-12" aria-labelledby="browse-updates">
+          <div className="flex items-baseline justify-between gap-4 border-b border-rule pb-3">
+            <h2 id="browse-updates" className="ed-home-display text-[22px] leading-tight text-ink">
+              {category === 'All' ? 'The library' : category}
+            </h2>
+            <span className="text-[11.5px] text-ink-mute">{filtered.length} records</span>
           </div>
-        </div>
 
-        <div className="mt-8 flex items-end justify-between gap-4">
-          <div><p className="text-xs font-black uppercase tracking-[0.14em] text-[#174f7a]">Information library</p><h2 className="mt-2 text-3xl font-extrabold tracking-[-0.04em]">Browse updates</h2></div>
-          <span className="text-sm font-bold text-slate-500">{filtered.length} records</span>
-        </div>
+          {loading ? (
+            <div className="mt-4" aria-label="Loading updates">
+              {Array.from({ length: 6 }, (_, index) => (
+                <div key={index} className="h-24 animate-pulse border-b border-rule bg-chalk-100/70" />
+              ))}
+            </div>
+          ) : visible.length > 0 ? (
+            <>
+              {lead && (
+                <article className="border-b border-rule py-7">
+                  <p className="text-[11.5px] text-ink-mute">
+                    <Link href={categoryHref(primaryCategory(lead))} className="font-semibold text-petrol-600 hover:underline">
+                      {primaryCategory(lead)}
+                    </Link>
+                    {' · '}
+                    {fmtDate(lead)}
+                    {lead.archived && <span className="ml-2 border border-clay/40 bg-clay/5 px-1.5 py-0.5 text-[10.5px] font-semibold text-clay">Archived</span>}
+                  </p>
+                  <h3 className="mt-3 max-w-[30ch] ed-home-display text-[clamp(1.6rem,2.8vw,2.3rem)] leading-[1.1] text-ink">
+                    <Link href={`/updates/${lead.slug}`} className="underline-offset-4 hover:underline">
+                      {lead.title}
+                    </Link>
+                  </h3>
+                  {lead.excerpt && <p className="mt-3 max-w-[62ch] text-[14px] leading-7 text-ink-soft">{lead.excerpt}</p>}
+                  <div className="mt-4 flex items-center gap-4 text-[12px]">
+                    <Link href={`/updates/${lead.slug}`} className="inline-flex items-center gap-1.5 font-semibold text-petrol-600 underline-offset-4 hover:underline">
+                      Read the {lead.type === 'article' ? 'article' : 'update'} <ArrowUpRight size={13} aria-hidden="true" />
+                    </Link>
+                    <span className="text-ink-mute">{lead.author}</span>
+                  </div>
+                </article>
+              )}
 
-        {loading ? (
-          <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3" aria-label="Loading updates">{Array.from({ length: 6 }, (_, index) => <div key={index} className="h-72 animate-pulse rounded-[1.5rem] bg-[#edf3f6]" />)}</div>
-        ) : visible.length > 0 ? (
-          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {visible.map(update => (
-              <article key={update.id} className="group overflow-hidden rounded-[1.5rem] border border-[#174f7a]/12 bg-white shadow-[0_8px_28px_rgba(8,38,60,.06)] transition hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(8,38,60,.11)]">
-                <Link href={`/updates/${update.slug}`} className="block" aria-label={`Open ${update.type === 'article' ? 'article' : 'update'}: ${update.title}`}>
-                  <div className="relative aspect-[16/9] overflow-hidden bg-[#08263c]">
-                    {update.featuredImage ? <Image src={update.featuredImage} alt={update.title} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover transition duration-700 group-hover:scale-[1.03]" /> : <div className="grid h-full place-items-center text-sm font-black uppercase tracking-[0.15em] text-[#9bd8f3]">EduExpress update</div>}
-                  </div>
-                </Link>
-                <div className="p-5">
-                  <div className="flex items-center justify-between gap-2">
-                    <Link href={categoryHref(primaryCategory(update))} className="text-[10px] font-black uppercase tracking-[0.13em] text-[#174f7a] hover:underline">{primaryCategory(update)}</Link>
-                    {update.archived ? (
-                      <span className="shrink-0 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-amber-800">Archive · closed</span>
-                    ) : (
-                      <span className="shrink-0 rounded-full border border-[#174f7a]/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-slate-500">{update.type === 'article' ? 'Article' : 'Update'}</span>
-                    )}
-                  </div>
-                  <h3 className="mt-3 line-clamp-2 text-xl font-extrabold leading-7 tracking-[-0.025em]"><Link href={update.slug ? `/updates/${update.slug}` : '#'} className="hover:underline">{update.title}</Link></h3>
-                  {update.excerpt ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{update.excerpt}</p> : null}
-                  <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-3 text-sm text-slate-500">
-                    <span className="truncate">{update.author}</span>
-                    <span className="shrink-0">{fmtDate(update)}</span>
-                  </div>
-                  <Link href={`/updates/${update.slug}`} className="mt-4 inline-flex items-center gap-2 text-sm font-black text-[#174f7a]">{update.type === 'article' ? 'Read article' : 'Read update'} <ArrowRight size={14} className="transition group-hover:translate-x-1" /></Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="mt-8 rounded-[1.5rem] border border-dashed border-[#174f7a]/25 bg-[#f8fbfd] px-6 py-16 text-center"><Search size={28} className="mx-auto text-[#174f7a]" /><h3 className="mt-4 text-xl font-extrabold">No matching update</h3><button onClick={() => { setSearch(''); chooseCategory('All'); }} className="mt-4 text-sm font-black text-[#174f7a]">Clear search</button></div>
-        )}
+              <ul>
+                {rest.map(update => (
+                  <li key={update.id} className="border-b border-rule">
+                    <article className="grid gap-2 py-5 sm:grid-cols-[120px_minmax(0,1fr)_130px] sm:items-baseline sm:gap-6">
+                      <p className="text-[11.5px] text-ink-mute">{fmtDate(update)}</p>
+                      <div>
+                        <h3 className="ed-home-display text-[18px] leading-snug text-ink">
+                          <Link href={`/updates/${update.slug}`} className="underline-offset-4 hover:underline">
+                            {update.title}
+                          </Link>
+                          {update.archived && <span className="ml-2 align-middle border border-clay/40 bg-clay/5 px-1.5 py-0.5 text-[10px] font-semibold text-clay">Archived</span>}
+                        </h3>
+                        {update.excerpt && <p className="mt-1 line-clamp-2 max-w-[70ch] text-[13px] leading-6 text-ink-soft">{update.excerpt}</p>}
+                      </div>
+                      <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
+                        <Link href={categoryHref(primaryCategory(update))} className="text-[11.5px] font-semibold text-petrol-600 hover:underline">
+                          {primaryCategory(update)}
+                        </Link>
+                        <span className="text-[11px] text-ink-mute">{update.author}</span>
+                      </div>
+                    </article>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <div className="mt-6 border border-rule bg-white px-6 py-14 text-center">
+              <Search size={22} className="mx-auto text-petrol-500" aria-hidden="true" />
+              <h3 className="mt-4 ed-home-display text-[21px] text-ink">No record matches “{search || category}”</h3>
+              <p className="mx-auto mt-2 max-w-md text-[13px] leading-6 text-ink-soft">Clear the search or pick a different category. If you need a specific intake answer, a counsellor can check it directly.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch('');
+                  chooseCategory('All');
+                }}
+                className="ed-btn ed-btn-outline mt-5 min-h-10 text-[13px]"
+              >
+                Clear the search
+              </button>
+            </div>
+          )}
 
-        {totalPages > 1 && (
-          <nav className="mt-10 flex items-center justify-center gap-3" aria-label="Update pages">
-            <button onClick={() => choosePage(page - 1)} disabled={page === 1} aria-label="Previous page" className="grid size-11 place-items-center rounded-full border border-[#174f7a]/15 disabled:opacity-35"><ChevronLeft size={18} /></button>
-            <span className="text-sm font-bold">{page} of {totalPages}</span>
-            <button onClick={() => choosePage(page + 1)} disabled={page === totalPages} aria-label="Next page" className="grid size-11 place-items-center rounded-full border border-[#174f7a]/15 disabled:opacity-35"><ChevronRight size={18} /></button>
-          </nav>
-        )}
-        </section>}
+          {totalPages > 1 && (
+            <nav className="mt-8 flex items-center justify-center gap-3" aria-label="Update pages">
+              <button
+                type="button"
+                onClick={() => choosePage(page - 1)}
+                disabled={page === 1}
+                aria-label="Previous page"
+                className="grid size-9 place-items-center border border-rule-strong text-petrol-700 disabled:opacity-30"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className="text-[12px] text-ink-soft">
+                Page {page} of {totalPages}
+              </span>
+              <button
+                type="button"
+                onClick={() => choosePage(page + 1)}
+                disabled={page === totalPages}
+                aria-label="Next page"
+                className="grid size-9 place-items-center border border-rule-strong text-petrol-700 disabled:opacity-30"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </nav>
+          )}
+        </section>
       </main>
     </div>
   );

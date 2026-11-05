@@ -10,7 +10,7 @@ type TeamMember = { id: string; name: string; role: string; bio: string | null; 
 
 export default function AboutClient({ team }: { team: TeamMember[] }) {
   return (
-    <div className="min-h-screen bg-[#f4f8fa] text-[#08263c] font-sans">
+    <div className="min-h-screen bg-[#f5efe6] text-ed-ink font-sans">
       <PageHeader
         title="About"
         highlight="EduExpress"
@@ -24,14 +24,14 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
               trackConsultationRequest('about_page_hero_start_journey');
               window.dispatchEvent(new CustomEvent('openQuickForm'));
             }}
-            className="inline-flex items-center justify-center bg-[#08263c] text-white px-6 py-4 font-black text-sm hover:bg-[#174f7a] transition-all shadow-[4px_4px_0_0_#174f7a] w-full sm:w-auto"
+            className="inline-flex items-center justify-center bg-ed-navy text-white px-6 py-4 font-black text-sm hover:bg-[#12436b] transition-all shadow-[4px_4px_0_0_#12436b] w-full sm:w-auto"
           >
             Start Your Fit Assessment
             <ArrowRight className="w-4 h-4 ml-2" />
           </button>
           <Link
             href="/fees-and-transparency"
-            className="inline-flex items-center justify-center border-2 border-[#08263c] bg-white/70 text-[#08263c] hover:bg-white px-6 py-4 font-black text-sm transition-all w-full sm:w-auto"
+            className="inline-flex items-center justify-center border-2 border-[#0f3a5c] bg-white/70 text-ed-ink hover:bg-white px-6 py-4 font-black text-sm transition-all w-full sm:w-auto"
           >
             Our Transparency System
           </Link>
@@ -39,31 +39,31 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
       </PageHeader>
 
       {/* Key Numbers Grid */}
-      <section className="py-16 bg-[#08263c] text-white border-b border-[#174f7a]/30">
+      <section className="py-16 bg-ed-navy text-white border-b border-[#12436b]/30">
         <div className="container mx-auto px-5 sm:px-8 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
-              <div className="font-heading text-4xl font-bold text-[#8ed0ee] mb-1">06</div>
+            <div className="border border-[#12436b]/40 bg-[#0b2b45] p-5 text-center">
+              <div className="ed-home-display text-4xl font-bold text-ed-mist mb-1">06</div>
               <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">Better Education Checks</div>
             </div>
-            <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
-              <div className="font-heading text-4xl font-bold text-[#64b5df] mb-1">Written</div>
+            <div className="border border-[#12436b]/40 bg-[#0b2b45] p-5 text-center">
+              <div className="ed-home-display text-4xl font-bold text-ed-mist mb-1">Written</div>
               <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">ClearCost Schedule</div>
             </div>
-            <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
-              <div className="font-heading text-4xl font-bold text-[#8ed0ee] mb-1">3+</div>
+            <div className="border border-[#12436b]/40 bg-[#0b2b45] p-5 text-center">
+              <div className="ed-home-display text-4xl font-bold text-ed-mist mb-1">3+</div>
               <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">Routes Compared</div>
             </div>
-            <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
-              <div className="font-heading text-4xl font-bold text-[#64b5df] mb-1">10</div>
+            <div className="border border-[#12436b]/40 bg-[#0b2b45] p-5 text-center">
+              <div className="ed-home-display text-4xl font-bold text-ed-mist mb-1">10</div>
               <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">Active Destinations</div>
             </div>
-            <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
-              <div className="font-heading text-4xl font-bold text-[#8ed0ee] mb-1">Flagship</div>
+            <div className="border border-[#12436b]/40 bg-[#0b2b45] p-5 text-center">
+              <div className="ed-home-display text-4xl font-bold text-ed-mist mb-1">Flagship</div>
               <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">China Proof Engine</div>
             </div>
-            <div className="border border-[#174f7a]/40 bg-[#061b2a] p-5 text-center">
-              <div className="font-heading text-4xl font-bold text-[#64b5df] mb-1">2018</div>
+            <div className="border border-[#12436b]/40 bg-[#0b2b45] p-5 text-center">
+              <div className="ed-home-display text-4xl font-bold text-ed-mist mb-1">2018</div>
               <div className="font-mono text-[10px] font-black uppercase tracking-wider text-white/65">Founded Year</div>
             </div>
           </div>
@@ -71,12 +71,12 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
       </section>
 
       {/* Our Story & History */}
-      <section className="py-20 bg-white border-b border-[#174f7a]/15">
+      <section className="py-20 bg-white border-b border-[#12436b]/10">
         <div className="container mx-auto px-5 sm:px-8 lg:px-12 max-w-5xl">
           <div className="text-center mb-16">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Institutional Evolution</p>
-            <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">Our Story & Purpose</h2>
-            <div className="mt-6 text-base leading-8 text-slate-700 text-left space-y-6 max-w-4xl mx-auto border-l-4 border-[#174f7a] pl-6">
+            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-ed-navy">Institutional Evolution</p>
+            <h2 className="mt-2 ed-home-display text-4xl font-bold text-ed-ink">Our Story & Purpose</h2>
+            <div className="mt-6 text-base leading-8 text-slate-700 text-left space-y-6 max-w-4xl mx-auto border-l-4 border-[#12436b] pl-6">
               <p>
                 EduExpress International’s journey began on 8 March 2018 through Founder and CEO Abdullah Al Rakib’s work in Chinese higher education. In 2019, he established Wuxi Haiying Culture and Art Consulting Co., Ltd. in China and developed institutional cooperation with Chinese universities, including a formal student-recruitment cooperation agreement with Linyi University.
               </p>
@@ -87,9 +87,9 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
           </div>
 
           {/* China Specialist Positioning Callout */}
-          <div className="border-2 border-[#08263c] bg-[#08263c] p-8 md:p-12 mb-20 text-[#08263c] shadow-[10px_10px_0_0_#64b5df]">
-            <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee]">Flagship Specialization</span>
-            <h3 className="mt-2 font-heading text-2xl md:text-3xl font-bold text-white">
+          <div className="border-2 border-[#0f3a5c] bg-ed-navy p-8 md:p-12 mb-20 text-ed-ink shadow-[10px_10px_0_0_#a9d6ee]">
+            <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-ed-mist">Flagship Specialization</span>
+            <h3 className="mt-2 ed-home-display text-2xl md:text-3xl font-bold text-white">
               EduExpress International — Bangladesh’s China Admission and Scholarship Specialist
             </h3>
             <p className="mt-4 text-base md:text-lg text-white/80 leading-relaxed max-w-3xl">
@@ -99,9 +99,9 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
 
           {/* Historical Timeline */}
           <div className="mb-8">
-            <h3 className="font-heading text-3xl font-bold text-center text-[#08263c] mb-12">Historical Timeline</h3>
+            <h3 className="ed-home-display text-3xl leading-[1.05] text-center text-ed-ink mb-12">Historical Timeline</h3>
             
-            <div className="relative border-l-2 border-[#174f7a] pl-6 ml-2 space-y-8">
+            <div className="relative border-l-2 border-[#12436b] pl-6 ml-2 space-y-8">
               {[
                 { year: "2018", title: "Journey Began", desc: "Abdullah Al Rakib entered the Chinese international-education and student-admission sector." },
                 { year: "2019", title: "China Entity Formed", desc: "Wuxi Haiying Culture and Art Consulting Co., Ltd. was established in China." },
@@ -112,10 +112,10 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
                 { year: "Present", title: "Dhanmondi Decision Desk", desc: "Operating from Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209." },
               ].map((item, idx) => (
                 <div key={idx} className="relative pl-6">
-                  <div className="absolute left-[-31px] top-1.5 size-4 bg-[#64b5df] border-2 border-[#08263c]" />
-                  <div className="border border-[#174f7a]/20 bg-[#f4f8fa] p-5 shadow-sm">
-                    <span className="inline-block px-3 py-1 bg-[#174f7a] text-[#8ed0ee] font-mono text-[10px] font-black uppercase tracking-wider mb-2">{item.year}</span>
-                    <h4 className="font-heading text-xl font-bold text-[#08263c] mb-1">{item.title}</h4>
+                  <div className="absolute left-[-31px] top-1.5 size-4 bg-ed-mist border-2 border-[#0f3a5c]" />
+                  <div className="border border-[#12436b]/20 bg-[#f5efe6] p-5 shadow-sm">
+                    <span className="inline-block px-3 py-1 bg-[#12436b] text-ed-mist font-mono text-[10px] font-black uppercase tracking-wider mb-2">{item.year}</span>
+                    <h4 className="ed-home-display text-xl font-bold text-ed-ink mb-1">{item.title}</h4>
                     <p className="text-sm text-slate-700 leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
@@ -129,49 +129,49 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
       <TeamSection team={team} />
 
       {/* What We Do */}
-      <section className="py-20 bg-[#f4f8fa]">
+      <section className="py-20 bg-[#f5efe6]">
         <div className="container mx-auto px-5 sm:px-8 lg:px-12 max-w-5xl">
           <div className="text-center mb-14">
-            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Our Core Pillars</p>
-            <h2 className="mt-2 font-heading text-4xl font-bold text-[#08263c]">What We Do</h2>
+            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-ed-navy">Our Core Pillars</p>
+            <h2 className="mt-2 ed-home-display text-4xl font-bold text-ed-ink">What We Do</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="border-2 border-[#08263c] bg-white p-8 shadow-sm">
-              <div className="w-10 h-10 bg-[#e9f7fd] border border-[#174f7a]/20 flex items-center justify-center mb-5 text-[#174f7a]">
+            <div className="border-2 border-[#0f3a5c] bg-white p-8 shadow-sm">
+              <div className="w-10 h-10 bg-ed-sky/12 border border-[#12436b]/20 flex items-center justify-center mb-5 text-ed-navy">
                 <GraduationCap className="w-5 h-5" />
               </div>
-              <h3 className="font-heading text-xl font-bold text-[#08263c] mb-2">Education Fit Assessment</h3>
+              <h3 className="ed-home-display text-xl font-bold text-ed-ink mb-2">Education Fit Assessment</h3>
               <p className="text-sm leading-6 text-slate-700">
                 We compare education quality, program entry logic, recognition, and total financial reality before making an option recommendation.
               </p>
             </div>
 
-            <div className="border-2 border-[#08263c] bg-white p-8 shadow-sm">
-              <div className="w-10 h-10 bg-[#e9f7fd] border border-[#174f7a]/20 flex items-center justify-center mb-5 text-[#174f7a]">
+            <div className="border-2 border-[#0f3a5c] bg-white p-8 shadow-sm">
+              <div className="w-10 h-10 bg-ed-sky/12 border border-[#12436b]/20 flex items-center justify-center mb-5 text-ed-navy">
                 <Shield className="w-5 h-5" />
               </div>
-              <h3 className="font-heading text-xl font-bold text-[#08263c] mb-2">Visa Readiness Records</h3>
+              <h3 className="ed-home-display text-xl font-bold text-ed-ink mb-2">Visa Readiness Records</h3>
               <p className="text-sm leading-6 text-slate-700">
                 Document checklists, missing requirements, official embassy guidance, and assigned responsibilities recorded in writing.
               </p>
             </div>
 
-            <div className="border-2 border-[#08263c] bg-white p-8 shadow-sm">
-              <div className="w-10 h-10 bg-[#e9f7fd] border border-[#174f7a]/20 flex items-center justify-center mb-5 text-[#174f7a]">
+            <div className="border-2 border-[#0f3a5c] bg-white p-8 shadow-sm">
+              <div className="w-10 h-10 bg-ed-sky/12 border border-[#12436b]/20 flex items-center justify-center mb-5 text-ed-navy">
                 <DollarSign className="w-5 h-5" />
               </div>
-              <h3 className="font-heading text-xl font-bold text-[#08263c] mb-2">ClearCost Transparency</h3>
+              <h3 className="ed-home-display text-xl font-bold text-ed-ink mb-2">ClearCost Transparency</h3>
               <p className="text-sm leading-6 text-slate-700">
                 Itemized cost schedule separating university tuition, hostel, deposit, embassy, medical, and courier costs from EduExpress service charges.
               </p>
             </div>
 
-            <div className="border-2 border-[#08263c] bg-white p-8 shadow-sm">
-              <div className="w-10 h-10 bg-[#e9f7fd] border border-[#174f7a]/20 flex items-center justify-center mb-5 text-[#174f7a]">
+            <div className="border-2 border-[#0f3a5c] bg-white p-8 shadow-sm">
+              <div className="w-10 h-10 bg-ed-sky/12 border border-[#12436b]/20 flex items-center justify-center mb-5 text-ed-navy">
                 <Globe className="w-5 h-5" />
               </div>
-              <h3 className="font-heading text-xl font-bold text-[#08263c] mb-2">Application Proof Pack</h3>
+              <h3 className="ed-home-display text-xl font-bold text-ed-ink mb-2">Application Proof Pack</h3>
               <p className="text-sm leading-6 text-slate-700">
                 Timestamped submission references, receipts, offer letters, deadlines, and direct university tracking recorded for every student.
               </p>
@@ -181,10 +181,10 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 bg-[#08263c] text-white">
+      <section className="py-20 bg-ed-navy text-white">
         <div className="container mx-auto px-5 sm:px-8 lg:px-12 text-center max-w-3xl">
-          <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#8ed0ee] mb-3">Compare Before You Commit</p>
-          <h2 className="font-heading text-4xl font-bold mb-6">Ready to inspect your options?</h2>
+          <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-ed-mist mb-3">Compare Before You Commit</p>
+          <h2 className="ed-home-display text-4xl font-bold mb-6">Ready to inspect your options?</h2>
           <p className="text-base text-white/75 mb-10 leading-relaxed">
             Visit our Dhanmondi decision desk or submit your Education Fit Assessment online for a written summary of suitable routes.
           </p>
@@ -194,7 +194,7 @@ export default function AboutClient({ team }: { team: TeamMember[] }) {
                 trackConsultationRequest('about_page_cta_get_consultation');
                 window.dispatchEvent(new CustomEvent('openQuickForm'));
               }}
-              className="inline-flex items-center justify-center bg-[#64b5df] text-[#08263c] px-8 py-4 font-black text-sm hover:bg-white transition-all shadow-[4px_4px_0_0_#174f7a]"
+              className="inline-flex items-center justify-center bg-ed-mist text-ed-ink px-8 py-4 font-black text-sm hover:bg-white transition-all shadow-[4px_4px_0_0_#12436b]"
             >
               Get My Fit Assessment
               <ArrowRight className="w-4 h-4 ml-2" />

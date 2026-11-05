@@ -108,7 +108,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#08263c]">
+    <div className="min-h-screen bg-white text-[#0f3a5c]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <PageHeader
         title="Updates by"
@@ -122,17 +122,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <main className="mx-auto max-w-[1320px] px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {posts.map(update => (
-            <article key={update.id} className="group overflow-hidden rounded-[1.5rem] border border-[#174f7a]/12 bg-white shadow-[0_8px_28px_rgba(8,38,60,.06)] transition hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(8,38,60,.11)]">
+            <article key={update.id} className="group overflow-hidden rounded-[1.5rem] border border-[#12436b]/12 bg-white shadow-[0_8px_28px_rgba(11,43,69,.06)] transition hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,43,69,.11)]">
               <Link href={`/updates/${update.slug}`} className="block">
-                <div className="relative aspect-[16/9] overflow-hidden bg-[#08263c]">
+                <div className="relative aspect-[16/9] overflow-hidden bg-[#0f3a5c]">
                   {update.featuredImage
                     ? <Image src={update.featuredImage} alt={update.title} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover transition duration-700 group-hover:scale-[1.03]" />
-                    : <div className="grid h-full place-items-center text-sm font-black uppercase tracking-[0.15em] text-[#9bd8f3]">EduExpress update</div>}
+                    : <div className="grid h-full place-items-center text-sm font-black uppercase tracking-[0.15em] text-[#cfe7f5]">EduExpress update</div>}
                 </div>
                 <div className="p-5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-[0.13em] text-[#174f7a]">{update.category || update.categories?.[0] || 'Update'}</span>
-                    <span className="shrink-0 rounded-full border border-[#174f7a]/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-slate-500">{update.type === 'article' ? 'Article' : 'Update'}</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.13em] text-[#12436b]">{update.category || update.categories?.[0] || 'Update'}</span>
+                    <span className="shrink-0 rounded-full border border-[#12436b]/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.13em] text-slate-500">{update.type === 'article' ? 'Article' : 'Update'}</span>
                   </div>
                   <h2 className="mt-3 line-clamp-2 text-xl font-extrabold leading-7 tracking-[-0.025em]">{update.title}</h2>
                   {update.excerpt ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{update.excerpt}</p> : null}
@@ -140,7 +140,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     <span className="truncate">{update.author}</span>
                     <span className="shrink-0">{fmtDate(update)}</span>
                   </div>
-                  <span className="mt-4 inline-flex items-center gap-2 text-sm font-black text-[#174f7a]">{update.type === 'article' ? 'Read article' : 'Read update'} <ArrowRight size={14} className="transition group-hover:translate-x-1" /></span>
+                  <span className="mt-4 inline-flex items-center gap-2 text-sm font-black text-[#12436b]">{update.type === 'article' ? 'Read article' : 'Read update'} <ArrowRight size={14} className="transition group-hover:translate-x-1" /></span>
                 </div>
               </Link>
             </article>

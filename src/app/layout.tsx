@@ -6,6 +6,7 @@ import ConditionalHeader from "@/components/ConditionalHeader";
 import EducationTracking from "@/components/EducationTracking";
 import Footer from "@/components/Footer";
 import ConditionalFooter from "@/components/ConditionalFooter";
+import MobileLeadBar from "@/components/MobileLeadBar";
 
 import WhatsAppWrapper from "@/components/WhatsAppWrapper";
 import CookieConsent from "@/components/CookieConsent";
@@ -16,7 +17,7 @@ import "./globals.css";
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
 export const viewport: Viewport = {
-  themeColor: "#174f7a",
+  themeColor: "#f6e9da",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -94,7 +95,7 @@ export const metadata: Metadata = {
       : {}),
   },
   other: {
-    'msapplication-TileColor': '#174f7a',
+    'msapplication-TileColor': '#12436b',
     'msapplication-config': '/browserconfig.xml',
   },
   appleWebApp: {
@@ -287,16 +288,17 @@ export default async function RootLayout({
               and screen-reader users can skip the header on every page. */}
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-5 focus:py-3 focus:text-sm focus:font-bold focus:text-[#08263c] focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#174f7a] focus:ring-offset-2"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-5 focus:py-3 focus:text-sm focus:font-bold focus:text-[#12436b] focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#12436b] focus:ring-offset-2"
           >
             Skip to content
           </a>
           <ConditionalHeader office={office ? { phonePrimary: office.phonePrimary, phoneSecondary: office.phoneSecondary, hours: office.hours } : undefined} />
-          <main id="main-content" tabIndex={-1}>{children}</main>
+          <main id="main-content" tabIndex={-1} className="pb-[calc(76px+env(safe-area-inset-bottom,0px))] lg:pb-0">{children}</main>
           <WhatsAppWrapper
             phoneNumber={office?.phonePrimary || '+8801983333566'}
             message="Hi, I would like an Education Fit Assessment. Please help me compare suitable universities, complete costs, recognition and scholarship availability."
           />
+          <MobileLeadBar />
           <CookieConsent />
           <ConditionalFooter><Footer /></ConditionalFooter>
           {enableProductionTracking && (

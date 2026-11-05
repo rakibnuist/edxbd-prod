@@ -180,7 +180,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
             type="button"
             onClick={() => !disabled && setIsOpen(!isOpen)}
             disabled={disabled}
-            className="group flex items-center space-x-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#174f7a] focus-visible:ring-offset-2"
+            className="group flex items-center space-x-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#12436b] focus-visible:ring-offset-2"
             aria-haspopup="listbox"
             aria-expanded={isOpen}
           >
@@ -188,7 +188,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
             <span className="text-sm font-bold text-slate-700 group-hover:text-blue-600 transition-colors">
               {selectedCountry.dialCode}
             </span>
-            <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`w-3 h-3 text-slate-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {/* Dropdown */}
@@ -219,7 +219,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
                     >
                       <span className="text-lg">{country.flag}</span>
                       <span className="flex-1 text-xs font-semibold text-slate-700">{country.name}</span>
-                      <span className="text-xs font-bold text-slate-400 font-mono">{country.dialCode}</span>
+                      <span className="text-xs font-bold text-slate-500 font-mono">{country.dialCode}</span>
                     </button>
                   ))
                 ) : (
@@ -246,7 +246,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
           autoComplete="tel"
           maxLength={15}
           aria-invalid={error ? true : undefined}
-          className="flex-1 bg-transparent border-none p-0 text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:outline-none h-full"
+          className="flex-1 bg-transparent border-none p-0 text-sm font-semibold text-slate-900 placeholder:text-slate-500 focus:ring-0 focus:outline-none h-full"
         />
       </div>
 

@@ -50,9 +50,9 @@ const bnFeatures = [
 
 export default function BengaliStudyInChinaPage() {
   return (
-    <div className="bg-[#f4f8fa] text-[#08263c] font-sans">
+    <div className="bg-[#f5efe6] text-[#0f3a5c] font-sans">
       {/* HERO */}
-      <section className="relative overflow-hidden bg-[#08263c] px-5 pb-20 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
+      <section className="relative overflow-hidden bg-[#0f3a5c] px-5 pb-20 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
         <div className="relative mx-auto max-w-[1440px]">
           <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-white/50">
             <Link href="/" className="hover:text-white">হোম</Link> <span aria-hidden>/</span>{' '}
@@ -60,7 +60,7 @@ export default function BengaliStudyInChinaPage() {
           </nav>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#8ed0ee]/30 bg-[#8ed0ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-[#8ed0ee]">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#a9d6ee]/30 bg-[#a9d6ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-[#a9d6ee]">
               <Globe2 size={14} /> ফ্ল্যাগশিপ চায়না উচ্চশিক্ষা পোর্টাল
             </div>
             <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.15] tracking-tight sm:text-5xl md:text-6xl">
@@ -73,7 +73,7 @@ export default function BengaliStudyInChinaPage() {
             <div className="mt-8 flex flex-wrap gap-4 text-sm font-semibold">
               <a
                 href="#bn-assessment"
-                className="inline-flex items-center gap-2 rounded-full bg-[#64b5df] px-7 py-3.5 text-[#08263c] transition-all hover:bg-white"
+                className="inline-flex items-center gap-2 rounded-full bg-[#a9d6ee] px-7 py-3.5 text-[#0f3a5c] transition-all hover:bg-white"
               >
                 ফ্রি এডুকেশন ফিট অ্যাসেসমেন্ট <ArrowRight size={16} />
               </a>
@@ -86,14 +86,14 @@ export default function BengaliStudyInChinaPage() {
       <section className="px-5 py-20 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1200px]">
           <div className="text-center">
-            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">প্রধান সুবিধাসমূহ</span>
-            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-[#08263c]">কেন চীনে উচ্চশিক্ষা নির্বাচন করবেন?</h2>
+            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#12436b]">প্রধান সুবিধাসমূহ</span>
+            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-[#0f3a5c]">কেন চীনে উচ্চশিক্ষা নির্বাচন করবেন?</h2>
           </div>
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {bnFeatures.map((f) => (
               <div key={f.title} className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-                <h3 className="font-serif text-xl font-bold text-[#08263c]">{f.title}</h3>
+                <h3 className="font-serif text-xl font-bold text-[#0f3a5c]">{f.title}</h3>
                 <p className="mt-4 text-sm text-slate-600 leading-relaxed">{f.detail}</p>
               </div>
             ))}
@@ -104,16 +104,16 @@ export default function BengaliStudyInChinaPage() {
       {/* REASSURANCE */}
       <section className="bg-white px-5 py-16 border-y border-slate-200 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1000px] text-center">
-          <ShieldCheck size={36} className="mx-auto text-[#174f7a]" />
-          <h2 className="mt-4 font-serif text-3xl font-bold text-[#08263c]">ভিসা-ফার্স্ট সার্ভিস পলিসি</h2>
-          <div className="mt-6 rounded-2xl bg-[#e9f7fd] p-6 text-base font-semibold leading-relaxed text-[#08263c] border border-blue-200">
+          <ShieldCheck size={36} className="mx-auto text-[#12436b]" />
+          <h2 className="mt-4 font-serif text-3xl font-bold text-[#0f3a5c]">ভিসা-ফার্স্ট সার্ভিস পলিসি</h2>
+          <div className="mt-6 rounded-2xl bg-[#e3f0f9] p-6 text-base font-semibold leading-relaxed text-[#0f3a5c] border border-blue-200">
             “কোনো ফাইল ওপেনিং চার্জ নেই। চায়না স্টুডেন্ট ভিসা অনুমোদনের পূর্বে এজু এক্সপ্রেসের কোনো সার্ভিস ফি নেই। বিশ্ববিদ্যালয়, এম্বাসি, মেডিকেল, অনুবাদ বা অন্যান্য থার্ড-পার্টি ফি লিখিতভাবে প্রদান করা হয়।”
           </div>
         </div>
       </section>
 
       {/* ASSESSMENT */}
-      <section id="bn-assessment" className="px-5 py-20 bg-[#e9f7fd] sm:px-8 lg:px-12">
+      <section id="bn-assessment" className="px-5 py-20 bg-[#e3f0f9] sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1100px]">
           <EducationFitAssessment />
         </div>

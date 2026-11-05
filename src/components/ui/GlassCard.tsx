@@ -7,7 +7,7 @@ interface GlassCardProps {
 
 const GlassCard = ({ children, className = "" }: GlassCardProps) => {
     return (
-        <div className={`relative backdrop-blur-3xl bg-white/40 border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] rounded-[2.5rem] overflow-hidden ${className}`}>
+        <div className={`relative backdrop-blur-3xl bg-white/40 border border-white/40 shadow-[0_8px_32px_0_rgba(18,67,107,0.07)] rounded-[2.5rem] overflow-hidden ${className}`}>
             {/* Refractive Highlight Edge (Top/Left) */}
             <div className="absolute inset-0 rounded-[2.5rem] border border-white/50 pointer-events-none z-20 mix-blend-overlay"></div>
 

@@ -16,54 +16,58 @@ interface PageHeaderProps {
     breadcrumbs?: { name: string; href?: string }[];
 }
 
+/**
+ * Shared page masthead. A warm editorial band with a serif statement, the trail
+ * back and a layered sky grid. Inner pages inherit the homepage's depth here.
+ */
 export default function PageHeader({
     title,
     highlight,
     description,
     icon: IconOrElement = Sparkles,
-    badgeText = "Explore Global Opportunities",
+    badgeText,
     children,
     breadcrumbLabel,
-    breadcrumbs
+    breadcrumbs,
 }: PageHeaderProps) {
-    let iconElement: React.ReactNode;
-    const iconClassName = "w-4 h-4 text-[#8ed0ee]";
-
-    if (React.isValidElement(IconOrElement)) {
-        iconElement = React.cloneElement(IconOrElement as React.ReactElement<{ className?: string }>, { className: iconClassName });
-    } else {
-        const IconComp = IconOrElement as LucideIcon;
-        iconElement = <IconComp className={iconClassName} />;
-    }
-
+    const IconComp = React.isValidElement(IconOrElement) ? null : (IconOrElement as LucideIcon);
     const trail = breadcrumbs ?? [{ name: breadcrumbLabel || `${title} ${highlight}`.trim() }];
 
     return (
-        <header className="relative overflow-hidden border-b border-[#174f7a]/12 bg-gradient-to-b from-[#e9f3fa] via-[#eef6fb] to-[#f7fbfe] pb-12 pt-28 text-[#08263c] sm:pb-14 sm:pt-32 lg:pt-36">
-            <div aria-hidden="true" className="pointer-events-none absolute left-[-6rem] bottom-[-14rem] size-[26rem] rounded-full bg-[#64b5df]/15 blur-3xl" />
-            <div aria-hidden="true" className="pointer-events-none absolute right-[-8rem] top-[-12rem] size-[30rem] rounded-full border-[5rem] border-[#64b5df]/10" />
-            <div aria-hidden="true" className="pointer-events-none absolute right-[24%] top-[-4rem] hidden size-[9rem] rounded-full border border-[#64b5df]/25 sm:block" />
+        <header className="relative overflow-hidden border-b border-[#12436b]/10 bg-[linear-gradient(180deg,#ffffff_0%,#f4f9fc_100%)] px-5 pb-12 pt-[100px] text-ed-ink sm:px-8 lg:px-12 lg:pb-16 lg:pt-[136px]">
+            <div className="pointer-events-none absolute inset-0 ed-grid-lines-dark opacity-70" aria-hidden="true" />
+            <div className="pointer-events-none absolute -right-24 -top-24 size-[360px] rounded-full bg-sky-100/80 blur-[90px]" aria-hidden="true" />
+            <div
+                className="ed-numeral pointer-events-none absolute right-8 top-24 hidden select-none text-[170px] leading-none text-ed-navy/[0.05] lg:block"
+                aria-hidden="true"
+            >
+                ED
+            </div>
 
-            <div className="relative z-10 mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
+            <div className="relative mx-auto max-w-shell">
                 <Breadcrumbs items={trail} className="mb-5" />
 
-                <div className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-[#174f7a]/15 bg-white px-4 py-2 text-[11px] font-black uppercase leading-5 tracking-[0.12em] text-[#174f7a] shadow-sm sm:text-xs">
-                    {iconElement}
-                    <span className="min-w-0 whitespace-normal">{badgeText}</span>
+                {badgeText && (
+                    <p className="inline-flex items-center gap-2 rounded-full border border-[#12436b]/12 bg-white px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ed-navy shadow-[0_12px_28px_-24px_rgba(18,67,107,0.35)]">
+                        {IconComp ? <IconComp size={13} className="text-ed-teal" aria-hidden="true" /> : null}
+                        {badgeText}
+                    </p>
+                )}
+
+                <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:items-end lg:gap-14">
+                    <div className="min-w-0">
+                        <h1 className="ed-home-display max-w-[26ch] break-words text-balance text-[clamp(2.15rem,4.5vw,3.7rem)] leading-[1.02] tracking-[-0.03em]">
+                            {title}
+                            {highlight ? <span className="block text-ed-navy">{highlight}</span> : null}
+                        </h1>
+                        <span className="mt-6 block h-[3px] w-20 rounded-full bg-gradient-to-r from-ed-navy via-ed-teal to-ed-sky" aria-hidden="true" />
+                    </div>
+                    <p className="max-w-[54ch] border-l-2 border-ed-sky/30 pl-4 text-[15px] leading-7 text-slate-600 lg:mb-1">
+                        {description}
+                    </p>
                 </div>
 
-                <h1 className="w-full max-w-4xl break-words text-balance font-heading text-[clamp(2.35rem,5vw,4rem)] font-bold leading-[1.04] tracking-[-0.035em]">
-                    {title}{' '}
-                    <span className="text-[#174f7a]">
-                        {highlight}
-                    </span>
-                </h1>
-
-                <p className="mt-5 max-w-2xl text-base leading-7 text-slate-700 md:text-lg">
-                    {description}
-                </p>
-
-                {children && <div className="mt-6">{children}</div>}
+                {children && <div className="mt-7">{children}</div>}
             </div>
         </header>
     );

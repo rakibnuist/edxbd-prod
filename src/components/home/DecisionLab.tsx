@@ -208,30 +208,30 @@ export default function DecisionLab() {
   const currentIndex = order.indexOf(screen);
 
   return (
-    <form onSubmit={submit} className="decision-lab relative overflow-hidden rounded-[10px] border border-[#0a1f33] bg-[#08263c] text-white">
+    <form onSubmit={submit} className="decision-lab relative overflow-hidden rounded-[10px] border border-[#14212e] bg-[#0f3a5c] text-white">
             <div className="relative border-b border-white/10 px-6 py-5 sm:px-9">
         <div className="flex items-center justify-between gap-5">
-          <p className="ed-label flex items-center gap-2 text-[#8ed0ee]"><ScanLine size={14} /> EduExpress Decision Lab</p>
+          <p className="ed-label flex items-center gap-2 text-[#a9d6ee]"><ScanLine size={14} /> EduExpress Decision Lab</p>
           <p className="ed-label text-white/60">Signal {String(Math.min(currentIndex + 1, 5)).padStart(2, '0')} / 05</p>
         </div>
         <div className="mt-4 flex gap-1.5" aria-label={`Stage ${Math.min(currentIndex + 1, 5)} of 5`}>
-          {[0, 1, 2, 3, 4].map(index => <span key={index} className={`h-1 flex-1 rounded-full transition ${index <= currentIndex ? 'bg-[#8ed0ee]' : 'bg-white/10'}`} />)}
+          {[0, 1, 2, 3, 4].map(index => <span key={index} className={`h-1 flex-1 rounded-full transition ${index <= currentIndex ? 'bg-[#a9d6ee]' : 'bg-white/10'}`} />)}
         </div>
       </div>
 
       <div className="relative min-h-[570px] px-6 py-9 sm:px-9 sm:py-11 lg:px-12">
         {screen === 'priority' && (
           <div>
-            <p className="ed-label text-[#cbdbe6]">Question 01</p>
+            <p className="ed-label text-[#dccdb8]">Question 01</p>
             <h2 className="ed-display mt-4 max-w-[16ch] text-[clamp(2.1rem,5vw,4rem)]">What matters most in your next decision?</h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">Do not choose a country yet. Choose the problem you want the route to solve.</p>
             <div className="mt-9 grid gap-3 sm:grid-cols-2">
               {priorities.map(priority => {
                 const active = form.priority === priority.value;
                 return (
-                  <button type="button" key={priority.value} onClick={() => update({ priority: priority.value })} className={`group flex min-h-[140px] items-start gap-5 rounded-[20px] border p-5 text-left transition ${active ? 'border-[#8ed0ee] bg-[#8ed0ee] text-[#071622]' : 'border-white/12 bg-white/[.035] hover:border-white/35'}`}>
-                    <span className={`ed-figure text-xl ${active ? 'text-[#174f7a]' : 'text-[#8ed0ee]'}`}>{priority.code}</span>
-                    <span><strong className="ed-display block text-xl">{priority.title}</strong><span className={`mt-3 block text-xs leading-5 ${active ? 'text-[#0a1f33]/65' : 'text-white/50'}`}>{priority.note}</span></span>
+                  <button type="button" key={priority.value} onClick={() => update({ priority: priority.value })} className={`group flex min-h-[140px] items-start gap-5 rounded-[20px] border p-5 text-left transition ${active ? 'border-[#a9d6ee] bg-[#a9d6ee] text-[#0b2b45]' : 'border-white/12 bg-white/[.035] hover:border-white/35'}`}>
+                    <span className={`ed-figure text-xl ${active ? 'text-[#12436b]' : 'text-[#a9d6ee]'}`}>{priority.code}</span>
+                    <span><strong className="ed-display block text-xl">{priority.title}</strong><span className={`mt-3 block text-xs leading-5 ${active ? 'text-[#14212e]/65' : 'text-white/50'}`}>{priority.note}</span></span>
                   </button>
                 );
               })}
@@ -241,7 +241,7 @@ export default function DecisionLab() {
 
         {screen === 'profile' && (
           <div>
-            <p className="ed-label text-[#cbdbe6]">Question 02</p>
+            <p className="ed-label text-[#dccdb8]">Question 02</p>
             <h2 className="ed-display mt-4 max-w-[16ch] text-[clamp(2.1rem,5vw,4rem)]">Where are you starting from?</h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">This turns a vague ambition into an academic route.</p>
             <div className="mt-9 grid gap-5 lg:grid-cols-[1fr_1fr]">
@@ -254,7 +254,7 @@ export default function DecisionLab() {
 
         {screen === 'limits' && (
           <div>
-            <p className="ed-label text-[#cbdbe6]">Question 03</p>
+            <p className="ed-label text-[#dccdb8]">Question 03</p>
             <h2 className="ed-display mt-4 max-w-[17ch] text-[clamp(2.1rem,5vw,4rem)]">Give the dream some real boundaries.</h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">A route is only useful when timing and money make sense.</p>
             <div className="mt-9 grid gap-5 sm:grid-cols-2">
@@ -264,7 +264,7 @@ export default function DecisionLab() {
             <div className="mt-8">
               <p className={labelClass}>A destination in mind?</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {destinations.map(destination => <button type="button" key={destination.value} onClick={() => update({ destination: destination.value })} className={`rounded-full border px-4 py-2.5 text-sm font-semibold transition ${form.destination === destination.value ? 'border-[#8ed0ee] bg-[#8ed0ee] text-[#071622]' : 'border-white/15 bg-white/[.03] text-white/65 hover:border-white/35'}`}>{destination.label}</button>)}
+                {destinations.map(destination => <button type="button" key={destination.value} onClick={() => update({ destination: destination.value })} className={`rounded-full border px-4 py-2.5 text-sm font-semibold transition ${form.destination === destination.value ? 'border-[#a9d6ee] bg-[#a9d6ee] text-[#0b2b45]' : 'border-white/15 bg-white/[.03] text-white/65 hover:border-white/35'}`}>{destination.label}</button>)}
               </div>
             </div>
           </div>
@@ -273,15 +273,15 @@ export default function DecisionLab() {
         {screen === 'signal' && signal && (
           <div className="grid gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-start">
             <div>
-              <div className="flex items-center gap-3"><Radar className="text-[#8ed0ee]" size={27} /><p className="ed-label text-[#8ed0ee]">{signal.label}</p></div>
+              <div className="flex items-center gap-3"><Radar className="text-[#a9d6ee]" size={27} /><p className="ed-label text-[#a9d6ee]">{signal.label}</p></div>
               <h2 className="ed-display mt-5 text-[clamp(2.5rem,6vw,5rem)] text-balance">{signal.route}</h2>
               <p className="mt-5 max-w-md text-sm leading-7 text-white/55">This is a starting signal, not an admission promise. It shows where the next verification should begin.</p>
-              <Link href={signal.href} className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-5 text-sm font-bold text-[#071622]">Explore this route <ArrowRight size={16} /></Link>
+              <Link href={signal.href} className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-5 text-sm font-bold text-[#0b2b45]">Explore this route <ArrowRight size={16} /></Link>
             </div>
             <div className="rounded-[24px] border border-white/12 bg-white/[.035] p-6 sm:p-8">
               <div className="grid gap-7 sm:grid-cols-2">
-                <div><p className="ed-label text-[#8ed0ee]">Why it starts here</p><ul className="mt-5 space-y-4">{signal.why.map(item => <li key={item} className="flex gap-3 text-sm leading-6 text-white/70"><Check size={16} className="mt-1 shrink-0 text-[#8ed0ee]" />{item}</li>)}</ul></div>
-                <div><p className="ed-label text-[#f0b9b2]">Must be verified</p><ul className="mt-5 space-y-4">{signal.verify.map(item => <li key={item} className="flex gap-3 text-sm leading-6 text-white/70"><ShieldAlert size={16} className="mt-1 shrink-0 text-[#e1786b]" />{item}</li>)}</ul></div>
+                <div><p className="ed-label text-[#a9d6ee]">Why it starts here</p><ul className="mt-5 space-y-4">{signal.why.map(item => <li key={item} className="flex gap-3 text-sm leading-6 text-white/70"><Check size={16} className="mt-1 shrink-0 text-[#a9d6ee]" />{item}</li>)}</ul></div>
+                <div><p className="ed-label text-[#8cc6e6]">Must be verified</p><ul className="mt-5 space-y-4">{signal.verify.map(item => <li key={item} className="flex gap-3 text-sm leading-6 text-white/70"><ShieldAlert size={16} className="mt-1 shrink-0 text-[#2f7fb0]" />{item}</li>)}</ul></div>
               </div>
             </div>
           </div>
@@ -289,7 +289,7 @@ export default function DecisionLab() {
 
         {screen === 'contact' && (
           <div>
-            <p className="ed-label flex items-center gap-2 text-[#8ed0ee]"><Fingerprint size={14} /> Optional human layer</p>
+            <p className="ed-label flex items-center gap-2 text-[#a9d6ee]"><Fingerprint size={14} /> Optional human layer</p>
             <h2 className="ed-display mt-4 max-w-[15ch] text-[clamp(2.1rem,5vw,4rem)]">Turn the signal into a counselor-checked shortlist.</h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/55">Your instant route is already yours. Share details only if you want a named counselor to review it.</p>
             <div className="mt-9 grid gap-5 sm:grid-cols-3">
@@ -297,17 +297,17 @@ export default function DecisionLab() {
               <label><span className={labelClass}>Email</span><input type="email" value={form.email} onChange={event => update({ email: event.target.value })} className={inputClass} placeholder="you@example.com" /></label>
               <label><span className={labelClass}>WhatsApp / phone</span><input value={form.phone} onChange={event => update({ phone: event.target.value })} className={inputClass} placeholder="01XXXXXXXXX" /></label>
             </div>
-            <label className="mt-5 flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[.035] p-4 text-xs leading-6 text-white/55"><input type="checkbox" checked={form.consent} onChange={event => update({ consent: event.target.checked })} className="mt-1 size-4 accent-[#8ed0ee]" /><span>I agree that EduExpress may contact me about this assessment. I have read the <Link href="/privacy" className="font-bold text-[#8ed0ee] underline">privacy policy</Link>.</span></label>
+            <label className="mt-5 flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[.035] p-4 text-xs leading-6 text-white/55"><input type="checkbox" checked={form.consent} onChange={event => update({ consent: event.target.checked })} className="mt-1 size-4 accent-[#a9d6ee]" /><span>I agree that EduExpress may contact me about this assessment. I have read the <Link href="/privacy" className="font-bold text-[#a9d6ee] underline">privacy policy</Link>.</span></label>
           </div>
         )}
 
         {screen === 'done' && (
           <div className="grid min-h-[460px] place-items-center text-center">
-            <div className="max-w-xl"><span className="mx-auto grid size-16 place-items-center rounded-full bg-[#8ed0ee] text-[#071622]"><CheckCircle2 size={31} /></span><p className="ed-label mt-7 text-[#8ed0ee]">Signal transmitted</p><h2 className="ed-display mt-4 text-[clamp(2.5rem,6vw,5rem)]">A human can take it from here.</h2><p className="mt-5 text-sm leading-7 text-white/55">Your profile, decision priority and starting route are ready for counselor review.</p><div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><Link href="/universities" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-bold text-[#071622]">Explore universities <ArrowRight size={16} /></Link><Link href="/contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/20 px-6 text-sm font-bold text-white">Visit decision desk <ArrowRight size={16} /></Link></div></div>
+            <div className="max-w-xl"><span className="mx-auto grid size-16 place-items-center rounded-full bg-[#a9d6ee] text-[#0b2b45]"><CheckCircle2 size={31} /></span><p className="ed-label mt-7 text-[#a9d6ee]">Signal transmitted</p><h2 className="ed-display mt-4 text-[clamp(2.5rem,6vw,5rem)]">A human can take it from here.</h2><p className="mt-5 text-sm leading-7 text-white/55">Your profile, decision priority and starting route are ready for counselor review.</p><div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><Link href="/universities" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-bold text-[#0b2b45]">Explore universities <ArrowRight size={16} /></Link><Link href="/contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/20 px-6 text-sm font-bold text-white">Visit decision desk <ArrowRight size={16} /></Link></div></div>
           </div>
         )}
 
-        {error && <p role="alert" className="mt-6 rounded-xl border border-[#c0392b]/45 bg-[#c0392b]/10 px-4 py-3 text-sm text-[#f0b9b2]">{error}</p>}
+        {error && <p role="alert" className="mt-6 rounded-xl border border-[#66b5e0]/45 bg-[#66b5e0]/10 px-4 py-3 text-sm text-[#8cc6e6]">{error}</p>}
       </div>
 
       {screen !== 'done' && (
@@ -323,7 +323,7 @@ export default function DecisionLab() {
   );
 }
 
-const labelClass = 'ed-label mb-2 block text-[#8ed0ee]';
-const inputClass = 'w-full rounded-2xl border border-white/12 bg-white/[.055] px-5 py-4 text-sm text-white outline-none transition focus:border-[#8ed0ee] focus:bg-white/[.08] placeholder:text-white/25';
-const primaryButton = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#8ed0ee] px-6 text-sm font-bold text-[#071622] transition hover:bg-white';
+const labelClass = 'ed-label mb-2 block text-[#a9d6ee]';
+const inputClass = 'w-full rounded-2xl border border-white/12 bg-white/[.055] px-5 py-4 text-sm text-white outline-none transition focus:border-[#a9d6ee] focus:bg-white/[.08] placeholder:text-white/25';
+const primaryButton = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#a9d6ee] px-6 text-sm font-bold text-[#0b2b45] transition hover:bg-white';
 const backButton = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/15 px-5 text-sm font-bold text-white/70 transition hover:border-white/35 hover:text-white';

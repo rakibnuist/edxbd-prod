@@ -34,11 +34,11 @@ export default async function ApplyPage({ searchParams }: Props) {
   const country = contextValue(query.country, 80);
   const intake = contextValue(query.intake, 80);
 
-  return <main className="min-h-screen bg-[#f6f8fa] px-5 pb-20 pt-28 text-[#102b40] sm:px-8 xl:pt-40">
+  return <main className="min-h-screen bg-[#e3f0f9] px-5 pb-20 pt-28 text-[#14212e] sm:px-8 xl:pt-40">
     <div className="mx-auto max-w-[1000px]">
-      <Link href="/universities" className="inline-flex min-h-10 items-center gap-2 text-sm font-medium text-[#174f7a]"><ArrowLeft size={15} />Explore universities</Link>
+      <Link href="/universities" className="inline-flex min-h-10 items-center gap-2 text-sm font-medium text-[#12436b]"><ArrowLeft size={15} />Explore universities</Link>
       <header className="mb-8 mt-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#287465]">University applications</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#175180]">University applications</p>
         <h1 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Apply with EduExpress International</h1>
         <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">Share your academic background and study preferences. Our counselors can help you check eligibility, prepare documents and plan your university application.</p>
         {(university || program || country || intake) && <dl className="mt-7 grid gap-5 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-2 sm:p-6">

@@ -118,12 +118,12 @@ export default function CscScholarshipBangladeshPage() {
   };
 
   return (
-    <div className="bg-[#f4f8fa] text-[#08263c]">
+    <div className="bg-[#f5efe6] text-[#0f3a5c]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-[#08263c] px-5 pb-20 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(100,181,223,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(100,181,223,0.07)_1px,transparent_1px)] bg-[size:58px_58px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
+      <section className="relative overflow-hidden bg-[#0f3a5c] px-5 pb-20 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(127,168,191,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(127,168,191,0.07)_1px,transparent_1px)] bg-[size:58px_58px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
         <div className="relative mx-auto max-w-[1440px]">
           <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-white/50">
             <Link href="/" className="hover:text-white">Home</Link> <span aria-hidden>/</span>{' '}
@@ -132,7 +132,7 @@ export default function CscScholarshipBangladeshPage() {
 
           <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_.8fr]">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#8ed0ee]/30 bg-[#8ed0ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-[#8ed0ee]">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#a9d6ee]/30 bg-[#a9d6ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-[#a9d6ee]">
                 <Award size={14} /> Official 2026/27 Guide
               </div>
               <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
@@ -145,7 +145,7 @@ export default function CscScholarshipBangladeshPage() {
               <div className="mt-8 flex flex-wrap gap-4 text-sm font-semibold">
                 <a
                   href="#csc-assessment"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#64b5df] px-7 py-3.5 text-[#08263c] transition-all hover:bg-white hover:shadow-lg"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#a9d6ee] px-7 py-3.5 text-[#0f3a5c] transition-all hover:bg-white hover:shadow-lg"
                 >
                   Check Your CSC Eligibility <ArrowRight size={16} />
                 </a>
@@ -162,22 +162,22 @@ export default function CscScholarshipBangladeshPage() {
 
             {/* QUICK STATS CARD */}
             <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
-              <h3 className="font-mono text-xs font-black uppercase tracking-widest text-[#8ed0ee]">At a Glance for BD Students</h3>
+              <h3 className="font-mono text-xs font-black uppercase tracking-widest text-[#a9d6ee]">At a Glance for BD Students</h3>
               <ul className="mt-6 space-y-4 text-sm">
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#64b5df]" size={18} />
+                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#a9d6ee]" size={18} />
                   <span><strong>Tuition:</strong> 100% Free (Full Waiver)</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#64b5df]" size={18} />
+                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#a9d6ee]" size={18} />
                   <span><strong>Stipend:</strong> 40,000 – 56,000 BDT / month</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#64b5df]" size={18} />
+                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#a9d6ee]" size={18} />
                   <span><strong>Housing:</strong> Free On-Campus Dormitory</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#64b5df]" size={18} />
+                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#a9d6ee]" size={18} />
                   <span><strong>EduExpress Terms:</strong> No service fee before visa approval</span>
                 </li>
               </ul>
@@ -190,8 +190,8 @@ export default function CscScholarshipBangladeshPage() {
       <section className="px-5 py-20 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1200px]">
           <div className="text-center">
-            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">Financial Breakdown</span>
-            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-[#08263c]">What Does CSC Scholarship Cover?</h2>
+            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#12436b]">Financial Breakdown</span>
+            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-[#0f3a5c]">What Does CSC Scholarship Cover?</h2>
             <p className="mt-4 text-slate-600 max-w-2xl mx-auto">
               CSC (China Scholarship Council) is one of the most generous fully-funded government scholarships available to students from Bangladesh.
             </p>
@@ -202,10 +202,10 @@ export default function CscScholarshipBangladeshPage() {
               const Icon = item.icon;
               return (
                 <div key={item.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all">
-                  <div className="grid size-12 place-items-center rounded-xl bg-[#e9f7fd] text-[#174f7a] mb-5">
+                  <div className="grid size-12 place-items-center rounded-xl bg-[#e3f0f9] text-[#12436b] mb-5">
                     <Icon size={24} />
                   </div>
-                  <h3 className="font-serif text-lg font-bold text-[#08263c]">{item.title}</h3>
+                  <h3 className="font-serif text-lg font-bold text-[#0f3a5c]">{item.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">{item.detail}</p>
                 </div>
               );
@@ -218,17 +218,17 @@ export default function CscScholarshipBangladeshPage() {
       <section className="bg-white px-5 py-20 border-y border-slate-200 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1200px]">
           <div className="text-center">
-            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">Application Pathways</span>
-            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-[#08263c]">CSC Type A vs Type B for Bangladeshi Students</h2>
+            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#12436b]">Application Pathways</span>
+            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-[#0f3a5c]">CSC Type A vs Type B for Bangladeshi Students</h2>
           </div>
 
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             {cscTypes.map((t) => (
-              <div key={t.type} className="rounded-3xl border-2 border-[#08263c] p-8 bg-[#f4f8fa]">
-                <div className="inline-block rounded-full bg-[#174f7a] px-4 py-1 text-xs font-bold text-white uppercase tracking-wider mb-4">
+              <div key={t.type} className="rounded-3xl border-2 border-[#0f3a5c] p-8 bg-[#f5efe6]">
+                <div className="inline-block rounded-full bg-[#12436b] px-4 py-1 text-xs font-bold text-white uppercase tracking-wider mb-4">
                   {t.type}
                 </div>
-                <p className="text-[#08263c] font-bold text-lg">{t.appliedThrough}</p>
+                <p className="text-[#0f3a5c] font-bold text-lg">{t.appliedThrough}</p>
                 <div className="mt-4 space-y-3 text-sm text-slate-700">
                   <p><strong>Target Group:</strong> {t.bestFor}</p>
                   <p><strong>Primary Window:</strong> {t.deadline}</p>
@@ -243,9 +243,9 @@ export default function CscScholarshipBangladeshPage() {
       {/* DOCUMENT CHECKLIST SECTION */}
       <section className="px-5 py-20 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1100px]">
-          <div className="rounded-3xl bg-[#08263c] p-8 text-white sm:p-12">
+          <div className="rounded-3xl bg-[#0f3a5c] p-8 text-white sm:p-12">
             <div className="flex items-center gap-3">
-              <FileText size={28} className="text-[#64b5df]" />
+              <FileText size={28} className="text-[#a9d6ee]" />
               <h2 className="font-serif text-2xl font-bold sm:text-3xl">Required Document Checklist for Bangladesh</h2>
             </div>
             <p className="mt-3 text-white/80 text-sm sm:text-base">
@@ -255,7 +255,7 @@ export default function CscScholarshipBangladeshPage() {
             <ul className="mt-8 grid gap-4 sm:grid-cols-2">
               {requiredDocuments.map((doc, idx) => (
                 <li key={idx} className="flex items-start gap-3 rounded-xl bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur-sm">
-                  <span className="font-mono text-xs font-bold text-[#8ed0ee] shrink-0">{idx + 1}.</span>
+                  <span className="font-mono text-xs font-bold text-[#a9d6ee] shrink-0">{idx + 1}.</span>
                   <span>{doc}</span>
                 </li>
               ))}
@@ -267,9 +267,9 @@ export default function CscScholarshipBangladeshPage() {
       {/* EDUEXPRESS REASSURANCE COMMERCIAL TERMS */}
       <section className="bg-white px-5 py-16 border-y border-slate-200 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1000px] text-center">
-          <ShieldCheck size={36} className="mx-auto text-[#174f7a]" />
-          <h2 className="mt-4 font-serif text-3xl font-bold text-[#08263c]">EduExpress China Visa-First Guarantee</h2>
-          <div className="mt-6 rounded-2xl bg-[#e9f7fd] p-6 text-base font-semibold leading-relaxed text-[#08263c] border border-blue-200">
+          <ShieldCheck size={36} className="mx-auto text-[#12436b]" />
+          <h2 className="mt-4 font-serif text-3xl font-bold text-[#0f3a5c]">EduExpress China Visa-First Guarantee</h2>
+          <div className="mt-6 rounded-2xl bg-[#e3f0f9] p-6 text-base font-semibold leading-relaxed text-[#0f3a5c] border border-blue-200">
             “No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.”
           </div>
         </div>
@@ -279,14 +279,14 @@ export default function CscScholarshipBangladeshPage() {
       <section className="px-5 py-20 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[900px]">
           <div className="text-center">
-            <HelpCircle size={32} className="mx-auto text-[#174f7a]" />
-            <h2 className="mt-3 font-serif text-3xl font-bold text-[#08263c]">Frequently Asked Questions</h2>
+            <HelpCircle size={32} className="mx-auto text-[#12436b]" />
+            <h2 className="mt-3 font-serif text-3xl font-bold text-[#0f3a5c]">Frequently Asked Questions</h2>
           </div>
 
           <div className="mt-10 space-y-6">
             {faqs.map((faq, idx) => (
               <div key={idx} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="font-bold text-lg text-[#08263c]">{faq.q}</h3>
+                <h3 className="font-bold text-lg text-[#0f3a5c]">{faq.q}</h3>
                 <p className="mt-3 text-sm leading-6 text-slate-600">{faq.a}</p>
               </div>
             ))}
@@ -295,11 +295,11 @@ export default function CscScholarshipBangladeshPage() {
       </section>
 
       {/* ASSESSMENT FORM INTEGRATION */}
-      <section id="csc-assessment" className="px-5 py-20 bg-[#e9f7fd] sm:px-8 lg:px-12">
+      <section id="csc-assessment" className="px-5 py-20 bg-[#e3f0f9] sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1100px]">
           <div className="mb-8 text-center">
-            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">Free Assessment</span>
-            <h2 className="mt-2 font-serif text-3xl font-bold text-[#08263c]">Check Your CSC Scholarship Fit</h2>
+            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#12436b]">Free Assessment</span>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-[#0f3a5c]">Check Your CSC Scholarship Fit</h2>
             <p className="mt-2 text-sm text-slate-600">Share your GPA, major, and intake — our team will evaluate your chances for CSC Type A & Type B routes in writing.</p>
           </div>
           <EducationFitAssessment />

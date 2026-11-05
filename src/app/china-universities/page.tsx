@@ -76,7 +76,7 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
   };
 
   return (
-    <article className="bg-[#f4f8fa] text-[#08263c] font-sans">
+    <article className="bg-[#f5efe6] text-[#0f3a5c] font-sans">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       
       <PageHeader
@@ -87,14 +87,14 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
         badgeText="China university directory"
       />
 
-      <section className="border-b border-[#174f7a]/15 bg-white">
-        <div className="mx-auto grid max-w-[1440px] gap-px bg-[#174f7a]/15 sm:grid-cols-3">
+      <section className="border-b border-[#12436b]/15 bg-white">
+        <div className="mx-auto grid max-w-[1440px] gap-px bg-[#12436b]/15 sm:grid-cols-3">
           {[
             [Database, `${universities.length} China university records`, 'Browse the available directory records. A listing does not establish an institutional partnership or open admission.'],
             [SearchCheck, `${sourceLinkedCount} records with linked sources`, 'Source links support specific facts. Each card shows whether the complete record still needs verification.'],
             [ShieldCheck, 'Compare education fit first', 'Review recognition, academic fit, career value, full cost, visa readiness and student support side by side.'],
           ].map(([Icon, title, text]) => (
-            <div key={String(title)} className="flex gap-4 bg-white p-5"><span className="grid size-10 shrink-0 place-items-center bg-[#e9f7fd] text-[#174f7a]"><Icon size={20} /></span><div><strong className="text-sm">{String(title)}</strong><p className="mt-1 text-xs leading-5 text-slate-500">{String(text)}</p></div></div>
+            <div key={String(title)} className="flex gap-4 bg-white p-5"><span className="grid size-10 shrink-0 place-items-center bg-[#e3f0f9] text-[#12436b]"><Icon size={20} /></span><div><strong className="text-sm">{String(title)}</strong><p className="mt-1 text-xs leading-5 text-slate-500">{String(text)}</p></div></div>
           ))}
         </div>
       </section>
@@ -103,10 +103,10 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
         <UniversitiesClient initialUniversities={universities} />
       </Suspense>
 
-      <section className="border-b border-[#174f7a]/15 bg-white">
+      <section className="border-b border-[#12436b]/15 bg-white">
         <div className="mx-auto max-w-[1440px] px-5 py-8 text-xs leading-6 text-slate-500 sm:px-8 lg:px-12">
-          <p><strong className="text-[#08263c]">Database status:</strong> {universities.length} Chinese university records are available; {sourceLinkedCount} have linked sources. Historical fees, intakes and scholarship options require a current official-source review before application.</p>
-          <p className="mt-2"><strong className="text-[#08263c]">How to use this directory:</strong> Open an individual profile for detailed evidence, use Compare to identify unanswered questions, then request a program-specific Education Fit Assessment and written ClearCost Sheet.</p>
+          <p><strong className="text-[#0f3a5c]">Database status:</strong> {universities.length} Chinese university records are available; {sourceLinkedCount} have linked sources. Historical fees, intakes and scholarship options require a current official-source review before application.</p>
+          <p className="mt-2"><strong className="text-[#0f3a5c]">How to use this directory:</strong> Open an individual profile for detailed evidence, use Compare to identify unanswered questions, then request a program-specific Education Fit Assessment and written ClearCost Sheet.</p>
         </div>
       </section>
     </article>

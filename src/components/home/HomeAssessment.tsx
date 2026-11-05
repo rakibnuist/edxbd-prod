@@ -56,7 +56,7 @@ const initialForm: FormState = {
 };
 
 const inputClass =
-  'mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#1767a0] focus:ring-4 focus:ring-[#1767a0]/10';
+  'mt-2 min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-500 focus:border-[#175180] focus:ring-4 focus:ring-[#175180]/10';
 
 function destinationLabel(value: string) {
   return destinations.find(item => item.value === value)?.label ?? 'Not sure';
@@ -153,32 +153,32 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
   )}`;
 
   return (
-    <div id="assessment" className="scroll-mt-32 rounded-[1.5rem] bg-white p-5 shadow-[0_24px_70px_rgba(15,55,87,.16)] sm:p-7">
+    <div id="assessment" className="scroll-mt-32 rounded-[1.5rem] bg-white p-5 shadow-[0_24px_70px_rgba(15,58,92,.16)] sm:p-7">
       {step !== 'done' && (
         <>
           <div className="flex items-start justify-between gap-5">
             <div>
-              <span className="inline-flex rounded-full bg-[#fff4df] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[.12em] text-[#9a5a00]">
+              <span className="inline-flex rounded-full bg-[#f6e9da] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[.12em] text-[#256994]">
                 Free profile assessment
               </span>
-              <h2 className="mt-3 text-2xl font-bold tracking-[-.03em] text-[#102a43]">Tell us where you want to go</h2>
+              <h2 className="mt-3 text-2xl font-bold tracking-[-.03em] text-[#14212e]">Tell us where you want to go</h2>
               <p className="mt-2 text-sm leading-6 text-slate-600">Two short steps. A real counsellor reviews the result.</p>
             </div>
-            <span className="shrink-0 rounded-full bg-[#e9f5fc] px-3 py-1.5 text-xs font-bold text-[#1767a0]">
+            <span className="shrink-0 rounded-full bg-[#e3f0f9] px-3 py-1.5 text-xs font-bold text-[#175180]">
               Step {step} of 2
             </span>
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-2" aria-hidden="true">
-            <span className="h-1.5 rounded-full bg-[#1767a0]" />
-            <span className={`h-1.5 rounded-full ${step === 2 ? 'bg-[#1767a0]' : 'bg-slate-200'}`} />
+            <span className="h-1.5 rounded-full bg-[#175180]" />
+            <span className={`h-1.5 rounded-full ${step === 2 ? 'bg-[#175180]' : 'bg-slate-200'}`} />
           </div>
         </>
       )}
 
       {step === 1 && (
         <div className="mt-6">
-          <label className="block text-sm font-semibold text-[#102a43]">
+          <label className="block text-sm font-semibold text-[#14212e]">
             Current study level
             <select
               value={form.academicLevel}
@@ -190,7 +190,7 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
             </select>
           </label>
 
-          <label className="mt-4 block text-sm font-semibold text-[#102a43]">
+          <label className="mt-4 block text-sm font-semibold text-[#14212e]">
             Preferred destination
             <select
               value={form.destination}
@@ -203,8 +203,8 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
             </select>
           </label>
 
-          <label className="mt-4 block text-sm font-semibold text-[#102a43]">
-            Subject or program <span className="font-normal text-slate-400">(optional)</span>
+          <label className="mt-4 block text-sm font-semibold text-[#14212e]">
+            Subject or program <span className="font-normal text-slate-500">(optional)</span>
             <input
               value={form.subject}
               onChange={event => update({ subject: event.target.value })}
@@ -219,7 +219,7 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
           <button
             type="button"
             onClick={continueToContact}
-            className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#f4a024] px-5 text-sm font-extrabold text-[#102a43] transition hover:bg-[#ffb33f]"
+            className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#66b5e0] px-5 text-sm font-extrabold text-[#14212e] transition hover:bg-[#8cc6e6]"
           >
             Continue — takes 30 seconds <ArrowRight size={17} />
           </button>
@@ -231,7 +231,7 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
 
       {step === 2 && (
         <form onSubmit={submit} className="mt-6">
-          <label className="block text-sm font-semibold text-[#102a43]">
+          <label className="block text-sm font-semibold text-[#14212e]">
             Your name
             <input
               value={form.name}
@@ -243,7 +243,7 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
           </label>
 
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <label className="block text-sm font-semibold text-[#102a43]">
+            <label className="block text-sm font-semibold text-[#14212e]">
               WhatsApp number
               <input
                 value={form.phone}
@@ -254,7 +254,7 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
                 autoComplete="tel"
               />
             </label>
-            <label className="block text-sm font-semibold text-[#102a43]">
+            <label className="block text-sm font-semibold text-[#14212e]">
               Email
               <input
                 type="email"
@@ -267,16 +267,16 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
             </label>
           </div>
 
-          <label className="mt-4 flex items-start gap-3 rounded-xl bg-[#f5f9fc] p-3.5 text-xs leading-5 text-slate-600">
+          <label className="mt-4 flex items-start gap-3 rounded-xl bg-[#e3f0f9] p-3.5 text-xs leading-5 text-slate-600">
             <input
               type="checkbox"
               checked={form.consent}
               onChange={event => update({ consent: event.target.checked })}
-              className="mt-0.5 size-4 shrink-0 accent-[#1767a0]"
+              className="mt-0.5 size-4 shrink-0 accent-[#175180]"
             />
             <span>
               EduExpress may contact me about this assessment. I have read the{' '}
-              <Link href="/privacy" className="font-bold text-[#1767a0] underline">privacy policy</Link>.
+              <Link href="/privacy" className="font-bold text-[#175180] underline">privacy policy</Link>.
             </span>
           </label>
 
@@ -294,7 +294,7 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[#f4a024] px-5 text-sm font-extrabold text-[#102a43] transition hover:bg-[#ffb33f] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[#66b5e0] px-5 text-sm font-extrabold text-[#14212e] transition hover:bg-[#8cc6e6] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? <><Loader2 size={17} className="animate-spin" /> Sending</> : <>Get My Free Assessment <ArrowRight size={17} /></>}
             </button>
@@ -307,7 +307,7 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
           <span className="mx-auto grid size-14 place-items-center rounded-full bg-emerald-100 text-emerald-700">
             <CheckCircle2 size={27} />
           </span>
-          <h2 className="mt-5 text-2xl font-bold tracking-[-.03em] text-[#102a43]">Your profile is with our counselling team</h2>
+          <h2 className="mt-5 text-2xl font-bold tracking-[-.03em] text-[#14212e]">Your profile is with our counselling team</h2>
           <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-slate-600">
             A counsellor will review your study level, destination and subject, then contact you during office hours.
           </p>
@@ -315,7 +315,7 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 text-sm font-extrabold text-[#07301a]"
+            className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#25d366] px-5 text-sm font-extrabold text-[#071c2e]"
           >
             <MessageCircle size={18} /> Continue on WhatsApp
           </a>

@@ -14,19 +14,18 @@ export default function FooterCta() {
   if (pathname === '/') return null;
 
   return (
-    <div className="border-b border-white/15 bg-[#08263c] px-5 py-8 sm:px-8 lg:px-12">
-      <div className="mx-auto grid max-w-[1440px] items-center gap-6 md:grid-cols-[1fr_auto]">
+    <div className="relative overflow-hidden border-b border-white/10 bg-petrol-800 px-5 py-10 sm:px-8 lg:px-12">
+      <div className="pointer-events-none absolute inset-0 ed-grid-lines opacity-80" aria-hidden="true" />
+      <div className="pointer-events-none absolute -right-24 -top-24 size-[320px] rounded-full bg-sky-500/20 blur-[80px]" aria-hidden="true" />
+      <div className="relative mx-auto grid max-w-shell items-end gap-7 md:grid-cols-[1fr_auto]">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.1em] text-[#8ed0ee]">Not sure where to begin?</p>
-          <h2 className="mt-2.5 max-w-3xl font-heading text-2xl font-bold leading-tight sm:text-3xl">
-            Start with a free fit assessment. We will compare the cost, the recognition and your visa chances.
+          <p className="ed-label !text-mint-300">Not sure where to begin?</p>
+          <h2 className="mt-3 max-w-3xl font-heading text-[clamp(1.6rem,2.6vw,2.35rem)] leading-[1.12] text-white">
+            Start with a free fit assessment. We compare the cost, the recognition and your visa readiness in writing.
           </h2>
         </div>
-        <Link
-          href="/education-fit-assessment"
-          className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-xl bg-[#64b5df] px-6 text-base font-black text-[#08263c] transition hover:bg-white md:w-auto"
-        >
-          Get a free fit assessment <ArrowUpRight size={18} />
+        <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-12 md:min-h-13">
+          Get a free fit assessment <ArrowUpRight size={17} aria-hidden="true" />
         </Link>
       </div>
     </div>

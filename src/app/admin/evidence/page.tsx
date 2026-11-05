@@ -83,7 +83,7 @@ function Preview({ record }: { record: Pick<EvidenceRecord, 'thumbnailUrl' | 'ti
       {record.thumbnailUrl ? (
         <Image src={record.thumbnailUrl} alt={`Preview of ${record.title || 'evidence record'}`} fill sizes="260px" className="object-contain p-3" unoptimized />
       ) : (
-        <div className="grid h-full place-items-center text-center text-slate-400"><div><ImagePlus className="mx-auto" /><p className="mt-2 text-xs font-bold">Upload a safe preview</p></div></div>
+        <div className="grid h-full place-items-center text-center text-slate-500"><div><ImagePlus className="mx-auto" /><p className="mt-2 text-xs font-bold">Upload a safe preview</p></div></div>
       )}
     </div>
   );
@@ -219,11 +219,11 @@ export default function EvidenceAdminPage() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-7 pb-16">
-      <header className="overflow-hidden rounded-3xl bg-[#08263c] p-7 text-white sm:p-9">
+      <header className="overflow-hidden rounded-3xl bg-[#0f3a5c] p-7 text-white sm:p-9">
         <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end">
-          <div><p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#8ed0ee]">Public evidence portal</p><h1 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Admission outcomes and authorization letters</h1><p className="mt-3 max-w-3xl text-sm leading-6 text-white/70">Add one approved preview, connect it to the university or organization, then control whether it appears on the homepage and proof library.</p></div>
+          <div><p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#a9d6ee]">Public evidence portal</p><h1 className="mt-3 font-heading text-3xl font-bold sm:text-4xl">Admission outcomes and authorization letters</h1><p className="mt-3 max-w-3xl text-sm leading-6 text-white/70">Add one approved preview, connect it to the university or organization, then control whether it appears on the homepage and proof library.</p></div>
           <div className="grid grid-cols-4 gap-px overflow-hidden rounded-2xl bg-white/15 text-center">
-            {[['Public', counts.public], ['Letters', counts.authorizations], ['Admission', counts.admissions], ['JW202', counts.jw202]].map(([label, value]) => <div key={label} className="min-w-20 bg-[#08263c] p-3"><strong className="block text-xl text-[#8ed0ee]">{value}</strong><span className="mt-1 block text-[10px] text-white/55">{label}</span></div>)}
+            {[['Public', counts.public], ['Letters', counts.authorizations], ['Admission', counts.admissions], ['JW202', counts.jw202]].map(([label, value]) => <div key={label} className="min-w-20 bg-[#0f3a5c] p-3"><strong className="block text-xl text-[#a9d6ee]">{value}</strong><span className="mt-1 block text-[10px] text-white/55">{label}</span></div>)}
           </div>
         </div>
       </header>
@@ -268,7 +268,7 @@ export default function EvidenceAdminPage() {
               <label className="flex items-start gap-3 text-sm font-bold text-slate-800"><input type="checkbox" className="mt-1" checked={redactionConfirmed} onChange={event => setRedactionConfirmed(event.target.checked)} /><span>I checked this public preview and removed private student, identity, payment and document identifiers.</span></label>
               <label className="mt-3 flex items-center gap-3 text-sm font-bold text-slate-800"><input type="checkbox" checked={draft.isPublished} onChange={event => setDraft({ ...draft, isPublished: event.target.checked })} />Show on the homepage and proof library</label>
             </div>
-            <button type="button" onClick={createRecord} disabled={!draft.title || !draft.thumbnailUrl || !redactionConfirmed || busy === 'create'} className="inline-flex min-h-12 items-center justify-center gap-2 self-end rounded-xl bg-[#08263c] px-5 text-sm font-extrabold text-white disabled:cursor-not-allowed disabled:opacity-40">{busy === 'create' ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />} Save record</button>
+            <button type="button" onClick={createRecord} disabled={!draft.title || !draft.thumbnailUrl || !redactionConfirmed || busy === 'create'} className="inline-flex min-h-12 items-center justify-center gap-2 self-end rounded-xl bg-[#0f3a5c] px-5 text-sm font-extrabold text-white disabled:cursor-not-allowed disabled:opacity-40">{busy === 'create' ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />} Save record</button>
           </div>
         </div>
       </section>
@@ -280,7 +280,7 @@ export default function EvidenceAdminPage() {
             ['authorization', `Authorization letters (${counts.authorizations})`],
             ['admission', `Admission notices (${counts.admissions})`],
             ['jw202', `JW202 (${counts.jw202})`],
-          ] as const).map(([group, label]) => <button key={group} type="button" onClick={() => setSelectedGroup(group)} className={`rounded-full px-4 py-2 text-sm font-bold transition ${selectedGroup === group ? 'bg-[#08263c] text-white' : 'border border-slate-200 bg-white text-slate-600 hover:border-blue-300'}`}>{label}</button>)}
+          ] as const).map(([group, label]) => <button key={group} type="button" onClick={() => setSelectedGroup(group)} className={`rounded-full px-4 py-2 text-sm font-bold transition ${selectedGroup === group ? 'bg-[#0f3a5c] text-white' : 'border border-slate-200 bg-white text-slate-600 hover:border-blue-300'}`}>{label}</button>)}
         </div>
         <div className="mt-6 space-y-5">
           {visibleRecords.map(record => (
