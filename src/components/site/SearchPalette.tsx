@@ -102,12 +102,13 @@ export default function SearchPalette() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="hidden items-center gap-2 rounded-full border border-rule bg-chalk-50 px-3 py-2 text-[15px] font-medium text-ink-soft transition hover:border-petrol-400 hover:text-petrol-700 lg:inline-flex"
+        className="hidden min-h-10 items-center gap-2 rounded-full border border-rule bg-chalk-50 px-3 py-2 text-[15px] font-medium text-ink-soft transition hover:border-petrol-400 hover:text-petrol-700 lg:inline-flex"
         aria-label="Search universities, programmes and guides"
       >
         <Search size={15} aria-hidden="true" />
-        <span>Search</span>
-        <kbd className="ml-1 rounded border border-rule bg-white px-1.5 py-0.5 text-[12px] font-semibold text-ink-mute">⌘K</kbd>
+        {/* Label and shortcut only where the six-item menu leaves room. */}
+        <span className="xl:hidden 2xl:inline">Search</span>
+        <kbd className="ml-1 hidden 2xl:inline rounded border border-rule bg-white px-1.5 py-0.5 text-[12px] font-semibold text-ink-mute">⌘K</kbd>
       </button>
 
       <button

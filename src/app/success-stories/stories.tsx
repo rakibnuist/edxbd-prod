@@ -1,8 +1,8 @@
 import 'server-only';
 
-import Image from 'next/image';
 import type { Prisma } from '@prisma/client';
-import { BadgeCheck, CameraOff, FileCheck2, LockKeyhole, UserRoundCheck } from 'lucide-react';
+import { FileCheck2, LockKeyhole, UserRoundCheck } from 'lucide-react';
+import StoryCardView from '@/components/stories/StoryCard';
 import { kit } from '@/components/page/PageKit';
 import prisma from '@/lib/prisma';
 import { withPublicTestimonials } from '@/lib/testimonial-visibility';
@@ -13,6 +13,8 @@ export type PublicStory = {
   id: string;
   name: string;
   location: string;
+  country: string;
+  rating: number;
   university: string;
   program: string;
   quote: string;
@@ -35,7 +37,9 @@ export async function getPublishedStories(where: Prisma.TestimonialWhereInput = 
     return records.map(record => ({
       id: record.id,
       name: record.displayName || record.studentName,
-      location: record.location || record.country || '',
+      location: record.location || '',
+      country: record.country || '',
+      rating: record.rating || 5,
       university: record.university || '',
       program: record.program || '',
       quote: record.content,
@@ -55,9 +59,9 @@ export async function getPublishedStories(where: Prisma.TestimonialWhereInput = 
 
 /** The publishing standard every story is held to, shown on both story pages. */
 export const storyStandards = [
-  { icon: UserRoundCheck, title: 'Private data removed', text: 'Passport, visa, contact and payment details are never shown with a story.' },
-  { icon: FileCheck2, title: 'Service scope and payment', text: 'Each story states what EduExpress provided and who paid for it.' },
-  { icon: LockKeyhole, title: 'Sensitive data removed', text: 'Passport numbers, birth dates and visa identifiers never appear publicly.' },
+  { icon: UserRoundCheck, title: 'A real, individual case', text: 'One student, one route. A story shows their own university, program and words, not a promise for anyone else.' },
+  { icon: FileCheck2, title: 'Service and cost made clear', text: 'Where a story covers it, it states what EduExpress provided and who paid for what.' },
+  { icon: LockKeyhole, title: 'Private data removed', text: 'Passport numbers, birth dates, visa identifiers, contact and payment details never appear publicly.' },
 ];
 
 export function StandardsGrid() {
@@ -75,45 +79,19 @@ export function StandardsGrid() {
 }
 
 export function StoryCard({ story }: { story: PublicStory }) {
-  const facts: [string, string | undefined][] = [
-    ['Profile and constraints', story.academicProfile],
-    ['Decision and options', story.decisionFactors],
-    ['Application and visa timeline', story.applicationTimeline],
-    ['EduExpress service', story.serviceProvided],
-    ['Student payment record', story.studentPaid],
-    ['Current update', story.currentUpdate || 'Arrival update not yet recorded.'],
-  ];
-  const place = [story.university, story.location].filter(Boolean).join(' · ');
-
   return (
-    <article className="overflow-hidden rounded-3xl bg-white">
-      <div className="grid sm:grid-cols-[180px_1fr]">
-        <div className="relative min-h-[200px] bg-petrol-800">
-          {story.image ? (
-            <Image src={story.image} alt={`${story.name}, EduExpress student`} fill sizes="(max-width:640px) 100vw, 180px" className="object-cover" />
-          ) : (
-            <div className="flex h-full min-h-[200px] flex-col items-center justify-center gap-3 p-5 text-center">
-              <span className={kit.iconLime}><CameraOff size={20} aria-hidden="true" /></span>
-              <p className="text-[14px] leading-5 text-white/80">Photo not approved for public display</p>
-            </div>
-          )}
-        </div>
-        <div className="p-6 sm:p-7">
-          <p className={kit.badge}><BadgeCheck size={15} aria-hidden="true" /> Student story</p>
-          <h3 className="mt-4 font-display text-[28px] font-black leading-none tracking-[-0.01em] text-petrol-800">{story.name}</h3>
-          {story.program && <p className="mt-3 text-[16px] font-semibold text-petrol-800">{story.program}</p>}
-          {place && <p className="mt-1 text-[14px] text-ink-soft">{place}</p>}
-          <blockquote className="mt-5 border-l-4 border-lime pl-4 text-[16px] leading-7 text-ink-soft">&ldquo;{story.quote}&rdquo;</blockquote>
-        </div>
-      </div>
-      <dl className="grid border-t border-canvas-soft sm:grid-cols-2">
-        {facts.filter(([, value]) => Boolean(value)).map(([label, value]) => (
-          <div key={label} className="border-b border-canvas-soft p-5 sm:odd:border-r">
-            <dt className="text-[14px] font-semibold text-petrol-800">{label}</dt>
-            <dd className="mt-1 text-[15px] leading-6 text-ink-soft">{value}</dd>
-          </div>
-        ))}
-      </dl>
-    </article>
+    <StoryCardView
+      story={{
+        ...story,
+        facts: [
+          ['Profile and constraints', story.academicProfile],
+          ['Decision and options', story.decisionFactors],
+          ['Application and visa timeline', story.applicationTimeline],
+          ['EduExpress service', story.serviceProvided],
+          ['Who paid what', story.studentPaid],
+          ['Where they are now', story.currentUpdate],
+        ],
+      }}
+    />
   );
 }

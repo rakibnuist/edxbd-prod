@@ -80,7 +80,7 @@ export const proofNavigation: SiteLink[] = [
 ];
 
 export const resourceNavigation: SiteLink[] = [
-  { name: 'Advice and updates', href: '/updates', note: 'Current study-abroad guidance' },
+  { name: 'Education updates', href: '/updates', note: 'New universities, scholarships, programs and tips' },
   { name: 'Study in China guides', href: '/study-in-china-from-bangladesh', note: 'Costs, visas, intakes and student life' },
   { name: 'For parents', href: '/for-parents', note: 'A family view of the complete journey' },
   { name: 'About EduExpress', href: '/about', note: 'Our company and working method' },
@@ -94,7 +94,7 @@ export const primaryNavigation = [
   { name: 'Your Journey', href: '/your-study-journey', menu: 'journey' as const },
   { name: 'How We Help', href: '/services', menu: 'services' as const },
   { name: 'Proof', href: '/better-education-standard', menu: 'proof' as const },
-  { name: 'Advice', href: '/updates', menu: 'resources' as const },
+  { name: 'Updates', href: '/updates', menu: 'resources' as const },
 ];
 
 // Header groups for the simplified primary navigation (5 items). Plain labels
@@ -114,6 +114,5 @@ export const aboutNavigation: SiteLink[] = [
   { name: 'Student success stories', href: '/success-stories', note: 'Stories from our students' },
   { name: 'Proof library', href: '/proof-library', note: 'Redacted evidence and company records' },
   { name: 'For parents', href: '/for-parents', note: 'Costs, safety and responsibilities' },
-  { name: 'Advice and updates', href: '/updates', note: 'Dated intake and visa news' },
   { name: 'Contact and visit us', href: '/contact', note: 'Phone, WhatsApp and office hours' },
 ];

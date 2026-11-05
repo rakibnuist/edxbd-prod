@@ -53,9 +53,9 @@ async function getUpdates(): Promise<{ updates: Update[]; categories: string[]; 
 export async function generateMetadata(): Promise<Metadata> {
   const { updates, loaded } = await getUpdates();
   const base = pageMetadata({
-    title: 'Study Abroad News, Intakes and Visa Updates | EduExpress',
+    title: 'Education Updates and Study Abroad News | EduExpress',
     description:
-      'Dated study abroad updates for Bangladeshi students: intake windows, scholarship changes, visa guidance and university news, each with its source.',
+      'New universities, scholarships, programs and study tips for Bangladeshi students, plus intake windows and visa guidance. Every update is dated and sourced.',
     path: PATH,
     // An empty archive is a thin page: keep it out of the index until the first
     // update is published. A failed read is not treated as empty.
@@ -66,7 +66,7 @@ export async function generateMetadata(): Promise<Metadata> {
     authors: [{ name: 'EduExpress International' }],
     creator: 'EduExpress International',
     publisher: 'EduExpress International',
-    alternates: { ...base.alternates, types: { 'application/rss+xml': '/updates/feed.xml' } },
+    alternates: base.alternates,
     other: {
       'geo.region': 'BD-DH',
       'geo.placename': 'Dhaka',
@@ -104,9 +104,9 @@ export default async function UpdatesPage() {
       <PageHero
         path={PATH}
         trail={[{ name: 'Updates' }]}
-        eyebrow="Information centre"
-        title="Advice that carries a date and a source."
-        lead="Admissions news, scholarship changes and practical study guidance. Every entry shows when it was published and who wrote it, and old intake notices stay online, visibly closed."
+        eyebrow="Education updates"
+        title="New universities, scholarships and study tips."
+        lead="What changed this intake, new programs and scholarships, and practical advice from our counsellors. Every update shows when it was published and who wrote it, and old intake notices stay online, visibly closed."
         actions={
           <>
             <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">

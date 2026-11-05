@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, BadgeCheck, ShieldCheck } from 'lucide-react';
+import { ArrowRight, GraduationCap, Star, Users } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { StandardsGrid, StoryCard, getPublishedStories } from './stories';
@@ -18,15 +18,18 @@ export const metadata = pageMetadata({
   image: ogImage('stories', 'Students and parents at Dhaka airport celebrating a study in China departure with EduExpress'),
 });
 
-const gateReasons = [
-  'The student controls their public name and photo',
-  'Sensitive identifiers remain redacted',
-  'Readers can understand the decision and the outcome',
-  'Every result is presented as an individual case',
-];
-
 export default async function SuccessStoriesPage() {
   const stories = await getPublishedStories();
+  const universities = new Set(stories.map(story => story.university).filter(Boolean)).size;
+  const countries = new Set(stories.map(story => story.country).filter(Boolean)).size;
+  const rated = stories.filter(story => story.rating > 0);
+  const average = rated.length ? rated.reduce((sum, story) => sum + story.rating, 0) / rated.length : 0;
+
+  const summary = [
+    { icon: Users, value: String(stories.length), label: stories.length === 1 ? 'student story' : 'student stories' },
+    ...(universities ? [{ icon: GraduationCap, value: String(universities), label: universities === 1 ? 'university' : 'universities' }] : []),
+    ...(average && rated.length >= 3 ? [{ icon: Star, value: `${average.toFixed(1)} / 5`, label: 'average student rating' }] : []),
+  ];
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -35,17 +38,16 @@ export default async function SuccessStoriesPage() {
     url: canonical,
     name: 'Student Success Stories',
     description: 'Education stories from EduExpress students.',
-    dateModified: '2026-07-19',
     inLanguage: 'en-BD',
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
     about: { '@id': 'https://eduexpressint.com/#organization' },
-    breadcrumb: { '@id': `${canonical}#breadcrumb` },
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: stories.length,
       itemListElement: stories.map((story, index) => ({
         '@type': 'ListItem',
         position: index + 1,
+        url: `${canonical}#story-${story.id}`,
         name: [story.name, [story.program, story.university].filter(Boolean).join(' at ')].filter(Boolean).join(': '),
       })),
     },
@@ -58,14 +60,14 @@ export default async function SuccessStoriesPage() {
       <PageHero
         path={PATH}
         trail={[{ name: 'Success stories' }]}
-        eyebrow="Proof with permission"
+        eyebrow="Real students, real routes"
         title="Student success stories."
-        lead="A real story explains the student profile, options considered, university decision, timeline, EduExpress service and cost responsibility. Passport numbers, birth dates and visa identifiers never belong on this page."
+        lead="Bangladeshi students who studied abroad with EduExpress, in their own words: where they went, what they study and how the process went for them."
         actions={
           <>
             {stories.length > 0 ? (
               <a href="#stories" className="ed-btn ed-btn-signal min-h-[52px] px-7">
-                Read the stories <ArrowRight size={18} aria-hidden="true" />
+                Read {stories.length} {stories.length === 1 ? 'story' : 'stories'} <ArrowRight size={18} aria-hidden="true" />
               </a>
             ) : (
               <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
@@ -94,64 +96,65 @@ export default async function SuccessStoriesPage() {
         }
       />
 
-      <TrustBar />
-
-      <Section
-        title="What every story must show."
-        intro="Each story describes one student’s profile, decision and timeline, so a family can judge it as an individual case rather than a slogan."
-      >
-        <StandardsGrid />
-        <dl className="mt-10 grid gap-4 border-t border-canvas-soft pt-6 text-[15px] leading-6 text-ink-soft sm:grid-cols-3">
-          <div><dt className="font-semibold text-petrol-800">Editorial owner</dt><dd>EduExpress Admissions Desk</dd></div>
-          <div><dt className="font-semibold text-petrol-800">Story reviewer</dt><dd>EduExpress Content and Compliance</dd></div>
-          <div><dt className="font-semibold text-petrol-800">Publishing standard</dt><dd>Sensitive data redaction and a complete story record</dd></div>
-        </dl>
-      </Section>
-
       <Section
         tone="sage"
         id="stories"
-        title={stories.length ? 'Published student stories.' : 'New student stories are on their way.'}
+        title={stories.length ? 'In their own words.' : 'New student stories are on their way.'}
         intro={
           stories.length
             ? 'Each story is one student’s own case. Results are individual and do not predict another student’s outcome.'
-            : 'Stories appear here once their profile, decision, timeline, service scope and payment details are complete. We would rather show nothing than a quote without context.'
+            : 'We add new stories as students settle into their universities. Meanwhile, the proof library shows privacy-safe admission notices and company records.'
         }
       >
-        {stories.length ? (
-          <div data-anim="stagger" className="grid gap-6 lg:grid-cols-2">
-            {stories.map(story => <StoryCard key={story.id} story={story} />)}
-          </div>
+        {stories.length > 0 ? (
+          <>
+            <ul className="mb-10 flex flex-wrap gap-3">
+              {summary.map(item => (
+                <li key={item.label} className="inline-flex items-center gap-3 rounded-full bg-white py-2 pl-2 pr-5">
+                  <span className="grid size-10 place-items-center rounded-full bg-lime text-petrol-800"><item.icon size={18} aria-hidden="true" /></span>
+                  <span className="text-[16px] text-ink-soft"><strong className="font-display text-[20px] font-black text-petrol-800">{item.value}</strong> {item.label}</span>
+                </li>
+              ))}
+              {countries > 1 && (
+                <li className="inline-flex items-center rounded-full bg-white px-5 py-2 text-[16px] text-ink-soft">
+                  <strong className="mr-1.5 font-display text-[20px] font-black text-petrol-800">{countries}</strong> destination countries
+                </li>
+              )}
+            </ul>
+            <div className="columns-1 gap-6 md:columns-2 lg:columns-3">
+              {stories.map(story => (
+                <div key={story.id} className="mb-6 break-inside-avoid">
+                  <StoryCard story={story} />
+                </div>
+              ))}
+            </div>
+          </>
         ) : (
-          <div data-anim="stagger" className="grid gap-5 lg:grid-cols-[.9fr_1.1fr]">
-            <article className={`${kit.cardDark} flex flex-col justify-between gap-10`}>
-              <span className={kit.iconLime}><ShieldCheck size={22} aria-hidden="true" /></span>
-              <div>
-                <p className="text-[14px] font-semibold uppercase tracking-[0.12em] text-white/70">Publication gate active</p>
-                <h3 className="mt-3 font-display text-[30px] font-black leading-[1] text-lime">No story is published without a complete, consented record.</h3>
-              </div>
-            </article>
-            <article className={kit.card}>
-              <h3 className={kit.h3}>Why this is better than publishing a quote alone</h3>
-              <ul className="mt-5 grid gap-3">
-                {gateReasons.map(item => (
-                  <li key={item} className="flex gap-3 text-[16px] leading-7 text-ink-soft">
-                    <BadgeCheck size={18} className="mt-1 shrink-0 text-petrol-800" aria-hidden="true" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Link href="/proof-library" className="ed-btn ed-btn-soft min-h-[48px] px-6">See published company records</Link>
-                <Link href="/your-study-journey" className={`${kit.link} min-h-[48px]`}>How a student file moves <ArrowRight size={16} aria-hidden="true" /></Link>
-              </div>
-            </article>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link href="/proof-library" className="ed-btn ed-btn-signal min-h-[52px] px-7">See published company records</Link>
+            <Link href="/your-study-journey" className="ed-btn ed-btn-outline min-h-[52px] px-7">How a student file moves</Link>
           </div>
         )}
       </Section>
 
+      <TrustBar />
+
+      <Section
+        title="What every story protects."
+        intro="Each story describes one student’s profile, decision and timeline, so a family can judge it as an individual case rather than a slogan."
+      >
+        <StandardsGrid />
+        <dl className="mt-10 grid gap-4 border-t border-canvas-soft pt-6 text-[15px] leading-6 text-ink-soft sm:grid-cols-2">
+          <div><dt className="font-semibold text-petrol-800">Editorial owner</dt><dd>EduExpress Admissions Desk</dd></div>
+          <div><dt className="font-semibold text-petrol-800">Publishing standard</dt><dd>Sensitive data removed from every story</dd></div>
+        </dl>
+        <p className={`mt-6 ${kit.body}`}>
+          Want to share your own story or update one? <Link href="/contact" className={kit.link}>Contact the admissions desk</Link>.
+        </p>
+      </Section>
+
       <CtaBand
-        title="Start your own file."
+        title="Start your own story."
         text="Tell us your results, budget and preferred country. A counsellor reviews your profile and explains realistic options, the complete cost and the documents to prepare."
       />
     </>

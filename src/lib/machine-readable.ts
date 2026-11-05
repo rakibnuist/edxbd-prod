@@ -1,6 +1,7 @@
 import { chinaGuidePages } from '@/data/chinaGuidePages';
 import { evidencePages } from '@/data/evidencePages';
 import { getChinaIntakes } from '@/lib/china-intakes';
+import { getPublishedUpdates } from '@/lib/content-records';
 import { activeCountries } from '@/lib/countries';
 import { destinationPath } from '@/lib/site-urls';
 import { getPublicTrustRecords } from '@/lib/trust-records';
@@ -136,8 +137,31 @@ async function universityBlock() {
   }
 }
 
+async function updatesBlock() {
+  try {
+    const posts = await getPublishedUpdates(25, false);
+    if (!posts.length) return '';
+    const day = (value?: string) => (value ? new Date(value).toISOString().slice(0, 10) : '');
+    return [
+      `## Latest education updates (${posts.length} newest)`,
+      '',
+      'New universities, scholarships, programs and study tips, newest first. Each is dated; check the page for the current status.',
+      '',
+      ...posts.map(post => {
+        const summary = clean(post.excerpt || post.metaDescription);
+        const meta = [post.category, day(post.publishedAt ?? post.createdAt)].filter(Boolean).join(', ');
+        return `- [${clean(post.title)}](${url(`/updates/${post.slug}`)})${meta ? ` (${meta})` : ''}${summary ? `: ${summary}` : ''}`;
+      }),
+      `- All updates: ${url('/updates')} · RSS: ${url('/updates/feed.xml')}`,
+      '',
+    ].join('\n') + '\n';
+  } catch {
+    return '';
+  }
+}
+
 export async function buildLlmsFull(): Promise<string> {
-  const [office, universities] = await Promise.all([loadOffice(), universityBlock()]);
+  const [office, universities, updates] = await Promise.all([loadOffice(), universityBlock(), updatesBlock()]);
   return [
     '# EduExpress International — full reference for AI assistants',
     '',
@@ -151,6 +175,7 @@ export async function buildLlmsFull(): Promise<string> {
     destinationBlock(),
     guideBlock(),
     universities,
+    updates,
     evidenceBlock(),
     `## Contact`,
     '',

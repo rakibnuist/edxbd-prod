@@ -29,7 +29,7 @@ const companyLinks = [
   ['Student success stories', '/success-stories'],
   ['Proof library', '/proof-library'],
   ['For parents', '/for-parents'],
-  ['Advice and updates', '/updates'],
+  ['Education updates', '/updates'],
   ['Partner with us', '/partnership'],
 ];
 

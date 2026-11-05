@@ -4,6 +4,7 @@ import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { serializeContent, toContentData } from '@/lib/content-serialize';
 import { contentPublicationErrors } from '@/lib/content-governance';
+import { announcePublishedUpdate } from '@/lib/indexnow';
 
 export async function GET(
   request: NextRequest,
@@ -73,6 +74,7 @@ export async function PUT(
     revalidatePath('/');
     revalidatePath(`/updates/${content.slug}`);
     if (existing?.slug && existing.slug !== content.slug) revalidatePath(`/updates/${existing.slug}`);
+    if (content.isPublished) announcePublishedUpdate(content.slug);
     return NextResponse.json(serializeContent(content as Record<string, unknown>));
   } catch (error) {
     console.error('Update content error:', error);

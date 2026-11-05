@@ -4,6 +4,7 @@ import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { serializeContent, toContentData } from '@/lib/content-serialize';
 import { contentPublicationErrors } from '@/lib/content-governance';
+import { announcePublishedUpdate } from '@/lib/indexnow';
 
 export async function GET(request: NextRequest) {
   try {
@@ -71,6 +72,7 @@ export async function POST(request: NextRequest) {
     revalidatePath('/updates');
     revalidatePath('/');
     revalidatePath(`/updates/${savedContent.slug}`);
+    if (savedContent.isPublished) announcePublishedUpdate(savedContent.slug);
     console.log('Content created successfully:', savedContent.id);
 
     return NextResponse.json(serializeContent(savedContent as Record<string, unknown>), { status: 201 });

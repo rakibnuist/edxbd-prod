@@ -1,4 +1,4 @@
-import { serializeJsonLd } from '@/lib/json-ld';
+import { breadcrumbJsonLd, serializeJsonLd } from '@/lib/json-ld';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
@@ -196,6 +196,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     return (
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd([{ name: 'Updates', path: '/updates' }, { name: update.title }], `/updates/${update.slug}`)) }} />
         <UpdateClient update={updateData} related={related} stale={stale} />
       </>
     );

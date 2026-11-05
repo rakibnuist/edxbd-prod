@@ -246,3 +246,15 @@ export function getIndexNowApiKey(): string {
 export function getKeyLocation(): string {
   return `${BASE_URL}/${INDEXNOW_API_KEY}.txt`
 }
+
+/**
+ * Tell IndexNow engines (Bing, Yandex and others) about a newly published or
+ * edited update straight away. Fire-and-forget: a failure is logged and never
+ * blocks the admin save.
+ */
+export function announcePublishedUpdate(slug: string) {
+  const base = 'https://eduexpressint.com';
+  void submitToIndexNow([`${base}/updates/${slug}`, `${base}/updates`, `${base}/`]).catch(error => {
+    console.warn('IndexNow announcement failed:', error instanceof Error ? error.message : error);
+  });
+}

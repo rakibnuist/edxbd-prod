@@ -37,8 +37,9 @@ const queryTrustRecords = () =>
       where: withPublicTestimonials({ content: { not: '' } }),
       orderBy: [{ featured: 'desc' }, { updatedAt: 'desc' }],
       take: 6,
-      select: { id: true, studentName: true, displayName: true, content: true, university: true, country: true, image: true, rating: true, consentImageApproved: true },
+      select: { id: true, studentName: true, displayName: true, content: true, university: true, program: true, location: true, country: true, image: true, rating: true },
     }),
+    prisma.testimonial.count({ where: withPublicTestimonials({ content: { not: '' } }) }),
   ]);
 
 /**
@@ -53,9 +54,9 @@ export const getPublicTrustRecords = cache(async () => {
     rows = await queryTrustRecords();
   } catch (error) {
     console.warn('Trust records unavailable; using the default office record.', error instanceof Error ? error.message.split('\n').filter(Boolean).pop() : error);
-    rows = [[], [], [], [], [], []];
+    rows = [[], [], [], [], [], [], 0];
   }
-  const [metrics, evidence, offices, team, servicePackages, testimonials] = rows;
+  const [metrics, evidence, offices, team, servicePackages, testimonials, storyCount] = rows;
 
   const publicOffices = offices.length > 0 ? offices : [{
     id: 'default-dhanmondi-office',
@@ -76,5 +77,6 @@ export const getPublicTrustRecords = cache(async () => {
       securityOptions: parseList(item.securityOptions),
     })),
     testimonials,
+    storyCount,
   };
 });

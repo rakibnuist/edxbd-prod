@@ -14,12 +14,11 @@ import {
   Plane,
   Search,
   ShieldCheck,
-  Star,
   Wallet,
 } from 'lucide-react';
 
 import MobileLeadBar from '@/components/home/MobileLeadBar';
-import TestimonialCarousel from '@/components/home/TestimonialCarousel';
+import StoryCard, { Stars, type StoryCardData } from '@/components/stories/StoryCard';
 import HomeLeadForm from '@/components/lead/HomeLeadForm';
 import { getChinaIntakes } from '@/lib/china-intakes';
 import { config } from '@/lib/config';
@@ -30,6 +29,8 @@ import { destinationPath } from '@/lib/site-urls';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 import { getUniversityRecords } from '@/lib/university-records';
 import type { Update } from '@/lib/types';
+import { categoriesFromUpdate, categoryHref } from '@/lib/update-categories';
+import { RSS_FEED } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
   title: { absolute: 'Study Abroad Consultancy in Bangladesh | EduExpress' },
   description:
     'Free study abroad assessment in Dhanmondi, Dhaka. Compare universities, scholarships and the full cost in writing, with no fee before your China visa.',
-  alternates: { canonical: '/' },
+  alternates: { canonical: '/', types: RSS_FEED },
   openGraph: {
     title: 'Study Abroad, With the Costs in Writing | EduExpress International',
     description: 'Free profile assessment. Clear costs, written proof and a counsellor in Dhanmondi, Dhaka.',
@@ -74,7 +75,8 @@ async function loadTrustRecords(): Promise<TrustRecords> {
 
 async function loadGuides(): Promise<Update[]> {
   try {
-    return await getPublishedUpdates(6);
+    // Newest first: this is the live Education Updates feed.
+    return await getPublishedUpdates(5, false);
   } catch {
     return [];
   }
@@ -196,14 +198,18 @@ export default async function Home() {
   const office = trust.offices.find(item => item.isHeadOffice) ?? trust.offices[0] ?? null;
   const fullPackage = trust.servicePackages.find(item => item.packageType === 'full_scholarship');
   const testimonials = trust.testimonials.slice(0, 6);
-  const testimonialQuotes = testimonials.map(item => ({
+  const storyCards: StoryCardData[] = testimonials.map(item => ({
     id: item.id,
     quote: item.content,
     name: item.displayName || item.studentName,
-    detail: [item.university, item.country].filter(Boolean).join(' · '),
-    rating: item.rating,
-    ...(item.image ? { image: item.image } : {}),
+    program: item.program ?? undefined,
+    university: item.university ?? undefined,
+    location: item.location ?? undefined,
+    country: item.country ?? undefined,
+    rating: item.rating ?? 5,
+    image: item.image ?? undefined,
   }));
+  const storyCount = Math.max(trust.storyCount ?? 0, storyCards.length);
   const ratedTestimonials = testimonials.filter(item => typeof item.rating === 'number' && item.rating > 0);
   const averageRating = ratedTestimonials.length
     ? ratedTestimonials.reduce((sum, item) => sum + (item.rating ?? 0), 0) / ratedTestimonials.length
@@ -257,20 +263,24 @@ export default async function Home() {
     .filter((country): country is (typeof activeDestinations)[number] => Boolean(country))
     .map(country => ({ name: country.name, slug: country.slug, href: destinationPath(country.slug), description: country.description, image: destinationImages[country.slug] }));
 
+  const updateImages = ['/images/home/china-campus-life.webp', '/images/students/student-life.webp', '/images/home/china-campus-group.webp', '/images/students/campus-nuist.webp', '/images/real/china_campus/cie_campus_visit.webp'];
   const guideRows = guides.length
-    ? guides.map(post => ({
+    ? guides.map((post, index) => ({
         key: post.id,
         title: post.title,
         excerpt: post.excerpt ?? '',
         href: `/updates/${post.slug}`,
         date: fmtGuideDate(post.publishedAt ?? post.createdAt),
-        category: post.category ?? 'Advice',
+        dateTime: post.publishedAt ?? post.createdAt ?? '',
+        category: post.category ?? 'Update',
+        image: post.featuredImage || updateImages[index % updateImages.length],
       }))
     : [
-        { key: 'guide-china', title: 'Study in China from Bangladesh', excerpt: 'A complete starting guide covering fit, cost, scholarships and student life.', href: '/study-in-china-from-bangladesh', date: '', category: 'China' },
-        { key: 'guide-cost', title: 'Cost of studying in China', excerpt: 'Plan tuition, hostel, living, insurance, visa and travel expenses.', href: '/study-in-china-cost-bangladesh', date: '', category: 'Costs' },
-        { key: 'guide-scholarships', title: 'China scholarships explained', excerpt: 'Compare CSC, university and other scholarship types without vague promises.', href: '/china-scholarships-bangladesh', date: '', category: 'Scholarships' },
+        { key: 'guide-china', title: 'Study in China from Bangladesh', excerpt: 'A complete starting guide covering fit, cost, scholarships and student life.', href: '/study-in-china-from-bangladesh', date: '', dateTime: '', category: 'China', image: updateImages[0] },
+        { key: 'guide-cost', title: 'Cost of studying in China', excerpt: 'Plan tuition, hostel, living, insurance, visa and travel expenses.', href: '/study-in-china-cost-bangladesh', date: '', dateTime: '', category: 'Costs', image: updateImages[1] },
+        { key: 'guide-scholarships', title: 'China scholarships explained', excerpt: 'Compare CSC, university and other scholarship types without vague promises.', href: '/china-scholarships-bangladesh', date: '', dateTime: '', category: 'Scholarships', image: updateImages[2] },
       ];
+  const updateTopics = Array.from(new Set(guides.flatMap(post => categoriesFromUpdate(post)))).slice(0, 8);
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -604,92 +614,130 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 7. Real students — proof */}
-      <section className="py-20 lg:py-24">
-        <div className={`${wrap} grid gap-12 lg:grid-cols-2 lg:items-center`}>
-          <div data-anim="up" className="relative aspect-[4/3] overflow-hidden rounded-3xl">
-            <Image
-              src="/images/students/success-banner.webp"
-              alt="Students and parents at Dhaka airport holding a banner: Finally we made our dream study in China with EduExpress International"
-              fill
-              sizes="(max-width:1024px) 100vw, 580px"
-              className="object-cover"
-            />
-          </div>
-          <div>
-            <p className={badge}>Since 2018 · Dhanmondi, Dhaka</p>
-            <h2 data-anim="up" className={`mt-6 ${displaySection}`}>&ldquo;Finally we made our dream: study in China.&rdquo;</h2>
-            <p className={`mt-6 ${lead}`}>
-              Families meet our counsellors in Dhanmondi, and we see students off at Dhaka airport. Read their stories in their own
-              words.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="/success-stories" className="ed-btn ed-btn-outline min-h-[52px] px-7">Read student stories</Link>
-              <Link href="/proof-library" className="ed-btn ed-btn-soft min-h-[52px] px-7">
-                {trust.evidence.length > 0 ? `See ${trust.evidence.length} published records` : 'Open the proof library'}
-              </Link>
+      {/* 7. Student stories — the strongest trust signal, on navy */}
+      <section className="bg-petrol-800 py-20 text-white lg:py-24">
+        <div className={wrap}>
+          <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
+            <div>
+              <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[14px] font-semibold text-lime">Since 2018 · Dhanmondi, Dhaka</p>
+              <h2 data-anim="up" className="mt-6 font-display text-[38px] font-black leading-[0.95] tracking-[-0.01em] text-lime sm:text-[52px]">
+                Real students. Real departures.
+              </h2>
+              <p className="mt-6 text-[19px] leading-[1.55] text-white/85 sm:text-[20px]">
+                Families meet our counsellors in Dhanmondi, and we see students off at Dhaka airport. Here is what they say about the journey, in their own words.
+              </p>
+              {averageRating > 0 && ratedTestimonials.length >= 3 && (
+                <p className="mt-6 inline-flex flex-wrap items-center gap-3 rounded-full bg-white/10 px-5 py-2.5 text-[16px] text-white/85">
+                  <Stars rating={averageRating} size={18} />
+                  <span><strong className="text-white">{averageRating.toFixed(1)} / 5</strong> from {ratedTestimonials.length} student stories</span>
+                </p>
+              )}
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link href="/success-stories" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+                  {storyCount > 0 ? `Read all ${storyCount} stories` : 'Read student stories'} <ArrowRight size={18} aria-hidden="true" />
+                </Link>
+                <Link href="/proof-library" className="ed-btn ed-btn-on-dark min-h-[52px] px-7">
+                  {trust.evidence.length > 0 ? `See ${trust.evidence.length} published records` : 'Open the proof library'}
+                </Link>
+              </div>
             </div>
+            <figure data-anim="up" className="relative overflow-hidden rounded-3xl">
+              <div className="relative aspect-[4/3]">
+                <Image
+                  src="/images/students/success-banner.webp"
+                  alt="Students and parents at Dhaka airport holding a banner: Finally we made our dream study in China with EduExpress International"
+                  fill
+                  sizes="(max-width:1024px) 100vw, 580px"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="absolute bottom-4 left-4 rounded-full bg-white px-4 py-1.5 text-[14px] font-semibold text-petrol-800">
+                Departure day, Dhaka airport
+              </figcaption>
+            </figure>
           </div>
+
+          {storyCards.length > 0 && (
+            <ul aria-label="Student stories" className="-mx-5 mt-14 flex items-start snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 text-left md:mx-0 md:block md:columns-2 md:gap-5 md:overflow-visible md:px-0 md:pb-0 lg:columns-3">
+              {storyCards.map(story => (
+                <li key={story.id} className="w-[86%] shrink-0 snap-start sm:w-[60%] md:mb-5 md:w-auto md:break-inside-avoid">
+                  <Link href={`/success-stories#story-${story.id}`} className="block h-full rounded-3xl transition hover:-translate-y-1 focus-visible:-translate-y-1">
+                    <StoryCard story={story} compact />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
 
-      {/* 8. Student voices (only when published) */}
-      {testimonialQuotes.length > 0 && (
-        <section className="py-20 lg:py-24">
-          <div className={`${wrap} grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-center`}>
-            <div>
-              <h2 className={displaySection}>What students say.</h2>
-              {averageRating > 0 && ratedTestimonials.length >= 3 && (
-                <p className="mt-5 inline-flex items-center gap-2 text-[16px] text-ink-soft">
-                  <span className="inline-flex text-[#ffd11a]" aria-hidden="true">
-                    {Array.from({ length: 5 }, (_, i) => <Star key={i} size={20} fill="currentColor" strokeWidth={0} />)}
-                  </span>
-                  <strong className="text-petrol-800">{averageRating.toFixed(1)} / 5</strong> from {ratedTestimonials.length} published reviews
-                </p>
-              )}
-            </div>
-            <TestimonialCarousel quotes={testimonialQuotes} />
-          </div>
-        </section>
-      )}
-
-      {/* 9. Guides */}
-      <section className={`${testimonialQuotes.length ? 'bg-canvas-soft' : ''} py-20 lg:py-24`}>
+      {/* 8. Education updates — the live blog feed */}
+      <section className="py-20 lg:py-24">
         <div className={wrap}>
-          <div className="flex flex-wrap items-end justify-between gap-5">
-            <h2 data-anim="up" className={`max-w-2xl ${displaySection}`}>Read before you decide.</h2>
-            <Link href="/updates" className="ed-btn ed-btn-outline min-h-12 px-6">All guides <ArrowRight size={16} aria-hidden="true" /></Link>
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div className="max-w-2xl">
+              <p className={badge}>Education updates</p>
+              <h2 data-anim="up" className={`mt-6 ${displaySection}`}>New universities, scholarships and study tips.</h2>
+              <p className={`mt-5 ${lead}`}>
+                What changed this intake, new programs and scholarships, and practical advice from our counsellors, each update dated.
+              </p>
+            </div>
+            <Link href="/updates" className="ed-btn ed-btn-outline min-h-12 px-6">All updates <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
-          <ul data-anim="stagger" className="mt-12 grid gap-5 md:grid-cols-3">
-            {guideRows.slice(0, 3).map((row, index) => (
-              <li key={row.key}>
-                <Link href={row.href} className={`group flex h-full flex-col rounded-3xl p-3 transition hover:-translate-y-1 ${testimonialQuotes.length ? 'bg-white' : 'bg-canvas-soft'}`}>
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-2xl">
-                    <Image
-                      src={['/images/home/china-campus-life.webp', '/images/students/student-life.webp', '/images/home/china-campus-group.webp'][index % 3]}
-                      alt=""
-                      fill
-                      sizes="(max-width:768px) 100vw, 380px"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
-                    <span className="text-[14px] font-semibold text-ink-mute">{row.category}{row.date && ` · ${row.date}`}</span>
-                    <span className={`mt-2 ${subDisplay}`}>{row.title}</span>
-                    {row.excerpt && <span className="mt-2 line-clamp-2 text-[16px] leading-6 text-ink-soft">{row.excerpt}</span>}
-                    <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[16px] font-semibold underline-offset-4 group-hover:underline">
-                      Read the guide <ArrowRight size={16} aria-hidden="true" />
+
+          <div className="mt-12 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+            {guideRows[0] && (
+              <Link href={guideRows[0].href} className="group flex flex-col rounded-3xl bg-canvas-soft p-3 transition hover:-translate-y-1">
+                <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
+                  <Image src={guideRows[0].image} alt="" fill sizes="(max-width:1024px) 100vw, 640px" className="object-cover transition duration-700 group-hover:scale-[1.03]" />
+                  {guides.length > 0 && <span className="absolute left-4 top-4 rounded-full bg-lime px-3 py-1 text-[14px] font-semibold text-petrol-800">Latest</span>}
+                </div>
+                <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
+                  <span className="text-[14px] font-semibold text-ink-mute">
+                    {guideRows[0].category}
+                    {guideRows[0].date && <> · <time dateTime={guideRows[0].dateTime}>{guideRows[0].date}</time></>}
+                  </span>
+                  <h3 className="mt-2 font-display text-[28px] font-black leading-[1.05] text-petrol-800 sm:text-[32px]">{guideRows[0].title}</h3>
+                  {guideRows[0].excerpt && <p className="mt-3 line-clamp-3 text-[16px] leading-7 text-ink-soft">{guideRows[0].excerpt}</p>}
+                  <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-[16px] font-semibold text-petrol-800 underline-offset-4 group-hover:underline">
+                    Read the update <ArrowRight size={16} aria-hidden="true" />
+                  </span>
+                </div>
+              </Link>
+            )}
+            <ul className="grid content-start gap-3">
+              {guideRows.slice(1, 5).map(row => (
+                <li key={row.key}>
+                  <Link href={row.href} className="group flex gap-4 rounded-3xl bg-canvas-soft p-3 transition hover:bg-lime-pale">
+                    <span className="relative size-24 shrink-0 overflow-hidden rounded-2xl sm:size-28">
+                      <Image src={row.image} alt="" fill sizes="112px" className="object-cover" />
                     </span>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                    <span className="flex min-w-0 flex-col justify-center py-1 pr-2">
+                      <span className="text-[14px] font-semibold text-ink-mute">
+                        {row.category}
+                        {row.date && <> · <time dateTime={row.dateTime}>{row.date}</time></>}
+                      </span>
+                      <span className="mt-1 line-clamp-2 text-[18px] font-semibold leading-snug text-petrol-800 underline-offset-4 group-hover:underline">{row.title}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {updateTopics.length > 0 && (
+            <nav aria-label="Update topics" className="mt-8 flex flex-wrap items-center gap-2">
+              <span className="mr-1 text-[15px] font-semibold text-petrol-800">Browse topics:</span>
+              {updateTopics.map(topic => (
+                <Link key={topic} href={categoryHref(topic)} className="ed-btn ed-btn-soft min-h-10 text-[15px]">{topic}</Link>
+              ))}
+            </nav>
+          )}
         </div>
       </section>
 
       {/* 10. FAQ */}
-      <section className={`${testimonialQuotes.length ? '' : 'bg-canvas-soft'} py-20 lg:py-24`}>
+      <section className="bg-canvas-soft py-20 lg:py-24">
         <div className={`${wrap} grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:items-start`}>
           <div className="lg:sticky lg:top-[140px]">
             <h2 data-anim="up" className={displaySection}>Questions parents ask first.</h2>
@@ -705,7 +753,7 @@ export default async function Home() {
           </div>
           <div data-anim="stagger" className="grid gap-3">
             {faqs.map(item => (
-              <details key={item.question} className={`faq-smooth group rounded-3xl px-6 ${testimonialQuotes.length ? 'bg-canvas-soft' : 'bg-white'}`}>
+              <details key={item.question} className="faq-smooth group rounded-3xl bg-white px-6">
                 <summary className="flex min-h-[68px] cursor-pointer list-none items-center justify-between gap-5 py-4 text-[18px] font-semibold leading-snug">
                   {item.question}
                   <span className="grid size-10 shrink-0 place-items-center rounded-full bg-lime text-[22px] leading-none text-petrol-800 transition group-open:rotate-45" aria-hidden="true">+</span>

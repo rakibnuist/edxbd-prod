@@ -32,6 +32,9 @@ export type PageSeo = {
  * (with og:url and image) and a matching Twitter card. Development builds warn
  * when the title or description falls outside the lengths search engines show.
  */
+/** Advertised on every page so feed readers and crawlers find new updates. */
+export const RSS_FEED = { 'application/rss+xml': [{ url: '/updates/feed.xml', title: 'EduExpress education updates' }] };
+
 export function pageMetadata(seo: PageSeo): Metadata {
   if (process.env.NODE_ENV !== 'production') {
     if (seo.title.length > 62) console.warn(`[seo] Title over 62 chars (${seo.title.length}) on ${seo.path}: ${seo.title}`);
@@ -43,7 +46,7 @@ export function pageMetadata(seo: PageSeo): Metadata {
   return {
     title: { absolute: seo.title },
     description: seo.description,
-    alternates: { canonical: seo.path, ...(seo.languages ? { languages: seo.languages } : {}) },
+    alternates: { canonical: seo.path, ...(seo.languages ? { languages: seo.languages } : {}), types: RSS_FEED },
     openGraph: {
       title: seo.title,
       description: seo.description,

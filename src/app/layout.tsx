@@ -114,6 +114,7 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/site.webmanifest",
+  alternates: { types: { 'application/rss+xml': [{ url: '/updates/feed.xml', title: 'EduExpress education updates' }] } },
 };
 
 export default async function RootLayout({

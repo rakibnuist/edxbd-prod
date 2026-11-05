@@ -15,7 +15,7 @@ import {
 import { formatBangladeshPhone } from '@/lib/contact-format';
 import SearchPalette from '@/components/site/SearchPalette';
 
-// Five plain-language sections. A first-time student or parent should be able
+// Six plain-language sections. A first-time student or parent should be able
 // to guess what is behind each label without reading a description.
 type HeaderMenu = {
   label: string;
@@ -30,6 +30,7 @@ const menus: HeaderMenu[] = [
   { label: 'Destinations', href: '/destinations', links: destinationLinks, wide: true },
   { label: 'Universities', href: '/universities', links: [] },
   { label: 'Scholarships & costs', href: '/scholarships', links: costNavigation },
+  { label: 'Updates', href: '/updates', links: [] },
   { label: 'About us', href: '/about', links: aboutNavigation, align: 'right', wide: true },
 ];
 
@@ -174,7 +175,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
                     aria-haspopup={hasMenu ? 'true' : undefined}
                     aria-expanded={hasMenu ? isOpen : undefined}
                     aria-current={current ? 'page' : undefined}
-                    className={`relative flex items-center gap-1 whitespace-nowrap px-3.5 text-[15px] font-semibold transition-colors ${
+                    className={`relative flex items-center gap-1 whitespace-nowrap px-3 text-[15px] font-semibold transition-colors 2xl:px-3.5 ${
                       current || isOpen ? 'text-petrol-600' : 'text-ink hover:text-petrol-600'
                     }`}
                   >
