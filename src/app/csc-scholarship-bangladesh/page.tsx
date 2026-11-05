@@ -1,55 +1,41 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
-import {
-  ArrowRight,
-  Award,
-  CheckCircle2,
-  FileText,
-  GraduationCap,
-  HelpCircle,
-  Info,
-  ShieldCheck,
-  Building2,
-  Calendar,
-  DollarSign,
-  UserCheck,
-  MapPin,
-  ExternalLink,
-} from 'lucide-react';
+import { ArrowRight, Building2, Check, ExternalLink, FileText, GraduationCap, ShieldCheck, Wallet } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { ogImage, pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: { absolute: 'CSC Scholarship from Bangladesh (2026/27) | Complete Guide & Verification' },
+const SITE = 'https://eduexpressint.com';
+const PATH = '/csc-scholarship-bangladesh';
+
+export const metadata = pageMetadata({
+  title: 'CSC Scholarship from Bangladesh: Full Guide | EduExpress',
   description:
-    'Complete Bangladesh guide to Chinese Government Scholarships (CSC). Learn Type A & Type B eligibility, agency numbers, monthly stipends, document checklists, and application timelines with written evidence.',
-  alternates: { canonical: '/csc-scholarship-bangladesh' },
-  openGraph: {
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
-    title: 'CSC Scholarship from Bangladesh (2026/27) | EduExpress International',
-    description: 'Verified guide to CSC Chinese Government Scholarships for Bangladeshi students. Full tuition waivers, monthly stipends, and step-by-step application guidance.',
-    url: '/csc-scholarship-bangladesh',
-    type: 'website',
-  },
-};
+    'Chinese Government (CSC) Scholarship guide for Bangladeshi students: Type A and Type B routes, what a full award covers, stipends, age limits and documents.',
+  path: PATH,
+  image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
+});
 
+const visaFirstTerms = 'No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.';
+
+// University and CSC amounts are quoted in CNY only: no fixed BDT exchange rate is assumed.
 const cscCoverage = [
   {
-    title: 'Full Tuition Waiver',
+    title: 'Full tuition waiver',
     detail: 'Tuition is covered by the Chinese Government Scholarship for awarded scholars, subject to the annual CSC review and the university’s programme terms.',
     icon: GraduationCap,
   },
   {
-    title: 'Free On-Campus Accommodation',
+    title: 'On-campus accommodation',
     detail: 'Free university dormitory accommodation (single or double room) or housing stipend.',
     icon: Building2,
   },
   {
-    title: 'Monthly Living Stipend',
-    detail: 'Undergraduate: CNY 2,500/mo (~40,000 BDT) | Master’s: CNY 3,000/mo (~48,000 BDT) | PhD: CNY 3,500/mo (~56,000 BDT).',
-    icon: DollarSign,
+    title: 'Monthly living stipend',
+    detail: 'Undergraduate: CNY 2,500 a month. Master’s: CNY 3,000 a month. PhD: CNY 3,500 a month.',
+    icon: Wallet,
   },
   {
-    title: 'Comprehensive Insurance',
+    title: 'Comprehensive insurance',
     detail: 'CNY 800/year medical insurance covered for emergency hospitalization and outpatient treatment in China.',
     icon: ShieldCheck,
   },
@@ -57,15 +43,15 @@ const cscCoverage = [
 
 const cscTypes = [
   {
-    type: 'Type A (Bilateral Program)',
+    type: 'Type A · bilateral programme',
     appliedThrough: 'Ministry of Education (MoE) Bangladesh / Chinese Embassy in Dhaka',
     bestFor: 'Students applying through Bangladesh government nomination rounds',
     deadline: 'December – February',
     keyNote: 'Requires MoE Bangladesh primary screening and embassy interview endorsement.',
   },
   {
-    type: 'Type B (Chinese University Program)',
-    appliedThrough: 'Directly through designated Chinese Universities (CSC Agency Code)',
+    type: 'Type B · Chinese university programme',
+    appliedThrough: 'Directly through designated Chinese universities (CSC agency code)',
     bestFor: 'Students applying directly for Bachelor’s, Master’s, or PhD at target universities',
     deadline: 'January – April',
     keyNote: 'Requires university pre-admission letter or professor acceptance letter for postgraduate applicants.',
@@ -86,225 +72,190 @@ const requiredDocuments = [
 
 const faqs = [
   {
-    q: 'Can Bangladeshi students apply for CSC Scholarship without IELTS?',
-    a: 'Yes, many Chinese universities accept Medium of Instruction (MOI) certificates from Bangladeshi schools/colleges where previous instruction was in English. However, top-tier Double First Class universities or specific medical/engineering programs may mandate IELTS (5.5+) or HSK.',
+    question: 'Can Bangladeshi students apply for CSC Scholarship without IELTS?',
+    answer: 'Yes, many Chinese universities accept Medium of Instruction (MOI) certificates from Bangladeshi schools/colleges where previous instruction was in English. However, top-tier Double First Class universities or specific medical/engineering programs may mandate IELTS (5.5+) or HSK.',
   },
   {
-    q: 'What is the difference between CSC Type A and Type B for Bangladeshi applicants?',
-    a: 'Type A is processed through the Bangladesh Ministry of Education (MoE) and the Chinese Embassy in Dhaka under bilateral quota. Type B is submitted directly to designated Chinese universities using their unique 5-digit Agency Number.',
+    question: 'What is the difference between CSC Type A and Type B for Bangladeshi applicants?',
+    answer: 'Type A is processed through the Bangladesh Ministry of Education (MoE) and the Chinese Embassy in Dhaka under bilateral quota. Type B is submitted directly to designated Chinese universities using their unique 5-digit Agency Number.',
   },
   {
-    q: 'Is there any application fee for CSC Scholarship?',
-    a: 'The official CSC application portal (campuschina.org) is free of charge. However, some individual Chinese universities charge an application processing fee (CNY 400 - 800 / ~6,500 - 13,000 BDT) directly payable to the university bank account.',
+    question: 'Is there any application fee for CSC Scholarship?',
+    answer: 'The official CSC application portal (campuschina.org) is free of charge. However, some individual Chinese universities charge an application processing fee (CNY 400 - 800) directly payable to the university bank account.',
   },
   {
-    q: 'What are the age limits for CSC Scholarship applicants from Bangladesh?',
-    a: 'Undergraduate applicants must be under 25 years old; Master’s degree applicants must be under 35 years old; Doctoral (PhD) applicants must be under 40 years old.',
+    question: 'What are the age limits for CSC Scholarship applicants from Bangladesh?',
+    answer: 'Undergraduate applicants must be under 25 years old; Master’s degree applicants must be under 35 years old; Doctoral (PhD) applicants must be under 40 years old.',
   },
 ];
 
+const related = [
+  { label: 'China scholarships: every route compared', href: '/china-scholarships-bangladesh' },
+  { label: 'China intakes and deadlines', href: '/china-intakes-deadlines' },
+  { label: 'China admission requirements', href: '/china-admission-requirements' },
+  { label: 'Study in China without IELTS', href: '/study-in-china-without-ielts' },
+  { label: 'Study costs and ClearCost', href: '/study-in-china-cost-bangladesh' },
+  { label: 'Study in China from Bangladesh', href: '/study-in-china-from-bangladesh' },
+];
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${SITE}${PATH}#page`,
+  url: `${SITE}${PATH}`,
+  name: 'CSC Scholarship from Bangladesh (Chinese Government Scholarship)',
+  description: 'Guide for Bangladeshi students applying for CSC Chinese Government Scholarships.',
+  inLanguage: 'en-BD',
+  isPartOf: { '@id': `${SITE}/#website` },
+  publisher: { '@id': `${SITE}/#organization` },
+  breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
+};
+
 export default function CscScholarshipBangladeshPage() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: 'CSC Scholarship from Bangladesh (Chinese Government Scholarship 2026/27)',
-    description: 'Complete guide for Bangladeshi students applying for CSC Chinese Government Scholarships.',
-    url: 'https://eduexpressint.com/csc-scholarship-bangladesh',
-    publisher: {
-      '@type': 'Organization',
-      name: 'EduExpress International',
-      url: 'https://eduexpressint.com',
-    },
-  };
-
   return (
-    <div className="bg-[#f4f8fa] text-[#08263c]">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    <>
+      <JsonLd data={structuredData} />
 
-      {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-[#08263c] px-5 pb-20 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(100,181,223,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(100,181,223,0.07)_1px,transparent_1px)] bg-[size:58px_58px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
-        <div className="relative mx-auto max-w-[1440px]">
-          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-white/50">
-            <Link href="/" className="hover:text-white">Home</Link> <span aria-hidden>/</span>{' '}
-            <Link href="/study-in-china-from-bangladesh" className="hover:text-white">Study in China</Link> <span aria-hidden>/</span> CSC Scholarship
-          </nav>
-
-          <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_.8fr]">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#8ed0ee]/30 bg-[#8ed0ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-[#8ed0ee]">
-                <Award size={14} /> Official 2026/27 Guide
-              </div>
-              <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
-                CSC Scholarship from Bangladesh
-              </h1>
-              <p className="mt-6 text-lg leading-8 text-white/80 md:text-xl">
-                For awarded scholars, the Chinese Government Scholarship (CSC) covers tuition and university housing and provides a monthly stipend of up to 56,000 BDT/month for Bangladeshi undergraduate and postgraduate students. Awards are renewed through the annual CSC review.
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-4 text-sm font-semibold">
-                <a
-                  href="#csc-assessment"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#64b5df] px-7 py-3.5 text-[#08263c] transition-all hover:bg-white hover:shadow-lg"
-                >
-                  Check Your CSC Eligibility <ArrowRight size={16} />
-                </a>
-                <a
-                  href="https://www.campuschina.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-white transition-all hover:bg-white/10"
-                >
-                  Official Portal (campuschina.org) <ExternalLink size={14} />
-                </a>
-              </div>
-            </div>
-
-            {/* QUICK STATS CARD */}
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
-              <h3 className="font-mono text-xs font-black uppercase tracking-widest text-[#8ed0ee]">At a Glance for BD Students</h3>
-              <ul className="mt-6 space-y-4 text-sm">
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#64b5df]" size={18} />
-                  <span><strong>Tuition:</strong> 100% Free (Full Waiver)</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#64b5df]" size={18} />
-                  <span><strong>Stipend:</strong> 40,000 – 56,000 BDT / month</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#64b5df]" size={18} />
-                  <span><strong>Housing:</strong> Free On-Campus Dormitory</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-[#64b5df]" size={18} />
-                  <span><strong>EduExpress Terms:</strong> No service fee before visa approval</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* COVERAGE SECTION */}
-      <section className="px-5 py-20 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="text-center">
-            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">Financial Breakdown</span>
-            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-[#08263c]">What Does CSC Scholarship Cover?</h2>
-            <p className="mt-4 text-slate-600 max-w-2xl mx-auto">
-              CSC (China Scholarship Council) is one of the most generous fully-funded government scholarships available to students from Bangladesh.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {cscCoverage.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all">
-                  <div className="grid size-12 place-items-center rounded-xl bg-[#e9f7fd] text-[#174f7a] mb-5">
-                    <Icon size={24} />
-                  </div>
-                  <h3 className="font-serif text-lg font-bold text-[#08263c]">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">{item.detail}</p>
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Study in China', path: '/study-in-china-from-bangladesh' }, { name: 'CSC scholarship' }]}
+        eyebrow="Chinese Government Scholarship guide"
+        title="CSC scholarship from Bangladesh."
+        lead="For awarded scholars, the Chinese Government Scholarship (CSC) covers tuition and university housing and provides a monthly stipend of CNY 2,500 to 3,500 for Bangladeshi undergraduate and postgraduate students. Awards are renewed through the annual CSC review."
+        actions={
+          <>
+            <a href="#csc-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">Check your CSC eligibility <ArrowRight size={18} aria-hidden="true" /></a>
+            <a href="https://www.campuschina.org/" target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Official portal: campuschina.org <ExternalLink size={16} aria-hidden="true" /><span className="sr-only">(opens in a new tab)</span>
+            </a>
+          </>
+        }
+        aside={
+          <div className={kit.cardDark}>
+            <p className="text-[21px] font-semibold leading-[1.3] text-lime">A full CSC award at a glance</p>
+            <dl className="mt-4 divide-y divide-white/15">
+              {[
+                ['Tuition', 'Full waiver'],
+                ['Stipend', 'CNY 2,500–3,500 / month'],
+                ['Housing', 'University dormitory or housing stipend'],
+                ['EduExpress terms', 'No service fee before visa approval'],
+              ].map(([term, value]) => (
+                <div key={term} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3.5">
+                  <dt className="text-[15px] text-white/75">{term}</dt>
+                  <dd className="text-[17px] font-semibold text-white">{value}</dd>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* SCHOLARSHIP TYPES SECTION */}
-      <section className="bg-white px-5 py-20 border-y border-slate-200 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="text-center">
-            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">Application Pathways</span>
-            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-[#08263c]">CSC Type A vs Type B for Bangladeshi Students</h2>
-          </div>
-
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
-            {cscTypes.map((t) => (
-              <div key={t.type} className="rounded-3xl border-2 border-[#08263c] p-8 bg-[#f4f8fa]">
-                <div className="inline-block rounded-full bg-[#174f7a] px-4 py-1 text-xs font-bold text-white uppercase tracking-wider mb-4">
-                  {t.type}
-                </div>
-                <p className="text-[#08263c] font-bold text-lg">{t.appliedThrough}</p>
-                <div className="mt-4 space-y-3 text-sm text-slate-700">
-                  <p><strong>Target Group:</strong> {t.bestFor}</p>
-                  <p><strong>Primary Window:</strong> {t.deadline}</p>
-                  <p className="border-t border-slate-300 pt-3 text-xs text-slate-600 italic">💡 {t.keyNote}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* DOCUMENT CHECKLIST SECTION */}
-      <section className="px-5 py-20 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1100px]">
-          <div className="rounded-3xl bg-[#08263c] p-8 text-white sm:p-12">
-            <div className="flex items-center gap-3">
-              <FileText size={28} className="text-[#64b5df]" />
-              <h2 className="font-serif text-2xl font-bold sm:text-3xl">Required Document Checklist for Bangladesh</h2>
-            </div>
-            <p className="mt-3 text-white/80 text-sm sm:text-base">
-              All academic certificates and transcripts must be notarized and verified by the Ministry of Foreign Affairs (MOFA) Bangladesh before submitting to CSC.
-            </p>
-
-            <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-              {requiredDocuments.map((doc, idx) => (
-                <li key={idx} className="flex items-start gap-3 rounded-xl bg-white/10 p-4 text-sm leading-6 text-white/90 backdrop-blur-sm">
-                  <span className="font-mono text-xs font-bold text-[#8ed0ee] shrink-0">{idx + 1}.</span>
-                  <span>{doc}</span>
-                </li>
               ))}
-            </ul>
+            </dl>
+            <p className="mt-3 border-t border-white/15 pt-4 text-[15px] leading-6 text-white/80">
+              Scholarships are competitive. Meeting the age or qualification criteria makes you eligible to apply; it does not secure an award.
+            </p>
           </div>
+        }
+      />
+
+      <TrustBar />
+
+      <Section
+        title="What does a CSC scholarship cover?"
+        intro="CSC (China Scholarship Council) is one of the most generous fully-funded government scholarships available to students from Bangladesh."
+        action={<Link href="/china-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[48px] px-6">Compare every scholarship route <ArrowRight size={16} aria-hidden="true" /></Link>}
+      >
+        <div data-anim="stagger" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {cscCoverage.map(item => (
+            <div key={item.title} className={kit.cardSage}>
+              <span className={kit.icon}><item.icon size={22} aria-hidden="true" /></span>
+              <h3 className={`mt-5 ${kit.h3}`}>{item.title}</h3>
+              <p className="mt-2 text-[15px] leading-6 text-ink-soft">{item.detail}</p>
+            </div>
+          ))}
         </div>
-      </section>
-
-      {/* EDUEXPRESS REASSURANCE COMMERCIAL TERMS */}
-      <section className="bg-white px-5 py-16 border-y border-slate-200 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1000px] text-center">
-          <ShieldCheck size={36} className="mx-auto text-[#174f7a]" />
-          <h2 className="mt-4 font-serif text-3xl font-bold text-[#08263c]">EduExpress China Visa-First Guarantee</h2>
-          <div className="mt-6 rounded-2xl bg-[#e9f7fd] p-6 text-base font-semibold leading-relaxed text-[#08263c] border border-blue-200">
-            “No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.”
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ SECTION */}
-      <section className="px-5 py-20 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[900px]">
-          <div className="text-center">
-            <HelpCircle size={32} className="mx-auto text-[#174f7a]" />
-            <h2 className="mt-3 font-serif text-3xl font-bold text-[#08263c]">Frequently Asked Questions</h2>
-          </div>
-
-          <div className="mt-10 space-y-6">
-            {faqs.map((faq, idx) => (
-              <div key={idx} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="font-bold text-lg text-[#08263c]">{faq.q}</h3>
-                <p className="mt-3 text-sm leading-6 text-slate-600">{faq.a}</p>
-              </div>
+        <div className={`mt-5 ${kit.cardLime}`}>
+          <h3 className={kit.h3}>Know the coverage limits</h3>
+          <ul className="mt-3 grid gap-x-8 gap-y-2.5 md:grid-cols-2">
+            {[
+              'A partial scholarship can fund only some of these items. Read the written coverage of your specific award.',
+              'Airfare is included only where your specific award expressly covers it.',
+              'Continued funding can depend on an annual review of academic progress, attendance and conduct.',
+              'Keep CNY and BDT separate until a rate is supplied, and plan the cash you need before the first stipend arrives.',
+            ].map(item => (
+              <li key={item} className="flex items-start gap-2.5 text-[16px] leading-7 text-ink-soft">
+                <Check size={17} className="mt-1.5 shrink-0 text-petrol-800" aria-hidden="true" />{item}
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
-      </section>
+      </Section>
 
-      {/* ASSESSMENT FORM INTEGRATION */}
-      <section id="csc-assessment" className="px-5 py-20 bg-[#e9f7fd] sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1100px]">
-          <div className="mb-8 text-center">
-            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#174f7a]">Free Assessment</span>
-            <h2 className="mt-2 font-serif text-3xl font-bold text-[#08263c]">Check Your CSC Scholarship Fit</h2>
-            <p className="mt-2 text-sm text-slate-600">Share your GPA, major, and intake — our team will evaluate your chances for CSC Type A & Type B routes in writing.</p>
-          </div>
-          <EducationFitAssessment />
+      <Section
+        tone="sage"
+        title="CSC Type A vs Type B for Bangladeshi students."
+        intro="These labels identify application routes. Type A is not a synonym for full funding, and Type B does not mean partial funding."
+      >
+        <div data-anim="stagger" className="grid gap-5 md:grid-cols-2">
+          {cscTypes.map(item => (
+            <article key={item.type} className={kit.card}>
+              <span className={kit.badge}>{item.type}</span>
+              <h3 className={`mt-4 ${kit.h3}`}>{item.appliedThrough}</h3>
+              <dl className="mt-4 divide-y divide-canvas-soft border-y border-canvas-soft text-[16px]">
+                <div className="py-3"><dt className="text-[14px] font-semibold text-ink-soft">Target group</dt><dd className="mt-1 text-petrol-800">{item.bestFor}</dd></div>
+                <div className="py-3"><dt className="text-[14px] font-semibold text-ink-soft">Typical window</dt><dd className="mt-1 font-semibold text-petrol-800">{item.deadline}</dd></div>
+              </dl>
+              <p className="mt-4 text-[15px] leading-6 text-ink-soft">{item.keyNote}</p>
+            </article>
+          ))}
         </div>
-      </section>
-    </div>
+        <p className="mt-6 text-[16px] leading-7 text-ink-soft">
+          Windows vary by year and by university. Check the current notice for your route, and see{' '}
+          <Link href="/china-intakes-deadlines" className="font-semibold text-petrol-800 underline underline-offset-4">China intakes and deadlines</Link> for the March and September 2027 windows.
+        </p>
+      </Section>
+
+      <Section
+        title="Required document checklist for Bangladesh."
+        intro="All academic certificates and transcripts must be notarized and verified by the Ministry of Foreign Affairs (MOFA) Bangladesh before submitting to CSC."
+      >
+        <ol data-anim="stagger" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {requiredDocuments.map((doc, index) => (
+            <li key={doc} className={`flex items-start gap-3.5 ${kit.cardSage} !p-5`}>
+              <span className="grid size-9 shrink-0 place-items-center rounded-full bg-lime font-display text-[16px] font-black text-petrol-800" aria-hidden="true">{index + 1}</span>
+              <span className="text-[16px] leading-6 text-petrol-800">{doc}</span>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-6 flex items-start gap-2.5 text-[15px] leading-6 text-ink-soft">
+          <FileText size={18} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" />
+          The receiving university or authority sets the final checklist. Your admission documents support both self-funded and scholarship applications.
+        </p>
+      </Section>
+
+      <Section tone="navy" title="EduExpress China visa-first policy." intro={visaFirstTerms}>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link href="/china-visa-first-policy" className="ed-btn ed-btn-signal min-h-[52px] px-7">Read the visa-first policy <ArrowRight size={18} aria-hidden="true" /></Link>
+          <Link href="/fees-and-transparency" className="ed-btn ed-btn-on-dark min-h-[52px] px-7">How we handle fees</Link>
+        </div>
+      </Section>
+
+      <FaqBlock items={faqs} tone="sage" />
+
+      <Section id="csc-assessment" title="Check your CSC scholarship fit." intro="Share your GPA, major, and intake. Our team will evaluate your chances for CSC Type A & Type B routes in writing.">
+        <EducationFitAssessment />
+      </Section>
+
+      <Section tone="sage" title="Keep planning your scholarship.">
+        <nav aria-label="Related China guides">
+          <ul data-anim="stagger" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {related.map(item => (
+              <li key={item.href}>
+                <Link href={item.href} className="flex min-h-[64px] items-center justify-between gap-4 rounded-3xl bg-white px-5 py-4 text-[16px] font-semibold text-petrol-800 transition-colors hover:bg-lime-pale">
+                  {item.label}<ArrowRight size={17} className="shrink-0" aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </Section>
+
+      <CtaBand title="Find your scholarship route." text="Share your qualifications, intended major and budget. A counsellor replies within one working day with suitable CSC and university scholarship routes and the costs that remain." />
+    </>
   );
 }

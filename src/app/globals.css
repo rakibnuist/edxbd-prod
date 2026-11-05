@@ -2,46 +2,164 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------------------
+   Typefaces — self-hosted so the app renders identically offline and on the
+   VPS (no build-time font fetch). Lora carries headlines with a warm,
+   humanist voice; Plus Jakarta Sans carries interface text and every number
+   a family has to trust.
+--------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Lora";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/lora-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Lora";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/lora-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/archivo-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/archivo-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/jakarta-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/jakarta-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Bengali — self-hosted. Hind Siliguri carries interface text; Noto Serif
+   Bengali carries Bangla headlines on the home page. */
+@font-face {
+  font-family: "Hind Siliguri";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/hind-siliguri-bn-400.woff2") format("woff2");
+  unicode-range: U+0951-0952, U+0964-0965, U+0980-09FE, U+200C-200D, U+20B9, U+25CC, U+A8F1;
+}
+
+@font-face {
+  font-family: "Hind Siliguri";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/hind-siliguri-bn-600.woff2") format("woff2");
+  unicode-range: U+0951-0952, U+0964-0965, U+0980-09FE, U+200C-200D, U+20B9, U+25CC, U+A8F1;
+}
+
+@font-face {
+  font-family: "Hind Siliguri";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/hind-siliguri-bn-700.woff2") format("woff2");
+  unicode-range: U+0951-0952, U+0964-0965, U+0980-09FE, U+200C-200D, U+20B9, U+25CC, U+A8F1;
+}
+
+@font-face {
+  font-family: "Noto Serif Bengali";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("/fonts/noto-serif-bengali-bn.woff2") format("woff2");
+  unicode-range: U+0951-0952, U+0964-0965, U+0980-09FE, U+200B-200D, U+20B9, U+25CC, U+A8F1;
+}
+
+/* ---------------------------------------------------------------------------
+   Tokens — "field ledger": chalk paper, petrol ink, marigold signal, jade for
+   anything verified. Spacing is a 4px scale; radii are deliberately uneven so
+   a data plate never reads like a marketing card.
+--------------------------------------------------------------------------- */
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 248, 250, 252;
-  --brand-navy: #0b2f4a;
-  --brand-blue: #174f7a;
-  --brand-cyan: #64b5df;
-  --brand-mist: #e9f7fd;
-  --font-inter: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-bengali: "Noto Sans Bengali", "Nirmala UI", Vrinda, sans-serif;
+  /* Clean & bright: white and cool light-grey grounds, logo navy for
+     authority, sky blue as the brand signal, green only for primary actions
+     and verified facts. */
+  --chalk: #ffffff;
+  --chalk-raised: #ffffff;
+  --chalk-sunk: #f8fafc;
+  --chalk-deep: #f1f5f9;
+  --ink: #14212e;
+  --ink-soft: #475569;
+  --ink-mute: #64748b;
+  --petrol-900: #071c2e;
+  --petrol-800: #0b2b45;
+  --petrol-700: #0f3a5c;
+  --petrol-600: #12436b;
+  --petrol-500: #175180;
+  --petrol-400: #2c6a97;
+  --mint-300: #a9d6ee;
+  --mint-200: #cfe7f5;
+  --mint-100: #e3f0f9;
+  --rule: #e2e8f0;
+  --rule-strong: #cbd5e1;
+  --marigold: #66b5e0;
+  --marigold-soft: #8cc6e6;
+  --terra: #2f7fb0;
+  --jade: #0b7a53;
+  --action: #9fe870;
+  --action-hover: #b8f28f;
+  --on-action: #0b2b45;
+  --canvas-soft: #e8ebe6;
+  --clay: #a8452c;
 
-  /* Product-led type. No serif anywhere: one geometric sans, cut tight, with
-     weight and size doing the hierarchy work the serif used to do. */
-  --font-display: Inter, "SF Pro Display", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", system-ui, sans-serif;
+  /* Heavy display grotesque (Wise system: weight 900 for hero, 800 for sections). */
+  --font-display: "Archivo", "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-text: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-bengali: "Hind Siliguri", "Noto Sans Bengali", "Nirmala UI", Vrinda, sans-serif;
+  --font-bengali-display: "Hind Siliguri", "Noto Sans Bengali", "Nirmala UI", Vrinda, sans-serif;
 
-  /* Cool product surfaces */
-  --paper: #ffffff;
-  --paper-sunk: #f5f7f9;
-  --paper-deep: #eef1f5;
-  --ink: #0a1f33;
-  --ink-soft: #55677a;
-  --rule: #e2e7ee;
-  --rule-strong: #0a1f33;
-  --accent: #174f7a;
-  --accent-bright: #2f7fbf;
-  --amber: #f0a028;
+  --radius-plate: 14px;
+  --radius-control: 999px;
+  --radius-photo: 24px;
 
-  --radius-plate: 10px;
-  --radius-control: 8px;
+  --shadow-lift: 0 22px 48px -26px rgba(15, 53, 87, 0.24);
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-start-rgb));
-  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  color: var(--ink);
+  background: var(--chalk);
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: 1rem;
+  font-feature-settings: "ss01" 1, "cv01" 1;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  line-height: 1.6;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
 }
 
 @layer base {
@@ -53,16 +171,30 @@ body {
   h6,
   .font-heading,
   .font-serif {
-    font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: var(--font-display), system-ui, sans-serif;
     font-synthesis: none;
-    letter-spacing: -0.035em;
-    line-height: 1.08;
+    letter-spacing: -0.015em;
+    font-weight: 800;
+    line-height: 1.12;
+    color: inherit;
+  }
+
+  p,
+  li,
+  dd,
+  dt,
+  label,
+  input,
+  select,
+  textarea,
+  button {
+    font-family: inherit;
   }
 
   /* Bengali typography — applies wherever lang="bn" is set */
   :lang(bn),
   .font-bengali {
-    font-family: var(--font-bengali), var(--font-inter), system-ui, sans-serif;
+    font-family: var(--font-bengali), var(--font-text), system-ui, sans-serif;
     letter-spacing: 0;
     line-height: 1.75;
   }
@@ -75,111 +207,81 @@ body {
   :lang(bn) h6,
   :lang(bn) .font-heading,
   :lang(bn) .font-serif {
-    font-family: var(--font-bengali), var(--font-inter), system-ui, sans-serif;
+    font-family: var(--font-bengali-display), var(--font-bengali), system-ui, sans-serif;
+    font-variation-settings: normal;
     letter-spacing: 0;
     line-height: 1.35;
   }
-}
 
-/* Homepage showcase rails. They pause for mouse and keyboard users, and become
-   normal horizontal lists when reduced motion is requested. */
-.home-loop {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.home-loop::before,
-.home-loop::after {
-  content: "";
-  position: absolute;
-  inset-block: 0;
-  z-index: 2;
-  width: clamp(1.25rem, 6vw, 5rem);
-  pointer-events: none;
-}
-
-.home-loop::before {
-  left: 0;
-  background: linear-gradient(90deg, var(--loop-edge, #fff), transparent);
-}
-
-.home-loop::after {
-  right: 0;
-  background: linear-gradient(270deg, var(--loop-edge, #fff), transparent);
-}
-
-.home-loop-track {
-  display: flex;
-  width: max-content;
-  animation: home-loop var(--loop-speed, 48s) linear infinite;
-  will-change: transform;
-}
-
-.home-loop-track.reverse {
-  animation-direction: reverse;
-}
-
-.home-loop-set {
-  display: flex;
-  align-items: stretch;
-  gap: 1rem;
-  padding-right: 1rem;
-}
-
-.home-loop:hover .home-loop-track,
-.home-loop:focus-within .home-loop-track {
-  animation-play-state: paused;
-}
-
-@keyframes home-loop {
-  to {
-    transform: translateX(-50%);
+  a {
+    color: inherit;
   }
 }
 
-.font-mono {
-  font-family: var(--font-inter), system-ui, sans-serif;
-  font-variant-numeric: tabular-nums;
-}
-
 /* ==========================================================================
-   Product system (homepage). One geometric sans, cut tight. Hierarchy comes
-   from size and weight; surfaces are crisp panels rather than paper.
+   Ledger components
    ========================================================================== */
 
 .ed-display {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.036em;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
   line-height: 1.02;
-  font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "ss01" 1;
 }
 
-/* Eyebrows and section labels — small, tight, uppercase sans. */
+/* Home hero headline: Archivo per the home conversion system. Tight, plain
+   and high-contrast so the photo, not the typeface, carries the emotion. */
+.ed-home-display {
+  font-family: "Archivo", var(--font-text), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+/* Section labels are set as a sentence-case line with a sky tick, not a
+   tracked-out all-caps eyebrow. The default colour lives in the components
+   layer so an explicit `text-*` utility can override it on dark panels. */
 .ed-label {
-  font-family: var(--font-display);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+}
+
+@layer components {
+  .ed-label {
+    color: var(--petrol-600);
+  }
+
+  .ed-label::before {
+    background: var(--terra);
+  }
+}
+
+.ed-label::before {
+  content: "";
+  width: 1.5rem;
+  height: 2px;
+  border-radius: 999px;
 }
 
 .ed-figure {
-  font-family: var(--font-display);
-  font-weight: 700;
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-weight: 600;
   font-variant-numeric: tabular-nums lining-nums;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.03em;
 }
 
-/* Intro line under a headline. Sans, not serif, and deliberately short. */
 .ed-standfirst {
-  font-family: var(--font-display);
-  font-size: clamp(1.0625rem, 1.35vw, 1.1875rem);
-  font-weight: 450;
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+  font-weight: 400;
   line-height: 1.6;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.005em;
+  color: var(--ink-soft);
 }
 
 .ed-rule {
@@ -190,11 +292,10 @@ body {
   border-color: rgba(255, 255, 255, 0.16);
 }
 
-/* Rows read as list items in a product UI: hover fills, arrow advances. */
+/* A ledger row: hairline top, fills on hover, the trailing action advances. */
 .ed-index-row {
   border-top: 1px solid var(--rule);
-  border-radius: var(--radius-control);
-  transition: background-color 0.16s ease;
+  transition: background-color 0.16s ease, padding-left 0.16s ease;
 }
 
 .ed-index-row:last-child {
@@ -202,7 +303,7 @@ body {
 }
 
 .ed-index-row:hover {
-  background-color: var(--paper-sunk);
+  background-color: var(--chalk-sunk);
 }
 
 .ed-index-row:hover .ed-index-arrow {
@@ -215,61 +316,624 @@ body {
 
 .ed-index-row-dark {
   border-top: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-control);
   transition: background-color 0.16s ease;
 }
 
-.ed-index-row-dark:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-}
-
 .ed-index-row-dark:hover {
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Contractual terms, called out as a panel rather than a printed notice. */
+/* Notices carry contractual or cautionary weight — never decorative. */
 .ed-notice {
   border: 1px solid var(--rule);
-  border-left: 3px solid var(--accent-bright);
-  background: var(--paper-sunk);
+  border-left: 3px solid var(--terra);
+  background: var(--chalk-sunk);
   border-radius: var(--radius-plate);
 }
 
-/* Panels: universities, evidence documents, any bounded object. */
 .ed-record {
   border: 1px solid var(--rule);
-  background: #fff;
-  border-radius: var(--radius-plate);
-  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+  background: var(--chalk-raised);
+  border-radius: 20px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .ed-record:hover {
-  border-color: var(--accent-bright);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(10, 31, 51, 0.1);
+  border-color: var(--rule-strong);
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-2px);
 }
 
 .ed-plate {
   border: 1px solid var(--rule);
-  border-radius: var(--radius-plate);
+  border-radius: 20px;
   overflow: hidden;
-  background: var(--paper-sunk);
+  background: var(--chalk-sunk);
 }
 
 .ed-plate-dark {
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: var(--radius-plate);
+  border-radius: 20px;
   overflow: hidden;
+}
+
+/* Buttons: one shape, four weights. Sentence case, action-named. Green is
+   reserved for the primary action so visitors always know the next step. */
+.ed-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.9rem;
+  padding: 0 1.35rem;
+  border-radius: 24px;
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  text-align: center;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ed-btn:active {
+  transform: translateY(1px);
+}
+
+.ed-btn-primary {
+  background: var(--petrol-600);
+  color: #fff;
+}
+
+.ed-btn-primary:hover {
+  background: var(--petrol-700);
+}
+
+.ed-btn-signal {
+  background: var(--action);
+  color: var(--on-action);
+}
+
+.ed-btn-signal:hover {
+  background: var(--action-hover);
+}
+
+.ed-btn-outline {
+  border: 1px solid var(--petrol-800);
+  color: var(--petrol-800);
+  background: #fff;
+}
+
+.ed-btn-outline:hover {
+  background: var(--canvas-soft);
+}
+
+/* Secondary: sage fill, ink label (Wise button-secondary). */
+.ed-btn-soft {
+  background: var(--canvas-soft);
+  color: var(--petrol-800);
+}
+
+.ed-btn-soft:hover {
+  background: #dde2da;
+}
+
+.ed-btn-quiet {
+  color: var(--petrol-600);
+  background: transparent;
+  padding-inline: 0.4rem;
+}
+
+.ed-btn-quiet:hover {
+  color: var(--petrol-800);
+}
+
+.ed-btn-on-dark {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  background: transparent;
+}
+
+.ed-btn-on-dark:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Verification stamp — rotated outline, used only where a record is verified. */
+.ed-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  padding: 0.2rem 0.5rem;
+  transform: rotate(-1.5deg);
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--jade);
+}
+
+/* Form fields share one look so filters and lead forms feel like one system. */
+.ed-field {
+  width: 100%;
+  min-height: 2.9rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 0 0.9rem;
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: 1rem;
+  color: var(--ink);
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+}
+
+.ed-field::placeholder {
+  color: var(--ink-mute);
+}
+
+.ed-field:hover {
+  border-color: var(--sage, #a9d6ee);
+}
+
+.ed-field:focus {
+  outline: none;
+  border-color: var(--petrol-500);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(23,81,128, 0.14);
+}
+
+/* Search fields carry a leading icon; this keeps the text clear of it without
+   fighting Tailwind's utility order. */
+.ed-field-icon {
+  padding-left: 2.4rem;
+}
+
+select.ed-field {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--petrol-600) 50%),
+    linear-gradient(135deg, var(--petrol-600) 50%, transparent 50%);
+  background-position: calc(100% - 1.05rem) 1.15rem, calc(100% - 0.7rem) 1.15rem;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 2rem;
+}
+
+/* Paper grain: a single quiet texture behind editorial bands. */
+.ed-grain {
+  background-color: var(--chalk);
+  background-image: radial-gradient(rgba(20,33,46, 0.045) 0.5px, transparent 0.5px);
+  background-size: 4px 4px;
+}
+
+/* Dotted route rule used beside timeline and destination lists. */
+.ed-route {
+  background-image: repeating-linear-gradient(90deg, var(--rule-strong) 0 5px, transparent 5px 11px);
+  height: 1px;
+}
+
+/* ==========================================================================
+   Home surfaces — warm, soft and photographic
+   The same class names are kept for older home components, but the language
+   is now rounded warmth rather than paper documents and stamps.
+   ========================================================================== */
+
+.home-paper {
+  background-color: var(--chalk);
+  background-image:
+    radial-gradient(1100px 520px at 12% -8%, rgba(102,181,224, 0.12), transparent 62%),
+    radial-gradient(900px 520px at 92% 4%, rgba(18, 67, 107, 0.09), transparent 58%);
+}
+
+/* Hero photograph overlay: dense enough for white type on phones, opening up
+   into the photograph on wide screens. */
+.home-hero-scrim {
+  background:
+    linear-gradient(180deg, rgba(7, 28, 46, 0.74) 0%, rgba(7, 28, 46, 0.9) 42%, rgba(7, 28, 46, 0.97) 100%),
+    linear-gradient(104deg, rgba(7, 28, 46, 0.98) 0%, rgba(11, 43, 69, 0.9) 48%, rgba(18, 67, 107, 0.55) 100%);
+}
+
+@media (min-width: 1024px) {
+  .home-hero-scrim {
+    background:
+      linear-gradient(104deg, rgba(7, 28, 46, 0.98) 0%, rgba(11, 43, 69, 0.9) 44%, rgba(18, 67, 107, 0.52) 100%);
+  }
+}
+
+.home-bn {
+  font-family: var(--font-bengali), system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+.home-bn-display {
+  font-family: var(--font-bengali-display), var(--font-bengali), serif;
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: 0;
+}
+
+.home-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--petrol-600);
+  line-height: 1.5;
+}
+
+.home-label::before {
+  content: "";
+  width: 1.4rem;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--terra);
+}
+
+/* Soft photo frame — replaces the old arch mask. */
+.home-arch {
+  border-radius: var(--radius-photo);
+  overflow: hidden;
+}
+
+.home-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--petrol-600);
+}
+
+.home-stamp::after {
+  content: none;
+}
+
+/* Ticket becomes a rounded price card with a soft tinted footer. */
+.home-ticket {
+  position: relative;
+  background: var(--chalk-raised);
+  border: 1px solid var(--rule);
+  border-radius: 24px;
+  box-shadow: var(--shadow-lift);
+}
+
+.home-ticket::before,
+.home-ticket::after {
+  content: none;
+}
+
+.home-ticket-perf {
+  border-top: 1px solid var(--rule);
+}
+
+.home-ticker {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.home-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: home-ticker 42s linear infinite;
+}
+
+.home-ticker:hover .home-ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes home-ticker {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Soft card with a gentle lift; no tilt. */
+.home-sheet {
+  position: relative;
+  background: var(--chalk-raised);
+  border: 1px solid var(--rule);
+  border-radius: 22px;
+  box-shadow: 0 18px 40px -30px rgba(15,53,87, 0.35);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.home-sheet:hover,
+.home-sheet:focus-within {
+  transform: translateY(-5px);
+  border-color: var(--rule-strong);
+  box-shadow: 0 30px 58px -34px rgba(15,53,87, 0.42);
+}
+
+.home-sheet-tab {
+  position: absolute;
+  top: -1px;
+  left: 1.4rem;
+  height: 4px;
+  width: 3.5rem;
+  border-radius: 0 0 999px 999px;
+  background: var(--marigold);
+}
+
+/* Destination card: rounded photo tile. */
+.home-stamp-card {
+  position: relative;
+  display: block;
+  border: 1px solid var(--rule);
+  border-radius: 22px;
+  background: var(--chalk-raised);
+  overflow: hidden;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.home-stamp-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--rule-strong);
+  box-shadow: var(--shadow-lift);
+}
+
+.home-stamp-card::after {
+  content: none;
+}
+
+.home-route-svg {
+  overflow: visible;
+}
+
+.home-route-fallback {
+  background-image: repeating-linear-gradient(90deg, var(--rule-strong) 0 6px, transparent 6px 14px);
+  height: 2px;
+}
+
+.home-scrim {
+  background: linear-gradient(180deg, rgba(7, 28, 46, 0) 42%, rgba(7, 28, 46, 0.72) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-ticker-track {
+    animation: none !important;
+  }
+
+  .home-sheet,
+  .home-stamp-card {
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Rich brand editorial
+   Full-bleed navy bands, patterned grounds, layered plates and oversized
+   numerals. These carry the homepage and the shared page masthead.
+   ========================================================================== */
+
+.ed-band {
+  position: relative;
+  isolation: isolate;
+}
+
+.ed-band-navy {
+  color: #fff;
+  background-color: #0b2b45;
+  background-image:
+    radial-gradient(900px 520px at 88% -10%, rgba(102, 181, 224, 0.24), transparent 62%),
+    radial-gradient(760px 460px at -6% 104%, rgba(23, 81, 128, 0.7), transparent 64%),
+    linear-gradient(135deg, #071c2e 0%, #0b2b45 54%, #0f3a5c 100%);
+}
+
+.ed-band-sand {
+  background-color: #f1f5f9;
+  background-image:
+    radial-gradient(760px 420px at 100% 0%, rgba(102, 181, 224, 0.18), transparent 60%),
+    radial-gradient(600px 380px at 0% 100%, rgba(18, 67, 107, 0.08), transparent 62%);
+}
+
+.ed-band-sky {
+  background-color: #e3f0f9;
+  background-image:
+    radial-gradient(720px 420px at 92% 8%, rgba(102, 181, 224, 0.45), transparent 62%),
+    linear-gradient(180deg, #eaf4fb 0%, #f8fafc 78%);
+}
+
+/* Fine architectural grid, clipped to the band edges. */
+.ed-grid-lines {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 58px 58px;
+  -webkit-mask-image: radial-gradient(120% 100% at 50% 0%, #000 35%, transparent 88%);
+  mask-image: radial-gradient(120% 100% at 50% 0%, #000 35%, transparent 88%);
+}
+
+.ed-grid-lines-dark {
+  background-image:
+    linear-gradient(rgba(18, 67, 107, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 67, 107, 0.07) 1px, transparent 1px);
+  background-size: 52px 52px;
+  -webkit-mask-image: radial-gradient(110% 100% at 100% 0%, #000 20%, transparent 82%);
+  mask-image: radial-gradient(110% 100% at 100% 0%, #000 20%, transparent 82%);
+}
+
+/* A plate that sits forward of a coloured offset sheet — the editorial stack. */
+.ed-stack {
+  position: relative;
+}
+
+.ed-stack::before {
+  content: "";
+  position: absolute;
+  inset: 16px -14px -16px 14px;
+  z-index: -1;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: linear-gradient(140deg, var(--mint-300), var(--petrol-400));
+  opacity: 0.55;
+}
+
+.ed-stack-sand::before {
+  border-color: var(--rule-strong);
+  background: var(--sand);
+  opacity: 1;
+}
+
+/* Photo frame: a pale mount with a sky hairline and a deep editorial shadow. */
+.ed-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 9px;
+  box-shadow: 0 38px 80px -46px rgba(7, 28, 46, 0.8);
+}
+
+.ed-frame img {
+  border-radius: 18px;
+}
+
+.ed-frame-sky {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Oversized editorial numeral, inherits colour from the parent. */
+.ed-numeral {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 600;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -0.06em;
+  line-height: 0.78;
+}
+
+/* Hairline card used on navy bands. */
+.ed-panel-dark {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(6px);
+}
+
+.ed-panel-dark:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.26);
+}
+
+/* Accent rule: sky-to-navy gradient used under headings and inside cards. */
+.ed-rule-brand {
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--terra), var(--marigold) 45%, transparent 100%);
+}
+
+/* SSR-safe editorial reveal. The element is visible in the HTML; CSS only
+   animates it when motion is allowed, so the hero never flashes empty. */
+@keyframes ed-rise {
+  from { transform: translateY(110%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes ed-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ed-rise {
+  animation: ed-rise 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ed-fade-up {
+  animation: ed-fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes ed-photo-settle {
+  from { transform: scale(1.04); }
+  to { transform: scale(1); }
+}
+
+.ed-photo-settle {
+  animation: ed-photo-settle 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ed-rise,
+  .ed-fade-up,
+  .ed-photo-settle {
+    animation: none;
+  }
+}
+
+/* Chip on a light surface (hero badges). */
+.ed-chip-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: #fff;
+  padding: 0.4rem 0.85rem;
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--petrol-600);
+}
+
+.ed-chip-light-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--action);
+}
+
+/* Chip on a dark surface. */
+.ed-chip-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 0.4rem 0.85rem;
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ed-chip-dark-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--mint-300);
+  box-shadow: 0 0 0 4px rgba(169, 214, 238, 0.18);
 }
 
 :lang(bn) .ed-display,
 :lang(bn) .ed-standfirst,
 :lang(bn) .ed-figure,
 :lang(bn) .ed-label {
-  font-family: var(--font-bengali), var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-bengali), var(--font-text), system-ui, sans-serif;
+  font-variation-settings: normal;
   letter-spacing: 0;
-  line-height: 1.4;
+  line-height: 1.45;
   text-transform: none;
+}
+
+
+/* Nested inline elements inside a Bangla block must inherit its leading;
+   otherwise the :lang(bn) base rule re-applies 1.75 to every span. */
+[lang="bn"] :is(span, strong, em, b, i, small, a) {
+  line-height: inherit;
 }
 
 button,
@@ -280,8 +944,8 @@ textarea {
 }
 
 ::selection {
-  background: #64b5df;
-  color: #08263c;
+  background: #cfe7f5;
+  color: var(--petrol-900);
 }
 
 @layer utilities {
@@ -317,13 +981,7 @@ textarea {
 }
 
 /* ==========================================================================
-   Readability & accessibility floor (added in audit 2026-07-20; raised to the
-   12px audit target on 2026-10-26)
-   These rules come AFTER @tailwind utilities, so for equal specificity they
-   win the cascade — no !important needed. Purpose: raise sub-12px text to the
-   legible floor, lift very low-contrast white text on dark backgrounds, and
-   respect reduced-motion. Adjust or remove per component if a specific label
-   needs to be smaller.
+   Readability & accessibility floor
    ========================================================================== */
 
 /* 1. Minimum legible font size — 9px/10px/11px labels were hard to read on phones */
@@ -338,23 +996,18 @@ textarea {
 .text-white\/50 { color: rgba(255, 255, 255, 0.75); }
 .text-white\/60 { color: rgba(255, 255, 255, 0.82); }
 
-/* 3. WCAG 2.4.7 Focus Visible — keyboard focus floor.
-   Around 90 places across the app clear the native outline with
-   `outline-none` / `focus:outline-none`, many without providing a
-   replacement. Tailwind's utility sits at (0,2,0) specificity, so this rule
-   needs !important to act as a guaranteed floor.
-   Scoped to :focus-visible, so pointer users never see it — only keyboard
-   and other non-pointer input. Components with their own focus ring keep it;
-   this only guarantees no element is ever focused invisibly. */
+/* 3. Keyboard focus floor, in brand petrol with a mint halo on dark surfaces. */
 :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 3px solid #174f7a !important;
+  outline: 3px solid var(--petrol-500) !important;
   outline-offset: 2px !important;
+  /* White halo fills the offset gap so the ring stays visible on dark
+     surfaces the class-based override below does not catch (e.g. #1767a0). */
+  box-shadow: 0 0 0 2px #fff;
 }
 
-/* The navy ring vanishes on the dark brand surfaces — switch to brand cyan. */
-:is([class*="bg-[#08263c]"], [class*="bg-[#071f31]"], [class*="bg-[#061b2a]"])
-  :is(a, button, input, select, textarea, [tabindex]):focus-visible {
-  outline-color: #8ed0ee !important;
+:is([class*="bg-[#0"], [class*="bg-petrol"], [class*="bg-[var(--petrol"]) :is(a, button, input, select, textarea, [tabindex]):focus-visible,
+[data-surface="dark"] :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline-color: var(--mint-300) !important;
 }
 
 /* 4. Respect users who ask for less motion (better on low-end Android too) */
@@ -385,36 +1038,28 @@ textarea {
 }
 
 /* ==========================================================================
-   Homepage.
-   The homepage now uses the shared product system above (.ed-display,
-   .ed-label, .ed-figure, .ed-standfirst, .ed-record, .ed-plate, .ed-notice,
-   .ed-index-row) and the :root tokens — same type scale, 8px/10px radii and
-   hairline rules as the rest of the site.
-
-   The former .ee-* block lived here: a parallel system with 900-weight
-   headings up to 6rem, 20-40px radii, decorative orbs, floating cards and an
-   animated plane. It was used by src/app/page.tsx and nothing else, so it was
-   removed rather than maintained. Add homepage-only CSS here only when the
-   shared system genuinely cannot express it.
+   Existing page-level motion (kept: universities, destinations, journey and
+   campaign surfaces depend on these class names). Colours warmed to the new
+   palette; no new decorative motion added.
    ========================================================================== */
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--chalk-sunk);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--rule-strong);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--ink-mute);
 }
+
 body.dashboard-mode .site-footer {
   display: none;
 }
@@ -430,37 +1075,34 @@ body.dashboard-mode .site-footer {
   }
 }
 
-/* EduExpress route experience ------------------------------------------------
-   A subtle instrument-grid and continuous signal ticker make the homepage feel
-   like a decision interface instead of a conventional consultancy brochure. */
 .experience-grid {
-  background-color: #050d14;
+  background-color: var(--petrol-900);
   background-image:
-    linear-gradient(rgba(142, 208, 238, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(142, 208, 238, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(169,214,238, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(169,214,238, 0.035) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
 .experience-grid-light {
-  background-color: #f4f9fc;
+  background-color: var(--chalk);
   background-image:
-    linear-gradient(rgba(23, 79, 122, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(23, 79, 122, 0.045) 1px, transparent 1px);
+    linear-gradient(rgba(23,81,128, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23,81,128, 0.045) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
 .journey-hero {
-  background-color: #f4f9fc;
+  background-color: var(--chalk);
   background-image:
-    linear-gradient(rgba(23, 79, 122, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(23, 79, 122, 0.045) 1px, transparent 1px);
+    linear-gradient(rgba(23,81,128, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23,81,128, 0.045) 1px, transparent 1px);
   background-size: 58px 58px;
 }
 
 .terminal-gallery {
   background-image:
-    linear-gradient(rgba(142, 208, 238, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(142, 208, 238, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(169,214,238, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(169,214,238, 0.035) 1px, transparent 1px);
   background-size: 58px 58px;
 }
 
@@ -483,7 +1125,7 @@ body.dashboard-mode .site-footer {
   top: 18px;
   right: 0;
   left: 0;
-  border-top: 1px dashed rgba(142, 208, 238, 0.38);
+  border-top: 1px dashed rgba(169,214,238, 0.38);
   content: '';
 }
 
@@ -493,10 +1135,10 @@ body.dashboard-mode .site-footer {
   right: 0;
   width: 11px;
   height: 11px;
-  border: 2px solid #8ed0ee;
+  border: 2px solid var(--mint-300);
   border-radius: 999px;
-  background: #071622;
-  box-shadow: 0 0 0 7px rgba(142, 208, 238, 0.1);
+  background: var(--petrol-900);
+  box-shadow: 0 0 0 7px rgba(169,214,238, 0.1);
   content: '';
 }
 
@@ -509,9 +1151,9 @@ body.dashboard-mode .site-footer {
   height: 22px;
   place-items: center;
   border-radius: 999px;
-  background: #8ed0ee;
-  color: #071622;
-  box-shadow: 0 8px 22px rgba(142, 208, 238, 0.25);
+  background: var(--mint-300);
+  color: var(--petrol-900);
+  box-shadow: 0 8px 22px rgba(169,214,238, 0.25);
   animation: terminal-route-flight 7s ease-in-out infinite;
 }
 
@@ -528,11 +1170,11 @@ body.dashboard-mode .site-footer {
   display: inline-flex;
   align-items: center;
   gap: 14px;
-  border: 1px solid #c7dae6;
+  border: 1px solid var(--rule);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.94);
   padding: 8px 18px 8px 8px;
-  box-shadow: 0 14px 38px rgba(23, 79, 122, 0.08);
+  box-shadow: var(--shadow-lift);
 }
 
 .journey-checkpoint > span:first-child {
@@ -541,7 +1183,7 @@ body.dashboard-mode .site-footer {
   height: 48px;
   place-items: center;
   border-radius: 999px;
-  background: #174f7a;
+  background: var(--petrol-600);
   color: white;
 }
 
@@ -549,13 +1191,13 @@ body.dashboard-mode .site-footer {
   display: inline-flex;
   align-items: center;
   min-height: 34px;
-  border: 1px solid #c7dae6;
+  border: 1px solid var(--rule);
   border-radius: 999px;
   background: white;
   padding: 0 13px;
-  color: #526777;
+  color: var(--ink-soft);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .journey-output {
@@ -565,18 +1207,18 @@ body.dashboard-mode .site-footer {
   align-items: center;
   gap: 18px;
   overflow: hidden;
-  border: 1px solid #b9d4e3;
-  border-radius: 26px;
-  background: linear-gradient(135deg, #ffffff, #eaf5fa);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-photo);
+  background: linear-gradient(135deg, #ffffff, var(--mint-100));
   padding: 20px;
-  box-shadow: 0 18px 50px rgba(23, 79, 122, 0.08);
+  box-shadow: var(--shadow-lift);
 }
 
 .journey-output::before {
   position: absolute;
   inset: 0 auto 0 0;
   width: 4px;
-  background: linear-gradient(#8ed0ee, #174f7a);
+  background: linear-gradient(var(--mint-300), var(--petrol-600));
   content: '';
 }
 
@@ -585,21 +1227,21 @@ body.dashboard-mode .site-footer {
   width: 50px;
   height: 50px;
   place-items: center;
-  border-radius: 17px;
-  background: #174f7a;
+  border-radius: 12px;
+  background: var(--petrol-600);
   color: white;
-  box-shadow: 0 12px 28px rgba(23, 79, 122, 0.2);
+  box-shadow: 0 12px 28px rgba(15,53,87, 0.2);
 }
 
 .journey-stamp {
   transform: rotate(-3deg);
-  border: 2px solid rgba(37, 134, 95, 0.48);
-  border-radius: 8px;
+  border: 2px solid rgba(45,122,95, 0.5);
+  border-radius: 4px;
   padding: 8px 11px;
-  color: #25865f;
-  font-family: var(--font-display);
+  color: var(--jade);
+  font-family: var(--font-text), system-ui, sans-serif;
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0.14em;
 }
 
@@ -610,7 +1252,7 @@ body.dashboard-mode .site-footer {
     bottom: 0;
     left: -33px;
     width: 2px;
-    background: linear-gradient(180deg, #b9d3e2, #2f7fbf 48%, #b9d3e2);
+    background: linear-gradient(180deg, var(--rule), var(--petrol-400) 48%, var(--rule));
     background-size: 100% 220%;
     animation: journey-signal-vertical 8s linear infinite;
     content: '';
@@ -621,10 +1263,10 @@ body.dashboard-mode .site-footer {
     left: -42px;
     width: 20px;
     height: 20px;
-    border: 5px solid #f6fafc;
+    border: 5px solid var(--chalk);
     border-radius: 999px;
-    background: #2f7fbf;
-    box-shadow: 0 0 0 1px #8fb8d0, 0 0 0 8px rgba(142, 208, 238, 0.18);
+    background: var(--petrol-400);
+    box-shadow: 0 0 0 1px var(--rule-strong), 0 0 0 8px rgba(44,106,151, 0.14);
     content: '';
   }
 }
@@ -660,9 +1302,9 @@ body.dashboard-mode .site-footer {
 .journey-line {
   background: linear-gradient(
     90deg,
-    #a9c5d8 0 40%,
-    #2f7fbf 50%,
-    #a9c5d8 60% 100%
+    var(--rule-strong) 0 40%,
+    var(--petrol-400) 50%,
+    var(--rule-strong) 60% 100%
   );
   background-size: 220% 100%;
   animation: journey-signal 6s linear infinite;
@@ -671,9 +1313,9 @@ body.dashboard-mode .site-footer {
 .journey-line-vertical {
   background: linear-gradient(
     180deg,
-    #a9c5d8 0 40%,
-    #2f7fbf 50%,
-    #a9c5d8 60% 100%
+    var(--rule-strong) 0 40%,
+    var(--petrol-400) 50%,
+    var(--rule-strong) 60% 100%
   );
   background-size: 100% 220%;
   animation: journey-signal-vertical 6s linear infinite;
@@ -725,10 +1367,10 @@ body.dashboard-mode .site-footer {
 @keyframes route-pulse {
   0%,
   100% {
-    box-shadow: 0 10px 30px rgba(23, 79, 122, 0.28);
+    box-shadow: 0 10px 30px rgba(15,53,87, 0.28);
   }
   50% {
-    box-shadow: 0 12px 44px rgba(47, 127, 191, 0.48);
+    box-shadow: 0 12px 44px rgba(44,106,151, 0.4);
   }
 }
 
@@ -798,11 +1440,73 @@ body.dashboard-mode .site-footer {
 @keyframes terminal-glow {
   0%,
   100% {
-    box-shadow: 0 18px 55px rgba(10, 31, 51, 0.28);
+    box-shadow: 0 18px 55px rgba(15,58,92, 0.28);
   }
   50% {
-    box-shadow: 0 20px 65px rgba(47, 127, 191, 0.34);
+    box-shadow: 0 20px 65px rgba(44,106,151, 0.32);
   }
+}
+
+/* Homepage showcase rails. They pause for mouse and keyboard users, and become
+   normal horizontal lists when reduced motion is requested. */
+.home-loop {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.home-loop::before,
+.home-loop::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  z-index: 2;
+  width: clamp(1.25rem, 6vw, 5rem);
+  pointer-events: none;
+}
+
+.home-loop::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--loop-edge, #fff), transparent);
+}
+
+.home-loop::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--loop-edge, #fff), transparent);
+}
+
+.home-loop-track {
+  display: flex;
+  width: max-content;
+  animation: home-loop var(--loop-speed, 48s) linear infinite;
+  will-change: transform;
+}
+
+.home-loop-track.reverse {
+  animation-direction: reverse;
+}
+
+.home-loop-set {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+  padding-right: 1rem;
+}
+
+.home-loop:hover .home-loop-track,
+.home-loop:focus-within .home-loop-track {
+  animation-play-state: paused;
+}
+
+@keyframes home-loop {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.font-mono {
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -858,26 +1562,21 @@ body.dashboard-mode .site-footer {
   display: none;
 }
 
-@keyframes home-aura {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-    opacity: 0.55;
+/* One authored page-load sequence: the hero rule draws, then the three lines
+   of the statement rise. Nothing else on the page animates on load. */
+@keyframes ed-draw {
+  from {
+    transform: scaleX(0);
   }
-  50% {
-    transform: translate3d(14px, -18px, 0) scale(1.08);
-    opacity: 0.8;
+  to {
+    transform: scaleX(1);
   }
 }
 
-.home-aura {
-  animation: home-aura 18s ease-in-out infinite;
-}
-
-@keyframes home-rise {
+@keyframes ed-rise {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -885,8 +1584,13 @@ body.dashboard-mode .site-footer {
   }
 }
 
-.home-rise {
-  animation: home-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+.ed-load-draw {
+  transform-origin: left;
+  animation: ed-draw 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ed-load-rise {
+  animation: ed-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -898,4 +1602,300 @@ body.dashboard-mode .site-footer {
   [data-reveal="shown"] {
     transition: none;
   }
+
+  .ed-load-draw,
+  .ed-load-rise {
+    animation: none;
+  }
 }
+
+/* ---------------------------------------------------------------------------
+   Bright & airy — homepage ambient light (2026 redesign)
+   A soft pastel glow drifts behind the hero and the destination marquee, and
+   a gentle band of light sweeps the hero. All decorative: gated in JS behind
+   prefers-reduced-motion and neutralised again here. Orbs animate transform
+   and opacity only (the blur is a one-time paint, never interpolated).
+---------------------------------------------------------------------------- */
+.ed-aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ed-aurora-orb {
+  position: absolute;
+  width: 46vmax;
+  height: 46vmax;
+  border-radius: 999px;
+  filter: blur(52px);
+  opacity: var(--orb-opacity, 0.5);
+  will-change: transform, opacity;
+  animation: ed-aurora var(--orb-duration, 30s) ease-in-out infinite alternate;
+}
+
+.ed-aurora-orb--mint {
+  background: radial-gradient(circle, rgba(169,214,238, 0.62), rgba(169,214,238, 0) 62%);
+}
+
+.ed-aurora-orb--marigold {
+  background: radial-gradient(circle, rgba(140,198,230, 0.36), rgba(140,198,230, 0) 58%);
+}
+
+.ed-aurora-orb--sky {
+  background: radial-gradient(circle, rgba(44,106,151, 0.2), rgba(44,106,151, 0) 60%);
+}
+
+@keyframes ed-aurora {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: var(--orb-opacity, 0.5);
+  }
+
+  to {
+    transform: translate3d(var(--orb-x, 10vmax), var(--orb-y, -6vmax), 0) scale(1.12);
+    opacity: calc(var(--orb-opacity, 0.5) * 0.7);
+  }
+}
+
+/* A dotted departure line with a travelling glow — the "light" in the hero. */
+.ed-hero-route {
+  position: relative;
+  height: 16px;
+  margin-top: 1.2rem;
+}
+
+.ed-hero-route-line {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 2px;
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(90deg, rgba(44,106,151, 0.3) 0 5px, transparent 5px 11px);
+}
+
+.ed-hero-route-dot {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: var(--marigold);
+  box-shadow: 0 0 0 3px rgba(102,181,224, 0.16), 0 0 16px 3px rgba(102,181,224, 0.5);
+  animation: ed-hero-route 7s ease-in-out infinite;
+}
+
+@keyframes ed-hero-route {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* Soft cards drifting over a warm glow on the cream band. */
+.light-rail-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(48px);
+  background:
+    radial-gradient(38% 62% at 10% 40%, rgba(169,214,238, 0.55), transparent 70%),
+    radial-gradient(36% 58% at 90% 58%, rgba(102,181,224, 0.34), transparent 70%),
+    radial-gradient(32% 52% at 52% 16%, rgba(102, 181, 224, 0.22), transparent 70%);
+}
+
+.light-rail-track {
+  position: relative;
+  z-index: 1;
+}
+
+.light-rail-card {
+  border: 1px solid var(--rule);
+  background: var(--chalk-raised);
+  box-shadow: 0 20px 46px -32px rgba(15,53,87, 0.4);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s ease, border-color 0.32s ease;
+}
+
+.light-rail-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--rule-strong);
+  box-shadow: 0 30px 62px -34px rgba(15,53,87, 0.46);
+}
+
+.light-rail-card::after {
+  content: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ed-aurora-orb,
+  .ed-hero-route-dot {
+    animation: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Homepage hero: rotating destination word ("Study in China." → "the UK." …).
+   Six stacked items (the last repeats the first) so the loop resets seamlessly.
+   Reduced motion holds on the first word.
+--------------------------------------------------------------------------- */
+.hero-rotator {
+  animation: hero-rotate 12.5s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+}
+
+@keyframes hero-rotate {
+  0%, 16% { transform: translateY(0); }
+  20%, 36% { transform: translateY(-16.6667%); }
+  40%, 56% { transform: translateY(-33.3333%); }
+  60%, 76% { transform: translateY(-50%); }
+  80%, 96% { transform: translateY(-66.6667%); }
+  100% { transform: translateY(-83.3333%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rotator { animation: none; }
+}
+
+/* Boarding-pass "how it works": perforation notches cut into the ticket. */
+.ticket-notch {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--canvas-soft);
+}
+
+.ticket-barcode {
+  background: repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 4px, currentColor 4px 5px, transparent 5px 8px, currentColor 8px 11px, transparent 11px 13px);
+}
+
+/* ---------------------------------------------------------------------------
+   Motion system (see components/motion/RevealObserver.tsx).
+   Rules: transform + opacity only; one-shot keyframes with `backwards` fill so
+   hover transforms work once an entrance ends; nothing hidden unless JS marked
+   it `out`; everything off under prefers-reduced-motion.
+--------------------------------------------------------------------------- */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translate3d(0, 32px, 0); }
+}
+
+@keyframes reveal-pop {
+  from { opacity: 0; transform: scale(0.92); }
+}
+
+@keyframes reveal-rise-lg {
+  from { opacity: 0; transform: translate3d(0, 90px, 0); }
+}
+
+@keyframes lift-in {
+  from { transform: translate3d(0, 28px, 0); }
+}
+
+/* Load entrance (hero). The headline only moves — it never fades, so it paints
+   immediately as the page's largest element. */
+.anim-rise {
+  animation: reveal-up 0.85s var(--ease-out-expo) backwards;
+  animation-delay: var(--d, 0ms);
+}
+
+.anim-lift {
+  animation: lift-in 0.9s var(--ease-out-expo) backwards;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Scroll reveals */
+[data-anim-state="out"]:is([data-anim="up"], [data-anim="pop"], [data-anim="rise"]),
+[data-anim="stagger"][data-anim-state="out"] > * {
+  opacity: 0;
+}
+
+[data-anim="up"][data-anim-state="in"] { animation: reveal-up 0.85s var(--ease-out-expo) backwards; }
+[data-anim="pop"][data-anim-state="in"] { animation: reveal-pop 0.9s var(--ease-out-expo) backwards; }
+[data-anim="rise"][data-anim-state="in"] { animation: reveal-rise-lg 1.2s var(--ease-out-expo) backwards; }
+[data-anim="stagger"][data-anim-state="in"] > * { animation: reveal-up 0.8s var(--ease-out-expo) backwards; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(2) { animation-delay: 80ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(3) { animation-delay: 160ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(4) { animation-delay: 240ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(5) { animation-delay: 320ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(6) { animation-delay: 400ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(7) { animation-delay: 460ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(8) { animation-delay: 520ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(9) { animation-delay: 580ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(n + 10) { animation-delay: 640ms; }
+
+/* Boarding pass: the route draws, stops pop in turn, the plane flies across. */
+@keyframes route-draw { from { transform: scaleX(0); } }
+@keyframes route-stop { from { opacity: 0; transform: scale(0.4); } }
+@keyframes route-fly {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(calc(100% - 28px), 0, 0); }
+}
+
+.route-line { transform-origin: left center; }
+.route-flyer { transform: translate3d(calc(100% - 28px), 0, 0); }
+
+[data-anim="route"][data-anim-state="out"] .route-line { transform: scaleX(0); }
+[data-anim="route"][data-anim-state="out"] .route-stop { opacity: 0; }
+[data-anim="route"][data-anim-state="out"] .route-flyer { transform: translate3d(0, 0, 0); }
+
+[data-anim="route"][data-anim-state="in"] .route-line { animation: route-draw 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.15s backwards; }
+[data-anim="route"][data-anim-state="in"] .route-flyer { animation: route-fly 2.2s cubic-bezier(0.65, 0, 0.35, 1) 0.15s backwards; }
+[data-anim="route"][data-anim-state="in"] li .route-stop { animation: route-stop 0.6s var(--ease-out-expo) backwards; }
+[data-anim="route"][data-anim-state="in"] li:nth-of-type(1) .route-stop { animation-delay: 0.2s; }
+[data-anim="route"][data-anim-state="in"] li:nth-of-type(2) .route-stop { animation-delay: 0.7s; }
+[data-anim="route"][data-anim-state="in"] li:nth-of-type(3) .route-stop { animation-delay: 1.2s; }
+[data-anim="route"][data-anim-state="in"] li:nth-of-type(4) .route-stop { animation-delay: 1.7s; }
+
+/* Continuous motion stops while off screen. */
+[data-offscreen] .home-ticker-track,
+.home-ticker[data-offscreen] .home-ticker-track { animation-play-state: paused; }
+
+/* Micro-interactions */
+.lucide-arrow-right { transition: transform 0.2s ease; }
+a:hover .lucide-arrow-right,
+button:hover .lucide-arrow-right { transform: translateX(4px); }
+
+.ed-btn-signal { transition: background-color 0.18s ease, transform 0.2s var(--ease-out-expo), box-shadow 0.2s ease; }
+.ed-btn-signal:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -14px rgba(11, 43, 69, 0.55); }
+.ed-btn-signal:active { transform: translateY(0); box-shadow: none; }
+
+/* FAQ answers open smoothly where the browser can animate to height:auto
+   (small, one-shot layout change on an isolated element). */
+@supports (interpolate-size: allow-keywords) {
+  .faq-smooth { interpolate-size: allow-keywords; }
+  .faq-smooth::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size 0.35s var(--ease-out-expo), content-visibility 0.35s allow-discrete;
+  }
+  .faq-smooth[open]::details-content { block-size: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-rise,
+  .anim-lift,
+  [data-anim] *,
+  [data-anim] { animation: none !important; }
+  .ed-btn-signal:hover { transform: none; }
+}
+
+/* One closing call to action per page: the footer card steps aside when the
+   page already ends with a CtaBand. */
+body:has([data-cta-band]) .footer-cta { display: none; }

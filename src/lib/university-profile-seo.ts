@@ -108,13 +108,21 @@ export function universityProfileSeo(university: UniversityIdentity, programs: U
   return { ...identity, title, description, canonical: `${UNIVERSITY_SITE_URL}/universities/${university.slug}` };
 }
 
+function courseDescription(program: UniversityProgramDetail, university: Pick<CleanUniversityRecord, 'name' | 'city' | 'country'>): string {
+  const parts = [`${program.level} programme in ${program.name} at ${university.name}, ${university.city}, ${university.country}`];
+  if (program.duration) parts.push(`duration ${program.duration}`);
+  if (program.languages.length) parts.push(`taught in ${program.languages.join(' and ')}`);
+  if (program.intake) parts.push(`intake ${program.intake}`);
+  return `${parts.join('; ')}.`;
+}
+
 /** Shared semantic graph. Course facts come from the same catalogue the page renders. */
 export function universityProfileStructuredData(university: UniversityIdentity & Pick<CleanUniversityRecord, 'officialUrl' | 'sourceUrls'>, programs: UniversityProgramDetail[]) {
   const seo = universityProfileSeo(university, programs);
   const universityId = `${seo.canonical}#university`;
   // Corroboration links: the university's own site plus recorded official
   // sources (provincial departments, publishers). Internal URLs are excluded.
-  const sameAsList = [university.officialUrl, ...university.sourceUrls]
+  const sameAsList = [university.officialUrl, ...(university.sourceUrls ?? [])]
     .filter((url): url is string => Boolean(url && /^https:\/\//i.test(url)))
     .filter(url => !url.includes(UNIVERSITY_SITE_URL))
     .filter((url, index, list) => list.indexOf(url) === index);
@@ -128,6 +136,9 @@ export function universityProfileStructuredData(university: UniversityIdentity &
     '@type': 'Course',
     '@id': `${seo.canonical}#course-${encodeURIComponent(program.id)}`,
     name: program.name,
+    // Google requires a description on Course items; it is composed only from
+    // the catalogue facts already shown on the page.
+    description: courseDescription(program, university),
     educationalLevel: program.level,
     ...(program.languages.length ? { inLanguage: program.languages } : {}),
     provider: { '@id': universityId },

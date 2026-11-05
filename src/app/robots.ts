@@ -13,8 +13,16 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: privatePaths,
       },
-      ...['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot-Extended', 'Amazonbot', 'cohere-ai', 'meta-externalagent', 'Bytespider']
-        .map(userAgent => ({ userAgent, allow: '/', disallow: privatePaths })),
+      // Named groups restate the wildcard for every AI search, user-fetch and
+      // training crawler so no vendor default can treat the site as opted out.
+      ...[
+        // Search discovery (cited answers)
+        'OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot', 'meta-webindexer', 'DuckAssistBot', 'Applebot', 'Bingbot', 'Googlebot',
+        // User-triggered retrieval (someone asked an assistant about us)
+        'ChatGPT-User', 'Claude-User', 'Perplexity-User', 'meta-externalfetcher', 'MistralAI-User',
+        // Model training and grounding (being known to the model itself)
+        'GPTBot', 'ClaudeBot', 'Google-Extended', 'Applebot-Extended', 'Amazonbot', 'cohere-ai', 'meta-externalagent', 'CCBot', 'Bytespider',
+      ].map(userAgent => ({ userAgent, allow: '/', disallow: privatePaths })),
     ],
     sitemap: [
       'https://eduexpressint.com/sitemap.xml',

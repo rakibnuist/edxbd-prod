@@ -25,7 +25,7 @@ const initialState: FormState = {
 };
 
 const fieldClass =
-  'mt-2 h-11 w-full border border-[#174f7a]/20 bg-white px-3 text-sm font-semibold text-[#08263c] outline-none transition placeholder:text-slate-400 focus:border-[#174f7a] focus:ring-4 focus:ring-[#64b5df]/20';
+  'mt-2 h-11 w-full border border-[#12436b]/20 bg-white px-3 text-sm font-semibold text-[#0f3a5c] outline-none transition placeholder:text-slate-500 focus:border-[#12436b] focus:ring-4 focus:ring-[#a9d6ee]/20';
 
 export default function ChinaCampaignLeadForm() {
   const [formData, setFormData] = useState<FormState>(initialState);
@@ -110,17 +110,17 @@ export default function ChinaCampaignLeadForm() {
 
   if (isSubmitted) {
     return (
-      <div id="china-fit-form" className="flex min-h-[470px] flex-col justify-center bg-white p-6 text-center shadow-[0_25px_80px_rgba(8,38,60,0.22)] sm:p-8" aria-live="polite">
-        <span className="mx-auto grid size-16 place-items-center rounded-full bg-[#e9f7fd] text-[#174f7a]">
+      <div id="china-fit-form" className="flex min-h-[470px] flex-col justify-center bg-white p-6 text-center shadow-[0_25px_80px_rgba(11,43,69,0.22)] sm:p-8" aria-live="polite">
+        <span className="mx-auto grid size-16 place-items-center rounded-full bg-[#e3f0f9] text-[#12436b]">
           <CheckCircle2 size={34} />
         </span>
-        <p className="mt-6 font-mono text-[10px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Assessment request received</p>
-        <h2 className="mt-3 font-heading text-3xl font-bold text-[#08263c]">Your China profile is in the review queue</h2>
+        <p className="mt-6 font-mono text-[12px] font-black uppercase tracking-[0.2em] text-[#12436b]">Assessment request received</p>
+        <h2 className="mt-3 font-heading text-3xl font-bold text-[#0f3a5c]">Your China profile is in the review queue</h2>
         <p className="mx-auto mt-4 max-w-sm text-sm leading-6 text-slate-600">
           A China admissions counselor will review your study level, eligibility and likely next documents, then contact you during office hours.
         </p>
         <p className="mt-5 text-xs font-bold text-slate-500">Saturday to Thursday, 11:00 AM to 6:00 PM</p>
-        <button type="button" onClick={() => { setFormData(initialState); setIsSubmitted(false); startedRef.current = false; }} className="mx-auto mt-7 text-sm font-black text-[#174f7a] underline underline-offset-4">
+        <button type="button" onClick={() => { setFormData(initialState); setIsSubmitted(false); startedRef.current = false; }} className="mx-auto mt-7 text-sm font-black text-[#12436b] underline underline-offset-4">
           Submit another profile
         </button>
       </div>
@@ -128,13 +128,13 @@ export default function ChinaCampaignLeadForm() {
   }
 
   return (
-    <form id="china-fit-form" onSubmit={handleSubmit} className="scroll-mt-[92px] bg-white p-5 text-[#08263c] shadow-[0_25px_80px_rgba(8,38,60,0.22)] sm:p-7 min-[1200px]:scroll-mt-[120px]" noValidate>
-      <div className="flex items-start justify-between gap-4 border-b border-[#174f7a]/15 pb-4">
+    <form id="china-fit-form" onSubmit={handleSubmit} className="scroll-mt-[92px] bg-white p-5 text-[#0f3a5c] shadow-[0_25px_80px_rgba(11,43,69,0.22)] sm:p-7 min-[1200px]:scroll-mt-[120px]" noValidate>
+      <div className="flex items-start justify-between gap-4 border-b border-[#12436b]/15 pb-4">
         <div>
-          <p className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-[#174f7a]">Free first step</p>
+          <p className="font-mono text-[12px] font-black uppercase tracking-[0.2em] text-[#12436b]">Free first step</p>
           <h2 className="mt-1 font-heading text-2xl font-bold leading-tight">Get your China Fit Assessment</h2>
         </div>
-        <span className="grid size-10 shrink-0 place-items-center bg-[#e9f7fd] text-[#174f7a]" aria-hidden="true"><ShieldCheck size={21} /></span>
+        <span className="grid size-10 shrink-0 place-items-center bg-[#e3f0f9] text-[#12436b]" aria-hidden="true"><ShieldCheck size={21} /></span>
       </div>
 
       <p className="mt-3 text-xs leading-5 text-slate-600">Share five details. We will screen your likely study level, admission route and next documents.</p>
@@ -183,18 +183,18 @@ export default function ChinaCampaignLeadForm() {
         </div>
       </div>
 
-      <div className="mt-4 flex items-start gap-3 text-[11px] leading-5 text-slate-600">
-        <input id="consent" name="consent" type="checkbox" checked={formData.consent} onFocus={() => recordInteraction('consent')} onChange={(event) => setFormData({ ...formData, consent: event.target.checked })} className="mt-1 size-4 shrink-0 accent-[#174f7a]" required />
-        <label htmlFor="consent" className="cursor-pointer">I agree that EduExpress may contact me about this assessment. I have read the <Link href="/privacy" className="font-bold text-[#174f7a] underline">privacy policy</Link>.</label>
+      <div className="mt-4 flex items-start gap-3 text-[13px] leading-5 text-slate-600">
+        <input id="consent" name="consent" type="checkbox" checked={formData.consent} onFocus={() => recordInteraction('consent')} onChange={(event) => setFormData({ ...formData, consent: event.target.checked })} className="mt-1 size-4 shrink-0 accent-[#12436b]" required />
+        <label htmlFor="consent" className="cursor-pointer">I agree that EduExpress may contact me about this assessment. I have read the <Link href="/privacy" className="font-bold text-[#12436b] underline">privacy policy</Link>.</label>
       </div>
 
       {error ? <p className="mt-3 border-l-4 border-red-500 bg-red-50 px-3 py-2 text-xs font-bold text-red-700" role="alert">{error}</p> : null}
 
-      <button type="submit" disabled={isSubmitting} className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 bg-[#174f7a] px-5 text-sm font-black text-white transition hover:bg-[#08263c] disabled:cursor-wait disabled:opacity-70">
+      <button type="submit" disabled={isSubmitting} className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 bg-[#12436b] px-5 text-sm font-black text-white transition hover:bg-[#0f3a5c] disabled:cursor-wait disabled:opacity-70">
         {isSubmitting ? 'Sending your profile' : 'Get My China Fit Assessment'} <ArrowRight size={17} aria-hidden="true" />
       </button>
 
-      <div className="mt-3 flex items-center justify-center gap-2 text-[10px] font-bold text-slate-500">
+      <div className="mt-3 flex items-center justify-center gap-2 text-[12px] font-bold text-slate-500">
         <LockKeyhole size={12} aria-hidden="true" /> No file opening charge. Your details are used only for this request.
       </div>
     </form>

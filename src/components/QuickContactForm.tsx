@@ -73,7 +73,7 @@ const QuickContactForm = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             style={{
-              background: 'rgba(2, 6, 23, 0.8)', // Darker slate overlay
+              background: 'rgba(10,28,46, 0.8)', // Darker slate overlay
               backdropFilter: 'blur(8px)'
             }}
             onClick={(e) => {
@@ -119,12 +119,12 @@ const QuickContactForm = () => {
                     className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-all duration-300 group shadow-sm hover:shadow-md"
                     aria-label="Close"
                   >
-                    <X className="w-4 h-4 text-slate-400 group-hover:text-slate-800 transition-colors" />
+                    <X className="w-4 h-4 text-slate-500 group-hover:text-slate-800 transition-colors" />
                   </button>
                 </div>
 
                 {/* Trust indicators */}
-                <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-wide">
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-[12px] font-bold uppercase tracking-wide">
                   <div className="flex items-center space-x-1 bg-green-50 text-green-700 border border-green-100 px-2 py-1 rounded-md">
                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                     <span>100% Free</span>

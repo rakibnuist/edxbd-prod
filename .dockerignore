@@ -6,3 +6,9 @@ npm-debug.log
 README.md
 .vscode
 .DS_Store
+# Local secrets and databases never belong in an image layer. Production
+# builds from the git URL (no .env) and receives env at runtime via compose.
+.env
+.env.*
+!.env.example
+prisma/data

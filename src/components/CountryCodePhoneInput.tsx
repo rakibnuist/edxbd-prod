@@ -65,6 +65,12 @@ const countryCodes: CountryCode[] = [
   { code: 'RU', name: 'Russia', flag: '🇷🇺', dialCode: '+7' },
 ];
 
+// Bangladeshi users type the local "017…" form; after +880 the trunk 0 must be
+// dropped or the stored number (+88001…) breaks WhatsApp and tel: links.
+function composeNumber(dialCode: string, number: string) {
+  return dialCode + (dialCode === '+880' ? number.replace(/^0+/, '') : number);
+}
+
 function parsePhoneNumber(fullNumber: string) {
   const country = countryCodes.find(item => fullNumber.startsWith(item.dialCode));
   return country
@@ -77,7 +83,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
   name,
   value,
   onChange,
-
+  placeholder = '1712-345678',
   required = false,
   className = '',
   error,
@@ -121,7 +127,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
     setSearchTerm('');
 
     // Update the full phone number
-    const fullNumber = country.dialCode + phoneNumber;
+    const fullNumber = composeNumber(country.dialCode, phoneNumber);
     onChange(fullNumber);
 
     // Default focus back to input
@@ -136,7 +142,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
     setPhoneNumber(number);
 
     // Update the full phone number
-    const fullNumber = selectedCountry.dialCode + number;
+    const fullNumber = composeNumber(selectedCountry.dialCode, number);
     onChange(fullNumber);
   };
 
@@ -180,7 +186,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
             type="button"
             onClick={() => !disabled && setIsOpen(!isOpen)}
             disabled={disabled}
-            className="group flex items-center space-x-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#174f7a] focus-visible:ring-offset-2"
+            className="group flex items-center space-x-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#12436b] focus-visible:ring-offset-2"
             aria-haspopup="listbox"
             aria-expanded={isOpen}
           >
@@ -188,7 +194,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
             <span className="text-sm font-bold text-slate-700 group-hover:text-blue-600 transition-colors">
               {selectedCountry.dialCode}
             </span>
-            <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`w-3 h-3 text-slate-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {/* Dropdown */}
@@ -201,7 +207,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
                   placeholder="Search country..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-xs bg-white"
+                  className="w-full px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm bg-white"
                   autoFocus
                 />
               </div>
@@ -218,12 +224,12 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
                         }`}
                     >
                       <span className="text-lg">{country.flag}</span>
-                      <span className="flex-1 text-xs font-semibold text-slate-700">{country.name}</span>
-                      <span className="text-xs font-bold text-slate-400 font-mono">{country.dialCode}</span>
+                      <span className="flex-1 text-sm font-semibold text-slate-700">{country.name}</span>
+                      <span className="text-sm font-bold text-slate-500 font-mono">{country.dialCode}</span>
                     </button>
                   ))
                 ) : (
-                  <div className="px-4 py-3 text-xs text-slate-500 text-center">No countries found</div>
+                  <div className="px-4 py-3 text-sm text-slate-500 text-center">No countries found</div>
                 )}
               </div>
             </div>
@@ -239,14 +245,14 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
           value={phoneNumber}
           onChange={handlePhoneNumberChange}
           onKeyDown={handleKeyDown}
-          placeholder="123 456 7890"
+          placeholder={placeholder}
           required={required}
           disabled={disabled}
           inputMode="tel"
           autoComplete="tel"
           maxLength={15}
           aria-invalid={error ? true : undefined}
-          className="flex-1 bg-transparent border-none p-0 text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:outline-none h-full"
+          className="flex-1 bg-transparent border-none p-0 text-base font-semibold text-slate-900 placeholder:text-slate-500 focus:ring-0 focus:outline-none h-full"
         />
       </div>
 

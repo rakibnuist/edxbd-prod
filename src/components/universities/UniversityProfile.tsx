@@ -62,6 +62,7 @@ export default async function UniversityProfile({ university }: { university: Cl
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, '\\u003c') }} />
     <UniversityProfileClient
+    faq={faq}
     university={{
       name: university.name, slug: university.slug, city: university.city, country: university.country, logo,
       location: university.location,

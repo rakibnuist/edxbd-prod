@@ -35,12 +35,12 @@ export default function StartingPoints({ items }: { items: StartingPoint[] }) {
               className="ed-index-row group relative block px-1 py-6 sm:px-3"
             >
               <span className="flex items-center gap-5 sm:gap-7">
-                <span className="ed-label w-6 shrink-0 text-[#2f7fbf]">
+                <span className="ed-label w-6 shrink-0 text-[#2c6a97]">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <span
                   className={`ed-display flex-1 text-[1.6rem] transition-colors duration-200 sm:text-[2rem] ${
-                    active === index ? 'text-[#2f7fbf]' : 'text-[#0a1f33]'
+                    active === index ? 'text-[#2c6a97]' : 'text-[#14212e]'
                   }`}
                 >
                   {item.title}
@@ -48,7 +48,7 @@ export default function StartingPoints({ items }: { items: StartingPoint[] }) {
                 <ArrowUpRight
                   size={22}
                   className={`shrink-0 transition-all duration-200 ${
-                    active === index ? 'translate-x-1 text-[#2f7fbf]' : 'text-[#9aa8b8]'
+                    active === index ? 'translate-x-1 text-[#2c6a97]' : 'text-[#cfe7f5]'
                   }`}
                 />
               </span>
@@ -72,7 +72,7 @@ export default function StartingPoints({ items }: { items: StartingPoint[] }) {
             </motion.div>
           </AnimatePresence>
         </div>
-        <div className="mt-4 min-h-[3.5rem] border-t border-[#e2e7ee] pt-4">
+        <div className="mt-4 min-h-[3.5rem] border-t border-[#e2e8f0] pt-4">
           <AnimatePresence mode="wait" initial={false}>
             <motion.p
               key={current.caption}
@@ -80,7 +80,7 @@ export default function StartingPoints({ items }: { items: StartingPoint[] }) {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0 }}
               transition={{ duration: 0.28 }}
-              className="text-sm leading-6 text-[#55677a]"
+              className="text-sm leading-6 text-[#475569]"
             >
               {current.caption}
             </motion.p>

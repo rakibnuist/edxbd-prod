@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
+import { routeLead } from '@/lib/lead-routing';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import {
   getOptionalString,
@@ -96,6 +97,10 @@ export async function POST(request: NextRequest) {
 
     const safeUtm = getSafeUtm(body.utm);
 
+    // Same routing rules as /api/leads, so China-campaign and MBBS enquiries
+    // submitted through contact-style forms reach the right team.
+    const routing = routeLead({ country, program, source });
+
     // Create new lead from contact form using Prisma
     const lead = await prisma.lead.create({
       data: {
@@ -107,6 +112,10 @@ export async function POST(request: NextRequest) {
         message: message || 'Consultation request from ' + country,
         source,
         status: 'new',
+        assignedTeam: routing.assignedTeam,
+        riskFlag: routing.riskFlag,
+        medicalProgram: routing.medicalProgram,
+        notes: routing.routingNote,
         consentTimestamp,
         consentPolicyVersion,
         landingPage,

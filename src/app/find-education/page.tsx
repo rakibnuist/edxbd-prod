@@ -1,122 +1,341 @@
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, BadgeDollarSign, CheckCircle2, Globe2, GraduationCap, Search, SlidersHorizontal } from 'lucide-react';
-import { activeCountries } from '@/lib/countries';
-import { destinationPath } from '@/lib/site-urls';
+import { ArrowRight, ArrowUpRight, BadgeDollarSign, CheckCircle2, Globe2, GraduationCap, Search, SlidersHorizontal } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Find Universities, Programs and Scholarships',
-  description: 'Explore universities, destinations and scholarship guidance, then match options to your level, subject, budget and intake.',
-  alternates: { canonical: '/find-education' },
-  openGraph: {
-    title: 'Find Universities, Programs and Scholarships',
-    description: 'Match universities, destinations and funding options to your level, subject, budget and intake.',
-    url: '/find-education',
-    type: 'website',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — find education' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Find Universities, Programs and Scholarships',
-    description: 'Match universities, destinations and funding options to your level, subject, budget and intake.',
-    images: ['/og-image.jpg'],
-  },
-};
+import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { activeCountries } from '@/lib/countries';
+import { pageMetadata } from '@/lib/seo';
+import { SITE_URL, absoluteUrl, destinationPath } from '@/lib/site-urls';
+import { getUniversityRecords } from '@/lib/university-records';
+
+export const revalidate = 3600;
+
+const PATH = '/find-education';
+const canonical = `${SITE_URL}${PATH}`;
+const LAST_REVIEWED = '2026-11-04';
+
+export const metadata = pageMetadata({
+  title: 'Find Universities, Programs & Scholarships 2027 | EduExpress',
+  description: `Compare universities, programs, tuition, scholarships and intakes across ${activeCountries.length} study destinations. Free education fit assessment for students in Bangladesh.`,
+  path: PATH,
+  image: { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — find universities, programs and scholarships' },
+});
 
 const discoveryPaths = [
   {
     icon: GraduationCap,
     number: '01',
     title: 'Find universities',
-    copy: 'Browse institution records and inspect the details available before asking for a shortlist.',
+    copy: 'Search institution records by country, degree level and subject. Each profile shows what is verified, what it costs and when the record was last checked.',
     href: '/universities',
-    cta: 'Browse universities',
+    cta: 'Browse university records',
+    tone: 'sage',
   },
   {
     icon: Globe2,
     number: '02',
     title: 'Compare destinations',
-    copy: 'Compare recognition, academic fit, total cost and visa readiness across 12 open destinations.',
+    copy: 'Put recognition, total cost, visa requirements and student life side by side before choosing a country.',
     href: '/compare-study-destinations',
     cta: 'Compare destinations',
+    tone: 'lime',
   },
   {
     icon: BadgeDollarSign,
     number: '03',
     title: 'Understand scholarships',
-    copy: 'Look beyond the headline amount to eligibility, coverage, renewal conditions and remaining costs.',
+    copy: 'Read eligibility, coverage, renewal conditions and the costs that remain after an award, not just the headline value.',
     href: '/scholarships',
     cta: 'Explore scholarship guidance',
+    tone: 'sage',
   },
   {
     icon: SlidersHorizontal,
     number: '04',
     title: 'Match your profile',
-    copy: 'Use your level, results, subject, budget, language readiness and intake to shape a realistic shortlist.',
+    copy: 'Share your results, budget, language readiness and preferred intake. A counsellor reviews the realistic options with you.',
     href: '/education-fit-assessment',
-    cta: 'Start free assessment',
+    cta: 'Start the free assessment',
+    tone: 'dark',
+  },
+] as const;
+
+const startingPoints = [
+  { label: 'Study in China from Bangladesh', href: '/study-in-china-from-bangladesh' },
+  { label: 'Cost of studying in China', href: '/study-in-china-cost-bangladesh' },
+  { label: 'China scholarships explained', href: '/china-scholarships-bangladesh' },
+  { label: 'University and program finder', href: '/universities' },
+  { label: 'Compare study destinations', href: '/compare-study-destinations' },
+  { label: 'Guidance for parents and sponsors', href: '/for-parents' },
+];
+
+const readinessItems = [
+  'Current academic level and results',
+  'Subject and career direction',
+  'Realistic yearly and total budget',
+  'Language and document readiness',
+  'Preferred intake and timing',
+  'Recognition or licensing needs',
+];
+
+const nextSteps = [
+  { number: '01', title: 'Profile review', copy: 'Level, results, subject, budget and intake.' },
+  { number: '02', title: 'Options in writing', copy: 'Recognition, costs and entry requirements compared.' },
+  { number: '03', title: 'Your decision', copy: 'Apply only when the fit and the cost are clear.' },
+];
+
+const faqs = [
+  {
+    question: 'How do I choose a university or destination?',
+    answer:
+      'Start with what the qualification must do for your career, then compare recognition, total cost, language of instruction, intake timing and student support. A destination that looks affordable can become expensive once living costs, travel and deposits are added, so compare the full schedule rather than tuition alone.',
+  },
+  {
+    question: 'Can EduExpress shortlist universities before I pay?',
+    answer:
+      'The initial education fit assessment is free. A counsellor reviews your level, results, budget and preferred intake, then explains which options can be shortlisted and which documents are needed to confirm them. For the China visa-first package, no EduExpress service fee is due before China visa approval; any third-party fee required earlier is itemised in writing.',
+  },
+  {
+    question: 'Do you guarantee admission, a scholarship or a visa?',
+    answer:
+      'No. Admission, funding and visa decisions belong to the relevant university, scholarship body or embassy. EduExpress checks eligibility, prepares the application and explains the evidence behind each recommendation, but no consultancy can guarantee an outcome.',
+  },
+  {
+    question: 'What should I prepare before the first counselling session?',
+    answer:
+      'Bring your latest academic transcripts or certificates, passport details, an English or language test result if available, and a realistic budget range. A CV or personal statement helps for postgraduate applications. The exact document list depends on the destination and university and is confirmed in writing before submission.',
   },
 ];
 
-export default function FindEducationPage() {
+async function getUniversityCount() {
+  try {
+    const records = await getUniversityRecords();
+    return records.filter(record => record.isActive).length;
+  } catch {
+    return 0;
+  }
+}
+
+const cardTone = { sage: kit.cardSage, lime: kit.cardLime, dark: kit.cardDark } as const;
+
+export default async function FindEducationPage() {
+  const universityCount = await getUniversityCount();
+  const destinations = activeCountries;
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${canonical}#webpage`,
+        url: canonical,
+        name: 'Find universities, programs and scholarships',
+        description:
+          'Compare universities, programs, tuition, scholarships and intakes across study destinations, then request a free education fit assessment.',
+        inLanguage: 'en-BD',
+        dateModified: LAST_REVIEWED,
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+        about: { '@id': `${SITE_URL}/#organization` },
+        breadcrumb: { '@id': `${canonical}#breadcrumb` },
+        primaryImageOfPage: { '@type': 'ImageObject', url: absoluteUrl('/images/students/students-campus.webp') },
+      },
+      {
+        '@type': 'ItemList',
+        '@id': `${canonical}#research-paths`,
+        name: 'Ways to research study options',
+        numberOfItems: discoveryPaths.length,
+        itemListElement: discoveryPaths.map((path, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: path.title,
+          url: absoluteUrl(path.href),
+        })),
+      },
+      {
+        '@type': 'ItemList',
+        '@id': `${canonical}#destinations`,
+        name: 'Study destinations supported by EduExpress International',
+        numberOfItems: destinations.length,
+        itemListElement: destinations.map((country, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: `Study in ${country.name}`,
+          url: absoluteUrl(destinationPath(country.slug)),
+        })),
+      },
+    ],
+  };
+
   return (
-    <main className="min-h-screen bg-white text-[#08263c]">
-      <section className="relative overflow-hidden bg-[#eaf7fc] px-5 pb-16 pt-32 sm:px-8 sm:pb-20 sm:pt-40 lg:px-12">
-        <div className="absolute -right-24 top-12 size-[420px] rounded-full bg-[#64b5df]/20 blur-3xl" />
-        <div className="relative mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[.94fr_1.06fr] lg:items-center">
-          <div>
-            <nav aria-label="Breadcrumb" className="text-xs font-bold text-[#17699a]"><Link href="/">Home</Link> <span aria-hidden>/</span> Find Education</nav>
-            <p className="mt-8 text-xs font-black uppercase tracking-[.18em] text-[#e34c43]">One starting point · Four ways to discover</p>
-            <h1 className="mt-4 max-w-[12ch] text-[clamp(3.2rem,6vw,6.7rem)] font-black leading-[.9] tracking-[-.065em]">Find education that fits your life.</h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-600">Start with your subject, level, budget and intake. Then compare universities, destinations and funding without losing sight of the complete cost or the admission journey.</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="/education-fit-assessment" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-[#e34c43] px-7 text-sm font-black text-white">Find my education fit <ArrowRight size={17} /></Link>
-              <Link href="/universities" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-[#174f7a]/20 bg-white px-7 text-sm font-black text-[#174f7a]">Browse universities <Search size={17} /></Link>
-            </div>
-          </div>
-          <div className="relative min-h-[480px] overflow-hidden rounded-[36px] bg-[#08263c] shadow-[0_30px_80px_rgba(8,38,60,.18)]">
-            <Image src="/images/students/students-campus.webp" alt="International students on a university campus" fill priority sizes="(max-width:1024px) 100vw, 54vw" className="object-cover opacity-75" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#061c2d]/95 via-[#061c2d]/15 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-7 text-white sm:p-10">
-              <p className="text-xs font-black uppercase tracking-[.16em] text-[#8ed0ee]">The EduExpress sequence</p>
-              <p className="mt-3 max-w-xl text-3xl font-black leading-tight sm:text-4xl">Profile → comparison → clear cost → application decision</p>
-            </div>
-          </div>
-        </div>
-      </section>
+    <>
+      <JsonLd data={structuredData} />
 
-      <section className="px-5 py-20 sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto max-w-[1320px]">
-          <div className="max-w-3xl"><p className="text-xs font-black uppercase tracking-[.18em] text-[#17699a]">Choose what you need now</p><h2 className="mt-4 text-4xl font-black tracking-[-.045em] sm:text-6xl">Four doors. One connected decision.</h2><p className="mt-5 text-base leading-8 text-slate-600">Each door leads back to the same question: does this option fit your education, finances and readiness?</p></div>
-          <div className="mt-12 grid gap-4 md:grid-cols-2">
-            {discoveryPaths.map(({ icon: Icon, number, title, copy, href, cta }) => (
-              <Link key={title} href={href} className="group rounded-[28px] border border-[#174f7a]/12 bg-[#f7fbfd] p-6 transition hover:-translate-y-1 hover:border-[#174f7a]/30 hover:shadow-[0_24px_60px_rgba(8,38,60,.09)] sm:p-8">
-                <div className="flex items-center justify-between"><span className="grid size-12 place-items-center rounded-2xl bg-[#dff3fb] text-[#17699a]"><Icon size={23} /></span><span className="text-xs font-black tracking-[.16em] text-[#e34c43]">{number}</span></div>
-                <h2 className="mt-8 text-3xl font-black">{title}</h2>
-                <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600">{copy}</p>
-                <span className="mt-6 inline-flex items-center gap-2 text-sm font-black text-[#17699a]">{cta} <ArrowRight size={15} className="transition group-hover:translate-x-1" /></span>
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Find education' }]}
+        eyebrow="Universities, destinations and funding"
+        title="Find universities, programs and scholarships that fit."
+        lead="A free, structured starting point for students and families in Bangladesh. Compare institutions, destinations, tuition, funding and intake timing before you commit to an application."
+        reviewed="November 2026"
+        actions={
+          <>
+            <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              Start the free fit assessment <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+            <Link href="/universities" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Browse university records <Search size={18} aria-hidden="true" />
+            </Link>
+          </>
+        }
+        aside={
+          <figure className="relative overflow-hidden rounded-3xl">
+            <div className="relative aspect-[4/3]">
+              <Image
+                src="/images/students/students-campus.webp"
+                alt="Students standing in front of an admissions banner on a university campus in China"
+                fill
+                priority
+                sizes="(max-width:1024px) 100vw, 480px"
+                className="object-cover"
+              />
+            </div>
+            <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl bg-white px-4 py-3">
+              <span className="block text-[14px] font-semibold text-ink-soft">The EduExpress sequence</span>
+              <span className="mt-0.5 block text-[16px] font-semibold leading-6 text-petrol-800">
+                Profile → comparison → clear cost → application decision
+              </span>
+            </figcaption>
+          </figure>
+        }
+      />
+
+      <TrustBar universities={universityCount > 0 ? universityCount : undefined} />
+
+      <Section
+        title="Four ways to research, one decision."
+        intro="Each path returns to the same question: does this option fit your education, finances and readiness?"
+      >
+        <ul data-anim="stagger" className="grid gap-5 md:grid-cols-2">
+          {discoveryPaths.map(({ icon: Icon, number, title, copy, href, cta, tone }) => {
+            const dark = tone === 'dark';
+            return (
+              <li key={title}>
+                <Link href={href} className={`group flex h-full flex-col transition duration-200 hover:-translate-y-1 ${cardTone[tone]}`}>
+                  <span className="flex items-center justify-between gap-4">
+                    <span className={dark ? kit.iconLime : kit.icon}><Icon size={22} aria-hidden="true" /></span>
+                    <span className={`font-display text-[15px] font-black tracking-[0.08em] ${dark ? 'text-white/75' : 'text-ink-soft'}`}>PATH {number}</span>
+                  </span>
+                  <h3 className={`mt-6 ${dark ? 'text-[21px] font-semibold leading-[1.3] tracking-[-0.02em] text-lime' : kit.h3}`}>{title}</h3>
+                  <p className={`mt-2 flex-1 text-[16px] leading-7 ${dark ? 'text-white/80' : 'text-ink-soft'}`}>{copy}</p>
+                  <span className={`mt-6 inline-flex items-center gap-1.5 text-[16px] font-semibold underline-offset-4 group-hover:underline ${dark ? 'text-white' : 'text-petrol-800'}`}>
+                    {cta} <ArrowRight size={16} aria-hidden="true" />
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </Section>
+
+      <Section tone="sage" title="Go straight to the question you are researching." intro="Popular starting points for the 2027 cycle.">
+        <ul data-anim="stagger" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {startingPoints.map(point => (
+            <li key={point.href}>
+              <Link
+                href={point.href}
+                className="group flex min-h-[64px] items-center justify-between gap-3 rounded-2xl bg-white px-5 py-4 text-[16px] font-semibold text-petrol-800 transition-colors hover:bg-lime-pale"
+              >
+                {point.label}
+                <ArrowUpRight size={18} className="shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
               </Link>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <Section
+        tone="navy"
+        title="Explore every destination we support."
+        intro={`${destinations.length} destinations, all open. Each route page explains recognition, indicative costs, intake timing and visa steps for that country. China carries the deepest published evidence set.`}
+        action={
+          <Link href="/destinations" className="ed-btn ed-btn-on-dark min-h-[52px] px-7">
+            View the destination hub <ArrowRight size={18} aria-hidden="true" />
+          </Link>
+        }
+      >
+        <ul data-anim="stagger" className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {destinations.map(country => (
+            <li key={country.slug}>
+              <Link
+                href={destinationPath(country.slug)}
+                className="group flex min-h-[72px] items-center justify-between gap-3 rounded-2xl bg-white/[0.07] px-4 py-4 ring-1 ring-white/10 transition-colors hover:bg-white/[0.12] hover:ring-white/25"
+              >
+                <span className="flex min-w-0 items-center gap-3">
+                  <span className="text-[22px]" aria-hidden="true">{country.flag}</span>
+                  <span className="min-w-0">
+                    <strong className="block truncate text-[16px] font-semibold text-white">{country.name}</strong>
+                    <span className="mt-0.5 block text-[14px] font-semibold text-lime">{country.serviceStatus}</span>
+                  </span>
+                </span>
+                <ArrowUpRight size={16} className="shrink-0 text-lime transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <Section>
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-14">
+          <div>
+            <h2 data-anim="up" className={kit.h2}>Six facts we need before recommending anything.</h2>
+            <p className={`mt-5 ${kit.lead}`}>
+              A shortlist is only useful if it matches your results and your family&apos;s budget. These are the facts a counsellor
+              checks first, so the options discussed are realistic from the start.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+                Review my profile <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+              <p className="text-[15px] text-ink-soft">Free assessment · no payment details requested</p>
+            </div>
+          </div>
+
+          <ul data-anim="stagger" className="grid gap-3 sm:grid-cols-2">
+            {readinessItems.map(item => (
+              <li key={item} className="flex gap-3 rounded-2xl bg-canvas-soft px-5 py-4 text-[16px] font-semibold leading-6 text-petrol-800">
+                <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-[#2ead4b]" aria-hidden="true" />
+                {item}
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
-      </section>
 
-      <section className="bg-[#08263c] px-5 py-20 text-white sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto max-w-[1320px]">
-          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end"><div><p className="text-xs font-black uppercase tracking-[.18em] text-[#8ed0ee]">12 destinations · all open</p><h2 className="mt-4 max-w-3xl text-4xl font-black tracking-[-.045em] sm:text-6xl">Explore every route EduExpress supports.</h2></div><Link href="/destinations" className="inline-flex min-h-12 w-fit items-center gap-2 rounded-full bg-white px-6 text-sm font-black text-[#08263c]">View destination hub <ArrowRight size={16} /></Link></div>
-          <div className="mt-10 grid gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {activeCountries.map(country => <Link key={country.slug} href={destinationPath(country.slug)} className="group flex items-center justify-between rounded-2xl border border-white/14 bg-white/[.06] px-5 py-4 transition hover:bg-white/[.12]"><span className="flex items-center gap-3"><span className="text-xl" aria-hidden>{country.flag}</span><strong className="text-sm">{country.name}</strong></span><ArrowRight size={14} className="text-[#8ed0ee] transition group-hover:translate-x-1" /></Link>)}
-          </div>
+        <div className="mt-14">
+          <h3 className={kit.h3}>Start with a profile review, not an application.</h3>
+          <ol data-anim="stagger" className="mt-5 grid gap-4 md:grid-cols-3">
+            {nextSteps.map(step => (
+              <li key={step.number} className={kit.cardLime}>
+                <span className="font-display text-[34px] font-black leading-none text-petrol-800">{step.number}</span>
+                <strong className="mt-4 block text-[18px] font-semibold text-petrol-800">{step.title}</strong>
+                <span className="mt-1 block text-[16px] leading-6 text-ink-soft">{step.copy}</span>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-6 text-[16px] leading-7 text-ink-soft">
+            Want to see how we charge first?{' '}
+            <Link href="/fees-and-transparency" className="font-semibold text-petrol-800 underline underline-offset-4">Read our fees and transparency policy</Link>
+            {' '}or{' '}
+            <Link href="/how-we-verify-universities" className="font-semibold text-petrol-800 underline underline-offset-4">how we verify university records</Link>.
+          </p>
         </div>
-      </section>
+      </Section>
 
-      <section className="px-5 py-20 sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto grid max-w-[1180px] gap-10 rounded-[34px] bg-[#eaf7fc] p-7 sm:p-10 lg:grid-cols-[.8fr_1.2fr] lg:p-14">
-          <div><p className="text-xs font-black uppercase tracking-[.18em] text-[#17699a]">Before a shortlist</p><h2 className="mt-4 text-4xl font-black tracking-[-.045em]">What we need to understand.</h2></div>
-          <div className="grid gap-3 sm:grid-cols-2">{['Current academic level and results', 'Subject and career direction', 'Realistic yearly and total budget', 'Language and document readiness', 'Preferred intake and timing', 'Recognition or licensing needs'].map(item => <p key={item} className="flex gap-3 rounded-2xl bg-white p-4 text-sm font-bold"><CheckCircle2 size={18} className="mt-0.5 shrink-0 text-[#25865f]" />{item}</p>)}</div>
-        </div>
-      </section>
-    </main>
+      <FaqBlock items={faqs} title="Clear answers before you commit." />
+
+      <CtaBand
+        title="Start with a profile review."
+        text="A counsellor will review your level, results, budget and preferred intake, then explain the realistic options and the documents needed before you pay anything."
+      />
+    </>
   );
 }

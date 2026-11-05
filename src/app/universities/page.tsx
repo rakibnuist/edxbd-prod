@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { ArrowRight, FileSearch, ShieldCheck } from 'lucide-react';
+import { CtaBand, JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
+import { pageMetadata } from '@/lib/seo';
 import UniversitiesClient from './UniversitiesClient';
 import { getUniversityRankings } from '@/lib/university-rankings';
 import { getAllUniversityProfileDetails } from '@/lib/university-profile-details';
@@ -12,8 +15,10 @@ import { scholarshipReductionLabel } from '@/lib/university-scholarship-view';
 import { universityProfileLogo } from '@/lib/university-profile-assets';
 import { activeCountries } from '@/lib/countries';
 import { destinationPath } from '@/lib/site-urls';
+import { countryCode } from '@/lib/country-code';
 
-const canonical = 'https://eduexpressint.com/universities';
+const PATH = '/universities';
+const canonical = `https://eduexpressint.com${PATH}`;
 export const revalidate = 3600;
 const programName = (value: string) => evergreenText(value).replace(/\s*\([^)]*\b(?:till|until|deadline)\b[^)]*\)/gi, '').trim();
 
@@ -22,25 +27,14 @@ type Props = { searchParams: Promise<Query> };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const query = await searchParams;
-  return {
-    title: { absolute: 'University & Program Finder 2027 | EduExpress International' },
+  return pageMetadata({
+    title: 'University & Program Finder 2027 | EduExpress International',
     description: 'Find and compare 2027 universities, programs, tuition and scholarships across destinations. Verified fees, rankings and intake months with sources.',
-    alternates: { canonical },
-    openGraph: {
-      title: 'University & Program Finder 2027',
-      description: 'Compare 2027 universities, programs, tuition, scholarships and intake months with source records.',
-      url: canonical,
-      type: 'website',
-      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — university and program finder' }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'University & Program Finder 2027',
-      description: 'Compare 2027 universities, programs, tuition, scholarships and intake months with source records.',
-      images: ['/og-image.jpg'],
-    },
-    ...(Object.values(query).some(value => Array.isArray(value) ? value.some(Boolean) : Boolean(value)) ? { robots: { index: false, follow: true } } : {}),
-  };
+    path: PATH,
+    image: { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — university and program finder' },
+    // Filtered views (?country=…) are variants of the directory; only the clean URL is indexed.
+    noindex: Object.values(query).some(value => Array.isArray(value) ? value.some(Boolean) : Boolean(value)),
+  });
 }
 
 async function getUniversities() {
@@ -95,53 +89,143 @@ export default async function UniversitiesPage({ searchParams }: Props) {
   });
   const listedDestinations = destinations.filter(item => item.hasDirectoryData).sort((a, b) => b.count - a.count);
   const guideDestinations = destinations.filter(item => !item.hasDirectoryData);
+  const activeCount = universities.filter(u => u.isActive).length;
+  const programCount = universities.reduce((count, u) => count + u.programs.length, 0);
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: 'Universities and Study Options', inLanguage: 'en-BD' },
-      { '@type': 'BreadcrumbList', '@id': `${canonical}#breadcrumb`, itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'EduExpress International', item: 'https://eduexpressint.com' },
-        { '@type': 'ListItem', position: 2, name: 'Universities and Study Options', item: canonical },
-      ] },
+      {
+        '@type': 'CollectionPage',
+        '@id': `${canonical}#page`,
+        url: canonical,
+        name: 'Universities and Study Options',
+        inLanguage: 'en-BD',
+        isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+        breadcrumb: { '@id': `${canonical}#breadcrumb` },
+      },
       { '@type': 'ItemList', numberOfItems: visibleUniversities.length, itemListElement: visibleUniversities.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, url: `${canonical}/${item.slug}` })) },
     ],
   };
 
   return (
-    <article className="bg-[#f4f6f7] pt-[76px] text-[#08263c] xl:pt-[112px]">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      <header className="bg-[#082d45] px-5 py-5 text-white sm:px-8 sm:py-7 lg:px-10">
-        <div className="mx-auto max-w-[1280px]">
-          <p className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#f0bc6a]"><span aria-hidden="true">🎓</span>Program Finder 2027</p>
-          <h1 className="max-w-3xl font-heading text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-[1.18] tracking-[-.025em]">Universities and Study Options</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-[#c4d6e2]">Find and compare universities, programs, tuition and scholarships for your 2027 study plan across every destination we assess.</p>
-          <dl className="mt-5 flex flex-wrap gap-x-7 gap-y-2 text-xs">
-            <div className="flex items-baseline gap-1.5"><dt className="sr-only">Universities listed</dt><dd className="text-lg font-bold tabular-nums">{universities.filter(u => u.isActive).length}</dd><dd className="text-[#8fa8b8]">universities</dd></div>
-            <div className="flex items-baseline gap-1.5 border-l border-white/10 pl-5"><dt className="sr-only">Programs listed</dt><dd className="text-lg font-bold tabular-nums">{universities.reduce((count, u) => count + u.programs.length, 0)}</dd><dd className="text-[#8fa8b8]">programs</dd></div>
-            <div className="flex items-baseline gap-1.5 border-l border-white/10 pl-5"><dt className="sr-only">Destinations with verified data</dt><dd className="text-lg font-bold tabular-nums">{listedDestinations.length}</dd><dd className="text-[#8fa8b8]">destinations with verified data</dd></div>
-          </dl>
-          <p className="mt-3 flex max-w-2xl items-start gap-1.5 text-[11px] leading-5 text-[#8fa8b8]"><span aria-hidden="true">✔</span>Fees, scholarships and rankings carry source records and verification dates in every university profile.</p>
-                    <nav aria-label="Browse verified universities by destination" className="mt-4 flex flex-wrap gap-2">
+    <>
+      <JsonLd data={schema} />
+
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Universities' }]}
+        eyebrow="Programme finder · 2027 cycle"
+        title="Universities and study options, without the brochure."
+        lead="Every record below carries its own fee, intake, scholarship and ranking source. Filter it like a directory, compare up to four, and read the profile before you shortlist."
+        actions={
+          <>
+            <a href="#university-results" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              Search the directory <ArrowRight size={18} aria-hidden="true" />
+            </a>
+            <Link href="/education-fit-assessment" className="ed-btn ed-btn-outline min-h-[52px] px-7">Ask for a shortlist</Link>
+          </>
+        }
+        aside={
+          <div className={kit.cardDark}>
+            <p className="text-[15px] font-semibold text-white/80">In the directory today</p>
+            <dl className="mt-5 grid grid-cols-3 gap-4">
+              <div className="flex flex-col-reverse">
+                <dt className="mt-2 text-[14px] leading-5 text-white/80">{activeCount === 1 ? 'university' : 'universities'}</dt>
+                <dd className="font-display text-[40px] font-black leading-none text-lime">{activeCount}</dd>
+              </div>
+              <div className="flex flex-col-reverse">
+                <dt className="mt-2 text-[14px] leading-5 text-white/80">programmes</dt>
+                <dd className="font-display text-[40px] font-black leading-none text-lime">{programCount}</dd>
+              </div>
+              <div className="flex flex-col-reverse">
+                <dt className="mt-2 text-[14px] leading-5 text-white/80">{listedDestinations.length === 1 ? 'destination with data' : 'destinations with data'}</dt>
+                <dd className="font-display text-[40px] font-black leading-none text-lime">{listedDestinations.length}</dd>
+              </div>
+            </dl>
+            <Link href="/how-we-verify-universities" className="mt-6 inline-flex min-h-[44px] items-center gap-1.5 text-[16px] font-semibold text-white underline underline-offset-4">
+              How records are verified <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </div>
+        }
+      />
+
+      <section aria-label="Browse by destination" className="border-b border-canvas-soft bg-white py-7">
+        <div className={kit.wrap}>
+          <nav aria-label="Browse verified universities by destination" className="flex flex-wrap items-center gap-2">
             {listedDestinations.map(item => (
-              <Link key={item.name} href={item.href} className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-white/20">
-                <span aria-hidden="true">{item.flag}</span>{item.name}<span className="rounded-md bg-[#efa93d] px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-[#08263c]">{item.count}</span>
+              <Link
+                key={item.name}
+                href={item.href}
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-canvas-soft px-4 text-[15px] font-semibold text-petrol-800 transition-colors hover:bg-lime-pale"
+              >
+                <span aria-hidden="true" className="text-[14px] font-semibold text-ink-soft">{countryCode(item.name.toLowerCase().replace(/\s+/g, '-'))}</span>
+                {item.name}
+                <span className="rounded-full bg-white px-2 text-[14px] text-ink-soft">{item.count}</span>
               </Link>
             ))}
-            {guideDestinations.length > 0 && <span className="inline-flex min-h-9 items-center gap-1 text-xs font-semibold text-[#8fa8b8]">{guideDestinations.length} more destinations are launching — see the destinations menu</span>}
+            {guideDestinations.length > 0 && (
+              <span className="text-[14px] text-ink-soft">{guideDestinations.length} further destinations are counselling-only — see the <Link href="/destinations" className="font-semibold text-petrol-800 underline underline-offset-4">destinations hub</Link></span>
+            )}
           </nav>
-<nav aria-label="Popular university study routes" className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs font-semibold"><Link href="/universities?country=China&search=medicine" className="inline-flex min-h-10 items-center text-[#f0bc6a] hover:underline">Explore medicine in China</Link><Link href="/mbbs-in-china-bangladesh" className="inline-flex min-h-10 items-center text-white hover:underline">MBBS fees & admission guide</Link></nav>
-        </div>
-      </header>
-      <Suspense fallback={<div className="py-20 text-center text-sm text-slate-500">Loading study options…</div>}><UniversitiesClient initialUniversities={universities} /></Suspense>
-      <footer className="border-t border-[#d8e2e8] bg-white px-5 py-7 sm:px-8 lg:px-10">
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <p className="max-w-3xl text-xs leading-6 text-slate-500">Tuition, scholarship and ranking entries in this directory link to their official source records inside each university profile. Where a figure is under verification, the profile says so — we do not publish estimates as facts. Compare before you commit.</p>
-          <nav aria-label="Directory transparency" className="flex shrink-0 flex-wrap gap-x-5 gap-y-1 text-xs font-semibold">
-            <Link href="/fees-and-transparency" className="inline-flex min-h-8 items-center text-[#174f7a] hover:underline">Fee &amp; transparency policy</Link>
-            <Link href="/how-we-verify-universities" className="inline-flex min-h-8 items-center text-[#174f7a] hover:underline">How we verify universities</Link>
+
+          <nav aria-label="Popular university study routes" className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-[15px] font-semibold">
+            <Link href="/universities?country=China&search=medicine" className="inline-flex min-h-[44px] items-center text-petrol-800 underline-offset-4 hover:underline">
+              Medicine in China
+            </Link>
+            <Link href="/mbbs-in-china-bangladesh" className="inline-flex min-h-[44px] items-center text-petrol-800 underline-offset-4 hover:underline">
+              MBBS fees and admission
+            </Link>
+            <Link href="/china-scholarships-bangladesh" className="inline-flex min-h-[44px] items-center text-petrol-800 underline-offset-4 hover:underline">
+              China scholarships
+            </Link>
+            <Link href="/how-we-verify-universities" className="inline-flex min-h-[44px] items-center text-ink-soft underline-offset-4 hover:text-petrol-800 hover:underline">
+              How records are verified
+            </Link>
           </nav>
         </div>
-      </footer>
-    </article>
+      </section>
+
+      <div className="bg-white pt-8">
+        <Suspense fallback={<div className="px-5 py-20 text-center text-[16px] text-ink-soft sm:px-8">Loading the directory…</div>}>
+          <UniversitiesClient initialUniversities={universities} />
+        </Suspense>
+      </div>
+
+      <Section tone="sage" title="How we keep the directory honest." intro="Tuition, scholarship and ranking entries link to their official source records inside each profile.">
+        <div data-anim="stagger" className="grid gap-5 md:grid-cols-3">
+          <article className={kit.card}>
+            <span className={kit.iconLime}><FileSearch size={22} aria-hidden="true" /></span>
+            <h3 className={`mt-6 ${kit.h3}`}>Sources on every record</h3>
+            <p className="mt-2 text-[16px] leading-7 text-ink-soft">
+              Each record stores the official institution name, source URL, recognition notes, exact program names, tuition periods,
+              intake dates and the date each fact was checked.
+            </p>
+          </article>
+          <article className={kit.card}>
+            <span className={kit.iconLime}><ShieldCheck size={22} aria-hidden="true" /></span>
+            <h3 className={`mt-6 ${kit.h3}`}>No estimates as facts</h3>
+            <p className="mt-2 text-[16px] leading-7 text-ink-soft">
+              Where a figure is under verification, the profile says so. We do not publish estimates as facts.
+            </p>
+          </article>
+          <article className={kit.cardDark}>
+            <h3 className="text-[21px] font-semibold leading-[1.3] tracking-[-0.02em] text-lime">Honest relationship labels</h3>
+            <p className="mt-2 text-[16px] leading-7 text-white/80">
+              Direct partner, authorized representative, network access and public direct application are different relationships. We
+              use &ldquo;partner&rdquo; only when supporting evidence is current.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1">
+              <Link href="/fees-and-transparency" className="inline-flex min-h-[44px] items-center gap-1.5 text-[16px] font-semibold text-white underline underline-offset-4">Fee policy</Link>
+              <Link href="/how-we-verify-universities" className="inline-flex min-h-[44px] items-center gap-1.5 text-[16px] font-semibold text-white underline underline-offset-4">Verification method</Link>
+            </div>
+          </article>
+        </div>
+      </Section>
+
+      <CtaBand
+        title="Want a shortlist instead?"
+        text="Tell us your results, budget and preferred intake. A counsellor checks which universities in the directory are realistic for you, with the costs and documents in writing."
+      />
+    </>
   );
 }

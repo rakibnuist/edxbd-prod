@@ -1,26 +1,33 @@
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, CheckCircle2, ClipboardCheck, FileCheck2, GraduationCap, Plane, Search, ShieldCheck, Sparkles, WalletCards, type LucideIcon } from 'lucide-react';
+import {
+  ArrowRight,
+  CheckCircle2,
+  ClipboardCheck,
+  FileCheck2,
+  GraduationCap,
+  Plane,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  WalletCards,
+  type LucideIcon,
+} from 'lucide-react';
+import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { ogImage, pageMetadata } from '@/lib/seo';
+import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
 
-export const metadata: Metadata = {
-  title: 'Your Complete Study Abroad Journey',
-  description: 'See the seven-stage EduExpress journey from education fit and applications to visa readiness, departure, arrival and university registration.',
-  alternates: { canonical: '/your-study-journey' },
-  openGraph: {
-    title: 'Your Complete Study Abroad Journey',
-    description: 'See every stage from education fit and applications to visa readiness, departure and university registration.',
-    url: '/your-study-journey',
-    type: 'website',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — the complete study journey' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Your Complete Study Abroad Journey',
-    description: 'See every stage from education fit and applications to visa readiness, departure and university registration.',
-    images: ['/og-image.jpg'],
-  },
-};
+const PATH = '/your-study-journey';
+const canonical = absoluteUrl(PATH);
+
+export const metadata = pageMetadata({
+  title: 'Your Study Abroad Journey in 7 Stages | EduExpress',
+  description:
+    'See the seven-stage EduExpress journey from education fit and applications to visa readiness, departure and university registration, each with a clear output.',
+  path: PATH,
+  locale: 'en_BD',
+  image: ogImage('journey', 'A Bangladeshi family seeing a student off at Dhaka airport'),
+});
 
 type JourneyStage = {
   id: string;
@@ -32,6 +39,8 @@ type JourneyStage = {
   owner: string;
   icon: LucideIcon;
   image?: string;
+  /** Photo description; falls back to the stage title. */
+  alt?: string;
 };
 
 const stages: JourneyStage[] = [
@@ -44,7 +53,8 @@ const stages: JourneyStage[] = [
     output: 'Education profile',
     owner: 'Student + EduExpress counselor',
     icon: Sparkles,
-    image: '/images/office/counselling-office.webp',
+    image: '/images/office/counselor-office.webp',
+    alt: 'EduExpress counselor at the decision desk',
   },
   {
     id: 'compare-options',
@@ -76,6 +86,7 @@ const stages: JourneyStage[] = [
     owner: 'Student supplies originals; EduExpress supports preparation',
     icon: ClipboardCheck,
     image: '/images/office/admission-packets.webp',
+    alt: 'Admission envelopes from Nanjing University of Information Science and Technology with EduExpress file notes',
   },
   {
     id: 'visa-to-registration',
@@ -108,60 +119,184 @@ const stages: JourneyStage[] = [
     owner: 'Student + university, with EduExpress guidance',
     icon: GraduationCap,
     image: '/images/students/campus-nuist.webp',
+    alt: 'A student at the I love NUIST sign on campus in Nanjing',
   },
 ];
 
 export default function StudyJourneyPage() {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${canonical}#webpage`,
+        url: canonical,
+        name: 'Your complete study abroad journey',
+        description:
+          'Seven visible stages from education fit and applications to visa readiness, departure, arrival and university registration.',
+        inLanguage: 'en-BD',
+        dateModified: '2026-11-04',
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+        about: { '@id': `${SITE_URL}/#organization` },
+        breadcrumb: { '@id': `${canonical}#breadcrumb` },
+      },
+      {
+        '@type': 'ItemList',
+        '@id': `${canonical}#stages`,
+        name: 'The seven stages of the EduExpress study journey',
+        numberOfItems: stages.length,
+        itemListElement: stages.map((stage) => ({
+          '@type': 'ListItem',
+          position: Number(stage.number),
+          name: stage.title,
+          url: `${canonical}#${stage.id}`,
+        })),
+      },
+    ],
+  };
+
   return (
-    <main className="min-h-screen bg-white text-[#08263c]">
-      <section className="relative overflow-hidden bg-[#08263c] px-5 pb-16 pt-32 text-white sm:px-8 sm:pb-24 sm:pt-40 lg:px-12">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_15%,rgba(100,181,223,.22),transparent_28%)]" />
-        <div className="relative mx-auto max-w-[1360px]">
-          <nav aria-label="Breadcrumb" className="text-xs font-bold text-white/60"><Link href="/" className="hover:text-white">Home</Link> <span aria-hidden>/</span> Your Study Journey</nav>
-          <div className="mt-10 grid gap-12 lg:grid-cols-[.95fr_1.05fr] lg:items-end">
-            <div><p className="text-xs font-black uppercase tracking-[.18em] text-[#8ed0ee]">File open → university registration</p><h1 className="mt-5 max-w-[11ch] text-[clamp(3.6rem,7vw,7.6rem)] font-black leading-[.86] tracking-[-.07em]">See your whole journey.</h1><p className="mt-7 max-w-2xl text-lg leading-8 text-white/70">Seven visible stages. A clear output from each. Written responsibilities throughout—so your family understands what happens next.</p><Link href="/education-fit-assessment" className="mt-8 inline-flex min-h-14 items-center gap-2 rounded-full bg-[#e34c43] px-7 text-sm font-black text-white">Start stage one free <ArrowRight size={17} /></Link></div>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">{stages.map(stage => <a key={stage.number} href={`#${stage.id}`} className="group rounded-2xl border border-white/15 bg-white/[.06] p-4 transition hover:bg-white/[.12]"><span className="text-[10px] font-black tracking-[.16em] text-[#8ed0ee]">{stage.number}</span><strong className="mt-2 block text-sm leading-5">{stage.title}</strong></a>)}</div>
-          </div>
-        </div>
-      </section>
+    <>
+      <JsonLd data={structuredData} />
 
-      <section className="border-b border-[#174f7a]/12 bg-[#eaf7fc] px-5 py-6 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-[1360px] flex-wrap items-center justify-between gap-4"><p className="text-sm font-black">Every stage answers three questions: what happens, what you receive, who owns the decision.</p><Link href="/proof-library" className="inline-flex items-center gap-2 text-sm font-black text-[#17699a]">Inspect real work proof <ArrowRight size={15} /></Link></div>
-      </section>
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Your study journey' }]}
+        eyebrow="File open → university registration"
+        title="See your whole journey."
+        lead="Seven visible stages. A clear output from each. Written responsibilities throughout, so your family understands what happens next."
+        reviewed="November 2026"
+        actions={
+          <>
+            <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              Start stage one free <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+            <Link href="/proof-library" className="ed-btn ed-btn-outline min-h-[52px] px-7">Inspect the proof library</Link>
+          </>
+        }
+        aside={
+          <nav aria-label="Journey stages" className="rounded-3xl bg-white p-3">
+            <ol className="grid gap-1">
+              {stages.map((stage) => (
+                <li key={stage.number}>
+                  <a href={`#${stage.id}`} className="group flex min-h-[52px] items-center gap-4 rounded-2xl px-4 py-2.5 transition hover:bg-canvas-soft">
+                    <span className="font-display text-[22px] font-black leading-none text-petrol-800/35 group-hover:text-petrol-800">{stage.number}</span>
+                    <span className="flex-1 text-[16px] font-semibold leading-5 text-petrol-800">{stage.title}</span>
+                    <ArrowRight size={16} className="shrink-0 text-petrol-800 transition group-hover:translate-x-1" aria-hidden="true" />
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        }
+      />
 
-      <section className="px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
-        <div className="mx-auto max-w-[1180px]">
-          <div className="space-y-6">
-            {stages.map((stage, index) => {
-              const Icon = stage.icon;
-              const reverse = index % 2 === 1;
-              return (
-                <article id={stage.id} key={stage.number} className="scroll-mt-32 overflow-hidden rounded-[32px] border border-[#174f7a]/12 bg-[#f8fbfd]">
-                  <div className={`grid ${stage.image ? 'lg:grid-cols-2' : ''}`}>
-                    {stage.image && <figure className={`relative min-h-[320px] ${reverse ? 'lg:order-2' : ''}`}><Image src={stage.image} alt={`${stage.title} in the EduExpress student journey`} fill sizes="(max-width:1024px) 100vw, 50vw" className="object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-[#061c2d]/55 to-transparent" /><figcaption className="absolute bottom-5 left-5 rounded-full bg-[#08263c]/85 px-4 py-2 text-[10px] font-black uppercase tracking-[.14em] text-white backdrop-blur">Stage {stage.number}</figcaption></figure>}
-                    <div className={`p-6 sm:p-9 lg:p-12 ${reverse && stage.image ? 'lg:order-1' : ''}`}>
-                      <div className="flex items-start justify-between gap-6"><span className="grid size-12 place-items-center rounded-2xl bg-[#dff3fb] text-[#17699a]"><Icon size={24} /></span><span className="text-xs font-black tracking-[.18em] text-[#e34c43]">{stage.number} / 07</span></div>
-                      <h2 className="mt-8 text-3xl font-black tracking-[-.04em] sm:text-4xl">{stage.title}</h2>
-                      <p className="mt-4 text-base leading-7 text-slate-600">{stage.promise}</p>
-                      <ul className="mt-6 grid gap-3">{stage.work.map(item => <li key={item} className="flex gap-3 text-sm font-bold text-[#23455d]"><CheckCircle2 size={17} className="mt-0.5 shrink-0 text-[#25865f]" />{item}</li>)}</ul>
-                      <div className="mt-8 grid gap-3 sm:grid-cols-2"><div className="rounded-2xl bg-white p-4"><p className="text-[10px] font-black uppercase tracking-[.14em] text-[#17699a]">What you receive</p><strong className="mt-2 block text-sm">{stage.output}</strong></div><div className="rounded-2xl bg-white p-4"><p className="text-[10px] font-black uppercase tracking-[.14em] text-[#17699a]">Responsibility</p><strong className="mt-2 block text-sm">{stage.owner}</strong></div></div>
+      <TrustBar />
+
+      <Section
+        title="One file, seven visible handovers."
+        intro="Each stage has a document you can keep and a named owner for the decision. Nothing moves forward on a spoken promise."
+      >
+        <p data-anim="up" className="mb-8 inline-block rounded-2xl bg-lime-pale px-4 py-3 text-[15px] font-semibold leading-6 text-lime-deep">Every stage answers three questions: what happens, what you receive, who owns the decision.</p>
+        <div className="space-y-5">
+          {stages.map((stage, index) => {
+            const Icon = stage.icon;
+            const reverse = index % 2 === 1;
+            const head = (
+              <>
+                <div className="flex items-start justify-between gap-6">
+                  <span className={kit.icon}><Icon size={22} aria-hidden="true" /></span>
+                  <span className="font-display text-[22px] font-black leading-none text-petrol-800/30">{stage.number} / 07</span>
+                </div>
+                <h3 className="mt-6 font-display text-[30px] font-black leading-[1] tracking-[-0.01em] text-petrol-800 sm:text-[36px]">{stage.title}</h3>
+                <p className={`mt-3 ${kit.body}`}>{stage.promise}</p>
+              </>
+            );
+            const body = (
+              <>
+                <ul className="grid gap-2.5">
+                  {stage.work.map((item) => (
+                    <li key={item} className="flex gap-2.5 text-[16px] leading-6 text-petrol-800">
+                      <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <dl className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl bg-white p-4">
+                    <dt className="text-[14px] font-semibold text-ink-soft">What you receive</dt>
+                    <dd className="mt-1 text-[16px] font-semibold text-petrol-800">{stage.output}</dd>
+                  </div>
+                  <div className="rounded-2xl bg-lime-pale p-4">
+                    <dt className="text-[14px] font-semibold text-lime-deep">Responsibility</dt>
+                    <dd className="mt-1 text-[16px] font-semibold text-petrol-800">{stage.owner}</dd>
+                  </div>
+                </dl>
+              </>
+            );
+            return (
+              <article id={stage.id} key={stage.number} data-anim="up" className="scroll-mt-28 overflow-hidden rounded-3xl bg-canvas-soft">
+                {stage.image ? (
+                  <div className="grid lg:grid-cols-2">
+                    <figure className={`relative min-h-[280px] ${reverse ? 'lg:order-2' : ''}`}>
+                      <Image
+                        src={stage.image}
+                        alt={stage.alt ?? `${stage.title} in the EduExpress student journey`}
+                        fill
+                        sizes="(max-width:1024px) 100vw, 600px"
+                        className="object-cover"
+                      />
+                      <figcaption className="absolute bottom-4 left-4 rounded-full bg-white px-4 py-1.5 text-[14px] font-semibold text-petrol-800">
+                        Stage {stage.number}
+                      </figcaption>
+                    </figure>
+                    <div className="p-6 sm:p-8 lg:p-10">
+                      {head}
+                      <div className="mt-6">{body}</div>
                     </div>
                   </div>
-                </article>
-              );
-            })}
-          </div>
+                ) : (
+                  <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-2 lg:gap-12 lg:p-10">
+                    <div>{head}</div>
+                    <div className="lg:pt-[72px]">{body}</div>
+                  </div>
+                )}
+              </article>
+            );
+          })}
         </div>
-      </section>
+      </Section>
 
-      <section className="bg-[#eaf7fc] px-5 py-20 sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto grid max-w-[1180px] gap-8 lg:grid-cols-[1.08fr_.92fr]">
-          <div className="rounded-[32px] bg-white p-7 sm:p-10"><span className="grid size-12 place-items-center rounded-2xl bg-[#eaf8f1] text-[#25865f]"><FileCheck2 size={23} /></span><h2 className="mt-6 text-4xl font-black tracking-[-.045em]">Proof travels with the journey.</h2><p className="mt-4 text-base leading-8 text-slate-600">EduExpress publishes privacy-safe examples of admission work, document records and institutional evidence. Your own file remains private.</p><Link href="/proof-library" className="mt-7 inline-flex items-center gap-2 text-sm font-black text-[#17699a]">Open proof library <ArrowRight size={16} /></Link></div>
-          <div className="rounded-[32px] bg-[#08263c] p-7 text-white sm:p-10"><p className="text-xs font-black uppercase tracking-[.16em] text-[#8ed0ee]">Important boundary</p><h2 className="mt-5 text-3xl font-black">Support is not a guarantee.</h2><p className="mt-4 text-sm leading-7 text-white/70">Universities decide admission and scholarships. Government authorities decide visas and permits. EduExpress can compare, prepare, check, explain and support—but cannot replace an official decision.</p><Link href="/better-education-standard" className="mt-7 inline-flex items-center gap-2 text-sm font-black text-[#8ed0ee]">Read our standard <ArrowRight size={16} /></Link></div>
+      <Section tone="sage" title="Proof, and its limits.">
+        <div data-anim="stagger" className="grid gap-5 lg:grid-cols-2">
+          <article className={`${kit.card} flex flex-col`}>
+            <span className={kit.iconLime}><FileCheck2 size={22} aria-hidden="true" /></span>
+            <h3 className={`mt-6 ${kit.h3}`}>Proof travels with the journey</h3>
+            <p className={`mt-2 ${kit.body}`}>
+              EduExpress publishes privacy-safe examples of admission work, document records and institutional evidence. Your own file remains private.
+            </p>
+            <Link href="/proof-library" className="ed-btn ed-btn-soft mt-auto min-h-[48px] self-start px-6">
+              Open proof library <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </article>
+          <article className={`${kit.cardDark} flex flex-col`}>
+            <span className={kit.iconLime}><ShieldCheck size={22} aria-hidden="true" /></span>
+            <h3 className="mt-6 text-[21px] font-semibold leading-[1.3] tracking-[-0.02em] text-lime">Support is not a guarantee</h3>
+            <p className="mt-2 text-[16px] leading-7 text-white/80">
+              Universities decide admission and scholarships. Government authorities decide visas and permits. EduExpress can compare, prepare, check, explain and support, but cannot replace an official decision.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 pt-0 sm:flex-row">
+              <Link href="/better-education-standard" className="ed-btn ed-btn-signal min-h-[48px] px-6">Read our standard <ArrowRight size={16} aria-hidden="true" /></Link>
+              <Link href="/fees-and-transparency" className="ed-btn ed-btn-on-dark min-h-[48px] px-6">How fees work</Link>
+            </div>
+          </article>
         </div>
-      </section>
+      </Section>
 
-      <section className="px-5 py-20 sm:px-8 sm:py-24 lg:px-12"><div className="mx-auto flex max-w-[1180px] flex-col items-center rounded-[36px] bg-[#e34c43] px-7 py-14 text-center text-white sm:px-12"><p className="text-xs font-black uppercase tracking-[.18em] text-white/70">Your next honest step</p><h2 className="mt-4 max-w-3xl text-4xl font-black tracking-[-.05em] sm:text-6xl">Open stage one with your real profile.</h2><p className="mt-5 max-w-2xl text-base leading-8 text-white/80">The free assessment gives your counselor the context needed to compare education routes responsibly.</p><Link href="/education-fit-assessment" className="mt-8 inline-flex min-h-14 items-center gap-2 rounded-full bg-white px-7 text-sm font-black text-[#b73531]">Start my Education Fit Assessment <ArrowRight size={17} /></Link></div></section>
-    </main>
+      <CtaBand
+        title="Open stage one with your real profile."
+        text="The free assessment gives your counsellor the context needed to compare education routes responsibly."
+      />
+    </>
   );
 }

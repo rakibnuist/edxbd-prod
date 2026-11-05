@@ -439,11 +439,11 @@ export default function TestimonialsPage() {
                   <label className="block text-sm font-bold text-blue-950">Real student photo</label>
                   <p className="mt-1 text-xs leading-5 text-blue-800">Upload only the authentic student portrait covered by the written public-consent record below.</p>
                   <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
-                    <div className="relative grid size-28 shrink-0 place-items-center overflow-hidden rounded-2xl border border-blue-200 bg-white text-xs font-bold text-slate-400">
+                    <div className="relative grid size-28 shrink-0 place-items-center overflow-hidden rounded-2xl border border-blue-200 bg-white text-xs font-bold text-slate-500">
                       {formData.image ? <Image src={formData.image} alt="Student photo preview" fill sizes="112px" unoptimized className="object-cover" /> : 'No photo'}
                     </div>
                     <div className="flex-1">
-                      <label className="inline-flex min-h-11 cursor-pointer items-center rounded-xl bg-[#174f7a] px-5 text-sm font-bold text-white">
+                      <label className="inline-flex min-h-11 cursor-pointer items-center rounded-xl bg-[#12436b] px-5 text-sm font-bold text-white">
                         {uploadingPhoto ? 'Uploading photo…' : 'Upload real student photo'}
                         <input type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" disabled={uploadingPhoto} onChange={event => {
                           const file = event.target.files?.[0];

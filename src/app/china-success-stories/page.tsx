@@ -1,63 +1,138 @@
-import type { Metadata } from 'next';
+import { cache } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, BadgeCheck, LockKeyhole, ShieldCheck } from 'lucide-react';
-import prisma from '@/lib/prisma';
+import { ArrowRight, FileCheck2, ShieldCheck } from 'lucide-react';
+import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { ogImage, pageMetadata } from '@/lib/seo';
+import { StandardsGrid, StoryCard, getPublishedStories } from '../success-stories/stories';
 
-const canonical = 'https://eduexpressint.com/china-success-stories';
+const PATH = '/china-success-stories';
+const canonical = `https://eduexpressint.com${PATH}`;
 
-async function getChinaStoryCount() {
-  try {
-    return await prisma.testimonial.count({
-      where: {
-        country: { contains: 'China' },
-        isPublished: true,
-      },
-    });
-  } catch {
-    return 0;
-  }
-}
+const getChinaStories = cache(() => getPublishedStories({ country: { contains: 'China' } }));
 
-export async function generateMetadata(): Promise<Metadata> {
-  const count = await getChinaStoryCount();
-  return {
-    title: { absolute: 'China Student Success Stories | EduExpress International' },
-    description: 'Consent-based China student outcomes with evidence records and sensitive details redacted.',
-    alternates: { canonical },
-    robots: { index: count > 0, follow: true },
-    openGraph: {
-      title: 'China Student Success Stories',
-      description: 'Proof with permission and privacy controls.',
-      url: canonical,
-      type: 'website',
-      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
-    },
-  };
+export async function generateMetadata() {
+  const stories = await getChinaStories();
+  return pageMetadata({
+    title: 'China Student Success Stories | EduExpress International',
+    description:
+      'Consent-based stories from EduExpress students in China: profile, university choice, timeline, service scope and payment, with passport and visa data redacted.',
+    path: PATH,
+    image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
+    // Unchanged rule: the page stays out of the index until at least one consented China story is public.
+    noindex: stories.length === 0,
+  });
 }
 
 export default async function ChinaSuccessStoriesPage() {
-  const count = await getChinaStoryCount();
+  const stories = await getChinaStories();
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${canonical}#page`,
+    url: canonical,
+    name: 'China Student Success Stories',
+    inLanguage: 'en-BD',
+    isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+    about: { '@id': 'https://eduexpressint.com/#organization' },
+    breadcrumb: { '@id': `${canonical}#breadcrumb` },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: stories.length,
+      itemListElement: stories.map((story, index) => ({ '@type': 'ListItem', position: index + 1, name: story.name })),
+    },
+  };
+
   return (
-    <article className="min-h-screen bg-[#f4f8fa] px-5 pb-20 pt-32 text-[#08263c] sm:px-8 lg:px-12">
-      <div className="mx-auto max-w-[1100px]">
-        <nav aria-label="Breadcrumb" className="text-xs font-bold text-[#174f7a]"><Link href="/">Home</Link> <span aria-hidden>/</span> <Link href="/study-in-china-from-bangladesh">Study in China</Link> <span aria-hidden>/</span> Success stories</nav>
-        <header className="mt-8 overflow-hidden rounded-[2rem] bg-[#08263c] p-7 text-white sm:p-10 lg:p-14">
-          <p className="text-xs font-black uppercase tracking-[.16em] text-[#8ed0ee]">Proof with permission</p>
-          <h1 className="mt-4 max-w-4xl font-heading text-4xl font-bold sm:text-6xl">China student success stories</h1>
-          <p className="mt-5 max-w-3xl text-base leading-7 text-white/70">Every published story requires a real student record, written consent, an approved photo, service and payment details, and privacy-safe evidence.</p>
-        </header>
+    <>
+      <JsonLd data={structuredData} />
 
-        <section className="mt-8 grid gap-4 sm:grid-cols-3">
-          {[['Written consent', 'The student controls their public name, photo and story scope.'], ['Evidence record', 'Offer and timeline facts are checked before publication.'], ['Privacy control', 'Passport, birth date and visa identifiers never appear publicly.']].map(([title, text], index) => <div key={title} className="rounded-2xl border border-[#174f7a]/15 bg-white p-5">{index === 0 ? <BadgeCheck className="text-[#174f7a]" /> : index === 1 ? <ShieldCheck className="text-[#174f7a]" /> : <LockKeyhole className="text-[#174f7a]" />}<h2 className="mt-4 font-heading text-xl font-bold">{title}</h2><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p></div>)}
-        </section>
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Study in China', path: '/study-in-china-from-bangladesh' }, { name: 'Success stories' }]}
+        eyebrow="Proof with permission"
+        title="China student success stories."
+        lead="Every published story requires a real student record, written consent, an approved photo, service and payment details, and privacy-safe evidence."
+        actions={
+          <>
+            {stories.length > 0 ? (
+              <a href="#stories" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+                Read the stories <ArrowRight size={18} aria-hidden="true" />
+              </a>
+            ) : (
+              <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+                Get my free assessment <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+            )}
+            <Link href="/study-in-china-from-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">Study in China guide</Link>
+          </>
+        }
+        aside={
+          <figure className="relative overflow-hidden rounded-3xl">
+            <div className="relative aspect-[4/3]">
+              <Image
+                src="/images/students/campus-nuist.webp"
+                alt="A student at the I love NUIST sign on campus in Nanjing"
+                fill
+                priority
+                sizes="(max-width:1024px) 100vw, 480px"
+                className="object-cover object-[60%_45%]"
+              />
+            </div>
+            <figcaption className="absolute bottom-4 left-4 rounded-full bg-white px-4 py-1.5 text-[14px] font-semibold text-petrol-800">
+              On campus in Nanjing
+            </figcaption>
+          </figure>
+        }
+      />
 
-        <section className="mt-8 rounded-[2rem] border border-[#174f7a]/15 bg-white p-7 sm:p-10">
-          <p className="text-xs font-black uppercase tracking-[.14em] text-[#174f7a]">Publication status</p>
-          <h2 className="mt-3 font-heading text-3xl font-bold">{count > 0 ? `${count} consent-approved China stories are ready` : 'No China story is public until its consent record is complete'}</h2>
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600">The public proof library remains available for privacy-safe admission notices and JW202 evidence. Student stories are a separate consent-controlled record.</p>
-          <div className="mt-6 flex flex-wrap gap-3"><Link href="/proof-library" className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-[#08263c] px-5 text-sm font-black text-white">Inspect the proof library <ArrowRight size={15} /></Link><Link href="/education-fit-assessment" className="inline-flex min-h-12 items-center gap-2 rounded-xl border-2 border-[#08263c] px-5 text-sm font-black">Get my free assessment <ArrowRight size={15} /></Link></div>
-        </section>
-      </div>
-    </article>
+      <TrustBar />
+
+      <Section title="Three checks before a story goes public." intro="Offer and timeline facts are checked before publication, and the student decides what is shown.">
+        <StandardsGrid />
+      </Section>
+
+      <Section
+        tone="sage"
+        id="stories"
+        title={stories.length ? 'Published China stories.' : 'No China story is public until its consent record is complete.'}
+        intro={
+          stories.length
+            ? 'Each story is one student’s case, published with permission. Universities decide admission and scholarships; authorities decide visas.'
+            : 'Student stories are a separate consent-controlled record. Until one is complete, the proof library shows privacy-safe admission notices and JW202 evidence instead.'
+        }
+      >
+        {stories.length ? (
+          <div data-anim="stagger" className="grid gap-6 lg:grid-cols-2">
+            {stories.map(story => <StoryCard key={story.id} story={story} />)}
+          </div>
+        ) : (
+          <div data-anim="stagger" className="grid gap-5 md:grid-cols-2">
+            <article className={kit.card}>
+              <span className={kit.iconLime}><FileCheck2 size={22} aria-hidden="true" /></span>
+              <h3 className={`mt-6 ${kit.h3}`}>Inspect the evidence that is public</h3>
+              <p className="mt-2 text-[16px] leading-7 text-ink-soft">
+                The proof library holds company records with definitions and privacy-safe admission evidence, or we arrange a controlled inspection at our Dhanmondi office.
+              </p>
+              <Link href="/proof-library" className="ed-btn ed-btn-soft mt-6 min-h-[48px] px-6">Open the proof library</Link>
+            </article>
+            <article className={kit.cardDark}>
+              <span className={kit.iconLime}><ShieldCheck size={22} aria-hidden="true" /></span>
+              <h3 className="mt-6 text-[21px] font-semibold leading-[1.3] tracking-[-0.02em] text-lime">What we will never publish</h3>
+              <p className="mt-2 text-[16px] leading-7 text-white/80">
+                Passport numbers, birth dates, visa identifiers or a photo the student has not approved. A story is a record, not an advertisement.
+              </p>
+              <Link href="/success-stories" className="ed-btn ed-btn-on-dark mt-6 min-h-[48px] px-6">All student stories</Link>
+            </article>
+          </div>
+        )}
+      </Section>
+
+      <CtaBand
+        title="Check your China route."
+        text="Share your results, budget and preferred subject. A counsellor explains the scholarship routes that fit, the complete cost and the documents to prepare."
+      />
+    </>
   );
 }

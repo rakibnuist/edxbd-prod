@@ -304,21 +304,23 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
 
   if (screen === 'done') {
     return (
-      <div className="overflow-hidden rounded-[22px] border border-[#174f7a]/20 bg-white shadow-[0_24px_70px_rgba(8,38,60,.14)]">
-        <div className="bg-[#0a1f33] p-7 text-white sm:p-9">
-          <CheckCircle2 className="text-[#8ed0ee]" size={34} />
-          <p className="ed-label mt-6 text-[#8ed0ee]">{isApplication ? 'Application support request received' : 'Assessment received'}</p>
-          <h2 className="ed-display mt-3 text-3xl">Your profile is ready for counselor review.</h2>
-          <p className="mt-4 text-sm leading-6 text-white/70">
+      <div className="overflow-hidden rounded-3xl bg-white shadow-[0_24px_60px_-36px_rgba(11,43,69,.35)] ring-1 ring-petrol-800/10">
+        <div className="bg-petrol-800 p-7 text-white sm:p-9">
+          <span className="grid size-12 place-items-center rounded-full bg-lime text-petrol-800">
+            <CheckCircle2 size={24} aria-hidden="true" />
+          </span>
+          <p className="mt-6 text-[15px] font-semibold text-white/85">{isApplication ? 'Application support request received' : 'Assessment received'}</p>
+          <h2 className="mt-2 font-display text-[30px] font-black leading-[1.02] tracking-[-0.01em] text-lime sm:text-[36px]">Your profile is ready for counselor review.</h2>
+          <p className="mt-4 text-[16px] leading-7 text-white/85">
             {isApplication ? 'A counselor will review your preferred university, program and academic profile, then help with eligibility, documents and the application process. This request is not a university admission offer.' : 'We have your study plan and starting routes. A counselor can now check the exact university, cost and document details.'}
           </p>
         </div>
         <div className="grid gap-3 p-6 sm:grid-cols-2 sm:p-8">
-          <Link href="/universities" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#174f7a] px-5 text-sm font-bold text-white">
-            Browse universities <ArrowRight size={16} />
+          <Link href="/universities" className="ed-btn ed-btn-signal min-h-12 px-5">
+            Browse universities <ArrowRight size={16} aria-hidden="true" />
           </Link>
-          <Link href="/contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#c9d8e6] px-5 text-sm font-bold text-[#0a1f33]">
-            Contact the office <ArrowRight size={16} />
+          <Link href="/contact" className="ed-btn ed-btn-outline min-h-12 px-5">
+            Contact the office <ArrowRight size={16} aria-hidden="true" />
           </Link>
         </div>
       </div>
@@ -326,36 +328,36 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
   }
 
   return (
-    <form onSubmit={handleSubmit} className="overflow-hidden rounded-[22px] border border-[#174f7a]/20 bg-white shadow-[0_24px_70px_rgba(8,38,60,.14)]">
-      <div className="border-b border-[#e2e7ee] bg-[#0a1f33] p-6 text-white sm:p-7">
+    <form onSubmit={handleSubmit} className="overflow-hidden rounded-3xl bg-white shadow-[0_24px_60px_-36px_rgba(11,43,69,.35)] ring-1 ring-petrol-800/10">
+      <div className="bg-petrol-800 p-6 text-white sm:p-7">
         <div className="flex items-start justify-between gap-4">
-          <div className="flex gap-3">
-            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#8ed0ee] text-[#0a1f33]">
-              <SearchCheck size={22} />
+          <div className="flex gap-3.5">
+            <span className="grid size-12 shrink-0 place-items-center rounded-full bg-lime text-petrol-800">
+              <SearchCheck size={22} aria-hidden="true" />
             </span>
             <div>
-              <p className="ed-label text-[#8ed0ee]">{isApplication ? 'University application support' : 'Free admissions discovery'}</p>
-              <h2 className="ed-display mt-1 text-2xl sm:text-[1.75rem]">{isApplication ? 'Tell us about your study plans' : 'See your starting routes'}</h2>
+              <p className="text-[15px] font-semibold text-white/80">{isApplication ? 'University application support' : 'Free admissions discovery'}</p>
+              <h2 className="mt-1 font-display text-[26px] font-black leading-[1.05] tracking-[-0.01em] text-lime sm:text-[30px]">{isApplication ? 'Tell us about your study plans' : 'See your starting routes'}</h2>
             </div>
           </div>
-          <span className="shrink-0 rounded-full border border-white/20 px-3 py-1.5 text-[11px] font-semibold text-white/70">2 min</span>
+          <span className="shrink-0 rounded-full bg-white/10 px-3 py-1.5 text-[14px] font-semibold text-white/85">2 min</span>
         </div>
         <div className="mt-6 grid grid-cols-3 gap-2" aria-label={`Step ${progress} of 3`}>
           {(isApplication ? ['Profile', 'Study plan', 'Contact'] : ['Profile', 'Routes', 'Review']).map((label, index) => (
             <div key={label}>
-              <div className={`h-1.5 rounded-full ${index + 1 <= progress ? 'bg-[#8ed0ee]' : 'bg-white/15'}`} />
-              <span className={`mt-2 block text-[11px] font-semibold ${index + 1 === progress ? 'text-white' : 'text-white/50'}`}>{label}</span>
+              <div className={`h-1.5 rounded-full ${index + 1 <= progress ? 'bg-lime' : 'bg-white/15'}`} />
+              <span className={`mt-2 block text-[14px] font-semibold ${index + 1 === progress ? 'text-white' : 'text-white/60'}`}>{label}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="p-6 sm:p-7">
+      <div className="p-6 sm:p-8">
         {screen === 'profile' && (
           <div className="space-y-5">
             <div>
-              <h3 className="ed-display text-2xl text-[#0a1f33]">What do you want to study?</h3>
-              <p className="mt-2 text-sm leading-6 text-[#55677a]">Start with what you know. Exact documents can come later.</p>
+              <h3 className="font-display text-[24px] font-black leading-tight text-petrol-800">What do you want to study?</h3>
+              <p className="mt-2 text-[16px] leading-6 text-ink-soft">Start with what you know. Exact documents can come later.</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Current level" required>
@@ -380,8 +382,8 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
         {screen === 'plan' && (
           <div className="space-y-5">
             <div>
-              <h3 className="ed-display text-2xl text-[#0a1f33]">{isApplication ? 'Plan your study preferences' : 'What should the route fit?'}</h3>
-              <p className="mt-2 text-sm leading-6 text-[#55677a]">{isApplication ? 'Add your budget, preferred intake and language readiness to guide the application review.' : 'Choose “not sure” whenever you want us to compare.'}</p>
+              <h3 className="font-display text-[24px] font-black leading-tight text-petrol-800">{isApplication ? 'Plan your study preferences' : 'What should the route fit?'}</h3>
+              <p className="mt-2 text-[16px] leading-6 text-ink-soft">{isApplication ? 'Add your budget, preferred intake and language readiness to guide the application review.' : 'Choose “not sure” whenever you want us to compare.'}</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="Yearly budget">
@@ -404,7 +406,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
               </Field>
             </div>
             <div>
-              <p className="ed-label text-[#174f7a]">{isApplication ? 'Preferred destinations · choose up to 3' : 'Destinations to compare · choose up to 3'}</p>
+              <p className="text-[15px] font-semibold text-petrol-800">{isApplication ? 'Preferred destinations · choose up to 3' : 'Destinations to compare · choose up to 3'}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {DESTINATIONS.map(destination => {
                   const active = form.preferredCountries.includes(destination.value);
@@ -413,8 +415,10 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
                       type="button"
                       key={destination.value}
                       onClick={() => toggleCountry(destination.value)}
-                      className={`rounded-full border px-3.5 py-2 text-sm font-semibold transition ${active ? 'border-[#0a1f33] bg-[#0a1f33] text-white' : 'border-[#d8e1e9] bg-[#f7fafc] text-[#55677a] hover:border-[#174f7a]'}`}
+                      aria-pressed={active}
+                      className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-full px-4 text-[15px] font-semibold transition ${active ? 'bg-petrol-800 text-white' : 'bg-canvas-soft text-petrol-800 hover:bg-lime-pale'}`}
                     >
+                      {active && <CheckCircle2 size={15} className="text-lime" aria-hidden="true" />}
                       {destination.label}
                     </button>
                   );
@@ -427,35 +431,35 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
         {screen === 'results' && summary && (
           <div className="space-y-6">
             <div className="flex items-start gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#e6f4fb] text-[#174f7a]"><Sparkles size={19} /></span>
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-lime-pale text-lime-deep"><Sparkles size={19} aria-hidden="true" /></span>
               <div>
-                <p className="ed-label text-[#2f7fbf]">Your instant starting point</p>
-                <h3 className="ed-display mt-1 text-2xl text-[#0a1f33]">Routes worth checking first</h3>
+                <p className="text-[15px] font-semibold text-ink-soft">Your instant starting point</p>
+                <h3 className="mt-1 font-display text-[24px] font-black leading-tight text-petrol-800">Routes worth checking first</h3>
               </div>
             </div>
             <div className="space-y-3">
               {summary.routes.map(route => (
-                <Link key={route.title} href={route.href} className="group block rounded-2xl border border-[#dce5ed] bg-[#f8fbfd] p-4 transition hover:border-[#64b5df] hover:bg-white">
-                  <span className="ed-label text-[#c0392b]">{route.badge}</span>
-                  <span className="mt-2 flex items-center justify-between gap-4">
-                    <strong className="text-base text-[#0a1f33]">{route.title}</strong>
-                    <ArrowRight size={16} className="shrink-0 text-[#2f7fbf] transition group-hover:translate-x-1" />
+                <Link key={route.title} href={route.href} className="group block rounded-2xl bg-canvas-soft p-5 transition-colors hover:bg-lime-pale">
+                  <span className="inline-flex rounded-full bg-white px-3 py-1 text-[14px] font-semibold text-lime-deep">{route.badge}</span>
+                  <span className="mt-3 flex items-center justify-between gap-4">
+                    <strong className="text-[17px] text-petrol-800">{route.title}</strong>
+                    <ArrowRight size={18} className="shrink-0 text-petrol-800 transition group-hover:translate-x-1" aria-hidden="true" />
                   </span>
-                  <span className="mt-2 block text-sm leading-6 text-[#55677a]">{route.note}</span>
+                  <span className="mt-2 block text-[15px] leading-6 text-ink-soft">{route.note}</span>
                 </Link>
               ))}
             </div>
-            <div className="grid gap-4 rounded-2xl bg-[#0a1f33] p-5 text-white sm:grid-cols-2">
+            <div className="grid gap-5 rounded-2xl bg-petrol-800 p-5 text-white sm:grid-cols-2 sm:p-6">
               <div>
-                <p className="ed-label text-[#8ed0ee]">We will verify</p>
-                <ul className="mt-3 space-y-2 text-xs leading-5 text-white/75">
-                  {summary.checks.map(item => <li key={item} className="flex gap-2"><CheckCircle2 size={14} className="mt-0.5 shrink-0 text-[#8ed0ee]" />{item}</li>)}
+                <p className="text-[15px] font-semibold text-lime">We will verify</p>
+                <ul className="mt-3 space-y-2 text-[14px] leading-6 text-white/85">
+                  {summary.checks.map(item => <li key={item} className="flex gap-2"><CheckCircle2 size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" />{item}</li>)}
                 </ul>
               </div>
               <div>
-                <p className="ed-label text-[#f0c36a]">Still needed</p>
-                <ul className="mt-3 space-y-2 text-xs leading-5 text-white/75">
-                  {(summary.missing.length ? summary.missing : ['Your documents for a final eligibility check']).map(item => <li key={item} className="flex gap-2"><ShieldCheck size={14} className="mt-0.5 shrink-0 text-[#f0c36a]" />{item}</li>)}
+                <p className="text-[15px] font-semibold text-lime">Still needed</p>
+                <ul className="mt-3 space-y-2 text-[14px] leading-6 text-white/85">
+                  {(summary.missing.length ? summary.missing : ['Your documents for a final eligibility check']).map(item => <li key={item} className="flex gap-2"><ShieldCheck size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" />{item}</li>)}
                 </ul>
               </div>
             </div>
@@ -465,48 +469,48 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
         {screen === 'contact' && (
           <div className="space-y-5">
             <div>
-              <p className="ed-label text-[#2f7fbf]">{isApplication ? 'Contact details' : 'Optional counselor review'}</p>
-              <h3 className="ed-display mt-2 text-2xl text-[#0a1f33]">{isApplication ? 'Start your application with EduExpress.' : 'Get a written shortlist checked by a person.'}</h3>
-              <p className="mt-2 text-sm leading-6 text-[#55677a]">{isApplication ? 'Share your contact details so a counselor can review your eligibility and help with the university application.' : 'Your instant result stays free. Share contact details only if you want a counselor to review it.'}</p>
+              <p className="text-[15px] font-semibold text-ink-soft">{isApplication ? 'Contact details' : 'Optional counselor review'}</p>
+              <h3 className="mt-1 font-display text-[24px] font-black leading-tight text-petrol-800">{isApplication ? 'Start your application with EduExpress.' : 'Get a written shortlist checked by a person.'}</h3>
+              <p className="mt-2 text-[16px] leading-6 text-ink-soft">{isApplication ? 'Share your contact details so a counselor can review your eligibility and help with the university application.' : 'Your instant result stays free. Share contact details only if you want a counselor to review it.'}</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="Full name" required><input value={form.name} onChange={event => update({ name: event.target.value })} className={inputClass} placeholder="Your name" /></Field>
               <Field label="Email" required><input type="email" value={form.email} onChange={event => update({ email: event.target.value })} className={inputClass} placeholder="you@example.com" /></Field>
               <Field label="WhatsApp / phone" required><input value={form.phone} onChange={event => update({ phone: event.target.value })} className={inputClass} placeholder="01XXXXXXXXX" /></Field>
             </div>
-            <label className="flex items-start gap-3 rounded-2xl bg-[#f5f7f9] p-4 text-sm leading-6 text-[#55677a]">
-              <input type="checkbox" checked={form.consent} onChange={event => update({ consent: event.target.checked })} className="mt-1 size-4 shrink-0 accent-[#174f7a]" />
-              <span>I agree that EduExpress may contact me about this {isApplication ? 'application request' : 'assessment'}. I have read the <Link href="/privacy" className="font-bold text-[#174f7a] underline">privacy policy</Link>.</span>
+            <label className="flex items-start gap-3 rounded-2xl bg-canvas-soft p-4 text-[15px] leading-6 text-ink-soft">
+              <input type="checkbox" checked={form.consent} onChange={event => update({ consent: event.target.checked })} className="mt-1 size-5 shrink-0 accent-[#0b2b45]" />
+              <span>I agree that EduExpress may contact me about this {isApplication ? 'application request' : 'assessment'}. I have read the <Link href="/privacy" className="font-bold text-petrol-800 underline">privacy policy</Link>.</span>
             </label>
           </div>
         )}
 
-        {errorMsg && <p role="alert" className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{errorMsg}</p>}
+        {errorMsg && <p role="alert" className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-[15px] text-red-700">{errorMsg}</p>}
 
-        <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-[#e2e7ee] pt-5">
+        <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-canvas-soft pt-5">
           {screen === 'profile' && (
             <>
-              <span className="mr-auto text-xs text-[#6c7b89]">No contact details required</span>
-              <button type="button" onClick={continueFromProfile} className={primaryButton}>Continue <ArrowRight size={17} /></button>
+              <span className="mr-auto text-[14px] text-ink-soft">No contact details required</span>
+              <button type="button" onClick={continueFromProfile} className={primaryButton}>Continue <ArrowRight size={17} aria-hidden="true" /></button>
             </>
           )}
           {screen === 'plan' && (
             <>
-              <button type="button" onClick={() => { setErrorMsg(''); setScreen('profile'); }} className={secondaryButton}><ArrowLeft size={16} /> Back</button>
-              <button type="button" onClick={showResults} className={`ml-auto ${primaryButton}`}>{isApplication ? 'Continue to contact details' : 'Show my starting routes'} <SearchCheck size={17} /></button>
+              <button type="button" onClick={() => { setErrorMsg(''); setScreen('profile'); }} className={secondaryButton}><ArrowLeft size={16} aria-hidden="true" /> Back</button>
+              <button type="button" onClick={showResults} className={`ml-auto ${primaryButton}`}>{isApplication ? 'Continue to contact details' : 'Show my starting routes'} <SearchCheck size={17} aria-hidden="true" /></button>
             </>
           )}
           {screen === 'results' && (
             <>
-              <button type="button" onClick={() => setScreen('plan')} className={secondaryButton}><ArrowLeft size={16} /> Edit answers</button>
-              <button type="button" onClick={() => setScreen('contact')} className={`ml-auto ${primaryButton}`}>Get a written shortlist <ArrowRight size={17} /></button>
+              <button type="button" onClick={() => setScreen('plan')} className={secondaryButton}><ArrowLeft size={16} aria-hidden="true" /> Edit answers</button>
+              <button type="button" onClick={() => setScreen('contact')} className={`ml-auto ${primaryButton}`}>Get a written shortlist <ArrowRight size={17} aria-hidden="true" /></button>
             </>
           )}
           {screen === 'contact' && (
             <>
-              <button type="button" onClick={() => { setErrorMsg(''); setScreen(isApplication ? 'plan' : 'results'); }} className={secondaryButton}><ArrowLeft size={16} /> Back</button>
+              <button type="button" onClick={() => { setErrorMsg(''); setScreen(isApplication ? 'plan' : 'results'); }} className={secondaryButton}><ArrowLeft size={16} aria-hidden="true" /> Back</button>
               <button type="submit" disabled={status === 'submitting'} className={`ml-auto ${primaryButton} disabled:opacity-60`}>
-                {status === 'submitting' ? <><Loader2 className="animate-spin" size={17} /> Sending…</> : <><ClipboardCheck size={17} /> {isApplication ? 'Request application support' : 'Request counselor review'}</>}
+                {status === 'submitting' ? <><Loader2 className="animate-spin" size={17} aria-hidden="true" /> Sending…</> : <><ClipboardCheck size={17} aria-hidden="true" /> {isApplication ? 'Request application support' : 'Request counselor review'}</>}
               </button>
             </>
           )}
@@ -516,14 +520,14 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
   );
 }
 
-const inputClass = 'w-full rounded-xl border border-[#d8e1e9] bg-white px-4 py-3 text-sm text-[#0a1f33] outline-none transition focus:border-[#174f7a] focus:ring-2 focus:ring-[#64b5df]/25 placeholder:text-slate-400';
-const primaryButton = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#0a1f33] px-5 text-sm font-bold text-white transition hover:bg-[#174f7a]';
-const secondaryButton = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#c9d8e6] bg-white px-5 text-sm font-bold text-[#174f7a] transition hover:border-[#174f7a]';
+const inputClass = 'w-full min-h-[48px] rounded-xl border border-rule-strong bg-white px-4 py-3 text-[16px] text-petrol-800 outline-none transition placeholder:text-ink-mute hover:border-petrol-400 focus:border-petrol-800 focus:ring-4 focus:ring-lime/50';
+const primaryButton = 'ed-btn ed-btn-signal min-h-12 px-6';
+const secondaryButton = 'ed-btn ed-btn-outline min-h-12 px-5';
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-[11px] font-bold uppercase tracking-[0.09em] text-[#174f7a]">{label}{required && <span className="text-[#c0392b]"> *</span>}</span>
+      <span className="mb-2 block text-[15px] font-semibold text-petrol-800">{label}{required && <span className="text-[#b42318]" aria-hidden="true"> *</span>}</span>
       {children}
     </label>
   );

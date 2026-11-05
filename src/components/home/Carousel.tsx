@@ -71,7 +71,7 @@ export default function Carousel({ label, items, itemClassName = '', className =
         aria-roledescription="carousel"
         aria-label={label}
         tabIndex={0}
-        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1767a0]"
+        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#175180]"
       >
         {items.map((item, index) => (
           <div
@@ -94,7 +94,7 @@ export default function Carousel({ label, items, itemClassName = '', className =
             onClick={() => step(-1)}
             disabled={!canPrev}
             aria-label={`Scroll ${label} backwards`}
-            className="absolute -left-3 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-slate-200 bg-white/95 text-[#1767a0] shadow-[0_10px_30px_rgba(15,55,87,.16)] backdrop-blur-sm transition hover:border-[#1767a0]/40 hover:text-[#102a43] disabled:cursor-default disabled:opacity-0 lg:grid"
+            className="absolute -left-3 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-rule bg-white text-petrol-700 shadow-[0_12px_30px_-18px_rgba(15,53,87,0.35)] transition hover:border-petrol-400 hover:bg-mint-100 disabled:cursor-default disabled:opacity-0 lg:grid"
           >
             <ChevronLeft size={20} />
           </button>
@@ -103,16 +103,16 @@ export default function Carousel({ label, items, itemClassName = '', className =
             onClick={() => step(1)}
             disabled={!canNext}
             aria-label={`Scroll ${label} forwards`}
-            className="absolute -right-3 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-slate-200 bg-white/95 text-[#1767a0] shadow-[0_10px_30px_rgba(15,55,87,.16)] backdrop-blur-sm transition hover:border-[#1767a0]/40 hover:text-[#102a43] disabled:cursor-default disabled:opacity-0 lg:grid"
+            className="absolute -right-3 top-[38%] hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-rule bg-white text-petrol-700 shadow-[0_12px_30px_-18px_rgba(15,53,87,0.35)] transition hover:border-petrol-400 hover:bg-mint-100 disabled:cursor-default disabled:opacity-0 lg:grid"
           >
             <ChevronRight size={20} />
           </button>
 
           <div className="mt-5 flex items-center gap-3" aria-hidden="true">
-            <div className="h-1 flex-1 overflow-hidden rounded-full bg-slate-200/80">
-              <div className="h-full rounded-full bg-[#f4a024] transition-[width] duration-300" style={{ width: `${Math.max(6, progress)}%` }} />
+            <div className="h-1 flex-1 overflow-hidden rounded-full bg-rule">
+              <div className="h-full rounded-full bg-marigold transition-[width] duration-300" style={{ width: `${Math.max(6, progress)}%` }} />
             </div>
-            <span className="text-[11px] font-bold uppercase tracking-[.14em] text-slate-400">Swipe or drag</span>
+            <span className="text-[12px] font-medium text-ink-mute">Swipe or drag</span>
           </div>
         </>
       )}

@@ -2,32 +2,34 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+
+const PAGES_WITH_OWN_FORM = new Set(['/', '/education-fit-assessment', '/apply', '/contact']);
 
 /**
- * Site-wide assessment prompt in the footer.
- * Hidden on the homepage, which closes with its own richer call to action
- * (assessment + phone + WhatsApp + office) — two stacked prompts read as a mistake.
+ * Site-wide assessment prompt at the top of the footer.
+ * Hidden where the page already carries the form (home, assessment, apply,
+ * contact) and, via CSS, on any page that ends with its own CtaBand.
  */
 export default function FooterCta() {
   const pathname = usePathname();
-  if (pathname === '/') return null;
+  if (PAGES_WITH_OWN_FORM.has(pathname)) return null;
 
   return (
-    <div className="border-b border-white/15 bg-[#08263c] px-5 py-8 sm:px-8 lg:px-12">
-      <div className="mx-auto grid max-w-[1440px] items-center gap-6 md:grid-cols-[1fr_auto]">
+    <div className="footer-cta mx-auto max-w-[1200px] px-5 pt-16 lg:px-8">
+      <div className="flex flex-col gap-6 rounded-3xl bg-white p-7 text-petrol-800 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.1em] text-[#8ed0ee]">Not sure where to begin?</p>
-          <h2 className="mt-2.5 max-w-3xl font-heading text-2xl font-bold leading-tight sm:text-3xl">
-            Start with a free fit assessment. We will compare the cost, the recognition and your visa chances.
-          </h2>
+          <h2 className="font-display text-[34px] font-black leading-[0.95] tracking-[-0.01em] sm:text-[44px]">Not sure where to begin?</h2>
+          <p className="mt-3 max-w-2xl text-[17px] leading-7 text-ink-soft">
+            Get a free assessment. A counsellor compares the cost, the recognition and your visa readiness, and explains it in writing.
+          </p>
         </div>
-        <Link
-          href="/education-fit-assessment"
-          className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-xl bg-[#64b5df] px-6 text-base font-black text-[#08263c] transition hover:bg-white md:w-auto"
-        >
-          Get a free fit assessment <ArrowUpRight size={18} />
-        </Link>
+        <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+          <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+            Get my free assessment <ArrowRight size={18} aria-hidden="true" />
+          </Link>
+          <Link href="/contact" className="ed-btn ed-btn-outline min-h-[52px] px-7">Talk to a counsellor</Link>
+        </div>
       </div>
     </div>
   );

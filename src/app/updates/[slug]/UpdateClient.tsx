@@ -122,8 +122,8 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
                   This page records an earlier admissions window and is kept for transparency. The deadlines, fees and scholarship terms below may no longer be available. Use the live calendar before you act.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  <Link href="/china-march-2027-intake" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[#08263c] px-4 text-sm font-bold text-white">See the March 2027 intake <ArrowRight size={14} /></Link>
-                  <Link href="/china-intakes-deadlines" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#08263c]/20 bg-white px-4 text-sm font-bold text-[#08263c]">Check live deadlines <ArrowRight size={14} /></Link>
+                  <Link href="/china-march-2027-intake" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[#0f3a5c] px-4 text-sm font-bold text-white">See the March 2027 intake <ArrowRight size={14} /></Link>
+                  <Link href="/china-intakes-deadlines" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#0f3a5c]/20 bg-white px-4 text-sm font-bold text-[#0f3a5c]">Check live deadlines <ArrowRight size={14} /></Link>
                 </div>
               </aside>
             ) : null}
@@ -188,13 +188,13 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
                     {(stale?.windows ?? []).map(window => (
                       <li key={window.name} className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm">
                         <span className="font-bold text-slate-900">{window.name}</span>
-                        <span className="rounded-full border border-[#174f7a]/15 px-2 py-0.5 text-xs font-black uppercase tracking-[0.08em] text-[#174f7a]">{window.status}</span>
+                        <span className="rounded-full border border-[#12436b]/15 px-2 py-0.5 text-xs font-black uppercase tracking-[0.08em] text-[#12436b]">{window.status}</span>
                         <span className="text-slate-500">{window.summary}</span>
                       </li>
                     ))}
                   </ul>
                 ) : null}
-                <Link href="/china-intakes-deadlines" className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#08263c] px-4 py-2 text-sm font-bold text-white">
+                <Link href="/china-intakes-deadlines" className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#0f3a5c] px-4 py-2 text-sm font-bold text-white">
                   Check intake deadlines <ArrowRight size={14} />
                 </Link>
               </aside>
@@ -224,7 +224,7 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
                       <div className="p-4">
                         <div className="flex items-center justify-between gap-2">
                           {postCategory ? <span className="truncate text-xs font-bold uppercase tracking-[0.08em] text-amber-600">{postCategory}</span> : null}
-                          <span className="shrink-0 text-xs font-semibold text-slate-400">{post.type === 'article' ? 'Article' : 'Update'}</span>
+                          <span className="shrink-0 text-xs font-semibold text-slate-500">{post.type === 'article' ? 'Article' : 'Update'}</span>
                         </div>
                         <h3 className="mt-2 line-clamp-2 text-base font-bold text-slate-900">{post.title}</h3>
                       </div>
