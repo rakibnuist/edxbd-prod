@@ -20,5 +20,9 @@ fi
 echo "Deploying Prisma Schema..."
 npx prisma db push
 
+# The image is built without a database, so prerendered pages start empty.
+# Once the server is up, re-render them from the live database (background).
+node docker-warm-cache.mjs &
+
 echo "Starting Next.js server..."
 exec node server.js

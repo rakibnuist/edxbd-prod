@@ -9,8 +9,10 @@ const parseList = (value: string) => {
   try { return JSON.parse(value) as string[]; } catch { return []; }
 };
 
-export const getPublicTrustRecords = cache(async () => {
-  const [metrics, evidence, offices, team, servicePackages, testimonials] = await Promise.all([
+type TrustQueries = Awaited<ReturnType<typeof queryTrustRecords>>;
+
+const queryTrustRecords = () =>
+  Promise.all([
     prisma.trustMetric.findMany({ where: { isPublished: true }, orderBy: [{ displayOrder: 'asc' }, { updatedAt: 'desc' }] }),
     prisma.evidenceAsset.findMany({
       where: { isPublished: true, privacyStatus: 'redacted' },
@@ -38,6 +40,22 @@ export const getPublicTrustRecords = cache(async () => {
       select: { id: true, studentName: true, displayName: true, content: true, university: true, country: true, image: true, rating: true, consentImageApproved: true },
     }),
   ]);
+
+/**
+ * Public trust records for every page (the root layout reads the office).
+ * The production image is built without a database, so a failed read must
+ * not fail the build: it falls back to the canonical office record and empty
+ * lists, and the server re-renders pages with real data once it is running.
+ */
+export const getPublicTrustRecords = cache(async () => {
+  let rows: TrustQueries;
+  try {
+    rows = await queryTrustRecords();
+  } catch (error) {
+    console.warn('Trust records unavailable; using the default office record.', error instanceof Error ? error.message.split('\n').filter(Boolean).pop() : error);
+    rows = [[], [], [], [], [], []];
+  }
+  const [metrics, evidence, offices, team, servicePackages, testimonials] = rows;
 
   const publicOffices = offices.length > 0 ? offices : [{
     id: 'default-dhanmondi-office',

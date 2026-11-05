@@ -10,7 +10,8 @@ const PATH = '/services';
 const PAGE_URL = `https://eduexpressint.com${PATH}`;
 
 export async function generateMetadata() {
-  const universityCount = (await getUniversityRecords()).length;
+  // The production image is built without a database; fall back to a count-free description.
+  const universityCount = await getUniversityRecords().then(records => records.length, () => 0);
   return pageMetadata({
     title: 'Study Abroad Services: Admission, Costs & Visa | EduExpress',
     description:

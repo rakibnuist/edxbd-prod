@@ -59,7 +59,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 # Copy startup script
-COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
+COPY --chown=nextjs:nodejs docker-entrypoint.sh docker-warm-cache.mjs ./
 RUN chmod +x docker-entrypoint.sh
 
 USER nextjs
