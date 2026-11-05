@@ -288,8 +288,8 @@ export default function TestimonialsPage() {
                           Featured
                         </span>
                       )}
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${testimonial.consentVerified && testimonial.consentEvidenceId ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-600'}`}>
-                        {testimonial.consentVerified && testimonial.consentEvidenceId ? 'Consent recorded' : 'Not publishable'}
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${testimonial.image ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-600'}`}>
+                        {testimonial.image ? 'Photo added' : 'Needs photo to publish'}
                       </span>
                     </div>
                   </td>
@@ -437,7 +437,7 @@ export default function TestimonialsPage() {
                 
                 <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4">
                   <label className="block text-sm font-bold text-blue-950">Real student photo</label>
-                  <p className="mt-1 text-xs leading-5 text-blue-800">Upload only the authentic student portrait covered by the written public-consent record below.</p>
+                  <p className="mt-1 text-xs leading-5 text-blue-800">Upload a real photo of this student. A story needs a photo, a name and the story text before it can be published.</p>
                   <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
                     <div className="relative grid size-28 shrink-0 place-items-center overflow-hidden rounded-2xl border border-blue-200 bg-white text-xs font-bold text-slate-500">
                       {formData.image ? <Image src={formData.image} alt="Student photo preview" fill sizes="112px" unoptimized className="object-cover" /> : 'No photo'}
@@ -476,8 +476,8 @@ export default function TestimonialsPage() {
                 </section>
 
                 <section className="border border-amber-300 bg-amber-50 p-4">
-                  <h4 className="font-bold text-amber-950">Public consent record</h4>
-                  <p className="mt-1 text-xs text-amber-800">A story remains private until consent is verified and an internal evidence ID is recorded.</p>
+                  <h4 className="font-bold text-amber-950">Permission record (optional)</h4>
+                  <p className="mt-1 text-xs text-amber-800">Optional notes for your own records. Publishing does not depend on them. To take a story down, set a revoked date or an expiry date; it disappears from the site.</p>
                   <div className="mt-4 grid gap-4 md:grid-cols-2">
                     <label className="text-sm font-medium text-gray-700">Internal consent evidence ID
                       <input value={formData.consentEvidenceId} onChange={(e) => setFormData({ ...formData, consentEvidenceId: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2" placeholder="Example: CN-STORY-2027-001" />
@@ -493,8 +493,7 @@ export default function TestimonialsPage() {
                     </label>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-5">
-                    <label className="flex items-center text-sm text-gray-700"><input type="checkbox" checked={formData.consentVerified} onChange={(e) => setFormData({ ...formData, consentVerified: e.target.checked })} className="mr-2" />Written public consent verified</label>
-                    <label className="flex items-center text-sm text-gray-700"><input type="checkbox" checked={formData.consentImageApproved} onChange={(e) => setFormData({ ...formData, consentImageApproved: e.target.checked })} className="mr-2" />Photo approved for public display</label>
+                    <label className="flex items-center text-sm text-gray-700"><input type="checkbox" checked={formData.consentVerified} onChange={(e) => setFormData({ ...formData, consentVerified: e.target.checked })} className="mr-2" />Written permission on file</label>
                   </div>
                 </section>
                 

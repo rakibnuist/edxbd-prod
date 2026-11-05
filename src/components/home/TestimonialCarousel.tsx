@@ -121,7 +121,7 @@ export default function TestimonialCarousel({ quotes }: { quotes: CarouselQuote[
                   ))}
                 </div>
                 <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-jade">
-                  <ShieldCheck size={12} aria-hidden="true" /> Consent on file
+                  <ShieldCheck size={12} aria-hidden="true" /> EduExpress student
                 </span>
               </div>
 

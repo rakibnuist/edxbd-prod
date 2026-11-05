@@ -202,7 +202,7 @@ export default async function Home() {
     name: item.displayName || item.studentName,
     detail: [item.university, item.country].filter(Boolean).join(' · '),
     rating: item.rating,
-    ...(item.consentImageApproved && item.image ? { image: item.image } : {}),
+    ...(item.image ? { image: item.image } : {}),
   }));
   const ratedTestimonials = testimonials.filter(item => typeof item.rating === 'number' && item.rating > 0);
   const averageRating = ratedTestimonials.length
@@ -620,8 +620,8 @@ export default async function Home() {
             <p className={badge}>Since 2018 · Dhanmondi, Dhaka</p>
             <h2 data-anim="up" className={`mt-6 ${displaySection}`}>&ldquo;Finally we made our dream: study in China.&rdquo;</h2>
             <p className={`mt-6 ${lead}`}>
-              Families meet our counsellors in Dhanmondi, and we see students off at Dhaka airport. Student stories are published only
-              with consent.
+              Families meet our counsellors in Dhanmondi, and we see students off at Dhaka airport. Read their stories in their own
+              words.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href="/success-stories" className="ed-btn ed-btn-outline min-h-[52px] px-7">Read student stories</Link>

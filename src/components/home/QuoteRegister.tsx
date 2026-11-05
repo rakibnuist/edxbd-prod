@@ -30,7 +30,7 @@ export default function QuoteRegister({ quotes }: { quotes: RegisterQuote[] }) {
             ))}
           </div>
           <span className="home-stamp rotate-[-1.4deg] !border-jade/60 !px-2 !py-1 text-[12px] !text-jade">
-            Consent on file
+            EduExpress student
           </span>
         </div>
 

@@ -42,8 +42,9 @@ async function updateTestimonial(request: NextRequest, id: string) {
   const merged = { ...existing, ...updateData };
   const requestedPublish = (body.isActive ?? body.isPublished) === undefined ? existing.isPublished : (body.isActive ?? body.isPublished) === true;
   const consentCurrent = !merged.consentExpiresAt || new Date(merged.consentExpiresAt) >= new Date();
-  const ready = Boolean(merged.image && merged.consentVerified && merged.consentImageApproved && merged.consentEvidenceId && merged.consentRecordedAt && !merged.consentRevokedAt && consentCurrent);
-  if (requestedPublish && !ready) return NextResponse.json({ error: 'Add the real photo, written-consent evidence, consent date and photo approval before publishing.' }, { status: 400 });
+  // A story can go live once it has a photo, a name and the story text.
+  const ready = Boolean(merged.image && merged.studentName && merged.content && !merged.consentRevokedAt && consentCurrent);
+  if (requestedPublish && !ready) return NextResponse.json({ error: 'Add the student photo, name and story before publishing.' }, { status: 400 });
   updateData.isPublished = requestedPublish && ready;
 
   const testimonial = await prisma.testimonial.update({ where: { id }, data: updateData });

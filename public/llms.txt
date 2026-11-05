@@ -55,6 +55,6 @@ Key facts:
 ## Optional
 
 - [Advice and updates](https://eduexpressint.com/updates): dated intake and visa news (RSS: https://eduexpressint.com/updates/feed.xml)
-- [Success stories](https://eduexpressint.com/success-stories): published only with verified student consent
+- [Success stories](https://eduexpressint.com/success-stories): stories from EduExpress students
 - [Partner with EduExpress](https://eduexpressint.com/partnership): programme for education agencies
 - [Privacy policy](https://eduexpressint.com/privacy) and [Terms of service](https://eduexpressint.com/terms)

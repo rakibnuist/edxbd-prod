@@ -13,7 +13,7 @@ export const revalidate = 3600;
 export const metadata = pageMetadata({
   title: 'Study Abroad Success Stories from Bangladesh | EduExpress',
   description:
-    'Consent-based EduExpress student stories: the profile, options considered, university decision, timeline, service scope and who paid, with private data removed.',
+    'Real EduExpress student stories: the profile, options considered, university decision, timeline, service scope and who paid, with private data removed.',
   path: PATH,
   image: ogImage('stories', 'Students and parents at Dhaka airport celebrating a study in China departure with EduExpress'),
 });
@@ -34,7 +34,7 @@ export default async function SuccessStoriesPage() {
     '@id': `${canonical}#page`,
     url: canonical,
     name: 'Student Success Stories',
-    description: 'Consent-based education stories from EduExpress students.',
+    description: 'Education stories from EduExpress students.',
     dateModified: '2026-07-19',
     inLanguage: 'en-BD',
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
@@ -103,7 +103,7 @@ export default async function SuccessStoriesPage() {
         <StandardsGrid />
         <dl className="mt-10 grid gap-4 border-t border-canvas-soft pt-6 text-[15px] leading-6 text-ink-soft sm:grid-cols-3">
           <div><dt className="font-semibold text-petrol-800">Editorial owner</dt><dd>EduExpress Admissions Desk</dd></div>
-          <div><dt className="font-semibold text-petrol-800">Consent reviewer</dt><dd>EduExpress Content and Compliance</dd></div>
+          <div><dt className="font-semibold text-petrol-800">Story reviewer</dt><dd>EduExpress Content and Compliance</dd></div>
           <div><dt className="font-semibold text-petrol-800">Publishing standard</dt><dd>Sensitive data redaction and a complete story record</dd></div>
         </dl>
       </Section>
@@ -114,7 +114,7 @@ export default async function SuccessStoriesPage() {
         title={stories.length ? 'Published student stories.' : 'New student stories are on their way.'}
         intro={
           stories.length
-            ? 'Each story was published with the student’s permission. Results are individual and do not predict another student’s outcome.'
+            ? 'Each story is one student’s own case. Results are individual and do not predict another student’s outcome.'
             : 'Stories appear here once their profile, decision, timeline, service scope and payment details are complete. We would rather show nothing than a quote without context.'
         }
       >

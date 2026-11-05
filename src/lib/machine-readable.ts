@@ -62,7 +62,6 @@ const policyBlock = [
   '- China: no EduExpress service fee is due before the student’s China visa is approved.',
   '- University tuition, deposits, embassy, medical, translation and courier costs are paid to those recipients and are listed in writing before payment.',
   '- Admission, scholarship, visa and employment outcomes are never guaranteed; the university and the authorities decide.',
-  '- Student stories are published only with verified, current written consent.',
   `- Fee policy: ${url('/fees-and-transparency')} · Visa-first policy: ${url('/china-visa-first-policy')} · Complaints: ${url('/complaints-and-resolution')}`,
   '',
 ].join('\n') + '\n';

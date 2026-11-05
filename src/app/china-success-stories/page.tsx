@@ -16,10 +16,10 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'China Student Success Stories | EduExpress International',
     description:
-      'Consent-based stories from EduExpress students in China: profile, university choice, timeline, service scope and payment, with passport and visa data redacted.',
+      'Stories from EduExpress students in China: profile, university choice, timeline, service scope and payment, with passport and visa data redacted.',
     path: PATH,
     image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
-    // Unchanged rule: the page stays out of the index until at least one consented China story is public.
+    // The page stays out of the index until at least one China story is public.
     noindex: stories.length === 0,
   });
 }
@@ -96,11 +96,11 @@ export default async function ChinaSuccessStoriesPage() {
       <Section
         tone="sage"
         id="stories"
-        title={stories.length ? 'Published China stories.' : 'No China story is public until its consent record is complete.'}
+        title={stories.length ? 'Published China stories.' : 'China stories are on their way.'}
         intro={
           stories.length
-            ? 'Each story is one student’s case, published with permission. Universities decide admission and scholarships; authorities decide visas.'
-            : 'Student stories are a separate consent-controlled record. Until one is complete, the proof library shows privacy-safe admission notices and JW202 evidence instead.'
+            ? 'Each story is one student’s case. Universities decide admission and scholarships; authorities decide visas.'
+            : 'Until a China story is published here, the proof library shows privacy-safe admission notices and JW202 evidence.'
         }
       >
         {stories.length ? (

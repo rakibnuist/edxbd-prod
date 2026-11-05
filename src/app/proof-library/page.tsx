@@ -32,7 +32,7 @@ const structuredData = {
 };
 
 export default async function ProofLibraryPage() {
-  // getPublicTrustRecords applies the complete, fail-closed consent policy.
+  // getPublicTrustRecords applies the public story rule (published, not taken down).
   // Never query published testimonials independently on a public page.
   const trust = await getPublicTrustRecords();
   const testimonials = trust.testimonials;

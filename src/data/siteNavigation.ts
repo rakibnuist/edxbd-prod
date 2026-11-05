@@ -74,7 +74,7 @@ export const proofNavigation: SiteLink[] = [
   { name: 'Better Education Standard', href: '/better-education-standard', note: 'The checks behind a recommendation' },
   { name: 'Fees and transparency', href: '/fees-and-transparency', note: 'Know who receives each payment' },
   { name: 'University verification', href: '/how-we-verify-universities', note: 'How recognition and records are checked' },
-  { name: 'Student success stories', href: '/success-stories', note: 'Consent-based student outcomes' },
+  { name: 'Student success stories', href: '/success-stories', note: 'Real student outcomes' },
   { name: 'Country service status', href: '/country-status', note: 'Which destinations are open and how they are verified' },
   { name: 'Complaints and resolution', href: '/complaints-and-resolution', note: 'Accountability and written response times' },
 ];
@@ -111,7 +111,7 @@ export const aboutNavigation: SiteLink[] = [
   { name: 'About EduExpress', href: '/about', note: 'Our team and Dhanmondi office, since 2018' },
   { name: 'How it works', href: '/your-study-journey', note: 'From free assessment to arrival' },
   { name: 'What we do for you', href: '/services', note: 'Counselling, applications and visa support' },
-  { name: 'Student success stories', href: '/success-stories', note: 'Published with student consent' },
+  { name: 'Student success stories', href: '/success-stories', note: 'Stories from our students' },
   { name: 'Proof library', href: '/proof-library', note: 'Redacted evidence and company records' },
   { name: 'For parents', href: '/for-parents', note: 'Costs, safety and responsibilities' },
   { name: 'Advice and updates', href: '/updates', note: 'Dated intake and visa news' },

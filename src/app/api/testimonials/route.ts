@@ -6,10 +6,9 @@ const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 50;
 
 /**
- * Public student stories. Only stories with current, verified consent are
- * returned, and only public fields: the display name (never the legal name
- * when a display name is set), no consent evidence, payment or contact data,
- * and the photo only when its use was approved.
+ * Public student stories (published, not taken down), with public fields
+ * only: the display name (never the legal name when a display name is set)
+ * and the photo, with no consent records, payment or contact data.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -32,15 +31,14 @@ export async function GET(request: NextRequest) {
         rating: true,
         featured: true,
         image: true,
-        consentImageApproved: true,
         createdAt: true,
       },
     });
 
-    const testimonials = records.map(({ studentName, displayName, image, consentImageApproved, ...rest }) => ({
+    const testimonials = records.map(({ studentName, displayName, image, ...rest }) => ({
       ...rest,
       name: displayName || studentName,
-      image: consentImageApproved ? image : null,
+      image: image || null,
     }));
 
     return NextResponse.json(testimonials);

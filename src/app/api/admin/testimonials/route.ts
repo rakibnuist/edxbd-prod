@@ -11,9 +11,10 @@ const dateOrNull = (value: unknown) => {
   const date = new Date(String(value));
   return Number.isNaN(date.getTime()) ? null : date;
 };
+// A story can go live once it has a photo, a name and the story text.
 const publicReady = (body: Record<string, unknown>) => Boolean(
-  optional(body.image) && body.consentVerified === true && body.consentImageApproved === true &&
-  optional(body.consentEvidenceId) && dateOrNull(body.consentRecordedAt) && !dateOrNull(body.consentRevokedAt)
+  optional(body.image) && optional(body.name || body.studentName || body.displayName) &&
+  optional(body.quote || body.content) && !dateOrNull(body.consentRevokedAt)
 );
 const testimonialData = (body: Record<string, unknown>) => ({
   studentName: String(body.name || body.studentName || body.displayName || 'Student').trim(),

@@ -25,7 +25,7 @@ export type PublicStory = {
   currentUpdate?: string;
 };
 
-/** Publicly visible stories (published + current verified consent), optionally narrowed (e.g. to China). Fails closed to an empty list. */
+/** Publicly visible stories (published, not taken down), optionally narrowed (e.g. to China). Fails closed to an empty list. */
 export async function getPublishedStories(where: Prisma.TestimonialWhereInput = {}): Promise<PublicStory[]> {
   try {
     const records = await prisma.testimonial.findMany({
@@ -39,8 +39,7 @@ export async function getPublishedStories(where: Prisma.TestimonialWhereInput = 
       university: record.university || '',
       program: record.program || '',
       quote: record.content,
-      // A photo is shown only when the student approved public use of it.
-      image: record.image && record.consentImageApproved ? record.image : undefined,
+      image: record.image || undefined,
       academicProfile: record.academicProfile || undefined,
       decisionFactors: record.decisionFactors || undefined,
       applicationTimeline: record.applicationTimeline || undefined,
@@ -56,7 +55,7 @@ export async function getPublishedStories(where: Prisma.TestimonialWhereInput = 
 
 /** The publishing standard every story is held to, shown on both story pages. */
 export const storyStandards = [
-  { icon: UserRoundCheck, title: 'Written consent', text: 'The student controls their public name, photo and how much of the story is shown.' },
+  { icon: UserRoundCheck, title: 'Private data removed', text: 'Passport, visa, contact and payment details are never shown with a story.' },
   { icon: FileCheck2, title: 'Service scope and payment', text: 'Each story states what EduExpress provided and who paid for it.' },
   { icon: LockKeyhole, title: 'Sensitive data removed', text: 'Passport numbers, birth dates and visa identifiers never appear publicly.' },
 ];
