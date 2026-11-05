@@ -131,11 +131,14 @@
   --marigold-soft: #8cc6e6;
   --terra: #2f7fb0;
   --jade: #0b7a53;
-  --action: #0b7a53;
-  --action-hover: #096845;
+  --action: #9fe870;
+  --action-hover: #b8f28f;
+  --on-action: #0b2b45;
+  --canvas-soft: #e8ebe6;
   --clay: #a8452c;
 
-  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Heavy display grotesque (Wise system: weight 900 for hero, 800 for sections). */
+  --font-display: "Archivo", "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-text: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-bengali: "Hind Siliguri", "Noto Sans Bengali", "Nirmala UI", Vrinda, sans-serif;
   --font-bengali-display: "Hind Siliguri", "Noto Sans Bengali", "Nirmala UI", Vrinda, sans-serif;
@@ -170,8 +173,8 @@ body {
   .font-serif {
     font-family: var(--font-display), system-ui, sans-serif;
     font-synthesis: none;
-    letter-spacing: -0.022em;
-    font-weight: 700;
+    letter-spacing: -0.015em;
+    font-weight: 800;
     line-height: 1.12;
     color: inherit;
   }
@@ -363,9 +366,9 @@ body {
   gap: 0.5rem;
   min-height: 2.9rem;
   padding: 0 1.35rem;
-  border-radius: 10px;
+  border-radius: 24px;
   font-family: var(--font-text), system-ui, sans-serif;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: -0.005em;
   text-align: center;
@@ -388,8 +391,7 @@ body {
 
 .ed-btn-signal {
   background: var(--action);
-  color: #fff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+  color: var(--on-action);
 }
 
 .ed-btn-signal:hover {
@@ -397,14 +399,23 @@ body {
 }
 
 .ed-btn-outline {
-  border: 1px solid var(--rule-strong);
-  color: var(--petrol-600);
+  border: 1px solid var(--petrol-800);
+  color: var(--petrol-800);
   background: #fff;
 }
 
 .ed-btn-outline:hover {
-  border-color: var(--petrol-500);
-  background: var(--mint-100);
+  background: var(--canvas-soft);
+}
+
+/* Secondary: sage fill, ink label (Wise button-secondary). */
+.ed-btn-soft {
+  background: var(--canvas-soft);
+  color: var(--petrol-800);
+}
+
+.ed-btn-soft:hover {
+  background: #dde2da;
 }
 
 .ed-btn-quiet {
@@ -450,7 +461,7 @@ body {
   width: 100%;
   min-height: 2.9rem;
   border: 1px solid var(--rule-strong);
-  border-radius: 10px;
+  border-radius: 12px;
   background: #ffffff;
   padding: 0 0.9rem;
   font-family: var(--font-text), system-ui, sans-serif;
@@ -1734,4 +1745,153 @@ body.dashboard-mode .site-footer {
   .ed-hero-route-dot {
     animation: none !important;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Homepage hero: rotating destination word ("Study in China." → "the UK." …).
+   Six stacked items (the last repeats the first) so the loop resets seamlessly.
+   Reduced motion holds on the first word.
+--------------------------------------------------------------------------- */
+.hero-rotator {
+  animation: hero-rotate 12.5s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+}
+
+@keyframes hero-rotate {
+  0%, 16% { transform: translateY(0); }
+  20%, 36% { transform: translateY(-16.6667%); }
+  40%, 56% { transform: translateY(-33.3333%); }
+  60%, 76% { transform: translateY(-50%); }
+  80%, 96% { transform: translateY(-66.6667%); }
+  100% { transform: translateY(-83.3333%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rotator { animation: none; }
+}
+
+/* Boarding-pass "how it works": perforation notches cut into the ticket. */
+.ticket-notch {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--canvas-soft);
+}
+
+.ticket-barcode {
+  background: repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 4px, currentColor 4px 5px, transparent 5px 8px, currentColor 8px 11px, transparent 11px 13px);
+}
+
+/* ---------------------------------------------------------------------------
+   Motion system (see components/motion/RevealObserver.tsx).
+   Rules: transform + opacity only; one-shot keyframes with `backwards` fill so
+   hover transforms work once an entrance ends; nothing hidden unless JS marked
+   it `out`; everything off under prefers-reduced-motion.
+--------------------------------------------------------------------------- */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translate3d(0, 32px, 0); }
+}
+
+@keyframes reveal-pop {
+  from { opacity: 0; transform: scale(0.92); }
+}
+
+@keyframes reveal-rise-lg {
+  from { opacity: 0; transform: translate3d(0, 90px, 0); }
+}
+
+@keyframes lift-in {
+  from { transform: translate3d(0, 28px, 0); }
+}
+
+/* Load entrance (hero). The headline only moves — it never fades, so it paints
+   immediately as the page's largest element. */
+.anim-rise {
+  animation: reveal-up 0.85s var(--ease-out-expo) backwards;
+  animation-delay: var(--d, 0ms);
+}
+
+.anim-lift {
+  animation: lift-in 0.9s var(--ease-out-expo) backwards;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Scroll reveals */
+[data-anim-state="out"]:is([data-anim="up"], [data-anim="pop"], [data-anim="rise"]),
+[data-anim="stagger"][data-anim-state="out"] > * {
+  opacity: 0;
+}
+
+[data-anim="up"][data-anim-state="in"] { animation: reveal-up 0.85s var(--ease-out-expo) backwards; }
+[data-anim="pop"][data-anim-state="in"] { animation: reveal-pop 0.9s var(--ease-out-expo) backwards; }
+[data-anim="rise"][data-anim-state="in"] { animation: reveal-rise-lg 1.2s var(--ease-out-expo) backwards; }
+[data-anim="stagger"][data-anim-state="in"] > * { animation: reveal-up 0.8s var(--ease-out-expo) backwards; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(2) { animation-delay: 80ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(3) { animation-delay: 160ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(4) { animation-delay: 240ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(5) { animation-delay: 320ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(6) { animation-delay: 400ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(7) { animation-delay: 460ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(8) { animation-delay: 520ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(9) { animation-delay: 580ms; }
+[data-anim="stagger"][data-anim-state="in"] > :nth-child(n + 10) { animation-delay: 640ms; }
+
+/* Boarding pass: the route draws, stops pop in turn, the plane flies across. */
+@keyframes route-draw { from { transform: scaleX(0); } }
+@keyframes route-stop { from { opacity: 0; transform: scale(0.4); } }
+@keyframes route-fly {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(calc(100% - 28px), 0, 0); }
+}
+
+.route-line { transform-origin: left center; }
+.route-flyer { transform: translate3d(calc(100% - 28px), 0, 0); }
+
+[data-anim="route"][data-anim-state="out"] .route-line { transform: scaleX(0); }
+[data-anim="route"][data-anim-state="out"] .route-stop { opacity: 0; }
+[data-anim="route"][data-anim-state="out"] .route-flyer { transform: translate3d(0, 0, 0); }
+
+[data-anim="route"][data-anim-state="in"] .route-line { animation: route-draw 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.15s backwards; }
+[data-anim="route"][data-anim-state="in"] .route-flyer { animation: route-fly 2.2s cubic-bezier(0.65, 0, 0.35, 1) 0.15s backwards; }
+[data-anim="route"][data-anim-state="in"] li .route-stop { animation: route-stop 0.6s var(--ease-out-expo) backwards; }
+[data-anim="route"][data-anim-state="in"] li:nth-of-type(1) .route-stop { animation-delay: 0.2s; }
+[data-anim="route"][data-anim-state="in"] li:nth-of-type(2) .route-stop { animation-delay: 0.7s; }
+[data-anim="route"][data-anim-state="in"] li:nth-of-type(3) .route-stop { animation-delay: 1.2s; }
+[data-anim="route"][data-anim-state="in"] li:nth-of-type(4) .route-stop { animation-delay: 1.7s; }
+
+/* Continuous motion stops while off screen. */
+[data-offscreen] .home-ticker-track,
+.home-ticker[data-offscreen] .home-ticker-track { animation-play-state: paused; }
+
+/* Micro-interactions */
+.lucide-arrow-right { transition: transform 0.2s ease; }
+a:hover .lucide-arrow-right,
+button:hover .lucide-arrow-right { transform: translateX(4px); }
+
+.ed-btn-signal { transition: background-color 0.18s ease, transform 0.2s var(--ease-out-expo), box-shadow 0.2s ease; }
+.ed-btn-signal:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -14px rgba(11, 43, 69, 0.55); }
+.ed-btn-signal:active { transform: translateY(0); box-shadow: none; }
+
+/* FAQ answers open smoothly where the browser can animate to height:auto
+   (small, one-shot layout change on an isolated element). */
+@supports (interpolate-size: allow-keywords) {
+  .faq-smooth { interpolate-size: allow-keywords; }
+  .faq-smooth::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size 0.35s var(--ease-out-expo), content-visibility 0.35s allow-discrete;
+  }
+  .faq-smooth[open]::details-content { block-size: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-rise,
+  .anim-lift,
+  [data-anim] *,
+  [data-anim] { animation: none !important; }
+  .ed-btn-signal:hover { transform: none; }
 }

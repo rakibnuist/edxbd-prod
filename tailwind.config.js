@@ -97,6 +97,23 @@ module.exports = {
         rule: '#e2e8f0',
         'rule-strong': '#cbd5e1',
 
+        // Wise-style system (awesome-design-md/wise.md) mapped onto the
+        // EduExpress brand: lime is the single CTA accent (navy text, 9.9:1),
+        // the sage canvas carries page bands, white cards sit on it, and the
+        // logo navy replaces Wise's near-black ink. Never set lime as text on
+        // white (1.5:1) — only on navy, or as a fill under navy text.
+        lime: {
+          DEFAULT: '#9fe870',
+          hover: '#b8f28f',
+          pale: '#e2f6d5',
+          deep: '#054d28',
+        },
+        canvas: {
+          DEFAULT: '#ffffff',
+          soft: '#e8ebe6',
+        },
+        peach: '#ffc091',
+
         // `ed-*` utilities (bg-ed-navy, text-ed-mist, ...) are used by ~270
         // classes across About, Contact, Partnership and other pages but were
         // never defined, so those elements rendered with no colour at all

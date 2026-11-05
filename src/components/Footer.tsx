@@ -3,36 +3,41 @@ import Link from 'next/link';
 import { formatBangladeshPhone } from '@/lib/contact-format';
 import FooterCta from '@/components/FooterCta';
 import { CookieSettingsButton } from '@/components/CookieConsent';
-import {
-  ArrowUpRight,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Navigation,
-  Phone,
-  Youtube,
-} from 'lucide-react';
-import { destinationLinks, proofNavigation, resourceNavigation } from '@/data/siteNavigation';
+import { Clock3, Facebook, Instagram, Linkedin, Mail, MapPin, MessageCircle, Navigation, Phone, Youtube } from 'lucide-react';
+import { destinationLinks } from '@/data/siteNavigation';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
-const exploreLinks = [
-  ['Find education', '/find-education'],
+// Footer information architecture: one labelled group per question a visitor
+// brings to the bottom of a page (where can I study, how do I plan, who are
+// you, how do I reach you), then legal links on their own line.
+const planLinks = [
   ['University finder', '/universities'],
-  ['Scholarship guidance', '/scholarships'],
-  ['Destinations', '/destinations'],
-  ['Compare destinations', '/compare-study-destinations'],
-  ['Study in China', '/study-in-china-from-bangladesh'],
+  ['Scholarships', '/scholarships'],
+  ['Cost of studying in China', '/study-in-china-cost-bangladesh'],
+  ['Intakes and deadlines', '/china-intakes-deadlines'],
+  ['Student visa guide', '/china-student-visa-bangladesh'],
+  ['MBBS in China', '/mbbs-in-china-bangladesh'],
+  ['Free assessment', '/education-fit-assessment'],
 ];
 
-const journeyLinks = [
-  ['Complete study journey', '/your-study-journey'],
-  ['How we help', '/services'],
-  ['Free fit assessment', '/education-fit-assessment'],
+const companyLinks = [
+  ['About EduExpress', '/about'],
+  ['How it works', '/your-study-journey'],
+  ['What we do', '/services'],
+  ['Student success stories', '/success-stories'],
+  ['Proof library', '/proof-library'],
   ['For parents', '/for-parents'],
-  ['Contact EduExpress', '/contact'],
+  ['Advice and updates', '/updates'],
+  ['Partner with us', '/partnership'],
+];
+
+const legalLinks = [
+  ['Privacy', '/privacy'],
+  ['Terms', '/terms'],
+  ['Fee policy', '/fees-and-transparency'],
+  ['Student data', '/student-data-privacy'],
+  ['Complaints', '/complaints-and-resolution'],
+  ['Country status', '/country-status'],
 ];
 
 const socialLinks = [
@@ -42,182 +47,165 @@ const socialLinks = [
   { name: 'YouTube', href: 'https://www.youtube.com/@EduExpressInt', icon: Youtube },
 ];
 
-const legalLinks = [
-  ['About', '/about'],
-  ['Contact', '/contact'],
-  ['Dhanmondi office', '/education-consultant-dhaka'],
-  ['Partnership', '/partnership'],
-  ['Privacy', '/privacy'],
-  ['Terms', '/terms'],
-  ['Fee policy', '/fees-and-transparency'],
-  ['Country status', '/country-status'],
-  ['Student data', '/student-data-privacy'],
-  ['Complaints', '/complaints-and-resolution'],
-];
+const linkClass = 'text-[15px] leading-6 text-white/75 transition-colors hover:text-lime';
 
-function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+function Group({ title, children, className = '' }: { title: string; children: React.ReactNode; className?: string }) {
   return (
-    <Link
-      href={href}
-      className="group flex items-center justify-between gap-3 py-1.5 text-[15px] font-medium text-white/85 transition-colors hover:text-white"
-    >
-      <span>{children}</span>
-      <ArrowUpRight size={12} className="shrink-0 text-mint-300 opacity-0 transition group-hover:opacity-100" aria-hidden="true" />
-    </Link>
-  );
-}
-
-function Column({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <p className="text-[15px] font-bold text-white">{title}</p>
-      <div className="mt-3">{children}</div>
-    </div>
+    <nav aria-label={title} className={className}>
+      <h2 className="text-[13px] font-bold uppercase tracking-[0.14em] text-lime">{title}</h2>
+      <div className="mt-5">{children}</div>
+    </nav>
   );
 }
 
 export default async function Footer() {
   const { offices } = await getPublicTrustRecords();
-  const office = offices[0];
-  const officeWhatsApp = office?.phonePrimary
-    ? `https://wa.me/${office.phonePrimary.replace(/\D/g, '')}?text=${encodeURIComponent(
-        'Assalamu alaikum. I would like counselling for studying abroad.',
-      )}`
+  const office = offices.find(item => item.isHeadOffice) ?? offices[0];
+  const whatsapp = office?.phonePrimary
+    ? `https://wa.me/${office.phonePrimary.replace(/\D/g, '')}?text=${encodeURIComponent('Assalamu alaikum. I would like counselling for studying abroad.')}`
     : null;
+  const half = Math.ceil(destinationLinks.length / 2);
 
   return (
-    <footer id="site-footer" className="site-footer overflow-hidden bg-petrol-800 text-white">
+    <footer id="site-footer" className="site-footer relative overflow-hidden bg-petrol-800 text-white">
       <FooterCta />
 
-      <div className="mx-auto max-w-shell px-5 py-14 sm:px-8 lg:px-12">
-        <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-[1.1fr_.7fr_.7fr_.8fr_1fr] xl:gap-10">
-          <div>
-            <Link href="/" aria-label="EduExpress International home">
-              <Image src="/white-logo.png" alt="EduExpress International" width={210} height={59} className="h-auto w-44" />
+      <div className="mx-auto max-w-[1200px] px-5 pb-28 pt-16 lg:px-8 lg:pb-10">
+        <div data-anim="stagger" className="grid gap-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10">
+          {/* About */}
+          <div className="sm:col-span-2 lg:col-span-4">
+            <Link href="/" aria-label="EduExpress International home" className="inline-block">
+              <Image src="/white-logo.png" alt="EduExpress International" width={210} height={59} className="h-auto w-48" />
             </Link>
-            <p className="mt-5 max-w-sm text-[15px] leading-7 text-white/80">
-              Bangladesh&apos;s evidence-first education consultancy. We publish costs, sources and verification dates so a family can check the decision instead of trusting a brochure.
+            <p className="mt-5 max-w-sm text-[16px] leading-7 text-white/80">
+              Study abroad from Bangladesh, with every cost in writing. Evidence-first counselling from our Dhanmondi office since 2018.
             </p>
-                        <div className="mt-6 flex gap-2">
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {['Since 2018', 'BDT 0 before China visa', 'Parents welcome'].map(item => (
+                <li key={item} className="rounded-full border border-white/20 px-3 py-1 text-[13px] font-semibold text-white/85">{item}</li>
+              ))}
+            </ul>
+            <div className="mt-6 flex gap-2">
               {socialLinks.map(({ name, href, icon: Icon }) => (
                 <a
                   key={name}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={name}
-                  className="grid size-10 place-items-center rounded-full border border-white/20 text-white/70 transition hover:border-marigold hover:text-marigold"
+                  aria-label={`EduExpress on ${name}`}
+                  className="grid size-11 place-items-center rounded-full bg-white/10 text-white transition hover:bg-lime hover:text-petrol-800"
                 >
-                  <Icon size={15} />
+                  <Icon size={18} aria-hidden="true" />
                 </a>
               ))}
             </div>
           </div>
 
-          <Column title="Find education">
-            {exploreLinks.map(([name, href]) => (
-              <FooterLink key={href} href={href}>
-                {name}
-              </FooterLink>
-            ))}
-          </Column>
-
-          <Column title="Your journey">
-            {journeyLinks.map(([name, href]) => (
-              <FooterLink key={href} href={href}>
-                {name}
-              </FooterLink>
-            ))}
-          </Column>
-
-          <Column title="Proof and advice">
-            {proofNavigation.slice(0, 3).map(link => (
-              <FooterLink key={link.href} href={link.href}>
-                {link.name}
-              </FooterLink>
-            ))}
-            {resourceNavigation.slice(0, 2).map(link => (
-              <FooterLink key={link.href} href={link.href}>
-                {link.name}
-              </FooterLink>
-            ))}
-          </Column>
-
-          <div>
-            <Column title="Dhanmondi office">
-              {office ? (
-                <div className="mt-1 space-y-3.5 text-[15px] leading-6 text-white/80">
-                  <p className="flex items-start gap-2.5">
-                    <MapPin className="mt-1 shrink-0 text-mint-300" size={15} aria-hidden="true" />
-                    <span>{office.address}</span>
-                  </p>
-                  <p className="flex items-start gap-2.5">
-                    <Phone className="mt-1 shrink-0 text-mint-300" size={15} aria-hidden="true" />
-                    <span>
-                      <a href={`tel:${office.phonePrimary}`} className="block font-semibold text-white hover:text-mint-300">
-                        {formatBangladeshPhone(office.phonePrimary)}
-                      </a>
-                      {office.phoneSecondary && (
-                        <a href={`tel:${office.phoneSecondary}`} className="mt-0.5 block hover:text-mint-300">
-                          {formatBangladeshPhone(office.phoneSecondary)}
-                        </a>
-                      )}
-                    </span>
-                  </p>
-                  {officeWhatsApp && (
-                    <a href={officeWhatsApp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 font-semibold text-white hover:text-mint-300">
-                      <MessageCircle className="shrink-0 text-mint-300" size={15} aria-hidden="true" /> WhatsApp the office
-                    </a>
-                  )}
-                  {office.email && (
-                    <a href={`mailto:${office.email}`} className="flex items-center gap-2.5 break-all hover:text-mint-300">
-                      <Mail className="shrink-0 text-mint-300" size={15} aria-hidden="true" /> {office.email}
-                    </a>
-                  )}
-                  <p className="text-white/80">{office.hours}</p>
-                  {office.mapUrl && (
-                    <a href={office.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-semibold text-mint-300 hover:text-white">
-                      <Navigation className="shrink-0" size={14} aria-hidden="true" /> Directions on Google Maps
-                    </a>
-                  )}
-                </div>
-              ) : (
-                <Link href="/contact" className="mt-1 inline-flex items-center gap-2 text-[15px] font-semibold text-mint-300">
-                  Open contact details <ArrowUpRight size={13} />
-                </Link>
-              )}
-            </Column>
-          </div>
-        </div>
-
-        <div className="mt-12 border-t border-white/12 pt-6">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-            <p className="shrink-0 text-[14px] font-semibold text-white/80">Destinations</p>
-            <div className="flex flex-wrap gap-x-5 gap-y-2 lg:border-l lg:border-white/12 lg:pl-6">
-              {destinationLinks.map(link => (
-                <Link key={link.href} href={link.href} className="text-[14px] text-white/75 transition-colors hover:text-white">
-                  {link.name}
-                </Link>
+          {/* Destinations, in two columns */}
+          <Group title="Study destinations" className="lg:col-span-3">
+            <div className="grid grid-cols-2 gap-x-6">
+              {[destinationLinks.slice(0, half), destinationLinks.slice(half)].map((column, index) => (
+                <ul key={index} className="grid gap-2.5">
+                  {column.map(link => (
+                    <li key={link.href}>
+                      <Link href={link.href} className={linkClass}>{link.name}</Link>
+                    </li>
+                  ))}
+                </ul>
               ))}
             </div>
-          </div>
+            <Link href="/destinations" className="mt-4 inline-block text-[15px] font-semibold text-white underline underline-offset-4 hover:text-lime">
+              Compare all destinations
+            </Link>
+          </Group>
+
+          <Group title="Plan and compare" className="lg:col-span-2">
+            <ul className="grid gap-2.5">
+              {planLinks.map(([name, href]) => (
+                <li key={href}><Link href={href} className={linkClass}>{name}</Link></li>
+              ))}
+            </ul>
+          </Group>
+
+          <Group title="Company" className="lg:col-span-3">
+            <ul className="grid gap-2.5">
+              {companyLinks.map(([name, href]) => (
+                <li key={href}><Link href={href} className={linkClass}>{name}</Link></li>
+              ))}
+            </ul>
+          </Group>
         </div>
 
-        <div className="mt-6 flex flex-col justify-between gap-5 text-[14px] text-white/70 md:flex-row md:items-center">
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
-            {legalLinks.map(([name, href]) => (
-              <Link key={href} href={href} className="transition-colors hover:text-white">
-                {name}
-              </Link>
-            ))}
-            <Link href="/bn/study-in-china" lang="bn" className="transition-colors hover:text-white">
-              বাংলা গাইড
-            </Link>
-            <CookieSettingsButton className="transition-colors hover:text-white" />
+        {/* Visit us — every way to reach a person, in one row */}
+        <section aria-label="Visit or contact our office" className="mt-14 grid gap-6 rounded-3xl bg-white/[0.06] p-6 ring-1 ring-white/10 sm:grid-cols-2 sm:p-8 lg:grid-cols-[1.15fr_1fr_.8fr_1.25fr]">
+          <div className="flex gap-3.5">
+            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-lime text-petrol-800"><MapPin size={18} aria-hidden="true" /></span>
+            <div className="text-[15px] leading-6">
+              <p className="font-bold text-white">Dhanmondi office</p>
+              <p className="mt-1 text-white/75">{office?.address ?? 'Dhanmondi, Dhaka'}</p>
+              {office?.mapUrl && (
+                <a href={office.mapUrl} target="_blank" rel="noopener noreferrer" className="mt-1.5 inline-flex items-center gap-1.5 font-semibold text-lime hover:underline">
+                  <Navigation size={14} aria-hidden="true" /> Get directions
+                </a>
+              )}
+            </div>
           </div>
-          <p>© EduExpress International Bangladesh. All rights reserved.</p>
+          <div className="flex gap-3.5">
+            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-lime text-petrol-800"><Clock3 size={18} aria-hidden="true" /></span>
+            <div className="text-[15px] leading-6">
+              <p className="font-bold text-white">Opening hours</p>
+              <p className="mt-1 text-white/75">{office?.hours ?? 'Saturday to Thursday, 11:00 AM to 6:00 PM'}</p>
+            </div>
+          </div>
+          <div className="flex gap-3.5">
+            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-lime text-petrol-800"><Phone size={18} aria-hidden="true" /></span>
+            <div className="text-[15px] leading-6">
+              <p className="font-bold text-white">Call us</p>
+              {office?.phonePrimary ? (
+                <>
+                  <a href={`tel:${office.phonePrimary}`} className="mt-1 block text-white/85 hover:text-lime">{formatBangladeshPhone(office.phonePrimary)}</a>
+                  {office.phoneSecondary && <a href={`tel:${office.phoneSecondary}`} className="block text-white/85 hover:text-lime">{formatBangladeshPhone(office.phoneSecondary)}</a>}
+                </>
+              ) : (
+                <Link href="/contact" className="mt-1 block text-white/85 hover:text-lime">Contact details</Link>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-3.5">
+            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-lime text-petrol-800"><MessageCircle size={18} aria-hidden="true" /></span>
+            <div className="min-w-0 text-[15px] leading-6">
+              <p className="font-bold text-white">Message us</p>
+              {whatsapp && <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="mt-1 block text-white/85 hover:text-lime">WhatsApp the office</a>}
+              {office?.email && (
+                <a href={`mailto:${office.email}`} className="mt-0.5 flex items-center gap-1.5 text-white/85 [overflow-wrap:anywhere] hover:text-lime">
+                  <Mail size={14} className="shrink-0" aria-hidden="true" /> {office.email}
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Legal */}
+        <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 text-[14px] text-white/70 lg:flex-row lg:items-center lg:justify-between">
+          <p>© {new Date().getFullYear()} EduExpress International. All rights reserved.</p>
+          <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            {legalLinks.map(([name, href]) => (
+              <li key={href}><Link href={href} className="hover:text-white">{name}</Link></li>
+            ))}
+            <li><CookieSettingsButton className="hover:text-white" /></li>
+            <li><Link href="/bn/study-in-china" lang="bn" hrefLang="bn-BD" className="font-semibold text-white hover:text-lime">বাংলা</Link></li>
+          </ul>
         </div>
       </div>
+
+      {/* Oversized wordmark — decorative sign-off */}
+      <p
+        aria-hidden="true"
+        data-anim="rise"
+        className="pointer-events-none select-none whitespace-nowrap text-center font-display text-[19vw] font-black leading-[0.72] tracking-[-0.04em] text-white/[0.06] lg:text-[17vw]"
+      >
+        EduExpress
+      </p>
     </footer>
   );
 }

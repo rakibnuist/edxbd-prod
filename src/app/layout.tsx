@@ -11,6 +11,7 @@ import MobileLeadBar from "@/components/MobileLeadBar";
 
 import WhatsAppWrapper from "@/components/WhatsAppWrapper";
 import CookieConsent from "@/components/CookieConsent";
+import RevealObserver from "@/components/motion/RevealObserver";
 import MetaPixel from "@/components/MetaPixel";
 import GoogleTags from "@/components/GoogleTags";
 
@@ -301,6 +302,7 @@ export default async function RootLayout({
           />
           <MobileLeadBar />
           <CookieConsent />
+          <RevealObserver />
           <ConditionalFooter><Footer /></ConditionalFooter>
           {enableProductionTracking && (
             <>

@@ -97,35 +97,31 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
     'Assalamu alaikum. I would like counselling for studying abroad.',
   )}`;
   const assessmentHref = pathname === '/' ? '#assessment' : '/education-fit-assessment';
-  // On the homepage the header floats transparently over the hero photo until
-  // the visitor scrolls or opens a menu; everywhere else it is solid white.
-  const overHero = pathname === '/' && !scrolled && !mobileOpen && !openMenu;
-  const stripLink = overHero ? 'text-white hover:text-mint-200' : 'text-petrol-600 hover:text-petrol-800';
 
   return (
     <header className="fixed inset-x-0 top-0 z-[60]">
       {/* Keeps the header's total height unchanged (pages offset for it). */}
-      <div className={`h-[3px] transition-colors ${overHero ? 'bg-transparent' : 'bg-petrol-600'}`} aria-hidden="true" />
+      <div className="h-[3px] transition-colors bg-petrol-600" aria-hidden="true" />
 
       {/* Contact facts: who we are and how to reach a person. */}
-      <div className={`hidden h-[34px] border-b text-[14px] transition-colors lg:block ${overHero ? 'border-white/15 bg-transparent text-white/85' : 'border-rule bg-chalk-100 text-ink-soft'}`}>
+      <div className="hidden h-[34px] border-b text-[14px] transition-colors lg:block border-rule bg-chalk-100 text-ink-soft">
         <div className="mx-auto flex h-full max-w-shell items-center justify-between px-6">
           <div className="flex items-center gap-5">
             <Link href="/contact" className="inline-flex items-center gap-1.5 hover:underline">
-              <MapPin size={14} aria-hidden="true" className={overHero ? 'text-mint-300' : 'text-petrol-500'} /> Office in Dhanmondi, Dhaka
+              <MapPin size={14} aria-hidden="true" className="text-petrol-500" /> Office in Dhanmondi, Dhaka
             </Link>
             <span className="inline-flex items-center gap-1.5">
-              <Clock3 size={14} aria-hidden="true" className={overHero ? 'text-mint-300' : 'text-petrol-500'} /> {hours}
+              <Clock3 size={14} aria-hidden="true" className="text-petrol-500" /> {hours}
             </span>
           </div>
           <div className="flex items-center gap-5">
-            <Link href="/bn/study-in-china" hrefLang="bn-BD" lang="bn" className={`font-semibold ${stripLink}`}>
+            <Link href="/bn/study-in-china" hrefLang="bn-BD" lang="bn" className="font-semibold text-petrol-700 hover:text-petrol-900">
               বাংলা
             </Link>
-            <a href={telHref} className={`inline-flex items-center gap-1.5 font-semibold ${stripLink}`}>
+            <a href={telHref} className="inline-flex items-center gap-1.5 font-semibold text-petrol-700 hover:text-petrol-900">
               <Phone size={14} aria-hidden="true" /> {formatBangladeshPhone(phone)}
             </a>
-            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-1.5 font-semibold ${overHero ? 'text-[#7ee2b0] hover:text-white' : 'text-green-600 hover:text-green-700'}`}>
+            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-green-600 hover:text-green-700">
               <MessageCircle size={14} aria-hidden="true" /> WhatsApp
             </a>
           </div>
@@ -135,13 +131,12 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
       <nav
         aria-label="Main navigation"
         className={`border-b transition-[background-color,box-shadow,border-color] duration-200 ${
-          overHero ? 'border-transparent bg-transparent' : 'border-rule bg-white'
+          'border-rule bg-white'
         } ${scrolled || openMenu ? 'shadow-[0_8px_24px_-18px_rgba(15,23,42,.45)]' : ''}`}
       >
         <div className="mx-auto flex h-[64px] max-w-shell items-center justify-between px-4 sm:h-[72px] sm:px-6">
           <Link href="/" aria-label="EduExpress International home" className="shrink-0">
-            <Image src="/logo.png" alt="EduExpress International" width={180} height={51} priority className={`h-8 w-auto sm:h-9 lg:h-10 ${overHero ? 'hidden' : ''}`} />
-            <Image src="/white-logo.png" alt="EduExpress International" width={180} height={51} priority className={`h-8 w-auto sm:h-9 lg:h-10 ${overHero ? '' : 'hidden'}`} />
+            <Image src="/logo.png" alt="EduExpress International" width={180} height={51} priority className="h-8 w-auto sm:h-9 lg:h-10" />
           </Link>
 
           <div
@@ -180,12 +175,12 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
                     aria-expanded={hasMenu ? isOpen : undefined}
                     aria-current={current ? 'page' : undefined}
                     className={`relative flex items-center gap-1 whitespace-nowrap px-3.5 text-[15px] font-semibold transition-colors ${
-                      overHero ? 'text-white hover:text-mint-200' : current || isOpen ? 'text-petrol-600' : 'text-ink hover:text-petrol-600'
+                      current || isOpen ? 'text-petrol-600' : 'text-ink hover:text-petrol-600'
                     }`}
                   >
                     {menu.label}
                     {hasMenu && (
-                      <ChevronDown size={15} aria-hidden="true" className={`transition-transform duration-200 ${overHero ? 'text-white/70' : 'text-ink-mute'} ${isOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown size={15} aria-hidden="true" className={`transition-transform duration-200 text-ink-mute ${isOpen ? 'rotate-180' : ''}`} />
                     )}
                     <span
                       aria-hidden="true"
@@ -231,7 +226,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
             <a
               href={telHref}
               aria-label={`Call ${formatBangladeshPhone(phone)}`}
-              className={`grid size-10 place-items-center rounded-lg border lg:hidden ${overHero ? 'border-white/30 bg-white/10 text-white' : 'border-rule text-petrol-600 hover:bg-chalk-100'}`}
+              className="grid size-10 place-items-center rounded-lg border lg:hidden border-rule text-petrol-600 hover:bg-chalk-100"
             >
               <Phone size={18} aria-hidden="true" />
             </a>
@@ -244,7 +239,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
               aria-expanded={mobileOpen}
               aria-controls="mobile-navigation"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              className={`grid size-10 place-items-center rounded-lg border xl:hidden ${overHero ? 'border-white/30 bg-white/10 text-white' : 'border-rule bg-white text-petrol-700'}`}
+              className="grid size-10 place-items-center rounded-lg border xl:hidden border-rule bg-white text-petrol-700"
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>

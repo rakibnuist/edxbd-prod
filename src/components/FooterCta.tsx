@@ -2,29 +2,31 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 /**
- * Site-wide assessment prompt in the footer.
- * Hidden on the homepage, which closes with its own richer call to action
- * (assessment + phone + WhatsApp + office) — two stacked prompts read as a mistake.
+ * Site-wide assessment prompt at the top of the footer.
+ * Hidden on the homepage, which already closes with the full assessment form.
  */
 export default function FooterCta() {
   const pathname = usePathname();
   if (pathname === '/') return null;
 
   return (
-    <div className="border-b border-white/10 bg-petrol-700 px-5 py-10 sm:px-8 lg:px-12">
-      <div className="mx-auto grid max-w-shell items-center gap-6 md:grid-cols-[1fr_auto]">
+    <div className="mx-auto max-w-[1200px] px-5 pt-16 lg:px-8">
+      <div className="flex flex-col gap-6 rounded-3xl bg-white p-7 text-petrol-800 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="text-[26px] font-bold leading-tight text-white sm:text-[30px]">Not sure where to begin?</h2>
-          <p className="mt-2 max-w-3xl text-[17px] leading-7 text-white/85">
+          <h2 className="font-display text-[34px] font-black leading-[0.95] tracking-[-0.01em] sm:text-[44px]">Not sure where to begin?</h2>
+          <p className="mt-3 max-w-2xl text-[17px] leading-7 text-ink-soft">
             Get a free assessment. A counsellor compares the cost, the recognition and your visa readiness, and explains it in writing.
           </p>
         </div>
-        <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7 text-[16px]">
-          Get my free assessment <ArrowUpRight size={17} aria-hidden="true" />
-        </Link>
+        <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+          <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+            Get my free assessment <ArrowRight size={18} aria-hidden="true" />
+          </Link>
+          <Link href="/contact" className="ed-btn ed-btn-outline min-h-[52px] px-7">Talk to a counsellor</Link>
+        </div>
       </div>
     </div>
   );

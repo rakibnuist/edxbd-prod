@@ -64,7 +64,7 @@ export default function MobileLeadBar({ whatsappHref }: { whatsappHref: string }
         </a>
         <a
           href="#assessment"
-          className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full bg-green-500 px-2 text-[14px] font-bold text-white"
+          className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full bg-lime px-2 text-[14px] font-bold text-petrol-800"
         >
           <CalendarCheck size={14} aria-hidden="true" /> Assessment
         </a>
