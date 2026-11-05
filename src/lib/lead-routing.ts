@@ -96,7 +96,9 @@ export function routeLead(input: RoutingInput): RoutingResult {
 function isHighRisk(input: RoutingInput): boolean {
   const budget = normalize(input.budget);
   // Explicitly declared very-low budget against an expensive destination is worth a review.
-  const veryLowBudget = /under|below|less|<|0-|no-budget|not-sure/.test(budget) && budget.length > 0;
+  // Anchored to the start of the option label: an unanchored /0-/ also matched
+  // "10–20-lakh" and "above-20-lakh", flagging every UK/Finland lead.
+  const veryLowBudget = /^(under|below|less-than|<)|^no-budget|^not-sure/.test(budget);
   const expensiveDest = ['uk', 'united-kingdom', 'finland'].includes(
     normalize(input.destinationInterest || input.country)
   );

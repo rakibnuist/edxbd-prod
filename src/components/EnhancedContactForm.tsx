@@ -270,7 +270,8 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
             onFocus={() => handleFieldFocus('name')}
             required
             className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f5efe6] text-[#0f3a5c] placeholder:text-slate-500 font-semibold"
-            placeholder="e.g. John Doe"
+            autoComplete="name"
+            placeholder="e.g. Tahmid Rahman"
           />
         </div>
 
@@ -288,7 +289,8 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
             onFocus={() => handleFieldFocus('email')}
             required
             className="w-full px-4 py-2.5 text-xs border-2 border-[#0f3a5c]/30 focus:border-[#0f3a5c] focus:outline-none bg-[#f5efe6] text-[#0f3a5c] placeholder:text-slate-500 font-semibold"
-            placeholder="e.g. john@example.com"
+            autoComplete="email"
+            placeholder="e.g. yourname@gmail.com"
           />
         </div>
 
@@ -305,7 +307,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
               setFormData(prev => ({ ...prev, phone: value }));
               handleInteraction();
             }}
-            placeholder="123 456 7890"
+            placeholder="1712-345678"
             required
             error={error && formData.phone === '' ? 'Required' : undefined}
           />

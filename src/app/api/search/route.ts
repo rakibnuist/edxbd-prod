@@ -33,7 +33,7 @@ const PAGE_INDEX: SearchHit[] = [
 const normalize = (value: string) => value.trim().toLowerCase();
 
 export async function GET(request: NextRequest) {
-  const query = normalize(new URL(request.url).searchParams.get('q') || '');
+  const query = normalize(new URL(request.url).searchParams.get('q') || '').slice(0, 80);
 
   if (query.length < 2) {
     return NextResponse.json({ hits: PAGE_INDEX.slice(0, 6), query });

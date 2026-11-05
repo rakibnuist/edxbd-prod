@@ -10,6 +10,13 @@ import {
   readLimitedJson,
 } from '@/lib/request-body';
 
+// Int columns: free-text answers like "5+" or "" become NaN with Number(), which
+// Prisma rejects with a 500. Keep the leading whole number, else 0.
+function toCount(value: unknown): number {
+  const firstNumber = /\d+/.exec(String(value ?? ''))?.[0];
+  return firstNumber ? Math.min(Number.parseInt(firstNumber, 10), 1_000_000) : 0;
+}
+
 export async function POST(request: NextRequest) {
   const rateLimit = checkRateLimit(request, {
     name: 'partnership-form',
@@ -113,7 +120,7 @@ export async function POST(request: NextRequest) {
         businessRegistrationNumber,
         businessLicense,
         website,
-        yearsInBusiness: Number(yearsInBusiness),
+        yearsInBusiness: toCount(yearsInBusiness),
 
         // Contact Information
         contactPerson,
@@ -129,8 +136,8 @@ export async function POST(request: NextRequest) {
         // Business Details
         partnershipType,
         targetCountries: Array.isArray(targetCountries) ? JSON.stringify(targetCountries) : JSON.stringify([targetCountries].filter(Boolean)),
-        currentClients: Number(currentClients),
-        monthlyTarget: Number(monthlyTarget),
+        currentClients: toCount(currentClients),
+        monthlyTarget: toCount(monthlyTarget),
         experience,
         currentPartners: Array.isArray(currentPartners) ? JSON.stringify(currentPartners) : currentPartners ? JSON.stringify([currentPartners]) : null,
 
@@ -143,7 +150,8 @@ export async function POST(request: NextRequest) {
         marketingChannels: Array.isArray(marketingChannels) ? JSON.stringify(marketingChannels) : JSON.stringify([marketingChannels].filter(Boolean)),
         socialMediaPresence: typeof socialMediaPresence === 'object' ? JSON.stringify(socialMediaPresence) : socialMediaPresence,
         localNetwork,
-        referralSources,
+        // The form sends a list; the column is a JSON string (an array here 500'd every submission).
+        referralSources: Array.isArray(referralSources) ? JSON.stringify(referralSources) : JSON.stringify([referralSources].filter(Boolean)),
 
         // Documents
         documents: Array.isArray(documents) ? JSON.stringify(documents) : JSON.stringify([documents].filter(Boolean)),

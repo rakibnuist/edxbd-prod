@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -95,7 +96,7 @@ export default async function SuccessStoriesPage() {
 
   return (
     <article className="bg-[#ffffff] pt-[76px] text-ed-ink min-[1200px]:pt-[104px]">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
       <header className="relative overflow-hidden border-b border-rule bg-chalk">
         <div className="pointer-events-none absolute inset-0 ed-grid-lines-dark" aria-hidden="true" />
         <div className="pointer-events-none absolute -right-24 -top-20 size-[380px] rounded-full bg-sky-400/20 blur-[100px]" aria-hidden="true" />

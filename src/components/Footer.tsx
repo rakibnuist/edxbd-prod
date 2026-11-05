@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { formatBangladeshPhone } from '@/lib/contact-format';
 import FooterCta from '@/components/FooterCta';
+import { CookieSettingsButton } from '@/components/CookieConsent';
 import {
   ArrowUpRight,
   Facebook,
@@ -234,6 +235,7 @@ export default async function Footer() {
             <Link href="/bn/study-in-china" lang="bn" className="transition-colors hover:text-white">
               বাংলা গাইড
             </Link>
+            <CookieSettingsButton className="transition-colors hover:text-white" />
           </div>
           <p>© EduExpress International Bangladesh. All rights reserved.</p>
         </div>

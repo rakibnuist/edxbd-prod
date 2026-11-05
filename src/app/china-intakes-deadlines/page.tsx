@@ -6,7 +6,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
-import { chinaIntakes, CHINA_INTAKE_VERIFIED_ON, CHINA_INTAKE_NEXT_REVIEW } from '@/lib/china-intakes';
+import { getChinaIntakes, CHINA_INTAKE_VERIFIED_ON, CHINA_INTAKE_NEXT_REVIEW } from '@/lib/china-intakes';
 import { canApplyToIntake } from '@/lib/intake-status';
 import type { IntakeStatus } from '@/lib/intake-status';
 
@@ -34,7 +34,6 @@ export const metadata: Metadata = {
 const VERIFIED_ON = CHINA_INTAKE_VERIFIED_ON;
 const NEXT_SCHEDULED_REVIEW = CHINA_INTAKE_NEXT_REVIEW;
 
-const intakes = chinaIntakes;
 
 const statusStyles: Record<IntakeStatus, string> = {
   Open: 'bg-[#e3f0f9] text-[#276b55] border-[#cfe7f5]',
@@ -52,6 +51,7 @@ const timelineSteps = [
 ];
 
 export default function ChinaIntakesDeadlinesPage() {
+  const intakes = getChinaIntakes();
   return (
     <div className="bg-[#f5efe6] text-[#0f3a5c]">
       {/* HERO */}
@@ -126,7 +126,7 @@ export default function ChinaIntakesDeadlinesPage() {
           </div>
 
           <p className="mt-8 text-center text-xs leading-6 text-slate-500">
-            Window status checked on <strong>{VERIFIED_ON}</strong> against university admissions-office updates, re-checked {NEXT_SCHEDULED_REVIEW}.
+            Window status checked on <strong>{VERIFIED_ON}</strong> against university admissions-office updates. Next check scheduled for {NEXT_SCHEDULED_REVIEW}.
             If a window is awaiting re-verification we label it &ldquo;Under Verification&rdquo; rather than show a stale deadline.
           </p>
         </div>

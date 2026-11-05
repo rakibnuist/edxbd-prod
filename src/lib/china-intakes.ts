@@ -11,10 +11,6 @@ import type { IntakeStatus } from '@/lib/intake-status';
 export const CHINA_INTAKE_VERIFIED_ON = '26 October 2026';
 export const CHINA_INTAKE_NEXT_REVIEW = 'January 2027 (before the March deadline window)';
 
-export function intakeStatus(detail: { opensAt: string; deadline: string; verifiedUntil: string }): IntakeStatus {
-  return getIntakeStatus({ opensAt: detail.opensAt, deadline: detail.deadline, verifiedUntil: detail.verifiedUntil });
-}
-
 export interface ChinaIntakeRow {
   name: string;
   applicationsOpen: string;
@@ -25,9 +21,16 @@ export interface ChinaIntakeRow {
   badge: string;
   status: IntakeStatus;
   activeCampaignHref: string | null;
+  /** Human-readable window for compact summaries. */
+  opensLabel: string;
+  deadlineLabel: string;
 }
 
-export const chinaIntakes: ChinaIntakeRow[] = [
+type ChinaIntakeDefinition = Omit<ChinaIntakeRow, 'status'> & {
+  window: { opensAt: string; deadline: string; verifiedUntil: string };
+};
+
+const CHINA_INTAKE_DEFINITIONS: ChinaIntakeDefinition[] = [
   {
     name: 'September 2027 Intake (Autumn) — Main Intake',
     applicationsOpen: 'October / November (Previous Year)',
@@ -36,7 +39,9 @@ export const chinaIntakes: ChinaIntakeRow[] = [
     classesStart: 'September',
     programs: 'All Bachelor’s, Master’s, PhD, and MBBS degree programs.',
     badge: 'Largest Selection & Full CSC Allocation',
-    status: intakeStatus({ opensAt: '2026-10-31', deadline: '2027-06-30', verifiedUntil: '2027-02-28' }),
+    window: { opensAt: '2026-10-31', deadline: '2027-06-30', verifiedUntil: '2027-02-28' },
+    opensLabel: '31 October 2026',
+    deadlineLabel: '30 June 2027',
     activeCampaignHref: null,
   },
   {
@@ -47,20 +52,32 @@ export const chinaIntakes: ChinaIntakeRow[] = [
     classesStart: 'March',
     programs: 'Select Bachelor’s, Master’s, and Chinese Language preparatory courses.',
     badge: 'Faster Entry (No 1-Year Gap)',
-    status: intakeStatus({ opensAt: '2026-08-01', deadline: '2027-01-31', verifiedUntil: '2027-01-31' }),
+    window: { opensAt: '2026-08-01', deadline: '2027-01-31', verifiedUntil: '2027-01-31' },
+    opensLabel: 'August 2026',
+    deadlineLabel: '31 January 2027',
     activeCampaignHref: '/china-march-2027-intake',
   },
 ];
 
+/**
+ * Status is derived per call. It used to be computed once at module load, so a
+ * long-running server kept showing "Open" past the 14-day "Closing" mark and
+ * past the deadline until the next restart.
+ */
+export function getChinaIntakes(now = new Date()): ChinaIntakeRow[] {
+  return CHINA_INTAKE_DEFINITIONS.map(({ window, ...row }) => ({
+    ...row,
+    status: getIntakeStatus(window, now),
+  }));
+}
+
 // Compact rows for the stale-post guidance box (server-computed; the pillar
 // page renders the full detail, this surface only needs name/status/window).
-export const chinaIntakeOverview = () =>
-  chinaIntakes.map(row => ({
+export const chinaIntakeOverview = (now = new Date()) =>
+  getChinaIntakes(now).map(row => ({
     name: row.name,
     status: row.status,
     summary: row.status === 'Open' || row.status === 'Closing'
-      ? 'Applications are open now — university deadline 31 January 2027'
-      : row.name.startsWith('September')
-        ? 'Applications open 31 October 2026 · university deadline 30 June 2027'
-        : 'Applications open August 2026 · university deadline 31 January 2027',
+      ? `Applications are open now — university deadline ${row.deadlineLabel}`
+      : `Applications open ${row.opensLabel} · university deadline ${row.deadlineLabel}`,
   }));

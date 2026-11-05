@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -142,7 +143,7 @@ export default async function EvidencePageRoute({ params }: Props) {
 
   return (
     <main className="overflow-x-clip bg-chalk text-ink">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
 
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-rule bg-chalk">

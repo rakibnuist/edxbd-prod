@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import { Metadata } from 'next';
 import UpdatesClient from './UpdatesClient';
 import type { Update } from '@/lib/types';
@@ -119,7 +120,7 @@ export default async function UpdatesPage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
       <UpdatesClient initialUpdates={updates} initialCategories={categories} />
     </>
   );

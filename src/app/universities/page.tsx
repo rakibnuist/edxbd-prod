@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -110,7 +111,7 @@ export default async function UniversitiesPage({ searchParams }: Props) {
 
   return (
     <article className="bg-chalk pt-[74px] text-ink lg:pt-[108px]">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }} />
       <header className="border-b border-rule px-5 pb-8 pt-10 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-shell">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">

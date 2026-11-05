@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import AboutClient from './AboutClient';
 import { getPublicTrustRecords } from '@/lib/trust-records';
@@ -52,7 +53,7 @@ export default async function About() {
   const { team } = await getPublicTrustRecords();
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
       <AboutClient team={team} />
     </>
   );

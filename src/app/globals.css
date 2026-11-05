@@ -965,6 +965,9 @@ textarea {
 :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 3px solid var(--petrol-500) !important;
   outline-offset: 2px !important;
+  /* White halo fills the offset gap so the ring stays visible on dark
+     surfaces the class-based override below does not catch (e.g. #1767a0). */
+  box-shadow: 0 0 0 2px #fff;
 }
 
 :is([class*="bg-[#0"], [class*="bg-petrol"], [class*="bg-[var(--petrol"]) :is(a, button, input, select, textarea, [tabindex]):focus-visible,

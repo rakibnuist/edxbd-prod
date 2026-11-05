@@ -65,6 +65,12 @@ const countryCodes: CountryCode[] = [
   { code: 'RU', name: 'Russia', flag: '🇷🇺', dialCode: '+7' },
 ];
 
+// Bangladeshi users type the local "017…" form; after +880 the trunk 0 must be
+// dropped or the stored number (+88001…) breaks WhatsApp and tel: links.
+function composeNumber(dialCode: string, number: string) {
+  return dialCode + (dialCode === '+880' ? number.replace(/^0+/, '') : number);
+}
+
 function parsePhoneNumber(fullNumber: string) {
   const country = countryCodes.find(item => fullNumber.startsWith(item.dialCode));
   return country
@@ -77,7 +83,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
   name,
   value,
   onChange,
-
+  placeholder = '1712-345678',
   required = false,
   className = '',
   error,
@@ -121,7 +127,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
     setSearchTerm('');
 
     // Update the full phone number
-    const fullNumber = country.dialCode + phoneNumber;
+    const fullNumber = composeNumber(country.dialCode, phoneNumber);
     onChange(fullNumber);
 
     // Default focus back to input
@@ -136,7 +142,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
     setPhoneNumber(number);
 
     // Update the full phone number
-    const fullNumber = selectedCountry.dialCode + number;
+    const fullNumber = composeNumber(selectedCountry.dialCode, number);
     onChange(fullNumber);
   };
 
@@ -239,7 +245,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
           value={phoneNumber}
           onChange={handlePhoneNumberChange}
           onKeyDown={handleKeyDown}
-          placeholder="123 456 7890"
+          placeholder={placeholder}
           required={required}
           disabled={disabled}
           inputMode="tel"

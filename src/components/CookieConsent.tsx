@@ -3,9 +3,23 @@
 import { useState, useEffect } from 'react';
 import { Cookie, X } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export const CONSENT_STORAGE_KEY = 'cookie-consent';
 export const CONSENT_CHANGE_EVENT = 'eduexpress:consent-change';
+const OPEN_SETTINGS_EVENT = 'eduexpress:open-cookie-settings';
+
+// Internal tools set no marketing cookies; the banner only gets in the way there.
+const HIDDEN_ROUTE = /^\/(admin|dashboard|login)(\/|$)/;
+
+/** Footer link that reopens the banner so a visitor can change an earlier choice. */
+export function CookieSettingsButton({ className = '' }: { className?: string }) {
+  return (
+    <button type="button" className={className} onClick={() => window.dispatchEvent(new Event(OPEN_SETTINGS_EVENT))}>
+      Cookie settings
+    </button>
+  );
+}
 
 function announceConsent(accepted: boolean) {
   window.dispatchEvent(new CustomEvent(CONSENT_CHANGE_EVENT, { detail: { accepted } }));
@@ -13,6 +27,13 @@ function announceConsent(accepted: boolean) {
 
 export default function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const open = () => setIsVisible(true);
+    window.addEventListener(OPEN_SETTINGS_EVENT, open);
+    return () => window.removeEventListener(OPEN_SETTINGS_EVENT, open);
+  }, []);
 
   useEffect(() => {
     const consent = localStorage.getItem(CONSENT_STORAGE_KEY);
@@ -34,7 +55,7 @@ export default function CookieConsent() {
     setIsVisible(false);
   };
 
-  if (!isVisible) return null;
+  if (!isVisible || HIDDEN_ROUTE.test(pathname ?? '')) return null;
 
   return (
     <div className="fixed inset-x-4 bottom-4 z-[65] animate-[cookie-in_.3s_ease-out] sm:inset-x-auto sm:bottom-5 sm:left-5 sm:max-w-[380px]">

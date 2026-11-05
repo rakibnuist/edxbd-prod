@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import { Database, SearchCheck, ShieldCheck } from 'lucide-react';
 import { Suspense } from 'react';
@@ -77,7 +78,7 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
 
   return (
     <article className="bg-[#f5efe6] text-[#0f3a5c] font-sans">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
       
       <PageHeader
         title="China Universities"

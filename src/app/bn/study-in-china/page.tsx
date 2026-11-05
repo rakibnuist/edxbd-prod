@@ -13,7 +13,7 @@ import {
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 
 export const metadata: Metadata = {
-  title: { absolute: 'বাংলাদেশে শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা ও স্কলারশিপ ২০২৬ | EduExpress' },
+  title: { absolute: 'বাংলাদেশে শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা ও স্কলারশিপ ২০২৭ | EduExpress' },
   description:
     'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে ব্যাচেলর, মাস্টার্স, স্কলারশিপ ও ভিসা প্রসেসিং গাইড। ভিসা অনুমোদনের পূর্বে কোনো ফাইল ওপেনিং চার্জ বা সার্ভিস ফি নেই।',
   alternates: {
@@ -30,13 +30,20 @@ export const metadata: Metadata = {
     description: 'চীনে স্কলারশিপ, বিশ্ববিদ্যালয়ের তালিকা, টিউশন ফি এবং ভিসা প্রসেসিং তথ্য।',
     url: '/bn/study-in-china',
     type: 'website',
+    locale: 'bn_BD',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'বাংলাদেশে শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা | EduExpress International',
+    description: 'চীনে স্কলারশিপ, বিশ্ববিদ্যালয়ের তালিকা, টিউশন ফি এবং ভিসা প্রসেসিং তথ্য।',
+    images: ['/og-image.jpg'],
   },
 };
 
 const bnFeatures = [
   {
-    title: '১০০% ফুল টিউশন ও হোস্টেল স্কলারশিপ',
-    detail: 'চীনা সরকারি সিএসসি (CSC), প্রোভিনশিয়াল এবং বিশ্ববিদ্যালয় স্কলারশিপের মাধ্যমে সম্পূর্ণ বিনামূল্যে পড়ার সুযোগ।',
+    title: 'ফুল টিউশন ও হোস্টেল স্কলারশিপের সুযোগ',
+    detail: 'চীনা সরকারি সিএসসি (CSC), প্রোভিনশিয়াল এবং বিশ্ববিদ্যালয় স্কলারশিপে টিউশন ও হোস্টেল পুরোপুরি কভার হতে পারে। তবে স্কলারশিপ প্রতিযোগিতামূলক — আমরা কোনো স্কলারশিপের নিশ্চয়তা দিই না।',
   },
   {
     title: 'আইইএলটিএস (IELTS) ছাড়া আবেদনের সুযোগ',
@@ -50,7 +57,7 @@ const bnFeatures = [
 
 export default function BengaliStudyInChinaPage() {
   return (
-    <div className="bg-[#f5efe6] text-[#0f3a5c] font-sans">
+    <div lang="bn" className="bg-[#f5efe6] text-[#0f3a5c] font-sans">
       {/* HERO */}
       <section className="relative overflow-hidden bg-[#0f3a5c] px-5 pb-20 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">
         <div className="relative mx-auto max-w-[1440px]">
@@ -64,7 +71,7 @@ export default function BengaliStudyInChinaPage() {
               <Globe2 size={14} /> ফ্ল্যাগশিপ চায়না উচ্চশিক্ষা পোর্টাল
             </div>
             <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.15] tracking-tight sm:text-5xl md:text-6xl">
-              বাংলাদেশী শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা ২০২৬
+              বাংলাদেশী শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা ২০২৭
             </h1>
             <p className="mt-6 text-lg leading-8 text-white/80 md:text-xl">
               টিউশন ফি waiver, স্কলারশিপ, বিশ্ববিদ্যালয় পছন্দ, খরচ এবং ভিসা আবেদনের সঠিক ও লিখিত তথ্যভিত্তিক গাইডলাইন।

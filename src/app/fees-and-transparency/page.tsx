@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Calculator, Download, GraduationCap, ReceiptText, Sparkles } from 'lucide-react';
@@ -35,7 +36,7 @@ export default async function FeesAndTransparencyPage() {
   };
 
   return <main className="bg-ed-paper pb-20 pt-[74px] text-ed-ink xl:pt-[106px]">
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
     <header className="relative overflow-hidden border-b border-[#12436b]/10 bg-[linear-gradient(180deg,#ffffff_0%,#f4f9fc_100%)] px-5 py-12 sm:px-8 sm:py-14 lg:px-12"><div className="pointer-events-none absolute inset-0 ed-grid-lines-dark opacity-60" aria-hidden="true" /><div className="relative mx-auto grid max-w-[1240px] items-end gap-8 lg:grid-cols-[1fr_360px]"><div><p className="text-xs font-black uppercase tracking-[.16em] text-ed-navy">ClearCost lives with the university</p><h1 className="mt-3 max-w-4xl ed-home-display text-[clamp(2.4rem,5vw,4.4rem)] leading-[1.02] tracking-[-0.03em]">Choose the program. Apply a scholarship. See the cost.</h1><p className="mt-5 max-w-2xl text-base leading-7 text-slate-600">Every university profile now keeps programs, scholarship choices, tuition and other first year costs together. You can download the selected view as an EduExpress branded PDF.</p><Link href="/universities" className="mt-7 inline-flex min-h-14 items-center gap-3 rounded-xl bg-ed-navy px-6 text-sm font-black text-white">Choose a university <ArrowRight size={17} /></Link></div><div className="rounded-3xl bg-ed-sand/40 p-6"><ReceiptText className="text-ed-navy" /><strong className="mt-4 block ed-home-display text-2xl">One data point, one place.</strong><p className="mt-2 text-sm leading-6 text-slate-600">The university page is the main cost record. Separate cost pages redirect back to it.</p></div></div></header>
 
     <section className="mt-14 border-y border-[#12436b]/10 bg-white px-5 py-14 sm:px-8 lg:px-12"><div className="mx-auto max-w-[1240px]"><div className="grid gap-4 md:grid-cols-3">{[

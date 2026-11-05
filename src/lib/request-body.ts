@@ -122,9 +122,15 @@ export function getSafeUtm(value: unknown): Record<string, string> | null {
 
 export function getValidatedPhone(body: Record<string, unknown>, field = 'phone'): string {
   const value = getRequiredString(body, field, 40);
-  const digits = value.replace(/\D/g, '');
+  const hasPlus = value.trim().startsWith('+');
+  let digits = value.replace(/\D/g, '');
+  // Bangladesh mobiles: "+880 01712…" keeps the trunk 0 after the country code,
+  // and "01712…" is the local form. Both become E.164 (+8801712…) so the
+  // counsellor's WhatsApp and tel: links work.
+  if (/^88001\d{9}$/.test(digits)) digits = `880${digits.slice(4)}`;
+  else if (!hasPlus && /^01\d{9}$/.test(digits)) return `+880${digits.slice(1)}`;
   if (digits.length < 7 || digits.length > 15) {
     throw new JsonBodyError('Enter a valid phone number including country code.', 400);
   }
-  return value.trim().startsWith('+') ? `+${digits}` : digits;
+  return hasPlus || /^8801\d{9}$/.test(digits) ? `+${digits}` : digits;
 }

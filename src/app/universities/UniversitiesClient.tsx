@@ -108,13 +108,17 @@ function buildRow(university: DirectoryUniversity, filters: DirectoryFilters): R
   const legacyAward = !university.fundingRoutes?.length
     ? legacyAwards.find(award => /100%|full tuition|fully funded/i.test(award.coverage || '')) || legacyAwards.find(award => legacyScholarshipValue(award))
     : undefined;
+  const programIntakeValues = programs.flatMap(program => program.intakes || []).filter(Boolean);
   const tuition = directoryTuitionSummary(programs.map(program => evergreenText(program.tuition || ''))) || evergreenText(university.details.tuition || '');
 
   return {
     university,
     tuition,
     showTuition: Boolean(tuition) && !/not recorded|contact|request|not specified|not confirmed|unknown/i.test(tuition),
-    intake: evergreenIntakes(programs.flatMap(program => program.intakes || []).concat(university.intake)),
+    // Program rows are the specific source; the legacy university-level text can
+    // hold deadline notes ("July 2026 or December 2026 (application deadlines
+    // passed)") that would otherwise surface as July/December intakes.
+    intake: evergreenIntakes(programIntakeValues.length ? programIntakeValues : university.intake),
     ranking,
     awardValue: route?.value || (legacyAward ? legacyScholarshipValue(legacyAward) : ''),
     levels,

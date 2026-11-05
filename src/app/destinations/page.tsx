@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
@@ -114,7 +115,7 @@ export default function DestinationsPage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
       <DestinationsClient />
       <section className="px-4 pb-16 sm:px-6 lg:px-10">
         <div className="mx-auto max-w-shell rounded-[28px] border border-rule bg-white p-6 shadow-[0_22px_50px_-44px_rgba(15,53,87,0.45)] sm:p-8 lg:flex lg:items-center lg:justify-between lg:gap-8">

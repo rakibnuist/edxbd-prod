@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
@@ -119,7 +120,7 @@ export default function CscScholarshipBangladeshPage() {
 
   return (
     <div className="bg-[#f5efe6] text-[#0f3a5c]">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
 
       {/* HERO SECTION */}
       <section className="relative overflow-hidden bg-[#0f3a5c] px-5 pb-20 pt-28 text-white sm:px-8 sm:pt-32 lg:px-12">

@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -321,7 +322,7 @@ export default async function Home() {
 
   return (
     <div className="overflow-x-clip bg-chalk text-ink">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
       <ScrollProgress />
 
       <HomeHero universityCount={plannerData.length} whatsappHref={whatsappHref} />
