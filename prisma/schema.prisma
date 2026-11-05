@@ -306,6 +306,10 @@ model Content {
   complianceApprovedAt DateTime?
   seoApprovedAt        DateTime?
   publishedAt          DateTime?
+  // Set when an intake announcement has closed. Archived posts stay reachable
+  // for transparency and backlinks, but are noindexed and excluded from
+  // sitemaps/RSS so they cannot compete with the current intake pages.
+  archivedAt           DateTime?
   views                Int       @default(0)
 
   createdAt DateTime @default(now())

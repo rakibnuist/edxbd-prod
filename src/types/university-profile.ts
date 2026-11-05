@@ -11,6 +11,7 @@ export type UniversityProfileFee = {
   stage: 'before_china' | 'in_china';
   notes?: string;
   optional?: boolean;
+  creditToward?: 'tuition' | 'housing';
 };
 
 export type UniversityProgramDetail = {

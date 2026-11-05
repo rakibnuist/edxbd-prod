@@ -47,7 +47,7 @@ test('internal maintenance timestamps and founding years are absent from public 
   assert.equal(evergreenText("A public university founded in 1896 and a member of the C9 League."), 'A public university and a member of the C9 League.');
 });
 
-const sourceFiles = ['nuist-programme-details.json', 'xjtu-2027-programmes.json', 'hubei-wenzhou-programmes.json'];
+const sourceFiles = ['nuist-programme-details.json', 'xjtu-2027-programmes.json', 'hubei-wenzhou-programmes.json', 'ahut-official-programmes.json'];
 for (const file of sourceFiles) {
   test(`public projection preserves catalogue facts and private source records: ${file}`, async () => {
     const payload = JSON.parse(await readFile(new URL(`../data/research/${file}`, import.meta.url), 'utf8'));

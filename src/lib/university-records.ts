@@ -16,6 +16,7 @@ export type CleanUniversityRecord = {
   degree: string[];
   taught: string[];
   rankings: { country?: number; world?: number; national?: number };
+  publishedRankings?: { publisher: string; rank: string; scope: 'world' | 'national' | 'subject'; subject?: string }[];
   details: { majors: string[]; tuition: string; tuitionDetails: string[] };
   programs: {
     level: string;

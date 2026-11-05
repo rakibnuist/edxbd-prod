@@ -133,7 +133,7 @@ export default function UniversitiesPage() {
             {/* Search and destination filters */}
             <div className="grid gap-3 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm lg:grid-cols-[1fr_190px_190px_190px_auto]">
                 <div className="relative">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5" />
                     <input
                         type="text"
                         placeholder="Search university, city or destination"
@@ -184,14 +184,14 @@ export default function UniversitiesPage() {
                             <div className="flex items-center gap-3">
                                 <Link
                                     href={`/admin/universities/${uni.slug}`}
-                                    className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                    className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                     aria-label={`Edit ${uni.name}`}
                                 >
                                     <Edit size={20} />
                                 </Link>
                                 <button
                                     onClick={() => handleDeleteClick(uni.id)}
-                                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                    className="p-2 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                     aria-label={`Delete ${uni.name}`}
                                 >
                                     <Trash2 size={20} />

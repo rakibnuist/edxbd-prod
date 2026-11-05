@@ -16,6 +16,7 @@ export type CostScenario = {
   housingDays?: string;
   depositRequired: boolean;
   depositCreditedToTuition: boolean;
+  depositCreditedToHousing?: boolean;
   otherCostsApply: boolean;
 };
 export type CostCurrencyTotals = Partial<Record<CostCurrency, number>>;
@@ -176,6 +177,8 @@ export function calculateClearCost(scenario: CostScenario) {
   let netTuition: number | null = null;
   let depositCredit = 0;
   let depositExceedsTuition = false;
+  let housingDepositCredit = 0;
+  let depositExceedsHousing = false;
   const tuitionWaivedWithoutGross = readCostNumber(scenario.values.tuition).status === 'missing'
     && scholarship.status === 'valid' && scenario.scholarshipType === 'percent' && scholarship.value === 100;
   if (amounts.tuition !== undefined && scholarship.status === 'valid') {
@@ -203,6 +206,13 @@ export function calculateClearCost(scenario: CostScenario) {
     if (field === 'housing') { if (housingMonths !== null) entries[field] = amounts[field] * housingMonths; }
     else entries[field] = amounts[field];
   }
+  if (scenario.depositRequired && scenario.depositCreditedToHousing && !scenario.depositCreditedToTuition) {
+    if (entries.housing !== undefined && amounts.deposit !== undefined) {
+      housingDepositCredit = Math.min(entries.housing, amounts.deposit);
+      depositExceedsHousing = amounts.deposit > entries.housing;
+      entries.housing -= housingDepositCredit;
+    } else delete entries.housing;
+  }
   const currency = scenario.currency || 'CNY';
   const serviceCurrency = scenario.serviceCurrency || currency;
   const separatePackage = serviceCurrency !== currency;
@@ -214,7 +224,7 @@ export function calculateClearCost(scenario: CostScenario) {
     beforeCurrencyTotals[serviceCurrency] = entries.service;
     currencyTotals[serviceCurrency] = entries.service;
   }
-  return { entries, total: beforeTotal + inChinaTotal, beforeTotal, inChinaTotal, beforeCurrencyTotals, currencyTotals, missing, invalid, netTuition, tuitionWaivedWithoutGross, depositCredit, depositExceedsTuition, scholarshipDeduction, scholarshipCapped, isComplete: !missing.length && !invalid.length };
+  return { entries, total: beforeTotal + inChinaTotal, beforeTotal, inChinaTotal, beforeCurrencyTotals, currencyTotals, missing, invalid, netTuition, tuitionWaivedWithoutGross, depositCredit, depositExceedsTuition, housingDepositCredit, depositExceedsHousing, scholarshipDeduction, scholarshipCapped, isComplete: !missing.length && !invalid.length };
 }
 
 export function convertToBdt(amount: number, rate: string): number | null {

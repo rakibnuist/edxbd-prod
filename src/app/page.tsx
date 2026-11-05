@@ -1,43 +1,55 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
+import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowRight,
-  ArrowUpRight,
-  BadgeCheck,
-  BookOpenCheck,
-  Check,
   CheckCircle2,
-  CircleDollarSign,
-  FileCheck2,
-  GraduationCap,
-  HeartHandshake,
+  ClipboardCheck,
+  Clock3,
   MapPin,
   MessageCircle,
   Phone,
-  PlaneTakeoff,
+  Plane,
   Search,
   ShieldCheck,
-  Sparkles,
-  UsersRound,
+  Star,
+  Wallet,
 } from 'lucide-react';
-import HomeAssessment from '@/components/home/HomeAssessment';
+
+import MobileLeadBar from '@/components/home/MobileLeadBar';
+import TestimonialCarousel from '@/components/home/TestimonialCarousel';
+import HomeLeadForm from '@/components/lead/HomeLeadForm';
+import { getChinaIntakes } from '@/lib/china-intakes';
 import { config } from '@/lib/config';
+import { formatBangladeshPhone } from '@/lib/contact-format';
+import { countries } from '@/lib/countries';
+import { getPublishedUpdates } from '@/lib/content-records';
+import { destinationPath } from '@/lib/site-urls';
 import { getPublicTrustRecords } from '@/lib/trust-records';
+import { getUniversityRecords } from '@/lib/university-records';
+import type { Update } from '@/lib/types';
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: { absolute: 'Education Consultancy in Bangladesh | EduExpress International' },
+  title: { absolute: 'Study Abroad Consultancy in Bangladesh | EduExpress' },
   description:
-    'Study abroad with clear costs, written guidance and personal support. Get a free profile assessment for China and other study destinations from EduExpress International, Dhaka.',
+    'Free study abroad assessment in Dhanmondi, Dhaka. Compare universities, scholarships and the full cost in writing, with no fee before your China visa.',
   alternates: { canonical: '/' },
   openGraph: {
-    title: 'Choose Better Education Abroad | EduExpress International',
-    description: 'Clear costs, written proof and human guidance from profile assessment to departure.',
+    title: 'Study Abroad, With the Costs in Writing | EduExpress International',
+    description: 'Free profile assessment. Clear costs, written proof and a counsellor in Dhanmondi, Dhaka.',
     url: '/',
     type: 'website',
-    images: [{ url: '/images/home/consultation-family.webp', width: 1280, height: 960, alt: 'Student and parent consultation at the EduExpress Dhanmondi office' }],
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Study abroad with the costs in writing' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Study Abroad, With the Costs in Writing | EduExpress International',
+    description: 'Free profile assessment. Clear costs, written proof and a counsellor in Dhanmondi, Dhaka.',
+    images: ['/og-image.jpg'],
   },
 };
 
@@ -60,126 +72,205 @@ async function loadTrustRecords(): Promise<TrustRecords> {
   }
 }
 
-const informationRoutes = [
-  {
-    icon: GraduationCap,
-    title: 'Find a university',
-    copy: 'Browse universities, programs and current admission information.',
-    href: '/universities',
-    link: 'Explore universities',
-  },
-  {
-    icon: CircleDollarSign,
-    title: 'Understand the cost',
-    copy: 'See tuition, accommodation, deposits and other likely expenses.',
-    href: '/study-in-china-cost-bangladesh',
-    link: 'See China costs',
-  },
-  {
-    icon: Sparkles,
-    title: 'Check scholarships',
-    copy: 'Learn what tuition, accommodation or stipend support may cover.',
-    href: '/china-scholarships-bangladesh',
-    link: 'Compare scholarships',
-  },
-  {
-    icon: FileCheck2,
-    title: 'Prepare documents',
-    copy: 'Understand admission, JW202 and China student-visa requirements.',
-    href: '/china-student-visa-bangladesh',
-    link: 'View requirements',
-  },
-];
+async function loadGuides(): Promise<Update[]> {
+  try {
+    return await getPublishedUpdates(6);
+  } catch {
+    return [];
+  }
+}
 
-const journey = [
-  ['01', 'Share your profile', 'Tell us your study level, subject and preferred destination.'],
-  ['02', 'Compare suitable options', 'A counsellor shortlists realistic university and scholarship routes.'],
-  ['03', 'Receive the full cost', 'University, third-party and EduExpress charges are separated in writing.'],
-  ['04', 'Complete the application', 'We guide documents, applications and admission-notice processing.'],
-  ['05', 'Prepare for the visa', 'Your file is checked against the current official requirements.'],
-  ['06', 'Travel with support', 'Air ticket, airport pickup and arrival guidance follow the signed package.'],
-];
+type PlannerUniversity = {
+  slug: string;
+  name: string;
+  country: string;
+  city: string;
+  levels: string[];
+  funding: boolean;
+  tuition: string;
+  programmes: number;
+  logo?: string;
+};
 
-const otherDestinations = [
-  { name: 'Malaysia', image: '/images/destinations/malaysia.jpg', href: '/study-in-malaysia-from-bangladesh' },
-  { name: 'United Kingdom', image: '/images/destinations/united-kingdom.jpg', href: '/study-in-uk-from-bangladesh' },
-  { name: 'South Korea', image: '/images/destinations/south-korea.jpg', href: '/study-in-south-korea-from-bangladesh' },
-  { name: 'Hungary', image: '/images/destinations/hungary.jpg', href: '/study-in-hungary-from-bangladesh' },
-  { name: 'Finland', image: '/images/destinations/finland.jpg', href: '/study-in-finland-from-bangladesh' },
-];
+async function loadPlannerData(): Promise<PlannerUniversity[]> {
+  try {
+    const universities = await getUniversityRecords();
+    const levelLabel = (value: string): string => {
+      const label = value.toLowerCase();
+      if (/phd|doctor/.test(label)) return 'PhD';
+      if (/master|postgraduate/.test(label)) return 'Master’s';
+      if (/bachelor|undergraduate|mbbs/.test(label)) return 'Bachelor’s';
+      if (/language|chinese studies/.test(label)) return 'Language';
+      if (/foundation|preparatory/.test(label)) return 'Foundation';
+      return '';
+    };
+    return universities.map(university => ({
+      slug: university.slug,
+      name: university.name,
+      country: university.country,
+      city: university.city,
+      levels: [
+        ...new Set(
+          [...university.degree, ...university.programs.map(program => program.level)]
+            .map(levelLabel)
+            .filter((level): level is string => Boolean(level)),
+        ),
+      ],
+      funding: university.scholarships.some(award => award.status !== 'closed'),
+      tuition: university.details.tuition,
+      programmes: university.programs.length,
+      logo: university.logo,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+const fmtGuideDate = (value?: string) => {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date);
+};
+
+
 
 const faqs = [
   {
     question: 'How do I start with EduExpress?',
-    answer: 'Complete the free profile assessment with your current study level, preferred destination and contact details. A counsellor will review the profile and explain the most relevant next step.',
+    answer:
+      'Complete the free profile assessment with your current study level, preferred destination and contact details. A counsellor reviews the profile and explains the most relevant next step.',
   },
   {
     question: 'What does a full scholarship mean?',
-    answer: 'The exact coverage depends on the university award. It may cover tuition, accommodation, a monthly stipend or a stated combination. We show every covered and payable item before you proceed.',
+    answer:
+      'The exact coverage depends on the university award. It may cover tuition, accommodation, a monthly stipend or a stated combination. We show every covered and payable item before you proceed.',
   },
   {
     question: 'When do I pay the EduExpress service charge?',
-    answer: 'For the China package, the approved policy is No Success, No Service Charge. You can use the documented original-document security route and pay after visa issuance, or deposit BDT 15,000, retain your originals and deduct that deposit from the final package price.',
+    answer:
+      'For the China package, no EduExpress service fee is due before China visa approval. Any university, embassy, medical, translation, courier or deposit fee required earlier is itemised in writing before you proceed. You can also hold your original documents with EduExpress and place a BDT 15,000 deposit, deducted from the final package price.',
   },
   {
     question: 'Are university deposits included in the BDT 200,000 package?',
-    answer: 'No. University registration, seat or tuition deposits are paid separately when required. They are identified in the written cost schedule before payment.',
+    answer:
+      'No. University registration, seat or tuition deposits are paid separately when required. They are identified in the written cost schedule before payment.',
   },
   {
     question: 'Can my parents join the counselling session?',
-    answer: 'Yes. Parents and sponsors are encouraged to join so costs, payment terms, documents, safety and responsibilities can be explained together.',
+    answer:
+      'Yes. Parents and sponsors are encouraged to join so costs, payment terms, documents, safety and responsibilities can be explained together.',
   },
   {
     question: 'Does EduExpress guarantee a visa?',
-    answer: 'No consultancy controls an embassy decision. EduExpress provides admission and visa-application support under written service and refund terms, but the final decision belongs to the relevant university and authority.',
+    answer:
+      'No consultancy controls an embassy decision. EduExpress provides admission and visa-application support under written service and refund terms, but the final decision belongs to the relevant university and authority.',
   },
 ];
 
-const fallbackPackageItems = [
-  'Application fee',
-  'Admission Notice',
-  'Scholarship assistance',
-  'JW202 Form',
-  'Visa application support',
-  'Embassy fee',
-  'Medical checkup in Bangladesh',
-  'Pre-departure briefing and travel guidance',
-  'One-way air ticket',
-  'Airport pickup',
+// Four plain steps. Each reuses the commitments the full journey page makes.
+const steps = [
+  {
+    title: 'Free profile assessment',
+    copy: 'Share your study level, subject, results, budget and preferred intake. A counsellor reviews it and calls you within one working day.',
+  },
+  {
+    title: 'Compare options and the full cost',
+    copy: 'A shortlist where recognition, cost and fit are checked together, with university, third-party and EduExpress charges separated in writing.',
+  },
+  {
+    title: 'Apply and receive admission',
+    copy: 'We prepare and submit your documents and handle the admission notice with you.',
+  },
+  {
+    title: 'Visa and travel',
+    copy: 'Your file is checked against the current official requirements. Air ticket, airport pickup and arrival guidance follow the signed package.',
+  },
 ];
 
-function SectionHeading({
-  eyebrow,
-  title,
-  copy,
-  centered = false,
-}: {
-  eyebrow: string;
-  title: string;
-  copy?: string;
-  centered?: boolean;
-}) {
-  return (
-    <div className={centered ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}>
-      <p className="text-xs font-extrabold uppercase tracking-[.16em] text-[#1767a0]">{eyebrow}</p>
-      <h2 className="mt-3 text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.08] tracking-[-.045em] text-[#102a43]">{title}</h2>
-      {copy && <p className="mt-4 text-base leading-7 text-slate-600">{copy}</p>}
-    </div>
-  );
-}
+// Entrance stagger for the hero (consumed by .anim-rise / .anim-lift).
+const delay = (ms: number) => ({ '--d': `${ms}ms` }) as CSSProperties;
 
 export default async function Home() {
-  const trust = await loadTrustRecords();
+  const [trust, guides, plannerData] = await Promise.all([loadTrustRecords(), loadGuides(), loadPlannerData()]);
   const office = trust.offices.find(item => item.isHeadOffice) ?? trust.offices[0] ?? null;
   const fullPackage = trust.servicePackages.find(item => item.packageType === 'full_scholarship');
-  const testimonials = trust.testimonials.slice(0, 3);
+  const testimonials = trust.testimonials.slice(0, 6);
+  const testimonialQuotes = testimonials.map(item => ({
+    id: item.id,
+    quote: item.content,
+    name: item.displayName || item.studentName,
+    detail: [item.university, item.country].filter(Boolean).join(' · '),
+    rating: item.rating,
+    ...(item.consentImageApproved && item.image ? { image: item.image } : {}),
+  }));
+  const ratedTestimonials = testimonials.filter(item => typeof item.rating === 'number' && item.rating > 0);
+  const averageRating = ratedTestimonials.length
+    ? ratedTestimonials.reduce((sum, item) => sum + (item.rating ?? 0), 0) / ratedTestimonials.length
+    : 0;
 
   const officeAddress = office?.address ?? `${config.contact.address.street}, ${config.contact.address.city} ${config.contact.address.postalCode}`;
   const officePhone = office?.phonePrimary ?? config.contact.phone;
   const officeHours = office?.hours ?? 'Saturday to Thursday, 11:00 AM to 6:00 PM';
-  const packagePrice = fullPackage?.priceLabel ?? '2,00,000 BDT';
-  const packageItems = fullPackage?.includedItems?.length ? fullPackage.includedItems : fallbackPackageItems;
-  const whatsappHref = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent('Assalamu alaikum. I would like a free profile assessment for studying abroad.')}`;
+  const packagePrice = fullPackage?.priceLabel ?? 'BDT 200,000';
+  const packageItems = fullPackage?.includedItems?.length
+    ? fullPackage.includedItems
+    : [
+        'Application fee',
+        'Admission notice',
+        'Scholarship assistance',
+        'JW202 form',
+        'Visa application support',
+        'Embassy fee',
+        'Medical checkup in Bangladesh',
+        'Pre-departure briefing',
+        'One-way air ticket',
+        'Airport pickup',
+      ];
+  const excludedItems = fullPackage?.excludedItems?.length
+    ? fullPackage.excludedItems
+    : ['University registration or seat deposit', 'Personal spending', 'Document translation or courier where required'];
+  const whatsappHref = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(
+    'Assalamu alaikum. I would like a free profile assessment for studying abroad.',
+  )}`;
+  const telHref = `tel:${officePhone.replace(/[^\d+]/g, '')}`;
+
+  // Live intake badge: only intakes whose window is open right now.
+  const openIntakes = getChinaIntakes()
+    .filter(row => row.status === 'Open' || row.status === 'Closing')
+    .map(row => row.name.split(' Intake')[0]);
+  const intakeBadge = openIntakes.length ? `${openIntakes.join(' & ')} intakes open for China` : 'Free assessment for the next intake';
+
+  const logos = plannerData.filter(item => item.logo && !item.logo.endsWith('.gif')).slice(0, 16);
+  const levels = [...new Set(plannerData.flatMap(item => item.levels))].filter(level => ['Bachelor’s', 'Master’s', 'PhD'].includes(level));
+
+  const activeDestinations = countries.filter(country => country.isActive);
+  const destinationImages: Record<string, string> = {
+    china: '/images/destinations/china-hero.webp',
+    uk: '/images/destinations/united-kingdom-hero.webp',
+    'south-korea': '/images/destinations/south-korea-hero.webp',
+    malaysia: '/images/destinations/malaysia-hero.webp',
+    hungary: '/images/destinations/hungary-hero.webp',
+  };
+  const featured = ['china', 'uk', 'south-korea', 'malaysia', 'hungary']
+    .map(slug => activeDestinations.find(country => country.slug === slug))
+    .filter((country): country is (typeof activeDestinations)[number] => Boolean(country))
+    .map(country => ({ name: country.name, slug: country.slug, href: destinationPath(country.slug), description: country.description, image: destinationImages[country.slug] }));
+
+  const guideRows = guides.length
+    ? guides.map(post => ({
+        key: post.id,
+        title: post.title,
+        excerpt: post.excerpt ?? '',
+        href: `/updates/${post.slug}`,
+        date: fmtGuideDate(post.publishedAt ?? post.createdAt),
+        category: post.category ?? 'Advice',
+      }))
+    : [
+        { key: 'guide-china', title: 'Study in China from Bangladesh', excerpt: 'A complete starting guide covering fit, cost, scholarships and student life.', href: '/study-in-china-from-bangladesh', date: '', category: 'China' },
+        { key: 'guide-cost', title: 'Cost of studying in China', excerpt: 'Plan tuition, hostel, living, insurance, visa and travel expenses.', href: '/study-in-china-cost-bangladesh', date: '', category: 'Costs' },
+        { key: 'guide-scholarships', title: 'China scholarships explained', excerpt: 'Compare CSC, university and other scholarship types without vague promises.', href: '/china-scholarships-bangladesh', date: '', category: 'Scholarships' },
+      ];
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -191,6 +282,14 @@ export default async function Home() {
         name: 'EduExpress International',
         inLanguage: 'en-BD',
         publisher: { '@id': 'https://eduexpressint.com/#organization' },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: 'https://eduexpressint.com/universities?search={search_term_string}',
+          },
+          'query-input': 'required name=search_term_string',
+        },
       },
       {
         '@type': 'Service',
@@ -198,7 +297,7 @@ export default async function Home() {
         name: 'Study abroad consultancy for Bangladeshi students and families',
         provider: { '@id': 'https://eduexpressint.com/#organization' },
         areaServed: { '@type': 'Country', name: 'Bangladesh' },
-        description: 'Profile assessment, university comparison, cost guidance, admission support, visa preparation and pre-departure support.',
+        description: 'Free profile assessment, university comparison, cost guidance, admission support, visa preparation and pre-departure support.',
       },
       {
         '@type': 'FAQPage',
@@ -211,346 +310,432 @@ export default async function Home() {
     ],
   };
 
+  // Wise-style scale (awesome-design-md/wise.md): weight-900 display for brand
+  // moments, semibold Jakarta for sub-displays, 24px card/button radius.
+  const wrap = 'mx-auto max-w-[1200px] px-5 lg:px-8';
+  const displaySection = 'font-display text-[38px] font-black leading-[0.95] tracking-[-0.01em] text-petrol-800 sm:text-[52px]';
+  const subDisplay = 'text-[23px] font-semibold leading-[1.3] tracking-[-0.02em] text-petrol-800';
+  const lead = 'text-[19px] leading-[1.55] text-ink-soft sm:text-[20px]';
+  const badge = 'inline-flex items-center gap-2 rounded-full bg-lime-pale px-3.5 py-1.5 text-[14px] font-semibold text-lime-deep';
+
   return (
-    <main className="overflow-hidden bg-[#fbfcfe] text-[#102a43]">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+    <div className="overflow-x-clip bg-white text-petrol-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
 
-      <section className="relative border-b border-slate-200 bg-[radial-gradient(circle_at_10%_10%,#e7f5ff_0,transparent_35%),radial-gradient(circle_at_90%_15%,#fff2d8_0,transparent_27%),linear-gradient(180deg,#ffffff_0%,#f7fbfe_100%)] px-5 pb-16 pt-28 sm:px-8 lg:px-12 lg:pb-24 lg:pt-40">
-        <div className="absolute -left-24 top-40 size-64 rounded-full border-[45px] border-[#dff1fb]/70" aria-hidden="true" />
-        <div className="relative mx-auto grid max-w-[1240px] items-center gap-12 lg:grid-cols-[1.08fr_.92fr]">
+      {/* 1. Hero band — sage canvas, heavy display, signature plan card */}
+      <section className="bg-canvas-soft pb-14 pt-[100px] sm:pt-[116px] lg:pb-20 lg:pt-[150px]">
+        <div className={`${wrap} grid gap-10 lg:grid-cols-[1.2fr_.8fr] lg:items-center lg:gap-14`}>
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#1767a0]/15 bg-white px-4 py-2 text-xs font-bold text-[#1767a0] shadow-sm">
-              <MapPin size={14} /> Dhanmondi, Dhaka · In-person and online guidance
-            </span>
-            <h1 className="mt-6 max-w-[14ch] text-[clamp(2.55rem,5.5vw,5rem)] font-bold leading-[.98] tracking-[-.06em] text-[#102a43]">
-              Choose Better Education Abroad — <span className="text-[#1767a0]">with Clear Costs and Written Proof</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-              Explore suitable universities, understand the complete cost and receive personal support from application to departure.
+            <p className={`${badge} anim-rise`}>
+              <span className="size-2 rounded-full bg-[#2ead4b]" aria-hidden="true" /> {intakeBadge}
             </p>
-
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="#assessment" className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-[#f4a024] px-6 text-sm font-extrabold text-[#102a43] shadow-[0_10px_25px_rgba(244,160,36,.25)] transition hover:-translate-y-0.5 hover:bg-[#ffb33f]">
-                Get Free Profile Assessment <ArrowRight size={17} />
-              </Link>
-              <Link href="/study-in-china-from-bangladesh" className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl border border-[#1767a0]/20 bg-white px-6 text-sm font-extrabold text-[#1767a0] transition hover:border-[#1767a0] hover:bg-[#eef8fe]">
-                Explore Study in China <ArrowUpRight size={17} />
-              </Link>
+            <h1 style={delay(60)} className="anim-lift mt-6 font-display text-[50px] font-black leading-[0.95] tracking-[-0.02em] text-petrol-800 sm:text-[80px] lg:text-[96px]">
+              <span className="sr-only">Study abroad. Every cost in writing.</span>
+              <span aria-hidden="true">
+                Study in{' '}
+                <span className="inline-block h-[1.02em] overflow-hidden rounded-[0.28em] bg-lime px-[0.18em] align-[-0.12em]">
+                  <span className="hero-rotator flex flex-col">
+                    {['China', 'the UK', 'Korea', 'Malaysia', 'Hungary', 'China'].map((word, index) => (
+                      <span key={index} className="block h-[1.02em] whitespace-nowrap leading-[1.02em]">{word}.</span>
+                    ))}
+                  </span>
+                </span>
+                <br />
+                Every cost in writing.
+              </span>
+            </h1>
+            <p style={delay(160)} className={`anim-rise mt-7 max-w-[34rem] ${lead}`}>
+              Bangladesh&apos;s evidence-first study abroad consultancy since 2018. Compare universities, scholarships and the full cost
+              with a counsellor before you pay anything.
+            </p>
+            <div style={delay(240)} className="anim-rise mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="#assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+                Get my free assessment <ArrowRight size={18} aria-hidden="true" />
+              </a>
+              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+                <MessageCircle size={18} aria-hidden="true" /> WhatsApp a counsellor
+              </a>
             </div>
-
-            <ul className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">
-              {['Real counsellors', 'Written cost breakdown', 'Support to airport pickup'].map(item => (
-                <li key={item} className="flex items-center gap-2.5 text-sm font-semibold text-slate-700">
-                  <CheckCircle2 size={17} className="shrink-0 text-emerald-600" /> {item}
+            <ul style={delay(320)} className="anim-rise mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[15px] font-semibold text-petrol-800">
+              {['Free, no obligation', 'Parents welcome', 'Reply within one working day'].map(item => (
+                <li key={item} className="flex items-center gap-2">
+                  <CheckCircle2 size={18} className="text-[#2ead4b]" aria-hidden="true" /> {item}
                 </li>
               ))}
             </ul>
-
-            <div className="mt-9 grid max-w-xl grid-cols-[1fr_.72fr] gap-3">
-              <div className="relative min-h-48 overflow-hidden rounded-2xl">
-                <Image src="/images/home/consultation-student-parent.webp" alt="EduExpress counsellor speaking with a student and parent in the Dhanmondi office" fill priority sizes="(max-width:1024px) 65vw, 380px" className="object-cover object-[center_42%]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/75 via-transparent to-transparent" />
-                <p className="absolute inset-x-0 bottom-0 p-4 text-sm font-bold text-white">Discuss your options with a real counsellor</p>
-              </div>
-              <div className="relative min-h-48 overflow-hidden rounded-2xl">
-                <Image src="/images/home/student-departure-support.webp" alt="EduExpress counsellor with a student and luggage at Dhaka airport" fill priority sizes="(max-width:1024px) 35vw, 220px" className="object-cover object-[center_35%]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/75 via-transparent to-transparent" />
-                <p className="absolute inset-x-0 bottom-0 p-4 text-sm font-bold text-white">Support through departure day</p>
-              </div>
-            </div>
           </div>
 
-          <div className="relative">
-            <HomeAssessment whatsappNumber={config.contact.whatsapp} />
-          </div>
+          {/* Signature card — the counterpart of Wise's converter: real numbers, one action */}
+          <form action="/universities" method="get" role="search" aria-label="Plan your study" style={delay(200)} className="anim-rise rounded-3xl border border-petrol-800 bg-white p-6 sm:p-7">
+            <p className={subDisplay}>Plan your study</p>
+            <label className="mt-5 block">
+              <span className="text-[14px] font-semibold text-petrol-800">What do you want to study?</span>
+              <span className="mt-1.5 flex items-center gap-2 rounded-xl border border-petrol-800 px-4 focus-within:ring-4 focus-within:ring-lime/60">
+                <Search size={18} className="shrink-0 text-ink-mute" aria-hidden="true" />
+                <input name="search" type="search" placeholder="Computer Science, MBBS, a university…" className="min-h-[50px] w-full bg-transparent text-[16px] text-petrol-800 placeholder:text-ink-mute focus:outline-none" />
+              </span>
+            </label>
+            <label className="mt-4 block">
+              <span className="text-[14px] font-semibold text-petrol-800">Study level</span>
+              <select name="level" defaultValue="" className="mt-1.5 min-h-[50px] w-full rounded-xl border border-petrol-800 bg-white px-4 text-[16px] text-petrol-800 focus:outline-none focus:ring-4 focus:ring-lime/60">
+                <option value="">Any level</option>
+                {levels.map(level => <option key={level} value={level}>{level}</option>)}
+              </select>
+            </label>
+
+            <dl className="mt-6 divide-y divide-canvas-soft border-y border-canvas-soft">
+              <div className="flex items-baseline justify-between gap-4 py-3.5">
+                <dt className="text-[15px] text-ink-soft">EduExpress fee before visa</dt>
+                <dd className="whitespace-nowrap font-display text-[24px] font-black leading-none text-petrol-800 sm:text-[28px]">BDT 0</dd>
+              </div>
+              <div className="flex items-baseline justify-between gap-4 py-3.5">
+                <dt className="text-[15px] text-ink-soft">China package, after visa</dt>
+                <dd className="whitespace-nowrap text-[17px] font-bold text-petrol-800 sm:text-[18px]">{packagePrice}</dd>
+              </div>
+              {plannerData.length > 0 && (
+                <div className="flex items-baseline justify-between gap-4 py-3.5">
+                  <dt className="text-[15px] text-ink-soft">Universities on record</dt>
+                  <dd className="whitespace-nowrap text-[17px] font-bold text-petrol-800 sm:text-[18px]">{plannerData.length}</dd>
+                </div>
+              )}
+            </dl>
+            <button type="submit" className="ed-btn ed-btn-signal mt-6 min-h-[52px] w-full">
+              Find universities <ArrowRight size={18} aria-hidden="true" />
+            </button>
+            <p className="mt-3 text-center text-[13px] leading-5 text-ink-mute">University tuition and deposits are paid to the university and listed separately.</p>
+          </form>
         </div>
-      </section>
 
-      <section className="border-b border-slate-200 bg-white px-5 py-7 sm:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-[1240px] gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Real photographs, rounded like every card in the system */}
+        <div className={`${wrap} mt-12 grid grid-cols-3 gap-3 sm:gap-5`}>
           {[
-            [ShieldCheck, 'No Success, No Service Charge', 'Terms provided in writing'],
-            [BadgeCheck, 'Written proof, not vague claims', 'Sensitive numbers stay hidden'],
-            [UsersRound, 'Students and parents welcome', 'Join the consultation together'],
-            [HeartHandshake, 'Human support throughout', 'Application to departure guidance'],
-          ].map(([Icon, title, copy]) => {
-            const TrustIcon = Icon as typeof ShieldCheck;
-            return (
-              <div key={String(title)} className="flex items-start gap-3 rounded-2xl bg-[#f5f9fc] p-4">
-                <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white text-[#1767a0] shadow-sm"><TrustIcon size={19} /></span>
-                <div><strong className="block text-sm font-bold text-[#102a43]">{String(title)}</strong><span className="mt-1 block text-xs leading-5 text-slate-500">{String(copy)}</span></div>
-              </div>
-            );
-          })}
+            { src: '/images/students/campus-nuist.webp', alt: 'A student at the I love NUIST sign on campus in Nanjing', caption: 'On campus in Nanjing', position: 'object-[60%_45%]' },
+            { src: '/images/students/students-campus.webp', alt: 'Bangladeshi students in front of a Chinese university admissions board', caption: 'Admitted and enrolled', position: 'object-[center_35%]' },
+            { src: '/images/students/departure-family.webp', alt: 'A Bangladeshi family seeing a student off at Dhaka airport', caption: 'Departure day, Dhaka', position: 'object-center' },
+          ].map((photo, index) => (
+            <figure key={photo.src} style={delay(320 + index * 90)} className="anim-rise group relative aspect-[3/4] overflow-hidden rounded-3xl sm:aspect-[4/3]">
+              <Image src={photo.src} alt={photo.alt} fill sizes="(max-width:640px) 33vw, 380px" className={`object-cover transition duration-700 group-hover:scale-105 ${photo.position}`} />
+              <figcaption className="absolute bottom-3 left-3 hidden rounded-full bg-white px-3 py-1 text-[13px] font-semibold text-petrol-800 sm:block">{photo.caption}</figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 
-      <section className="px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto max-w-[1240px]">
-          <SectionHeading
-            centered
-            eyebrow="Start with the information you need"
-            title="Get useful answers before speaking to a consultant"
-            copy="Check universities, costs, scholarships and documents at your own pace. When you are ready, we can review the information against your profile."
-          />
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {informationRoutes.map(({ icon: Icon, title, copy, href, link }) => (
-              <Link key={title} href={href} className="group flex min-h-64 flex-col rounded-[1.4rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-[#1767a0]/40 hover:shadow-[0_18px_45px_rgba(15,55,87,.10)]">
-                <span className="grid size-12 place-items-center rounded-2xl bg-[#e9f5fc] text-[#1767a0]"><Icon size={23} /></span>
-                <h3 className="mt-6 text-xl font-bold tracking-[-.03em] text-[#102a43]">{title}</h3>
-                <p className="mt-3 flex-1 text-sm leading-6 text-slate-600">{copy}</p>
-                <span className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold text-[#1767a0]">{link} <ArrowRight size={15} className="transition group-hover:translate-x-1" /></span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[#0d3856] px-5 py-16 text-white sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto grid max-w-[1240px] gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
-          <div>
-            <p className="text-xs font-extrabold uppercase tracking-[.16em] text-[#8ed6f7]">China · Our flagship destination</p>
-            <h2 className="mt-4 text-[clamp(2.2rem,4.5vw,4rem)] font-bold leading-[1.02] tracking-[-.05em]">A clear China route for students and parents</h2>
-            <p className="mt-5 max-w-xl text-base leading-8 text-white/75">
-              Compare universities, understand scholarship coverage and know the full financial responsibility before starting an application.
-            </p>
-
-            <div className="mt-8 grid grid-cols-2 gap-3">
-              <div className="relative min-h-56 overflow-hidden rounded-2xl">
-                <Image src="/images/proof/egpc-team-conference.webp" alt="EduExpress representatives at an international education conference" fill sizes="(max-width:1024px) 50vw, 280px" className="object-cover" />
-              </div>
-              <div className="relative min-h-56 overflow-hidden rounded-2xl">
-                <Image src="/images/home/china-campus-life.webp" alt="Bangladeshi and international students together on a university campus in China" fill sizes="(max-width:1024px) 50vw, 280px" className="object-cover" />
-              </div>
-            </div>
-
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link href="/study-in-china-from-bangladesh" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#f4a024] px-5 text-sm font-extrabold text-[#102a43] hover:bg-[#ffb33f]">Explore the China guide <ArrowRight size={16} /></Link>
-              <Link href="/china-march-2027-intake" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/20 px-5 text-sm font-bold text-white hover:bg-white/10">March 2027 intake <ArrowUpRight size={16} /></Link>
-            </div>
-          </div>
-
-          <article className="rounded-[1.75rem] bg-white p-6 text-[#102a43] shadow-[0_25px_70px_rgba(0,0,0,.22)] sm:p-8">
-            <div className="flex flex-col justify-between gap-5 border-b border-slate-200 pb-6 sm:flex-row sm:items-start">
-              <div>
-                <span className="inline-flex rounded-full bg-[#e9f5fc] px-3 py-1 text-xs font-extrabold uppercase tracking-[.12em] text-[#1767a0]">Full Scholarship Support Package</span>
-                <h3 className="mt-4 text-2xl font-bold tracking-[-.035em]">Application-to-arrival support</h3>
-                <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">The scholarship letter defines whether tuition, accommodation, stipend or a combination is covered.</p>
-              </div>
-              <div className="shrink-0 sm:text-right">
-                <p className="text-xs font-bold uppercase tracking-[.12em] text-slate-400">Package price</p>
-                <strong className="mt-1 block text-3xl font-extrabold tracking-[-.04em] text-[#1767a0]">{packagePrice}</strong>
-              </div>
-            </div>
-
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {packageItems.map(item => (
-                <p key={item} className="flex gap-2.5 rounded-xl bg-[#f5f9fc] px-3.5 py-3 text-xs font-semibold leading-5 text-slate-700">
-                  <Check size={15} className="mt-0.5 shrink-0 text-emerald-600" /> {item}
-                </p>
-              ))}
-            </div>
-
-            <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4">
-              <p className="text-sm font-extrabold text-[#6d4300]">University deposits are not included.</p>
-              <p className="mt-1 text-xs leading-5 text-[#7a5a26]">Registration, seat or tuition deposits charged directly by the university are listed separately in your written cost sheet.</p>
-            </div>
-
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="flex items-center gap-2 text-sm font-extrabold text-[#102a43]"><ShieldCheck size={18} className="text-[#1767a0]" /> No Success, No Service Charge</p>
-              <Link href="/china-visa-first-policy" className="inline-flex items-center gap-2 text-sm font-extrabold text-[#1767a0]">Read payment terms <ArrowRight size={15} /></Link>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section className="bg-white px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto max-w-[1240px]">
-          <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-            <SectionHeading
-              eyebrow="Real people. Real records. Real presence."
-              title="Trust should be visible, not requested"
-              copy="These are EduExpress counselling, departure, campus and international-education records—not stock photographs or invented counters. Sensitive information remains redacted."
-            />
-            <Link href="/proof-library" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl border border-[#1767a0]/20 bg-white px-5 text-sm font-extrabold text-[#1767a0] hover:bg-[#eef8fe]">Open proof library <ArrowRight size={16} /></Link>
-          </div>
-
-          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-[1.1fr_.9fr_.9fr] lg:grid-rows-2">
-            <figure className="group relative min-h-[420px] overflow-hidden rounded-[1.5rem] lg:row-span-2">
-              <Image src="/images/home/consultation-family.webp" alt="A student and parent meeting an EduExpress counsellor in Dhanmondi" fill sizes="(max-width:1024px) 100vw, 42vw" className="object-cover transition duration-500 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/85 via-transparent to-transparent" />
-              <figcaption className="absolute inset-x-0 bottom-0 p-6 text-white"><span className="text-xs font-bold uppercase tracking-[.12em] text-[#8ed6f7]">Guidance in person</span><strong className="mt-2 block text-xl">A student and parent discussing the decision together</strong></figcaption>
-            </figure>
-            <figure className="group relative min-h-52 overflow-hidden rounded-[1.5rem]">
-              <Image src="/images/home/student-departure-support.webp" alt="EduExpress departure support with a student at Dhaka airport" fill sizes="(max-width:1024px) 50vw, 28vw" className="object-cover object-[center_35%] transition duration-500 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/80 via-transparent to-transparent" />
-              <figcaption className="absolute inset-x-0 bottom-0 p-5 text-sm font-bold text-white">Support on departure day</figcaption>
-            </figure>
-            <figure className="group relative min-h-52 overflow-hidden rounded-[1.5rem]">
-              <Image src="/images/home/education-partners-meeting.webp" alt="EduExpress representatives at an international education partners meeting" fill sizes="(max-width:1024px) 50vw, 28vw" className="object-cover transition duration-500 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/80 via-transparent to-transparent" />
-              <figcaption className="absolute inset-x-0 bottom-0 p-5 text-sm font-bold text-white">International education engagement</figcaption>
-            </figure>
-            <figure className="group relative min-h-52 overflow-hidden rounded-[1.5rem]">
-              <Image src="/images/home/dhanmondi-counselling-team.webp" alt="EduExpress counselling team working in the Dhanmondi office" fill sizes="(max-width:1024px) 50vw, 28vw" className="object-cover transition duration-500 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/80 via-transparent to-transparent" />
-              <figcaption className="absolute inset-x-0 bottom-0 p-5 text-sm font-bold text-white">The Dhanmondi counselling team</figcaption>
-            </figure>
-            <figure className="group relative min-h-52 overflow-hidden rounded-[1.5rem]">
-              <Image src="/images/home/china-campus-life.webp" alt="Bangladeshi and international students on a university campus in China" fill sizes="(max-width:1024px) 50vw, 28vw" className="object-cover transition duration-500 group-hover:scale-[1.02]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/80 via-transparent to-transparent" />
-              <figcaption className="absolute inset-x-0 bottom-0 p-5 text-sm font-bold text-white">Student life on campus in China</figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
-
-      {testimonials.length > 0 && (
-        <section className="border-y border-slate-200 bg-[#f5f9fc] px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-          <div className="mx-auto max-w-[1240px]">
-            <SectionHeading centered eyebrow="Student experiences" title="Stories shared with permission" copy="Every published story uses an approved display name and consented image." />
-            <div className="mt-9 grid gap-4 md:grid-cols-3">
-              {testimonials.map(item => (
-                <figure key={item.id} className="rounded-[1.4rem] border border-slate-200 bg-white p-6 shadow-sm">
-                  <blockquote className="text-sm leading-7 text-slate-600">“{item.content}”</blockquote>
-                  <figcaption className="mt-6 flex items-center gap-3 border-t border-slate-100 pt-5">
-                    {item.image && <Image src={item.image} alt={item.displayName || item.studentName} width={48} height={48} className="size-12 rounded-full object-cover" />}
-                    <div><strong className="block text-sm text-[#102a43]">{item.displayName || item.studentName}</strong><span className="text-xs text-slate-500">{[item.university, item.country].filter(Boolean).join(' · ')}</span></div>
-                  </figcaption>
-                </figure>
+      {/* 2. University logos */}
+      {logos.length >= 6 && (
+        <section aria-label="Universities in our directory" className="border-b border-canvas-soft py-10">
+          <p className="text-center text-[15px] font-semibold text-ink-soft">
+            {plannerData.length} universities in our verified directory, with fees, intakes and scholarships
+          </p>
+          <div className="home-ticker mt-6" data-pause-offscreen>
+            <div className="home-ticker-track items-center gap-14 px-7">
+              {[...logos, ...logos].map((item, index) => (
+                <Image
+                  key={`${item.slug}-${index}`}
+                  src={item.logo as string}
+                  alt={index < logos.length ? item.name : ''}
+                  aria-hidden={index >= logos.length ? true : undefined}
+                  width={120}
+                  height={56}
+                  unoptimized
+                  className="h-14 w-auto max-w-[140px] object-contain"
+                />
               ))}
             </div>
           </div>
         </section>
       )}
 
-      <section className="px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto max-w-[1240px]">
-          <SectionHeading centered eyebrow="How it works" title="Six simple steps from profile to departure" copy="You know the next action, who is responsible and what information you should receive." />
-          <ol className="relative mt-11 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {journey.map(([number, title, copy]) => (
-              <li key={number} className="relative rounded-[1.4rem] border border-slate-200 bg-white p-6 shadow-sm">
-                <span className="grid size-11 place-items-center rounded-2xl bg-[#1767a0] text-sm font-extrabold text-white">{number}</span>
-                <h3 className="mt-5 text-xl font-bold tracking-[-.03em] text-[#102a43]">{title}</h3>
-                <p className="mt-3 text-sm leading-6 text-slate-600">{copy}</p>
-              </li>
-            ))}
-          </ol>
-          <div className="mt-8 text-center"><Link href="/your-study-journey" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#1767a0] px-6 text-sm font-extrabold text-white hover:bg-[#104f7c]">See the complete journey <ArrowRight size={16} /></Link></div>
+      {/* 3. What you get — sage / pale-lime / dark feature cards */}
+      <section className="py-20 lg:py-24">
+        <div className={wrap}>
+          <h2 data-anim="up" className={`max-w-3xl ${displaySection}`}>Three things you get in writing.</h2>
+          <p className={`mt-5 max-w-2xl ${lead}`}>Decisions this big should not depend on a phone call. You receive all three before you pay.</p>
+          <div data-anim="stagger" className="mt-12 grid gap-5 md:grid-cols-3">
+            <Link href="/how-we-verify-universities" className="group flex flex-col rounded-3xl bg-canvas-soft p-7 transition hover:-translate-y-1">
+              <span className="grid size-12 place-items-center rounded-full bg-white transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"><ShieldCheck size={22} aria-hidden="true" /></span>
+              <h3 className={`mt-8 ${subDisplay}`}>Recognition check</h3>
+              <p className="mt-2 flex-1 text-[16px] leading-6 text-ink-soft">Who recognises the degree, on which official source, and when it was last verified.</p>
+              <span className="mt-6 inline-flex items-center gap-1.5 text-[16px] font-semibold underline-offset-4 group-hover:underline">How we verify <ArrowRight size={16} aria-hidden="true" /></span>
+            </Link>
+            <Link href="/fees-and-transparency" className="group flex flex-col rounded-3xl bg-lime-pale p-7 transition hover:-translate-y-1">
+              <span className="grid size-12 place-items-center rounded-full bg-white transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"><Wallet size={22} aria-hidden="true" /></span>
+              <h3 className={`mt-8 ${subDisplay}`}>Full cost schedule</h3>
+              <p className="mt-2 flex-1 text-[16px] leading-6 text-ink-soft">Tuition, hostel, insurance, visa, travel and our fee on one page, with what is refundable.</p>
+              <span className="mt-6 inline-flex items-center gap-1.5 text-[16px] font-semibold underline-offset-4 group-hover:underline">Our fee policy <ArrowRight size={16} aria-hidden="true" /></span>
+            </Link>
+            <Link href="/your-study-journey" className="group flex flex-col rounded-3xl bg-petrol-800 p-7 text-white transition hover:-translate-y-1">
+              <span className="grid size-12 place-items-center rounded-full bg-lime text-petrol-800 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"><ClipboardCheck size={22} aria-hidden="true" /></span>
+              <h3 className="mt-8 text-[23px] font-semibold leading-[1.3] tracking-[-0.02em] text-lime">Application record</h3>
+              <p className="mt-2 flex-1 text-[16px] leading-6 text-white/80">Every document submitted, every deadline and the status of your file, from application to airport pickup.</p>
+              <span className="mt-6 inline-flex items-center gap-1.5 text-[16px] font-semibold text-white underline-offset-4 group-hover:underline">See every stage <ArrowRight size={16} aria-hidden="true" /></span>
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section className="bg-[#eef8fe] px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto grid max-w-[1240px] overflow-hidden rounded-[1.75rem] bg-white shadow-[0_20px_60px_rgba(15,55,87,.10)] lg:grid-cols-2">
-          <div className="relative min-h-[390px]">
-            <Image src="/images/home/parent-counselling.webp" alt="An EduExpress counsellor meeting a student and parent in the Dhanmondi office" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-cover object-[center_35%]" />
+      {/* 4. Cost — dark band with lime display headline */}
+      <section id="package" className="bg-petrol-800 py-20 text-white lg:py-24">
+        <div className={`${wrap} grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center`}>
+          <div>
+            <h2 data-anim="pop" className="font-display text-[56px] font-black leading-[0.9] tracking-[-0.02em] text-lime sm:text-[88px]">BDT 0 before your visa.</h2>
+            <p className="mt-6 max-w-xl text-[20px] leading-[1.55] text-white/85">
+              For China, the EduExpress package is {packagePrice}, paid after your visa is approved. University deposits, personal
+              spending and some document fees are paid separately, and listed for you before you commit.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="#assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">Get my full cost schedule</a>
+              <Link href="/study-in-china-cost-bangladesh" className="ed-btn ed-btn-on-dark min-h-[52px] px-7">Living and tuition costs</Link>
+            </div>
           </div>
-          <div className="p-7 sm:p-10 lg:p-12">
-            <p className="text-xs font-extrabold uppercase tracking-[.16em] text-[#1767a0]">For parents and sponsors</p>
-            <h2 className="mt-4 text-[clamp(2rem,4vw,3.1rem)] font-bold leading-[1.06] tracking-[-.045em] text-[#102a43]">You should understand the decision too</h2>
-            <p className="mt-4 text-base leading-7 text-slate-600">Join the consultation and ask directly about costs, university recognition, documents, payment security, accommodation and student support.</p>
-            <ul className="mt-7 grid gap-3">
-              {['Receive the cost breakdown in writing', 'Understand what the scholarship actually covers', 'See payment and refund terms before signing', 'Know who to contact throughout the process'].map(item => (
-                <li key={item} className="flex gap-3 text-sm font-semibold leading-6 text-slate-700"><CheckCircle2 size={18} className="mt-0.5 shrink-0 text-emerald-600" /> {item}</li>
+          <div data-anim="up" className="rounded-3xl bg-white p-6 text-petrol-800 sm:p-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className={subDisplay}>What&apos;s included</p>
+              <span className="rounded-full bg-lime-pale px-3 py-1 text-[14px] font-semibold text-lime-deep">{packagePrice}</span>
+            </div>
+            <ul data-anim="stagger" className="mt-5 grid gap-x-6 gap-y-2.5 sm:grid-cols-2">
+              {packageItems.map(item => (
+                <li key={item} className="flex gap-2 text-[15px] leading-6">
+                  <CheckCircle2 size={18} className="mt-[3px] shrink-0 text-[#2ead4b]" aria-hidden="true" /> {item}
+                </li>
               ))}
             </ul>
-            <Link href="/for-parents" className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#1767a0] px-5 text-sm font-extrabold text-white hover:bg-[#104f7c]">Read the parent guide <ArrowRight size={16} /></Link>
+            <div className="mt-6 rounded-2xl bg-canvas-soft p-5">
+              <p className="text-[15px] font-bold">Paid separately</p>
+              <ul className="mt-2 grid gap-1.5">
+                {excludedItems.map(item => (
+                  <li key={item} className="flex gap-2 text-[15px] leading-6 text-ink-soft">
+                    <span className="mt-[10px] size-1.5 shrink-0 rounded-full bg-ink-mute" aria-hidden="true" /> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <Link href="/china-visa-first-policy" className="mt-5 inline-flex items-center gap-1.5 text-[15px] font-semibold underline underline-offset-4">
+              Read the payment terms <ArrowRight size={15} aria-hidden="true" />
+            </Link>
           </div>
         </div>
       </section>
 
-      <section className="bg-white px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto max-w-[1240px]">
-          <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-            <SectionHeading eyebrow="Study destinations" title="China first, with more routes to compare" copy="China carries our deepest experience and evidence. We also support selected destinations across Asia and Europe." />
-            <Link href="/destinations" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl border border-[#1767a0]/20 px-5 text-sm font-extrabold text-[#1767a0] hover:bg-[#eef8fe]">Explore all destinations <ArrowRight size={16} /></Link>
-          </div>
-          <div className="mt-10 grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
-            <Link href="/study-in-china-from-bangladesh" className="group relative min-h-[430px] overflow-hidden rounded-[1.5rem]">
-              <Image src="/images/proof/egpc-team-conference.webp" alt="EduExpress representatives meeting international education partners" fill sizes="(max-width:1024px) 100vw, 55vw" className="object-cover transition duration-500 group-hover:scale-[1.025]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/95 via-[#102a43]/25 to-transparent" />
-              <span className="absolute left-6 top-6 rounded-full bg-[#f4a024] px-3 py-1.5 text-xs font-extrabold text-[#102a43]">Flagship destination</span>
-              <div className="absolute inset-x-0 bottom-0 p-7 text-white sm:p-9"><p className="text-xs font-bold uppercase tracking-[.14em] text-[#8ed6f7]">Study in China from Bangladesh</p><h3 className="mt-3 text-3xl font-bold tracking-[-.04em]">Universities, scholarships, costs and visa guidance</h3><span className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold">Explore China <ArrowUpRight size={16} /></span></div>
-            </Link>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {otherDestinations.map((destination, index) => (
-                <Link key={destination.name} href={destination.href} className={`group relative min-h-[205px] overflow-hidden rounded-[1.5rem] ${index === 4 ? 'sm:col-span-2' : ''}`}>
-                  <Image src={destination.image} alt={`Study in ${destination.name} from Bangladesh`} fill sizes={index === 4 ? '(max-width:1024px) 100vw, 45vw' : '(max-width:640px) 100vw, 23vw'} className="object-cover transition duration-500 group-hover:scale-[1.025]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/90 via-transparent to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-5 text-white"><strong className="text-lg">{destination.name}</strong><ArrowUpRight size={17} /></div>
+      {/* 5. Destinations — white cards on sage */}
+      {featured.length > 0 && (
+        <section className="py-20 lg:py-24">
+          <div className={wrap}>
+            <div className="flex flex-wrap items-end justify-between gap-5">
+              <h2 data-anim="up" className={`max-w-2xl ${displaySection}`}>{activeDestinations.length} countries. One honest plan.</h2>
+              <Link href="/destinations" className="ed-btn ed-btn-outline min-h-12 px-6">All destinations <ArrowRight size={16} aria-hidden="true" /></Link>
+            </div>
+            <div data-anim="stagger" className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.map((item, index) => (
+                <Link key={item.slug} href={item.href} className={`group flex flex-col rounded-3xl bg-canvas-soft p-3 transition hover:-translate-y-1 ${index === 0 ? 'sm:col-span-2' : ''}`}>
+                  <div className={`relative overflow-hidden rounded-2xl ${index === 0 ? 'aspect-[16/8]' : 'aspect-[16/10]'}`}>
+                    {item.image && <Image src={item.image} alt="" fill sizes={index === 0 ? '(max-width:1024px) 100vw, 760px' : '(max-width:640px) 100vw, 380px'} className="object-cover transition duration-500 group-hover:scale-105" />}
+                    {index === 0 && <span className={`absolute left-4 top-4 ${badge}`}>Most data available</span>}
+                  </div>
+                  <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
+                    <h3 className={index === 0 ? 'font-display text-[34px] font-black leading-none text-petrol-800' : subDisplay}>Study in {item.name}</h3>
+                    {item.description && <p className="mt-2 line-clamp-2 text-[16px] leading-6 text-ink-soft">{item.description}</p>}
+                    <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[16px] font-semibold underline-offset-4 group-hover:underline">
+                      Costs, universities and visa <ArrowRight size={16} aria-hidden="true" />
+                    </span>
+                  </div>
                 </Link>
               ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 6. How it works — a boarding pass from Dhaka to campus */}
+      <section className="bg-canvas-soft py-20 lg:py-24">
+        <div className={wrap}>
+          <div className="flex flex-wrap items-end justify-between gap-5">
+            <h2 data-anim="up" className={`max-w-2xl ${displaySection}`}>Your route: Dhaka to campus.</h2>
+            <Link href="/your-study-journey" className="ed-btn ed-btn-outline min-h-12 bg-white px-6">See the full journey <ArrowRight size={16} aria-hidden="true" /></Link>
+          </div>
+
+          <div className="relative mt-12 grid overflow-hidden rounded-3xl bg-white ring-1 ring-petrol-800 lg:grid-cols-[330px_1fr]">
+            {/* Stub */}
+            <div className="relative bg-petrol-800 p-7 text-white sm:p-8">
+              <p className="text-[13px] font-bold uppercase tracking-[0.16em] text-lime">Boarding pass</p>
+              <div className="mt-6 flex items-center gap-4">
+                <div>
+                  <p className="font-display text-[42px] font-black leading-none">DAC</p>
+                  <p className="mt-1 text-[14px] text-white/75">Dhaka</p>
+                </div>
+                <Plane size={28} className="shrink-0 text-lime" aria-hidden="true" />
+                <div>
+                  <p className="font-display text-[42px] font-black leading-none">UNI</p>
+                  <p className="mt-1 text-[14px] text-white/75">Your campus</p>
+                </div>
+              </div>
+              <dl className="mt-8 grid grid-cols-2 gap-x-4 gap-y-4 text-[14px]">
+                <div><dt className="text-white/60">Passenger</dt><dd className="mt-0.5 font-semibold">You (and family)</dd></div>
+                <div><dt className="text-white/60">Check-in</dt><dd className="mt-0.5 font-semibold">Dhanmondi office</dd></div>
+                <div><dt className="text-white/60">Fare before visa</dt><dd className="mt-0.5 font-semibold text-lime">BDT 0</dd></div>
+                <div><dt className="text-white/60">Class</dt><dd className="mt-0.5 font-semibold">Free assessment</dd></div>
+              </dl>
+              <div className="ticket-barcode mt-8 h-12 text-white/80" aria-hidden="true" />
+            </div>
+
+            {/* Perforation notches between stub and body (desktop) */}
+            <span className="ticket-notch -top-[14px] left-[316px] hidden lg:block" aria-hidden="true" />
+            <span className="ticket-notch -bottom-[14px] left-[316px] hidden lg:block" aria-hidden="true" />
+
+            {/* Route */}
+            <ol data-anim="route" className="relative grid gap-8 border-dashed border-petrol-800/30 p-7 sm:grid-cols-2 sm:p-8 lg:grid-cols-4 lg:border-l-2 lg:p-10">
+              <span className="route-line absolute left-10 right-10 top-[72px] hidden border-t-2 border-dashed border-petrol-800/25 lg:block" aria-hidden="true" />
+              <span className="route-flyer absolute left-10 right-10 top-[26px] hidden text-petrol-800 lg:block" aria-hidden="true"><Plane size={28} className="rotate-45" /></span>
+              {steps.map((step, index) => (
+                <li key={step.title} className="relative">
+                  <span className="route-stop relative grid size-12 place-items-center rounded-full bg-lime font-display text-[20px] font-black text-petrol-800" aria-hidden="true">
+                    {index + 1}
+                  </span>
+                  <p className="mt-5 text-[13px] font-bold uppercase tracking-[0.14em] text-ink-mute">{['Consult', 'Compare', 'Apply', 'Fly'][index]}</p>
+                  <h3 className="mt-1 text-[20px] font-semibold leading-snug tracking-[-0.02em] text-petrol-800">
+                    <span className="sr-only">Step {index + 1}: </span>
+                    {step.title}
+                  </h3>
+                  <p className="mt-2 text-[15px] leading-6 text-ink-soft">{step.copy}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Real students — proof */}
+      <section className="py-20 lg:py-24">
+        <div className={`${wrap} grid gap-12 lg:grid-cols-2 lg:items-center`}>
+          <div data-anim="up" className="relative aspect-[4/3] overflow-hidden rounded-3xl">
+            <Image
+              src="/images/students/success-banner.webp"
+              alt="Students and parents at Dhaka airport holding a banner: Finally we made our dream study in China with EduExpress International"
+              fill
+              sizes="(max-width:1024px) 100vw, 580px"
+              className="object-cover"
+            />
+          </div>
+          <div>
+            <p className={badge}>Since 2018 · Dhanmondi, Dhaka</p>
+            <h2 data-anim="up" className={`mt-6 ${displaySection}`}>&ldquo;Finally we made our dream: study in China.&rdquo;</h2>
+            <p className={`mt-6 ${lead}`}>
+              Families meet our counsellors in Dhanmondi, and we see students off at Dhaka airport. Student stories are published only
+              with consent.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link href="/success-stories" className="ed-btn ed-btn-outline min-h-[52px] px-7">Read student stories</Link>
+              <Link href="/proof-library" className="ed-btn ed-btn-soft min-h-[52px] px-7">
+                {trust.evidence.length > 0 ? `See ${trust.evidence.length} published records` : 'Open the proof library'}
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="border-y border-slate-200 bg-[#f5f9fc] px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto grid max-w-[1100px] gap-10 lg:grid-cols-[.72fr_1.28fr]">
-          <div>
-            <SectionHeading eyebrow="Frequently asked questions" title="Clear answers before you decide" copy="If your situation is different, submit the free assessment or ask us directly on WhatsApp." />
-            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 text-sm font-extrabold text-[#07301a]"><MessageCircle size={18} /> Ask on WhatsApp</a>
+      {/* 8. Student voices (only when published) */}
+      {testimonialQuotes.length > 0 && (
+        <section className="py-20 lg:py-24">
+          <div className={`${wrap} grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-center`}>
+            <div>
+              <h2 className={displaySection}>What students say.</h2>
+              {averageRating > 0 && ratedTestimonials.length >= 3 && (
+                <p className="mt-5 inline-flex items-center gap-2 text-[16px] text-ink-soft">
+                  <span className="inline-flex text-[#ffd11a]" aria-hidden="true">
+                    {Array.from({ length: 5 }, (_, i) => <Star key={i} size={20} fill="currentColor" strokeWidth={0} />)}
+                  </span>
+                  <strong className="text-petrol-800">{averageRating.toFixed(1)} / 5</strong> from {ratedTestimonials.length} published reviews
+                </p>
+              )}
+            </div>
+            <TestimonialCarousel quotes={testimonialQuotes} />
           </div>
-          <div className="grid gap-3">
+        </section>
+      )}
+
+      {/* 9. Guides */}
+      <section className={`${testimonialQuotes.length ? 'bg-canvas-soft' : ''} py-20 lg:py-24`}>
+        <div className={wrap}>
+          <div className="flex flex-wrap items-end justify-between gap-5">
+            <h2 data-anim="up" className={`max-w-2xl ${displaySection}`}>Read before you decide.</h2>
+            <Link href="/updates" className="ed-btn ed-btn-outline min-h-12 px-6">All guides <ArrowRight size={16} aria-hidden="true" /></Link>
+          </div>
+          <ul data-anim="stagger" className="mt-12 grid gap-5 md:grid-cols-3">
+            {guideRows.slice(0, 3).map((row, index) => (
+              <li key={row.key}>
+                <Link href={row.href} className={`group flex h-full flex-col rounded-3xl p-3 transition hover:-translate-y-1 ${testimonialQuotes.length ? 'bg-white' : 'bg-canvas-soft'}`}>
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-2xl">
+                    <Image
+                      src={['/images/home/china-campus-life.webp', '/images/students/student-life.webp', '/images/home/china-campus-group.webp'][index % 3]}
+                      alt=""
+                      fill
+                      sizes="(max-width:768px) 100vw, 380px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
+                    <span className="text-[14px] font-semibold text-ink-mute">{row.category}{row.date && ` · ${row.date}`}</span>
+                    <span className={`mt-2 ${subDisplay}`}>{row.title}</span>
+                    {row.excerpt && <span className="mt-2 line-clamp-2 text-[16px] leading-6 text-ink-soft">{row.excerpt}</span>}
+                    <span className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[16px] font-semibold underline-offset-4 group-hover:underline">
+                      Read the guide <ArrowRight size={16} aria-hidden="true" />
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* 10. FAQ */}
+      <section className={`${testimonialQuotes.length ? '' : 'bg-canvas-soft'} py-20 lg:py-24`}>
+        <div className={`${wrap} grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:items-start`}>
+          <div className="lg:sticky lg:top-[140px]">
+            <h2 data-anim="up" className={displaySection}>Questions parents ask first.</h2>
+            <p className={`mt-5 ${lead}`}>Your situation is different? Ask a counsellor directly.</p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+                <MessageCircle size={18} aria-hidden="true" /> WhatsApp us
+              </a>
+              <a href={telHref} className="ed-btn ed-btn-outline min-h-[52px] px-7">
+                <Phone size={18} aria-hidden="true" /> {formatBangladeshPhone(officePhone)}
+              </a>
+            </div>
+          </div>
+          <div data-anim="stagger" className="grid gap-3">
             {faqs.map(item => (
-              <details key={item.question} className="group rounded-2xl border border-slate-200 bg-white p-5 open:border-[#1767a0]/35 open:shadow-sm">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-5 text-base font-bold text-[#102a43]"><span>{item.question}</span><span className="grid size-8 shrink-0 place-items-center rounded-full bg-[#e9f5fc] text-[#1767a0] transition group-open:rotate-45">+</span></summary>
-                <p className="mt-4 border-t border-slate-100 pt-4 text-sm leading-7 text-slate-600">{item.answer}</p>
+              <details key={item.question} className={`faq-smooth group rounded-3xl px-6 ${testimonialQuotes.length ? 'bg-canvas-soft' : 'bg-white'}`}>
+                <summary className="flex min-h-[68px] cursor-pointer list-none items-center justify-between gap-5 py-4 text-[18px] font-semibold leading-snug">
+                  {item.question}
+                  <span className="grid size-10 shrink-0 place-items-center rounded-full bg-lime text-[22px] leading-none text-petrol-800 transition group-open:rotate-45" aria-hidden="true">+</span>
+                </summary>
+                <p className="pb-6 pr-10 text-[16px] leading-7 text-ink-soft">{item.answer}</p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-white px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
-        <div className="mx-auto max-w-[1240px]">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHeading eyebrow="Useful guides" title="Continue your research" />
-            <Link href="/updates" className="inline-flex items-center gap-2 text-sm font-extrabold text-[#1767a0]">View all guides <ArrowRight size={15} /></Link>
+      {/* 11. Free assessment — dark band, lime headline */}
+      <section id="assessment" className="scroll-mt-24 bg-petrol-800 py-20 text-white lg:py-24">
+        <div className={`${wrap} grid gap-12 lg:grid-cols-[1fr_minmax(0,460px)] lg:items-center`}>
+          <div>
+            <h2 data-anim="pop" className="font-display text-[48px] font-black leading-[0.92] tracking-[-0.02em] text-lime sm:text-[72px]">Not sure where to start?</h2>
+            <p className="mt-6 max-w-xl text-[20px] leading-[1.55] text-white/85">
+              Tell us your results, budget and preferred country. A counsellor calls you within one working day with realistic options,
+              the costs and the documents to prepare.
+            </p>
+            <ul className="mt-8 grid gap-4 text-[16px] text-white/90">
+              <li className="flex gap-3"><MapPin size={20} className="mt-0.5 shrink-0 text-lime" aria-hidden="true" /> {officeAddress}</li>
+              <li className="flex gap-3"><Clock3 size={20} className="mt-0.5 shrink-0 text-lime" aria-hidden="true" /> {officeHours}</li>
+            </ul>
           </div>
-          <div className="mt-9 grid gap-4 md:grid-cols-3">
-            {[
-              [BookOpenCheck, 'Study in China from Bangladesh', 'A complete starting guide covering fit, cost, scholarships and student life.', '/study-in-china-from-bangladesh'],
-              [CircleDollarSign, 'Cost of Studying in China', 'Plan tuition, hostel, living, insurance, visa and travel expenses.', '/study-in-china-cost-bangladesh'],
-              [Search, 'China Scholarships Explained', 'Compare CSC, university and other scholarship types without vague promises.', '/china-scholarships-bangladesh'],
-            ].map(([Icon, title, copy, href]) => {
-              const GuideIcon = Icon as typeof BookOpenCheck;
-              return (
-                <Link key={String(title)} href={String(href)} className="group rounded-[1.4rem] border border-slate-200 bg-[#fbfcfe] p-6 transition hover:-translate-y-1 hover:border-[#1767a0]/40 hover:shadow-lg">
-                  <span className="grid size-11 place-items-center rounded-2xl bg-white text-[#1767a0] shadow-sm"><GuideIcon size={21} /></span>
-                  <h3 className="mt-6 text-xl font-bold tracking-[-.03em] text-[#102a43]">{String(title)}</h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-600">{String(copy)}</p>
-                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold text-[#1767a0]">Read guide <ArrowRight size={15} className="transition group-hover:translate-x-1" /></span>
-                </Link>
-              );
-            })}
-          </div>
+          <div data-anim="up"><HomeLeadForm whatsappHref={whatsappHref} /></div>
         </div>
       </section>
 
-      <section className="px-5 pb-16 sm:px-8 sm:pb-24 lg:px-12">
-        <div className="mx-auto grid max-w-[1240px] overflow-hidden rounded-[1.75rem] bg-[#0d3856] text-white lg:grid-cols-[1.15fr_.85fr]">
-          <div className="relative p-8 sm:p-12 lg:p-14">
-            <PlaneTakeoff className="text-[#8ed6f7]" size={29} />
-            <h2 className="mt-5 max-w-xl text-[clamp(2.2rem,4vw,3.7rem)] font-bold leading-[1.04] tracking-[-.05em]">Your next step can be simple</h2>
-            <p className="mt-5 max-w-xl text-base leading-8 text-white/75">Share your profile, visit the office or message us on WhatsApp. We will help you understand the most suitable next action.</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="#assessment" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#f4a024] px-5 text-sm font-extrabold text-[#102a43] hover:bg-[#ffb33f]">Get Free Profile Assessment <ArrowRight size={16} /></Link>
-              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/20 px-5 text-sm font-bold text-white hover:bg-white/10"><MessageCircle size={17} /> WhatsApp EduExpress</a>
-            </div>
-          </div>
-          <address className="m-4 rounded-[1.35rem] bg-white p-7 not-italic text-[#102a43] sm:m-6 sm:p-8">
-            <p className="text-xs font-extrabold uppercase tracking-[.14em] text-[#1767a0]">Dhanmondi counselling office</p>
-            <h3 className="mt-3 text-2xl font-bold tracking-[-.03em]">Visit EduExpress</h3>
-            <ul className="mt-6 grid gap-4 text-sm leading-6 text-slate-600">
-              <li className="flex gap-3"><MapPin size={18} className="mt-1 shrink-0 text-[#1767a0]" /><span>{officeAddress}</span></li>
-              <li className="flex gap-3"><Phone size={18} className="mt-1 shrink-0 text-[#1767a0]" /><a href={`tel:${officePhone.replace(/\s/g, '')}`} className="font-bold text-[#1767a0] hover:underline">{officePhone}</a></li>
-              <li className="flex gap-3"><MessageCircle size={18} className="mt-1 shrink-0 text-[#1767a0]" /><span>{officeHours}</span></li>
-            </ul>
-            <Link href="/contact" className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#1767a0] px-5 text-sm font-extrabold text-white hover:bg-[#104f7c]">Book an office consultation <ArrowRight size={16} /></Link>
-          </address>
-        </div>
-      </section>
-    </main>
+      <MobileLeadBar whatsappHref={whatsappHref} />
+    </div>
   );
 }

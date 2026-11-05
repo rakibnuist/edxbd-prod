@@ -1,142 +1,193 @@
-'use client';
-
-import { FileText, Scale, Users, Shield, AlertTriangle, CheckCircle, Globe, Phone, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
-import PageHeader from '@/components/PageHeader';
+import { AlertTriangle, ArrowRight, CheckCircle, Mail, MapPin, Phone, Scale, Shield } from 'lucide-react';
+import { CtaBand, JsonLd, PageHero, kit } from '@/components/page/PageKit';
+import { config } from '@/lib/config';
+import { LegalDocument, LegalList, type LegalSection } from '../privacy/LegalDocument';
 
+const PATH = '/terms';
+const POLICY_VERSION = '2026-07-19';
+const PAGE_URL = `https://eduexpressint.com${PATH}`;
+
+const termsPillars = [
+  {
+    title: 'Written proof standard',
+    icon: CheckCircle,
+    copy: 'Every cost schedule, decision report, and document checklist is provided in writing before you proceed.',
+  },
+  {
+    title: 'Explicit fee separation',
+    icon: Scale,
+    copy: 'Unambiguous separation of host university tuition, third-party government fees, and EduExpress service charges.',
+  },
+  {
+    title: 'China visa-first fee timing',
+    icon: Shield,
+    copy: 'No EduExpress service fee collected for China placements prior to official student visa issuance.',
+  },
+  {
+    title: 'Outcome responsibility limits',
+    icon: AlertTriangle,
+    copy: 'Admissions and visa decisions rest exclusively with host universities and relevant government embassies.',
+  },
+];
+
+/** Terms of service page body (server component). */
 export default function TermsClient() {
-  const termsPillars = [
+  const { email, phone, address } = config.contact;
+  const officeAddress = `${address.street}, ${address.city} ${address.postalCode}`;
+  const link = 'font-semibold text-petrol-800 underline underline-offset-4';
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${PAGE_URL}#webpage`,
+    url: PAGE_URL,
+    name: 'Terms of service',
+    description: 'The written terms governing EduExpress International student evaluations, fee schedules and application support.',
+    inLanguage: 'en-BD',
+    dateModified: POLICY_VERSION,
+    isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+    about: { '@id': 'https://eduexpressint.com/#organization' },
+    breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
+  };
+
+  const sections: LegalSection[] = [
     {
-      num: '01',
-      title: 'Written Proof Standard',
-      icon: CheckCircle,
-      copy: 'Every cost schedule, decision report, and document checklist is provided in writing before you proceed.'
+      id: 'operational-clauses',
+      title: 'Four operational clauses',
+      content: (
+        <ul className="grid gap-4 sm:grid-cols-2">
+          {termsPillars.map(({ title, copy, icon: Icon }) => (
+            <li key={title} className={kit.cardSage}>
+              <span className={kit.icon}><Icon size={22} aria-hidden="true" /></span>
+              <h3 className={`mt-5 ${kit.h3}`}>{title}</h3>
+              <p className="mt-2 text-[16px] leading-7 text-ink-soft">{copy}</p>
+            </li>
+          ))}
+        </ul>
+      ),
     },
     {
-      num: '02',
-      title: 'Explicit Fee Separation',
-      icon: Scale,
-      copy: 'Unambiguous separation of host university tuition, third-party government fees, and EduExpress service charges.'
+      id: 'scope',
+      title: '1. Scope of consultation',
+      content: (
+        <p>
+          EduExpress International provides educational evaluation, university matching, scholarship assessment, document preparation,
+          and visa readiness coaching under written evidence standards.
+        </p>
+      ),
     },
     {
-      num: '03',
-      title: 'China Visa-First Guarantee',
-      icon: Shield,
-      copy: 'No EduExpress service fee collected for China placements prior to official student visa issuance.'
+      id: 'fees',
+      title: '2. Fee schedule and payment policy',
+      content: (
+        <>
+          <LegalList
+            items={[
+              'Initial EduFit evaluation and document review: free, with no file opening fee',
+              'China placement service fee: payable only after the student visa is approved',
+              'Official third-party fees (JW202, embassy visa and medicals): itemised in advance, with receipts',
+            ]}
+          />
+          <p>
+            The full China payment terms are set out in our{' '}
+            <Link href="/china-visa-first-policy" className={link}>China visa-first service policy</Link>, and how EduExpress charges are
+            kept separate from third-party costs is explained on{' '}
+            <Link href="/fees-and-transparency" className={link}>fees and transparency</Link>.
+          </p>
+        </>
+      ),
     },
     {
-      num: '04',
-      title: 'Outcome Responsibility Limits',
-      icon: AlertTriangle,
-      copy: 'Admissions and visa decisions rest exclusively with host universities and relevant government embassies.'
-    }
+      id: 'outcomes',
+      title: '3. Outcome disclaimers',
+      content: (
+        <div className={`${kit.cardOutline} space-y-4 text-[16px] leading-7`}>
+          <p>
+            <strong className="text-petrol-800">Admissions:</strong> Official admission offers and JW202 government forms are issued solely by
+            host university registrars and Chinese ministry departments.
+          </p>
+          <p>
+            <strong className="text-petrol-800">Visas:</strong> Visa issuance decisions rest exclusively with the relevant embassy consular
+            section.
+          </p>
+        </div>
+      ),
+    },
+    {
+      id: 'operating-entity',
+      title: 'Licensed operating entity',
+      content: (
+        <ul className="grid gap-3 text-[16px] leading-7">
+          <li className="flex gap-3">
+            <MapPin size={20} className="mt-1 shrink-0 text-petrol-800" aria-hidden="true" />
+            <span>EduExpress International — {officeAddress} (DSCC Trade Licence TRAD/005430/2023)</span>
+          </li>
+          <li className="flex gap-3">
+            <Mail size={20} className="mt-1 shrink-0 text-petrol-800" aria-hidden="true" />
+            <a href={`mailto:${email}`} className={link}>{email}</a>
+          </li>
+          <li className="flex gap-3">
+            <Phone size={20} className="mt-1 shrink-0 text-petrol-800" aria-hidden="true" />
+            <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className={link}>{phone}</a>
+          </li>
+          <li>
+            <Link href="/contact" className={kit.link}>
+              Contact the decision desk <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </li>
+        </ul>
+      ),
+    },
   ];
 
   return (
-    <div className="overflow-hidden bg-[#f4f8fa] text-[#08263c] font-sans">
-      {/* Homepage Hero Header Style */}
-      <section className="relative px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32 md:pt-40 lg:px-12 border-b border-[#174f7a]/15">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(23,79,122,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(23,79,122,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
-        <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#64b5df]/15 md:size-[460px]" />
+    <>
+      <JsonLd data={structuredData} />
 
-        <div className="relative mx-auto max-w-[1440px]">
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#174f7a]/25 py-3 font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#174f7a]">
-            <span>EduExpress International Bangladesh</span>
-            <span>Terms of Service Agreement</span>
-            <span>Policy Version 2026-07-19</span>
-          </div>
-
-          <div className="max-w-4xl">
-            <p className="flex w-full max-w-full items-start gap-3 bg-[#174f7a] px-4 py-2 text-xs font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
-              <Scale className="mt-0.5 shrink-0 text-[#8ed0ee] sm:mt-0" size={16} />
-              <span className="min-w-0 whitespace-normal">Evidence-First Terms of Service</span>
-            </p>
-
-            <h1 className="mt-7 w-full max-w-4xl break-words text-balance font-heading text-[clamp(2.4rem,5.6vw,4.2rem)] font-bold leading-[1.06] tracking-[-0.022em]">
-              Written operational terms <span className="relative mt-2 inline-block bg-[#64b5df] px-2 pb-2 text-[#08263c] sm:px-3 sm:pb-3">governing your consultation</span>
-            </h1>
-
-            <p className="mt-7 max-w-2xl border-l-4 border-[#64b5df] pl-5 text-base leading-7 text-slate-700 md:text-lg md:leading-8">
-              These terms govern all student evaluations, written fee schedules, and university application dossiers managed by EduExpress International from Dhanmondi, Dhaka.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Universal Promise Dark Section */}
-      <section className="border-y border-[#08263c] bg-[#08263c] text-white">
-        <div className="mx-auto grid max-w-[1440px] lg:grid-cols-[.8fr_repeat(4,1fr)]">
-          <div className="bg-[#64b5df] p-6 text-[#08263c] lg:p-7">
-            <p className="font-mono text-xs font-black uppercase tracking-[0.2em] text-[#174f7a]">Four Operational Clauses</p>
-            <h2 className="mt-3 font-heading text-2xl font-bold leading-tight">Service Framework</h2>
-          </div>
-          {termsPillars.map(({ num, title, copy, icon: Icon }) => (
-            <div key={title} className="group relative border-b border-white/15 p-5 hover:bg-white/5 lg:border-b-0 lg:border-r lg:p-6">
-              <div className="flex items-center justify-between"><span className="font-mono text-xs text-[#64b5df]">TERM {num}</span><Icon size={19} className="text-[#64b5df]" /></div>
-              <h3 className="mt-7 font-heading text-lg font-bold leading-6">{title}</h3>
-              <p className="mt-2 text-xs leading-5 text-white/50">{copy}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Terms Content */}
-      <section className="bg-white px-5 py-16 sm:px-8 sm:py-24 border-b border-[#174f7a]/15">
-        <div className="container mx-auto max-w-4xl bg-[#f4f8fa] border-2 border-[#08263c] p-8 md:p-12 shadow-[8px_8px_0_0_#174f7a]">
-          <div className="space-y-10">
-            <div>
-              <h2 className="font-heading text-2xl font-bold mb-4 flex items-center text-[#08263c]">
-                <FileText className="w-6 h-6 mr-2.5 text-[#174f7a]" />
-                1. Scope of Consultation
-              </h2>
-              <p className="text-slate-700 text-sm leading-6">
-                EduExpress International provides educational evaluation, university matching, scholarship assessment, document preparation, and visa readiness coaching under written evidence standards.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="font-heading text-2xl font-bold mb-4 flex items-center text-[#08263c]">
-                <Globe className="w-6 h-6 mr-2.5 text-[#174f7a]" />
-                2. Fee Schedule & Payment Policy
-              </h2>
-              <ul className="space-y-2 bg-white p-5 border border-[#174f7a]/20 text-xs text-slate-700 font-semibold">
-                <li className="flex items-center"><span className="text-[#174f7a] mr-2">✓</span> Initial EduFit Evaluation & Document Review: 100% Free ($0 File Opening Fee)</li>
-                <li className="flex items-center"><span className="text-[#174f7a] mr-2">✓</span> China Placement Service Fee: Payable ONLY after Student Visa is Approved</li>
-                <li className="flex items-center"><span className="text-[#174f7a] mr-2">✓</span> Official Third-Party Fees: JW202, Embassy Visa & Medicals itemized in advance with receipts</li>
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="font-heading text-2xl font-bold mb-4 flex items-center text-[#08263c]">
-                <AlertTriangle className="w-6 h-6 mr-2.5 text-[#174f7a]" />
-                3. Outcome Disclaimers
-              </h2>
-              <div className="bg-[#e9f7fd] p-5 border border-[#174f7a]/30 text-xs text-[#08263c] space-y-2 font-medium">
-                <p><strong>Admissions:</strong> Official admission offers and JW202 government forms are issued solely by host university registrars and Chinese ministry departments.</p>
-                <p><strong>Visas:</strong> Visa issuance decisions rest exclusively with the relevant embassy consular section.</p>
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Terms of service' }]}
+        eyebrow="Evidence-first terms of service"
+        title="Terms of service."
+        lead="Written operational terms governing your consultation. These terms govern all student evaluations, written fee schedules, and university application dossiers managed by EduExpress International from Dhanmondi, Dhaka."
+        reviewed="July 2026"
+        aside={
+          <div className={kit.cardDark}>
+            <p className="text-[21px] font-semibold leading-[1.3] tracking-[-0.02em] text-lime">At a glance</p>
+            <dl className="mt-5 grid gap-4 text-[16px] leading-7">
+              <div>
+                <dt className="text-[14px] text-white/70">Policy version</dt>
+                <dd className="font-semibold text-white">{POLICY_VERSION}</dd>
               </div>
-            </div>
-
-            <div className="border-t border-[#174f7a]/15 pt-6">
-              <h3 className="font-heading text-lg font-bold text-[#08263c] mb-2">Licensed Operating Entity</h3>
-              <p className="text-xs text-slate-700">EduExpress International — Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209 (DSCC Trade Licence TRAD/005430/2023)</p>
-            </div>
+              <div>
+                <dt className="text-[14px] text-white/70">File opening fee</dt>
+                <dd className="font-semibold text-white">None — initial evaluation and document review are free</dd>
+              </div>
+              <div>
+                <dt className="text-[14px] text-white/70">China service fee</dt>
+                <dd className="font-semibold text-white">Only after the student visa is approved</dd>
+              </div>
+            </dl>
           </div>
-        </div>
-      </section>
+        }
+      />
 
-      {/* Bring 01-03 CTA Banner */}
-      <section className="bg-[#64b5df] px-5 py-16 text-[#08263c] sm:px-8 sm:py-24 md:py-32 lg:px-12">
-        <div className="mx-auto max-w-[1440px]">
-          <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto] lg:gap-10">
-            <div>
-              <p className="font-mono text-xs font-black uppercase tracking-[0.22em] text-[#174f7a]">Compare before you commit</p>
-              <h2 className="mt-4 max-w-4xl font-heading text-4xl font-bold leading-tight tracking-tight md:text-6xl">Questions about our written terms? Speak to our Dhanmondi desk.</h2>
-            </div>
-            <Link href="/contact" className="inline-flex w-full items-center justify-center gap-3 bg-[#08263c] px-7 py-5 text-base font-black text-white hover:bg-[#174f7a] sm:text-lg lg:w-auto lg:min-w-64">Contact Decision Desk <ArrowUpRight size={20} /></Link>
-          </div>
-        </div>
-      </section>
-    </div>
+      <LegalDocument
+        sections={sections}
+        version={POLICY_VERSION}
+        related={[
+          { href: '/china-visa-first-policy', label: 'China visa-first policy' },
+          { href: '/fees-and-transparency', label: 'Fees and transparency' },
+          { href: '/complaints-and-resolution', label: 'Complaints and resolution' },
+          { href: '/privacy', label: 'Privacy policy' },
+        ]}
+      />
+
+      <CtaBand
+        title="Questions about our written terms?"
+        text="Speak to our Dhanmondi desk in person, by email or on WhatsApp, or start the free assessment and receive your costs in writing."
+      />
+    </>
   );
 }

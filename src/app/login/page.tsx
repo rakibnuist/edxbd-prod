@@ -37,9 +37,9 @@ function LoginForm() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Login
-          </h2>
+          <h1 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Staff Login — EduExpress International
+          </h1>
           <p className="mt-2 text-center text-sm text-gray-600">
             EduExpress International Dashboard
           </p>

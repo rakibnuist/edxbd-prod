@@ -27,7 +27,7 @@ export default function WhatsAppWrapper(props: WrapperProps) {
         return () => clearTimeout(timer);
     }, []);
 
-    if (pathname.startsWith('/admin') || pathname.startsWith('/dashboard') || isStandaloneCampaignRoute(pathname)) return null;
+    if (pathname === '/' || pathname.startsWith('/admin') || pathname.startsWith('/dashboard') || isStandaloneCampaignRoute(pathname)) return null;
     if (!shouldRender) return null;
 
     return <FloatingWhatsApp {...props} />;

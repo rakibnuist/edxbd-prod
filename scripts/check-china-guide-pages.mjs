@@ -3,6 +3,8 @@ import { register } from 'node:module';
 
 register(new URL('./lib/typescript-source-resolver.mjs', import.meta.url));
 const { chinaGuidePages } = await import('../src/data/chinaGuidePages.ts');
+const { readFile } = await import('node:fs/promises');
+const hubContent = JSON.parse(await readFile(new URL('../src/data/chinaStudyHub.json', import.meta.url), 'utf8'));
 
 const args = process.argv.slice(2);
 const baseAt = args.indexOf('--base-url');
@@ -70,6 +72,15 @@ async function checkPage(slug) {
 
   if (slug === hub) {
     for (const topic of topics) assert.ok(internal.includes(`/${topic}`), `${path}: crawlable link to ${topic}`);
+    for (const topic of ['mbbs-in-china-bangladesh', 'china-intakes-deadlines']) assert.ok(internal.includes(`/${topic}`), `${path}: medical and intake guide discovery`);
+    for (const phrase of [hubContent.intro, ...hubContent.quality.map(item => item.body), ...hubContent.fundingRoutes.map(item => item.body), hubContent.mbbs.intro, ...hubContent.mbbs.points.map(item => item.body)]) assert.ok(text.includes(phrase), `${path}: substantive education, scholarship and medical content SSR`);
+    for (const item of hubContent.rankings) assert.ok(text.includes(item.name) && new RegExp(`#\\s*${item.rank}\\b`).test(text), `${path}: scoped world ranking examples SSR`);
+    assert.ok(text.includes('World rank') && text.includes('ShanghaiRanking'), `${path}: rankings retain scope and publisher`);
+    assert.ok(text.includes('BMDC') && text.includes('Registration Qualifying Examination') && text.includes('CSCA'), `${path}: Bangladesh medical and undergraduate preparation`);
+    assert.equal(faqNodes[0].mainEntity.length, hubContent.faqs.length, `${path}: all current FAQ answers represented`);
+    const article = html.match(/<article\b[\s\S]*?<\/article>/i)?.[0] || '';
+    assert.doesNotMatch(plain(article), /\b20\d{2}\b/, `${path}: evergreen hub without public cycle or ranking-edition years`);
+    assert.doesNotMatch(article, /<form[^>]+method="post"/i, `${path}: hub links to the actual application flow`);
     assert.equal(tags(html, 'link').some(link => link.hreflang), false, `${path}: incomplete Bengali page is not claimed as a language equivalent`);
   } else {
     const guide = chinaGuidePages[slug];

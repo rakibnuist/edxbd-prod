@@ -1,0 +1,317 @@
+[
+  {
+    "slug": "fudan-university",
+    "asset": "/images/universities/medical-logos/fudan-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/4/44/Fudan_University_Logo.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Fudan%20University",
+    "file": "Fudan_University_Logo.svg"
+  },
+  {
+    "slug": "nankai-university",
+    "asset": "/images/universities/medical-logos/nankai-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/a/a5/Nankai_University_logo.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Nankai%20University",
+    "file": "Nankai_University_logo.svg"
+  },
+  {
+    "slug": "jinan-university",
+    "asset": "/images/universities/medical-logos/jinan-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/d/db/Jinan_University_Emblem.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Jinan%20University",
+    "file": "Jinan_University_Emblem.svg"
+  },
+  {
+    "slug": "zhejiang-university",
+    "asset": "/images/universities/medical-logos/zhejiang-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/1/16/Zhejiang_University_Logo.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Zhejiang%20University",
+    "file": "Zhejiang_University_Logo.svg"
+  },
+  {
+    "slug": "shandong-university",
+    "asset": "/images/universities/medical-logos/shandong-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/7/79/Shandong_University_Emblem.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Shandong%20University",
+    "file": "Shandong_University_Emblem.svg"
+  },
+  {
+    "slug": "sun-yat-sen-university",
+    "asset": "/images/universities/medical-logos/sun-yat-sen-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/f/fb/Sun_Yat-sen_University_Logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Sun%20Yat-sen%20University",
+    "file": "Sun_Yat-sen_University_Logo.png"
+  },
+  {
+    "slug": "shantou-university",
+    "asset": "/images/universities/medical-logos/shantou-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/b/b8/Shantou_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Shantou%20University",
+    "file": "Shantou_University_logo.png"
+  },
+  {
+    "slug": "sichuan-university",
+    "asset": "/images/universities/medical-logos/sichuan-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/e/ef/Sichuan_University_logo_%28seal%29.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Sichuan%20University",
+    "file": "Sichuan_University_logo_(seal).svg"
+  },
+  {
+    "slug": "xian-jiaotong-university",
+    "asset": "/images/universities/medical-logos/xian-jiaotong-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/3/3d/Xi%27an_Jiaotong_University.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Xi'an%20Jiaotong%20University",
+    "file": "Xi'an_Jiaotong_University.png"
+  },
+  {
+    "slug": "xiamen-university",
+    "asset": "/images/universities/medical-logos/xiamen-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/7/75/Xiamen_University_logo.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Xiamen%20University",
+    "file": "Xiamen_University_logo.svg"
+  },
+  {
+    "slug": "tongji-university",
+    "asset": "/images/universities/medical-logos/tongji-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/a/a4/Tongji_Uni_logo.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Tongji%20University",
+    "file": "Tongji_Uni_logo.svg"
+  },
+  {
+    "slug": "fujian-medical-university",
+    "asset": "/images/universities/medical-logos/fujian-medical-university.gif",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/6/69/Fujian_Medical_University_logo.gif?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Fujian%20Medical%20University",
+    "file": "Fujian_Medical_University_logo.gif"
+  },
+  {
+    "slug": "zzu",
+    "asset": "/images/universities/medical-logos/zzu.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/6/68/Zhengzhouuni.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Zhengzhou%20University",
+    "file": "Zhengzhouuni.png"
+  },
+  {
+    "slug": "southeast-university",
+    "asset": "/images/universities/medical-logos/southeast-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/a/ab/Southeast_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Southeast%20University",
+    "file": "Southeast_University_logo.png"
+  },
+  {
+    "slug": "jilin-university",
+    "asset": "/images/universities/medical-logos/jilin-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/4/47/Jilin_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Jilin%20University",
+    "file": "Jilin_University_logo.png"
+  },
+  {
+    "slug": "china-medical-university",
+    "asset": "/images/universities/medical-logos/china-medical-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/e/ea/China_Medical_University_%28Liaoning%29_seal.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/China%20Medical%20University%20(Liaoning)",
+    "file": "China_Medical_University_(Liaoning)_seal.png"
+  },
+  {
+    "slug": "tianjin-medical-university",
+    "asset": "/images/universities/medical-logos/tianjin-medical-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/e/e4/Tianjin_Medical_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Tianjin%20Medical%20University",
+    "file": "Tianjin_Medical_University_logo.png"
+  },
+  {
+    "slug": "wuhan-university",
+    "asset": "/images/universities/medical-logos/wuhan-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/6/68/Wuhan_University_Logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Wuhan%20University",
+    "file": "Wuhan_University_Logo.png"
+  },
+  {
+    "slug": "huazhong-university-of-science-and-technology",
+    "asset": "/images/universities/medical-logos/huazhong-university-of-science-and-technology.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/0/01/Huazhong_University_of_Science_and_Technology_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Huazhong%20University%20of%20Science%20and%20Technology",
+    "file": "Huazhong_University_of_Science_and_Technology_logo.png"
+  },
+  {
+    "slug": "qingdao-university",
+    "asset": "/images/universities/medical-logos/qingdao-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/5/5e/Qingdao_University_new_logo.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Qingdao%20University",
+    "file": "Qingdao_University_new_logo.svg"
+  },
+  {
+    "slug": "ntu",
+    "asset": "/images/universities/medical-logos/ntu.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Nantong_University_name.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Nantong%20University",
+    "file": "Nantong_University_name.svg"
+  },
+  {
+    "slug": "ctgu",
+    "asset": "/images/universities/medical-logos/ctgu.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/e/ee/China_Three_Gorges_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/China%20Three%20Gorges%20University",
+    "file": "China_Three_Gorges_University_logo.png"
+  },
+  {
+    "slug": "yangzhou-university",
+    "asset": "/images/universities/medical-logos/yangzhou-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/d/d7/Yangzhou_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Yangzhou%20University",
+    "file": "Yangzhou_University_logo.png"
+  },
+  {
+    "slug": "ningbo-university",
+    "asset": "/images/universities/medical-logos/ningbo-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/a/af/Ningbo_University_Emblem.svg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Ningbo%20University",
+    "file": "Ningbo_University_Emblem.svg"
+  },
+  {
+    "slug": "guangxi-medical-university",
+    "asset": "/images/universities/medical-logos/guangxi-medical-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/2/23/Guangxi_Medical_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Guangxi%20Medical%20University",
+    "file": "Guangxi_Medical_University_logo.png"
+  },
+  {
+    "slug": "southern-medical-university",
+    "asset": "/images/universities/medical-logos/southern-medical-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/d/d3/Official_logo_of_SMU.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Southern%20Medical%20University",
+    "file": "Official_logo_of_SMU.png"
+  },
+  {
+    "slug": "shihezi-university",
+    "asset": "/images/universities/medical-logos/shihezi-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/4/4b/Shihezi_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Shihezi%20University",
+    "file": "Shihezi_University_logo.png"
+  },
+  {
+    "slug": "kunming-medical-university",
+    "asset": "/images/universities/medical-logos/kunming-medical-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/3/3f/Kunming_Medical_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Kunming%20Medical%20University",
+    "file": "Kunming_Medical_University_logo.png"
+  },
+  {
+    "slug": "soochow-university",
+    "asset": "/images/universities/medical-logos/soochow-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/4/47/Soochow_University_%28Suzhou%29_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Soochow%20University%20(Suzhou)",
+    "file": "Soochow_University_(Suzhou)_logo.png"
+  },
+  {
+    "slug": "chongqing-medical-university",
+    "asset": "/images/universities/medical-logos/chongqing-medical-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/8/87/Chongqing_Medical_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Chongqing%20Medical%20University",
+    "file": "Chongqing_Medical_University_logo.png"
+  },
+  {
+    "slug": "harbin-medical-university",
+    "asset": "/images/universities/medical-logos/harbin-medical-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/d/d1/Harbin_Medical_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Harbin%20Medical%20University",
+    "file": "Harbin_Medical_University_logo.png"
+  },
+  {
+    "slug": "jiangsu-university",
+    "asset": "/images/universities/medical-logos/jiangsu-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/0/0a/Jiangsu_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Jiangsu%20University",
+    "file": "Jiangsu_University_logo.png"
+  },
+  {
+    "slug": "north-sichuan-medical-college",
+    "asset": "/images/universities/medical-logos/north-sichuan-medical-college.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/0/07/North_Sichuan_Medical_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/North%20Sichuan%20Medical%20College",
+    "file": "North_Sichuan_Medical_University_logo.png"
+  },
+  {
+    "slug": "beihua-university",
+    "asset": "/images/universities/medical-logos/beihua-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/en/0/0d/Beihua_University_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://en.wikipedia.org/wiki/Beihua%20University",
+    "file": "Beihua_University_logo.png"
+  },
+  {
+    "slug": "peking-university-health-science-center",
+    "asset": "/images/universities/medical-logos/peking-university-health-science-center.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/e/e8/Peking_University_Health_Science_Center_Logo.svg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E5%8C%97%E4%BA%AC%E5%A4%A7%E5%AD%A6%E5%8C%BB%E5%AD%A6%E9%83%A8",
+    "file": "Peking_University_Health_Science_Center_Logo.svg"
+  },
+  {
+    "slug": "shanghai-jiao-tong-university",
+    "asset": "/images/universities/medical-logos/shanghai-jiao-tong-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/d/d5/SJTU_emblem.svg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6",
+    "file": "SJTU_emblem.svg"
+  },
+  {
+    "slug": "xuzhou-medical-university",
+    "asset": "/images/universities/medical-logos/xuzhou-medical-university.jpg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/3/37/Xuzhou_Medical_University_logo.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E5%BE%90%E5%B7%9E%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6",
+    "file": "Xuzhou_Medical_University_logo.jpg"
+  },
+  {
+    "slug": "nanjing-medical-university",
+    "asset": "/images/universities/medical-logos/nanjing-medical-university.jpg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/f/fa/Nanjing_Medical_University_logo.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E5%8D%97%E4%BA%AC%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6",
+    "file": "Nanjing_Medical_University_logo.jpg"
+  },
+  {
+    "slug": "capital-medical-university",
+    "asset": "/images/universities/medical-logos/capital-medical-university.png",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/e/e7/Capital_Medical_University_logo.png?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E9%A6%96%E9%83%BD%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6",
+    "file": "Capital_Medical_University_logo.png"
+  },
+  {
+    "slug": "dalian-medical-university",
+    "asset": "/images/universities/medical-logos/dalian-medical-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/c/c1/Dalian_Medical_University_Emblem.svg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E5%A4%A7%E8%BF%9E%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6",
+    "file": "Dalian_Medical_University_Emblem.svg"
+  },
+  {
+    "slug": "guangzhou-medical-university",
+    "asset": "/images/universities/medical-logos/guangzhou-medical-university.jpg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/7/7d/Guangzhou_Medical_University_logo.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E5%B9%BF%E5%B7%9E%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6",
+    "file": "Guangzhou_Medical_University_logo.jpg"
+  },
+  {
+    "slug": "jinzhou-medical-university",
+    "asset": "/images/universities/medical-logos/jinzhou-medical-university.jpeg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/4/4f/Jinzhou_Medical_University_logo.jpeg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E9%94%A6%E5%B7%9E%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6",
+    "file": "Jinzhou_Medical_University_logo.jpeg"
+  },
+  {
+    "slug": "anhui-medical-university",
+    "asset": "/images/universities/medical-logos/anhui-medical-university.jpg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/d/db/Anhui_Medical_University_logo.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E5%AE%89%E5%BE%BD%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6",
+    "file": "Anhui_Medical_University_logo.jpg"
+  },
+  {
+    "slug": "wenzhou-medical-university",
+    "asset": "/images/universities/medical-logos/wenzhou-medical-university.svg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/5/56/Wenzhou_Medical_University_Emblem.svg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E6%B8%A9%E5%B7%9E%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6",
+    "file": "Wenzhou_Medical_University_Emblem.svg"
+  },
+  {
+    "slug": "southwest-medical-university",
+    "asset": "/images/universities/medical-logos/southwest-medical-university.jpg",
+    "sourceUrl": "https://upload.wikimedia.org/wikipedia/zh/b/b6/SWMU_logo.jpg?utm_source=zh.wikipedia.org&utm_campaign=api&utm_content=original",
+    "pageUrl": "https://zh.wikipedia.org/wiki/%E8%A5%BF%E5%8D%97%E5%8C%BB%E7%A7%91%E5%A4%A7%E5%AD%A6",
+    "file": "SWMU_logo.jpg"
+  }
+]

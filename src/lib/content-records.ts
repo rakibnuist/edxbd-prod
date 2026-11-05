@@ -3,7 +3,8 @@ import 'server-only';
 import { cache } from 'react';
 import prisma from '@/lib/prisma';
 import type { Update } from '@/lib/types';
-import { currentPublishedContentWhere } from '@/lib/content-governance';
+import { currentVisibleContentWhere } from '@/lib/content-governance';
+import { sanitizeUpdateHtml } from '@/lib/content-html';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -15,14 +16,14 @@ const parseList = (value?: string | null): string[] => {
   }
 };
 
-const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content.findFirst>>): Update | null => {
+export const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content.findFirst>>): Update | null => {
   if (!record) return null;
   return {
     id: record.id,
     title: record.title,
     slug: record.slug,
     type: record.type,
-    content: record.content,
+    content: sanitizeUpdateHtml(record.content),
     excerpt: record.excerpt || undefined,
     metaDescription: record.metaDescription || undefined,
     category: record.category || undefined,
@@ -34,6 +35,7 @@ const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content.findFi
     author: record.author,
     reviewer: record.reviewer || undefined,
     publishedAt: record.publishedAt?.toISOString(),
+    archived: Boolean(record.archivedAt),
     lastVerifiedAt: record.lastVerifiedAt?.toISOString(),
     nextReviewAt: record.nextReviewAt?.toISOString(),
     expiresAt: record.expiresAt?.toISOString(),
@@ -47,7 +49,7 @@ const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content.findFi
 
 export const getPublishedUpdates = cache(async (take?: number, prioritizeFeatured = true): Promise<Update[]> => {
   const records = await prisma.content.findMany({
-    where: { type: 'update', ...currentPublishedContentWhere() },
+    where: { type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
     orderBy: prioritizeFeatured
       ? [{ isFeatured: 'desc' }, { publishedAt: 'desc' }, { updatedAt: 'desc' }]
       : [{ publishedAt: 'desc' }, { updatedAt: 'desc' }],

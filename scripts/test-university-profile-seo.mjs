@@ -10,18 +10,36 @@ const nuist = {
 };
 const program = (id, name, level, languages = ['English']) => ({ id, name, level, languages, duration: '4 years', qualifications: [], languageRequirements: [], documents: [], fees: [], notes: [] });
 
-test('NUIST search title is concise and its description identifies the full university', () => {
+test('name searches retain the full university identity in the title and description', () => {
   const seo = universityProfileSeo(nuist);
-  assert.equal(seo.title, 'NUIST: Fees, Scholarships & Programs');
-  assert.match(seo.description, /Study at Nanjing University of Information Science and Technology \(NUIST\)/);
+  assert.equal(seo.title, 'Nanjing University of Information Science and Technology (NUIST): Fees & Scholarships');
+  assert.match(seo.description, /Explore Nanjing University of Information Science and Technology \(NUIST\)/);
   assert.match(seo.description, /Nanjing, China/);
   assert.equal(seo.canonical, 'https://eduexpressint.com/universities/nuist');
+});
+
+test('a sourced tuition fact makes the description useful without inventing an offer', () => {
+  const row = { ...program('trade', 'International Economics and Trade', 'Bachelor'), fees: [{ key: 'tuition', amount: 26000, currency: 'CNY', period: 'year', stage: 'in_china', item: 'Tuition' }] };
+  assert.match(universityProfileSeo(nuist, [row]).description, /Bachelor's tuition: CNY 26,000\/year/);
+  assert.match(universityProfileSeo(nuist, [row]).description, /Bangladesh/);
+  assert.ok(!universityProfileSeo(nuist).description.includes('26,000'));
 });
 
 test('only recorded acronyms are used; existing names are never duplicated', () => {
   assert.equal(universitySearchIdentity({ name: 'Example University', aliases: [] }).shortName, 'Example University');
   assert.equal(universitySearchIdentity({ name: 'Example University', aliases: ['Other university name'] }).acronym, undefined);
   assert.equal(universitySearchIdentity({ name: 'Example University (EU)', aliases: ['EU'] }).displayName, 'Example University (EU)');
+});
+
+test('medical search metadata identifies the actual language and degree route', () => {
+  const medical = { ...program('medicine', 'Clinical Medicine (MBBS)', 'Bachelor'), duration: '6 years' };
+  const english = universityProfileSeo({ ...nuist, name: 'Example Medical University', aliases: ['EMU'] }, [medical]);
+  assert.match(english.title, /MBBS, Fees & Scholarships/);
+  assert.match(english.description, /6 years, English/);
+  const chinese = universityProfileSeo(nuist, [{ ...medical, name: 'Clinical Medicine', languages: ['Chinese'] }]);
+  assert.match(chinese.title, /Medicine, Fees & Scholarships/);
+  assert.doesNotMatch(chinese.title, /MBBS/);
+  assert.match(chinese.description, /Chinese/);
 });
 
 test('the semantic catalogue covers every supplied level, rather than a legacy four-course subset', () => {
@@ -46,6 +64,7 @@ test('schema preserves the publisher and canonical identity without inventing of
   const institution = graph.find(item => item['@type'] === 'CollegeOrUniversity');
   assert.equal(page.publisher['@id'], 'https://eduexpressint.com/#organization');
   assert.equal(page.mainEntity['@id'], institution['@id']);
+  assert.deepEqual(page.hasPart.map(part => part.url.split('#')[1]), ['overview', 'programs', 'scholarships', 'fees', 'admission', 'documents', 'rankings']);
   assert.equal(institution.logo, 'https://eduexpressint.com/images/nuist-logo.webp');
   const json = JSON.stringify(graph);
   for (const forbidden of ['Offer', 'aggregateRating', 'dateModified', 'lastVerifiedAt', 'sourceUrl', 'sameAs']) assert.ok(!json.includes(`"${forbidden}"`), forbidden);

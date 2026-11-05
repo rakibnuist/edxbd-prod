@@ -1,21 +1,13 @@
 import { sitemapResponse } from '@/lib/sitemap-xml';
 import prisma from '@/lib/prisma';
+import { publicTestimonialWhere } from '@/lib/testimonial-visibility';
 
 export async function GET() {
   try {
-    const currentConsent = {
-      isPublished: true,
-      consentVerified: true,
-      consentImageApproved: true,
-      consentEvidenceId: { not: null },
-      consentRecordedAt: { not: null },
-      consentRevokedAt: null,
-      image: { not: null },
-      OR: [{ consentExpiresAt: null }, { consentExpiresAt: { gte: new Date() } }],
-    };
+    const published = publicTestimonialWhere();
     const [all, china] = await Promise.all([
-      prisma.testimonial.count({ where: currentConsent }),
-      prisma.testimonial.count({ where: { ...currentConsent, country: { contains: 'China' } } }),
+      prisma.testimonial.count({ where: published }),
+      prisma.testimonial.count({ where: { AND: [published, { country: { contains: 'China' } }] } }),
     ]);
     return sitemapResponse([
       ...(all ? [{ loc: 'https://eduexpressint.com/success-stories' }] : []),

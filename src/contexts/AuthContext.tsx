@@ -106,7 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ...(options.headers as Record<string, string> || {}),
     };
 
-    let response = await fetch(url, {
+    const response = await fetch(url, {
       ...options,
       headers: mergedHeaders,
       credentials: 'include',

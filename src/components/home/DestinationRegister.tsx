@@ -56,19 +56,19 @@ export default function DestinationRegister({ rows }: { rows: DestinationRow[] }
                   </motion.span>
                   <span
                     className={`ed-display text-xl transition-colors duration-200 sm:text-[1.6rem] ${
-                      isActive ? 'text-[#2f7fbf]' : 'text-[#0a1f33]'
+                      isActive ? 'text-[#2c6a97]' : 'text-[#14212e]'
                     }`}
                   >
                     {row.name}
                   </span>
                 </span>
                 <span
-                  className={`ed-label justify-self-start rounded-[3px] border px-2.5 py-1 transition-colors duration-200 ${
+                  className={`ed-label justify-self-start rounded-full border px-2.5 py-1 transition-colors duration-200 ${
                     row.established
                       ? isActive
-                        ? 'border-[#2f7fbf] text-[#2f7fbf]'
-                        : 'border-[#55677a]/35 text-[#55677a]'
-                      : 'border-[#c87f0a] bg-[#fdf3e2] text-[#8a5606]'
+                        ? 'border-[#2c6a97] text-[#2c6a97]'
+                        : 'border-[#475569]/35 text-[#475569]'
+                      : 'border-[#4a9cc8] bg-[#f1f5f9] text-[#256994]'
                   }`}
                 >
                   {row.status}
@@ -76,7 +76,7 @@ export default function DestinationRegister({ rows }: { rows: DestinationRow[] }
                 <ArrowUpRight
                   size={20}
                   className={`hidden transition-all duration-200 sm:block ${
-                    isActive ? 'translate-x-1 text-[#2f7fbf]' : 'text-[#9aa8b8]'
+                    isActive ? 'translate-x-1 text-[#2c6a97]' : 'text-[#cfe7f5]'
                   }`}
                 />
               </span>

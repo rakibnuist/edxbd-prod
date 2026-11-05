@@ -1,4 +1,5 @@
-FROM node:18-alpine AS base
+# Next.js 16 and sharp 0.35 require Node >= 20.9; node:18 fails at `next build`.
+FROM node:22-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -30,7 +31,10 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 RUN apk add --no-cache openssl
-RUN npm install -g prisma
+# Pin the CLI to the @prisma/client major in package.json. An unpinned global
+# install pulls whatever major is latest, which can disagree with the generated
+# client and change `prisma db push` behaviour on every container start.
+RUN npm install -g prisma@5.22.0
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1

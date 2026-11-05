@@ -118,7 +118,7 @@ export default function SettingsPage() {
     }
   };
 
-  const field = 'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#174f7a] focus:outline-none focus:ring-2 focus:ring-[#174f7a]/20';
+  const field = 'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#12436b] focus:outline-none focus:ring-2 focus:ring-[#12436b]/20';
   const label = 'mb-1 block text-sm font-medium text-gray-700';
 
   if (loading) {
@@ -128,7 +128,7 @@ export default function SettingsPage() {
   return (
     <div className="mx-auto max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#08263c] sm:text-3xl">Settings</h1>
+        <h1 className="text-2xl font-bold text-[#0f3a5c] sm:text-3xl">Settings</h1>
         <p className="mt-1 text-sm text-gray-500">Manage site details and marketing integrations.</p>
       </div>
 
@@ -149,7 +149,7 @@ export default function SettingsPage() {
         <section id="meta-tracking" className="scroll-mt-6 rounded-xl border border-gray-200 bg-white">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-6 py-4">
             <div>
-              <h2 className="text-lg font-semibold text-[#08263c]">Meta Connectivity Status</h2>
+              <h2 className="text-lg font-semibold text-[#0f3a5c]">Meta Connectivity Status</h2>
               <p className="text-xs text-gray-500">Facebook Pixel &amp; Conversions API for ad tracking.</p>
             </div>
             <button type="submit" disabled={isSaving} className="min-h-10 rounded-lg bg-gray-900 px-4 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-60">{isSaving ? 'Saving…' : 'Save settings'}</button>
@@ -197,7 +197,7 @@ export default function SettingsPage() {
         {/* Analytics & Tags */}
         <section className="rounded-2xl bg-white shadow ring-1 ring-gray-100">
           <div className="border-b border-gray-100 px-6 py-4">
-            <h2 className="text-lg font-semibold text-[#08263c]">Analytics &amp; Tags</h2>
+            <h2 className="text-lg font-semibold text-[#0f3a5c]">Analytics &amp; Tags</h2>
             <p className="text-xs text-gray-500">Google Tag Manager &amp; GA4. Loaded on the public site at runtime.</p>
             <p className="mt-2 text-xs text-amber-700">Use either GTM to manage GA4, or enter GA4 directly—not both. Tracking loads only after a visitor accepts cookies.</p>
           </div>
@@ -218,7 +218,7 @@ export default function SettingsPage() {
         {/* Site details */}
         <section className="rounded-2xl bg-white shadow ring-1 ring-gray-100">
           <div className="border-b border-gray-100 px-6 py-4">
-            <h2 className="text-lg font-semibold text-[#08263c]">Site Identity</h2>
+            <h2 className="text-lg font-semibold text-[#0f3a5c]">Site Identity</h2>
           </div>
           <div className="grid gap-5 p-6 sm:grid-cols-2">
             <div className="sm:col-span-2">
@@ -239,7 +239,7 @@ export default function SettingsPage() {
         {/* Social */}
         <section className="rounded-2xl bg-white shadow ring-1 ring-gray-100">
           <div className="border-b border-gray-100 px-6 py-4">
-            <h2 className="text-lg font-semibold text-[#08263c]">Social Links</h2>
+            <h2 className="text-lg font-semibold text-[#0f3a5c]">Social Links</h2>
           </div>
           <div className="grid gap-5 p-6 sm:grid-cols-2">
             {(['facebookUrl', 'linkedinUrl', 'instagramUrl', 'youtubeUrl'] as const).map((key) => (
@@ -254,7 +254,7 @@ export default function SettingsPage() {
         {/* Homepage video */}
         <section className="rounded-2xl bg-white shadow ring-1 ring-gray-100">
           <div className="border-b border-gray-100 px-6 py-4">
-            <h2 className="text-lg font-semibold text-[#08263c]">Homepage Video Introduction</h2>
+            <h2 className="text-lg font-semibold text-[#0f3a5c]">Homepage Video Introduction</h2>
             <p className="text-xs text-gray-500">Add a YouTube link, YouTube embed link, or direct MP4/WebM URL. Leave the URL empty to show the office poster with a YouTube button.</p>
           </div>
           <div className="grid gap-5 p-6 sm:grid-cols-2">
@@ -277,7 +277,7 @@ export default function SettingsPage() {
           <button
             type="submit"
             disabled={isSaving}
-            className="rounded-lg bg-[#174f7a] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#08263c] disabled:opacity-60"
+            className="rounded-lg bg-[#12436b] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0f3a5c] disabled:opacity-60"
           >
             {isSaving ? 'Saving…' : 'Save changes'}
           </button>

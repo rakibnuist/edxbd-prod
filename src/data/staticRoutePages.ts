@@ -12,7 +12,7 @@ export const staticRouteGuides: Record<string, string | undefined> = {
   'china-student-visa-bangladesh': '2026-07-19',
   'study-in-china-cost-bangladesh': '2026-07-19',
   'study-in-china-without-ielts': '2026-07-19',
-  'mbbs-in-china-bangladesh': '2026-07-19',
+  'mbbs-in-china-bangladesh': '2026-10-24',
   'china-intakes-deadlines': '2026-07-19',
   'life-in-china-bangladeshi-students': '2026-07-19',
   'study-in-china-from-bangladesh': '2026-07-19',

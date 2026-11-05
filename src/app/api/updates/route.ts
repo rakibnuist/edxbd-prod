@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { serializeContent } from '@/lib/content-serialize';
-import { currentPublishedContentWhere } from '@/lib/content-governance';
+import { currentVisibleContentWhere } from '@/lib/content-governance';
+import { sanitizeUpdateHtml } from '@/lib/content-html';
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,10 +15,10 @@ export async function GET(request: NextRequest) {
     const limit = searchParams.get('limit');
     const page = searchParams.get('page');
 
-    // Build query
-    const where: any = { 
-      type: 'update', 
-      ...currentPublishedContentWhere(),
+    // Build query — serve both updates (news) and articles (guides/blog posts)
+    const where: Prisma.ContentWhereInput = {
+      type: { in: ['update', 'article'] },
+      ...currentVisibleContentWhere(),
     };
     
     // Add search functionality
@@ -73,7 +75,7 @@ export async function GET(request: NextRequest) {
     // Get unique categories and authors for filters (since SQLite doesn't have distinct for multiple fields, we fetch all unique from matching or all published)
     // To be efficient, just fetching the fields we need across all published updates.
     const allPublished = await prisma.content.findMany({
-      where: { type: 'update', ...currentPublishedContentWhere() },
+      where: { type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
       select: { category: true, categories: true, author: true }
     });
 
@@ -98,7 +100,10 @@ export async function GET(request: NextRequest) {
     const normalizedAuthors = normalizeList(authors);
 
     return NextResponse.json({
-      updates: updates.map(update => serializeContent(update as unknown as Record<string, unknown>)),
+      updates: updates.map(update => {
+        const serialized = serializeContent(update as unknown as Record<string, unknown>);
+        return { ...serialized, content: sanitizeUpdateHtml(String(serialized.content ?? '')) };
+      }),
       totalCount,
       categories: ['All', ...normalizedCategories],
       authors: ['All', ...normalizedAuthors],

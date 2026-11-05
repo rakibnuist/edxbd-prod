@@ -1,113 +1,341 @@
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ChevronDown, ChevronRight } from 'lucide-react';
+import { ArrowRight, BookOpen, Check, MapPin, ShieldCheck, Stethoscope } from 'lucide-react';
 import ChinaStudyPlanner from '@/components/china/ChinaStudyPlanner';
+import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getUniversityRoute } from '@/lib/university-records';
-import { universitySearchIdentity } from '@/lib/university-profile-seo';
+import { getChinaStudyHub } from '@/lib/china-study-hub';
+import { ogImage, pageMetadata } from '@/lib/seo';
 
-const siteUrl = 'https://eduexpressint.com';
-const canonical = `${siteUrl}/study-in-china-from-bangladesh`;
+const SITE = 'https://eduexpressint.com';
+const PATH = '/study-in-china-from-bangladesh';
+const canonical = `${SITE}${PATH}`;
 const applyHref = '/apply?country=China';
-const description = 'Plan your study in China from Bangladesh. Compare universities, fees, scholarships, admission requirements and student visa guidance with EduExpress International.';
-
 export const revalidate = 3600;
-export const metadata: Metadata = {
-  title: { absolute: 'Study in China from Bangladesh | EduExpress International' },
-  description,
-  alternates: { canonical },
-  openGraph: {
-    title: 'Study in China from Bangladesh', description, url: canonical, type: 'website', siteName: 'EduExpress International',
-    images: [{ url: '/images/destinations/china-study-guide.webp', width: 1400, height: 933, alt: 'The Great Wall of China across wooded hills' }],
-  },
-  twitter: { card: 'summary_large_image', title: 'Study in China from Bangladesh', description, images: ['/images/destinations/china-study-guide.webp'] },
+
+export async function generateMetadata() {
+  const content = await getChinaStudyHub();
+  return pageMetadata({
+    title: 'Study in China from Bangladesh | EduExpress International',
+    description: content.description,
+    path: PATH,
+    locale: 'en_GB',
+    languages: { 'en-BD': PATH, 'bn-BD': '/bn/study-in-china', 'x-default': PATH },
+    image: ogImage('china-guide', content.photos.hero.alt),
+  });
+}
+
+const selections = [
+  { slug: 'nuist', acronym: 'NUIST', logo: '/images/universities/logos/nuist.webp', summary: 'Explore atmospheric science, computing and engineering, with English- and Chinese-medium options.' },
+  { slug: 'hit-harbin', acronym: 'HIT', logo: '/images/campaigns/march-2027/harbin-institute-of-technology.png', summary: 'Explore an engineering-focused university, preparation routes and degree scholarship options.' },
+  { slug: 'nuaa', acronym: 'NUAA', logo: '/images/campaigns/march-2027/nanjing-university-of-aeronautics-and-astronautics.jpg', summary: 'Compare engineering and business programmes, preparation and university funding.' },
+];
+const contents = [['Education & rankings', 'china-education-quality'], ['Scholarships', 'china-funding'], ['MBBS', 'china-recognition'], ['Admission & CSCA', 'china-eligibility'], ['Fees', 'china-total-cost'], ['Student life', 'china-student-life'], ['Universities', 'china-university-options'], ['FAQs', 'china-research-faq']];
+const visaFirstTerms = 'No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.';
+const monthYear = (iso?: string) => {
+  const date = iso ? new Date(`${iso}T00:00:00Z`) : null;
+  return date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : undefined;
 };
 
-const guides = [
-  { title: 'Costs & tuition fees', href: '/study-in-china-cost-bangladesh', summary: 'Understand university fees, accommodation and the costs to plan before travel and in China.', ids: ['china-fee-examples', 'china-total-cost'] },
-  { title: 'Scholarships', href: '/china-scholarships-bangladesh', summary: 'Compare CSC, provincial and university funding, including coverage and renewal conditions.', ids: ['china-funding'] },
-  { title: 'Admission requirements', href: '/china-admission-requirements', summary: 'Match your qualifications to a study route. Prepare academic documents and any required CSCA evidence.', ids: ['china-eligibility', 'china-preparation'] },
-  { title: 'Student visa', href: '/china-student-visa-bangladesh', summary: 'Understand X1 and X2 study routes, admission paperwork and visa preparation from Bangladesh.', ids: ['china-visa-route'] },
-  { title: 'English & IELTS options', href: '/study-in-china-without-ielts', summary: 'Check English tests, accepted MOI alternatives and Chinese-medium language requirements.', ids: ['china-language'] },
-  { title: 'Student life', href: '/life-in-china-bangladeshi-students', summary: 'Prepare for housing, halal food, everyday payments, campus support and life in a new city.', ids: ['china-student-life'] },
-];
-const faqs = [
-  { question: 'How can I study in China from Bangladesh?', answer: 'Start by choosing your study level and subject, then compare universities against your qualifications, teaching language and budget. Prepare the university’s required documents, apply through the stated admission route and assess scholarships separately. After an offer, follow the applicable student visa process.' },
-  { question: 'Can I study in China without IELTS?', answer: 'Some programs accept another English test or official evidence that previous study was taught in English. Acceptance depends on the university, program and scholarship. Check the exact requirements before relying on an MOI certificate; there is no universal IELTS exemption.' },
-  { question: 'What does a China scholarship cover?', answer: 'Coverage depends on the award. It may reduce tuition or include accommodation, insurance and a living allowance. Check the amount, supported study period, eligible program and renewal conditions. Plan separately for costs outside the written award.' },
-  { question: 'How much does studying in China cost?', answer: 'The total depends on the university, program, city, room choice and confirmed scholarship support. Add tuition, accommodation, insurance, health and residence procedures, living expenses and travel. Compare a specific university’s fee schedule in ClearCost, keeping CNY and BDT amounts separate unless you enter an exchange rate.' },
-];
-const universitySelections = [
-  { slug: 'nuist', summary: 'Atmospheric science, computing and engineering, with English- and Chinese-medium study routes.' },
-  { slug: 'xian-jiaotong-university', summary: 'Explore Chinese-language study and foundation preparation at a university in Xi’an.' },
-  { slug: 'wzu', summary: 'Explore undergraduate majors, entry requirements and tuition at Wenzhou University.' },
-];
-const actionClass = 'inline-flex min-h-12 items-center justify-center gap-3 rounded-md bg-[#174f7a] px-5 py-3 text-center text-sm font-semibold leading-6 text-white transition-colors hover:bg-[#103d60] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#174f7a]';
-const textLinkClass = 'inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#174f7a] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#174f7a]';
-const headingClass = 'text-2xl font-semibold tracking-tight text-[#102b40] sm:text-3xl';
-
 export default async function StudyInChinaFromBangladeshPage() {
-  const records = await Promise.all(universitySelections.map(async selection => {
+  const [content, records] = await Promise.all([getChinaStudyHub(), Promise.all(selections.map(async selection => {
     const route = await getUniversityRoute(selection.slug);
-    return route ? { university: route.record, summary: selection.summary } : null;
-  }));
+    return route ? { ...selection, university: route.record } : null;
+  }))]);
   const universities = records.filter(record => record !== null);
-  const structuredData = {
+  const reviewed = monthYear(content.research?.checkedAt);
+  const schema = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: 'Study in China from Bangladesh', description, inLanguage: 'en-BD', publisher: { '@id': `${siteUrl}/#organization` }, breadcrumb: { '@id': `${canonical}#breadcrumb` }, mainEntity: { '@id': `${canonical}#guides` } },
-      { '@type': 'ItemList', '@id': `${canonical}#guides`, name: 'Study in China guides', numberOfItems: guides.length, itemListElement: guides.map((guide, index) => ({ '@type': 'ListItem', position: index + 1, name: guide.title, url: `${siteUrl}${guide.href}` })) },
-      { '@type': 'FAQPage', '@id': `${canonical}#faq`, mainEntity: faqs.map(faq => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: faq.answer } })) },
-      { '@type': 'BreadcrumbList', '@id': `${canonical}#breadcrumb`, itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Study in China', item: canonical }] },
+      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: 'Study in China from Bangladesh', description: content.description, inLanguage: 'en-BD', isPartOf: { '@id': `${SITE}/#website` }, publisher: { '@id': `${SITE}/#organization` }, breadcrumb: { '@id': `${canonical}#breadcrumb` }, mainEntity: { '@id': `${canonical}#guides` } },
+      { '@type': 'ItemList', '@id': `${canonical}#guides`, name: 'Study in China topic guides for Bangladeshi students', numberOfItems: content.guides.length, itemListElement: content.guides.map((guide, i) => ({ '@type': 'ListItem', position: i + 1, name: guide.title, url: `${SITE}${guide.href}` })) },
     ],
   };
 
-  return <article className="china-study-hub bg-white pt-[76px] text-[#102b40] xl:pt-[112px]">
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }} />
-    <header className="bg-[#f5f7f7] px-5 pb-8 pt-5 sm:px-8 lg:px-10 lg:pb-10">
-      <div className="mx-auto max-w-[1200px]">
-        <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-2 text-xs leading-6 text-slate-500"><Link href="/" className="hover:text-[#174f7a]">Home</Link><ChevronRight size={13} aria-hidden="true" /><span>Study in China</span></nav>
-        <div className="grid items-center gap-7 lg:grid-cols-[.58fr_.42fr] lg:gap-10">
-          <div>
-            <h1 className="max-w-xl text-[34px] font-semibold leading-[1.12] tracking-tight sm:text-[46px] lg:text-[52px]">Study in China<br />from Bangladesh</h1>
-            <p className="mt-5 max-w-xl text-base leading-8 text-slate-600">Explore Chinese universities, scholarships and study costs with EduExpress International. Build a plan around your qualifications, preferred subject and budget.</p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3"><Link href={applyHref} className={actionClass}>Apply with EduExpress International<ArrowRight size={17} className="shrink-0" /></Link><a href="#china-study-guide" className={textLinkClass}>Explore the guides<ArrowRight size={16} /></a></div>
-            <p className="mt-4 text-sm leading-7 text-slate-500">English- and Chinese-medium routes · Undergraduate to postgraduate study</p>
+  return (
+    <article lang="en">
+      <JsonLd data={schema} />
+
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Study in China' }]}
+        eyebrow="Bachelor’s · Master’s · PhD · MBBS · Language"
+        title="Study in China from Bangladesh."
+        lead={content.intro}
+        reviewed={reviewed}
+        actions={
+          <>
+            <Link href={applyHref} className="ed-btn ed-btn-signal min-h-[52px] px-7">Get my China study plan <ArrowRight size={18} aria-hidden="true" /></Link>
+            <a href="#study-routes" className="ed-btn ed-btn-outline min-h-[52px] px-7">Find a programme</a>
+          </>
+        }
+        aside={
+          <figure className="relative overflow-hidden rounded-3xl">
+            <div className="relative aspect-[4/3]">
+              <Image src={content.photos.hero.src} alt={content.photos.hero.alt} fill priority sizes="(max-width:1024px) 100vw, 480px" className="object-cover object-[68%_43%]" />
+            </div>
+            <figcaption className="absolute bottom-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-1.5 text-[14px] font-semibold text-petrol-800">
+              <MapPin size={15} aria-hidden="true" />{content.photos.hero.caption}
+            </figcaption>
+          </figure>
+        }
+      />
+
+      <TrustBar />
+
+      <section aria-label="Plan your China study" className="border-b border-canvas-soft bg-white py-8">
+        <div className={`${kit.wrap} grid gap-6 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-12`}>
+          <p className={kit.body}>{content.introDetail}</p>
+          <nav aria-label="On this page" className="flex flex-wrap gap-2">
+            {contents.map(([label, id]) => <a key={id} href={`#${id}`} className="inline-flex min-h-[44px] items-center rounded-full bg-canvas-soft px-4 text-[15px] font-semibold text-petrol-800 transition-colors hover:bg-lime-pale">{label}</a>)}
+          </nav>
+        </div>
+      </section>
+
+      <Section id="china-education-quality" title="Why study in China? Education quality comes first." intro="A good shortlist connects the reputation of a university with the quality of your actual programme. Look at what you will study, who will teach you and the facilities you will use.">
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_.95fr] lg:gap-14">
+          <div data-anim="stagger" className="grid gap-4">
+            {content.quality.map(item => (
+              <div key={item.title} className={kit.cardSage}>
+                <h3 className={kit.h3}>{item.title}</h3>
+                <p className={`mt-2 ${kit.body}`}>{item.body}</p>
+              </div>
+            ))}
           </div>
-          <figure className="relative overflow-hidden rounded-lg"><Image src="/images/destinations/china-study-guide.webp" alt="The Great Wall of China crossing wooded hills" width={1400} height={933} priority sizes="(max-width: 1023px) 100vw, 480px" className="h-[190px] w-full object-cover object-[50%_57%] sm:h-[250px] lg:h-[330px]" /></figure>
+          <aside data-anim="up" className={`${kit.cardDark} self-start`}>
+            <h3 className="text-[21px] font-semibold leading-[1.3] tracking-[-0.02em] text-lime">Chinese universities on the world stage</h3>
+            <p className="mt-2 text-[14px] leading-6 text-white/75">ShanghaiRanking · Academic Ranking of World Universities</p>
+            <table className="mt-5 w-full text-left text-[16px]">
+              <caption className="sr-only">Examples of Chinese university world rankings from ShanghaiRanking</caption>
+              <thead><tr className="border-b border-white/20 text-[14px] text-white/70"><th scope="col" className="py-3 font-medium">University</th><th scope="col" className="py-3 text-right font-medium">World rank</th></tr></thead>
+              <tbody className="divide-y divide-white/15">
+                {content.rankings.map(item => <tr key={item.name}><th scope="row" className="py-4 pr-4 font-semibold text-white">{item.name}</th><td className="py-4 text-right font-display text-[30px] font-black leading-none text-lime">#{item.rank}</td></tr>)}
+              </tbody>
+            </table>
+            <p className="mt-5 border-t border-white/20 pt-4 text-[15px] leading-6 text-white/80">World, national and subject rankings answer different questions. Use the ranking for your intended major alongside teaching language, admission fit and total cost.</p>
+            <Link href="/china-universities" className="ed-btn ed-btn-on-dark mt-5 min-h-[48px] px-5">Explore university options <ArrowRight size={16} aria-hidden="true" /></Link>
+          </aside>
         </div>
-      </div>
-    </header>
+      </Section>
 
-    <ChinaStudyPlanner />
-
-    <section id="china-study-guide" className="scroll-mt-32 px-5 py-10 sm:px-8 lg:px-10 lg:py-12">
-      <div className="mx-auto grid max-w-[1200px] gap-6 lg:grid-cols-[.28fr_.72fr] lg:gap-10">
-        <div><h2 className={headingClass}>Your China study guide</h2><p className="mt-3 text-sm leading-7 text-slate-600">Start with the question on your mind. Each guide covers one part of your study plan in detail.</p><Link href="/china-universities" className={`mt-3 ${textLinkClass}`}>Compare universities<ArrowRight size={16} /></Link></div>
-        <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">{guides.map(guide => <div key={guide.href} className="relative">{guide.ids.map(anchor => <span id={anchor} key={anchor} className="block scroll-mt-36" />)}<Link href={guide.href} className="group block rounded-md bg-[#f5f7f7] px-5 py-4 transition-colors hover:bg-[#eaf1f3] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#174f7a]"><h3 className="flex items-center justify-between gap-3 text-lg font-semibold leading-7"><span>{guide.title}</span><ArrowRight size={18} className="shrink-0 text-[#174f7a] transition-transform group-hover:translate-x-1 motion-reduce:transform-none" /></h3><p className="mt-2 text-sm leading-7 text-slate-600">{guide.summary}</p></Link></div>)}</div>
-      </div>
-    </section>
-
-    <section id="china-university-options" className="bg-[#f5f7f7] px-5 py-10 sm:px-8 lg:px-10 lg:py-12">
-      <div className="mx-auto max-w-[1200px]">
-        <div className="flex flex-wrap items-end justify-between gap-3"><div><h2 className={headingClass}>Explore universities in China</h2><p className="mt-3 text-sm leading-7 text-slate-600">Look closer at the university, your major and the full study cost.</p></div><Link href="/china-universities" className={textLinkClass}>View all universities<ArrowRight size={16} /></Link></div>
-        <div className="mt-6 grid items-start gap-6 lg:grid-cols-[.42fr_.58fr] lg:gap-10">
-          <figure><Image src="/images/universities/nuist-campus.webp" alt="NUIST campus building and meteorological radar dome in Nanjing" width={1600} height={708} sizes="(max-width: 1023px) 100vw, 480px" className="h-[200px] w-full rounded-lg object-cover object-[65%_45%] lg:h-[280px]" /><figcaption className="mt-2 text-xs leading-6 text-slate-500">NUIST campus, Nanjing</figcaption></figure>
-          <div className="grid gap-3">{universities.map(({ university, summary }) => <Link key={university.slug} href={`/universities/${university.slug}`} className="group flex items-center justify-between gap-5 rounded-md bg-white px-5 py-4 transition-colors hover:bg-[#eaf1f3]"><div><h3 className="text-lg font-semibold leading-7">{universitySearchIdentity(university).shortName}</h3><p className="mt-0.5 text-xs leading-6 text-[#287465]">{university.city}, {university.country}</p><p className="mt-1 text-sm leading-6 text-slate-600">{summary}</p></div><ArrowRight size={18} className="shrink-0 text-[#174f7a]" /></Link>)}{universities.length === 0 && <Link href="/china-universities" className={textLinkClass}>Explore university profiles<ArrowRight size={16} /></Link>}</div>
+      <Section
+        id="china-funding"
+        tone="sage"
+        title="Scholarships for Bangladeshi students."
+        intro="From tuition reductions to full awards, funding can make your chosen programme more affordable. Compare the coverage, eligible degree and renewal conditions."
+        action={<Link href="/china-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[48px] px-6">Explore scholarships <ArrowRight size={16} aria-hidden="true" /></Link>}
+      >
+        <div data-anim="stagger" className="grid gap-4 md:grid-cols-3">
+          {content.fundingRoutes.map(item => (
+            <div key={item.title} className={kit.card}>
+              <h3 className={kit.h3}>{item.title}</h3>
+              <p className={`mt-2 ${kit.body}`}>{item.body}</p>
+            </div>
+          ))}
         </div>
-        <div id="china-recognition" className="mt-4 flex scroll-mt-32 flex-wrap gap-x-6 gap-y-1"><Link href="/mbbs-in-china-bangladesh" className={textLinkClass}>Considering MBBS? Read the recognition guide<ArrowRight size={16} /></Link><Link href="/china-success-stories" className={textLinkClass}>Student stories<ArrowRight size={16} /></Link></div>
-      </div>
-    </section>
+        <div className={`mt-5 grid gap-6 ${kit.cardLime} lg:grid-cols-[1fr_1.5fr] lg:items-center`}>
+          <div>
+            <h3 className={kit.h3}>Full CSC scholarship monthly stipends</h3>
+            <p className="mt-2 text-[15px] leading-6 text-ink-soft">For eligible full-award recipients; the scholarship terms define your funding period. Partial awards and other schemes differ.</p>
+            <Link href="/csc-scholarship-bangladesh" className={`mt-3 ${kit.link}`}>CSC scholarship guide <ArrowRight size={16} aria-hidden="true" /></Link>
+          </div>
+          <dl className="grid grid-cols-3 gap-3">
+            {content.stipends.map(item => (
+              <div key={item.level} className="rounded-2xl bg-white p-4">
+                <dt className="text-[14px] font-semibold text-ink-soft">{item.level}</dt>
+                <dd className="mt-1 font-display text-[22px] font-black leading-tight text-petrol-800 sm:text-[28px]">{item.amount}</dd>
+                <dd className="text-[14px] text-ink-soft">{item.period}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </Section>
 
-    <section id="china-fit-form" className="scroll-mt-32 bg-[#174f7a] px-5 py-9 text-white sm:px-8 lg:px-10 lg:py-10">
-      <div className="mx-auto grid max-w-[1200px] items-center gap-7 lg:grid-cols-[.42fr_.58fr] lg:gap-10">
-        <div><h2 className="max-w-md text-2xl font-semibold tracking-tight sm:text-3xl">Prepare with EduExpress</h2><p className="mt-3 max-w-md text-sm leading-7 text-white/85">Get support with your university shortlist, application documents, scholarship route and ClearCost plan.</p><Link href={applyHref} className="mt-5 inline-flex min-h-12 items-center justify-center gap-3 rounded-md bg-white px-5 py-3 text-center text-sm font-semibold leading-6 text-[#174f7a] transition-colors hover:bg-[#eaf1f3]">Apply with EduExpress International<ArrowRight size={17} className="shrink-0" /></Link></div>
-        <div><p className="text-sm leading-8 text-white/90">No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.</p><Link href="/china-visa-first-policy" className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white underline underline-offset-4">Packages & payment terms<ArrowRight size={16} /></Link></div>
-      </div>
-    </section>
+      <Section id="china-recognition" tone="navy" title="MBBS in China: plan your medical career." intro={content.mbbs.intro}>
+        <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-14">
+          <div>
+            <span className={kit.iconLime}><Stethoscope size={22} aria-hidden="true" /></span>
+            <p className="mt-5 text-[17px] leading-7 text-white/85">Compare medical universities, annual tuition, freshman scholarships and entry requirements in our dedicated guide for Bangladeshi students.</p>
+            <Link href="/mbbs-in-china-bangladesh" className="ed-btn ed-btn-signal mt-6 min-h-[52px] px-6">MBBS universities, fees & scholarships <ArrowRight size={17} aria-hidden="true" /></Link>
+          </div>
+          <div data-anim="stagger" className="divide-y divide-white/15">
+            {content.mbbs.points.map(item => (
+              <div key={item.title} className="py-5 first:pt-0">
+                <h3 className="text-[19px] font-semibold text-white">{item.title}</h3>
+                <p className="mt-2 text-[16px] leading-7 text-white/80">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
 
-    <section id="china-research-faq" className="scroll-mt-32 px-5 py-10 sm:px-8 lg:px-10 lg:py-12">
-      <div className="mx-auto grid max-w-[1200px] gap-6 lg:grid-cols-[.28fr_.72fr] lg:gap-10"><div><h2 className={headingClass}>Common questions</h2><p className="mt-3 text-sm leading-7 text-slate-600">A few answers to help you take the next step.</p></div><div className="grid gap-3">{faqs.map(faq => <details key={faq.question} className="group rounded-md bg-[#f5f7f7] px-5"><summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-5 py-4 text-sm font-semibold leading-7 [&::-webkit-details-marker]:hidden">{faq.question}<ChevronDown size={17} className="shrink-0 text-[#174f7a] transition-transform group-open:rotate-180 motion-reduce:transform-none" /></summary><p className="pb-5 text-sm leading-7 text-slate-600">{faq.answer}</p></details>)}</div></div>
-    </section>
-  </article>;
+      <Section
+        id="china-eligibility"
+        title="Your Bangladesh-to-China admission plan."
+        intro="Use your current qualification to find the right starting point. Requirements belong to the selected university and programme."
+        action={<Link href="/china-admission-requirements" className="ed-btn ed-btn-outline min-h-[48px] px-6">Full admission guide <ArrowRight size={16} aria-hidden="true" /></Link>}
+      >
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft">
+          <table className="w-full min-w-[620px] text-left text-[15px] leading-6">
+            <caption className="sr-only">China study routes and qualifications for Bangladeshi applicants</caption>
+            <thead className="bg-canvas-soft"><tr>{['Study route', 'Your starting qualification', 'What to prepare'].map(label => <th key={label} scope="col" className="px-5 py-3.5 font-semibold text-petrol-800">{label}</th>)}</tr></thead>
+            <tbody className="divide-y divide-canvas-soft">
+              {content.qualifications.map(item => <tr key={item.level}><th scope="row" className="px-5 py-4 align-top font-semibold text-petrol-800">{item.level}</th><td className="px-5 py-4 align-top text-ink-soft">{item.qualification}</td><td className="max-w-md px-5 py-4 text-ink-soft">{item.prepare}</td></tr>)}
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-6 grid gap-5 lg:grid-cols-2">
+          <div id="china-language" className={`scroll-mt-28 ${kit.cardSage}`}>
+            <h3 className={kit.h3}>English, Chinese and CSCA</h3>
+            <p className={`mt-2 ${kit.body}`}>Teaching-language evidence and academic entrance results serve different purposes. English-taught programmes specify accepted IELTS, TOEFL or MOI evidence; Chinese-taught routes specify HSK requirements. CSCA Mathematics and any required Physics, Chemistry or Professional Chinese depend on your undergraduate route.</p>
+            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+              <Link href="/china-admission-requirements#guide-3-understand-csca-and-language-proof" className={kit.link}>Understand CSCA <ArrowRight size={15} aria-hidden="true" /></Link>
+              <Link href="/study-in-china-without-ielts" className={kit.link}>English & MOI options <ArrowRight size={15} aria-hidden="true" /></Link>
+            </div>
+          </div>
+          <div id="china-preparation" className={`scroll-mt-28 ${kit.cardSage}`}>
+            <h3 className={kit.h3}>Prepare your application file</h3>
+            <ul className="mt-4 grid gap-x-4 gap-y-2.5 sm:grid-cols-2">
+              {content.documents.map(item => <li key={item} className="flex items-start gap-2.5 text-[15px] leading-6 text-ink-soft"><span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-lime text-petrol-800"><Check size={13} strokeWidth={3} aria-hidden="true" /></span>{item}</li>)}
+            </ul>
+            <p className="mt-4 text-[14px] leading-6 text-ink-soft">Keep names consistent across your passport and academic records. Programme documents apply to self-funded and scholarship applicants.</p>
+          </div>
+        </div>
+        <p className="mt-6 text-[16px] leading-7 text-ink-soft"><strong className="text-petrol-800">Choosing a start: </strong>Autumn is a common degree-entry period; spring offers language and foundation options, with selected degree routes by university. <Link href="/china-intakes-deadlines" className="font-semibold text-petrol-800 underline underline-offset-4">See 2027 intakes and deadlines</Link>.</p>
+      </Section>
+
+      <ChinaStudyPlanner />
+
+      <Section id="china-total-cost" title="What does studying in China cost?" intro="Build a full family budget around the university, major and city. Keep tuition before scholarship, confirmed funding and living expenses as separate items. CNY and RMB refer to the same currency; BDT service charges stay separate.">
+        <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
+          <div>
+            <div id="china-fee-examples" className="scroll-mt-28 divide-y divide-canvas-soft rounded-3xl border border-canvas-soft px-6">
+              {content.costExamples.map(item => (
+                <div key={item.name} className="flex flex-wrap items-center justify-between gap-3 py-5">
+                  <div>
+                    <Link href={item.href} className="text-[17px] font-semibold text-petrol-800 underline-offset-4 hover:underline">{item.name}</Link>
+                    <p className="mt-1 text-[14px] text-ink-soft">{item.programme}</p>
+                  </div>
+                  <div className="sm:text-right">
+                    <strong className="font-display text-[26px] font-black leading-none text-petrol-800">{item.amount}</strong>
+                    <p className="mt-1 text-[14px] text-ink-soft">{item.period}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Link href="/study-in-china-cost-bangladesh" className={`mt-4 ${kit.link}`}>Explore fees & total costs <ArrowRight size={16} aria-hidden="true" /></Link>
+          </div>
+          <div className={`${kit.cardLime} self-start`}>
+            <h3 className={kit.h3}>Your ClearCost checklist</h3>
+            <dl className="mt-3 divide-y divide-white">
+              <div className="py-4"><dt className="text-[16px] font-semibold text-petrol-800">Before China</dt><dd className={`mt-1 ${kit.body}`}>Application charges, any university deposit, document preparation, visa and travel arrangements, plus the agreed EduExpress Package.</dd></div>
+              <div className="py-4"><dt className="text-[16px] font-semibold text-petrol-800">In China</dt><dd className={`mt-1 ${kit.body}`}>Tuition after confirmed support, accommodation, insurance, medical examination, residence permit, meals and everyday living.</dd></div>
+            </dl>
+            <p className="mt-1 text-[15px] leading-6 text-ink-soft">Compare the first year and later years, including the conditions for scholarship renewal.</p>
+            <Link href="/fees-and-transparency" className={`mt-3 ${kit.link}`}>How EduExpress handles fees <ArrowRight size={16} aria-hidden="true" /></Link>
+          </div>
+        </div>
+      </Section>
+
+      <Section
+        id="china-student-life"
+        tone="sage"
+        title="Feel prepared for life in China."
+        intro="Practical details matter to students and parents as much as the course."
+        action={<Link href="/life-in-china-bangladeshi-students" className="ed-btn ed-btn-outline min-h-[48px] px-6">Explore student life <ArrowRight size={16} aria-hidden="true" /></Link>}
+      >
+        <div className="grid items-start gap-8 lg:grid-cols-[.9fr_1.1fr] lg:gap-12">
+          <figure data-anim="up">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
+              <Image src={content.photos.life.src} alt={content.photos.life.alt} fill sizes="(max-width:1024px) 100vw, 500px" className="object-cover object-[50%_72%]" />
+            </div>
+            <figcaption className="mt-3 text-[14px] leading-6 text-ink-soft">{content.photos.life.caption}</figcaption>
+          </figure>
+          <div data-anim="stagger" className="grid gap-3">
+            {content.life.map(item => (
+              <div key={item.title} className={kit.card}>
+                <h3 className={kit.h3}>{item.title}</h3>
+                <p className={`mt-2 ${kit.body}`}>{item.body}</p>
+              </div>
+            ))}
+            <Link id="china-visa-route" href="/china-student-visa-bangladesh" className={`scroll-mt-28 mt-2 ${kit.link}`}>Student visa and arrival preparation from Bangladesh <ArrowRight size={16} aria-hidden="true" /></Link>
+          </div>
+        </div>
+      </Section>
+
+      <Section
+        id="china-university-options"
+        title="Explore Chinese university programmes."
+        intro="Open a profile for majors, teaching language, entry requirements, scholarships and ClearCost."
+        action={<Link href="/china-universities" className="ed-btn ed-btn-outline min-h-[48px] px-6">View all universities <ArrowRight size={16} aria-hidden="true" /></Link>}
+      >
+        <div data-anim="stagger" className="grid gap-4 md:grid-cols-3">
+          {universities.map(({ university, logo, acronym, summary }) => (
+            <div key={university.slug}>
+              <Link href={`/universities/${university.slug}`} className="group flex h-full flex-col rounded-3xl bg-canvas-soft p-6 transition-colors hover:bg-lime-pale">
+                <div className="flex items-center gap-3">
+                  <Image src={logo} alt={`${university.name} logo`} width={56} height={56} className="size-14 rounded-2xl bg-white object-contain p-1.5" />
+                  <div><p className="text-[16px] font-bold text-petrol-800">{acronym}</p><p className="text-[14px] text-ink-soft">{university.city}, China</p></div>
+                </div>
+                <h3 className={`mt-5 ${kit.h3}`}>{university.name}</h3>
+                <p className={`mt-2 ${kit.body}`}>{summary}</p>
+                <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-[16px] font-semibold text-petrol-800 group-hover:underline">View programmes <ArrowRight size={16} aria-hidden="true" /></span>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="china-study-guide" tone="sage" title="Go deeper into your next question." intro="Each topic has its own guide, so you can focus on the part of your study plan that matters now.">
+        <nav aria-label="China study topic guides">
+          <ul data-anim="stagger" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {content.guides.map(guide => (
+              <li key={guide.href}>
+                <Link href={guide.href} className="group flex h-full flex-col rounded-3xl bg-white p-6 transition-colors hover:bg-lime-pale">
+                  <span className="flex items-center justify-between gap-3 text-[18px] font-semibold text-petrol-800"><span className="inline-flex items-center gap-2"><BookOpen size={18} aria-hidden="true" />{guide.title}</span><ArrowRight size={17} className="shrink-0" aria-hidden="true" /></span>
+                  <span className="mt-2 text-[15px] leading-6 text-ink-soft">{guide.summary}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </Section>
+
+      <Section id="china-fit-form" title="From your first question to your university plan." intro="Share your academic background and study goals. EduExpress helps you prepare a suitable shortlist, scholarship route and written cost plan. Parents are welcome to join the conversation.">
+        <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-14">
+          <div>
+            <figure>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
+                <Image src={content.photos.support.src} alt={content.photos.support.alt} fill sizes="(max-width:1024px) 100vw, 430px" className="object-cover" />
+              </div>
+              <figcaption className="mt-3 text-[14px] leading-6 text-ink-soft">{content.photos.support.caption}</figcaption>
+            </figure>
+            <Link href={applyHref} className="ed-btn ed-btn-signal mt-6 min-h-[52px] px-7">Apply with EduExpress <ArrowRight size={18} aria-hidden="true" /></Link>
+          </div>
+          <div>
+            <ol data-anim="stagger" className="grid gap-4 sm:grid-cols-2">
+              {content.steps.map((item, i) => (
+                <li key={item.title} className={kit.cardSage}>
+                  <span className="grid size-10 place-items-center rounded-full bg-lime font-display text-[18px] font-black text-petrol-800" aria-hidden="true">{i + 1}</span>
+                  <h3 className={`mt-4 ${kit.h3}`}>{item.title}</h3>
+                  <p className={`mt-2 ${kit.body}`}>{item.body}</p>
+                </li>
+              ))}
+            </ol>
+            <div className={`mt-5 ${kit.cardDark}`}>
+              <p className="flex items-center gap-2 text-[21px] font-semibold leading-[1.3] text-lime"><ShieldCheck size={22} aria-hidden="true" />Clear support. Written payment terms.</p>
+              <p className="mt-3 text-[16px] leading-7 text-white/85">{visaFirstTerms}</p>
+              <Link href="/china-visa-first-policy" className="ed-btn ed-btn-on-dark mt-5 min-h-[48px] px-5">Support package & payment terms <ArrowRight size={16} aria-hidden="true" /></Link>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <div id="china-research-faq" className="scroll-mt-28">
+        <FaqBlock items={content.faqs} title="Study in China: your questions answered." />
+      </div>
+
+      <CtaBand title="Plan your China study with us." text="Share your results, subject and budget. A counsellor replies within one working day with suitable universities, scholarship routes and every cost in writing." />
+    </article>
+  );
 }

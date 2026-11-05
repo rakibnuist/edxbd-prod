@@ -45,7 +45,7 @@ export function contentPublicationErrors(candidate: ContentCandidate, now = new 
   return errors;
 }
 
-export const currentPublishedContentWhere = (now = new Date()) => {
+export const currentVerifiedContentWhere = (now = new Date()) => {
   const today = new Date(now);
   today.setUTCHours(0, 0, 0, 0);
   return ({
@@ -65,5 +65,27 @@ export const currentPublishedContentWhere = (now = new Date()) => {
       ],
     },
   ],
+  });
+};
+
+// Publication policy (owner decision, 26 Oct 2026): everything published and
+// unexpired is publicly visible. The strict set above is used for CTA-only
+// decisions that need full verification; public surfaces query this relaxed
+// set and the UI shows a truthful "editorial review in progress" note on
+// records without complete verification data. The admin publication gate
+// (contentPublicationErrors) is unchanged — new content still needs full data.
+export const currentVisibleContentWhere = (now = new Date()) => {
+  const today = new Date(now);
+  today.setUTCHours(0, 0, 0, 0);
+  return ({
+    isPublished: true,
+    AND: [
+      {
+        OR: [
+          { expiresAt: null },
+          { expiresAt: { gte: today } },
+        ],
+      },
+    ],
   });
 };

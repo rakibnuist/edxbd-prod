@@ -10,7 +10,7 @@ const SIGNALS = [
 export default function TrustStrip({ className = '' }: { className?: string }) {
   return (
     <section
-      className={`border-y border-[#0a1f33] bg-[#0a1f33] text-white ${className}`}
+      className={`border-y border-[#14212e] bg-[#14212e] text-white ${className}`}
       aria-label="Our written service commitments"
     >
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
@@ -20,7 +20,7 @@ export default function TrustStrip({ className = '' }: { className?: string }) {
               key={text}
               className="flex items-start gap-4 py-5 lg:border-l lg:border-white/15 lg:py-6 lg:pl-6 lg:first:border-l-0 lg:first:pl-0"
             >
-              <span className="ed-label mt-1 shrink-0 text-[#9ecdf0]">
+              <span className="ed-label mt-1 shrink-0 text-[#cfe7f5]">
                 {String(index + 1).padStart(2, '0')}
               </span>
               <span className="text-sm font-semibold leading-6 text-white/90">{text}</span>

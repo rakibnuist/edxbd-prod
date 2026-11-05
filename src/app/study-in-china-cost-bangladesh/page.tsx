@@ -1,8 +1,11 @@
 import ChinaGuidePage from '@/components/china/ChinaGuidePage';
-import { chinaGuidePages, chinaGuideMetadata } from '@/data/chinaGuidePages';
+import { chinaGuidePages } from '@/data/chinaGuidePages';
+import { ogImage, pageMetadata } from '@/lib/seo';
 
-export const metadata = chinaGuideMetadata('study-in-china-cost-bangladesh');
+const guide = chinaGuidePages['study-in-china-cost-bangladesh'];
+
+export const metadata = pageMetadata({ title: guide.metaTitle, description: guide.description, path: '/study-in-china-cost-bangladesh', image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing') });
 
 export default function ChinaCostGuidePage() {
-  return <ChinaGuidePage guide={chinaGuidePages['study-in-china-cost-bangladesh']} />;
+  return <ChinaGuidePage guide={guide} />;
 }

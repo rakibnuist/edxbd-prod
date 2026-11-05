@@ -3,6 +3,7 @@ import type { UniversityProfileDetail, UniversityProgramDetail, UniversityProfil
 
 export const PROGRAM_LEVELS = ['Bachelor', 'Master', 'PhD', 'Language', 'Foundation', 'Diploma'] as const;
 export type ProgramLevel = typeof PROGRAM_LEVELS[number];
+export const PROGRAM_LEVEL_LABELS: Record<ProgramLevel, string> = { Bachelor: 'Bachelor’s', Master: 'Master’s', PhD: 'PhD', Language: 'Language', Foundation: 'Foundation', Diploma: 'Diploma' };
 export function normalizeProgramLevel(level: string): ProgramLevel {
   if (/ph\.?d|doctor/i.test(level)) return 'PhD';
   if (/master|postgraduate/i.test(level)) return 'Master';
@@ -11,6 +12,20 @@ export function normalizeProgramLevel(level: string): ProgramLevel {
   if (/diploma|associate/i.test(level)) return 'Diploma';
   return 'Bachelor';
 }
+
+/** Lowest-to-highest published tuition per study level. Levels with mixed
+ *  currencies or billing periods are excluded rather than compared. */
+export function programFeePreviews(programs: UniversityProgramDetail[]): { level: ProgramLevel; amount: string; period: string }[] {
+  const levels = PROGRAM_LEVELS.filter(item => programs.some(program => normalizeProgramLevel(program.level) === item));
+  return levels.flatMap(level => {
+    const fees = programs.filter(program => normalizeProgramLevel(program.level) === level).flatMap(program => program.fees.filter(fee => fee.key === 'tuition' && !fee.optional && fee.amount !== undefined));
+    if (!fees.length || new Set(fees.map(fee => fee.currency)).size !== 1 || new Set(fees.map(fee => fee.period)).size !== 1) return [];
+    const low = Math.min(...fees.map(fee => fee.amount!));
+    const high = Math.max(...fees.map(fee => fee.amount!));
+    return [{ level, amount: `${fees[0].currency} ${low.toLocaleString('en-US')}${high > low ? `–${high.toLocaleString('en-US')}` : ''}`, period: ({ year: 'per year', semester: 'per semester', programme: 'per program', month: 'per month', day: 'per day', oneoff: 'one-time' })[fees[0].period] }];
+  });
+}
+
 export function feeText(fee: UniversityProfileFee): string {
   if ('displayAmount' in fee && typeof fee.displayAmount === 'string') return fee.displayAmount;
   if (fee.amount === undefined) return 'Not specified';

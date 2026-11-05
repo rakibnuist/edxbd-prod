@@ -3,6 +3,10 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  if (process.argv.includes('--create-only') && await prisma.intakeCampaign.findUnique({where:{slug:'china-march-2027-intake'}})) {
+    console.log('Existing March campaign preserved.');
+    return;
+  }
   const campaignData = await import('../src/data/chinaMarch2027Campaign.ts');
   const contentJson = JSON.stringify({
     routes: campaignData.chinaMarch2027Routes,

@@ -33,6 +33,7 @@ for (const item of payload.universities) {
   }
   for (const program of item.programs) {
     if (!['id', 'name', 'level', 'duration'].every(key => typeof program[key] === 'string' && program[key].trim()) || !['languages', 'qualifications', 'languageRequirements', 'documents', 'notes'].every(key => stringList(program[key])) || !Array.isArray(program.fees)) throw new Error(`Incomplete programme: ${program.id}`);
+    if (program.sourceUrl && !/^https?:\/\//.test(program.sourceUrl)) throw new Error(`Invalid programme source: ${program.id}`);
     for (const fee of program.fees) {
       if (!keys.has(fee.key) || !periods.has(fee.period) || !['before_china', 'in_china'].includes(fee.stage) || typeof fee.item !== 'string' || typeof fee.currency !== 'string' || (fee.amount !== undefined && (!Number.isFinite(fee.amount) || fee.amount < 0))) throw new Error(`Invalid fee: ${program.id}/${fee.item}`);
     }
@@ -85,7 +86,7 @@ try {
         }
         for (const program of item.programs) {
           const programmeTuition = program.fees.find(fee => fee.key === 'tuition' && fee.amount !== undefined);
-          const data = { universityId, level:program.level, name:program.name, subject:program.level === 'Language' ? 'Chinese language' : program.level === 'Foundation' ? 'University preparation' : null, languages:program.languages.join(','), duration:program.duration, intakes:program.intake ?? '', tuition:programmeTuition ? `${programmeTuition.currency} ${programmeTuition.amount.toLocaleString('en-US')} / ${periodLabel[programmeTuition.period]}` : null, applicationDeadline:program.deadline ?? null, eligibility:JSON.stringify([...program.qualifications,...program.languageRequirements]), sourceUrl:item.officialUrl, status:item.internal?.programStatus === 'planned' ? 'planned' : 'active' };
+          const data = { universityId, level:program.level, name:program.name, subject:program.level === 'Language' ? 'Chinese language' : program.level === 'Foundation' ? 'University preparation' : null, languages:program.languages.join(','), duration:program.duration, intakes:program.intake ?? '', tuition:programmeTuition ? `${programmeTuition.currency} ${programmeTuition.amount.toLocaleString('en-US')} / ${periodLabel[programmeTuition.period]}` : null, applicationDeadline:program.deadline ?? null, eligibility:JSON.stringify([...program.qualifications,...program.languageRequirements]), sourceUrl:program.sourceUrl || item.officialUrl, status:item.internal?.programStatus === 'planned' ? 'planned' : 'active' };
           const deterministicId = `brochure-${item.slug}-${program.id}`;
           const existingProgram = previous?.programs.find(row=>row.id===deterministicId || (row.name===program.name && row.level===program.level));
           await tx.program.upsert({where:{id:existingProgram?.id ?? deterministicId},create:{id:deterministicId,...data},update:data});
@@ -108,6 +109,8 @@ try {
         }
         // Directory summaries must describe the imported choices and their real cycles.
         await tx.university.update({ where: { id: universityId }, data: {
+          officialUrl: item.officialUrl,
+          sourceUrls: JSON.stringify([...new Set([...(previous ? readJson(previous.sourceUrls) : []), item.officialUrl, ...(item.internal?.sourceUrls || []), ...item.programs.map(program => program.sourceUrl).filter(Boolean)])]),
           ...(item.slug === 'nuist' && item.internal?.recognitionAuthority && item.internal?.recognitionSourceUrl ? { recognitionAuthority: item.internal.recognitionAuthority, recognitionSourceUrl: item.internal.recognitionSourceUrl } : {}),
           degree: [...new Set(item.programs.map(program => program.level))].join(','),
           intake: [...new Set(item.programs.map(program => program.intake).filter(Boolean))].join(','),

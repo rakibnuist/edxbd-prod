@@ -19,10 +19,6 @@ export default function CountriesPage() {
     featured: false
   });
 
-  useEffect(() => {
-    fetchCountries();
-  }, []);
-
   const fetchCountries = async () => {
     try {
       const response = await authenticatedFetch('/api/admin/countries');
@@ -34,6 +30,11 @@ export default function CountriesPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial async data load
+    fetchCountries();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

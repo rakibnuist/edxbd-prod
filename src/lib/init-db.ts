@@ -229,7 +229,7 @@ export async function initializeDatabase() {
               </ul>
             </div>
           `,
-          type: 'blog',
+          type: 'article',
           categories: JSON.stringify(['Success']),
           tags: JSON.stringify(['success-story', 'uk', 'computer-science', 'manchester']),
           featuredImage: '/uploads/success-story-1.jpg',

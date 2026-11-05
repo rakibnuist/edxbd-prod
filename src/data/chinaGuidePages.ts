@@ -84,7 +84,13 @@ export function chinaGuideMetadata(slug: string): Metadata {
   return {
     title: { absolute: guide.metaTitle }, description: guide.description,
     alternates: { canonical: `/${guide.slug}` },
-    openGraph: { title: guide.metaTitle, description: guide.description, url: `/${guide.slug}`, type: 'website' },
-    twitter: { card: 'summary_large_image', title: guide.metaTitle, description: guide.description },
+    openGraph: {
+      title: guide.metaTitle,
+      description: guide.description,
+      url: `/${guide.slug}`,
+      type: 'website',
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
+    },
+    twitter: { card: 'summary_large_image', title: guide.metaTitle, description: guide.description, images: ['/og-image.jpg'] },
   };
 }

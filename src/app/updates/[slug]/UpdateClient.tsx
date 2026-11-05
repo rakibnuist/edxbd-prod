@@ -1,13 +1,23 @@
 'use client';
 
-import { ArrowRight, Share2, Calendar, Clock, ChevronLeft, ExternalLink } from 'lucide-react';
+import { ArrowRight, Share2, Calendar, Clock, ChevronLeft, ExternalLink, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
 import { trackConsultationRequest } from '@/lib/analytics';
 import { UpdateClientProps } from '@/lib/types';
+import { teamMembers } from '@/data/teamMembers';
 
-export default function UpdateClient({ update }: UpdateClientProps) {
+// Deterministic date formatting (avoid locale-dependent server/client mismatch)
+const fmtDate = (iso?: string) => {
+  if (!iso) return null;
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return null;
+  return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
+};
+
+export default function UpdateClient({ update, related = [], stale }: UpdateClientProps) {
+  const teamMember = teamMembers.find(m => m.name.toLowerCase() === (update.author || '').trim().toLowerCase());
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -37,6 +47,10 @@ export default function UpdateClient({ update }: UpdateClientProps) {
   // Calculate read time
   const readTime = Math.max(1, Math.ceil((update.content.length || 0) / 1000)) + ' min read';
 
+  // Posts older than ~12 months route readers to the live, verified intake
+  // calendar instead of dead dates (computed server-side in page.tsx).
+  const stalePost = stale?.enabled ?? false;
+
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-amber-100 selection:text-amber-900">
 
@@ -46,7 +60,7 @@ export default function UpdateClient({ update }: UpdateClientProps) {
         highlight={highlightPart}
         description={update.excerpt || "Latest updates and opportunities from EduExpress International"}
         icon={Calendar}
-        badgeText={update.category || "Update"}
+        badgeText={stale?.archived ? 'Closed intake · Archive' : update.category || 'Update'}
       >
         <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm font-medium text-slate-600">
           <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
@@ -54,7 +68,7 @@ export default function UpdateClient({ update }: UpdateClientProps) {
             {readTime}
           </div>
           <div className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
-            By {update.author}
+            By {update.author}{teamMember ? ` · ${teamMember.role}` : ''}
           </div>
         </div>
       </PageHeader>
@@ -98,6 +112,22 @@ export default function UpdateClient({ update }: UpdateClientProps) {
               </div>
             )}
 
+            {/* Closed-intake notice — shown above the article so nobody acts on
+                an expired deadline. The URL stays live for transparency. */}
+            {stale?.archived ? (
+              <aside className="mb-10 rounded-2xl border-2 border-amber-300 bg-amber-50 p-5 sm:p-6" aria-label="Closed intake notice">
+                <p className="text-xs font-black uppercase tracking-[.14em] text-amber-800">Archive · closed intake</p>
+                <h2 className="mt-2 text-xl font-extrabold tracking-tight text-slate-900">This intake has closed</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-700">
+                  This page records an earlier admissions window and is kept for transparency. The deadlines, fees and scholarship terms below may no longer be available. Use the live calendar before you act.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <Link href="/china-march-2027-intake" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[#0f3a5c] px-4 text-sm font-bold text-white">See the March 2027 intake <ArrowRight size={14} /></Link>
+                  <Link href="/china-intakes-deadlines" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#0f3a5c]/20 bg-white px-4 text-sm font-bold text-[#0f3a5c]">Check live deadlines <ArrowRight size={14} /></Link>
+                </div>
+              </aside>
+            ) : null}
+
             {/* Content - Prose Slate (Dark text) */}
             <div className="update-content-fix prose prose-lg md:prose-xl max-w-none prose-slate prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-slate-900 prose-p:leading-8 prose-p:text-slate-600 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-a:font-semibold prose-img:rounded-2xl prose-img:shadow-md prose-blockquote:border-l-4 prose-blockquote:border-amber-500 prose-blockquote:bg-amber-50 prose-blockquote:text-slate-700 prose-blockquote:px-8 prose-blockquote:py-6 prose-blockquote:my-10 prose-blockquote:not-italic prose-blockquote:rounded-r-xl prose-strong:text-slate-900">
               <div dangerouslySetInnerHTML={{ __html: update.content }} />
@@ -115,7 +145,95 @@ export default function UpdateClient({ update }: UpdateClientProps) {
                 </div>
               </aside>
             ) : null}
+
+            {/* Trust block — two tiers. Fully verified records show the stamp;
+                everything else states plainly that editorial review is under
+                way. This renders on every post (the visible-content policy). */}
+            {update.lastVerifiedAt && update.nextReviewAt && update.reviewer && update.sourceUrls?.length ? (
+              <aside className="mt-10 rounded-2xl border border-emerald-200 bg-emerald-50/60 p-6">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="size-5 text-emerald-600" />
+                  <h2 className="text-base font-bold text-emerald-900">Content verification</h2>
+                </div>
+                <p className="mt-3 text-sm font-medium leading-6 text-emerald-900/80">
+                  {fmtDate(update.lastVerifiedAt) ? <>Verified on {fmtDate(update.lastVerifiedAt)}</> : 'Verification in progress'}
+                  {update.reviewer ? <> · Content reviewed by {update.reviewer}</> : null}
+                  {update.sourceUrls?.length ? <> · {update.sourceUrls.length} official source{update.sourceUrls.length === 1 ? '' : 's'} listed above</> : null}
+                  {fmtDate(update.nextReviewAt) ? <> · Next scheduled review: {fmtDate(update.nextReviewAt)}</> : null}
+                </p>
+              </aside>
+            ) : (
+              <aside className="mt-10 rounded-2xl border border-amber-200 bg-amber-50/60 p-6">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="size-5 text-amber-600" />
+                  <h2 className="text-base font-bold text-amber-900">Editorial review in progress</h2>
+                </div>
+                <p className="mt-3 text-sm font-medium leading-6 text-amber-900/80">
+                  Verified dates, the named reviewer and the official source list for this post will appear here as the content is re-checked for the current admissions cycle.
+                </p>
+              </aside>
+            )}
+
+            {/* Stale-post care — old posts stay useful by showing the LIVE,
+                auto-verified intake windows plus the calendar link instead
+                of dead dates. */}
+            {stalePost ? (
+              <aside className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                <h2 className="text-base font-bold text-slate-900">{stale?.archived ? 'This post is from an earlier intake' : 'Intake dates change every cycle'}</h2>
+                <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
+                  This post was published on {fmtDate(update.publishedAt || update.createdAt)}. Before you act on any deadline shown, check the live application calendar — it carries the current 2026/27 windows and their verification dates.
+                </p>
+                {(stale?.windows ?? []).length > 0 ? (
+                  <ul className="mt-4 grid gap-2">
+                    {(stale?.windows ?? []).map(window => (
+                      <li key={window.name} className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm">
+                        <span className="font-bold text-slate-900">{window.name}</span>
+                        <span className="rounded-full border border-[#12436b]/15 px-2 py-0.5 text-xs font-black uppercase tracking-[0.08em] text-[#12436b]">{window.status}</span>
+                        <span className="text-slate-500">{window.summary}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                <Link href="/china-intakes-deadlines" className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#0f3a5c] px-4 py-2 text-sm font-bold text-white">
+                  Check intake deadlines <ArrowRight size={14} />
+                </Link>
+              </aside>
+            ) : null}
           </article>
+
+          {/* Related posts — interlinks the library by shared categories,
+              every entry already passing the publication gate */}
+          {related.length > 0 ? (
+            <nav aria-label="Related posts" className="mb-12">
+              <div className="flex items-end justify-between gap-4 mb-5 px-1">
+                <h2 className="text-2xl md:text-3xl font-extrabold tracking-[-0.03em] text-slate-900">Keep reading</h2>
+                <Link href="/updates" className="inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900">
+                  All updates <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-3">
+                {related.map(post => {
+                  const postCategory = post.category || post.categories?.[0];
+                  return (
+                    <Link key={post.id} href={`/updates/${post.slug}`} className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
+                      <div className="relative aspect-[16/10] bg-slate-800">
+                        {post.featuredImage
+                          ? <Image src={post.featuredImage} alt={post.title} fill sizes="(max-width:640px) 100vw, 33vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
+                          : <div className="grid h-full place-items-center text-xs font-bold uppercase tracking-[0.15em] text-slate-300">EduExpress</div>}
+                      </div>
+                      <div className="p-4">
+                        <div className="flex items-center justify-between gap-2">
+                          {postCategory ? <span className="truncate text-xs font-bold uppercase tracking-[0.08em] text-amber-600">{postCategory}</span> : null}
+                          <span className="shrink-0 text-xs font-semibold text-slate-500">{post.type === 'article' ? 'Article' : 'Update'}</span>
+                        </div>
+                        <h3 className="mt-2 line-clamp-2 text-base font-bold text-slate-900">{post.title}</h3>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </nav>
+          ) : null}
 
           {/* 6. High-Visibility Gradient CTA Banner */}
           <div className="bg-slate-900 rounded-[2rem] p-10 md:p-16 text-center shadow-2xl relative overflow-hidden mb-12 group">
@@ -130,7 +248,7 @@ export default function UpdateClient({ update }: UpdateClientProps) {
                 Start your study abroad journey
               </h2>
               <p className="text-slate-300 mb-10 max-w-2xl mx-auto text-lg/relaxed font-medium">
-                Join thousands of students who have realized their dreams. Our expert counselors are here to guide you through every step.
+                Talk to a counsellor who reviews your profile, explains the real total costs and helps you choose the right route before you commit to anything.
               </p>
 
               <button

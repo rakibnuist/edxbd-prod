@@ -12,50 +12,48 @@ interface PageHeaderProps {
     badgeText?: string;
     children?: React.ReactNode;
     breadcrumbLabel?: string;
+    /** Full crumb trail. Omit to keep the single-crumb default built from breadcrumbLabel / `${title} ${highlight}`. */
+    breadcrumbs?: { name: string; href?: string }[];
 }
 
+/**
+ * Shared page masthead in the site's Wise-style system: sage band, trail back,
+ * heavy display headline and a readable lead. Same props as before.
+ */
 export default function PageHeader({
     title,
     highlight,
     description,
     icon: IconOrElement = Sparkles,
-    badgeText = "Explore Global Opportunities",
+    badgeText,
     children,
-    breadcrumbLabel
+    breadcrumbLabel,
+    breadcrumbs,
 }: PageHeaderProps) {
-    let iconElement: React.ReactNode;
-    const iconClassName = "w-4 h-4 text-[#8ed0ee]";
-
-    if (React.isValidElement(IconOrElement)) {
-        iconElement = React.cloneElement(IconOrElement as React.ReactElement<{ className?: string }>, { className: iconClassName });
-    } else {
-        const IconComp = IconOrElement as LucideIcon;
-        iconElement = <IconComp className={iconClassName} />;
-    }
+    const IconComp = React.isValidElement(IconOrElement) ? null : (IconOrElement as LucideIcon);
+    const trail = breadcrumbs ?? [{ name: breadcrumbLabel || `${title} ${highlight}`.trim() }];
 
     return (
-        <header className="relative overflow-hidden border-b border-[#174f7a]/12 bg-[#edf6fb] pb-12 pt-28 text-[#08263c] sm:pb-14 sm:pt-32 lg:pt-36">
-            <div className="pointer-events-none absolute right-[-8rem] top-[-12rem] size-[30rem] rounded-full border-[5rem] border-[#64b5df]/10" />
-            <div className="relative z-10 mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-12">
-                <Breadcrumbs items={[{ name: breadcrumbLabel || `${title} ${highlight}`.trim() }]} className="mb-5" />
+        <header className="bg-canvas-soft pb-14 pt-[96px] text-petrol-800 sm:pt-[112px] lg:pb-20 lg:pt-[140px]">
+            <div className="mx-auto max-w-[1200px] px-5 lg:px-8">
+                <Breadcrumbs items={trail} className="anim-rise" />
 
-                <div className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-[#174f7a]/15 bg-white px-4 py-2 text-xs font-black uppercase leading-5 tracking-[0.12em] text-[#174f7a] shadow-sm sm:text-xs">
-                    {iconElement}
-                    <span className="min-w-0 whitespace-normal">{badgeText}</span>
-                </div>
+                {badgeText && (
+                    <p className="anim-rise mt-6 inline-flex items-center gap-2 rounded-full bg-lime-pale px-3.5 py-1.5 text-[14px] font-semibold text-lime-deep" style={{ '--d': '40ms' } as React.CSSProperties}>
+                        {IconComp ? <IconComp size={15} aria-hidden="true" /> : null}
+                        {badgeText}
+                    </p>
+                )}
 
-                <h1 className="w-full max-w-4xl break-words text-balance font-heading text-[clamp(2.35rem,5vw,4rem)] font-bold leading-[1.04] tracking-[-0.035em]">
-                    {title}{' '}
-                    <span className="text-[#174f7a]">
-                        {highlight}
-                    </span>
+                <h1 className="anim-lift mt-5 max-w-[22ch] text-balance font-display text-[42px] font-black leading-[0.97] tracking-[-0.02em] sm:text-[60px] lg:text-[72px]" style={{ '--d': '80ms' } as React.CSSProperties}>
+                    {title}
+                    {highlight ? <span className="block">{highlight}</span> : null}
                 </h1>
-
-                <p className="mt-5 max-w-2xl text-base leading-7 text-slate-700 md:text-lg">
+                <p className="anim-rise mt-6 max-w-2xl text-[18px] leading-[1.6] text-ink-soft sm:text-[19px]" style={{ '--d': '160ms' } as React.CSSProperties}>
                     {description}
                 </p>
 
-                {children && <div className="mt-6">{children}</div>}
+                {children && <div className="anim-rise mt-8" style={{ '--d': '240ms' } as React.CSSProperties}>{children}</div>}
             </div>
         </header>
     );

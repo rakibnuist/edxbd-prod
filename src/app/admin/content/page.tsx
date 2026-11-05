@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { trackDashboardView, trackContentManagement } from '@/lib/analytics';
 import { Content } from '@/lib/types';
+import { teamMembers } from '@/data/teamMembers';
 import { useAuth } from '@/contexts/AuthContext';
 
 const isPubliclyCurrent = (content: Content) => {
@@ -18,7 +19,6 @@ const isPubliclyCurrent = (content: Content) => {
 export default function ContentPage() {
   const { authenticatedFetch } = useAuth();
   const [contents, setContents] = useState<Content[]>([]);
-  const [filteredContents, setFilteredContents] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingContent, setEditingContent] = useState<Content | null>(null);
@@ -52,13 +52,7 @@ export default function ContentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  useEffect(() => {
-    trackDashboardView('content_management');
-    fetchContents();
-  }, []);
-
-  // Filter contents based on selected filters
-  useEffect(() => {
+  const filteredContents = useMemo(() => {
     let filtered = [...contents];
 
     // Filter by category
@@ -79,7 +73,7 @@ export default function ContentPage() {
       filtered = filtered.filter(content => content.isPublished === isPublished);
     }
 
-    setFilteredContents(filtered);
+    return filtered;
   }, [contents, selectedCategory, selectedType, selectedStatus]);
 
   const showMessage = (type: 'success' | 'error', text: string) => {
@@ -137,6 +131,12 @@ export default function ContentPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    trackDashboardView('content_management');
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial async data load
+    fetchContents();
+  }, []);
 
   const handleImageUpload = async (file: File) => {
     setIsUploadingImage(true);
@@ -455,7 +455,7 @@ export default function ContentPage() {
             >
               <option value="all">All Types</option>
               <option value="page">Page</option>
-              <option value="blog">Blog</option>
+              <option value="article">Article / Guide</option>
               <option value="update">Update</option>
               <option value="service">Service</option>
               <option value="destination">Destination</option>
@@ -654,12 +654,12 @@ export default function ContentPage() {
                     className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                   >
                     <option value="update">Update</option>
-                    <option value="blog">Guide or article</option>
+                    <option value="article">Guide or article (blog)</option>
                     <option value="page">Standalone page</option>
                     <option value="service">Service</option>
                     <option value="destination">Destination</option>
                   </select>
-                  <p className="mt-1 text-xs text-slate-500">Choose Update for university announcements, admission news and student guidance shown in the public Updates library.</p>
+                  <p className="mt-1 text-[11px] text-slate-500">Update = intake news and announcements. Guide or article = blog-style posts. Both publish to the same public Updates library at /updates once verification details are complete.</p>
                 </div>
 
                 <div>
@@ -674,11 +674,15 @@ export default function ContentPage() {
                   <label className="block text-xs sm:text-sm font-medium text-gray-700">Author</label>
                   <input
                     type="text"
+                    list="team-author-names"
                     value={formData.author}
                     onChange={(e) => setFormData({ ...formData, author: e.target.value })}
                     className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 touch-manipulation"
                     required
                   />
+                  <datalist id="team-author-names">
+                    {teamMembers.map(member => <option key={member.name} value={member.name} />)}
+                  </datalist>
                   </div>
                   <div>
                     <label className="block text-xs sm:text-sm font-medium text-gray-700">Reviewer</label>
@@ -831,7 +835,7 @@ export default function ContentPage() {
 
                 <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
                   <p className="text-xs font-bold text-amber-950">Publishing approvals</p>
-                  <p className="mt-1 text-xs leading-5 text-amber-800">Only confirm these after the source, dates, claims and search presentation have been reviewed.</p>
+                  <p className="mt-1 text-[11px] leading-5 text-amber-800">Only confirm these after the source, dates, claims and search presentation have been reviewed.</p>
                   <div className="mt-3 flex flex-wrap gap-5">
                     <label className="flex items-center text-xs font-medium text-gray-800 sm:text-sm"><input type="checkbox" checked={Boolean(formData.complianceApprovedAt)} onChange={(e) => setFormData({ ...formData, complianceApprovedAt: e.target.checked ? new Date().toISOString() : '' })} className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />Management compliance approved</label>
                     <label className="flex items-center text-xs font-medium text-gray-800 sm:text-sm"><input type="checkbox" checked={Boolean(formData.seoApprovedAt)} onChange={(e) => setFormData({ ...formData, seoApprovedAt: e.target.checked ? new Date().toISOString() : '' })} className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />SEO approved</label>

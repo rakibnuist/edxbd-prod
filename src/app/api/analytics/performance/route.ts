@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
+import { verifyTokenFromRequest } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
+  const decoded = verifyTokenFromRequest(request);
+  if (!decoded) {
+    return NextResponse.json({ error: 'Admin access is required.' }, { status: 403 });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const startDate = searchParams.get('startDate') || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
@@ -10,7 +17,7 @@ export async function GET(request: NextRequest) {
     const source = searchParams.get('source');
 
     // Build filter
-    const where: any = {
+    const where: Prisma.LeadWhereInput = {
       createdAt: {
         gte: new Date(startDate),
         lte: new Date(endDate)

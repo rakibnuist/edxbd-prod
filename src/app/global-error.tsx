@@ -22,8 +22,8 @@ export default function GlobalError({
           justifyContent: 'center',
           minHeight: '100vh',
           fontFamily: 'system-ui, sans-serif',
-          backgroundColor: '#f8fafc',
-          color: '#1e293b'
+          backgroundColor: '#e3f0f9',
+          color: '#14212e'
         }}>
       <div style={{
             textAlign: 'center',
@@ -37,21 +37,21 @@ export default function GlobalError({
               fontSize: '2rem',
               fontWeight: 'bold',
               marginBottom: '1rem',
-              color: '#dc2626'
+              color: '#a8452c'
             }}>
               Something went wrong!
             </h1>
             <p style={{
               fontSize: '1.125rem',
               marginBottom: '2rem',
-              color: '#64748b'
+              color: '#a9d6ee'
             }}>
               We encountered an unexpected error. Please try refreshing the page.
             </p>
             <button
               onClick={reset}
               style={{
-                backgroundColor: '#3b82f6',
+                backgroundColor: '#a9d6ee',
                 color: 'white',
                 padding: '0.75rem 1.5rem',
                 borderRadius: '6px',
@@ -62,10 +62,10 @@ export default function GlobalError({
                 transition: 'background-color 0.2s'
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = '#2563eb';
+                e.currentTarget.style.backgroundColor = '#12436b';
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = '#3b82f6';
+                e.currentTarget.style.backgroundColor = '#a9d6ee';
               }}
             >
               Try again

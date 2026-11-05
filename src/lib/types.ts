@@ -53,6 +53,7 @@ export interface Update {
   publishedAt?: string;
   createdAt: string;
   updatedAt: string;
+  archived?: boolean;
   views?: number;
 }
 
@@ -290,6 +291,17 @@ export interface ConsultationButtonProps {
   source: string;
 }
 
+// Detail page passes the post plus its interlinked neighbors; clients must
+// tolerate the optional extras being absent (time-sensitive values are
+// computed server-side to keep this component render-pure).
 export interface UpdateClientProps {
   update: Update;
+  related?: Update[];
+  stale?: {
+    enabled: boolean;
+    // True when the intake this post announced has closed.
+    archived?: boolean;
+    // Current intake windows from the verified calendar module
+    windows?: { name: string; status: string; summary: string }[];
+  };
 }

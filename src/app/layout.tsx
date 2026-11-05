@@ -1,3 +1,4 @@
+import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata, Viewport } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
@@ -6,9 +7,11 @@ import ConditionalHeader from "@/components/ConditionalHeader";
 import EducationTracking from "@/components/EducationTracking";
 import Footer from "@/components/Footer";
 import ConditionalFooter from "@/components/ConditionalFooter";
+import MobileLeadBar from "@/components/MobileLeadBar";
 
 import WhatsAppWrapper from "@/components/WhatsAppWrapper";
 import CookieConsent from "@/components/CookieConsent";
+import RevealObserver from "@/components/motion/RevealObserver";
 import MetaPixel from "@/components/MetaPixel";
 import GoogleTags from "@/components/GoogleTags";
 
@@ -16,7 +19,7 @@ import "./globals.css";
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
 export const viewport: Viewport = {
-  themeColor: "#174f7a",
+  themeColor: "#f1f5f9",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -82,9 +85,19 @@ export const metadata: Metadata = {
   },
   category: 'education',
   classification: 'Education Services',
+  verification: {
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : {}),
+    ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION
+      ? {
+          other: {
+            ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } : {}),
+            ...(process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION ? { 'facebook-domain-verification': process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION } : {}),
+          },
+        }
+      : {}),
+  },
   other: {
-    'msapplication-TileColor': '#174f7a',
-    'msapplication-config': '/browserconfig.xml',
+    'msapplication-TileColor': '#12436b',
   },
   appleWebApp: {
     capable: true,
@@ -145,6 +158,15 @@ export default async function RootLayout({
       "longitude": 90.3713009
     },
     "telephone": [office?.phonePrimary, office?.phoneSecondary].filter(Boolean),
+    "foundingDate": "2018-03-08",
+    "founder": { "@type": "Person", "name": "Abdullah Al Rakib", "jobTitle": "Founder and CEO" },
+    "slogan": "Better Education. Clear Costs. Written Proof.",
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+      "opens": "11:00",
+      "closes": "18:00"
+    },
     "contactPoint": [
       {
         "@type": "ContactPoint",
@@ -155,7 +177,7 @@ export default async function RootLayout({
         "hoursAvailable": {
           "@type": "OpeningHoursSpecification",
           "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
-          "opens": "09:00",
+          "opens": "11:00",
           "closes": "18:00"
         }
       },
@@ -250,7 +272,7 @@ export default async function RootLayout({
       >
           <script
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+            dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
           />
           {enableProductionTracking && (
             <>
@@ -276,17 +298,19 @@ export default async function RootLayout({
               and screen-reader users can skip the header on every page. */}
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-5 focus:py-3 focus:text-sm focus:font-bold focus:text-[#08263c] focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#174f7a] focus:ring-offset-2"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-5 focus:py-3 focus:text-sm focus:font-bold focus:text-[#12436b] focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#12436b] focus:ring-offset-2"
           >
             Skip to content
           </a>
-          <ConditionalHeader office={office ? { phonePrimary: office.phonePrimary, hours: office.hours } : undefined} />
-          <main id="main-content" tabIndex={-1}>{children}</main>
+          <ConditionalHeader office={office ? { phonePrimary: office.phonePrimary, phoneSecondary: office.phoneSecondary, hours: office.hours } : undefined} />
+          <main id="main-content" tabIndex={-1} className="pb-[calc(76px+env(safe-area-inset-bottom,0px))] lg:pb-0">{children}</main>
           <WhatsAppWrapper
             phoneNumber={office?.phonePrimary || '+8801983333566'}
             message="Hi, I would like an Education Fit Assessment. Please help me compare suitable universities, complete costs, recognition and scholarship availability."
           />
+          <MobileLeadBar />
           <CookieConsent />
+          <RevealObserver />
           <ConditionalFooter><Footer /></ConditionalFooter>
           {enableProductionTracking && (
             <>

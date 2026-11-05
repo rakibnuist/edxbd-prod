@@ -316,3 +316,22 @@ test('a full tuition waiver resolves the net fee without inventing unpublished g
   assert.equal(unknownDeposit.isComplete, false);
   assert.ok(unknownDeposit.missing.includes('Deposit'));
 });
+
+test('accommodation reservation deposits are credited once against the later housing balance', () => {
+  const base = { ...scenario({ ...completeValues, application: '400', deposit: '2000', tuition: '26000', housing: '3000', insurance: '800', residence: '400', medical: '400' }), depositRequired: true, depositCreditedToHousing: true };
+  const result = calculateClearCost(base);
+  assert.equal(result.beforeTotal, 2400);
+  assert.equal(result.entries.housing, 1000);
+  assert.equal(result.housingDepositCredit, 2000);
+  assert.equal(result.entries.tuition, 26000);
+  assert.equal(result.total, 31000);
+  const excess = calculateClearCost({ ...base, values: { ...base.values, deposit: '5000' } });
+  assert.equal(excess.entries.housing, 0);
+  assert.equal(excess.depositExceedsHousing, true);
+  const missing = calculateClearCost({ ...base, values: { ...base.values, deposit: '' } });
+  assert.equal(missing.entries.housing, undefined);
+  assert.equal(missing.isComplete, false);
+  const both = calculateClearCost({ ...base, depositCreditedToTuition: true });
+  assert.equal(both.housingDepositCredit, 0);
+  assert.equal(both.depositCredit, 2000);
+});

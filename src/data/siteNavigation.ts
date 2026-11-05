@@ -55,6 +55,7 @@ export const serviceNavigation: SiteLink[] = [
   { name: 'Application support', href: '/your-study-journey#application-file', note: 'Document checks and application records' },
   { name: 'Visa readiness', href: '/your-study-journey#visa-to-registration', note: 'A checklist, not a visa guarantee' },
   { name: 'Parents and families', href: '/for-parents', note: 'Costs, safety and responsibilities explained' },
+  { name: 'Education consultant in Dhaka', href: '/education-consultant-dhaka', note: 'Visit the Dhanmondi office or call the team' },
   { name: 'Visit or contact us', href: '/contact', note: 'Dhanmondi office, phone and WhatsApp' },
 ];
 
@@ -74,6 +75,7 @@ export const proofNavigation: SiteLink[] = [
   { name: 'Fees and transparency', href: '/fees-and-transparency', note: 'Know who receives each payment' },
   { name: 'University verification', href: '/how-we-verify-universities', note: 'How recognition and records are checked' },
   { name: 'Student success stories', href: '/success-stories', note: 'Consent-based student outcomes' },
+  { name: 'Country service status', href: '/country-status', note: 'Which destinations are open and how they are verified' },
   { name: 'Complaints and resolution', href: '/complaints-and-resolution', note: 'Accountability and written response times' },
 ];
 
@@ -93,4 +95,25 @@ export const primaryNavigation = [
   { name: 'How We Help', href: '/services', menu: 'services' as const },
   { name: 'Proof', href: '/better-education-standard', menu: 'proof' as const },
   { name: 'Advice', href: '/updates', menu: 'resources' as const },
+];
+
+// Header groups for the simplified primary navigation (5 items). Plain labels
+// a first-time student or parent recognises without decoding the brand terms.
+export const costNavigation: SiteLink[] = [
+  { name: 'Scholarship guidance', href: '/scholarships', note: 'What awards really cover and who qualifies' },
+  { name: 'China scholarships', href: '/china-scholarships-bangladesh', note: 'CSC, provincial and university awards' },
+  { name: 'Cost of studying in China', href: '/study-in-china-cost-bangladesh', note: 'Tuition, hostel, insurance, visa and travel' },
+  { name: 'Our fees, in writing', href: '/fees-and-transparency', note: 'What you pay us, when, and what is refundable' },
+  { name: 'Compare destinations', href: '/compare-study-destinations', note: 'Cost and entry side by side' },
+];
+
+export const aboutNavigation: SiteLink[] = [
+  { name: 'About EduExpress', href: '/about', note: 'Our team and Dhanmondi office, since 2018' },
+  { name: 'How it works', href: '/your-study-journey', note: 'From free assessment to arrival' },
+  { name: 'What we do for you', href: '/services', note: 'Counselling, applications and visa support' },
+  { name: 'Student success stories', href: '/success-stories', note: 'Published with student consent' },
+  { name: 'Proof library', href: '/proof-library', note: 'Redacted evidence and company records' },
+  { name: 'For parents', href: '/for-parents', note: 'Costs, safety and responsibilities' },
+  { name: 'Advice and updates', href: '/updates', note: 'Dated intake and visa news' },
+  { name: 'Contact and visit us', href: '/contact', note: 'Phone, WhatsApp and office hours' },
 ];

@@ -208,124 +208,132 @@ const PartnershipForm = () => {
     }
   };
 
+  const labelClass = 'mb-1.5 block text-[14px] font-semibold text-petrol-800';
+  const fieldClass = (field: keyof PartnershipFormData) =>
+    `w-full min-h-[50px] rounded-xl border-2 px-4 text-[16px] text-petrol-800 placeholder:text-ink-mute transition-colors focus:border-petrol-800 focus:bg-white focus:outline-none ${
+      errors[field] ? 'border-red-600 bg-red-50' : 'border-rule bg-chalk-100 hover:border-rule-strong'
+    }`;
+  const errorText = (field: keyof PartnershipFormData) =>
+    errors[field] ? <p id={`partner-${field}-error`} className="mt-1.5 text-[14px] font-semibold text-red-700">{errors[field]}</p> : null;
+  const describedBy = (field: keyof PartnershipFormData) => (errors[field] ? `partner-${field}-error` : undefined);
+
   const renderStep = () => {
     switch (currentStep) {
       case 1:
         return (
-          <div className="space-y-4">
-            <div className="text-center mb-4">
-              <Building2 className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <h3 className="text-lg font-bold text-gray-900">Basic Information</h3>
-              <p className="text-gray-600 text-xs">Tell us about your company and contact details</p>
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-lime text-petrol-800"><Building2 size={20} aria-hidden="true" /></span>
+              <div>
+                <h3 className="text-[19px] font-semibold text-petrol-800">Basic information</h3>
+                <p className="text-[14px] text-ink-soft">Tell us about your company and contact details</p>
+              </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-3">
+            <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Company Name
+                <label htmlFor="partner-companyName" className={labelClass}>
+                  Company name <span className="font-normal text-ink-soft">(optional)</span>
                 </label>
                 <input
+                  id="partner-companyName"
                   type="text"
                   value={formData.companyName}
                   onChange={(e) => updateFormData('companyName', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors hover:border-gray-400"
+                  className={fieldClass('companyName')}
+                  autoComplete="organization"
                   placeholder="Your company name (optional)"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Contact Person *
+                <label htmlFor="partner-contactPerson" className={labelClass}>
+                  Contact person *
                 </label>
                 <input
+                  id="partner-contactPerson"
                   type="text"
                   value={formData.contactPerson}
                   onChange={(e) => updateFormData('contactPerson', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${errors.contactPerson
-                    ? 'border-red-500 bg-red-50'
-                    : formData.contactPerson
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                  className={fieldClass('contactPerson')}
+                  autoComplete="name"
+                  aria-invalid={Boolean(errors.contactPerson)}
+                  aria-describedby={describedBy('contactPerson')}
                   placeholder="Your full name"
                 />
-                {errors.contactPerson && <p className="text-red-500 text-xs mt-1">{errors.contactPerson}</p>}
+                {errorText('contactPerson')}
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Email Address *
+                <label htmlFor="partner-email" className={labelClass}>
+                  Email address *
                 </label>
                 <input
+                  id="partner-email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => updateFormData('email', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${errors.email
-                    ? 'border-red-500 bg-red-50'
-                    : formData.email
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                  className={fieldClass('email')}
+                  autoComplete="email"
+                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby={describedBy('email')}
                   placeholder="your@email.com"
                 />
-                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                {errorText('email')}
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Phone Number *
+                <label htmlFor="partner-phone" className={labelClass}>
+                  Phone number *
                 </label>
                 <input
+                  id="partner-phone"
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => updateFormData('phone', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${errors.phone
-                    ? 'border-red-500 bg-red-50'
-                    : formData.phone
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                  className={fieldClass('phone')}
+                  autoComplete="tel"
+                  aria-invalid={Boolean(errors.phone)}
+                  aria-describedby={describedBy('phone')}
                   placeholder="+1 (555) 123-4567"
                 />
-                {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                {errorText('phone')}
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label htmlFor="partner-city" className={labelClass}>
                   City *
                 </label>
                 <input
+                  id="partner-city"
                   type="text"
                   value={formData.city}
                   onChange={(e) => updateFormData('city', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${errors.city
-                    ? 'border-red-500 bg-red-50'
-                    : formData.city
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                  className={fieldClass('city')}
+                  autoComplete="address-level2"
+                  aria-invalid={Boolean(errors.city)}
+                  aria-describedby={describedBy('city')}
                   placeholder="Your city"
                 />
-                {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
+                {errorText('city')}
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label htmlFor="partner-country" className={labelClass}>
                   Country *
                 </label>
                 <input
+                  id="partner-country"
                   type="text"
                   value={formData.country}
                   onChange={(e) => updateFormData('country', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-blue-500 focus:border-transparent text-sm transition-colors ${errors.country
-                    ? 'border-red-500 bg-red-50'
-                    : formData.country
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                  className={fieldClass('country')}
+                  autoComplete="country-name"
+                  aria-invalid={Boolean(errors.country)}
+                  aria-describedby={describedBy('country')}
                   placeholder="Your country"
                 />
-                {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country}</p>}
+                {errorText('country')}
               </div>
             </div>
           </div>
@@ -333,84 +341,82 @@ const PartnershipForm = () => {
 
       case 2:
         return (
-          <div className="space-y-4">
-            <div className="text-center mb-4">
-              <Briefcase className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <h3 className="text-lg font-bold text-gray-900">Partnership Details</h3>
-              <p className="text-gray-600 text-xs">Tell us about your partnership goals</p>
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-lime text-petrol-800"><Briefcase size={20} aria-hidden="true" /></span>
+              <div>
+                <h3 className="text-[19px] font-semibold text-petrol-800">Partnership details</h3>
+                <p className="text-[14px] text-ink-soft">Tell us about your partnership goals</p>
+              </div>
             </div>
 
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Partnership Type *
-                </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {partnershipTypes.map(type => (
-                    <label key={type.value} className={`relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${formData.partnershipType === type.value
-                      ? 'border-blue-500 bg-blue-50 shadow-md'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                      }`}>
+            <fieldset>
+              <legend className={labelClass}>Partnership type *</legend>
+              <div className="mt-1 grid grid-cols-1 gap-3 md:grid-cols-2">
+                {partnershipTypes.map(type => {
+                  const selected = formData.partnershipType === type.value;
+                  return (
+                    <label
+                      key={type.value}
+                      className={`relative flex cursor-pointer flex-col rounded-2xl border-2 p-4 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-petrol-800 ${
+                        selected ? 'border-petrol-800 bg-lime-pale' : 'border-rule bg-white hover:border-rule-strong'
+                      }`}
+                    >
                       <input
                         type="radio"
                         name="partnershipType"
                         value={type.value}
-                        checked={formData.partnershipType === type.value}
+                        checked={selected}
                         onChange={(e) => updateFormData('partnershipType', e.target.value)}
                         className="sr-only"
                       />
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="font-semibold text-gray-900 text-sm">{type.label}</div>
-                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${formData.partnershipType === type.value
-                          ? 'border-blue-500 bg-blue-500'
-                          : 'border-gray-300'
-                          }`}>
-                          {formData.partnershipType === type.value && (
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-600 leading-relaxed">{type.description}</div>
+                      <span className="flex items-center justify-between gap-3">
+                        <span className="text-[16px] font-semibold text-petrol-800">{type.label}</span>
+                        <span className={`grid size-5 place-items-center rounded-full border-2 ${selected ? 'border-petrol-800 bg-petrol-800' : 'border-rule-strong'}`} aria-hidden="true">
+                          {selected && <span className="size-2 rounded-full bg-lime" />}
+                        </span>
+                      </span>
+                      <span className="mt-1.5 text-[14px] leading-6 text-ink-soft">{type.description}</span>
                     </label>
-                  ))}
-                </div>
-                {errors.partnershipType && <p className="text-red-500 text-xs mt-2">{errors.partnershipType}</p>}
+                  );
+                })}
               </div>
+              {errorText('partnershipType')}
+            </fieldset>
 
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Why do you want to partner with us? *
-                </label>
-                <textarea
-                  value={formData.motivation}
-                  onChange={(e) => updateFormData('motivation', e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors resize-none ${errors.motivation
-                    ? 'border-red-500 bg-red-50'
-                    : formData.motivation
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-300 hover:border-gray-400'
-                    }`}
-                  rows={4}
-                  placeholder="Briefly explain your motivation for partnering with EduExpress International..."
-                />
-                <div className="flex justify-between items-center mt-1">
-                  {errors.motivation ? (
-                    <p className="text-red-500 text-xs">{errors.motivation}</p>
-                  ) : (
-                    <p className="text-gray-500 text-xs">
-                      {formData.motivation.length < 20
-                        ? `Minimum 20 characters (${formData.motivation.length}/20)`
-                        : 'Great! You\'ve provided enough detail.'
-                      }
-                    </p>
-                  )}
-                  <span className="text-xs text-gray-400">
-                    {formData.motivation.length} characters
-                  </span>
-                </div>
+            <div>
+              <label htmlFor="partner-motivation" className={labelClass}>
+                Why do you want to partner with us? *
+              </label>
+              <textarea
+                id="partner-motivation"
+                value={formData.motivation}
+                onChange={(e) => updateFormData('motivation', e.target.value)}
+                className={`${fieldClass('motivation')} resize-none py-3`}
+                rows={4}
+                aria-invalid={Boolean(errors.motivation)}
+                aria-describedby={describedBy('motivation')}
+                placeholder="Briefly explain your motivation for partnering with EduExpress International..."
+              />
+              <div className="mt-1.5 flex items-center justify-between gap-3">
+                {errors.motivation ? (
+                  errorText('motivation')
+                ) : (
+                  <p className="text-[14px] text-ink-soft">
+                    {formData.motivation.length < 20
+                      ? `Minimum 20 characters (${formData.motivation.length}/20)`
+                      : 'Great! You\'ve provided enough detail.'
+                    }
+                  </p>
+                )}
+                <span className="shrink-0 text-[14px] text-ink-mute">
+                  {formData.motivation.length} characters
+                </span>
               </div>
+            </div>
 
-              <label className="flex items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-700">
+            <div>
+              <label className="flex items-start gap-3 rounded-2xl bg-canvas-soft p-4 text-[14px] leading-6 text-ink-soft">
                 <input
                   type="checkbox"
                   checked={formData.privacyConsent}
@@ -420,16 +426,16 @@ const PartnershipForm = () => {
                       setErrors((previous) => ({ ...previous, privacyConsent: '' }));
                     }
                   }}
-                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="mt-1 size-5 shrink-0 accent-petrol-800"
                 />
                 <span>
                   I agree that EduExpress International may use my details to review and respond to this partnership application, as described in the{' '}
-                  <Link href="/privacy" className="font-medium text-blue-700 underline hover:text-blue-800" target="_blank">
+                  <Link href="/privacy" className="font-semibold text-petrol-800 underline underline-offset-2" target="_blank">
                     Privacy Policy
                   </Link>.
                 </span>
               </label>
-              {errors.privacyConsent && <p className="text-red-500 text-xs">{errors.privacyConsent}</p>}
+              {errorText('privacyConsent')}
             </div>
           </div>
         );
@@ -446,11 +452,14 @@ const PartnershipForm = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="text-center py-12"
+        className="rounded-3xl bg-white px-6 py-12 text-center sm:px-10"
+        role="status"
       >
-        <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">Application Submitted Successfully!</h3>
-        <p className="text-gray-600 mb-8">
+        <span className="mx-auto mb-6 grid size-16 place-items-center rounded-full bg-lime text-petrol-800">
+          <CheckCircle className="size-8" aria-hidden="true" />
+        </span>
+        <h3 className="font-display text-[30px] font-black leading-none text-petrol-800">Application Submitted Successfully!</h3>
+        <p className="mx-auto mt-4 max-w-md text-[16px] leading-7 text-ink-soft">
           Thank you for your interest in partnering with EduExpress International.
           We have received your application and will review it carefully.
           Our team will contact you within 2-3 business days.
@@ -461,7 +470,7 @@ const PartnershipForm = () => {
             setFormData(initialFormData);
             setCurrentStep(1);
           }}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          className="ed-btn ed-btn-outline mt-8 min-h-[48px] px-6"
         >
           Submit Another Application
         </button>
@@ -470,30 +479,28 @@ const PartnershipForm = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-      {/* Compact Progress Bar */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 px-4 py-3 border-b border-gray-200">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs font-bold">{currentStep}</span>
-            </div>
+    <div className="overflow-hidden rounded-3xl bg-white">
+      {/* Progress */}
+      <div className="border-b border-canvas-soft px-6 py-5 sm:px-8">
+        <div className="mb-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="grid size-9 place-items-center rounded-full bg-petrol-800 text-[15px] font-bold text-lime">{currentStep}</span>
             <div>
-              <span className="text-xs font-semibold text-gray-900">
+              <span className="block text-[14px] font-semibold text-petrol-800">
                 Step {currentStep} of {totalSteps}
               </span>
-              <div className="text-xs text-gray-600">
+              <span className="block text-[14px] text-ink-soft">
                 {currentStep === 1 ? 'Basic Information' : 'Partnership Details'}
-              </div>
+              </span>
             </div>
           </div>
-          <span className="text-xs font-medium text-gray-700">
+          <span className="text-[14px] font-semibold text-petrol-800">
             {Math.round((currentStep / totalSteps) * 100)}% Complete
           </span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-1.5">
+        <div className="h-2 w-full rounded-full bg-canvas-soft">
           <motion.div
-            className="bg-gradient-to-r from-blue-500 to-purple-500 h-1.5 rounded-full"
+            className="h-2 rounded-full bg-lime"
             initial={{ width: 0 }}
             animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -502,7 +509,7 @@ const PartnershipForm = () => {
       </div>
 
       {/* Form Content */}
-      <div className="p-4">
+      <div className="p-6 sm:p-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
@@ -516,41 +523,38 @@ const PartnershipForm = () => {
         </AnimatePresence>
 
         {/* Navigation Buttons */}
-        <div className="flex justify-between mt-4 pt-3 border-t border-gray-200">
+        <div className="mt-7 flex items-center justify-between gap-3 border-t border-canvas-soft pt-5">
           <button
             onClick={prevStep}
             disabled={currentStep === 1}
-            className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors text-xs ${currentStep === 1
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-gray-700 hover:bg-gray-100'
-              }`}
+            className="ed-btn ed-btn-soft min-h-[48px] px-5 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            <ArrowLeft className="w-3 h-3" />
+            <ArrowLeft className="size-4" aria-hidden="true" />
             <span>Previous</span>
           </button>
 
           {currentStep < totalSteps ? (
             <button
               onClick={nextStep}
-              className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+              className="ed-btn ed-btn-signal min-h-[48px] px-6"
             >
               <span>Next</span>
-              <ArrowRight className="w-3 h-3" />
+              <ArrowRight className="size-4" aria-hidden="true" />
             </button>
           ) : (
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              className="ed-btn ed-btn-signal min-h-[48px] px-6 disabled:cursor-wait disabled:opacity-70"
             >
               {isSubmitting ? (
                 <>
-                  <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span className="size-4 animate-spin rounded-full border-2 border-petrol-800/30 border-t-petrol-800" aria-hidden="true" />
                   <span>Submitting...</span>
                 </>
               ) : (
                 <>
-                  <Handshake className="w-3 h-3" />
+                  <Handshake className="size-4" aria-hidden="true" />
                   <span>Submit Application</span>
                 </>
               )}
@@ -563,10 +567,11 @@ const PartnershipForm = () => {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2"
+            role="alert"
+            className="mt-5 flex items-center gap-3 rounded-2xl bg-red-50 p-4"
           >
-            <AlertCircle className="w-5 h-5 text-red-500" />
-            <span className="text-red-700">
+            <AlertCircle className="size-5 shrink-0 text-red-700" aria-hidden="true" />
+            <span className="text-[15px] font-semibold text-red-700">
               Failed to submit application. Please try again or contact support.
             </span>
           </motion.div>
