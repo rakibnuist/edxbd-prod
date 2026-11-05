@@ -49,7 +49,7 @@ function UniversityMark({ university, size = 44 }: { university: DirectoryUniver
       .join('')
       .slice(0, 5);
   return (
-    <span className="grid shrink-0 place-items-center overflow-hidden rounded-[2px] border border-rule bg-white p-1" style={{ width: size, height: size }}>
+    <span className="grid shrink-0 place-items-center overflow-hidden rounded-xl border border-rule bg-white p-1" style={{ width: size, height: size }}>
       {university.logo && !failed ? (
         <Image
           src={university.logo}
@@ -163,14 +163,14 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
 
   return (
     <div className="fixed inset-0 z-[70] flex items-end justify-center p-0 sm:items-center sm:p-6">
-      <button type="button" aria-label="Close comparison" onClick={onClose} className="absolute inset-0 cursor-default bg-petrol-900/50" />
-      <div role="dialog" aria-modal="true" aria-label="Compare universities" className="relative max-h-[92dvh] w-full max-w-[1100px] overflow-y-auto border border-rule bg-chalk shadow-deep">
-        <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-rule bg-chalk px-5 py-4">
+      <button type="button" aria-label="Close comparison" onClick={onClose} className="absolute inset-0 cursor-default bg-petrol-900/60" />
+      <div role="dialog" aria-modal="true" aria-label="Compare universities" className="relative max-h-[92dvh] w-full max-w-[1100px] overflow-y-auto rounded-t-3xl bg-white shadow-deep sm:rounded-3xl">
+        <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-canvas-soft bg-white px-5 py-4 sm:px-6">
           <div>
-            <p className="ed-label">Side by side</p>
-            <h2 className="mt-1 ed-home-display text-[22px] leading-tight text-ink">{rows.length} universities compared</h2>
+            <p className="text-[14px] font-semibold text-ink-soft">Side by side</p>
+            <h2 className="mt-1 font-display text-[24px] font-black leading-tight text-petrol-800">{rows.length} universities compared</h2>
           </div>
-          <button ref={closeRef} type="button" onClick={onClose} className="grid size-9 place-items-center border border-rule-strong text-petrol-700 hover:bg-white" aria-label="Close comparison">
+          <button ref={closeRef} type="button" onClick={onClose} className="grid size-11 place-items-center rounded-full bg-canvas-soft text-petrol-800 hover:bg-lime-pale" aria-label="Close comparison">
             <X size={17} />
           </button>
         </div>
@@ -180,7 +180,7 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
             <caption className="sr-only">Comparison of selected universities by record fields</caption>
             <thead>
               <tr>
-                <th scope="col" className="sticky left-0 w-[150px] border-b border-rule bg-chalk-100 px-4 py-3 text-[13px] font-semibold text-ink-mute">
+                <th scope="col" className="sticky left-0 w-[150px] border-b border-rule bg-canvas-soft px-4 py-3 text-[14px] font-semibold text-ink-soft">
                   Field
                 </th>
                 {rows.map(row => (
@@ -188,10 +188,10 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
                     <span className="flex items-start gap-2">
                       <UniversityMark university={row.university} size={34} />
                       <span className="min-w-0">
-                        <Link href={`/universities/${row.university.slug}`} className="block ed-home-display text-[15px] leading-tight text-ink hover:text-petrol-700">
+                        <Link href={`/universities/${row.university.slug}`} className="block text-[16px] font-semibold leading-tight text-petrol-800 hover:underline">
                           {row.university.name}
                         </Link>
-                        <button type="button" onClick={() => onRemove(row.university.slug)} className="mt-1 text-[13px] text-ink-mute underline underline-offset-2 hover:text-clay">
+                        <button type="button" onClick={() => onRemove(row.university.slug)} className="mt-1 text-[14px] text-ink-soft underline underline-offset-2 hover:text-clay">
                           Remove
                         </button>
                       </span>
@@ -203,11 +203,11 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
             <tbody>
               {fields.map(field => (
                 <tr key={field.label} className="border-b border-rule">
-                  <th scope="row" className="sticky left-0 bg-chalk px-4 py-3 align-top text-[14px] font-semibold text-ink-soft">
+                  <th scope="row" className="sticky left-0 bg-white px-4 py-3 align-top text-[14px] font-semibold text-ink-soft">
                     {field.label}
                   </th>
                   {rows.map(row => (
-                    <td key={row.university.id} className="border-l border-rule px-4 py-3 align-top text-ink">
+                    <td key={row.university.id} className="border-l border-rule px-4 py-3 align-top text-petrol-800">
                       {field.render(row)}
                     </td>
                   ))}
@@ -217,9 +217,9 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
           </table>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-rule bg-white px-5 py-4">
-          <p className="text-[14px] leading-5 text-ink-mute">Figures come from each university record. Where a figure is under verification, the profile says so.</p>
-          <Link href="/education-fit-assessment" className="ed-btn ed-btn-primary min-h-10 text-[15px]">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-soft bg-canvas-soft px-5 py-4 sm:px-6">
+          <p className="text-[14px] leading-5 text-ink-soft">Figures come from each university record. Where a figure is under verification, the profile says so.</p>
+          <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-11 text-[15px]">
             Ask a counsellor to review these <ArrowUpRight size={14} aria-hidden="true" />
           </Link>
         </div>
@@ -320,15 +320,15 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
     });
 
   return (
-    <section aria-label="University finder" className="bg-chalk px-5 pb-16 sm:px-8 lg:px-12">
-      <div className="mx-auto max-w-shell">
+    <section aria-label="University finder" className="bg-white pb-16">
+      <div className="mx-auto max-w-[1200px] px-5 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-12">
           {/* Facet rail */}
           <form role="search" aria-label="Filter universities" action="/universities" method="get" onSubmit={submitSearch} className="lg:sticky lg:top-[124px] lg:self-start">
-            <div className="flex items-center justify-between border-b border-rule pb-2">
-              <p className="text-[14px] font-semibold text-petrol-600">Filter the directory</p>
+            <div className="flex items-center justify-between border-b border-canvas-soft pb-2">
+              <p className="text-[16px] font-semibold text-petrol-800">Filter the directory</p>
               {chips.length > 0 && (
-                <button type="button" onClick={clearFilters} className="text-[13px] font-semibold text-ink-mute underline underline-offset-4 hover:text-clay">
+                <button type="button" onClick={clearFilters} className="inline-flex min-h-[44px] items-center text-[14px] font-semibold text-ink-soft underline underline-offset-4 hover:text-clay">
                   Clear
                 </button>
               )}
@@ -355,7 +355,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                   className="ed-field ed-field-icon"
                 />
               </div>
-              <p className="mt-1.5 text-[13px] text-ink-mute">Press / to search, Esc to clear.</p>
+              <p className="mt-1.5 text-[14px] text-ink-soft">Press / to search, Esc to clear.</p>
             </div>
 
             <div className="mt-4 grid gap-3">
@@ -399,16 +399,16 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                 aria-expanded={advancedOpen}
                 aria-controls="advanced-university-filters"
                 onClick={() => setAdvancedOpen(value => !value)}
-                className="flex min-h-9 items-center justify-between border border-rule-strong px-3 text-[14px] font-semibold text-petrol-700 hover:bg-white"
+                className="flex min-h-[44px] items-center justify-between rounded-xl bg-canvas-soft px-3.5 text-[15px] font-semibold text-petrol-800 hover:bg-lime-pale"
               >
                 <span className="inline-flex items-center gap-2">
                   <SlidersHorizontal size={13} aria-hidden="true" /> More filters
-                  {advancedCount > 0 && <span className="grid size-4 place-items-center rounded-full bg-petrol-600 text-[12px] text-white">{advancedCount}</span>}
+                  {advancedCount > 0 && <span className="grid size-5 place-items-center rounded-full bg-petrol-800 text-[12px] text-white">{advancedCount}</span>}
                 </span>
                 <ChevronDown size={13} className={advancedOpen ? 'rotate-180' : ''} aria-hidden="true" />
               </button>
 
-              <div id="advanced-university-filters" hidden={!advancedOpen} className="grid gap-3 border-t border-rule pt-3">
+              <div id="advanced-university-filters" hidden={!advancedOpen} className="grid gap-3 border-t border-canvas-soft pt-3">
                 <div>
                   <label htmlFor="filter-subject" className="block text-[13px] font-semibold text-ink-soft">
                     Subject
@@ -460,14 +460,14 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
             </div>
 
             {chips.length > 0 && (
-              <div className="mt-4 border-t border-rule pt-3" aria-label="Active filters">
+              <div className="mt-4 border-t border-canvas-soft pt-3" aria-label="Active filters">
                 <div className="flex flex-wrap gap-1.5">
                   {chips.map(chip => (
                     <button
                       key={chip.key}
                       type="button"
                       onClick={() => removeFilter(chip.key)}
-                      className="inline-flex min-h-7 max-w-full items-center gap-1.5 border border-rule-strong bg-white px-2 text-[13px] text-petrol-700 hover:border-clay hover:text-clay"
+                      className="inline-flex min-h-9 max-w-full items-center gap-1.5 rounded-full bg-lime-pale px-3 text-[14px] font-semibold text-petrol-800 hover:bg-canvas-soft hover:text-clay"
                       aria-label={`Remove filter ${chip.label}`}
                     >
                       <span className="truncate">{chip.label}</span>
@@ -481,13 +481,13 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
 
           {/* Results */}
           <div>
-            <div id="university-results" className="flex scroll-mt-32 flex-wrap items-baseline justify-between gap-3 border-b border-rule pb-3 xl:scroll-mt-40">
+            <div id="university-results" className="flex scroll-mt-32 flex-wrap items-center justify-between gap-3 border-b border-canvas-soft pb-3 xl:scroll-mt-40">
               <p role="status" aria-live="polite" className="text-[15px] text-ink-soft">
-                <strong className="ed-figure text-[17px] text-ink">{filtered.length}</strong> {filtered.length === 1 ? 'university' : 'universities'}
+                <strong className="font-display text-[20px] font-black text-petrol-800">{filtered.length}</strong> {filtered.length === 1 ? 'university' : 'universities'}
                 {filters.country ? ` in ${filters.country}` : ''}
                 {filtered.length > visibleCount ? ` · showing ${visibleCount}` : ''}
               </p>
-              <div className="flex items-center gap-2 text-[14px] text-ink-mute">
+              <div className="flex items-center gap-2 text-[14px] text-ink-soft">
                 <label htmlFor="university-sort">Sort</label>
                 <select
                   id="university-sort"
@@ -495,7 +495,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                   onChange={event =>
                     setFilters({ sort: ['city', 'fee', 'ranking', 'scholarship'].includes(event.target.value) ? (event.target.value as DirectoryFilters['sort']) : 'name' })
                   }
-                  className="h-8 border border-rule-strong bg-white px-2 text-[14px] font-medium text-ink"
+                  className="h-11 rounded-xl border border-rule-strong bg-white px-3 text-[15px] font-medium text-petrol-800"
                 >
                   <option value="name">Name</option>
                   <option value="ranking">Best ranking</option>
@@ -507,9 +507,9 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
             </div>
 
             {filtered.length === 0 ? (
-              <div className="mt-8 border border-rule bg-white px-6 py-12 text-center">
-                <Search size={24} className="mx-auto text-petrol-500" aria-hidden="true" />
-                <h2 className="mt-4 ed-home-display text-[22px] text-ink">
+              <div className="mt-8 rounded-3xl bg-canvas-soft px-6 py-12 text-center">
+                <span className="mx-auto grid size-12 place-items-center rounded-full bg-white text-petrol-800"><Search size={22} aria-hidden="true" /></span>
+                <h2 className="mt-4 font-display text-[26px] font-black leading-tight text-petrol-800">
                   {destinationNotListed ? `Find your university in ${filters.country}` : 'No record matches this combination'}
                 </h2>
                 <p className="mx-auto mt-2 max-w-lg text-[15px] leading-7 text-ink-soft">
@@ -518,17 +518,17 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                     : 'Loosen one filter, or tell a counsellor the subject and budget you are working with — we will check the route directly.'}
                 </p>
                 <div className="mt-5 flex flex-wrap justify-center gap-3">
-                  <button type="button" onClick={clearFilters} className="ed-btn ed-btn-outline min-h-10 text-[15px]">
+                  <button type="button" onClick={clearFilters} className="ed-btn ed-btn-outline min-h-11 text-[15px]">
                     Clear all filters
                   </button>
-                  <Link href="/education-fit-assessment" className="ed-btn ed-btn-primary min-h-10 text-[15px]">
+                  <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-11 text-[15px]">
                     Ask for a shortlist
                   </Link>
                 </div>
               </div>
             ) : (
               <>
-                <ul className="mt-2 border-t border-rule">
+                <ul className="mt-2">
                   {visibleRows.map(row => {
                     const { university } = row;
                     const selected = compare.includes(university.slug);
@@ -538,31 +538,31 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                       intake: filters.intake || 'Upcoming intake',
                     }).toString()}`;
                     return (
-                      <li key={university.id} className="border-b border-rule">
+                      <li key={university.id} className="border-b border-canvas-soft">
                         <article aria-label={university.name} className="grid gap-4 py-5 lg:grid-cols-[minmax(0,1fr)_180px_210px] lg:items-start lg:gap-6">
                           <div className="flex min-w-0 gap-3.5">
                             <UniversityMark university={university} />
                             <div className="min-w-0">
-                              <h2 className="ed-home-display text-[19px] leading-tight text-ink">
+                              <h2 className="text-[19px] font-semibold leading-tight tracking-[-0.01em] text-petrol-800">
                                 <Link href={`/universities/${university.slug}`} className="underline-offset-4 hover:underline">
                                   {university.name}
                                 </Link>
                               </h2>
-                              <p className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[14px] text-ink-mute">
+                              <p className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[14px] text-ink-soft">
                                 <span className="inline-flex items-center gap-1">
                                   <MapPin size={12} className="shrink-0" aria-hidden="true" />
                                   {[university.city, university.country].filter(Boolean).join(', ')}
                                 </span>
-                                {row.relationship && <span className="border border-rule-strong px-1.5 py-0.5 text-[12px] font-semibold text-petrol-600">{row.relationship}</span>}
-                                {row.englishTaught && <span className="text-[12px] font-semibold text-jade">English-taught</span>}
+                                {row.relationship && <span className="rounded-full bg-lime-pale px-2.5 py-0.5 text-[14px] font-semibold text-lime-deep">{row.relationship}</span>}
+                                {row.englishTaught && <span className="text-[14px] font-semibold text-jade">English-taught</span>}
                               </p>
-                              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-ink-soft">
+                              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-ink-soft">
                                 <span>{row.levels.slice(0, 3).join(' · ') || 'Levels on profile'}</span>
                                 {row.awardValue && <span className="font-semibold text-jade">{row.awardValue}</span>}
                                 {university.clearCost && (
                                   <Link
                                     href={`/universities/${university.slug}/clear-cost`}
-                                    className="inline-flex items-center gap-1 font-semibold text-petrol-600 underline-offset-4 hover:underline"
+                                    className="inline-flex items-center gap-1 font-semibold text-petrol-800 underline underline-offset-4"
                                   >
                                     <FileText size={11} aria-hidden="true" /> ClearCost sheet
                                   </Link>
@@ -571,22 +571,22 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                             </div>
                           </div>
 
-                          <dl className="grid grid-cols-3 gap-3 border-t border-rule pt-3 text-[14px] lg:grid-cols-1 lg:gap-1.5 lg:border-t-0 lg:pt-0">
+                          <dl className="grid grid-cols-3 gap-3 rounded-2xl bg-canvas-soft p-3 text-[14px] lg:grid-cols-1 lg:gap-2">
                             <div>
-                              <dt className="text-[12px] text-ink-mute">Tuition</dt>
-                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-ink">{row.showTuition ? row.tuition : 'View programme fees'}</dd>
+                              <dt className="text-[14px] text-ink-soft">Tuition</dt>
+                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-petrol-800">{row.showTuition ? row.tuition : 'View programme fees'}</dd>
                             </div>
                             <div>
-                              <dt className="text-[12px] text-ink-mute">Intake</dt>
-                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-ink">{row.intake.length ? row.intake.join(', ') : 'On profile'}</dd>
+                              <dt className="text-[14px] text-ink-soft">Intake</dt>
+                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-petrol-800">{row.intake.length ? row.intake.join(', ') : 'On profile'}</dd>
                             </div>
                             <div>
-                              <dt className="flex items-center gap-1 text-[12px] text-ink-mute">
+                              <dt className="flex items-center gap-1 text-[14px] text-ink-soft">
                                 <Trophy size={10} aria-hidden="true" /> Ranking
                               </dt>
-                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-ink">
+                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-petrol-800">
                                 {row.ranking ? `#${row.ranking.rank}` : 'Not recorded'}
-                                {row.ranking && <span className="ml-1 font-normal text-[12px] text-ink-mute">{row.ranking.publisher}</span>}
+                                {row.ranking && <span className="ml-1 font-normal text-[14px] text-ink-soft">{row.ranking.publisher}</span>}
                               </dd>
                             </div>
                           </dl>
@@ -597,8 +597,8 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                                 type="button"
                                 onClick={() => toggleCompare(university.slug)}
                                 aria-pressed={selected}
-                                className={`inline-flex min-h-9 flex-1 items-center justify-center gap-1.5 border px-2 text-[13px] font-semibold transition-colors ${
-                                  selected ? 'border-petrol-600 bg-petrol-600 text-white' : 'border-rule-strong text-petrol-700 hover:border-petrol-500'
+                                className={`inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-full px-3 text-[15px] font-semibold transition-colors ${
+                                  selected ? 'bg-petrol-800 text-white' : 'bg-canvas-soft text-petrol-800 hover:bg-lime-pale'
                                 }`}
                               >
                                 {selected ? <Check size={12} aria-hidden="true" /> : null}
@@ -609,7 +609,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                               <Link
                                 href={`/universities/${university.slug}`}
                                 onClick={() => recordClick('university_programs_click', university)}
-                                className="ed-btn ed-btn-primary min-h-9 flex-1 px-2 text-[14px]"
+                                className="ed-btn ed-btn-outline min-h-11 flex-1 px-3 text-[15px]"
                                 aria-label={`View programmes at ${university.name}`}
                               >
                                 Programmes
@@ -617,7 +617,7 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                               <Link
                                 href={applicationHref}
                                 onClick={() => recordClick('university_apply_click', university)}
-                                className="ed-btn min-h-9 flex-1 border border-marigold bg-marigold/10 px-2 text-[14px] font-semibold text-petrol-900 hover:bg-marigold"
+                                className="ed-btn ed-btn-signal min-h-11 flex-1 px-3 text-[15px]"
                                 aria-label={`Apply to ${university.name} with EduExpress International`}
                               >
                                 Apply
@@ -632,16 +632,16 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
 
                 {visibleCount < filtered.length && (
                   <div className="mt-6 flex flex-col items-center gap-2">
-                    <p className="text-[14px] text-ink-mute">
+                    <p className="text-[14px] text-ink-soft">
                       Showing {Math.min(visibleCount, filtered.length)} of {filtered.length} universities
                     </p>
-                    <Link href={moreHref} scroll={false} prefetch={false} className="ed-btn ed-btn-outline min-h-10 text-[15px]">
+                    <Link href={moreHref} scroll={false} prefetch={false} className="ed-btn ed-btn-outline min-h-11 text-[15px]">
                       Show {Math.min(12, filtered.length - visibleCount)} more
                     </Link>
                   </div>
                 )}
 
-                <p className="mt-8 border-t border-rule pt-4 text-[13px] leading-6 text-ink-mute">
+                <p className="mt-8 border-t border-canvas-soft pt-4 text-[14px] leading-6 text-ink-soft">
                   Tuition, scholarship and ranking entries link to the official source record inside each profile. Where a figure is under verification, the profile says so — we do not publish estimates as facts.
                 </p>
               </>
@@ -652,17 +652,17 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
 
       {/* Compare tray */}
       {compare.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-petrol-900/20 bg-petrol-900 px-4 py-3 text-white shadow-deep">
+        <div className="fixed inset-x-0 bottom-0 z-[60] bg-petrol-800 px-4 py-3 text-white shadow-deep">
           <div className="mx-auto flex max-w-shell flex-wrap items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
-              <span className="ed-figure text-[15px] text-mint-300">{compare.length}/4</span>
-              <p className="truncate text-[14px] text-white/80">{compareRows.map(row => row.university.name).join(' · ')}</p>
+              <span className="font-display text-[18px] font-black text-lime">{compare.length}/4</span>
+              <p className="truncate text-[14px] text-white/85">{compareRows.map(row => row.university.name).join(' · ')}</p>
             </div>
             <div className="flex items-center gap-2">
-              <button type="button" onClick={() => setCompare([])} className="px-2 text-[14px] font-semibold text-white/60 hover:text-white">
+              <button type="button" onClick={() => setCompare([])} className="min-h-11 px-3 text-[14px] font-semibold text-white/75 hover:text-white">
                 Clear
               </button>
-              <button type="button" onClick={() => setCompareOpen(true)} className="ed-btn ed-btn-signal min-h-9 px-4 text-[14px]">
+              <button type="button" onClick={() => setCompareOpen(true)} className="ed-btn ed-btn-signal min-h-11 px-5 text-[15px]">
                 Compare {compare.length}
               </button>
             </div>

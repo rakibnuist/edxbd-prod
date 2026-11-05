@@ -1,13 +1,16 @@
-import { serializeJsonLd } from '@/lib/json-ld';
-import type { Metadata } from 'next';
-import { Database, SearchCheck, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowRight, Database, SearchCheck, ShieldCheck } from 'lucide-react';
 import { Suspense } from 'react';
-import PageHeader from '@/components/PageHeader';
 import UniversitiesClient from '@/app/universities/UniversitiesClient';
+import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getUniversityRecords } from '@/lib/university-records';
 import { filterUniversities, readDirectoryFilters } from '@/lib/university-directory';
+import { pageMetadata } from '@/lib/seo';
 
-const canonical = 'https://eduexpressint.com/china-universities';
+const SITE = 'https://eduexpressint.com';
+const PATH = '/china-universities';
+const canonical = `${SITE}${PATH}`;
 
 export const revalidate = 3600;
 
@@ -24,27 +27,28 @@ async function getChinaUniversities() {
 type Query = Record<string, string | string[] | undefined>;
 type Props = { searchParams: Promise<Query> };
 
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+export async function generateMetadata({ searchParams }: Props) {
   const universities = await getChinaUniversities();
   const count = universities.length;
   const query = await searchParams;
-  const description = count > 0
-    ? `Search and compare ${count} China university records by subject, degree, teaching language, city and intake. Compare program details, recorded costs and source status.`
-    : 'Search and compare China university records by subject, degree, language, city and intake, with recorded costs and visible source status.';
-  return {
-    title: { absolute: 'China Universities Database for Bangladeshi Students | EduExpress' },
-    description,
-    alternates: { canonical },
-    ...(Object.values(query).some(value => Array.isArray(value) ? value.some(Boolean) : Boolean(value)) ? { robots: { index: false, follow: true } } : {}),
-    openGraph: {
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
-      title: 'China Universities Database for Bangladeshi Students',
-      description,
-      url: canonical,
-      type: 'website',
-    },
-  };
+  const filtered = Object.values(query).some(value => Array.isArray(value) ? value.some(Boolean) : Boolean(value));
+  return pageMetadata({
+    title: 'China Universities for Bangladeshi Students | EduExpress',
+    description: `Compare ${count > 0 ? `${count} ` : ''}China university records for Bangladeshi students by subject, degree, teaching language, city and intake, with recorded costs and source status.`,
+    path: PATH,
+    // Filtered views stay crawlable but out of the index; the canonical stays the unfiltered directory.
+    noindex: filtered,
+  });
 }
+
+const guides = [
+  { label: 'Study in China from Bangladesh', href: '/study-in-china-from-bangladesh' },
+  { label: 'MBBS in China', href: '/mbbs-in-china-bangladesh' },
+  { label: 'China admission requirements', href: '/china-admission-requirements' },
+  { label: 'China scholarships', href: '/china-scholarships-bangladesh' },
+  { label: 'Study costs and ClearCost', href: '/study-in-china-cost-bangladesh' },
+  { label: 'Intakes and deadlines', href: '/china-intakes-deadlines' },
+];
 
 export default async function ChinaUniversitiesPage({ searchParams }: Props) {
   const universities = await getChinaUniversities();
@@ -59,57 +63,98 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
   const structuredData = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: 'China Universities Database', inLanguage: 'en-BD' },
-      { '@type': 'ItemList', '@id': `${canonical}#directory`, numberOfItems: visibleUniversities.length, itemListElement: visibleUniversities.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, url: `https://eduexpressint.com/universities/${item.slug}` })) },
-      ...visibleUniversities.map((item) => ({
+      { '@type': 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: 'China Universities for Bangladeshi Students', inLanguage: 'en-BD', isPartOf: { '@id': `${SITE}/#website` }, breadcrumb: { '@id': `${canonical}#breadcrumb` }, mainEntity: { '@id': `${canonical}#directory` } },
+      { '@type': 'ItemList', '@id': `${canonical}#directory`, numberOfItems: visibleUniversities.length, itemListElement: visibleUniversities.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, url: `${SITE}/universities/${item.slug}` })) },
+      ...visibleUniversities.map(item => ({
         '@type': 'CollegeOrUniversity',
-        '@id': `https://eduexpressint.com/universities/${item.slug}#university`,
+        '@id': `${SITE}/universities/${item.slug}#university`,
         name: item.name,
-        url: `https://eduexpressint.com/universities/${item.slug}`,
+        url: `${SITE}/universities/${item.slug}`,
         address: { '@type': 'PostalAddress', addressLocality: item.city, addressCountry: 'CN' },
       })),
-      { '@type': 'BreadcrumbList', itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://eduexpressint.com/' },
-        { '@type': 'ListItem', position: 2, name: 'Study in China', item: 'https://eduexpressint.com/study-in-china-from-bangladesh' },
-        { '@type': 'ListItem', position: 3, name: 'China Universities', item: canonical },
-      ] },
     ],
   };
 
+  const stats = [
+    { icon: Database, title: `${universities.length} China university records`, text: 'Browse the available directory records. A listing does not establish an institutional partnership or open admission.' },
+    { icon: SearchCheck, title: `${sourceLinkedCount} records with linked sources`, text: 'Source links support specific facts. Each card shows whether the complete record still needs verification.' },
+    { icon: ShieldCheck, title: 'Compare education fit first', text: 'Review recognition, academic fit, career value, full cost, visa readiness and student support side by side.' },
+  ];
+
   return (
-    <article className="bg-[#f1f5f9] text-[#0f3a5c] font-sans">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
-      
-      <PageHeader
-        title="China Universities"
-        highlight="Study Options"
-        description={`Explore ${universities.length} Chinese university records. Filter recorded programs by subject, degree, language, city and intake, then compare academic fit, costs and source status.`}
-        icon={<Database />}
-        badgeText="China university directory"
+    <article>
+      <JsonLd data={structuredData} />
+
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Study in China', path: '/study-in-china-from-bangladesh' }, { name: 'China universities' }]}
+        eyebrow="China university directory"
+        title="China universities for Bangladeshi students."
+        lead={`Explore ${universities.length} Chinese university records. Filter recorded programs by subject, degree, language, city and intake, then compare academic fit, costs and source status.`}
+        actions={
+          <>
+            <a href="#china-directory" className="ed-btn ed-btn-signal min-h-[52px] px-7">Search the directory <ArrowRight size={18} aria-hidden="true" /></a>
+            <Link href="/education-fit-assessment" className="ed-btn ed-btn-outline min-h-[52px] px-7">Get my free assessment</Link>
+          </>
+        }
+        aside={
+          <figure className="relative overflow-hidden rounded-3xl">
+            <div className="relative aspect-[4/3]">
+              <Image src="/images/students/campus-nuist.webp" alt="A student at the I love NUIST sign on campus in Nanjing" fill priority sizes="(max-width:1024px) 100vw, 480px" className="object-cover object-[60%_45%]" />
+            </div>
+            <figcaption className="absolute bottom-4 left-4 rounded-full bg-white px-4 py-1.5 text-[14px] font-semibold text-petrol-800">On campus in Nanjing</figcaption>
+          </figure>
+        }
       />
 
-      <section className="border-b border-[#12436b]/15 bg-white">
-        <div className="mx-auto grid max-w-[1440px] gap-px bg-[#12436b]/15 sm:grid-cols-3">
-          {[
-            [Database, `${universities.length} China university records`, 'Browse the available directory records. A listing does not establish an institutional partnership or open admission.'],
-            [SearchCheck, `${sourceLinkedCount} records with linked sources`, 'Source links support specific facts. Each card shows whether the complete record still needs verification.'],
-            [ShieldCheck, 'Compare education fit first', 'Review recognition, academic fit, career value, full cost, visa readiness and student support side by side.'],
-          ].map(([Icon, title, text]) => (
-            <div key={String(title)} className="flex gap-4 bg-white p-5"><span className="grid size-10 shrink-0 place-items-center bg-[#e3f0f9] text-[#12436b]"><Icon size={20} /></span><div><strong className="text-sm">{String(title)}</strong><p className="mt-1 text-xs leading-5 text-slate-500">{String(text)}</p></div></div>
+      <TrustBar />
+
+      <section aria-label="How to read this directory" className="border-b border-canvas-soft bg-white pb-10">
+        <ul data-anim="stagger" className={`${kit.wrap} grid gap-4 md:grid-cols-3`}>
+          {stats.map(item => (
+            <li key={item.title} className={kit.cardSage}>
+              <span className={kit.icon}><item.icon size={22} aria-hidden="true" /></span>
+              <p className="mt-4 text-[18px] font-semibold text-petrol-800">{item.title}</p>
+              <p className="mt-1.5 text-[15px] leading-6 text-ink-soft">{item.text}</p>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
-      <Suspense fallback={<div className="py-20 text-center">Loading China directory...</div>}>
-        <UniversitiesClient initialUniversities={universities} />
-      </Suspense>
+      <div id="china-directory" className="scroll-mt-28">
+        <Suspense fallback={<div className="py-20 text-center text-[16px] text-ink-soft">Loading China directory…</div>}>
+          <UniversitiesClient initialUniversities={universities} />
+        </Suspense>
+      </div>
 
-      <section className="border-b border-[#12436b]/15 bg-white">
-        <div className="mx-auto max-w-[1440px] px-5 py-8 text-xs leading-6 text-slate-500 sm:px-8 lg:px-12">
-          <p><strong className="text-[#0f3a5c]">Database status:</strong> {universities.length} Chinese university records are available; {sourceLinkedCount} have linked sources. Historical fees, intakes and scholarship options require a current official-source review before application.</p>
-          <p className="mt-2"><strong className="text-[#0f3a5c]">How to use this directory:</strong> Open an individual profile for detailed evidence, use Compare to identify unanswered questions, then request a program-specific Education Fit Assessment and written ClearCost Sheet.</p>
+      <Section tone="sage" title="How to use this directory.">
+        <div className="grid gap-5 lg:grid-cols-2">
+          <div className={kit.card}>
+            <h3 className={kit.h3}>Database status</h3>
+            <p className={`mt-2 ${kit.body}`}>{universities.length} Chinese university records are available; {sourceLinkedCount} have linked sources. Historical fees, intakes and scholarship options require a current official-source review before application.</p>
+            <Link href="/how-we-verify-universities" className={`mt-3 ${kit.link}`}>How we verify universities <ArrowRight size={16} aria-hidden="true" /></Link>
+          </div>
+          <div className={kit.card}>
+            <h3 className={kit.h3}>From shortlist to written plan</h3>
+            <p className={`mt-2 ${kit.body}`}>Open an individual profile for detailed evidence, use Compare to identify unanswered questions, then request a program-specific Education Fit Assessment and written ClearCost Sheet.</p>
+            <Link href="/education-fit-assessment" className={`mt-3 ${kit.link}`}>Start the Education Fit Assessment <ArrowRight size={16} aria-hidden="true" /></Link>
+          </div>
         </div>
-      </section>
+        <nav aria-label="China study guides" className="mt-10">
+          <h3 className={kit.h3}>China guides for your shortlist</h3>
+          <ul data-anim="stagger" className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {guides.map(item => (
+              <li key={item.href}>
+                <Link href={item.href} className="flex min-h-[60px] items-center justify-between gap-4 rounded-3xl bg-white px-5 py-3.5 text-[16px] font-semibold text-petrol-800 transition-colors hover:bg-lime-pale">
+                  {item.label}<ArrowRight size={17} className="shrink-0" aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </Section>
+
+      <CtaBand title="Need help choosing a university?" text="Share your results, subject and budget. A counsellor replies within one working day with a shortlist of suitable Chinese universities and every cost in writing." />
     </article>
   );
 }

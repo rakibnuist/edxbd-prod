@@ -1,16 +1,17 @@
-import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowRight, ArrowUpRight, BadgeCheck, CheckCircle2, FileText, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 
-import Breadcrumbs from '@/components/Breadcrumbs';
-import { evidencePages } from '@/data/evidencePages';
 import ChinaGuidePage from '@/components/china/ChinaGuidePage';
+import { CtaBand, JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
 import { chinaGuideMetadata, chinaGuidePages } from '@/data/chinaGuidePages';
+import { evidencePages, type EvidencePage } from '@/data/evidencePages';
 import { staticRouteSlugs } from '@/data/staticRoutePages';
-import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
+import { countries } from '@/lib/countries';
+import { pageMetadata } from '@/lib/seo';
+import { SITE_URL, absoluteUrl, destinationPath } from '@/lib/site-urls';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -18,6 +19,62 @@ type Props = { params: Promise<{ slug: string }> };
 // also has a hand-built route must not be pre-rendered here. Static wrappers
 // may reuse the shared guide data, but each URL has only one rendering owner.
 const isOwnedByStaticRoute = (slug: string) => staticRouteSlugs.includes(slug);
+
+/**
+ * Search titles (45–60 chars) and descriptions (120–160 chars) for the evidence
+ * pages, written from each page's own content. The data titles stay as the
+ * visible H1 and breadcrumb names.
+ */
+const EVIDENCE_SEO: Record<string, { title: string; description: string }> = {
+  'better-education-standard': {
+    title: 'The Better Education Standard: 6 Checks | EduExpress',
+    description:
+      'The six checks EduExpress makes before recommending a study abroad option: recognition, academic fit, career value, total cost, visa readiness and support.',
+  },
+  'how-we-verify-universities': {
+    title: 'How We Verify Universities and Programs | EduExpress',
+    description:
+      'How EduExpress verifies universities and programs: official names, source links, recognition evidence, fees, intake status and the date each fact was checked.',
+  },
+  'student-data-privacy': {
+    title: 'Student Data and Document Privacy Policy | EduExpress',
+    description:
+      'How EduExpress handles student consent, sensitive documents, staff access and retention, and how you can ask to see, correct or delete the data we hold.',
+  },
+  'complaints-and-resolution': {
+    title: 'Complaints and Resolution Process | EduExpress',
+    description:
+      'How to raise a complaint with EduExpress: a written acknowledgement within two working days, a named management owner and a written response within ten.',
+  },
+  'compare-study-destinations': {
+    title: 'Compare Study Destinations from Bangladesh | EduExpress',
+    description:
+      'Compare study abroad destinations from Bangladesh by recognition, entry and language fit, total cost, funding rules, visa readiness and career pathways.',
+  },
+  'country-status': {
+    title: 'Country Service Status for 12 Destinations | EduExpress',
+    description:
+      'EduExpress service status for 12 study destinations: China is the flagship service, and the UK, South Korea, Hungary, Finland and seven more are active.',
+  },
+};
+
+const seoFor = (page: EvidencePage) =>
+  EVIDENCE_SEO[page.slug] ?? { title: `${page.title} | EduExpress`, description: page.description };
+
+/** Pages that list every destination service, with links to each guide. */
+const DESTINATION_GRID_PAGES = new Set(['country-status', 'compare-study-destinations']);
+
+const sectionId = (heading: string, index: number) =>
+  `part-${index + 1}-${heading.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+
+const formatDate = (iso: string, options: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat('en-GB', { ...options, timeZone: 'UTC' }).format(new Date(iso));
+
+const assessmentSteps = [
+  { number: '01', title: 'Profile review', text: 'Results, goals, budget and preferred intake.' },
+  { number: '02', title: 'Written comparison', text: 'Recognition, costs, risks and realistic options.' },
+  { number: '03', title: 'Clear next steps', text: 'Apply only when fit and costs are clear in writing.' },
+];
 
 export function generateStaticParams() {
   const evidenceSlugs = Object.keys(evidencePages).filter((slug) => !slug.includes('/'));
@@ -33,49 +90,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const page = evidencePages[slug];
   const chinaGuide = chinaGuidePages[slug];
   if (!page && !chinaGuide) return {};
-  if (chinaGuide) {
-    return chinaGuideMetadata(slug);
-  }
+  if (chinaGuide) return chinaGuideMetadata(slug);
 
-  const canonical = absoluteUrl(`/${slug}`);
-  return {
-    title: { absolute: page.title },
-    description: page.description,
-    alternates: { canonical },
-    openGraph: {
-      title: page.title,
-      description: page.description,
-      url: canonical,
-      type: 'article',
-      siteName: 'EduExpress International',
-      locale: 'en_BD',
-      images: [
-        {
-          url: '/og-image.jpg',
-          width: 1200,
-          height: 630,
-          alt: `${page.title} | EduExpress International`,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: page.title,
-      description: page.description,
-      images: ['/og-image.jpg'],
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      },
-    },
-  };
+  const seo = seoFor(page);
+  return pageMetadata({ title: seo.title, description: seo.description, path: `/${slug}`, type: 'article', locale: 'en_BD' });
 }
 
 export default async function EvidencePageRoute({ params }: Props) {
@@ -87,7 +105,35 @@ export default async function EvidencePageRoute({ params }: Props) {
 
   if (chinaGuide) return <ChinaGuidePage guide={chinaGuide} />;
 
-  const canonical = absoluteUrl(`/${slug}`);
+  const path = `/${slug}`;
+  const canonical = absoluteUrl(path);
+  const seo = seoFor(page);
+  const reviewedLong = formatDate(page.reviewedAt, { day: 'numeric', month: 'long', year: 'numeric' });
+  const reviewedMonth = formatDate(page.reviewedAt, { month: 'long', year: 'numeric' });
+  const parts = page.sections.map((section, index) => ({ ...section, id: sectionId(section.heading, index) }));
+
+  const showDestinations = DESTINATION_GRID_PAGES.has(slug);
+  const destinations = countries
+    .filter((country) => country.isActive)
+    .map((country) => ({ ...country, status: country.serviceStatus ?? 'Active' }))
+    .sort((a, b) => (a.status === b.status ? 0 : a.status === 'Flagship' ? -1 : 1));
+
+  const related = [
+    ...Object.values(evidencePages)
+      .filter((item) => item.slug !== slug)
+      .map((item) => ({ href: `/${item.slug}`, title: item.title, text: item.description })),
+    {
+      href: '/china-visa-first-policy',
+      title: 'China visa-first service policy',
+      text: 'No EduExpress service fee before China visa approval, and every earlier third-party cost itemised in writing.',
+    },
+    {
+      href: '/fees-and-transparency',
+      title: 'Fees and transparency',
+      text: 'How EduExpress charges are kept separate from university, embassy and other third-party costs.',
+    },
+  ];
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -96,7 +142,7 @@ export default async function EvidencePageRoute({ params }: Props) {
         '@id': `${canonical}#webpage`,
         url: canonical,
         name: page.title,
-        description: page.description,
+        description: seo.description,
         inLanguage: 'en-BD',
         dateModified: page.reviewedAt,
         datePublished: page.reviewedAt,
@@ -106,236 +152,260 @@ export default async function EvidencePageRoute({ params }: Props) {
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
       },
       {
-        '@type': 'BreadcrumbList',
-        '@id': `${canonical}#breadcrumb`,
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-          { '@type': 'ListItem', position: 2, name: page.title, item: canonical },
-        ],
-      },
-      {
         '@type': 'Article',
         '@id': `${canonical}#article`,
         headline: page.title,
-        description: page.description,
+        description: seo.description,
         dateModified: page.reviewedAt,
         datePublished: page.reviewedAt,
         author: { '@id': `${SITE_URL}/#organization` },
         publisher: { '@id': `${SITE_URL}/#organization` },
         inLanguage: 'en-BD',
         mainEntityOfPage: { '@id': `${canonical}#webpage` },
+        ...(page.sources?.length
+          ? { citation: page.sources.map((source) => ({ '@type': 'CreativeWork', name: source.label, url: source.href })) }
+          : {}),
       },
-      ...(page.sources?.length
-        ? [
-            {
-              '@type': 'WebPage',
-              name: 'Referenced sources',
-              about: page.sources.map((source) => ({
-                '@type': 'WebPage',
-                name: source.label,
-                url: source.href,
-              })),
-            },
-          ]
-        : []),
     ],
   };
 
+  const record = [
+    { label: 'Owner', value: 'Content & Compliance' },
+    { label: 'Reviewed', value: reviewedLong },
+    { label: 'Sections', value: String(parts.length) },
+    { label: 'Status', value: 'Public' },
+  ];
+
   return (
-    <main className="overflow-x-clip bg-chalk text-ink">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
+    <>
+      <JsonLd data={structuredData} />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-rule bg-chalk">
-        <div className="pointer-events-none absolute inset-0 ed-grid-lines-dark" aria-hidden="true" />
-        <div className="pointer-events-none absolute -right-24 -top-20 size-[380px] rounded-full bg-sky-400/20 blur-[100px]" aria-hidden="true" />
+      <PageHero
+        path={path}
+        trail={[{ name: page.title }]}
+        eyebrow={page.eyebrow}
+        title={page.title}
+        lead={page.intro}
+        reviewed={reviewedMonth}
+        actions={
+          <>
+            <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              Get my free assessment <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+            <Link href="/proof-library" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Open the proof library
+            </Link>
+          </>
+        }
+        aside={
+          <aside aria-label="About this record" className={kit.cardDark}>
+            <p className="text-[14px] font-semibold uppercase tracking-[0.12em] text-white/70">The record</p>
+            <dl className="mt-5 grid grid-cols-2 gap-3">
+              {record.map((item) => (
+                <div key={item.label} className="rounded-2xl bg-white/[0.08] px-4 py-3.5">
+                  <dt className="text-[14px] text-white/70">{item.label}</dt>
+                  <dd className="mt-1 text-[17px] font-semibold leading-snug text-lime">{item.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-5 text-[15px] leading-7 text-white/85">
+              Every claim here is tied to a written responsibility or an official source. Private student records are never published.
+            </p>
+            <Link
+              href="/proof-library"
+              className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 text-[16px] font-semibold text-white underline-offset-4 hover:underline"
+            >
+              Inspect the proof library <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </aside>
+        }
+      />
 
-        <div className="relative mx-auto max-w-shell px-4 pb-14 pt-[104px] sm:px-6 lg:px-10 lg:pb-20 lg:pt-[142px]">
-          <Breadcrumbs items={[{ name: page.title }]} />
-
-          <div className="mt-8 grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:gap-14">
-            <div className="min-w-0">
-              <p className="ed-label">{page.eyebrow}</p>
-              <h1 className="ed-home-display mt-5 max-w-[18ch] text-[clamp(2.4rem,4.4vw,3.9rem)] text-ink">
-                {page.title}
-              </h1>
-              <p className="mt-5 max-w-[58ch] text-[15px] leading-8 text-ink-soft">{page.intro}</p>
-
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-12 px-6">
-                  Start free fit assessment <ArrowRight size={16} aria-hidden="true" />
-                </Link>
-                <Link href="/proof-library" className="ed-btn ed-btn-outline min-h-12 bg-white px-6">
-                  Open proof library <ArrowUpRight size={16} aria-hidden="true" />
-                </Link>
-              </div>
-
-              <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-mute">
-                <li className="inline-flex items-center gap-1.5">
-                  <BadgeCheck size={13} className="text-jade" aria-hidden="true" />
-                  Owned by Content &amp; Compliance
-                </li>
-                <li aria-hidden="true" className="text-ink-mute/40">·</li>
-                <li className="inline-flex items-center gap-1.5">
-                  <ShieldCheck size={13} className="text-jade" aria-hidden="true" />
-                  Official sources &amp; written responsibilities
-                </li>
-                <li aria-hidden="true" className="text-ink-mute/40">·</li>
-                <li>Reviewed {new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(page.reviewedAt))}</li>
-              </ul>
+      <Section>
+        <div className="grid gap-10 lg:grid-cols-[260px_1fr] lg:gap-16">
+          <nav aria-label="On this page" className="lg:sticky lg:top-28 lg:self-start">
+            <div className={kit.cardSage}>
+              <p className="text-[14px] font-semibold uppercase tracking-[0.12em] text-ink-soft">On this page</p>
+              <ol className="mt-4 grid gap-1">
+                {parts.map((part, index) => (
+                  <li key={part.id}>
+                    <a
+                      href={`#${part.id}`}
+                      className="flex min-h-[44px] items-start gap-3 rounded-xl px-2 py-2.5 text-[15px] font-semibold leading-6 text-petrol-800 hover:bg-white"
+                    >
+                      <span className="font-display text-[14px] font-black text-ink-mute">{String(index + 1).padStart(2, '0')}</span>
+                      {part.heading}
+                    </a>
+                  </li>
+                ))}
+              </ol>
             </div>
+          </nav>
 
-            <aside className="rounded-[22px] border border-rule bg-white p-6 shadow-lift">
-              <p className="ed-label">The record</p>
-              <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-rule bg-rule">
-                <div className="bg-white p-4">
-                  <dt className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">Owner</dt>
-                  <dd className="mt-1 text-[15px] font-semibold text-ink">Content &amp; Compliance</dd>
-                </div>
-                <div className="bg-white p-4">
-                  <dt className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">Reviewed</dt>
-                  <dd className="mt-1 text-[15px] font-semibold text-ink">
-                    {new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(page.reviewedAt))}
-                  </dd>
-                </div>
-                <div className="bg-white p-4">
-                  <dt className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">Sources</dt>
-                  <dd className="mt-1 text-[15px] font-semibold text-ink">Official</dd>
-                </div>
-                <div className="bg-white p-4">
-                  <dt className="text-[12px] font-bold uppercase tracking-[0.12em] text-ink-mute">Status</dt>
-                  <dd className="mt-1 text-[15px] font-semibold text-jade">Public</dd>
-                </div>
-              </dl>
-              <p className="mt-4 text-[14px] leading-6 text-ink-soft">
-                Every claim here is tied to a written responsibility or an official source. Private student records are never published.
-              </p>
-              <Link href="/proof-library" className="mt-4 inline-flex items-center gap-1.5 text-[14px] font-bold text-petrol-700 hover:text-petrol-900">
-                Inspect the proof library <ArrowRight size={14} aria-hidden="true" />
-              </Link>
-            </aside>
-          </div>
-        </div>
-      </section>
-
-      {/* Content */}
-      <section className="px-4 py-section sm:px-6 lg:px-10">
-        <div className="mx-auto max-w-shell">
-          <div className="grid gap-5">
-            {page.sections.map((section, idx) => (
-              <article
-                key={section.heading}
-                className="overflow-hidden rounded-[32px] border border-rule bg-white shadow-[0_24px_60px_-52px_rgba(15,53,87,0.5)]"
+          <div className="min-w-0 max-w-3xl">
+            {parts.map((part, index) => (
+              <section
+                key={part.id}
+                id={part.id}
+                aria-labelledby={`${part.id}-title`}
+                className="scroll-mt-28 border-t border-canvas-soft py-10 first:border-t-0 first:pt-0 last:pb-0"
               >
-                <div className="flex flex-col gap-4 border-b border-rule p-7 sm:flex-row sm:items-start sm:justify-between sm:p-9">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="ed-figure text-[13px] font-bold tracking-[0.14em] text-ink-mute">
-                        SECTION {String(idx + 1).padStart(2, '0')}
-                      </span>
-                      <span className="h-px w-6 bg-rule-strong" aria-hidden="true" />
-                    </div>
-                    <h2 className="ed-home-display mt-4 text-[clamp(1.7rem,2.8vw,2.4rem)] leading-[1.08] text-ink">
-                      {section.heading}
-                    </h2>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-full border border-rule-strong bg-chalk-100 px-3 py-1.5 text-[13px] font-semibold text-petrol-700">
-                    <FileText size={13} aria-hidden="true" />
-                    EduExpress standard
-                  </div>
+                <div data-anim="up">
+                  <p className={kit.badge}>Part {String(index + 1).padStart(2, '0')}</p>
+                  <h2
+                    id={`${part.id}-title`}
+                    className="mt-4 font-display text-[30px] font-black leading-[1.05] tracking-[-0.01em] text-petrol-800 sm:text-[36px]"
+                  >
+                    {part.heading}
+                  </h2>
+                  <p className="mt-4 whitespace-pre-line text-[17px] leading-8 text-ink-soft">{part.body}</p>
                 </div>
-                <div className="p-7 sm:p-9">
-                  <p className="max-w-[86ch] whitespace-pre-line text-[14px] leading-8 text-ink-soft">{section.body}</p>
-                  {section.items && section.items.length > 0 && (
-                    <ul className="mt-6 grid gap-2 sm:grid-cols-2">
-                      {section.items.map((item) => (
-                        <li
-                          key={item}
-                          className="flex items-start gap-3 rounded-2xl border border-rule bg-chalk-100 px-4 py-3 text-[15px] font-semibold leading-6 text-ink"
-                        >
-                          <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-jade" aria-hidden="true" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </article>
+                {part.items && part.items.length > 0 && (
+                  <ul data-anim="stagger" className="mt-6 grid gap-3 sm:grid-cols-2">
+                    {part.items.map((item) => (
+                      <li key={item} className="flex items-start gap-3 rounded-2xl bg-canvas-soft px-4 py-3.5 text-[16px] font-semibold leading-6 text-petrol-800">
+                        <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-lime-deep" aria-hidden="true" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
             ))}
 
             {page.sources?.length ? (
-              <article className="rounded-[32px] border border-rule bg-white p-7 shadow-[0_24px_60px_-52px_rgba(15,53,87,0.5)] sm:p-9">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="ed-label">References</p>
-                    <h2 className="ed-display mt-4 text-[clamp(1.6rem,2.8vw,2.2rem)] leading-[1.08] text-ink">
-                      Official sources
-                    </h2>
-                    <p className="mt-2 text-[15px] text-ink-soft">
-                      Links to official authorities referenced in this policy.
-                    </p>
-                  </div>
-                </div>
-                <ul className="mt-6 grid gap-2">
+              <section aria-labelledby="official-sources" className="border-t border-canvas-soft pt-10">
+                <h2 id="official-sources" className="font-display text-[30px] font-black leading-[1.05] text-petrol-800">
+                  Official sources
+                </h2>
+                <p className="mt-3 text-[16px] leading-7 text-ink-soft">Links to official authorities referenced in this policy.</p>
+                <ul className="mt-5 grid gap-2">
                   {page.sources.map((source) => (
                     <li key={source.href}>
                       <a
-                        className="group flex items-center justify-between gap-4 rounded-2xl border border-rule bg-chalk-100 px-5 py-4 transition-colors hover:border-petrol-400/40 hover:bg-mint-100"
                         href={source.href}
-                        rel="noreferrer noopener"
                         target="_blank"
+                        rel="noreferrer noopener"
+                        className="flex min-h-[52px] items-center justify-between gap-4 rounded-2xl bg-canvas-soft px-5 py-3 text-[16px] font-semibold text-petrol-800 hover:underline"
                       >
-                        <span className="text-[15px] font-semibold text-ink">{source.label}</span>
-                        <ArrowUpRight size={16} className="shrink-0 text-petrol-600 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+                        {source.label}
+                        <ArrowUpRight size={18} className="shrink-0" aria-hidden="true" />
                       </a>
                     </li>
                   ))}
                 </ul>
-              </article>
+              </section>
             ) : null}
-
-            {/* CTA */}
-            <section className="ed-band ed-band-sky relative overflow-hidden rounded-[28px] border border-rule px-6 py-10 sm:px-9 lg:px-12 lg:py-12">
-              <div className="pointer-events-none absolute inset-0 ed-grid-lines-dark" aria-hidden="true" />
-              <div className="relative grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-12">
-                <div>
-                  <p className="ed-label">Compare before you commit</p>
-                  <h2 className="ed-home-display mt-4 max-w-[26ch] text-[clamp(1.9rem,3.4vw,2.8rem)] leading-[1.04] text-ink">
-                    Get your free education fit assessment
-                  </h2>
-                  <p className="mt-4 max-w-[52ch] text-[14px] leading-7 text-ink-soft">
-                    Share your academic profile, subject, budget, intake, language readiness and career goal. We&apos;ll identify suitable routes, risks and missing information in writing before you commit.
-                  </p>
-                  <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                    <Link href="/education-fit-assessment" className="ed-btn ed-btn-primary min-h-12 px-6">
-                      Start my assessment <ArrowRight size={16} aria-hidden="true" />
-                    </Link>
-                    <Link href="/contact" className="ed-btn ed-btn-outline min-h-12 bg-white px-6">
-                      Talk to a counsellor <ArrowUpRight size={16} aria-hidden="true" />
-                    </Link>
-                  </div>
-                </div>
-
-                <ol className="grid gap-2.5 text-[15px]">
-                  {[
-                    ['01', 'Profile review', 'Results, goals, budget and preferred intake.'],
-                    ['02', 'Written comparison', 'Recognition, costs, risks and realistic options.'],
-                    ['03', 'Clear next steps', 'Apply only when fit and costs are clear in writing.'],
-                  ].map(([number, title, copy]) => (
-                    <li key={title} className="flex gap-4 rounded-2xl border border-white bg-white px-4 py-3.5 shadow-[0_16px_36px_-32px_rgba(15,53,87,0.45)]">
-                      <span className="ed-figure text-[13px] font-bold tracking-[0.12em] text-petrol-600">{number}</span>
-                      <span>
-                        <strong className="block text-[15px] font-semibold text-ink">{title}</strong>
-                        <span className="mt-0.5 block text-[13px] leading-5 text-ink-soft">{copy}</span>
-                      </span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </section>
           </div>
         </div>
-      </section>
-    </main>
+      </Section>
+
+      {showDestinations && (
+        <Section
+          tone="sage"
+          title="Destination services."
+          intro="Every listed destination is open for counselling and application support. China is the flagship service with the deepest published evidence base."
+        >
+          <ul data-anim="stagger" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {destinations.map((country) => (
+              <li key={country.slug}>
+                <Link
+                  href={destinationPath(country.slug)}
+                  className="group flex h-full min-h-[88px] items-center justify-between gap-4 rounded-3xl bg-white px-6 py-5"
+                >
+                  <span className="flex items-center gap-4">
+                    <span className="text-[28px] leading-none" aria-hidden="true">{country.flag}</span>
+                    <span>
+                      <span className="block text-[18px] font-semibold text-petrol-800 group-hover:underline">{country.name}</span>
+                      <span
+                        className={`mt-1 inline-flex rounded-full px-2.5 py-0.5 text-[14px] font-semibold ${
+                          country.status === 'Flagship' ? 'bg-petrol-800 text-lime' : 'bg-lime-pale text-lime-deep'
+                        }`}
+                      >
+                        {country.status}
+                      </span>
+                    </span>
+                  </span>
+                  <ArrowRight size={18} className="shrink-0 text-petrol-800" aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
+      <Section
+        tone={showDestinations ? 'white' : 'sage'}
+        title="Related policies and standards."
+        intro="The written rules behind every EduExpress recommendation, payment and record."
+      >
+        <ul data-anim="stagger" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {related.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className={`group flex h-full flex-col rounded-3xl p-6 sm:p-7 ${showDestinations ? 'bg-canvas-soft' : 'bg-white'}`}
+              >
+                <span className={`${kit.h3} group-hover:underline`}>{item.title}</span>
+                <span className="mt-2 flex-1 text-[16px] leading-7 text-ink-soft">{item.text}</span>
+                <span className="mt-5 inline-flex items-center gap-1.5 text-[15px] font-semibold text-petrol-800">
+                  Read the page <ArrowRight size={16} aria-hidden="true" />
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <Section tone={showDestinations ? 'sage' : 'white'} title="Compare before you commit.">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-14">
+          <div>
+            <p className={kit.lead}>
+              Share your academic profile, subject, budget, intake, language readiness and career goal. We identify suitable routes,
+              risks and missing information in writing before you commit.
+            </p>
+            <ol data-anim="stagger" className="mt-8 grid gap-3">
+              {assessmentSteps.map((step) => (
+                <li key={step.number} className={`flex gap-4 ${showDestinations ? kit.card : kit.cardSage}`}>
+                  <span className="grid size-11 shrink-0 place-items-center rounded-full bg-lime font-display text-[15px] font-black text-petrol-800">
+                    {step.number}
+                  </span>
+                  <span>
+                    <span className="block text-[18px] font-semibold text-petrol-800">{step.title}</span>
+                    <span className="mt-0.5 block text-[16px] leading-7 text-ink-soft">{step.text}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+                Start my assessment <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+              <Link href="/contact" className="ed-btn ed-btn-outline min-h-[52px] px-7">Talk to a counsellor</Link>
+            </div>
+          </div>
+          <figure data-anim="up" className="relative overflow-hidden rounded-3xl">
+            <div className="relative aspect-[4/3]">
+              <Image
+                src="/images/home/consultation-student-parent.webp"
+                alt="An EduExpress counsellor reviewing study options with a student and parent at the Dhanmondi office"
+                fill
+                sizes="(max-width:1024px) 100vw, 560px"
+                className="object-cover"
+              />
+            </div>
+          </figure>
+        </div>
+      </Section>
+
+      {showDestinations ? (
+        <CtaBand />
+      ) : (
+        <CtaBand
+          title="Questions about this policy?"
+          text="Visit our Dhanmondi office or start the free assessment online. A counsellor replies within one working day with a written summary of suitable routes."
+        />
+      )}
+    </>
   );
 }

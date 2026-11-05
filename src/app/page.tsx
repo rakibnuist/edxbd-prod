@@ -34,9 +34,9 @@ import type { Update } from '@/lib/types';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: { absolute: 'Study Abroad Consultancy in Bangladesh | Free Assessment | EduExpress' },
+  title: { absolute: 'Study Abroad Consultancy in Bangladesh | EduExpress' },
   description:
-    'Free profile assessment for Bangladeshi students. Compare universities, tuition, scholarships and visa requirements, then get the costs and next step in writing. Dhanmondi, Dhaka.',
+    'Free study abroad assessment in Dhanmondi, Dhaka. Compare universities, scholarships and the full cost in writing, with no fee before your China visa.',
   alternates: { canonical: '/' },
   openGraph: {
     title: 'Study Abroad, With the Costs in Writing | EduExpress International',

@@ -1,8 +1,13 @@
-import { serializeJsonLd } from '@/lib/json-ld';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
+
 import UpdatesClient from './UpdatesClient';
-import type { Update } from '@/lib/types';
+import { chinaGuides } from './guides';
+import { CtaBand, JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
 import { getPublishedUpdates } from '@/lib/content-records';
+import { pageMetadata } from '@/lib/seo';
+import type { Update } from '@/lib/types';
 
 // PHASE 0 FIX: this page now fetches updates on the SERVER and passes them to
 // the client component, so every article title/excerpt is present in the HTML
@@ -10,49 +15,7 @@ import { getPublishedUpdates } from '@/lib/content-records';
 // ISR: regenerated at most every 5 minutes.
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-  // PHASE 0 FIX: brand suffix removed — the root layout template appends it
-  // (was causing "| EduExpress International | EduExpress International")
-  title: 'Latest Study Abroad Updates & News',
-  description: 'Stay updated with the latest study abroad news, scholarship opportunities, visa updates, and university announcements. Get expert guidance for your international education journey.',
-  authors: [{ name: 'EduExpress International' }],
-  creator: 'EduExpress International',
-  publisher: 'EduExpress International',
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  openGraph: {
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
-    title: 'Latest Study Abroad Updates & News',
-    description: 'Stay updated with the latest study abroad news, scholarship opportunities, visa updates, and university announcements.',
-    type: 'website',
-    url: '/updates',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Latest Study Abroad Updates & News',
-    description: 'Stay updated with the latest study abroad news, scholarship opportunities, visa updates, and university announcements.',
-  },
-  alternates: {
-    // PHASE 0 FIX: relative canonical, resolved against apex metadataBase
-    canonical: '/updates',
-    types: { 'application/rss+xml': '/updates/feed.xml' },
-  },
-  other: {
-    'geo.region': 'BD-DH',
-    'geo.placename': 'Dhaka',
-    'geo.position': '23.8103;90.4125',
-    'ICBM': '23.8103, 90.4125',
-  },
-};
+const PATH = '/updates';
 
 const normalizeList = (values: unknown[]) =>
   Array.from(
@@ -64,7 +27,7 @@ const normalizeList = (values: unknown[]) =>
     )
   ).sort((a, b) => a.localeCompare(b));
 
-async function getUpdates(): Promise<{ updates: Update[]; categories: string[] }> {
+async function getUpdates(): Promise<{ updates: Update[]; categories: string[]; loaded: boolean }> {
   try {
     const updates = await getPublishedUpdates();
     const singleCategories = updates
@@ -78,12 +41,39 @@ async function getUpdates(): Promise<{ updates: Update[]; categories: string[] }
     return {
       updates,
       categories: normalizeList([...singleCategories, ...multiCategories]),
+      loaded: true,
     };
   } catch (error) {
     console.error('Error fetching updates server-side:', error);
     // Fall back to empty — the client component will fetch from the API instead
-    return { updates: [], categories: [] };
+    return { updates: [], categories: [], loaded: false };
   }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { updates, loaded } = await getUpdates();
+  const base = pageMetadata({
+    title: 'Study Abroad News, Intakes and Visa Updates | EduExpress',
+    description:
+      'Dated study abroad updates for Bangladeshi students: intake windows, scholarship changes, visa guidance and university news, each with its source.',
+    path: PATH,
+    // An empty archive is a thin page: keep it out of the index until the first
+    // update is published. A failed read is not treated as empty.
+    noindex: loaded && updates.length === 0,
+  });
+  return {
+    ...base,
+    authors: [{ name: 'EduExpress International' }],
+    creator: 'EduExpress International',
+    publisher: 'EduExpress International',
+    alternates: { ...base.alternates, types: { 'application/rss+xml': '/updates/feed.xml' } },
+    other: {
+      'geo.region': 'BD-DH',
+      'geo.placename': 'Dhaka',
+      'geo.position': '23.8103;90.4125',
+      'ICBM': '23.8103, 90.4125',
+    },
+  };
 }
 
 export default async function UpdatesPage() {
@@ -91,37 +81,72 @@ export default async function UpdatesPage() {
 
   const structuredData = {
     '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'Blog',
-        '@id': 'https://eduexpressint.com/updates#blog',
-        url: 'https://eduexpressint.com/updates',
-        name: 'EduExpress Updates',
-        description: 'Verified study-abroad updates, intake news and guidance for Bangladeshi students.',
-        inLanguage: 'en-BD',
-        publisher: { '@id': 'https://eduexpressint.com/#organization' },
-        blogPost: updates.slice(0, 20).map((u) => ({
-          '@type': 'BlogPosting',
-          headline: u.title,
-          url: `https://eduexpressint.com/updates/${u.slug}`,
-          datePublished: u.publishedAt || u.createdAt,
-        })),
-      },
-      {
-        '@type': 'BreadcrumbList',
-        '@id': 'https://eduexpressint.com/updates#breadcrumb',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://eduexpressint.com/' },
-          { '@type': 'ListItem', position: 2, name: 'Updates', item: 'https://eduexpressint.com/updates' },
-        ],
-      },
-    ],
+    '@type': 'Blog',
+    '@id': 'https://eduexpressint.com/updates#blog',
+    url: 'https://eduexpressint.com/updates',
+    name: 'EduExpress Updates',
+    description: 'Dated study-abroad updates, intake news and guidance for Bangladeshi students.',
+    inLanguage: 'en-BD',
+    publisher: { '@id': 'https://eduexpressint.com/#organization' },
+    breadcrumb: { '@id': 'https://eduexpressint.com/updates#breadcrumb' },
+    blogPost: updates.slice(0, 20).map((u) => ({
+      '@type': 'BlogPosting',
+      headline: u.title,
+      url: `https://eduexpressint.com/updates/${u.slug}`,
+      datePublished: u.publishedAt || u.createdAt,
+    })),
   };
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
-      <UpdatesClient initialUpdates={updates} initialCategories={categories} />
+      <JsonLd data={structuredData} />
+
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Updates' }]}
+        eyebrow="Information centre"
+        title="Advice that carries a date and a source."
+        lead="Admissions news, scholarship changes and practical study guidance. Every entry shows when it was published and who wrote it, and old intake notices stay online, visibly closed."
+        actions={
+          <>
+            <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              Get my free assessment <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+            <Link href="/study-in-china-from-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">Study in China guide</Link>
+          </>
+        }
+        aside={
+          // With nothing published the library itself lists these guides, so the
+          // hero only repeats them once there are updates to browse.
+          updates.length > 0 ? (
+            <nav aria-label="Check before you apply" className={kit.card}>
+              <p className="text-[15px] font-semibold text-ink-soft">Check before you apply</p>
+              <ul className="mt-3 grid">
+                {chinaGuides.map(guide => (
+                  <li key={guide.href} className="border-t border-canvas-soft first:border-t-0">
+                    <Link href={guide.href} className="group flex min-h-[64px] items-center justify-between gap-4 py-3">
+                      <span>
+                        <span className="block text-[14px] text-ink-soft">{guide.label}</span>
+                        <span className="block text-[17px] font-semibold leading-snug text-petrol-800 group-hover:underline">{guide.title}</span>
+                      </span>
+                      <ArrowUpRight size={18} className="shrink-0 text-petrol-800" aria-hidden="true" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : undefined
+        }
+      />
+
+      <Section id="library">
+        <UpdatesClient initialUpdates={updates} initialCategories={categories} />
+      </Section>
+
+      <CtaBand
+        title="Need an answer for your intake?"
+        text="Published deadlines and criteria can change. Tell us your results, budget and preferred intake, and a counsellor will check the current route directly."
+      />
     </>
   );
 }

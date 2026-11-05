@@ -1,7 +1,9 @@
-import { serializeJsonLd } from '@/lib/json-ld';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { ArrowRight, FileSearch, ShieldCheck } from 'lucide-react';
+import { CtaBand, JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
+import { pageMetadata } from '@/lib/seo';
 import UniversitiesClient from './UniversitiesClient';
 import { getUniversityRankings } from '@/lib/university-rankings';
 import { getAllUniversityProfileDetails } from '@/lib/university-profile-details';
@@ -15,7 +17,8 @@ import { activeCountries } from '@/lib/countries';
 import { destinationPath } from '@/lib/site-urls';
 import { countryCode } from '@/lib/country-code';
 
-const canonical = 'https://eduexpressint.com/universities';
+const PATH = '/universities';
+const canonical = `https://eduexpressint.com${PATH}`;
 export const revalidate = 3600;
 const programName = (value: string) => evergreenText(value).replace(/\s*\([^)]*\b(?:till|until|deadline)\b[^)]*\)/gi, '').trim();
 
@@ -24,25 +27,14 @@ type Props = { searchParams: Promise<Query> };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const query = await searchParams;
-  return {
-    title: { absolute: 'University & Program Finder 2027 | EduExpress International' },
+  return pageMetadata({
+    title: 'University & Program Finder 2027 | EduExpress International',
     description: 'Find and compare 2027 universities, programs, tuition and scholarships across destinations. Verified fees, rankings and intake months with sources.',
-    alternates: { canonical },
-    openGraph: {
-      title: 'University & Program Finder 2027',
-      description: 'Compare 2027 universities, programs, tuition, scholarships and intake months with source records.',
-      url: canonical,
-      type: 'website',
-      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — university and program finder' }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'University & Program Finder 2027',
-      description: 'Compare 2027 universities, programs, tuition, scholarships and intake months with source records.',
-      images: ['/og-image.jpg'],
-    },
-    ...(Object.values(query).some(value => Array.isArray(value) ? value.some(Boolean) : Boolean(value)) ? { robots: { index: false, follow: true } } : {}),
-  };
+    path: PATH,
+    image: { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — university and program finder' },
+    // Filtered views (?country=…) are variants of the directory; only the clean URL is indexed.
+    noindex: Object.values(query).some(value => Array.isArray(value) ? value.some(Boolean) : Boolean(value)),
+  });
 }
 
 async function getUniversities() {
@@ -97,100 +89,143 @@ export default async function UniversitiesPage({ searchParams }: Props) {
   });
   const listedDestinations = destinations.filter(item => item.hasDirectoryData).sort((a, b) => b.count - a.count);
   const guideDestinations = destinations.filter(item => !item.hasDirectoryData);
+  const activeCount = universities.filter(u => u.isActive).length;
+  const programCount = universities.reduce((count, u) => count + u.programs.length, 0);
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: 'Universities and Study Options', inLanguage: 'en-BD' },
-      { '@type': 'BreadcrumbList', '@id': `${canonical}#breadcrumb`, itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'EduExpress International', item: 'https://eduexpressint.com' },
-        { '@type': 'ListItem', position: 2, name: 'Universities and Study Options', item: canonical },
-      ] },
+      {
+        '@type': 'CollectionPage',
+        '@id': `${canonical}#page`,
+        url: canonical,
+        name: 'Universities and Study Options',
+        inLanguage: 'en-BD',
+        isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+        breadcrumb: { '@id': `${canonical}#breadcrumb` },
+      },
       { '@type': 'ItemList', numberOfItems: visibleUniversities.length, itemListElement: visibleUniversities.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, url: `${canonical}/${item.slug}` })) },
     ],
   };
 
   return (
-    <article className="bg-chalk pt-[74px] text-ink lg:pt-[108px]">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }} />
-      <header className="border-b border-rule px-5 pb-8 pt-10 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-shell">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-            <div>
-              <p className="ed-label">Programme finder · 2027 cycle</p>
-              <h1 className="mt-4 max-w-[24ch] ed-home-display text-[clamp(2.1rem,4.4vw,3.5rem)] leading-[1.02] text-ink">
-                Universities and study options, without the brochure.
-              </h1>
-              <p className="mt-4 max-w-[58ch] text-[14.5px] leading-7 text-ink-soft">
-                Every record below carries its own fee, intake, scholarship and ranking source. Filter it like a directory, compare up to four, and read the profile before you shortlist.
-              </p>
-            </div>
+    <>
+      <JsonLd data={schema} />
 
-            <dl className="grid grid-cols-3 gap-6 border-t border-rule pt-4 lg:border-t-0 lg:pt-0">
-              <div>
-                <dd className="ed-figure text-[28px] leading-none text-petrol-700">{universities.filter(u => u.isActive).length}</dd>
-                <dt className="mt-1 text-[13px] text-ink-mute">universities</dt>
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Universities' }]}
+        eyebrow="Programme finder · 2027 cycle"
+        title="Universities and study options, without the brochure."
+        lead="Every record below carries its own fee, intake, scholarship and ranking source. Filter it like a directory, compare up to four, and read the profile before you shortlist."
+        actions={
+          <>
+            <a href="#university-results" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              Search the directory <ArrowRight size={18} aria-hidden="true" />
+            </a>
+            <Link href="/education-fit-assessment" className="ed-btn ed-btn-outline min-h-[52px] px-7">Ask for a shortlist</Link>
+          </>
+        }
+        aside={
+          <div className={kit.cardDark}>
+            <p className="text-[15px] font-semibold text-white/80">In the directory today</p>
+            <dl className="mt-5 grid grid-cols-3 gap-4">
+              <div className="flex flex-col-reverse">
+                <dt className="mt-2 text-[14px] leading-5 text-white/80">{activeCount === 1 ? 'university' : 'universities'}</dt>
+                <dd className="font-display text-[40px] font-black leading-none text-lime">{activeCount}</dd>
               </div>
-              <div>
-                <dd className="ed-figure text-[28px] leading-none text-petrol-700">{universities.reduce((count, u) => count + u.programs.length, 0)}</dd>
-                <dt className="mt-1 text-[13px] text-ink-mute">programmes</dt>
+              <div className="flex flex-col-reverse">
+                <dt className="mt-2 text-[14px] leading-5 text-white/80">programmes</dt>
+                <dd className="font-display text-[40px] font-black leading-none text-lime">{programCount}</dd>
               </div>
-              <div>
-                <dd className="ed-figure text-[28px] leading-none text-petrol-700">{listedDestinations.length}</dd>
-                <dt className="mt-1 text-[13px] text-ink-mute">destinations with data</dt>
+              <div className="flex flex-col-reverse">
+                <dt className="mt-2 text-[14px] leading-5 text-white/80">{listedDestinations.length === 1 ? 'destination with data' : 'destinations with data'}</dt>
+                <dd className="font-display text-[40px] font-black leading-none text-lime">{listedDestinations.length}</dd>
               </div>
             </dl>
+            <Link href="/how-we-verify-universities" className="mt-6 inline-flex min-h-[44px] items-center gap-1.5 text-[16px] font-semibold text-white underline underline-offset-4">
+              How records are verified <ArrowRight size={16} aria-hidden="true" />
+            </Link>
           </div>
+        }
+      />
 
-          <nav aria-label="Browse verified universities by destination" className="mt-7 flex flex-wrap items-center gap-2">
+      <section aria-label="Browse by destination" className="border-b border-canvas-soft bg-white py-7">
+        <div className={kit.wrap}>
+          <nav aria-label="Browse verified universities by destination" className="flex flex-wrap items-center gap-2">
             {listedDestinations.map(item => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="inline-flex min-h-8 items-center gap-2 border border-rule-strong bg-white px-2.5 text-[14px] font-medium text-ink transition-colors hover:border-petrol-500 hover:text-petrol-700"
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-canvas-soft px-4 text-[15px] font-semibold text-petrol-800 transition-colors hover:bg-lime-pale"
               >
-                <span aria-hidden="true" className="text-[12px] font-semibold text-ink-mute">{countryCode(item.name.toLowerCase().replace(/\s+/g, '-'))}</span>
+                <span aria-hidden="true" className="text-[14px] font-semibold text-ink-soft">{countryCode(item.name.toLowerCase().replace(/\s+/g, '-'))}</span>
                 {item.name}
-                <span className="ed-figure text-[13px] text-ink-mute">{item.count}</span>
+                <span className="rounded-full bg-white px-2 text-[14px] text-ink-soft">{item.count}</span>
               </Link>
             ))}
             {guideDestinations.length > 0 && (
-              <span className="text-[13px] text-ink-mute">{guideDestinations.length} further destinations are counselling-only — see the destinations menu</span>
+              <span className="text-[14px] text-ink-soft">{guideDestinations.length} further destinations are counselling-only — see the <Link href="/destinations" className="font-semibold text-petrol-800 underline underline-offset-4">destinations hub</Link></span>
             )}
           </nav>
 
-          <nav aria-label="Popular university study routes" className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[14px] font-semibold">
-            <Link href="/universities?country=China&search=medicine" className="inline-flex min-h-9 items-center text-petrol-600 underline-offset-4 hover:underline">
+          <nav aria-label="Popular university study routes" className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-[15px] font-semibold">
+            <Link href="/universities?country=China&search=medicine" className="inline-flex min-h-[44px] items-center text-petrol-800 underline-offset-4 hover:underline">
               Medicine in China
             </Link>
-            <Link href="/mbbs-in-china-bangladesh" className="inline-flex min-h-9 items-center text-petrol-600 underline-offset-4 hover:underline">
+            <Link href="/mbbs-in-china-bangladesh" className="inline-flex min-h-[44px] items-center text-petrol-800 underline-offset-4 hover:underline">
               MBBS fees and admission
             </Link>
-            <Link href="/how-we-verify-universities" className="inline-flex min-h-9 items-center text-ink-mute underline-offset-4 hover:text-petrol-600 hover:underline">
+            <Link href="/china-scholarships-bangladesh" className="inline-flex min-h-[44px] items-center text-petrol-800 underline-offset-4 hover:underline">
+              China scholarships
+            </Link>
+            <Link href="/how-we-verify-universities" className="inline-flex min-h-[44px] items-center text-ink-soft underline-offset-4 hover:text-petrol-800 hover:underline">
               How records are verified
             </Link>
           </nav>
         </div>
-      </header>
+      </section>
 
-      <Suspense fallback={<div className="px-5 py-20 text-center text-[15px] text-ink-mute sm:px-8">Loading the directory…</div>}>
-        <UniversitiesClient initialUniversities={universities} />
-      </Suspense>
+      <div className="bg-white pt-8">
+        <Suspense fallback={<div className="px-5 py-20 text-center text-[16px] text-ink-soft sm:px-8">Loading the directory…</div>}>
+          <UniversitiesClient initialUniversities={universities} />
+        </Suspense>
+      </div>
 
-      <footer className="border-t border-rule bg-white px-5 py-6 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-shell flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <p className="max-w-3xl text-[13px] leading-6 text-ink-mute">
-            Tuition, scholarship and ranking entries link to their official source records inside each profile. Where a figure is under verification, the profile says so — we do not publish estimates as facts.
-          </p>
-          <nav aria-label="Directory transparency" className="flex shrink-0 flex-wrap gap-x-5 gap-y-1 text-[14px] font-semibold">
-            <Link href="/fees-and-transparency" className="inline-flex min-h-8 items-center text-petrol-600 hover:underline">
-              Fee policy
-            </Link>
-            <Link href="/how-we-verify-universities" className="inline-flex min-h-8 items-center text-petrol-600 hover:underline">
-              Verification method
-            </Link>
-          </nav>
+      <Section tone="sage" title="How we keep the directory honest." intro="Tuition, scholarship and ranking entries link to their official source records inside each profile.">
+        <div data-anim="stagger" className="grid gap-5 md:grid-cols-3">
+          <article className={kit.card}>
+            <span className={kit.iconLime}><FileSearch size={22} aria-hidden="true" /></span>
+            <h3 className={`mt-6 ${kit.h3}`}>Sources on every record</h3>
+            <p className="mt-2 text-[16px] leading-7 text-ink-soft">
+              Each record stores the official institution name, source URL, recognition notes, exact program names, tuition periods,
+              intake dates and the date each fact was checked.
+            </p>
+          </article>
+          <article className={kit.card}>
+            <span className={kit.iconLime}><ShieldCheck size={22} aria-hidden="true" /></span>
+            <h3 className={`mt-6 ${kit.h3}`}>No estimates as facts</h3>
+            <p className="mt-2 text-[16px] leading-7 text-ink-soft">
+              Where a figure is under verification, the profile says so. We do not publish estimates as facts.
+            </p>
+          </article>
+          <article className={kit.cardDark}>
+            <h3 className="text-[21px] font-semibold leading-[1.3] tracking-[-0.02em] text-lime">Honest relationship labels</h3>
+            <p className="mt-2 text-[16px] leading-7 text-white/80">
+              Direct partner, authorized representative, network access and public direct application are different relationships. We
+              use &ldquo;partner&rdquo; only when supporting evidence is current.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1">
+              <Link href="/fees-and-transparency" className="inline-flex min-h-[44px] items-center gap-1.5 text-[16px] font-semibold text-white underline underline-offset-4">Fee policy</Link>
+              <Link href="/how-we-verify-universities" className="inline-flex min-h-[44px] items-center gap-1.5 text-[16px] font-semibold text-white underline underline-offset-4">Verification method</Link>
+            </div>
+          </article>
         </div>
-      </footer>
-    </article>
+      </Section>
+
+      <CtaBand
+        title="Want a shortlist instead?"
+        text="Tell us your results, budget and preferred intake. A counsellor checks which universities in the directory are realistic for you, with the costs and documents in writing."
+      />
+    </>
   );
 }

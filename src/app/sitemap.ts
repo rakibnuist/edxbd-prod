@@ -34,6 +34,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/china-march-2027-intake',
     '/for-parents',
     '/proof-library',
+    '/csc-scholarship-bangladesh',
+    '/bn/study-in-china',
     // Pages served by a hand-built route under src/app/
     ...sitemapStaticRouteSlugs.map((slug) => `/${slug}`),
     // Pages served by app/[slug] from the two data files
@@ -42,8 +44,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .map((slug) => `/${slug}`),
     ...Object.keys(chinaGuidePages).map((slug) => `/${slug}`),
   ]));
+  // Static pages were rebuilt on the shared page kit on this date.
+  const STATIC_CONTENT_UPDATED = new Date('2026-11-06');
   const routes = staticPaths.map((route) => ({
     url: `${baseUrl}${route}`,
+    lastModified: STATIC_CONTENT_UPDATED,
     changeFrequency: 'weekly' as const,
     priority: route === '' ? 1 : route === '/education-fit-assessment' ? 0.9 : 0.8,
   }));
@@ -53,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((country) => country.slug !== 'china')
     .map((country) => ({
     url: `${baseUrl}${destinationPath(country.slug)}`,
-    lastModified: new Date('2026-08-24'),
+    lastModified: new Date('2026-11-06'),
     changeFrequency: 'weekly' as const,
     priority: 0.85,
   }));

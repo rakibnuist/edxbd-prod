@@ -6,24 +6,24 @@ type TeamMember = { id: string; name: string; role: string; bio: string | null; 
 
 export default function TeamSection({ team }: { team: TeamMember[] }) {
     return (
-        <section id="team" className="py-20 bg-[#f1f5f9] border-b border-[#12436b]/15 scroll-mt-24">
-            <div className="container mx-auto px-5 sm:px-8 lg:px-12">
+        <section id="team" className="scroll-mt-24 bg-white py-16 lg:py-20">
+            <div className="mx-auto max-w-[1200px] px-5 lg:px-8">
                 <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-14">
-                        <p className="font-mono text-[12px] font-black uppercase tracking-[0.2em] text-[#12436b]">The people behind your file</p>
-                        <h2 className="mt-2 font-heading text-4xl font-bold text-[#0f3a5c]">Meet Our Team</h2>
-                        <p className="text-base text-slate-600 max-w-2xl mx-auto mt-3">
+                    <div className="mb-12 max-w-3xl">
+                        <p className="inline-flex items-center gap-2 rounded-full bg-lime-pale px-3.5 py-1.5 text-[14px] font-semibold text-lime-deep">The people behind your file</p>
+                        <h2 data-anim="up" className="mt-4 font-display text-[34px] font-black leading-[0.98] tracking-[-0.01em] text-petrol-800 sm:text-[46px]">Meet our team.</h2>
+                        <p className="mt-4 text-[18px] leading-[1.6] text-ink-soft">
                             Counselors, document specialists, and admissions officers working under written evidence guidelines from our Dhanmondi decision desk.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div data-anim="stagger" className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                         {team.map((member) => (
                             <div
                                 key={member.name}
-                                className="group relative bg-white border-2 border-[#0f3a5c] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#12436b]"
+                                className="group relative overflow-hidden rounded-3xl bg-canvas-soft p-3 transition duration-300 hover:-translate-y-1"
                             >
-                                <div className="aspect-[3/4] relative overflow-hidden bg-[#0f3a5c]">
+                                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-petrol-800">
                                     {member.photoUrl ? (
                                         <Image
                                             src={member.photoUrl}
@@ -40,13 +40,13 @@ export default function TeamSection({ team }: { team: TeamMember[] }) {
                                     )}
                                 </div>
 
-                                <div className="p-5 text-center bg-white border-t border-[#12436b]/15">
-                                    <h3 className="font-heading text-lg font-bold text-[#0f3a5c] mb-1">{member.name}</h3>
-                                    <p className="font-mono text-[12px] font-black uppercase tracking-wider text-[#12436b] mb-2">{member.role}</p>
-                                    <p className="text-slate-600 text-xs leading-5 line-clamp-3">
+                                <div className="px-3 pb-3 pt-5">
+                                    <h3 className="text-[20px] font-semibold leading-snug text-petrol-800">{member.name}</h3>
+                                    <p className="mt-0.5 text-[14px] font-semibold text-lime-deep">{member.role}</p>
+                                    <p className="mt-2 line-clamp-3 text-[15px] leading-6 text-ink-soft">
                                         {member.bio}
                                     </p>
-                                    <div className="mt-4 flex flex-wrap justify-center gap-1.5">
+                                    <div className="mt-4 flex flex-wrap gap-1.5">
                                         {member.specialties.map(specialty => <span key={specialty} className="bg-[#e3f0f9] px-2 py-1 text-[12px] font-bold text-[#12436b]">{specialty}</span>)}
                                     </div>
                                 </div>

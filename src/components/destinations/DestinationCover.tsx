@@ -22,6 +22,22 @@ export const DESTINATION_PHOTOS: Record<string, string> = {
   malta: '/images/destinations/malta-hero.webp',
 };
 
+/** What each photo actually shows, for screen readers and image search. */
+const PHOTO_ALT: Record<string, string> = {
+  china: 'The Great Wall of China across autumn hills',
+  'south-korea': 'A street lined with Korean shop signs in South Korea',
+  uk: 'Tower Bridge and the River Thames in London',
+  malaysia: 'The Petronas Twin Towers in Kuala Lumpur at dusk',
+  georgia: 'Old town rooftops in Georgia at sunset',
+  greece: 'The Parthenon on the Acropolis in Athens',
+  thailand: 'Thai temple buildings under a blue sky',
+  hungary: 'The Hungarian Parliament Building in Budapest lit up at night',
+  finland: 'Helsinki Cathedral above the harbour in Finland',
+  cyprus: 'Seafront towers and a promenade in Cyprus',
+  croatia: 'The twin spires of Zagreb Cathedral in Croatia',
+  malta: 'Aerial view of Valletta, Malta, with the sea behind',
+};
+
 export function destinationPhoto(slug: string) {
   return DESTINATION_PHOTOS[slug];
 }
@@ -34,6 +50,7 @@ export default function DestinationCover({
   sizes = '(max-width: 1024px) 100vw, 560px',
   className = '',
   compact = false,
+  alt,
 }: {
   slug: string;
   name: string;
@@ -42,6 +59,8 @@ export default function DestinationCover({
   sizes?: string;
   className?: string;
   compact?: boolean;
+  /** Override the photo description; pass "" when a visible heading already names the country. */
+  alt?: string;
 }) {
   const photo = DESTINATION_PHOTOS[slug];
 
@@ -49,7 +68,7 @@ export default function DestinationCover({
     return (
       <Image
         src={photo}
-        alt={`Study in ${name} from Bangladesh`}
+        alt={alt ?? PHOTO_ALT[slug] ?? `Study in ${name} from Bangladesh`}
         fill
         priority={priority}
         sizes={sizes}
@@ -60,12 +79,11 @@ export default function DestinationCover({
 
   return (
     <div className={`absolute inset-0 overflow-hidden bg-petrol-800 ${className}`} aria-hidden="true">
-      <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_85%_0%,rgba(102,181,224,0.55),transparent_62%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(7,28,46,0.1),rgba(7,28,46,0.75))]" />
-      <div className="ed-grid-lines absolute inset-0 opacity-60" />
+      <div className="absolute -right-16 -top-16 size-56 rounded-full bg-lime/25 blur-2xl" />
+      <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(7,28,46,0.05),rgba(7,28,46,0.6))]" />
       <span
-        className={`ed-numeral absolute leading-none text-white/10 ${
-          compact ? 'right-3 top-3 text-[46px]' : '-right-3 -top-10 text-[180px]'
+        className={`absolute font-display font-black leading-none text-white/10 ${
+          compact ? 'right-3 top-3 text-[46px]' : '-right-3 -top-8 text-[180px]'
         }`}
       >
         {countryCode(slug)}
@@ -73,10 +91,8 @@ export default function DestinationCover({
       {!compact && (
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
           {flag && <span className="text-5xl leading-none">{flag}</span>}
-          <span className="mt-3 text-[14px] font-bold uppercase tracking-[0.16em] text-white/90">{name}</span>
-          <span className="mt-1 text-[12px] font-medium uppercase tracking-[0.16em] text-mint-300">
-            Destination profile
-          </span>
+          <span className="mt-3 font-display text-[22px] font-black text-white">{name}</span>
+          <span className="mt-1 text-[14px] font-semibold text-lime">Destination profile</span>
         </div>
       )}
     </div>

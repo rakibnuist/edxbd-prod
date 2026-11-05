@@ -1,140 +1,205 @@
-'use client';
-
-import { Shield, Lock, Eye, Users, FileText, Database, ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowRight, Eye, Lock, Mail, MapPin, Phone, Shield, Users } from 'lucide-react';
+import { CtaBand, JsonLd, PageHero, kit } from '@/components/page/PageKit';
+import { config } from '@/lib/config';
+import { LegalDocument, LegalList, type LegalSection } from './LegalDocument';
 
+const PATH = '/privacy';
+const POLICY_VERSION = '2026-07-19';
+const PAGE_URL = `https://eduexpressint.com${PATH}`;
+
+const privacyPillars = [
+  {
+    title: 'Secure data storage',
+    icon: Lock,
+    copy: 'Student transcripts, passport copies, and personal records are encrypted in transit and stored securely on protected database infrastructure.',
+  },
+  {
+    title: 'Explicit consent',
+    icon: Eye,
+    copy: 'We collect personal information strictly to prepare your Education Fit Assessment, ClearCost schedule, and university applications.',
+  },
+  {
+    title: 'Student control & deletion',
+    icon: Users,
+    copy: 'You retain full rights to inspect, update, export, or request deletion of your personal records from our system.',
+  },
+  {
+    title: 'No data monetization',
+    icon: Shield,
+    copy: 'EduExpress International never sells, rents, or monetizes student information to third-party advertisers.',
+  },
+];
+
+/** Privacy policy page body (server component). */
 export default function PrivacyClient() {
-  const privacyPillars = [
+  const { email, phone, address } = config.contact;
+  const officeAddress = `${address.street}, ${address.city} ${address.postalCode}`;
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${PAGE_URL}#webpage`,
+    url: PAGE_URL,
+    name: 'Privacy policy',
+    description: 'How EduExpress International collects, uses and protects student data and documents.',
+    inLanguage: 'en-BD',
+    dateModified: POLICY_VERSION,
+    isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+    about: { '@id': 'https://eduexpressint.com/#organization' },
+    breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
+  };
+
+  const sections: LegalSection[] = [
     {
-      num: '01',
-      title: 'Secure Data Storage',
-      icon: Lock,
-      copy: 'Student transcripts, passport copies, and personal records are encrypted in transit and stored securely on protected database infrastructure.'
+      id: 'privacy-standards',
+      title: 'Our four privacy standards',
+      content: (
+        <ul className="grid gap-4 sm:grid-cols-2">
+          {privacyPillars.map(({ title, copy, icon: Icon }) => (
+            <li key={title} className={kit.cardSage}>
+              <span className={kit.icon}><Icon size={22} aria-hidden="true" /></span>
+              <h3 className={`mt-5 ${kit.h3}`}>{title}</h3>
+              <p className="mt-2 text-[16px] leading-7 text-ink-soft">{copy}</p>
+            </li>
+          ))}
+        </ul>
+      ),
     },
     {
-      num: '02',
-      title: 'Explicit Consent',
-      icon: Eye,
-      copy: 'We collect personal information strictly to prepare your Education Fit Assessment, ClearCost schedule, and university applications.'
+      id: 'scope',
+      title: '1. Scope of this policy',
+      content: (
+        <p>
+          This policy applies to all personal information, academic transcripts, passport copies, and contact information collected
+          through eduexpressint.com or at our Dhanmondi decision desk in Dhaka.
+        </p>
+      ),
     },
     {
-      num: '03',
-      title: 'Student Control & Deletion',
-      icon: Users,
-      copy: 'You retain full rights to inspect, update, export, or request deletion of your personal records from our system.'
+      id: 'data-collected',
+      title: '2. Data collected and purpose',
+      content: (
+        <>
+          <p>
+            We collect, process, and retain student information strictly to fulfil your educational evaluation and university
+            application dossier. That includes:
+          </p>
+          <LegalList
+            items={[
+              'Student name, email, WhatsApp number, and residential address',
+              'SSC/HSC transcripts, GPA/CGPA, and language proficiency scores',
+              'Target destination preferences, budget availability, and program choice',
+            ]}
+          />
+        </>
+      ),
     },
     {
-      num: '04',
-      title: 'No Data Monetization',
-      icon: Shield,
-      copy: 'EduExpress International never sells, rents, or monetizes student information to third-party advertisers.'
-    }
+      id: 'your-rights',
+      title: '3. Your data rights',
+      content: (
+        <>
+          <p>
+            You have the right to request a complete copy of your stored records or ask us to delete your personal information by
+            contacting our Dhanmondi office at{' '}
+            <a href={`mailto:${email}`} className="font-semibold text-petrol-800 underline underline-offset-4">{email}</a>.
+          </p>
+          <p>
+            Our <Link href="/student-data-privacy" className="font-semibold text-petrol-800 underline underline-offset-4">student data and document privacy standard</Link>{' '}
+            explains how consent, sensitive documents, staff access and retention are handled.
+          </p>
+        </>
+      ),
+    },
+    {
+      id: 'contact',
+      title: 'Data protection contact',
+      content: (
+        <div className="grid gap-5 sm:grid-cols-[1fr_200px] sm:items-start">
+          <ul className="grid gap-3 text-[16px] leading-7">
+            <li className="flex gap-3">
+              <MapPin size={20} className="mt-1 shrink-0 text-petrol-800" aria-hidden="true" />
+              <span>EduExpress International — {officeAddress}</span>
+            </li>
+            <li className="flex gap-3">
+              <Mail size={20} className="mt-1 shrink-0 text-petrol-800" aria-hidden="true" />
+              <a href={`mailto:${email}`} className="font-semibold text-petrol-800 underline underline-offset-4">{email}</a>
+            </li>
+            <li className="flex gap-3">
+              <Phone size={20} className="mt-1 shrink-0 text-petrol-800" aria-hidden="true" />
+              <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="font-semibold text-petrol-800 underline underline-offset-4">{phone}</a>
+            </li>
+            <li>
+              <Link href="/contact" className={kit.link}>
+                Contact the decision desk <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            </li>
+          </ul>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
+            <Image
+              src="/images/office/dhanmondi-reception.webp"
+              alt="Reception area of the EduExpress office in Dhanmondi, Dhaka"
+              fill
+              sizes="200px"
+              className="object-cover"
+            />
+          </div>
+        </div>
+      ),
+    },
   ];
 
   return (
-    <div className="overflow-hidden bg-[#f1f5f9] text-ed-ink font-sans">
-      {/* Homepage Hero Header Style */}
-      <section className="relative px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32 md:pt-40 lg:px-12 border-b border-[#12436b]/10">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(18,67,107,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(18,67,107,0.07)_1px,transparent_1px)] bg-[size:76px_76px]" />
-        <div className="pointer-events-none absolute right-[4%] top-28 size-72 rounded-full border-[44px] border-[#a9d6ee]/15 md:size-[460px]" />
+    <>
+      <JsonLd data={structuredData} />
 
-        <div className="relative mx-auto max-w-[1440px]">
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-y border-[#12436b]/18 py-3 font-mono text-[13px] font-bold uppercase tracking-[0.2em] text-ed-navy">
-            <span>EduExpress International Bangladesh</span>
-            <span>Data Protection Standard</span>
-            <span>Policy Version 2026-07-19</span>
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Privacy policy' }]}
+        eyebrow="Written data governance"
+        title="Privacy policy."
+        lead="How we protect student data and personal records. Under our evidence-first standard, we collect, process, and retain student information strictly to fulfil your educational evaluation and university application dossier."
+        reviewed="July 2026"
+        aside={
+          <div className={kit.cardDark}>
+            <p className="text-[21px] font-semibold leading-[1.3] tracking-[-0.02em] text-lime">At a glance</p>
+            <dl className="mt-5 grid gap-4 text-[16px] leading-7">
+              <div>
+                <dt className="text-[14px] text-white/70">Policy version</dt>
+                <dd className="font-semibold text-white">{POLICY_VERSION}</dd>
+              </div>
+              <div>
+                <dt className="text-[14px] text-white/70">Applies to</dt>
+                <dd className="font-semibold text-white">eduexpressint.com and our Dhanmondi decision desk</dd>
+              </div>
+              <div>
+                <dt className="text-[14px] text-white/70">Copy or deletion requests</dt>
+                <dd>
+                  <a href={`mailto:${email}`} className="font-semibold text-white underline underline-offset-4">{email}</a>
+                </dd>
+              </div>
+            </dl>
           </div>
+        }
+      />
 
-          <div className="max-w-4xl">
-            <p className="flex w-full max-w-full items-start gap-3 bg-[#12436b] px-4 py-2 text-[13px] font-black uppercase leading-5 tracking-[0.16em] text-white sm:inline-flex sm:w-auto sm:items-center sm:text-xs sm:tracking-[0.2em]">
-              <Shield className="mt-0.5 shrink-0 text-ed-mist sm:mt-0" size={16} />
-              <span className="min-w-0 whitespace-normal">Written Data Governance</span>
-            </p>
+      <LegalDocument
+        sections={sections}
+        version={POLICY_VERSION}
+        related={[
+          { href: '/student-data-privacy', label: 'Student data privacy standard' },
+          { href: '/terms', label: 'Terms of service' },
+          { href: '/complaints-and-resolution', label: 'Complaints and resolution' },
+          { href: '/fees-and-transparency', label: 'Fees and transparency' },
+        ]}
+      />
 
-            <h1 className="mt-7 w-full max-w-4xl break-words text-balance ed-home-display text-[clamp(2.4rem,5.6vw,4.2rem)] font-bold leading-[1.06] tracking-[-0.022em]">
-              How we protect <span className="relative mt-2 inline-block bg-ed-mist px-2 pb-2 text-ed-ink sm:px-3 sm:pb-3">student data</span> and personal records
-            </h1>
-
-            <p className="mt-7 max-w-2xl border-l-4 border-[#a9d6ee] pl-5 text-base leading-7 text-slate-700 md:text-lg md:leading-8">
-              Under our evidence-first standard, we collect, process, and retain student information strictly to fulfill your educational evaluation and university application dossier.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Universal Promise Dark Section */}
-      <section className="border-y border-[#0f3a5c] bg-ed-navy text-white">
-        <div className="mx-auto grid max-w-[1440px] lg:grid-cols-[.8fr_repeat(4,1fr)]">
-          <div className="bg-ed-mist p-6 text-ed-ink lg:p-7">
-            <p className="font-mono text-[12px] font-black uppercase tracking-[0.2em] text-ed-navy">Four Privacy Standards</p>
-            <h2 className="mt-3 ed-home-display text-2xl leading-[1.05] leading-tight">Data Security Principles</h2>
-          </div>
-          {privacyPillars.map(({ num, title, copy, icon: Icon }) => (
-            <div key={title} className="group relative border-b border-white/15 p-5 hover:bg-white/5 lg:border-b-0 lg:border-r lg:p-6">
-              <div className="flex items-center justify-between"><span className="font-mono text-[12px] text-ed-mist">SEC {num}</span><Icon size={19} className="text-ed-mist" /></div>
-              <h3 className="mt-7 ed-home-display text-lg font-bold leading-6">{title}</h3>
-              <p className="mt-2 text-xs leading-5 text-white/50">{copy}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Privacy Policy Content */}
-      <section className="bg-white px-5 py-16 sm:px-8 sm:py-24 border-b border-[#12436b]/10">
-        <div className="container mx-auto max-w-4xl bg-[#f1f5f9] border-2 border-[#0f3a5c] p-8 md:p-12 shadow-[8px_8px_0_0_#12436b]">
-          <div className="space-y-10">
-            <div>
-              <h2 className="ed-home-display text-2xl leading-[1.05] mb-4 flex items-center text-ed-ink">
-                <FileText className="w-6 h-6 mr-2.5 text-ed-navy" />
-                1. Scope of Privacy Policy
-              </h2>
-              <p className="text-slate-700 text-sm leading-6">
-                This policy applies to all personal information, academic transcripts, passport copies, and contact information collected through eduexpressint.com or at our Dhanmondi decision desk in Dhaka.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="ed-home-display text-2xl leading-[1.05] mb-4 flex items-center text-ed-ink">
-                <Database className="w-6 h-6 mr-2.5 text-ed-navy" />
-                2. Data Collected & Purpose
-              </h2>
-              <ul className="space-y-2 bg-white p-5 border border-[#12436b]/20 text-xs text-slate-700 font-semibold">
-                <li className="flex items-center"><span className="text-ed-navy mr-2">✓</span> Student name, email, WhatsApp number, and residential address</li>
-                <li className="flex items-center"><span className="text-ed-navy mr-2">✓</span> SSC/HSC transcripts, GPA/CGPA, and language proficiency scores</li>
-                <li className="flex items-center"><span className="text-ed-navy mr-2">✓</span> Target destination preferences, budget availability, and program choice</li>
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="ed-home-display text-2xl leading-[1.05] mb-4 flex items-center text-ed-ink">
-                <Shield className="w-6 h-6 mr-2.5 text-ed-navy" />
-                3. Your Data Rights
-              </h2>
-              <p className="text-slate-700 text-xs leading-5">
-                You have the right to request a complete copy of your stored records or ask us to delete your personal information by contacting our Dhanmondi office at info@eduexpressint.com.
-              </p>
-            </div>
-
-            <div className="border-t border-[#12436b]/10 pt-6">
-              <h3 className="ed-home-display text-lg font-bold text-ed-ink mb-2">Data Protection Officer</h3>
-              <p className="text-xs text-slate-700">EduExpress International — Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Bring 01-03 CTA Banner */}
-      <section className="bg-ed-mist px-5 py-16 text-ed-ink sm:px-8 sm:py-24 md:py-32 lg:px-12">
-        <div className="mx-auto max-w-[1440px]">
-          <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto] lg:gap-10">
-            <div>
-              <p className="font-mono text-xs font-black uppercase tracking-[0.22em] text-ed-navy">Compare before you commit</p>
-              <h2 className="mt-4 max-w-4xl ed-home-display text-4xl font-bold leading-tight tracking-tight md:text-6xl">Questions about how we handle your documents? Speak to our team.</h2>
-            </div>
-            <Link href="/contact" className="inline-flex w-full items-center justify-center gap-3 bg-ed-navy px-7 py-5 text-base font-black text-white hover:bg-[#12436b] sm:text-lg lg:w-auto lg:min-w-64">Contact Decision Desk <ArrowUpRight size={20} /></Link>
-          </div>
-        </div>
-      </section>
-    </div>
+      <CtaBand
+        title="Questions about how we handle your documents?"
+        text="Speak to our team at the Dhanmondi office, by email or on WhatsApp. A counsellor replies within one working day."
+      />
+    </>
   );
 }

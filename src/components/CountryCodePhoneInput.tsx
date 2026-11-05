@@ -207,7 +207,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
                   placeholder="Search country..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-xs bg-white"
+                  className="w-full px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm bg-white"
                   autoFocus
                 />
               </div>
@@ -224,12 +224,12 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
                         }`}
                     >
                       <span className="text-lg">{country.flag}</span>
-                      <span className="flex-1 text-xs font-semibold text-slate-700">{country.name}</span>
-                      <span className="text-xs font-bold text-slate-500 font-mono">{country.dialCode}</span>
+                      <span className="flex-1 text-sm font-semibold text-slate-700">{country.name}</span>
+                      <span className="text-sm font-bold text-slate-500 font-mono">{country.dialCode}</span>
                     </button>
                   ))
                 ) : (
-                  <div className="px-4 py-3 text-xs text-slate-500 text-center">No countries found</div>
+                  <div className="px-4 py-3 text-sm text-slate-500 text-center">No countries found</div>
                 )}
               </div>
             </div>
@@ -252,7 +252,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
           autoComplete="tel"
           maxLength={15}
           aria-invalid={error ? true : undefined}
-          className="flex-1 bg-transparent border-none p-0 text-sm font-semibold text-slate-900 placeholder:text-slate-500 focus:ring-0 focus:outline-none h-full"
+          className="flex-1 bg-transparent border-none p-0 text-base font-semibold text-slate-900 placeholder:text-slate-500 focus:ring-0 focus:outline-none h-full"
         />
       </div>
 

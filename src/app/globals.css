@@ -246,7 +246,7 @@ body {
   align-items: center;
   gap: 0.6rem;
   font-family: var(--font-text), system-ui, sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.005em;
 }
@@ -1895,3 +1895,7 @@ button:hover .lucide-arrow-right { transform: translateX(4px); }
   [data-anim] { animation: none !important; }
   .ed-btn-signal:hover { transform: none; }
 }
+
+/* One closing call to action per page: the footer card steps aside when the
+   page already ends with a CtaBand. */
+body:has([data-cta-band]) .footer-cta { display: none; }

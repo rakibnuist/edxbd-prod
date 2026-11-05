@@ -1,61 +1,28 @@
-import { serializeJsonLd } from '@/lib/json-ld';
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, BadgeCheck, CheckCircle2, FileText, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, CheckCircle2, MessageCircle } from 'lucide-react';
 
-import Breadcrumbs from '@/components/Breadcrumbs';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import { FaqBlock, JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
+import { config } from '@/lib/config';
+import { pageMetadata } from '@/lib/seo';
 import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
 
-const canonical = absoluteUrl('/education-fit-assessment');
+const PATH = '/education-fit-assessment';
+const canonical = absoluteUrl(PATH);
 const LAST_REVIEWED = '2026-11-04';
 
-export const metadata: Metadata = {
-  title: { absolute: 'Free Education Fit Assessment | Compare Study Options Before You Commit' },
+export const metadata = pageMetadata({
+  title: 'Free Education Fit Assessment for Study Abroad | EduExpress',
   description:
-    'Free, written education fit assessment for Bangladeshi students. Compare suitable study-abroad routes, recognition, total costs, risks and missing information before you apply. No obligation.',
-  alternates: { canonical },
-  openGraph: {
-    title: 'Free Education Fit Assessment | EduExpress International',
-    description:
-      'Compare before you commit. Get a written read on suitable routes, realistic costs, risks and next steps for studying abroad from Bangladesh.',
-    url: canonical,
-    type: 'website',
-    siteName: 'EduExpress International',
-    locale: 'en_BD',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'EduExpress International — Free Education Fit Assessment',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Free Education Fit Assessment | EduExpress International',
-    description:
-      'Compare before you commit. A written read on your suitable routes, risks and next step for studying abroad.',
-    images: ['/og-image.jpg'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-};
+    'Free, written education fit assessment for Bangladeshi students. Compare study abroad routes, recognition, total costs and risks before you apply.',
+  path: PATH,
+  image: { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — free education fit assessment' },
+});
 
 const promises = [
   'We compare at least three suitable routes and explain why each is recommended or set aside.',
-  'We separate university, embassy and third-party costs from EduExpress charges — in writing.',
+  'We separate university, embassy and third-party costs from EduExpress charges, in writing.',
   'No file-opening charge, and no EduExpress service fee before China visa approval.',
 ];
 
@@ -64,7 +31,7 @@ const whatYouGet = [
   'Recognition, entry requirements and language fit for each option',
   'Itemised costs: tuition, living, fees and what remains payable',
   'Risks, timelines and documents still needed',
-  'Clear next steps — apply only when fit and costs are clear',
+  'Clear next steps: apply only when fit and costs are clear',
 ];
 
 const faqs = [
@@ -90,242 +57,173 @@ const faqs = [
   },
 ];
 
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: 'Free Education Fit Assessment',
+      description: 'Free, written education fit assessment comparing suitable study-abroad routes, costs, risks and next steps before you commit.',
+      inLanguage: 'en-BD',
+      dateModified: LAST_REVIEWED,
+      isPartOf: { '@id': `${SITE_URL}/#website` },
+      about: { '@id': `${SITE_URL}/#organization` },
+      breadcrumb: { '@id': `${canonical}#breadcrumb` },
+      primaryImageOfPage: { '@type': 'ImageObject', url: absoluteUrl('/images/home/consultation-student-parent.webp') },
+    },
+    {
+      '@type': 'Service',
+      '@id': `${canonical}#service`,
+      name: 'Free Education Fit Assessment',
+      serviceType: 'Education counselling',
+      provider: { '@id': `${SITE_URL}/#organization` },
+      areaServed: { '@type': 'Country', name: 'Bangladesh' },
+      description: 'Written comparison of suitable study routes with recognition, total costs, risks and missing information before applying.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'BDT', availability: 'https://schema.org/InStock' },
+    },
+  ],
+};
+
 export default function EducationFitAssessmentPage() {
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'WebPage',
-        '@id': `${canonical}#webpage`,
-        url: canonical,
-        name: 'Free Education Fit Assessment',
-        description:
-          'Free, written education fit assessment comparing suitable study-abroad routes, costs, risks and next steps before you commit.',
-        inLanguage: 'en-BD',
-        dateModified: LAST_REVIEWED,
-        isPartOf: { '@id': `${SITE_URL}/#website` },
-        about: { '@id': `${SITE_URL}/#organization` },
-        breadcrumb: { '@id': `${canonical}#breadcrumb` },
-        primaryImageOfPage: {
-          '@type': 'ImageObject',
-          url: absoluteUrl('/images/students/students-campus.webp'),
-        },
-      },
-      {
-        '@type': 'BreadcrumbList',
-        '@id': `${canonical}#breadcrumb`,
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-          { '@type': 'ListItem', position: 2, name: 'Education Fit Assessment', item: canonical },
-        ],
-      },
-      {
-        '@type': 'Service',
-        '@id': `${canonical}#service`,
-        name: 'Free Education Fit Assessment',
-        serviceType: 'Education counselling',
-        provider: { '@id': `${SITE_URL}/#organization` },
-        areaServed: {
-          '@type': 'Country',
-          name: 'Bangladesh',
-        },
-        description:
-          'Written comparison of suitable study routes with recognition, total costs, risks and missing information before applying.',
-        offers: {
-          '@type': 'Offer',
-          price: '0',
-          priceCurrency: 'BDT',
-          availability: 'https://schema.org/InStock',
-        },
-      },
-      {
-        '@type': 'FAQPage',
-        '@id': `${canonical}#faq`,
-        mainEntity: faqs.map((item) => ({
-          '@type': 'Question',
-          name: item.question,
-          acceptedAnswer: { '@type': 'Answer', text: item.answer },
-        })),
-      },
-    ],
-  };
+  const whatsapp = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent('Assalamu alaikum. I would like help with the education fit assessment.')}`;
 
   return (
-    <main className="overflow-x-clip bg-chalk text-ink">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
+    <>
+      <JsonLd data={structuredData} />
 
-      {/* Hero */}
-      <section className="bg-gradient-to-b from-mint-100/70 to-white relative overflow-hidden border-b border-rule px-4 pb-16 pt-[104px] sm:px-6 lg:px-10 lg:pb-20 lg:pt-[142px]">
-        <div className="pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="pointer-events-none absolute -right-28 -top-24 size-[420px] rounded-full bg-sky-500/25 blur-[100px]" aria-hidden="true" />
-        <div className="pointer-events-none absolute -left-40 bottom-[-30%] size-[520px] rounded-full bg-petrol-400/20 blur-[120px]" aria-hidden="true" />
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Education Fit Assessment' }]}
+        eyebrow="Free · Written · No obligation"
+        title="Free education fit assessment, in writing."
+        lead="Compare before you commit. Share a few details about your results, budget, intake and goals. We return the suitable routes for you, the risks to weigh, and the information we still need, before any money or application is involved."
+        reviewed="November 2026"
+        actions={
+          <>
+            <a href="#assessment-form" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              Start my assessment <ArrowRight size={18} aria-hidden="true" />
+            </a>
+            <Link href="/find-education" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Research destinations and universities <ArrowUpRight size={18} aria-hidden="true" />
+            </Link>
+          </>
+        }
+        aside={
+          <figure className="relative overflow-hidden rounded-3xl">
+            <div className="relative aspect-[4/3]">
+              <Image
+                src="/images/home/consultation-student-parent.webp"
+                alt="A counsellor reviewing study options with a student and parent at the EduExpress office"
+                fill
+                priority
+                sizes="(max-width:1024px) 100vw, 480px"
+                className="object-cover"
+              />
+            </div>
+            <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl bg-white px-4 py-3">
+              <span className="block text-[14px] font-semibold text-ink-soft">Written before you commit</span>
+              <span className="mt-0.5 block text-[16px] font-semibold leading-6 text-petrol-800">Routes · Risks · Costs · Next steps</span>
+            </figcaption>
+          </figure>
+        }
+      />
 
-        <div className="relative mx-auto max-w-shell">
-          <Breadcrumbs
-            items={[{ name: 'Education Fit Assessment' }]}
-            className="text-ink-soft [&_a]:text-ink-soft [&_a:hover]:text-ink [&_span]:text-ink-soft"
-          />
+      <section aria-label="Our promises" className="border-b border-canvas-soft bg-white py-8">
+        <ul data-anim="stagger" className={`${kit.wrap} grid gap-6 md:grid-cols-3`}>
+          {promises.map(promise => (
+            <li key={promise} className="flex items-start gap-3.5">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-lime text-petrol-800">
+                <CheckCircle2 size={20} aria-hidden="true" />
+              </span>
+              <span className="text-[16px] font-semibold leading-6 text-petrol-800">{promise}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-          <div className="mt-8 grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-14">
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="ed-chip-light">
-                  <span className="ed-chip-light-dot" aria-hidden="true" />
-                  Free · Written · No obligation
-                </span>
-                <span className="ed-chip-light">Compare before you commit</span>
-              </div>
-              <h1 className="ed-display mt-6 max-w-[18ch] text-[clamp(2.6rem,5vw,4.4rem)] leading-[1.01] text-ink">
-                Compare before you commit — with a written read on your fit
-              </h1>
-              <p className="mt-6 max-w-[58ch] text-[15px] leading-8 text-ink-soft">
-                Share a few details about your results, budget, intake and goals. We return the suitable routes for you, the risks to weigh, and the information we still need — before any money or application is involved.
-              </p>
+      <Section
+        tone="sage"
+        id="assessment-form"
+        title="Share your profile to get your written assessment."
+        intro="Takes a few minutes. No payment details required. We'll review and respond with suitable routes and next steps."
+      >
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
+          <EducationFitAssessment />
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link href="#assessment-form" className="ed-btn ed-btn-signal min-h-12 px-6">
-                  Start my assessment <ArrowRight size={16} aria-hidden="true" />
-                </Link>
-                <Link href="/find-education" className="ed-btn ed-btn-outline min-h-12 px-6">
-                  Research destinations & universities <ArrowUpRight size={16} aria-hidden="true" />
-                </Link>
-              </div>
-
-              <ul className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-soft">
-                <li className="inline-flex items-center gap-1.5">
-                  <BadgeCheck size={13} className="text-petrol-600" aria-hidden="true" />
-                  Compare at least 3 routes
-                </li>
-                <li aria-hidden="true" className="text-ink-mute">·</li>
-                <li className="inline-flex items-center gap-1.5">
-                  <ShieldCheck size={13} className="text-petrol-600" aria-hidden="true" />
-                  Costs in writing
-                </li>
-                <li aria-hidden="true" className="text-ink-mute">·</li>
-                <li>Reviewed {new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(LAST_REVIEWED))}</li>
+          <aside className="grid gap-5">
+            <div className={kit.card}>
+              <h3 className={kit.h3}>What you get</h3>
+              <ul className="mt-4 grid gap-3">
+                {whatYouGet.map(item => (
+                  <li key={item} className="flex gap-3 text-[16px] leading-6 text-ink-soft">
+                    <CheckCircle2 size={19} className="mt-0.5 shrink-0 text-[#2ead4b]" aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
               </ul>
             </div>
-
-            <div className="relative min-w-0">
-              <figure className="ed-frame ed-frame-sky overflow-hidden">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[18px]">
-                  <Image
-                    src="/images/students/students-campus.webp"
-                    alt="Students getting education fit assessment counselling"
-                    fill
-                    sizes="(max-width:1024px) 100vw, 560px"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-petrol-900/90 via-petrol-900/15 to-transparent" aria-hidden="true" />
-                  <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl bg-white px-4 py-3 backdrop-blur">
-                    <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-petrol-600">Written before you commit</p>
-                    <p className="mt-1 text-[15px] font-semibold leading-6 text-ink">
-                      Routes • Risks • Costs • Next steps
-                    </p>
-                  </figcaption>
-                </div>
-              </figure>
+            <div className={kit.cardDark}>
+              <h3 className="text-[21px] font-semibold leading-[1.3] tracking-[-0.02em] text-lime">What it costs</h3>
+              <p className="mt-2 text-[16px] leading-7 text-white/85">
+                The assessment is free. No file-opening charge, and no EduExpress service fee before China visa approval. Genuine
+                university and third-party costs are itemised in writing before you proceed.
+              </p>
+              <Link href="/fees-and-transparency" className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 text-[16px] font-semibold text-white underline underline-offset-4">
+                Read our fee policy <ArrowRight size={16} aria-hidden="true" />
+              </Link>
             </div>
-          </div>
+          </aside>
         </div>
-      </section>
+      </Section>
 
-      {/* Promises */}
-      <section className="relative z-20 -mt-8 px-4 sm:px-6 lg:px-10">
-        <div className="mx-auto grid max-w-shell grid-cols-1 gap-px overflow-hidden rounded-[24px] border border-rule bg-rule shadow-[0_30px_70px_-48px_rgba(15,53,87,0.5)] md:grid-cols-3">
-          {promises.map((promise) => (
-            <div key={promise} className="flex items-start gap-3 bg-white px-5 py-5">
-              <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-jade" aria-hidden="true" />
-              <p className="text-[15px] leading-6 text-ink">{promise}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* What you get */}
-      <section className="px-4 py-section sm:px-6 lg:px-10">
-        <div className="mx-auto grid max-w-shell gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+      <Section>
+        <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-14">
           <div>
-            <p className="ed-label">What you get</p>
-            <h2 className="ed-display mt-4 text-[clamp(2rem,4vw,3rem)] leading-[1.06] text-ink">
-              A clear, written read on your fit
-            </h2>
-            <p className="mt-4 max-w-[48ch] text-[14px] leading-7 text-ink-soft">
-              We don&apos;t just suggest countries — we compare realistic options against your profile and show the tradeoffs in writing.
+            <h2 data-anim="up" className={kit.h2}>A clear, written read on your fit.</h2>
+            <p className={`mt-5 ${kit.lead}`}>
+              We don&apos;t just suggest countries. We compare realistic options against your profile and show the tradeoffs in
+              writing, checked against published rules.
             </p>
-            <Link href="/better-education-standard" className="ed-btn ed-btn-outline mt-7 min-h-11">
-              See our evidence standard <ArrowRight size={15} aria-hidden="true" />
-            </Link>
-          </div>
-          <div className="grid gap-2">
-            {whatYouGet.map((item) => (
-              <div
-                key={item}
-                className="flex items-center gap-3 rounded-2xl border border-rule bg-white px-5 py-4 shadow-[0_16px_36px_-32px_rgba(15,53,87,0.45)]"
-              >
-                <CheckCircle2 size={18} className="shrink-0 text-jade" aria-hidden="true" />
-                <span className="text-[15px] font-semibold leading-6 text-ink">{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Assessment Form */}
-      <section id="assessment-form" className="px-4 pb-16 sm:px-6 lg:px-10 lg:pb-20 scroll-mt-28">
-        <div className="mx-auto max-w-[1100px]">
-          <div className="mb-8 text-center">
-            <p className="ed-label justify-center">Start your assessment</p>
-            <h2 className="ed-display mt-4 text-[clamp(2rem,4vw,2.8rem)] leading-[1.06] text-ink">
-              Share your profile to get your written assessment
-            </h2>
-            <p className="mx-auto mt-3 max-w-[56ch] text-[14px] leading-7 text-ink-soft">
-              Takes a few minutes. No payment details required. We&apos;ll review and respond with suitable routes and next steps.
-            </p>
-          </div>
-          <div className="overflow-hidden rounded-[32px] border border-rule bg-white shadow-[0_30px_70px_-48px_rgba(15,53,87,0.5)]">
-            <div className="h-1.5 w-full bg-gradient-to-r from-petrol-700 via-petrol-500 to-sky-400" aria-hidden="true" />
-            <div className="p-5 sm:p-8 lg:p-10">
-              <EducationFitAssessment />
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link href="/better-education-standard" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+                See our evidence standard <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+              <Link href="/how-we-verify-universities" className="ed-btn ed-btn-soft min-h-[52px] px-7">How we verify</Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="px-4 pb-20 sm:px-6 lg:px-10">
-        <div className="mx-auto grid max-w-shell gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-14">
-          <div>
-            <p className="ed-label">FAQs</p>
-            <h2 className="ed-display mt-4 text-[clamp(1.9rem,3.2vw,2.6rem)] leading-[1.08] text-ink">
-              Common questions about the assessment
-            </h2>
-            <p className="mt-4 max-w-[40ch] text-[14px] leading-7 text-ink-soft">
-              If you need clarification before submitting, we&apos;re happy to talk.
-            </p>
-            <Link href="/contact" className="ed-btn ed-btn-outline mt-6 min-h-11">
-              Contact EduExpress
-            </Link>
-          </div>
-
-          <div className="grid gap-3">
-            {faqs.map((item) => (
-              <details
-                key={item.question}
-                className="group rounded-[20px] border border-rule bg-white px-5 shadow-[0_16px_36px_-32px_rgba(15,53,87,0.45)] open:border-[#cfe7f5]"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-5 py-4 ed-home-display text-[17px] leading-snug text-ink">
-                  {item.question}
-                  <span className="grid size-8 shrink-0 place-items-center rounded-full border border-rule-strong bg-chalk-100 text-[16px] leading-none text-petrol-600 transition group-open:rotate-45 group-open:border-petrol-400 group-open:bg-mint-100">
-                    +
-                  </span>
-                </summary>
-                <p className="pb-5 pr-10 text-[15px] leading-7 text-ink-soft">{item.answer}</p>
-              </details>
+          <ol data-anim="stagger" className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+            {[
+              ['01', 'Profile review', 'Results, goals, budget and preferred intake.'],
+              ['02', 'Written comparison', 'Recognition, costs, risks and realistic options.'],
+              ['03', 'Clear next steps', 'Apply only when the fit and the cost are clear.'],
+            ].map(([number, title, copy]) => (
+              <li key={number} className={`${kit.cardSage} flex gap-5`}>
+                <span className="font-display text-[34px] font-black leading-none text-petrol-800">{number}</span>
+                <span>
+                  <strong className="block text-[18px] font-semibold text-petrol-800">{title}</strong>
+                  <span className="mt-1 block text-[16px] leading-6 text-ink-soft">{copy}</span>
+                </span>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
-      </section>
-    </main>
+      </Section>
+
+      <FaqBlock items={faqs} title="Common questions about the assessment." />
+
+      <Section tone="navy" title="Prefer to talk to a person first?" intro="If you need clarification before submitting, we're happy to talk. Visit the Dhanmondi office or message a counsellor.">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <a href="#assessment-form" className="ed-btn ed-btn-signal min-h-[54px] px-7">
+            Start my assessment <ArrowRight size={18} aria-hidden="true" />
+          </a>
+          <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-on-dark min-h-[54px] px-7">
+            <MessageCircle size={18} aria-hidden="true" /> WhatsApp a counsellor
+          </a>
+          <Link href="/contact" className="ed-btn ed-btn-on-dark min-h-[54px] px-7">Contact EduExpress</Link>
+        </div>
+      </Section>
+    </>
   );
 }

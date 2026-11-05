@@ -17,8 +17,8 @@ interface PageHeaderProps {
 }
 
 /**
- * Shared page masthead. A warm editorial band with a serif statement, the trail
- * back and a layered sky grid. Inner pages inherit the homepage's depth here.
+ * Shared page masthead in the site's Wise-style system: sage band, trail back,
+ * heavy display headline and a readable lead. Same props as before.
  */
 export default function PageHeader({
     title,
@@ -34,40 +34,26 @@ export default function PageHeader({
     const trail = breadcrumbs ?? [{ name: breadcrumbLabel || `${title} ${highlight}`.trim() }];
 
     return (
-        <header className="relative overflow-hidden border-b border-[#12436b]/10 bg-[linear-gradient(180deg,#ffffff_0%,#f4f9fc_100%)] px-5 pb-12 pt-[100px] text-ed-ink sm:px-8 lg:px-12 lg:pb-16 lg:pt-[136px]">
-            <div className="pointer-events-none absolute inset-0 ed-grid-lines-dark opacity-70" aria-hidden="true" />
-            <div className="pointer-events-none absolute -right-24 -top-24 size-[360px] rounded-full bg-sky-100/80 blur-[90px]" aria-hidden="true" />
-            <div
-                className="ed-numeral pointer-events-none absolute right-8 top-24 hidden select-none text-[170px] leading-none text-ed-navy/[0.05] lg:block"
-                aria-hidden="true"
-            >
-                ED
-            </div>
-
-            <div className="relative mx-auto max-w-shell">
-                <Breadcrumbs items={trail} className="mb-5" />
+        <header className="bg-canvas-soft pb-14 pt-[96px] text-petrol-800 sm:pt-[112px] lg:pb-20 lg:pt-[140px]">
+            <div className="mx-auto max-w-[1200px] px-5 lg:px-8">
+                <Breadcrumbs items={trail} className="anim-rise" />
 
                 {badgeText && (
-                    <p className="inline-flex items-center gap-2 rounded-full border border-[#12436b]/12 bg-white px-3.5 py-1.5 text-[13px] font-bold uppercase tracking-[0.12em] text-ed-navy shadow-[0_12px_28px_-24px_rgba(18,67,107,0.35)]">
-                        {IconComp ? <IconComp size={13} className="text-ed-teal" aria-hidden="true" /> : null}
+                    <p className="anim-rise mt-6 inline-flex items-center gap-2 rounded-full bg-lime-pale px-3.5 py-1.5 text-[14px] font-semibold text-lime-deep" style={{ '--d': '40ms' } as React.CSSProperties}>
+                        {IconComp ? <IconComp size={15} aria-hidden="true" /> : null}
                         {badgeText}
                     </p>
                 )}
 
-                <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:items-end lg:gap-14">
-                    <div className="min-w-0">
-                        <h1 className="ed-home-display max-w-[26ch] break-words text-balance text-[clamp(2.15rem,4.5vw,3.7rem)] leading-[1.02] tracking-[-0.03em]">
-                            {title}
-                            {highlight ? <span className="block text-ed-navy">{highlight}</span> : null}
-                        </h1>
-                        <span className="mt-6 block h-[3px] w-20 rounded-full bg-gradient-to-r from-ed-navy via-ed-teal to-ed-sky" aria-hidden="true" />
-                    </div>
-                    <p className="max-w-[54ch] border-l-2 border-ed-sky/30 pl-4 text-[15px] leading-7 text-slate-600 lg:mb-1">
-                        {description}
-                    </p>
-                </div>
+                <h1 className="anim-lift mt-5 max-w-[22ch] text-balance font-display text-[42px] font-black leading-[0.97] tracking-[-0.02em] sm:text-[60px] lg:text-[72px]" style={{ '--d': '80ms' } as React.CSSProperties}>
+                    {title}
+                    {highlight ? <span className="block">{highlight}</span> : null}
+                </h1>
+                <p className="anim-rise mt-6 max-w-2xl text-[18px] leading-[1.6] text-ink-soft sm:text-[19px]" style={{ '--d': '160ms' } as React.CSSProperties}>
+                    {description}
+                </p>
 
-                {children && <div className="mt-7">{children}</div>}
+                {children && <div className="anim-rise mt-8" style={{ '--d': '240ms' } as React.CSSProperties}>{children}</div>}
             </div>
         </header>
     );

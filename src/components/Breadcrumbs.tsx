@@ -9,16 +9,16 @@ type BreadcrumbItem = {
 export default function Breadcrumbs({ items, className = '' }: { items: BreadcrumbItem[]; className?: string }) {
   return (
     <nav aria-label="Breadcrumb" className={className}>
-      <ol className="flex flex-wrap items-center gap-2 text-xs font-bold text-[#12436b]">
+      <ol className="flex flex-wrap items-center gap-1.5 text-[14px] font-semibold text-ink-soft">
         <li>
-          <Link href="/" aria-label="Home" className="inline-flex items-center gap-1.5 hover:text-[#0f3a5c]"><Home size={13} /> Home</Link>
+          <Link href="/" className="inline-flex items-center gap-1.5 hover:text-petrol-800 hover:underline"><Home size={14} aria-hidden="true" /> Home</Link>
         </li>
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
             <li key={`${item.name}-${index}`} className="flex items-center gap-2">
-              <ChevronRight size={13} className="text-[#12436b]/45" />
-              {item.href && !isLast ? <Link href={item.href} className="hover:text-[#0f3a5c]">{item.name}</Link> : <span aria-current={isLast ? 'page' : undefined} className="text-slate-600">{item.name}</span>}
+              <ChevronRight size={14} className="text-ink-mute" aria-hidden="true" />
+              {item.href && !isLast ? <Link href={item.href} className="hover:text-petrol-800 hover:underline">{item.name}</Link> : <span aria-current={isLast ? 'page' : undefined} className="text-petrol-800">{item.name}</span>}
             </li>
           );
         })}

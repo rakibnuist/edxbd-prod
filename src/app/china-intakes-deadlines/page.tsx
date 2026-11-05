@@ -1,30 +1,23 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
-import {
-  ArrowRight,
-  Calendar,
-  ShieldCheck,
-} from 'lucide-react';
+import { ArrowRight, Calendar, ShieldCheck } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getChinaIntakes, CHINA_INTAKE_VERIFIED_ON, CHINA_INTAKE_NEXT_REVIEW } from '@/lib/china-intakes';
 import { canApplyToIntake } from '@/lib/intake-status';
 import type { IntakeStatus } from '@/lib/intake-status';
+import { pageMetadata } from '@/lib/seo';
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: { absolute: 'China University Intakes & Deadlines 2026/27 for Bangladesh Students' },
+const SITE = 'https://eduexpressint.com';
+const PATH = '/china-intakes-deadlines';
+
+export const metadata = pageMetadata({
+  title: 'China University Intakes & Deadlines 2027 | EduExpress',
   description:
-    'March (Spring) and September (Autumn) intake deadlines for Chinese universities. Verified application calendar, document submission windows, and scholarship deadlines for Bangladeshi applicants.',
-  alternates: { canonical: '/china-intakes-deadlines' },
-  openGraph: {
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
-    title: 'China University Intakes & Deadlines | EduExpress International',
-    description: 'Verified calendar of March and September intake application windows and CSC scholarship deadlines.',
-    url: '/china-intakes-deadlines',
-    type: 'website',
-  },
-};
+    'March 2027 and September 2027 China intake windows for Bangladeshi students: applications, CSC and university deadlines, checked with admissions offices.',
+  path: PATH,
+});
 
 // 2027 windows follow each intake's typical admissions cycle (applications open
 // the previous autumn; university deadlines as tracked with admissions offices).
@@ -33,146 +26,175 @@ export const metadata: Metadata = {
 // "Under Verification" instead of showing a stale promise.
 const VERIFIED_ON = CHINA_INTAKE_VERIFIED_ON;
 const NEXT_SCHEDULED_REVIEW = CHINA_INTAKE_NEXT_REVIEW;
-
+// "26 October 2026" -> "October 2026" for the hero's last-updated line.
+const VERIFIED_MONTH = VERIFIED_ON.split(' ').slice(-2).join(' ');
 
 const statusStyles: Record<IntakeStatus, string> = {
-  Open: 'bg-[#e3f0f9] text-[#276b55] border-[#cfe7f5]',
-  Closing: 'bg-amber-50 text-[#256994] border-amber-200',
-  Closed: 'bg-slate-100 text-slate-500 border-slate-200',
-  'Next Intake': 'bg-[#e3f0f9] text-[#12436b] border-[#cfe7f5]',
-  'Under Verification': 'bg-slate-100 text-slate-600 border-slate-200',
+  Open: 'bg-lime-pale text-lime-deep',
+  Closing: 'bg-lime text-petrol-800',
+  Closed: 'bg-canvas-soft text-ink-soft',
+  'Next Intake': 'bg-canvas-soft text-petrol-800',
+  'Under Verification': 'bg-canvas-soft text-ink-soft',
 };
 
 const timelineSteps = [
-  { step: '1. Fit Assessment & Document Prep', window: '4-6 Months Before Intake', detail: 'Gather SSC/HSC/Degree transcripts, passport, physical exam, and police clearance.' },
-  { step: '2. University & CSC Portal Submission', window: '3-5 Months Before Intake', detail: 'Submit application to target universities and CSC portal with verified certificates.' },
-  { step: '3. Admission Notice & JW201/JW202 Issuance', window: '2-3 Months Before Intake', detail: 'Receive official admission package and Chinese Ministry of Education JW form.' },
-  { step: '4. Visa Application & Flight to China', window: '1 Month Before Intake', detail: 'Apply for X1 visa at Chinese Visa Center Dhaka and book pre-departure flights.' },
+  { step: 'Fit assessment & document prep', window: '4–6 months before intake', detail: 'Gather SSC/HSC/Degree transcripts, passport, physical exam, and police clearance.' },
+  { step: 'University & CSC portal submission', window: '3–5 months before intake', detail: 'Submit application to target universities and CSC portal with verified certificates.' },
+  { step: 'Admission notice & JW201/JW202 issuance', window: '2–3 months before intake', detail: 'Receive official admission package and Chinese Ministry of Education JW form.' },
+  { step: 'Visa application & flight to China', window: '1 month before intake', detail: 'Apply for X1 visa at Chinese Visa Center Dhaka and book pre-departure flights.' },
 ];
+
+const guides = [
+  { label: 'March 2027 university shortlist', href: '/china-march-2027-intake' },
+  { label: 'China scholarships for Bangladeshi students', href: '/china-scholarships-bangladesh' },
+  { label: 'CSC scholarship guide', href: '/csc-scholarship-bangladesh' },
+  { label: 'China admission requirements', href: '/china-admission-requirements' },
+  { label: 'China student visa from Bangladesh', href: '/china-student-visa-bangladesh' },
+  { label: 'Study in China from Bangladesh', href: '/study-in-china-from-bangladesh' },
+];
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${SITE}${PATH}#page`,
+  url: `${SITE}${PATH}`,
+  name: 'China University Intakes & Deadlines 2027',
+  description: 'March 2027 and September 2027 China intake windows, CSC and university deadlines for Bangladeshi applicants.',
+  inLanguage: 'en-BD',
+  isPartOf: { '@id': `${SITE}/#website` },
+  publisher: { '@id': `${SITE}/#organization` },
+  breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
+};
 
 export default function ChinaIntakesDeadlinesPage() {
   const intakes = getChinaIntakes();
   return (
-    <div className="bg-[#f1f5f9] text-[#0f3a5c]">
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-mint-100/70 to-white px-5 pb-20 pt-28 text-ink sm:px-8 sm:pt-32 lg:px-12">
-        <div className="relative mx-auto max-w-[1440px]">
-          <nav aria-label="Breadcrumb" className="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-ink-mute">
-            <Link href="/" className="hover:text-ink">Home</Link> <span aria-hidden>/</span>{' '}
-            <Link href="/study-in-china-from-bangladesh" className="hover:text-ink">Study in China</Link> <span aria-hidden>/</span> Intakes & Deadlines
-          </nav>
+    <>
+      <JsonLd data={structuredData} />
 
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#a9d6ee]/30 bg-[#a9d6ee]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-petrol-600">
-              <Calendar size={14} /> Dynamic Intake Calendar 2026/27
-            </div>
-            <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
-              China University Intakes & Application Deadlines
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-ink-soft md:text-xl">
-              Plan your application timeline for March and September intakes. Stay ahead of CSC scholarship deadlines, university admission rounds, and visa processing windows.
+      <PageHero
+        path={PATH}
+        trail={[{ name: 'Study in China', path: '/study-in-china-from-bangladesh' }, { name: 'Intakes & deadlines' }]}
+        eyebrow="Intake calendar · March & September 2027"
+        title="China university intakes and deadlines."
+        lead="Plan your application timeline for March and September intakes. Stay ahead of CSC scholarship deadlines, university admission rounds, and visa processing windows."
+        reviewed={VERIFIED_MONTH}
+        actions={
+          <>
+            <a href="#intake-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">Check upcoming intake slots <ArrowRight size={18} aria-hidden="true" /></a>
+            <Link href="/china-march-2027-intake" className="ed-btn ed-btn-outline min-h-[52px] px-7">March 2027 shortlist</Link>
+          </>
+        }
+        aside={
+          <div className={kit.cardDark}>
+            <p className="text-[14px] font-semibold uppercase tracking-[0.08em] text-white/70">Upcoming China intakes</p>
+            <ul className="mt-2 divide-y divide-white/15">
+              {intakes.map(intake => (
+                <li key={intake.name} className="py-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-[18px] font-semibold text-white">{intake.name.split(' — ')[0]}</p>
+                    <span className={`rounded-full px-3 py-1 text-[14px] font-semibold ${statusStyles[intake.status]}`}>{intake.status}</span>
+                  </div>
+                  <p className="mt-1 text-[15px] leading-6 text-white/80">Applications open {intake.opensLabel} · university deadline <span className="font-semibold text-lime">{intake.deadlineLabel}</span></p>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2 flex items-start gap-2 border-t border-white/15 pt-4 text-[14px] leading-6 text-white/75">
+              <ShieldCheck size={17} className="mt-0.5 shrink-0 text-lime" aria-hidden="true" />Window status checked on {VERIFIED_ON}.
             </p>
-
-            <div className="mt-8 flex flex-wrap gap-4 text-sm font-semibold">
-              <a
-                href="#intake-assessment"
-                className="inline-flex items-center gap-2 rounded-full bg-[#a9d6ee] px-7 py-3.5 text-[#0f3a5c] transition-all hover:bg-white"
-              >
-                Check Upcoming Intake Slots <ArrowRight size={16} />
-              </a>
-            </div>
           </div>
-        </div>
-      </section>
+        }
+      />
 
-      {/* INTAKE COMPARISON */}
-      <section className="px-5 py-20 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="text-center">
-            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#12436b]">Intake Cycles</span>
-            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-[#0f3a5c]">March vs September Intake Windows</h2>
-          </div>
+      <TrustBar />
 
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
-            {intakes.map((i) => (
-              <div key={i.name} className="rounded-3xl border-2 border-[#0f3a5c] bg-white p-8 shadow-sm">
-                <div className="mb-4 flex flex-wrap items-center gap-2">
-                  <span className="inline-block rounded-full bg-[#12436b] px-4 py-1 text-xs font-bold text-white uppercase tracking-wider">
-                    {i.badge}
-                  </span>
-                  <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider ${statusStyles[i.status]}`} data-intake-status={i.status}>
-                    <Calendar size={12} aria-hidden="true" />
-                    {i.status}
-                  </span>
-                </div>
-                <h3 className="font-serif text-2xl font-bold text-[#0f3a5c]">{i.name}</h3>
-                <div className="mt-6 space-y-3 text-sm text-slate-700">
-                  <p><strong>Applications Open:</strong> {i.applicationsOpen}</p>
-                  <p><strong>CSC Scholarship Deadline:</strong> {i.cscDeadline}</p>
-                  <p><strong>University Deadline:</strong> {i.universityDeadline}</p>
-                  <p><strong>Classes Start:</strong> {i.classesStart}</p>
-                  <p className="border-t border-slate-200 pt-3 text-xs text-slate-600"><strong>Available Courses:</strong> {i.programs}</p>
-                </div>
-                {canApplyToIntake(i.status) && (
-                  i.activeCampaignHref
-                    ? <Link href={i.activeCampaignHref} className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-[#66b5e0] px-5 text-sm font-bold text-[#0f3a5c] transition hover:bg-[#66b5e0]">See the March 2027 university shortlist <ArrowRight size={16} /></Link>
-                    : <a href="#intake-assessment" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg border-2 border-[#12436b] px-5 text-sm font-bold text-[#12436b] transition hover:bg-[#e3f0f9]">Start your September 2027 plan <ArrowRight size={16} /></a>
-                )}
-                {i.status === 'Under Verification' && (
-                  <p className="mt-6 rounded-lg bg-slate-50 p-3 text-xs leading-5 text-slate-600">We are re-verifying this application window with admissions offices. Ask a counsellor for the current deadline.</p>
-                )}
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-8 text-center text-xs leading-6 text-slate-500">
-            Window status checked on <strong>{VERIFIED_ON}</strong> against university admissions-office updates. Next check scheduled for {NEXT_SCHEDULED_REVIEW}.
-            If a window is awaiting re-verification we label it &ldquo;Under Verification&rdquo; rather than show a stale deadline.
-          </p>
-        </div>
-      </section>
-
-      {/* TIMELINE */}
-      <section className="bg-white px-5 py-20 border-y border-slate-200 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1100px]">
-          <div className="text-center">
-            <span className="font-mono text-xs font-black uppercase tracking-widest text-[#12436b]">Step-By-Step Roadmap</span>
-            <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-[#0f3a5c]">Recommended Application Roadmap</h2>
-          </div>
-
-          <div className="mt-12 space-y-6">
-            {timelineSteps.map((t, idx) => (
-              <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-2xl bg-[#f1f5f9] p-6 border border-slate-200 gap-4">
-                <div>
-                  <h3 className="font-bold text-lg text-[#0f3a5c]">{t.step}</h3>
-                  <p className="mt-1 text-sm text-slate-600">{t.detail}</p>
-                </div>
-                <span className="shrink-0 font-mono text-xs font-extrabold uppercase tracking-wider bg-[#e3f0f9] text-[#12436b] px-4 py-2 rounded-full border border-blue-200">
-                  {t.window}
+      <Section title="March vs September intake windows." intro="Two intakes a year. September is the main intake for degree programmes; March is the secondary intake with a narrower choice of programmes.">
+        <div data-anim="stagger" className="grid gap-5 md:grid-cols-2">
+          {intakes.map(intake => (
+            <article key={intake.name} className={kit.cardOutline}>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className={kit.badge}>{intake.badge}</span>
+                <span className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[14px] font-semibold ${statusStyles[intake.status]}`} data-intake-status={intake.status}>
+                  <Calendar size={14} aria-hidden="true" />{intake.status}
                 </span>
               </div>
+              <h3 className="mt-5 font-display text-[28px] font-black leading-[1.05] text-petrol-800">{intake.name}</h3>
+              <dl className="mt-5 divide-y divide-canvas-soft border-y border-canvas-soft text-[16px]">
+                {[
+                  ['Applications open', intake.applicationsOpen],
+                  ['CSC scholarship deadline', intake.cscDeadline],
+                  ['University deadline', intake.universityDeadline],
+                  ['Classes start', intake.classesStart],
+                ].map(([term, value]) => (
+                  <div key={term} className="flex flex-wrap justify-between gap-x-4 gap-y-1 py-3">
+                    <dt className="text-ink-soft">{term}</dt>
+                    <dd className="font-semibold text-petrol-800">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className="mt-4 text-[15px] leading-6 text-ink-soft"><strong className="text-petrol-800">Available courses:</strong> {intake.programs}</p>
+              {canApplyToIntake(intake.status) && (
+                intake.activeCampaignHref
+                  ? <Link href={intake.activeCampaignHref} className="ed-btn ed-btn-signal mt-6 min-h-[50px] px-6">See the March 2027 university shortlist <ArrowRight size={17} aria-hidden="true" /></Link>
+                  : <a href="#intake-assessment" className="ed-btn ed-btn-outline mt-6 min-h-[50px] px-6">Start your September 2027 plan <ArrowRight size={17} aria-hidden="true" /></a>
+              )}
+              {intake.status === 'Under Verification' && (
+                <p className="mt-6 rounded-2xl bg-canvas-soft p-4 text-[15px] leading-6 text-ink-soft">We are re-verifying this application window with admissions offices. Ask a counsellor for the current deadline.</p>
+              )}
+            </article>
+          ))}
+        </div>
+
+        <p className="mt-8 flex max-w-4xl items-start gap-3 text-[15px] leading-6 text-ink-soft">
+          <ShieldCheck size={18} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" />
+          <span>
+            Window status checked on <strong className="text-petrol-800">{VERIFIED_ON}</strong> against university admissions-office updates. Next check scheduled for {NEXT_SCHEDULED_REVIEW}.
+            If a window is awaiting re-verification we label it &ldquo;Under Verification&rdquo; rather than show a stale deadline.
+          </span>
+        </p>
+      </Section>
+
+      <Section tone="sage" title="Recommended application roadmap." intro="Work back from your intake. Each step depends on the one before it, so start your documents early.">
+        <ol data-anim="stagger" className="grid gap-4 md:grid-cols-2">
+          {timelineSteps.map((item, index) => (
+            <li key={item.step} className={kit.card}>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span className="grid size-10 place-items-center rounded-full bg-lime font-display text-[18px] font-black text-petrol-800" aria-hidden="true">{index + 1}</span>
+                <span className="rounded-full bg-canvas-soft px-3.5 py-1.5 text-[14px] font-semibold text-petrol-800">{item.window}</span>
+              </div>
+              <h3 className={`mt-4 ${kit.h3}`}>{item.step}</h3>
+              <p className={`mt-2 ${kit.body}`}>{item.detail}</p>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
+      <Section tone="navy" title="Visa-first service terms." intro="EduExpress International tracks intake windows directly with university admissions offices. No file opening charge, and no EduExpress service fee before your China visa approval. University, embassy and other third-party charges required earlier are itemised in writing before you proceed.">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link href="/china-visa-first-policy" className="ed-btn ed-btn-signal min-h-[52px] px-7">Read the visa-first policy <ArrowRight size={18} aria-hidden="true" /></Link>
+          <Link href="/fees-and-transparency" className="ed-btn ed-btn-on-dark min-h-[52px] px-7">How we handle fees</Link>
+        </div>
+      </Section>
+
+      <Section title="Plan around your intake.">
+        <nav aria-label="Related China guides">
+          <ul data-anim="stagger" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {guides.map(item => (
+              <li key={item.href}>
+                <Link href={item.href} className="flex min-h-[64px] items-center justify-between gap-4 rounded-3xl bg-canvas-soft px-5 py-4 text-[16px] font-semibold text-petrol-800 transition-colors hover:bg-lime-pale">
+                  {item.label}<ArrowRight size={17} className="shrink-0" aria-hidden="true" />
+                </Link>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
+          </ul>
+        </nav>
+      </Section>
 
-      {/* REASSURANCE */}
-      <section className="px-5 py-16 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1000px] text-center">
-          <ShieldCheck size={36} className="mx-auto text-[#12436b]" />
-          <h2 className="mt-4 font-serif text-3xl font-bold text-[#0f3a5c]">Visa-First Service Terms</h2>
-          <p className="mt-4 text-slate-600 leading-relaxed">
-            EduExpress International tracks intake windows directly with university admissions offices. No file opening charge, and no EduExpress service fee before your China visa approval. University, embassy and other third-party charges required earlier are itemised in writing before you proceed.
-          </p>
-        </div>
-      </section>
+      <Section id="intake-assessment" tone="sage" title="Check your intake fit." intro="Share your results, subject and preferred intake. A counsellor reviews which March or September 2027 routes suit you.">
+        <EducationFitAssessment />
+      </Section>
 
-      {/* ASSESSMENT */}
-      <section id="intake-assessment" className="px-5 py-20 bg-[#e3f0f9] sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-[1100px]">
-          <EducationFitAssessment />
-        </div>
-      </section>
-    </div>
+      <CtaBand title="Do not miss your intake." text="Tell us which intake you are aiming for. A counsellor replies within one working day with the deadlines, documents and costs for your route, in writing." />
+    </>
   );
 }

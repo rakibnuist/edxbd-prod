@@ -1,8 +1,11 @@
 import ChinaGuidePage from '@/components/china/ChinaGuidePage';
-import { chinaGuidePages, chinaGuideMetadata } from '@/data/chinaGuidePages';
+import { chinaGuidePages } from '@/data/chinaGuidePages';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata = chinaGuideMetadata('china-student-visa-bangladesh');
+const guide = chinaGuidePages['china-student-visa-bangladesh'];
+
+export const metadata = pageMetadata({ title: guide.metaTitle, description: guide.description, path: '/china-student-visa-bangladesh' });
 
 export default function ChinaVisaGuidePage() {
-  return <ChinaGuidePage guide={chinaGuidePages['china-student-visa-bangladesh']} />;
+  return <ChinaGuidePage guide={guide} />;
 }

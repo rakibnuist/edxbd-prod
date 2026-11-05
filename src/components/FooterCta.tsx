@@ -4,16 +4,19 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 
+const PAGES_WITH_OWN_FORM = new Set(['/', '/education-fit-assessment', '/apply', '/contact']);
+
 /**
  * Site-wide assessment prompt at the top of the footer.
- * Hidden on the homepage, which already closes with the full assessment form.
+ * Hidden where the page already carries the form (home, assessment, apply,
+ * contact) and, via CSS, on any page that ends with its own CtaBand.
  */
 export default function FooterCta() {
   const pathname = usePathname();
-  if (pathname === '/') return null;
+  if (PAGES_WITH_OWN_FORM.has(pathname)) return null;
 
   return (
-    <div className="mx-auto max-w-[1200px] px-5 pt-16 lg:px-8">
+    <div className="footer-cta mx-auto max-w-[1200px] px-5 pt-16 lg:px-8">
       <div className="flex flex-col gap-6 rounded-3xl bg-white p-7 text-petrol-800 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h2 className="font-display text-[34px] font-black leading-[0.95] tracking-[-0.01em] sm:text-[44px]">Not sure where to begin?</h2>

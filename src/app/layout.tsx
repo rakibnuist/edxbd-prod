@@ -98,7 +98,6 @@ export const metadata: Metadata = {
   },
   other: {
     'msapplication-TileColor': '#12436b',
-    'msapplication-config': '/browserconfig.xml',
   },
   appleWebApp: {
     capable: true,
@@ -159,6 +158,13 @@ export default async function RootLayout({
       "longitude": 90.3713009
     },
     "telephone": [office?.phonePrimary, office?.phoneSecondary].filter(Boolean),
+    "foundingDate": "2018-03-08",
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+      "opens": "11:00",
+      "closes": "18:00"
+    },
     "contactPoint": [
       {
         "@type": "ContactPoint",

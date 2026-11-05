@@ -28,7 +28,7 @@ EduExpress compares education quality, recognition, total cost, academic fit, vi
 ## Updates, Guides & RSS
 
 - Advice and updates library (news + verified guides): https://eduexpressint.com/updates
-- Topic archives: https://eduexpressint.com/updates/category/announcement (one archive per category)
+- Updates and guides: https://eduexpressint.com/updates (topic archives appear once posts are published)
 - Everything as an RSS feed: https://eduexpressint.com/updates/feed.xml
 - Intake deadlines & status: https://eduexpressint.com/china-intakes-deadlines
 
