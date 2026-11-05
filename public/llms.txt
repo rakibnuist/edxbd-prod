@@ -1,55 +1,58 @@
-# EduExpress International — Evidence-First Overseas Education
+# EduExpress International
 
-> Official portal for Bangladeshi students seeking verified university admissions, clear cost schedules, and visa guidance.
-> Better Education. Clear Costs. Written Proof.
+> Evidence-first study abroad consultancy for students and families in Bangladesh, based in Dhanmondi, Dhaka since 2018. EduExpress compares education quality, recognition, the full cost and visa readiness before recommending a route, puts every cost in writing, and charges no service fee for China before the student's visa is approved. Admission, scholarship and visa outcomes are never guaranteed.
 
-Canonical website: https://eduexpressint.com
+Key facts:
+- Founded 8 March 2018 by Abdullah Al Rakib (Founder and CEO); China specialist with 12 destination services.
+- Office: Evergreen Latif, House 12/1, Road 4/A, Ground Floor, Dhanmondi, Dhaka 1209, Bangladesh. Open Saturday to Thursday, 11:00 AM to 6:00 PM.
+- Phone / WhatsApp: +880 1983-333566, +880 1329-663505. Email: info@eduexpressint.com
+- Free first assessment. Fees, inclusions and refund terms: https://eduexpressint.com/pricing.md
+- Full reference with guide answers, intakes and the university directory: https://eduexpressint.com/llms-full.txt
 
-## What EduExpress does
+## Start here
 
-EduExpress compares education quality, recognition, total cost, academic fit, visa readiness and career fit before recommending an overseas education route. Scholarship options are assessed after education fit. Admission, scholarship, visa and employment outcomes are never guaranteed.
+- [Free education fit assessment](https://eduexpressint.com/education-fit-assessment): share results, budget and goals; a counsellor replies within one working day
+- [Fees and transparency](https://eduexpressint.com/fees-and-transparency): what EduExpress charges, when, and what is paid to third parties
+- [China visa-first payment policy](https://eduexpressint.com/china-visa-first-policy): no service fee before China visa approval
+- [Contact and office visit](https://eduexpressint.com/contact): address, hours, phone, WhatsApp and map
 
-## Core Services & Verification Standard
+## Study in China (flagship)
 
-- Find Education: https://eduexpressint.com/find-education
-- Complete Study Journey: https://eduexpressint.com/your-study-journey
-- Scholarship Guidance: https://eduexpressint.com/scholarships
-- Better Education Standard: https://eduexpressint.com/better-education-standard
-- Fees & Transparency: https://eduexpressint.com/fees-and-transparency
-- China Visa-First Policy: https://eduexpressint.com/china-visa-first-policy
-- Free Education Fit Assessment: https://eduexpressint.com/education-fit-assessment
+- [Study in China from Bangladesh](https://eduexpressint.com/study-in-china-from-bangladesh): the complete starting guide
+- [Cost of studying in China](https://eduexpressint.com/study-in-china-cost-bangladesh): tuition, hostel, insurance, visa and travel budgeting
+- [China scholarships](https://eduexpressint.com/china-scholarships-bangladesh): CSC, provincial and university awards and what they cover
+- [CSC scholarship from Bangladesh](https://eduexpressint.com/csc-scholarship-bangladesh): Chinese Government Scholarship steps and documents
+- [China admission requirements](https://eduexpressint.com/china-admission-requirements): documents and entry rules by level
+- [China student visa (X1/X2)](https://eduexpressint.com/china-student-visa-bangladesh): visa preparation from Bangladesh
+- [Study in China without IELTS](https://eduexpressint.com/study-in-china-without-ielts): English-proof routes that are accepted
+- [MBBS in China](https://eduexpressint.com/mbbs-in-china-bangladesh): medical universities, fees and BMDC considerations
+- [China intakes and deadlines](https://eduexpressint.com/china-intakes-deadlines): March and September 2027 windows with live status
+- [Life in China for Bangladeshi students](https://eduexpressint.com/life-in-china-bangladeshi-students): housing, food, safety and part-time rules
+- [China universities](https://eduexpressint.com/china-universities): profiles with programmes, fees and scholarships
+- [বাংলা গাইড (Bengali guide)](https://eduexpressint.com/bn/study-in-china): study in China, in Bengali
 
-## Evidence & Trust Pages
+## Plan and compare
 
-- How Universities Are Verified: https://eduexpressint.com/how-we-verify-universities
-- Student Data Privacy: https://eduexpressint.com/student-data-privacy
-- Complaints and Resolution: https://eduexpressint.com/complaints-and-resolution
+- [University and programme finder](https://eduexpressint.com/universities): search universities by subject, level, intake and scholarship
+- [Scholarship guidance](https://eduexpressint.com/scholarships): what awards cover and what still has to be paid
+- [All destinations](https://eduexpressint.com/destinations): China, United Kingdom, South Korea, Malaysia, Hungary, Finland, Cyprus, Croatia, Georgia, Malta, Greece, Thailand
+- [Compare study destinations](https://eduexpressint.com/compare-study-destinations): cost and entry side by side
+- [Your study journey](https://eduexpressint.com/your-study-journey): the seven stages from assessment to arrival
+- [For parents](https://eduexpressint.com/for-parents): costs, safety and responsibilities explained for families
 
-## Updates, Guides & RSS
+## Trust and policy
 
-- Advice and updates library (news + verified guides): https://eduexpressint.com/updates
-- Updates and guides: https://eduexpressint.com/updates (topic archives appear once posts are published)
-- Everything as an RSS feed: https://eduexpressint.com/updates/feed.xml
-- Intake deadlines & status: https://eduexpressint.com/china-intakes-deadlines
+- [About EduExpress](https://eduexpressint.com/about): history, team and office
+- [How we verify universities](https://eduexpressint.com/how-we-verify-universities): sources and review dates behind every listed fact
+- [Better Education Standard](https://eduexpressint.com/better-education-standard): how options are compared before recommending
+- [Proof library](https://eduexpressint.com/proof-library): published company and office records
+- [Complaints and resolution](https://eduexpressint.com/complaints-and-resolution): how to raise and escalate a complaint
+- [Student data privacy](https://eduexpressint.com/student-data-privacy): how documents and personal data are handled
+- [Country service status](https://eduexpressint.com/country-status): which destination services are active
 
-## Public Destination Services
+## Optional
 
-- Study in China (Flagship): https://eduexpressint.com/study-in-china-from-bangladesh
-- All 12 listed destination services are open: https://eduexpressint.com/destinations
-- United Kingdom: https://eduexpressint.com/study-in-uk-from-bangladesh
-- Hungary: https://eduexpressint.com/study-in-hungary-from-bangladesh
-- South Korea: https://eduexpressint.com/study-in-south-korea-from-bangladesh
-- Finland: https://eduexpressint.com/study-in-finland-from-bangladesh
-- Malaysia: https://eduexpressint.com/study-in-malaysia-from-bangladesh
-- Malta: https://eduexpressint.com/study-in-malta-from-bangladesh
-- Cyprus: https://eduexpressint.com/study-in-cyprus-from-bangladesh
-- Georgia: https://eduexpressint.com/study-in-georgia-from-bangladesh
-- Greece: https://eduexpressint.com/study-in-greece-from-bangladesh
-- Croatia: https://eduexpressint.com/study-in-croatia-from-bangladesh
-- Thailand: https://eduexpressint.com/study-in-thailand-from-bangladesh
-
-## Head Office & Location
-
-- Address: Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209
-- Phone: +880 1983-333566 | +880 1329-663505
-- Hours: Saturday to Thursday, 11:00 AM to 6:00 PM
+- [Advice and updates](https://eduexpressint.com/updates): dated intake and visa news (RSS: https://eduexpressint.com/updates/feed.xml)
+- [Success stories](https://eduexpressint.com/success-stories): published only with verified student consent
+- [Partner with EduExpress](https://eduexpressint.com/partnership): programme for education agencies
+- [Privacy policy](https://eduexpressint.com/privacy) and [Terms of service](https://eduexpressint.com/terms)

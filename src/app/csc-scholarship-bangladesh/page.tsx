@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, Building2, Check, ExternalLink, FileText, GraduationCap, ShieldCheck, Wallet } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
 const PATH = '/csc-scholarship-bangladesh';
@@ -12,6 +12,7 @@ export const metadata = pageMetadata({
   description:
     'Chinese Government (CSC) Scholarship guide for Bangladeshi students: Type A and Type B routes, what a full award covers, stipends, age limits and documents.',
   path: PATH,
+  image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
 });
 
 const visaFirstTerms = 'No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.';

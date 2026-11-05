@@ -42,6 +42,10 @@ export function destinationPhoto(slug: string) {
   return DESTINATION_PHOTOS[slug];
 }
 
+export function destinationPhotoAlt(slug: string) {
+  return PHOTO_ALT[slug];
+}
+
 export default function DestinationCover({
   slug,
   name,

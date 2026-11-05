@@ -7,7 +7,7 @@ import { DESTINATION_PHOTOS } from '@/components/destinations/DestinationCover';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
 import { activeCountries } from '@/lib/countries';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 import { SITE_URL, absoluteUrl, destinationPath } from '@/lib/site-urls';
 
 const PATH = '/destinations';
@@ -18,7 +18,7 @@ export const metadata = pageMetadata({
   title: 'Study Abroad Destinations from Bangladesh | EduExpress',
   description: `Compare ${activeCountries.length} study abroad destinations for Bangladeshi students: recognition, tuition, living costs, scholarships, intakes and visa steps, all in writing.`,
   path: PATH,
-  image: { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — study abroad destinations for Bangladeshi students' },
+  image: ogImage('destinations', 'The Great Wall of China across autumn hills'),
 });
 
 const mosaic = [

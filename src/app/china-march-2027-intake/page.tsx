@@ -10,7 +10,7 @@ import { CHINA_INTAKE_VERIFIED_ON, getChinaIntakes } from '@/lib/china-intakes';
 import { canApplyToIntake } from '@/lib/intake-status';
 import { publicMarchCatalogue } from '@/lib/march-campaign-catalogue';
 import { getChinaMarch2027Landing } from '@/lib/intake-campaigns';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
 export const revalidate = 1800;
@@ -24,7 +24,7 @@ export const metadata = pageMetadata({
   description,
   path: PATH,
   locale: 'en_GB',
-  image: { url: '/images/students/student-life.webp', width: 1400, height: 933, alt: 'Student life in China — plan your spring study route with EduExpress International' },
+  image: ogImage('march-2027', 'Students at a cultural event in China'),
 });
 const paymentPolicy = 'No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.';
 const documents = [

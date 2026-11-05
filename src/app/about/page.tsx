@@ -4,7 +4,7 @@ import { ArrowRight, FileCheck2, GraduationCap, ShieldCheck, Wallet } from 'luci
 import TeamSection from '@/components/about/TeamSection';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { countries } from '@/lib/countries';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
 const PATH = '/about';
@@ -14,6 +14,7 @@ export const metadata = pageMetadata({
   description:
     'Meet EduExpress, an evidence-first study abroad consultancy in Dhanmondi, Dhaka since 2018: our story, team, China expertise and how we put every cost in writing.',
   path: PATH,
+  image: ogImage('about', 'The EduExpress counselling team at the Dhanmondi office in Dhaka'),
 });
 
 const timeline = [

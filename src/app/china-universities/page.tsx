@@ -6,7 +6,7 @@ import UniversitiesClient from '@/app/universities/UniversitiesClient';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getUniversityRecords } from '@/lib/university-records';
 import { filterUniversities, readDirectoryFilters } from '@/lib/university-directory';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
 const PATH = '/china-universities';
@@ -36,6 +36,7 @@ export async function generateMetadata({ searchParams }: Props) {
     title: 'China Universities for Bangladeshi Students | EduExpress',
     description: `Compare ${count > 0 ? `${count} ` : ''}China university records for Bangladeshi students by subject, degree, teaching language, city and intake, with recorded costs and source status.`,
     path: PATH,
+    image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
     // Filtered views stay crawlable but out of the index; the canonical stays the unfiltered directory.
     noindex: filtered,
   });

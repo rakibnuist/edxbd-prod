@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, FileCheck2, ShieldCheck } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 import { StandardsGrid, StoryCard, getPublishedStories } from '../success-stories/stories';
 
 const PATH = '/china-success-stories';
@@ -18,6 +18,7 @@ export async function generateMetadata() {
     description:
       'Consent-based stories from EduExpress students in China: profile, university choice, timeline, service scope and payment, with passport and visa data redacted.',
     path: PATH,
+    image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
     // Unchanged rule: the page stays out of the index until at least one consented China story is public.
     noindex: stories.length === 0,
   });

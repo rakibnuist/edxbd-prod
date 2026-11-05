@@ -159,6 +159,8 @@ export default async function RootLayout({
     },
     "telephone": [office?.phonePrimary, office?.phoneSecondary].filter(Boolean),
     "foundingDate": "2018-03-08",
+    "founder": { "@type": "Person", "name": "Abdullah Al Rakib", "jobTitle": "Founder and CEO" },
+    "slogan": "Better Education. Clear Costs. Written Proof.",
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],

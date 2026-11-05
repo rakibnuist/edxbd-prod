@@ -14,7 +14,7 @@ import {
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
 import { formatBangladeshPhone } from '@/lib/contact-format';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 import PaymentRules from '../contact/PaymentRules';
 
@@ -25,7 +25,7 @@ export const metadata = pageMetadata({
   description:
     'A practical guide for Bangladeshi parents comparing recognition, full study costs, student safety, application proof and visa responsibility.',
   path: PATH,
-  image: { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — parent and student guidance in Dhanmondi' },
+  image: ogImage('parents', 'An EduExpress counsellor meeting a parent and student'),
 });
 
 const structuredData = {

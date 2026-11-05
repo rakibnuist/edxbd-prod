@@ -5,7 +5,7 @@ import EducationFitAssessment from '@/components/assessment/EducationFitAssessme
 import { JsonLd, Section, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
 import { breadcrumbJsonLd } from '@/lib/json-ld';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
 const PATH = '/bn/study-in-china';
@@ -16,6 +16,7 @@ export const metadata = pageMetadata({
   description:
     'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে ব্যাচেলর, মাস্টার্স, স্কলারশিপ ও ভিসা প্রসেসিং গাইড। ভিসা অনুমোদনের পূর্বে কোনো ফাইল ওপেনিং চার্জ বা সার্ভিস ফি নেই।',
   path: PATH,
+  image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
   locale: 'bn_BD',
   languages: {
     'en-BD': '/study-in-china-from-bangladesh',

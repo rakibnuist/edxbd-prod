@@ -16,10 +16,10 @@ import {
   Wallet,
 } from 'lucide-react';
 
-import DestinationCover, { destinationPhoto } from '@/components/destinations/DestinationCover';
+import DestinationCover, { destinationPhoto, destinationPhotoAlt } from '@/components/destinations/DestinationCover';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
 import { countries } from '@/lib/countries';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
 import { COUNTRY_SEO, type CountrySeo } from './country-seo';
 
@@ -63,7 +63,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (country.slug === 'china') return {};
 
   const seo = seoFor(country);
-  return pageMetadata({ title: seo.title, description: seo.description, path: countryPath(slug), locale: 'en_BD' });
+  // Every served country has a real-photo share card in public/og/<slug>.jpg.
+  const alt = destinationPhotoAlt(slug);
+  return pageMetadata({
+    title: seo.title,
+    description: seo.description,
+    path: countryPath(slug),
+    locale: 'en_BD',
+    ...(destinationPhoto(slug) && alt ? { image: ogImage(slug, alt) } : {}),
+  });
 }
 
 export default async function CountryPage({ params }: Props) {

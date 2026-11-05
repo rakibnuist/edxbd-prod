@@ -17,7 +17,7 @@ export const getIndexableUniversityGuides = cache(async (): Promise<Set<string>>
 /** Both sitemap formats use the same eligibility decision as profile metadata. */
 export const getIndexableUniversitySitemapRecords = cache(async () => {
   const [records, guides] = await Promise.all([
-    prisma.university.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true, verificationStatus: true, officialUrl: true, sourceUrls: true, lastVerifiedAt: true, verificationExpiresAt: true } }),
+    prisma.university.findMany({ where: { isActive: true }, select: { slug: true, logo: true, updatedAt: true, verificationStatus: true, officialUrl: true, sourceUrls: true, lastVerifiedAt: true, verificationExpiresAt: true } }),
     getIndexableUniversityGuides(),
   ]);
   return records.filter(record => guides.has(record.slug) || universityIsIndexable(record));

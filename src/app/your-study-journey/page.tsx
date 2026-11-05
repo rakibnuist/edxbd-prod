@@ -14,7 +14,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
 
 const PATH = '/your-study-journey';
@@ -26,7 +26,7 @@ export const metadata = pageMetadata({
     'See the seven-stage EduExpress journey from education fit and applications to visa readiness, departure and university registration, each with a clear output.',
   path: PATH,
   locale: 'en_BD',
-  image: { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — the complete study journey' },
+  image: ogImage('journey', 'A Bangladeshi family seeing a student off at Dhaka airport'),
 });
 
 type JourneyStage = {

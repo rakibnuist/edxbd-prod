@@ -8,6 +8,25 @@ import { categoriesFromUpdate, categorySlug } from '@/lib/update-categories';
 import { activeCountries } from '@/lib/countries';
 import { destinationPath } from '@/lib/site-urls';
 import { getIndexableUniversitySitemapRecords } from '@/lib/university-guide-publication';
+import { DESTINATION_PHOTOS } from '@/components/destinations/DestinationCover';
+
+const SITE = 'https://eduexpressint.com';
+const abs = (src: string) => (src.startsWith('http') ? src : `${SITE}${src}`);
+
+/**
+ * Real photos rendered on each static page, listed for Google Images. Only
+ * photos that actually appear on the page belong here.
+ */
+const PAGE_IMAGES: Record<string, string[]> = {
+  '': ['/images/students/success-banner.webp', '/images/students/departure-family.webp'],
+  '/about': ['/images/home/dhanmondi-counselling-team.webp'],
+  '/destinations': Object.values(DESTINATION_PHOTOS),
+  '/for-parents': ['/images/home/parent-counselling.webp'],
+  '/success-stories': ['/images/students/success-banner.webp'],
+  '/china-universities': ['/images/students/campus-nuist.webp'],
+  '/study-in-china-from-bangladesh': ['/images/real/china_campus/cie_campus_visit.webp'],
+  '/china-march-2027-intake': ['/images/home/consultation-family.webp'],
+};
 
 // PHASE 0 FIX:
 // - baseUrl moved to apex domain (www redirects -> canonical mismatch before)
@@ -51,6 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: STATIC_CONTENT_UPDATED,
     changeFrequency: 'weekly' as const,
     priority: route === '' ? 1 : route === '/education-fit-assessment' ? 0.9 : 0.8,
+    ...(PAGE_IMAGES[route] ? { images: PAGE_IMAGES[route].map(abs) } : {}),
   }));
 
   // Dynamic routes (Countries)
@@ -61,6 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date('2026-11-06'),
     changeFrequency: 'weekly' as const,
     priority: 0.85,
+    ...(DESTINATION_PHOTOS[country.slug] ? { images: [abs(DESTINATION_PHOTOS[country.slug])] } : {}),
   }));
 
   try {
@@ -71,6 +92,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: uni.updatedAt ? new Date(uni.updatedAt) : new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.8,
+      ...(uni.logo ? { images: [abs(uni.logo)] } : {}),
     }));
     // Published updates/articles
     const updates = await prisma.content.findMany({

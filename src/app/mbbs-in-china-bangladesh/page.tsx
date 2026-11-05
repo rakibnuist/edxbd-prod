@@ -5,7 +5,7 @@ import MbbsUniversityFinder from '@/components/china/MbbsUniversityFinder';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getChinaMbbsGuide } from '@/lib/china-mbbs-guide';
 import { mbbsApplyHref } from '@/lib/mbbs-enquiry';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 
 export const revalidate = 3600;
 const SITE = 'https://eduexpressint.com';
@@ -48,7 +48,7 @@ export async function generateMetadata() {
     title: 'MBBS in China for Bangladeshi Students | EduExpress',
     description: guide.description,
     path: PATH,
-    image: heroImage,
+    image: ogImage('china-guide', heroImage.alt),
   });
 }
 

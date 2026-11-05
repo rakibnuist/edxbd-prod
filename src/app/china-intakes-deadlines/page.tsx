@@ -5,7 +5,7 @@ import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/
 import { getChinaIntakes, CHINA_INTAKE_VERIFIED_ON, CHINA_INTAKE_NEXT_REVIEW } from '@/lib/china-intakes';
 import { canApplyToIntake } from '@/lib/intake-status';
 import type { IntakeStatus } from '@/lib/intake-status';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 
 export const revalidate = 3600;
 
@@ -17,6 +17,7 @@ export const metadata = pageMetadata({
   description:
     'March 2027 and September 2027 China intake windows for Bangladeshi students: applications, CSC and university deadlines, checked with admissions offices.',
   path: PATH,
+  image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
 });
 
 // 2027 windows follow each intake's typical admissions cycle (applications open

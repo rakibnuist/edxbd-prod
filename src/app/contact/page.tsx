@@ -4,7 +4,7 @@ import EnhancedContactForm from '@/components/EnhancedContactForm';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
 import { formatBangladeshPhone } from '@/lib/contact-format';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 import PaymentRules from './PaymentRules';
 
@@ -15,6 +15,7 @@ export const metadata = pageMetadata({
   description:
     'Call, WhatsApp or visit EduExpress in Dhanmondi, Dhaka, Saturday to Thursday. Parents welcome. Costs in writing, no service fee before China visa approval.',
   path: PATH,
+  image: ogImage('contact', 'A counsellor meeting a student and a family member at the EduExpress office'),
 });
 
 const structuredData = {

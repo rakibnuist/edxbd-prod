@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, BadgeCheck, ShieldCheck } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 import { StandardsGrid, StoryCard, getPublishedStories } from './stories';
 
 const PATH = '/success-stories';
@@ -15,6 +15,7 @@ export const metadata = pageMetadata({
   description:
     'Consent-based EduExpress student stories: the profile, options considered, university decision, timeline, service scope and who paid, with private data removed.',
   path: PATH,
+  image: ogImage('stories', 'Students and parents at Dhaka airport celebrating a study in China departure with EduExpress'),
 });
 
 const gateReasons = [

@@ -63,4 +63,11 @@ export function pageMetadata(seo: PageSeo): Metadata {
   };
 }
 
+/**
+ * A 1200×630 JPEG share card cut from a real site photo (generated into
+ * public/og/). JPEG rather than WebP so every chat app and social network
+ * renders the preview.
+ */
+export const ogImage = (name: string, alt: string) => ({ url: `/og/${name}.jpg`, width: 1200, height: 630, alt });
+
 export const absoluteUrl = (path: string) => `${SITE_URL}${path === '/' ? '' : path}`;

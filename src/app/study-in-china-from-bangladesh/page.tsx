@@ -5,7 +5,7 @@ import ChinaStudyPlanner from '@/components/china/ChinaStudyPlanner';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getUniversityRoute } from '@/lib/university-records';
 import { getChinaStudyHub } from '@/lib/china-study-hub';
-import { pageMetadata } from '@/lib/seo';
+import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
 const PATH = '/study-in-china-from-bangladesh';
@@ -21,7 +21,7 @@ export async function generateMetadata() {
     path: PATH,
     locale: 'en_GB',
     languages: { 'en-BD': PATH, 'bn-BD': '/bn/study-in-china', 'x-default': PATH },
-    image: { url: content.photos.hero.src, width: content.photos.hero.width, height: content.photos.hero.height, alt: content.photos.hero.alt },
+    image: ogImage('china-guide', content.photos.hero.alt),
   });
 }
 
