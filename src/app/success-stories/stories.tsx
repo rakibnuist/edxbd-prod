@@ -5,6 +5,7 @@ import type { Prisma } from '@prisma/client';
 import { BadgeCheck, CameraOff, FileCheck2, LockKeyhole, UserRoundCheck } from 'lucide-react';
 import { kit } from '@/components/page/PageKit';
 import prisma from '@/lib/prisma';
+import { withPublicTestimonials } from '@/lib/testimonial-visibility';
 
 /** Shared by /success-stories and /china-success-stories. */
 
@@ -24,11 +25,11 @@ export type PublicStory = {
   currentUpdate?: string;
 };
 
-/** Published testimonial records, optionally narrowed (e.g. to China). Fails closed to an empty list. */
+/** Publicly visible stories (published + current verified consent), optionally narrowed (e.g. to China). Fails closed to an empty list. */
 export async function getPublishedStories(where: Prisma.TestimonialWhereInput = {}): Promise<PublicStory[]> {
   try {
     const records = await prisma.testimonial.findMany({
-      where: { ...where, isPublished: true },
+      where: withPublicTestimonials(where),
       orderBy: [{ featured: 'desc' }, { createdAt: 'desc' }],
     });
     return records.map(record => ({

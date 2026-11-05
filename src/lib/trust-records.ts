@@ -2,6 +2,7 @@ import 'server-only';
 
 import { cache } from 'react';
 import prisma from '@/lib/prisma';
+import { withPublicTestimonials } from '@/lib/testimonial-visibility';
 import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
 
 const parseList = (value: string) => {
@@ -31,10 +32,7 @@ export const getPublicTrustRecords = cache(async () => {
     prisma.teamMember.findMany({ where: { isPublished: true, consentConfirmedAt: { not: null } }, orderBy: [{ displayOrder: 'asc' }, { name: 'asc' }] }),
     prisma.servicePackage.findMany({ where: { isPublished: true }, orderBy: [{ displayOrder: 'asc' }, { title: 'asc' }] }),
     prisma.testimonial.findMany({
-      where: {
-        isPublished: true,
-        content: { not: '' },
-      },
+      where: withPublicTestimonials({ content: { not: '' } }),
       orderBy: [{ featured: 'desc' }, { updatedAt: 'desc' }],
       take: 6,
       select: { id: true, studentName: true, displayName: true, content: true, university: true, country: true, image: true, rating: true, consentImageApproved: true },
