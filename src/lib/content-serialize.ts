@@ -1,6 +1,9 @@
 // Content stores tags/categories/sourceUrls as JSON strings in SQLite,
 // but the admin UI works with arrays. These helpers convert between the two.
 
+// Relative import keeps this helper loadable by the node:test scripts.
+import { sanitizeUpdateHtml } from './content-html';
+
 const toArray = (v: unknown): string[] => {
   if (Array.isArray(v)) return v as string[];
   if (typeof v === 'string' && v.trim()) {
@@ -23,7 +26,9 @@ export const toContentData = (body: Record<string, unknown>, partial = false) =>
   const all: Record<string, unknown> = {
     title: body.title,
     slug: body.slug,
-    content: body.content,
+    // Article bodies are rendered as HTML for every visitor: store only the
+    // allowlisted markup (render paths sanitise again for older rows).
+    content: typeof body.content === 'string' ? sanitizeUpdateHtml(body.content) : body.content,
     excerpt: body.excerpt ?? null,
     type: body.type || 'update',
     category: body.category ?? null,

@@ -6,6 +6,7 @@ import { trackDashboardView, trackContentManagement } from '@/lib/analytics';
 import { Content } from '@/lib/types';
 import { teamMembers } from '@/data/teamMembers';
 import { useAuth } from '@/contexts/AuthContext';
+import { sanitizeUpdateHtml } from '@/lib/content-html';
 
 const isPubliclyCurrent = (content: Content) => {
   const today = new Date();
@@ -729,7 +730,7 @@ export default function ContentPage() {
                   ) : (
                     <div
                       className="mt-1 block w-full border border-gray-300 rounded-md px-2 sm:px-3 py-1.5 sm:py-2 min-h-[200px] sm:min-h-[300px] bg-white text-xs sm:text-sm"
-                      dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-500">No content to preview</p>' }}
+                      dangerouslySetInnerHTML={{ __html: sanitizeUpdateHtml(formData.content) || '<p class="text-gray-500">No content to preview</p>' }}
                     />
                   )}
                 </div>

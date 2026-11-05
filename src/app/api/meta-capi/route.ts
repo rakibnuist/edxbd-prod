@@ -4,6 +4,9 @@ import { getMetaConfig } from '@/lib/settings';
 import { sendMetaEvents } from '@/lib/meta-api';
 import { recordMetaDelivery } from '@/lib/meta-health';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
+import { isAdminRequest } from '@/lib/auth';
+import { SITE_URL } from '@/lib/site-urls';
+import { classifyRequestOrigin, pickCustomData, resolveCapiEvent } from '@/lib/meta-capi-policy';
 import {
     getOptionalString,
     getRequiredString,
@@ -11,24 +14,8 @@ import {
     readLimitedJson,
 } from '@/lib/request-body';
 
-const PUBLIC_EVENT_NAMES: Record<string, string> = {
-    page_view: 'PageView',
-    study_abroad_lead: 'Lead',
-    PageView: 'PageView',
-    ViewContent: 'ViewContent',
-    Lead: 'Lead',
-    CompleteRegistration: 'CompleteRegistration',
-    Contact: 'Contact',
-    Schedule: 'Schedule',
-    AddToCart: 'AddToCart',
-    Purchase: 'Purchase',
-    Subscribe: 'Subscribe',
-    AddToWishlist: 'AddToWishlist',
-    InitiateCheckout: 'InitiateCheckout',
-    Search: 'Search',
-    FindLocation: 'FindLocation',
-    SubmitApplication: 'SubmitApplication',
-};
+const SITE_HOST = new URL(SITE_URL).host;
+const SITE_HOSTS = [SITE_HOST, `www.${SITE_HOST}`];
 
 interface ConversionsAPIEvent {
     event_name: string;
@@ -51,8 +38,7 @@ interface ConversionsAPIEvent {
         zp?: string; // hashed zip
         country?: string; // hashed country
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    custom_data?: Record<string, any>;
+    custom_data?: Record<string, string | number | boolean>;
 }
 
 // SHA256 hashing function for PII
@@ -87,33 +73,49 @@ export async function POST(request: NextRequest) {
     try {
         const body = await readLimitedJson(request, 32 * 1024);
         const eventNameInput = getRequiredString(body, body.event_name ? 'event_name' : 'eventType', 64);
-        const eventName = PUBLIC_EVENT_NAMES[eventNameInput];
-        const eventId = getOptionalString(body, body.event_id ? 'event_id' : 'eventId', 200) ||
-            `server_${Date.now()}_${crypto.randomUUID()}`;
-        const eventSourceUrl = body.event_source_url || body.data?.event_source_url;
-        const directUserData = body.user_data;
-        const nestedUserData = body.data?.userData;
-        const userData = directUserData && typeof directUserData === 'object' && !Array.isArray(directUserData)
-            ? directUserData
-            : nestedUserData && typeof nestedUserData === 'object' && !Array.isArray(nestedUserData)
-                ? nestedUserData
-                : {};
-        const customData = body.custom_data && typeof body.custom_data === 'object' && !Array.isArray(body.custom_data)
-            ? body.custom_data
-            : body.data && typeof body.data === 'object' && !Array.isArray(body.data)
-                ? Object.fromEntries(Object.entries(body.data).filter(([key]) => key !== 'userData' && key !== 'event_source_url'))
-                : {};
-
-        if (body.trackingConsent !== true) {
-            return NextResponse.json({ error: 'Advertising consent required' }, { status: 403 });
-        }
-
-        if (!eventName) {
+        const event = resolveCapiEvent(eventNameInput);
+        if (!event) {
             return NextResponse.json(
                 { error: 'Unsupported conversion event' },
                 { status: 400 }
             );
         }
+
+        // Only pages on this site may report visitor events; value and
+        // outcome events need an admin session/token (as /api/meta-conversion).
+        const origin = classifyRequestOrigin(request.headers, [request.headers.get('host') || '', ...SITE_HOSTS]);
+        if (origin === 'cross-site') {
+            return NextResponse.json({ error: 'Cross-site conversion events are not accepted' }, { status: 403 });
+        }
+        const isAdmin = isAdminRequest(request);
+        if (event.access === 'admin' && !isAdmin) {
+            return NextResponse.json({ error: 'Admin access is required for this event' }, { status: 403 });
+        }
+        if (origin === 'unknown' && !isAdmin) {
+            return NextResponse.json({ error: 'Conversion events must come from the site' }, { status: 403 });
+        }
+
+        if (body.trackingConsent !== true) {
+            return NextResponse.json({ error: 'Advertising consent required' }, { status: 403 });
+        }
+
+        const eventId = getOptionalString(body, body.event_id ? 'event_id' : 'eventId', 200) ||
+            `server_${Date.now()}_${crypto.randomUUID()}`;
+        const nestedData = body.data && typeof body.data === 'object' && !Array.isArray(body.data) ? body.data : null;
+        const eventSourceUrl = body.event_source_url || nestedData?.event_source_url || nestedData?.page_location;
+        const directUserData = body.user_data;
+        const nestedUserData = nestedData?.userData;
+        const userData = directUserData && typeof directUserData === 'object' && !Array.isArray(directUserData)
+            ? directUserData
+            : nestedUserData && typeof nestedUserData === 'object' && !Array.isArray(nestedUserData)
+                ? nestedUserData
+                : {};
+        const customData = pickCustomData(
+            body.custom_data && typeof body.custom_data === 'object' && !Array.isArray(body.custom_data)
+                ? body.custom_data
+                : nestedData,
+            event.access,
+        );
 
         // DB-configured values take precedence over env (admin can set without a rebuild).
         const { pixelId, accessToken } = await getMetaConfig();
@@ -134,7 +136,7 @@ export async function POST(request: NextRequest) {
 
         // Build the event payload with hashed PII
         const eventPayload: ConversionsAPIEvent = {
-            event_name: eventName,
+            event_name: event.eventName,
             event_time: Math.floor(Date.now() / 1000),
             event_id: eventId,
             event_source_url: trustedEventSource(eventSourceUrl),
@@ -169,7 +171,7 @@ export async function POST(request: NextRequest) {
         if (bodyError) return bodyError;
         console.error('Conversions API Error:', error);
         return NextResponse.json(
-            { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
+            { error: 'Internal server error' },
             { status: 500 }
         );
     }
