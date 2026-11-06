@@ -45,6 +45,7 @@ export const toContentData = (body: Record<string, unknown>, partial = false) =>
     lastVerifiedAt: date(body.lastVerifiedAt),
     nextReviewAt: date(body.nextReviewAt),
     expiresAt: date(body.expiresAt),
+    deadlineAt: date(body.deadlineAt),
     complianceApprovedAt: date(body.complianceApprovedAt),
     seoApprovedAt: date(body.seoApprovedAt),
   };

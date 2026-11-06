@@ -48,6 +48,7 @@ export interface Update {
   lastVerifiedAt?: string;
   nextReviewAt?: string;
   expiresAt?: string;
+  deadlineAt?: string;
   complianceApprovedAt?: string;
   seoApprovedAt?: string;
   publishedAt?: string;
@@ -126,6 +127,7 @@ export interface Content {
   lastVerifiedAt?: string;
   nextReviewAt?: string;
   expiresAt?: string;
+  deadlineAt?: string;
   complianceApprovedAt?: string;
   seoApprovedAt?: string;
   publishedAt?: string;

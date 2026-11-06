@@ -1899,3 +1899,59 @@ button:hover .lucide-arrow-right { transform: translateX(4px); }
 /* One closing call to action per page: the footer card steps aside when the
    page already ends with a CtaBand. */
 body:has([data-cta-band]) .footer-cta { display: none; }
+
+/* ── Update / blog article body ─────────────────────────────────────────────
+   Posts are stored as sanitised HTML from the CMS, so they are styled here by
+   element and by four optional classes: .lede, .key-facts, .callout, .note.
+   Tailwind preflight resets lists and headings, so everything is explicit. */
+.update-body { color: theme('colors.ink.soft'); font-size: 17px; line-height: 1.75; overflow-wrap: anywhere; }
+.update-body > * + * { margin-top: 1.15em; }
+.update-body h2 { margin-top: 2.2em; font-family: theme('fontFamily.display'); font-weight: 900; font-size: 30px; line-height: 1.05; letter-spacing: -0.01em; color: theme('colors.petrol.800'); }
+.update-body h3 { margin-top: 1.8em; font-size: 21px; font-weight: 700; line-height: 1.3; color: theme('colors.petrol.800'); }
+.update-body h4, .update-body h5, .update-body h6 { margin-top: 1.5em; font-size: 18px; font-weight: 700; color: theme('colors.petrol.800'); }
+.update-body p { margin-top: 1em; }
+.update-body strong { color: theme('colors.petrol.800'); font-weight: 700; }
+.update-body a { color: theme('colors.petrol.600'); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.update-body a:hover { color: theme('colors.petrol.800'); text-decoration-thickness: 2px; }
+.update-body ul, .update-body ol { padding-left: 1.4em; }
+.update-body ul { list-style: disc; }
+.update-body ol { list-style: decimal; }
+.update-body li { margin-top: 0.45em; padding-left: 0.25em; }
+.update-body li::marker { color: theme('colors.lime.deep'); font-weight: 700; }
+.update-body img { border-radius: 24px; max-width: 100%; height: auto; }
+.update-body blockquote { border-left: 4px solid theme('colors.lime.DEFAULT'); background: theme('colors.canvas.soft'); border-radius: 0 20px 20px 0; padding: 18px 22px; color: theme('colors.petrol.800'); }
+.update-body hr { border: 0; border-top: 1px solid theme('colors.canvas.soft'); margin: 2.5em 0; }
+.update-body table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.55; }
+.update-body th, .update-body td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid theme('colors.canvas.soft'); }
+.update-body thead th { background: theme('colors.petrol.800'); color: #fff; font-weight: 700; }
+.update-body thead th:first-child { border-top-left-radius: 14px; }
+.update-body thead th:last-child { border-top-right-radius: 14px; }
+.update-body tbody th { width: 38%; color: theme('colors.petrol.800'); font-weight: 600; }
+.update-body details { border-radius: 20px; background: theme('colors.canvas.soft'); padding: 0 20px; margin-top: 10px; }
+.update-body details + details { margin-top: 10px; }
+.update-body summary { cursor: pointer; list-style: none; padding: 16px 32px 16px 0; position: relative; font-weight: 600; font-size: 17px; color: theme('colors.petrol.800'); }
+.update-body summary::-webkit-details-marker { display: none; }
+.update-body summary::after { content: '+'; position: absolute; right: 0; top: 50%; translate: 0 -50%; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 999px; background: theme('colors.lime.DEFAULT'); font-size: 18px; line-height: 1; transition: rotate .2s ease; }
+.update-body details[open] summary::after { rotate: 45deg; }
+.update-body details > p { margin-top: 0; padding-bottom: 16px; }
+
+/* Optional content blocks */
+.update-body .lede { font-size: 20px; line-height: 1.6; color: theme('colors.petrol.800'); }
+.update-body .key-facts { margin-top: 2em; border-radius: 24px; background: theme('colors.lime.pale'); padding: 22px 22px 8px; }
+.update-body .key-facts h2 { margin-top: 0; font-size: 22px; }
+.update-body .key-facts table { margin-top: 12px; }
+.update-body .key-facts th, .update-body .key-facts td { border-bottom-color: rgba(5, 77, 40, 0.14); }
+.update-body .key-facts tr:last-child th, .update-body .key-facts tr:last-child td { border-bottom: 0; }
+.update-body .callout { margin-top: 2em; border-radius: 24px; background: theme('colors.petrol.800'); padding: 24px 26px; color: rgba(255,255,255,.85); }
+.update-body .callout h3 { margin-top: 0; font-family: theme('fontFamily.display'); font-weight: 900; font-size: 26px; line-height: 1.05; color: theme('colors.lime.DEFAULT'); }
+.update-body .callout strong { color: #fff; }
+.update-body .callout a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border-radius: 999px; background: theme('colors.lime.DEFAULT'); color: theme('colors.petrol.800'); font-weight: 700; text-decoration: none; }
+.update-body .callout a:hover { background: theme('colors.lime.hover'); color: theme('colors.petrol.800'); }
+.update-body .note { margin-top: 2em; border-top: 1px solid theme('colors.canvas.soft'); padding-top: 14px; font-size: 15px; color: theme('colors.ink.mute'); }
+@media (max-width: 640px) {
+  .update-body { font-size: 16px; }
+  .update-body h2 { font-size: 26px; }
+  .update-body .lede { font-size: 18px; }
+  .update-body table { display: block; overflow-x: auto; }
+  .update-body tbody th { width: auto; min-width: 120px; }
+}

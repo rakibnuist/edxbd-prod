@@ -1,4 +1,5 @@
 import { breadcrumbJsonLd, serializeJsonLd } from '@/lib/json-ld';
+import { RSS_FEED } from '@/lib/seo';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
@@ -85,19 +86,29 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
     const tags = update.tags ? JSON.parse(update.tags) : [];
     const plainBody = htmlToText(update.content, 300);
 
+    // Search results show about 60 characters: keyword-first meta title plus a
+    // short brand, falling back to the headline when it fits.
+    const base = update.metaTitle || update.title;
+    const title = `${base} | EduExpress`.length <= 62 ? `${base} | EduExpress` : base;
+    const image = update.featuredImage
+      ? { url: update.featuredImage, width: 1200, height: 630, alt: update.title }
+      : { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' };
+
     return {
-      title: update.metaTitle || update.title,
+      title: { absolute: title },
       description: update.metaDescription || update.excerpt || plainBody.slice(0, 160),
-      alternates: { canonical: `/updates/${slug}` },
+      alternates: { canonical: `/updates/${slug}`, types: RSS_FEED },
       // Closed intakes stay reachable for transparency and backlinks, but they
       // must not compete in search with the current intake pages.
       robots: { index: !update.archivedAt, follow: true },
       openGraph: {
-        images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' }],
+        images: [image],
+        url: `/updates/${slug}`,
         title: update.title,
         description: update.excerpt || plainBody.slice(0, 160),
         type: 'article',
         publishedTime: update.publishedAt?.toISOString(),
+        modifiedTime: update.updatedAt.toISOString(),
         authors: update.author ? [update.author] : undefined,
         tags: tags,
       },
@@ -105,6 +116,7 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
         card: 'summary_large_image',
         title: update.title,
         description: update.excerpt || plainBody.slice(0, 160),
+        images: [image.url],
       }
     };
   } catch {
@@ -157,6 +169,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       lastVerifiedAt: update.lastVerifiedAt?.toISOString(),
       nextReviewAt: update.nextReviewAt?.toISOString(),
       expiresAt: update.expiresAt?.toISOString(),
+      deadlineAt: update.deadlineAt?.toISOString(),
       complianceApprovedAt: update.complianceApprovedAt?.toISOString(),
       seoApprovedAt: update.seoApprovedAt?.toISOString(),
       createdAt: update.createdAt.toISOString(),
@@ -175,7 +188,9 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       '@id': `${canonical}#article`,
       headline: update.title,
       description: update.excerpt || htmlToText(update.content, 300).slice(0, 160),
-      image: update.featuredImage ? [update.featuredImage] : ['https://eduexpressint.com/og-image.jpg'],
+      image: update.featuredImage
+        ? [update.featuredImage.startsWith('/') ? `https://eduexpressint.com${update.featuredImage}` : update.featuredImage]
+        : ['https://eduexpressint.com/og-image.jpg'],
       datePublished: update.publishedAt?.toISOString() || update.createdAt.toISOString(),
       dateModified: update.updatedAt.toISOString(),
       author: teamMember

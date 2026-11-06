@@ -303,6 +303,10 @@ model Content {
   lastVerifiedAt       DateTime?
   nextReviewAt         DateTime?
   expiresAt            DateTime?
+  // Application deadline the post is about. Unlike expiresAt it never hides
+  // the post: before it the page shows "Apply by", after it a closed-round
+  // notice with a next-intake call to action, so the URL keeps its ranking.
+  deadlineAt           DateTime?
   complianceApprovedAt DateTime?
   seoApprovedAt        DateTime?
   publishedAt          DateTime?

@@ -45,6 +45,7 @@ export default function ContentPage() {
     lastVerifiedAt: '',
     nextReviewAt: '',
     expiresAt: '',
+    deadlineAt: '',
     complianceApprovedAt: '',
     seoApprovedAt: '',
   });
@@ -266,6 +267,7 @@ export default function ContentPage() {
           lastVerifiedAt: '',
           nextReviewAt: '',
           expiresAt: '',
+          deadlineAt: '',
           complianceApprovedAt: '',
           seoApprovedAt: '',
         });
@@ -322,6 +324,7 @@ export default function ContentPage() {
       lastVerifiedAt: content.lastVerifiedAt?.slice(0, 10) || '',
       nextReviewAt: content.nextReviewAt?.slice(0, 10) || '',
       expiresAt: content.expiresAt?.slice(0, 10) || '',
+      deadlineAt: content.deadlineAt?.slice(0, 10) || '',
       complianceApprovedAt: content.complianceApprovedAt || '',
       seoApprovedAt: content.seoApprovedAt || '',
     });
@@ -415,6 +418,7 @@ export default function ContentPage() {
               lastVerifiedAt: '',
               nextReviewAt: '',
               expiresAt: '',
+              deadlineAt: '',
               complianceApprovedAt: '',
               seoApprovedAt: '',
             });
@@ -828,6 +832,9 @@ export default function ContentPage() {
                   </label>
                   <label className="block text-xs font-medium text-gray-700 sm:text-sm">Next review date
                     <input type="date" value={formData.nextReviewAt} onChange={(e) => setFormData({ ...formData, nextReviewAt: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" />
+                  </label>
+                  <label className="block text-xs font-medium text-gray-700 sm:text-sm">Application deadline (shows &ldquo;Apply by&rdquo;; post stays live after it)
+                    <input type="date" value={formData.deadlineAt} onChange={(e) => setFormData({ ...formData, deadlineAt: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" />
                   </label>
                   <label className="block text-xs font-medium text-gray-700 sm:text-sm">Public expiry date
                     <input type="date" value={formData.expiresAt} onChange={(e) => setFormData({ ...formData, expiresAt: e.target.value })} className="mt-1 block w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs focus:border-blue-500 focus:outline-none sm:px-3 sm:py-2 sm:text-sm" />

@@ -1,14 +1,19 @@
 'use client';
 
-import { ArrowRight, Share2, Calendar, Clock, ChevronLeft, ExternalLink, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import PageHeader from '@/components/PageHeader';
-import { trackConsultationRequest } from '@/lib/analytics';
-import { UpdateClientProps } from '@/lib/types';
+import { ArrowRight, CalendarClock, Check, ChevronRight, Clock, ExternalLink, Link2, MessageCircle, Phone, ShieldCheck } from 'lucide-react';
+import HomeLeadForm from '@/components/lead/HomeLeadForm';
 import { teamMembers } from '@/data/teamMembers';
+import { config } from '@/lib/config';
+import { trackPhoneClick, trackWhatsAppClick } from '@/lib/conversion-events';
+import type { UpdateClientProps } from '@/lib/types';
 
-// Deterministic date formatting (avoid locale-dependent server/client mismatch)
+const SITE = 'https://eduexpressint.com';
+const wrap = 'mx-auto max-w-[1200px] px-5 lg:px-8';
+
+// Deterministic date formatting (avoids locale-dependent server/client mismatch)
 const fmtDate = (iso?: string) => {
   if (!iso) return null;
   const date = new Date(iso);
@@ -16,256 +21,262 @@ const fmtDate = (iso?: string) => {
   return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
 };
 
+const host = (url: string) => {
+  try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; }
+};
+
 export default function UpdateClient({ update, related = [], stale }: UpdateClientProps) {
+  const [copied, setCopied] = useState(false);
   const teamMember = teamMembers.find(m => m.name.toLowerCase() === (update.author || '').trim().toLowerCase());
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: update.title,
-          text: update.excerpt || update.title,
-          url: window.location.href,
-        });
-      } catch (error) {
-        console.log('Error sharing:', error);
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-        alert('Link copied to clipboard!');
-      } catch (error) {
-        console.log('Error copying to clipboard:', error);
-      }
+  const pageUrl = `${SITE}/updates/${update.slug}`;
+  const category = update.category || update.categories?.[0] || 'Update';
+  const words = update.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+  const readTime = `${Math.max(1, Math.round(words / 220))} min read`;
+  const published = fmtDate(update.publishedAt || update.createdAt);
+  const checked = fmtDate(update.lastVerifiedAt);
+  // The application deadline this post is about (deadlineAt). Before it the
+  // hero says "Apply by"; after it the post stays live with a closed-round
+  // notice that turns late readers into next-intake leads.
+  const deadlineIso = update.deadlineAt;
+  const deadline = fmtDate(deadlineIso);
+  const deadlinePassed = Boolean(deadlineIso && new Date(deadlineIso).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10));
+  const stalePost = stale?.enabled ?? false;
+
+  const waNumber = config.contact.whatsapp.replace(/\D/g, '');
+  const waHref = `https://wa.me/${waNumber}?text=${encodeURIComponent(`Assalamu alaikum. I read "${update.title}" on your website. Please check my eligibility.`)}`;
+  const telHref = `tel:${config.contact.phone.replace(/[^\d+]/g, '')}`;
+  const shareWhatsApp = `https://wa.me/?text=${encodeURIComponent(`${update.title} ${pageUrl}`)}`;
+  const shareFacebook = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`;
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(pageUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard unavailable: the share links still work */
     }
   };
 
-  // Smart title splitting for PageHeader
-  const words = update.title.split(' ');
-  const titlePart = words.slice(0, Math.ceil(words.length / 2)).join(' ');
-  const highlightPart = words.slice(Math.ceil(words.length / 2)).join(' ');
-
-  // Calculate read time
-  const readTime = Math.max(1, Math.ceil((update.content.length || 0) / 1000)) + ' min read';
-
-  // Posts older than ~12 months route readers to the live, verified intake
-  // calendar instead of dead dates (computed server-side in page.tsx).
-  const stalePost = stale?.enabled ?? false;
-
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-amber-100 selection:text-amber-900">
+    <article>
+      {/* Hero */}
+      <header className="bg-canvas-soft pb-12 pt-[96px] sm:pt-[112px] lg:pb-16 lg:pt-[136px]">
+        <div className={wrap}>
+          <nav aria-label="Breadcrumb">
+            <ol className="flex flex-wrap items-center gap-1.5 text-[14px] font-semibold text-ink-soft">
+              <li><Link href="/" className="hover:text-petrol-800 hover:underline">Home</Link></li>
+              <li className="flex items-center gap-1.5"><ChevronRight size={14} className="text-ink-mute" aria-hidden="true" /><Link href="/updates" className="hover:text-petrol-800 hover:underline">Updates</Link></li>
+              <li className="flex min-w-0 items-center gap-1.5"><ChevronRight size={14} className="text-ink-mute" aria-hidden="true" /><span aria-current="page" className="truncate text-petrol-800">{category}</span></li>
+            </ol>
+          </nav>
 
-      {/* 1. Standardized Header */}
-      <PageHeader
-        title={titlePart}
-        highlight={highlightPart}
-        description={update.excerpt || "Latest updates and opportunities from EduExpress International"}
-        icon={Calendar}
-        badgeText={stale?.archived ? 'Closed intake · Archive' : update.category || 'Update'}
-      >
-        <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-sm font-medium text-slate-600">
-          <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
-            <Clock className="w-4 h-4 text-amber-500" />
-            {readTime}
+          <div className="mt-6 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center rounded-full bg-lime-pale px-3.5 py-1.5 text-[14px] font-semibold text-lime-deep">
+              {stale?.archived ? 'Closed intake · Archive' : category}
+            </span>
+            {deadline && !stale?.archived && (
+              <span className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[14px] font-semibold ${deadlinePassed ? 'bg-white text-ink-soft' : 'bg-peach text-petrol-800'}`}>
+                <CalendarClock size={15} aria-hidden="true" /> {deadlinePassed ? `Deadline passed ${deadline}` : `Apply by ${deadline}`}
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[14px] font-semibold text-ink-soft">
+              <Clock size={15} aria-hidden="true" /> {readTime}
+            </span>
           </div>
-          <div className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
-            By {update.author}{teamMember ? ` · ${teamMember.role}` : ''}
+
+          <h1 className="mt-5 max-w-4xl font-display text-[36px] font-black leading-[1.02] tracking-[-0.01em] text-petrol-800 sm:text-[48px] lg:text-[56px]">
+            {update.title}
+          </h1>
+          {update.excerpt && <p className="mt-5 max-w-3xl text-[18px] leading-[1.6] text-ink-soft sm:text-[20px]">{update.excerpt}</p>}
+
+          <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-[15px] text-ink-soft">
+            <span>
+              By <strong className="text-petrol-800">{update.author || 'EduExpress International'}</strong>
+              {teamMember ? `, ${teamMember.role}` : ''}
+            </span>
+            {published && <span>Published <time dateTime={update.publishedAt || update.createdAt}>{published}</time></span>}
+            {checked && (
+              <span className="inline-flex items-center gap-1.5"><ShieldCheck size={16} className="text-green-600" aria-hidden="true" /> Updated {checked}</span>
+            )}
+            <span className="flex items-center gap-2">
+              <a href={shareWhatsApp} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-white px-3.5 text-[14px] font-semibold text-petrol-800 transition hover:bg-lime-pale">Share on WhatsApp</a>
+              <a href={shareFacebook} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-white px-3.5 text-[14px] font-semibold text-petrol-800 transition hover:bg-lime-pale">Facebook</a>
+              <button type="button" onClick={copyLink} className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-white px-3.5 text-[14px] font-semibold text-petrol-800 transition hover:bg-lime-pale" aria-live="polite">
+                {copied ? <><Check size={14} aria-hidden="true" /> Copied</> : <><Link2 size={14} aria-hidden="true" /> Copy link</>}
+              </button>
+            </span>
           </div>
         </div>
-      </PageHeader>
+      </header>
 
-      <main className="relative z-10 -mt-20 pb-24 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto">
-
-          {/* Navigation Bar */}
-          <div className="flex items-center justify-between mb-8 px-2">
-            <Link
-              href="/updates"
-              className="flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all group bg-white/90 backdrop-blur-md px-4 py-2 rounded-full border border-slate-200 hover:border-slate-300 shadow-sm"
-            >
-              <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              Back to Updates
-            </Link>
-
-            <button
-              onClick={handleShare}
-              className="flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold text-slate-600 hover:text-slate-900 bg-white/90 backdrop-blur-md border border-slate-200 hover:border-slate-300 transition-all hover:bg-slate-50 shadow-sm"
-            >
-              <Share2 className="w-4 h-4" />
-              <span>Share</span>
-            </button>
-          </div>
-
-          {/* 2. Content Card */}
-          <article className="bg-white rounded-[2rem] shadow-xl border border-slate-200 overflow-hidden p-8 md:p-12 lg:p-16 mb-16 ring-1 ring-slate-100">
-
-            {/* Wide Focus Image */}
+      {/* Body + sticky lead sidebar */}
+      <div className="bg-white py-12 lg:py-16">
+        <div className={`${wrap} grid gap-12 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-14`}>
+          <div className="min-w-0">
             {update.featuredImage && (
-              <div className="mb-12 -mx-8 md:-mx-12 lg:-mx-16 mt-[-2rem] md:mt-[-3rem] lg:mt-[-4rem] relative aspect-video shadow-sm border-b border-slate-100">
-                <Image
-                  src={update.featuredImage}
-                  alt={update.title}
-                  fill
-                  priority
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+              <div className="relative mb-10 aspect-[1200/630] overflow-hidden rounded-3xl bg-canvas-soft">
+                <Image src={update.featuredImage} alt={update.title} fill priority sizes="(max-width:1024px) 100vw, 760px" className="object-cover" />
               </div>
             )}
 
-            {/* Closed-intake notice — shown above the article so nobody acts on
-                an expired deadline. The URL stays live for transparency. */}
-            {stale?.archived ? (
-              <aside className="mb-10 rounded-2xl border-2 border-amber-300 bg-amber-50 p-5 sm:p-6" aria-label="Closed intake notice">
-                <p className="text-xs font-black uppercase tracking-[.14em] text-amber-800">Archive · closed intake</p>
-                <h2 className="mt-2 text-xl font-extrabold tracking-tight text-slate-900">This intake has closed</h2>
-                <p className="mt-2 text-sm leading-6 text-slate-700">
-                  This page records an earlier admissions window and is kept for transparency. The deadlines, fees and scholarship terms below may no longer be available. Use the live calendar before you act.
+            {stale?.archived && (
+              <aside className="mb-10 rounded-3xl bg-peach/60 p-6" aria-label="Closed intake notice">
+                <p className="text-[14px] font-semibold uppercase tracking-[0.1em] text-petrol-800">Archive · closed intake</p>
+                <h2 className="mt-2 font-display text-[26px] font-black leading-tight text-petrol-800">This intake has closed</h2>
+                <p className="mt-2 text-[16px] leading-7 text-ink-soft">
+                  This page records an earlier admissions window and is kept for transparency. Deadlines, fees and scholarship terms below may no longer apply. Check the live calendar before you act.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  <Link href="/china-march-2027-intake" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[#0f3a5c] px-4 text-sm font-bold text-white">See the March 2027 intake <ArrowRight size={14} /></Link>
-                  <Link href="/china-intakes-deadlines" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#0f3a5c]/20 bg-white px-4 text-sm font-bold text-[#0f3a5c]">Check live deadlines <ArrowRight size={14} /></Link>
+                  <Link href="/china-march-2027-intake" className="ed-btn ed-btn-primary min-h-11 px-5 text-[15px]">See the March 2027 intake <ArrowRight size={15} aria-hidden="true" /></Link>
+                  <Link href="/china-intakes-deadlines" className="ed-btn ed-btn-outline min-h-11 px-5 text-[15px]">Check live deadlines</Link>
                 </div>
-              </aside>
-            ) : null}
-
-            {/* Content - Prose Slate (Dark text) */}
-            <div className="update-content-fix prose prose-lg md:prose-xl max-w-none prose-slate prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-slate-900 prose-p:leading-8 prose-p:text-slate-600 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-a:font-semibold prose-img:rounded-2xl prose-img:shadow-md prose-blockquote:border-l-4 prose-blockquote:border-amber-500 prose-blockquote:bg-amber-50 prose-blockquote:text-slate-700 prose-blockquote:px-8 prose-blockquote:py-6 prose-blockquote:my-10 prose-blockquote:not-italic prose-blockquote:rounded-r-xl prose-strong:text-slate-900">
-              <div dangerouslySetInnerHTML={{ __html: update.content }} />
-            </div>
-
-            {update.sourceUrls?.length ? (
-              <aside className="mt-12 border-t border-slate-200 pt-8">
-                <h2 className="text-xl font-bold text-slate-900">Official sources</h2>
-                <div className="mt-4 grid gap-2">
-                  {update.sourceUrls.map(source => (
-                    <a key={source} href={source} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:underline">
-                      Official or institutional source <ExternalLink size={14} />
-                    </a>
-                  ))}
-                </div>
-              </aside>
-            ) : null}
-
-            {/* Trust block — two tiers. Fully verified records show the stamp;
-                everything else states plainly that editorial review is under
-                way. This renders on every post (the visible-content policy). */}
-            {update.lastVerifiedAt && update.nextReviewAt && update.reviewer && update.sourceUrls?.length ? (
-              <aside className="mt-10 rounded-2xl border border-emerald-200 bg-emerald-50/60 p-6">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="size-5 text-emerald-600" />
-                  <h2 className="text-base font-bold text-emerald-900">Content verification</h2>
-                </div>
-                <p className="mt-3 text-sm font-medium leading-6 text-emerald-900/80">
-                  {fmtDate(update.lastVerifiedAt) ? <>Verified on {fmtDate(update.lastVerifiedAt)}</> : 'Verification in progress'}
-                  {update.reviewer ? <> · Content reviewed by {update.reviewer}</> : null}
-                  {update.sourceUrls?.length ? <> · {update.sourceUrls.length} official source{update.sourceUrls.length === 1 ? '' : 's'} listed above</> : null}
-                  {fmtDate(update.nextReviewAt) ? <> · Next scheduled review: {fmtDate(update.nextReviewAt)}</> : null}
-                </p>
-              </aside>
-            ) : (
-              <aside className="mt-10 rounded-2xl border border-amber-200 bg-amber-50/60 p-6">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="size-5 text-amber-600" />
-                  <h2 className="text-base font-bold text-amber-900">Editorial review in progress</h2>
-                </div>
-                <p className="mt-3 text-sm font-medium leading-6 text-amber-900/80">
-                  Verified dates, the named reviewer and the official source list for this post will appear here as the content is re-checked for the current admissions cycle.
-                </p>
               </aside>
             )}
 
-            {/* Stale-post care — old posts stay useful by showing the LIVE,
-                auto-verified intake windows plus the calendar link instead
-                of dead dates. */}
-            {stalePost ? (
-              <aside className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-                <h2 className="text-base font-bold text-slate-900">{stale?.archived ? 'This post is from an earlier intake' : 'Intake dates change every cycle'}</h2>
-                <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
-                  This post was published on {fmtDate(update.publishedAt || update.createdAt)}. Before you act on any deadline shown, check the live application calendar — it carries the current 2026/27 windows and their verification dates.
+            {deadlinePassed && !stale?.archived && (
+              <aside className="mb-10 rounded-3xl bg-petrol-800 p-6 text-white" aria-label="Application round closed">
+                <p className="text-[14px] font-semibold uppercase tracking-[0.1em] text-lime">This round has closed</p>
+                <h2 className="mt-2 font-display text-[26px] font-black leading-tight text-white">Get ready for the next intake.</h2>
+                <p className="mt-2 text-[16px] leading-7 text-white/85">
+                  The deadline for this round was {deadline}. Universities usually open the next round on a similar timeline. Tell us your profile and we will tell you when it opens and what to prepare now.
                 </p>
-                {(stale?.windows ?? []).length > 0 ? (
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <a href="#apply-help" className="ed-btn ed-btn-signal min-h-11 px-5 text-[15px]">Notify me for the next intake <ArrowRight size={15} aria-hidden="true" /></a>
+                  <Link href="/china-intakes-deadlines" className="ed-btn ed-btn-on-dark min-h-11 px-5 text-[15px]">See open intakes</Link>
+                </div>
+              </aside>
+            )}
+
+            <div className="update-body" dangerouslySetInnerHTML={{ __html: update.content }} />
+
+            {update.sourceUrls?.length ? (
+              <aside className="mt-12 rounded-3xl bg-canvas-soft p-6">
+                <h2 className="text-[19px] font-bold text-petrol-800">Official sources</h2>
+                <ul className="mt-3 grid gap-2">
+                  {update.sourceUrls.map(source => (
+                    <li key={source}>
+                      <a href={source} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[15px] font-semibold text-petrol-600 underline-offset-4 hover:underline">
+                        {host(source)} <ExternalLink size={14} aria-hidden="true" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-4 flex items-start gap-2 text-[14px] leading-6 text-ink-soft">
+                  <ShieldCheck size={16} className="mt-0.5 shrink-0 text-green-600" aria-hidden="true" />
+                  <span>
+                    {checked ? `Last reviewed ${checked}` : 'Being re-checked for the current cycle'}
+                    {update.reviewer ? ` · Reviewed by ${update.reviewer}` : ''}
+                    {fmtDate(update.nextReviewAt) ? ` · Next review ${fmtDate(update.nextReviewAt)}` : ''}
+                  </span>
+                </p>
+              </aside>
+            ) : null}
+
+            {stalePost && (
+              <aside className="mt-10 rounded-3xl bg-canvas-soft p-6">
+                <h2 className="text-[19px] font-bold text-petrol-800">{stale?.archived ? 'This post is from an earlier intake' : 'Intake dates change every cycle'}</h2>
+                <p className="mt-2 text-[15px] leading-6 text-ink-soft">
+                  Published on {published}. Before you act on any deadline shown, check the live application calendar.
+                </p>
+                {(stale?.windows ?? []).length > 0 && (
                   <ul className="mt-4 grid gap-2">
                     {(stale?.windows ?? []).map(window => (
-                      <li key={window.name} className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm">
-                        <span className="font-bold text-slate-900">{window.name}</span>
-                        <span className="rounded-full border border-[#12436b]/15 px-2 py-0.5 text-xs font-black uppercase tracking-[0.08em] text-[#12436b]">{window.status}</span>
-                        <span className="text-slate-500">{window.summary}</span>
+                      <li key={window.name} className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-white px-4 py-3 text-[15px]">
+                        <span className="font-semibold text-petrol-800">{window.name}</span>
+                        <span className="rounded-full bg-lime-pale px-2.5 py-0.5 text-[13px] font-semibold text-lime-deep">{window.status}</span>
+                        <span className="text-ink-soft">{window.summary}</span>
                       </li>
                     ))}
                   </ul>
-                ) : null}
-                <Link href="/china-intakes-deadlines" className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#0f3a5c] px-4 py-2 text-sm font-bold text-white">
-                  Check intake deadlines <ArrowRight size={14} />
-                </Link>
+                )}
+                <Link href="/china-intakes-deadlines" className="ed-btn ed-btn-primary mt-4 min-h-11 px-5 text-[15px]">Check intake deadlines <ArrowRight size={15} aria-hidden="true" /></Link>
               </aside>
-            ) : null}
-          </article>
-
-          {/* Related posts — interlinks the library by shared categories,
-              every entry already passing the publication gate */}
-          {related.length > 0 ? (
-            <nav aria-label="Related posts" className="mb-12">
-              <div className="flex items-end justify-between gap-4 mb-5 px-1">
-                <h2 className="text-2xl md:text-3xl font-extrabold tracking-[-0.03em] text-slate-900">Keep reading</h2>
-                <Link href="/updates" className="inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900">
-                  All updates <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-3">
-                {related.map(post => {
-                  const postCategory = post.category || post.categories?.[0];
-                  return (
-                    <Link key={post.id} href={`/updates/${post.slug}`} className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
-                      <div className="relative aspect-[16/10] bg-slate-800">
-                        {post.featuredImage
-                          ? <Image src={post.featuredImage} alt={post.title} fill sizes="(max-width:640px) 100vw, 33vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
-                          : <div className="grid h-full place-items-center text-xs font-bold uppercase tracking-[0.15em] text-slate-300">EduExpress</div>}
-                      </div>
-                      <div className="p-4">
-                        <div className="flex items-center justify-between gap-2">
-                          {postCategory ? <span className="truncate text-xs font-bold uppercase tracking-[0.08em] text-amber-600">{postCategory}</span> : null}
-                          <span className="shrink-0 text-xs font-semibold text-slate-500">{post.type === 'article' ? 'Article' : 'Update'}</span>
-                        </div>
-                        <h3 className="mt-2 line-clamp-2 text-base font-bold text-slate-900">{post.title}</h3>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </nav>
-          ) : null}
-
-          {/* 6. High-Visibility Gradient CTA Banner */}
-          <div className="bg-slate-900 rounded-[2rem] p-10 md:p-16 text-center shadow-2xl relative overflow-hidden mb-12 group">
-
-            <div className="absolute inset-0 bg-blue-900/20"></div>
-            {/* Background decorative elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -z-10"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
-
-            <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight drop-shadow-md">
-                Start your study abroad journey
-              </h2>
-              <p className="text-slate-300 mb-10 max-w-2xl mx-auto text-lg/relaxed font-medium">
-                Talk to a counsellor who reviews your profile, explains the real total costs and helps you choose the right route before you commit to anything.
-              </p>
-
-              <button
-                onClick={() => {
-                  trackConsultationRequest('update_footer_cta');
-                  window.dispatchEvent(new CustomEvent('openQuickForm'));
-                }}
-                className="inline-flex items-center gap-3 px-8 py-4 bg-amber-500 text-slate-900 rounded-full font-bold text-lg transition-all shadow-lg shadow-amber-500/20 hover:bg-amber-400 hover:scale-105 active:scale-95 hover:shadow-amber-500/30"
-              >
-                Book Free Consultation
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
+            )}
           </div>
 
+          {/* Sticky lead magnet */}
+          <aside className="lg:sticky lg:top-28 lg:self-start" aria-label="Get help with this application">
+            <div className="rounded-3xl bg-petrol-800 p-6 text-white">
+              <p className="inline-flex rounded-full bg-white/10 px-3 py-1 text-[14px] font-semibold text-lime">Free eligibility check</p>
+              <h2 className="mt-4 font-display text-[28px] font-black leading-[1.02] text-lime">Want to apply for this?</h2>
+              <p className="mt-3 text-[16px] leading-7 text-white/85">
+                Send your results to EduExpress. A counsellor checks whether you qualify, which documents you need and the full cost, before you pay anything.
+              </p>
+              <div className="mt-5 grid gap-2.5">
+                <a href="#apply-help" className="ed-btn ed-btn-signal min-h-12 text-[15px]">Check my eligibility <ArrowRight size={16} aria-hidden="true" /></a>
+                <a href={waHref} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick({ label: 'update_sidebar' })} className="ed-btn ed-btn-on-dark min-h-12 text-[15px]">
+                  <MessageCircle size={16} aria-hidden="true" /> Ask on WhatsApp
+                </a>
+                <a href={telHref} onClick={() => trackPhoneClick({ label: 'update_sidebar' })} className="inline-flex min-h-11 items-center justify-center gap-2 text-[15px] font-semibold text-white/85 hover:text-white">
+                  <Phone size={15} aria-hidden="true" /> {config.contact.phone}
+                </a>
+              </div>
+              <ul className="mt-5 grid gap-2 border-t border-white/15 pt-5 text-[14px] leading-6 text-white/80">
+                <li className="flex gap-2"><Check size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" /> No EduExpress fee before your China visa is approved</li>
+                <li className="flex gap-2"><Check size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" /> Every cost in writing</li>
+                <li className="flex gap-2"><Check size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" /> Office in Dhanmondi, Dhaka since 2018</li>
+              </ul>
+            </div>
+          </aside>
         </div>
-      </main>
-    </div>
+      </div>
+
+      {/* Lead form tied to this post */}
+      <section id="apply-help" className="scroll-mt-24 bg-petrol-800 py-16 text-white lg:py-20" data-cta-band>
+        <div className={`${wrap} grid gap-10 lg:grid-cols-[1fr_.95fr] lg:items-center lg:gap-16`}>
+          <div>
+            <h2 className="font-display text-[38px] font-black leading-[0.95] tracking-[-0.01em] text-lime sm:text-[52px]">Apply with a counsellor beside you.</h2>
+            <p className="mt-5 max-w-xl text-[18px] leading-[1.6] text-white/85">
+              Tell us your study level and results. We reply within one working day with whether this opportunity fits you, the documents to prepare and the realistic timeline.
+            </p>
+            <ul className="mt-6 grid gap-2.5 text-[16px] text-white/85">
+              <li className="flex gap-2.5"><Check size={18} className="mt-0.5 shrink-0 text-lime" aria-hidden="true" /> Eligibility check against the official requirements</li>
+              <li className="flex gap-2.5"><Check size={18} className="mt-0.5 shrink-0 text-lime" aria-hidden="true" /> Study plan and document checklist</li>
+              <li className="flex gap-2.5"><Check size={18} className="mt-0.5 shrink-0 text-lime" aria-hidden="true" /> Admission and scholarship decisions stay with the university</li>
+            </ul>
+          </div>
+          <div className="rounded-3xl bg-white p-1 text-ink">
+            <HomeLeadForm
+              whatsappHref={waHref}
+              source="update_post"
+              topic={update.title}
+              eyebrow="Free eligibility check"
+              heading="Check if you qualify."
+              intro="Share a few details. A counsellor calls you within one working day."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Related posts */}
+      {related.length > 0 && (
+        <nav aria-label="Related posts" className="bg-canvas-soft py-16 lg:py-20">
+          <div className={wrap}>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <h2 className="font-display text-[34px] font-black leading-[0.98] text-petrol-800 sm:text-[44px]">Keep reading.</h2>
+              <Link href="/updates" className="ed-btn ed-btn-outline min-h-11 px-5 text-[15px]">All updates <ArrowRight size={15} aria-hidden="true" /></Link>
+            </div>
+            <ul className="mt-10 grid gap-5 sm:grid-cols-3">
+              {related.map(post => (
+                <li key={post.id}>
+                  <Link href={`/updates/${post.slug}`} className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white transition hover:-translate-y-1">
+                    <div className="relative aspect-[16/10] bg-petrol-800">
+                      {post.featuredImage
+                        ? <Image src={post.featuredImage} alt="" fill sizes="(max-width:640px) 100vw, 33vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
+                        : <div className="grid h-full place-items-center font-display text-[22px] font-black text-lime">EduExpress</div>}
+                    </div>
+                    <div className="flex flex-1 flex-col p-5">
+                      <span className="text-[14px] font-semibold text-ink-mute">{post.category || post.categories?.[0] || 'Update'}</span>
+                      <span className="mt-1.5 line-clamp-2 text-[18px] font-semibold leading-snug text-petrol-800 group-hover:underline">{post.title}</span>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+      )}
+    </article>
   );
 }

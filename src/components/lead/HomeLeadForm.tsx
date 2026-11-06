@@ -30,7 +30,27 @@ const DESTINATIONS = [
 
 type Status = 'idle' | 'submitting' | 'done';
 
-export default function HomeLeadForm({ whatsappHref, embedded = false }: { whatsappHref: string; embedded?: boolean }) {
+type HomeLeadFormProps = {
+  whatsappHref: string;
+  embedded?: boolean;
+  /** Lead source recorded in the CRM, e.g. "update_post". */
+  source?: string;
+  /** What the visitor was reading, e.g. a post title; added to the lead message. */
+  topic?: string;
+  eyebrow?: string;
+  heading?: string;
+  intro?: string;
+};
+
+export default function HomeLeadForm({
+  whatsappHref,
+  embedded = false,
+  source = 'homepage_lead_form',
+  topic,
+  eyebrow = 'Free profile assessment',
+  heading = 'Start with your profile.',
+  intro = 'Tell us where you are and where you want to go. A counsellor will call you within one working day.',
+}: HomeLeadFormProps) {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState('');
   const [name, setName] = useState('');
@@ -74,8 +94,8 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
           phone,
           country,
           program: level || 'Not specified',
-          message: `Homepage assessment request. Study level: ${level || 'not provided'}. Destination: ${country}.`,
-          source: 'homepage_lead_form',
+          message: `${topic ? `Interested in: ${topic}. ` : 'Homepage assessment request. '}Study level: ${level || 'not provided'}. Destination: ${country}.`,
+          source,
           leadType: 'assessment',
           destinationInterest: destination === 'Not sure yet' ? [] : [destination],
           assessment: {
@@ -97,7 +117,7 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
         throw new Error(data.error || 'We could not send your request. Please try again.');
       }
 
-      trackAssessmentSubmit({ destination, label: 'homepage_lead_form', eventId });
+      trackAssessmentSubmit({ destination, label: source, eventId });
       setStatus('done');
     } catch (submitError) {
       setStatus('idle');
@@ -143,15 +163,13 @@ export default function HomeLeadForm({ whatsappHref, embedded = false }: { whats
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[15px] font-bold uppercase tracking-[0.1em] text-petrol-600">Free profile assessment</p>
-          <h2 className="mt-1.5 font-heading text-[27px] font-semibold leading-tight text-ink">Start with your profile.</h2>
+          <p className="text-[15px] font-bold uppercase tracking-[0.1em] text-petrol-600">{eyebrow}</p>
+          <h2 className="mt-1.5 font-heading text-[27px] font-semibold leading-tight text-ink">{heading}</h2>
         </div>
         <span className="shrink-0 rounded-full bg-mint-100 px-3 py-1.5 text-[15px] font-bold text-petrol-700">2 min</span>
       </div>
 
-      <p className="mt-2 text-[15px] leading-6 text-ink-soft">
-        Tell us where you are and where you want to go. A counsellor will call you within one working day.
-      </p>
+      <p className="mt-2 text-[15px] leading-6 text-ink-soft">{intro}</p>
 
       <div className="mt-5 grid gap-3.5">
         <div>
