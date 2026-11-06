@@ -22,8 +22,9 @@ import {
   type DirectoryFilters,
   type DirectoryUniversity,
 } from '@/lib/university-directory';
+import { expandDirectory, type CompactUniversity } from '@/lib/university-directory-compact';
 
-type Props = { initialUniversities: DirectoryUniversity[] };
+type Props = { directory: CompactUniversity[] };
 
 const unique = (values: string[]) => Array.from(new Set(values.filter(Boolean)));
 const levelLabel = (level: string) =>
@@ -228,7 +229,8 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
   );
 }
 
-export default function UniversitiesClient({ initialUniversities }: Props) {
+export default function UniversitiesClient({ directory }: Props) {
+  const initialUniversities = useMemo(() => expandDirectory(directory), [directory]);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [advancedOpen, setAdvancedOpen] = useState(false);

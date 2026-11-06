@@ -33,6 +33,28 @@ const filterKeys = ['search', 'country', 'city', 'level', 'language', 'subject',
 const normalized = (value: string) => value.trim().toLocaleLowerCase();
 const same = (a: string, b: string) => normalized(a) === normalized(b);
 const contains = (values: string[], selected: string) => values.some(value => same(value, selected));
+
+// Broad subject areas for the finder filter. Programme names vary too much (580+
+// distinct titles) for one dropdown, so each area matches names by keyword. An
+// exact programme title in an old URL still matches by name.
+export const SUBJECT_AREAS: { label: string; pattern: RegExp }[] = [
+  { label: 'Medicine & health', pattern: /medic|mbbs|clinical|nursing|pharma|dent|stomatolog|health|surgery|anatomy|patholog|biomedical|rehabilitat|traditional chinese medicine/i },
+  { label: 'Computer science & AI', pattern: /comput|software|artificial intelligence|\bai\b|data science|big data|information|cyber|network|internet|intelligen/i },
+  { label: 'Engineering', pattern: /engineer|mechani|electric|electronic|civil|aeronaut|aerospace|astronaut|material|automation|control|chemical|energy|power|vehicle|transport|architect|construction|mining|petroleum|telecom|robot|instrument|optic|manufactur|metallurg/i },
+  { label: 'Business, finance & economics', pattern: /business|financ|econom|accounting|management|\bmba\b|trade|marketing|commerce|logistics|tourism|hospitality/i },
+  { label: 'Natural sciences & maths', pattern: /physics|chemistry|biolog|mathemat|statistic|geolog|geograph|astronom|ecolog|life science|marine|atmospher|meteorolog/i },
+  { label: 'Law, politics & social sciences', pattern: /\blaw\b|legal|politic|international relations|sociolog|psycholog|public administration|governance|social work|diploma(?:cy|tic)/i },
+  { label: 'Chinese language', pattern: /chinese language|mandarin|\bhsk\b|chinese as a|tcsol|teaching chinese|chinese program|chinese course/i },
+  { label: 'Education, languages & humanities', pattern: /education|english|literature|linguist|translat|history|philosoph|journalism|communication|media|language/i },
+  { label: 'Arts & design', pattern: /\barts?\b|design|music|film|animation|drama|dance/i },
+  { label: 'Agriculture, food & environment', pattern: /agricult|food|forest|horticult|veterin|animal|plant|crop|environment|water|soil/i },
+  { label: 'Foundation & pathway', pattern: /foundation|pre-?university|preparatory|pathway/i },
+];
+
+export function subjectMatches(name: string, selected: string) {
+  const area = SUBJECT_AREAS.find(item => item.label === selected);
+  return area ? area.pattern.test(name) : same(name, selected);
+}
 // Source catalogues use both degree names and possessive labels. A planner's
 // canonical level must find the same programme under either spelling.
 const studyLevel = (value: string) => {
@@ -139,7 +161,7 @@ export function matchingPrograms(university: DirectoryUniversity, filters: Direc
     (!filters.cscaFree || (university.country.toLowerCase() === 'china' && programIsCscaFree(program)))
     && (!filters.level || sameStudyLevel(program.level, filters.level))
     && (!filters.language || contains(program.languages, filters.language))
-    && (!filters.subject || same(programSubject(program), filters.subject))
+    && (!filters.subject || subjectMatches(programSubject(program), filters.subject))
     && (!filters.intake || matchesIntake(program.intakes, filters.intake))
     && (!wantsFunding || !university.fundingRoutes?.length || university.fundingRoutes.some(route => fundingMatchesProgram(route, program)))
     && terms.every(term => institution.includes(term) || (searchText([program.name, program.subject || '', program.level, studyLevel(program.level), ...program.languages, ...program.intakes, program.tuition || ''].join(' ')) + ' ' + fundingSearchText(university, program)).includes(term))
@@ -163,7 +185,7 @@ export function universityMatchesFilters(university: DirectoryUniversity, filter
   if (university.programs.length) return matchingPrograms(university, filters).length > 0;
   return (!filters.level || university.degree.some(level => sameStudyLevel(level, filters.level)))
     && (!filters.language || contains(university.taught, filters.language))
-    && (!filters.subject || contains(university.details.majors, filters.subject))
+    && (!filters.subject || university.details.majors.some(major => subjectMatches(major, filters.subject)))
     && (!filters.intake || matchesIntake(university.intake, filters.intake));
 }
 
@@ -251,7 +273,10 @@ export function directoryOptions(universities: DirectoryUniversity[], country: s
     cities: distinct(records.map(item => item.city)),
     levels: distinct(records.flatMap(item => programOrLegacy(item, availablePrograms(item).map(program => program.level), item.degree))),
     languages: distinct(records.flatMap(item => programOrLegacy(item, availablePrograms(item).flatMap(program => program.languages), item.taught))),
-    subjects: distinct(records.flatMap(item => programOrLegacy(item, availablePrograms(item).map(programSubject), item.details.majors))),
+    subjects: (() => {
+      const names = records.flatMap(item => programOrLegacy(item, availablePrograms(item).map(programSubject), item.details.majors));
+      return SUBJECT_AREAS.filter(area => names.some(name => area.pattern.test(name))).map(area => area.label);
+    })(),
     intakes: INTAKE_MONTHS.filter(month => ['January', 'February', 'March', 'April', 'May', 'September'].includes(month) || intakeMonths(records.flatMap(item => programOrLegacy(item, availablePrograms(item).flatMap(program => program.intakes), item.intake))).includes(month)),
   };
 }

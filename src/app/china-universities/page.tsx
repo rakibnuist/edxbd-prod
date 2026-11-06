@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, Database, SearchCheck, ShieldCheck } from 'lucide-react';
 import { Suspense } from 'react';
 import UniversitiesClient from '@/app/universities/UniversitiesClient';
+import { compactDirectory } from '@/lib/university-directory-compact';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getUniversityRecords } from '@/lib/university-records';
 import { filterUniversities, readDirectoryFilters } from '@/lib/university-directory';
@@ -135,7 +136,7 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
 
       <div id="china-directory" className="scroll-mt-28">
         <Suspense fallback={<div className="py-20 text-center text-[16px] text-ink-soft">Loading China directory…</div>}>
-          <UniversitiesClient initialUniversities={universities} />
+          <UniversitiesClient directory={compactDirectory(universities)} />
         </Suspense>
       </div>
 

@@ -11,10 +11,11 @@ import { config } from '@/lib/config';
 import { openByDeadline, requestTime } from '@/lib/update-deadlines';
 import { pageMetadata } from '@/lib/seo';
 import UniversitiesClient from './UniversitiesClient';
+import { compactDirectory } from '@/lib/university-directory-compact';
 import { getUniversityRankings } from '@/lib/university-rankings';
 import { getAllUniversityProfileDetails } from '@/lib/university-profile-details';
 import { getUniversityRecords } from '@/lib/university-records';
-import { filterUniversities, intakeMonths, programIsCscaFree, readDirectoryFilters } from '@/lib/university-directory';
+import { filterUniversities, intakeMonths, readDirectoryFilters } from '@/lib/university-directory';
 import { feeText, normalizeProgramLevel } from '@/lib/university-profile-view';
 import { evergreenText, prepareUniversityScholarship } from '@/lib/university-profile-public';
 import { scholarshipReductionLabel } from '@/lib/university-scholarship-view';
@@ -61,19 +62,7 @@ async function getUniversities() {
       }) : record.programs.map(program => ({ ...program, name: programName(program.name), ...(program.subject ? { subject: programName(program.subject) } : {}), intakes: intakeMonths(program.intakes) }));
       const { id, slug, name, aliases, city, country, isActive, degree, taught, intake, details, scholarships } = record;
       const relationshipLabels = { direct_partner: 'Direct university partner', authorized_representative: 'Authorized representative', network_access: 'Network access', public_direct_application: 'Public direct application' } as const;
-      // The finder only needs filter fields. Long eligibility text, durations and source
-      // URLs stay on the profile pages; a sourced CSCA exemption is kept as a marker.
-      const slimPrograms = programs.map(program => {
-        const cscaFree = programIsCscaFree(program);
-        return {
-          ...program,
-          duration: undefined,
-          subject: program.subject && program.subject !== program.name ? program.subject : undefined,
-          eligibility: cscaFree ? ['CSCA not required.'] : [],
-          sourceUrl: cscaFree ? program.sourceUrl : undefined,
-        };
-      });
-      return { id, slug, name, aliases, city, country, isActive, degree, taught, intake, details, scholarships, programs: slimPrograms, logo: universityProfileLogo(record),
+      return { id, slug, name, aliases, city, country, isActive, degree, taught, intake, details, scholarships, programs, logo: universityProfileLogo(record),
         verification: { status: record.verificationStatus, ...(record.lastVerifiedAt ? { lastVerifiedAt: record.lastVerifiedAt } : {}) },
         ...(record.relationshipType && record.relationshipType !== 'unverified' && relationshipLabels[record.relationshipType] ? { relationship: relationshipLabels[record.relationshipType] } : {}),
         clearCost: record.costPlans.some(plan => plan.isPublished),
@@ -233,7 +222,7 @@ export default async function UniversitiesPage({ searchParams }: Props) {
 
       <div className="bg-white pt-10">
         <Suspense fallback={<div className="px-5 py-20 text-center text-[16px] text-ink-soft sm:px-8">Loading the directory…</div>}>
-          <UniversitiesClient initialUniversities={universities} />
+          <UniversitiesClient directory={compactDirectory(universities)} />
         </Suspense>
       </div>
 
