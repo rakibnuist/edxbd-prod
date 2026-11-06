@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight, Check, ChevronDown, FileText, MapPin, Search, SlidersHorizontal, Trophy, X } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, ChevronDown, FileText, Gift, MapPin, Plus, Search, SlidersHorizontal, Trophy, X } from 'lucide-react';
 import { evergreenText } from '@/lib/university-profile-public';
 import { activeCountries } from '@/lib/countries';
 import { trackConversion } from '@/lib/conversion-events';
@@ -493,15 +493,16 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                   id="university-sort"
                   value={filters.sort}
                   onChange={event =>
-                    setFilters({ sort: ['city', 'fee', 'ranking', 'scholarship'].includes(event.target.value) ? (event.target.value as DirectoryFilters['sort']) : 'name' })
+                    setFilters({ sort: ['name', 'city', 'fee', 'ranking', 'scholarship'].includes(event.target.value) ? (event.target.value as DirectoryFilters['sort']) : 'recommended' })
                   }
                   className="h-11 rounded-xl border border-rule-strong bg-white px-3 text-[15px] font-medium text-petrol-800"
                 >
-                  <option value="name">Name</option>
+                  <option value="recommended">Recommended</option>
                   <option value="ranking">Best ranking</option>
                   <option value="scholarship">Scholarships first</option>
                   <option value="fee">Lowest tuition</option>
                   <option value="city">City</option>
+                  <option value="name">Name (A–Z)</option>
                 </select>
               </div>
             </div>
@@ -528,8 +529,8 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
               </div>
             ) : (
               <>
-                <ul className="mt-2">
-                  {visibleRows.map(row => {
+                <ul className="mt-6 grid gap-5 md:grid-cols-2">
+                  {visibleRows.map((row, index) => {
                     const { university } = row;
                     const selected = compare.includes(university.slug);
                     const applicationHref = `/apply?${new URLSearchParams({
@@ -538,94 +539,122 @@ export default function UniversitiesClient({ initialUniversities }: Props) {
                       intake: filters.intake || 'Upcoming intake',
                     }).toString()}`;
                     return (
-                      <li key={university.id} className="border-b border-canvas-soft">
-                        <article aria-label={university.name} className="grid gap-4 py-5 lg:grid-cols-[minmax(0,1fr)_180px_210px] lg:items-start lg:gap-6">
-                          <div className="flex min-w-0 gap-3.5">
-                            <UniversityMark university={university} />
-                            <div className="min-w-0">
-                              <h2 className="text-[19px] font-semibold leading-tight tracking-[-0.01em] text-petrol-800">
-                                <Link href={`/universities/${university.slug}`} className="underline-offset-4 hover:underline">
+                      <Fragment key={university.id}>
+                        <li>
+                          <article
+                            aria-label={university.name}
+                            className="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-petrol-800/10 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-18px_rgba(11,43,69,0.4)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                          >
+                            <div className="relative h-[92px] bg-petrol-800 bg-[radial-gradient(circle_at_90%_-10%,rgba(159,232,112,0.35),transparent_55%)]">
+                              {row.awardValue && (
+                                <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-lime px-3 py-1 text-[13px] font-bold text-petrol-800">
+                                  <Gift size={13} aria-hidden="true" /> Scholarship
+                                </span>
+                              )}
+                              {row.ranking && (
+                                <span className="absolute right-4 top-4 inline-flex max-w-[60%] items-center gap-1.5 truncate rounded-full bg-white/15 px-3 py-1 text-[13px] font-semibold text-white">
+                                  <Trophy size={13} className="shrink-0 text-lime" aria-hidden="true" /> #{row.ranking.rank}
+                                  <span className="truncate font-normal text-white/75">{row.ranking.publisher}</span>
+                                </span>
+                              )}
+                            </div>
+                            <div className="relative -mt-9 flex flex-1 flex-col px-5 pb-5 sm:px-6">
+                              <span className="w-fit rounded-2xl bg-white p-1 shadow-[0_6px_18px_-8px_rgba(11,43,69,0.45)]">
+                                <UniversityMark university={university} size={60} />
+                              </span>
+                              <h2 className="mt-3 text-[20px] font-semibold leading-tight tracking-[-0.01em] text-petrol-800">
+                                <Link
+                                  href={`/universities/${university.slug}`}
+                                  onClick={() => recordClick('university_programs_click', university)}
+                                  className="after:absolute after:inset-0 focus-visible:outline-none"
+                                >
                                   {university.name}
                                 </Link>
                               </h2>
-                              <p className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[14px] text-ink-soft">
+                              <p className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] text-ink-soft">
                                 <span className="inline-flex items-center gap-1">
-                                  <MapPin size={12} className="shrink-0" aria-hidden="true" />
+                                  <MapPin size={13} className="shrink-0" aria-hidden="true" />
                                   {[university.city, university.country].filter(Boolean).join(', ')}
                                 </span>
-                                {row.relationship && <span className="rounded-full bg-lime-pale px-2.5 py-0.5 text-[14px] font-semibold text-lime-deep">{row.relationship}</span>}
-                                {row.englishTaught && <span className="text-[14px] font-semibold text-jade">English-taught</span>}
+                                {row.englishTaught && <span className="font-semibold text-jade">English-taught</span>}
                               </p>
-                              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-ink-soft">
-                                <span>{row.levels.slice(0, 3).join(' · ') || 'Levels on profile'}</span>
-                                {row.awardValue && <span className="font-semibold text-jade">{row.awardValue}</span>}
-                                {university.clearCost && (
-                                  <Link
-                                    href={`/universities/${university.slug}/clear-cost`}
-                                    className="inline-flex items-center gap-1 font-semibold text-petrol-800 underline underline-offset-4"
-                                  >
-                                    <FileText size={11} aria-hidden="true" /> ClearCost sheet
-                                  </Link>
-                                )}
+                              {row.levels.length > 0 && (
+                                <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Study levels">
+                                  {row.levels.slice(0, 4).map(level => (
+                                    <li key={level} className="rounded-full bg-canvas-soft px-2.5 py-0.5 text-[13px] font-semibold text-petrol-800">{level}</li>
+                                  ))}
+                                </ul>
+                              )}
+                              {row.awardValue && (
+                                <p className="mt-3 line-clamp-2 rounded-xl bg-lime-pale px-3 py-2 text-[14px] font-semibold leading-5 text-lime-deep">{row.awardValue}</p>
+                              )}
+                              <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-canvas-soft pt-4 text-[14px]">
+                                <div>
+                                  <dt className="text-ink-soft">Tuition</dt>
+                                  <dd className="mt-0.5 font-semibold leading-5 text-petrol-800">{row.showTuition ? row.tuition : 'See programmes'}</dd>
+                                </div>
+                                <div>
+                                  <dt className="text-ink-soft">Intake</dt>
+                                  <dd className="mt-0.5 font-semibold leading-5 text-petrol-800">{row.intake.length ? row.intake.join(', ') : 'See profile'}</dd>
+                                </div>
+                              </dl>
+                              {university.clearCost && (
+                                <Link
+                                  href={`/universities/${university.slug}/clear-cost`}
+                                  className="relative z-10 mt-3 inline-flex w-fit items-center gap-1 text-[14px] font-semibold text-petrol-800 underline underline-offset-4"
+                                >
+                                  <FileText size={13} aria-hidden="true" /> Full cost sheet
+                                </Link>
+                              )}
+                              <div className="relative z-10 mt-auto flex items-center gap-2 pt-5">
+                                <button
+                                  type="button"
+                                  onClick={() => toggleCompare(university.slug)}
+                                  aria-pressed={selected}
+                                  aria-label={selected ? `Remove ${university.name} from comparison` : `Add ${university.name} to comparison`}
+                                  title={selected ? 'In comparison' : 'Compare'}
+                                  className={`grid size-11 shrink-0 place-items-center rounded-full transition-colors ${
+                                    selected ? 'bg-petrol-800 text-white' : 'bg-canvas-soft text-petrol-800 hover:bg-lime-pale'
+                                  }`}
+                                >
+                                  {selected ? <Check size={17} aria-hidden="true" /> : <Plus size={17} aria-hidden="true" />}
+                                </button>
+                                <Link
+                                  href={`/universities/${university.slug}`}
+                                  onClick={() => recordClick('university_programs_click', university)}
+                                  className="ed-btn ed-btn-outline min-h-11 flex-1 px-3 text-[15px]"
+                                  aria-label={`View ${university.name} profile`}
+                                >
+                                  Profile
+                                </Link>
+                                <Link
+                                  href={applicationHref}
+                                  onClick={() => recordClick('university_apply_click', university)}
+                                  className="ed-btn ed-btn-signal min-h-11 flex-[1.4] whitespace-nowrap px-3 text-[14px] sm:text-[15px]"
+                                  aria-label={`Check eligibility for ${university.name} with EduExpress International`}
+                                >
+                                  Check eligibility
+                                </Link>
                               </div>
                             </div>
-                          </div>
-
-                          <dl className="grid grid-cols-3 gap-3 rounded-2xl bg-canvas-soft p-3 text-[14px] lg:grid-cols-1 lg:gap-2">
-                            <div>
-                              <dt className="text-[14px] text-ink-soft">Tuition</dt>
-                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-petrol-800">{row.showTuition ? row.tuition : 'View programme fees'}</dd>
-                            </div>
-                            <div>
-                              <dt className="text-[14px] text-ink-soft">Intake</dt>
-                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-petrol-800">{row.intake.length ? row.intake.join(', ') : 'On profile'}</dd>
-                            </div>
-                            <div>
-                              <dt className="flex items-center gap-1 text-[14px] text-ink-soft">
-                                <Trophy size={10} aria-hidden="true" /> Ranking
-                              </dt>
-                              <dd className="mt-0.5 text-[14px] font-semibold leading-5 text-petrol-800">
-                                {row.ranking ? `#${row.ranking.rank}` : 'Not recorded'}
-                                {row.ranking && <span className="ml-1 font-normal text-[14px] text-ink-soft">{row.ranking.publisher}</span>}
-                              </dd>
-                            </div>
-                          </dl>
-
-                          <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-2">
-                              <button
-                                type="button"
-                                onClick={() => toggleCompare(university.slug)}
-                                aria-pressed={selected}
-                                className={`inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-full px-3 text-[15px] font-semibold transition-colors ${
-                                  selected ? 'bg-petrol-800 text-white' : 'bg-canvas-soft text-petrol-800 hover:bg-lime-pale'
-                                }`}
-                              >
-                                {selected ? <Check size={12} aria-hidden="true" /> : null}
-                                {selected ? 'In comparison' : 'Compare'}
-                              </button>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Link
-                                href={`/universities/${university.slug}`}
-                                onClick={() => recordClick('university_programs_click', university)}
-                                className="ed-btn ed-btn-outline min-h-11 flex-1 px-3 text-[15px]"
-                                aria-label={`View programmes at ${university.name}`}
-                              >
-                                Programmes
-                              </Link>
-                              <Link
-                                href={applicationHref}
-                                onClick={() => recordClick('university_apply_click', university)}
-                                className="ed-btn ed-btn-signal min-h-11 flex-1 px-3 text-[15px]"
-                                aria-label={`Apply to ${university.name} with EduExpress International`}
-                              >
-                                Apply
-                              </Link>
-                            </div>
-                          </div>
-                        </article>
-                      </li>
+                          </article>
+                        </li>
+                        {index === 3 && (
+                          <li className="md:col-span-2">
+                            <aside className="flex flex-col gap-5 rounded-3xl bg-petrol-800 p-6 text-white sm:p-8 md:flex-row md:items-center md:justify-between">
+                              <div>
+                                <p className="font-display text-[26px] font-black leading-[1.04] text-lime sm:text-[32px]">Not sure which university fits you?</p>
+                                <p className="mt-2 max-w-xl text-[16px] leading-7 text-white/80">
+                                  Send your results and budget once. A counsellor shortlists the universities and scholarships you can realistically get, free of charge.
+                                </p>
+                              </div>
+                              <a href="#shortlist" className="ed-btn ed-btn-signal min-h-[52px] shrink-0 px-7">
+                                Get my free shortlist <ArrowRight size={18} aria-hidden="true" />
+                              </a>
+                            </aside>
+                          </li>
+                        )}
+                      </Fragment>
                     );
                   })}
                 </ul>

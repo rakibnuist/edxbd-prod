@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
 import { chinaGuides } from '../../guides';
-import { CtaBand, JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
+import { CtaBand, JsonLd, PageHero, Section } from '@/components/page/PageKit';
 import { getPublishedUpdates } from '@/lib/content-records';
 import { pageMetadata } from '@/lib/seo';
-import type { Update } from '@/lib/types';
+import UpdateCard from '@/components/updates/UpdateCard';
+import { requestTime } from '@/lib/update-deadlines';
 import { categorySlug, categoriesFromUpdate } from '@/lib/update-categories';
 
 // Server-rendered category archive. Unlike the /updates list (client-side
@@ -19,12 +19,6 @@ import { categorySlug, categoriesFromUpdate } from '@/lib/update-categories';
 export const revalidate = 300;
 
 type CategoryPageProps = { params: Promise<{ category: string }> };
-
-const fmtDate = (update: Update) => {
-  const date = new Date(update.publishedAt || update.createdAt);
-  if (Number.isNaN(date.getTime())) return '';
-  return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date);
-};
 
 async function getCategoryData(slug: string) {
   try {
@@ -108,6 +102,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     })),
   };
 
+  const now = requestTime();
+
   return (
     <>
       <JsonLd data={structuredData} />
@@ -129,33 +125,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       />
 
       <Section>
-        <ul data-anim="stagger" className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {posts.map(update => (
+        <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((update, index) => (
             <li key={update.id}>
-              <article className="h-full">
-                <Link href={`/updates/${update.slug}`} className="group flex h-full flex-col rounded-3xl bg-canvas-soft p-3 transition duration-200 hover:-translate-y-1">
-                  <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-petrol-800">
-                    {update.featuredImage
-                      ? <Image src={update.featuredImage} alt={update.title} fill sizes="(max-width:768px) 100vw, 380px" className="object-cover transition duration-500 group-hover:scale-105" />
-                      : <div className="grid h-full place-items-center font-display text-[18px] font-black text-lime">EduExpress update</div>}
-                  </div>
-                  <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
-                    <div className="flex items-center justify-between gap-2 text-[14px]">
-                      <span className="font-semibold text-petrol-800">{update.category || update.categories?.[0] || 'Update'}</span>
-                      <span className="shrink-0 rounded-full bg-white px-2.5 py-0.5 font-semibold text-ink-soft">{update.type === 'article' ? 'Article' : 'Update'}</span>
-                    </div>
-                    <h2 className={`mt-3 line-clamp-2 ${kit.h3}`}>{update.title}</h2>
-                    {update.excerpt ? <p className="mt-2 line-clamp-2 text-[15px] leading-6 text-ink-soft">{update.excerpt}</p> : null}
-                    <div className="mt-auto flex items-center justify-between gap-3 border-t border-white pt-3 text-[14px] text-ink-soft">
-                      <span className="truncate">{update.author}</span>
-                      <span className="shrink-0">{fmtDate(update)}</span>
-                    </div>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-[16px] font-semibold text-petrol-800 underline-offset-4 group-hover:underline">
-                      {update.type === 'article' ? 'Read article' : 'Read update'} <ArrowRight size={16} aria-hidden="true" />
-                    </span>
-                  </div>
-                </Link>
-              </article>
+              <UpdateCard update={update} now={now} headingLevel="h2" priority={index < 3} />
             </li>
           ))}
         </ul>

@@ -12,6 +12,24 @@ import { evergreenText, prepareUniversityProfile, prepareUniversityPrograms } fr
 import type { CleanUniversityRecord } from '@/lib/university-records';
 import type { UniversityProgramDetail } from '@/types/university-profile';
 import UniversityProfileClient from './UniversityProfileClient';
+import { getPublishedUpdates } from '@/lib/content-records';
+import type { UpdateCardData } from '@/components/updates/UpdateCard';
+import { requestTime } from '@/lib/update-deadlines';
+
+/** Posts that link to this profile or name the university in the title. */
+async function universityNews(university: CleanUniversityRecord): Promise<UpdateCardData[]> {
+  try {
+    const names = [university.name, ...university.aliases.filter(alias => alias.length >= 4)].map(name => name.toLowerCase());
+    const link = `/universities/${university.slug}"`;
+    const updates = await getPublishedUpdates(undefined, false);
+    return updates
+      .filter(update => !update.archived && (update.content.includes(link) || names.some(name => update.title.toLowerCase().includes(name))))
+      .slice(0, 6)
+      .map(({ slug, title, excerpt, featuredImage, category, categories, deadlineAt, publishedAt, createdAt }) => ({ slug, title, excerpt, featuredImage, category, categories, deadlineAt, publishedAt, createdAt }));
+  } catch {
+    return [];
+  }
+}
 
 // Many majors share the same official checklist and fee table. Sharing these
 // values lets React send one copy while preserving the full catalogue in HTML.
@@ -33,8 +51,8 @@ function shareProgramFields(programs: UniversityProgramDetail[]) {
 }
 
 export default async function UniversityProfile({ university }: { university: CleanUniversityRecord }) {
-  const [researchRows, rankings, details, trust] = await Promise.all([
-    getUniversityResearch(), getUniversityRankings(university.slug), getUniversityProfileDetails(university.slug), getPublicTrustRecords(),
+  const [researchRows, rankings, details, trust, news] = await Promise.all([
+    getUniversityResearch(), getUniversityRankings(university.slug), getUniversityProfileDetails(university.slug), getPublicTrustRecords(), universityNews(university),
   ]);
   const research = researchRows.find(row => row.slug === university.slug);
   const publicDetails = details ? prepareUniversityProfile(details) : undefined;
@@ -63,6 +81,8 @@ export default async function UniversityProfile({ university }: { university: Cl
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, '\\u003c') }} />
     <UniversityProfileClient
     faq={faq}
+    news={news}
+    now={requestTime()}
     university={{
       name: university.name, slug: university.slug, city: university.city, country: university.country, logo,
       location: university.location,

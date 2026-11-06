@@ -36,7 +36,7 @@ const queryTrustRecords = () =>
     prisma.testimonial.findMany({
       where: withPublicTestimonials({ content: { not: '' } }),
       orderBy: [{ featured: 'desc' }, { updatedAt: 'desc' }],
-      take: 6,
+      take: 16,
       select: { id: true, studentName: true, displayName: true, content: true, university: true, program: true, location: true, country: true, image: true, rating: true },
     }),
     prisma.testimonial.count({ where: withPublicTestimonials({ content: { not: '' } }) }),

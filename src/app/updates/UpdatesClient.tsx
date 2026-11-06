@@ -1,178 +1,105 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Newspaper, Search } from 'lucide-react';
-import type { Update, UpdatesResponse } from '@/lib/types';
-import { categoryHref } from '@/lib/update-categories';
-import { chinaGuides } from './guides';
+import { ArrowRight, Search, ShieldCheck } from 'lucide-react';
+import UpdateCard, { updateCategory, type UpdateCardData } from '@/components/updates/UpdateCard';
+import { daysLeft } from '@/lib/update-deadlines';
 
-// Keep the whole current library crawlable in one server-rendered page. The
-// pagination controls below remain for when the library grows past this size.
-const ITEMS_PER_PAGE = 24;
+export type LibraryItem = UpdateCardData & { id: string; search: string };
 
-const fmtDate = (update: Update) => {
-  const iso = update.publishedAt || update.createdAt;
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return '';
-  return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date);
+const PAGE = 18;
+
+const rank = (item: LibraryItem, now: number) => (item.archived ? 2 : (daysLeft(item.deadlineAt, now) ?? 0) < 0 ? 1 : 0);
+
+const normal = (value: string) => {
+  const key = value.trim().toLowerCase();
+  return key === 'announcements' ? 'announcement' : key;
 };
 
-const primaryCategory = (update: Update) => update.category || update.categories?.[0] || 'Update';
-
-const archivedBadge = 'ml-2 inline-flex rounded-full bg-canvas-soft px-2.5 py-0.5 align-middle text-[14px] font-semibold text-clay';
-
-interface UpdatesClientProps {
-  initialUpdates?: Update[];
-  initialCategories?: string[];
-}
-
-export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProps) {
-  const [updates, setUpdates] = useState(initialUpdates);
+export default function UpdatesClient({ items, now }: { items: LibraryItem[]; now: number }) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
-  const [page, setPage] = useState(1);
+  const [shown, setShown] = useState(PAGE);
 
-  useEffect(() => {
-    // The server snapshot covers crawlers and first paint (including the empty
-    // state); this refresh pulls the freshest backend records so a new post
-    // shows immediately instead of waiting for the 5-minute ISR window.
-    let active = true;
-    fetch('/api/updates')
-      .then(response => (response.ok ? (response.json() as Promise<UpdatesResponse>) : Promise.reject(new Error('Unable to load updates'))))
-      .then(data => {
-        if (!active) return;
-        const fresh = data.updates || [];
-        if (fresh.length > 0 || initialUpdates.length === 0) setUpdates(fresh);
-      })
-      .catch(() => {
-        /* keep the server snapshot */
-      });
-    return () => {
-      active = false;
-    };
-  }, [initialUpdates.length]);
-
-  const currentUpdates = updates;
-
+  // Chips ordered by how many posts use them, so the useful filters come first.
   const categories = useMemo(() => {
-    const values = currentUpdates.flatMap(update => [update.category, ...(update.categories || [])]).filter((value): value is string => Boolean(value?.trim()));
-    const labels = new Map<string, string>();
-    values.forEach(value => {
-      const clean = value.trim();
-      const rawKey = clean.toLowerCase();
-      const key = rawKey === 'announcements' ? 'announcement' : rawKey;
-      if (!labels.has(key)) labels.set(key, key === 'announcement' ? 'Announcement' : clean);
+    const counts = new Map<string, { label: string; count: number }>();
+    items.forEach(item => {
+      new Set([item.category, ...(item.categories || [])].filter((v): v is string => Boolean(v?.trim())).map(v => v.trim())).forEach(label => {
+        const key = normal(label);
+        const entry = counts.get(key) || { label: key === 'announcement' ? 'Announcement' : label, count: 0 };
+        entry.count += 1;
+        counts.set(key, entry);
+      });
     });
-    return ['All', ...labels.values()];
-  }, [currentUpdates]);
+    return [...counts.values()].sort((a, b) => b.count - a.count).slice(0, 8);
+  }, [items]);
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return currentUpdates
-      .filter(update => {
-        const matchesCategory =
-          category === 'All' ||
-          primaryCategory(update).toLowerCase() === category.toLowerCase() ||
-          update.categories?.some(item => item.toLowerCase() === category.toLowerCase());
-        const matchesSearch = !query || `${update.title} ${update.excerpt || ''} ${update.content || ''}`.toLowerCase().includes(query);
-        return matchesCategory && matchesSearch;
+    return items
+      .filter(item => {
+        const inCategory =
+          category === 'All' || normal(updateCategory(item)) === normal(category) || item.categories?.some(value => normal(value) === normal(category));
+        return inCategory && (!query || query.split(/\s+/).every(word => item.search.includes(word)));
       })
-      .sort((a, b) => Number(Boolean(a.archived)) - Number(Boolean(b.archived)));
-  }, [category, currentUpdates, search]);
+      // Open and undated posts first (newest first), then closed rounds, then archived.
+      .sort((a, b) => rank(a, now) - rank(b, now));
+  }, [category, items, now, search]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
-  const visible = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  const visible = filtered.slice(0, shown);
   const [lead, ...rest] = visible;
+  const filteredView = search.trim() !== '' || category !== 'All';
 
-  const chooseCategory = (value: string) => {
+  const choose = (value: string) => {
     setCategory(value);
-    setPage(1);
+    setShown(PAGE);
   };
-  const choosePage = (value: number) => {
-    setPage(Math.max(1, Math.min(value, totalPages)));
-    document.getElementById('library')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  // Nothing published yet: say so plainly and send readers to the evergreen
-  // China guides instead of showing an empty search box.
-  if (currentUpdates.length === 0) {
-    return (
-      <div className="rounded-3xl bg-canvas-soft p-6 sm:p-10">
-        <div className="max-w-2xl">
-          <span className="grid size-12 place-items-center rounded-full bg-white text-petrol-800">
-            <Newspaper size={22} aria-hidden="true" />
-          </span>
-          <h2 className="mt-6 font-display text-[30px] font-black leading-[1.02] tracking-[-0.01em] text-petrol-800 sm:text-[40px]">
-            No dated updates are published right now.
-          </h2>
-          <p className="mt-4 text-[17px] leading-7 text-ink-soft">
-            Intake notices, scholarship changes and visa news appear here with their publish date and author. Until the next one is
-            published, the China guides below cover intakes, scholarships, visas and complete costs.
-          </p>
-        </div>
-        <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-          {chinaGuides.map(guide => (
-            <li key={guide.href}>
-              <Link href={guide.href} className="group flex min-h-[76px] items-center justify-between gap-4 rounded-2xl bg-white px-5 py-4 transition-colors hover:bg-lime-pale">
-                <span>
-                  <span className="block text-[14px] text-ink-soft">{guide.label}</span>
-                  <span className="block text-[17px] font-semibold leading-snug text-petrol-800">{guide.title}</span>
-                </span>
-                <ArrowUpRight size={18} className="shrink-0 text-petrol-800 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Link href="/study-in-china-from-bangladesh" className="ed-btn ed-btn-signal min-h-[52px] px-7">
-            Open the Study in China guide <ArrowRight size={18} aria-hidden="true" />
-          </Link>
-          <Link href="/contact" className="ed-btn ed-btn-outline min-h-[52px] px-7">Ask a counsellor</Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h2 className="font-display text-[34px] font-black leading-[0.98] tracking-[-0.01em] text-petrol-800 sm:text-[46px]">
-            {category === 'All' ? 'The library.' : category}
+          <p className="text-[14px] font-semibold uppercase tracking-[0.08em] text-lime-deep">The library</p>
+          <h2 className="mt-2 font-display text-[34px] font-black leading-[0.98] tracking-[-0.01em] text-petrol-800 sm:text-[46px]">
+            {category === 'All' ? 'Latest updates.' : category}
           </h2>
-          <p className="mt-3 text-[16px] text-ink-soft">
-            <strong className="font-semibold text-petrol-800">{filtered.length}</strong> {filtered.length === 1 ? 'record' : 'records'} · new posts appear as soon as they are published
-          </p>
         </div>
+        <p className="text-[15px] text-ink-soft">
+          <strong className="font-semibold text-petrol-800">{filtered.length}</strong> {filtered.length === 1 ? 'post' : 'posts'}
+          {filteredView ? ' match' : ', newest first'}
+        </p>
       </div>
 
       <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center">
-        <label className="relative block lg:w-[420px]">
+        <label className="relative block lg:w-[400px] lg:shrink-0">
           <span className="sr-only">Search updates</span>
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-mute" size={16} aria-hidden="true" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-mute" size={18} aria-hidden="true" />
           <input
+            type="search"
             value={search}
             onChange={event => {
               setSearch(event.target.value);
-              setPage(1);
+              setShown(PAGE);
             }}
-            placeholder="Search the library: intake, visa, cost, scholarship"
-            className="ed-field ed-field-icon"
+            placeholder="Search a university, scholarship or exam"
+            className="ed-field ed-field-icon min-h-[52px] rounded-full pl-11"
           />
         </label>
-        <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar" role="group" aria-label="Filter by category">
-          {categories.map(item => (
+        <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 no-scrollbar lg:mx-0 lg:px-0" role="group" aria-label="Filter by category">
+          {[{ label: 'All', count: items.length }, ...categories].map(item => (
             <button
-              key={item}
+              key={item.label}
               type="button"
-              onClick={() => chooseCategory(item)}
-              aria-pressed={category === item}
-              className={`min-h-[44px] shrink-0 rounded-full px-4 text-[15px] font-semibold transition-colors ${
-                category === item ? 'bg-petrol-800 text-white' : 'bg-canvas-soft text-petrol-800 hover:bg-lime-pale'
+              onClick={() => choose(item.label)}
+              aria-pressed={category === item.label}
+              className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 rounded-full px-4 text-[15px] font-semibold transition-colors ${
+                category === item.label ? 'bg-petrol-800 text-white' : 'bg-canvas-soft text-petrol-800 hover:bg-lime-pale'
               }`}
             >
-              {item}
+              {item.label}
+              <span className={`text-[13px] ${category === item.label ? 'text-lime' : 'text-ink-soft'}`}>{item.count}</span>
             </button>
           ))}
         </div>
@@ -181,100 +108,87 @@ export default function UpdatesClient({ initialUpdates = [] }: UpdatesClientProp
       {visible.length > 0 ? (
         <>
           {lead && (
-            <article className="mt-8 rounded-3xl bg-canvas-soft p-6 sm:p-8">
-              <p className="text-[14px] text-ink-soft">
-                <Link href={categoryHref(primaryCategory(lead))} className="font-semibold text-petrol-800 underline-offset-4 hover:underline">
-                  {primaryCategory(lead)}
-                </Link>
-                {' · '}
-                {fmtDate(lead)}
-                {lead.archived && <span className={archivedBadge}>Archived</span>}
-              </p>
-              <h3 className="mt-3 max-w-[30ch] font-display text-[28px] font-black leading-[1.05] tracking-[-0.01em] text-petrol-800 sm:text-[36px]">
-                <Link href={`/updates/${lead.slug}`} className="underline-offset-4 hover:underline">
-                  {lead.title}
-                </Link>
-              </h3>
-              {lead.excerpt && <p className="mt-3 max-w-[62ch] text-[16px] leading-7 text-ink-soft">{lead.excerpt}</p>}
-              <div className="mt-5 flex flex-wrap items-center gap-4 text-[15px]">
-                <Link href={`/updates/${lead.slug}`} className="ed-btn ed-btn-signal min-h-11 px-5">
-                  Read the {lead.type === 'article' ? 'article' : 'update'} <ArrowUpRight size={16} aria-hidden="true" />
-                </Link>
-                <span className="text-ink-soft">{lead.author}</span>
-              </div>
-            </article>
+            <div className="mt-8">
+              <UpdateCard update={lead} now={now} variant="feature" priority />
+            </div>
           )}
 
-          <ul className="mt-4">
-            {rest.map(update => (
-              <li key={update.id} className="border-b border-canvas-soft">
-                <article className="grid gap-2 py-5 sm:grid-cols-[120px_minmax(0,1fr)_150px] sm:items-baseline sm:gap-6">
-                  <p className="text-[14px] text-ink-soft">{fmtDate(update)}</p>
-                  <div>
-                    <h3 className="text-[19px] font-semibold leading-snug tracking-[-0.01em] text-petrol-800">
-                      <Link href={`/updates/${update.slug}`} className="underline-offset-4 hover:underline">
-                        {update.title}
-                      </Link>
-                      {update.archived && <span className={archivedBadge}>Archived</span>}
-                    </h3>
-                    {update.excerpt && <p className="mt-1 line-clamp-2 max-w-[70ch] text-[15px] leading-6 text-ink-soft">{update.excerpt}</p>}
-                  </div>
-                  <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
-                    <Link href={categoryHref(primaryCategory(update))} className="text-[14px] font-semibold text-petrol-800 underline-offset-4 hover:underline">
-                      {primaryCategory(update)}
-                    </Link>
-                    <span className="text-[14px] text-ink-soft">{update.author}</span>
-                  </div>
-                </article>
-              </li>
+          <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {rest.map((item, index) => (
+              <FragmentWithLead key={item.id} index={index}>
+                <li>
+                  <UpdateCard update={item} now={now} />
+                </li>
+              </FragmentWithLead>
             ))}
           </ul>
+
+          {filtered.length > shown && (
+            <div className="mt-10 flex justify-center">
+              <button type="button" onClick={() => setShown(value => value + PAGE)} className="ed-btn ed-btn-outline min-h-[52px] px-7">
+                Show more updates ({filtered.length - shown} more)
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <div className="mt-8 rounded-3xl bg-canvas-soft px-6 py-14 text-center">
           <span className="mx-auto grid size-12 place-items-center rounded-full bg-white text-petrol-800">
             <Search size={22} aria-hidden="true" />
           </span>
-          <h3 className="mt-4 font-display text-[26px] font-black leading-tight text-petrol-800">No record matches “{search || category}”</h3>
-          <p className="mx-auto mt-2 max-w-md text-[16px] leading-6 text-ink-soft">Clear the search or pick a different category. If you need a specific intake answer, a counsellor can check it directly.</p>
-          <button
-            type="button"
-            onClick={() => {
-              setSearch('');
-              chooseCategory('All');
-            }}
-            className="ed-btn ed-btn-outline mt-5 min-h-11 text-[15px]"
-          >
-            Clear the search
-          </button>
+          <h3 className="mt-4 font-display text-[26px] font-black leading-tight text-petrol-800">Nothing matches “{search || category}” yet.</h3>
+          <p className="mx-auto mt-2 max-w-md text-[16px] leading-6 text-ink-soft">
+            A counsellor can check the latest notice for that university or scholarship and tell you if it is open.
+          </p>
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
+            <a href="#shortlist" className="ed-btn ed-btn-signal min-h-11 px-5 text-[15px]">
+              Ask a counsellor <ArrowRight size={16} aria-hidden="true" />
+            </a>
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('');
+                choose('All');
+              }}
+              className="ed-btn ed-btn-outline min-h-11 px-5 text-[15px]"
+            >
+              Clear the search
+            </button>
+          </div>
         </div>
       )}
-
-      {totalPages > 1 && (
-        <nav className="mt-8 flex items-center justify-center gap-3" aria-label="Update pages">
-          <button
-            type="button"
-            onClick={() => choosePage(page - 1)}
-            disabled={page === 1}
-            aria-label="Previous page"
-            className="grid size-11 place-items-center rounded-full bg-canvas-soft text-petrol-800 hover:bg-lime-pale disabled:opacity-30"
-          >
-            <ChevronLeft size={18} aria-hidden="true" />
-          </button>
-          <span className="text-[15px] text-ink-soft">
-            Page {page} of {totalPages}
-          </span>
-          <button
-            type="button"
-            onClick={() => choosePage(page + 1)}
-            disabled={page === totalPages}
-            aria-label="Next page"
-            className="grid size-11 place-items-center rounded-full bg-canvas-soft text-petrol-800 hover:bg-lime-pale disabled:opacity-30"
-          >
-            <ChevronRight size={18} aria-hidden="true" />
-          </button>
-        </nav>
-      )}
     </div>
+  );
+}
+
+/** After the 5th grid card, a lead card takes one grid cell. */
+function FragmentWithLead({ index, children }: { index: number; children: React.ReactNode }) {
+  return (
+    <>
+      {children}
+      {index === 4 && (
+        <li className="flex">
+          <aside className="flex w-full flex-col justify-between rounded-3xl bg-petrol-800 p-6 text-white sm:p-7">
+            <div>
+              <span className="grid size-12 place-items-center rounded-full bg-lime text-petrol-800">
+                <ShieldCheck size={22} aria-hidden="true" />
+              </span>
+              <h3 className="mt-5 font-display text-[28px] font-black leading-[1.02] text-lime">Which of these can you actually get?</h3>
+              <p className="mt-3 text-[16px] leading-7 text-white/80">
+                Send your results once. We check every open scholarship against your profile and reply with a realistic shortlist.
+              </p>
+            </div>
+            <div className="mt-6 grid gap-2">
+              <a href="#shortlist" className="ed-btn ed-btn-signal min-h-[52px] px-5">
+                Get my free shortlist <ArrowRight size={17} aria-hidden="true" />
+              </a>
+              <Link href="/education-fit-assessment" className="inline-flex min-h-11 items-center justify-center text-[15px] font-semibold text-white underline-offset-4 hover:underline">
+                Or take the 2-minute assessment
+              </Link>
+            </div>
+          </aside>
+        </li>
+      )}
+    </>
   );
 }

@@ -4,7 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useEffect, useId, useState } from 'react';
-import { ArrowRight, ChevronRight, GraduationCap, MapPin, Trophy, BookOpen, Wallet, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, ChevronRight, GraduationCap, MapPin, Trophy, BookOpen, Wallet, CalendarClock, MessageCircle } from 'lucide-react';
+import UpdateCard, { type UpdateCardData } from '@/components/updates/UpdateCard';
+import { config } from '@/lib/config';
+import { deadlineBadge, openByDeadline } from '@/lib/update-deadlines';
 import type { CleanUniversityRecord } from '@/lib/university-records';
 import type { UniversityRanking } from '@/lib/university-rankings';
 import { feeText, normalizeProgramLevel, PROGRAM_LEVELS, type ProgramLevel } from '@/lib/university-profile-view';
@@ -27,10 +30,10 @@ const PANELS: { id: Panel; label: string }[] = [
   { id: 'rankings', label: 'Rankings' },
 ];
 const LEVEL_LABELS: Record<ProgramLevel, string> = { Bachelor: 'Bachelor’s', Master: 'Master’s', PhD: 'PhD', Language: 'Language', Foundation: 'Foundation', Diploma: 'Diploma' };
-const titleClass = 'text-2xl font-semibold tracking-tight text-[#14212e] sm:text-[28px] sm:leading-9';
+const titleClass = 'font-display text-[28px] font-black leading-[1.02] tracking-[-0.01em] text-petrol-800 sm:text-[36px]';
 const mutedClass = 'text-sm leading-7 text-slate-500';
 const selectClass = 'mt-2 min-h-12 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/10';
-const sheetClass = 'rounded-xl border border-slate-200 bg-white p-5 sm:p-8';
+const sheetClass = 'rounded-3xl bg-white p-5 ring-1 ring-petrol-800/[0.06] sm:p-8';
 const textAction = 'inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#12436b] hover:text-[#14212e] hover:underline';
 const applyClass = 'inline-flex min-h-12 items-center justify-center gap-3 rounded-lg bg-[#12436b] px-5 py-3 text-center text-sm font-semibold leading-6 text-white transition-colors hover:bg-[#0f3a5c]';
 
@@ -50,6 +53,10 @@ type Props = {
   hasDetailedPrograms: boolean;
   rankings: Omit<UniversityRanking, 'sourceUrl'>[];
   servicePackages: { title: string; priceLabel: string; summary?: string }[];
+  /** Published updates about this university (newest first). */
+  news?: UpdateCardData[];
+  /** Render time, so deadline labels match between server and client. */
+  now?: number;
 };
 
 function PlainList({ items, empty = 'Details are not yet available for this program.' }: { items: string[]; empty?: string }) {
@@ -57,7 +64,7 @@ function PlainList({ items, empty = 'Details are not yet available for this prog
   return <ul className="space-y-4">{items.map((item, index) => <li key={`${index}-${item}`} className="border-l-2 border-[#cfe7f5] pl-4 text-sm leading-7 text-slate-600">{item}</li>)}</ul>;
 }
 
-export default function UniversityProfileClient({ faq, university, shortName, displayName, overview, highlights, campusImage, intakeMonths = [], generalDetails, programs, hasDetailedPrograms, scholarshipOptions, rankings, servicePackages }: Props) {
+export default function UniversityProfileClient({ faq, university, shortName, displayName, overview, highlights, campusImage, intakeMonths = [], generalDetails, programs, hasDetailedPrograms, scholarshipOptions, rankings, servicePackages, news = [], now = 0 }: Props) {
   const [panel, setPanel] = useState<Panel>('overview');
   const [level, setLevel] = useState<ProgramLevel>(programs[0] ? normalizeProgramLevel(programs[0].level) : 'Bachelor');
   const [selectedId, setSelectedId] = useState(programs[0]?.id || '');
@@ -127,31 +134,39 @@ export default function UniversityProfileClient({ faq, university, shortName, di
   const tuitionHighlight = selected?.fees.find(fee => fee.key === 'tuition' && !fee.optional);
 
 
+  const nextDeadline = openByDeadline(news, now)[0];
+  const nextBadge = nextDeadline ? deadlineBadge(nextDeadline.deadlineAt, now) : null;
+  const waHref = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(`Assalamu alaikum. I am interested in ${university.name}. Please check my eligibility.`)}`;
+  const heroChips = [...(availableLevels.length ? availableLevels.map(item => LEVEL_LABELS[item]) : generalDetails.degrees), ...languages.map(item => `${item}-taught`)].slice(0, 6);
+
   return <article className="min-h-screen bg-chalk pb-16 pt-[76px] text-ink xl:pt-[112px]">
-    <header className="overflow-hidden border-b border-rule bg-chalk">
-      <div className="mx-auto max-w-[1280px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
-        <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-2 text-xs leading-5 text-ink-mute"><Link href="/" className="hover:text-petrol-700">Home</Link><ChevronRight size={12} /><Link href="/universities" className="hover:text-petrol-700">Universities</Link><ChevronRight size={12} /><span className="text-ink">{shortName}</span></nav>
-        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12">
-          <div className="min-w-0 lg:py-2">
-            <div className="flex items-center gap-4"><div className={'grid size-20 shrink-0 place-items-center overflow-hidden rounded-xl border border-rule p-2.5 ' + (['hsu', 'njit', 'jit', 'ctgu'].includes(university.slug) && !logoFailed ? 'bg-mint-100' : 'bg-white')}>{university.logo && !logoFailed ? <Image src={university.logo} alt={university.name + ' logo'} width={76} height={76} className="h-full w-full object-contain" unoptimized onError={() => setLogoFailed(true)} /> : <GraduationCap size={32} className="text-petrol-600" aria-hidden="true" />}</div><div><p className="text-[13px] font-semibold uppercase tracking-[.16em] text-petrol-600">University guide · {university.country}</p><p className="mt-2 flex items-center gap-1.5 text-sm text-ink-soft"><MapPin size={15} />{university.city}, {university.country}</p></div></div>
-            <h1 className="ed-home-display mt-6 max-w-3xl text-[clamp(1.9rem,3.3vw,2.7rem)] text-ink">{displayName}</h1>
-            <p className="mt-4 max-w-xl text-[14px] leading-7 text-ink-soft">{overview.split(/\n\s*\n/)[0]}</p>
-            <p className="mt-4 flex items-start gap-2 text-[15px] leading-6 text-ink-soft"><BookOpen size={18} className="mt-0.5 shrink-0 text-petrol-600" aria-hidden="true" />{(availableLevels.length ? availableLevels.map(item => LEVEL_LABELS[item]) : generalDetails.degrees).join(' · ') || 'Find your study route'}{languages.length ? ' · ' + languages.join(' / ') : ''}</p>
-            <div className="mt-6 flex flex-wrap gap-3"><a href="#programs" className="ed-btn ed-btn-signal min-h-11 px-5 text-[15px]">Explore programs<ArrowRight size={15} aria-hidden="true" /></a><a href="#university-enquiry" className="ed-btn ed-btn-outline min-h-11 bg-white px-5 text-[15px]">Get my university plan<ArrowRight size={15} aria-hidden="true" /></a></div>
-            <dl className="mt-7 grid grid-cols-2 gap-5 border-y border-rule py-5 sm:grid-cols-3">
-              {worldRanking && <div><dt className="flex items-center gap-1.5 text-xs text-ink-mute"><Trophy size={14} />World ranking</dt><dd className="mt-2"><a href="#rankings" className="text-2xl font-bold tabular-nums text-petrol-700">#{worldRanking.rank}<span className="mt-1 block text-xs font-normal text-ink-mute">{worldRanking.publisher}</span></a></dd></div>}
-              <div><dt className="flex items-center gap-1.5 text-xs text-ink-mute"><Wallet size={14} />Scholarship highlight</dt><dd className="mt-2"><a href="#scholarships" className="text-[14px] font-bold leading-6 text-petrol-700">{scholarshipHighlightLabel || 'Explore scholarship routes'}<span className="mt-1 block text-xs font-normal leading-5 text-ink-mute">{scholarshipHighlight?.title || 'Funding, coverage and conditions'}</span></a></dd></div>
-              <div><dt className="text-xs text-ink-mute">Selected program tuition</dt><dd className="mt-2"><a href="#fees" className="text-[14px] font-bold leading-6 text-petrol-700">{tuitionHighlight ? feeText(tuitionHighlight) : 'Build a study budget'}<span className="mt-1 block text-xs font-normal leading-5 text-ink-mute">{selected ? LEVEL_LABELS[normalizeProgramLevel(selected.level)] + ' · before scholarship' : 'Program fees and living costs'}</span></a></dd></div>
+    <header className="relative overflow-hidden bg-petrol-800 text-white">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-48 -top-48 size-[560px] rounded-full bg-lime/10 blur-3xl" />
+      <div className="relative mx-auto max-w-[1280px] px-5 py-9 sm:px-8 lg:px-10 lg:py-14">
+        <nav aria-label="Breadcrumb" className="mb-7 flex flex-wrap items-center gap-2 text-[14px] font-semibold leading-5 text-white/65"><Link href="/" className="hover:text-white">Home</Link><ChevronRight size={13} className="text-white/40" /><Link href="/universities" className="hover:text-white">Universities</Link><ChevronRight size={13} className="text-white/40" /><span className="text-white">{shortName}</span></nav>
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-14">
+          <div className="min-w-0">
+            <div className="flex items-center gap-4">
+              <div className={'grid size-20 shrink-0 place-items-center overflow-hidden rounded-2xl p-2.5 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.5)] ' + (['hsu', 'njit', 'jit', 'ctgu'].includes(university.slug) && !logoFailed ? 'bg-mint-100' : 'bg-white')}>{university.logo && !logoFailed ? <Image src={university.logo} alt={university.name + ' logo'} width={76} height={76} className="h-full w-full object-contain" unoptimized onError={() => setLogoFailed(true)} /> : <GraduationCap size={32} className="text-petrol-600" aria-hidden="true" />}</div>
+              <div><p className="text-[13px] font-semibold uppercase tracking-[.16em] text-lime">University guide · {university.country}</p><p className="mt-2 flex items-center gap-1.5 text-[15px] text-white/75"><MapPin size={15} aria-hidden="true" />{university.city}, {university.country}</p></div>
+            </div>
+            <h1 className="mt-6 max-w-3xl font-display text-[38px] font-black leading-[0.98] tracking-[-0.012em] text-white sm:text-[52px] lg:text-[58px]">{displayName}</h1>
+            <p className="mt-5 max-w-2xl text-[16px] leading-7 text-white/80 sm:text-[17px]">{overview.split(/\n\s*\n/)[0]}</p>
+            {heroChips.length > 0 && <ul className="mt-5 flex flex-wrap gap-2" aria-label="Study levels and languages">{heroChips.map(chip => <li key={chip} className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-[14px] font-semibold text-white"><BookOpen size={14} className="text-lime" aria-hidden="true" />{chip}</li>)}</ul>}
+            {nextDeadline && nextBadge && <Link href={`/updates/${nextDeadline.slug}`} className="group mt-6 flex max-w-2xl items-center gap-3 rounded-2xl bg-peach px-4 py-3.5 text-petrol-800 transition hover:brightness-105"><CalendarClock size={22} className="shrink-0" aria-hidden="true" /><span className="min-w-0 flex-1 text-[15px] leading-6"><strong className="font-bold">{nextBadge.label}</strong> · <span className="font-semibold">{nextDeadline.title}</span></span><ArrowRight size={18} className="shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true" /></Link>}
+            <div className="mt-7 flex flex-wrap items-center gap-3"><a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[52px] px-6">Check my eligibility<ArrowRight size={17} aria-hidden="true" /></a><a href={waHref} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-on-dark min-h-[52px] px-6"><MessageCircle size={17} aria-hidden="true" />Ask on WhatsApp</a><a href="#programs" className="inline-flex min-h-[52px] items-center gap-1.5 px-2 text-[15px] font-semibold text-white underline-offset-4 hover:underline">Explore programs</a></div>
+            <dl className="mt-8 grid gap-3 sm:grid-cols-3">
+              {worldRanking && <div className="rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/10"><dt className="flex items-center gap-1.5 text-[13px] text-white/65"><Trophy size={14} className="text-lime" />World ranking</dt><dd className="mt-2"><a href="#rankings" className="font-display text-[30px] font-black leading-none tabular-nums text-lime">#{worldRanking.rank}<span className="mt-1.5 block font-sans text-[13px] font-normal text-white/65">{worldRanking.publisher}</span></a></dd></div>}
+              <div className="rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/10"><dt className="flex items-center gap-1.5 text-[13px] text-white/65"><Wallet size={14} className="text-lime" />Scholarship</dt><dd className="mt-2"><a href="#scholarships" className="line-clamp-3 text-[15px] font-bold leading-6 text-white">{scholarshipHighlightLabel || scholarshipHighlight?.title || 'See scholarship routes'}</a></dd></div>
+              <div className="rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/10"><dt className="text-[13px] text-white/65">Tuition from</dt><dd className="mt-2"><a href="#fees" className="text-[15px] font-bold leading-6 text-white">{tuitionHighlight ? feeText(tuitionHighlight) : 'Build a study budget'}<span className="mt-1 block text-[13px] font-normal leading-5 text-white/65">{selected ? LEVEL_LABELS[normalizeProgramLevel(selected.level)] + ' · before scholarship' : 'Program fees and living costs'}</span></a></dd></div>
             </dl>
-            {selected && !campusImage && <div className="mt-5 flex items-center justify-between gap-4 rounded-xl border border-rule bg-white px-4 py-4"><div><p className="text-[13px] font-medium uppercase tracking-[.1em] text-petrol-600">Your study option</p><p className="mt-1 text-sm font-semibold leading-6 text-ink">{selected.name}</p><p className="mt-1 text-xs leading-6 text-ink-mute">{LEVEL_LABELS[normalizeProgramLevel(selected.level)]} · {selected.duration} · {selected.languages.join(' / ')}</p></div><a href="#programs" className="inline-flex min-h-10 shrink-0 items-center gap-1 text-xs font-semibold text-petrol-700 underline underline-offset-4">Explore<ArrowRight size={14} aria-hidden="true" /></a></div>}
-            {campusImage && <figure className="relative mt-5 hidden h-[125px] overflow-hidden rounded-xl lg:block"><Image src={campusImage.src} alt={campusImage.alt} fill priority sizes="650px" className="object-cover object-[65%_45%]" /></figure>}
-            <p className="mt-4 flex items-start gap-2 text-xs leading-6 text-ink-mute"><CheckCircle2 size={16} className="mt-1 shrink-0 text-jade" aria-hidden="true" />Programs, scholarship options and a cost plan. Personal guidance for students from Bangladesh.</p>
+            {campusImage && <figure className="relative mt-6 hidden h-[150px] overflow-hidden rounded-2xl lg:block"><Image src={campusImage.src} alt={campusImage.alt} fill priority sizes="650px" className="object-cover object-[65%_45%]" /></figure>}
           </div>
-          <UniversityEnquiryForm university={university} programs={programs} selectedProgramId={selectedId} onProgram={chooseProgram} scholarship={scholarshipScenario?.title} />
+          <div className="lg:sticky lg:top-[132px]"><UniversityEnquiryForm university={university} programs={programs} selectedProgramId={selectedId} onProgram={chooseProgram} scholarship={scholarshipScenario?.title} /></div>
         </div>
       </div>
     </header>
-    <nav aria-label="On this university page" className="sticky top-[76px] z-20 border-b border-slate-200 bg-white xl:top-[112px]"><div className="mx-auto flex max-w-[1280px] items-center gap-3 px-5 sm:px-8 lg:px-10"><div className="flex min-w-0 flex-1 overflow-x-auto">{PANELS.map(item => <a key={item.id} href={'#' + item.id} onClick={() => setPanel(item.id)} aria-current={panel === item.id ? 'location' : undefined} className={'inline-flex min-h-14 shrink-0 items-center border-b-2 px-4 text-sm font-semibold first:pl-0 ' + (panel === item.id ? 'border-[#66b5e0] text-[#0b2b45]' : 'border-transparent text-slate-500 hover:text-[#0b2b45]')}>{item.label}</a>)}</div><a href={assessmentHref} className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-lg bg-[#66b5e0] px-3 text-xs font-bold text-[#0f3a5c]">Enquire<ArrowRight size={14} /></a></div></nav>
+    <nav aria-label="On this university page" className="sticky top-[76px] z-20 border-b border-slate-200 bg-white xl:top-[112px]"><div className="mx-auto flex max-w-[1280px] items-center gap-3 px-5 sm:px-8 lg:px-10"><div className="flex min-w-0 flex-1 overflow-x-auto">{PANELS.map(item => <a key={item.id} href={'#' + item.id} onClick={() => setPanel(item.id)} aria-current={panel === item.id ? 'location' : undefined} className={'inline-flex min-h-14 shrink-0 items-center border-b-2 px-4 text-sm font-semibold first:pl-0 ' + (panel === item.id ? 'border-lime text-petrol-800' : 'border-transparent text-slate-500 hover:text-petrol-800')}>{item.label}</a>)}</div><a href={assessmentHref} className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full bg-lime px-4 text-[13px] font-bold text-petrol-800">Check eligibility<ArrowRight size={14} /></a></div></nav>
     <div className="mx-auto max-w-[1160px] space-y-7 px-5 pt-7 sm:px-8 lg:px-10 [&>section]:scroll-mt-[148px] xl:[&>section]:scroll-mt-[184px]">
       <section {...panelProps('overview')} className={sheetClass}>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px]"><div><p className="mb-2 text-xs font-semibold uppercase tracking-[.12em] text-[#276b55]">The university at a glance</p><h2 className={titleClass}>About {university.name}</h2><div className="mt-4 space-y-3">{overview.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => <p key={index} className="text-[15px] leading-8 text-slate-600">{paragraph}</p>)}</div>{highlights.length > 0 && <div className="mt-6 grid gap-5 sm:grid-cols-2">{highlights.map(highlight => <div key={highlight.title} className="border-l-2 border-[#66b5e0] pl-4"><h3 className="text-sm font-bold leading-6 text-[#14212e]">{highlight.title}</h3><p className="mt-1 text-sm leading-7 text-slate-500">{highlight.description}</p></div>)}</div>}</div>
@@ -192,11 +207,15 @@ export default function UniversityProfileClient({ faq, university, shortName, di
         <section {...panelProps('rankings')} className={sheetClass}>
           <h2 className={titleClass}>{shortName} rankings</h2><p className="mt-2 text-sm leading-7 text-slate-500">Explore {shortName}’s position in global and subject rankings.</p>{rankings.length > 0 ? <div className="mt-6"><table className="w-full text-left text-sm"><caption className="sr-only">Published university rankings</caption><thead><tr className="border-b border-slate-200 text-xs text-slate-500"><th scope="col" className="pb-3 pr-4 font-medium">Ranking & scope</th><th scope="col" className="pb-3 text-right font-medium">Position</th></tr></thead><tbody>{rankings.map((ranking, index) => <tr key={`${ranking.publisher}-${index}`} className="border-b border-slate-100 last:border-0"><th scope="row" className="py-5 pr-5 font-medium leading-7 text-slate-700">{ranking.publisher}<span className="mt-1 block text-xs font-normal leading-6 text-slate-500">{ranking.rankingName}{ranking.subject ? ` · ${ranking.subject}` : ''}</span><span className="mt-1 block text-xs font-normal text-[#175180]">{ranking.scope === 'world' ? 'Overall world ranking' : ranking.scope === 'subject' ? 'Subject ranking' : 'National ranking'}</span></th><td className="py-5 text-right align-top text-lg font-semibold tabular-nums text-[#14212e]">{ranking.rank}</td></tr>)}</tbody></table></div> : <p className={`mt-6 ${mutedClass}`}>A published world ranking is not available for this profile.</p>}<p className="mt-5 text-sm leading-7 text-slate-500">Rankings measure different aspects of a university. Consider your subject, degree recognition and entry requirements alongside its position.</p>
         </section>
+      {news.length > 0 && <section id="news" aria-labelledby="university-news" className={sheetClass}>
+        <div className="flex flex-wrap items-end justify-between gap-3"><h2 id="university-news" className={titleClass}>{shortName} scholarships &amp; admission news</h2><Link href="/updates" className="inline-flex min-h-11 items-center gap-1.5 text-[15px] font-semibold text-petrol-800 underline-offset-4 hover:underline">All updates<ArrowRight size={15} aria-hidden="true" /></Link></div>
+        <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{news.slice(0, 6).map(item => <li key={item.slug}><UpdateCard update={item} now={now} /></li>)}</ul>
+      </section>}
       <section id="questions" aria-labelledby="university-questions" className={sheetClass}>
         <h2 id="university-questions" className={titleClass}>{shortName}: frequently asked questions</h2><div className="mt-5 divide-y divide-slate-200">{faq.map(item => <details key={item.question} className="py-3"><summary className="cursor-pointer py-2 text-sm font-semibold leading-6 text-[#14212e]">{item.question}</summary><p className="pb-2 pt-2 text-sm leading-7 text-slate-600">{item.answer}</p></details>)}</div>
       </section>
       {university.country.toLowerCase() === 'china' && <section aria-label="Related study guides" className="rounded-xl border border-slate-200 bg-white p-5 sm:p-8"><h2 className="text-xl font-bold text-[#14212e]">Prepare for studying in China</h2><p className="mt-2 text-sm leading-7 text-slate-500">Continue with the practical guides for students from Bangladesh.</p><div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{[...(hasMedicalProgram ? [{href:'/mbbs-in-china-bangladesh',label:'MBBS & BMDC pathway guide'}] : []),{href:'/study-in-china-from-bangladesh',label:'Study in China guide'},{href:'/study-in-china-cost-bangladesh',label:'Living and study costs'},{href:'/china-scholarships-bangladesh',label:'China scholarship routes'},{href:'/china-student-visa-bangladesh',label:'Student visa preparation'}].map(link => <Link key={link.href} href={link.href} className="flex min-h-14 items-center justify-between gap-3 rounded-lg bg-[#f8fafc] p-4 text-sm font-semibold leading-6 text-[#12436b]">{link.label}<ArrowRight size={15} className="shrink-0" /></Link>)}</div></section>}
-      <section className="flex flex-wrap items-center justify-between gap-5 rounded-xl bg-[#0b2b45] p-6 text-white sm:p-8"><div><h2 className="text-2xl font-bold">Your next step at {shortName}</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-[#cbd5e1]">Get help with eligibility, the right program, scholarship conditions and a written study budget.</p></div><a href={assessmentHref} className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-[#66b5e0] px-5 text-sm font-bold text-[#0f3a5c]">Get my university plan<ArrowRight size={16} /></a></section>
+      <section className="flex flex-wrap items-center justify-between gap-5 rounded-3xl bg-petrol-800 p-6 text-white sm:p-10"><div><h2 className="text-2xl font-bold">Your next step at {shortName}</h2><p className="mt-3 max-w-2xl text-sm leading-7 text-[#cbd5e1]">Get help with eligibility, the right program, scholarship conditions and a written study budget.</p></div><a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[52px] px-6">Check my eligibility<ArrowRight size={16} /></a></section>
     </div>
   </article>;
 }

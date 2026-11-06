@@ -46,7 +46,7 @@ export default function UniversityScholarships({ options, programs, onEstimate, 
       return <article key={option.id} hidden={!matches(option)} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
         <div className="p-5 sm:p-7">
           <p className="text-sm font-medium text-[#175180]">{option.type}</p>
-          <h3 className="mt-2 text-xl font-semibold leading-8 tracking-tight text-[#14212e] sm:text-[22px]">{option.title}</h3>
+          <h3 className="mt-2 text-xl font-semibold leading-8 tracking-tight text-[#14212e] sm:text-[22px]">{option.title || option.type || 'Scholarship option'}</h3>
           <p className="mt-3 text-sm leading-7 text-slate-500">{option.levels.join(' · ')}{option.languages?.length ? ` · ${option.languages.join(' / ')}` : ''}</p>
 
           {(reduction || option.stipend) && <dl className={`mt-5 grid gap-5 rounded-lg bg-[#e3f0f9] p-5 ${reduction && option.stipend ? 'sm:grid-cols-2' : ''}`}>

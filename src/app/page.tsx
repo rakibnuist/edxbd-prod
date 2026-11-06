@@ -18,7 +18,8 @@ import {
 } from 'lucide-react';
 
 import MobileLeadBar from '@/components/home/MobileLeadBar';
-import StoryCard, { Stars, type StoryCardData } from '@/components/stories/StoryCard';
+import { Stars, type StoryCardData } from '@/components/stories/StoryCard';
+import StoryMarquee from '@/components/stories/StoryMarquee';
 import HomeLeadForm from '@/components/lead/HomeLeadForm';
 import { getChinaIntakes } from '@/lib/china-intakes';
 import { config } from '@/lib/config';
@@ -197,7 +198,7 @@ export default async function Home() {
   const [trust, guides, plannerData] = await Promise.all([loadTrustRecords(), loadGuides(), loadPlannerData()]);
   const office = trust.offices.find(item => item.isHeadOffice) ?? trust.offices[0] ?? null;
   const fullPackage = trust.servicePackages.find(item => item.packageType === 'full_scholarship');
-  const testimonials = trust.testimonials.slice(0, 6);
+  const testimonials = trust.testimonials.slice(0, 16);
   const storyCards: StoryCardData[] = testimonials.map(item => ({
     id: item.id,
     quote: item.content,
@@ -657,17 +658,24 @@ export default async function Home() {
             </figure>
           </div>
 
-          {storyCards.length > 0 && (
-            <ul aria-label="Student stories" className="-mx-5 mt-14 flex items-start snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 text-left md:mx-0 md:block md:columns-2 md:gap-5 md:overflow-visible md:px-0 md:pb-0 lg:columns-3">
-              {storyCards.map(story => (
-                <li key={story.id} className="w-[86%] shrink-0 snap-start sm:w-[60%] md:mb-5 md:w-auto md:break-inside-avoid">
-                  <Link href={`/success-stories#story-${story.id}`} className="block h-full rounded-3xl transition hover:-translate-y-1 focus-visible:-translate-y-1">
-                    <StoryCard story={story} compact />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+        </div>
+
+        {storyCards.length > 0 && (
+          <div className="mt-14">
+            <StoryMarquee stories={storyCards} />
+          </div>
+        )}
+
+        <div className={`${wrap} mt-12`}>
+          <div className="flex flex-col items-start justify-between gap-5 rounded-3xl bg-white/[0.06] p-6 ring-1 ring-white/10 sm:p-8 md:flex-row md:items-center">
+            <div>
+              <p className="font-display text-[26px] font-black leading-[1.05] text-white sm:text-[30px]">Your story could be next.</p>
+              <p className="mt-2 max-w-xl text-[16px] leading-7 text-white/75">Share your results and budget. A counsellor tells you which universities and scholarships are realistic, free of charge.</p>
+            </div>
+            <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] shrink-0 px-7">
+              Start my free assessment <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </section>
 

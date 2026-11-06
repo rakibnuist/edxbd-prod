@@ -22,11 +22,11 @@ export type DirectoryFilters = {
   intake: string;
   scholarship: boolean;
   cscaFree: boolean;
-  sort: 'name' | 'city' | 'fee' | 'ranking' | 'scholarship';
+  sort: 'recommended' | 'name' | 'city' | 'fee' | 'ranking' | 'scholarship';
 };
 
 export const emptyDirectoryFilters: DirectoryFilters = {
-  search: '', country: '', city: '', level: '', language: '', subject: '', intake: '', scholarship: false, cscaFree: false, sort: 'name',
+  search: '', country: '', city: '', level: '', language: '', subject: '', intake: '', scholarship: false, cscaFree: false, sort: 'recommended',
 };
 
 const filterKeys = ['search', 'country', 'city', 'level', 'language', 'subject', 'intake', 'scholarship', 'cscaFree', 'sort'] as const;
@@ -78,7 +78,7 @@ export function readDirectoryFilters(params: Pick<URLSearchParams, 'get'>): Dire
     search: params.get('search') || '', country: params.get('country') || '', city: params.get('city') || '',
     level: params.get('level') || '', language: params.get('language') || '', subject: params.get('subject') || '',
     intake: intakeMonths([params.get('intake') || ''])[0] || params.get('intake') || '', scholarship: params.get('scholarship') === '1', cscaFree: params.get('cscaFree') === '1',
-    sort: ['city', 'fee', 'ranking', 'scholarship'].includes(params.get('sort') || '') ? (params.get('sort') as DirectoryFilters['sort']) : 'name',
+    sort: ['name', 'city', 'fee', 'ranking', 'scholarship'].includes(params.get('sort') || '') ? (params.get('sort') as DirectoryFilters['sort']) : 'recommended',
   };
 }
 
@@ -89,7 +89,7 @@ export function writeDirectoryFilters(params: URLSearchParams, filters: Director
     const value = filters[key];
     if (key === 'scholarship' || key === 'cscaFree') {
       if (value) next.set(key, '1');
-    } else if (value && !(key === 'sort' && value === 'name')) next.set(key, String(value));  }
+    } else if (value && !(key === 'sort' && value === 'recommended')) next.set(key, String(value));  }
   next.delete('limit');
   return next;
 }
@@ -234,6 +234,10 @@ export function filterUniversities(universities: DirectoryUniversity[], filters:
   }
   if (filters.sort === 'ranking') {
     return matching.sort((a, b) => directoryRankingSortKey(a) - directoryRankingSortKey(b) || byName(a, b));
+  }
+  if (filters.sort === 'recommended') {
+    // Default view: best-known universities first, then those with open funding, then A–Z.
+    return matching.sort((a, b) => directoryRankingSortKey(a) - directoryRankingSortKey(b) || directoryScholarshipSortKey(a) - directoryScholarshipSortKey(b) || byName(a, b));
   }
   return matching.sort(byName);
 }
