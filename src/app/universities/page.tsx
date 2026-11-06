@@ -15,8 +15,8 @@ import { compactDirectory } from '@/lib/university-directory-compact';
 import { getUniversityRankings } from '@/lib/university-rankings';
 import { getAllUniversityProfileDetails } from '@/lib/university-profile-details';
 import { getUniversityRecords } from '@/lib/university-records';
-import { filterUniversities, intakeMonths, readDirectoryFilters } from '@/lib/university-directory';
-import { feeText, normalizeProgramLevel } from '@/lib/university-profile-view';
+import { filterUniversities, intakeMonths, readDirectoryFilters, type DirectoryUniversity } from '@/lib/university-directory';
+import { feeText, normalizeProgramLevel, programMergeKey } from '@/lib/university-profile-view';
 import { evergreenText, prepareUniversityScholarship } from '@/lib/university-profile-public';
 import { scholarshipReductionLabel } from '@/lib/university-scholarship-view';
 import { universityProfileLogo } from '@/lib/university-profile-assets';
@@ -51,7 +51,7 @@ async function getUniversities() {
       const rankings = await getUniversityRankings(record.slug);
       const profile = profiles.find(profile => profile.slug === record.slug);
       const awards = profile?.scholarshipOptions?.map(prepareUniversityScholarship) || [];
-      const programs = profile?.programs.length ? profile.programs.map(program => {
+      const programs: DirectoryUniversity['programs'] = profile?.programs.length ? profile.programs.map(program => {
         const prior = record.programs.find(item => item.name === program.name && normalizeProgramLevel(item.level) === normalizeProgramLevel(program.level));
         const tuition = program.fees.find(fee => fee.key === 'tuition' && !fee.optional);
         return { name: programName(program.name), level: normalizeProgramLevel(program.level), languages: program.languages,
@@ -59,7 +59,12 @@ async function getUniversities() {
           tuition: tuition ? feeText(tuition) : undefined, eligibility: [...program.qualifications, ...program.languageRequirements, ...program.notes], sourceUrl: prior?.sourceUrl,
           status: prior?.status === 'active' ? 'active' as const : 'planned' as const,
         };
-      }) : record.programs.map(program => ({ ...program, name: programName(program.name), ...(program.subject ? { subject: programName(program.subject) } : {}), intakes: intakeMonths(program.intakes) }));
+      }) : [];
+      // Stored programme records the detailed profile does not cover (e.g. imported 2027 catalogues).
+      const covered = new Set((profile?.programs || []).map(program => programMergeKey(program.level, program.name)));
+      programs.push(...record.programs
+        .filter(program => !covered.has(programMergeKey(program.level, program.name)))
+        .map(program => ({ ...program, name: programName(program.name), ...(program.subject ? { subject: programName(program.subject) } : {}), intakes: intakeMonths(program.intakes) })));
       const { id, slug, name, aliases, city, country, isActive, degree, taught, intake, details, scholarships } = record;
       const relationshipLabels = { direct_partner: 'Direct university partner', authorized_representative: 'Authorized representative', network_access: 'Network access', public_direct_application: 'Public direct application' } as const;
       return { id, slug, name, aliases, city, country, isActive, degree, taught, intake, details, scholarships, programs, logo: universityProfileLogo(record),

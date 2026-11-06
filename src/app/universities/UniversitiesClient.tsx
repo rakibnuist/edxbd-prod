@@ -219,7 +219,7 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-canvas-soft bg-canvas-soft px-5 py-4 sm:px-6">
-          <p className="text-[14px] leading-5 text-ink-soft">Figures come from each university record. Where a figure is under verification, the profile says so.</p>
+          <p className="text-[14px] leading-5 text-ink-soft">Figures come from each university record and its official sources.</p>
           <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-11 text-[15px]">
             Ask a counsellor to review these <ArrowUpRight size={14} aria-hidden="true" />
           </Link>
@@ -673,7 +673,7 @@ export default function UniversitiesClient({ directory }: Props) {
                 )}
 
                 <p className="mt-8 border-t border-canvas-soft pt-4 text-[14px] leading-6 text-ink-soft">
-                  Tuition, scholarship and ranking entries link to the official source record inside each profile. Where a figure is under verification, the profile says so — we do not publish estimates as facts.
+                  Tuition, scholarship and ranking entries link to the official source inside each profile. Ask a counsellor to confirm the current figure before you apply.
                 </p>
               </>
             )}

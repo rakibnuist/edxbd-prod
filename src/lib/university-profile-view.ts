@@ -41,8 +41,25 @@ function makeFee(item: string, cost: string, key: UniversityProfileFee['key'], s
   const amount = sourced && amounts.length === 1 && currencies.length === 1 && !/scholarship|after|free|discount|waiv|[–—]|\d\s*-\s*\d/i.test(plain) ? Number(amounts[0].replaceAll(',', '')) : undefined;
   return { key, item, amount, currency: currencies[0]?.toUpperCase().replace('RMB','CNY') || 'CNY', period, stage: key === 'application' || key === 'deposit' ? 'before_china' : 'in_china', displayAmount: cost };
 }
+/** Same programme in two sources: level plus the name without its school or campus suffix. */
+export const programMergeKey = (level: string, name: string) =>
+  `${normalizeProgramLevel(level)}|${name.replace(/\s*[(（–—-]\s.*$/, '').replace(/\s*\(.*$/, '').trim().toLowerCase()}`;
+
+/**
+ * Detailed profile programmes first (they carry the richest fee and document data), then
+ * every stored programme record they do not already cover, so imported catalogues stay visible.
+ */
 export function profilePrograms(university: CleanUniversityRecord, details: UniversityProfileDetail | null, researchedFees: [string, string][] = []): UniversityProgramDetail[] {
-  if (details?.programs.length) return details.programs;
+  if (!details?.programs.length) return recordPrograms(university, researchedFees);
+  const known = new Set(details.programs.map(program => programMergeKey(program.level, program.name)));
+  const extra = recordPrograms(university, researchedFees)
+    .filter(program => !known.has(programMergeKey(program.level, program.name)))
+    .map(program => ({ ...program, id: program.id.replace(`${university.slug}-`, `${university.slug}-r`) }));
+  return [...details.programs, ...extra];
+}
+
+/** Stored programme records as profile programmes, not paused. */
+export function recordPrograms(university: CleanUniversityRecord, researchedFees: [string, string][] = []): UniversityProgramDetail[] {
   return university.programs.filter(program => program.status !== 'paused').map((program, index) => {
     const fees: UniversityProfileFee[] = [];
     if (program.tuition) fees.push(makeFee('Tuition', program.tuition, 'tuition', Boolean(program.sourceUrl)));

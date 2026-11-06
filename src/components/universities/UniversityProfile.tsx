@@ -6,7 +6,7 @@ import { getPublicTrustRecords } from '@/lib/trust-records';
 import { intakeMonths } from '@/lib/university-directory';
 import { prepareUniversityScholarship } from '@/lib/university-profile-public';
 import type { UniversityScholarshipOption } from '@/types/university-scholarship';
-import { profilePrograms } from '@/lib/university-profile-view';
+import { profilePrograms, programMergeKey, recordPrograms } from '@/lib/university-profile-view';
 import { universitySearchIdentity, universityProfileFaq, universityFaqStructuredData } from '@/lib/university-profile-seo';
 import { evergreenText, prepareUniversityProfile, prepareUniversityPrograms } from '@/lib/university-profile-public';
 import type { CleanUniversityRecord } from '@/lib/university-records';
@@ -65,7 +65,15 @@ export default async function UniversityProfile({ university }: { university: Cl
     status: award.status === 'closed' ? 'closed' : 'confirm',
     notes: ['Confirm the award conditions and eligible programs before including a reduction in your budget.'],
   })).map(prepareUniversityScholarship);
-  const publicPrograms = shareProgramFields(publicDetails?.programs.length ? publicDetails.programs : prepareUniversityPrograms(profilePrograms(university, details, research?.fees)));
+  const extraRecordPrograms = () => {
+    const known = new Set(publicDetails!.programs.map(program => programMergeKey(program.level, program.name)));
+    return prepareUniversityPrograms(recordPrograms(university, research?.fees))
+      .filter(program => !known.has(programMergeKey(program.level, program.name)))
+      .map(program => ({ ...program, id: program.id.replace(`${university.slug}-`, `${university.slug}-r`) }));
+  };
+  const publicPrograms = shareProgramFields(publicDetails?.programs.length
+    ? [...publicDetails.programs, ...extraRecordPrograms()]
+    : prepareUniversityPrograms(profilePrograms(university, details, research?.fees)));
   const logo = universityProfileLogo(university);
   const scholarshipOptions = publicDetails?.scholarshipOptions?.length ? publicDetails.scholarshipOptions : legacyAwards;
   const profileIntakeMonths = intakeMonths(details?.programs.length ? details.programs.flatMap(program => program.intake ? [program.intake] : []) : university.programs.length ? university.programs.flatMap(program => program.intakes) : university.intake);

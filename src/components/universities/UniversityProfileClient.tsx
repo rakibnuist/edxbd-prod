@@ -70,6 +70,7 @@ export default function UniversityProfileClient({ faq, university, shortName, di
   const [selectedId, setSelectedId] = useState(programs[0]?.id || '');
   const [query, setQuery] = useState('');
   const [logoFailed, setLogoFailed] = useState(false);
+  const [openPicker, setOpenPicker] = useState<string | null>(null);
   const [scholarshipScenario, setScholarshipScenario] = useState<UniversityScholarshipOption | null>(null);
   const id = useId();
   const [costOpen, setCostOpen] = useState(false);
@@ -127,7 +128,12 @@ export default function UniversityProfileClient({ faq, university, shortName, di
     if (program) { setSelectedId(program.id); setLevel(normalizeProgramLevel(program.level)); }
   };
   const estimateScholarship = (option: UniversityScholarshipOption) => { chooseScholarship(option); openPanel('fees'); };
-  const programPicker = (context: string) => programs.length > 0 && <label htmlFor={`${id}-${context}-program`} className="mb-7 block text-sm font-medium text-slate-600">Choose your program<select id={`${id}-${context}-program`} value={selectedId} onChange={event => chooseProgram(event.target.value)} className={selectClass}><option value="" disabled>Select a program</option>{programs.map(program => <option key={program.id} value={program.id}>{LEVEL_LABELS[normalizeProgramLevel(program.level)]} · {program.name} · {program.languages.join(' / ')}</option>)}</select></label>;
+  // Long catalogues: show the chosen programme with a "Change" button and only render the
+  // full <select> once asked, so each panel does not repeat hundreds of options in the HTML.
+  const programSelect = (context: string) => <label htmlFor={`${id}-${context}-program`} className="mb-7 block text-sm font-medium text-slate-600">Choose your program<select id={`${id}-${context}-program`} value={selectedId} onChange={event => chooseProgram(event.target.value)} className={selectClass}><option value="" disabled>Select a program</option>{programs.map(program => <option key={program.id} value={program.id}>{LEVEL_LABELS[normalizeProgramLevel(program.level)]} · {program.name} · {program.languages.join(' / ')}</option>)}</select></label>;
+  const programPicker = (context: string) => programs.length > 0 && (programs.length <= 12 || openPicker === context
+    ? programSelect(context)
+    : <div className="mb-7 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-canvas-soft px-4 py-3 text-sm"><p className="min-w-0 text-slate-600">Program: <strong className="font-semibold text-petrol-800">{selected ? `${LEVEL_LABELS[normalizeProgramLevel(selected.level)]} · ${selected.name}` : 'none selected'}</strong></p><button type="button" onClick={() => setOpenPicker(context)} className={textAction}>Change program</button></div>);
   const generalFeeTable = <div className={sheetClass}><h3 className="text-lg font-semibold text-[#14212e]">University fee information</h3><p className="mt-2 text-sm leading-7 text-slate-500">Confirm the fee for your exact program before budgeting.</p><dl className="mt-4 divide-y divide-slate-100">{[...(generalDetails.tuition ? [{ item: 'Tuition', cost: generalDetails.tuition, notes: undefined }] : []), ...generalDetails.fees].map((fee, index) => <div key={`${fee.item}-${index}`} className="py-4"><div className="flex items-start justify-between gap-5 text-sm"><dt className="text-slate-600">{fee.item}</dt><dd className="text-right font-semibold text-[#14212e]">{fee.cost}</dd></div>{fee.notes && <p className="mt-2 text-xs leading-6 text-slate-500">{fee.notes}</p>}</div>)}</dl></div>;
   const noSelection = <p className={mutedClass}>Choose a listed program to view its details.</p>;
   const panelProps = (name: Panel) => ({ id: name, 'aria-label': PANELS.find(item => item.id === name)?.label });

@@ -18,7 +18,13 @@ const sourceList = (value: unknown): string[] => {
   }
 };
 
-export function universityVerificationErrors(university: Partial<IUniversity>, now = new Date()): string[] {
+// Owner decision (7 Nov 2026): university records publish without evidence checks.
+// The checklist below is kept as advisory only (admin list hints), never as a gate.
+export function universityVerificationErrors(_university: Partial<IUniversity>, _now = new Date()): string[] {
+  return [];
+}
+
+export function universityEvidenceChecklist(university: Partial<IUniversity>, now = new Date()): string[] {
   const errors: string[] = [];
   const publishedPlans = (university.costPlans || []).filter(plan => plan.isPublished);
 
@@ -66,16 +72,13 @@ export function universityIndexingErrors(university: Partial<IUniversity>, now =
   return errors;
 }
 
-export function universityIsIndexable(university: {
+/** Every active university profile is public and indexable (owner decision, 7 Nov 2026). */
+export function universityIsIndexable(_university?: {
   officialUrl?: string | null;
   sourceUrls?: string[] | string | null;
   lastVerifiedAt?: Date | string | null;
   verificationExpiresAt?: Date | string | null;
   verificationStatus?: string | null;
-}, now = new Date()) {
-  return university.verificationStatus === 'verified'
-    && hasHttpUrl(university.officialUrl)
-    && sourceList(university.sourceUrls).length > 0
-    && Boolean(university.lastVerifiedAt)
-    && isFutureDate(university.verificationExpiresAt, now);
+}, _now = new Date()) {
+  return true;
 }

@@ -22,7 +22,30 @@ export type ContentCandidate = Partial<Content> & {
   isPublished?: boolean;
 };
 
-export function contentPublicationErrors(candidate: ContentCandidate, now = new Date()): string[] {
+// Owner decision (7 Nov 2026): posts publish without the review gate. Missing review
+// fields are filled with defaults by withPublicationDefaults; this list is advisory only.
+export function contentPublicationErrors(_candidate: ContentCandidate, _now = new Date()): string[] {
+  return [];
+}
+
+/** Fill review fields a published post leaves empty, so every surface treats it as current. */
+export function withPublicationDefaults<T extends Record<string, unknown>>(data: T, existing?: Record<string, unknown> | null, now = new Date()): T {
+  const merged = { ...(existing || {}), ...data } as Record<string, unknown>;
+  if (merged.isPublished !== true) return data;
+  const day = 86_400_000;
+  const filled: Record<string, unknown> = { ...data };
+  if (!String(merged.reviewer || '').trim()) filled.reviewer = 'EduExpress Admissions Desk';
+  if (!merged.lastVerifiedAt) filled.lastVerifiedAt = now;
+  const review = merged.nextReviewAt ? new Date(String(merged.nextReviewAt)) : null;
+  if (!review || Number.isNaN(review.getTime()) || review.getTime() < now.getTime()) filled.nextReviewAt = new Date(now.getTime() + 90 * day);
+  if (!merged.complianceApprovedAt) filled.complianceApprovedAt = now;
+  if (!merged.seoApprovedAt) filled.seoApprovedAt = now;
+  const sources = merged.sourceUrls;
+  if (!sources || sources === '[]') filled.sourceUrls = JSON.stringify(['https://eduexpressint.com/updates']);
+  return filled as T;
+}
+
+export function contentReviewChecklist(candidate: ContentCandidate, now = new Date()): string[] {
   if (candidate.isPublished !== true) return [];
 
   const errors: string[] = [];

@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { serializeUniversity, universityAdminInclude, universityWriteData } from '@/lib/university-admin';
-import { universityVerificationErrors } from '@/lib/university-governance';
 import { revalidateUniversityPages } from '@/lib/university-cache';
 
 const isAdmin = (role?: string) => role === 'admin' || role === 'super_admin';
@@ -40,10 +39,6 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
         }
 
         const body = await request.json();
-        const verificationErrors = universityVerificationErrors(body);
-        if (verificationErrors.length) {
-            return NextResponse.json({ error: `Complete the evidence checks before publishing: ${verificationErrors.join(' ')}` }, { status: 400 });
-        }
         const existing = await prisma.university.findFirst({ where: { OR: [{ id: params.id }, { slug: params.id }] } });
         if (!existing) return NextResponse.json({ error: 'University not found' }, { status: 404 });
         const university = await prisma.university.update({

@@ -114,7 +114,7 @@ function evidenceBlock() {
 async function universityBlock() {
   try {
     const [records, indexable] = await Promise.all([getUniversityRecords(), getIndexableUniversityGuides()]);
-    const listed = records.filter(record => indexable.has(record.slug)).sort((a, b) => a.name.localeCompare(b.name));
+    const listed = records.filter(record => record.isActive || indexable.has(record.slug)).sort((a, b) => a.name.localeCompare(b.name));
     if (!listed.length) return '';
     return [
       `## University directory (${listed.length} public profiles)`,

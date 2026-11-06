@@ -1981,3 +1981,28 @@ body:has([data-cta-band]) .footer-cta { display: none; }
   .story-marquee-track > ul[aria-hidden] { display: none; }
   .story-marquee li { scroll-snap-align: start; }
 }
+
+/* University programme table (profile pages). Shared classes keep large catalogues light. */
+.ptable { display: block; width: 100%; text-align: left; font-size: 0.875rem; }
+.ptable thead { display: none; }
+.ptable tbody { display: block; }
+.ptable tr { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #e2e8f0; scroll-margin-top: 12rem; }
+.ptable tr:last-child { border-bottom: 0; }
+.ptable th[scope='row'] { grid-column: span 2 / span 2; display: block; padding: 1rem 1rem 0.5rem; font-weight: 500; }
+.ptable th[scope='row'] button { text-align: left; line-height: 1.5rem; color: #12436b; text-underline-offset: 4px; }
+.ptable th[scope='row'] button:hover { text-decoration: underline; }
+.ptable th[scope='row'] span { margin-top: 0.25rem; }
+.ptable th[scope='row'] span, .ptable td span { display: block; font-size: 0.75rem; font-weight: 400; color: #64748b; }
+.ptable td { display: block; padding: 0 1rem 1rem; font-size: 0.75rem; line-height: 1.5rem; color: #475569; }
+.ptable td:last-child { text-align: right; font-weight: 600; color: #14212e; font-variant-numeric: tabular-nums; }
+@media (min-width: 640px) {
+  .ptable { display: table; min-width: 560px; }
+  .ptable thead { display: table-header-group; border-block: 1px solid #e2e8f0; background: #e3f0f9; font-size: 0.75rem; color: #64748b; }
+  .ptable thead th { padding: 0.75rem 1rem; font-weight: 500; }
+  .ptable thead th:last-child { text-align: right; }
+  .ptable tbody { display: table-row-group; }
+  .ptable tr { display: table-row; border-bottom-color: #f1f5f9; }
+  .ptable th[scope='row'], .ptable td { display: table-cell; padding: 1rem; }
+  .ptable td:nth-child(2) { padding-left: 0.75rem; padding-right: 0.75rem; }
+  .ptable td:last-child span { display: none; }
+}

@@ -132,7 +132,8 @@ export function universityProfileStructuredData(university: UniversityIdentity &
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
-  }).map(program => ({
+  // Structured data lists a representative set; the full catalogue stays in the visible table.
+  }).slice(0, 40).map(program => ({
     '@type': 'Course',
     '@id': `${seo.canonical}#course-${encodeURIComponent(program.id)}`,
     name: program.name,

@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { serializeContent, toContentData } from '@/lib/content-serialize';
-import { contentPublicationErrors } from '@/lib/content-governance';
+import { contentPublicationErrors, withPublicationDefaults } from '@/lib/content-governance';
 import { announcePublishedUpdate } from '@/lib/indexnow';
 
 export async function GET(request: NextRequest) {
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const data = toContentData(body) as Record<string, unknown>;
+    const data = withPublicationDefaults(toContentData(body) as Record<string, unknown>);
     const publicationErrors = contentPublicationErrors(data);
     if (publicationErrors.length) {
       return NextResponse.json({ error: 'This content is not ready to publish.', details: publicationErrors }, { status: 400 });

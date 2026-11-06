@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { serializeUniversity, universityAdminInclude, universityWriteData } from '@/lib/university-admin';
-import { universityIndexingErrors, universityIsIndexable, universityVerificationErrors } from '@/lib/university-governance';
 import { revalidateUniversityPages } from '@/lib/university-cache';
 
 const isAdmin = (role?: string) => role === 'admin' || role === 'super_admin';
@@ -70,18 +69,17 @@ export async function GET(request: NextRequest) {
         const governed = governanceRecords.map(serializeUniversity);
         const readiness = {
             total: governed.length,
-            indexable: governed.filter(university => universityIsIndexable(university) && universityIndexingErrors(university).length === 0).length,
+            indexable: governed.filter(university => university.isActive !== false).length,
             underVerification: governed.filter(university => university.verificationStatus === 'under_verification').length,
             expired: governed.filter(university => university.verificationStatus === 'expired' || (university.verificationExpiresAt && new Date(university.verificationExpiresAt) < new Date())).length,
         };
 
         return NextResponse.json({
             universities: serialized.map(university => {
-                const verificationIssues = universityIndexingErrors(university);
                 return {
                     ...university,
-                    verificationIssues,
-                    sitemapEligible: universityIsIndexable(university) && verificationIssues.length === 0,
+                    verificationIssues: [] as string[],
+                    sitemapEligible: university.isActive !== false,
                 };
             }),
             filters: { countries, degrees },
@@ -115,11 +113,6 @@ export async function POST(request: NextRequest) {
         // Basic validation
         if (!body.name || !body.slug) {
             return NextResponse.json({ error: 'Name and Slug are required' }, { status: 400 });
-        }
-
-        const verificationErrors = universityVerificationErrors(body);
-        if (verificationErrors.length) {
-            return NextResponse.json({ error: `Complete the evidence checks before publishing: ${verificationErrors.join(' ')}` }, { status: 400 });
         }
 
         // Check unique slug
