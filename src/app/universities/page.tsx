@@ -14,7 +14,7 @@ import UniversitiesClient from './UniversitiesClient';
 import { getUniversityRankings } from '@/lib/university-rankings';
 import { getAllUniversityProfileDetails } from '@/lib/university-profile-details';
 import { getUniversityRecords } from '@/lib/university-records';
-import { filterUniversities, intakeMonths, readDirectoryFilters } from '@/lib/university-directory';
+import { filterUniversities, intakeMonths, programIsCscaFree, readDirectoryFilters } from '@/lib/university-directory';
 import { feeText, normalizeProgramLevel } from '@/lib/university-profile-view';
 import { evergreenText, prepareUniversityScholarship } from '@/lib/university-profile-public';
 import { scholarshipReductionLabel } from '@/lib/university-scholarship-view';
@@ -61,7 +61,19 @@ async function getUniversities() {
       }) : record.programs.map(program => ({ ...program, name: programName(program.name), ...(program.subject ? { subject: programName(program.subject) } : {}), intakes: intakeMonths(program.intakes) }));
       const { id, slug, name, aliases, city, country, isActive, degree, taught, intake, details, scholarships } = record;
       const relationshipLabels = { direct_partner: 'Direct university partner', authorized_representative: 'Authorized representative', network_access: 'Network access', public_direct_application: 'Public direct application' } as const;
-      return { id, slug, name, aliases, city, country, isActive, degree, taught, intake, details, scholarships, programs, logo: universityProfileLogo(record),
+      // The finder only needs filter fields. Long eligibility text, durations and source
+      // URLs stay on the profile pages; a sourced CSCA exemption is kept as a marker.
+      const slimPrograms = programs.map(program => {
+        const cscaFree = programIsCscaFree(program);
+        return {
+          ...program,
+          duration: undefined,
+          subject: program.subject && program.subject !== program.name ? program.subject : undefined,
+          eligibility: cscaFree ? ['CSCA not required.'] : [],
+          sourceUrl: cscaFree ? program.sourceUrl : undefined,
+        };
+      });
+      return { id, slug, name, aliases, city, country, isActive, degree, taught, intake, details, scholarships, programs: slimPrograms, logo: universityProfileLogo(record),
         verification: { status: record.verificationStatus, ...(record.lastVerifiedAt ? { lastVerifiedAt: record.lastVerifiedAt } : {}) },
         ...(record.relationshipType && record.relationshipType !== 'unverified' && relationshipLabels[record.relationshipType] ? { relationship: relationshipLabels[record.relationshipType] } : {}),
         clearCost: record.costPlans.some(plan => plan.isPublished),
@@ -125,7 +137,7 @@ export default async function UniversitiesPage({ searchParams }: Props) {
     ['/universities?search=medicine', 'Medicine & MBBS'],
     ['/universities?city=Beijing', 'Beijing'],
     ['/universities?city=Shanghai', 'Shanghai'],
-    ['/universities?cscaFree=1', 'No CSCA exam'],
+    ['/universities?level=Master', 'Master’s programmes'],
   ];
 
   return (
