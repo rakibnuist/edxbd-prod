@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { verifyTokenFromRequest } from '@/lib/auth';
+import prisma from '@/lib/prisma';
 import { DEFAULT_META_PIXEL_ID, getAllSettings, saveSettings, validateSettings, SETTING_KEYS } from '@/lib/settings';
+
+/** When the access token was last saved, so admins can see a save actually landed. */
+const tokenSavedAt = () => prisma.setting.findUnique({ where: { key: 'metaAccessToken' }, select: { updatedAt: true } }).then(row => row?.updatedAt.toISOString() || null).catch(() => null);
 
 const MASK = '••••••••';
 
 // Mask secrets before sending to the client; expose a boolean "isSet" instead.
-function presentForClient(settings: Record<string, string>) {
+function presentForClient(settings: Record<string, string>, metaAccessTokenSavedAt: string | null = null) {
   const accessToken = settings.metaAccessToken || process.env.META_ACCESS_TOKEN || '';
   const environmentPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
   const effectivePixelId = settings.metaPixelId || environmentPixelId || DEFAULT_META_PIXEL_ID;
@@ -14,6 +18,7 @@ function presentForClient(settings: Record<string, string>) {
     ...Object.fromEntries(Object.entries(settings).filter(([key]) => (SETTING_KEYS as readonly string[]).includes(key))),
     metaAccessToken: accessToken ? MASK : '',
     metaAccessTokenSet: !!accessToken,
+    metaAccessTokenSavedAt,
     metaPixelIdSet: !!effectivePixelId,
     metaPixelIdSource: settings.metaPixelId ? 'settings' : environmentPixelId ? 'environment' : 'default',
   };
@@ -28,7 +33,7 @@ export async function GET(request: NextRequest) {
   }
   try {
     const settings = await getAllSettings();
-    return NextResponse.json(presentForClient(settings));
+    return NextResponse.json(presentForClient(settings, await tokenSavedAt()));
   } catch (error) {
     console.error('Get settings error:', error);
     return NextResponse.json({ error: 'Failed to load settings' }, { status: 500 });
@@ -53,7 +58,7 @@ export async function PUT(request: NextRequest) {
     await saveSettings(validated.values);
     revalidatePath('/');
     const settings = await getAllSettings();
-    return NextResponse.json({ ok: true, settings: presentForClient(settings) });
+    return NextResponse.json({ ok: true, settings: presentForClient(settings, await tokenSavedAt()) });
   } catch (error) {
     console.error('Save settings error:', error);
     return NextResponse.json({ error: 'Failed to save settings' }, { status: 500 });

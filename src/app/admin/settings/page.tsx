@@ -43,6 +43,7 @@ export default function SettingsPage() {
   const [pixelActive, setPixelActive] = useState(false);
   const [trackingRefresh, setTrackingRefresh] = useState(0);
   const [tokenIsSet, setTokenIsSet] = useState(false);
+  const [tokenSavedAt, setTokenSavedAt] = useState<string | null>(null);
   const [pixelSource, setPixelSource] = useState<'settings' | 'environment' | 'default'>('settings');
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -60,6 +61,7 @@ export default function SettingsPage() {
           metaAccessToken: '', // never prefill the secret
         }));
         setTokenIsSet(!!data.metaAccessTokenSet);
+        setTokenSavedAt(typeof data.metaAccessTokenSavedAt === 'string' ? data.metaAccessTokenSavedAt : null);
         setPixelActive(!!data.metaPixelIdSet);
         setPixelSource(['default', 'environment'].includes(data.metaPixelIdSource) ? data.metaPixelIdSource : 'settings');
 
@@ -106,6 +108,7 @@ export default function SettingsPage() {
       const data = await res.json();
       const s = data.settings || {};
       setTokenIsSet(!!s.metaAccessTokenSet);
+      setTokenSavedAt(typeof s.metaAccessTokenSavedAt === 'string' ? s.metaAccessTokenSavedAt : null);
       setPixelActive(!!s.metaPixelIdSet);
       setPixelSource(['default', 'environment'].includes(s.metaPixelIdSource) ? s.metaPixelIdSource : 'settings');
       setTrackingRefresh(value => value + 1);
@@ -144,7 +147,7 @@ export default function SettingsPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} noValidate className="space-y-6">
         {/* Meta Connectivity */}
         <section id="meta-tracking" className="scroll-mt-6 rounded-xl border border-gray-200 bg-white">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-6 py-4">
@@ -163,6 +166,9 @@ export default function SettingsPage() {
               <input
                 id="metaPixelId"
                 name="metaPixelId"
+                autoComplete="off"
+                data-1p-ignore
+                data-lpignore="true"
                 value={settings.metaPixelId}
                 onChange={handleChange}
                 placeholder="e.g. 1234567890123456"
@@ -187,6 +193,11 @@ export default function SettingsPage() {
                 className={field}
                 autoComplete="new-password"
               />
+              {tokenSavedAt && (
+                <p className="mt-1 text-xs font-medium text-gray-700">
+                  Token last saved {new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Dhaka' }).format(new Date(tokenSavedAt))} (Dhaka time)
+                </p>
+              )}
               <p className="mt-1 text-xs text-gray-600">Kept server-side and never returned to the browser. Generate the token for this dataset in Meta Events Manager → Settings → Conversions API → Set up manually.</p>
             </div>
           </div>
