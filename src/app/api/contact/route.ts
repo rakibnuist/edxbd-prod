@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
+import { sendCrmStage } from '@/lib/meta-crm-events';
 import prisma from '@/lib/prisma';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
 import { routeLead } from '@/lib/lead-routing';
@@ -101,6 +102,13 @@ export async function POST(request: NextRequest) {
     // submitted through contact-style forms reach the right team.
     const routing = routeLead({ country, program, source });
 
+    // Meta click/browser IDs (set by the Pixel only after cookie consent), kept for CRM matching.
+    const adTrackingConsent = body.trackingConsent === true;
+    const cookieId = (name: string) => {
+      const value = request.cookies.get(name)?.value?.trim();
+      return value && /^fb\.\d\.\d+\.[\w.-]{4,240}$/.test(value) ? value : null;
+    };
+
     // Create new lead from contact form using Prisma
     const lead = await prisma.lead.create({
       data: {
@@ -119,9 +127,14 @@ export async function POST(request: NextRequest) {
         consentTimestamp,
         consentPolicyVersion,
         landingPage,
-        utm: safeUtm ? JSON.stringify(safeUtm) : null
+        utm: safeUtm ? JSON.stringify(safeUtm) : null,
+        adTrackingConsent,
+        metaFbc: adTrackingConsent ? cookieId('_fbc') : null,
+        metaFbp: adTrackingConsent ? cookieId('_fbp') : null,
       }
     });
+    // First CRM stage for Meta's CRM integration, after the response is sent.
+    if (adTrackingConsent) after(() => sendCrmStage(lead, 'new'));
 
     // Contact consent does not automatically authorize advertising tracking.
     if (body.trackingConsent === true) {

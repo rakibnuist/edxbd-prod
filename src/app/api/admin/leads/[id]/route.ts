@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
+import { sendCrmStage } from '@/lib/meta-crm-events';
 import { verifyTokenFromRequest } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { validateLeadUpdate } from '@/lib/lead-workflow';
@@ -51,10 +52,13 @@ export async function PUT(
     const body = await readLimitedJson(request, 64 * 1024);
     const validated = validateLeadUpdate(body);
     if (!validated.data) return NextResponse.json({ error: validated.error }, { status: 400 });
+    const before = await prisma.lead.findUnique({ where: { id }, select: { status: true } });
     const lead = await prisma.lead.update({
       where: { id },
       data: validated.data
     }).catch(() => null);
+    // Meta CRM integration: report each stage change once, after the response.
+    if (lead && before && lead.status !== before.status) after(() => sendCrmStage(lead, lead.status));
 
     if (!lead) {
       return NextResponse.json(
@@ -93,10 +97,13 @@ export async function PATCH(
     if (!validated.data) return NextResponse.json({ error: validated.error }, { status: 400 });
 
     
+    const before = await prisma.lead.findUnique({ where: { id }, select: { status: true } });
     const lead = await prisma.lead.update({
       where: { id },
       data: validated.data
     }).catch(() => null);
+    // Meta CRM integration: report each stage change once, after the response.
+    if (lead && before && lead.status !== before.status) after(() => sendCrmStage(lead, lead.status));
 
     if (!lead) {
 

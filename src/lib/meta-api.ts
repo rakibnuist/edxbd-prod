@@ -28,12 +28,12 @@ export async function verifyMetaDataset(config: MetaCredentials, request: typeof
     return { ok: false, checkedAt, message: 'The server could not reach Meta. Please retry the connection check.' };
   }
 }
-export async function sendMetaEvents(config: MetaCredentials, events: unknown[], request: typeof fetch = fetch): Promise<MetaDelivery> {
+export async function sendMetaEvents(config: MetaCredentials, events: unknown[], request: typeof fetch = fetch, testEventCode?: string): Promise<MetaDelivery> {
   if (!config.pixelId || !config.accessToken) return { ok: false, eventsReceived: 0, error: 'Meta access token or Pixel / dataset ID is missing.' };
   try {
     const response = await request(`https://graph.facebook.com/${META_API_VERSION}/${encodeURIComponent(config.pixelId)}/events`, {
       method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${config.accessToken}` },
-      body: JSON.stringify({ data: events }), signal: AbortSignal.timeout(10000), cache: 'no-store',
+      body: JSON.stringify({ data: events, ...(testEventCode ? { test_event_code: testEventCode } : {}) }), signal: AbortSignal.timeout(10000), cache: 'no-store',
     });
     const result = await response.json();
     if (!response.ok || result.error) return { ok: false, eventsReceived: 0, error: metaFailure(result.error?.code) };

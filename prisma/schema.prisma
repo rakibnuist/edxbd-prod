@@ -278,6 +278,12 @@ model Lead {
   landingPage          String?
   utm                  String? // JSON string
 
+  // Meta CRM integration: stage events are sent only when the visitor accepted
+  // advertising tracking on the form. fbc/fbp are Meta's click and browser IDs.
+  adTrackingConsent Boolean @default(false)
+  metaFbc           String?
+  metaFbp           String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

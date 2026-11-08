@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
+import { sendCrmStage } from '@/lib/meta-crm-events';
 import prisma from '@/lib/prisma';
 import { routeLead } from '@/lib/lead-routing';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
@@ -67,6 +68,14 @@ export async function POST(request: NextRequest) {
     }
 
     const safeUtm = getSafeUtm(body.utm);
+    // Meta click/browser IDs (set by the Pixel only after cookie consent), kept for CRM matching.
+    const adTrackingConsent = body.trackingConsent === true;
+    const cookieId = (name: string) => {
+      const value = request.cookies.get(name)?.value?.trim();
+      return value && /^fb\.\d\.\d+\.[\w.-]{4,240}$/.test(value) ? value : null;
+    };
+    const metaFbc = adTrackingConsent ? cookieId('_fbc') : null;
+    const metaFbp = adTrackingConsent ? cookieId('_fbp') : null;
 
     // Apply plan lead-routing rules server-side.
     const routing = routeLead({
@@ -100,6 +109,9 @@ export async function POST(request: NextRequest) {
         consentPolicyVersion,
         landingPage,
         utm: safeUtm ? JSON.stringify(safeUtm) : null,
+        adTrackingConsent,
+        metaFbc,
+        metaFbp,
         assessAcademicLevel: body.assessment?.academicLevel,
         assessAcademicResults: body.assessment?.academicResults,
         assessSubject: body.assessment?.subject,
@@ -110,6 +122,9 @@ export async function POST(request: NextRequest) {
         assessPreferredCountries: body.assessment?.preferredCountries ? JSON.stringify(body.assessment.preferredCountries) : null,
       }
     });
+
+    // First CRM stage for Meta's CRM integration, after the response is sent.
+    if (adTrackingConsent) after(() => sendCrmStage(lead, 'new'));
 
     // Advertising consent is separate from permission to contact the lead.
     // Only send hashed lead data to Meta when the visitor explicitly accepted.
