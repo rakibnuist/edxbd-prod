@@ -113,11 +113,13 @@ export default function SettingsPage() {
       setPixelSource(['default', 'environment'].includes(s.metaPixelIdSource) ? s.metaPixelIdSource : 'settings');
       setTrackingRefresh(value => value + 1);
       setSettings((prev) => ({ ...prev, metaAccessToken: '' }));
-      setMessage({ type: 'success', text: 'Settings saved.' });
+      setMessage({ type: 'success', text: payload.metaAccessToken ? 'Settings saved, including the new Meta access token.' : 'Settings saved.' });
     } catch (error) {
       setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Failed to save settings. Please try again.' });
     } finally {
       setIsSaving(false);
+      // The result banner sits at the top of the page; bring it into view.
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 

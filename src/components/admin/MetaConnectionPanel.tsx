@@ -48,7 +48,7 @@ export default function MetaConnectionPanel({ refreshKey = 0, pendingChanges = f
     {health && <p className="mt-5 text-sm leading-6 text-gray-700">{health.message}</p>}
     {checkFeedback && <p role="status" className="mt-3 text-sm text-gray-700">{checkFeedback}</p>}
     {pendingChanges && <p className="mt-3 text-sm text-amber-900">Save your new credentials before checking the connection.</p>}
-    {error && <p role="alert" className="mt-3 text-sm text-red-800">{error} <button onClick={() => { setLoading(true); setError(null); setRetry(value => value + 1); }} className="font-semibold underline">Retry</button></p>}
+    {error && <p role="alert" className="mt-3 text-sm text-red-800">{error} <button type="button" onClick={() => { setLoading(true); setError(null); setRetry(value => value + 1); }} className="font-semibold underline">Retry</button></p>}
     <div className="mt-4 flex flex-wrap items-center gap-3"><button type="button" onClick={check} disabled={checking || loading || !health?.accessTokenConfigured || pendingChanges} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-gray-300 px-3 text-sm font-medium hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#12436b] disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-600"><RefreshCw size={14} className={checking ? 'animate-spin' : ''} />{checking ? 'Checking connection…' : 'Check connection'}</button>
       <span className="text-xs text-gray-600">Checks dataset access without sending conversion events.</span></div>
   </section>;

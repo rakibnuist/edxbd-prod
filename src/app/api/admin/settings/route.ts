@@ -43,6 +43,8 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   const decoded = verifyTokenFromRequest(request);
   if (!decoded || !isAdmin(decoded.role)) {
+    // Setting names only; values (and the token) are never logged.
+    console.warn(`Settings save refused: ${decoded ? `role "${decoded.role}" is not admin` : 'no valid admin session (signed out or expired)'}`);
     return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
   }
   try {
@@ -53,9 +55,11 @@ export async function PUT(request: NextRequest) {
     }
     const validated = validateSettings(body);
     if (!validated.values) {
+      console.warn(`Settings save refused: ${validated.error || 'invalid settings'}`);
       return NextResponse.json({ error: validated.error || 'Invalid settings.' }, { status: 400 });
     }
     await saveSettings(validated.values);
+    console.info(`Settings saved: ${Object.keys(validated.values).join(', ') || 'no changes'}${'metaAccessToken' in validated.values ? ' (new Meta token)' : ''}`);
     revalidatePath('/');
     const settings = await getAllSettings();
     return NextResponse.json({ ok: true, settings: presentForClient(settings, await tokenSavedAt()) });
