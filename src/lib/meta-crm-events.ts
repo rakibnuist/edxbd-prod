@@ -1,6 +1,7 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
 import { sendMetaEvents, type MetaDelivery } from '@/lib/meta-api';
+import { recordMetaDelivery } from '@/lib/meta-health';
 import { getAllSettings, resolveMetaConfig } from '@/lib/settings';
 
 // Meta "Send a CRM event" (Conversions API for CRM / conversion leads).
@@ -96,6 +97,8 @@ export async function sendCrmStage(lead: CrmLead, status: string): Promise<CrmDe
     if (!config.pixelId || !config.accessToken) return { ok: false, skipped: 'Meta access token not configured' };
     const testCode = settings.metaCrmTestEventCode?.trim() || process.env.META_CRM_TEST_EVENT_CODE?.trim() || undefined;
     const result = await sendMetaEvents(config, [event], fetch, testCode);
+    // Production sends update Settings → Meta tracking ("Last accepted server event").
+    if (!testCode) await recordMetaDelivery(config, result);
     if (!result.ok) console.warn(`Meta CRM stage "${event.event_name}" not delivered: ${result.error}`);
     return result;
   } catch {

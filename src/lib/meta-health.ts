@@ -34,7 +34,7 @@ export async function getMetaHealth() {
   const delivery = rawDelivery?.fingerprint === fingerprint ? rawDelivery : null;
   const state = !config.pixelId ? 'missing_pixel' : !config.accessToken ? 'missing_token'
     : delivery?.error ? 'attention' : delivery?.acceptedAt ? 'active'
-      : connection?.ok ? 'connected' : connection ? 'attention' : 'configured';
+      : connection?.ok ? 'connected' : connection?.limited ? 'waiting' : connection ? 'attention' : 'configured';
   const message = !config.pixelId ? 'Save the website’s Pixel / dataset ID in Settings.'
     : !config.accessToken ? 'The Conversions API access token is missing. Add it in Settings to enable server-side delivery.'
       : state === 'active' ? 'Meta accepted a server event from these credentials. Continue monitoring delivery in Meta Events Manager.'

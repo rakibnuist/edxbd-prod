@@ -3,7 +3,9 @@ import { createHash } from 'node:crypto';
 // Kept aligned with Meta's official Node Business SDK (26.0.2).
 export const META_API_VERSION = 'v26.0';
 export type MetaCredentials = { pixelId: string | null; accessToken: string | null };
-export type MetaCheck = { ok: boolean; message: string; checkedAt: string };
+// `limited`: the token works for sending but cannot read dataset details (common for
+// Conversions API tokens), so only an accepted event can confirm delivery.
+export type MetaCheck = { ok: boolean; message: string; checkedAt: string; limited?: boolean };
 export type MetaDelivery = { ok: boolean; eventsReceived: number; error?: string };
 export function metaFingerprint(config: MetaCredentials) {
   return createHash('sha256').update(`${config.pixelId || ''}:${config.accessToken || ''}`).digest('hex');
@@ -22,6 +24,8 @@ export async function verifyMetaDataset(config: MetaCredentials, request: typeof
       headers: { Authorization: `Bearer ${config.accessToken}` }, cache: 'no-store', signal: AbortSignal.timeout(10000),
     });
     const result = await response.json();
+    const readOnlyDenied = (result.error?.code === 100 && /missing permission/i.test(String(result.error?.message || ''))) || result.error?.code === 10 || result.error?.code === 200;
+    if (readOnlyDenied) return { ok: false, limited: true, checkedAt, message: 'Token saved. It cannot read dataset details, which is normal for Conversions API tokens, so this check cannot confirm it. Delivery is confirmed when Meta accepts the next server or CRM event.' };
     if (!response.ok || result.error || String(result.id) !== config.pixelId) return { ok: false, checkedAt, message: metaFailure(result.error?.code) };
     return { ok: true, checkedAt, message: 'Dataset connection verified. This check does not send a conversion event.' };
   } catch {

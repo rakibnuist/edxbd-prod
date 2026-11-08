@@ -8,7 +8,7 @@ import type { MetaHealth } from '@/lib/meta-health';
 
 const labels: Record<string, string> = {
   missing_pixel: 'Setup required', missing_token: 'Access token needed', configured: 'Ready to check',
-  connected: 'Connected', active: 'Delivering events', attention: 'Needs attention',
+  connected: 'Connected', active: 'Delivering events', attention: 'Needs attention', waiting: 'Waiting for first event',
 };
 export default function MetaConnectionPanel({ refreshKey = 0, pendingChanges = false }: { refreshKey?: number; pendingChanges?: boolean }) {
   const { authenticatedFetch, isAuthenticated, loading: authLoading } = useAuth();
