@@ -248,7 +248,13 @@ export default async function Home() {
     .map(row => row.name.split(' Intake')[0]);
   const intakeBadge = openIntakes.length ? `${openIntakes.join(' & ')} intakes open for China` : 'Free assessment for the next intake';
 
-  const logos = plannerData.filter(item => item.logo && !item.logo.endsWith('.gif')).slice(0, 16);
+  const seenLogos = new Set<string>();
+  const logos = plannerData.filter(item => {
+    if (!item.logo) return false;
+    if (seenLogos.has(item.logo)) return false;
+    seenLogos.add(item.logo);
+    return true;
+  });
   const levels = [...new Set(plannerData.flatMap(item => item.levels))].filter(level => ['Bachelor’s', 'Master’s', 'PhD'].includes(level));
 
   const activeDestinations = countries.filter(country => country.isActive);
@@ -432,25 +438,45 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 2. University logos */}
+      {/* 2. University logos — continuous, gapless infinite loop of all directory universities */}
       {logos.length >= 6 && (
         <section aria-label="Universities in our directory" className="border-b border-canvas-soft py-10">
           <p className="text-center text-[15px] font-semibold text-ink-soft">
             {plannerData.length} universities in our verified directory, with fees, intakes and scholarships
           </p>
-          <div className="home-ticker mt-6" data-pause-offscreen>
-            <div className="home-ticker-track items-center gap-14 px-7">
-              {[...logos, ...logos].map((item, index) => (
-                <Image
-                  key={`${item.slug}-${index}`}
-                  src={item.logo as string}
-                  alt={index < logos.length ? item.name : ''}
-                  aria-hidden={index >= logos.length ? true : undefined}
-                  width={120}
-                  height={56}
-                  unoptimized
-                  className="h-14 w-auto max-w-[140px] object-contain"
-                />
+          <div className="home-ticker mt-6">
+            <div
+              className="home-ticker-track items-center"
+              style={{ ['--ticker-duration' as string]: `${Math.max(60, Math.round(logos.length * 1.8))}s` }}
+            >
+              {[0, 1].map(copy => (
+                <ul
+                  key={copy}
+                  className="flex shrink-0 items-center gap-4 pr-4"
+                  aria-hidden={copy === 1 ? true : undefined}
+                  inert={copy === 1 ? true : undefined}
+                >
+                  {logos.map(item => (
+                    <li key={`${item.slug}-${copy}`} className="shrink-0">
+                      <Link
+                        href={`/universities/${item.slug}`}
+                        title={item.name}
+                        className="flex h-16 w-[148px] items-center justify-center rounded-2xl border border-slate-200/70 bg-white px-4 py-2 shadow-[0_2px_10px_rgba(15,58,92,0.04)] transition hover:border-petrol-800/40"
+                      >
+                        <Image
+                          src={item.logo as string}
+                          alt={copy === 0 ? item.name : ''}
+                          width={116}
+                          height={48}
+                          unoptimized
+                          loading="eager"
+                          decoding="sync"
+                          className="max-h-11 w-auto max-w-[116px] object-contain"
+                        />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               ))}
             </div>
           </div>
