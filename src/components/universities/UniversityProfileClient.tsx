@@ -721,7 +721,7 @@ export default function UniversityProfileClient({
             <div className="space-y-4">
               <div className="rounded-2xl bg-slate-50/90 p-6 border border-slate-200/90">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-3">
-                  Quick Verification & Links
+                  Quick Admission Summary
                 </h3>
                 <dl className="mt-4 space-y-3.5 text-xs">
                   <div>
@@ -742,18 +742,6 @@ export default function UniversityProfileClient({
                     <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Statutory Recognition</dt>
                     <dd className="mt-0.5 font-bold text-emerald-800">{recognitionLabel}</dd>
                   </div>
-                  {university.officialUrl && (
-                    <div className="pt-2 border-t border-slate-200">
-                      <a
-                        href={university.officialUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 font-bold text-petrol-800 hover:text-emerald-700 text-xs"
-                      >
-                        Official University Website <ExternalLink size={12} />
-                      </a>
-                    </div>
-                  )}
                 </dl>
                 <a
                   href="#university-enquiry"
