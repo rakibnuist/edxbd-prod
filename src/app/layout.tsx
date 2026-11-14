@@ -14,6 +14,7 @@ import CookieConsent from "@/components/CookieConsent";
 import RevealObserver from "@/components/motion/RevealObserver";
 import MetaPixel from "@/components/MetaPixel";
 import GoogleTags from "@/components/GoogleTags";
+import MarchIntakePopup from "@/components/campaigns/MarchIntakePopup";
 
 import "./globals.css";
 import { getPublicTrustRecords } from '@/lib/trust-records';
@@ -310,6 +311,7 @@ export default async function RootLayout({
             message="Hi, I would like an Education Fit Assessment. Please help me compare suitable universities, complete costs, recognition and scholarship availability."
           />
           <MobileLeadBar />
+          <MarchIntakePopup />
           <CookieConsent />
           <RevealObserver />
           <ConditionalFooter><Footer /></ConditionalFooter>
