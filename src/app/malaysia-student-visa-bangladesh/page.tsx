@@ -134,7 +134,7 @@ export default async function MalaysiaStudentVisaPage() {
         }
       />
 
-      <TrustBar />
+      <TrustBar destination="Malaysia" />
 
       {/* Progress Phases Strip */}
       <section aria-label="Visa process phases" className="border-b border-canvas-soft bg-white py-6">

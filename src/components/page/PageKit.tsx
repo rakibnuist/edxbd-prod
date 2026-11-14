@@ -145,11 +145,14 @@ export function Section({
 }
 
 /** Four standing facts that make a consultancy checkable. */
-export function TrustBar({ universities }: { universities?: number }) {
+export function TrustBar({ universities, destination, feeNote }: { universities?: number; destination?: string; feeNote?: string }) {
+  const isMalaysia = destination?.toLowerCase() === 'malaysia';
+  const feeTitle = isMalaysia ? 'BDT 0 service fee' : 'BDT 0 before visa';
+  const feeText = feeNote || (isMalaysia ? 'Free admission guidance for Malaysia' : 'No EduExpress fee before visa approval');
   const items = [
     { icon: CalendarCheck, title: 'Since 2018', text: 'Counselling families from Dhanmondi, Dhaka' },
     { icon: MapPin, title: 'Visit in person', text: 'Saturday to Thursday, 11 AM to 6 PM' },
-    { icon: Wallet, title: 'BDT 0 before visa', text: 'No EduExpress fee before China visa approval' },
+    { icon: Wallet, title: feeTitle, text: feeText },
     universities
       ? { icon: BadgeCheck, title: `${universities} universities`, text: 'Fees and scholarships checked at source' }
       : { icon: BadgeCheck, title: 'Costs in writing', text: 'Every payment listed before you commit' },

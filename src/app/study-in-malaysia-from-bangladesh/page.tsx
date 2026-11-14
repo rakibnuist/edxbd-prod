@@ -256,7 +256,7 @@ export default async function StudyInMalaysiaPage() {
         }
       />
 
-      <TrustBar />
+      <TrustBar destination="Malaysia" universities={9} />
 
       {/* Value Statement & Quick Navigation Bar */}
       <section aria-label="Malaysia study guide overview" className="border-b border-canvas-soft bg-white py-8">

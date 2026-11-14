@@ -126,7 +126,7 @@ export default async function MalaysiaStudyCostPage() {
         }
       />
 
-      <TrustBar />
+      <TrustBar destination="Malaysia" />
 
       {/* Conversion Banner */}
       <section aria-label="Currency baseline" className="border-b border-canvas-soft bg-white py-6">
