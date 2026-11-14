@@ -73,7 +73,7 @@ const LEVEL_LABELS: Record<ProgramLevel, string> = {
 const titleClass = 'font-display text-[26px] font-black leading-tight tracking-[-0.01em] text-petrol-800 sm:text-[32px] lg:text-[36px]';
 const mutedClass = 'text-sm leading-7 text-slate-500';
 const selectClass = 'mt-2 min-h-12 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-sm text-slate-800 outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/10';
-const sheetClass = 'rounded-3xl bg-white p-6 sm:p-8 shadow-sm border border-rule';
+const sheetClass = 'rounded-2xl bg-white p-6 sm:p-8 shadow-xs border border-slate-200/90';
 const textAction = 'inline-flex min-h-10 items-center gap-1.5 text-sm font-bold text-[#12436b] hover:text-emerald-700 hover:underline';
 const applyClass = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-petrol-800 px-6 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-petrol-900 shadow-sm';
 
@@ -286,7 +286,7 @@ export default function UniversityProfileClient({
     (programs.length <= 12 || openPicker === context ? (
       programSelect(context)
     ) : (
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-canvas-soft p-4 text-sm border border-rule">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-50 border border-slate-200 p-4 text-xs">
         <p className="min-w-0 text-slate-700">
           Selected program:{' '}
           <strong className="font-bold text-petrol-800">
@@ -299,18 +299,22 @@ export default function UniversityProfileClient({
       </div>
     ));
 
+  const cleanGeneralTuition = /dated official fee|next-cycle|require confirmation|research below/i.test(generalDetails.tuition || '')
+    ? 'Official fee per program'
+    : generalDetails.tuition;
+
   const generalFeeTable = (
     <div className={sheetClass}>
-      <h3 className="text-xl font-bold text-petrol-800">Itemized Fee Schedule</h3>
-      <p className="mt-1 text-sm text-slate-500">Official university and third-party fee breakdown.</p>
+      <h3 className="text-lg font-bold text-slate-900">Itemized Fee Schedule</h3>
+      <p className="mt-1 text-xs text-slate-500">Official university and third-party fee breakdown.</p>
       <dl className="mt-5 divide-y divide-slate-100">
         {[
-          ...(generalDetails.tuition ? [{ item: 'Tuition Range', cost: generalDetails.tuition, notes: undefined }] : []),
+          ...(cleanGeneralTuition ? [{ item: 'Tuition Range', cost: cleanGeneralTuition, notes: undefined }] : []),
           ...generalDetails.fees,
         ].map((fee, index) => (
-          <div key={`${fee.item}-${index}`} className="py-3.5 flex items-start justify-between gap-5 text-sm">
+          <div key={`${fee.item}-${index}`} className="py-3.5 flex items-start justify-between gap-5 text-xs">
             <dt className="font-medium text-slate-700">{fee.item}</dt>
-            <dd className="text-right font-bold tabular-nums text-petrol-800">{fee.cost}</dd>
+            <dd className="text-right font-bold tabular-nums text-slate-900">{fee.cost}</dd>
           </div>
         ))}
       </dl>
@@ -350,11 +354,11 @@ export default function UniversityProfileClient({
   ].slice(0, 6);
 
   return (
-    <article className="min-h-screen bg-canvas-soft pb-20 pt-[76px] text-ink xl:pt-[112px]">
+    <article className="min-h-screen bg-[#f8fafc] pb-20 pt-[76px] text-ink xl:pt-[112px]">
       {/* Executive Hero Header */}
       <header className="relative overflow-hidden bg-petrol-800 text-white">
         <div aria-hidden="true" className="pointer-events-none absolute -right-48 -top-48 size-[560px] rounded-full bg-lime/10 blur-3xl" />
-        <div className="relative mx-auto max-w-[1280px] px-5 py-10 sm:px-8 lg:px-10 lg:py-14">
+        <div className="relative mx-auto max-w-[1280px] px-5 pt-8 pb-14 sm:px-8 lg:px-10 lg:pt-10 lg:pb-16">
           <nav aria-label="Breadcrumb" className="mb-7 flex flex-wrap items-center gap-2 text-[14px] font-semibold text-white/65">
             <Link href="/" className="hover:text-white">
               Home
@@ -525,7 +529,7 @@ export default function UniversityProfileClient({
             </div>
 
             {/* Sidebar Lead Form */}
-            <div className="lg:sticky lg:top-[132px]">
+            <div className="w-full">
               <UniversityEnquiryForm
                 university={university}
                 programs={programs}
@@ -539,7 +543,7 @@ export default function UniversityProfileClient({
       </header>
 
       {/* Sticky Tab Bar */}
-      <nav aria-label="On this university page" className="sticky top-[76px] z-20 border-b border-rule bg-white shadow-sm xl:top-[112px]">
+      <nav aria-label="On this university page" className="sticky top-[76px] z-20 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-xs xl:top-[112px]">
         <div className="mx-auto flex max-w-[1280px] items-center gap-3 px-5 sm:px-8 lg:px-10">
           <div className="flex min-w-0 flex-1 overflow-x-auto no-scrollbar">
             {PANELS.map((item) => (
@@ -586,11 +590,17 @@ export default function UniversityProfileClient({
               </div>
 
               {highlights.length > 0 && (
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                <div className="mt-8 grid gap-3.5 sm:grid-cols-2">
                   {highlights.map((highlight) => (
-                    <div key={highlight.title} className="rounded-2xl border border-rule bg-canvas-soft p-4">
-                      <h3 className="text-sm font-bold text-petrol-800">{highlight.title}</h3>
-                      <p className="mt-1 text-xs leading-5 text-slate-600">{highlight.description}</p>
+                    <div
+                      key={highlight.title}
+                      className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-4 transition-all hover:bg-white hover:border-emerald-300"
+                    >
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+                        <CheckCircle2 size={14} className="text-emerald-700 shrink-0" />
+                        {highlight.title}
+                      </h3>
+                      <p className="mt-1.5 text-xs leading-relaxed text-slate-600">{highlight.description}</p>
                     </div>
                   ))}
                 </div>
@@ -598,43 +608,45 @@ export default function UniversityProfileClient({
             </div>
 
             {/* Quick Fact Card */}
-            <div className="rounded-2xl bg-canvas-soft p-6 border border-rule h-fit">
-              <h3 className="text-base font-bold text-petrol-800">Quick Facts & Verification</h3>
-              <dl className="mt-4 space-y-4 text-sm">
+            <div className="rounded-2xl bg-slate-50/80 p-6 border border-slate-200/80 h-fit">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-3">
+                Quick Facts & Verification
+              </h3>
+              <dl className="mt-4 space-y-3.5 text-xs">
                 <div>
-                  <dt className="text-xs font-semibold text-slate-500 uppercase">Location</dt>
-                  <dd className="mt-0.5 font-bold text-petrol-800">{university.city}, {university.country}</dd>
+                  <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Location</dt>
+                  <dd className="mt-0.5 font-bold text-slate-800">{university.city}, {university.country}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs font-semibold text-slate-500 uppercase">Intake Months</dt>
-                  <dd className="mt-0.5 font-bold text-petrol-800">{intakeMonths.join(', ') || 'Multiple year-round'}</dd>
+                  <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Intake Months</dt>
+                  <dd className="mt-0.5 font-bold text-slate-800">{intakeMonths.join(', ') || 'Multiple year-round'}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs font-semibold text-slate-500 uppercase">Instruction Language</dt>
-                  <dd className="mt-0.5 font-bold text-petrol-800">{languages.join(' / ') || 'English'}</dd>
+                  <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Instruction Language</dt>
+                  <dd className="mt-0.5 font-bold text-slate-800">{languages.join(' / ') || 'English'}</dd>
                 </div>
                 {university.recognitionAuthority && (
                   <div>
-                    <dt className="text-xs font-semibold text-slate-500 uppercase">Accrediting Body</dt>
+                    <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Accreditation Body</dt>
                     <dd className="mt-0.5 font-bold text-emerald-800">{university.recognitionAuthority}</dd>
                   </div>
                 )}
                 {university.officialUrl && (
-                  <div className="pt-2 border-t border-rule">
+                  <div className="pt-2 border-t border-slate-200">
                     <a
                       href={university.officialUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-petrol-800 hover:text-emerald-700"
+                      className="inline-flex items-center gap-1.5 font-bold text-petrol-800 hover:text-emerald-700 text-xs"
                     >
-                      Visit Official Website <ExternalLink size={13} />
+                      Official University Portal <ExternalLink size={12} />
                     </a>
                   </div>
                 )}
               </dl>
               <a
                 href="#university-enquiry"
-                className="mt-6 w-full ed-btn ed-btn-outline min-h-[46px] text-xs font-bold"
+                className="mt-5 w-full ed-btn ed-btn-outline min-h-[42px] text-xs font-bold"
               >
                 Request Admission Guide
               </a>
@@ -668,7 +680,7 @@ export default function UniversityProfileClient({
                   setFiltersOpen(event.currentTarget.open);
                   if (event.currentTarget.open) setFiltersMounted(true);
                 }}
-                className="mt-6 rounded-2xl border border-rule p-5 bg-canvas-soft"
+                className="mt-6 rounded-2xl border border-slate-200 p-5 bg-slate-50/70"
               >
                 <summary className="cursor-pointer text-sm font-bold text-petrol-800">
                   Filter programs by degree level, subject, and medium of instruction
@@ -697,19 +709,19 @@ export default function UniversityProfileClient({
           )}
 
           {selected && (
-            <div className="mt-8 rounded-2xl border border-rule bg-canvas-soft p-5 flex flex-wrap items-center justify-between gap-4">
+            <div className="mt-6 rounded-2xl border border-emerald-100 bg-emerald-50/50 p-4.5 flex flex-wrap items-center justify-between gap-4">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Selected Program</span>
-                <h3 className="mt-1 text-base font-bold text-petrol-800">{selected.name}</h3>
-                <p className="mt-0.5 text-xs text-slate-600">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Selected Program</span>
+                <h3 className="mt-0.5 text-base font-bold text-slate-900">{selected.name}</h3>
+                <p className="mt-0.5 text-xs text-slate-600 font-medium">
                   {[selected.duration, selected.languages.join(' / ')].filter(Boolean).join(' · ')}
                 </p>
               </div>
-              <div className="flex gap-3">
-                <button type="button" onClick={() => openPanel('fees')} className="ed-btn ed-btn-signal min-h-[42px] px-5 text-xs">
-                  Calculate in ClearCost <ArrowRight size={14} />
+              <div className="flex gap-2.5">
+                <button type="button" onClick={() => openPanel('fees')} className="ed-btn ed-btn-signal min-h-[40px] px-4 text-xs font-bold">
+                  Calculate in ClearCost <ArrowRight size={13} />
                 </button>
-                <button type="button" onClick={() => openPanel('documents')} className="ed-btn ed-btn-outline min-h-[42px] px-5 text-xs">
+                <button type="button" onClick={() => openPanel('documents')} className="ed-btn ed-btn-outline min-h-[40px] px-4 text-xs font-bold">
                   Documents Needed
                 </button>
               </div>
@@ -719,13 +731,13 @@ export default function UniversityProfileClient({
 
         {/* Fees & ClearCost Section */}
         <section {...panelProps('fees')} className="space-y-6">
-          <div className="grid items-center gap-5 rounded-3xl border border-rule bg-white p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <div className="grid items-center gap-5 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-7 shadow-xs lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
             <div>
-              <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
                 Transparent Cost Planning
               </span>
               <h2 className={titleClass}>{shortName} Fees & ClearCost™</h2>
-              <p className="mt-2 text-sm text-slate-600">
+              <p className="mt-1.5 text-xs text-slate-600">
                 Transparent fee schedules with clear currency separation and itemized third-party costs.
               </p>
             </div>
@@ -733,12 +745,12 @@ export default function UniversityProfileClient({
           </div>
 
           {feePreviews.length > 0 && (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
               {feePreviews.map((fee) => (
-                <div key={fee.level} className="rounded-2xl border border-rule bg-white p-5 shadow-sm">
-                  <p className="text-xs font-semibold text-slate-500 uppercase">{LEVEL_LABELS[fee.level]} Tuition</p>
-                  <p className="mt-2 text-xl font-bold tabular-nums text-petrol-800">{fee.amount}</p>
-                  <p className="mt-1 text-xs text-slate-500">{fee.period} · before scholarship reduction</p>
+                <div key={fee.level} className="rounded-xl border border-slate-200/80 bg-white p-4.5 shadow-xs">
+                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{LEVEL_LABELS[fee.level]} Tuition</p>
+                  <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">{fee.amount}</p>
+                  <p className="mt-0.5 text-[11px] text-slate-500">{fee.period} · gross published fee</p>
                 </div>
               ))}
             </div>
@@ -748,10 +760,10 @@ export default function UniversityProfileClient({
 
           {/* Interactive ClearCost Calculator */}
           {selected && (
-            <div className="rounded-3xl border border-rule bg-white shadow-sm overflow-hidden">
-              <div className="bg-canvas-soft p-5 sm:p-6 border-b border-rule flex items-center justify-between">
+            <div className="rounded-2xl border border-slate-200/90 bg-white shadow-xs overflow-hidden">
+              <div className="bg-slate-50/80 p-5 sm:p-6 border-b border-slate-200 flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-petrol-800">ClearCost™ Study Budget Calculator</h3>
+                  <h3 className="text-base font-bold text-slate-900">ClearCost™ Study Budget Calculator</h3>
                   <p className="text-xs text-slate-500">
                     Customized for {selected.name} ({university.country})
                   </p>
@@ -859,7 +871,7 @@ export default function UniversityProfileClient({
               <div className="mt-6">
                 <UniversityFundingTable options={scholarshipOptions} onChoose={estimateScholarship} />
               </div>
-              <details className="mt-6 rounded-2xl border border-rule p-5 bg-canvas-soft">
+              <details className="mt-6 rounded-2xl border border-slate-200 p-5 bg-slate-50/70">
                 <summary className="cursor-pointer text-sm font-bold text-petrol-800">
                   Scholarship eligibility criteria, renewal rules & application documents
                 </summary>
@@ -985,7 +997,7 @@ export default function UniversityProfileClient({
                 </tbody>
               </table>
             ) : (
-              <div className="rounded-2xl border border-rule bg-canvas-soft p-6">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-6">
                 <div className="flex items-center gap-4">
                   <div className="grid size-12 place-items-center rounded-xl bg-lime/25 text-petrol-800 shrink-0">
                     <Trophy size={22} />
@@ -1011,17 +1023,17 @@ export default function UniversityProfileClient({
 
         {/* FAQs Section */}
         <section {...panelProps('questions')} className={sheetClass}>
-          <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
+          <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
             Frequently Asked Questions
           </span>
           <h2 className={titleClass}>{shortName}: Common Questions</h2>
-          <div className="mt-6 divide-y divide-rule">
+          <div className="mt-6 divide-y divide-slate-100">
             {faq.map((item) => (
               <details key={item.question} className="py-4">
-                <summary className="cursor-pointer font-bold text-petrol-800 text-[16px] hover:text-emerald-800">
+                <summary className="cursor-pointer font-bold text-slate-900 text-[15px] hover:text-emerald-800">
                   {item.question}
                 </summary>
-                <p className="mt-2.5 text-sm leading-relaxed text-slate-600">{item.answer}</p>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600">{item.answer}</p>
               </details>
             ))}
           </div>
@@ -1030,11 +1042,12 @@ export default function UniversityProfileClient({
         {/* Destination-Aware Related Guides */}
         {isChina && (
           <section aria-label="Related China study guides" className={sheetClass}>
-            <h2 className="text-xl font-bold text-petrol-800">Explore China Study Guides</h2>
-            <p className="mt-1.5 text-sm text-slate-600">Practical guides for Bangladeshi students and families.</p>
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Destination Resources</span>
+            <h2 className="mt-1 text-xl font-bold text-slate-900">Explore China Study Guides</h2>
+            <p className="mt-1 text-xs text-slate-500">Official policies, cost sheets, and visa guidance for Bangladeshi families.</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                ...(hasMedicalProgram ? [{ href: '/mbbs-in-china-bangladesh', label: 'MBBS in China' }] : []),
+                ...(hasMedicalProgram ? [{ href: '/mbbs-in-china-bangladesh', label: 'MBBS in China Guide' }] : []),
                 { href: '/study-in-china-from-bangladesh', label: 'Study in China Overview' },
                 { href: '/bn/study-in-china-cost-bangladesh', label: 'খরচ ও স্কলারশিপ গাইড (বাংলা)' },
                 { href: '/bn/china-student-visa-bangladesh', label: 'স্টুডেন্ট ভিসা গাইড (বাংলা)' },
@@ -1042,10 +1055,10 @@ export default function UniversityProfileClient({
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="flex min-h-14 items-center justify-between gap-3 rounded-2xl bg-canvas-soft p-4 text-sm font-bold text-petrol-800 hover:bg-lime/25 transition-colors"
+                  className="flex min-h-12 items-center justify-between gap-3 rounded-xl border border-slate-200/90 bg-slate-50/70 p-3.5 text-xs font-bold text-slate-800 hover:border-emerald-300 hover:bg-emerald-50/40 transition-colors"
                 >
                   {link.label}
-                  <ArrowRight size={15} className="shrink-0" />
+                  <ArrowRight size={14} className="shrink-0 text-slate-400" />
                 </Link>
               ))}
             </div>
@@ -1054,35 +1067,34 @@ export default function UniversityProfileClient({
 
         {isMalaysia && (
           <section aria-label="Related Malaysia study guides" className={sheetClass}>
-            <h2 className="text-xl font-bold text-petrol-800">Explore Malaysia Study Guides</h2>
-            <p className="mt-1.5 text-sm text-slate-600">Affordable UK/AU degree pathways in Southeast Asia.</p>
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Destination Resources</span>
+            <h2 className="mt-1 text-xl font-bold text-slate-900">Explore Malaysia Study Guides</h2>
+            <p className="mt-1 text-xs text-slate-500">Affordable UK/AU degree pathways in Southeast Asia with BDT 0 agency fee.</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <Link
-                href="/destinations/malaysia"
-                className="flex min-h-14 items-center justify-between gap-3 rounded-2xl bg-canvas-soft p-4 text-sm font-bold text-petrol-800 hover:bg-lime/25 transition-colors"
+                href="/study-in-malaysia-from-bangladesh"
+                className="flex min-h-12 items-center justify-between gap-3 rounded-xl border border-slate-200/90 bg-slate-50/70 p-3.5 text-xs font-bold text-slate-800 hover:border-emerald-300 hover:bg-emerald-50/40 transition-colors"
               >
-                Study in Malaysia Overview <ArrowRight size={15} />
+                Study in Malaysia Overview <ArrowRight size={14} className="shrink-0 text-slate-400" />
+              </Link>
+              <Link
+                href="/malaysia-study-cost-bangladesh"
+                className="flex min-h-12 items-center justify-between gap-3 rounded-xl border border-slate-200/90 bg-slate-50/70 p-3.5 text-xs font-bold text-slate-800 hover:border-emerald-300 hover:bg-emerald-50/40 transition-colors"
+              >
+                Malaysia Cost & Student File <ArrowRight size={14} className="shrink-0 text-slate-400" />
+              </Link>
+              <Link
+                href="/malaysia-student-visa-bangladesh"
+                className="flex min-h-12 items-center justify-between gap-3 rounded-xl border border-slate-200/90 bg-slate-50/70 p-3.5 text-xs font-bold text-slate-800 hover:border-emerald-300 hover:bg-emerald-50/40 transition-colors"
+              >
+                EMGS Visa & i-KAD Guide <ArrowRight size={14} className="shrink-0 text-slate-400" />
               </Link>
               <Link
                 href="/universities?country=Malaysia"
-                className="flex min-h-14 items-center justify-between gap-3 rounded-2xl bg-canvas-soft p-4 text-sm font-bold text-petrol-800 hover:bg-lime/25 transition-colors"
+                className="flex min-h-12 items-center justify-between gap-3 rounded-xl border border-slate-200/90 bg-slate-50/70 p-3.5 text-xs font-bold text-slate-800 hover:border-emerald-300 hover:bg-emerald-50/40 transition-colors"
               >
-                All 9 Malaysia Universities <ArrowRight size={15} />
+                All 9 Malaysia Universities <ArrowRight size={14} className="shrink-0 text-slate-400" />
               </Link>
-              <Link
-                href="/for-parents"
-                className="flex min-h-14 items-center justify-between gap-3 rounded-2xl bg-canvas-soft p-4 text-sm font-bold text-petrol-800 hover:bg-lime/25 transition-colors"
-              >
-                Guide for Parents <ArrowRight size={15} />
-              </Link>
-              <a
-                href={waHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex min-h-14 items-center justify-between gap-3 rounded-2xl bg-canvas-soft p-4 text-sm font-bold text-petrol-800 hover:bg-lime/25 transition-colors"
-              >
-                Talk to Malaysia Counselor <ArrowRight size={15} />
-              </a>
             </div>
           </section>
         )}
