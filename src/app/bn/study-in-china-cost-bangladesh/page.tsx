@@ -4,13 +4,20 @@ import {
   BadgeCheck,
   Building2,
   Calculator,
+  CheckCircle2,
   ChevronRight,
-  CircleDollarSign,
+  CreditCard,
   FileCheck2,
+  FileText,
   HelpCircle,
   Landmark,
+  PhoneCall,
+  Plane,
   ShieldAlert,
+  ShieldCheck,
+  Sparkles,
   Wallet,
+  Zap,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import { JsonLd, Section, kit } from '@/components/page/PageKit';
@@ -23,13 +30,13 @@ const PATH = '/bn/study-in-china-cost-bangladesh';
 const EN_PATH = '/study-in-china-cost-bangladesh';
 const trail = [
   { name: 'চীনে উচ্চশিক্ষা', href: '/bn/study-in-china' },
-  { name: 'পড়াশোনার মোট খরচ ও ব্যাংক ফাইল' },
+  { name: 'পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড' },
 ];
 
 export const metadata = pageMetadata({
-  title: 'চীনে পড়াশোনার খরচ ও বাংলাদেশ ব্যাংক স্টুডেন্ট ফাইল গাইড ২০২৭ | EduExpress',
+  title: 'চীনে পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড ২০২৭ | EduExpress',
   description:
-    'চীনে ব্যাচেলর, মাস্টার্স ও এমবিবিএস পড়ার সম্পূর্ণ খরচ (টাকা ও আরএমবিতে হিসাব), স্কলারশিপ সুবিধা এবং বাংলাদেশ ব্যাংকের মাধ্যমে বৈধভাবে টিউশন ফি পাঠানোর নিয়মাবলী।',
+    'চীনে Bachelor, Master’s ও MBBS পড়ার বাস্তবসম্মত খরচ (টাকা ও RMB হিসাব)। কোনো জটিল Student File-এর ঝামেলা নেই। CSC ও Provincial স্কলারশিপের পূর্ণাঙ্গ বিবরণ।',
   path: PATH,
   image: ogImage('china', 'Chinese university campus and cost planning guide'),
   locale: 'bn_BD',
@@ -42,59 +49,117 @@ export const metadata = pageMetadata({
 
 const costTiers = [
   {
-    title: 'ফুল স্কলারশিপ (CSC / Type A)',
-    tag: 'সর্বোচ্চ সাশ্রয়ী',
-    highlight: 'টিউশন ও হোস্টেল সম্পূর্ণ ফ্রি',
-    tuition: '০ টাকা (১০০% ওয়েভার)',
-    hostel: '০ টাকা (ফ্রি ডরমিটরি)',
-    stipend: 'মাসিক ২,৫০০ – ৩,৫00 আরএমবি (প্রায় ৪৬,০০০ – ৬৫,০০০ টাকা)',
-    outOfPocket: 'ইনস্যুরেন্স (৮০০ আরএমবি/বছর), রেসিডেন্স পারমিট (৪০০ আরএমবি) ও বিমান ভাড়া',
+    title: 'Full CSC Scholarship (Type A / B)',
+    tag: 'সর্বোচ্চ সাশ্রয়ী (Fully Funded)',
+    highlight: '১০০% Tuition Fee ও Dormitory ফ্রি + মাসিক হ্যান্ডসাম Stipend',
+    tuition: 'BDT 0 (সম্পূর্ণ Tuition Waiver)',
+    hostel: 'ফ্রি ইউনিভার্সিটি ডরমিটরি (Single / Double Room)',
+    stipend: 'মাসিক 2,500 – 3,500 RMB (প্রায় ৪৬,০০০ – ৬৫,০০০ টাকা)',
+    outOfPocket:
+      'শুধুমাত্র Medical Insurance (৮০০ RMB/বছর), Residence Permit (৪০০ RMB) এবং এককালীন বিমান ভাড়া।',
+    badgeTone: 'bg-emerald-50 text-emerald-800 border-emerald-200',
   },
   {
-    title: 'আংশিক স্কলারশিপ (প্রোভিন্সিয়াল / প্রেসিডেনশিয়াল)',
-    tag: 'জনপ্রিয় বিকল্প',
-    highlight: 'টিউশন ফি ৫০% – ১০০% পর্যন্ত ছাড়',
-    tuition: '০ – ১৫,০০০ আরএমবি/বছর (প্রায় ০ – ২.৮০ লাখ টাকা)',
-    hostel: '১,৫০০ – ৪,৫০০ আরএমবি/বছর (প্রায় ২৮,০০০ – ৮৪,০০০ টাকা)',
-    stipend: 'সাধারণত প্রযোজ্য নয় (কোনো কোনো বিশ্ববিদ্যালয়ে সীমিত এলাউন্স)',
-    outOfPocket: 'খাবার ও পকেট খরচ (মাসিক ১৮,০০০ – ৩০,০০০ টাকা)',
+    title: 'Partial / Provincial Scholarship',
+    tag: 'সবচেয়ে জনপ্রিয় বিকল্প',
+    highlight: '৫০% থেকে ১০০% পর্যন্ত Tuition Fee ছাড়',
+    tuition: '০ – ১৫,০০০ RMB / বছর (প্রায় BDT 0 – ২.৮০ লাখ)',
+    hostel: '১,৫০০ – ৪,৫০০ RMB / বছর (প্রায় ২৮,০০০ – ৮৪,০০০ টাকা)',
+    stipend: 'কিছু বিশ্ববিদ্যালয় বার্ষিক এককালীন মেরিট স্টাইপেন্ড প্রদান করে',
+    outOfPocket:
+      'খাবার ও ব্যক্তিগত পকেট খরচ: মাসিক ১,০০০ – ১,৫০০ RMB (প্রায় ১৮,০০০ – ২৮,০০০ টাকা)।',
+    badgeTone: 'bg-blue-50 text-blue-800 border-blue-200',
   },
   {
-    title: 'স্ব-অর্থায়ন (Self-Funded)',
-    tag: 'সরাসরি ভর্তি',
-    highlight: 'নির্ধারিত টিউশন ফি প্রদান',
-    tuition: '১২,০০০ – ২৫,০০০ আরএমবি/বছর (ইঞ্জিনিয়ারিং/বিজনেস: প্রায় ২.২৫ – ৪.৬৭ লাখ টাকা)',
-    hostel: '২,০০০ – ৬,০০০ আরএমবি/বছর (প্রায় ৩৭,০০০ – ১.১২ লাখ টাকা)',
-    stipend: 'প্রযোজ্য নয়',
-    outOfPocket: 'এমবিবিএস কোর্সের ক্ষেত্রে টিউশন বার্ষিক ৩০,০০০ – ৫০,০০০ আরএমবি (প্রায় ৫.৬০ – ৯.৩৩ লাখ টাকা)',
+    title: 'Self-Funded (স্ব-অর্থায়ন)',
+    tag: 'সরাসরি ভর্তি (Direct Admission)',
+    highlight: 'সাশ্রয়ী টিউশনে আন্তর্জাতিক মানের ডিগ্রি',
+    tuition: 'Engineering / Business: ১২,০০০ – ২৫,০০০ RMB / বছর (প্রায় ২.২৫ – ৪.৬৭ লাখ টাকা)',
+    hostel: '২,০০০ – ৬,০০০ RMB / বছর (প্রায় ৩৭,০০০ – ১.১২ লাখ টাকা)',
+    stipend: 'প্রযোজ্য নয় (তবে ২য় বর্ষ থেকে রেজাল্টের ভিত্তিতে University Merit Scholarship সম্ভব)',
+    outOfPocket:
+      'MBBS প্রোগ্রামের বার্ষিক Tuition Fee সাধারণত ৩০,০০০ – ৫০,০০০ RMB (প্রায় ৫.৬০ – ৯.৩৩ লাখ টাকা; BMDC ও WHO স্বীকৃত)।',
+    badgeTone: 'bg-canvas-soft text-petrol-800 border-rule',
   },
 ];
 
-const studentFileSteps = [
+const annualComparisonRows = [
   {
-    step: '১',
-    title: 'অনুমোদিত ডিলার (AD) ব্যাংক নির্বাচন',
-    body: 'বাংলাদেশ ব্যাংকের অনুমোদিত যেকোনো কমার্শিয়াল ব্যাংকের অথরাইজড ডিলার শাখায় (যেমন: সিটি ব্যাংক, ইস্টার্ন ব্যাংক, ব্র্যাক ব্যাংক, প্রিমিয়ার ব্যাংক) শিক্ষার্থীর নামে স্টুডেন্ট ফাইল খুলতে হয়।',
+    category: 'Full CSC Scholarship',
+    tuition: '০ টাকা (ফ্রি)',
+    hostel: 'ফ্রি ডরমিটরি',
+    foodPersonal: 'মাসিক Stipend থেকেই খাবার খরচ মেটানো যায়',
+    totalOutPocket: 'শুধু Insurance, Visa ও বিমান ভাড়া',
   },
   {
-    step: '২',
-    title: 'বিশ্ববিদ্যালয়ের অফার লেটার ও ডিমান্ড নোট',
-    body: 'বিশ্ববিদ্যালয় থেকে পাঠানো অফিশিয়াল এডমিশন লেটার, JW201 অথবা JW202 ফর্ম এবং টিউশন ফি ইনভয়েস মূল কপি ব্যাংকে জমা দিতে হবে।',
+    category: 'Provincial / University Scholarship (Tuition Free)',
+    tuition: '০ টাকা (100% Waiver)',
+    hostel: '২৮,০০০ – ৫৫,০০০ টাকা',
+    foodPersonal: '২.২০ – ২.৮০ লাখ টাকা',
+    totalOutPocket: 'বার্ষিক প্রায় ২.৫০ – ৩.৪০ লাখ টাকা',
   },
   {
-    step: '৩',
-    title: 'অভিভাবকের আর্থিক ও ট্যাক্স ডকুমেন্টস (KYC)',
-    body: 'স্পন্সরের ই-টিন (E-TIN), সর্বশেষ ট্যাক্স রিটার্ন দাখিলের প্রমাণপত্র এবং আয়ের উৎস যাচাইয়ের জন্য ৬ থেকে ১২ মাসের ব্যাংক স্টেটমেন্ট জমা দিতে হয়।',
+    category: 'Partial Scholarship (50% Tuition Waiver)',
+    tuition: '১.২০ – ১.৮০ লাখ টাকা',
+    hostel: '২৮,০০০ – ৫৫,০০০ টাকা',
+    foodPersonal: '২.২০ – ২.৮০ লাখ টাকা',
+    totalOutPocket: 'বার্ষিক প্রায় ৩.৭০ – ৫.১৫ লাখ টাকা',
   },
   {
-    step: '৪',
-    title: 'বাংলাদেশ ব্যাংক টিএম (TM) ফর্ম ও রেমিট্যান্স অনুমোদন',
-    body: 'বৈদেশিক মুদ্রা লেনদেনের জন্য ব্যাংকের নির্ধারিত TM ফর্ম পূরণ করে টিউশন ফি সরাসরি বিশ্ববিদ্যালয়ের ব্যাংক অ্যাকাউন্টে ওয়্যার ট্রান্সফার করা হয়। প্রতি শিক্ষাবর্ষের জন্য ১ বছরের সমপরিমাণ ফি পাঠানোর অনুমতি মেলে।',
+    category: 'Self-Funded (Engineering / BBA / CS)',
+    tuition: '২.২৫ – ৪.৫০ লাখ টাকা',
+    hostel: '৩৭,০০০ – ৮০,০০০ টাকা',
+    foodPersonal: '২.২০ – ২.৮০ লাখ টাকা',
+    totalOutPocket: 'বার্ষিক প্রায় ৪.৮০ – ৭.৫০ লাখ টাকা',
   },
   {
-    step: '৫',
-    title: 'ডেডিকেটেড এডুকেশন কার্ড (FE Circular No. 37)',
-    body: 'বাংলাদেশ ব্যাংকের সার্কুলার অনুযায়ী বিশ্ববিদ্যালয় পোর্টালে অ্যাপ্লিকেশন ফি ও সিট বুকিং ফি অনলাইনে সরাসরি পরিশোধের জন্য স্টুডেন্ট ফাইলের বিপরীতে আন্তর্জাতিক এডুকেশন কার্ড ইস্যু করা যায়।',
+    category: 'Self-Funded MBBS (English Medium)',
+    tuition: '৫.৬০ – ৯.৩০ লাখ টাকা',
+    hostel: '৫৫,০০০ – ১.১০ লাখ টাকা',
+    foodPersonal: '২.৫০ – ৩.২০ লাখ টাকা',
+    totalOutPocket: 'বার্ষিক প্রায় ৮.৬৫ – ১৩.৬০ লাখ টাকা',
+  },
+];
+
+const paymentSimplicityPoints = [
+  {
+    icon: CheckCircle2,
+    title: 'কোনো Student File খোলার ঝামেলা নেই',
+    desc: 'ইউকে, কানাডা বা ইউরোপের মতো চীনে পড়ার ক্ষেত্রে বাংলাদেশ ব্যাংকে জটিল Student File খুলে ট্যাক্স ফাইল বা সোর্স অব ফান্ড অডিট করাতে হয় না। কোনো ব্যাংকিং আমলাতান্ত্রিক জটিলতা নেই।',
+  },
+  {
+    icon: Building2,
+    title: 'বিশ্ববিদ্যালয়ে পৌঁছে On-Campus পেমেন্ট সুবিধা',
+    desc: 'আংশিক স্কলারশিপ বা সেলফ-ফান্ডেড টিউশন ফি সাধারণত চীনে পৌঁছে বিশ্ববিদ্যালয় ক্যাম্পাসে সরাসরি রেজিস্ট্রেশনের সময় জমা দেওয়া যায়। দেশ ছাড়ার আগে আগাম কোনো ফি পাঠাতে হয় না।',
+  },
+  {
+    icon: CreditCard,
+    title: 'পাসপোর্ট এনডোর্সমেন্ট ও ইন্টারন্যাশনাল কার্ড',
+    desc: 'ভিসা ও বিমানের টিকিট দেখিয়ে পাসপোর্টে প্রয়োজনীয় বৈদেশিক মুদ্রা (USD/RMB) সহজে এনডোর্স করা যায় এবং যেকোনো ডুয়াল কারেন্সি ডেবিট/ক্রেডিট কার্ড চীনে স্বাচ্ছন্দ্যে ব্যবহার করা যায়।',
+  },
+  {
+    icon: Zap,
+    title: 'WeChat Pay ও Alipay-তে ডিজিটাল পেমেন্ট',
+    desc: 'চীনে পৌঁছানোর পরপরই ক্যাম্পাসের ভেতরে লোকাল চাইনিজ ব্যাংক অ্যাকাউন্ট ওপেন করে দেওয়া হয়। এরপর মোবাইল থেকেই সহজে সব ধরনের দৈনিক খরচ ও কেনাকাটা করা যায়।',
+  },
+];
+
+const faqs = [
+  {
+    q: 'চীনে পড়ার জন্য কি বাংলাদেশ ব্যাংকে Student File খুলতে হবে?',
+    a: 'না, চীনে পড়াশোনার জন্য কোনো Student File খোলার প্রয়োজন নেই। ফুল স্কলারশিপে টিউশন ও হোস্টেল সম্পূর্ণ ফ্রি থাকে। আর যাদের আংশিক ফি থাকে, তারা চীনে গিয়ে ক্যাম্পাসে সরাসরি রেজিস্ট্রেশনের সময় ফি দিতে পারেন।',
+  },
+  {
+    q: 'বাংলাদেশ থেকে চীনে টাকা নিয়ে যাওয়ার নিয়ম কী?',
+    a: 'শিক্ষার্থী ভ্রমণের সময় আইনসম্মতভাবে পাসপোর্টে ডলার বা ইউয়ান এনডোর্স করে সাথে ক্যাশ নিতে পারেন। এছাড়া ইন্টারন্যাশনাল কার্ড বা পরবর্তীতে লোকাল ব্যাংক অ্যাকাউন্টের মাধ্যমেও খরচ ম্যানেজ করা যায়।',
+  },
+  {
+    q: 'চীনে পড়ার জন্য কি ব্যাংকে বড় অঙ্কের Bank Solvency দেখাতে হয়?',
+    a: 'চায়না এম্বাসির ভিসার জন্য সাধারণ একটি ব্যাংক স্টেটমেন্ট বা সলভেন্সি সার্টিফিকেটই যথেষ্ট (সাধারণত ৫ থেকে ৮ লাখ টাকা সমপরিমাণ ব্যালেন্স)। কোনো অস্বাভাবিক লেনদেন বা জটিল প্রমাণের প্রয়োজন পড়ে না।',
+  },
+  {
+    q: 'ভিসা হওয়ার আগে EduExpress-কে কি কোনো সার্ভিস চার্জ দিতে হবে?',
+    a: 'একদমই না। আমাদের চায়না প্যাকেজে ফাইল ওপেনিং চার্জ সম্পূর্ণ ০ টাকা। চায়না স্টুডেন্ট ভিসা (X1/X2) কনফার্ম হওয়ার পূর্বে আমাদের কোনো সার্ভিস ফি নেই। ভিসা শতভাগ নিশ্চিত হওয়ার পর নির্ধারিত প্যাকেজ ফি (BDT 2,00,000) প্রদেয়।',
   },
 ];
 
@@ -103,19 +168,34 @@ const structuredData = {
   '@type': 'Article',
   '@id': `${SITE}${PATH}#article`,
   url: `${SITE}${PATH}`,
-  headline: 'চীনে পড়াশোনার খরচ ও বাংলাদেশ ব্যাংক স্টুডেন্ট ফাইল গাইড ২০২৭',
-  description: 'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে পড়াশোনার পূর্ণাঙ্গ ব্যয় বিবরণী ও ব্যাংক রেমিট্যান্স গাইড।',
+  headline: 'চীনে পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড ২০২৭',
+  description:
+    'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে পড়াশোনার পূর্ণাঙ্গ ব্যয় বিবরণী, স্কলারশিপ ও অন-ক্যাম্পাস পেমেন্ট গাইড। কোনো জটিল Student File-এর প্রয়োজন নেই।',
   inLanguage: 'bn-BD',
   publisher: { '@id': `${SITE}/#organization` },
   breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
 };
 
+const faqStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.a,
+    },
+  })),
+};
+
 export default function BengaliChinaCostPage() {
-  const whatsapp = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent('আসসালামু আলাইকুম। চীনে পড়াশোনার খরচ ও ব্যাংক ফাইলের বিষয়ে জানতে চাই।')}`;
+  const whatsapp = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent('আসসালামু আলাইকুম। চীনে পড়াশোনার মোট খরচ ও স্কলারশিপ প্রসেসিং নিয়ে বিস্তারিত জানতে চাই।')}`;
 
   return (
     <div lang="bn" className="text-petrol-800">
       <JsonLd data={structuredData} />
+      <JsonLd data={faqStructuredData} />
       <JsonLd data={breadcrumbJsonLd(trail, PATH)} />
 
       {/* Hero */}
@@ -123,36 +203,47 @@ export default function BengaliChinaCostPage() {
         <div className={`${kit.wrap} max-w-4xl text-center mx-auto`}>
           <nav aria-label="ব্রেডক্রাম্ব" className="flex justify-center mb-6">
             <ol className="flex flex-wrap items-center gap-1.5 text-[14px] font-semibold text-ink-soft">
-              <li><Link href="/" className="hover:text-petrol-800 hover:underline">হোম</Link></li>
-              <li className="flex items-center gap-1.5">
-                <ChevronRight size={14} className="text-ink-mute" aria-hidden="true" />
-                <Link href="/bn/study-in-china" className="hover:text-petrol-800 hover:underline">চীনে উচ্চশিক্ষা</Link>
+              <li>
+                <Link href="/" className="hover:text-petrol-800 hover:underline">
+                  হোম
+                </Link>
               </li>
               <li className="flex items-center gap-1.5">
                 <ChevronRight size={14} className="text-ink-mute" aria-hidden="true" />
-                <span className="text-petrol-800">খরচের হিসাব ও ব্যাংক ফাইল</span>
+                <Link href="/bn/study-in-china" className="hover:text-petrol-800 hover:underline">
+                  চীনে উচ্চশিক্ষা
+                </Link>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <ChevronRight size={14} className="text-ink-mute" aria-hidden="true" />
+                <span className="text-petrol-800">পড়াশোনার মোট খরচ ও স্কলারশিপ</span>
               </li>
             </ol>
           </nav>
 
-          <span className="inline-block rounded-full bg-lime px-4 py-1.5 text-[13px] font-bold text-petrol-800 tracking-wide uppercase">
-            স্বচ্ছ হিসাব ও সঠিক প্রক্রিয়া
+          <span className="inline-flex items-center gap-2 rounded-full bg-lime/25 px-4 py-1.5 text-[13px] font-bold text-petrol-800 tracking-wide">
+            <Sparkles size={15} className="text-petrol-800" /> কোনো জটিল Student File-এর ঝামেলা নেই
           </span>
 
           <h1 className="mt-4 font-display text-[32px] font-black leading-tight sm:text-[44px] lg:text-[52px]">
-            চীনে পড়াশোনার মোট খরচ ও বৈধ রেমিট্যান্স গাইড
+            চীনে পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড
           </h1>
 
           <p className="mt-5 text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
-            লুকানো কোনো ফি নেই। টিউশন, হোস্টেল, খাবার ও সরকারি ফির স্পষ্ট হিসাব জেনে পরিবারসহ পরিকল্পিত সিদ্ধান্ত নিন।
+            কোনো গোপন চার্জ নেই। Tuition fee, হোস্টেল, খাবার ও ক্যাম্পাসে সরাসরি ফি পরিশোধের স্পষ্ট হিসাব জেনে পরিবারসহ নিশ্চিন্তে সিদ্ধান্ত নিন।
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a href="#student-file" className="ed-btn ed-btn-signal min-h-[50px] px-7">
-              ব্যাংক স্টুডেন্ট ফাইল নিয়মাবলী <ArrowRight size={17} aria-hidden="true" />
+            <a href="#cost-tiers" className="ed-btn ed-btn-signal min-h-[50px] px-7">
+              খরচ ও স্কলারশিপের ছক দেখুন <ArrowRight size={17} aria-hidden="true" />
             </a>
-            <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-[50px] px-7">
-              কাউন্সেলরের সাথে কথা বলুন
+            <a
+              href={whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ed-btn ed-btn-outline min-h-[50px] px-7 inline-flex items-center gap-2"
+            >
+              <PhoneCall size={16} /> কাউন্সেলরের সাথে পরামর্শ করুন
             </a>
           </div>
         </div>
@@ -164,154 +255,206 @@ export default function BengaliChinaCostPage() {
           <div className="flex items-center gap-3">
             <Wallet className="size-8 text-lime shrink-0" />
             <div>
-              <p className="text-[15px] font-bold text-petrol-800">ভিসার আগে ০ টাকা</p>
-              <p className="text-[13px] text-ink-soft">ভিসার পূর্বে কোনো সার্ভিস ফি নেই</p>
+              <p className="text-[15px] font-bold text-petrol-800">ভিসার আগে BDT 0</p>
+              <p className="text-[13px] text-ink-soft">ভিসা স্ট্যাম্পিংয়ের আগে কোনো সার্ভিস ফি নেই</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Landmark className="size-8 text-lime shrink-0" />
+            <CheckCircle2 className="size-8 text-lime shrink-0" />
             <div>
-              <p className="text-[15px] font-bold text-petrol-800">ব্যাংক ফাইল গাইডেন্স</p>
-              <p className="text-[13px] text-ink-soft">বাংলাদেশ ব্যাংকের নিয়ম মেনে লেনদেন</p>
+              <p className="text-[15px] font-bold text-petrol-800">No Student File</p>
+              <p className="text-[13px] text-ink-soft">ব্যাংক ফাইলের কোনো ঝামেলা নেই</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <Calculator className="size-8 text-lime shrink-0" />
             <div>
-              <p className="text-[15px] font-bold text-petrol-800">টাকা ও আরএমবি রূপান্তর</p>
-              <p className="text-[13px] text-ink-soft">১ আরএমবি ≈ ১৮.৬৬ টাকা (বাজারদর অনুযায়ী)</p>
+              <p className="text-[15px] font-bold text-petrol-800">BDT ও RMB রূপান্তর</p>
+              <p className="text-[13px] text-ink-soft">১ RMB ≈ ১৮.৬৬ টাকা (মার্কেট রেট অনুযায়ী)</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <BadgeCheck className="size-8 text-lime shrink-0" />
             <div>
-              <p className="text-[15px] font-bold text-petrol-800">লিখিত ক্লিয়ারকস্ট শিট</p>
-              <p className="text-[13px] text-ink-soft">পেমেন্টের পূর্বেই বিস্তারিত শিট প্রদান</p>
+              <p className="text-[15px] font-bold text-petrol-800">লিখিত ClearCost™ শিট</p>
+              <p className="text-[13px] text-ink-soft">আবেদনের আগেই প্রতিটি ফি লিখিত আকারে প্রদান</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Cost Tiers */}
-      <Section title="চীনে ৩টি মূল ক্যাটাগরিতে পড়াশোনার খরচ" intro="স্কলারশিপের ধরন অনুযায়ী শিক্ষার্থীর প্রকৃত খরচ নির্ধারিত হয়। নিচে প্রধান ৩টি ক্যাটাগরির আর্থিক বিবরণ দেওয়া হলো:">
-        <div className="grid gap-6 lg:grid-cols-3">
-          {costTiers.map((tier) => (
-            <div key={tier.title} className="rounded-3xl border border-rule bg-white p-7 shadow-sm flex flex-col justify-between">
-              <div>
-                <span className="inline-block rounded-full bg-canvas-soft px-3.5 py-1 text-[13px] font-bold text-petrol-800">
-                  {tier.tag}
-                </span>
-                <h3 className="mt-4 text-[22px] font-bold text-petrol-800">{tier.title}</h3>
-                <p className="mt-2 text-[15px] font-semibold text-emerald-700 bg-emerald-50 rounded-xl p-3">
-                  {tier.highlight}
-                </p>
-
-                <div className="mt-6 space-y-4 text-[15px] text-ink-soft border-t border-rule pt-5">
-                  <div>
-                    <span className="font-bold text-petrol-800 block">টিউশন ফি:</span>
-                    <span>{tier.tuition}</span>
-                  </div>
-                  <div>
-                    <span className="font-bold text-petrol-800 block">হোস্টেল আবাসন:</span>
-                    <span>{tier.hostel}</span>
-                  </div>
-                  <div>
-                    <span className="font-bold text-petrol-800 block">মাসিক বৃত্তি / স্টাইপেন্ড:</span>
-                    <span>{tier.stipend}</span>
-                  </div>
-                  <div>
-                    <span className="font-bold text-petrol-800 block">অন্যান্য আনুষঙ্গিক খরচ:</span>
-                    <span className="text-[14px] leading-relaxed">{tier.outOfPocket}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 pt-5 border-t border-rule">
-                <Link href="/china-universities" className="inline-flex items-center gap-2 text-[15px] font-bold text-petrol-800 hover:text-lime">
-                  বিশ্ববিদ্যালয় তালিকা দেখুন <ArrowRight size={16} />
-                </Link>
-              </div>
+      {/* Why China Has No Student File Hassle */}
+      <Section
+        title="চীনে উচ্চশিক্ষায় কোনো Student File খোলার ঝামেলা নেই কেন?"
+        intro="ইউরোপ বা পশ্চিমা দেশগুলোর তুলনায় চীনে পড়াশোনার পেমেন্ট প্রক্রিয়া অত্যন্ত সহজ ও ঝামেলামুক্ত:"
+      >
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {paymentSimplicityPoints.map((item) => (
+            <div key={item.title} className="rounded-2xl border border-rule bg-white p-6 shadow-sm">
+              <span className="grid size-11 place-items-center rounded-xl bg-lime/25 text-petrol-800">
+                <item.icon size={22} />
+              </span>
+              <h3 className="mt-4 text-[17px] font-bold text-petrol-800">{item.title}</h3>
+              <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">{item.desc}</p>
             </div>
           ))}
         </div>
       </Section>
 
-      {/* Bangladesh Bank Student File Section */}
-      <section id="student-file" className="bg-canvas-soft py-16 lg:py-24">
-        <div className={kit.wrap}>
-          <div className="max-w-3xl">
-            <span className="text-[14px] font-bold uppercase tracking-wider text-emerald-700">বাংলাদেশ ব্যাংক নির্দেশিকা</span>
-            <h2 className="mt-2 font-display text-[28px] font-black sm:text-[36px] text-petrol-800">
-              বৈধ ব্যাংকিং চ্যানেলে বিদেশে টিউশন ফি পাঠানো (স্টুডেন্ট ফাইল)
-            </h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-ink-soft">
-              বিদেশে পড়াশোনার টিউশন ও থাকার খরচ পাঠানোর জন্য হুন্ডি বা অননুমোদিত কোনো মাধ্যম ব্যবহার করা সম্পূর্ণ বেআইনি। বাংলাদেশ ব্যাংকের বৈদেশিক মুদ্রা নিয়ন্ত্রণ নীতি অনুযায়ী অনুমোদিত বাণিজ্যিক ব্যাংকের মাধ্যমে স্টুডেন্ট ফাইল খুলে টাকা পাঠাতে হয়।
-            </p>
-          </div>
+      {/* Main Cost Tiers */}
+      <section id="cost-tiers">
+        <Section
+          tone="sage"
+          title="চীনে ৩টি প্রধান ক্যাটাগরিতে পড়াশোনার খরচ"
+          intro="স্কলারশিপের ধরন অনুযায়ী শিক্ষার্থীর প্রকৃত খরচ নির্ধারিত হয়। নিচে ৩টি মূল ক্যাটাগরির আর্থিক বিবরণ দেওয়া হলো:"
+        >
+          <div className="grid gap-6 lg:grid-cols-3">
+            {costTiers.map((tier) => (
+              <div
+                key={tier.title}
+                className="rounded-3xl border border-rule bg-white p-7 shadow-sm flex flex-col justify-between"
+              >
+                <div>
+                  <span
+                    className={`inline-block rounded-full border px-3.5 py-1 text-[13px] font-bold ${tier.badgeTone}`}
+                  >
+                    {tier.tag}
+                  </span>
+                  <h3 className="mt-4 text-[21px] font-bold text-petrol-800">{tier.title}</h3>
+                  <p className="mt-3 text-[14px] font-semibold text-emerald-800 bg-emerald-50 rounded-xl p-3 border border-emerald-100">
+                    {tier.highlight}
+                  </p>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {studentFileSteps.map((s) => (
-              <div key={s.step} className="rounded-2xl bg-white p-6 border border-rule shadow-sm">
-                <span className="flex size-10 items-center justify-center rounded-xl bg-petrol-800 font-display text-[18px] font-black text-lime">
-                  {s.step}
-                </span>
-                <h3 className="mt-4 text-[18px] font-bold text-petrol-800">{s.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{s.body}</p>
+                  <div className="mt-6 space-y-4 text-[15px] text-ink-soft border-t border-rule pt-5">
+                    <div>
+                      <span className="font-bold text-petrol-800 block text-[14px]">Tuition Fee:</span>
+                      <span className="font-medium text-petrol-800">{tier.tuition}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-petrol-800 block text-[14px]">হোস্টেল / ডরমিটরি:</span>
+                      <span>{tier.hostel}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-petrol-800 block text-[14px]">মাসিক স্টাইপেন্ড (Stipend):</span>
+                      <span>{tier.stipend}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-petrol-800 block text-[14px]">অন্যান্য আনুষঙ্গিক খরচ:</span>
+                      <span className="text-[14px] leading-relaxed">{tier.outOfPocket}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-5 border-t border-rule">
+                  <Link
+                    href="/china-universities"
+                    className="inline-flex items-center gap-2 text-[15px] font-bold text-petrol-800 hover:text-lime"
+                  >
+                    বিশ্ববিদ্যালয় তালিকা ও প্রোগ্রাম দেখুন <ArrowRight size={16} />
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
-
-          <div className="mt-10 rounded-2xl bg-amber-50 border border-amber-200 p-6 flex items-start gap-4">
-            <ShieldAlert className="size-6 text-amber-700 shrink-0 mt-1" />
-            <div>
-              <h4 className="text-[16px] font-bold text-amber-900">অভিভাবকদের জন্য জরুরি সতর্কবার্তা</h4>
-              <p className="mt-1 text-[14px] leading-relaxed text-amber-800">
-                বাংলাদেশ ব্যাংকের নিয়ম অনুযায়ী স্পন্সরের টিআইএন (TIN) সার্টিফিকেট ও ব্যাংক স্টেটমেন্টে আয়ের সুনির্দিষ্ট বৈধ উৎস থাকা আবশ্যক। চাইনিজ বিশ্ববিদ্যালয়গুলো সাধারণত আরএমবি (CNY) কারেন্সিতে ইনভয়েস দেয়, কিন্তু দেশীয় ব্যাংকগুলো ইউএসডি (USD) বা ইউরো (EUR) তে ওয়্যার ট্রান্সফার করে। ফলে মুদ্রা রূপান্তরের ক্ষেত্রে ২–৪% এক্সচেঞ্জ মার্জিন হিসেবে বাজেটে বিবেচনায় রাখুন।
-              </p>
-            </div>
-          </div>
-        </div>
+        </Section>
       </section>
 
+      {/* Quick Summary Comparison Table */}
+      <Section
+        title="এক নজরে বার্ষিক খরচের বাস্তবসম্মত হিসাব"
+        intro="অভিভাবকদের বাজেট পরিকল্পনার সুবিধার্থে খাবার, আবাসন ও টিউশনসহ সম্ভাব্য বার্ষিক সর্বমোট ব্যয়ের তুলনামূলক ছক:"
+      >
+        <div className="overflow-x-auto rounded-2xl border border-rule bg-white shadow-sm">
+          <table className="w-full text-left text-[14px] sm:text-[15px]">
+            <thead className="bg-canvas-soft text-petrol-800 border-b border-rule font-bold text-[13px] uppercase tracking-wider">
+              <tr>
+                <th className="p-4 sm:p-5">ক্যাটাগরি / কোর্স</th>
+                <th className="p-4 sm:p-5">বার্ষিক Tuition Fee</th>
+                <th className="p-4 sm:p-5">বার্ষিক ডরমিটরি</th>
+                <th className="p-4 sm:p-5">খাবার ও হাতখরচ (বার্ষিক)</th>
+                <th className="p-4 sm:p-5 font-black text-petrol-800">অভিভাবকের সম্ভাব্য খরচ</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-rule text-ink-soft">
+              {annualComparisonRows.map((row) => (
+                <tr key={row.category} className="hover:bg-canvas-soft/50 transition-colors">
+                  <td className="p-4 sm:p-5 font-bold text-petrol-800">{row.category}</td>
+                  <td className="p-4 sm:p-5">{row.tuition}</td>
+                  <td className="p-4 sm:p-5">{row.hostel}</td>
+                  <td className="p-4 sm:p-5">{row.foodPersonal}</td>
+                  <td className="p-4 sm:p-5 font-bold text-emerald-800">{row.totalOutPocket}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-[13px] text-ink-mute leading-relaxed">
+          *হিসাবটি আনুমানিক এবং ১ RMB = ১৮.৬৬ টাকা ও ১ USD = ১২২ টাকা ধরে রূপান্তর করা হয়েছে। কোর্স, শহর এবং শিক্ষার্থীর নিজস্ব লাইফস্টাইলের ওপর নির্ভর করে খরচ কিছুটা কম-বেশি হতে পারে।
+        </p>
+      </Section>
+
       {/* EduExpress Commercial Policy */}
-      <Section title="এজু এক্সপ্রেসের সার্ভিস চার্জ পলিসি" intro="আমরা স্বচ্ছ ও স্পষ্ট শর্তে কাজ করি। আপনার কোনো টাকা ঝুঁকির মুখে পড়তে দিই না।">
-        <div className="rounded-3xl bg-petrol-800 text-white p-8 lg:p-12">
+      <Section
+        title="EduExpress-এর সার্ভিস চার্জ ও Visa-First পলিসি"
+        intro="আমরা স্বচ্ছ ও লিখিত শর্তে কাজ করি। আপনার কোনো টাকা অনাকাঙ্ক্ষিত ঝুঁকির মুখে পড়বে না।"
+      >
+        <div className="rounded-3xl bg-petrol-800 text-white p-8 lg:p-12 shadow-md">
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div>
-              <span className="rounded-full bg-lime/20 px-3.5 py-1 text-[13px] font-semibold text-lime">ভিসা-ফার্স্ট প্রতিশ্রুতি</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-lime/20 px-3.5 py-1 text-[13px] font-semibold text-lime">
+                <ShieldCheck size={16} /> ভিসা-ফার্স্ট (Visa-First) প্রতিশ্রুতি
+              </span>
               <h3 className="mt-4 font-display text-[26px] font-bold sm:text-[32px]">
-                ভিসা স্ট্যাম্পিংয়ের পূর্বে আমাদের কোনো ফি নেই
+                ভিসা নিশ্চিত হওয়ার আগে আমাদের সার্ভিস ফি BDT 0
               </h3>
-              <p className="mt-4 text-[16px] leading-relaxed text-white/80">
-                চায়না প্যাকেজের জন্য ফাইল ওপেনিং চার্জ সম্পূর্ণ ০ টাকা। চায়না ভিসা অনুমোদনের পূর্বে এজু এক্সপ্রেস কোনো সার্ভিস চার্জ গ্রহণ করে না। ভিসা নিশ্চিত হওয়ার পর নির্ধারিত প্যাকেজ ফি (২,০০,০০০ টাকা) পরিশোধযোগ্য।
+              <p className="mt-4 text-[16px] leading-relaxed text-white/85">
+                চায়না প্যাকেজের জন্য ফাইল ওপেনিং চার্জ সম্পূর্ণ ০ টাকা। চায়না ভিসা স্ট্যাম্পিংয়ের আগে EduExpress কোনো সার্ভিস ফি গ্রহণ করে না। ভিসা শতভাগ নিশ্চিত হওয়ার পর নির্ধারিত প্যাকেজ ফি (BDT 2,00,000) পরিশোধযোগ্য।
               </p>
               <p className="mt-3 text-[14px] leading-relaxed text-white/70">
-                *বিশ্ববিদ্যালয় কর্তৃক নির্ধারিত আবেদন ফি, মেডিকেল টেস্ট, ইনস্যুরেন্স কিংবা সরকারি ফি থাকলে তা সরাসরি সংশ্লিষ্ট প্রতিষ্ঠানে প্রদেয় এবং আবেদনের পূর্বেই লিখিত কস্ট শিটে উল্লেখ থাকবে।
+                *বিশ্ববিদ্যালয় কর্তৃক নির্ধারিত Application Fee, অনুমোদিত মেডিকেল টেস্ট বা সরকারি এম্বাসি ফি সরাসরি সংশ্লিষ্ট কর্তৃপক্ষকে প্রদেয় এবং আবেদনের পূর্বেই লিখিত কস্ট শিটে স্পষ্ট উল্লেখ থাকে।
               </p>
             </div>
 
-            <div className="rounded-2xl bg-white/10 p-6 border border-white/15">
+            <div className="rounded-2xl bg-white/10 p-6 border border-white/15 backdrop-blur-sm">
               <h4 className="text-[18px] font-bold text-lime">লিখিত খরচের অঙ্গীকারনামা</h4>
-              <ul className="mt-4 space-y-3 text-[15px] text-white/90">
+              <ul className="mt-4 space-y-3.5 text-[15px] text-white/90">
                 <li className="flex items-center gap-2.5">
                   <BadgeCheck size={18} className="text-lime shrink-0" />
-                  <span>কোনো গোপন বা অপ্রকাশিত চার্জ নেই</span>
+                  <span>কোনো গোপন বা অপ্রত্যাশিত চার্জ নেই</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <BadgeCheck size={18} className="text-lime shrink-0" />
-                  <span>প্রতিটি ফির নির্দিষ্ট রিসিট ও প্রাপক নিশ্চিতকরণ</span>
+                  <span>প্রতিটি ফির অফিশিয়াল রসিদ ও প্রাপক স্পষ্টীকরণ</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <BadgeCheck size={18} className="text-lime shrink-0" />
-                  <span>ব্যাংক স্টুডেন্ট ফাইল ওপেনিংয়ে পূর্ণাঙ্গ সহায়তা</span>
+                  <span>ক্যাম্পাসে পৌঁছে ফি পরিশোধে গাইডলাইন ও সহায়তা</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <BadgeCheck size={18} className="text-lime shrink-0" />
-                  <span>ভিসা প্রিপারেশন ও প্রি-ডিপার্চার ওরিয়েন্টেশন অন্তর্ভুক্ত</span>
+                  <span>JW202 প্রসেসিং, এম্বাসি ফাইল প্রস্তুতি ও প্রি-ডিপার্চার ব্রিফিং অন্তর্ভুক্ত</span>
                 </li>
               </ul>
             </div>
           </div>
+        </div>
+      </Section>
+
+      {/* Frequently Asked Questions */}
+      <Section
+        title="সাধারণ জিজ্ঞাসা (FAQ)"
+        intro="চীনে পড়াশোনার খরচ ও পেমেন্ট নিয়ে অভিভাবক ও শিক্ষার্থীদের সচরাচর প্রশ্নগুলোর উত্তর:"
+      >
+        <div className="grid gap-5 md:grid-cols-2">
+          {faqs.map((faq) => (
+            <div key={faq.q} className="rounded-2xl border border-rule bg-white p-6 shadow-sm">
+              <h3 className="flex items-start gap-2.5 text-[17px] font-bold text-petrol-800">
+                <HelpCircle size={20} className="text-emerald-700 shrink-0 mt-0.5" />
+                <span>{faq.q}</span>
+              </h3>
+              <p className="mt-3 pl-7 text-[15px] leading-relaxed text-ink-soft">{faq.a}</p>
+            </div>
+          ))}
         </div>
       </Section>
 
@@ -320,12 +463,14 @@ export default function BengaliChinaCostPage() {
         <div className={kit.wrap}>
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
-              <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-700">ফ্রি প্রোফাইল অ্যাসেসমেন্ট</span>
+              <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
+                ফ্রি প্রোফাইল অ্যাসেসমেন্ট
+              </span>
               <h2 className="mt-2 font-display text-[26px] font-black sm:text-[32px] text-petrol-800">
-                আপনার বাজেট অনুযায়ী সেরা বিশ্ববিদ্যালয় ও স্কলারশিপ জানুন
+                আপনার রেজাল্ট ও বাজেট অনুযায়ী সেরা অপশন জানুন
               </h2>
               <p className="mt-3 text-[15px] text-ink-soft">
-                আপনার রেজাল্ট ও পছন্দের সাবজেক্ট জমা দিন। আমাদের সিনিয়র কাউন্সেলর আপনার সাথে যোগাযোগ করবেন।
+                আপনার শিক্ষাগত যোগ্যতা ও পছন্দের বিষয় জমা দিন। আমাদের এক্সপার্ট কাউন্সেলর আপনার প্রোফাইল মূল্যায়ন করে স্কলারশিপ সম্ভাবনা জানাবেন।
               </p>
             </div>
             <div className="rounded-3xl bg-white p-6 sm:p-8 border border-rule shadow-sm">

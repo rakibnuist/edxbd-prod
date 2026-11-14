@@ -11,7 +11,7 @@
 EduExpress will **not** dilute engineering or content bandwidth by launching Malaysia before China's data architecture, fee transparency, and SEO/Bengali parity are airtight. Malaysia is sequenced immediately after China reaches 100% database and parent-trust parity, serving as the first Wave 1 Southeast Asian expansion built on the exact same verified-data architecture.
 
 ```
-[Phase 1: China Data Architecture] ──► [Phase 2: China SEO, Student File & /bn Parity]
+[Phase 1: China Data Architecture] ──► [Phase 2: China SEO, Payment Simplicity & /bn Parity]
                                                      │
                                                      ▼
 [Phase 4: Malaysia SEO & Wave 1 Gate] ◄── [Phase 3: Malaysia Data & EMGS/BDT Architecture]
@@ -42,8 +42,8 @@ EduExpress will **not** dilute engineering or content bandwidth by launching Mal
 
 | Workstream | Concrete Action | Target URLs / Deliverables | Owner |
 |---|---|---|---|
-| **2.1 Bangladesh Bank Student File Guide** | Publish an authoritative, bank-ready **Student File & Remittance Guide** covering AD bank selection, FE Circular No. 37 education cards, TM Form, E-TIN/KYC, JW201/202, and CNY↔USD FX spread | Integrate into `/study-in-china-cost-bangladesh`, `/china-student-visa-bangladesh`, and `/for-parents` | Content / Counselors |
-| **2.2 Bengali (`/bn/*`) Expansion** | Add `language` schema field (`en` / `bn`) + automated `hreflang` pairs; translate & human-review top 3 China money pages (Cost + Student File in BDT, X1/X2 Visa Process, Top-5 Universities Comparison) | `/bn/study-in-china` + 3 `/bn/*` supporting pages with `hreflang` | Translator + Developer |
+| **2.1 China Payment Simplicity & Cost Guide** | Publish authoritative guide clarifying that **no Bangladesh Bank Student File is needed for China** (fees covered by full scholarship or paid on-campus after arrival; passport endorsement for travel/living) | Integrated into `/study-in-china-cost-bangladesh` and `/for-parents` | Content / Counselors |
+| **2.2 Bengali (`/bn/*`) Expansion** | Add `language` schema field (`en` / `bn`) + bidirectional `hreflang` pairs; publish user-friendly Bengali guides with natural English terms (`/bn/study-in-china-cost-bangladesh`, `/bn/china-student-visa-bangladesh`, `/bn/china-universities`) | `/bn/study-in-china` + 3 `/bn/*` supporting pages with `hreflang` | Translator + Developer |
 | **2.3 Search Engine & Schema Parity** | Standardize clean FAQ, Breadcrumb and Course schema blocks across all 14 China URLs; keep `llms.txt`, `llms-full.txt`, and `pricing.md` synced to the 110-university catalog | 100% China cluster pages pass FAQ/Breadcrumb/Course schema validation | Developer + SEO |
 | **2.4 B2B Partner Authority** | Upgrade `/partnership` with written Partner SOP, commission/payment-terms in writing, and downloadable Partner Process Pack (management-approved) | Live B2B partner page + CRM stage routing | Management + Dev |
 

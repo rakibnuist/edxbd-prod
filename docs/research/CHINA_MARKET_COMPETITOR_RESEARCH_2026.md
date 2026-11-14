@@ -91,28 +91,17 @@ Bangladesh's outbound student market is undergoing a structural shift from tradi
 
 ---
 
-## 4. Parent & Guardian Pain Points (Including Bangladesh Bank Student File Requirements)
+## 4. Parent & Guardian Pain Points & Payment Simplicity
 
-In Bangladesh, parents/guardians finance the education and sign off on agency selection. Their primary friction points fall into five operational categories:
+In Bangladesh, parents/guardians finance the education and sign off on agency selection. Their primary friction points and practical payment realities are:
 
-### 4.1 Bangladesh Bank Student File & Remittance Friction (Critical Pain Point)
+### 4.1 Payment Simplicity for China: No Student File Required (Major Strategic Advantage)
 
-Under Bangladesh Bank foreign exchange regulations (including **FE Circular No. 37/2025** and 2026 updates), parents cannot legally wire tuition or living expenses abroad via standard personal accounts—they must open a **Student File** at an **Authorized Dealer (AD) commercial bank branch** (e.g., City Bank, Eastern Bank, Premier Bank, BRAC Bank, Prime Bank).
-
-- **Required Documents Checklist for Parents:**
-  1. **Bank Account & KYC:** Savings/current account in student's or legal guardian's name, NID/passport, passport photos, and **AML/KYC compliance** of the sponsor (E-TIN certificate, tax return/acknowledgement, verified income source proof, and 6–12 months of bank statements).
-  2. **University Admission Proof:** Original & photocopy of the official **Admission Letter / JW201 or JW202 form** (for China).
-  3. **Official Fee Invoice / Cost Estimate:** Itemized institutional demand note showing annual tuition, dormitory, and mandatory fees.
-  4. **Academic & Identity Records:** Attested SSC/HSC/Bachelor certificates & transcripts + valid passport (with visa if applicable).
-  5. **TM Form:** Completed Bangladesh Bank **TM (Travel/Miscellaneous) Form** for outward remittance.
-- **Regulatory Limits & Mechanics:**
-  - **Tuition:** Remitted for the **actual invoice amount** (no arbitrary dollar ceiling, provided it matches official university papers).
-  - **Duration Cap:** Approved for **up to 1 academic year at a time**; Year 2+ requires fresh academic progress reports and updated invoices.
-  - **Advance Deposits:** Seat-booking/application deposits can only be remitted in advance if the university's official offer/invoice explicitly mandates advance payment.
-  - **Dedicated International Education Cards (FE Circular No. 37):** AD banks may issue dedicated debit/prepaid/credit cards mapped exclusively to overseas education portals, separate from personal travel quotas.
-- **Specific Parent Pain Points:**
-  - *Hidden Bank Fees:* Commercial AD banks charge Student File opening & annual maintenance fees (plus SWIFT/correspondent bank charges and FX spread), which agencies rarely warn parents about upfront.
-  - *Tax & Income Source Scrutiny:* Many business-owner or agricultural-income guardians struggle to assemble compliant E-TIN and bank-statement trails on short notice, delaying seat deposits.
+Unlike Western destinations (UK, USA, Canada, Australia) or Malaysia where parents must navigate complex central bank bureaucracy, **studying in China does NOT require opening a Bangladesh Bank Student File**:
+- **Full CSC / Type A Scholarships:** Tuition and dormitory accommodation are 100% free; the student receives a direct monthly cash stipend (2,500 – 3,500 RMB) in China. Zero tuition remittance is needed from Bangladesh.
+- **Partial / Provincial Scholarships:** Tuition waivers apply directly, and any remaining hostel or partial tuition fees are paid **on-campus upon arrival during registration week** (via cash, UnionPay, or campus cashier), removing the need for advance cross-border wire transfers.
+- **Living & Arrival Funds:** Handled smoothly through standard foreign currency endorsement on the student's passport (USD/CNY) and dual-currency cards, transitioning to on-campus digital mobile payments (Alipay / WeChat Pay) within the first week.
+- **Strategic Impact:** Bangladeshi parents dread bureaucratic bank audits, E-TIN tax clearance inspections, and bank file delays. Highlighting that **"No Student File is needed for China"** is one of EduExpress's strongest conversion USPs over competing Western study destinations. Student Files apply only to countries where advance tuition wire before visa is legally required (e.g., Malaysia, UK).
   - *CNY vs USD Wire Confusion:* Most Bangladeshi AD banks remit in USD/EUR while Chinese universities invoice in CNY—creating FX conversion slippage (2–4%) unless budgeted in the ClearCost Sheet.
 
 ### 4.2 Additional Guardian & Student Pain Points

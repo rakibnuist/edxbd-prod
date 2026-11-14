@@ -27,16 +27,19 @@ export const metadata = pageMetadata({
 
 const bnFeatures = [
   {
-    title: 'ফুল টিউশন ও হোস্টেল স্কলারশিপের সুযোগ',
-    detail: 'চীনা সরকারি সিএসসি (CSC), প্রোভিনশিয়াল এবং বিশ্ববিদ্যালয় স্কলারশিপে টিউশন ও হোস্টেল পুরোপুরি কভার হতে পারে। তবে স্কলারশিপ প্রতিযোগিতামূলক — আমরা কোনো স্কলারশিপের নিশ্চয়তা দিই না।',
+    title: 'Full Tuition ও ডরমিটরি স্কলারশিপের সুযোগ',
+    detail:
+      'চীনা সরকারি CSC Scholarship, Provincial ও University স্কলারশিপে টিউশন এবং হোস্টেল ডরমিটরি পুরোপুরি কভার হতে পারে। তবে স্কলারশিপ পুরোপুরি মেধা ও যোগ্যতানির্ভর—আমরা কোনো প্রকার অবাস্তব নিশ্চয়তা দিই না।',
   },
   {
-    title: 'আইইএলটিএস (IELTS) ছাড়া আবেদনের সুযোগ',
-    detail: 'কিছু বিশ্ববিদ্যালয় ও প্রোগ্রাম মিডিয়াম অফ ইন্সট্রাকশন (MOI) সার্টিফিকেট গ্রহণ করে। এটি সব প্রোগ্রামে প্রযোজ্য নয় — আপনার নির্দিষ্ট প্রোগ্রামের শর্ত যাচাই করুন।',
+    title: 'IELTS ছাড়াই আবেদনের সুযোগ (MOI Certificate)',
+    detail:
+      'অনেক চাইনিজ বিশ্ববিদ্যালয় ও প্রোগ্রামে ইংরেজি মাধ্যমের প্রুফ হিসেবে Medium of Instruction (MOI) সার্টিফিকেট গ্রহণ করা হয়। প্রোগ্রামের রিকোয়ারমেন্ট অনুযায়ী আমরা সঠিক তালিকা জানিয়ে দিই।',
   },
   {
-    title: 'ভিসার আগে কোনো সার্ভিস ফি নেই',
-    detail: 'এজু এক্সপ্রেস ইন্টারন্যাশনাল-এ ভিসা অনুমোদনের পূর্বে কোনো কনসালটেন্সি সার্ভিস চার্জ প্রযোজ্য নয়।',
+    title: 'ভিসা কনফার্মেশনের আগে কোনো সার্ভিস ফি নেই',
+    detail:
+      'EduExpress-এ চায়না ভিসা অনুমোদনের পূর্বে কোনো ফাইল ওপেনিং চার্জ বা কনসালটেন্সি সার্ভিস ফি নেওয়া হয় না।',
   },
 ];
 
@@ -48,16 +51,16 @@ const trustItems = [
   { icon: BadgeCheck, title: 'সব খরচ লিখিতভাবে', text: 'সিদ্ধান্ত নেওয়ার আগেই প্রতিটি পেমেন্টের তালিকা' },
 ];
 
-// Detailed guides are published in English; links carry hrefLang so readers know.
+// Detailed guides are published in English or Bangla; links carry hrefLang so readers know.
 const guides = [
   { label: 'চীনে স্কলারশিপ: সব রুটের তুলনা', href: '/china-scholarships-bangladesh' },
-  { label: 'সিএসসি (CSC) স্কলারশিপ গাইড', href: '/csc-scholarship-bangladesh' },
-  { label: 'ভর্তির যোগ্যতা ও কাগজপত্র', href: '/china-admission-requirements' },
-  { label: 'পড়াশোনার মোট খরচ', href: '/study-in-china-cost-bangladesh' },
-  { label: 'চায়না স্টুডেন্ট ভিসা', href: '/china-student-visa-bangladesh' },
-  { label: 'চীনে এমবিবিএস', href: '/mbbs-in-china-bangladesh' },
-  { label: 'ইনটেক ও আবেদনের সময়সীমা', href: '/china-intakes-deadlines' },
-  { label: 'চীনের বিশ্ববিদ্যালয় খুঁজুন', href: '/china-universities' },
+  { label: 'CSC স্কলারশিপ সম্পূর্ণ গাইড', href: '/csc-scholarship-bangladesh' },
+  { label: 'ভর্তির রিকোয়ারমেন্ট ও ডকুমেন্টস', href: '/china-admission-requirements' },
+  { label: 'পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড', href: '/bn/study-in-china-cost-bangladesh' },
+  { label: 'চায়না স্টুডেন্ট ভিসা (X1/X2)', href: '/china-student-visa-bangladesh' },
+  { label: 'চীনে MBBS ভর্তি গাইড', href: '/mbbs-in-china-bangladesh' },
+  { label: 'ইনটেক ও Application Deadlines', href: '/china-intakes-deadlines' },
+  { label: 'চীনের শীর্ষ বিশ্ববিদ্যালয় তালিকা', href: '/china-universities' },
 ];
 
 const structuredData = {
