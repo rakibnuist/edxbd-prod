@@ -89,18 +89,26 @@ function UniversityCostPicker(props: Props) {
 }
 
 function CostCalculator({ university, program, programDetail, currency, fees, costPlans, servicePackages = [], scholarshipScenario, assessmentHref }: Props & { program: Program; programDetail?: UniversityProgramDetail; currency: CostCurrency }) {
+  const isMalaysia = (university.country || '').toLowerCase() === 'malaysia';
+  const isChina = (university.country || '').toLowerCase() === 'china';
   const cmsProgram = programDetail ? { name: program.name } : program;
   const prefills = { ...buildCostPrefills(cmsProgram, currency, programDetail ? [] : fees, programDetail ? [] : costPlans), ...buildProgramCostPrefills(programDetail, currency) };
   const recordedTuitionPeriod = prefills.tuition?.period || programDetail?.fees.find(fee => fee.key === 'tuition' && !fee.optional)?.period;
   const initialTuitionPeriod: TuitionPeriod = recordedTuitionPeriod === 'semester' || recordedTuitionPeriod === 'programme' ? recordedTuitionPeriod : 'year';
   const selectedReduction = scholarshipScenarioReduction(scholarshipScenario, currency, initialTuitionPeriod);
-  const createScenario = (): CostScenario => ({
-    values: applyScholarshipFeeWaivers({ ...emptyCostValues(), ...Object.fromEntries(Object.entries(prefills).map(([field, prefill]) => [field, prefill.value])) }, scholarshipScenario?.feeWaivers),
-    currency, serviceCurrency: currency,
-    scholarshipType: selectedReduction?.type || 'fixed', scholarship: selectedReduction?.value || '0', tuitionPeriod: initialTuitionPeriod,
-    housingPeriod: scholarshipScenario?.feeWaivers?.includes('housing') ? 'programme' : prefills.housing?.period === 'monthly' ? 'monthly' : prefills.housing?.period === 'semester' ? 'semester' : prefills.housing?.period === 'programme' || prefills.housing?.period === 'oneoff' ? 'programme' : 'year',
-    housingMonths: '', housingDays: '', depositRequired: !!prefills.deposit, depositCreditedToTuition: programDetail?.fees.some(fee => fee.key === 'deposit' && fee.creditToward === 'tuition') || false, depositCreditedToHousing: programDetail?.fees.some(fee => fee.key === 'deposit' && fee.creditToward === 'housing') || false, otherCostsApply: !!prefills.other,
-  });
+  const createScenario = (): CostScenario => {
+    const vals = applyScholarshipFeeWaivers({ ...emptyCostValues(), ...Object.fromEntries(Object.entries(prefills).map(([field, prefill]) => [field, prefill.value])) }, scholarshipScenario?.feeWaivers);
+    if (isMalaysia) {
+      vals.service = '0';
+    }
+    return {
+      values: vals,
+      currency, serviceCurrency: currency,
+      scholarshipType: selectedReduction?.type || 'fixed', scholarship: selectedReduction?.value || '0', tuitionPeriod: initialTuitionPeriod,
+      housingPeriod: scholarshipScenario?.feeWaivers?.includes('housing') ? 'programme' : prefills.housing?.period === 'monthly' ? 'monthly' : prefills.housing?.period === 'semester' ? 'semester' : prefills.housing?.period === 'programme' || prefills.housing?.period === 'oneoff' ? 'programme' : 'year',
+      housingMonths: '', housingDays: '', depositRequired: !!prefills.deposit, depositCreditedToTuition: programDetail?.fees.some(fee => fee.key === 'deposit' && fee.creditToward === 'tuition') || false, depositCreditedToHousing: programDetail?.fees.some(fee => fee.key === 'deposit' && fee.creditToward === 'housing') || false, otherCostsApply: !!prefills.other,
+    };
+  };
   const [scenario, setScenario] = useState<CostScenario>(createScenario);
   const [edited, setEdited] = useState<CostField[]>([]);
   const [packageIndex, setPackageIndex] = useState('');
@@ -147,30 +155,48 @@ function CostCalculator({ university, program, programDetail, currency, fees, co
     return <div key={name} className="flex items-start justify-between gap-4 py-1.5 text-xs"><span className="text-slate-500">{name === 'tuition' ? `Tuition balance · ${periodLabel(scenario.tuitionPeriod)}` : name === 'housing' && scenario.housingPeriod === 'monthly' ? `Accommodation · ${scenario.housingMonths || '?'} months` : name === 'housing' && scenario.housingPeriod === 'daily' ? `Accommodation · ${scenario.housingDays || '?'} days` : COST_LABELS[name]}{name === 'service' && selectedPackage && <span className="mt-0.5 block text-[12px] leading-4">{selectedPackage.title}</span>}</span><span className="text-right font-medium text-slate-800">{result.entries[name] === undefined ? name === 'service' && selectedPackage ? 'Quote required' : 'Not entered' : formatAmount(result.entries[name]!, name === 'service' ? serviceCurrency : currency)}</span></div>;
   });
 
+  const beforeLabel = isChina ? 'Before China' : 'Before departure';
+  const inCountryLabel = isChina ? 'In China' : `In ${university.country || 'Host Country'}`;
+  const beforeSubtotal = isChina ? 'Before China subtotal' : 'Before departure subtotal';
+  const inCountrySubtotal = isChina ? 'In China subtotal' : `${university.country || 'Host Country'} subtotal`;
+  const payableNote = isChina ? 'Payable after China visa approval, before departure.' : 'Payable according to your written service agreement.';
+
   return <div className="grid items-start gap-6 p-4 sm:p-7 xl:grid-cols-[minmax(0,1fr)_340px]">
     <div className="clearcost-no-print grid gap-3 rounded-xl border border-slate-200 bg-[#f1f5f9] p-4 sm:grid-cols-2 xl:col-span-2">
-      <div className="flex items-start gap-3"><PlaneTakeoff size={20} className="mt-1 shrink-0 text-[#12436b]" /><div><p className="text-sm font-semibold text-[#14212e]">Before China</p><p className="mt-1 text-xs leading-5 text-slate-500">Application, required deposit and your EduExpress Package.</p><p className="mt-2 text-lg font-semibold tabular-nums text-[#14212e]">{formatTotals(result.beforeCurrencyTotals)}</p></div></div>
-      <div className="flex items-start gap-3 border-t border-slate-200 pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0"><Building2 size={20} className="mt-1 shrink-0 text-[#12436b]" /><div><p className="text-sm font-semibold text-[#14212e]">In China</p><p className="mt-1 text-xs leading-5 text-slate-500">Tuition balance, accommodation and other applicable costs.</p><p className="mt-2 text-lg font-semibold tabular-nums text-[#14212e]">{formatAmount(result.inChinaTotal, currency)}</p></div></div>
+      <div className="flex items-start gap-3"><PlaneTakeoff size={20} className="mt-1 shrink-0 text-[#12436b]" /><div><p className="text-sm font-semibold text-[#14212e]">{beforeLabel}</p><p className="mt-1 text-xs leading-5 text-slate-500">Application, required deposit and your EduExpress Package.</p><p className="mt-2 text-lg font-semibold tabular-nums text-[#14212e]">{formatTotals(result.beforeCurrencyTotals)}</p></div></div>
+      <div className="flex items-start gap-3 border-t border-slate-200 pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0"><Building2 size={20} className="mt-1 shrink-0 text-[#12436b]" /><div><p className="text-sm font-semibold text-[#14212e]">{inCountryLabel}</p><p className="mt-1 text-xs leading-5 text-slate-500">Tuition balance, accommodation and other applicable costs.</p><p className="mt-2 text-lg font-semibold tabular-nums text-[#14212e]">{formatAmount(result.inChinaTotal, currency)}</p></div></div>
       {!result.isComplete && <p className="border-t border-slate-200 pt-3 text-xs leading-5 text-slate-600 sm:col-span-2">Partial estimate · {result.missing.length + result.invalid.length} {result.missing.length + result.invalid.length === 1 ? 'item needs' : 'items need'} attention. Blank fields are not confirmed zero-cost items.</p>}
     </div>
     <div className="clearcost-no-print space-y-7">
       <fieldset className="rounded-xl border border-slate-200 p-4 sm:p-5">
-        <legend className="mb-4 flex items-center gap-3 text-base font-semibold text-[#14212e]"><span className="grid size-7 place-items-center rounded-full bg-[#f8fafc] text-xs text-[#12436b]">1</span>Before China</legend>
+        <legend className="mb-4 flex items-center gap-3 text-base font-semibold text-[#14212e]"><span className="grid size-7 place-items-center rounded-full bg-[#f8fafc] text-xs text-[#12436b]">1</span>{beforeLabel}</legend>
         <div className="grid gap-4 sm:grid-cols-2">{field('application')}
           <div><label htmlFor={`${id}-deposit-required`} className="flex min-h-6 items-center gap-2 text-xs font-semibold text-slate-600"><input id={`${id}-deposit-required`} type="checkbox" checked={scenario.depositRequired} onChange={event => setScenario(current => ({ ...current, depositRequired: event.target.checked }))} className="size-4 accent-[#12436b]" />Deposit required</label>{scenario.depositRequired ? <div className="mt-3">{field('deposit')}<label htmlFor={`${id}-deposit-credit`} className="mt-3 block text-xs font-medium text-slate-600">Deposit treatment<select id={`${id}-deposit-credit`} value={scenario.depositCreditedToTuition ? 'tuition' : scenario.depositCreditedToHousing ? 'housing' : 'separate'} onChange={event => setScenario(current => ({ ...current, depositCreditedToTuition: event.target.value === 'tuition', depositCreditedToHousing: event.target.value === 'housing' }))} className={inputClass}><option value="separate">Separate payment · no credit confirmed</option><option value="tuition">Credited toward tuition</option><option value="housing">Credited toward accommodation</option></select><span className="mt-1 block text-xs font-normal leading-5 text-slate-500">A confirmed credit is deducted from the later balance once.</span></label></div> : <p className="mt-3 text-xs text-slate-500">No deposit included.</p>}</div>
         </div>
-        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50/70 p-4">
-          {servicePackages.length > 0 && <label htmlFor={`${id}-package`} className="block text-xs font-semibold text-slate-600">Select an EduExpress Package<select id={`${id}-package`} value={packageIndex} onChange={event => selectPackage(event.target.value)} className={inputClass}><option value="">Enter agreed package fee</option>{servicePackages.map((item, index) => <option key={`${item.title}-${index}`} value={index}>{item.title}{item.priceLabel ? ` · ${item.priceLabel}` : ''}</option>)}</select></label>}
-          {selectedPackage?.summary && <p className="mt-2 text-xs leading-5 text-slate-500">{selectedPackage.summary}</p>}
-          <div className={`grid gap-4 sm:grid-cols-[minmax(0,1fr)_110px] ${servicePackages.length ? 'mt-4' : ''}`}>{field('service', packagePrice ? 'The selected package price is included automatically. Edit only for an agreed quote.' : selectedPackage ? 'Enter your written package quote to complete the estimate.' : 'Enter the agreed package fee.')}<label htmlFor={`${id}-package-currency`} className="text-xs font-semibold text-slate-600">Package currency<select id={`${id}-package-currency`} value={serviceCurrency} onChange={event => setScenario(current => ({ ...current, serviceCurrency: event.target.value as CostCurrency, values: { ...current.values, service: '' } }))} className={inputClass}>{COST_CURRENCIES.map(item => <option key={item}>{item}</option>)}</select></label></div>
-          {serviceCurrency !== currency && <p className="mt-2 text-xs leading-5 text-slate-500">The package stays in {serviceCurrency}. {serviceCurrency === 'BDT' ? 'Add a BDT exchange rate in your cost breakdown to combine the totals.' : 'Amounts in different currencies are shown separately.'}</p>}
-          <p className="mt-2 text-xs leading-5 text-slate-500">Payable after China visa approval, before departure.</p>
-        </div>
-        {subtotal('Before China subtotal', formatTotals(result.beforeCurrencyTotals))}
+        {isMalaysia ? (
+          <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/80 p-4">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 size={18} className="text-emerald-700 shrink-0" />
+              <span className="text-xs font-bold text-emerald-950">EduExpress Service Charge: BDT 0</span>
+            </div>
+            <p className="mt-1.5 text-xs leading-5 text-emerald-800">
+              EduExpress charges BDT 0 for Malaysian university admission and visa guidance. All tuition and official fees are paid directly to EMGS and the institution.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50/70 p-4">
+            {servicePackages.length > 0 && <label htmlFor={`${id}-package`} className="block text-xs font-semibold text-slate-600">Select an EduExpress Package<select id={`${id}-package`} value={packageIndex} onChange={event => selectPackage(event.target.value)} className={inputClass}><option value="">Enter agreed package fee</option>{servicePackages.map((item, index) => <option key={`${item.title}-${index}`} value={index}>{item.title}{item.priceLabel ? ` · ${item.priceLabel}` : ''}</option>)}</select></label>}
+            {selectedPackage?.summary && <p className="mt-2 text-xs leading-5 text-slate-500">{selectedPackage.summary}</p>}
+            <div className={`grid gap-4 sm:grid-cols-[minmax(0,1fr)_110px] ${servicePackages.length ? 'mt-4' : ''}`}>{field('service', packagePrice ? 'The selected package price is included automatically. Edit only for an agreed quote.' : selectedPackage ? 'Enter your written package quote to complete the estimate.' : 'Enter the agreed package fee.')}<label htmlFor={`${id}-package-currency`} className="text-xs font-semibold text-slate-600">Package currency<select id={`${id}-package-currency`} value={serviceCurrency} onChange={event => setScenario(current => ({ ...current, serviceCurrency: event.target.value as CostCurrency, values: { ...current.values, service: '' } }))} className={inputClass}>{COST_CURRENCIES.map(item => <option key={item}>{item}</option>)}</select></label></div>
+            {serviceCurrency !== currency && <p className="mt-2 text-xs leading-5 text-slate-500">The package stays in {serviceCurrency}. {serviceCurrency === 'BDT' ? 'Add a BDT exchange rate in your cost breakdown to combine the totals.' : 'Amounts in different currencies are shown separately.'}</p>}
+            <p className="mt-2 text-xs leading-5 text-slate-500">{payableNote}</p>
+          </div>
+        )}
+        {subtotal(beforeSubtotal, formatTotals(result.beforeCurrencyTotals))}
       </fieldset>
 
       <fieldset className="rounded-xl border border-slate-200 p-4 sm:p-5">
-        <legend className="mb-4 flex items-center gap-3 text-base font-semibold text-[#14212e]"><span className="grid size-7 place-items-center rounded-full bg-[#f8fafc] text-xs text-[#12436b]">2</span>In China</legend>
+        <legend className="mb-4 flex items-center gap-3 text-base font-semibold text-[#14212e]"><span className="grid size-7 place-items-center rounded-full bg-[#f8fafc] text-xs text-[#12436b]">2</span>{inCountryLabel}</legend>
         <div className="grid gap-4 sm:grid-cols-2">{field('tuition', result.tuitionWaivedWithoutGross ? '100% tuition waiver: the gross fee is not needed for this estimate.' : 'Full fee before any tuition reduction.')}
           <label htmlFor={`${id}-tuition-period`} className="text-xs font-semibold text-slate-600">Tuition period<select id={`${id}-tuition-period`} value={scenario.tuitionPeriod} onChange={event => { setScenario(current => ({ ...current, tuitionPeriod: event.target.value as TuitionPeriod, scholarship: '0', values: { ...current.values, tuition: '' } })); setEdited(current => [...current, 'tuition']); }} className={inputClass}><option value="year">One year</option><option value="semester">One semester</option><option value="programme">Full programme</option></select><span className="mt-1.5 block text-xs font-normal leading-5 text-slate-500">The entered tuition is used once.</span></label>
         </div>
@@ -189,7 +215,7 @@ function CostCalculator({ university, program, programDetail, currency, fees, co
           {field('insurance')}{field('medical')}{field('residence')}
         </div>
         <div className="mt-4"><label htmlFor={`${id}-other-required`} className="flex items-center gap-2 text-xs font-semibold text-slate-600"><input id={`${id}-other-required`} type="checkbox" checked={scenario.otherCostsApply} onChange={event => setScenario(current => ({ ...current, otherCostsApply: event.target.checked }))} className="size-4 accent-[#12436b]" />Include other costs</label>{scenario.otherCostsApply && <div className="mt-4">{field('other', 'For example, utilities, books and personal living expenses.')}</div>}</div>
-        {subtotal('In China subtotal', formatAmount(result.inChinaTotal, currency))}
+        {subtotal(inCountrySubtotal, formatAmount(result.inChinaTotal, currency))}
       </fieldset>
       <div className="flex flex-wrap items-center gap-4 border-t border-slate-200 pt-4"><button type="button" onClick={reset} className="inline-flex min-h-10 items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#12436b]"><RotateCcw size={14} />Reset amounts</button><p className="text-xs leading-5 text-slate-500">Changing program or currency starts a new estimate.</p></div>
     </div>
@@ -197,10 +223,10 @@ function CostCalculator({ university, program, programDetail, currency, fees, co
     <aside className="rounded-xl border border-[#12436b]/20 bg-[#e3f0f9] p-5 sm:p-6 xl:sticky xl:top-[184px]">
       <div className="clearcost-print-only mb-5 hidden border-b border-slate-200 pb-4"><h2 className="text-xl font-semibold">EduExpress ClearCost</h2><p className="mt-2 text-sm">{university.name}</p><p className="mt-1 text-xs">{program.level} · {program.name}</p></div>
       <div className="border-b border-slate-200 pb-4"><p className="text-xs font-medium text-[#12436b]">{university.name}</p><h3 className="mt-2 text-xl font-semibold text-[#14212e]">Your cost breakdown</h3><p className="mt-2 text-sm leading-6 text-slate-600">{program.level} · {program.name}</p><p className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#12436b]"><CheckCircle2 size={14} />{result.isComplete ? 'All required amounts entered' : 'Estimate in progress'}</p></div>
-      <div className="mt-5"><h4 className="mb-1 text-xs font-semibold text-[#12436b]">Before China</h4>{summaryRows(BEFORE_CHINA_FIELDS)}<div className="mt-2 flex justify-between gap-3 border-t border-slate-200 pt-3 text-sm font-semibold text-[#14212e]"><span>Subtotal</span><span className="text-right">{formatTotals(result.beforeCurrencyTotals)}</span></div></div>
-      <div className="mt-5"><h4 className="mb-1 text-xs font-semibold text-[#12436b]">In China</h4>{summaryRows(IN_CHINA_FIELDS)}<div className="mt-2 flex justify-between gap-3 border-t border-slate-200 pt-3 text-sm font-semibold text-[#14212e]"><span>Subtotal</span><span>{formatAmount(result.inChinaTotal, currency)}</span></div></div>
+      <div className="mt-5"><h4 className="mb-1 text-xs font-semibold text-[#12436b]">{beforeLabel}</h4>{summaryRows(BEFORE_CHINA_FIELDS)}<div className="mt-2 flex justify-between gap-3 border-t border-slate-200 pt-3 text-sm font-semibold text-[#14212e]"><span>Subtotal</span><span className="text-right">{formatTotals(result.beforeCurrencyTotals)}</span></div></div>
+      <div className="mt-5"><h4 className="mb-1 text-xs font-semibold text-[#12436b]">{inCountryLabel}</h4>{summaryRows(IN_CHINA_FIELDS)}<div className="mt-2 flex justify-between gap-3 border-t border-slate-200 pt-3 text-sm font-semibold text-[#14212e]"><span>Subtotal</span><span>{formatAmount(result.inChinaTotal, currency)}</span></div></div>
       {result.scholarshipDeduction !== null && result.scholarshipDeduction > 0 && <dl className="mt-4 space-y-2 border-t border-slate-200 pt-4 text-xs"><div className="flex justify-between gap-3"><dt className="text-slate-500">Tuition reduction</dt><dd className="font-semibold text-emerald-700">−{formatAmount(result.scholarshipDeduction, currency)}</dd></div><div className="flex justify-between gap-3"><dt className="text-slate-500">Tuition after scholarship</dt><dd className="font-semibold">{formatAmount(result.netTuition || 0, currency)}</dd></div></dl>}
-      {result.housingDepositCredit > 0 && <p className="mt-4 text-xs leading-5 text-slate-600">{formatAmount(result.housingDepositCredit, currency)} of your deposit is credited toward accommodation. The In China subtotal includes only the remaining accommodation balance.</p>}
+      {result.housingDepositCredit > 0 && <p className="mt-4 text-xs leading-5 text-slate-600">{formatAmount(result.housingDepositCredit, currency)} of your deposit is credited toward accommodation. The {inCountryLabel} subtotal includes only the remaining accommodation balance.</p>}
       {result.depositExceedsHousing && <p role="status" className="mt-3 text-xs leading-5 text-amber-700">The deposit exceeds the accommodation balance. Confirm how the excess will be handled.</p>}
       {result.depositCredit > 0 && <p className="mt-4 text-xs leading-5 text-slate-500">{formatAmount(result.depositCredit, currency)} of your deposit is deducted from the tuition balance.</p>}
       {result.depositExceedsTuition && <p role="status" className="mt-3 text-xs leading-5 text-amber-700">Your deposit exceeds the tuition balance. Confirm how the excess will be credited or refunded.</p>}

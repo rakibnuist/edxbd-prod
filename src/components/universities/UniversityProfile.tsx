@@ -92,8 +92,18 @@ export default async function UniversityProfile({ university }: { university: Cl
     news={news}
     now={requestTime()}
     university={{
-      name: university.name, slug: university.slug, city: university.city, country: university.country, logo,
+      name: university.name,
+      slug: university.slug,
+      city: university.city,
+      country: university.country,
+      logo,
       location: university.location,
+      officialUrl: university.officialUrl,
+      recognitionAuthority: university.recognitionAuthority,
+      recognitionSourceUrl: university.recognitionSourceUrl,
+      badges: university.badges,
+      rankings: university.rankings,
+      tuition: university.details.tuition,
       scholarships: details?.programs.length ? [] : university.scholarships.map(item => ({
         title: evergreenText(item.title), type: item.type, details: item.details.map(evergreenText).filter(Boolean),
         amount: item.amount ? evergreenText(item.amount) : undefined, condition: item.condition ? evergreenText(item.condition) : undefined,
