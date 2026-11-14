@@ -738,7 +738,7 @@ export const countries: Country[] = [
     slug: 'malaysia',
     flag: '🇲🇾',
     description: 'World-Class Education & Affordable Living',
-    universities: ['Universiti Malaya', 'Universiti Teknologi Malaysia (UTM)', 'Monash University Malaysia', 'University of Nottingham Malaysia', 'Asia Pacific University (APU)', 'Taylor\'s University'],
+    universities: ['Universiti Malaya', 'Universiti Teknologi Malaysia (UTM)', 'Monash University Malaysia', 'University of Nottingham Malaysia', 'Heriot-Watt University Malaysia', 'Taylor\'s University', 'Sunway University', 'UCSI University', 'Asia Pacific University (APU)'],
     programs: ['Business', 'Engineering', 'IT', 'Hospitality'],
     requirements: {
       language: ['IELTS 5.0 - 6.0 required', 'Medium of Instruction (MOI) accepted for students from English-medium schools'],
@@ -746,7 +746,7 @@ export const countries: Country[] = [
       visa: ['EMGS Visa Approval Letter (VAL)', 'Single Entry Visa (SEV) at Malaysian High Commission']
     },
     costs: {
-      tuition: 'RM 12,000 - RM 35,000 / year (approx. BDT 3.2L - 9.5L; branch campuses RM 40,000+)',
+      tuition: 'RM 12,000 - RM 45,000 / year (approx. BDT 3.2L - 12.0L; UK/AU branch campuses RM 42,000 - 58,000)',
       living: 'RM 1,200 - RM 2,000 / month (approx. BDT 32,000 - 54,000/month with hostel & food)',
       currency: 'MYR'
     },
