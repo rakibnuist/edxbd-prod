@@ -39,7 +39,25 @@ const levelLabel = (level: string) =>
           : level;
 const levelOrder = ['Bachelor’s', 'Master’s', 'PhD', 'Language', 'Foundation', 'Diploma'];
 
-function UniversityMark({ university, size = 44 }: { university: DirectoryUniversity; size?: number }) {
+const flagFor = (country?: string) => {
+  if (!country) return '🌐';
+  const c = country.toLowerCase();
+  if (c.includes('malaysia')) return '🇲🇾';
+  if (c.includes('china')) return '🇨🇳';
+  if (c.includes('united kingdom') || c === 'uk') return '🇬🇧';
+  if (c.includes('hungary')) return '🇭🇺';
+  if (c.includes('finland')) return '🇫🇮';
+  if (c.includes('korea')) return '🇰🇷';
+  if (c.includes('cyprus')) return '🇨🇾';
+  if (c.includes('croatia')) return '🇭🇷';
+  if (c.includes('georgia')) return '🇬🇪';
+  if (c.includes('malta')) return '🇲🇹';
+  if (c.includes('greece')) return '🇬🇷';
+  if (c.includes('thailand')) return '🇹🇭';
+  return '🏛️';
+};
+
+function UniversityMark({ university, size = 56 }: { university: DirectoryUniversity; size?: number }) {
   const [failed, setFailed] = useState(false);
   const initials =
     university.aliases.find(alias => /^[A-Z]{2,7}$/.test(alias)) ||
@@ -50,11 +68,14 @@ function UniversityMark({ university, size = 44 }: { university: DirectoryUniver
       .join('')
       .slice(0, 5);
   return (
-    <span className="grid shrink-0 place-items-center overflow-hidden rounded-xl border border-rule bg-white p-1" style={{ width: size, height: size }}>
+    <span
+      className="grid shrink-0 place-items-center overflow-hidden rounded-2xl border border-rule bg-white p-1.5 shadow-sm"
+      style={{ width: size, height: size }}
+    >
       {university.logo && !failed ? (
         <Image
           src={university.logo}
-          alt={`${university.name} logo`}
+          alt={`${university.name} official logo`}
           width={size - 8}
           height={size - 8}
           unoptimized
@@ -62,7 +83,7 @@ function UniversityMark({ university, size = 44 }: { university: DirectoryUniver
           className="h-full w-full object-contain"
         />
       ) : (
-        <span className="text-center text-[13px] font-semibold leading-tight text-petrol-600">{initials}</span>
+        <span className="text-center text-[13px] font-black leading-tight text-petrol-800">{initials}</span>
       )}
     </span>
   );
@@ -326,7 +347,7 @@ export default function UniversitiesClient({ directory }: Props) {
       <div className="mx-auto max-w-[1200px] px-5 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-12">
           {/* Facet rail */}
-          <form role="search" aria-label="Filter universities" action="/universities" method="get" onSubmit={submitSearch} className="lg:sticky lg:top-[124px] lg:self-start">
+          <form role="search" aria-label="Filter universities" action="/universities" method="get" onSubmit={submitSearch} className="lg:sticky lg:top-[88px] lg:self-start rounded-3xl border border-rule bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between border-b border-canvas-soft pb-2">
               <p className="text-[16px] font-semibold text-petrol-800">Filter the directory</p>
               {chips.length > 0 && (
@@ -483,26 +504,30 @@ export default function UniversitiesClient({ directory }: Props) {
 
           {/* Results */}
           <div>
-            <div id="university-results" className="flex scroll-mt-32 flex-wrap items-center justify-between gap-3 border-b border-canvas-soft pb-3 xl:scroll-mt-40">
-              <p role="status" aria-live="polite" className="text-[15px] text-ink-soft">
-                <strong className="font-display text-[20px] font-black text-petrol-800">{filtered.length}</strong> {filtered.length === 1 ? 'university' : 'universities'}
-                {filters.country ? ` in ${filters.country}` : ''}
-                {filtered.length > visibleCount ? ` · showing ${visibleCount}` : ''}
-              </p>
-              <div className="flex items-center gap-2 text-[14px] text-ink-soft">
-                <label htmlFor="university-sort">Sort</label>
+            <div id="university-results" className="flex scroll-mt-32 flex-wrap items-center justify-between gap-3 rounded-2xl bg-white p-4 border border-rule shadow-sm mb-6 xl:scroll-mt-40">
+              <div className="flex items-center gap-3">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-lime text-petrol-800 font-black text-sm">
+                  {filtered.length}
+                </span>
+                <p role="status" aria-live="polite" className="text-xs font-bold text-petrol-800">
+                  <span>{filtered.length === 1 ? 'University' : 'Universities'} Matching Criteria</span>
+                  {filters.country && <span className="text-emerald-800 font-semibold block text-[11px]">in {filters.country}</span>}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
+                <label htmlFor="university-sort">Sort by:</label>
                 <select
                   id="university-sort"
                   value={filters.sort}
                   onChange={event =>
                     setFilters({ sort: ['name', 'city', 'fee', 'ranking', 'scholarship'].includes(event.target.value) ? (event.target.value as DirectoryFilters['sort']) : 'recommended' })
                   }
-                  className="h-11 rounded-xl border border-rule-strong bg-white px-3 text-[15px] font-medium text-petrol-800"
+                  className="h-10 rounded-xl border border-rule bg-canvas-soft px-3 text-xs font-bold text-petrol-800 outline-none focus:border-petrol-800"
                 >
                   <option value="recommended">Recommended</option>
-                  <option value="ranking">Best ranking</option>
-                  <option value="scholarship">Scholarships first</option>
-                  <option value="fee">Lowest tuition</option>
+                  <option value="ranking">Best Ranking</option>
+                  <option value="scholarship">Scholarships First</option>
+                  <option value="fee">Lowest Tuition</option>
                   <option value="city">City</option>
                   <option value="name">Name (A–Z)</option>
                 </select>
@@ -545,26 +570,43 @@ export default function UniversitiesClient({ directory }: Props) {
                         <li>
                           <article
                             aria-label={university.name}
-                            className="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-petrol-800/10 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-18px_rgba(11,43,69,0.4)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                            className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-rule bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-xl"
                           >
-                            <div className="relative h-[92px] bg-petrol-800 bg-[radial-gradient(circle_at_90%_-10%,rgba(159,232,112,0.35),transparent_55%)]">
-                              {row.awardValue && (
-                                <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-lime px-3 py-1 text-[13px] font-bold text-petrol-800">
-                                  <Gift size={13} aria-hidden="true" /> Scholarship
-                                </span>
-                              )}
-                              {row.ranking && (
-                                <span className="absolute right-4 top-4 inline-flex max-w-[60%] items-center gap-1.5 truncate rounded-full bg-white/15 px-3 py-1 text-[13px] font-semibold text-white">
-                                  <Trophy size={13} className="shrink-0 text-lime" aria-hidden="true" /> #{row.ranking.rank}
-                                  <span className="truncate font-normal text-white/75">{row.ranking.publisher}</span>
-                                </span>
-                              )}
-                            </div>
-                            <div className="relative -mt-9 flex flex-1 flex-col px-5 pb-5 sm:px-6">
-                              <span className="w-fit rounded-2xl bg-white p-1 shadow-[0_6px_18px_-8px_rgba(11,43,69,0.45)]">
-                                <UniversityMark university={university} size={60} />
-                              </span>
-                              <h2 className="mt-3 text-[20px] font-semibold leading-tight tracking-[-0.01em] text-petrol-800">
+                            <div>
+                              {/* Card Header Row: Logo + Badges */}
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex items-center gap-3">
+                                  <UniversityMark university={university} size={58} />
+                                  <div>
+                                    <span className="flex items-center gap-1.5 text-xs font-bold text-petrol-800">
+                                      <span className="text-sm">{flagFor(university.country)}</span>
+                                      <span>{[university.city, university.country].filter(Boolean).join(', ')}</span>
+                                    </span>
+                                    {row.englishTaught && (
+                                      <span className="mt-0.5 inline-block text-[11px] font-bold text-emerald-700">
+                                        ● English-taught
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="flex flex-col items-end gap-1.5 shrink-0">
+                                  {row.ranking && (
+                                    <span className="inline-flex items-center gap-1 rounded-full bg-petrol-800 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+                                      <Trophy size={11} className="text-lime" aria-hidden="true" /> #{row.ranking.rank}
+                                      <span className="font-normal text-white/75">{row.ranking.publisher}</span>
+                                    </span>
+                                  )}
+                                  {row.awardValue && (
+                                    <span className="inline-flex items-center gap-1 rounded-full bg-lime/30 border border-lime/80 px-2.5 py-0.5 text-[11px] font-bold text-petrol-800">
+                                      <Gift size={11} aria-hidden="true" /> Scholarship
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* University Name */}
+                              <h2 className="mt-4 text-[19px] font-bold leading-snug tracking-tight text-petrol-800 transition-colors group-hover:text-emerald-800">
                                 <Link
                                   href={`/universities/${university.slug}`}
                                   onClick={() => recordClick('university_programs_click', university)}
@@ -573,71 +615,89 @@ export default function UniversitiesClient({ directory }: Props) {
                                   {university.name}
                                 </Link>
                               </h2>
-                              <p className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] text-ink-soft">
-                                <span className="inline-flex items-center gap-1">
-                                  <MapPin size={13} className="shrink-0" aria-hidden="true" />
-                                  {[university.city, university.country].filter(Boolean).join(', ')}
-                                </span>
-                                {row.englishTaught && <span className="font-semibold text-jade">English-taught</span>}
-                              </p>
+
+                              {/* Study Levels */}
                               {row.levels.length > 0 && (
-                                <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="Study levels">
+                                <ul className="mt-2.5 flex flex-wrap gap-1.5" aria-label="Study levels">
                                   {row.levels.slice(0, 4).map(level => (
-                                    <li key={level} className="rounded-full bg-canvas-soft px-2.5 py-0.5 text-[13px] font-semibold text-petrol-800">{level}</li>
+                                    <li key={level} className="rounded-full bg-canvas-soft px-2.5 py-0.5 text-[11px] font-semibold text-slate-700">
+                                      {level}
+                                    </li>
                                   ))}
                                 </ul>
                               )}
+
+                              {/* Scholarship Banner if award exists */}
                               {row.awardValue && (
-                                <p className="mt-3 line-clamp-2 rounded-xl bg-lime-pale px-3 py-2 text-[14px] font-semibold leading-5 text-lime-deep">{row.awardValue}</p>
+                                <div className="mt-3 rounded-2xl border border-emerald-200/80 bg-emerald-50/70 p-2.5 text-xs font-semibold leading-relaxed text-emerald-950">
+                                  <span className="font-bold text-emerald-800">Funding:</span> {row.awardValue}
+                                </div>
                               )}
-                              <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-canvas-soft pt-4 text-[14px]">
+
+                              {/* Financial & Intake Matrix */}
+                              <div className="mt-3.5 grid grid-cols-2 gap-3 rounded-2xl bg-canvas-soft p-3.5 text-xs">
                                 <div>
-                                  <dt className="text-ink-soft">Tuition</dt>
-                                  <dd className="mt-0.5 font-semibold leading-5 text-petrol-800">{row.showTuition ? row.tuition : 'See programmes'}</dd>
+                                  <span className="block text-[11px] text-slate-500 font-medium">Indicative Tuition</span>
+                                  <span className="mt-0.5 block font-bold text-petrol-800 leading-snug">
+                                    {row.showTuition ? row.tuition : 'See programmes'}
+                                  </span>
                                 </div>
                                 <div>
-                                  <dt className="text-ink-soft">Intake</dt>
-                                  <dd className="mt-0.5 font-semibold leading-5 text-petrol-800">{row.intake.length ? row.intake.join(', ') : 'See profile'}</dd>
+                                  <span className="block text-[11px] text-slate-500 font-medium">Upcoming Intakes</span>
+                                  <span className="mt-0.5 block font-bold text-petrol-800 leading-snug">
+                                    {row.intake.length ? row.intake.join(', ') : 'See profile'}
+                                  </span>
                                 </div>
-                              </dl>
-                              {university.clearCost && (
-                                <Link
-                                  href={`/universities/${university.slug}/clear-cost`}
-                                  className="relative z-10 mt-3 inline-flex w-fit items-center gap-1 text-[14px] font-semibold text-petrol-800 underline underline-offset-4"
-                                >
-                                  <FileText size={13} aria-hidden="true" /> Full cost sheet
-                                </Link>
-                              )}
-                              <div className="relative z-10 mt-auto flex items-center gap-2 pt-5">
-                                <button
-                                  type="button"
-                                  onClick={() => toggleCompare(university.slug)}
-                                  aria-pressed={selected}
-                                  aria-label={selected ? `Remove ${university.name} from comparison` : `Add ${university.name} to comparison`}
-                                  title={selected ? 'In comparison' : 'Compare'}
-                                  className={`grid size-11 shrink-0 place-items-center rounded-full transition-colors ${
-                                    selected ? 'bg-petrol-800 text-white' : 'bg-canvas-soft text-petrol-800 hover:bg-lime-pale'
-                                  }`}
-                                >
-                                  {selected ? <Check size={17} aria-hidden="true" /> : <Plus size={17} aria-hidden="true" />}
-                                </button>
-                                <Link
-                                  href={`/universities/${university.slug}`}
-                                  onClick={() => recordClick('university_programs_click', university)}
-                                  className="ed-btn ed-btn-outline min-h-11 flex-1 px-3 text-[15px]"
-                                  aria-label={`View ${university.name} profile`}
-                                >
-                                  Profile
-                                </Link>
-                                <Link
-                                  href={applicationHref}
-                                  onClick={() => recordClick('university_apply_click', university)}
-                                  className="ed-btn ed-btn-signal min-h-11 flex-[1.4] whitespace-nowrap px-3 text-[14px] sm:text-[15px]"
-                                  aria-label={`Check eligibility for ${university.name} with EduExpress International`}
-                                >
-                                  Check eligibility
-                                </Link>
                               </div>
+
+                              {/* Country-Aware Fee Notice */}
+                              <div className="mt-2.5 px-1 flex items-center justify-between text-[11px]">
+                                {university.country.toLowerCase() === 'malaysia' ? (
+                                  <span className="font-bold text-emerald-700">EduExpress Fee: BDT 0 (Free Service)</span>
+                                ) : (
+                                  <span className="font-semibold text-slate-500">Visa-First Pledge (BDT 0 Pre-Visa)</span>
+                                )}
+                                {university.clearCost && (
+                                  <Link
+                                    href={`/universities/${university.slug}#fees`}
+                                    className="relative z-10 font-bold text-petrol-800 hover:text-emerald-700 hover:underline"
+                                  >
+                                    ClearCost™ Sheet →
+                                  </Link>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Card Action Row */}
+                            <div className="relative z-10 mt-5 flex items-center gap-2 border-t border-rule pt-4">
+                              <button
+                                type="button"
+                                onClick={() => toggleCompare(university.slug)}
+                                aria-pressed={selected}
+                                aria-label={selected ? `Remove ${university.name} from comparison` : `Add ${university.name} to comparison`}
+                                title={selected ? 'In comparison' : 'Compare'}
+                                className={`grid size-10 shrink-0 place-items-center rounded-2xl border transition-all ${
+                                  selected ? 'border-petrol-800 bg-petrol-800 text-white' : 'border-rule bg-canvas-soft text-petrol-800 hover:bg-lime/25'
+                                }`}
+                              >
+                                {selected ? <Check size={16} aria-hidden="true" /> : <Plus size={16} aria-hidden="true" />}
+                              </button>
+                              <Link
+                                href={`/universities/${university.slug}`}
+                                onClick={() => recordClick('university_programs_click', university)}
+                                className="ed-btn ed-btn-outline min-h-[42px] flex-1 text-xs font-bold"
+                                aria-label={`View ${university.name} profile`}
+                              >
+                                View Details
+                              </Link>
+                              <Link
+                                href={applicationHref}
+                                onClick={() => recordClick('university_apply_click', university)}
+                                className="ed-btn ed-btn-signal min-h-[42px] flex-[1.3] whitespace-nowrap px-3 text-xs font-bold"
+                                aria-label={`Check eligibility for ${university.name} with EduExpress International`}
+                              >
+                                Check Eligibility
+                              </Link>
                             </div>
                           </article>
                         </li>

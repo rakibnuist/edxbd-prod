@@ -60,6 +60,28 @@ const parseJson = (str: string | null | undefined, defaultVal: any = []) => {
   try { return JSON.parse(str); } catch { return defaultVal; }
 };
 
+// Robust utility to parse string arrays from JSON array, object, or string
+const parseStringArray = (val: any): string[] => {
+  if (!val) return [];
+  if (Array.isArray(val)) {
+    return Array.from(new Set(val.map(v => (typeof v === 'string' ? v.trim() : JSON.stringify(v))).filter(Boolean)));
+  }
+  if (typeof val === 'object') {
+    return Object.entries(val).map(([k, v]) => `${k}: ${v}`).filter(Boolean);
+  }
+  if (typeof val === 'string') {
+    const trimmed = val.trim();
+    if (!trimmed) return [];
+    try {
+      const parsed = JSON.parse(trimmed);
+      return parseStringArray(parsed);
+    } catch {
+      return [trimmed];
+    }
+  }
+  return [String(val).trim()].filter(Boolean);
+};
+
 // Utility to parse CSV strings
 const parseCsv = (str: string | null | undefined) => {
   if (!str) return [];
@@ -97,7 +119,7 @@ function mapPrismaToClean(record: any): CleanUniversityRecord {
       tuition: p.tuition?.trim() || undefined,
       tuitionAfterScholarship: p.tuitionAfterScholarship?.trim() || undefined,
       applicationDeadline: p.applicationDeadline?.trim() || undefined,
-      eligibility: Array.from(new Set(parseJson(p.eligibility, []).map((value: string) => value.trim()).filter(Boolean))),
+      eligibility: parseStringArray(p.eligibility),
       sourceUrl: p.sourceUrl?.trim() || undefined,
       status: ['active', 'planned', 'paused'].includes(p.status) ? p.status : 'active',
     })),
@@ -121,10 +143,10 @@ function mapPrismaToClean(record: any): CleanUniversityRecord {
     record.scholarships.map((s: any): CleanScholarship => ({
       title: s.title?.trim() || 'Scholarship option',
       type: s.type?.trim() || undefined,
-      details: Array.from(new Set(parseJson(s.details, []).map((value: string) => value.trim()).filter(Boolean))),
+      details: parseStringArray(s.details),
       amount: s.amount?.trim() || undefined,
       condition: s.condition?.trim() || undefined,
-      eligiblePrograms: Array.from(new Set(parseJson(s.eligiblePrograms, []).map((value: string) => value.trim()).filter(Boolean))),
+      eligiblePrograms: parseStringArray(s.eligiblePrograms),
       coverage: s.coverage?.trim() || undefined,
       renewal: s.renewal?.trim() || undefined,
       deadline: s.deadline?.trim() || undefined,
