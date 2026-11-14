@@ -70,50 +70,53 @@ export function Stars({
   );
 }
 
-export default function StoryCard({ story, compact = false }: { story: StoryCardData; compact?: boolean }) {
+export default function StoryCard({
+  story,
+  compact = false,
+  asElement = 'article',
+}: {
+  story: StoryCardData;
+  compact?: boolean;
+  asElement?: 'article' | 'div';
+}) {
   const facts = (story.facts ?? []).filter((entry): entry is [string, string] => Boolean(entry[1]?.trim()));
   const place = [story.location, story.country]
     .filter(Boolean)
     .filter((val, idx, arr) => arr.indexOf(val) === idx)
     .join(', ');
   const { degree, award } = parseProgramAndAward(story.program, story.quote);
+  const Tag = asElement;
 
   return (
-    <article
+    <Tag
       id={`story-${story.id}`}
       className="group flex h-full scroll-mt-28 flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white text-petrol-800 shadow-[0_12px_32px_rgba(15,58,92,0.08)]"
     >
       {story.image && (
-        <div className={`relative overflow-hidden bg-petrol-800 ${compact ? 'aspect-[16/10]' : 'aspect-[4/3]'}`}>
+        <div className="relative aspect-[4/3] overflow-hidden bg-petrol-800">
           <Image
             src={story.image}
             alt={`${story.name}, EduExpress student${story.university ? ` at ${story.university}` : ''}`}
             fill
-            sizes="(max-width:768px) 90vw, (max-width:1024px) 45vw, 380px"
-            className="object-cover object-[50%_25%] transition duration-700 group-hover:scale-[1.04]"
+            sizes="(max-width:768px) 90vw, (max-width:1024px) 45vw, 360px"
+            className="object-cover object-[50%_8%] transition duration-700 group-hover:scale-[1.04]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#071f33]/85 via-[#071f33]/15 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#071f33]/90 via-[#071f33]/40 to-transparent" />
 
-          <div className="absolute left-3.5 right-3.5 top-3.5 flex items-center justify-between gap-2">
-            {story.country && (
-              <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-petrol-800 shadow-2xs">
-                {story.country}
-              </span>
+          <div className="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between gap-2">
+            {story.university ? (
+              <p className="flex min-w-0 items-center gap-1.5 text-xs font-bold leading-snug text-white drop-shadow-xs">
+                <GraduationCap size={15} className="shrink-0 text-lime" aria-hidden="true" />
+                <span className="truncate">{story.university}</span>
+              </p>
+            ) : (
+              <span />
             )}
-            <span className="inline-flex items-center gap-1 rounded-full bg-petrol-800/90 px-2.5 py-1 text-[11px] font-bold text-lime backdrop-blur-xs">
-              <CheckCircle2 size={12} aria-hidden="true" />
-              Verified Student
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-petrol-800/90 px-2.5 py-0.5 text-[11px] font-bold text-lime backdrop-blur-xs">
+              <CheckCircle2 size={11} aria-hidden="true" />
+              Verified
             </span>
           </div>
-
-          {story.university && (
-            <div className="absolute bottom-3 left-3.5 right-3.5">
-              <p className="flex items-center gap-1.5 text-xs font-bold leading-snug text-white drop-shadow-xs">
-                <GraduationCap size={15} className="shrink-0 text-lime" aria-hidden="true" />
-                <span className="line-clamp-1">{story.university}</span>
-              </p>
-            </div>
-          )}
         </div>
       )}
 
@@ -135,34 +138,46 @@ export default function StoryCard({ story, compact = false }: { story: StoryCard
           )}
         </div>
 
-        <blockquote className={`mt-3.5 text-[15.5px] leading-[1.65] text-petrol-800 ${compact ? 'line-clamp-5' : ''}`}>
+        <blockquote className={`mt-3.5 text-[15px] leading-[1.65] text-petrol-800 ${compact ? 'line-clamp-4' : ''}`}>
           <span
             aria-hidden="true"
-            className="mr-0.5 font-display text-[30px] font-black leading-[0] text-lime-deep [vertical-align:-0.28em]"
+            className="mr-0.5 font-display text-[28px] font-black leading-[0] text-lime-deep [vertical-align:-0.28em]"
           >
             &ldquo;
           </span>
           {story.quote}
         </blockquote>
 
-        <div className="mt-auto pt-5" />
-        <div className="flex items-start gap-3 border-t border-slate-100 pt-4">
-          <span
-            className="grid size-11 shrink-0 place-items-center rounded-2xl bg-lime font-display text-[15px] font-black text-petrol-800"
-            aria-hidden="true"
-          >
-            {initials(story.name)}
-          </span>
+        <div className="mt-auto pt-4" />
+        <div className="flex items-center gap-3 border-t border-slate-100 pt-4">
+          {story.image ? (
+            <div className="relative size-11 shrink-0 overflow-hidden rounded-full bg-petrol-800 ring-2 ring-lime">
+              <Image
+                src={story.image}
+                alt={story.name}
+                fill
+                sizes="44px"
+                className="object-cover object-[50%_18%]"
+              />
+            </div>
+          ) : (
+            <span
+              className="grid size-11 shrink-0 place-items-center rounded-2xl bg-lime font-display text-[15px] font-black text-petrol-800"
+              aria-hidden="true"
+            >
+              {initials(story.name)}
+            </span>
+          )}
           <div className="min-w-0 flex-1">
-            <p className="text-[16px] font-bold leading-tight text-petrol-800">{story.name}</p>
-            {degree && <p className="mt-0.5 text-[13.5px] font-medium leading-snug text-ink-soft">{degree}</p>}
+            <p className="truncate text-[15.5px] font-bold leading-tight text-petrol-800">{story.name}</p>
+            {degree && <p className="mt-0.5 truncate text-[13px] font-medium leading-snug text-ink-soft">{degree}</p>}
             {story.university && (
-              <p className="mt-1 flex items-start gap-1.5 text-[13.5px] font-bold leading-snug text-[#12436b]">
-                <GraduationCap size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
-                <span>{story.university}</span>
+              <p className="mt-0.5 flex items-center gap-1 text-[12.5px] font-bold leading-snug text-[#12436b]">
+                <GraduationCap size={14} className="shrink-0" aria-hidden="true" />
+                <span className="truncate">{story.university}</span>
               </p>
             )}
-            {place && (
+            {!compact && place && (
               <p className="mt-1 flex items-start gap-1 text-xs leading-snug text-ink-mute">
                 <MapPin size={13} className="mt-0.5 shrink-0" aria-hidden="true" />
                 <span>{place}</span>
@@ -193,6 +208,6 @@ export default function StoryCard({ story, compact = false }: { story: StoryCard
           </details>
         )}
       </div>
-    </article>
+    </Tag>
   );
 }
