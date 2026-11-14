@@ -34,12 +34,12 @@ export function feeText(fee: UniversityProfileFee): string {
 }
 function makeFee(item: string, cost: string, key: UniversityProfileFee['key'], sourced: boolean): UniversityProfileFee {
   const period = /semester/i.test(cost) ? 'semester' : /month/i.test(cost) ? 'month' : /day/i.test(cost) ? 'day' : /year|annual/i.test(cost) ? 'year' : key === 'tuition' ? 'programme' : 'oneoff';
-  const currencies = cost.match(/\b(CNY|RMB|BDT|USD|EUR|GBP)\b/gi) || [];
+  const currencies = cost.match(/\b(CNY|RMB|BDT|USD|EUR|GBP|MYR|RM)\b/gi) || [];
   // Remove a bracketed admission-cycle label before counting fee amounts.
   const plain = cost.replace(/\([^)]*\)/g, '').replace(/non-refundable/gi, '');
   const amounts = plain.match(/\d[\d,]*(?:\.\d+)?/g) || [];
   const amount = sourced && amounts.length === 1 && currencies.length === 1 && !/scholarship|after|free|discount|waiv|[–—]|\d\s*-\s*\d/i.test(plain) ? Number(amounts[0].replaceAll(',', '')) : undefined;
-  return { key, item, amount, currency: currencies[0]?.toUpperCase().replace('RMB','CNY') || 'CNY', period, stage: key === 'application' || key === 'deposit' ? 'before_china' : 'in_china', displayAmount: cost };
+  return { key, item, amount, currency: currencies[0]?.toUpperCase().replace('RMB','CNY').replace(/^RM$/,'MYR') || 'CNY', period, stage: key === 'application' || key === 'deposit' ? 'before_china' : 'in_china', displayAmount: cost };
 }
 /** Same programme in two sources: level plus the name without its school or campus suffix. */
 export const programMergeKey = (level: string, name: string) =>
@@ -76,8 +76,8 @@ export function recordPrograms(university: CleanUniversityRecord, researchedFees
       id: `${university.slug}-${index}`, name: program.name, level: normalizeProgramLevel(program.level), languages: program.languages,
       duration: program.duration || 'Not specified', intake: program.intakes.join(', ') || undefined,
       deadline: program.applicationDeadline || undefined,
-      qualifications: program.eligibility.filter(text => !/IELTS|TOEFL|HSK|Duolingo|language|English evidence/i.test(text)),
-      languageRequirements: program.eligibility.filter(text => /IELTS|TOEFL|HSK|Duolingo|language|English evidence/i.test(text)),
+      qualifications: program.eligibility.filter(text => !/IELTS|TOEFL|HSK|Duolingo|DET|EFSET|MOI|MUET|PTE|language|English evidence/i.test(text)),
+      languageRequirements: program.eligibility.filter(text => /IELTS|TOEFL|HSK|Duolingo|DET|EFSET|MOI|MUET|PTE|language|English evidence/i.test(text)),
       documents: university.documents, fees, notes: program.status === 'planned' ? ['Confirm availability for your intended intake before applying.'] : [],
     };
   });

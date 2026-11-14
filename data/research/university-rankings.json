@@ -5,304 +5,8 @@
   "editorialStatus": "Primary ranking-publisher profiles researched; publication of a rank does not verify admission, recognition or institutional relationship.",
   "universities": [
     {
-      "slug": "nuist",
-      "rankings": [
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings",
-          "year": 2027,
-          "rank": "801–1000",
-          "scope": "world",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/nanjing-university-information-science-and-technology"
-        },
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Academic Ranking of World Universities (ARWU)",
-          "year": 2026,
-          "rank": "301–400",
-          "scope": "world",
-          "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-university-of-information-science-technology"
-        },
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Global Ranking of Academic Subjects",
-          "year": 2026,
-          "rank": "7",
-          "scope": "subject",
-          "subject": "Atmospheric Science",
-          "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-university-of-information-science-technology"
-        },
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings by Subject",
-          "year": 2026,
-          "rank": "401–500",
-          "scope": "subject",
-          "subject": "Computer Science",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/nanjing-university-information-science-and-technology"
-        }
-      ]
-    },
-    {
-      "slug": "nuaa",
-      "rankings": [
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings",
-          "year": 2027,
-          "rank": "651–700",
-          "scope": "world",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/nanjing-university-aeronautics-and-astronautics"
-        },
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Academic Ranking of World Universities (ARWU)",
-          "year": 2026,
-          "rank": "201–300",
-          "scope": "world",
-          "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-university-of-aeronautics-and-astronautics"
-        },
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Global Ranking of Academic Subjects",
-          "year": 2026,
-          "rank": "3",
-          "scope": "subject",
-          "subject": "Aerospace Engineering",
-          "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-university-of-aeronautics-and-astronautics"
-        }
-      ]
-    },
-    {
-      "slug": "jiangsu-university-of-science-and-technology",
-      "rankings": [
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings",
-          "year": 2027,
-          "rank": "1001–1200",
-          "scope": "world",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/jiangsu-university-science-and-technology"
-        },
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Academic Ranking of World Universities (ARWU)",
-          "year": 2026,
-          "rank": "501–600",
-          "scope": "world",
-          "sourceUrl": "https://www.shanghairanking.com/universities/jiangsu-university-of-science-and-technology"
-        },
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Global Ranking of Academic Subjects",
-          "year": 2026,
-          "rank": "16",
-          "scope": "subject",
-          "subject": "Marine/Ocean Engineering",
-          "sourceUrl": "https://www.shanghairanking.com/universities/jiangsu-university-of-science-and-technology"
-        }
-      ]
-    },
-    {
-      "slug": "jiangsu-university-of-technology",
-      "researchNote": "A sourced overall world rank was not confirmed. The publisher profile lists the China ranking only; do not present it as a world ranking.",
-      "rankings": [
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Best Chinese Universities Ranking",
-          "year": 2026,
-          "rank": "347",
-          "scope": "national",
-          "sourceUrl": "https://www.shanghairanking.com/universities/jiangsu-university-of-technology"
-        }
-      ]
-    },
-    {
-      "slug": "zhejiang-normal-university",
-      "rankings": [
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings",
-          "year": 2027,
-          "rank": "601–650",
-          "scope": "world",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhejiang-normal-university"
-        },
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings by Subject",
-          "year": 2026,
-          "rank": "301–400",
-          "scope": "subject",
-          "subject": "Engineering",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhejiang-normal-university"
-        }
-      ]
-    },
-    {
-      "slug": "lyu",
-      "researchNote": "The THE directory page shows no overall rank. ShanghaiRanking lists a global subject result and China result; neither is an overall world rank.",
-      "rankings": [
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Global Ranking of Academic Subjects",
-          "year": 2026,
-          "rank": "401–500",
-          "scope": "subject",
-          "subject": "Mathematics",
-          "sourceUrl": "https://www.shanghairanking.com/universities/linyi-university"
-        },
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Best Chinese Universities Ranking",
-          "year": 2026,
-          "rank": "299",
-          "scope": "national",
-          "sourceUrl": "https://www.shanghairanking.com/universities/linyi-university"
-        }
-      ]
-    },
-    {
-      "slug": "shandong-university",
-      "rankings": [
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings",
-          "year": 2027,
-          "rank": "=263",
-          "scope": "world",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/shandong-university"
-        },
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Academic Ranking of World Universities (ARWU)",
-          "year": 2026,
-          "rank": "101–150",
-          "scope": "world",
-          "sourceUrl": "https://www.shanghairanking.com/universities/shandong-university"
-        },
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings by Subject",
-          "year": 2026,
-          "rank": "176–200",
-          "scope": "subject",
-          "subject": "Engineering",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/shandong-university"
-        }
-      ]
-    },
-    {
-      "slug": "zhejiang-university",
-      "rankings": [
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings",
-          "year": 2027,
-          "rank": "=34",
-          "scope": "world",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhejiang-university"
-        },
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Academic Ranking of World Universities (ARWU)",
-          "year": 2026,
-          "rank": "24",
-          "scope": "world",
-          "sourceUrl": "https://www.shanghairanking.com/universities/zhejiang-university"
-        },
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings by Subject",
-          "year": 2026,
-          "rank": "23",
-          "scope": "subject",
-          "subject": "Computer Science",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhejiang-university"
-        }
-      ]
-    },
-    {
-      "slug": "university-of-shanghai-for-science-and-technology",
-      "rankings": [
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Academic Ranking of World Universities (ARWU)",
-          "year": 2026,
-          "rank": "301–400",
-          "scope": "world",
-          "sourceUrl": "https://www.shanghairanking.com/universities/university-of-shanghai-for-science-and-technology"
-        },
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings",
-          "year": 2025,
-          "rank": "1201–1500",
-          "scope": "world",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/university-shanghai-science-and-technology",
-          "note": "Historical edition. The publisher profile displays this 2025 result; it is not a 2027 ranking."
-        },
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Global Ranking of Academic Subjects",
-          "year": 2026,
-          "rank": "51–75",
-          "scope": "subject",
-          "subject": "Instruments Science & Technology",
-          "sourceUrl": "https://www.shanghairanking.com/universities/university-of-shanghai-for-science-and-technology"
-        }
-      ]
-    },
-    {
-      "slug": "tsinghua-university",
-      "rankings": [
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings",
-          "year": 2027,
-          "rank": "11",
-          "scope": "world",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/tsinghua-university"
-        },
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings by Subject",
-          "year": 2026,
-          "rank": "12",
-          "scope": "subject",
-          "subject": "Computer Science",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/tsinghua-university"
-        }
-      ]
-    },
-    {
-      "slug": "xian-jiaotong-university",
-      "rankings": [
-        {
-          "publisher": "QS",
-          "rankingName": "QS World University Rankings",
-          "year": 2027,
-          "rank": "=296",
-          "scope": "world",
-          "sourceUrl": "https://www.topuniversities.com/universities/xian-jiaotong-university"
-        }
-      ]
-    },
-    {
-      "slug": "wzu",
-      "rankings": [
-        {
-          "publisher": "Times Higher Education",
-          "rankingName": "World University Rankings",
-          "year": 2027,
-          "rank": "801–1000",
-          "scope": "world",
-          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/wenzhou-university"
-        }
-      ]
-    },
-    {
       "slug": "ahut",
+      "researchNote": "Publisher profile takes precedence over older brochure ranking descriptions. World, national and subject scopes remain separate.",
       "rankings": [
         {
           "publisher": "ShanghaiRanking",
@@ -401,9 +105,7 @@
           "subject": "Artificial Intelligence",
           "sourceUrl": "https://www.shanghairanking.com/universities/anhui-university-of-technology"
         }
-      ],
-      "checkedAt": "2026-10-23",
-      "researchNote": "Publisher profile takes precedence over older brochure ranking descriptions. World, national and subject scopes remain separate."
+      ]
     },
     {
       "slug": "anhui-medical-university",
@@ -585,6 +287,53 @@
       ]
     },
     {
+      "slug": "cczu",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2026,
+          "rank": "1201–1500",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/changzhou-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "158",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/changzhou-university"
+        }
+      ]
+    },
+    {
+      "slug": "central-south-university-of-forestry-and-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "227",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/central-south-university-of-forestry-and-technology"
+        }
+      ]
+    },
+    {
+      "slug": "chengdu-normal-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "465",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/chengdu-normal-university"
+        }
+      ]
+    },
+    {
       "slug": "china-medical-university",
       "rankings": [
         {
@@ -651,23 +400,23 @@
       ]
     },
     {
-      "slug": "china-three-gorges-university",
+      "slug": "china-university-of-petroleum-east-china",
       "rankings": [
         {
           "publisher": "QS",
-          "rankingName": "QS Asian University Rankings 2026",
+          "rankingName": "QS World University Rankings",
           "year": 2026,
-          "rank": "851-900",
+          "rank": "565",
           "scope": "world",
-          "sourceUrl": "https://www.topuniversities.com/universities/china-three-gorges-university"
+          "sourceUrl": "https://www.topuniversities.com/universities/china-university-petroleum-huadong"
         },
         {
           "publisher": "ShanghaiRanking",
-          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026",
+          "rankingName": "Best Chinese Universities Ranking",
           "year": 2026,
-          "rank": "174",
+          "rank": "67",
           "scope": "national",
-          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+          "sourceUrl": "https://www.shanghairanking.com/institution/china-university-of-petroleum-east-china"
         }
       ]
     },
@@ -747,6 +496,103 @@
       ]
     },
     {
+      "slug": "civil-aviation-university-of-china",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "295",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/civil-aviation-university-of-china"
+        }
+      ]
+    },
+    {
+      "slug": "cpu",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2026,
+          "rank": "1001–1200",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/china-pharmaceutical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "86",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/china-pharmaceutical-university"
+        }
+      ]
+    },
+    {
+      "slug": "ctgu",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "851-900",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/china-three-gorges-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities Ranking 2026",
+          "year": 2026,
+          "rank": "174",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        }
+      ]
+    },
+    {
+      "slug": "cumt",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "654",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/china-university-mining-technology"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "56",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/china-university-of-mining-and-technology"
+        }
+      ]
+    },
+    {
+      "slug": "cupb",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "661–670",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/china-university-petroleum-beijing"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "71",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/china-university-of-petroleum-beijing"
+        }
+      ]
+    },
+    {
       "slug": "dalian-medical-university",
       "rankings": [
         {
@@ -773,6 +619,27 @@
           "scope": "subject",
           "subject": "Pharmacy & Pharmaceutical Sciences",
           "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        }
+      ]
+    },
+    {
+      "slug": "dalian-university-of-technology",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "448",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/dalian-university-technology"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "28",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/dalian-university-of-technology"
         }
       ]
     },
@@ -878,6 +745,19 @@
       ]
     },
     {
+      "slug": "fuist",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "520+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/fuzhou-university-of-international-studies-and-trade"
+        }
+      ]
+    },
+    {
       "slug": "fujian-medical-university",
       "rankings": [
         {
@@ -940,6 +820,19 @@
           "scope": "subject",
           "subject": "Dentistry & Oral Sciences",
           "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0403"
+        }
+      ]
+    },
+    {
+      "slug": "gannan-normal-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "312",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/gannan-normal-university"
         }
       ]
     },
@@ -1084,6 +977,40 @@
       ]
     },
     {
+      "slug": "gzu",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings",
+          "year": 2026,
+          "rank": "401–450",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/guizhou-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "124",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/guizhou-university"
+        }
+      ]
+    },
+    {
+      "slug": "hafa",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "550+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/hebei-academy-of-fine-arts"
+        }
+      ]
+    },
+    {
       "slug": "harbin-medical-university",
       "rankings": [
         {
@@ -1119,6 +1046,121 @@
           "scope": "subject",
           "subject": "Biomedical Engineering",
           "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        }
+      ]
+    },
+    {
+      "slug": "hbust",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "286",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/hebei-university-of-science-and-technology"
+        }
+      ]
+    },
+    {
+      "slug": "hcnu",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "510+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/hechi-university"
+        }
+      ]
+    },
+    {
+      "slug": "hdu",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2026,
+          "rank": "1201–1500",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/hangzhou-dianzi-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "97",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/hangzhou-dianzi-university"
+        }
+      ]
+    },
+    {
+      "slug": "henan-university-of-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "215",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/henan-university-of-technology"
+        }
+      ]
+    },
+    {
+      "slug": "hit-harbin",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "252",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/harbin-institute-technology"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "10",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/harbin-institute-of-technology"
+        }
+      ]
+    },
+    {
+      "slug": "hitsz",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "252",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/harbin-institute-technology"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "10",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/harbin-institute-of-technology"
+        }
+      ]
+    },
+    {
+      "slug": "hsu",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "478",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/huangshan-university"
         }
       ]
     },
@@ -1237,6 +1279,32 @@
       ]
     },
     {
+      "slug": "hubei-university-of-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "175",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/hubei-university-of-technology"
+        }
+      ]
+    },
+    {
+      "slug": "jianghan-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "252",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/jianghan-university"
+        }
+      ]
+    },
+    {
       "slug": "jiangsu-university",
       "rankings": [
         {
@@ -1298,6 +1366,50 @@
           "scope": "subject",
           "subject": "Biomedical Engineering",
           "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        }
+      ]
+    },
+    {
+      "slug": "jiangsu-university-of-science-and-technology",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2027,
+          "rank": "1001–1200",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/jiangsu-university-science-and-technology"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU)",
+          "year": 2026,
+          "rank": "501–600",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/universities/jiangsu-university-of-science-and-technology"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Global Ranking of Academic Subjects",
+          "year": 2026,
+          "rank": "16",
+          "scope": "subject",
+          "subject": "Marine/Ocean Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/universities/jiangsu-university-of-science-and-technology"
+        }
+      ]
+    },
+    {
+      "slug": "jiangsu-university-of-technology",
+      "researchNote": "A sourced overall world rank was not confirmed. The publisher profile lists the China ranking only; do not present it as a world ranking.",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "347",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/jiangsu-university-of-technology"
         }
       ]
     },
@@ -1437,6 +1549,53 @@
       ]
     },
     {
+      "slug": "jit",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "368",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/jinling-institute-of-technology"
+        }
+      ]
+    },
+    {
+      "slug": "jsnu",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2026,
+          "rank": "1501+",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/jiangsu-normal-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "146",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/jiangsu-normal-university"
+        }
+      ]
+    },
+    {
+      "slug": "jxu",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "305",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/jiaxing-university"
+        }
+      ]
+    },
+    {
       "slug": "kunming-medical-university",
       "rankings": [
         {
@@ -1472,6 +1631,50 @@
           "scope": "subject",
           "subject": "Biomedical Engineering",
           "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        }
+      ]
+    },
+    {
+      "slug": "lyu",
+      "researchNote": "The THE directory page shows no overall rank. ShanghaiRanking lists a global subject result and China result; neither is an overall world rank.",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Global Ranking of Academic Subjects",
+          "year": 2026,
+          "rank": "401–500",
+          "scope": "subject",
+          "subject": "Mathematics",
+          "sourceUrl": "https://www.shanghairanking.com/universities/linyi-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "299",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/universities/linyi-university"
+        }
+      ]
+    },
+    {
+      "slug": "nanchang-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities",
+          "year": 2026,
+          "rank": "301–400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/institution/nanchang-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "68",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/nanchang-university"
         }
       ]
     },
@@ -1577,31 +1780,57 @@
       ]
     },
     {
-      "slug": "nantong-university",
+      "slug": "nanjing-normal-university",
       "rankings": [
         {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "ShanghaiRanking ARWU 2026",
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
           "year": 2026,
-          "rank": "401-500",
+          "rank": "611–620",
           "scope": "world",
-          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+          "sourceUrl": "https://www.topuniversities.com/universities/nanjing-normal-university"
         },
         {
           "publisher": "ShanghaiRanking",
-          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "rankingName": "Best Chinese Universities Ranking",
           "year": 2026,
-          "rank": "147",
+          "rank": "59",
           "scope": "national",
-          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
-        },
+          "sourceUrl": "https://www.shanghairanking.com/institution/nanjing-normal-university"
+        }
+      ]
+    },
+    {
+      "slug": "nankai-university",
+      "rankings": [
         {
           "publisher": "QS",
-          "rankingName": "QS Asian University Rankings 2026",
-          "year": 2026,
-          "rank": "851-900",
+          "rankingName": "QS World University Rankings 2027",
+          "year": 2027,
+          "rank": "=329",
           "scope": "world",
-          "sourceUrl": "https://www.topuniversities.com/universities/nantong-university"
+          "sourceUrl": "https://www.topuniversities.com/universities/nankai-university"
+        }
+      ]
+    },
+    {
+      "slug": "ncepu",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2026,
+          "rank": "801–1000",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/north-china-electric-power-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "83",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/north-china-electric-power-university"
         }
       ]
     },
@@ -1652,6 +1881,74 @@
       ]
     },
     {
+      "slug": "ningxia-medical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "340",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/ningxia-medical-university"
+        }
+      ]
+    },
+    {
+      "slug": "njit",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "302",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/nanjing-institute-of-technology"
+        }
+      ]
+    },
+    {
+      "slug": "njtech",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities",
+          "year": 2026,
+          "rank": "301–400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/institution/nanjing-tech-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "88",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/nanjing-tech-university"
+        }
+      ]
+    },
+    {
+      "slug": "njupt",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2026,
+          "rank": "801–1000",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/nanjing-university-of-posts-and-telecommunications"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "81",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/nanjing-university-of-posts-and-telecommunications"
+        }
+      ]
+    },
+    {
       "slug": "north-sichuan-medical-college",
       "rankings": [
         {
@@ -1669,6 +1966,138 @@
           "rank": "1301-1400",
           "scope": "world",
           "sourceUrl": "https://www.topuniversities.com/universities/north-sichuan-medical-college"
+        }
+      ]
+    },
+    {
+      "slug": "northeast-forestry-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "115",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/northeast-forestry-university"
+        }
+      ]
+    },
+    {
+      "slug": "npu",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "547",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/northwestern-polytechnical-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "23",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/northwestern-polytechnical-university"
+        }
+      ]
+    },
+    {
+      "slug": "ntu",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking ARWU 2026",
+          "year": 2026,
+          "rank": "401-500",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/arwu/2026"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "ShanghaiRanking Best Chinese Universities 2026",
+          "year": 2026,
+          "rank": "147",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/rankings/bcur/2026"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Asian University Rankings 2026",
+          "year": 2026,
+          "rank": "851-900",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/nantong-university"
+        }
+      ]
+    },
+    {
+      "slug": "nuaa",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2027,
+          "rank": "651–700",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/nanjing-university-aeronautics-and-astronautics"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU)",
+          "year": 2026,
+          "rank": "201–300",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-university-of-aeronautics-and-astronautics"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Global Ranking of Academic Subjects",
+          "year": 2026,
+          "rank": "3",
+          "scope": "subject",
+          "subject": "Aerospace Engineering",
+          "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-university-of-aeronautics-and-astronautics"
+        }
+      ]
+    },
+    {
+      "slug": "nuist",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2027,
+          "rank": "801–1000",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/nanjing-university-information-science-and-technology"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU)",
+          "year": 2026,
+          "rank": "301–400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-university-of-information-science-technology"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Global Ranking of Academic Subjects",
+          "year": 2026,
+          "rank": "7",
+          "scope": "subject",
+          "subject": "Atmospheric Science",
+          "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-university-of-information-science-technology"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings by Subject",
+          "year": 2026,
+          "rank": "401–500",
+          "scope": "subject",
+          "subject": "Computer Science",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/nanjing-university-information-science-and-technology"
         }
       ]
     },
@@ -1837,6 +2266,83 @@
       ]
     },
     {
+      "slug": "scut",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "377",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/south-china-university-technology"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "25",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/south-china-university-of-technology"
+        }
+      ]
+    },
+    {
+      "slug": "sdu",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "390",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/shanghai-dianji-university"
+        }
+      ]
+    },
+    {
+      "slug": "shandong-university",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2027,
+          "rank": "=263",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/shandong-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU)",
+          "year": 2026,
+          "rank": "101–150",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/universities/shandong-university"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings by Subject",
+          "year": 2026,
+          "rank": "176–200",
+          "scope": "subject",
+          "subject": "Engineering",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/shandong-university"
+        }
+      ]
+    },
+    {
+      "slug": "shanghai-business-school",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "410",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/shanghai-business-school"
+        }
+      ]
+    },
+    {
       "slug": "shanghai-jiao-tong-university",
       "rankings": [
         {
@@ -1928,6 +2434,19 @@
       ]
     },
     {
+      "slug": "shanghai-polytechnic-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "355",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/shanghai-polytechnic-university"
+        }
+      ]
+    },
+    {
       "slug": "shantou-university",
       "rankings": [
         {
@@ -1961,6 +2480,19 @@
           "rank": "=526",
           "scope": "world",
           "sourceUrl": "https://www.topuniversities.com/universities/shantou-university"
+        }
+      ]
+    },
+    {
+      "slug": "shaoxing-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "272",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/shaoxing-university"
         }
       ]
     },
@@ -2081,6 +2613,19 @@
           "rank": "=300",
           "scope": "world",
           "sourceUrl": "https://www.topuniversities.com/universities/sichuan-university"
+        }
+      ]
+    },
+    {
+      "slug": "smu",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "428",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/sanming-university"
         }
       ]
     },
@@ -2334,6 +2879,45 @@
       ]
     },
     {
+      "slug": "southwest-petroleum-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "151",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/southwest-petroleum-university"
+        }
+      ]
+    },
+    {
+      "slug": "suep",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "264",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/shanghai-university-of-electric-power"
+        }
+      ]
+    },
+    {
+      "slug": "sues",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "234",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/shanghai-university-of-engineering-science"
+        }
+      ]
+    },
+    {
       "slug": "sun-yat-sen-university",
       "rankings": [
         {
@@ -2425,6 +3009,32 @@
       ]
     },
     {
+      "slug": "taiyuan-university-of-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "113",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/taiyuan-university-of-technology"
+        }
+      ]
+    },
+    {
+      "slug": "tiangong-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "149",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/tiangong-university"
+        }
+      ]
+    },
+    {
       "slug": "tianjin-medical-university",
       "rankings": [
         {
@@ -2487,6 +3097,27 @@
           "scope": "subject",
           "subject": "Medicine",
           "sourceUrl": "https://www.topuniversities.com/universities/tianjin-medical-university"
+        }
+      ]
+    },
+    {
+      "slug": "tianjin-university",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "269",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/tianjin-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "19",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/tianjin-university"
         }
       ]
     },
@@ -2573,6 +3204,59 @@
       ]
     },
     {
+      "slug": "tsinghua-university",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2027,
+          "rank": "11",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/tsinghua-university"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings by Subject",
+          "year": 2026,
+          "rank": "12",
+          "scope": "subject",
+          "subject": "Computer Science",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/tsinghua-university"
+        }
+      ]
+    },
+    {
+      "slug": "university-of-shanghai-for-science-and-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU)",
+          "year": 2026,
+          "rank": "301–400",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/universities/university-of-shanghai-for-science-and-technology"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2025,
+          "rank": "1201–1500",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/university-shanghai-science-and-technology",
+          "note": "Historical edition. The publisher profile displays this 2025 result; it is not a 2027 ranking."
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Global Ranking of Academic Subjects",
+          "year": 2026,
+          "rank": "51–75",
+          "scope": "subject",
+          "subject": "Instruments Science & Technology",
+          "sourceUrl": "https://www.shanghairanking.com/universities/university-of-shanghai-for-science-and-technology"
+        }
+      ]
+    },
+    {
       "slug": "wenzhou-medical-university",
       "rankings": [
         {
@@ -2643,6 +3327,19 @@
           "scope": "subject",
           "subject": "Medicine",
           "sourceUrl": "https://www.topuniversities.com/universities/wenzhou-medical-university"
+        }
+      ]
+    },
+    {
+      "slug": "wuchang-university-of-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "500+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/wuchang-university-of-technology"
         }
       ]
     },
@@ -2729,6 +3426,19 @@
       ]
     },
     {
+      "slug": "wzu",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2027,
+          "rank": "801–1000",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/wenzhou-university"
+        }
+      ]
+    },
+    {
       "slug": "xiamen-university",
       "rankings": [
         {
@@ -2798,6 +3508,61 @@
           "rank": "=303",
           "scope": "world",
           "sourceUrl": "https://www.topuniversities.com/universities/xiamen-university"
+        }
+      ]
+    },
+    {
+      "slug": "xian-jiaotong-university",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2027,
+          "rank": "=296",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/xian-jiaotong-university"
+        }
+      ]
+    },
+    {
+      "slug": "xidian-university",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "621–630",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/xidian-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "40",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/xidian-university"
+        }
+      ]
+    },
+    {
+      "slug": "xsyu",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2026,
+          "rank": "801–1000",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/xian-shiyou-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "248",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/xian-shiyou-university"
         }
       ]
     },
@@ -2904,7 +3669,132 @@
       ]
     },
     {
-      "slug": "zhengzhou-university",
+      "slug": "yunnan-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "76",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/yunnan-university"
+        }
+      ]
+    },
+    {
+      "slug": "zhejiang-normal-university",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2027,
+          "rank": "601–650",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhejiang-normal-university"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings by Subject",
+          "year": 2026,
+          "rank": "301–400",
+          "scope": "subject",
+          "subject": "Engineering",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhejiang-normal-university"
+        }
+      ]
+    },
+    {
+      "slug": "zhejiang-university",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2027,
+          "rank": "=34",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhejiang-university"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Academic Ranking of World Universities (ARWU)",
+          "year": 2026,
+          "rank": "24",
+          "scope": "world",
+          "sourceUrl": "https://www.shanghairanking.com/universities/zhejiang-university"
+        },
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings by Subject",
+          "year": 2026,
+          "rank": "23",
+          "scope": "subject",
+          "subject": "Computer Science",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhejiang-university"
+        }
+      ]
+    },
+    {
+      "slug": "zhejiang-university-of-finance-and-economics",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "185",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/zhejiang-university-of-finance-and-economics"
+        }
+      ]
+    },
+    {
+      "slug": "zhejiang-university-of-science-and-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "256",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/zhejiang-university-of-science-and-technology"
+        }
+      ]
+    },
+    {
+      "slug": "zhongnan-university-of-economics-and-law",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "74",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/zhongnan-university-of-economics-and-law"
+        }
+      ]
+    },
+    {
+      "slug": "zjut",
+      "rankings": [
+        {
+          "publisher": "Times Higher Education",
+          "rankingName": "World University Rankings",
+          "year": 2026,
+          "rank": "501–600",
+          "scope": "world",
+          "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhejiang-university-of-technology"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "64",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/zhejiang-university-of-technology"
+        }
+      ]
+    },
+    {
+      "slug": "zzu",
       "rankings": [
         {
           "publisher": "ShanghaiRanking",
@@ -2995,15 +3885,191 @@
       ]
     },
     {
-      "slug": "nankai-university",
+      "slug": "asia-pacific-university",
       "rankings": [
         {
           "publisher": "QS",
-          "rankingName": "QS World University Rankings 2027",
-          "year": 2027,
-          "rank": "=329",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "611–620",
           "scope": "world",
-          "sourceUrl": "https://www.topuniversities.com/universities/nankai-university"
+          "sourceUrl": "https://www.topuniversities.com/universities/asia-pacific-university-technology-innovation-apu"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Malaysia University Standing",
+          "year": 2026,
+          "rank": "12",
+          "scope": "national",
+          "sourceUrl": "https://www.topuniversities.com/universities/asia-pacific-university-technology-innovation-apu"
+        }
+      ]
+    },
+    {
+      "slug": "heriot-watt-university-malaysia",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "235",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/heriot-watt-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Malaysia Campus Standing",
+          "year": 2026,
+          "rank": "5",
+          "scope": "national",
+          "sourceUrl": "https://www.topuniversities.com/universities/heriot-watt-university"
+        }
+      ]
+    },
+    {
+      "slug": "monash-university-malaysia",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "37",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/monash-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Malaysia Campus Standing",
+          "year": 2026,
+          "rank": "1",
+          "scope": "national",
+          "sourceUrl": "https://www.topuniversities.com/universities/monash-university"
+        }
+      ]
+    },
+    {
+      "slug": "sunway-university",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "539",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/sunway-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Malaysia University Standing",
+          "year": 2026,
+          "rank": "7",
+          "scope": "national",
+          "sourceUrl": "https://www.topuniversities.com/universities/sunway-university"
+        }
+      ]
+    },
+    {
+      "slug": "taylors-university",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "251",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/taylors-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Malaysia Private University Standing",
+          "year": 2026,
+          "rank": "5",
+          "scope": "national",
+          "sourceUrl": "https://www.topuniversities.com/universities/taylors-university"
+        }
+      ]
+    },
+    {
+      "slug": "ucsi-university",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "265",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/ucsi-university"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Malaysia University Standing",
+          "year": 2026,
+          "rank": "6",
+          "scope": "national",
+          "sourceUrl": "https://www.topuniversities.com/universities/ucsi-university"
+        }
+      ]
+    },
+    {
+      "slug": "universiti-malaya",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "60",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/universiti-malaya-um"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Malaysia National Ranking",
+          "year": 2026,
+          "rank": "1",
+          "scope": "national",
+          "sourceUrl": "https://www.topuniversities.com/universities/universiti-malaya-um"
+        }
+      ]
+    },
+    {
+      "slug": "universiti-teknologi-malaysia",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "181",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/universiti-teknologi-malaysia"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Malaysia National Ranking",
+          "year": 2026,
+          "rank": "2",
+          "scope": "national",
+          "sourceUrl": "https://www.topuniversities.com/universities/universiti-teknologi-malaysia"
+        }
+      ]
+    },
+    {
+      "slug": "university-of-nottingham-malaysia",
+      "rankings": [
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "108",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/university-nottingham"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS Malaysia Campus Standing",
+          "year": 2026,
+          "rank": "3",
+          "scope": "national",
+          "sourceUrl": "https://www.topuniversities.com/universities/university-nottingham"
         }
       ]
     }

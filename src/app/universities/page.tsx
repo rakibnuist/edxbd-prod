@@ -83,7 +83,14 @@ async function getUniversities() {
         verification: { status: record.verificationStatus, ...(record.lastVerifiedAt ? { lastVerifiedAt: record.lastVerifiedAt } : {}) },
         ...(record.relationshipType && record.relationshipType !== 'unverified' && relationshipLabels[record.relationshipType] ? { relationship: relationshipLabels[record.relationshipType] } : {}),
         clearCost: record.costPlans.some(plan => plan.isPublished),
-        publishedRankings: rankings.map(({ publisher, rank, scope, subject }) => ({ publisher, rank, scope, ...(subject ? { subject } : {}) })),
+        publishedRankings: rankings.length
+          ? rankings.map(({ publisher, rank, scope, subject }) => ({ publisher, rank, scope, ...(subject ? { subject } : {}) }))
+          : [
+              ...(record.rankings.world ? [{ publisher: 'QS', rank: String(record.rankings.world), scope: 'world' as const }] : []),
+              ...(record.rankings.country || record.rankings.national
+                ? [{ publisher: 'National', rank: String(record.rankings.country || record.rankings.national), scope: 'national' as const }]
+                : []),
+            ],
         ...(awards.length ? {
           fundingRoutes: awards.map(award => ({
             title: award.title, value: scholarshipReductionLabel(award) || award.coverage[0] || '', levels: award.levels,
