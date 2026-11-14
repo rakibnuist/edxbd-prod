@@ -57,7 +57,7 @@ const guides = [
   { label: 'CSC স্কলারশিপ সম্পূর্ণ গাইড', href: '/csc-scholarship-bangladesh' },
   { label: 'ভর্তির রিকোয়ারমেন্ট ও ডকুমেন্টস', href: '/china-admission-requirements' },
   { label: 'পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড', href: '/bn/study-in-china-cost-bangladesh' },
-  { label: 'চায়না স্টুডেন্ট ভিসা (X1/X2)', href: '/china-student-visa-bangladesh' },
+  { label: 'চায়না স্টুডেন্ট ভিসা (X1/X2)', href: '/bn/china-student-visa-bangladesh' },
   { label: 'চীনে MBBS ভর্তি গাইড', href: '/mbbs-in-china-bangladesh' },
   { label: 'ইনটেক ও Application Deadlines', href: '/china-intakes-deadlines' },
   { label: 'চীনের শীর্ষ বিশ্ববিদ্যালয় তালিকা', href: '/china-universities' },
