@@ -69,7 +69,7 @@ export default async function Page() {
     <TrustBar/>
 
     <section id="costs" aria-labelledby="cost-title" className="bg-canvas-soft px-5 py-14 sm:px-8 lg:py-20"><div className="mx-auto max-w-[1180px]">
-      <div className="max-w-2xl"><h2 id="cost-title" data-anim="up" className={kit.h2}>See the full cost before you commit.</h2><p className={`mt-4 ${kit.lead}`}>Your ClearCost plan separates university fees, living expenses and EduExpress services, so you know what to pay, who receives it and when it is due.</p></div>
+      <div className="max-w-2xl"><h2 id="cost-title" data-anim="up" className={kit.h2}>See the full cost before you commit.</h2><p className={`mt-4 ${kit.lead}`}>Your written cost plan separates university fees, living expenses and EduExpress services, so you know what to pay, who receives it and when it is due.</p></div>
       <div data-anim="stagger" className="mt-8 grid gap-4 md:grid-cols-2">{[
         { title: 'Before you travel', subtitle: 'Before China', items: [['University', 'Application fees and any required admission or tuition deposit.'], ['Third parties', 'Any university or third-party costs outside your package, itemised in writing.'], ['EduExpress', 'Your selected package price and written payment terms.']] },
         { title: 'After arrival in China', subtitle: 'In China', items: [['Study', 'Tuition after any supported scholarship reduction.'], ['Stay', 'Accommodation, meals, utilities and personal living expenses.'], ['Formalities', 'Insurance, medical examination, residence permit and other applicable charges.']] },

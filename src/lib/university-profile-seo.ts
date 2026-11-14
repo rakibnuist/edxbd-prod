@@ -159,8 +159,8 @@ export function universityProfileStructuredData(university: UniversityIdentity &
         mainEntity: { '@id': universityId },
         breadcrumb: { '@id': `${seo.canonical}#breadcrumb` },
         hasPart: [
-          ['overview', 'University overview'], ['programs', 'Programs and tuition'],
-          ['scholarships', 'Scholarship options'], ['fees', 'Fees and ClearCost'],
+          ['overview', 'University overview'], ['programs', 'Programs and tuition fees'],
+          ['scholarships', 'Scholarship options'],
           ['admission', 'Admission requirements'], ['documents', 'Application documents'], ['rankings', 'Published university rankings'],
         ].map(([id, name]) => ({ '@type': 'WebPageElement', '@id': `${seo.canonical}#${id}`, name, url: `${seo.canonical}#${id}` })),
       },

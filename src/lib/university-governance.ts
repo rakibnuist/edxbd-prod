@@ -29,7 +29,7 @@ export function universityEvidenceChecklist(university: Partial<IUniversity>, no
   const publishedPlans = (university.costPlans || []).filter(plan => plan.isPublished);
 
   publishedPlans.forEach((plan, index) => {
-    const label = plan.title?.trim() || `ClearCost plan ${index + 1}`;
+    const label = plan.title?.trim() || `Cost plan ${index + 1}`;
     if (!hasHttpUrl(plan.sourceUrl)) errors.push(`${label}: add the official cost source.`);
     if (!plan.lastVerifiedAt) errors.push(`${label}: add the verification date.`);
     if (!plan.programName?.trim()) errors.push(`${label}: select the exact program.`);

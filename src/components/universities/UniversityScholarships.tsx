@@ -63,7 +63,7 @@ export default function UniversityScholarships({ options, programs, onEstimate, 
         </div>
         <footer className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-200 bg-slate-50/60 px-5 py-4 sm:px-7">
           <p className="max-w-xl text-sm leading-6 text-slate-500">{!compatible ? 'An eligible program is not listed in this catalog.' : option.tuitionReduction ? 'Compare the published tuition reduction alongside the other costs of studying.' : 'Compare this funding route. Enter only the tuition reduction confirmed in your award; no value is assumed.'}</p>
-          <button type="button" disabled={!compatible} onClick={() => onEstimate(option)} className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg border border-[#12436b] bg-white px-4 text-sm font-semibold text-[#12436b] transition-colors hover:bg-[#12436b] hover:text-white disabled:cursor-default disabled:border-slate-200 disabled:text-slate-500 disabled:hover:bg-white disabled:hover:text-slate-500">Compare in ClearCost<ArrowRight size={16} /></button>
+          <button type="button" disabled={!compatible} onClick={() => onEstimate(option)} className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg border border-[#12436b] bg-white px-4 text-sm font-semibold text-[#12436b] transition-colors hover:bg-[#12436b] hover:text-white disabled:cursor-default disabled:border-slate-200 disabled:text-slate-500 disabled:hover:bg-white disabled:hover:text-slate-500">Apply with Award<ArrowRight size={16} /></button>
         </footer>
       </article>;
     })}</div>

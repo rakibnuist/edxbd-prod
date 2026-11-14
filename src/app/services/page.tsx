@@ -35,9 +35,9 @@ const mainServices = [
     tone: kit.cardSage,
   },
   {
-    id: 'clearcost-sheet',
+    id: 'cost-schedule',
     number: '02',
-    title: 'ClearCost Sheet',
+    title: 'Itemised Cost Schedule',
     label: 'Financial schedule and fee separation',
     copy: 'An itemised written cost schedule separating university tuition, hostel, embassy and third-party fees from EduExpress charges.',
     icon: Wallet,
@@ -72,7 +72,7 @@ const mainServices = [
 const processSteps = [
   { step: '01', title: 'Education fit assessment', copy: 'Free evaluation of academic background, budget, language readiness and career goals' },
   { step: '02', title: 'Decision report', copy: 'Compare at least three suitable routes with written reasons to recommend or reject' },
-  { step: '03', title: 'ClearCost schedule', copy: 'Separates university, embassy and third-party fees from EduExpress charges' },
+  { step: '03', title: 'Itemised fee schedule', copy: 'Separates university, embassy and third-party fees from EduExpress charges' },
   { step: '04', title: 'Application proof pack', copy: 'Submit applications with timestamped references and receipts' },
   { step: '05', title: 'Visa readiness record', copy: 'Document checklist and official embassy guidance reviewed before departure' },
 ];

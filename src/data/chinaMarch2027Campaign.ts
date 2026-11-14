@@ -211,7 +211,7 @@ export const march2027Faqs = [
   },
   {
     question: 'Are the fees on this page final?',
-    answer: 'No. They are indicative figures transcribed from EduExpress’s owner-supplied project sheet. Your counsellor must confirm the university, award tier, accommodation, deposits and third-party charges in a written ClearCost breakdown before you pay.',
+    answer: 'No. They are indicative figures transcribed from EduExpress’s owner-supplied project sheet. Your counsellor must confirm the university, award tier, accommodation, deposits and third-party charges in a written fee breakdown before you pay.',
   },
   {
     question: 'Does a scholarship always include tuition, accommodation and a stipend?',

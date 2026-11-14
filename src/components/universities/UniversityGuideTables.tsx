@@ -135,7 +135,7 @@ export function UniversityFundingTable({
               onClick={() => onChoose(option)}
               className="inline-flex items-center gap-1 text-xs font-bold text-petrol-800 hover:text-emerald-700 hover:underline"
             >
-              Calculate with Award <ArrowRight size={13} />
+              View Eligible Programs <ArrowRight size={13} />
             </button>
           </div>
         </div>

@@ -171,15 +171,12 @@ function CompareDialog({ rows, onClose, onRemove }: { rows: Row[]; onClose: () =
     { label: 'Scholarship on file', render: row => row.awardValue || 'None published' },
     { label: 'EduExpress relationship', render: row => row.relationship || 'No recorded agreement' },
     {
-      label: 'Full cost sheet',
-      render: row =>
-        row.university.clearCost ? (
-          <Link href={`/universities/${row.university.slug}/clear-cost`} className="font-semibold text-petrol-600 underline underline-offset-4">
-            Open ClearCost
-          </Link>
-        ) : (
-          <span className="text-ink-mute">On profile</span>
-        ),
+      label: 'Fee breakdown',
+      render: row => (
+        <Link href={`/universities/${row.university.slug}#fees`} className="font-semibold text-petrol-600 underline underline-offset-4">
+          View Fees
+        </Link>
+      ),
     },
   ];
 
@@ -712,14 +709,12 @@ export default function UniversitiesClient({ directory }: Props) {
                                     <Check size={13} className="text-emerald-600" /> Visa-First Pledge (BDT 0 Pre-Visa)
                                   </span>
                                 )}
-                                {university.clearCost && (
-                                  <Link
-                                    href={`/universities/${university.slug}#fees`}
-                                    className="font-bold text-petrol-800 hover:text-emerald-700 hover:underline"
-                                  >
-                                    ClearCost™ Sheet →
-                                  </Link>
-                                )}
+                                <Link
+                                  href={`/universities/${university.slug}#fees`}
+                                  className="font-bold text-petrol-800 hover:text-emerald-700 hover:underline"
+                                >
+                                  Fee Schedule →
+                                </Link>
                               </div>
                             </div>
 

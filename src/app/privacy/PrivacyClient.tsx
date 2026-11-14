@@ -18,7 +18,7 @@ const privacyPillars = [
   {
     title: 'Explicit consent',
     icon: Eye,
-    copy: 'We collect personal information strictly to prepare your Education Fit Assessment, ClearCost schedule, and university applications.',
+    copy: 'We collect personal information strictly to prepare your Education Fit Assessment, itemised fee schedule, and university applications.',
   },
   {
     title: 'Student control & deletion',

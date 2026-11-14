@@ -72,7 +72,7 @@ const stages: JourneyStage[] = [
     title: 'See the complete cost',
     promise: 'A scholarship or tuition figure is not the whole financial decision.',
     work: ['Separate university, official and EduExpress charges', 'Add living, travel and document-related costs', 'Record payment timing, recipient and known conditions'],
-    output: 'ClearCost view',
+    output: 'Itemised fee schedule',
     owner: 'EduExpress explains; family decides',
     icon: WalletCards,
   },

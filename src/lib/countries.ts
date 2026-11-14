@@ -822,7 +822,7 @@ export const countries: Country[] = [
     },
     costs: {
       tuition: 'Confirmed for the selected institution and intake',
-      living: 'Prepared in a dated ClearCost Sheet',
+      living: 'Prepared in a written fee schedule',
       currency: 'EUR'
     },
     scholarships: [],
@@ -878,7 +878,7 @@ export const countries: Country[] = [
     },
     costs: {
       tuition: 'Confirmed for the selected institution and intake',
-      living: 'Prepared in a dated ClearCost Sheet',
+      living: 'Prepared in a written fee schedule',
       currency: 'EUR'
     },
     scholarships: [],
@@ -934,7 +934,7 @@ export const countries: Country[] = [
     },
     costs: {
       tuition: 'Confirmed for the selected institution and intake',
-      living: 'Prepared in a dated ClearCost Sheet',
+      living: 'Prepared in a written fee schedule',
       currency: 'THB'
     },
     scholarships: [],

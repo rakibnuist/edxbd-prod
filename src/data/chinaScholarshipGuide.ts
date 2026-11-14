@@ -116,7 +116,7 @@ export const chinaScholarshipGuide: ChinaGuidePage = {
       summary: 'Funding can depend on an annual review of academic progress, attendance, conduct and the institution’s conditions. Failure can lead to suspension or cancellation. Check the approved period before assuming support for an extension or a change of major.',
       cards: [
         { title: 'Keep an unfunded-cost plan', body: 'Account for travel, document preparation, application charges, deposits, uncovered room costs and personal spending. Airfare is included only where your specific award expressly covers it.' },
-        { title: 'Use ClearCost by university', body: 'Apply only the stated tuition reduction and explicit fee waivers. Keep CNY and BDT separate until a rate is supplied, and do not subtract a future stipend from the cash needed before arrival.' },
+        { title: 'Check fee schedules by university', body: 'Apply only the stated tuition reduction and explicit fee waivers. Keep CNY and BDT separate until a rate is supplied, and do not subtract a future stipend from the cash needed before arrival.' },
       ],
     },
   ],
@@ -140,7 +140,7 @@ export const chinaScholarshipGuide: ChinaGuidePage = {
     { label: 'Intakes and deadlines', href: '/china-intakes-deadlines' },
     { label: 'NUIST scholarship coverage', href: '/universities/nuist#scholarships' },
     { label: 'Compare Chinese universities', href: '/china-universities' },
-    { label: 'Study costs and ClearCost', href: '/study-in-china-cost-bangladesh' },
+    { label: 'Study Costs & Budgeting', href: '/study-in-china-cost-bangladesh' },
   ],
   ctaTitle: 'Find a suitable scholarship route',
   ctaText: 'Share your qualifications, intended major and budget. EduExpress International can help you compare eligibility, prepare the application file and understand the costs that remain.',

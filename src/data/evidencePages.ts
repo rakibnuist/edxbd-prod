@@ -28,7 +28,7 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
     intro: 'A recommendation should be explainable in writing. EduExpress compares recognition, academic fit, career value, total financial reality, visa readiness, and student support before recommending a route.',
     sections: [
       { heading: 'Six evidence checks', body: 'Every recommendation is assessed against the same standard.', items: ['Recognition through an official registry or accreditor', 'Academic fit based on entry requirements and curriculum', 'Career value framed through evidence and realistic pathways', 'Tuition, living costs, official fees and EduExpress charges', 'Visa-readiness gaps checked against official guidance', 'Student support, safety and limits of responsibility'] },
-      { heading: 'What you receive', body: 'Where appropriate, the assessment leads to an EduFit Decision Report comparing at least three suitable options, followed by a ClearCost Sheet and an Application Proof Pack.' },
+      { heading: 'What you receive', body: 'Where appropriate, the assessment leads to an EduFit Decision Report comparing at least three suitable options, followed by an Itemised Fee Schedule and an Application Proof Pack.' },
       { heading: 'Who this process serves best', body: 'This process is designed for students who value an evidence based recommendation and understand that universities, scholarship bodies and government authorities issue the official decisions.' },
     ],
   }),

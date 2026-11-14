@@ -94,7 +94,7 @@ const related = [
   { label: 'China intakes and deadlines', href: '/china-intakes-deadlines' },
   { label: 'China admission requirements', href: '/china-admission-requirements' },
   { label: 'Study in China without IELTS', href: '/study-in-china-without-ielts' },
-  { label: 'Study costs and ClearCost', href: '/study-in-china-cost-bangladesh' },
+  { label: 'Study Costs & Budgeting', href: '/study-in-china-cost-bangladesh' },
   { label: 'Study in China from Bangladesh', href: '/study-in-china-from-bangladesh' },
 ];
 

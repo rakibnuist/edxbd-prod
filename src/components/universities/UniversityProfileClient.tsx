@@ -42,21 +42,17 @@ import UniversityDocuments from './UniversityDocuments';
 import { UniversityProgramTable, UniversityFundingTable, UniversityEntrySummary } from './UniversityGuideTables';
 import UniversityScholarships from './UniversityScholarships';
 
-const UniversityClearCost = dynamic(() => import('./UniversityClearCost'), {
-  loading: () => <p className="p-5 text-sm text-slate-500">Loading ClearCost planner…</p>,
-});
 const UniversityPrograms = dynamic(() => import('./UniversityPrograms'), {
   loading: () => <p className="py-5 text-sm text-slate-500">Loading program filters…</p>,
 });
 
-type Panel = 'overview' | 'programs' | 'scholarships' | 'fees' | 'admission' | 'documents' | 'rankings' | 'questions';
+type Panel = 'overview' | 'programs' | 'scholarships' | 'admission' | 'documents' | 'rankings' | 'questions';
 const PANELS: { id: Panel; label: string }[] = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'programs', label: 'Programs & Tuition' },
-  { id: 'fees', label: 'Fees & ClearCost' },
-  { id: 'scholarships', label: 'Scholarships' },
+  { id: 'overview', label: 'About University' },
+  { id: 'programs', label: 'Programs & Fees' },
+  { id: 'scholarships', label: 'Scholarships & Aid' },
   { id: 'admission', label: 'Entry Requirements' },
-  { id: 'documents', label: 'Documents Required' },
+  { id: 'documents', label: 'Required Documents' },
   { id: 'rankings', label: 'Rankings & Accreditation' },
   { id: 'questions', label: 'FAQs' },
 ];
@@ -214,18 +210,22 @@ export default function UniversityProfileClient({
   useEffect(() => {
     const sync = () => {
       const hash = window.location.hash.slice(1);
-      if (PANELS.some((item) => item.id === hash)) setPanel(hash as Panel);
+      if (hash === 'fees') {
+        setPanel('programs');
+      } else if (PANELS.some((item) => item.id === hash)) {
+        setPanel(hash as Panel);
+      }
     };
     sync();
     window.addEventListener('hashchange', sync);
     return () => window.removeEventListener('hashchange', sync);
   }, []);
 
-  const openPanel = (next: Panel) => {
-    setPanel(next);
-    if (next === 'fees') setCostOpen(true);
-    window.history.replaceState(null, '', '#' + next);
-    document.getElementById(next)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  const openPanel = (next: Panel | 'fees') => {
+    const target = next === 'fees' ? 'programs' : next;
+    setPanel(target);
+    window.history.replaceState(null, '', '#' + target);
+    document.getElementById(target)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
   };
 
   const chooseLevel = (next: ProgramLevel) => {
@@ -257,7 +257,7 @@ export default function UniversityProfileClient({
 
   const estimateScholarship = (option: UniversityScholarshipOption) => {
     chooseScholarship(option);
-    openPanel('fees');
+    openPanel('programs');
   };
 
   const programSelect = (context: string) => (
@@ -491,7 +491,7 @@ export default function UniversityProfileClient({
                     Tuition Range
                   </dt>
                   <dd className="mt-2">
-                    <a href="#fees" className="text-[14px] font-bold text-white leading-snug block line-clamp-2 hover:text-lime">
+                    <a href="#programs" className="text-[14px] font-bold text-white leading-snug block line-clamp-2 hover:text-lime">
                       {cleanTuitionText}
                     </a>
                     <span className="mt-1 block text-[11px] text-white/60">Official gross tuition</span>
@@ -654,15 +654,34 @@ export default function UniversityProfileClient({
           </div>
         </section>
 
-        {/* Programs & Tuition Section */}
+        {/* Programs & Fees Section */}
         <section {...panelProps('programs')} className={sheetClass}>
-          <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
-            Catalog & Degree Finder
-          </span>
-          <h2 className={titleClass}>{shortName} Programs & Tuition Fees</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Select a program level to explore available majors, degree durations, and tuition costs.
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
+            <div>
+              <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
+                Academic Catalog & Fees
+              </span>
+              <h2 className={titleClass}>{shortName} Programs, Tuition & Costs</h2>
+              <p className="mt-1.5 text-sm text-slate-600">
+                Explore degree majors, standard durations, medium of instruction, and itemized annual tuition.
+              </p>
+            </div>
+            <a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[42px] px-5 text-xs font-bold">
+              Check Admission Eligibility <ArrowRight size={14} />
+            </a>
+          </div>
+
+          {feePreviews.length > 0 && (
+            <div className="mt-6 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+              {feePreviews.map((fee) => (
+                <div key={fee.level} className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-4.5 shadow-xs">
+                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{LEVEL_LABELS[fee.level]} Indicative Tuition</p>
+                  <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">{fee.amount}</p>
+                  <p className="mt-0.5 text-[11px] text-slate-500">{fee.period} · gross published fee</p>
+                </div>
+              ))}
+            </div>
+          )}
 
           {programs.length > 0 ? (
             <div className="mt-6">
@@ -670,7 +689,6 @@ export default function UniversityProfileClient({
                 programs={programs}
                 onChoose={(value) => {
                   chooseProgram(value);
-                  openPanel('fees');
                 }}
               />
 
@@ -696,7 +714,6 @@ export default function UniversityProfileClient({
                     onQuery={setQuery}
                     onProgram={(value) => {
                       chooseProgram(value);
-                      openPanel('fees');
                     }}
                   />
                 )}
@@ -708,153 +725,84 @@ export default function UniversityProfileClient({
             </div>
           )}
 
+          {/* Selected Program Detailed Fee & Living Breakdown */}
           {selected && (
-            <div className="mt-6 rounded-2xl border border-emerald-100 bg-emerald-50/50 p-4.5 flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Selected Program</span>
-                <h3 className="mt-0.5 text-base font-bold text-slate-900">{selected.name}</h3>
-                <p className="mt-0.5 text-xs text-slate-600 font-medium">
-                  {[selected.duration, selected.languages.join(' / ')].filter(Boolean).join(' · ')}
-                </p>
-              </div>
-              <div className="flex gap-2.5">
-                <button type="button" onClick={() => openPanel('fees')} className="ed-btn ed-btn-signal min-h-[40px] px-4 text-xs font-bold">
-                  Calculate in ClearCost <ArrowRight size={13} />
-                </button>
-                <button type="button" onClick={() => openPanel('documents')} className="ed-btn ed-btn-outline min-h-[40px] px-4 text-xs font-bold">
-                  Documents Needed
-                </button>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* Fees & ClearCost Section */}
-        <section {...panelProps('fees')} className="space-y-6">
-          <div className="grid items-center gap-5 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-7 shadow-xs lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
-                Transparent Cost Planning
-              </span>
-              <h2 className={titleClass}>{shortName} Fees & ClearCost™</h2>
-              <p className="mt-1.5 text-xs text-slate-600">
-                Transparent fee schedules with clear currency separation and itemized third-party costs.
-              </p>
-            </div>
-            {programPicker('fees')}
-          </div>
-
-          {feePreviews.length > 0 && (
-            <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
-              {feePreviews.map((fee) => (
-                <div key={fee.level} className="rounded-xl border border-slate-200/80 bg-white p-4.5 shadow-xs">
-                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{LEVEL_LABELS[fee.level]} Tuition</p>
-                  <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">{fee.amount}</p>
-                  <p className="mt-0.5 text-[11px] text-slate-500">{fee.period} · gross published fee</p>
+            <div className="mt-8 rounded-2xl border border-emerald-200 bg-white p-6 sm:p-7 shadow-xs">
+              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-200 pb-5">
+                <div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-900">
+                    Selected Program Details
+                  </span>
+                  <h3 className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl">{selected.name}</h3>
+                  <p className="mt-1 text-xs text-slate-600 font-medium flex flex-wrap items-center gap-2">
+                    <span>Degree: <strong>{selected.level}</strong></span>
+                    <span>·</span>
+                    <span>Duration: <strong>{selected.duration || 'Standard'}</strong></span>
+                    <span>·</span>
+                    <span>Language: <strong>{selected.languages.join(' / ') || 'English'}</strong></span>
+                  </p>
                 </div>
-              ))}
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[40px] px-5 text-xs font-bold">
+                    Apply for this Major <ArrowRight size={13} />
+                  </a>
+                  <button type="button" onClick={() => openPanel('documents')} className="ed-btn ed-btn-outline min-h-[40px] px-4 text-xs font-bold">
+                    Required Documents
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-petrol-800">
+                  Itemized Costs & Living Breakdown
+                </h4>
+                <div className="mt-3.5 grid gap-6 lg:grid-cols-2">
+                  {(['before_china', 'in_china'] as const).map((stage) => {
+                    const stageHeading =
+                      stage === 'before_china'
+                        ? isChina
+                          ? 'Before Departure (Application & Visa)'
+                          : 'Before Departure'
+                        : isChina
+                        ? 'In China (Direct to Campus)'
+                        : `In ${university.country} (Direct to Campus)`;
+                    return (
+                      <div key={stage} className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-5">
+                        <h5 className="border-b border-slate-200 pb-3 text-xs font-bold uppercase tracking-wider text-petrol-800">
+                          {stageHeading}
+                        </h5>
+                        <dl className="mt-2 divide-y divide-slate-200/60 text-xs">
+                          {selected.fees
+                            .filter((fee) => fee.stage === stage)
+                            .map((fee, index) => (
+                              <div key={`${fee.key}-${index}`} className="py-2.5 flex items-start justify-between gap-4">
+                                <dt className="text-slate-700 font-medium">
+                                  {fee.item}
+                                  {fee.optional && <span className="mt-0.5 block text-[11px] text-slate-400">If applicable</span>}
+                                </dt>
+                                <dd className="text-right font-bold tabular-nums text-petrol-800">{feeText(fee)}</dd>
+                              </div>
+                            ))}
+                          {selected.fees.filter((fee) => fee.stage === stage).length === 0 && (
+                            <p className="py-3 text-xs text-slate-500">No extra fee items listed for this stage.</p>
+                          )}
+                        </dl>
+                        {stage === 'before_china' && (
+                          <p className="mt-3.5 border-t border-slate-200/70 pt-3 text-[11px] leading-relaxed text-slate-500">
+                            {isMalaysia
+                              ? 'For Malaysia, EduExpress service fee is BDT 0. No agency charge is required.'
+                              : 'EduExpress service charge is payable only after your visa is successfully issued.'}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           )}
 
           {!selected && generalFeeTable}
-
-          {/* Interactive ClearCost Calculator */}
-          {selected && (
-            <div className="rounded-2xl border border-slate-200/90 bg-white shadow-xs overflow-hidden">
-              <div className="bg-slate-50/80 p-5 sm:p-6 border-b border-slate-200 flex items-center justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900">ClearCost™ Study Budget Calculator</h3>
-                  <p className="text-xs text-slate-500">
-                    Customized for {selected.name} ({university.country})
-                  </p>
-                </div>
-                <span className="rounded-full bg-emerald-100 text-emerald-900 px-3 py-1 text-xs font-bold">
-                  {isMalaysia ? 'BDT 0 Service Fee' : 'Visa-First Guarantee'}
-                </span>
-              </div>
-              <div className="p-4 sm:p-6">
-                <UniversityClearCost
-                  key={selected.id}
-                  university={university}
-                  programs={[]}
-                  programDetails={[selected]}
-                  scholarshipOptions={scholarshipOptions}
-                  selectedScholarshipId={scholarshipScenario?.id || ''}
-                  onScholarshipChange={chooseScholarship}
-                  scholarshipScenario={
-                    activeScenario && (activeScenario.tuitionReduction || activeScenario.feeWaivers?.length)
-                      ? {
-                          id: activeScenario.id,
-                          title: activeScenario.title,
-                          ...(activeScenario.tuitionReduction || { type: 'fixed' as const, value: 0 }),
-                          feeWaivers: activeScenario.feeWaivers,
-                        }
-                      : undefined
-                  }
-                  hideProgramPicker
-                  servicePackages={servicePackages}
-                  fees={[]}
-                  scholarships={university.scholarships}
-                  costPlans={[]}
-                  assessmentHref={assessmentHref}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* All Program Fees Itemized Schedule */}
-          {selected && (
-            <details open className={sheetClass}>
-              <summary className="min-h-11 cursor-pointer text-lg font-bold text-petrol-800">
-                All Program Fees & Payment Conditions
-              </summary>
-              <p className="mb-6 mt-2 text-sm text-slate-500">
-                Full itemized fee schedule for {selected.name}.
-              </p>
-              <div className="grid gap-8 lg:grid-cols-2">
-                {(['before_china', 'in_china'] as const).map((stage) => {
-                  const stageHeading =
-                    stage === 'before_china'
-                      ? isChina
-                        ? 'Before China'
-                        : 'Before Departure'
-                      : isChina
-                      ? 'In China'
-                      : `In ${university.country}`;
-                  return (
-                    <div key={stage}>
-                      <h3 className="border-b border-rule pb-3 text-base font-bold text-petrol-800">
-                        {stageHeading}
-                      </h3>
-                      <dl className="divide-y divide-slate-100">
-                        {selected.fees
-                          .filter((fee) => fee.stage === stage)
-                          .map((fee, index) => (
-                            <div key={`${fee.key}-${index}`} className="py-3.5 flex items-start justify-between gap-5 text-sm">
-                              <dt className="text-slate-600">
-                                {fee.item}
-                                {fee.optional && <span className="mt-0.5 block text-xs text-slate-400">If applicable</span>}
-                              </dt>
-                              <dd className="text-right font-bold tabular-nums text-petrol-800">{feeText(fee)}</dd>
-                            </div>
-                          ))}
-                        {selected.fees.filter((fee) => fee.stage === stage).length === 0 && (
-                          <p className="py-5 text-sm text-slate-500">No extra fee items listed for this stage.</p>
-                        )}
-                      </dl>
-                      {stage === 'before_china' && (
-                        <p className="mt-4 text-xs leading-5 text-slate-500">
-                          {isMalaysia
-                            ? 'For Malaysia, EduExpress service fee is BDT 0. No agency charge is required.'
-                            : 'Select an EduExpress Package in the calculator to include its published fee automatically.'}
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </details>
-          )}
         </section>
 
         {/* Scholarships Section */}

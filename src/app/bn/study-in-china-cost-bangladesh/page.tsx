@@ -276,7 +276,7 @@ export default function BengaliChinaCostPage() {
           <div className="flex items-center gap-3">
             <BadgeCheck className="size-8 text-lime shrink-0" />
             <div>
-              <p className="text-[15px] font-bold text-petrol-800">লিখিত ClearCost™ শিট</p>
+              <p className="text-[15px] font-bold text-petrol-800">লিখিত আইটেমাইজড ফি শিট</p>
               <p className="text-[13px] text-ink-soft">আবেদনের আগেই প্রতিটি ফি লিখিত আকারে প্রদান</p>
             </div>
           </div>

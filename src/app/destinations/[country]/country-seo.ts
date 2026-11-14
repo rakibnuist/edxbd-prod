@@ -74,7 +74,7 @@ export const COUNTRY_SEO: Record<string, CountrySeo> = {
     displayName: 'Malta',
     title: 'Study in Malta from Bangladesh: Programs & Visa | EduExpress',
     description:
-      'Study in Malta from Bangladesh: English-medium business, IT, hospitality and health sciences programs, with costs in a dated ClearCost Sheet and visa checks.',
+      'Study in Malta from Bangladesh: English-medium business, IT, hospitality and health sciences programs, with costs in an itemised fee breakdown and visa checks.',
     photoAlt: 'Aerial view of Valletta and the Triton Fountain, Malta',
   },
   greece: {

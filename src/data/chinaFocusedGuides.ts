@@ -75,7 +75,7 @@ export const chinaFocusedGuides: ChinaGuidePage[] = [
     metaTitle: 'Study in China Costs & Fees | EduExpress International',
     description: 'Plan China study costs from Bangladesh with university fee examples, two payment stages, scholarship deductions and CNY-to-BDT budgeting guidance.',
     eyebrow: 'Know your full budget',
-    directAnswer: 'The cost of studying in China depends on your university, major, teaching language, accommodation and confirmed scholarship. Start with programme-specific tuition in CNY, then add expenses before travel and after arrival. Keep an EduExpress Package priced in BDT in its own currency. Compare published fee examples, then open the university’s ClearCost calculator for an editable estimate. A tuition waiver reduces only the costs stated in the award; your complete budget also includes everyday living and travel.',
+    directAnswer: 'The cost of studying in China depends on your university, major, teaching language, accommodation and confirmed scholarship. Start with programme-specific tuition in CNY, then add expenses before travel and after arrival. Keep an EduExpress Package priced in BDT in its own currency. Compare published fee examples, then open the university profile for an itemized estimate. A tuition waiver reduces only the costs stated in the award; your complete budget also includes everyday living and travel.',
     facts: [
       { value: '2 stages', label: 'When you pay', note: 'Before China and in China' },
       { value: 'CNY', label: 'University costs', note: 'Keep original prices and billing periods' },
@@ -109,7 +109,7 @@ export const chinaFocusedGuides: ChinaGuidePage[] = [
         { title: 'Apply the written award', body: 'Enter the confirmed percentage or fixed tuition reduction. A living allowance is not a tuition discount.' },
         { title: 'Avoid double counting', body: 'Credit an eligible tuition deposit once. Add accommodation and insurance only if still payable after the award.' },
       ] },
-      { heading: 'Keep CNY and BDT clear', summary: 'CNY and RMB name the same currency. Keep university costs in CNY and your package in its published currency. For a BDT plan, use a bank or remittance quote, add transfer charges and allow for currency movement. ClearCost converts only when you enter a rate.' },
+      { heading: 'Keep CNY and BDT clear', summary: 'CNY and RMB name the same currency. Keep university costs in CNY and your package in its published currency. For a BDT plan, use a bank or remittance quote, add transfer charges and allow for currency movement. Convert using your bank’s authorized card or TT rate.' },
       { heading: 'No Student File Requirement & On-Campus Payment', summary: 'Unlike Western study destinations, studying in China does not require opening a cumbersome Bangladesh Bank Student File. Full scholarship recipients pay zero tuition, while partial or self-funded students pay fees directly on campus upon arrival or via endorsed cards.', table: { columns: ['Payment Pathway', 'Coverage & Requirement', 'Practical Guide for Students'], rows: [
         ['Full CSC / Type A Award', '100% Tuition Waiver & Free Dormitory + monthly living stipend', 'No tuition payment needed from Bangladesh; allowance is deposited into your Chinese bank account'],
         ['On-Campus Registration Fee', 'Partial tuition and hostel fees paid directly at the campus cashier', 'Paid during registration week after arriving in China; no advance bank wire needed'],
@@ -121,9 +121,9 @@ export const chinaFocusedGuides: ChinaGuidePage[] = [
     changeRisks: ['Tuition, billing period and deposit treatment', 'Room allocation and utility charges', 'Scholarship coverage and disbursement', 'Exchange rates and personal spending', 'Arrival flight costs and initial on-campus registration'],
     notSuitable: ['Students comparing the full study cost', 'Families planning uncovered expenses', 'Applicants who want recipients and refund terms in writing'],
     faqs: [
-      { question: 'How much does study in China cost from Bangladesh?', answer: 'There is no single reliable total. Use the exact programme tuition, room and confirmed award, then add travel, living and administrative costs. University ClearCost calculators keep the items and currencies separate.' },
+      { question: 'How much does study in China cost from Bangladesh?', answer: 'There is no single reliable total. Use the exact programme tuition, room and confirmed award, then add travel, living and administrative costs. University profiles keep fee items and original currencies separate.' },
       { question: 'Does a full tuition scholarship cover everything?', answer: research.faqs[3].answer },
-      { question: 'Can I calculate the budget in BDT?', answer: 'Enter your bank or remittance provider’s CNY-to-BDT rate in ClearCost. A package already priced in BDT remains in BDT and is added once.' },
+      { question: 'Can I calculate the budget in BDT?', answer: 'Use your bank or remittance provider’s CNY-to-BDT rate. A package already priced in BDT remains in BDT and is added once.' },
       { question: 'Do Bangladeshi students need to open a Student File for China?', answer: 'No. Unlike Western study destinations, studying in China does not require opening a Bangladesh Bank Student File. Full scholarship students pay zero tuition, while partial or self-funded students pay their tuition and accommodation fees directly on campus during registration after arrival in China.' },
       { question: 'Will a deposit be added to tuition twice?', answer: 'Select the tuition-credit option only when the university confirms it. Otherwise keep the deposit separate and check its refund conditions.' },
     ],

@@ -226,7 +226,7 @@ export default async function StudyInChinaFromBangladeshPage() {
             <Link href="/study-in-china-cost-bangladesh" className={`mt-4 ${kit.link}`}>Explore fees & total costs <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
           <div className={`${kit.cardLime} self-start`}>
-            <h3 className={kit.h3}>Your ClearCost checklist</h3>
+            <h3 className={kit.h3}>Your itemised cost checklist</h3>
             <dl className="mt-3 divide-y divide-white">
               <div className="py-4"><dt className="text-[16px] font-semibold text-petrol-800">Before China</dt><dd className={`mt-1 ${kit.body}`}>Application charges, any university deposit, document preparation, visa and travel arrangements, plus the agreed EduExpress Package.</dd></div>
               <div className="py-4"><dt className="text-[16px] font-semibold text-petrol-800">In China</dt><dd className={`mt-1 ${kit.body}`}>Tuition after confirmed support, accommodation, insurance, medical examination, residence permit, meals and everyday living.</dd></div>
@@ -266,7 +266,7 @@ export default async function StudyInChinaFromBangladeshPage() {
       <Section
         id="china-university-options"
         title="Explore Chinese university programmes."
-        intro="Open a profile for majors, teaching language, entry requirements, scholarships and ClearCost."
+        intro="Open a profile for majors, teaching language, entry requirements, scholarships and fee schedules."
         action={<Link href="/china-universities" className="ed-btn ed-btn-outline min-h-[48px] px-6">View all universities <ArrowRight size={16} aria-hidden="true" /></Link>}
       >
         <div data-anim="stagger" className="grid gap-4 md:grid-cols-3">

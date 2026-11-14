@@ -7,7 +7,7 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const route = await getUniversityRoute(slug);
-  if (!route) return { title: 'University ClearCost' };
+  if (!route) return { title: 'University Fees and Costs' };
   return {
     title: `${route.record.name} Costs and Scholarships`,
     description: `Compare program tuition, scholarship options and an itemized first year cost view for ${route.record.name}.`,
@@ -19,5 +19,5 @@ export default async function UniversityClearCostRedirect({ params }: Props) {
   const { slug } = await params;
   const route = await getUniversityRoute(slug);
   if (!route) notFound();
-  permanentRedirect(`/universities/${route.record.slug}#costs`);
+  permanentRedirect(`/universities/${route.record.slug}#fees`);
 }

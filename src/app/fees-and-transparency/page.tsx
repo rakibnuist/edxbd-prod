@@ -9,11 +9,11 @@ import { getPublicTrustRecords } from '@/lib/trust-records';
 const PATH = '/fees-and-transparency';
 
 export const metadata = pageMetadata({
-  title: 'Fees, University Costs and ClearCost Sheets | EduExpress',
+  title: 'Fees, University Costs & Itemised Breakdown | EduExpress',
   description:
     'What EduExpress charges, when you pay and what goes to universities and embassies. No service fee before China visa approval, and every cost in writing.',
   path: PATH,
-  image: { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — ClearCost breakdown' },
+  image: { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Itemised cost breakdown' },
 });
 
 const policyFacts = [
@@ -22,10 +22,10 @@ const policyFacts = [
   { label: 'Earlier third-party costs', value: 'Written', note: 'Itemised before the student proceeds' },
 ];
 
-const clearCostSteps = [
+const feeSteps = [
   { icon: GraduationCap, title: '1. Choose a program', text: 'Bachelor, Master, MBBS and other levels keep their own tuition and requirements.', tone: kit.cardSage },
   { icon: Sparkles, title: '2. Select a scholarship', text: 'Available scholarship types change the tuition view and show their conditions.', tone: kit.cardLime },
-  { icon: Download, title: '3. Download the PDF', text: 'The branded ClearCost PDF carries the selected program, scholarship, recipients and subtotal.', tone: kit.cardSage },
+  { icon: Download, title: '3. Download the PDF', text: 'The official fee schedule PDF carries the selected program, scholarship, recipients and subtotal.', tone: kit.cardSage },
 ];
 
 const earlierThirdParty = [
@@ -42,7 +42,7 @@ const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   '@id': `${SITE_URL}${PATH}#webpage`,
-  name: 'University Costs, Scholarships and ClearCost',
+  name: 'University Costs, Scholarships & Fee Schedules',
   url: `${SITE_URL}${PATH}`,
   description: 'How EduExpress aligns university programs, scholarships and itemized study costs.',
   inLanguage: 'en-BD',
@@ -62,7 +62,7 @@ export default async function FeesAndTransparencyPage() {
       <PageHero
         path={PATH}
         trail={[{ name: 'Fees and transparency' }]}
-        eyebrow="ClearCost lives with the university"
+        eyebrow="Transparent costs confirmed with the university"
         title="Our fees and your study costs, in writing."
         lead="Every university profile keeps programs, scholarship choices, tuition and other first-year costs together, and you can download the selected view as an EduExpress branded PDF. The EduExpress service package is separate from university costs."
         actions={
@@ -101,7 +101,7 @@ export default async function FeesAndTransparencyPage() {
         }
       >
         <ol data-anim="stagger" className="grid gap-5 md:grid-cols-3">
-          {clearCostSteps.map(step => (
+          {feeSteps.map(step => (
             <li key={step.title} className={step.tone}>
               <span className={kit.icon}><step.icon size={22} aria-hidden="true" /></span>
               <h3 className={`mt-6 ${kit.h3}`}>{step.title}</h3>

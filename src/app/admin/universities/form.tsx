@@ -175,7 +175,7 @@ export default function UniversityForm({ initialData, isNew = false }: Universit
       details: {
         ...(formData.details || { majors: [], tuition: '', tuitionDetails: [] }),
         majors: unique(programs.map(program => program.name)),
-        tuition: formData.details?.tuition || programs.find(program => program.tuition)?.tuition || 'Current tuition confirmed in the ClearCost Sheet',
+        tuition: formData.details?.tuition || programs.find(program => program.tuition)?.tuition || 'Current tuition confirmed in the official fee schedule',
       },
     } : formData;
 
@@ -273,7 +273,7 @@ export default function UniversityForm({ initialData, isNew = false }: Universit
 
       <EditorSection
         icon={<ReceiptText size={20} />}
-        title="ClearCost plans"
+        title="Cost plans"
         description="Build a separate written cost plan for each program and scholarship combination. Publish only after the amounts and source date are checked."
         action={<button type="button" onClick={() => setTopLevel('costPlans', [...(formData.costPlans || []), blankCostPlan()])} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white"><Plus size={16} /> Add cost plan</button>}
       >
@@ -303,11 +303,11 @@ export default function UniversityForm({ initialData, isNew = false }: Universit
                 <Field label="Notes, one per line" className="md:col-span-2"><textarea className={`${fieldClass} min-h-20`} value={plan.notes?.join('\n') || ''} onChange={event => updateCostPlan(index, 'notes', splitLines(event.target.value))} /></Field>
                 <Field label="Official source" className="md:col-span-2"><input type="url" className={fieldClass} value={plan.sourceUrl || ''} onChange={event => updateCostPlan(index, 'sourceUrl', event.target.value)} /></Field>
                 <Field label="Last verified"><input type="date" className={fieldClass} value={plan.lastVerifiedAt ? String(plan.lastVerifiedAt).slice(0, 10) : ''} onChange={event => updateCostPlan(index, 'lastVerifiedAt', event.target.value)} /></Field>
-                <label className="flex items-center gap-3 self-end rounded-xl border border-emerald-200 bg-white px-4 py-3 text-sm font-bold"><input type="checkbox" checked={plan.isPublished} onChange={event => updateCostPlan(index, 'isPublished', event.target.checked)} /> Publish ClearCost plan</label>
+                <label className="flex items-center gap-3 self-end rounded-xl border border-emerald-200 bg-white px-4 py-3 text-sm font-bold"><input type="checkbox" checked={plan.isPublished} onChange={event => updateCostPlan(index, 'isPublished', event.target.checked)} /> Publish cost plan</label>
               </div>
             </article>
           ))}
-          {!formData.costPlans?.length && <div className="rounded-2xl border border-dashed border-emerald-300 p-8 text-center text-sm text-slate-500">No ClearCost plan yet. Add one when the program, scholarship and full first year costs are aligned.</div>}
+          {!formData.costPlans?.length && <div className="rounded-2xl border border-dashed border-emerald-300 p-8 text-center text-sm text-slate-500">No cost plan yet. Add one when the program, scholarship and full first year costs are aligned.</div>}
         </div>
       </EditorSection>
 

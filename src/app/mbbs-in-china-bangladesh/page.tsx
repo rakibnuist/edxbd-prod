@@ -213,7 +213,7 @@ export default async function MbbsChinaPage() {
             <Link href="/study-in-china-cost-bangladesh" className={`mt-4 ${kit.link}`}>Explore the full China cost guide <ArrowRight size={15} aria-hidden="true" /></Link>
           </div>
           <div className={`${kit.cardLime} self-start`}>
-            <h3 className={kit.h3}>Your ClearCost breakdown</h3>
+            <h3 className={kit.h3}>Your itemised cost breakdown</h3>
             <dl className="mt-3 divide-y divide-white">
               <div className="py-4"><dt className="text-[16px] font-semibold text-petrol-800">Before China</dt><dd className={`mt-1 ${kit.body}`}>Application fee, deposit or tuition prepayment if required, document preparation, visa, travel and the agreed EduExpress Package.</dd></div>
               <div className="py-4"><dt className="text-[16px] font-semibold text-petrol-800">In China</dt><dd className={`mt-1 ${kit.body}`}>Remaining tuition after any confirmed reduction, accommodation, insurance, medical examination, residence permit, meals and personal expenses.</dd></div>

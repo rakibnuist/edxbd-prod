@@ -49,7 +49,7 @@ const guides = [
   { label: 'MBBS in China', href: '/mbbs-in-china-bangladesh' },
   { label: 'China admission requirements', href: '/china-admission-requirements' },
   { label: 'China scholarships', href: '/china-scholarships-bangladesh' },
-  { label: 'Study costs and ClearCost', href: '/study-in-china-cost-bangladesh' },
+  { label: 'Study Costs & Budgeting', href: '/study-in-china-cost-bangladesh' },
   { label: 'Intakes and deadlines', href: '/china-intakes-deadlines' },
 ];
 
@@ -149,7 +149,7 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
           </div>
           <div className={kit.card}>
             <h3 className={kit.h3}>From shortlist to written plan</h3>
-            <p className={`mt-2 ${kit.body}`}>Open an individual profile for detailed evidence, use Compare to identify unanswered questions, then request a program-specific Education Fit Assessment and written ClearCost Sheet.</p>
+            <p className={`mt-2 ${kit.body}`}>Open an individual profile for detailed evidence, use Compare to identify unanswered questions, then request a program-specific Education Fit Assessment and written itemised cost breakdown.</p>
             <Link href="/education-fit-assessment" className={`mt-3 ${kit.link}`}>Start the Education Fit Assessment <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
         </div>

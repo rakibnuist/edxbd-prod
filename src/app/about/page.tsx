@@ -29,7 +29,7 @@ const timeline = [
 
 const services = [
   { icon: GraduationCap, title: 'Education fit assessment', text: 'We compare education quality, entry requirements, recognition and the total cost before recommending any option.', tone: kit.cardSage },
-  { icon: Wallet, title: 'ClearCost schedule', text: 'Tuition, hostel, deposits, embassy, medical and courier costs itemised separately from EduExpress service charges.', tone: kit.cardLime },
+  { icon: Wallet, title: 'Itemised cost schedule', text: 'Tuition, hostel, deposits, embassy, medical and courier costs itemised separately from EduExpress service charges.', tone: kit.cardLime },
   { icon: FileCheck2, title: 'Application proof pack', text: 'Submission references, receipts, offer letters and deadlines recorded for every student, so nothing depends on memory.', tone: kit.cardSage },
   { icon: ShieldCheck, title: 'Visa readiness record', text: 'Document checklists, missing items, official embassy guidance and who is responsible for each step, in writing.', tone: kit.cardDark },
 ];

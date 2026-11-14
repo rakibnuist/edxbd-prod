@@ -260,8 +260,8 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
             {guide.slug === 'study-in-china-cost-bangladesh' ? (
               <section className={kit.cardSage}>
                 <h2 className={kit.h3}>Build your university budget</h2>
-                <p className="mt-2 text-[16px] leading-7 text-ink-soft">Choose a university and program to use ClearCost. Compare listed scholarship reductions, separate before-China and in-China payments, and include your EduExpress Package in its published currency.</p>
-                <Link href="/universities?country=china" className="ed-btn ed-btn-signal mt-5 min-h-[50px] px-6">Find a university & open ClearCost <ArrowRight size={17} aria-hidden="true" /></Link>
+                <p className="mt-2 text-[16px] leading-7 text-ink-soft">Choose a university and program to review itemised fee structures. Compare listed scholarship reductions, separate before-departure and in-country payments, and view your EduExpress Package in its published currency.</p>
+                <Link href="/universities?country=china" className="ed-btn ed-btn-signal mt-5 min-h-[50px] px-6">Find a university & view fees <ArrowRight size={17} aria-hidden="true" /></Link>
               </section>
             ) : null}
 
