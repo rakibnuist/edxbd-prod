@@ -44,9 +44,59 @@ interface ConversionsAPIEvent {
 // SHA256 hashing function for PII
 function hashData(data: string | undefined): string | undefined {
     if (!data) return undefined;
-    // Normalize: lowercase and trim
-    const normalized = data.toLowerCase().trim();
-    return crypto.createHash('sha256').update(normalized).digest('hex');
+    return crypto.createHash('sha256').update(data).digest('hex');
+}
+
+function hashEmail(email: string | undefined): string | undefined {
+    if (!email) return undefined;
+    return hashData(email.trim().toLowerCase());
+}
+
+function hashPhone(phone: string | undefined): string | undefined {
+    if (!phone) return undefined;
+    let digits = phone.replace(/\D/g, '');
+    if (!digits) return undefined;
+    if (digits.startsWith('01') && digits.length === 11) {
+        digits = `880${digits.slice(1)}`;
+    } else if (!digits.startsWith('880') && digits.length === 10 && digits.startsWith('1')) {
+        digits = `880${digits}`;
+    }
+    return hashData(digits);
+}
+
+const COUNTRY_CODE_MAP: Record<string, string> = {
+    bangladesh: 'bd',
+    china: 'cn',
+    uk: 'gb',
+    'united kingdom': 'gb',
+    malaysia: 'my',
+    hungary: 'hu',
+    'south korea': 'kr',
+    korea: 'kr',
+    finland: 'fi',
+    malta: 'mt',
+    cyprus: 'cy',
+    georgia: 'ge',
+    greece: 'gr',
+    croatia: 'hr',
+    thailand: 'th',
+    usa: 'us',
+    'united states': 'us',
+    canada: 'ca',
+    australia: 'au',
+};
+
+function hashCountry(country: string | undefined): string | undefined {
+    if (!country) return undefined;
+    const clean = country.trim().toLowerCase();
+    const code = clean.length === 2 ? clean : (COUNTRY_CODE_MAP[clean] || clean.slice(0, 2));
+    return hashData(code);
+}
+
+function hashText(text: string | undefined): string | undefined {
+    if (!text) return undefined;
+    const normalized = text.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+    return hashData(normalized);
 }
 
 function trustedEventSource(value: unknown): string {
@@ -60,6 +110,12 @@ function trustedEventSource(value: unknown): string {
         // Fall back to the canonical site URL for malformed or untrusted sources.
     }
     return 'https://eduexpressint.com';
+}
+
+function extractCookieFromHeader(cookieHeader: string | null, name: string): string | undefined {
+    if (!cookieHeader) return undefined;
+    const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
+    return match ? decodeURIComponent(match[1]) : undefined;
 }
 
 export async function POST(request: NextRequest) {
@@ -134,6 +190,20 @@ export async function POST(request: NextRequest) {
             undefined;
         const userAgent = request.headers.get('user-agent') || undefined;
 
+        const cookieHeader = request.headers.get('cookie');
+        const fbp = getOptionalString(userData, 'fbp', 255) || extractCookieFromHeader(cookieHeader, '_fbp');
+        let fbc = getOptionalString(userData, 'fbc', 255) || extractCookieFromHeader(cookieHeader, '_fbc');
+        if (!fbc) {
+            try {
+                const url = new URL(request.url);
+                const fbclid = url.searchParams.get('fbclid');
+                if (fbclid) fbc = `fb.1.${Date.now()}.${fbclid}`;
+            } catch {
+                /* ignore */
+            }
+        }
+        const externalId = getOptionalString(userData, 'external_id', 255) || extractCookieFromHeader(cookieHeader, 'ee_uid');
+
         // Build the event payload with hashed PII
         const eventPayload: ConversionsAPIEvent = {
             event_name: event.eventName,
@@ -144,18 +214,18 @@ export async function POST(request: NextRequest) {
             user_data: {
                 client_ip_address: clientIp,
                 client_user_agent: userAgent,
-                fbp: getOptionalString(userData, 'fbp', 255),
-                fbc: getOptionalString(userData, 'fbc', 255),
-                external_id: hashData(getOptionalString(userData, 'external_id', 255)),
-                // Hash PII data per Meta's requirements
-                em: hashData(getOptionalString(userData, 'email', 254)),
-                ph: hashData(getOptionalString(userData, 'phone', 40)),
-                fn: hashData(getOptionalString(userData, 'firstName', 100)),
-                ln: hashData(getOptionalString(userData, 'lastName', 100)),
-                ct: hashData(getOptionalString(userData, 'city', 100)),
-                st: hashData(getOptionalString(userData, 'state', 100)),
-                zp: hashData(getOptionalString(userData, 'zipCode', 32)),
-                country: hashData(getOptionalString(userData, 'country', 100)),
+                fbp: fbp,
+                fbc: fbc,
+                external_id: externalId ? hashData(externalId) : undefined,
+                // Hash PII data per Meta's Customer Information Parameters requirements
+                em: hashEmail(getOptionalString(userData, 'email', 254)),
+                ph: hashPhone(getOptionalString(userData, 'phone', 40)),
+                fn: hashText(getOptionalString(userData, 'firstName', 100)),
+                ln: hashText(getOptionalString(userData, 'lastName', 100)),
+                ct: hashText(getOptionalString(userData, 'city', 100)),
+                st: hashText(getOptionalString(userData, 'state', 100)),
+                zp: hashData(getOptionalString(userData, 'zipCode', 32)?.replace(/\s+/g, '').toLowerCase()),
+                country: hashCountry(getOptionalString(userData, 'country', 100)),
             },
             custom_data: customData,
         };

@@ -69,18 +69,29 @@ export default function EducationTracking({
 
         // Handle Click Events
         if (event.type === 'click') {
+          let trackingType: string | null = null;
           const trackingElement = target.closest('[data-tracking-type]');
-          if (!trackingElement) return;
+          if (trackingElement) {
+            trackingType = trackingElement.getAttribute('data-tracking-type');
+          } else {
+            const anchor = target.closest('a');
+            if (anchor) {
+              const href = anchor.getAttribute('href') || '';
+              if (href.startsWith('tel:')) trackingType = 'phone';
+              else if (href.includes('wa.me') || href.includes('whatsapp.com')) trackingType = 'whatsapp';
+            }
+          }
 
-          const trackingType = trackingElement.getAttribute('data-tracking-type');
+          if (!trackingType) return;
+
           const userData = { email: emailAddress };
 
           switch (trackingType) {
             case 'whatsapp':
-              if (whatsappSource) trackWhatsAppClick(whatsappSource, userData);
+              trackWhatsAppClick(whatsappSource || 'website', userData);
               break;
             case 'phone':
-              if (phoneSource) trackPhoneClick(phoneSource, userData);
+              trackPhoneClick(phoneSource || 'website', userData);
               break;
             case 'scholarship':
               if (scholarshipCountry || scholarshipProgram) {

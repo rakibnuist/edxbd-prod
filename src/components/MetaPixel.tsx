@@ -61,8 +61,21 @@ export default function MetaPixel() {
         })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         /* eslint-enable */
 
+        // Advanced Matching parameters for Meta Pixel
+        const advancedMatching: Record<string, string> = {};
+        const extId = localStorage.getItem('user_id') || localStorage.getItem('temp_user_id');
+        if (extId) advancedMatching.external_id = extId;
+        const storedEmail = localStorage.getItem('user_email');
+        if (storedEmail) advancedMatching.em = storedEmail.trim().toLowerCase();
+        const storedPhone = localStorage.getItem('user_phone');
+        if (storedPhone) advancedMatching.ph = storedPhone.replace(/\D/g, '');
+
         window.fbq?.('consent', 'grant');
-        window.fbq?.('init', pixelId);
+        if (Object.keys(advancedMatching).length > 0) {
+          window.fbq?.('init', pixelId, advancedMatching);
+        } else {
+          window.fbq?.('init', pixelId);
+        }
         window.fbq?.('track', 'PageView');
 
         // Expose for any code that wants to check configuration at runtime.

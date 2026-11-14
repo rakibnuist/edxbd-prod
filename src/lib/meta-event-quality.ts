@@ -41,15 +41,33 @@ const advertisingAllowed = () => {
   }
 };
 
-// Utility functions for client-side parameter extraction
+// Utility functions for client-side parameter extraction per Meta CAPI specifications
 export const getMetaParameters = (): MetaEventQualityParams => {
   if (typeof window === 'undefined') {
     return {};
   }
 
+  // Extract or format fbc (Facebook Click ID)
+  // Meta spec requires format: fb.1.<creationTime>.<fbclid>
+  let fbc = getCookie('_fbc');
+  if (!fbc) {
+    const fbclid = getUrlParameter('fbclid');
+    if (fbclid) {
+      fbc = `fb.1.${Date.now()}.${fbclid}`;
+      try {
+        document.cookie = `_fbc=${encodeURIComponent(fbc)};path=/;max-age=${90 * 86400};SameSite=Lax`;
+      } catch {
+        // Silent error handling
+      }
+    }
+  }
+
+  // Extract fbp (Facebook Browser ID)
+  const fbp = getCookie('_fbp');
+
   return {
-    fbc: getUrlParameter('fbclid'),
-    fbp: getCookie('_fbp'),
+    fbc,
+    fbp,
     external_id: getExternalId(),
     fb_login_id: getFacebookLoginId()
   };
@@ -75,7 +93,7 @@ export const getCookie = (name: string): string | undefined => {
   return undefined;
 };
 
-// Get external ID (your internal user ID)
+// Get external ID (your internal user ID for cross-device matching)
 export const getExternalId = (): string | undefined => {
   if (typeof window === 'undefined') return undefined;
 
@@ -83,17 +101,32 @@ export const getExternalId = (): string | undefined => {
   const storedUserId = localStorage.getItem('user_id');
   if (storedUserId) return storedUserId;
 
+  const cookieUid = getCookie('ee_uid');
+  if (cookieUid) {
+    try {
+      localStorage.setItem('user_id', cookieUid);
+    } catch {
+      /* ignore */
+    }
+    return cookieUid;
+  }
+
   // Try to get from sessionStorage
   const sessionUserId = sessionStorage.getItem('user_id');
   if (sessionUserId) return sessionUserId;
 
-  // Generate a temporary ID for anonymous users
+  // Generate a persistent ID for anonymous users
   const tempId = sessionStorage.getItem('temp_user_id');
   if (tempId) return tempId;
 
   // Create and store a new temporary ID
   const newTempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  sessionStorage.setItem('temp_user_id', newTempId);
+  try {
+    sessionStorage.setItem('temp_user_id', newTempId);
+    document.cookie = `ee_uid=${encodeURIComponent(newTempId)};path=/;max-age=${365 * 86400};SameSite=Lax`;
+  } catch {
+    /* ignore */
+  }
   return newTempId;
 };
 

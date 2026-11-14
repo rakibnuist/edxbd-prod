@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { trackContactInteraction, getUserDevice } from '@/lib/vercel-analytics';
+import { trackWhatsAppClick } from '@/lib/conversion-events';
 
 interface FloatingWhatsAppProps {
   phoneNumber?: string;
@@ -23,6 +24,7 @@ export default function FloatingWhatsApp({
       device: getUserDevice(),
       phone_number: phoneNumber,
     });
+    trackWhatsAppClick({ label: 'floating_whatsapp_widget' });
 
     const cleanPhone = phoneNumber.replace(/\D/g, '');
     const whatsappPhone = cleanPhone.startsWith('880') ? cleanPhone : `880${cleanPhone}`;

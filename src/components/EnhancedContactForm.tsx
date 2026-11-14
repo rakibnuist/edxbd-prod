@@ -170,9 +170,22 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         body: JSON.stringify(submitData),
       });
 
+      const resData = await response.json().catch(() => ({}));
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to submit form');
+        throw new Error(resData.error || 'Failed to submit form');
+      }
+
+      if (typeof window !== 'undefined') {
+        try {
+          if (resData?.leadId) {
+            localStorage.setItem('user_id', resData.leadId);
+            document.cookie = `ee_uid=${encodeURIComponent(resData.leadId)};path=/;max-age=${365 * 86400};SameSite=Lax`;
+          }
+          if (formData.email) localStorage.setItem('user_email', formData.email);
+          if (formData.phone) localStorage.setItem('user_phone', formData.phone);
+        } catch {
+          /* ignore */
+        }
       }
 
       if (autoHide) setCountdown(Math.ceil(autoHideDelay / 1000));

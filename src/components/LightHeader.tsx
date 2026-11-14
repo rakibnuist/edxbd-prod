@@ -14,6 +14,7 @@ import {
 } from '@/data/siteNavigation';
 import { formatBangladeshPhone } from '@/lib/contact-format';
 import SearchPalette from '@/components/site/SearchPalette';
+import { trackPhoneClick, trackWhatsAppClick, trackAssessmentStart } from '@/lib/conversion-events';
 
 // Six plain-language sections. A first-time student or parent should be able
 // to guess what is behind each label without reading a description.
@@ -119,10 +120,10 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
             <Link href="/bn/study-in-china" hrefLang="bn-BD" lang="bn" className="font-semibold text-petrol-700 hover:text-petrol-900">
               বাংলা
             </Link>
-            <a href={telHref} className="inline-flex items-center gap-1.5 font-semibold text-petrol-700 hover:text-petrol-900">
+            <a href={telHref} onClick={() => trackPhoneClick({ label: 'header_desktop_phone' })} className="inline-flex items-center gap-1.5 font-semibold text-petrol-700 hover:text-petrol-900">
               <Phone size={14} aria-hidden="true" /> {formatBangladeshPhone(phone)}
             </a>
-            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-green-600 hover:text-green-700">
+            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick({ label: 'header_desktop_whatsapp' })} className="inline-flex items-center gap-1.5 font-semibold text-green-600 hover:text-green-700">
               <MessageCircle size={14} aria-hidden="true" /> WhatsApp
             </a>
           </div>
@@ -226,12 +227,17 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
             </span>
             <a
               href={telHref}
+              onClick={() => trackPhoneClick({ label: 'header_mobile_phone' })}
               aria-label={`Call ${formatBangladeshPhone(phone)}`}
               className="grid size-10 place-items-center rounded-lg border lg:hidden border-rule text-petrol-600 hover:bg-chalk-100"
             >
               <Phone size={18} aria-hidden="true" />
             </a>
-            <Link href={assessmentHref} className="ed-btn ed-btn-signal min-h-10 px-4 text-[14px] sm:text-[15px]">
+            <Link
+              href={assessmentHref}
+              onClick={() => trackAssessmentStart({ label: 'header_free_assessment_btn' })}
+              className="ed-btn ed-btn-signal min-h-10 px-4 text-[14px] sm:text-[15px]"
+            >
               Free assessment
             </Link>
             <button
@@ -252,10 +258,23 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
         <div id="mobile-navigation" className="h-[calc(100dvh-67px)] overflow-y-auto border-b border-rule bg-white sm:h-[calc(100dvh-75px)] lg:h-[calc(100dvh-109px)] xl:hidden">
           <div className="mx-auto max-w-2xl px-4 pb-24 pt-4 sm:px-5">
             <div className="grid grid-cols-2 gap-2">
-              <Link href={assessmentHref} onClick={() => setMobileOpen(false)} className="ed-btn ed-btn-signal min-h-12 whitespace-nowrap px-3 text-[15px]">
+              <Link
+                href={assessmentHref}
+                onClick={() => {
+                  trackAssessmentStart({ label: 'header_mobile_menu_assessment' });
+                  setMobileOpen(false);
+                }}
+                className="ed-btn ed-btn-signal min-h-12 whitespace-nowrap px-3 text-[15px]"
+              >
                 Free assessment
               </Link>
-              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-12 text-[15px]">
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackWhatsAppClick({ label: 'header_mobile_menu_whatsapp' })}
+                className="ed-btn ed-btn-outline min-h-12 text-[15px]"
+              >
                 <MessageCircle size={17} aria-hidden="true" className="text-green-600" /> WhatsApp
               </a>
             </div>

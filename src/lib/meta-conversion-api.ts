@@ -16,7 +16,63 @@ const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
 
 // Hash data for Meta Conversion API (server-side)
 export const hashData = (data: string): string => {
-  return crypto.createHash('sha256').update(data.toLowerCase().trim()).digest('hex');
+  return crypto.createHash('sha256').update(data).digest('hex');
+};
+
+// Customer Information Normalization Helpers per Meta Specifications
+// https://developers.facebook.com/documentation/ads-commerce/conversions-api/parameters/customer-information-parameters
+
+export const normalizeEmail = (email: string | undefined): string | undefined => {
+  if (!email) return undefined;
+  return email.trim().toLowerCase();
+};
+
+export const normalizePhone = (phone: string | undefined): string | undefined => {
+  if (!phone) return undefined;
+  // Digits only: remove all +, -, spaces, parentheses, dots
+  let digits = phone.replace(/\D/g, '');
+  if (!digits) return undefined;
+  // If Bangladesh local number starting with 01..., prepend 880
+  if (digits.startsWith('01') && digits.length === 11) {
+    digits = `880${digits.slice(1)}`;
+  } else if (!digits.startsWith('880') && digits.length === 10 && digits.startsWith('1')) {
+    digits = `880${digits}`;
+  }
+  return digits;
+};
+
+const COUNTRY_CODE_MAP: Record<string, string> = {
+  bangladesh: 'bd',
+  china: 'cn',
+  uk: 'gb',
+  'united kingdom': 'gb',
+  malaysia: 'my',
+  hungary: 'hu',
+  'south korea': 'kr',
+  korea: 'kr',
+  finland: 'fi',
+  malta: 'mt',
+  cyprus: 'cy',
+  georgia: 'ge',
+  greece: 'gr',
+  croatia: 'hr',
+  thailand: 'th',
+  usa: 'us',
+  'united states': 'us',
+  canada: 'ca',
+  australia: 'au',
+};
+
+export const normalizeCountry = (country: string | undefined): string | undefined => {
+  if (!country) return undefined;
+  const clean = country.trim().toLowerCase();
+  if (clean.length === 2) return clean;
+  return COUNTRY_CODE_MAP[clean] || clean.slice(0, 2);
+};
+
+export const normalizeText = (text: string | undefined): string | undefined => {
+  if (!text) return undefined;
+  return text.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
 };
 
 // Get client IP from request headers
@@ -53,6 +109,13 @@ export interface MetaUserData {
   fb_login_id?: string;
 }
 
+export const extractCookie = (request: Request, name: string): string | undefined => {
+  const cookieHeader = request.headers.get('cookie');
+  if (!cookieHeader) return undefined;
+  const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : undefined;
+};
+
 // Extract Event Quality parameters from request
 export const extractEventQualityParams = (request: Request): {
   fbc?: string;
@@ -60,16 +123,24 @@ export const extractEventQualityParams = (request: Request): {
   external_id?: string;
   fb_login_id?: string;
 } => {
-  const url = new URL(request.url);
-  const fbc = url.searchParams.get('fbclid') || undefined;
+  let fbc = extractCookie(request, '_fbc');
+  if (!fbc) {
+    try {
+      const url = new URL(request.url);
+      const fbclid = url.searchParams.get('fbclid');
+      if (fbclid) fbc = `fb.1.${Date.now()}.${fbclid}`;
+    } catch {
+      /* ignore */
+    }
+  }
 
-  // Note: fbp, external_id, and fb_login_id should be passed from client-side
-  // as they're not available in server-side requests
+  const fbp = extractCookie(request, '_fbp');
+  const external_id = extractCookie(request, 'ee_uid');
+
   return {
     fbc,
-    // These will be passed from the client-side tracking
-    fbp: undefined,
-    external_id: undefined,
+    fbp,
+    external_id,
     fb_login_id: undefined
   };
 };
@@ -117,43 +188,63 @@ export const sendConversionAPIEvent = async (
   try {
     const finalEventId = eventId || generateEventId();
 
-    // Prepare user data with hashed values
+    // Prepare user data with hashed values per Meta's Customer Information Parameters specification
     const hashedUserData: Record<string, string[] | string> = {};
 
-    if (userData.email) {
-      hashedUserData.em = [hashData(userData.email)];
-    }
-    if (userData.phone) {
-      hashedUserData.ph = [hashData(userData.phone)];
-    }
-    if (userData.firstName) {
-      hashedUserData.fn = [hashData(userData.firstName)];
-    }
-    if (userData.lastName) {
-      hashedUserData.ln = [hashData(userData.lastName)];
-    }
-    if (userData.city) {
-      hashedUserData.ct = [hashData(userData.city)];
-    }
-    if (userData.state) {
-      hashedUserData.st = [hashData(userData.state)];
-    }
-    if (userData.country) {
-      hashedUserData.country = [hashData(userData.country)];
-    }
-    if (userData.zipCode) {
-      hashedUserData.zp = [hashData(userData.zipCode)];
+    const cleanEmail = normalizeEmail(userData.email);
+    if (cleanEmail) {
+      hashedUserData.em = [hashData(cleanEmail)];
     }
 
-    // Add Event Quality parameters (these should NOT be hashed)
-    if (userData.fbc) {
-      hashedUserData.fbc = userData.fbc;
+    const cleanPhone = normalizePhone(userData.phone);
+    if (cleanPhone) {
+      hashedUserData.ph = [hashData(cleanPhone)];
     }
-    if (userData.fbp) {
-      hashedUserData.fbp = userData.fbp;
+
+    const cleanFn = normalizeText(userData.firstName);
+    if (cleanFn) {
+      hashedUserData.fn = [hashData(cleanFn)];
     }
-    if (userData.external_id) {
-      hashedUserData.external_id = userData.external_id;
+
+    const cleanLn = normalizeText(userData.lastName);
+    if (cleanLn) {
+      hashedUserData.ln = [hashData(cleanLn)];
+    }
+
+    const cleanCity = normalizeText(userData.city);
+    if (cleanCity) {
+      hashedUserData.ct = [hashData(cleanCity)];
+    }
+
+    const cleanState = normalizeText(userData.state);
+    if (cleanState) {
+      hashedUserData.st = [hashData(cleanState)];
+    }
+
+    const cleanCountry = normalizeCountry(userData.country);
+    if (cleanCountry) {
+      hashedUserData.country = [hashData(cleanCountry)];
+    }
+
+    if (userData.zipCode) {
+      const cleanZip = userData.zipCode.replace(/\s+/g, '').toLowerCase();
+      hashedUserData.zp = [hashData(cleanZip)];
+    }
+
+    // Add Event Quality parameters per Meta CAPI specifications
+    const cookieParams = request ? extractEventQualityParams(request) : {};
+    const finalFbc = userData.fbc || cookieParams.fbc;
+    const finalFbp = userData.fbp || cookieParams.fbp;
+    const finalExtId = userData.external_id || cookieParams.external_id;
+
+    if (finalFbc) {
+      hashedUserData.fbc = finalFbc;
+    }
+    if (finalFbp) {
+      hashedUserData.fbp = finalFbp;
+    }
+    if (finalExtId) {
+      hashedUserData.external_id = finalExtId;
     }
     if (userData.fb_login_id) {
       hashedUserData.fb_login_id = userData.fb_login_id;

@@ -39,9 +39,69 @@ export interface UserData {
   fb_login_id?: string;
 }
 
+// Meta Pixel standard events mapping per Meta specifications
+// (https://eventsmanager.facebook.com/business/help/402791146561655?id=1205376682832142)
+const META_STANDARD_EVENTS: Record<string, string> = {
+  // Direct Standard Event Names
+  Lead: 'Lead',
+  Contact: 'Contact',
+  PageView: 'PageView',
+  ViewContent: 'ViewContent',
+  Subscribe: 'Subscribe',
+  CompleteRegistration: 'CompleteRegistration',
+  InitiateCheckout: 'InitiateCheckout',
+  Schedule: 'Schedule',
+  SubmitApplication: 'SubmitApplication',
+  Search: 'Search',
+  CustomizeProduct: 'CustomizeProduct',
+  Donate: 'Donate',
+  FindLocation: 'FindLocation',
+  StartTrial: 'StartTrial',
+
+  // Custom or lowercase mappings
+  lead: 'Lead',
+  study_abroad_lead: 'Lead',
+  assessment_submit: 'Lead',
+  consultation_request: 'Lead',
+  scholarship_inquiry: 'Lead',
+  partnership_inquiry: 'Lead',
+
+  contact: 'Contact',
+  whatsapp_click: 'Contact',
+  phone_click: 'Contact',
+  email_click: 'Contact',
+
+  page_view: 'PageView',
+
+  view_content: 'ViewContent',
+  country_view: 'ViewContent',
+  university_view: 'ViewContent',
+  destination_view: 'ViewContent',
+  program_view: 'ViewContent',
+  document_download: 'ViewContent',
+
+  subscribe: 'Subscribe',
+  email_subscription: 'Subscribe',
+
+  complete_registration: 'CompleteRegistration',
+
+  assessment_start: 'InitiateCheckout',
+  initiate_checkout: 'InitiateCheckout',
+  form_start: 'InitiateCheckout',
+
+  schedule: 'Schedule',
+  appointment_booked: 'Schedule',
+
+  application_start: 'SubmitApplication',
+  application_started: 'SubmitApplication',
+  submit_application: 'SubmitApplication',
+
+  search: 'Search',
+};
+
 // Track events
 export const trackEvent = (eventName: string, parameters?: Record<string, unknown>, _userData?: UserData) => {
-  const eventId = generateEventId();
+  const eventId = (parameters?.event_id as string) || generateEventId();
   if (!analyticsAllowed()) return eventId;
   const eventData = {
     event_id: eventId,
@@ -63,15 +123,24 @@ export const trackEvent = (eventName: string, parameters?: Record<string, unknow
     }
   }
 
-  // Meta Pixel tracking
-  // FB.getLoginStatus and other methods require HTTPS
+  // Meta Pixel tracking per Meta specifications
   const isHttps = typeof window !== 'undefined' && window.location.protocol === 'https:';
 
-  // fbq is only present when MetaPixel initialised it with a valid Pixel ID
-  // (from DB settings or env), so its presence is the correct guard.
-  if (isHttps && typeof window !== 'undefined' && window.fbq) {
+  if (isHttps && typeof window !== 'undefined' && typeof window.fbq === 'function') {
     try {
-      window.fbq('track', eventName, eventData);
+      const standardEvent = META_STANDARD_EVENTS[eventName];
+      const metaPayload = {
+        content_name: parameters?.content_name || eventName,
+        content_category: parameters?.content_category || 'Education',
+        value: parameters?.value ?? 0,
+        currency: (parameters?.currency as string) || 'BDT',
+        ...parameters,
+      };
+      if (standardEvent) {
+        window.fbq('track', standardEvent, metaPayload, { eventID: eventId });
+      } else {
+        window.fbq('trackCustom', eventName, metaPayload, { eventID: eventId });
+      }
     } catch {
       // Silent error handling
     }
@@ -282,86 +351,116 @@ export const trackDashboardView = (dashboardType: string) => {
 
 // Enhanced tracking functions for education consultancy
 export const trackWhatsAppClick = (source: string = 'website', userData?: UserData) => {
-  trackEvent('contact', {
+  trackEvent('Contact', {
     event_category: 'communication',
     event_label: 'whatsapp_click',
     contact_method: 'whatsapp',
+    content_name: 'WhatsApp Contact',
+    content_category: 'Admissions Inquiry',
+    value: 0,
+    currency: 'BDT',
     source: source
   }, userData);
 };
 
 export const trackPhoneClick = (source: string = 'website', userData?: UserData) => {
-  trackEvent('contact', {
+  trackEvent('Contact', {
     event_category: 'communication',
     event_label: 'phone_click',
     contact_method: 'phone',
+    content_name: 'Phone Call',
+    content_category: 'Admissions Hotline',
+    value: 0,
+    currency: 'BDT',
     source: source
   }, userData);
 };
 
 export const trackDestinationView = (countryName: string, userData?: UserData) => {
-  trackEvent('view_content', {
+  trackEvent('ViewContent', {
     event_category: 'destination_interest',
     event_label: `study_in_${countryName.toLowerCase().replace(/\s+/g, '_')}`,
     destination_country: countryName,
-    content_name: `Study in ${countryName}`
+    content_name: `Study in ${countryName}`,
+    content_category: 'Destination Guide',
+    value: 0,
+    currency: 'BDT',
   }, userData);
 };
 
 export const trackScholarshipInquiry = (country?: string, program?: string, userData?: UserData) => {
-  trackEvent('lead', {
+  trackEvent('Lead', {
     event_category: 'scholarship_interest',
     event_label: 'scholarship_inquiry',
     study_destination: country || 'not_specified',
-    program_interest: program || 'not_specified'
+    program_interest: program || 'not_specified',
+    content_name: 'Scholarship Inquiry',
+    content_category: 'Lead Generation',
+    value: 0,
+    currency: 'BDT',
   }, userData);
 };
 
 export const trackUniversityInterest = (universityName: string, country: string, userData?: UserData) => {
-  trackEvent('view_content', {
+  trackEvent('ViewContent', {
     event_category: 'university_research',
     event_label: `university_${universityName.toLowerCase().replace(/\s+/g, '_')}`,
     university_name: universityName,
     destination_country: country,
-    content_name: `University Interest: ${universityName}`
+    content_name: `University Interest: ${universityName}`,
+    content_category: 'University Profile',
+    value: 0,
+    currency: 'BDT',
   }, userData);
 };
 
 export const trackProgramInterest = (programName: string, country: string, userData?: UserData) => {
-  trackEvent('view_content', {
+  trackEvent('ViewContent', {
     event_category: 'program_research',
     event_label: `program_${programName.toLowerCase().replace(/\s+/g, '_')}`,
     program_name: programName,
     destination_country: country,
-    content_name: `Program Interest: ${programName}`
+    content_name: `Program Interest: ${programName}`,
+    content_category: 'Degree Program',
+    value: 0,
+    currency: 'BDT',
   }, userData);
 };
 
 export const trackDocumentDownload = (documentName: string, documentType: string, userData?: UserData) => {
-  trackEvent('view_content', {
+  trackEvent('ViewContent', {
     event_category: 'document_download',
     event_label: `download_${documentName.toLowerCase().replace(/\s+/g, '_')}`,
     document_type: documentType,
-    content_name: `Download: ${documentName}`
+    content_name: `Download: ${documentName}`,
+    content_category: 'Resource Download',
+    value: 0,
+    currency: 'BDT',
   }, userData);
 };
 
 export const trackEmailSubscription = (email: string, userData?: UserData) => {
   const finalUserData = { ...userData, email };
-  trackEvent('subscribe', {
+  trackEvent('Subscribe', {
     event_category: 'newsletter_signup',
     event_label: 'email_subscription',
     content_name: 'Email Subscription',
+    content_category: 'Newsletter',
+    value: 0,
+    currency: 'BDT',
     email: email
   }, finalUserData);
 };
 
 export const trackPartnershipInquiry = (companyName?: string, userData?: UserData) => {
-  trackEvent('lead', {
+  trackEvent('Lead', {
     event_category: 'business_partnership',
     event_label: 'partnership_inquiry',
     company_name: companyName || 'not_specified',
-    content_name: 'Partnership Inquiry'
+    content_name: 'Partnership Inquiry',
+    content_category: 'B2B Lead Generation',
+    value: 0,
+    currency: 'BDT',
   }, userData);
 };
 
@@ -395,17 +494,25 @@ export const trackAdminEngagement = (engagementType: string, parameters?: Record
 
 // Form tracking functions
 export const trackFormStart = (formType: string) => {
-  trackEvent(formType === 'consultation' || formType === 'application' ? 'assessment_start' : 'form_start', {
+  trackEvent('InitiateCheckout', {
     event_category: 'form',
     event_label: 'form_start',
-    form_type: formType
+    form_type: formType,
+    content_name: `${formType} Assessment Started`,
+    content_category: 'Assessment Funnel',
+    value: 0,
+    currency: 'BDT',
   });
 };
 
 export const trackAssessmentSubmit = (parameters?: Record<string, unknown>) => {
-  trackEvent('assessment_submit', {
+  trackEvent('Lead', {
     event_category: 'conversion',
     event_label: 'education_fit_assessment',
+    content_name: 'Education Fit Assessment Submission',
+    content_category: 'Lead Generation',
+    value: 0,
+    currency: 'BDT',
     ...parameters,
   });
 };
@@ -467,12 +574,14 @@ export const trackContentManagement = (action: string, parameters?: Record<strin
 
 // Application start tracking function
 export const trackApplicationStart = (source: string = 'homepage') => {
-  trackEvent('application_start', {
+  trackEvent('SubmitApplication', {
     event_category: 'conversion',
     event_label: 'application_start',
     source: source,
     content_name: 'Study Abroad Application',
-    content_category: 'Application Start'
+    content_category: 'Application Start',
+    value: 0,
+    currency: 'BDT',
   });
 };
 

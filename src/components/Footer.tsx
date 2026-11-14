@@ -289,11 +289,11 @@ export default async function Footer() {
                 <p className="font-bold text-white">Admissions Hotline</p>
                 {office?.phonePrimary ? (
                   <div className="mt-0.5 space-y-0.5 text-[13.5px]">
-                    <a href={`tel:${office.phonePrimary}`} className="block font-semibold text-white/90 hover:text-lime">
+                    <a href={`tel:${office.phonePrimary}`} data-tracking-type="phone" className="block font-semibold text-white/90 hover:text-lime">
                       {formatBangladeshPhone(office.phonePrimary)}
                     </a>
                     {office.phoneSecondary && (
-                      <a href={`tel:${office.phoneSecondary}`} className="block text-white/75 hover:text-lime">
+                      <a href={`tel:${office.phoneSecondary}`} data-tracking-type="phone" className="block text-white/75 hover:text-lime">
                         {formatBangladeshPhone(office.phoneSecondary)}
                       </a>
                     )}
@@ -318,6 +318,7 @@ export default async function Footer() {
                     href={whatsapp}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-tracking-type="whatsapp"
                     className="mt-0.5 block text-[13.5px] font-semibold text-lime hover:underline"
                   >
                     Chat on WhatsApp →
