@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { GraduationCap, MapPin, Star } from 'lucide-react';
+import { Award, CheckCircle2, GraduationCap, MapPin, Star } from 'lucide-react';
 
 /** One student story, as shown on the homepage and /success-stories. */
 export type StoryCardData = {
@@ -25,12 +25,46 @@ const initials = (name: string) =>
     .join('')
     .toUpperCase();
 
-export function Stars({ rating = 5, size = 16, className = 'text-[#f5b301]' }: { rating?: number; size?: number; className?: string }) {
+function parseProgramAndAward(program?: string, quote?: string): { degree?: string; award?: string } {
+  if (program && program.includes('·')) {
+    const [degreePart, ...awardParts] = program.split('·').map(part => part.trim());
+    return {
+      degree: degreePart || undefined,
+      award: awardParts.join(' · ') || undefined,
+    };
+  }
+  let inferredAward: string | undefined;
+  if (quote) {
+    if (/1200\s*CNY|1,200\s*CNY/i.test(quote)) inferredAward = 'Full Tuition + 1,200 CNY/mo Stipend';
+    else if (/1000\s*CNY|1,000\s*CNY/i.test(quote)) inferredAward = 'Full Tuition + 1,000 CNY/mo Stipend';
+    else if (/500\s*CNY/i.test(quote)) inferredAward = 'Full Tuition + Hostel + 500 CNY/mo';
+    else if (/tuition and hostel/i.test(quote)) inferredAward = 'Full Tuition + Hostel Scholarship';
+    else if (/full.*scholarship|tuition-free scholarship/i.test(quote)) inferredAward = 'Full Tuition Scholarship';
+  }
+  return { degree: program, award: inferredAward };
+}
+
+export function Stars({
+  rating = 5,
+  size = 16,
+  className = 'text-[#f5b301]',
+}: {
+  rating?: number;
+  size?: number;
+  className?: string;
+}) {
   const value = Math.min(5, Math.max(1, Math.round(rating)));
   return (
     <span className={`inline-flex gap-0.5 ${className}`} role="img" aria-label={`${value} out of 5 stars`}>
       {Array.from({ length: 5 }, (_, index) => (
-        <Star key={index} size={size} strokeWidth={0} fill="currentColor" className={index < value ? '' : 'opacity-25'} aria-hidden="true" />
+        <Star
+          key={index}
+          size={size}
+          strokeWidth={0}
+          fill="currentColor"
+          className={index < value ? '' : 'opacity-25'}
+          aria-hidden="true"
+        />
       ))}
     </span>
   );
@@ -38,78 +72,121 @@ export function Stars({ rating = 5, size = 16, className = 'text-[#f5b301]' }: {
 
 export default function StoryCard({ story, compact = false }: { story: StoryCardData; compact?: boolean }) {
   const facts = (story.facts ?? []).filter((entry): entry is [string, string] => Boolean(entry[1]?.trim()));
-  const place = [story.location, story.country].filter(Boolean).join(', ');
+  const place = [story.location, story.country]
+    .filter(Boolean)
+    .filter((val, idx, arr) => arr.indexOf(val) === idx)
+    .join(', ');
+  const { degree, award } = parseProgramAndAward(story.program, story.quote);
 
   return (
-    <article id={`story-${story.id}`} className="group flex h-full scroll-mt-28 flex-col overflow-hidden rounded-3xl bg-white">
+    <article
+      id={`story-${story.id}`}
+      className="group flex h-full scroll-mt-28 flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white text-petrol-800 shadow-[0_12px_32px_rgba(15,58,92,0.08)]"
+    >
       {story.image && (
-        <div className={`relative overflow-hidden bg-canvas-soft ${compact ? 'aspect-[16/11]' : 'aspect-[4/3]'}`}>
+        <div className={`relative overflow-hidden bg-petrol-800 ${compact ? 'aspect-[16/10]' : 'aspect-[4/3]'}`}>
           <Image
             src={story.image}
             alt={`${story.name}, EduExpress student${story.university ? ` at ${story.university}` : ''}`}
             fill
             sizes="(max-width:768px) 90vw, (max-width:1024px) 45vw, 380px"
-            className="object-cover object-[50%_25%] transition duration-700 group-hover:scale-[1.03]"
+            className="object-cover object-[50%_25%] transition duration-700 group-hover:scale-[1.04]"
           />
-          {story.country && (
-            <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[14px] font-semibold text-petrol-800">
-              {story.country}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#071f33]/85 via-[#071f33]/15 to-transparent" />
+
+          <div className="absolute left-3.5 right-3.5 top-3.5 flex items-center justify-between gap-2">
+            {story.country && (
+              <span className="rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-petrol-800 shadow-2xs">
+                {story.country}
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1 rounded-full bg-petrol-800/90 px-2.5 py-1 text-[11px] font-bold text-lime backdrop-blur-xs">
+              <CheckCircle2 size={12} aria-hidden="true" />
+              Verified Student
             </span>
+          </div>
+
+          {story.university && (
+            <div className="absolute bottom-3 left-3.5 right-3.5">
+              <p className="flex items-center gap-1.5 text-xs font-bold leading-snug text-white drop-shadow-xs">
+                <GraduationCap size={15} className="shrink-0 text-lime" aria-hidden="true" />
+                <span className="line-clamp-1">{story.university}</span>
+              </p>
+            </div>
           )}
         </div>
       )}
 
-      <div className="flex flex-1 flex-col p-6 sm:p-7">
-        <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <Stars rating={story.rating} />
-          {!story.image && story.country && (
-            <span className="rounded-full bg-canvas-soft px-3 py-1 text-[14px] font-semibold text-petrol-800">{story.country}</span>
+          {award ? (
+            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-900">
+              <Award size={12} className="shrink-0 text-emerald-700" aria-hidden="true" />
+              {award}
+            </span>
+          ) : (
+            !story.image &&
+            story.country && (
+              <span className="rounded-full bg-canvas-soft px-3 py-1 text-xs font-semibold text-petrol-800">
+                {story.country}
+              </span>
+            )
           )}
         </div>
 
-        <blockquote className={`mt-4 text-[17px] leading-[1.65] text-petrol-800 ${compact ? 'line-clamp-6' : ''}`}>
-          <span aria-hidden="true" className="mr-0.5 font-display text-[34px] font-black leading-[0] text-lime-deep [vertical-align:-0.3em]">
+        <blockquote className={`mt-3.5 text-[15.5px] leading-[1.65] text-petrol-800 ${compact ? 'line-clamp-5' : ''}`}>
+          <span
+            aria-hidden="true"
+            className="mr-0.5 font-display text-[30px] font-black leading-[0] text-lime-deep [vertical-align:-0.28em]"
+          >
             &ldquo;
           </span>
           {story.quote}
         </blockquote>
 
-        <div className="mt-auto pt-6" />
-        <div className="flex items-center gap-3.5 border-t border-canvas-soft pt-5">
-          {!story.image && (
-            <span className="grid size-12 shrink-0 place-items-center rounded-full bg-lime font-display text-[17px] font-black text-petrol-800" aria-hidden="true">
-              {initials(story.name)}
-            </span>
-          )}
-          <div className="min-w-0">
-            <p className="text-[17px] font-bold leading-tight text-petrol-800">{story.name}</p>
-            {story.program && <p className="mt-1 text-[15px] leading-snug text-ink-soft">{story.program}</p>}
+        <div className="mt-auto pt-5" />
+        <div className="flex items-start gap-3 border-t border-slate-100 pt-4">
+          <span
+            className="grid size-11 shrink-0 place-items-center rounded-2xl bg-lime font-display text-[15px] font-black text-petrol-800"
+            aria-hidden="true"
+          >
+            {initials(story.name)}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[16px] font-bold leading-tight text-petrol-800">{story.name}</p>
+            {degree && <p className="mt-0.5 text-[13.5px] font-medium leading-snug text-ink-soft">{degree}</p>}
             {story.university && (
-              <p className="mt-1 flex items-start gap-1.5 text-[15px] font-semibold leading-snug text-petrol-600">
-                <GraduationCap size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
-                {story.university}
+              <p className="mt-1 flex items-start gap-1.5 text-[13.5px] font-bold leading-snug text-[#12436b]">
+                <GraduationCap size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
+                <span>{story.university}</span>
               </p>
             )}
-            {!compact && place && (
-              <p className="mt-1 flex items-start gap-1.5 text-[14px] leading-snug text-ink-mute">
-                <MapPin size={14} className="mt-0.5 shrink-0" aria-hidden="true" />
-                {place}
+            {place && (
+              <p className="mt-1 flex items-start gap-1 text-xs leading-snug text-ink-mute">
+                <MapPin size={13} className="mt-0.5 shrink-0" aria-hidden="true" />
+                <span>{place}</span>
               </p>
             )}
           </div>
         </div>
 
         {!compact && facts.length > 0 && (
-          <details className="faq-smooth group/journey mt-5 rounded-2xl bg-canvas-soft px-5">
-            <summary className="flex min-h-[52px] cursor-pointer list-none items-center justify-between gap-3 text-[15px] font-semibold text-petrol-800">
-              Read the full journey
-              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-lime text-[18px] leading-none transition group-open/journey:rotate-45" aria-hidden="true">+</span>
+          <details className="faq-smooth group/journey mt-4 rounded-2xl border border-slate-200/80 bg-[#f8fafc] px-4">
+            <summary className="flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-3 text-sm font-bold text-petrol-800 [&::-webkit-details-marker]:hidden">
+              Read the full student case file
+              <span
+                className="grid size-7 shrink-0 place-items-center rounded-full bg-lime text-[17px] leading-none text-petrol-800 transition group-open/journey:rotate-45"
+                aria-hidden="true"
+              >
+                +
+              </span>
             </summary>
-            <dl className="grid gap-4 pb-5">
+            <dl className="grid gap-3.5 border-t border-slate-200/70 pb-4 pt-3.5">
               {facts.map(([label, value]) => (
                 <div key={label}>
-                  <dt className="text-[14px] font-semibold text-petrol-800">{label}</dt>
-                  <dd className="mt-0.5 text-[15px] leading-6 text-ink-soft">{value}</dd>
+                  <dt className="text-xs font-bold uppercase tracking-wider text-petrol-800">{label}</dt>
+                  <dd className="mt-0.5 text-sm leading-6 text-ink-soft">{value}</dd>
                 </div>
               ))}
             </dl>

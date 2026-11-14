@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 import MobileLeadBar from '@/components/home/MobileLeadBar';
-import { Stars, type StoryCardData } from '@/components/stories/StoryCard';
+import StoryCard, { Stars, type StoryCardData } from '@/components/stories/StoryCard';
 import StoryMarquee from '@/components/stories/StoryMarquee';
 import HomeLeadForm from '@/components/lead/HomeLeadForm';
 import { getChinaIntakes } from '@/lib/china-intakes';
@@ -661,8 +661,35 @@ export default async function Home() {
         </div>
 
         {storyCards.length > 0 && (
-          <div className="mt-14">
-            <StoryMarquee stories={storyCards} />
+          <div className={`${wrap} mt-14`}>
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-lime">
+                Featured Bangladeshi Student Outcomes
+              </p>
+              <Link
+                href="/success-stories"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-white/90 underline underline-offset-4 hover:text-lime"
+              >
+                Inspect full student case files <ArrowRight size={15} aria-hidden="true" />
+              </Link>
+            </div>
+            <div data-anim="stagger" className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {storyCards.slice(0, 3).map(story => (
+                <Link
+                  key={`featured-${story.id}`}
+                  href={`/success-stories#story-${story.id}`}
+                  className="block h-full rounded-3xl transition duration-300 hover:-translate-y-1 focus-visible:-translate-y-1"
+                >
+                  <StoryCard story={story} compact />
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {storyCards.length > 3 && (
+          <div className="mt-10">
+            <StoryMarquee stories={storyCards.slice(3)} />
           </div>
         )}
 

@@ -26,6 +26,23 @@ export default function March2027Experience({
   const [showSticky, setShowSticky] = useState(false);
 
   useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const initialRoute = params.get('route');
+      if (
+        initialRoute &&
+        ['Foundation → Bachelor', 'Direct Bachelor', 'Master’s', 'Chinese language', 'Help me choose a route'].includes(
+          initialRoute
+        )
+      ) {
+        setRoute(initialRoute);
+      }
+    } catch {
+      // ignore URL parsing errors
+    }
+  }, []);
+
+  useEffect(() => {
     const form = document.getElementById('march-2027-assessment');
     if (!form) return;
     let formVisible = false;

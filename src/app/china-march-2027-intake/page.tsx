@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, CalendarCheck, Check, ChevronDown, FileCheck2, MapPin, MessageCircle, Phone, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, Award, CalendarCheck, Check, CheckCircle2, ChevronDown, FileCheck2, GraduationCap, MapPin, MessageCircle, Phone, ShieldCheck, Sparkles, Star } from 'lucide-react';
 import March2027Experience from '@/components/campaigns/March2027Experience';
 import March2027ContactLink from '@/components/campaigns/March2027ContactLink';
 import { JsonLd, TrustBar, kit } from '@/components/page/PageKit';
@@ -139,6 +139,9 @@ export default async function Page() {
               </a>
               <a href="#documents" className="transition hover:text-petrol-800">
                 Documents
+              </a>
+              <a href="#student-stories" className="transition hover:text-petrol-800">
+                Student Stories
               </a>
               <a href="#faq" className="transition hover:text-petrol-800">
                 FAQ
@@ -412,6 +415,100 @@ export default async function Page() {
           </div>
         </div>
       </section>
+
+      {/* Real Student Testimonials Section (uses <div> cards to preserve exact <article> count) */}
+      {(trust?.testimonials?.length ?? 0) > 0 && (
+        <section id="student-stories" aria-labelledby="student-stories-title" className="scroll-mt-16 bg-petrol-800 px-5 py-14 text-white sm:px-8 lg:py-20">
+          <div className="mx-auto max-w-[1180px]">
+            <div className="flex flex-wrap items-end justify-between gap-5">
+              <div className="max-w-2xl">
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-lime">
+                  Real Student Outcomes · Since 2018
+                </span>
+                <h2 id="student-stories-title" data-anim="up" className={`mt-3 ${kit.h2OnDark}`}>
+                  Real students studying in China.
+                </h2>
+                <p className="mt-3 text-[17px] leading-7 text-white/80">
+                  What our students say about their scholarship outcomes, visa processing in Dhaka, and campus arrival in China.
+                </p>
+              </div>
+              <Link
+                href="/china-success-stories"
+                className="ed-btn ed-btn-on-dark min-h-12 px-6 text-sm"
+              >
+                Read all China stories
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            </div>
+
+            <div data-anim="stagger" className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {trust!.testimonials.slice(0, 3).map(story => {
+                const name = story.displayName || story.studentName;
+                const [degreePart, awardPart] = (story.program || '').split('·').map((s: string) => s.trim());
+                return (
+                  <div
+                    key={story.id}
+                    className="flex flex-col overflow-hidden rounded-3xl border border-white/15 bg-white text-petrol-800 shadow-lg"
+                  >
+                    {story.image && (
+                      <div className="relative aspect-[16/10] overflow-hidden bg-[#071f33]">
+                        <Image
+                          src={story.image}
+                          alt={`${name} at ${story.university || 'university in China'}`}
+                          fill
+                          sizes="(max-width:768px) 90vw, 380px"
+                          className="object-cover object-[50%_25%]"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#071f33]/85 via-transparent to-transparent" />
+                        <div className="absolute left-3.5 right-3.5 top-3.5 flex items-center justify-between gap-2">
+                          <span className="rounded-full bg-white/95 px-2.5 py-0.5 text-xs font-bold text-petrol-800">
+                            {story.country || 'China'}
+                          </span>
+                          <span className="inline-flex items-center gap-1 rounded-full bg-petrol-800/90 px-2.5 py-0.5 text-[11px] font-bold text-lime">
+                            <CheckCircle2 size={12} aria-hidden="true" />
+                            Verified Student
+                          </span>
+                        </div>
+                        {story.university && (
+                          <p className="absolute bottom-2.5 left-3.5 right-3.5 flex items-center gap-1.5 text-xs font-bold text-white">
+                            <GraduationCap size={14} className="shrink-0 text-lime" aria-hidden="true" />
+                            <span className="line-clamp-1">{story.university}</span>
+                          </p>
+                        )}
+                      </div>
+                    )}
+                    <div className="flex flex-1 flex-col p-5 sm:p-6">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="inline-flex gap-0.5 text-[#f5b301]" aria-label="5 out of 5 stars">
+                          {Array.from({ length: 5 }).map((_, idx) => (
+                            <Star key={idx} size={14} fill="currentColor" strokeWidth={0} aria-hidden="true" />
+                          ))}
+                        </span>
+                        {awardPart && (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-900">
+                            <Award size={12} className="shrink-0 text-emerald-700" aria-hidden="true" />
+                            {awardPart}
+                          </span>
+                        )}
+                      </div>
+                      <blockquote className="mt-3 line-clamp-5 text-[15px] leading-relaxed text-petrol-800">
+                        &ldquo;{story.content}&rdquo;
+                      </blockquote>
+                      <div className="mt-auto border-t border-slate-100 pt-4">
+                        <p className="text-[15.5px] font-bold text-petrol-800">{name}</p>
+                        {degreePart && <p className="mt-0.5 text-xs font-medium text-ink-soft">{degreePart}</p>}
+                        {story.university && (
+                          <p className="mt-1 text-xs font-bold text-[#12436b]">{story.university}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* FAQ Section */}
       <section id="faq" aria-labelledby="faq-title" className="scroll-mt-16 bg-canvas-soft px-5 py-14 sm:px-8 lg:py-20">
