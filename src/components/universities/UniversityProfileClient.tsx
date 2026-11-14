@@ -320,6 +320,23 @@ export default function UniversityProfileClient({
   const noSelection = <p className={mutedClass}>Choose a listed program above to view exact requirements.</p>;
   const panelProps = (name: Panel) => ({ id: name, 'aria-label': PANELS.find((item) => item.id === name)?.label });
   const tuitionHighlight = selected?.fees.find((fee) => fee.key === 'tuition' && !fee.optional);
+  const rawTuitionText = university.tuition || generalDetails.tuition || (tuitionHighlight ? feeText(tuitionHighlight) : 'Itemized below');
+  const cleanTuitionText = /dated official fee|next-cycle|require confirmation|research below/i.test(rawTuitionText)
+    ? 'View program fee schedule'
+    : rawTuitionText;
+
+  const cleanScholarshipTitle = (() => {
+    const raw = scholarshipHighlightLabel || scholarshipHighlight?.title;
+    if (!raw) return 'Merit & Entry Waivers';
+    if (/full(?:y)? funded|100%|full tuition/i.test(raw)) return 'Up to 100% Tuition Waiver';
+    if (/partial/i.test(raw) && /waiver|discount|scholarship/i.test(raw)) return 'Partial Merit Waiver';
+    if (raw.length > 36) {
+      if (/merit/i.test(raw)) return 'Merit-Based Scholarship';
+      if (/waiver/i.test(raw)) return 'Tuition Fee Waiver';
+      return raw.slice(0, 32) + '…';
+    }
+    return raw;
+  })();
 
   const nextDeadline = openByDeadline(news, now)[0];
   const nextBadge = nextDeadline ? deadlineBadge(nextDeadline.deadlineAt, now) : null;
@@ -464,42 +481,42 @@ export default function UniversityProfileClient({
                   </dd>
                 </div>
 
-                <div className="rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15">
+                <div className="flex flex-col justify-between rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15 min-h-[118px]">
                   <dt className="flex items-center gap-1.5 text-[12px] font-medium text-white/65 uppercase tracking-wide">
-                    <Wallet size={14} className="text-lime" />
+                    <Wallet size={14} className="text-lime shrink-0" />
                     Tuition Range
                   </dt>
                   <dd className="mt-2">
-                    <a href="#fees" className="text-[15px] font-bold text-white leading-snug block line-clamp-2">
-                      {university.tuition || generalDetails.tuition || (tuitionHighlight ? feeText(tuitionHighlight) : 'Itemized below')}
+                    <a href="#fees" className="text-[14px] font-bold text-white leading-snug block line-clamp-2 hover:text-lime">
+                      {cleanTuitionText}
                     </a>
-                    <span className="mt-1 block text-[12px] text-white/70">Official gross tuition</span>
+                    <span className="mt-1 block text-[11px] text-white/60">Official gross tuition</span>
                   </dd>
                 </div>
 
-                <div className="rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15">
+                <div className="flex flex-col justify-between rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15 min-h-[118px]">
                   <dt className="flex items-center gap-1.5 text-[12px] font-medium text-white/65 uppercase tracking-wide">
-                    <Sparkles size={14} className="text-lime" />
+                    <Sparkles size={14} className="text-lime shrink-0" />
                     Scholarship Award
                   </dt>
                   <dd className="mt-2">
-                    <a href="#scholarships" className="text-[14px] font-bold text-white leading-snug block line-clamp-2">
-                      {scholarshipHighlightLabel || scholarshipHighlight?.title || 'Merit & Entry Waivers'}
+                    <a href="#scholarships" className="text-[14px] font-bold text-white leading-snug block line-clamp-2 hover:text-lime">
+                      {cleanScholarshipTitle}
                     </a>
-                    <span className="mt-1 block text-[12px] text-white/70">Competitive merit discount</span>
+                    <span className="mt-1 block text-[11px] text-white/60">Competitive merit discount</span>
                   </dd>
                 </div>
 
-                <div className="rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15">
+                <div className="flex flex-col justify-between rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15 min-h-[118px]">
                   <dt className="flex items-center gap-1.5 text-[12px] font-medium text-white/65 uppercase tracking-wide">
-                    <ShieldCheck size={14} className="text-lime" />
+                    <ShieldCheck size={14} className="text-lime shrink-0" />
                     EduExpress Fee
                   </dt>
                   <dd className="mt-2">
                     <span className="font-display text-[22px] font-black text-lime leading-tight block">
                       {isMalaysia ? 'BDT 0' : 'BDT 0 Before Visa'}
                     </span>
-                    <span className="mt-1 block text-[12px] text-white/70">
+                    <span className="mt-1 block text-[11px] text-white/60">
                       {isMalaysia ? 'Free service for Malaysia' : 'Payable after visa approval'}
                     </span>
                   </dd>

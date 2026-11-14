@@ -1,4 +1,4 @@
-export const COST_CURRENCIES = ['CNY', 'BDT', 'USD', 'EUR', 'GBP'] as const;
+export const COST_CURRENCIES = ['MYR', 'CNY', 'BDT', 'USD', 'EUR', 'GBP'] as const;
 export type CostCurrency = typeof COST_CURRENCIES[number];
 export type CostField = 'application' | 'deposit' | 'service' | 'tuition' | 'housing' | 'insurance' | 'medical' | 'residence' | 'other';
 export type CostValues = Record<CostField, string>;

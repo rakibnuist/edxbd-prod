@@ -299,9 +299,16 @@ export default async function UniversitiesPage({ searchParams }: Props) {
         </nav>
       )}
 
+      {/* Directory & Facet Filter Section */}
+      <div className="bg-[#f8fafc] pt-6">
+        <Suspense fallback={<div className="px-5 py-24 text-center text-base font-semibold text-slate-600">Loading university catalog…</div>}>
+          <UniversitiesClient directory={compactDirectory(universities)} />
+        </Suspense>
+      </div>
+
       {/* Open Scholarship Deadlines */}
       {openDeadlines.length > 0 && (
-        <section aria-labelledby="open-deadlines" className="border-b border-canvas-soft bg-canvas py-8">
+        <section aria-labelledby="open-deadlines" className="border-t border-slate-200 bg-white py-14">
           <div className={kit.wrap}>
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
@@ -314,7 +321,7 @@ export default async function UniversitiesPage({ searchParams }: Props) {
                 View All Scholarship Deadlines <ArrowRight size={15} aria-hidden="true" />
               </Link>
             </div>
-            <ul className="mt-5 grid gap-3 md:grid-cols-2">
+            <ul className="mt-6 grid gap-4 md:grid-cols-2">
               {openDeadlines.map(update => (
                 <li key={update.id}><UpdateCard update={update} now={now} variant="row" /></li>
               ))}
@@ -322,13 +329,6 @@ export default async function UniversitiesPage({ searchParams }: Props) {
           </div>
         </section>
       )}
-
-      {/* Directory & Facet Filter Section */}
-      <div className="bg-canvas-soft/30 pt-8">
-        <Suspense fallback={<div className="px-5 py-24 text-center text-base font-semibold text-slate-600">Loading university catalog…</div>}>
-          <UniversitiesClient directory={compactDirectory(universities)} />
-        </Suspense>
-      </div>
 
       {/* Bottom Shortlist Conversion Section */}
       <section id="shortlist" className="scroll-mt-24 bg-petrol-800 py-16 text-white lg:py-20" data-cta-band>

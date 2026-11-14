@@ -131,15 +131,15 @@ function buildRow(university: DirectoryUniversity, filters: DirectoryFilters): R
     ? legacyAwards.find(award => /100%|full tuition|fully funded/i.test(award.coverage || '')) || legacyAwards.find(award => legacyScholarshipValue(award))
     : undefined;
   const programIntakeValues = programs.flatMap(program => program.intakes || []).filter(Boolean);
-  const tuition = directoryTuitionSummary(programs.map(program => evergreenText(program.tuition || ''))) || evergreenText(university.details.tuition || '');
+  const rawTuition = directoryTuitionSummary(programs.map(program => evergreenText(program.tuition || ''))) || evergreenText(university.details.tuition || '');
+  const isAwkwardTuition = /dated official fee|next-cycle|require confirmation|research below|not recorded|contact|request|not specified|not confirmed|unknown/i.test(rawTuition);
+  const tuition = isAwkwardTuition ? 'View program fees' : rawTuition;
+  const showTuition = Boolean(tuition) && !isAwkwardTuition;
 
   return {
     university,
     tuition,
-    showTuition: Boolean(tuition) && !/not recorded|contact|request|not specified|not confirmed|unknown/i.test(tuition),
-    // Program rows are the specific source; the legacy university-level text can
-    // hold deadline notes ("July 2026 or December 2026 (application deadlines
-    // passed)") that would otherwise surface as July/December intakes.
+    showTuition,
     intake: evergreenIntakes(programIntakeValues.length ? programIntakeValues : university.intake),
     ranking,
     awardValue: route?.value || (legacyAward ? legacyScholarshipValue(legacyAward) : ''),
@@ -343,26 +343,38 @@ export default function UniversitiesClient({ directory }: Props) {
     });
 
   return (
-    <section aria-label="University finder" className="bg-white pb-16">
-      <div className="mx-auto max-w-[1200px] px-5 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-12">
+    <section aria-label="University finder" className="bg-[#f8fafc] pb-20 pt-2">
+      <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
           {/* Facet rail */}
-          <form role="search" aria-label="Filter universities" action="/universities" method="get" onSubmit={submitSearch} className="lg:sticky lg:top-[88px] lg:self-start rounded-3xl border border-rule bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between border-b border-canvas-soft pb-2">
-              <p className="text-[16px] font-semibold text-petrol-800">Filter the directory</p>
+          <form
+            role="search"
+            aria-label="Filter universities"
+            action="/universities"
+            method="get"
+            onSubmit={submitSearch}
+            className="lg:sticky lg:top-[88px] lg:self-start rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm"
+          >
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <span className="text-[14px] font-bold uppercase tracking-wider text-slate-800">Filters</span>
               {chips.length > 0 && (
-                <button type="button" onClick={clearFilters} className="inline-flex min-h-[44px] items-center text-[14px] font-semibold text-ink-soft underline underline-offset-4 hover:text-clay">
-                  Clear
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="text-xs font-bold text-rose-600 hover:underline"
+                >
+                  Reset ({chips.length})
                 </button>
               )}
             </div>
 
+            {/* Keyword Search */}
             <div className="mt-4">
-              <label className="sr-only" htmlFor="university-search">
-                Search universities or programmes
+              <label htmlFor="university-search" className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                Keyword Search
               </label>
-              <div className="relative">
-                <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-mute" aria-hidden="true" />
+              <div className="relative mt-1.5">
+                <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
                 <input
                   ref={searchRef}
                   id="university-search"
@@ -373,40 +385,44 @@ export default function UniversitiesClient({ directory }: Props) {
                   onKeyDown={event => {
                     if (event.key === 'Escape' && filters.search) setFilters({ search: '' }, true);
                   }}
-                  placeholder="University, city or subject"
+                  placeholder="Name, city, major..."
                   autoComplete="off"
-                  className="ed-field ed-field-icon"
+                  className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-9 pr-3 text-xs font-medium text-slate-800 placeholder:text-slate-400 outline-none focus:border-petrol-800 focus:bg-white"
                 />
               </div>
-              <p className="mt-1.5 text-[14px] text-ink-soft">Press / to search, Esc to clear.</p>
             </div>
 
-            <div className="mt-4 grid gap-3">
+            <div className="mt-4 grid gap-3.5">
               <div>
-                <label htmlFor="filter-country" className="block text-[13px] font-semibold text-ink-soft">
-                  Destination
+                <label htmlFor="filter-country" className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  Destination Country
                 </label>
                 <select
                   id="filter-country"
-                  className="ed-field mt-1"
+                  className="mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-xs font-semibold text-slate-800 outline-none focus:border-petrol-800 focus:bg-white"
                   value={filters.country}
                   onChange={event => setFilters({ country: event.target.value, city: '', subject: '', cscaFree: false })}
                 >
-                  <option value="">All destinations</option>
+                  <option value="">All Destinations</option>
                   {unique([...options.countries, ...activeCountries.map(country => country.name)]).map(item => (
                     <option key={item} value={item}>
-                      {item}
+                      {flagFor(item)} {item}
                     </option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label htmlFor="filter-level" className="block text-[13px] font-semibold text-ink-soft">
-                  Study level
+                <label htmlFor="filter-level" className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  Study Level
                 </label>
-                <select id="filter-level" className="ed-field mt-1" value={filters.level} onChange={event => setFilters({ level: event.target.value })}>
-                  <option value="">All levels</option>
+                <select
+                  id="filter-level"
+                  className="mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-xs font-semibold text-slate-800 outline-none focus:border-petrol-800 focus:bg-white"
+                  value={filters.level}
+                  onChange={event => setFilters({ level: event.target.value })}
+                >
+                  <option value="">All Degree Levels</option>
                   {unique(options.levels.map(levelLabel))
                     .sort((a, b) => levelOrder.indexOf(a) - levelOrder.indexOf(b))
                     .map(item => (
@@ -422,22 +438,31 @@ export default function UniversitiesClient({ directory }: Props) {
                 aria-expanded={advancedOpen}
                 aria-controls="advanced-university-filters"
                 onClick={() => setAdvancedOpen(value => !value)}
-                className="flex min-h-[44px] items-center justify-between rounded-xl bg-canvas-soft px-3.5 text-[15px] font-semibold text-petrol-800 hover:bg-lime-pale"
+                className="flex h-10 items-center justify-between rounded-xl border border-slate-200 bg-slate-50/80 px-3 text-xs font-bold text-slate-700 hover:bg-slate-100"
               >
                 <span className="inline-flex items-center gap-2">
-                  <SlidersHorizontal size={13} aria-hidden="true" /> More filters
-                  {advancedCount > 0 && <span className="grid size-5 place-items-center rounded-full bg-petrol-800 text-[12px] text-white">{advancedCount}</span>}
+                  <SlidersHorizontal size={13} aria-hidden="true" /> Specific Criteria
+                  {advancedCount > 0 && (
+                    <span className="grid size-4 place-items-center rounded-full bg-petrol-800 text-[10px] text-white">
+                      {advancedCount}
+                    </span>
+                  )}
                 </span>
-                <ChevronDown size={13} className={advancedOpen ? 'rotate-180' : ''} aria-hidden="true" />
+                <ChevronDown size={14} className={`transition-transform ${advancedOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </button>
 
-              <div id="advanced-university-filters" hidden={!advancedOpen} className="grid gap-3 border-t border-canvas-soft pt-3">
+              <div id="advanced-university-filters" hidden={!advancedOpen} className="grid gap-3 border-t border-slate-100 pt-3">
                 <div>
-                  <label htmlFor="filter-subject" className="block text-[13px] font-semibold text-ink-soft">
-                    Subject
+                  <label htmlFor="filter-subject" className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    Subject Field
                   </label>
-                  <select id="filter-subject" className="ed-field mt-1" value={filters.subject} onChange={event => setFilters({ subject: event.target.value })}>
-                    <option value="">All subjects</option>
+                  <select
+                    id="filter-subject"
+                    className="mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-petrol-800"
+                    value={filters.subject}
+                    onChange={event => setFilters({ subject: event.target.value })}
+                  >
+                    <option value="">All Subjects</option>
                     {options.subjects.map(item => (
                       <option key={item} value={item}>
                         {item}
@@ -445,12 +470,18 @@ export default function UniversitiesClient({ directory }: Props) {
                     ))}
                   </select>
                 </div>
+
                 <div>
-                  <label htmlFor="filter-city" className="block text-[13px] font-semibold text-ink-soft">
-                    City
+                  <label htmlFor="filter-city" className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    City Location
                   </label>
-                  <select id="filter-city" className="ed-field mt-1" value={filters.city} onChange={event => setFilters({ city: event.target.value })}>
-                    <option value="">All cities</option>
+                  <select
+                    id="filter-city"
+                    className="mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-petrol-800"
+                    value={filters.city}
+                    onChange={event => setFilters({ city: event.target.value })}
+                  >
+                    <option value="">All Cities</option>
                     {options.cities.map(item => (
                       <option key={item} value={item}>
                         {item}
@@ -458,12 +489,18 @@ export default function UniversitiesClient({ directory }: Props) {
                     ))}
                   </select>
                 </div>
+
                 <div>
-                  <label htmlFor="filter-intake" className="block text-[13px] font-semibold text-ink-soft">
-                    Intake month
+                  <label htmlFor="filter-intake" className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    Intake Month
                   </label>
-                  <select id="filter-intake" className="ed-field mt-1" value={filters.intake} onChange={event => setFilters({ intake: event.target.value })}>
-                    <option value="">Any listed intake</option>
+                  <select
+                    id="filter-intake"
+                    className="mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-petrol-800"
+                    value={filters.intake}
+                    onChange={event => setFilters({ intake: event.target.value })}
+                  >
+                    <option value="">Any Intake</option>
                     {options.intakes.map(item => (
                       <option key={item} value={item}>
                         {item}
@@ -471,26 +508,38 @@ export default function UniversitiesClient({ directory }: Props) {
                     ))}
                   </select>
                 </div>
-                <label className="flex min-h-9 items-center gap-2 text-[15px] text-ink">
-                  <input type="checkbox" checked={filters.scholarship} onChange={event => setFilters({ scholarship: event.target.checked })} className="size-4 accent-[#175180]" />
-                  Scholarship on file
+
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer pt-1">
+                  <input
+                    type="checkbox"
+                    checked={filters.scholarship}
+                    onChange={event => setFilters({ scholarship: event.target.checked })}
+                    className="size-4 rounded accent-petrol-800"
+                  />
+                  <span>Scholarship Available Only</span>
                 </label>
-                <label className="flex min-h-9 items-center gap-2 text-[15px] text-ink">
-                  <input type="checkbox" checked={filters.cscaFree} onChange={event => setFilters({ cscaFree: event.target.checked })} className="size-4 accent-[#175180]" />
-                  CSCA exam not required
+
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={filters.cscaFree}
+                    onChange={event => setFilters({ cscaFree: event.target.checked })}
+                    className="size-4 rounded accent-petrol-800"
+                  />
+                  <span>CSCA Exam Exempt</span>
                 </label>
               </div>
             </div>
 
             {chips.length > 0 && (
-              <div className="mt-4 border-t border-canvas-soft pt-3" aria-label="Active filters">
+              <div className="mt-4 border-t border-slate-100 pt-3" aria-label="Active filters">
                 <div className="flex flex-wrap gap-1.5">
                   {chips.map(chip => (
                     <button
                       key={chip.key}
                       type="button"
                       onClick={() => removeFilter(chip.key)}
-                      className="inline-flex min-h-9 max-w-full items-center gap-1.5 rounded-full bg-lime-pale px-3 text-[14px] font-semibold text-petrol-800 hover:bg-canvas-soft hover:text-clay"
+                      className="inline-flex h-7 max-w-full items-center gap-1.5 rounded-lg bg-emerald-50 border border-emerald-200 px-2.5 text-[11px] font-bold text-emerald-800 hover:bg-emerald-100"
                       aria-label={`Remove filter ${chip.label}`}
                     >
                       <span className="truncate">{chip.label}</span>
@@ -502,61 +551,57 @@ export default function UniversitiesClient({ directory }: Props) {
             )}
           </form>
 
-          {/* Results */}
+          {/* Results Area */}
           <div>
-            <div id="university-results" className="flex scroll-mt-32 flex-wrap items-center justify-between gap-3 rounded-2xl bg-white p-4 border border-rule shadow-sm mb-6 xl:scroll-mt-40">
-              <div className="flex items-center gap-3">
-                <span className="flex size-9 items-center justify-center rounded-xl bg-lime text-petrol-800 font-black text-sm">
-                  {filtered.length}
+            <div id="university-results" className="mb-5 flex scroll-mt-32 flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200/90 bg-white px-5 py-3.5 shadow-sm xl:scroll-mt-40">
+              <div className="flex items-center gap-2.5">
+                <span className="text-sm font-semibold text-slate-600">
+                  Showing <strong className="font-extrabold text-slate-900">{filtered.length}</strong> {filtered.length === 1 ? 'University' : 'Universities'}
+                  {filters.country && <span> in <strong className="text-emerald-700">{filters.country}</strong></span>}
                 </span>
-                <p role="status" aria-live="polite" className="text-xs font-bold text-petrol-800">
-                  <span>{filtered.length === 1 ? 'University' : 'Universities'} Matching Criteria</span>
-                  {filters.country && <span className="text-emerald-800 font-semibold block text-[11px]">in {filters.country}</span>}
-                </p>
               </div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                <label htmlFor="university-sort">Sort by:</label>
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                <label htmlFor="university-sort">Sort:</label>
                 <select
                   id="university-sort"
                   value={filters.sort}
                   onChange={event =>
                     setFilters({ sort: ['name', 'city', 'fee', 'ranking', 'scholarship'].includes(event.target.value) ? (event.target.value as DirectoryFilters['sort']) : 'recommended' })
                   }
-                  className="h-10 rounded-xl border border-rule bg-canvas-soft px-3 text-xs font-bold text-petrol-800 outline-none focus:border-petrol-800"
+                  className="h-9 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-bold text-slate-800 outline-none focus:border-petrol-800"
                 >
-                  <option value="recommended">Recommended</option>
-                  <option value="ranking">Best Ranking</option>
-                  <option value="scholarship">Scholarships First</option>
-                  <option value="fee">Lowest Tuition</option>
-                  <option value="city">City</option>
+                  <option value="recommended">Recommended (Top Ranked & Funding)</option>
+                  <option value="ranking">Highest World Ranking</option>
+                  <option value="scholarship">Active Scholarships First</option>
+                  <option value="fee">Lowest Indicative Tuition</option>
                   <option value="name">Name (A–Z)</option>
                 </select>
               </div>
             </div>
 
             {filtered.length === 0 ? (
-              <div className="mt-8 rounded-3xl bg-canvas-soft px-6 py-12 text-center">
-                <span className="mx-auto grid size-12 place-items-center rounded-full bg-white text-petrol-800"><Search size={22} aria-hidden="true" /></span>
-                <h2 className="mt-4 font-display text-[26px] font-black leading-tight text-petrol-800">
-                  {destinationNotListed ? `Find your university in ${filters.country}` : 'No record matches this combination'}
+              <div className="mt-8 rounded-3xl bg-white border border-slate-200 px-6 py-14 text-center">
+                <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-slate-100 text-petrol-800"><Search size={22} aria-hidden="true" /></span>
+                <h2 className="mt-4 font-display text-[24px] font-black leading-tight text-slate-900">
+                  {destinationNotListed ? `Find your university in ${filters.country}` : 'No matching universities found'}
                 </h2>
-                <p className="mx-auto mt-2 max-w-lg text-[15px] leading-7 text-ink-soft">
+                <p className="mx-auto mt-2 max-w-lg text-[14px] leading-relaxed text-slate-500">
                   {destinationNotListed
-                    ? 'That destination is served by counselling, but has no verified directory records yet. Read the destination guide or ask us to check a specific university.'
-                    : 'Loosen one filter, or tell a counsellor the subject and budget you are working with — we will check the route directly.'}
+                    ? 'That destination is served by our personalized counselling team. Ask a counselor to check available partner universities for you.'
+                    : 'Try clearing or loosening your filters to explore more institutions, or contact an advisor directly.'}
                 </p>
-                <div className="mt-5 flex flex-wrap justify-center gap-3">
-                  <button type="button" onClick={clearFilters} className="ed-btn ed-btn-outline min-h-11 text-[15px]">
+                <div className="mt-6 flex flex-wrap justify-center gap-3">
+                  <button type="button" onClick={clearFilters} className="ed-btn ed-btn-outline min-h-[44px] text-xs font-bold">
                     Clear all filters
                   </button>
-                  <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-11 text-[15px]">
-                    Ask for a shortlist
+                  <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[44px] text-xs font-bold">
+                    Ask for a free shortlist
                   </Link>
                 </div>
               </div>
             ) : (
               <>
-                <ul className="mt-6 grid gap-5 md:grid-cols-2">
+                <ul className="grid gap-5 md:grid-cols-2">
                   {visibleRows.map((row, index) => {
                     const { university } = row;
                     const selected = compare.includes(university.slug);
@@ -570,97 +615,107 @@ export default function UniversitiesClient({ directory }: Props) {
                         <li>
                           <article
                             aria-label={university.name}
-                            className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-rule bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-xl"
+                            className="group relative flex h-full flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-lg"
                           >
                             <div>
-                              {/* Card Header Row: Logo + Badges */}
-                              <div className="flex items-start justify-between gap-3">
-                                <div className="flex items-center gap-3">
-                                  <UniversityMark university={university} size={58} />
-                                  <div>
-                                    <span className="flex items-center gap-1.5 text-xs font-bold text-petrol-800">
-                                      <span className="text-sm">{flagFor(university.country)}</span>
-                                      <span>{[university.city, university.country].filter(Boolean).join(', ')}</span>
-                                    </span>
-                                    {row.englishTaught && (
-                                      <span className="mt-0.5 inline-block text-[11px] font-bold text-emerald-700">
-                                        ● English-taught
-                                      </span>
-                                    )}
-                                  </div>
+                              {/* Header: Logo, Location & Status Badge */}
+                              <div className="flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  <UniversityMark university={university} size={42} />
+                                  <span className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 truncate">
+                                    <span className="text-sm">{flagFor(university.country)}</span>
+                                    <span>{[university.city, university.country].filter(Boolean).join(', ')}</span>
+                                  </span>
                                 </div>
 
-                                <div className="flex flex-col items-end gap-1.5 shrink-0">
-                                  {row.ranking && (
-                                    <span className="inline-flex items-center gap-1 rounded-full bg-petrol-800 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
-                                      <Trophy size={11} className="text-lime" aria-hidden="true" /> #{row.ranking.rank}
-                                      <span className="font-normal text-white/75">{row.ranking.publisher}</span>
+                                <div className="shrink-0">
+                                  {row.ranking ? (
+                                    <span className="inline-flex items-center gap-1 rounded-md bg-petrol-800 px-2 py-0.5 text-[11px] font-bold text-white shadow-xs">
+                                      <Trophy size={11} className="text-lime" aria-hidden="true" />
+                                      #{row.ranking.rank} <span className="font-normal text-white/70">{row.ranking.publisher}</span>
                                     </span>
-                                  )}
-                                  {row.awardValue && (
-                                    <span className="inline-flex items-center gap-1 rounded-full bg-lime/30 border border-lime/80 px-2.5 py-0.5 text-[11px] font-bold text-petrol-800">
-                                      <Gift size={11} aria-hidden="true" /> Scholarship
+                                  ) : row.awardValue ? (
+                                    <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[11px] font-bold text-emerald-800">
+                                      <Gift size={11} className="text-emerald-600" aria-hidden="true" /> Scholarship
                                     </span>
-                                  )}
+                                  ) : row.englishTaught ? (
+                                    <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-700">
+                                      English-Taught
+                                    </span>
+                                  ) : null}
                                 </div>
                               </div>
 
-                              {/* University Name */}
-                              <h2 className="mt-4 text-[19px] font-bold leading-snug tracking-tight text-petrol-800 transition-colors group-hover:text-emerald-800">
+                              {/* University Name: Full width so it never truncates */}
+                              <h2 className="mt-2.5 text-[17px] font-bold text-slate-900 leading-snug group-hover:text-emerald-800 transition-colors line-clamp-2 min-h-[46px] flex items-center">
                                 <Link
                                   href={`/universities/${university.slug}`}
                                   onClick={() => recordClick('university_programs_click', university)}
-                                  className="after:absolute after:inset-0 focus-visible:outline-none"
+                                  className="focus-visible:outline-none"
                                 >
                                   {university.name}
                                 </Link>
                               </h2>
 
-                              {/* Study Levels */}
-                              {row.levels.length > 0 && (
-                                <ul className="mt-2.5 flex flex-wrap gap-1.5" aria-label="Study levels">
-                                  {row.levels.slice(0, 4).map(level => (
-                                    <li key={level} className="rounded-full bg-canvas-soft px-2.5 py-0.5 text-[11px] font-semibold text-slate-700">
-                                      {level}
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-
-                              {/* Scholarship Banner if award exists */}
-                              {row.awardValue && (
-                                <div className="mt-3 rounded-2xl border border-emerald-200/80 bg-emerald-50/70 p-2.5 text-xs font-semibold leading-relaxed text-emerald-950">
-                                  <span className="font-bold text-emerald-800">Funding:</span> {row.awardValue}
-                                </div>
-                              )}
-
-                              {/* Financial & Intake Matrix */}
-                              <div className="mt-3.5 grid grid-cols-2 gap-3 rounded-2xl bg-canvas-soft p-3.5 text-xs">
-                                <div>
-                                  <span className="block text-[11px] text-slate-500 font-medium">Indicative Tuition</span>
-                                  <span className="mt-0.5 block font-bold text-petrol-800 leading-snug">
-                                    {row.showTuition ? row.tuition : 'See programmes'}
+                              {/* Key Specs Matrix */}
+                              <div className="mt-4 grid grid-cols-2 divide-x divide-slate-100 border-y border-slate-100 py-3 text-xs">
+                                <div className="pr-3">
+                                  <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400">Indicative Tuition</span>
+                                  <span className="mt-0.5 block font-bold text-slate-900 text-[13px] truncate">
+                                    {row.showTuition ? row.tuition : 'See programs on profile'}
                                   </span>
                                 </div>
-                                <div>
-                                  <span className="block text-[11px] text-slate-500 font-medium">Upcoming Intakes</span>
-                                  <span className="mt-0.5 block font-bold text-petrol-800 leading-snug">
-                                    {row.intake.length ? row.intake.join(', ') : 'See profile'}
+                                <div className="pl-3">
+                                  <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400">Upcoming Intake</span>
+                                  <span className="mt-0.5 block font-bold text-slate-900 text-[13px] truncate">
+                                    {row.intake.length ? row.intake.slice(0, 2).join(', ') : 'September'}
                                   </span>
                                 </div>
                               </div>
 
-                              {/* Country-Aware Fee Notice */}
-                              <div className="mt-2.5 px-1 flex items-center justify-between text-[11px]">
+                              {/* Study Levels & Medium */}
+                              <div className="mt-3 flex flex-wrap items-center gap-1.5 min-h-[26px]">
+                                {row.levels.slice(0, 4).map(level => (
+                                  <span key={level} className="rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">
+                                    {level}
+                                  </span>
+                                ))}
+                                {row.englishTaught && (
+                                  <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700">
+                                    ● English Medium
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Funding / Scholarship Line */}
+                              {row.awardValue ? (
+                                <div className="mt-3 flex items-center gap-2 rounded-xl border border-emerald-200/80 bg-emerald-50/70 px-3 py-2 text-xs font-semibold text-emerald-950">
+                                  <Gift size={13} className="shrink-0 text-emerald-700" />
+                                  <span className="truncate">
+                                    <strong className="text-emerald-800">Scholarship:</strong> {row.awardValue}
+                                  </span>
+                                </div>
+                              ) : (
+                                <div className="mt-3 flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50/80 px-3 py-2 text-xs text-slate-600">
+                                  <span className="truncate">Standard direct university admission pathway</span>
+                                </div>
+                              )}
+
+                              {/* Agency Fee Trust Line */}
+                              <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 font-medium">
                                 {university.country.toLowerCase() === 'malaysia' ? (
-                                  <span className="font-bold text-emerald-700">EduExpress Fee: BDT 0 (Free Service)</span>
+                                  <span className="font-bold text-emerald-700 flex items-center gap-1">
+                                    <Check size={13} className="text-emerald-600" /> BDT 0 EduExpress Service Fee
+                                  </span>
                                 ) : (
-                                  <span className="font-semibold text-slate-500">Visa-First Pledge (BDT 0 Pre-Visa)</span>
+                                  <span className="text-slate-600 flex items-center gap-1">
+                                    <Check size={13} className="text-emerald-600" /> Visa-First Pledge (BDT 0 Pre-Visa)
+                                  </span>
                                 )}
                                 {university.clearCost && (
                                   <Link
                                     href={`/universities/${university.slug}#fees`}
-                                    className="relative z-10 font-bold text-petrol-800 hover:text-emerald-700 hover:underline"
+                                    className="font-bold text-petrol-800 hover:text-emerald-700 hover:underline"
                                   >
                                     ClearCost™ Sheet →
                                   </Link>
@@ -668,16 +723,16 @@ export default function UniversitiesClient({ directory }: Props) {
                               </div>
                             </div>
 
-                            {/* Card Action Row */}
-                            <div className="relative z-10 mt-5 flex items-center gap-2 border-t border-rule pt-4">
+                            {/* Action Row */}
+                            <div className="mt-4 flex items-center gap-2 border-t border-slate-100 pt-3.5">
                               <button
                                 type="button"
                                 onClick={() => toggleCompare(university.slug)}
                                 aria-pressed={selected}
                                 aria-label={selected ? `Remove ${university.name} from comparison` : `Add ${university.name} to comparison`}
                                 title={selected ? 'In comparison' : 'Compare'}
-                                className={`grid size-10 shrink-0 place-items-center rounded-2xl border transition-all ${
-                                  selected ? 'border-petrol-800 bg-petrol-800 text-white' : 'border-rule bg-canvas-soft text-petrol-800 hover:bg-lime/25'
+                                className={`grid size-10 shrink-0 place-items-center rounded-xl border transition-all ${
+                                  selected ? 'border-petrol-800 bg-petrol-800 text-white' : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
                                 }`}
                               >
                                 {selected ? <Check size={16} aria-hidden="true" /> : <Plus size={16} aria-hidden="true" />}
@@ -685,16 +740,16 @@ export default function UniversitiesClient({ directory }: Props) {
                               <Link
                                 href={`/universities/${university.slug}`}
                                 onClick={() => recordClick('university_programs_click', university)}
-                                className="ed-btn ed-btn-outline min-h-[42px] flex-1 text-xs font-bold"
-                                aria-label={`View ${university.name} profile`}
+                                className="inline-flex min-h-[42px] flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-3 text-center text-xs font-bold text-slate-800 transition-colors hover:bg-slate-50 hover:border-slate-400"
+                                aria-label={`View ${university.name} details`}
                               >
                                 View Details
                               </Link>
                               <Link
                                 href={applicationHref}
                                 onClick={() => recordClick('university_apply_click', university)}
-                                className="ed-btn ed-btn-signal min-h-[42px] flex-[1.3] whitespace-nowrap px-3 text-xs font-bold"
-                                aria-label={`Check eligibility for ${university.name} with EduExpress International`}
+                                className="ed-btn ed-btn-signal min-h-[42px] flex-[1.2] whitespace-nowrap px-3 text-xs font-bold"
+                                aria-label={`Check eligibility for ${university.name}`}
                               >
                                 Check Eligibility
                               </Link>
@@ -703,15 +758,15 @@ export default function UniversitiesClient({ directory }: Props) {
                         </li>
                         {index === 3 && (
                           <li className="md:col-span-2">
-                            <aside className="flex flex-col gap-5 rounded-3xl bg-petrol-800 p-6 text-white sm:p-8 md:flex-row md:items-center md:justify-between">
+                            <aside className="flex flex-col gap-5 rounded-2xl bg-petrol-800 p-6 text-white sm:p-7 md:flex-row md:items-center md:justify-between shadow-md">
                               <div>
-                                <p className="font-display text-[26px] font-black leading-[1.04] text-lime sm:text-[32px]">Not sure which university fits you?</p>
-                                <p className="mt-2 max-w-xl text-[16px] leading-7 text-white/80">
-                                  Send your results and budget once. A counsellor shortlists the universities and scholarships you can realistically get, free of charge.
+                                <p className="font-display text-[22px] font-black leading-tight text-lime sm:text-[26px]">Not sure which university fits you?</p>
+                                <p className="mt-1.5 max-w-xl text-[14px] leading-relaxed text-white/80">
+                                  Send your transcripts and budget. An EduExpress counselor shortlists the universities and scholarships you qualify for, completely free.
                                 </p>
                               </div>
-                              <a href="#shortlist" className="ed-btn ed-btn-signal min-h-[52px] shrink-0 px-7">
-                                Get my free shortlist <ArrowRight size={18} aria-hidden="true" />
+                              <a href="#shortlist" className="ed-btn ed-btn-signal min-h-[46px] shrink-0 px-6 text-xs font-bold">
+                                Get my free shortlist <ArrowRight size={16} aria-hidden="true" />
                               </a>
                             </aside>
                           </li>
@@ -722,18 +777,18 @@ export default function UniversitiesClient({ directory }: Props) {
                 </ul>
 
                 {visibleCount < filtered.length && (
-                  <div className="mt-6 flex flex-col items-center gap-2">
-                    <p className="text-[14px] text-ink-soft">
+                  <div className="mt-8 flex flex-col items-center gap-2">
+                    <p className="text-xs text-slate-500">
                       Showing {Math.min(visibleCount, filtered.length)} of {filtered.length} universities
                     </p>
-                    <Link href={moreHref} scroll={false} prefetch={false} className="ed-btn ed-btn-outline min-h-11 text-[15px]">
-                      Show {Math.min(12, filtered.length - visibleCount)} more
+                    <Link href={moreHref} scroll={false} prefetch={false} className="ed-btn ed-btn-outline min-h-[44px] px-6 text-xs font-bold">
+                      Show {Math.min(12, filtered.length - visibleCount)} more universities
                     </Link>
                   </div>
                 )}
 
-                <p className="mt-8 border-t border-canvas-soft pt-4 text-[14px] leading-6 text-ink-soft">
-                  Tuition, scholarship and ranking entries link to the official source inside each profile. Ask a counsellor to confirm the current figure before you apply.
+                <p className="mt-8 border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500">
+                  Tuition, scholarship and ranking entries link to official records and ministry registers. Ask an EduExpress counselor to verify requirements for your specific intake.
                 </p>
               </>
             )}

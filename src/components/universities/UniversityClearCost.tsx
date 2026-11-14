@@ -48,8 +48,9 @@ function UniversityCostPicker(props: Props) {
   const activeProgramIndex = programIndex < programs.length ? programIndex : 0;
   const program = programs[activeProgramIndex];
   const detail = props.programDetails?.[activeProgramIndex];
-  const recordedCurrency = props.programs[0]?.tuition?.match(/\b(CNY|BDT|USD|EUR|GBP)\b/i)?.[1].toUpperCase() as CostCurrency | undefined;
-  const [currency, setCurrency] = useState<CostCurrency>(props.university.country.toLowerCase() === 'china' ? 'CNY' : recordedCurrency || 'USD');
+  const recordedCurrency = props.programs[0]?.tuition?.match(/\b(MYR|CNY|BDT|USD|EUR|GBP)\b/i)?.[1].toUpperCase() as CostCurrency | undefined;
+  const isMalaysia = (props.university.country || '').toLowerCase() === 'malaysia';
+  const [currency, setCurrency] = useState<CostCurrency>(isMalaysia ? 'MYR' : props.university.country.toLowerCase() === 'china' ? 'CNY' : recordedCurrency || 'USD');
   const selectedScholarshipId = props.selectedScholarshipId ?? props.scholarshipScenario?.id ?? '';
   const selectedScholarship = props.scholarshipOptions?.find(option => option.id === selectedScholarshipId);
   const id = useId();
