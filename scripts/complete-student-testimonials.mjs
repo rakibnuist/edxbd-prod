@@ -4,6 +4,7 @@
  * with their real student portrait photos and structured case-file metadata
  * into both prisma/data/edxbd.db and data/edxbd.db.
  */
+import fs from 'node:fs';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
 
@@ -257,11 +258,13 @@ async function syncDatabase(dbFilePath) {
 }
 
 async function main() {
+  const customDbUrl = process.env.DATABASE_URL?.replace(/^file:/, '');
   const dbPaths = [
+    ...(customDbUrl ? [path.resolve(process.cwd(), customDbUrl)] : []),
     path.resolve(process.cwd(), 'prisma/data/edxbd.db'),
     path.resolve(process.cwd(), 'data/edxbd.db'),
-  ];
-  for (const dbPath of dbPaths) {
+  ].filter(p => fs.existsSync(p));
+  for (const dbPath of [...new Set(dbPaths)]) {
     await syncDatabase(dbPath);
   }
 }

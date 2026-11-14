@@ -20,6 +20,9 @@ fi
 echo "Deploying Prisma Schema..."
 npx prisma db push
 
+echo "Seeding production database..."
+node scripts/seed-production-db.mjs
+
 # The image is built without a database, so prerendered pages start empty.
 # Once the server is up, re-render them from the live database (background).
 node docker-warm-cache.mjs &
