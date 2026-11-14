@@ -17,6 +17,9 @@ if (fs.existsSync(dbPath)) {
 
 // 2. Run seed scripts
 try {
+  console.log('Running import-full-catalog-bundle.mjs...');
+  execSync('node scripts/import-full-catalog-bundle.mjs', { stdio: 'inherit' });
+
   console.log('Running complete-all-universities-data.mjs...');
   execSync('node scripts/complete-all-universities-data.mjs', { stdio: 'inherit' });
 
