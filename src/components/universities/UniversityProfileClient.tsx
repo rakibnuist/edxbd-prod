@@ -125,6 +125,7 @@ export default function UniversityProfileClient({
 }: Props) {
   const [panel, setPanel] = useState<Panel>('overview');
   const [selectedId, setSelectedId] = useState(programs[0]?.id || '');
+  const [selectedDocLevel, setSelectedDocLevel] = useState<ProgramLevel | null>(null);
   const [logoFailed, setLogoFailed] = useState(false);
   const [scholarshipScenario, setScholarshipScenario] = useState<UniversityScholarshipOption | null>(null);
   const id = useId();
@@ -214,8 +215,28 @@ export default function UniversityProfileClient({
 
   const chooseProgram = (value: string) => {
     setSelectedId(value);
+    setSelectedDocLevel(null);
     setScholarshipScenario(null);
   };
+
+  const activeDocLevel: ProgramLevel =
+    selectedDocLevel && availableLevels.includes(selectedDocLevel)
+      ? selectedDocLevel
+      : selected
+      ? normalizeProgramLevel(selected.level)
+      : availableLevels[0] || 'Bachelor';
+
+  const activeLevelPrograms = programs.filter(
+    (program) => normalizeProgramLevel(program.level) === activeDocLevel
+  );
+  const activeLevelDocuments = [
+    ...new Set(
+      (activeLevelPrograms.length ? activeLevelPrograms : programs)
+        .flatMap((program) => program.documents)
+        .map((doc) => doc.trim())
+        .filter(Boolean)
+    ),
+  ];
 
   const chooseScholarship = (option: UniversityScholarshipOption | null) => {
     setScholarshipScenario(option);
@@ -306,7 +327,7 @@ export default function UniversityProfileClient({
     );
     if (isChina) {
       supplementalParagraphs.push(
-        `For Bangladeshi students and families, studying at ${shortName} does not require opening a Bangladesh Bank Student File. Tuition and on-campus dormitory fees are paid directly in CNY after arriving at the university in ${university.city}, and EduExpress International processes your admission and JW202 visa documentation under a strict BDT 0 Before Visa policy.`
+        `For Bangladeshi students and families, EduExpress International provides end-to-end admission support for ${shortName}—covering major selection, scholarship evaluation, document verification, and JW202 visa processing from Dhaka—under a strict BDT 0 Before Visa policy.`
       );
     } else if (isMalaysia) {
       supplementalParagraphs.push(
@@ -605,14 +626,6 @@ export default function UniversityProfileClient({
                     <dd className="font-semibold text-slate-800">{languages.join(' / ') || 'English'}</dd>
                   </div>
                   <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
-                    <dt className="font-semibold text-slate-500">Bank Student File Rule</dt>
-                    <dd className="font-semibold text-slate-800">
-                      {isChina
-                        ? 'No Bank Student File required — Pay tuition & hostel directly on campus in China'
-                        : 'Standard Authorized Dealer (AD) Bank Student File supported'}
-                    </dd>
-                  </div>
-                  <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
                     <dt className="font-semibold text-slate-500">EduExpress Service Fee</dt>
                     <dd className="font-bold text-emerald-800">
                       {isMalaysia
@@ -846,8 +859,8 @@ export default function UniversityProfileClient({
                   </div>
                   <div className="mt-4 rounded-lg bg-emerald-50/80 border border-emerald-200/70 p-3 text-[11px] leading-relaxed text-emerald-950">
                     {isMalaysia
-                      ? 'Malaysia Rule: EduExpress service is 100% free (BDT 0). You only pay official university & EMGS fees.'
-                      : 'China Rule: No Bank Student File required. Pay tuition & dormitory directly on campus after arrival in China.'}
+                      ? 'Malaysia Policy: EduExpress service is 100% free (BDT 0). You only pay official university & EMGS fees.'
+                      : 'China Policy: BDT 0 EduExpress service fee before visa approval. Service fee is payable only after your student visa is issued.'}
                   </div>
                 </div>
 
@@ -1016,26 +1029,30 @@ export default function UniversityProfileClient({
               </span>
               <h2 className={titleClass}>{shortName} Required Documents</h2>
               <p className="mt-1.5 text-sm text-slate-600">
-                Complete list of documents required from Bangladeshi students for admission and visa processing.
+                Complete list of documents required from Bangladeshi students by study level (Bachelor’s, Master’s, PhD).
               </p>
             </div>
-            {programs.length > 1 && (
-              <div className="w-full sm:w-72">
-                <label htmlFor={`${id}-doc-program`} className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                  Switch Program Checklist
-                </label>
-                <select
-                  id={`${id}-doc-program`}
-                  value={selected?.id || ''}
-                  onChange={(event) => chooseProgram(event.target.value)}
-                  className={selectClass}
-                >
-                  {programs.map((program) => (
-                    <option key={program.id} value={program.id}>
-                      {LEVEL_LABELS[normalizeProgramLevel(program.level)]} · {program.name}
-                    </option>
-                  ))}
-                </select>
+            {availableLevels.length > 1 && (
+              <div className="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Filter document checklist by degree level">
+                {availableLevels.map((lvl) => {
+                  const isActive = activeDocLevel === lvl;
+                  return (
+                    <button
+                      key={lvl}
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      onClick={() => setSelectedDocLevel(lvl)}
+                      className={`rounded-lg px-3.5 py-2 text-xs font-bold transition-all ${
+                        isActive
+                          ? 'bg-petrol-800 text-white shadow-xs'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
+                      }`}
+                    >
+                      {LEVEL_LABELS[lvl]}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -1044,10 +1061,10 @@ export default function UniversityProfileClient({
             {!programs.length && (
               <PlainList items={generalDetails.documents} empty="Request admission document checklist." />
             )}
-            {selected && (
+            {programs.length > 0 && (
               <UniversityDocuments
-                documents={selected.documents}
-                programName={selected.name}
+                documents={activeLevelDocuments}
+                programName={`${LEVEL_LABELS[activeDocLevel]} Programs`}
                 applyHref={assessmentHref}
               />
             )}
@@ -1262,7 +1279,7 @@ export default function UniversityProfileClient({
                 href="/malaysia-study-cost-bangladesh"
                 className="flex min-h-12 items-center justify-between gap-3 rounded-xl border border-slate-200/90 bg-slate-50/70 p-3.5 text-xs font-bold text-slate-800 hover:border-emerald-300 hover:bg-emerald-50/40 transition-colors"
               >
-                Malaysia Cost & Student File <ArrowRight size={14} className="shrink-0 text-slate-400" />
+                Malaysia Study Cost Guide <ArrowRight size={14} className="shrink-0 text-slate-400" />
               </Link>
               <Link
                 href="/malaysia-student-visa-bangladesh"

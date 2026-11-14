@@ -36,7 +36,7 @@ const trail = [
 export const metadata = pageMetadata({
   title: 'চীনে পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড ২০২৭ | EduExpress',
   description:
-    'চীনে Bachelor, Master’s ও MBBS পড়ার বাস্তবসম্মত খরচ (টাকা ও RMB হিসাব)। কোনো জটিল Student File-এর ঝামেলা নেই। CSC ও Provincial স্কলারশিপের পূর্ণাঙ্গ বিবরণ।',
+    'চীনে Bachelor, Master’s ও MBBS পড়ার বাস্তবসম্মত খরচ (টাকা ও RMB হিসাব)। ভিসার আগে কোনো সার্ভিস ফি নেই এবং CSC ও Provincial স্কলারশিপের পূর্ণাঙ্গ বিবরণ।',
   path: PATH,
   image: ogImage('china', 'Chinese university campus and cost planning guide'),
   locale: 'bn_BD',
@@ -124,13 +124,13 @@ const annualComparisonRows = [
 const paymentSimplicityPoints = [
   {
     icon: CheckCircle2,
-    title: 'কোনো Student File খোলার ঝামেলা নেই',
-    desc: 'ইউকে, কানাডা বা ইউরোপের মতো চীনে পড়ার ক্ষেত্রে বাংলাদেশ ব্যাংকে জটিল Student File খুলে ট্যাক্স ফাইল বা সোর্স অব ফান্ড অডিট করাতে হয় না। কোনো ব্যাংকিং আমলাতান্ত্রিক জটিলতা নেই।',
+    title: 'ভিসার আগে ০ টাকা সার্ভিস চার্জ',
+    desc: 'চায়না স্টুডেন্ট ভিসা কনফার্ম হওয়ার আগে আমাদের কোনো এজেন্সি সার্ভিস চার্জ নেই। শুরুতেই লিখিতভাবে সব ফি-এর বিবরণ প্রদান করা হয়।',
   },
   {
     icon: Building2,
-    title: 'বিশ্ববিদ্যালয়ে পৌঁছে On-Campus পেমেন্ট সুবিধা',
-    desc: 'আংশিক স্কলারশিপ বা সেলফ-ফান্ডেড টিউশন ফি সাধারণত চীনে পৌঁছে বিশ্ববিদ্যালয় ক্যাম্পাসে সরাসরি রেজিস্ট্রেশনের সময় জমা দেওয়া যায়। দেশ ছাড়ার আগে আগাম কোনো ফি পাঠাতে হয় না।',
+    title: 'স্পষ্ট টিউশন ও হোস্টেল ফি কাঠামো',
+    desc: 'প্রোগ্রাম অনুযায়ী বিশ্ববিদ্যালয়ের বার্ষিক টিউশন ফি, ডরমিটরি চার্জ, মেডিকেল ও ইনস্যুরেন্স ফি আলাদাভাবে উল্লেখ থাকে।',
   },
   {
     icon: CreditCard,
@@ -145,10 +145,6 @@ const paymentSimplicityPoints = [
 ];
 
 const faqs = [
-  {
-    q: 'চীনে পড়ার জন্য কি বাংলাদেশ ব্যাংকে Student File খুলতে হবে?',
-    a: 'না, চীনে পড়াশোনার জন্য কোনো Student File খোলার প্রয়োজন নেই। ফুল স্কলারশিপে টিউশন ও হোস্টেল সম্পূর্ণ ফ্রি থাকে। আর যাদের আংশিক ফি থাকে, তারা চীনে গিয়ে ক্যাম্পাসে সরাসরি রেজিস্ট্রেশনের সময় ফি দিতে পারেন।',
-  },
   {
     q: 'বাংলাদেশ থেকে চীনে টাকা নিয়ে যাওয়ার নিয়ম কী?',
     a: 'শিক্ষার্থী ভ্রমণের সময় আইনসম্মতভাবে পাসপোর্টে ডলার বা ইউয়ান এনডোর্স করে সাথে ক্যাশ নিতে পারেন। এছাড়া ইন্টারন্যাশনাল কার্ড বা পরবর্তীতে লোকাল ব্যাংক অ্যাকাউন্টের মাধ্যমেও খরচ ম্যানেজ করা যায়।',
@@ -170,7 +166,7 @@ const structuredData = {
   url: `${SITE}${PATH}`,
   headline: 'চীনে পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড ২০২৭',
   description:
-    'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে পড়াশোনার পূর্ণাঙ্গ ব্যয় বিবরণী, স্কলারশিপ ও অন-ক্যাম্পাস পেমেন্ট গাইড। কোনো জটিল Student File-এর প্রয়োজন নেই।',
+    'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে পড়াশোনার পূর্ণাঙ্গ ব্যয় বিবরণী ও স্কলারশিপ গাইড।',
   inLanguage: 'bn-BD',
   publisher: { '@id': `${SITE}/#organization` },
   breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
@@ -222,7 +218,7 @@ export default function BengaliChinaCostPage() {
           </nav>
 
           <span className="inline-flex items-center gap-2 rounded-full bg-lime/25 px-4 py-1.5 text-[13px] font-bold text-petrol-800 tracking-wide">
-            <Sparkles size={15} className="text-petrol-800" /> কোনো জটিল Student File-এর ঝামেলা নেই
+            <Sparkles size={15} className="text-petrol-800" /> ভিসার আগে কোনো সার্ভিস চার্জ নেই (BDT 0 Before Visa)
           </span>
 
           <h1 className="mt-4 font-display text-[32px] font-black leading-tight sm:text-[44px] lg:text-[52px]">
@@ -262,8 +258,8 @@ export default function BengaliChinaCostPage() {
           <div className="flex items-center gap-3">
             <CheckCircle2 className="size-8 text-lime shrink-0" />
             <div>
-              <p className="text-[15px] font-bold text-petrol-800">No Student File</p>
-              <p className="text-[13px] text-ink-soft">ব্যাংক ফাইলের কোনো ঝামেলা নেই</p>
+              <p className="text-[15px] font-bold text-petrol-800">১০০% স্বচ্ছ হিসাব</p>
+              <p className="text-[13px] text-ink-soft">কোনো গোপন বা অপ্রত্যাশিত চার্জ নেই</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -283,10 +279,10 @@ export default function BengaliChinaCostPage() {
         </div>
       </div>
 
-      {/* Why China Has No Student File Hassle */}
+      {/* Payment & Banking Simplicity */}
       <Section
-        title="চীনে উচ্চশিক্ষায় কোনো Student File খোলার ঝামেলা নেই কেন?"
-        intro="ইউরোপ বা পশ্চিমা দেশগুলোর তুলনায় চীনে পড়াশোনার পেমেন্ট প্রক্রিয়া অত্যন্ত সহজ ও ঝামেলামুক্ত:"
+        title="চীনে উচ্চশিক্ষায় পেমেন্ট ও ব্যাংকিং ব্যবস্থাপনা"
+        intro="বাংলাদেশী শিক্ষার্থীদের জন্য চীনে টিউশন ও দৈনিক খরচ পরিচালনার সহজ নির্দেশিকা:"
       >
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {paymentSimplicityPoints.map((item) => (

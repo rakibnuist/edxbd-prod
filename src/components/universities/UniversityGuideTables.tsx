@@ -355,22 +355,30 @@ export function UniversityEntrySummary({
 }) {
   const groups = new Map<
     string,
-    { ids: string[]; level: string; names: string[]; qualifications: string[]; languageRequirements: string[] }
+    { ids: string[]; levelKey: ProgramLevel; level: string; names: string[]; qualifications: string[]; languageRequirements: string[] }
   >();
   for (const program of programs) {
     if (!program.qualifications.length && !program.languageRequirements.length) continue;
-    const key = JSON.stringify([program.level, program.qualifications, program.languageRequirements]);
+    const levelKey = normalizeProgramLevel(program.level);
+    const key = levelKey;
     const group = groups.get(key);
     if (group) {
       group.names.push(program.name);
       group.ids.push(program.id);
+      for (const q of program.qualifications) {
+        if (!group.qualifications.includes(q)) group.qualifications.push(q);
+      }
+      for (const l of program.languageRequirements) {
+        if (!group.languageRequirements.includes(l)) group.languageRequirements.push(l);
+      }
     } else {
       groups.set(key, {
         ids: [program.id],
-        level: program.level,
+        levelKey,
+        level: LEVEL_NAMES[levelKey],
         names: [program.name],
-        qualifications: program.qualifications,
-        languageRequirements: program.languageRequirements,
+        qualifications: [...program.qualifications],
+        languageRequirements: [...program.languageRequirements],
       });
     }
   }
@@ -431,13 +439,12 @@ export function UniversityEntrySummary({
                   {group.level}
                 </span>
                 <h3 className="text-sm font-bold text-slate-900">
-                  {group.names.slice(0, 4).join(', ')}
-                  {group.names.length > 4 ? ` (+${group.names.length - 4} more majors)` : ''}
+                  {group.level} Programs ({group.names.length} {group.names.length === 1 ? 'major' : 'majors'})
                 </h3>
               </div>
               {isHighlighted && (
                 <span className="rounded-full bg-emerald-100 px-3 py-0.5 text-[11px] font-bold text-emerald-900">
-                  Selected Major Criteria
+                  Active Degree Level
                 </span>
               )}
             </div>

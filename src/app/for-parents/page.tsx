@@ -44,7 +44,6 @@ const structuredData = {
 const parentChecks = [
   { title: 'Is the education recognized?', copy: 'We check the institution, selected program and the student’s intended career route.', icon: ShieldCheck, href: '/how-we-verify-universities', cta: 'How we verify universities' },
   { title: 'What will the family really pay?', copy: 'Tuition, living costs, official fees and EduExpress charges are separated in writing.', icon: CircleDollarSign, href: '/fees-and-transparency', cta: 'See the fee policy' },
-  { title: 'Do we need a Student File for China?', copy: 'No. Studying in China requires no Bangladesh Bank student file. Tuition and hostel fees are covered by scholarships or paid on-campus upon arrival.', icon: CircleDollarSign, href: '/study-in-china-cost-bangladesh', cta: 'See China cost structure' },
   { title: 'Who is responsible for each step?', copy: 'Documents, deadlines, payments and application actions should have a named owner.', icon: FileCheck2, href: '/services', cta: 'See what we put in writing' },
   { title: 'Who can the family speak to?', copy: 'Parents can talk directly with the counseling desk in Dhanmondi before a student proceeds.', icon: UserRoundCheck, href: '/contact', cta: 'Contact the desk' },
 ];
@@ -56,11 +55,6 @@ const faqs = [
   {
     question: 'Can parents join the counselling session?',
     answer: 'Yes. Parents and sponsors are encouraged to join so costs, payment terms, documents, safety and responsibilities can be explained together.',
-  },
-  {
-    question: 'Do parents need to open a Bangladesh Bank Student File to pay China university fees?',
-    answer:
-      'No. For study in China, students do not need to open a bank Student File. On full scholarships (CSC / Type A), tuition and dormitories are completely free with monthly stipends provided directly to the student in China. For partial scholarship or self-funded programs, students pay their tuition and accommodation fees on-campus during registration after arrival in China, or carry endorsed foreign currency on their passport.',
   },
   {
     question: 'When does our family pay the EduExpress service charge?',

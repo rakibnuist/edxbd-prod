@@ -63,13 +63,13 @@ export function universityProfileFaq(university: UniversityIdentity, programs: U
   }
   if (isChina) {
     items.push({
-      question: `Do Bangladeshi students need a Bank Student File for ${identity.shortName}?`,
-      answer: `No. Studying in China at ${identity.shortName} does not require opening a Bangladesh Bank Student File. Full scholarship students pay zero tuition, and self-funded or partial scholarship students pay their tuition and dormitory fees directly on campus upon arrival in China. EduExpress charges BDT 0 service fee before your China student visa is approved.`,
+      question: `What is the EduExpress service fee for applying to ${identity.shortName}?`,
+      answer: `EduExpress International follows a strict BDT 0 Before Visa policy for ${identity.shortName}. There is no agency service charge before your China student visa is approved; official university application, medical, or visa center charges are itemized separately.`,
     });
   } else if (isMalaysia) {
     items.push({
       question: `What is the EduExpress service charge and visa process for ${identity.shortName} in Malaysia?`,
-      answer: `EduExpress International provides 100% free application and EMGS visa processing (BDT 0 service charge) for ${identity.shortName}. Students pay official EMGS and tuition fees directly according to the university's offer letter and invoice, and can open a standard Authorized Dealer (AD) Bank Student File in Bangladesh for tuition remittance.`,
+      answer: `EduExpress International provides 100% free application and EMGS visa processing (BDT 0 service charge) for ${identity.shortName}. Students pay official EMGS and tuition fees directly according to the university's offer letter and invoice.`,
     });
   }
   if (facts.rankings?.length) {
