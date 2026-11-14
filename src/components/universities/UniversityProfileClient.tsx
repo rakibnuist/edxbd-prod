@@ -144,8 +144,16 @@ export default function UniversityProfileClient({
   );
 
   const worldRanking = rankings.find((ranking) => ranking.scope === 'world');
+  const nationalRanking = rankings.find((ranking) => ranking.scope === 'national');
+  const subjectRanking = rankings.find((ranking) => ranking.scope === 'subject');
   const effectiveWorldRank = worldRanking?.rank || (university.rankings?.world ? String(university.rankings.world) : undefined);
-  const effectiveCountryRank = university.rankings?.country ? String(university.rankings.country) : undefined;
+  const effectiveCountryRank =
+    nationalRanking?.rank ||
+    (university.rankings?.country
+      ? String(university.rankings.country)
+      : university.rankings?.national
+      ? String(university.rankings.national)
+      : undefined);
 
   const recognitionLabel =
     university.recognitionAuthority ||
@@ -398,6 +406,35 @@ export default function UniversityProfileClient({
 
               {/* Quick Student Highlight Pills */}
               <div className="mt-4 flex flex-wrap gap-2">
+                {effectiveWorldRank && (
+                  <a
+                    href="#rankings"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-lime/20 border border-lime/35 px-3.5 py-1 text-[12px] font-bold text-lime hover:bg-lime/30 transition-colors"
+                  >
+                    <Trophy size={13} className="text-lime shrink-0" />
+                    World Rank #{String(effectiveWorldRank).replace(/^#/, '')}
+                    {worldRanking?.publisher ? ` (${worldRanking.publisher})` : ''}
+                  </a>
+                )}
+                {effectiveCountryRank && (
+                  <a
+                    href="#rankings"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-lime/20 border border-lime/35 px-3.5 py-1 text-[12px] font-bold text-lime hover:bg-lime/30 transition-colors"
+                  >
+                    <Trophy size={13} className="text-lime shrink-0" />
+                    {university.country} Rank #{String(effectiveCountryRank).replace(/^#/, '')}
+                    {nationalRanking?.publisher ? ` (${nationalRanking.publisher})` : ''}
+                  </a>
+                )}
+                {!effectiveWorldRank && !effectiveCountryRank && subjectRanking && (
+                  <a
+                    href="#rankings"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-lime/20 border border-lime/35 px-3.5 py-1 text-[12px] font-bold text-lime hover:bg-lime/30 transition-colors"
+                  >
+                    <Trophy size={13} className="text-lime shrink-0" />
+                    #{String(subjectRanking.rank).replace(/^#/, '')} in {subjectRanking.subject}
+                  </a>
+                )}
                 {university.badges?.map((badge) => (
                   <span
                     key={badge}
@@ -478,11 +515,23 @@ export default function UniversityProfileClient({
                   </dt>
                   <dd className="mt-2">
                     <a href="#rankings" className="font-display text-[22px] font-black text-lime leading-tight block hover:underline">
-                      {effectiveWorldRank ? `#${String(effectiveWorldRank).replace(/^#/, '')} World` : 'Recognized'}
+                      {effectiveWorldRank
+                        ? `#${String(effectiveWorldRank).replace(/^#/, '')} World`
+                        : effectiveCountryRank
+                        ? `#${String(effectiveCountryRank).replace(/^#/, '')} in ${university.country}`
+                        : subjectRanking
+                        ? `#${String(subjectRanking.rank).replace(/^#/, '')} Subject`
+                        : 'Recognized'}
                     </a>
                     <span className="mt-1 block text-[11px] text-white/70">
-                      {effectiveCountryRank
-                        ? `${university.country} Rank #${effectiveCountryRank}`
+                      {effectiveWorldRank && effectiveCountryRank
+                        ? `${university.country} Rank #${String(effectiveCountryRank).replace(/^#/, '')}`
+                        : effectiveWorldRank && worldRanking
+                        ? `${worldRanking.publisher} (${worldRanking.year})`
+                        : effectiveCountryRank && nationalRanking
+                        ? `${nationalRanking.publisher} (${nationalRanking.year})`
+                        : subjectRanking
+                        ? `${subjectRanking.publisher} · ${subjectRanking.subject}`
                         : isMalaysia
                         ? 'MQA & MoHE Accredited'
                         : isChina
@@ -611,6 +660,20 @@ export default function UniversityProfileClient({
                     <dt className="font-semibold text-slate-500">City & Country</dt>
                     <dd className="font-bold text-slate-900">{university.location || `${university.city}, ${university.country}`}</dd>
                   </div>
+                  {(effectiveWorldRank || effectiveCountryRank || subjectRanking) && (
+                    <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
+                      <dt className="font-semibold text-slate-500">Published Ranking</dt>
+                      <dd className="font-bold text-petrol-800">
+                        {[
+                          effectiveWorldRank ? `World #${String(effectiveWorldRank).replace(/^#/, '')}${worldRanking?.publisher ? ` (${worldRanking.publisher})` : ''}` : null,
+                          effectiveCountryRank ? `${university.country} #${String(effectiveCountryRank).replace(/^#/, '')}${nationalRanking?.publisher ? ` (${nationalRanking.publisher})` : ''}` : null,
+                          !effectiveWorldRank && !effectiveCountryRank && subjectRanking ? `#${String(subjectRanking.rank).replace(/^#/, '')} in ${subjectRanking.subject} (${subjectRanking.publisher})` : null,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
+                      </dd>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
                     <dt className="font-semibold text-slate-500">Accreditation Status</dt>
                     <dd className="font-bold text-emerald-800">{recognitionLabel}</dd>
