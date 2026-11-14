@@ -2,35 +2,31 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import { useEffect, useId, useState } from 'react';
 import {
   ArrowRight,
   BookOpen,
   Building2,
   CalendarCheck,
-  CalendarClock,
   CheckCircle2,
   ChevronRight,
   Clock,
   ExternalLink,
+  FileCheck2,
+  Globe2,
   GraduationCap,
-  HelpCircle,
   Landmark,
+  Languages,
   MapPin,
   MessageCircle,
-  PhoneCall,
   PlaneTakeoff,
-  ShieldAlert,
   ShieldCheck,
   Sparkles,
   Trophy,
-  UserCheck,
   Wallet,
 } from 'lucide-react';
-import UpdateCard, { type UpdateCardData } from '@/components/updates/UpdateCard';
+import { type UpdateCardData } from '@/components/updates/UpdateCard';
 import { config } from '@/lib/config';
-import { deadlineBadge, openByDeadline } from '@/lib/update-deadlines';
 import type { CleanUniversityRecord } from '@/lib/university-records';
 import type { UniversityRanking } from '@/lib/university-rankings';
 import { feeText, normalizeProgramLevel, PROGRAM_LEVELS, type ProgramLevel } from '@/lib/university-profile-view';
@@ -40,11 +36,6 @@ import { scholarshipMatchesProgram, scholarshipReductionLabel } from '@/lib/univ
 import UniversityEnquiryForm from './UniversityEnquiryForm';
 import UniversityDocuments from './UniversityDocuments';
 import { UniversityProgramTable, UniversityFundingTable, UniversityEntrySummary } from './UniversityGuideTables';
-import UniversityScholarships from './UniversityScholarships';
-
-const UniversityPrograms = dynamic(() => import('./UniversityPrograms'), {
-  loading: () => <p className="py-5 text-sm text-slate-500">Loading program filters…</p>,
-});
 
 type Panel = 'overview' | 'programs' | 'scholarships' | 'admission' | 'documents' | 'rankings' | 'questions';
 const PANELS: { id: Panel; label: string }[] = [
@@ -68,9 +59,8 @@ const LEVEL_LABELS: Record<ProgramLevel, string> = {
 
 const titleClass = 'font-display text-[26px] font-black leading-tight tracking-[-0.01em] text-petrol-800 sm:text-[32px] lg:text-[36px]';
 const mutedClass = 'text-sm leading-7 text-slate-500';
-const selectClass = 'mt-2 min-h-12 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-sm text-slate-800 outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/10';
+const selectClass = 'mt-2 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-xs sm:text-sm font-semibold text-slate-800 outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/10';
 const sheetClass = 'rounded-2xl bg-white p-6 sm:p-8 shadow-xs border border-slate-200/90';
-const textAction = 'inline-flex min-h-10 items-center gap-1.5 text-sm font-bold text-[#12436b] hover:text-emerald-700 hover:underline';
 const applyClass = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-petrol-800 px-6 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-petrol-900 shadow-sm';
 
 type Props = {
@@ -127,39 +117,27 @@ export default function UniversityProfileClient({
   displayName,
   overview,
   highlights,
-  campusImage,
   intakeMonths = [],
   generalDetails,
   programs,
-  hasDetailedPrograms,
   scholarshipOptions,
   rankings,
-  servicePackages,
-  news = [],
-  now = 0,
 }: Props) {
   const [panel, setPanel] = useState<Panel>('overview');
-  const [level, setLevel] = useState<ProgramLevel>(programs[0] ? normalizeProgramLevel(programs[0].level) : 'Bachelor');
   const [selectedId, setSelectedId] = useState(programs[0]?.id || '');
-  const [query, setQuery] = useState('');
   const [logoFailed, setLogoFailed] = useState(false);
-  const [openPicker, setOpenPicker] = useState<string | null>(null);
   const [scholarshipScenario, setScholarshipScenario] = useState<UniversityScholarshipOption | null>(null);
   const id = useId();
-  const [costOpen, setCostOpen] = useState(false);
-  const [costMounted, setCostMounted] = useState(false);
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [filtersMounted, setFiltersMounted] = useState(false);
 
   const isMalaysia = (university.country || '').toLowerCase() === 'malaysia';
   const isChina = (university.country || '').toLowerCase() === 'china';
   const countryFlag = isMalaysia ? '🇲🇾' : isChina ? '🇨🇳' : '🎓';
 
-  const selected = programs.find((program) => program.id === selectedId);
+  const selected = programs.find((program) => program.id === selectedId) || programs[0];
   const availableLevels = PROGRAM_LEVELS.filter((item) =>
     programs.some((program) => normalizeProgramLevel(program.level) === item)
   );
-  const languages = [...new Set(programs.flatMap((program) => program.languages))];
+  const languages = [...new Set(programs.flatMap((program) => program.languages).filter(Boolean))];
   const hasMedicalProgram = programs.some((program) =>
     /\bMBBS\b|clinical medicine|ophthalmological and optometric medicine/i.test(program.name)
   );
@@ -167,6 +145,14 @@ export default function UniversityProfileClient({
   const worldRanking = rankings.find((ranking) => ranking.scope === 'world');
   const effectiveWorldRank = worldRanking?.rank || (university.rankings?.world ? String(university.rankings.world) : undefined);
   const effectiveCountryRank = university.rankings?.country ? String(university.rankings.country) : undefined;
+
+  const recognitionLabel =
+    university.recognitionAuthority ||
+    (isMalaysia
+      ? 'MQA & Ministry of Higher Education (MoHE) Malaysia'
+      : isChina
+      ? 'Ministry of Education (MoE), PR China'
+      : 'Recognized Higher Education Institution');
 
   const feePreviews = availableLevels.flatMap((item) => {
     const fees = programs
@@ -195,8 +181,6 @@ export default function UniversityProfileClient({
     ];
   });
 
-  const programScholarships =
-    selected?.scholarships || selected?.notes.filter((note) => /scholarship|\baward\b|stipend/i.test(note)) || [];
   const assessmentHref = '#university-enquiry';
   const activeScenario =
     selected && scholarshipScenario && scholarshipMatchesProgram(scholarshipScenario, selected)
@@ -228,18 +212,9 @@ export default function UniversityProfileClient({
     document.getElementById(target)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
   };
 
-  const chooseLevel = (next: ProgramLevel) => {
-    setLevel(next);
-    setQuery('');
-    setScholarshipScenario(null);
-    setSelectedId(programs.find((program) => normalizeProgramLevel(program.level) === next)?.id || '');
-  };
-
   const chooseProgram = (value: string) => {
     setSelectedId(value);
     setScholarshipScenario(null);
-    const program = programs.find((item) => item.id === value);
-    if (program) setLevel(normalizeProgramLevel(program.level));
   };
 
   const chooseScholarship = (option: UniversityScholarshipOption | null) => {
@@ -251,68 +226,28 @@ export default function UniversityProfileClient({
         : programs.find((item) => scholarshipMatchesProgram(option, item));
     if (program) {
       setSelectedId(program.id);
-      setLevel(normalizeProgramLevel(program.level));
     }
   };
 
   const estimateScholarship = (option: UniversityScholarshipOption) => {
     chooseScholarship(option);
-    openPanel('programs');
+    document.getElementById('university-enquiry')?.scrollIntoView({ block: 'start', behavior: 'smooth' });
   };
-
-  const programSelect = (context: string) => (
-    <label htmlFor={`${id}-${context}-program`} className="mb-6 block text-sm font-semibold text-slate-700">
-      Choose a program to calculate:
-      <select
-        id={`${id}-${context}-program`}
-        value={selectedId}
-        onChange={(event) => chooseProgram(event.target.value)}
-        className={selectClass}
-      >
-        <option value="" disabled>
-          Select an academic program
-        </option>
-        {programs.map((program) => (
-          <option key={program.id} value={program.id}>
-            {LEVEL_LABELS[normalizeProgramLevel(program.level)]} · {program.name} ({program.languages.join(' / ')})
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-
-  const programPicker = (context: string) =>
-    programs.length > 0 &&
-    (programs.length <= 12 || openPicker === context ? (
-      programSelect(context)
-    ) : (
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-50 border border-slate-200 p-4 text-xs">
-        <p className="min-w-0 text-slate-700">
-          Selected program:{' '}
-          <strong className="font-bold text-petrol-800">
-            {selected ? `${LEVEL_LABELS[normalizeProgramLevel(selected.level)]} · ${selected.name}` : 'None selected'}
-          </strong>
-        </p>
-        <button type="button" onClick={() => setOpenPicker(context)} className={textAction}>
-          Change program <ChevronRight size={14} />
-        </button>
-      </div>
-    ));
 
   const cleanGeneralTuition = /dated official fee|next-cycle|require confirmation|research below/i.test(generalDetails.tuition || '')
     ? 'Official fee per program'
     : generalDetails.tuition;
 
   const generalFeeTable = (
-    <div className={sheetClass}>
-      <h3 className="text-lg font-bold text-slate-900">Itemized Fee Schedule</h3>
-      <p className="mt-1 text-xs text-slate-500">Official university and third-party fee breakdown.</p>
-      <dl className="mt-5 divide-y divide-slate-100">
+    <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50/60 p-6">
+      <h3 className="text-base font-bold text-slate-900">Published Institutional Fee Items</h3>
+      <p className="mt-1 text-xs text-slate-500">Official university tuition and campus charges.</p>
+      <dl className="mt-4 divide-y divide-slate-200/70">
         {[
-          ...(cleanGeneralTuition ? [{ item: 'Tuition Range', cost: cleanGeneralTuition, notes: undefined }] : []),
+          ...(cleanGeneralTuition ? [{ item: 'Tuition Range', cost: cleanGeneralTuition }] : []),
           ...generalDetails.fees,
         ].map((fee, index) => (
-          <div key={`${fee.item}-${index}`} className="py-3.5 flex items-start justify-between gap-5 text-xs">
+          <div key={`${fee.item}-${index}`} className="py-3 flex items-start justify-between gap-5 text-xs sm:text-sm">
             <dt className="font-medium text-slate-700">{fee.item}</dt>
             <dd className="text-right font-bold tabular-nums text-slate-900">{fee.cost}</dd>
           </div>
@@ -321,13 +256,15 @@ export default function UniversityProfileClient({
     </div>
   );
 
-  const noSelection = <p className={mutedClass}>Choose a listed program above to view exact requirements.</p>;
   const panelProps = (name: Panel) => ({ id: name, 'aria-label': PANELS.find((item) => item.id === name)?.label });
   const tuitionHighlight = selected?.fees.find((fee) => fee.key === 'tuition' && !fee.optional);
   const rawTuitionText = university.tuition || generalDetails.tuition || (tuitionHighlight ? feeText(tuitionHighlight) : 'Itemized below');
-  const cleanTuitionText = /dated official fee|next-cycle|require confirmation|research below/i.test(rawTuitionText)
-    ? 'View program fee schedule'
-    : rawTuitionText;
+  const cleanTuitionText =
+    feePreviews.length > 0
+      ? `${feePreviews[0].amount} ${feePreviews[0].period}`
+      : /dated official fee|next-cycle|require confirmation|research below/i.test(rawTuitionText)
+      ? 'View program fees below'
+      : rawTuitionText.replace(/\s*\([^)]*guide[^)]*\)/gi, '');
 
   const cleanScholarshipTitle = (() => {
     const raw = scholarshipHighlightLabel || scholarshipHighlight?.title;
@@ -342,16 +279,43 @@ export default function UniversityProfileClient({
     return raw;
   })();
 
-  const nextDeadline = openByDeadline(news, now)[0];
-  const nextBadge = nextDeadline ? deadlineBadge(nextDeadline.deadlineAt, now) : null;
   const waHref = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(
-    `Assalamu alaikum. I am interested in ${university.name} in ${university.country}. Please check my eligibility.`
+    `Assalamu alaikum. I am interested in ${selected ? `${selected.name} (${selected.level}) at ` : ''}${university.name} in ${university.country}. Please check my eligibility.`
   )}`;
 
-  const heroChips = [
-    ...(availableLevels.length ? availableLevels.map((item) => LEVEL_LABELS[item]) : generalDetails.degrees),
-    ...languages.map((item) => `${item}-taught`),
-  ].slice(0, 6);
+  const overviewParagraphs = overview
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+
+  // Build supplemental student-focused SEO paragraphs if the base overview is short
+  const supplementalParagraphs: string[] = [];
+  if (overviewParagraphs.join(' ').length < 320) {
+    const levelText = availableLevels.length
+      ? availableLevels.map((l) => LEVEL_LABELS[l]).join(', ')
+      : generalDetails.degrees.join(', ') || 'undergraduate and postgraduate';
+    const langText = languages.length ? languages.join(' and ') : 'English';
+    const intakeText = intakeMonths.length
+      ? intakeMonths.join(' and ')
+      : isChina
+      ? 'September and March'
+      : 'multiple annual intakes';
+
+    supplementalParagraphs.push(
+      `Located in ${university.city}, ${university.country}, ${displayName} offers ${programs.length || 'multiple'} documented academic programs across ${levelText} levels. International applicants from Bangladesh can apply to courses taught in ${langText}, with primary admission cycles in ${intakeText}.`
+    );
+    if (isChina) {
+      supplementalParagraphs.push(
+        `For Bangladeshi students and families, studying at ${shortName} does not require opening a Bangladesh Bank Student File. Tuition and on-campus dormitory fees are paid directly in CNY after arriving at the university in ${university.city}, and EduExpress International processes your admission and JW202 visa documentation under a strict BDT 0 Before Visa policy.`
+      );
+    } else if (isMalaysia) {
+      supplementalParagraphs.push(
+        `Bangladeshi students applying to ${shortName} through EduExpress International receive 100% free admission counseling and EMGS eVAL visa processing (BDT 0 agency service fee). All tuition and EMGS payments follow the university's official offer letter and invoice.`
+      );
+    }
+  }
+
+  const allOverviewParagraphs = [...overviewParagraphs, ...supplementalParagraphs];
 
   return (
     <article className="min-h-screen bg-[#f8fafc] pb-20 pt-[76px] text-ink xl:pt-[112px]">
@@ -368,7 +332,9 @@ export default function UniversityProfileClient({
               Universities
             </Link>
             <ChevronRight size={13} className="text-white/40" />
-            <span className="text-white/80">{university.country}</span>
+            <Link href={`/universities?country=${encodeURIComponent(university.country)}`} className="hover:text-white text-white/80">
+              {university.country}
+            </Link>
             <ChevronRight size={13} className="text-white/40" />
             <span className="text-white">{shortName}</span>
           </nav>
@@ -397,131 +363,153 @@ export default function UniversityProfileClient({
                   <span className="inline-flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-wider text-lime">
                     {countryFlag} Verified Institution · {university.country}
                   </span>
-                  <p className="mt-1.5 flex items-center gap-1.5 text-[15px] font-semibold text-white/80">
-                    <MapPin size={16} className="text-lime" aria-hidden="true" />
+                  <p className="mt-1.5 flex items-center gap-1.5 text-[15px] font-semibold text-white/85">
+                    <MapPin size={16} className="text-lime shrink-0" aria-hidden="true" />
                     {university.location || `${university.city}, ${university.country}`}
                   </p>
                 </div>
               </div>
 
               {/* Title & Badges */}
-              <h1 className="mt-6 font-display text-[36px] font-black leading-tight sm:text-[48px] lg:text-[54px] text-white">
+              <h1 className="mt-6 font-display text-[34px] font-black leading-tight sm:text-[46px] lg:text-[52px] text-white">
                 {displayName}
               </h1>
 
-              {/* Verified Badges */}
-              {university.badges && university.badges.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {university.badges.map((badge) => (
-                    <span
-                      key={badge}
-                      className="inline-flex items-center gap-1 rounded-full bg-lime/20 border border-lime/30 px-3.5 py-1 text-[13px] font-bold text-lime"
-                    >
-                      ★ {badge}
-                    </span>
-                  ))}
-                </div>
-              )}
+              {/* Quick Student Highlight Pills */}
+              <div className="mt-4 flex flex-wrap gap-2">
+                {university.badges?.map((badge) => (
+                  <span
+                    key={badge}
+                    className="inline-flex items-center gap-1 rounded-full bg-lime/20 border border-lime/30 px-3.5 py-1 text-[12px] font-bold text-lime"
+                  >
+                    ★ {badge}
+                  </span>
+                ))}
+                {programs.length > 0 && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 border border-white/15 px-3.5 py-1 text-[12px] font-semibold text-white/90">
+                    <GraduationCap size={14} className="text-lime" />
+                    {programs.length} {programs.length === 1 ? 'Program' : 'Programs'} ({availableLevels.map((l) => LEVEL_LABELS[l]).join(', ')})
+                  </span>
+                )}
+                {languages.length > 0 && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 border border-white/15 px-3.5 py-1 text-[12px] font-semibold text-white/90">
+                    <Globe2 size={14} className="text-lime" />
+                    {languages.join(' / ')} Medium
+                  </span>
+                )}
+                {intakeMonths.length > 0 && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 border border-white/15 px-3.5 py-1 text-[12px] font-semibold text-white/90">
+                    <CalendarCheck size={14} className="text-lime" />
+                    Intakes: {intakeMonths.join(', ')}
+                  </span>
+                )}
+              </div>
 
               {/* Accreditation / Recognition Callout */}
-              {university.recognitionAuthority && (
-                <div className="mt-4 flex flex-wrap items-center gap-2 rounded-2xl bg-white/10 px-4 py-2.5 backdrop-blur-sm text-[14px] text-white/90 border border-white/15">
-                  <ShieldCheck size={18} className="text-lime shrink-0" />
-                  <span>
-                    <strong>Accreditation:</strong> {university.recognitionAuthority}
-                  </span>
-                  {university.recognitionSourceUrl && (
-                    <a
-                      href={university.recognitionSourceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ml-auto inline-flex items-center gap-1 text-[13px] font-bold text-lime hover:underline"
-                    >
-                      Verify Register <ExternalLink size={12} />
-                    </a>
-                  )}
-                </div>
-              )}
+              <div className="mt-4 flex flex-wrap items-center gap-2 rounded-2xl bg-white/10 px-4 py-2.5 backdrop-blur-sm text-[13px] sm:text-[14px] text-white/90 border border-white/15">
+                <ShieldCheck size={18} className="text-lime shrink-0" />
+                <span>
+                  <strong>Accreditation:</strong> {recognitionLabel}
+                </span>
+                {university.recognitionSourceUrl && (
+                  <a
+                    href={university.recognitionSourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-auto inline-flex items-center gap-1 text-[13px] font-bold text-lime hover:underline"
+                  >
+                    Verify Register <ExternalLink size={12} />
+                  </a>
+                )}
+              </div>
 
-              <p className="mt-5 max-w-2xl text-[16px] leading-relaxed text-white/85">
-                {overview.split(/\n\s*\n/)[0]}
+              <p className="mt-5 max-w-2xl text-[15px] sm:text-[16px] leading-relaxed text-white/85">
+                {allOverviewParagraphs[0]}
               </p>
 
               {/* Action Buttons */}
-              <div className="mt-8 flex flex-wrap items-center gap-3.5">
-                <a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              <div className="mt-7 flex flex-wrap items-center gap-3.5">
+                <a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[50px] px-7">
                   Check My Eligibility <ArrowRight size={17} aria-hidden="true" />
                 </a>
                 <a
                   href={waHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ed-btn ed-btn-on-dark min-h-[52px] px-7 inline-flex items-center gap-2"
+                  className="ed-btn ed-btn-on-dark min-h-[50px] px-7 inline-flex items-center gap-2"
                 >
                   <MessageCircle size={17} /> Ask on WhatsApp
                 </a>
                 <a
                   href="#programs"
-                  className="inline-flex min-h-[52px] items-center gap-1.5 px-3 text-[15px] font-bold text-white underline-offset-4 hover:underline"
+                  className="inline-flex min-h-[50px] items-center gap-1.5 px-3 text-[15px] font-bold text-white underline-offset-4 hover:underline"
                 >
-                  View Programs ({programs.length})
+                  Explore Programs & Fees ({programs.length})
                 </a>
               </div>
 
               {/* 4 Hero Stat Cards */}
               <dl className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15">
-                  <dt className="flex items-center gap-1.5 text-[12px] font-medium text-white/65 uppercase tracking-wide">
-                    <Trophy size={14} className="text-lime" />
+                <div className="flex flex-col justify-between rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15 min-h-[116px]">
+                  <dt className="flex items-center gap-1.5 text-[11px] font-bold text-white/65 uppercase tracking-wider">
+                    <Trophy size={14} className="text-lime shrink-0" />
                     Ranking Standing
                   </dt>
                   <dd className="mt-2">
-                    <a href="#rankings" className="font-display text-[26px] font-black text-lime leading-tight block">
-                      {effectiveWorldRank ? `#${effectiveWorldRank}` : 'Top Accredited'}
+                    <a href="#rankings" className="font-display text-[22px] font-black text-lime leading-tight block hover:underline">
+                      {effectiveWorldRank ? `#${String(effectiveWorldRank).replace(/^#/, '')} World` : 'Recognized'}
                     </a>
-                    <span className="mt-1 block text-[12px] text-white/70">
-                      {effectiveCountryRank ? `${university.country} Rank #${effectiveCountryRank}` : 'MQA / MoHE recognized'}
+                    <span className="mt-1 block text-[11px] text-white/70">
+                      {effectiveCountryRank
+                        ? `${university.country} Rank #${effectiveCountryRank}`
+                        : isMalaysia
+                        ? 'MQA & MoHE Accredited'
+                        : isChina
+                        ? 'MoE China Recognized'
+                        : 'Official Public/Private Status'}
                     </span>
                   </dd>
                 </div>
 
-                <div className="flex flex-col justify-between rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15 min-h-[118px]">
-                  <dt className="flex items-center gap-1.5 text-[12px] font-medium text-white/65 uppercase tracking-wide">
+                <div className="flex flex-col justify-between rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15 min-h-[116px]">
+                  <dt className="flex items-center gap-1.5 text-[11px] font-bold text-white/65 uppercase tracking-wider">
                     <Wallet size={14} className="text-lime shrink-0" />
-                    Tuition Range
+                    Annual Tuition
                   </dt>
                   <dd className="mt-2">
-                    <a href="#programs" className="text-[14px] font-bold text-white leading-snug block line-clamp-2 hover:text-lime">
+                    <a href="#programs" className="text-[15px] font-bold text-white leading-snug block line-clamp-2 hover:text-lime">
                       {cleanTuitionText}
                     </a>
-                    <span className="mt-1 block text-[11px] text-white/60">Official gross tuition</span>
+                    <span className="mt-1 block text-[11px] text-white/65">Before scholarship deduction</span>
                   </dd>
                 </div>
 
-                <div className="flex flex-col justify-between rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15 min-h-[118px]">
-                  <dt className="flex items-center gap-1.5 text-[12px] font-medium text-white/65 uppercase tracking-wide">
+                <div className="flex flex-col justify-between rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15 min-h-[116px]">
+                  <dt className="flex items-center gap-1.5 text-[11px] font-bold text-white/65 uppercase tracking-wider">
                     <Sparkles size={14} className="text-lime shrink-0" />
-                    Scholarship Award
+                    Scholarship Route
                   </dt>
                   <dd className="mt-2">
-                    <a href="#scholarships" className="text-[14px] font-bold text-white leading-snug block line-clamp-2 hover:text-lime">
+                    <a href="#scholarships" className="text-[15px] font-bold text-white leading-snug block line-clamp-2 hover:text-lime">
                       {cleanScholarshipTitle}
                     </a>
-                    <span className="mt-1 block text-[11px] text-white/60">Competitive merit discount</span>
+                    <span className="mt-1 block text-[11px] text-white/65">
+                      {scholarshipOptions.length > 0 ? `${scholarshipOptions.length} documented award route(s)` : 'Merit & freshman waivers'}
+                    </span>
                   </dd>
                 </div>
 
-                <div className="flex flex-col justify-between rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15 min-h-[118px]">
-                  <dt className="flex items-center gap-1.5 text-[12px] font-medium text-white/65 uppercase tracking-wide">
+                <div className="flex flex-col justify-between rounded-2xl bg-white/[0.08] p-4 ring-1 ring-white/15 min-h-[116px]">
+                  <dt className="flex items-center gap-1.5 text-[11px] font-bold text-white/65 uppercase tracking-wider">
                     <ShieldCheck size={14} className="text-lime shrink-0" />
                     EduExpress Fee
                   </dt>
                   <dd className="mt-2">
-                    <span className="font-display text-[22px] font-black text-lime leading-tight block">
-                      {isMalaysia ? 'BDT 0' : 'BDT 0 Before Visa'}
+                    <span className="font-display text-[20px] font-black text-lime leading-tight block">
+                      {isMalaysia ? 'BDT 0 (Free)' : 'BDT 0 Pre-Visa'}
                     </span>
-                    <span className="mt-1 block text-[11px] text-white/60">
-                      {isMalaysia ? 'Free service for Malaysia' : 'Payable after visa approval'}
+                    <span className="mt-1 block text-[11px] text-white/65">
+                      {isMalaysia ? 'Zero agency charge for Malaysia' : 'Payable only after visa stamp'}
                     </span>
                   </dd>
                 </div>
@@ -542,7 +530,7 @@ export default function UniversityProfileClient({
         </div>
       </header>
 
-      {/* Sticky Tab Bar */}
+      {/* Sticky Sub-Navigation Bar */}
       <nav aria-label="On this university page" className="sticky top-[76px] z-20 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-xs xl:top-[112px]">
         <div className="mx-auto flex max-w-[1280px] items-center gap-3 px-5 sm:px-8 lg:px-10">
           <div className="flex min-w-0 flex-1 overflow-x-auto no-scrollbar">
@@ -572,25 +560,71 @@ export default function UniversityProfileClient({
 
       {/* Main Content Area */}
       <div className="mx-auto max-w-[1200px] space-y-9 px-5 pt-9 sm:px-8 lg:px-10 [&>section]:scroll-mt-[148px] xl:[&>section]:scroll-mt-[184px]">
-        {/* Overview Section */}
+        {/* 1. Overview & Student Snapshot Section */}
         <section {...panelProps('overview')} className={sheetClass}>
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
             <div>
               <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
-                Institutional Profile
+                Institutional Profile & Student Guide
               </span>
               <h2 className={titleClass}>About {university.name}</h2>
               <div className="mt-4 space-y-3.5 text-[15px] leading-relaxed text-slate-700">
-                {overview
-                  .split(/\n\s*\n/)
-                  .filter(Boolean)
-                  .map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
+                {allOverviewParagraphs.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
+
+              {/* At-a-Glance Student Snapshot Table */}
+              <div className="mt-7 overflow-hidden rounded-2xl border border-slate-200/90 bg-slate-50/50">
+                <div className="border-b border-slate-200 bg-slate-100/70 px-5 py-3">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-petrol-800">
+                    {shortName} Key Facts for Bangladeshi Students
+                  </h3>
+                </div>
+                <dl className="divide-y divide-slate-200/70 text-xs sm:text-sm">
+                  <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
+                    <dt className="font-semibold text-slate-500">Official Name</dt>
+                    <dd className="font-bold text-slate-900">{displayName}</dd>
+                  </div>
+                  <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
+                    <dt className="font-semibold text-slate-500">City & Country</dt>
+                    <dd className="font-bold text-slate-900">{university.location || `${university.city}, ${university.country}`}</dd>
+                  </div>
+                  <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
+                    <dt className="font-semibold text-slate-500">Accreditation Status</dt>
+                    <dd className="font-bold text-emerald-800">{recognitionLabel}</dd>
+                  </div>
+                  <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
+                    <dt className="font-semibold text-slate-500">Degrees & Majors</dt>
+                    <dd className="font-semibold text-slate-800">
+                      {availableLevels.map((l) => LEVEL_LABELS[l]).join(', ') || 'Undergraduate & Postgraduate'} ({programs.length} listed majors)
+                    </dd>
+                  </div>
+                  <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
+                    <dt className="font-semibold text-slate-500">Teaching Medium</dt>
+                    <dd className="font-semibold text-slate-800">{languages.join(' / ') || 'English'}</dd>
+                  </div>
+                  <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
+                    <dt className="font-semibold text-slate-500">Bank Student File Rule</dt>
+                    <dd className="font-semibold text-slate-800">
+                      {isChina
+                        ? 'No Bank Student File required — Pay tuition & hostel directly on campus in China'
+                        : 'Standard Authorized Dealer (AD) Bank Student File supported'}
+                    </dd>
+                  </div>
+                  <div className="grid grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-[200px_1fr]">
+                    <dt className="font-semibold text-slate-500">EduExpress Service Fee</dt>
+                    <dd className="font-bold text-emerald-800">
+                      {isMalaysia
+                        ? 'BDT 0 (100% Free Application & EMGS Visa Processing)'
+                        : 'BDT 0 Before Visa (Service fee payable only after visa approval)'}
+                    </dd>
+                  </div>
+                </dl>
               </div>
 
               {highlights.length > 0 && (
-                <div className="mt-8 grid gap-3.5 sm:grid-cols-2">
+                <div className="mt-7 grid gap-3.5 sm:grid-cols-2">
                   {highlights.map((highlight) => (
                     <div
                       key={highlight.title}
@@ -607,77 +641,89 @@ export default function UniversityProfileClient({
               )}
             </div>
 
-            {/* Quick Fact Card */}
-            <div className="rounded-2xl bg-slate-50/80 p-6 border border-slate-200/80 h-fit">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-3">
-                Quick Facts & Verification
-              </h3>
-              <dl className="mt-4 space-y-3.5 text-xs">
-                <div>
-                  <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Location</dt>
-                  <dd className="mt-0.5 font-bold text-slate-800">{university.city}, {university.country}</dd>
-                </div>
-                <div>
-                  <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Intake Months</dt>
-                  <dd className="mt-0.5 font-bold text-slate-800">{intakeMonths.join(', ') || 'Multiple year-round'}</dd>
-                </div>
-                <div>
-                  <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Instruction Language</dt>
-                  <dd className="mt-0.5 font-bold text-slate-800">{languages.join(' / ') || 'English'}</dd>
-                </div>
-                {university.recognitionAuthority && (
+            {/* Right Sidebar: Quick Action & Verification Card */}
+            <div className="space-y-4">
+              <div className="rounded-2xl bg-slate-50/90 p-6 border border-slate-200/90">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-200 pb-3">
+                  Quick Verification & Links
+                </h3>
+                <dl className="mt-4 space-y-3.5 text-xs">
                   <div>
-                    <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Accreditation Body</dt>
-                    <dd className="mt-0.5 font-bold text-emerald-800">{university.recognitionAuthority}</dd>
+                    <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Campus City</dt>
+                    <dd className="mt-0.5 font-bold text-slate-800">{university.city}, {university.country}</dd>
                   </div>
-                )}
-                {university.officialUrl && (
-                  <div className="pt-2 border-t border-slate-200">
-                    <a
-                      href={university.officialUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 font-bold text-petrol-800 hover:text-emerald-700 text-xs"
-                    >
-                      Official University Portal <ExternalLink size={12} />
-                    </a>
+                  <div>
+                    <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Intake Windows</dt>
+                    <dd className="mt-0.5 font-bold text-slate-800">
+                      {intakeMonths.join(', ') || (isChina ? 'September & March' : 'Multiple intakes')}
+                    </dd>
                   </div>
-                )}
-              </dl>
-              <a
-                href="#university-enquiry"
-                className="mt-5 w-full ed-btn ed-btn-outline min-h-[42px] text-xs font-bold"
-              >
-                Request Admission Guide
-              </a>
+                  <div>
+                    <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Indicative Tuition</dt>
+                    <dd className="mt-0.5 font-bold text-slate-800">{cleanTuitionText}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Statutory Recognition</dt>
+                    <dd className="mt-0.5 font-bold text-emerald-800">{recognitionLabel}</dd>
+                  </div>
+                  {university.officialUrl && (
+                    <div className="pt-2 border-t border-slate-200">
+                      <a
+                        href={university.officialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 font-bold text-petrol-800 hover:text-emerald-700 text-xs"
+                      >
+                        Official University Website <ExternalLink size={12} />
+                      </a>
+                    </div>
+                  )}
+                </dl>
+                <a
+                  href="#university-enquiry"
+                  className="mt-5 w-full ed-btn ed-btn-signal min-h-[42px] text-xs font-bold"
+                >
+                  Get Free Eligibility Check <ArrowRight size={13} />
+                </a>
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2.5 w-full ed-btn ed-btn-outline min-h-[40px] text-xs font-bold inline-flex items-center justify-center gap-1.5"
+                >
+                  <MessageCircle size={14} /> Chat with Counselor
+                </a>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Programs & Fees Section */}
+        {/* 2. Programs, Tuition & Complete Course Dossier Section */}
         <section {...panelProps('programs')} className={sheetClass}>
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
             <div>
               <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
-                Academic Catalog & Fees
+                Academic Catalog & Fee Breakdown
               </span>
-              <h2 className={titleClass}>{shortName} Programs, Tuition & Costs</h2>
+              <h2 className={titleClass}>{shortName} Programs & Tuition Fees</h2>
               <p className="mt-1.5 text-sm text-slate-600">
-                Explore degree majors, standard durations, medium of instruction, and itemized annual tuition.
+                Click any program below to inspect its itemized tuition, dormitory cost, entry requirements, and required documents.
               </p>
             </div>
             <a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[42px] px-5 text-xs font-bold">
-              Check Admission Eligibility <ArrowRight size={14} />
+              Apply for Admission <ArrowRight size={14} />
             </a>
           </div>
 
           {feePreviews.length > 0 && (
             <div className="mt-6 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
               {feePreviews.map((fee) => (
-                <div key={fee.level} className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-4.5 shadow-xs">
-                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{LEVEL_LABELS[fee.level]} Indicative Tuition</p>
+                <div key={fee.level} className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-4 shadow-xs">
+                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    {LEVEL_LABELS[fee.level]} Indicative Tuition
+                  </p>
                   <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">{fee.amount}</p>
-                  <p className="mt-0.5 text-[11px] text-slate-500">{fee.period} · gross published fee</p>
+                  <p className="mt-0.5 text-[11px] text-slate-500">{fee.period} · official gross tuition</p>
                 </div>
               ))}
             </div>
@@ -687,37 +733,11 @@ export default function UniversityProfileClient({
             <div className="mt-6">
               <UniversityProgramTable
                 programs={programs}
+                selectedId={selected?.id}
                 onChoose={(value) => {
                   chooseProgram(value);
                 }}
               />
-
-              <details
-                open={filtersOpen}
-                onToggle={(event) => {
-                  setFiltersOpen(event.currentTarget.open);
-                  if (event.currentTarget.open) setFiltersMounted(true);
-                }}
-                className="mt-6 rounded-2xl border border-slate-200 p-5 bg-slate-50/70"
-              >
-                <summary className="cursor-pointer text-sm font-bold text-petrol-800">
-                  Filter programs by degree level, subject, and medium of instruction
-                </summary>
-                {(filtersOpen || filtersMounted) && (
-                  <UniversityPrograms
-                    name={university.name}
-                    programs={programs}
-                    level={level}
-                    query={query}
-                    selectedId={selectedId}
-                    onLevel={chooseLevel}
-                    onQuery={setQuery}
-                    onProgram={(value) => {
-                      chooseProgram(value);
-                    }}
-                  />
-                )}
-              </details>
             </div>
           ) : (
             <div className="mt-6">
@@ -725,78 +745,148 @@ export default function UniversityProfileClient({
             </div>
           )}
 
-          {/* Selected Program Detailed Fee & Living Breakdown */}
+          {/* 360° Selected Program Complete Dossier */}
           {selected && (
-            <div className="mt-8 rounded-2xl border border-emerald-200 bg-white p-6 sm:p-7 shadow-xs">
+            <div className="mt-8 rounded-2xl border-2 border-emerald-200/90 bg-white p-6 sm:p-7 shadow-xs">
               <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-200 pb-5">
                 <div>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-900">
-                    Selected Program Details
+                    <CheckCircle2 size={13} className="text-emerald-700" />
+                    Selected Program Dossier
                   </span>
                   <h3 className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl">{selected.name}</h3>
-                  <p className="mt-1 text-xs text-slate-600 font-medium flex flex-wrap items-center gap-2">
-                    <span>Degree: <strong>{selected.level}</strong></span>
+                  <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-slate-600">
+                    <span>
+                      Degree Level: <strong className="text-slate-900">{selected.level}</strong>
+                    </span>
                     <span>·</span>
-                    <span>Duration: <strong>{selected.duration || 'Standard'}</strong></span>
+                    <span>
+                      Duration: <strong className="text-slate-900">{selected.duration || '4 years'}</strong>
+                    </span>
                     <span>·</span>
-                    <span>Language: <strong>{selected.languages.join(' / ') || 'English'}</strong></span>
-                  </p>
+                    <span>
+                      Teaching Medium: <strong className="text-slate-900">{selected.languages.join(' / ') || 'English'}</strong>
+                    </span>
+                    {selected.intake && (
+                      <>
+                        <span>·</span>
+                        <span>
+                          Intake: <strong className="text-slate-900">{selected.intake}</strong>
+                        </span>
+                      </>
+                    )}
+                  </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-2.5">
-                  <a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[40px] px-5 text-xs font-bold">
-                    Apply for this Major <ArrowRight size={13} />
+                  <a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[42px] px-5 text-xs font-bold">
+                    Apply for {selected.name} <ArrowRight size={13} />
                   </a>
-                  <button type="button" onClick={() => openPanel('documents')} className="ed-btn ed-btn-outline min-h-[40px] px-4 text-xs font-bold">
-                    Required Documents
+                  <button
+                    type="button"
+                    onClick={() => openPanel('documents')}
+                    className="ed-btn ed-btn-outline min-h-[42px] px-4 text-xs font-bold"
+                  >
+                    Document Checklist ({selected.documents.length})
                   </button>
                 </div>
               </div>
 
-              <div className="mt-6">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-petrol-800">
-                  Itemized Costs & Living Breakdown
-                </h4>
-                <div className="mt-3.5 grid gap-6 lg:grid-cols-2">
-                  {(['before_china', 'in_china'] as const).map((stage) => {
-                    const stageHeading =
-                      stage === 'before_china'
-                        ? isChina
-                          ? 'Before Departure (Application & Visa)'
-                          : 'Before Departure'
-                        : isChina
-                        ? 'In China (Direct to Campus)'
-                        : `In ${university.country} (Direct to Campus)`;
-                    return (
-                      <div key={stage} className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-5">
-                        <h5 className="border-b border-slate-200 pb-3 text-xs font-bold uppercase tracking-wider text-petrol-800">
-                          {stageHeading}
-                        </h5>
-                        <dl className="mt-2 divide-y divide-slate-200/60 text-xs">
-                          {selected.fees
-                            .filter((fee) => fee.stage === stage)
-                            .map((fee, index) => (
-                              <div key={`${fee.key}-${index}`} className="py-2.5 flex items-start justify-between gap-4">
-                                <dt className="text-slate-700 font-medium">
-                                  {fee.item}
-                                  {fee.optional && <span className="mt-0.5 block text-[11px] text-slate-400">If applicable</span>}
-                                </dt>
-                                <dd className="text-right font-bold tabular-nums text-petrol-800">{feeText(fee)}</dd>
-                              </div>
-                            ))}
-                          {selected.fees.filter((fee) => fee.stage === stage).length === 0 && (
-                            <p className="py-3 text-xs text-slate-500">No extra fee items listed for this stage.</p>
-                          )}
-                        </dl>
-                        {stage === 'before_china' && (
-                          <p className="mt-3.5 border-t border-slate-200/70 pt-3 text-[11px] leading-relaxed text-slate-500">
-                            {isMalaysia
-                              ? 'For Malaysia, EduExpress service fee is BDT 0. No agency charge is required.'
-                              : 'EduExpress service charge is payable only after your visa is successfully issued.'}
-                          </p>
-                        )}
+              {/* 3-Column Student Decision Grid: Campus Fees, Departure Costs, Entry & Scholarships */}
+              <div className="mt-6 grid gap-5 lg:grid-cols-3">
+                {/* Col 1: Tuition & On-Campus Living */}
+                <div className="rounded-xl border border-slate-200/90 bg-slate-50/60 p-5">
+                  <h4 className="border-b border-slate-200 pb-2.5 text-xs font-bold uppercase tracking-wider text-petrol-800 flex items-center gap-1.5">
+                    <Wallet size={14} className="text-emerald-700 shrink-0" />
+                    {isChina ? 'In China (Tuition & Hostel)' : `In ${university.country} (Tuition & Living)`}
+                  </h4>
+                  <dl className="mt-2 divide-y divide-slate-200/60 text-xs">
+                    {selected.fees
+                      .filter((fee) => fee.stage === 'in_china')
+                      .map((fee, index) => (
+                        <div key={`${fee.key}-${index}`} className="py-2.5 flex items-start justify-between gap-3">
+                          <dt className="text-slate-700 font-medium">
+                            {fee.item}
+                            {fee.optional && <span className="block text-[10px] text-slate-400">Optional / if applicable</span>}
+                          </dt>
+                          <dd className="text-right font-bold tabular-nums text-petrol-800 shrink-0">{feeText(fee)}</dd>
+                        </div>
+                      ))}
+                    {selected.fees.filter((fee) => fee.stage === 'in_china').length === 0 && (
+                      <p className="py-3 text-xs text-slate-500">Refer to published tuition range above.</p>
+                    )}
+                  </dl>
+                </div>
+
+                {/* Col 2: Before Departure & Payment Rule */}
+                <div className="rounded-xl border border-slate-200/90 bg-slate-50/60 p-5 flex flex-col justify-between">
+                  <div>
+                    <h4 className="border-b border-slate-200 pb-2.5 text-xs font-bold uppercase tracking-wider text-petrol-800 flex items-center gap-1.5">
+                      <PlaneTakeoff size={14} className="text-emerald-700 shrink-0" />
+                      Before Departure from Bangladesh
+                    </h4>
+                    <dl className="mt-2 divide-y divide-slate-200/60 text-xs">
+                      {selected.fees
+                        .filter((fee) => fee.stage === 'before_china')
+                        .map((fee, index) => (
+                          <div key={`${fee.key}-${index}`} className="py-2.5 flex items-start justify-between gap-3">
+                            <dt className="text-slate-700 font-medium">
+                              {fee.item}
+                              {fee.optional && <span className="block text-[10px] text-slate-400">If required by university</span>}
+                            </dt>
+                            <dd className="text-right font-bold tabular-nums text-petrol-800 shrink-0">{feeText(fee)}</dd>
+                          </div>
+                        ))}
+                      <div className="py-2.5 flex items-start justify-between gap-3">
+                        <dt className="text-slate-700 font-medium">EduExpress Service Fee</dt>
+                        <dd className="text-right font-bold text-emerald-800">
+                          {isMalaysia ? 'BDT 0 (Free)' : 'BDT 0 Pre-Visa'}
+                        </dd>
                       </div>
-                    );
-                  })}
+                    </dl>
+                  </div>
+                  <div className="mt-4 rounded-lg bg-emerald-50/80 border border-emerald-200/70 p-3 text-[11px] leading-relaxed text-emerald-950">
+                    {isMalaysia
+                      ? 'Malaysia Rule: EduExpress service is 100% free (BDT 0). You only pay official university & EMGS fees.'
+                      : 'China Rule: No Bank Student File required. Pay tuition & dormitory directly on campus after arrival in China.'}
+                  </div>
+                </div>
+
+                {/* Col 3: Entry Criteria & Scholarships for Selected Program */}
+                <div className="rounded-xl border border-slate-200/90 bg-slate-50/60 p-5 flex flex-col justify-between">
+                  <div>
+                    <h4 className="border-b border-slate-200 pb-2.5 text-xs font-bold uppercase tracking-wider text-petrol-800 flex items-center gap-1.5">
+                      <GraduationCap size={14} className="text-emerald-700 shrink-0" />
+                      Entry & Language Criteria
+                    </h4>
+                    <ul className="mt-3 space-y-2 text-xs text-slate-700">
+                      {[...selected.qualifications.slice(0, 2), ...selected.languageRequirements.slice(0, 2)].map((req, idx) => (
+                        <li key={idx} className="flex items-start gap-2 leading-5">
+                          <CheckCircle2 size={14} className="text-emerald-600 shrink-0 mt-0.5" />
+                          <span>{req}</span>
+                        </li>
+                      ))}
+                      {selected.qualifications.length === 0 && selected.languageRequirements.length === 0 && (
+                        <li className="text-slate-500">Standard {selected.level} academic transcripts and language proficiency apply.</li>
+                      )}
+                    </ul>
+                  </div>
+
+                  <div className="mt-4 border-t border-slate-200/80 pt-3 flex flex-wrap items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openPanel('scholarships')}
+                      className="text-xs font-bold text-emerald-800 hover:underline inline-flex items-center gap-1"
+                    >
+                      <Sparkles size={13} /> View Scholarships ({scholarshipOptions.length || university.scholarships.length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => openPanel('admission')}
+                      className="text-xs font-bold text-petrol-800 hover:underline inline-flex items-center gap-1"
+                    >
+                      Full Criteria <ArrowRight size={12} />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -805,49 +895,48 @@ export default function UniversityProfileClient({
           {!selected && generalFeeTable}
         </section>
 
-        {/* Scholarships Section */}
+        {/* 3. Scholarships & Financial Aid Section */}
         <section {...panelProps('scholarships')} className={sheetClass}>
-          <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
-            Funding Opportunities
-          </span>
-          <h2 className={titleClass}>{shortName} Scholarships</h2>
-          {scholarshipOptions.length > 0 ? (
-            <>
-              <p className="mt-2 text-sm text-slate-600">
-                Compare coverage, tuition reductions, eligibility, and renewal conditions for each available scholarship.
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
+            <div>
+              <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
+                Scholarships & Tuition Waivers
+              </span>
+              <h2 className={titleClass}>{shortName} Scholarships for Bangladeshi Students</h2>
+              <p className="mt-1.5 text-sm text-slate-600">
+                Compare documented scholarship routes, tuition waivers, coverage scope, and annual renewal rules.
               </p>
-              <div className="mt-6">
-                <UniversityFundingTable options={scholarshipOptions} onChoose={estimateScholarship} />
-              </div>
-              <details className="mt-6 rounded-2xl border border-slate-200 p-5 bg-slate-50/70">
-                <summary className="cursor-pointer text-sm font-bold text-petrol-800">
-                  Scholarship eligibility criteria, renewal rules & application documents
-                </summary>
-                <div className="mt-4">
-                  <UniversityScholarships
-                    options={scholarshipOptions}
-                    programs={programs}
-                    onEstimate={estimateScholarship}
-                    onDocuments={() => openPanel('documents')}
-                  />
-                </div>
-              </details>
-            </>
+            </div>
+            <a href="#university-enquiry" className="ed-btn ed-btn-outline min-h-[42px] px-5 text-xs font-bold">
+              Check Scholarship Eligibility <ArrowRight size={14} />
+            </a>
+          </div>
+
+          {scholarshipOptions.length > 0 ? (
+            <div className="mt-6">
+              <UniversityFundingTable options={scholarshipOptions} onChoose={estimateScholarship} />
+            </div>
           ) : university.scholarships.length > 0 ? (
-            <div className="mt-6 divide-y divide-rule">
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {university.scholarships.map((scholarship, index) => (
-                <article key={`${scholarship.title}-${index}`} className="py-6 first:pt-0">
-                  <h3 className="text-lg font-bold text-petrol-800">{scholarship.title}</h3>
+                <article
+                  key={`${scholarship.title}-${index}`}
+                  className="rounded-2xl border border-emerald-200/80 bg-emerald-50/30 p-6"
+                >
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-800">
+                    <Sparkles size={14} /> {scholarship.type || 'Scholarship Route'}
+                  </span>
+                  <h3 className="mt-2 text-lg font-bold text-petrol-800">{scholarship.title}</h3>
                   {scholarship.amount && (
-                    <p className="mt-2 text-base font-bold text-emerald-800">{scholarship.amount}</p>
+                    <p className="mt-1.5 text-sm font-bold text-emerald-800">{scholarship.amount}</p>
                   )}
-                  {scholarship.coverage && <p className="mt-2 text-sm text-slate-600">{scholarship.coverage}</p>}
-                  <div className="mt-4">
+                  {scholarship.coverage && <p className="mt-2 text-xs text-slate-700">{scholarship.coverage}</p>}
+                  <div className="mt-3">
                     <PlainList items={scholarship.details} />
                   </div>
                   {scholarship.condition && (
-                    <p className="mt-3 text-xs text-slate-500">
-                      <strong className="font-semibold text-slate-700">Eligibility: </strong>
+                    <p className="mt-3 text-xs text-slate-600">
+                      <strong className="font-semibold text-slate-800">Eligibility: </strong>
                       {scholarship.condition}
                     </p>
                   )}
@@ -855,133 +944,277 @@ export default function UniversityProfileClient({
               ))}
             </div>
           ) : (
-            <p className={`mt-5 ${mutedClass}`}>
-              A scholarship amount has not been confirmed for this specific program. Budget with full tuition until a written award is confirmed.
-            </p>
+            <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50/70 p-6">
+              <p className="text-sm leading-relaxed text-slate-700">
+                Specific scholarship tiers for {shortName} depend on intake quota and your academic GPA. Submit your transcripts in the form above so our counselors can check available university, provincial, or merit waivers for your intake.
+              </p>
+            </div>
           )}
+
+          {/* Student Guidance on Scholarships */}
+          <div className="mt-6 rounded-2xl border border-slate-200/90 bg-slate-50/80 p-5">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-petrol-800">
+              How Scholarships Work for Bangladeshi Applicants
+            </h3>
+            <div className="mt-2.5 grid gap-4 text-xs leading-relaxed text-slate-600 sm:grid-cols-3">
+              <div>
+                <strong className="block text-slate-900">1. Merit & Quota Based</strong>
+                Scholarship selection is decided by the university admissions committee based on your HSC/Bachelor GPA, language score, and early application timing.
+              </div>
+              <div>
+                <strong className="block text-slate-900">2. Tuition vs. Living Costs</strong>
+                A tuition waiver reduces your annual tuition fee. Always budget separately for dormitory, insurance, medical checkup, and personal living expenses unless explicitly covered.
+              </div>
+              <div>
+                <strong className="block text-slate-900">3. Annual Review</strong>
+                Multi-year scholarships typically require maintaining good attendance (90%+), passing all modules without backlog, and abiding by campus regulations.
+              </div>
+            </div>
+          </div>
         </section>
 
-        {/* Admission Requirements Section */}
+        {/* 4. Entry Requirements & Eligibility Section */}
         <section {...panelProps('admission')} className={sheetClass}>
-          <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
-            Eligibility & Prerequisites
-          </span>
-          <h2 className={titleClass}>{shortName} Admission Requirements</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Compare academic minimum qualifications and language proficiency standards for your program.
-          </p>
-
-          <div className="mt-6">
-            <UniversityEntrySummary programs={programs} selectedId={selectedId} />
+          <div className="border-b border-slate-200 pb-5">
+            <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
+              Eligibility & Prerequisites
+            </span>
+            <h2 className={titleClass}>{shortName} Entry Requirements</h2>
+            <p className="mt-1.5 text-sm text-slate-600">
+              Academic qualification standards and English / language proficiency requirements by study level.
+            </p>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a href="#documents" className="ed-btn ed-btn-outline min-h-[46px] px-6 text-xs font-bold">
-              Check Required Documents <ArrowRight size={14} />
-            </a>
-            <a href={assessmentHref} className={applyClass}>
-              Apply with EduExpress International <ArrowRight size={15} />
-            </a>
+          <div className="mt-6">
+            <UniversityEntrySummary programs={programs} selectedId={selected?.id || ''} />
+          </div>
+
+          <div className="mt-7 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">Not sure if your SSC / HSC or Bachelor GPA qualifies?</h3>
+              <p className="mt-0.5 text-xs text-slate-600">
+                Our Dhaka admissions team will evaluate your mark sheets against {shortName}’s current faculty requirements.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <a href="#documents" className="ed-btn ed-btn-outline min-h-[42px] px-5 text-xs font-bold">
+                View Document Checklist <ArrowRight size={13} />
+              </a>
+              <a href={assessmentHref} className="ed-btn ed-btn-signal min-h-[42px] px-5 text-xs font-bold">
+                Free GPA Assessment <ArrowRight size={13} />
+              </a>
+            </div>
           </div>
         </section>
 
-        {/* Documents Required Section */}
+        {/* 5. Required Documents Checklist Section */}
         <section {...panelProps('documents')} className={sheetClass}>
-          <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
-            Application Checklist
-          </span>
-          <h2 className={titleClass}>{shortName} Documents Required</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Organize and prepare your official application dossier before submission.
-          </p>
-
-          <div className="mt-6">
-            {programPicker('documents')}
-            {!programs.length && (
-              <PlainList items={generalDetails.documents} empty="Request admission document checklist." />
-            )}
-            {selected ? (
-              <UniversityDocuments documents={selected.documents} programName={selected.name} applyHref={assessmentHref} />
-            ) : (
-              noSelection
-            )}
-          </div>
-        </section>
-
-        {/* Rankings & Accreditation Section */}
-        <section {...panelProps('rankings')} className={sheetClass}>
-          <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
-            Rankings & Recognition
-          </span>
-          <h2 className={titleClass}>{shortName} Rankings & Accreditation</h2>
-          <p className="mt-2 text-sm text-slate-600">
-            Independent global standing, national rankings, and statutory accreditation status.
-          </p>
-
-          <div className="mt-6">
-            {rankings.length > 0 ? (
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b border-rule text-xs font-bold text-slate-500 uppercase">
-                    <th scope="col" className="pb-3 pr-4">Ranking & Scope</th>
-                    <th scope="col" className="pb-3 text-right">Position</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-rule">
-                  {rankings.map((ranking, index) => (
-                    <tr key={`${ranking.publisher}-${index}`}>
-                      <th scope="row" className="py-4 pr-5 font-bold text-petrol-800">
-                        {ranking.publisher}
-                        <span className="mt-0.5 block text-xs font-normal text-slate-500">
-                          {ranking.rankingName}
-                          {ranking.subject ? ` · ${ranking.subject}` : ''}
-                        </span>
-                      </th>
-                      <td className="py-4 text-right font-black text-petrol-800 tabular-nums text-lg">
-                        {ranking.rank}
-                      </td>
-                    </tr>
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
+            <div>
+              <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
+                Application Dossier Checklist
+              </span>
+              <h2 className={titleClass}>{shortName} Required Documents</h2>
+              <p className="mt-1.5 text-sm text-slate-600">
+                Complete list of documents required from Bangladeshi students for admission and visa processing.
+              </p>
+            </div>
+            {programs.length > 1 && (
+              <div className="w-full sm:w-72">
+                <label htmlFor={`${id}-doc-program`} className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  Switch Program Checklist
+                </label>
+                <select
+                  id={`${id}-doc-program`}
+                  value={selected?.id || ''}
+                  onChange={(event) => chooseProgram(event.target.value)}
+                  className={selectClass}
+                >
+                  {programs.map((program) => (
+                    <option key={program.id} value={program.id}>
+                      {LEVEL_LABELS[normalizeProgramLevel(program.level)]} · {program.name}
+                    </option>
                   ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-6">
-                <div className="flex items-center gap-4">
-                  <div className="grid size-12 place-items-center rounded-xl bg-lime/25 text-petrol-800 shrink-0">
-                    <Trophy size={22} />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-petrol-800">
-                      {effectiveWorldRank ? `QS World Ranking: #${effectiveWorldRank}` : `${university.name} Recognition Standing`}
-                    </h3>
-                    {effectiveCountryRank && (
-                      <p className="text-sm font-semibold text-emerald-800">
-                        {university.country} Rank: #{effectiveCountryRank}
-                      </p>
-                    )}
-                    <p className="mt-1 text-xs text-slate-600">
-                      Accredited by: {university.recognitionAuthority || 'National Higher Education Authority'}
-                    </p>
-                  </div>
-                </div>
+                </select>
               </div>
             )}
           </div>
+
+          <div className="mt-6">
+            {!programs.length && (
+              <PlainList items={generalDetails.documents} empty="Request admission document checklist." />
+            )}
+            {selected && (
+              <UniversityDocuments
+                documents={selected.documents}
+                programName={selected.name}
+                applyHref={assessmentHref}
+              />
+            )}
+          </div>
         </section>
 
-        {/* FAQs Section */}
+        {/* 6. Step-by-Step Application & Visa Roadmap from Bangladesh */}
+        <section aria-label="How to apply from Bangladesh" className={sheetClass}>
+          <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
+            Step-by-Step Admission Roadmap
+          </span>
+          <h2 className={titleClass}>How to Apply to {shortName} from Bangladesh</h2>
+          <p className="mt-1.5 text-sm text-slate-600">
+            A clear 4-step process managed with our Dhanmondi, Dhaka counseling office.
+          </p>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                step: 'Step 01',
+                title: 'Free Eligibility & Major Check',
+                desc: `Share your SSC, HSC, or Bachelor transcripts. We verify your GPA and language readiness for ${shortName} at zero cost.`,
+              },
+              {
+                step: 'Step 02',
+                title: 'Dossier Formatting & Submission',
+                desc: 'We verify your passport, academic scans, medical form, and study plan, then submit to the official university portal.',
+              },
+              {
+                step: 'Step 03',
+                title: isChina ? 'Admission Notice & JW202' : 'Offer Letter & EMGS eVAL',
+                desc: isChina
+                  ? 'Receive your official Pre-Admission/Admission Notice and Ministry JW202/JW201 visa form for X1/X2 student visa.'
+                  : 'Receive your official Offer Letter and track EMGS Visa Approval Letter (eVAL) progression online.',
+              },
+              {
+                step: 'Step 04',
+                title: 'Visa Stamp & Campus Arrival',
+                desc: isChina
+                  ? 'Submit your X1/X2 visa application in Dhaka. Pay EduExpress service fee only after your visa is approved, then fly to China.'
+                  : 'Complete Single Entry Visa (SEV), fly to Malaysia, and complete post-arrival medical and i-KAD registration.',
+              },
+            ].map((item) => (
+              <div key={item.step} className="rounded-2xl border border-slate-200/90 bg-slate-50/60 p-5">
+                <span className="inline-block rounded-lg bg-petrol-800 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-lime">
+                  {item.step}
+                </span>
+                <h3 className="mt-3 text-sm font-bold text-slate-900">{item.title}</h3>
+                <p className="mt-1.5 text-xs leading-relaxed text-slate-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 7. Rankings & Accreditation Section */}
+        <section {...panelProps('rankings')} className={sheetClass}>
+          <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
+            Global Standing & Statutory Recognition
+          </span>
+          <h2 className={titleClass}>{shortName} Rankings & Accreditation</h2>
+          <p className="mt-1.5 text-sm text-slate-600">
+            Independent global university rankings, national standing, and government accreditation records.
+          </p>
+
+          <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+            <div>
+              {rankings.length > 0 ? (
+                <div className="overflow-hidden rounded-2xl border border-slate-200/90">
+                  <table className="w-full text-left text-sm">
+                    <thead>
+                      <tr className="border-b border-slate-200 bg-slate-50/90 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                        <th scope="col" className="px-5 py-3.5">Ranking Publisher & Scope</th>
+                        <th scope="col" className="px-5 py-3.5 text-right">Listed Position</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 bg-white">
+                      {rankings.map((ranking, index) => (
+                        <tr key={`${ranking.publisher}-${index}`}>
+                          <th scope="row" className="px-5 py-4 font-bold text-petrol-800">
+                            {ranking.publisher}
+                            <span className="mt-0.5 block text-xs font-normal text-slate-500">
+                              {ranking.rankingName}
+                              {ranking.subject ? ` · ${ranking.subject}` : ''}
+                            </span>
+                          </th>
+                          <td className="px-5 py-4 text-right font-black text-petrol-800 tabular-nums text-lg">
+                            #{String(ranking.rank).replace(/^#/, '')}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="grid size-12 place-items-center rounded-xl bg-lime/25 text-petrol-800 shrink-0">
+                      <Trophy size={22} />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-petrol-800">
+                        {effectiveWorldRank
+                          ? `World Ranking: #${String(effectiveWorldRank).replace(/^#/, '')}`
+                          : `${university.name} Institutional Standing`}
+                      </h3>
+                      {effectiveCountryRank && (
+                        <p className="text-sm font-semibold text-emerald-800">
+                          {university.country} National Rank: #{effectiveCountryRank}
+                        </p>
+                      )}
+                      <p className="mt-1 text-xs text-slate-600">
+                        Recognized by: {recognitionLabel}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/40 p-5">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-800">
+                <ShieldCheck size={16} className="text-emerald-700" />
+                Degree Recognition Advice
+              </div>
+              <p className="mt-2.5 text-xs leading-relaxed text-slate-700">
+                <strong>Accrediting Authority:</strong> {recognitionLabel}.
+              </p>
+              <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                Always evaluate university rankings alongside specific department laboratories, English-medium faculty strength, and total 4-year tuition & living budget.
+              </p>
+              {university.recognitionSourceUrl && (
+                <a
+                  href={university.recognitionSourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-petrol-800 hover:underline"
+                >
+                  Inspect Official Recognition Register <ExternalLink size={12} />
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* 8. FAQs Section */}
         <section {...panelProps('questions')} className={sheetClass}>
           <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
-            Frequently Asked Questions
+            Student & Parent Questions
           </span>
-          <h2 className={titleClass}>{shortName}: Common Questions</h2>
-          <div className="mt-6 divide-y divide-slate-100">
-            {faq.map((item) => (
-              <details key={item.question} className="py-4">
-                <summary className="cursor-pointer font-bold text-slate-900 text-[15px] hover:text-emerald-800">
-                  {item.question}
+          <h2 className={titleClass}>{shortName}: Frequently Asked Questions</h2>
+          <p className="mt-1.5 text-sm text-slate-600">
+            Direct answers on tuition fees, English-medium study, scholarships, and applying from Bangladesh.
+          </p>
+          <div className="mt-6 space-y-3">
+            {faq.map((item, idx) => (
+              <details
+                key={item.question}
+                open={idx < 3}
+                className="group rounded-2xl border border-slate-200/90 bg-slate-50/60 px-5 py-4 transition-colors open:bg-white open:border-emerald-300"
+              >
+                <summary className="cursor-pointer font-bold text-slate-900 text-[15px] hover:text-emerald-800 flex items-center justify-between gap-4">
+                  <span>{item.question}</span>
+                  <ChevronRight size={16} className="shrink-0 text-slate-400 transition-transform group-open:rotate-90" />
                 </summary>
-                <p className="mt-2 text-xs leading-relaxed text-slate-600">{item.answer}</p>
+                <p className="mt-2.5 border-t border-slate-100 pt-2.5 text-xs sm:text-sm leading-relaxed text-slate-600">
+                  {item.answer}
+                </p>
               </details>
             ))}
           </div>
@@ -991,8 +1224,8 @@ export default function UniversityProfileClient({
         {isChina && (
           <section aria-label="Related China study guides" className={sheetClass}>
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Destination Resources</span>
-            <h2 className="mt-1 text-xl font-bold text-slate-900">Explore China Study Guides</h2>
-            <p className="mt-1 text-xs text-slate-500">Official policies, cost sheets, and visa guidance for Bangladeshi families.</p>
+            <h2 className="mt-1 text-xl font-bold text-slate-900">Explore China Study Guides for Bangladeshi Students</h2>
+            <p className="mt-1 text-xs text-slate-500">Official policies, CNY & BDT cost breakdowns, and X1/X2 student visa guides.</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 ...(hasMedicalProgram ? [{ href: '/mbbs-in-china-bangladesh', label: 'MBBS in China Guide' }] : []),
@@ -1053,12 +1286,22 @@ export default function UniversityProfileClient({
             <span className="text-xs font-bold uppercase tracking-wider text-lime">Next Steps</span>
             <h2 className="mt-1 text-2xl font-bold sm:text-3xl">Ready to apply to {shortName}?</h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/80">
-              Submit your academic transcripts and career goals. Our counselors will evaluate your eligibility and assist with direct institutional application.
+              Submit your academic transcripts and career goals. Our counselors in Dhanmondi, Dhaka will evaluate your eligibility, scholarship options, and admission timeline.
             </p>
           </div>
-          <a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[52px] px-8 text-sm">
-            Check My Eligibility <ArrowRight size={16} />
-          </a>
+          <div className="flex flex-wrap gap-3">
+            <a href="#university-enquiry" className="ed-btn ed-btn-signal min-h-[50px] px-7 text-sm">
+              Check My Eligibility <ArrowRight size={16} />
+            </a>
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ed-btn ed-btn-on-dark min-h-[50px] px-6 text-sm inline-flex items-center gap-2"
+            >
+              <MessageCircle size={16} /> WhatsApp Counselor
+            </a>
+          </div>
         </section>
       </div>
     </article>
