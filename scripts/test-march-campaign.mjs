@@ -39,11 +39,11 @@ test('researched costs retain correct billing periods and do not republish preli
   assert.equal(data.examples.some(item=>item.route==='degree'),false);
 });
 
-test('all seventeen institutions have real logos and only researched ranking numbers are published', async () => {
+test('all eighteen institutions have real logos and only researched ranking numbers are published', async () => {
  const data=JSON.parse(await readFile(new URL('../data/research/china-march-2027-landing.json',import.meta.url),'utf8'));
  const catalogue=publicMarchCatalogue(data.universities);
- assert.equal(catalogue.length,17);
- assert.equal(catalogue.reduce((n,u)=>n+u.programmes.length,0),20);
+ assert.equal(catalogue.length,18);
+ assert.equal(catalogue.reduce((n,u)=>n+u.programmes.length,0),22);
  for(const university of catalogue){
    assert.ok((await readFile(new URL('../public'+university.logo,import.meta.url))).length>100);
    if (university.ranking) assert.ok(university.ranking.value.startsWith(university.ranking.scope));
@@ -56,11 +56,11 @@ test('all seventeen institutions have real logos and only researched ranking num
 test('search and programme category must match the same course route', async () => {
  const data=JSON.parse(await readFile(new URL('../data/research/china-march-2027-landing.json',import.meta.url),'utf8'));
  const catalogue=publicMarchCatalogue(data.universities);
- assert.equal(filterMarchCatalogue(catalogue,'','all').length,17);
+ assert.equal(filterMarchCatalogue(catalogue,'','all').length,18);
  assert.equal(filterMarchCatalogue(catalogue,'','foundation').length,12);
  assert.equal(filterMarchCatalogue(catalogue,'','bachelor').length,4);
  assert.equal(filterMarchCatalogue(catalogue,'','masters').length,1);
- assert.equal(filterMarchCatalogue(catalogue,'','language').length,2);
+ assert.equal(filterMarchCatalogue(catalogue,'','language').length,3);
  assert.equal(filterMarchCatalogue(catalogue,'petroleum','foundation')[0].acronym,'XSYU');
  assert.equal(filterMarchCatalogue(catalogue,'hust','language')[0].programmes.length,1);
  assert.equal(filterMarchCatalogue(catalogue,'hust physics','language').length,0);

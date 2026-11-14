@@ -21,8 +21,8 @@ assert.ok(entities.some(item=>item['@type']==='BreadcrumbList'));
 const faqs=entities.find(item=>item['@type']==='FAQPage').mainEntity;
 assert.equal(faqs.length,6);
 for(const item of faqs) { assert.ok(html.includes(item.name)); assert.ok(html.includes(item.acceptedAnswer.text)); }
-assert.equal((html.match(/<article/g)||[]).length,19);
-assert.equal(entities.find(item=>item['@type']==='ItemList'&&item.numberOfItems===17).itemListElement.length,17);
+assert.equal((html.match(/<article/g)||[]).length,20);
+assert.equal(entities.find(item=>item['@type']==='ItemList'&&item.numberOfItems===18).itemListElement.length,18);
 assert.ok(html.includes('ভিসার আগে এক টাকাও না।'));
 assert.ok(html.includes('Complete China Support Package'));
 assert.ok(!html.includes('Partial Scholarship Service Package'));

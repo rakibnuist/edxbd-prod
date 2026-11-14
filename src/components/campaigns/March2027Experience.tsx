@@ -2,7 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { ArrowRight, Award, Building2, Check, Compass, FileCheck2, GraduationCap, ShieldCheck, Sparkles, Wallet } from 'lucide-react';
+import Link from 'next/link';
+import {
+  ArrowRight,
+  Award,
+  Building2,
+  Check,
+  Compass,
+  FileCheck2,
+  GraduationCap,
+  ShieldCheck,
+  Sparkles,
+  Wallet,
+} from 'lucide-react';
 import March2027LeadForm from './March2027LeadForm';
 import MarchUniversityCatalogue from './MarchUniversityCatalogue';
 import type { MarchCatalogueUniversity, MarchCatalogueProgramme } from '@/lib/march-campaign-catalogue';
@@ -10,8 +22,8 @@ import type { MarchCatalogueUniversity, MarchCatalogueProgramme } from '@/lib/ma
 const quickRoutes = [
   { label: 'Foundation → Bachelor', value: 'Foundation → Bachelor', badge: '12 Universities' },
   { label: 'Direct Bachelor', value: 'Direct Bachelor', badge: '4 Universities' },
+  { label: 'Chinese Language', value: 'Chinese language', badge: '3 Institutions' },
   { label: 'Master’s Degree', value: 'Master’s', badge: 'Postgraduate' },
-  { label: 'Chinese Language', value: 'Chinese language', badge: 'Top Ranked' },
 ];
 
 export default function March2027Experience({
@@ -24,6 +36,8 @@ export default function March2027Experience({
   const [route, setRoute] = useState('');
   const [selection, setSelection] = useState<{ university: string; program: string } | null>(null);
   const [showSticky, setShowSticky] = useState(false);
+
+  const totalRoutes = universities.reduce((sum, uni) => sum + uni.programmes.length, 0);
 
   useEffect(() => {
     try {
@@ -87,7 +101,8 @@ export default function March2027Experience({
   return (
     <>
       {/* Executive Dark-Petrol Split Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#071f33] via-petrol-800 to-[#0e3959] px-5 py-11 text-white sm:px-8 lg:py-16">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#061a2b] via-[#0b2b45] to-[#12436b] px-5 pb-14 pt-9 text-white sm:px-8 lg:pb-20 lg:pt-12">
+        {/* Subtle Architectural Grid & Glow Accents */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -left-24 -top-24 size-96 rounded-full bg-lime/10 blur-3xl"
@@ -97,157 +112,188 @@ export default function March2027Experience({
           className="pointer-events-none absolute bottom-0 right-1/3 size-80 rounded-full bg-[#38bdf8]/10 blur-3xl"
         />
 
-        <div className="relative mx-auto grid max-w-[1180px] gap-9 lg:grid-cols-[1.2fr_1fr] lg:items-start lg:gap-12">
-          {/* Left Hero Column */}
-          <div className="min-w-0">
-            <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-lime/30 bg-lime/15 px-4 py-1.5 text-[13px] font-bold tracking-wide text-lime">
-              <span className="size-2 animate-pulse rounded-full bg-lime" aria-hidden="true" />
-              Spring study routes for Bangladeshi students
-            </div>
+        <div className="relative mx-auto max-w-[1180px]">
+          {/* Executive Breadcrumb & Intake Window Bar */}
+          <div className="mb-7 flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4 text-xs text-white/75">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 font-medium">
+              <Link href="/" className="transition hover:text-white">
+                Home
+              </Link>
+              <span aria-hidden="true" className="text-white/35">
+                /
+              </span>
+              <Link href="/study-in-china-from-bangladesh" className="transition hover:text-white">
+                Study in China
+              </Link>
+              <span aria-hidden="true" className="text-white/35">
+                /
+              </span>
+              <span className="font-bold text-lime">March 2027 Spring Intake</span>
+            </nav>
 
-            <h1 className="mt-5 font-display text-[42px] font-black leading-[0.96] tracking-[-0.02em] text-white sm:text-[56px] lg:text-[62px]">
-              Study in China.
-              <br />
-              <span className="text-lime">March 2027 intake.</span>
-            </h1>
-
-            <p className="mt-5 max-w-xl text-[20px] font-semibold leading-snug text-white/95 sm:text-[22px]">
-              Find your programme. Know your costs. Plan your next step with written proof.
-            </p>
-
-            <p className="mt-3 max-w-xl text-[16px] leading-7 text-white/80">
-              Compare 17 shortlisted Chinese universities, scholarship tiers, and study routes. Get a personalised university shortlist and an itemised application plan from EduExpress International.
-            </p>
-
-            {/* 4 Key Executive Metric Cards */}
-            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <div className="rounded-2xl border border-white/15 bg-white/8 p-3.5 backdrop-blur-xs">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
-                  <Building2 size={14} className="text-lime" aria-hidden="true" />
-                  Shortlist
-                </div>
-                <p className="mt-1 font-display text-xl font-black text-white">17 Unis</p>
-                <p className="text-[11px] text-white/70">20 verified routes</p>
-              </div>
-
-              <div className="rounded-2xl border border-white/15 bg-white/8 p-3.5 backdrop-blur-xs">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
-                  <Award size={14} className="text-lime" aria-hidden="true" />
-                  Scholarships
-                </div>
-                <p className="mt-1 font-display text-xl font-black text-lime">Up to 100%</p>
-                <p className="text-[11px] text-white/70">Tuition + stipends</p>
-              </div>
-
-              <div className="rounded-2xl border border-white/15 bg-white/8 p-3.5 backdrop-blur-xs">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
-                  <ShieldCheck size={14} className="text-lime" aria-hidden="true" />
-                  Service Fee
-                </div>
-                <p className="mt-1 font-display text-xl font-black text-white">BDT 0</p>
-                <p className="text-[11px] text-white/70">Before visa approval</p>
-              </div>
-
-              <div className="rounded-2xl border border-white/15 bg-white/8 p-3.5 backdrop-blur-xs">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
-                  <Compass size={14} className="text-lime" aria-hidden="true" />
-                  Pathways
-                </div>
-                <p className="mt-1 font-display text-xl font-black text-white">4 Routes</p>
-                <p className="text-[11px] text-white/70">Foundation to PG</p>
-              </div>
-            </div>
-
-            {/* Interactive Quick Route Selector Pills */}
-            <div className="mt-6">
-              <p className="text-xs font-bold uppercase tracking-wider text-white/70">
-                Select a study route to start your plan:
-              </p>
-              <div className="mt-2.5 flex flex-wrap gap-2">
-                {quickRoutes.map(item => {
-                  const active = route === item.value;
-                  return (
-                    <button
-                      key={item.value}
-                      type="button"
-                      onClick={() => {
-                        setRoute(item.value);
-                        setSelection(null);
-                      }}
-                      className={`inline-flex items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-bold transition ${
-                        active
-                          ? 'border-lime bg-lime text-petrol-800 shadow-sm'
-                          : 'border-white/20 bg-white/10 text-white hover:border-white/35 hover:bg-white/15'
-                      }`}
-                    >
-                      <span>{item.label}</span>
-                      <span
-                        className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${
-                          active ? 'bg-petrol-800/15 text-petrol-800' : 'bg-white/15 text-white/85'
-                        }`}
-                      >
-                        {item.badge}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Primary Actions & Guarantees */}
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
-              <a
-                href="#march-2027-assessment"
-                className="ed-btn ed-btn-signal min-h-[52px] px-6 lg:hidden"
-              >
-                Get my free study plan
-                <ArrowRight size={17} aria-hidden="true" />
-              </a>
-              <a
-                href="#study-options"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-4 py-2.5 text-[15px] font-bold text-white transition hover:bg-white/20"
-              >
-                Explore 17 universities
-                <ArrowRight size={16} aria-hidden="true" />
-              </a>
-              <span className="inline-flex items-center gap-2 text-[14px] font-semibold text-white/90">
-                <span className="grid size-5 place-items-center rounded-full bg-lime text-petrol-800">
-                  <Check size={13} strokeWidth={3} aria-hidden="true" />
-                </span>
-                No file opening charge
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-lime/30 bg-lime/15 px-3 py-1 font-bold text-lime">
+                <span className="size-1.5 rounded-full bg-lime" aria-hidden="true" />
+                Applications Open · Apply by 31 Jan 2027
+              </span>
+              <span lang="bn" className="hidden rounded-full bg-white/10 px-3 py-1 font-bold text-white/95 sm:inline-block">
+                ভিসার আগে ০ টাকা সার্ভিস চার্জ
               </span>
             </div>
-
-            {/* Campus Showcase Banner */}
-            <figure className="relative mt-6 overflow-hidden rounded-3xl border border-white/15 bg-[#071f33] shadow-lg">
-              <Image
-                src="/images/students/student-life.webp"
-                alt="Students at a cultural event in China"
-                width={1400}
-                height={933}
-                priority
-                sizes="(max-width:1023px) 100vw, 620px"
-                className="h-[185px] w-full object-cover object-[center_42%] opacity-90 sm:h-[210px]"
-              />
-              <figcaption className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 bg-[#071f33]/95 px-5 py-3 text-[13px] text-white/90">
-                <span>English & Chinese-medium routes across major Chinese university cities</span>
-                <span className="shrink-0 font-bold text-lime">Student life in China</span>
-              </figcaption>
-            </figure>
           </div>
 
-          {/* Right Hero Column: Lead Form */}
-          <div className="lg:sticky lg:top-20 lg:pt-1">
-            <March2027LeadForm
-              whatsappNumber={whatsappNumber}
-              route={route}
-              onRoute={next => {
-                setRoute(next);
-                setSelection(null);
-              }}
-              selection={selection}
-              onClearSelection={() => setSelection(null)}
-            />
+          <div className="grid gap-10 lg:grid-cols-[1.18fr_1fr] lg:items-start lg:gap-12">
+            {/* Left Hero Column */}
+            <div className="min-w-0">
+              <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-[12.5px] font-bold uppercase tracking-wider text-lime">
+                <Sparkles size={13} aria-hidden="true" />
+                China Spring 2027 Admissions Desk · Dhaka
+              </div>
+
+              <h1 className="mt-5 font-display text-[42px] font-black leading-[0.95] tracking-[-0.02em] text-white sm:text-[56px] lg:text-[64px]">
+                Study in China.
+                <br />
+                <span className="text-lime">March 2027 intake.</span>
+              </h1>
+
+              <p className="mt-5 max-w-xl text-[20px] font-semibold leading-snug text-white/95 sm:text-[22px]">
+                Find your programme. Know your costs. Plan your next step with written proof.
+              </p>
+
+              <p className="mt-3 max-w-xl text-[16px] leading-7 text-white/80">
+                Compare {universities.length} shortlisted Chinese universities and colleges across {totalRoutes} verified spring study routes—including Foundation → Bachelor, Direct Bachelor, Master’s, and bundled Tuition + Hostel Chinese Language programmes.
+              </p>
+
+              {/* 4 Key Executive Metric Cards */}
+              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-xs">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
+                    <Building2 size={14} className="text-lime" aria-hidden="true" />
+                    Shortlist
+                  </div>
+                  <p className="mt-1 font-display text-xl font-black text-white">{universities.length} Unis</p>
+                  <p className="text-[11px] text-white/70">{totalRoutes} verified routes</p>
+                </div>
+
+                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-xs">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
+                    <Award size={14} className="text-lime" aria-hidden="true" />
+                    Scholarships
+                  </div>
+                  <p className="mt-1 font-display text-xl font-black text-lime">Up to 100%</p>
+                  <p className="text-[11px] text-white/70">Tuition + stipends</p>
+                </div>
+
+                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-xs">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
+                    <ShieldCheck size={14} className="text-lime" aria-hidden="true" />
+                    Service Fee
+                  </div>
+                  <p className="mt-1 font-display text-xl font-black text-white">BDT 0</p>
+                  <p className="text-[11px] text-white/70">Before visa approval</p>
+                </div>
+
+                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-xs">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
+                    <Compass size={14} className="text-lime" aria-hidden="true" />
+                    Pathways
+                  </div>
+                  <p className="mt-1 font-display text-xl font-black text-white">4 Routes</p>
+                  <p className="text-[11px] text-white/70">Language to Master’s</p>
+                </div>
+              </div>
+
+              {/* Interactive Quick Route Selector Pills */}
+              <div className="mt-6 rounded-2xl border border-white/15 bg-white/[0.05] p-4">
+                <p className="text-xs font-bold uppercase tracking-wider text-lime">
+                  1. Select a study route to pre-fill your personalised plan:
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {quickRoutes.map(item => {
+                    const active = route === item.value;
+                    return (
+                      <button
+                        key={item.value}
+                        type="button"
+                        onClick={() => {
+                          setRoute(item.value);
+                          setSelection(null);
+                        }}
+                        className={`inline-flex items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-bold transition ${
+                          active
+                            ? 'border-lime bg-lime text-petrol-800 shadow-sm'
+                            : 'border-white/20 bg-white/10 text-white hover:border-white/35 hover:bg-white/15'
+                        }`}
+                      >
+                        <span>{item.label}</span>
+                        <span
+                          className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${
+                            active ? 'bg-petrol-800/15 text-petrol-800' : 'bg-white/15 text-white/85'
+                          }`}
+                        >
+                          {item.badge}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Primary Actions & Guarantees */}
+              <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+                <a
+                  href="#march-2027-assessment"
+                  className="ed-btn ed-btn-signal min-h-[52px] px-6 lg:hidden"
+                >
+                  Get my free study plan
+                  <ArrowRight size={17} aria-hidden="true" />
+                </a>
+                <a
+                  href="#study-options"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-4 py-2.5 text-[15px] font-bold text-white transition hover:bg-white/20"
+                >
+                  Explore all {universities.length} universities
+                  <ArrowRight size={16} aria-hidden="true" />
+                </a>
+                <span className="inline-flex items-center gap-2 text-[14px] font-semibold text-white/90">
+                  <span className="grid size-5 place-items-center rounded-full bg-lime text-petrol-800">
+                    <Check size={13} strokeWidth={3} aria-hidden="true" />
+                  </span>
+                  No file opening charge
+                </span>
+              </div>
+
+              {/* Campus Showcase Banner */}
+              <figure className="relative mt-6 overflow-hidden rounded-3xl border border-white/15 bg-[#071f33] shadow-lg">
+                <Image
+                  src="/images/home/china-campus-group.webp"
+                  alt="Bangladeshi students enrolled at a Chinese partner university campus"
+                  width={1400}
+                  height={1050}
+                  priority
+                  sizes="(max-width:1023px) 100vw, 620px"
+                  className="h-[195px] w-full object-cover object-[center_68%] opacity-95 sm:h-[220px]"
+                />
+                <figcaption className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 bg-[#071f33]/95 px-5 py-3 text-[13px] text-white/90">
+                  <span>English & Chinese-medium routes across major Chinese university cities</span>
+                  <span className="shrink-0 font-bold text-lime">Bangladeshi students on campus</span>
+                </figcaption>
+              </figure>
+            </div>
+
+            {/* Right Hero Column: Lead Form */}
+            <div className="lg:sticky lg:top-24 lg:pt-1">
+              <March2027LeadForm
+                whatsappNumber={whatsappNumber}
+                route={route}
+                onRoute={next => {
+                  setRoute(next);
+                  setSelection(null);
+                }}
+                selection={selection}
+                onClearSelection={() => setSelection(null)}
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -297,7 +343,7 @@ export default function March2027Experience({
         </div>
       </div>
 
-      {/* 17-University Catalogue */}
+      {/* 18-University Catalogue */}
       <MarchUniversityCatalogue universities={universities} onChoose={choose} />
 
       {/* Mobile Sticky CTA Bar */}

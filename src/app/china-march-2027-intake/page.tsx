@@ -1,6 +1,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, CalendarCheck, Check, CheckCircle2, ChevronDown, FileCheck2, MapPin, MessageCircle, Phone, ShieldCheck, Sparkles } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  CalendarCheck,
+  Check,
+  ChevronDown,
+  Clock3,
+  FileCheck2,
+  MapPin,
+  MessageCircle,
+  Phone,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
 import March2027Experience from '@/components/campaigns/March2027Experience';
 import March2027ContactLink from '@/components/campaigns/March2027ContactLink';
 import StoryMarquee from '@/components/stories/StoryMarquee';
@@ -54,6 +67,7 @@ export default async function Page() {
   const address =
     office?.address ??
     `${config.contact.address.street}, ${config.contact.address.city} ${config.contact.address.postalCode}`;
+  const hours = office?.hours ?? 'Saturday to Thursday, 11:00 AM to 6:00 PM';
   const supportPackage =
     trust?.servicePackages.find(item => item.slug === 'china-complete-support-package') ??
     trust?.servicePackages.find(item => item.destination.toLowerCase() === 'china');
@@ -61,6 +75,7 @@ export default async function Page() {
     'Hello, I would like a study plan for China March 2027 intake.'
   )}`;
   const marchIntake = getChinaIntakes().find(row => row.activeCampaignHref === PATH);
+  const universityCount = campaign.universities.length;
 
   const schema = {
     '@context': 'https://schema.org',
@@ -114,94 +129,162 @@ export default async function Page() {
     <div lang="en" className="min-h-screen bg-white pb-24 text-petrol-800 lg:pb-0">
       <JsonLd data={schema} />
 
-      {/* Sticky Executive Campaign Header */}
-      <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 px-5 backdrop-blur-md sm:px-8">
-        <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 py-3">
-          <div className="flex items-center gap-7">
-            <Link href="/" aria-label="EduExpress International home">
-              <Image
-                src="/logo.png"
-                alt="EduExpress International"
-                width={205}
-                height={58}
-                className="h-auto w-36 sm:w-44"
-                priority
-              />
-            </Link>
-            <nav aria-label="Campaign sections" className="hidden items-center gap-5 text-sm font-semibold text-slate-600 lg:flex">
-              <a href="#study-options" className="transition hover:text-petrol-800">
-                17 Universities
-              </a>
-              <a href="#costs" className="transition hover:text-petrol-800">
-                Cost Plan
-              </a>
-              <a href="#support-package" className="transition hover:text-petrol-800">
-                Support Package
-              </a>
-              <a href="#documents" className="transition hover:text-petrol-800">
-                Documents
-              </a>
-              <a href="#student-stories" className="transition hover:text-petrol-800">
-                Student Stories
-              </a>
-              <a href="#faq" className="transition hover:text-petrol-800">
-                FAQ
-              </a>
-            </nav>
-          </div>
+      {/* 2-Tier Executive Campaign Header */}
+      <header className="sticky top-0 z-40 shadow-[0_8px_28px_-18px_rgba(6,26,43,0.35)]">
+        {/* Tier 1: Executive Top Institutional Bar */}
+        <div className="border-b border-white/10 bg-[#051827] px-5 text-xs text-white/85 sm:px-8">
+          <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-x-6 gap-y-1.5 py-2">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              {marchIntake && (
+                <span className="inline-flex items-center gap-1.5 font-bold text-lime">
+                  <CalendarCheck size={14} className="shrink-0" aria-hidden="true" />
+                  March 2027 Intake: {marchIntake.status}
+                </span>
+              )}
+              {marchIntake && (canApplyToIntake(marchIntake.status) || marchIntake.status === 'Next Intake') && (
+                <span className="hidden items-center gap-1.5 text-white/80 sm:inline-flex">
+                  <span aria-hidden="true" className="text-white/30">
+                    •
+                  </span>
+                  Deadline: <strong className="font-semibold text-white">{marchIntake.deadlineLabel}</strong>
+                </span>
+              )}
+              <span className="hidden items-center gap-1.5 text-white/75 md:inline-flex">
+                <span aria-hidden="true" className="text-white/30">
+                  •
+                </span>
+                <MapPin size={13} className="text-lime" aria-hidden="true" />
+                Dhanmondi Head Office, Dhaka
+              </span>
+            </div>
 
-          <div className="flex items-center gap-2.5 sm:gap-3.5">
-            <March2027ContactLink
-              kind="phone"
-              href={`tel:${phone}`}
-              className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm font-bold text-petrol-800 transition hover:bg-slate-100"
-            >
-              <Phone size={15} aria-hidden="true" />
-              <span className="hidden sm:inline">{formatBangladeshPhone(phone)}</span>
-              <span className="sm:hidden">Call</span>
-            </March2027ContactLink>
-            <March2027ContactLink
-              kind="whatsapp"
-              href={whatsappHref}
-              className="ed-btn ed-btn-soft min-h-10 px-3.5 text-sm"
-            >
-              <MessageCircle size={16} aria-hidden="true" />
-              WhatsApp
-            </March2027ContactLink>
+            <div className="flex items-center gap-4 font-semibold">
+              <Link href="/" className="inline-flex items-center gap-1 text-white/85 transition hover:text-lime">
+                <ArrowLeft size={13} aria-hidden="true" />
+                Main Website
+              </Link>
+              <span aria-hidden="true" className="text-white/25">
+                |
+              </span>
+              <Link href="/universities" className="hidden text-white/85 transition hover:text-lime sm:inline">
+                All 120 Universities
+              </Link>
+              <span aria-hidden="true" className="hidden text-white/25 sm:inline">
+                |
+              </span>
+              <Link href="/china-intakes-deadlines" className="text-lime underline underline-offset-4 hover:text-white">
+                All China intakes →
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Tier 2: Main Sticky Navigation Bar */}
+        <div className="border-b border-slate-200/90 bg-white/95 px-5 backdrop-blur-md sm:px-8">
+          <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 py-3">
+            <div className="flex items-center gap-4 sm:gap-5">
+              <Link href="/" aria-label="EduExpress International home" className="shrink-0">
+                <Image
+                  src="/logo.png"
+                  alt="EduExpress International"
+                  width={205}
+                  height={58}
+                  className="h-auto w-36 sm:w-44"
+                  priority
+                />
+              </Link>
+
+              <div className="hidden h-7 w-px bg-slate-200 sm:block" aria-hidden="true" />
+
+              <div className="hidden sm:block xl:hidden 2xl:block">
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#2c6a97]">
+                  China Spring 2027
+                </p>
+                <p className="text-xs font-bold text-petrol-800">Official Intake Desk</p>
+              </div>
+
+              <nav
+                aria-label="Campaign sections"
+                className="hidden items-center gap-1 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-1 text-[13px] font-bold text-slate-600 lg:flex"
+              >
+                <a
+                  href="#study-options"
+                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                >
+                  {universityCount} Universities
+                </a>
+                <a
+                  href="#costs"
+                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                >
+                  Cost Plan
+                </a>
+                <a
+                  href="#support-package"
+                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                >
+                  Support Package
+                </a>
+                <a
+                  href="#documents"
+                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                >
+                  Documents
+                </a>
+                <a
+                  href="#student-stories"
+                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                >
+                  Student Stories
+                </a>
+                <a
+                  href="#faq"
+                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                >
+                  FAQ
+                </a>
+              </nav>
+            </div>
+
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <March2027ContactLink
+                kind="phone"
+                href={`tel:${phone}`}
+                className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-bold text-petrol-800 transition hover:border-petrol-800/30 hover:bg-slate-100 sm:px-3.5 sm:text-sm"
+              >
+                <Phone size={15} className="text-[#12436b]" aria-hidden="true" />
+                <span className="hidden md:inline">{formatBangladeshPhone(phone)}</span>
+                <span className="md:hidden">Call</span>
+              </March2027ContactLink>
+
+              <March2027ContactLink
+                kind="whatsapp"
+                href={whatsappHref}
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3 text-xs font-bold text-emerald-900 transition hover:bg-emerald-100 sm:px-3.5 sm:text-sm"
+              >
+                <MessageCircle size={15} className="text-emerald-700" aria-hidden="true" />
+                <span>WhatsApp</span>
+              </March2027ContactLink>
+
+              <a
+                href="#march-2027-assessment"
+                className="ed-btn ed-btn-signal hidden min-h-10 px-4 text-xs font-extrabold sm:inline-flex sm:text-sm"
+              >
+                Free Study Plan
+                <ArrowRight size={15} aria-hidden="true" />
+              </a>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Intake Window Status Banner */}
-      {marchIntake && (
-        <div className="border-b border-lime-deep/15 bg-lime-pale px-5 sm:px-8">
-          <p className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5 text-[13.5px] leading-6 text-petrol-800">
-            <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <span className="inline-flex items-center gap-1.5 font-bold text-petrol-800">
-                <CalendarCheck size={16} className="shrink-0 text-lime-deep" aria-hidden="true" />
-                March 2027 intake: {marchIntake.status}
-              </span>
-              <span className="hidden text-petrol-800/40 sm:inline">•</span>
-              {canApplyToIntake(marchIntake.status) || marchIntake.status === 'Next Intake' ? (
-                <span className="font-medium">University application deadline: {marchIntake.deadlineLabel}</span>
-              ) : (
-                <span>Ask a counsellor for the current deadline</span>
-              )}
-            </span>
-            <Link href="/china-intakes-deadlines" className="font-bold underline underline-offset-4 hover:text-lime-deep">
-              All China intakes →
-            </Link>
-          </p>
-        </div>
-      )}
-
-      {/* Hero + Lead Form + 17-University Catalogue */}
+      {/* Hero + Lead Form + 18-University Catalogue */}
       <March2027Experience universities={publicMarchCatalogue(campaign.universities)} whatsappNumber={whatsapp} />
 
       <TrustBar universities={campaign.universities.length} />
 
       {/* Cost Plan & Complete China Support Package */}
-      <section id="costs" aria-labelledby="cost-title" className="scroll-mt-16 bg-canvas-soft px-5 py-14 sm:px-8 lg:py-20">
+      <section id="costs" aria-labelledby="cost-title" className="scroll-mt-24 bg-canvas-soft px-5 py-14 sm:px-8 lg:py-20">
         <div className="mx-auto max-w-[1180px]">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-petrol-800 shadow-2xs">
@@ -361,7 +444,7 @@ export default async function Page() {
       </section>
 
       {/* Application Dossier & Dhanmondi Consultation Section */}
-      <section id="documents" aria-labelledby="file-title" className="scroll-mt-16 px-5 py-14 sm:px-8 lg:py-20">
+      <section id="documents" aria-labelledby="file-title" className="scroll-mt-24 px-5 py-14 sm:px-8 lg:py-20">
         <div className="mx-auto grid max-w-[1180px] gap-8 lg:grid-cols-[.88fr_1.12fr] lg:items-center lg:gap-14">
           <div>
             <div data-anim="up" className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-slate-200 shadow-md">
@@ -419,7 +502,7 @@ export default async function Page() {
 
       {/* Real Student Testimonials Section (single-line infinite loop carousel, uses <div> cards to preserve exact <article> count) */}
       {(trust?.testimonials?.length ?? 0) > 0 && (
-        <section id="student-stories" aria-labelledby="student-stories-title" className="scroll-mt-16 overflow-hidden bg-petrol-800 py-14 text-white lg:py-20">
+        <section id="student-stories" aria-labelledby="student-stories-title" className="scroll-mt-24 overflow-hidden bg-petrol-800 py-14 text-white lg:py-20">
           <div className="mx-auto max-w-[1180px] px-5 sm:px-8">
             <div className="flex flex-wrap items-end justify-between gap-5">
               <div className="max-w-2xl">
@@ -463,7 +546,7 @@ export default async function Page() {
       )}
 
       {/* FAQ Section */}
-      <section id="faq" aria-labelledby="faq-title" className="scroll-mt-16 bg-canvas-soft px-5 py-14 sm:px-8 lg:py-20">
+      <section id="faq" aria-labelledby="faq-title" className="scroll-mt-24 bg-canvas-soft px-5 py-14 sm:px-8 lg:py-20">
         <div className="mx-auto grid max-w-[1180px] gap-8 lg:grid-cols-[.65fr_1.35fr] lg:gap-14">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-petrol-800 shadow-2xs">
@@ -505,14 +588,17 @@ export default async function Page() {
       </section>
 
       {/* Closing Executive CTA Band */}
-      <section className="bg-petrol-800 px-5 py-14 text-white sm:px-8 lg:py-16">
+      <section className="border-b border-white/10 bg-gradient-to-r from-[#071f33] via-petrol-800 to-[#12436b] px-5 py-14 text-white sm:px-8 lg:py-16">
         <div className="mx-auto flex max-w-[1180px] flex-col justify-between gap-6 sm:flex-row sm:items-center">
           <div>
-            <h2 data-anim="pop" className="font-display text-[34px] font-black leading-[0.98] text-lime sm:text-[44px]">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-lime">
+              Free Profile Assessment · Dhaka Office
+            </span>
+            <h2 data-anim="pop" className="mt-3 font-display text-[34px] font-black leading-[0.98] text-lime sm:text-[44px]">
               Your next step starts with your profile.
             </h2>
             <p className="mt-3 text-[18px] text-white/85">
-              Your universities, funding options and costs. One clear plan.
+              Your universities, funding options and costs. One clear plan in writing.
             </p>
           </div>
           <a href="#march-2027-assessment" className="ed-btn ed-btn-signal min-h-[54px] shrink-0 px-7">
@@ -522,39 +608,95 @@ export default async function Page() {
         </div>
       </section>
 
-      {/* Campaign Footer */}
-      <footer className="border-t border-slate-200/80 bg-white px-5 py-8 sm:px-8">
+      {/* Executive Institutional Campaign Footer */}
+      <footer className="bg-[#051827] px-5 py-12 text-white sm:px-8">
         <div className="mx-auto max-w-[1180px]">
-          <nav
-            aria-label="China study guides"
-            className="flex flex-wrap gap-x-5 gap-y-1 border-b border-canvas-soft pb-5 text-[15px] font-semibold text-petrol-800"
-          >
-            {[
-              ['/study-in-china-from-bangladesh', 'Study in China guide'],
-              ['/china-intakes-deadlines', 'Intakes & deadlines'],
-              ['/china-scholarships-bangladesh', 'Scholarships'],
-              ['/study-in-china-cost-bangladesh', 'Study costs'],
-              ['/china-admission-requirements', 'Admission requirements'],
-              ['/china-student-visa-bangladesh', 'Student visa'],
-            ].map(([href, label]) => (
-              <Link href={href} key={href} className="inline-flex min-h-11 items-center underline underline-offset-4">
-                {label}
+          <div className="grid gap-8 border-b border-white/10 pb-10 lg:grid-cols-[1.2fr_1fr_1fr]">
+            <div>
+              <Link href="/" aria-label="EduExpress International home" className="inline-block">
+                <Image src="/white-logo.png" alt="EduExpress International" width={190} height={54} className="h-auto w-44" />
               </Link>
-            ))}
-          </nav>
-          <div className="mt-5 flex flex-col justify-between gap-3 text-[14px] text-ink-soft sm:flex-row">
-            <p>EduExpress International · Guidance & application support</p>
-            <div className="flex flex-wrap gap-x-4">
-              <Link href="/privacy" className="inline-flex min-h-11 items-center">
+              <p className="mt-4 max-w-sm text-sm leading-6 text-white/75">
+                Bangladesh&apos;s evidence-first study abroad consultancy since 2018. Every university route, scholarship condition, and cost schedule provided in writing before you commit.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {['Since 2018', 'BDT 0 Before China Visa', 'Parents Welcome'].map(badge => (
+                  <span
+                    key={badge}
+                    className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold text-lime"
+                  >
+                    {badge}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-lime">China Study Guides</h3>
+              <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm text-white/80">
+                {[
+                  ['/study-in-china-from-bangladesh', 'Study in China guide'],
+                  ['/china-intakes-deadlines', 'Intakes & deadlines'],
+                  ['/china-scholarships-bangladesh', 'Scholarships'],
+                  ['/study-in-china-cost-bangladesh', 'Study costs'],
+                  ['/china-admission-requirements', 'Admission requirements'],
+                  ['/china-student-visa-bangladesh', 'Student visa'],
+                  ['/universities', 'All 120 universities'],
+                  ['/china-visa-first-policy', 'Visa-first policy'],
+                ].map(([href, label]) => (
+                  <li key={href}>
+                    <Link href={href} className="transition hover:text-lime">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-sm">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-lime">Dhanmondi Head Office</p>
+              <p className="mt-2.5 flex items-start gap-2 text-white/85">
+                <MapPin size={16} className="mt-0.5 shrink-0 text-lime" aria-hidden="true" />
+                <span>{address}</span>
+              </p>
+              <p className="mt-2 flex items-center gap-2 text-white/75">
+                <Clock3 size={15} className="shrink-0 text-lime" aria-hidden="true" />
+                <span>{hours}</span>
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                <a
+                  href={`tel:${phone}`}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-white/10 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-lime hover:text-petrol-800"
+                >
+                  <Phone size={14} aria-hidden="true" />
+                  {formatBangladeshPhone(phone)}
+                </a>
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-lime px-3.5 py-2 text-xs font-bold text-petrol-800 transition hover:bg-white"
+                >
+                  <MessageCircle size={14} aria-hidden="true" />
+                  WhatsApp Desk
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-col justify-between gap-3 text-xs text-white/65 sm:flex-row sm:items-center">
+            <p>© {new Date().getFullYear()} EduExpress International · Evidence-First Study Abroad Consultancy</p>
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
+              <Link href="/privacy" className="transition hover:text-white">
                 Privacy
               </Link>
-              <Link href="/terms" className="inline-flex min-h-11 items-center">
+              <Link href="/terms" className="transition hover:text-white">
                 Service terms
               </Link>
-              <Link href="/fees-and-transparency" className="inline-flex min-h-11 items-center">
+              <Link href="/fees-and-transparency" className="transition hover:text-white">
                 Fee policy
               </Link>
-              <Link href="/contact" className="inline-flex min-h-11 items-center">
+              <Link href="/contact" className="transition hover:text-white">
                 Contact
               </Link>
             </div>

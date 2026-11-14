@@ -21,7 +21,7 @@ const abs = (src: string) => (src.startsWith('http') ? src : `${SITE}${src}`);
  * photos that actually appear on the page belong here.
  */
 const PAGE_IMAGES: Record<string, string[]> = {
-  '': ['/images/students/success-banner.webp', '/images/students/departure-family.webp'],
+  '': ['/images/home/china-campus-group.webp', '/images/students/departure-family.webp'],
   '/about': ['/images/home/dhanmondi-counselling-team.webp'],
   '/destinations': Object.values(DESTINATION_PHOTOS),
   '/for-parents': ['/images/home/parent-counselling.webp'],

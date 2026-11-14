@@ -162,6 +162,17 @@ export const chinaMarch2027Routes: March2027RouteGroup[] = [
         deadline: 'Application window requires confirmation before submission.',
       },
       {
+        name: 'Guangzhou City Construction College',
+        location: 'Qingyuan, Guangzhou',
+        level: 'Chinese Language',
+        pathway: '1-Semester (X2 Visa) or 1-Year (X1 Visa) Chinese Language Program',
+        indicativeCost: 'Tuition + Hostel: CNY 7,000 / semester (X2 Visa) or CNY 13,200 / year (X1 Visa)',
+        scholarship: 'Bundled tuition and on-campus hostel package for eligible applicants aged 18–45.',
+        subjects: ['Chinese Language', 'Chinese Culture', 'HSK Preparation'],
+        deadline: 'March 2027 intake; apply by 31 January 2027.',
+        universitySlug: 'gzccc',
+      },
+      {
         name: 'Six-month pathway options',
         location: 'Wuhan, Jiangsu or Shandong',
         level: 'Chinese Language',

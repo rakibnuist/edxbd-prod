@@ -227,10 +227,12 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
                     <div className="flex items-center justify-between gap-2">
                       <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#12436b]">
                         <GraduationCap size={15} className="shrink-0 text-[#2c6a97]" />
-                        Art & design specialist institution
+                        {university.id === 'guangzhou-city-construction-college'
+                          ? 'Vocational & Chinese language college'
+                          : 'Art & design specialist institution'}
                       </span>
                       <span className="rounded-full bg-white px-2.5 py-0.5 text-[11px] font-semibold text-slate-600 ring-1 ring-slate-200/80">
-                        Public Academy
+                        {university.id === 'guangzhou-city-construction-college' ? 'MoE Accredited' : 'Public Academy'}
                       </span>
                     </div>
                   )}

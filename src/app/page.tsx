@@ -509,13 +509,13 @@ export default async function Home() {
                 </h2>
 
                 <p className="mt-4 max-w-xl text-[17.5px] leading-[1.6] text-white/85">
-                  Don&apos;t lose a full academic year waiting for September. Compare 17 verified Chinese universities offering Foundation → Bachelor, Direct Bachelor, Master&apos;s, and Language routes with up to 100% tuition scholarships.
+                  Don&apos;t lose a full academic year waiting for September. Compare 18 verified Chinese universities offering Foundation → Bachelor, Direct Bachelor, Master&apos;s, and Language routes with up to 100% tuition scholarships.
                 </p>
 
                 <dl className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/10 sm:gap-4 sm:p-5">
                   <div>
                     <dt className="text-xs font-semibold uppercase tracking-wider text-white/70">Universities</dt>
-                    <dd className="mt-1 font-display text-[26px] font-black leading-none text-white sm:text-[32px]">17</dd>
+                    <dd className="mt-1 font-display text-[26px] font-black leading-none text-white sm:text-[32px]">18</dd>
                   </div>
                   <div>
                     <dt className="text-xs font-semibold uppercase tracking-wider text-white/70">Scholarships</dt>
@@ -571,8 +571,8 @@ export default async function Home() {
                     },
                     {
                       title: 'Chinese Language',
-                      badge: 'Top 100',
-                      desc: 'Study at World Top 100 SJTU & HUST from CNY 7,300 / semester',
+                      badge: '3 Unis',
+                      desc: 'Study at SJTU, HUST & GZCCC (Guangzhou) from CNY 7,000 / semester',
                       href: '/china-march-2027-intake?route=Chinese%20language#march-2027-assessment',
                     },
                   ].map(route => (
@@ -598,9 +598,9 @@ export default async function Home() {
                 </div>
 
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-canvas-soft px-4 py-3 text-xs font-semibold text-petrol-800">
-                  <span>Includes SJTU, HIT, HUST, NUAA, CQMU, Nantong & 11 more</span>
-                  <Link href="/china-march-2027-intake#universities" className="font-bold underline underline-offset-4">
-                    View all 17 universities →
+                  <span>Includes SJTU, HIT, HUST, NUAA, CQMU, GZCCC & 12 more</span>
+                  <Link href="/china-march-2027-intake#study-options" className="font-bold underline underline-offset-4">
+                    View all 18 universities →
                   </Link>
                 </div>
               </div>
@@ -794,20 +794,45 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-            <figure data-anim="up" className="relative overflow-hidden rounded-3xl">
-              <div className="relative aspect-[4/3]">
-                <Image
-                  src="/images/students/success-banner.webp"
-                  alt="Students and parents at Dhaka airport holding a banner: Finally we made our dream study in China with EduExpress International"
-                  fill
-                  sizes="(max-width:1024px) 100vw, 580px"
-                  className="object-cover"
-                />
+            <div data-anim="up" className="relative">
+              <figure className="relative overflow-hidden rounded-3xl border border-white/15 bg-[#071f33] shadow-2xl">
+                <div className="relative aspect-[4/3]">
+                  <Image
+                    src="/images/home/china-campus-group.webp"
+                    alt="Bangladeshi students enrolled and studying together on campus in China through EduExpress International"
+                    fill
+                    sizes="(max-width:1024px) 100vw, 580px"
+                    className="object-cover object-[center_72%]"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#051827]/85 via-[#051827]/30 to-transparent"
+                  />
+                </div>
+                <figcaption className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-1.5 text-[13.5px] font-bold text-petrol-800 shadow-sm">
+                  <span className="size-2 rounded-full bg-[#2ead4b]" aria-hidden="true" />
+                  Admitted &amp; enrolled on campus in China
+                </figcaption>
+              </figure>
+
+              {/* Secondary Airport Departure Card */}
+              <div className="mt-3 hidden items-center gap-3.5 rounded-2xl border border-white/15 bg-[#071f33]/95 p-3 shadow-xl backdrop-blur-md sm:absolute sm:-bottom-5 sm:right-4 sm:mt-0 sm:flex sm:w-[270px]">
+                <div className="relative size-16 shrink-0 overflow-hidden rounded-xl border border-white/20">
+                  <Image
+                    src="/images/home/student-departure-support.webp"
+                    alt="EduExpress student departure support at Hazrat Shahjalal International Airport in Dhaka"
+                    fill
+                    sizes="64px"
+                    className="object-cover object-[center_28%]"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-lime">Dhaka Airport</p>
+                  <p className="mt-0.5 text-xs font-bold leading-snug text-white">Pre-departure &amp; airport send-off</p>
+                  <p className="mt-0.5 text-[11px] text-white/70">Dhanmondi to China campus</p>
+                </div>
               </div>
-              <figcaption className="absolute bottom-4 left-4 rounded-full bg-white px-4 py-1.5 text-[14px] font-semibold text-petrol-800">
-                Departure day, Dhaka airport
-              </figcaption>
-            </figure>
+            </div>
           </div>
 
         </div>

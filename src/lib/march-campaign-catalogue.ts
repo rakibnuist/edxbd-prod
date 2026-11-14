@@ -9,7 +9,7 @@ export function filterMarchCatalogue(universities: MarchCatalogueUniversity[], q
   const words=query.toLowerCase().trim().split(/\s+/).filter(Boolean);
   return universities.flatMap(university => {
     const identity=[university.name,university.acronym,university.city].join(' ').toLowerCase();
-    const programmes=university.programmes.filter(programme => (route==='all'||programme.route===route) && words.every(word => (identity+' '+[programme.name,programme.route,programme.teachingLanguage,programme.awardTitle,...programme.majors].join(' ').toLowerCase()).includes(word)));
+    const programmes=university.programmes.filter(programme => (route==='all'||programme.route===route) && words.every(word => (identity+' '+[programme.name,programme.route,programme.teachingLanguage,programme.awardTitle,programme.professionalNote,...programme.majors].join(' ').toLowerCase()).includes(word)));
     return programmes.length ? [{...university,programmes}] : [];
   });
 }

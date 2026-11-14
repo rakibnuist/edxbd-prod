@@ -2030,6 +2030,162 @@
           "fundingHighlight": "CNY 15,000 freshman award"
         }
       ]
+    },
+    {
+      "id": "guangzhou-city-construction-college",
+      "name": "Guangzhou City Construction College",
+      "acronym": "GZCCC",
+      "city": "Qingyuan, Guangzhou",
+      "logo": "/images/campaigns/march-2027/guangzhou-city-construction-college.png",
+      "ranking": null,
+      "programmes": [
+        {
+          "tuitionLabel": "1-Semester (X2) tuition + hostel",
+          "teachingLanguage": "Chinese",
+          "costItems": [
+            {
+              "item": "1-Semester Program (X2 Visa) — Tuition + Hostel Fee",
+              "amount": "CNY 7,000 / semester",
+              "note": "Bundled tuition and on-campus hostel accommodation."
+            },
+            {
+              "item": "1-Year Program (X1 Visa) — Tuition + Hostel Fee",
+              "amount": "CNY 13,200 / year",
+              "note": "Bundled tuition and on-campus hostel accommodation."
+            },
+            {
+              "item": "Application Fee",
+              "amount": "CNY 800",
+              "note": "One-off application fee."
+            },
+            {
+              "item": "Medical Insurance",
+              "amount": "CNY 400 / semester",
+              "note": ""
+            },
+            {
+              "item": "Residence Permit",
+              "amount": "CNY 400",
+              "note": "Applicable for X1 Visa residence permit registration."
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "1-Semester Package (X2 Visa)",
+              "coverage": "Tuition + Hostel Fee bundled at CNY 7,000 / semester."
+            },
+            {
+              "name": "1-Year Package (X1 Visa)",
+              "coverage": "Tuition + Hostel Fee bundled at CNY 13,200 / year."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "High-school / academic certificates and transcripts",
+            "Foreigner Physical Examination Form (medical checkup)",
+            "Police clearance certificate (non-criminal record)",
+            "Financial support declaration when required"
+          ],
+          "scholarshipConditions": "Bundled tuition + hostel package applies to eligible international students aged 18–45 years. Applicants from war-affected countries are not eligible.",
+          "professionalNote": "Also searched as Guangzhou City Censtruction College (GZCCC), located in Qingyuan, Guangzhou, China.",
+          "csca": "No CSCA score is required for non-degree Chinese language entry.",
+          "id": "gzccc-language-semester",
+          "route": "language",
+          "name": "Chinese Language Program · 1 Semester (X2 Visa)",
+          "tuition": "CNY 7,000",
+          "period": "semester",
+          "feeBasis": "Owner-supplied March 2027 bundled tuition + hostel package",
+          "duration": "1 semester (X2 Visa)",
+          "entry": "March 2027 intake",
+          "extra": "Tuition + Hostel Fee included: CNY 7,000/semester (X2 Visa) or CNY 13,200/year (X1 Visa). Application Fee: CNY 800; Insurance: CNY 400/semester; Residence Permit: CNY 400.",
+          "awardTitle": "Bundled Tuition + Hostel Package",
+          "scholarship": "All-inclusive tuition and on-campus hostel fee of CNY 7,000 for 1 semester (X2 Visa) or CNY 13,200 for 1 year (X1 Visa).",
+          "majors": [
+            "Chinese Language",
+            "Chinese Listening & Speaking",
+            "Chinese Reading & Writing",
+            "Chinese Culture"
+          ],
+          "eligibility": "Age limit: 18–45 years. High-school qualification or above. Country restrictions: Applicants from war-affected countries are not eligible (Bangladeshi applicants are eligible).",
+          "majorGroups": [],
+          "fundingStage": "Bundled tuition + hostel",
+          "fundingHighlight": "Tuition + Hostel: CNY 7,000/sem · CNY 13,200/yr"
+        },
+        {
+          "tuitionLabel": "1-Year (X1) tuition + hostel",
+          "teachingLanguage": "Chinese",
+          "costItems": [
+            {
+              "item": "1-Year Program (X1 Visa) — Tuition + Hostel Fee",
+              "amount": "CNY 13,200 / year",
+              "note": "Bundled tuition and on-campus hostel accommodation."
+            },
+            {
+              "item": "1-Semester Program (X2 Visa) — Tuition + Hostel Fee",
+              "amount": "CNY 7,000 / semester",
+              "note": "Alternative 1-semester short-term route."
+            },
+            {
+              "item": "Application Fee",
+              "amount": "CNY 800",
+              "note": "One-off application fee."
+            },
+            {
+              "item": "Medical Insurance",
+              "amount": "CNY 400 / semester",
+              "note": "CNY 800 for a full academic year."
+            },
+            {
+              "item": "Residence Permit",
+              "amount": "CNY 400",
+              "note": "Payable after arrival in China for X1 Visa conversion."
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "1-Year Package (X1 Visa)",
+              "coverage": "Tuition + Hostel Fee bundled at CNY 13,200 / year."
+            },
+            {
+              "name": "1-Semester Package (X2 Visa)",
+              "coverage": "Tuition + Hostel Fee bundled at CNY 7,000 / semester."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "High-school / academic certificates and transcripts",
+            "Foreigner Physical Examination Form (medical checkup)",
+            "Police clearance certificate (non-criminal record)",
+            "Financial support declaration when required"
+          ],
+          "scholarshipConditions": "Bundled tuition + hostel package applies to eligible international students aged 18–45 years. Applicants from war-affected countries are not eligible.",
+          "professionalNote": "X1 Student Visa route with on-campus residence permit (CNY 400) in Qingyuan, Guangzhou, China.",
+          "csca": "No CSCA score is required for non-degree Chinese language entry.",
+          "id": "gzccc-language-year",
+          "route": "language",
+          "name": "Chinese Language Program · 1 Year (X1 Visa)",
+          "tuition": "CNY 13,200",
+          "period": "year",
+          "feeBasis": "Owner-supplied March 2027 bundled tuition + hostel package",
+          "duration": "1 year (X1 Visa)",
+          "entry": "March 2027 intake",
+          "extra": "Tuition + Hostel Fee included: CNY 13,200/year (X1 Visa) or CNY 7,000/semester (X2 Visa). Application Fee: CNY 800; Insurance: CNY 400/semester; Residence Permit: CNY 400.",
+          "awardTitle": "Bundled Tuition + Hostel Package",
+          "scholarship": "All-inclusive tuition and on-campus hostel fee of CNY 13,200 for 1 year (X1 Visa) or CNY 7,000 for 1 semester (X2 Visa).",
+          "majors": [
+            "Chinese Language",
+            "Chinese Listening & Speaking",
+            "Chinese Reading & Writing",
+            "HSK Preparation"
+          ],
+          "eligibility": "Age limit: 18–45 years. High-school qualification or above. Country restrictions: Applicants from war-affected countries are not eligible (Bangladeshi applicants are eligible).",
+          "majorGroups": [],
+          "fundingStage": "Bundled tuition + hostel",
+          "fundingHighlight": "Tuition + Hostel: CNY 13,200/yr (X1 Visa)"
+        }
+      ]
     }
   ]
 }
