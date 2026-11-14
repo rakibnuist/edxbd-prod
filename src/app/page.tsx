@@ -457,6 +457,132 @@ export default async function Home() {
         </section>
       )}
 
+      {/* 2B. Featured Campaign — China March 2027 Intake */}
+      <section id="march-2027-intake" aria-labelledby="march-2027-home-heading" className="pt-16 lg:pt-20">
+        <div className={wrap}>
+          <div className="overflow-hidden rounded-3xl bg-petrol-800 p-6 text-white shadow-[0_24px_60px_rgba(15,58,92,0.16)] sm:p-10 lg:p-12">
+            <div className="grid gap-10 lg:grid-cols-[1.08fr_.92fr] lg:items-center">
+              <div>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-lime px-3.5 py-1 text-[13px] font-extrabold text-petrol-800">
+                    <span className="size-2 rounded-full bg-petrol-800" aria-hidden="true" />
+                    China March 2027 Intake · Open
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1 text-[13px] font-semibold text-white/90">
+                    <Clock3 size={14} className="text-lime" aria-hidden="true" />
+                    Apply by 31 January 2027
+                  </span>
+                </div>
+
+                <h2
+                  id="march-2027-home-heading"
+                  data-anim="up"
+                  className="mt-5 font-display text-[36px] font-black leading-[0.96] tracking-[-0.01em] text-lime sm:text-[48px]"
+                >
+                  Start your degree in China this March 2027.
+                </h2>
+
+                <p className="mt-4 max-w-xl text-[17.5px] leading-[1.6] text-white/85">
+                  Don&apos;t lose a full academic year waiting for September. Compare 17 verified Chinese universities offering Foundation → Bachelor, Direct Bachelor, Master&apos;s, and Language routes with up to 100% tuition scholarships.
+                </p>
+
+                <dl className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/10 sm:gap-4 sm:p-5">
+                  <div>
+                    <dt className="text-xs font-semibold uppercase tracking-wider text-white/70">Universities</dt>
+                    <dd className="mt-1 font-display text-[26px] font-black leading-none text-white sm:text-[32px]">17</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-semibold uppercase tracking-wider text-white/70">Scholarships</dt>
+                    <dd className="mt-1 font-display text-[26px] font-black leading-none text-lime sm:text-[32px]">Up to 100%</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-semibold uppercase tracking-wider text-white/70">Before Visa</dt>
+                    <dd className="mt-1 font-display text-[26px] font-black leading-none text-white sm:text-[32px]">BDT 0</dd>
+                  </div>
+                </dl>
+
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                  <Link href="/china-march-2027-intake" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+                    Explore March 2027 Intake <ArrowRight size={18} aria-hidden="true" />
+                  </Link>
+                  <Link href="/china-march-2027-intake#march-2027-assessment" className="ed-btn ed-btn-on-dark min-h-[52px] px-7">
+                    Check my eligibility
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right Column: 4 Pathways Card */}
+              <div className="rounded-3xl bg-white p-6 text-petrol-800 sm:p-7">
+                <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-[#2c6a97]">March 2027 Study Routes</p>
+                    <h3 className="mt-0.5 text-[20px] font-bold leading-snug text-petrol-800">Choose your entry pathway</h3>
+                  </div>
+                  <span lang="bn" className="rounded-full bg-lime-pale px-3 py-1 text-xs font-bold text-lime-deep">
+                    ভিসার আগে ০ টাকা
+                  </span>
+                </div>
+
+                <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+                  {[
+                    {
+                      title: 'Foundation → Bachelor',
+                      badge: '12 Unis',
+                      desc: '1-semester prep + 4-year degree with up to 100% tuition waiver & stipends',
+                      href: '/china-march-2027-intake?route=Foundation%20%E2%86%92%20Bachelor#march-2027-assessment',
+                    },
+                    {
+                      title: 'Direct Bachelor',
+                      badge: '4 Unis',
+                      desc: 'Direct March entry in CS, AI, Engineering, Business, Pharmacy & MBBS',
+                      href: '/china-march-2027-intake?route=Direct%20Bachelor#march-2027-assessment',
+                    },
+                    {
+                      title: 'Master’s Degree',
+                      badge: 'Postgrad',
+                      desc: 'Full tuition + hostel scholarship routes for bachelor graduates',
+                      href: '/china-march-2027-intake?route=Master%E2%80%99s#march-2027-assessment',
+                    },
+                    {
+                      title: 'Chinese Language',
+                      badge: 'Top 100',
+                      desc: 'Study at World Top 100 SJTU & HUST from CNY 7,300 / semester',
+                      href: '/china-march-2027-intake?route=Chinese%20language#march-2027-assessment',
+                    },
+                  ].map(route => (
+                    <Link
+                      key={route.title}
+                      href={route.href}
+                      className="group flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-canvas-soft/60 p-3.5 transition hover:-translate-y-0.5 hover:border-petrol-800 hover:bg-white hover:shadow-xs"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-1.5">
+                          <span className="text-[14px] font-bold text-petrol-800">{route.title}</span>
+                          <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[11px] font-bold text-petrol-800 ring-1 ring-slate-200">
+                            {route.badge}
+                          </span>
+                        </div>
+                        <p className="mt-1.5 text-[12.5px] leading-5 text-ink-soft">{route.desc}</p>
+                      </div>
+                      <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-petrol-800 group-hover:underline">
+                        Apply for this route <ArrowRight size={13} aria-hidden="true" />
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-canvas-soft px-4 py-3 text-xs font-semibold text-petrol-800">
+                  <span>Includes SJTU, HIT, HUST, NUAA, CQMU, Nantong & 11 more</span>
+                  <Link href="/china-march-2027-intake#universities" className="font-bold underline underline-offset-4">
+                    View all 17 universities →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 3. What you get — sage / pale-lime / dark feature cards */}
       <section className="py-20 lg:py-24">
         <div className={wrap}>
