@@ -43,18 +43,24 @@ const structuredData = {
 
 const parentChecks = [
   { title: 'Is the education recognized?', copy: 'We check the institution, selected program and the student’s intended career route.', icon: ShieldCheck, href: '/how-we-verify-universities', cta: 'How we verify universities' },
-  { title: 'What will the family really pay?', copy: 'Tuition, living costs, official fees and EduExpress charges are separated.', icon: CircleDollarSign, href: '/fees-and-transparency', cta: 'See the fee policy' },
+  { title: 'What will the family really pay?', copy: 'Tuition, living costs, official fees and EduExpress charges are separated in writing.', icon: CircleDollarSign, href: '/fees-and-transparency', cta: 'See the fee policy' },
+  { title: 'How do we remit tuition legally?', copy: 'We guide guardians through opening an Authorized Dealer Student File with Bangladesh Bank TM Form and tax compliance.', icon: CircleDollarSign, href: '/study-in-china-cost-bangladesh', cta: 'Student File & remittance steps' },
   { title: 'Who is responsible for each step?', copy: 'Documents, deadlines, payments and application actions should have a named owner.', icon: FileCheck2, href: '/services', cta: 'See what we put in writing' },
-  { title: 'Who can the family speak to?', copy: 'Parents can talk directly with the counseling desk before a student proceeds.', icon: UserRoundCheck, href: '/contact', cta: 'Contact the desk' },
+  { title: 'Who can the family speak to?', copy: 'Parents can talk directly with the counseling desk in Dhanmondi before a student proceeds.', icon: UserRoundCheck, href: '/contact', cta: 'Contact the desk' },
 ];
 
-const bringList = ['Latest academic results', 'Preferred subject or career area', 'Family budget range', 'Questions about recognition or safety'];
+const bringList = ['Latest academic results (SSC, HSC, or Bachelor marksheets)', 'Preferred subject or career area', 'Family budget range in BDT/CNY', 'Guardian/sponsor E-TIN or bank record questions', 'Questions about recognition, safety, or hostel living'];
 
 // Answers restate commitments already published on the homepage, fee and journey pages.
 const faqs = [
   {
     question: 'Can parents join the counselling session?',
     answer: 'Yes. Parents and sponsors are encouraged to join so costs, payment terms, documents, safety and responsibilities can be explained together.',
+  },
+  {
+    question: 'How do parents legally pay university tuition and living expenses from Bangladesh?',
+    answer:
+      'Tuition and living expenses must be remitted legally through an Authorized Dealer (AD) bank branch in Bangladesh by opening a dedicated Student File under Bangladesh Bank foreign exchange rules (FE Circular No. 37). EduExpress assists with the university demand note, JW202/201 admission papers, and itemized cost breakdown so your bank approves the transfer without friction.',
   },
   {
     question: 'When does our family pay the EduExpress service charge?',

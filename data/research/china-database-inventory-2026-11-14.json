@@ -1,0 +1,4947 @@
+{
+  "generatedAt": "2026-11-13T23:52:01.082Z",
+  "exchangeRateAssumed": {
+    "CNY_TO_BDT": 18.66
+  },
+  "totals": {
+    "universities": 110,
+    "programs": 594,
+    "fees": 398,
+    "scholarships": 162,
+    "universitiesWithFees": 68,
+    "universitiesMissingFees": 42,
+    "universitiesWithScholarships": 71,
+    "universitiesMissingScholarships": 39
+  },
+  "universities": [
+    {
+      "name": "Anhui Medical University",
+      "slug": "anhui-medical-university",
+      "city": "Hefei",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 30,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Anhui University of Technology",
+      "slug": "ahut",
+      "city": "Ma'anshan",
+      "degree": "Bachelor,Master,PhD,Language",
+      "intake": "September 2026",
+      "tuitionSummary": "CNY 26,000 / year; CNY 30,000 / year; CNY 15,000 / year; CNY 8,000 / semester",
+      "programsCount": 9,
+      "feesCount": 7,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "400 CNY",
+          "recipient": "Anhui University of Technology",
+          "refundable": "no"
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "26,000 CNY/year",
+          "recipient": "Anhui University of Technology",
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "3,000 CNY/year/person (double room)",
+          "recipient": "Anhui University of Technology",
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/year",
+          "recipient": "Insurance company",
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "About 400 CNY (first year)",
+          "recipient": "Entry-Exit Inspection and Quarantine Bureau",
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/year",
+          "recipient": "Municipal Entry-Exit Administration Bureau",
+          "refundable": ""
+        },
+        {
+          "item": "Enrollment Deposit",
+          "cost": "2,000 CNY",
+          "recipient": "Anhui University of Technology",
+          "refundable": "no"
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Study in Anhui Scholarship",
+          "coverage": "Award amount of 20,000 CNY per academic year for bachelor students",
+          "amount": "20,000 CNY/year for bachelor students",
+          "type": "Provincial scholarship"
+        }
+      ]
+    },
+    {
+      "name": "Beihua University",
+      "slug": "beihua-university",
+      "city": "Jilin City",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 26,000 / year (estimate)",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Capital Medical University",
+      "slug": "capital-medical-university",
+      "city": "Beijing",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 50,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Central South University of Forestry and Technology",
+      "slug": "central-south-university-of-forestry-and-technology",
+      "city": "Changsha",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 1,
+      "feesCount": 6,
+      "scholarshipsCount": 0,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "7500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "1300 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Text Books",
+          "cost": "700 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": []
+    },
+    {
+      "name": "Changzhou University",
+      "slug": "cczu",
+      "city": "Changzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 4,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "500 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "15,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "1,750 – 5,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "430 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": "100% Free",
+          "type": "Full"
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": "5,000 CNY/Year",
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Chengdu Normal University",
+      "slug": "chengdu-normal-university",
+      "city": "Chengdu",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 2,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "5000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "1500 – 6000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "550 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fees",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension Fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "400 – 500 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "China Medical University",
+      "slug": "china-medical-university",
+      "city": "Shenyang",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 40,000 / year (estimate)",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "China Pharmaceutical University",
+      "slug": "cpu",
+      "city": "Nanjing",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 3,
+      "feesCount": 6,
+      "scholarshipsCount": 3,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "400 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "19,000 – 25,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "4,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "600 – 800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "300 – 400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "CPU President Scholarship - Category 1",
+          "coverage": null,
+          "amount": "100% Tuition Free",
+          "type": "Full"
+        },
+        {
+          "title": "CPU President Scholarship - Category 2",
+          "coverage": null,
+          "amount": "Payable 5,000 CNY/Year",
+          "type": "Partial"
+        },
+        {
+          "title": "Nanjing Government Scholarship",
+          "coverage": null,
+          "amount": "10,000 CNY",
+          "type": "Reward"
+        }
+      ]
+    },
+    {
+      "name": "China Three Gorges University",
+      "slug": "ctgu",
+      "city": "Yichang",
+      "degree": "Bachelor",
+      "intake": "September 2027,September",
+      "tuitionSummary": "",
+      "programsCount": 17,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "400 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "10,000 – 15,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "1,800 – 3,600 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "100 – 600 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Hubei Provincial Government Scholarship",
+          "coverage": null,
+          "amount": "100% Tuition Free",
+          "type": "Full"
+        }
+      ]
+    },
+    {
+      "name": "China University of Mining and Technology",
+      "slug": "cumt",
+      "city": "Xuzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 3,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "400 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "14,600 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "2,000 – 3,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "690 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "300 – 400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "CUMT School Scholarship",
+          "coverage": null,
+          "amount": "Up to 100% Free",
+          "type": "Tiered"
+        }
+      ]
+    },
+    {
+      "name": "China University of Petroleum, Beijing",
+      "slug": "cupb",
+      "city": "Beijing",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 5,
+      "feesCount": 5,
+      "scholarshipsCount": 3,
+      "fees": [
+        {
+          "item": "Accommodation",
+          "cost": "1200 – 1500 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Insurance",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Health Check up",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fees",
+          "cost": "400 CNY (Only for 1st Year)",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type C",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "China University of Petroleum, East China",
+      "slug": "china-university-of-petroleum-east-china",
+      "city": "Qingdao",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 5,
+      "feesCount": 5,
+      "scholarshipsCount": 3,
+      "fees": [
+        {
+          "item": "Annual Tuition",
+          "cost": "18000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation",
+          "cost": "600 – 750 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Insurance",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Health Check up",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type C",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Chongqing Medical University",
+      "slug": "chongqing-medical-university",
+      "city": "Chongqing",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 30,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 1,
+      "fees": [],
+      "scholarships": [
+        {
+          "title": "CQMU Freshman Scholarship",
+          "coverage": "CNY 15,000 for the first year",
+          "amount": "CNY 15,000 for the first year",
+          "type": "University scholarship"
+        }
+      ]
+    },
+    {
+      "name": "Civil Aviation University of China",
+      "slug": "civil-aviation-university-of-china",
+      "city": "Tianjin",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 2,
+      "feesCount": 3,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Bachelor Scholarship (1st Year) Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Bachelor Scholarship (1st Year) Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Dalian Medical University",
+      "slug": "dalian-medical-university",
+      "city": "Dalian",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 42,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Dalian University of Technology",
+      "slug": "dalian-university-of-technology",
+      "city": "Dalian",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 10,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Accommodation (Single)",
+          "cost": "600/1800 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation (Double)",
+          "cost": "1200 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Application Fee",
+          "cost": "800 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "400 – 800 CNY (1st Year)",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": "Tuition"
+        }
+      ]
+    },
+    {
+      "name": "Fudan University",
+      "slug": "fudan-university",
+      "city": "Shanghai",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 75,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Fujian Medical University",
+      "slug": "fujian-medical-university",
+      "city": "Fuzhou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 35,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 1,
+      "fees": [],
+      "scholarships": [
+        {
+          "title": "FJMU Outstanding International Student Scholarship",
+          "coverage": "Up to CNY 35,000 per academic year Award tiers: CNY 35,000, 15,000, 10,000 or 5,000.",
+          "amount": "Up to CNY 35,000 per academic year",
+          "type": "University scholarship"
+        }
+      ]
+    },
+    {
+      "name": "Fuzhou University of International Studies and Trade",
+      "slug": "fuist",
+      "city": "Fuzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 1,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "500 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "16,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "3,200 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "600 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Scholarship Policy",
+          "coverage": null,
+          "amount": "Up to 100% Free",
+          "type": "Tiered"
+        }
+      ]
+    },
+    {
+      "name": "Gannan Normal University",
+      "slug": "gannan-normal-university",
+      "city": "Ganzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 2,
+      "feesCount": 5,
+      "scholarshipsCount": 5,
+      "fees": [
+        {
+          "item": "Registration Fees",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension Fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check up",
+          "cost": "400 – 500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "3000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "First Academic Year",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type A (Top 10% - 2nd Year+)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type B (11-70% - 2nd Year+)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type C (71-90% - 2nd Year+)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type D (91-100% - 2nd Year+)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Guangxi Medical University",
+      "slug": "guangxi-medical-university",
+      "city": "Nanning",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 35,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Guangzhou Medical University",
+      "slug": "guangzhou-medical-university",
+      "city": "Guangzhou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 30,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Guizhou University",
+      "slug": "gzu",
+      "city": "Guiyang",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 3,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Registration Fee",
+          "cost": "500 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "21,500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fee",
+          "cost": "3,000 – 6,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "100 – 500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "GZU University Scholarship",
+          "coverage": null,
+          "amount": "100% Free Tuition & Hostel",
+          "type": "Full"
+        }
+      ]
+    },
+    {
+      "name": "Hangzhou Dianzi University",
+      "slug": "hdu",
+      "city": "Hangzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 9,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "1000 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "22,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "5,400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "300 – 400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "First Class Scholarship",
+          "coverage": null,
+          "amount": "100% Free",
+          "type": "Full"
+        },
+        {
+          "title": "Second Class Scholarship",
+          "coverage": null,
+          "amount": "Tuition Free",
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Harbin Institute of Technology",
+      "slug": "hit-harbin",
+      "city": "Harbin",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 13,
+      "feesCount": 7,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "600 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "26,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "800 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "300 – 400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Security Deposit",
+          "cost": "13,000 CNY (For JW202)",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "HIT Scholarship",
+          "coverage": null,
+          "amount": "Up to 100% Free",
+          "type": "Tiered"
+        }
+      ]
+    },
+    {
+      "name": "Harbin Institute of Technology, Shenzhen",
+      "slug": "hitsz",
+      "city": "Shenzhen",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 8,
+      "feesCount": 7,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "400 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "30,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "240 – 1,000 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Security Deposit",
+          "cost": "30,000 CNY (After Admission)",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "HITSZ Entrance Scholarship",
+          "coverage": null,
+          "amount": "100% Free + Stipend",
+          "type": "Tiered"
+        }
+      ]
+    },
+    {
+      "name": "Harbin Medical University",
+      "slug": "harbin-medical-university",
+      "city": "Harbin",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 30,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Hebei Academy of Fine Arts",
+      "slug": "hafa",
+      "city": "Shijiazhuang",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 9,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "7,500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "2,000 – 3,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "100 – 400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Hebei Provincial / Academy Scholarship",
+          "coverage": null,
+          "amount": "75% OFF",
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Hebei University of Science and Technology",
+      "slug": "hbust",
+      "city": "Shijiazhuang",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 7,
+      "feesCount": 7,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fee",
+          "cost": "500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "4,900 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "1,200 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "100 – 400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Academic Scholarship",
+          "coverage": null,
+          "amount": "5,000 – 8,000 CNY",
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Hechi University",
+      "slug": "hcnu",
+      "city": "Hechi",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 3,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Registration Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "6,500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fee",
+          "cost": "2,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "400 – 500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Standard Scholarship",
+          "coverage": null,
+          "amount": "Tuition & Hostel Discount",
+          "type": "Partial"
+        },
+        {
+          "title": "Excellence Scholarship",
+          "coverage": null,
+          "amount": "4,000 CNY/Year",
+          "type": "Incentive"
+        }
+      ]
+    },
+    {
+      "name": "Henan University of Technology",
+      "slug": "henan-university-of-technology",
+      "city": "Zhengzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 9,
+      "feesCount": 5,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Tuition & Accom (After Scholarship)",
+          "cost": "10000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees (Original)",
+          "cost": "3600 – 12000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fee",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Resident Permit",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "450 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Scholarship Package",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Huangshan University",
+      "slug": "hsu",
+      "city": "Huangshan",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 1,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Registration Fee",
+          "cost": "500 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "12,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fee",
+          "cost": "2,000 – 4,500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "100 – 500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "HSU University Scholarship",
+          "coverage": null,
+          "amount": "100% Free Tuition & Hostel",
+          "type": "Full"
+        }
+      ]
+    },
+    {
+      "name": "Huazhong University of Science and Technology",
+      "slug": "huazhong-university-of-science-and-technology",
+      "city": "Wuhan",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 40,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Hubei University of Education",
+      "slug": "hubei-university-of-education",
+      "city": "Wuhan",
+      "degree": "Bachelor,Language",
+      "intake": "",
+      "tuitionSummary": "CNY 15,000 / year; CNY 18,000 / year",
+      "programsCount": 4,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Hubei University of Technology",
+      "slug": "hubei-university-of-technology",
+      "city": "Wuhan",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 7,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "After Scholarship Tuition Fees",
+          "cost": "7000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "3000 – 10000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fees",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "600 – 800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension Fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fees",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Entrance Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Performance Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Jianghan University",
+      "slug": "jianghan-university",
+      "city": "Wuhan",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 2,
+      "feesCount": 5,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "10,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "3400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Book Fees",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fees",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Full Scholarship (Reimbursement)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Jiangsu Normal University",
+      "slug": "jsnu",
+      "city": "Xuzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 4,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "500 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "14,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "1,500 – 3,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "400 – 500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": "100% Free",
+          "type": "Full"
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": "7,000 CNY/Year",
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Jiangsu University",
+      "slug": "jiangsu-university",
+      "city": "Zhenjiang",
+      "degree": "Bachelor",
+      "intake": "March, September",
+      "tuitionSummary": "CNY 34,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Jiangsu University of Science and Technology",
+      "slug": "jiangsu-university-of-science-and-technology",
+      "city": "Zhenjiang",
+      "degree": "Bachelor",
+      "intake": "September 2026",
+      "tuitionSummary": "CNY 11,250 / academic year for English bachelor’s (2026 guide; reconfirm next cycle)",
+      "programsCount": 13,
+      "feesCount": 7,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "4250 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "3000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Application Fees",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Deposit",
+          "cost": "1200 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fees",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fees",
+          "cost": "425 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "University Scholarship (2nd-4th Year)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Jiangsu University of Technology",
+      "slug": "jiangsu-university-of-technology",
+      "city": "Changzhou",
+      "degree": "Bachelor",
+      "intake": "September 2026",
+      "tuitionSummary": "CNY 14,000–18,000 / academic year by subject (2026 guide; reconfirm next cycle)",
+      "programsCount": 4,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "5000 – 6000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "3000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension Fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check up",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fees",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Jiaxing University",
+      "slug": "jxu",
+      "city": "Jiaxing",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 4,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "600 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "16,000 – 21,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "5,475 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "580 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "JXU Scholarship Options",
+          "coverage": null,
+          "amount": "Up to 100% Free",
+          "type": "Tiered"
+        }
+      ]
+    },
+    {
+      "name": "Jilin University",
+      "slug": "jilin-university",
+      "city": "Changchun",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 36,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Jinan University",
+      "slug": "jinan-university",
+      "city": "Guangzhou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 40,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Jinling Institute of Technology",
+      "slug": "jit",
+      "city": "Nanjing",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 2,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "300 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "12,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "1,500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "526 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "JIT Scholarship Policy",
+          "coverage": null,
+          "amount": "100% Free Tuition & Hostel",
+          "type": "Full"
+        }
+      ]
+    },
+    {
+      "name": "Jinzhou Medical University",
+      "slug": "jinzhou-medical-university",
+      "city": "Jinzhou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 38,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Kunming Medical University",
+      "slug": "kunming-medical-university",
+      "city": "Kunming",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 35,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 1,
+      "fees": [],
+      "scholarships": [
+        {
+          "title": "KMU Freshman Study Grant",
+          "coverage": "CNY 1,000/month for 10 months CNY 10,000 total for the academic year.",
+          "amount": "CNY 1,000/month for 10 months",
+          "type": "University scholarship"
+        }
+      ]
+    },
+    {
+      "name": "Linyi University",
+      "slug": "lyu",
+      "city": "Linyi",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "Current fees not confirmed — request an official program fee sheet",
+      "programsCount": 6,
+      "feesCount": 6,
+      "scholarshipsCount": 3,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "400 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "12,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "2,880 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "320 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "1st Class Scholarship",
+          "coverage": null,
+          "amount": "100% Free",
+          "type": "Full Tuition"
+        },
+        {
+          "title": "2nd Class Scholarship",
+          "coverage": null,
+          "amount": "4,000 CNY/Year",
+          "type": "Partial"
+        },
+        {
+          "title": "3rd Class Scholarship",
+          "coverage": null,
+          "amount": "7,000 CNY/Year",
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Nanchang University",
+      "slug": "nanchang-university",
+      "city": "Nanchang",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 6,
+      "feesCount": 5,
+      "scholarshipsCount": 3,
+      "fees": [
+        {
+          "item": "Accommodation",
+          "cost": "3000 – 7500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Application fees",
+          "cost": "800 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "400 – 800 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": null,
+          "type": "Full"
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": null,
+          "type": "Partial"
+        },
+        {
+          "title": "Type C",
+          "coverage": null,
+          "amount": null,
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Nanjing Institute of Technology",
+      "slug": "njit",
+      "city": "Nanjing",
+      "degree": "Master's",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 12,
+      "feesCount": 8,
+      "scholarshipsCount": 0,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "500 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "24,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "2,000 – 9,600 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Dormitory Deposit",
+          "cost": "800 CNY/Person (Refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Enrollment Deposit",
+          "cost": "5,000 CNY/Person (Refundable)",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": []
+    },
+    {
+      "name": "Nanjing Medical University",
+      "slug": "nanjing-medical-university",
+      "city": "Nanjing",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 34,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 4,
+      "fees": [],
+      "scholarships": [
+        {
+          "title": "NMU Full Tuition Freshman Scholarship",
+          "coverage": "100% tuition waiver CNY 34,000; selection allocation 5%.",
+          "amount": "100% tuition waiver",
+          "type": "University scholarship"
+        },
+        {
+          "title": "NMU Half Tuition Freshman Scholarship",
+          "coverage": "50% tuition waiver CNY 17,000; selection allocation 10%.",
+          "amount": "50% tuition waiver",
+          "type": "University scholarship"
+        },
+        {
+          "title": "NMU Quarter Tuition Freshman Scholarship",
+          "coverage": "25% tuition waiver CNY 8,500; selection allocation 15%.",
+          "amount": "25% tuition waiver",
+          "type": "University scholarship"
+        },
+        {
+          "title": "NMU General Entrance Scholarship",
+          "coverage": "CNY 5,000 Selection allocation 70%.",
+          "amount": "CNY 5,000",
+          "type": "University scholarship"
+        }
+      ]
+    },
+    {
+      "name": "Nanjing Normal University",
+      "slug": "nanjing-normal-university",
+      "city": "Nanjing",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 1,
+      "feesCount": 5,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Annual Tuition",
+          "cost": "28500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation",
+          "cost": "4500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical",
+          "cost": "500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Nanjing Tech University",
+      "slug": "njtech",
+      "city": "Nanjing",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 8,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Accommodation",
+          "cost": "2000 – 4000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Resident Permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fees",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Application Fees",
+          "cost": "500 CNY (non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Scholarship",
+          "coverage": null,
+          "amount": "20,000 CNY/Year/Student",
+          "type": null
+        },
+        {
+          "title": "Extra Scholarship (2nd Year+ for Top Students)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Nanjing University of Aeronautics and Astronautics",
+      "slug": "nuaa",
+      "city": "Nanjing",
+      "degree": "Bachelor",
+      "intake": "September 2026",
+      "tuitionSummary": "CNY 22,900 business / 23,900 engineering per year (2026 guide; reconfirm next cycle)",
+      "programsCount": 9,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "400 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "22,900 – 23,900 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "4,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "100 – 600 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "NUAA Scholarship Policy",
+          "coverage": null,
+          "amount": "Up to 100% (1st Year)",
+          "type": "Mixed"
+        }
+      ]
+    },
+    {
+      "name": "Nanjing University of Information Science and Technology",
+      "slug": "nuist",
+      "city": "Nanjing",
+      "degree": "Bachelor,Master,PhD,Language",
+      "intake": "September 2026 (closed),September 2026 to July 2028 (2026 entry closed),September 2026 (closed) or March 2027 (confirm deadline),July 2026 or December 2026 (application deadlines passed)",
+      "tuitionSummary": "CNY 15,000 / year; CNY 20,000 / year; CNY 25,000 / year",
+      "programsCount": 155,
+      "feesCount": 6,
+      "scholarshipsCount": 21,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "CNY 500",
+          "recipient": null,
+          "refundable": "no"
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "CNY 15,000 / year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "CNY 2,000–2,500 / year (twin room); CNY 4,000 / year (single room)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "CNY 600 / year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "CNY 526 per examination",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "CNY 400 for up to one year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "NUIST Excellent Freshmen Scholarship — Bachelor, class 1",
+          "coverage": "100% tuition waiver — CNY 15,000/year at the published bachelor tuition.",
+          "amount": "100% tuition waiver — CNY 15,000/year at the published bachelor tuition.",
+          "type": "University scholarship"
+        },
+        {
+          "title": "NUIST Excellent Freshmen Scholarship — Bachelor, class 2",
+          "coverage": "50% tuition waiver — CNY 7,500/year at the published bachelor tuition.",
+          "amount": "50% tuition waiver — CNY 7,500/year at the published bachelor tuition.",
+          "type": "University scholarship"
+        },
+        {
+          "title": "NUIST Excellent Freshmen Scholarship — Master, class 1",
+          "coverage": "100% tuition waiver — CNY 20,000/year at the published master tuition.; University accommodation fee waiver.",
+          "amount": "100% tuition waiver — CNY 20,000/year at the published master tuition.; University accommodation fee waiver.",
+          "type": "University scholarship"
+        },
+        {
+          "title": "NUIST Excellent Freshmen Scholarship — Master, class 2",
+          "coverage": "100% tuition waiver — CNY 20,000/year at the published master tuition.",
+          "amount": "100% tuition waiver — CNY 20,000/year at the published master tuition.",
+          "type": "University scholarship"
+        },
+        {
+          "title": "NUIST Excellent Freshmen Scholarship — PhD, class 1",
+          "coverage": "100% tuition waiver — CNY 25,000/year at the published phd tuition.; University accommodation fee waiver.; CNY 2,500 monthly living allowance.",
+          "amount": "100% tuition waiver — CNY 25,000/year at the published phd tuition.; University accommodation fee waiver.; CNY 2,500 monthly living allowance.",
+          "type": "University scholarship"
+        },
+        {
+          "title": "NUIST Excellent Freshmen Scholarship — PhD, class 2",
+          "coverage": "100% tuition waiver — CNY 25,000/year at the published phd tuition.; University accommodation fee waiver.",
+          "amount": "100% tuition waiver — CNY 25,000/year at the published phd tuition.; University accommodation fee waiver.",
+          "type": "University scholarship"
+        },
+        {
+          "title": "Chinese Government Scholarship (CSC) — High-Level Postgraduate",
+          "coverage": "Full tuition waiver: CNY 20,000/year Master or CNY 25,000/year PhD at published fees.; University dormitory and comprehensive medical insurance.; Monthly living allowance: CNY 3,000 Master; CNY 3,500 PhD.",
+          "amount": "Full tuition waiver: CNY 20,000/year Master or CNY 25,000/year PhD at published fees.; University dormitory and comprehensive medical insurance.; Monthly living allowance: CNY 3,000 Master; CNY 3,500 PhD.",
+          "type": "Chinese Government Scholarship"
+        },
+        {
+          "title": "Chinese Government Scholarship (CSC) — Bilateral route",
+          "coverage": "Full-award benefits in the brochure: tuition, accommodation and comprehensive medical insurance.; Living allowance: Bachelor CNY 2,500/month; Master/general scholar CNY 3,000/month; PhD/senior scholar CNY 3,500/month.",
+          "amount": "Full-award benefits in the brochure: tuition, accommodation and comprehensive medical insurance.; Living allowance: Bachelor CNY 2,500/month; Master/general scholar CNY 3,000/month; PhD/senior scholar CNY 3,500/month.",
+          "type": "Chinese Government Scholarship"
+        },
+        {
+          "title": "Chinese Government Scholarship (CSC) — Silk Road",
+          "coverage": "Tuition, accommodation and comprehensive medical insurance.; Master CNY 3,000/month; PhD CNY 3,500/month.",
+          "amount": "Tuition, accommodation and comprehensive medical insurance.; Master CNY 3,000/month; PhD CNY 3,500/month.",
+          "type": "Chinese Government Scholarship"
+        },
+        {
+          "title": "Chinese Government Excellent International Student Scholarship",
+          "coverage": "Merit award for already registered degree students; the 2026 brochure does not publish a fixed award value or tuition deduction.",
+          "amount": "Merit award for already registered degree students; the 2026 brochure does not publish a fixed award value or tuition deduction.",
+          "type": "Registered-student merit award"
+        },
+        {
+          "title": "Jiangsu Government Excellent Student Scholarship",
+          "coverage": "Merit award for already registered degree students; the 2026 brochure does not publish a fixed award value or tuition deduction.",
+          "amount": "Merit award for already registered degree students; the 2026 brochure does not publish a fixed award value or tuition deduction.",
+          "type": "Registered-student merit award"
+        },
+        {
+          "title": "NUIST Longshan Scholarship",
+          "coverage": "Merit award for already registered degree students; the 2026 brochure does not publish a fixed award value or tuition deduction.",
+          "amount": "Merit award for already registered degree students; the 2026 brochure does not publish a fixed award value or tuition deduction.",
+          "type": "Registered-student merit award"
+        },
+        {
+          "title": "International Chinese Language Teachers Scholarship — Bachelor",
+          "coverage": "Full tuition, accommodation and comprehensive medical insurance.; CNY 2,500 monthly living allowance for up to four academic years.",
+          "amount": "Full tuition, accommodation and comprehensive medical insurance.; CNY 2,500 monthly living allowance for up to four academic years.",
+          "type": "CLEC scholarship"
+        },
+        {
+          "title": "International Chinese Language Teachers Scholarship — Master",
+          "coverage": "Full tuition, accommodation and comprehensive medical insurance.; CNY 3,000 monthly living allowance for up to two academic years.",
+          "amount": "Full tuition, accommodation and comprehensive medical insurance.; CNY 3,000 monthly living allowance for up to two academic years.",
+          "type": "CLEC scholarship"
+        },
+        {
+          "title": "International Chinese Language Teachers Scholarship — Language",
+          "coverage": "Tuition, accommodation and comprehensive medical insurance for on-campus language study.; CNY 2,500/month for one-year and semester study; no living allowance for four-week study.",
+          "amount": "Tuition, accommodation and comprehensive medical insurance for on-campus language study.; CNY 2,500/month for one-year and semester study; no living allowance for four-week study.",
+          "type": "CLEC scholarship"
+        },
+        {
+          "title": "Chinese Government Scholarship — WMO Master",
+          "coverage": "Full tuition, university dormitory and comprehensive medical insurance.; Master CNY 3,000/month; PhD CNY 3,500/month.; WMO sponsors round-trip international airfare and international insurance.",
+          "amount": "Full tuition, university dormitory and comprehensive medical insurance.; Master CNY 3,000/month; PhD CNY 3,500/month.; WMO sponsors round-trip international airfare and international insurance.",
+          "type": "Chinese Government Scholarship"
+        },
+        {
+          "title": "Chinese Government Scholarship — WMO PhD",
+          "coverage": "Full tuition, university dormitory and comprehensive medical insurance.; Master CNY 3,000/month; PhD CNY 3,500/month.; WMO sponsors round-trip international airfare and international insurance.",
+          "amount": "Full tuition, university dormitory and comprehensive medical insurance.; Master CNY 3,000/month; PhD CNY 3,500/month.; WMO sponsors round-trip international airfare and international insurance.",
+          "type": "Chinese Government Scholarship"
+        },
+        {
+          "title": "MOFCOM Scholarship — Master of Meteorology",
+          "coverage": "Tuition, basic teaching materials, field study, thesis guidance, accommodation and comprehensive medical insurance.; CNY 3,000 monthly living allowance (CNY 36,000/year).; CNY 3,000 one-time settlement allowance and the approved international air travel benefits.",
+          "amount": "Tuition, basic teaching materials, field study, thesis guidance, accommodation and comprehensive medical insurance.; CNY 3,000 monthly living allowance (CNY 36,000/year).; CNY 3,000 one-time settlement allowance and the approved international air travel benefits.",
+          "type": "Chinese Ministry of Commerce scholarship"
+        },
+        {
+          "title": "MOFCOM Scholarship — Master of Artificial Intelligence",
+          "coverage": "Tuition, basic teaching materials, field study, thesis guidance, accommodation and comprehensive medical insurance.; CNY 3,000 monthly living allowance (CNY 36,000/year).; CNY 3,000 one-time settlement allowance and the approved international air travel benefits.",
+          "amount": "Tuition, basic teaching materials, field study, thesis guidance, accommodation and comprehensive medical insurance.; CNY 3,000 monthly living allowance (CNY 36,000/year).; CNY 3,000 one-time settlement allowance and the approved international air travel benefits.",
+          "type": "Chinese Ministry of Commerce scholarship"
+        },
+        {
+          "title": "NUIST-WMO Fellowships Education Programme — Master",
+          "coverage": "Tuition, accommodation and comprehensive medical insurance.; CNY 2,000 monthly living allowance for Master and PhD students.; WMO sponsors round-trip international airfare and international insurance.",
+          "amount": "Tuition, accommodation and comprehensive medical insurance.; CNY 2,000 monthly living allowance for Master and PhD students.; WMO sponsors round-trip international airfare and international insurance.",
+          "type": "University/WMO fellowship"
+        },
+        {
+          "title": "NUIST-WMO Fellowships Education Programme — PhD",
+          "coverage": "Tuition, accommodation and comprehensive medical insurance.; CNY 2,000 monthly living allowance for Master and PhD students.; WMO sponsors round-trip international airfare and international insurance.",
+          "amount": "Tuition, accommodation and comprehensive medical insurance.; CNY 2,000 monthly living allowance for Master and PhD students.; WMO sponsors round-trip international airfare and international insurance.",
+          "type": "University/WMO fellowship"
+        }
+      ]
+    },
+    {
+      "name": "Nanjing University of Posts and Telecommunications",
+      "slug": "njupt",
+      "city": "Nanjing",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 4,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "800 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "18,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "1,500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "430 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "NJUPT International Students Scholarship",
+          "coverage": null,
+          "amount": "Up to 100% Free",
+          "type": "Tiered"
+        },
+        {
+          "title": "Nanjing Government Scholarship",
+          "coverage": null,
+          "amount": "10,000 CNY",
+          "type": "Reward"
+        }
+      ]
+    },
+    {
+      "name": "Nankai University",
+      "slug": "nankai-university",
+      "city": "Tianjin",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 35,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Nantong University",
+      "slug": "ntu",
+      "city": "Nantong",
+      "degree": "Bachelor",
+      "intake": "September,September 2027",
+      "tuitionSummary": "",
+      "programsCount": 2,
+      "feesCount": 8,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "600 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "26,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fee",
+          "cost": "2,800 – 4,000 CNY/Year (Off Campus – 4 Beds Room)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "100 – 500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Textbook Fee",
+          "cost": "1200 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "JW202 Deposit",
+          "cost": "2,600 CNY (Mandatory)",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "NTU University Scholarship",
+          "coverage": null,
+          "amount": "Up to 100% Free",
+          "type": "Tiered"
+        }
+      ]
+    },
+    {
+      "name": "Ningbo University",
+      "slug": "ningbo-university",
+      "city": "Ningbo",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 30,000 / year (estimate)",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Ningxia Medical University",
+      "slug": "ningxia-medical-university",
+      "city": "Yinchuan",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 3,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "20000 – 29800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "3000 – 4000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "200 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fees",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension Fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Application Fees",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Freshmen Scholarship",
+          "coverage": null,
+          "amount": "15000 CNY",
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "North China Electric Power University",
+      "slug": "ncepu",
+      "city": "Beijing",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 4,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "600 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "22,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "9,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "300 – 400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "International Students Scholarship",
+          "coverage": null,
+          "amount": "Tuition Free",
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "North Sichuan Medical College",
+      "slug": "north-sichuan-medical-college",
+      "city": "Nanchong",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 26,000 / year (estimate)",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Northeast Forestry University",
+      "slug": "northeast-forestry-university",
+      "city": "Harbin",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 1,
+      "feesCount": 6,
+      "scholarshipsCount": 3,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "21500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "500 – 1000 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fees",
+          "cost": "380 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Application Fees",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "First Class (1st Year)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Second Class (1st Year)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Third Class (1st Year)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Northwestern Polytechnical University",
+      "slug": "npu",
+      "city": "Xi'an",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 9,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "600 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "25,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "5,400 – 7,200 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "The Belt & Road Scholarship (Only 1st Year)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "NPU President Scholarship (All Years)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Peking University Health Science Center",
+      "slug": "peking-university-health-science-center",
+      "city": "Beijing",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 45,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Qingdao University",
+      "slug": "qingdao-university",
+      "city": "Qingdao",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 30,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Sanming University",
+      "slug": "smu",
+      "city": "Sanming",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 2,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Registration Fee",
+          "cost": "500 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "14,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fee",
+          "cost": "4,500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "100 – 500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "SMU University Scholarship",
+          "coverage": null,
+          "amount": "100% Free Tuition & Hostel",
+          "type": "Full"
+        }
+      ]
+    },
+    {
+      "name": "Shandong University",
+      "slug": "shandong-university",
+      "city": "Jinan",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "See dated official fee research below; next-cycle costs require confirmation",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Shanghai Business School",
+      "slug": "shanghai-business-school",
+      "city": "Shanghai",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 3,
+      "feesCount": 7,
+      "scholarshipsCount": 5,
+      "fees": [
+        {
+          "item": "Entry fee",
+          "cost": "800 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Dormitory fee",
+          "cost": "8400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Dormitory fee",
+          "cost": "11200 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Textbook fee",
+          "cost": "1000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical check-up",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type C",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type D",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type E",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Shanghai Dianji University",
+      "slug": "sdu",
+      "city": "Shanghai",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 4,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "400 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "20,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "9,600 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "400 – 500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "SDU Scholarship Class A",
+          "coverage": null,
+          "amount": "Tuition 100% Free",
+          "type": "Full"
+        },
+        {
+          "title": "SDU Scholarship Class B",
+          "coverage": null,
+          "amount": "Tuition 7,500 CNY/Year",
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Shanghai Jiao Tong University",
+      "slug": "shanghai-jiao-tong-university",
+      "city": "Shanghai",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 75,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Shanghai Polytechnic University",
+      "slug": "shanghai-polytechnic-university",
+      "city": "Shanghai",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 4,
+      "feesCount": 3,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Accommodation Fees",
+          "cost": "40 CNY/Day",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Resident Permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Checkup",
+          "cost": "400 – 450 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Full Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Shanghai University of Electric Power",
+      "slug": "suep",
+      "city": "Shanghai",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 1,
+      "feesCount": 6,
+      "scholarshipsCount": 3,
+      "fees": [
+        {
+          "item": "Registration Fee",
+          "cost": "600 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "20,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "4,500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "400 – 500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "SGS Class A",
+          "coverage": null,
+          "amount": "100% Free + Stipend",
+          "type": "Full"
+        },
+        {
+          "title": "SGS Class B",
+          "coverage": null,
+          "amount": "100% Free",
+          "type": "Full"
+        },
+        {
+          "title": "University University",
+          "coverage": null,
+          "amount": "Partial Coverage",
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Shanghai University of Engineering Science",
+      "slug": "sues",
+      "city": "Shanghai",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 4,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "400 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "20,000 – 23,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "1,200 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "400 – 500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "SUES Scholarship Policy",
+          "coverage": null,
+          "amount": "100% Free",
+          "type": "Full"
+        }
+      ]
+    },
+    {
+      "name": "Shantou University",
+      "slug": "shantou-university",
+      "city": "Shantou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 40,000 / year (estimate)",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Shaoxing University",
+      "slug": "shaoxing-university",
+      "city": "Shaoxing",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 7,
+      "feesCount": 3,
+      "scholarshipsCount": 3,
+      "fees": [
+        {
+          "item": "Accommodation Fees",
+          "cost": "15 – 30 CNY/Day",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Application Fees",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type C",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Shihezi University",
+      "slug": "shihezi-university",
+      "city": "Shihezi",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 28,000 / year (estimate)",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Sichuan University",
+      "slug": "sichuan-university",
+      "city": "Chengdu",
+      "degree": "Bachelor",
+      "intake": "September 2027,September",
+      "tuitionSummary": "",
+      "programsCount": 5,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "600 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "17,500 – 22,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "1,500 – 6,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Belt & Road Scholarship",
+          "coverage": null,
+          "amount": "20,000 CNY/Year",
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Soochow University",
+      "slug": "soochow-university",
+      "city": "Suzhou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 32,500 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "South China University of Technology",
+      "slug": "scut",
+      "city": "Guangzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 2,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Registration Fee",
+          "cost": "500 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "26,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fee",
+          "cost": "12 – 27 CNY/Day",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "SCUT Scholarship Policy",
+          "coverage": null,
+          "amount": "Up to 100% Free",
+          "type": "Tiered"
+        }
+      ]
+    },
+    {
+      "name": "Southeast University",
+      "slug": "southeast-university",
+      "city": "Nanjing",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 32,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Southern Medical University",
+      "slug": "southern-medical-university",
+      "city": "Guangzhou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 50,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Southwest Medical University",
+      "slug": "southwest-medical-university",
+      "city": "Luzhou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 31,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 2,
+      "fees": [],
+      "scholarships": [
+        {
+          "title": "Sichuan Provincial Government Scholarship",
+          "coverage": "CNY 20,000/year",
+          "amount": "CNY 20,000/year",
+          "type": "University scholarship"
+        },
+        {
+          "title": "SWMU Entrance Scholarship",
+          "coverage": "Up to CNY 6,000 One-time tiers: CNY 4,000, 5,000 or 6,000.",
+          "amount": "Up to CNY 6,000",
+          "type": "University scholarship"
+        }
+      ]
+    },
+    {
+      "name": "Southwest Petroleum University",
+      "slug": "southwest-petroleum-university",
+      "city": "Chengdu",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 9,
+      "feesCount": 6,
+      "scholarshipsCount": 4,
+      "fees": [
+        {
+          "item": "Annual Tuition",
+          "cost": "Free",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation",
+          "cost": "1600 – 3000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension Fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fees",
+          "cost": "600 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Health Check Up",
+          "cost": "Around 550 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": "20000 CNY/Person/Year",
+          "type": null
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": "8000 CNY/Person/Year",
+          "type": null
+        },
+        {
+          "title": "Type C",
+          "coverage": null,
+          "amount": "5000 CNY/Person/Year",
+          "type": null
+        },
+        {
+          "title": "Type D",
+          "coverage": null,
+          "amount": "2000 CNY/Person/Year",
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Sun Yat-sen University",
+      "slug": "sun-yat-sen-university",
+      "city": "Guangzhou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 48,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Taiyuan University of Technology",
+      "slug": "taiyuan-university-of-technology",
+      "city": "Taiyuan",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 4,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "10000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "350 – 800 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Resident Permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "415 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fees",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Bachelor Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Tiangong University",
+      "slug": "tiangong-university",
+      "city": "Tianjin",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 13,
+      "feesCount": 5,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "5500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "500 – 600 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Resident Permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Checkup",
+          "cost": "400 – 450 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "1st Year Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "2nd-4th Year Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Tianjin Medical University",
+      "slug": "tianjin-medical-university",
+      "city": "Tianjin",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 48,000 / year (estimate)",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Tianjin University",
+      "slug": "tianjin-university",
+      "city": "Tianjin",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 3,
+      "feesCount": 4,
+      "scholarshipsCount": 4,
+      "fees": [
+        {
+          "item": "Accommodation Fees",
+          "cost": "750 – 900 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Resident Permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type C",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type D",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Tongji University",
+      "slug": "tongji-university",
+      "city": "Shanghai",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 45,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Tsinghua University",
+      "slug": "tsinghua-university",
+      "city": "Beijing",
+      "degree": "",
+      "intake": "",
+      "tuitionSummary": "See dated official fee research below; next-cycle costs require confirmation",
+      "programsCount": 0,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "University of Shanghai for Science and Technology",
+      "slug": "university-of-shanghai-for-science-and-technology",
+      "city": "Shanghai",
+      "degree": "Master",
+      "intake": "September 2026",
+      "tuitionSummary": "See dated official fee research below; next-cycle costs require confirmation",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Wenzhou Medical University",
+      "slug": "wenzhou-medical-university",
+      "city": "Wenzhou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 33,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 1,
+      "fees": [],
+      "scholarships": [
+        {
+          "title": "WMU MBBS Freshman Scholarship",
+          "coverage": "Up to CNY 20,000 Freshman tiers: CNY 20,000, 10,000 or 5,000; allocations 25%, 25% and 50%.",
+          "amount": "Up to CNY 20,000",
+          "type": "University scholarship"
+        }
+      ]
+    },
+    {
+      "name": "Wenzhou University",
+      "slug": "wzu",
+      "city": "Wenzhou",
+      "degree": "Bachelor",
+      "intake": "",
+      "tuitionSummary": "CNY 18,000 / year; CNY 20,000 / year; CNY 22,000 / year",
+      "programsCount": 22,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "500 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "20,000 – 22,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "2,900 – 4,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "300 – 400 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Wenzhou University Freshman Scholarship (2026 closed cycle)",
+          "coverage": "Cash award after successful registration; tuition must be budgeted without assuming an upfront discount.",
+          "amount": "Type A CNY 18,000; Type B CNY 10,000; Type C CNY 6,000",
+          "type": "Freshman award"
+        }
+      ]
+    },
+    {
+      "name": "Wuchang University of Technology",
+      "slug": "wuchang-university-of-technology",
+      "city": "Wuhan",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 6,
+      "feesCount": 5,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Tuition Fees (After Scholarship)",
+          "cost": "8000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "1500 – 3000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check up",
+          "cost": "340 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Scholarship Policy",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Wuhan University",
+      "slug": "wuhan-university",
+      "city": "Wuhan",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 40,000 / year (estimate)",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Xi'an Jiaotong University",
+      "slug": "xian-jiaotong-university",
+      "city": "Xi'an",
+      "degree": "Language,Foundation,Bachelor",
+      "intake": "February 2027,September 2027,April 2027,September",
+      "tuitionSummary": "CNY 8,000 / semester; CNY 15,000 / year; CNY 25,800 / programme; CNY 13,800 / programme; CNY 8,800 / programme",
+      "programsCount": 11,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Xi'an Shiyou University",
+      "slug": "xsyu",
+      "city": "Xi'an",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 5,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "600 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "18,500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "7,500 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "100 – 500 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Belt and Road International Students Scholarship",
+          "coverage": null,
+          "amount": "See Details",
+          "type": "Mixed"
+        }
+      ]
+    },
+    {
+      "name": "Xiamen University",
+      "slug": "xiamen-university",
+      "city": "Xiamen",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "CNY 38,000 / year",
+      "programsCount": 1,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Xidian University",
+      "slug": "xidian-university",
+      "city": "Xi'an",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 3,
+      "feesCount": 5,
+      "scholarshipsCount": 4,
+      "fees": [
+        {
+          "item": "Accommodation",
+          "cost": "3600 – 9600 CNY/Year (1 – 4 Beds)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance",
+          "cost": "1000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fees",
+          "cost": "400 CNY (depends)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Application Fees",
+          "cost": "800 CNY (non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "HuaShan Scholarship (1st Year)",
+          "coverage": null,
+          "amount": null,
+          "type": "Full + Stipend"
+        },
+        {
+          "title": "First Class Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": "Full + Stipend"
+        },
+        {
+          "title": "Second Class Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": "Full"
+        },
+        {
+          "title": "Third Class Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": "Partial"
+        }
+      ]
+    },
+    {
+      "name": "Xuzhou Medical University",
+      "slug": "xuzhou-medical-university",
+      "city": "Xuzhou",
+      "degree": "Bachelor,MBBS",
+      "intake": "September,September 2027",
+      "tuitionSummary": "",
+      "programsCount": 3,
+      "feesCount": 7,
+      "scholarshipsCount": 12,
+      "fees": [
+        {
+          "item": "Tuition Fee",
+          "cost": "28000 – 33000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation fees",
+          "cost": "4800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration fees",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Health Check Up",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Seat Deposit",
+          "cost": "5200 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Clinical Medicine Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Clinical Medicine Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Clinical Medicine Type C",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Nursing Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Nursing Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Nursing Type C",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Dental Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Dental Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Dental Type C",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "XZMU First Class Freshman Scholarship",
+          "coverage": "100% tuition waiver CNY 33,000 for the first academic year; allocation 50%.",
+          "amount": "100% tuition waiver",
+          "type": "University scholarship"
+        },
+        {
+          "title": "XZMU Second Class Freshman Scholarship",
+          "coverage": "50% tuition waiver CNY 16,500 for the first academic year; allocation 30%.",
+          "amount": "50% tuition waiver",
+          "type": "University scholarship"
+        },
+        {
+          "title": "XZMU Third Class Freshman Scholarship",
+          "coverage": "25% tuition waiver CNY 8,250 for the first academic year; allocation 20%.",
+          "amount": "25% tuition waiver",
+          "type": "University scholarship"
+        }
+      ]
+    },
+    {
+      "name": "Yangzhou University",
+      "slug": "yangzhou-university",
+      "city": "Yangzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027,September",
+      "tuitionSummary": "",
+      "programsCount": 8,
+      "feesCount": 5,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Tuition + Accommodation (After Scholarship)",
+          "cost": "10000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "1000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Resident Permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fees",
+          "cost": "600 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Special Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Yunnan University",
+      "slug": "yunnan-university",
+      "city": "Kunming",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 1,
+      "feesCount": 3,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension Fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up Fees",
+          "cost": "Aprox 400 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Zhejiang Normal University",
+      "slug": "zhejiang-normal-university",
+      "city": "Jinhua",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "CNY 18,000 / academic year (2026 undergraduate guide; reconfirm next cycle)",
+      "programsCount": 12,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "18000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "5400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Resident Permit",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Text Book",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A (Provincial)",
+          "coverage": null,
+          "amount": "20,000 CNY/Year",
+          "type": null
+        },
+        {
+          "title": "Type B (University)",
+          "coverage": null,
+          "amount": "8,000 CNY/Year",
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Zhejiang University",
+      "slug": "zhejiang-university",
+      "city": "Hangzhou",
+      "degree": "Bachelor",
+      "intake": "September 2026,September",
+      "tuitionSummary": "See dated official fee research below; next-cycle costs require confirmation",
+      "programsCount": 3,
+      "feesCount": 0,
+      "scholarshipsCount": 0,
+      "fees": [],
+      "scholarships": []
+    },
+    {
+      "name": "Zhejiang University of Finance & Economics",
+      "slug": "zhejiang-university-of-finance-and-economics",
+      "city": "Hangzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 10,
+      "feesCount": 7,
+      "scholarshipsCount": 5,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "19000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "3000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "5000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Application Fees",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension Fees",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "400 – 500 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Zhejiang Provincial Government Scholarship",
+          "coverage": null,
+          "amount": "20000 CNY/Year",
+          "type": null
+        },
+        {
+          "title": "ZUFE Excellent Prize",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "ZUFE First Prize",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "ZUFE Second Prize",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "ZUFE Third Prize",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Zhejiang University of Science and Technology",
+      "slug": "zhejiang-university-of-science-and-technology",
+      "city": "Hangzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 12,
+      "feesCount": 8,
+      "scholarshipsCount": 5,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "16000 – 24000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "600 – 1200 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Deposit",
+          "cost": "1000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Application fee",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Textbooks Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Health Check Up",
+          "cost": "400 – 500 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance fee",
+          "cost": "800 CNY / Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Visa Extension (Resident Permit) fee",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A (1st Year)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type B (1st Year)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type C (1st Year)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type D (1st Year)",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Promotion Scholarship",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    },
+    {
+      "name": "Zhejiang University of Technology",
+      "slug": "zjut",
+      "city": "Hangzhou",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 11,
+      "feesCount": 6,
+      "scholarshipsCount": 1,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "500 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "17,800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "3,500 – 5,300 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "1000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "600 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Scholarship Policy",
+          "coverage": null,
+          "amount": "Up to 100% Free",
+          "type": "Tiered"
+        }
+      ]
+    },
+    {
+      "name": "Zhengzhou University",
+      "slug": "zzu",
+      "city": "Zhengzhou",
+      "degree": "Bachelor",
+      "intake": "September",
+      "tuitionSummary": "",
+      "programsCount": 1,
+      "feesCount": 7,
+      "scholarshipsCount": 0,
+      "fees": [
+        {
+          "item": "Application Fee",
+          "cost": "800 CNY (Non – refundable)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Tuition Fee",
+          "cost": "36,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Hostel Fee",
+          "cost": "5,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Off-campus Hostel",
+          "cost": "2,500 – 4,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fee",
+          "cost": "1,000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Fee",
+          "cost": "100 – 600 CNY (1st Year only)",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Residence Permit Fee",
+          "cost": "430 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": []
+    },
+    {
+      "name": "Zhongnan University of Economics and Law",
+      "slug": "zhongnan-university-of-economics-and-law",
+      "city": "Wuhan",
+      "degree": "Bachelor",
+      "intake": "September 2027",
+      "tuitionSummary": "",
+      "programsCount": 1,
+      "feesCount": 6,
+      "scholarshipsCount": 2,
+      "fees": [
+        {
+          "item": "Tuition Fees",
+          "cost": "20000 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Accommodation Fees",
+          "cost": "750 – 1350 CNY/Month",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Insurance Fees",
+          "cost": "800 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Resident Permit",
+          "cost": "400 CNY/Year",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Medical Check Up",
+          "cost": "400 CNY",
+          "recipient": null,
+          "refundable": ""
+        },
+        {
+          "item": "Registration Fees",
+          "cost": "500 CNY",
+          "recipient": null,
+          "refundable": ""
+        }
+      ],
+      "scholarships": [
+        {
+          "title": "Type A",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        },
+        {
+          "title": "Type B",
+          "coverage": null,
+          "amount": null,
+          "type": null
+        }
+      ]
+    }
+  ]
+}

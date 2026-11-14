@@ -746,9 +746,9 @@ export const countries: Country[] = [
       visa: ['EMGS Visa Approval Letter (VAL)', 'Single Entry Visa (SEV) at Malaysian High Commission']
     },
     costs: {
-      tuition: '$3,500 - $7,000 / year (Very affordable for world-class campuses)',
-      living: '$300 - $450 / month',
-      currency: 'USD'
+      tuition: 'RM 12,000 - RM 35,000 / year (approx. BDT 3.2L - 9.5L; branch campuses RM 40,000+)',
+      living: 'RM 1,200 - RM 2,000 / month (approx. BDT 32,000 - 54,000/month with hostel & food)',
+      currency: 'MYR'
     },
     scholarships: ['University Merit Scholarship', 'MIS Scholarship'],
     benefits: ['Affordable tuition fees with direct foreign degree matching', 'Easy Credit Transfer options to Australia, UK, and USA', 'Modern, multicultural environment in Southeast Asia'],
