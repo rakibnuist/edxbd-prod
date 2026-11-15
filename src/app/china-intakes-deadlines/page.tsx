@@ -51,6 +51,7 @@ const timelineSteps = [
 
 const guides = [
   { label: 'CGS 2027/2028 Type A embassy notice (10 Jan 2027 deadline)', href: '/updates/cgs-2027-2028-type-a-scholarship-bangladesh' },
+  { label: 'China Medical University CSC 2027 (25 Feb 2027 deadline)', href: '/updates/china-medical-university-csc-scholarship-2027' },
   { label: 'March 2027 university shortlist', href: '/china-march-2027-intake' },
   { label: 'China scholarships for Bangladeshi students', href: '/china-scholarships-bangladesh' },
   { label: 'CSC scholarship guide', href: '/csc-scholarship-bangladesh' },

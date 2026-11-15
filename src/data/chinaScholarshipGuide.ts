@@ -135,6 +135,7 @@ export const chinaScholarshipGuide: ChinaGuidePage = {
   sources: [{ label: 'Campus China scholarship catalogue', href: facts.internal.requestedCatalogue }, ...facts.internal.sources.map(source => ({ label: source.publisher, href: source.url }))],
   related: [
     { label: 'CGS 2027/2028 Type A embassy notice (10 Jan 2027 deadline)', href: '/updates/cgs-2027-2028-type-a-scholarship-bangladesh' },
+    { label: 'China Medical University CSC 2027 (25 Feb 2027 deadline)', href: '/updates/china-medical-university-csc-scholarship-2027' },
     { label: 'Study in China', href: '/study-in-china-from-bangladesh' },
     { label: 'CSC scholarship — complete guide', href: '/csc-scholarship-bangladesh' },
     { label: 'Admission documents and CSCA', href: '/china-admission-requirements' },

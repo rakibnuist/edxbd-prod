@@ -272,6 +272,7 @@ export default function CscScholarshipBangladeshPage() {
           browse{' '}
           <Link href="/china-universities" className="font-semibold text-petrol-800 underline underline-offset-4">China university profiles &amp; requirements</Link>{' '}
           (including sample 2027 Type B calls like{' '}
+          <Link href="/updates/china-medical-university-csc-scholarship-2027" className="font-semibold text-petrol-800 underline underline-offset-4">China Medical University CSC</Link> and{' '}
           <Link href="/updates/nanjing-university-csc-type-b-scholarship-2027" className="font-semibold text-petrol-800 underline underline-offset-4">Nanjing University CSC</Link>),
           and see{' '}
           <Link href="/china-intakes-deadlines" className="font-semibold text-petrol-800 underline underline-offset-4">China intakes and deadlines</Link> for the March and September 2027 windows.

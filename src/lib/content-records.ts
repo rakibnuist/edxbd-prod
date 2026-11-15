@@ -8,6 +8,7 @@ import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { sanitizeUpdateHtml } from '@/lib/content-html';
 import { categoriesFromUpdate, categorySlug } from '@/lib/update-categories';
 import { CGS_2027_TYPE_A_SLUG, CGS_2027_TYPE_A_DATA } from '@/data/cgsTypeAGuide2027';
+import { CMU_2027_SLUG, CMU_2027_DATA } from '@/data/cmuGuide2027';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -61,6 +62,10 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   });
 
   const serialized = records.map(record => serializeUpdate(record)).filter((record): record is Update => Boolean(record));
+  if (!serialized.some(u => u.slug === CMU_2027_SLUG)) {
+    const fallback = serializeUpdate(CMU_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
   if (!serialized.some(u => u.slug === CGS_2027_TYPE_A_SLUG)) {
     const fallback = serializeUpdate(CGS_2027_TYPE_A_DATA);
     if (fallback) serialized.unshift(fallback);
@@ -74,6 +79,15 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
     where: { type: { in: ['update', 'article'] }, archivedAt: null, ...currentVisibleContentWhere() },
     select: { slug: true, updatedAt: true, publishedAt: true, category: true, categories: true },
   });
+  if (!updates.some(u => u.slug === CMU_2027_SLUG)) {
+    updates.unshift({
+      slug: CMU_2027_DATA.slug,
+      updatedAt: CMU_2027_DATA.updatedAt,
+      publishedAt: CMU_2027_DATA.publishedAt,
+      category: CMU_2027_DATA.category,
+      categories: CMU_2027_DATA.categories,
+    });
+  }
   if (!updates.some(u => u.slug === CGS_2027_TYPE_A_SLUG)) {
     updates.unshift({
       slug: CGS_2027_TYPE_A_DATA.slug,

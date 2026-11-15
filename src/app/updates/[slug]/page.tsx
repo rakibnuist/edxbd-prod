@@ -19,6 +19,7 @@ import { getIndexableUniversitySitemapRecords } from '@/lib/university-guide-pub
 import { CSC_DIRECTORY_SLUG, buildCscDirectoryEnrichment, linkCscDirectoryUniversities, type CscDirectoryEnrichment } from '@/lib/csc-directory-enrichment';
 import { repairUpdateInternalLinks } from '@/lib/content-links';
 import { CGS_2027_TYPE_A_SLUG, CGS_2027_TYPE_A_DATA } from '@/data/cgsTypeAGuide2027';
+import { CMU_2027_SLUG, CMU_2027_DATA } from '@/data/cmuGuide2027';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -109,6 +110,9 @@ const getUpdate = cache(async (slug: string) => {
   if (fromDb) return fromDb;
   if (slug === CGS_2027_TYPE_A_SLUG) {
     return CGS_2027_TYPE_A_DATA;
+  }
+  if (slug === CMU_2027_SLUG) {
+    return CMU_2027_DATA;
   }
   return null;
 });
