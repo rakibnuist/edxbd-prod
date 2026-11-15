@@ -61,16 +61,19 @@ type BlogPostSummaryInput = {
   featuredImage?: string | null;
 };
 
+/** Normalize a relative path or safe external image URL for JSON-LD properties. */
+export function safeJsonLdImageUrl(rawUrl: string | null | undefined, site = 'https://eduexpressint.com'): string | null {
+  const trimmed = rawUrl?.trim();
+  if (!trimmed) return null;
+  if (trimmed.startsWith('/')) return `${site}${trimmed}`;
+  return toSafeExternalUrl(trimmed);
+}
+
 /** Schema.org `BlogPosting` summary entries shared by updates and category archives. */
 export function blogPostSummaryJsonLd(posts: BlogPostSummaryInput[]) {
   const site = 'https://eduexpressint.com';
   return posts.map(post => {
-    const rawImage = post.featuredImage?.trim();
-    const image = rawImage
-      ? rawImage.startsWith('/')
-        ? `${site}${rawImage}`
-        : toSafeExternalUrl(rawImage)
-      : null;
+    const image = safeJsonLdImageUrl(post.featuredImage, site);
     return {
       '@type': 'BlogPosting',
       headline: post.title,

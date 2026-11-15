@@ -83,6 +83,7 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
         description:
           'Compare Chinese university records for Bangladeshi students by subject, degree, teaching language, city and intake, with recorded costs and source status.',
         inLanguage: 'en-BD',
+        primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE}/images/students/campus-nuist.webp` },
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },

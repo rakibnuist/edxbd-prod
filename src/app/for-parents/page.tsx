@@ -18,6 +18,7 @@ import { ogImage, pageMetadata } from '@/lib/seo';
 import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 import PaymentRules from '../contact/PaymentRules';
+import DownloadRoadmapModal from '@/components/assessment/DownloadRoadmapModal';
 
 const PATH = '/for-parents';
 
@@ -103,6 +104,7 @@ export default async function ParentsPage() {
             <Link href="/contact?audience=parent" className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Book a parent conversation <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <DownloadRoadmapModal buttonLabel="Download Family Study & Cost Roadmap (PDF)" buttonVariant="outline" />
             <a href={`tel:${phone.replace(/[^\d+]/g, '')}`} className="ed-btn ed-btn-outline min-h-[52px] px-7">
               <Phone size={18} aria-hidden="true" /> Call {formatBangladeshPhone(phone)}
             </a>

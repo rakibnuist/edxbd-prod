@@ -17,7 +17,7 @@ function Select({ label, value, values, onChange, all }: { label: string; value:
   return <label className="block min-w-0 text-[14px] font-bold text-ink-soft">{label}<select value={value} onChange={event => onChange(event.target.value)} className={fieldClass}><option value="">{all}</option>{values.map(item => <option key={item} value={item}>{item}</option>)}</select></label>;
 }
 
-export default function ProgramFinder({ rows }: { rows: ProgramRow[] }) {
+export default function ProgramFinder({ rows, heading = 'Recorded programs' }: { rows: ProgramRow[]; heading?: string }) {
   const [search, setSearch] = useState('');
   const [level, setLevel] = useState('');
   const [language, setLanguage] = useState('');
@@ -67,6 +67,7 @@ export default function ProgramFinder({ rows }: { rows: ProgramRow[] }) {
   return (
     <section aria-label="Program finder" className="bg-canvas-soft py-12 lg:py-16">
       <div className="mx-auto max-w-[1200px] px-5 lg:px-8">
+        <h2 className="sr-only">{heading}</h2>
         <div className="rounded-3xl border border-petrol-800/15 bg-white p-4 sm:p-5">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <label className="block text-[14px] font-bold text-ink-soft md:col-span-2">Program, university or city<span className="relative mt-1.5 block"><Search size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" /><input type="search" value={search} onChange={event => reset(() => setSearch(event.target.value))} placeholder="e.g. Computer Science, Nanjing, MBBS" className={`${fieldClass} mt-0 pl-11`} /></span></label>

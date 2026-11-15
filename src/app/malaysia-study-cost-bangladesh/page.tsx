@@ -315,7 +315,7 @@ export default async function MalaysiaStudyCostPage() {
             <div className="mb-3 inline-flex size-10 items-center justify-center rounded-2xl bg-canvas-soft text-emerald-700">
               <Home size={20} />
             </div>
-            <h4 className="text-sm font-bold text-petrol-800">Accommodation</h4>
+            <h3 className="text-sm font-bold text-petrol-800">Accommodation</h3>
             <span className="mt-1 block text-xs font-bold text-emerald-800">RM 500 – RM 1,200</span>
             <span className="text-[11px] text-slate-500">~13,500 – 32,400 BDT/mo</span>
             <p className="mt-2 text-[11px] leading-relaxed text-slate-600">
@@ -327,7 +327,7 @@ export default async function MalaysiaStudyCostPage() {
             <div className="mb-3 inline-flex size-10 items-center justify-center rounded-2xl bg-canvas-soft text-emerald-700">
               <Utensils size={20} />
             </div>
-            <h4 className="text-sm font-bold text-petrol-800">Food & Halal Meals</h4>
+            <h3 className="text-sm font-bold text-petrol-800">Food & Halal Meals</h3>
             <span className="mt-1 block text-xs font-bold text-emerald-800">RM 600 – RM 900</span>
             <span className="text-[11px] text-slate-500">~16,200 – 24,300 BDT/mo</span>
             <p className="mt-2 text-[11px] leading-relaxed text-slate-600">
@@ -339,7 +339,7 @@ export default async function MalaysiaStudyCostPage() {
             <div className="mb-3 inline-flex size-10 items-center justify-center rounded-2xl bg-canvas-soft text-emerald-700">
               <Train size={20} />
             </div>
-            <h4 className="text-sm font-bold text-petrol-800">Public Transit</h4>
+            <h3 className="text-sm font-bold text-petrol-800">Public Transit</h3>
             <span className="mt-1 block text-xs font-bold text-emerald-800">RM 50 – RM 100</span>
             <span className="text-[11px] text-slate-500">~1,350 – 2,700 BDT/mo</span>
             <p className="mt-2 text-[11px] leading-relaxed text-slate-600">
@@ -351,7 +351,7 @@ export default async function MalaysiaStudyCostPage() {
             <div className="mb-3 inline-flex size-10 items-center justify-center rounded-2xl bg-canvas-soft text-emerald-700">
               <Smartphone size={20} />
             </div>
-            <h4 className="text-sm font-bold text-petrol-800">Mobile & Data</h4>
+            <h3 className="text-sm font-bold text-petrol-800">Mobile & Data</h3>
             <span className="mt-1 block text-xs font-bold text-emerald-800">RM 35 – RM 60</span>
             <span className="text-[11px] text-slate-500">~950 – 1,620 BDT/mo</span>
             <p className="mt-2 text-[11px] leading-relaxed text-slate-600">
@@ -363,7 +363,7 @@ export default async function MalaysiaStudyCostPage() {
             <div className="mb-3 inline-flex size-10 items-center justify-center rounded-2xl bg-canvas-soft text-emerald-700">
               <Wallet size={20} />
             </div>
-            <h4 className="text-sm font-bold text-petrol-800">Utilities & Personal</h4>
+            <h3 className="text-sm font-bold text-petrol-800">Utilities & Personal</h3>
             <span className="mt-1 block text-xs font-bold text-emerald-800">RM 100 – RM 200</span>
             <span className="text-[11px] text-slate-500">~2,700 – 5,400 BDT/mo</span>
             <p className="mt-2 text-[11px] leading-relaxed text-slate-600">

@@ -8,7 +8,7 @@
 
 ## 1. Executive Summary
 
-This document describes the architecture, compliance guardrails, endpoints, and verification procedures for the seven production Google Gemini features integrated into EduExpress International:
+This document describes the architecture, compliance guardrails, endpoints, and verification procedures for the eight production Google Gemini features integrated into EduExpress International:
 
 1. **Database-Grounded Fit Matcher (`/education-fit-assessment`)**: Instant student fit scoring with structured JSON output powered by `gemini-4-hydrogen`.
 2. **Admin Counselor Co-pilot (`/admin/leads`)**: Dual-model triage and outreach drafting combining `gemini-decision-1` (Decisions API) and `gemini-4-hydrogen` (Interactions API).
@@ -17,6 +17,7 @@ This document describes the architecture, compliance guardrails, endpoints, and 
 5. **AI Visa Interview Simulator & Consular Coach (`/your-study-journey`)**: 4-round dynamic embassy interview rehearsal simulating the Chinese Embassy in Dhaka (X1/X2 visas) and Malaysian immigration desks (EMGS) with consular readiness scoring and red-flag detection powered by `gemini-4-hydrogen`.
 6. **ClearCost Budget & Financial Feasibility Analyzer (`/compare-costs`)**: Real-time solvency stress-testing comparing student family budget (BDT/USD) against real database tuition, dorm, insurance, and living costs, producing risk-tier assessments, deficit calculations, and low-cost alternative suggestions powered by `gemini-4-hydrogen`.
 7. **AI SOP & Study Plan Reviewer (`/csc-scholarship-bangladesh`)**: Comprehensive critique of student Statement of Purpose and research proposals evaluating academic milestones, research methodologies, non-immigrant intent, and BMDC licensing rules with before-and-after rewrite recommendations powered by `gemini-4-hydrogen`.
+8. **Personalized Study Abroad Roadmap & ClearCost™ PDF Generator (`/for-parents`, `/education-fit-assessment`)**: Executive academic dossier and 2-page branded PDF generation compiling student profile, Gemini strategy analysis, grounded university options, ClearCost expense itemization, and month-by-month intake roadmap powered by `gemini-4-hydrogen` and `pdf-lib`.
 
 All features strictly enforce EduExpress's brand, evidence-first governance, and Bangladesh medical licensing (BMDC/WDOMS) compliance rules with zero hallucinations and resilient local database catalog fallbacks.
 
@@ -106,6 +107,17 @@ All features strictly enforce EduExpress's brand, evidence-first governance, and
   - [`src/components/assessment/SopReviewerCard.tsx`](/src/components/assessment/SopReviewerCard.tsx): Interactive draft critique card with sample CSC plan pre-filler, overall evaluation score, strengths, areas for revision, and side-by-side Before/After recommendations.
 - **Unit Tests**: [`src/lib/sop-reviewer.test.mjs`](/src/lib/sop-reviewer.test.mjs) (5 unit tests passing).
 
+### Feature 8: Personalized Study Abroad Roadmap & ClearCost™ PDF Generator
+- **Target Pages**: [`/for-parents`](/for-parents), [`/education-fit-assessment`](/education-fit-assessment)
+- **API Endpoint**: `POST /api/ai/roadmap-pdf`
+- **Core Files**:
+  - [`src/lib/roadmap-generator.ts`](/src/lib/roadmap-generator.ts): Dossier models, grounded candidate shortlisting, transparent fee itemization, and catalog fallback generator.
+  - [`src/lib/gemini-roadmap.ts`](/src/lib/gemini-roadmap.ts): Server-only strategy synthesizer using `gemini-4-hydrogen` with structured JSON strategy schema.
+  - [`src/lib/pdf-roadmap.ts`](/src/lib/pdf-roadmap.ts): High-fidelity 2-page A4 PDF compiler powered by `pdf-lib` with dark petrol and lime EduExpress branding.
+  - [`src/app/api/ai/roadmap-pdf/route.ts`](/src/app/api/ai/roadmap-pdf/route.ts): Rate-limited endpoint (`ai-roadmap-pdf`, 20 req/hr) streaming binary PDF bytes.
+  - [`src/components/assessment/DownloadRoadmapModal.tsx`](/src/components/assessment/DownloadRoadmapModal.tsx): Interactive download modal providing one-click PDF generation and instant browser file download.
+- **Unit Tests**: [`src/lib/roadmap-generator.test.mjs`](/src/lib/roadmap-generator.test.mjs) (4 unit tests passing).
+
 ---
 
 ## 4. Brand & Compliance Guardrails
@@ -124,14 +136,14 @@ All features strictly enforce EduExpress's brand, evidence-first governance, and
 Run the following test commands to verify all services:
 
 ```bash
-# 1. Run all unit tests (60 passing across all suites)
+# 1. Run all unit tests (66 passing across all suites)
 node --test src/lib/*.test.mjs
 
 # 2. TypeScript compilation check
 npx tsc --noEmit
 
 # 3. Linter check on touched files
-npx eslint src/lib/sop-reviewer.ts src/lib/gemini-sop-reviewer.ts src/app/api/ai/sop-reviewer/route.ts src/components/assessment/SopReviewerCard.tsx src/lib/cost-feasibility.ts src/lib/gemini-cost-feasibility.ts src/app/api/ai/cost-feasibility/route.ts src/components/finders/FinancialFeasibilityCard.tsx src/lib/advisor-tools.ts src/lib/gemini-advisor.ts src/app/api/ai/advisor/route.ts src/components/finders/StudyAdvisorChat.tsx src/components/assessment/TranscriptUploadModal.tsx src/lib/transcript-evaluator.ts src/lib/gemini-transcript.ts src/app/api/ai/evaluate-transcript/route.ts src/lib/visa-simulator.ts src/lib/gemini-visa-simulator.ts src/app/api/ai/visa-simulator/route.ts src/components/visa/VisaInterviewSimulator.tsx
+npx eslint src/lib/roadmap-generator.ts src/lib/pdf-roadmap.ts src/lib/gemini-roadmap.ts src/app/api/ai/roadmap-pdf/route.ts src/components/assessment/DownloadRoadmapModal.tsx src/lib/sop-reviewer.ts src/lib/gemini-sop-reviewer.ts src/app/api/ai/sop-reviewer/route.ts src/components/assessment/SopReviewerCard.tsx src/lib/cost-feasibility.ts src/lib/gemini-cost-feasibility.ts src/app/api/ai/cost-feasibility/route.ts src/components/finders/FinancialFeasibilityCard.tsx src/lib/advisor-tools.ts src/lib/gemini-advisor.ts src/app/api/ai/advisor/route.ts src/components/finders/StudyAdvisorChat.tsx src/components/assessment/TranscriptUploadModal.tsx src/lib/transcript-evaluator.ts src/lib/gemini-transcript.ts src/app/api/ai/evaluate-transcript/route.ts src/lib/visa-simulator.ts src/lib/gemini-visa-simulator.ts src/app/api/ai/visa-simulator/route.ts src/components/visa/VisaInterviewSimulator.tsx
 
 # 4. Production build verification
 npm run build

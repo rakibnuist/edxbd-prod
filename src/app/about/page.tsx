@@ -12,7 +12,7 @@ const PATH = '/about';
 export const metadata = pageMetadata({
   title: 'About EduExpress International | Since 2018, Dhaka',
   description:
-    'Meet EduExpress, an evidence-first study abroad consultancy in Dhanmondi, Dhaka since 2018: our story, team, China expertise and how we put every cost in writing.',
+    'Meet EduExpress, an evidence-first study abroad consultancy in Dhanmondi, Dhaka since 2018: our team, China expertise and written cost schedules.',
   path: PATH,
   image: ogImage('about', 'The EduExpress counselling team at the Dhanmondi office in Dhaka'),
 });

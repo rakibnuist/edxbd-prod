@@ -141,6 +141,7 @@ export default async function UniversitiesPage({ searchParams }: Props) {
         description:
           'Find and compare verified universities, programs, tuition and scholarships across study destinations for Bangladeshi students.',
         inLanguage: 'en-BD',
+        primaryImageOfPage: { '@type': 'ImageObject', url: 'https://eduexpressint.com/og-image.jpg' },
         isPartOf: { '@id': 'https://eduexpressint.com/#website' },
         publisher: { '@id': 'https://eduexpressint.com/#organization' },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },

@@ -558,4 +558,29 @@ test('Built indexable HTML pages have unique @ids, resolved references, WebPage 
   for (const legacy of ['/destinations/china', '/destinations/malaysia', '/destinations/netherlands']) {
     assert.ok(!sitemapBody.includes(`<loc>https://eduexpressint.com${legacy}</loc>`), `sitemap.xml must not emit redirect URL ${legacy}`);
   }
+
+  const aboutHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'about.html'), 'utf8');
+  const aboutDescMatch = aboutHtml.match(/<meta\s+name="description"\s+content="([^"]*)"/i);
+  assert.ok(aboutDescMatch && aboutDescMatch[1].length >= 120 && aboutDescMatch[1].length <= 160, 'about.html description must be 120..160 chars');
+
+  const nanjingHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'china-universities', 'nanjing.html'), 'utf8');
+  assert.ok(nanjingHtml.includes('"primaryImageOfPage":{"@type":"ImageObject","url":"https://eduexpressint.com/og/china.jpg"}'));
+
+  for (const rel of [
+    'programs.html',
+    'programs/english-taught-bachelor-china.html',
+    'malaysia-study-cost-bangladesh.html',
+    'malaysia-student-visa-bangladesh.html',
+    'study-in-malaysia-from-bangladesh.html',
+  ]) {
+    const html = fs.readFileSync(path.join(BUILD_APP_DIR, rel), 'utf8');
+    const levels = [...html.matchAll(/<h([1-6])\b[^>]*>/gi)].map((m) => Number(m[1]));
+    for (let i = 1; i < levels.length; i += 1) {
+      assert.ok(levels[i] - levels[i - 1] <= 1, `${rel} skips heading level h${levels[i - 1]} -> h${levels[i]}`);
+    }
+  }
+
+  for (const imgRel of ['programs.html', 'china-student-visa-bangladesh.html', 'how-we-verify-universities.html']) {
+    assert.ok(fs.readFileSync(path.join(BUILD_APP_DIR, imgRel), 'utf8').includes('"primaryImageOfPage"'), `${imgRel} must include primaryImageOfPage`);
+  }
 });

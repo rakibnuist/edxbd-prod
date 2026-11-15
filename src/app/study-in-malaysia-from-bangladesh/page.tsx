@@ -762,19 +762,19 @@ export default async function StudyInMalaysiaPage() {
       <Section tone="sage" title="Our Transparent Service Commitment">
         <div className="grid gap-6 md:grid-cols-3">
           <div className="rounded-3xl bg-white p-6 shadow-sm">
-            <h4 className="text-base font-bold text-petrol-800">BDT 0 Service Charge</h4>
+            <h3 className="text-base font-bold text-petrol-800">BDT 0 Service Charge</h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-600">
               EduExpress charges zero service fees for Malaysian university applications, offer letter issuance, and EMGS visa guidance.
             </p>
           </div>
           <div className="rounded-3xl bg-white p-6 shadow-sm">
-            <h4 className="text-base font-bold text-petrol-800">Official Direct Transfers</h4>
+            <h3 className="text-base font-bold text-petrol-800">Official Direct Transfers</h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-600">
               Students pay application fees, EMGS visa charges, and tuition directly to the university’s official account via Bangladesh Bank student file.
             </p>
           </div>
           <div className="rounded-3xl bg-white p-6 shadow-sm">
-            <h4 className="text-base font-bold text-petrol-800">Official Regulatory Sources</h4>
+            <h3 className="text-base font-bold text-petrol-800">Official Regulatory Sources</h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-600">
               Data verified against Malaysian Qualifications Agency (MQA), Education Malaysia Global Services (EMGS), and Ministry of Higher Education Malaysia (MoHE).
             </p>

@@ -659,3 +659,56 @@ test('Step 22: flagship update SERP metadata lengths, clamped update fallback me
   assert.ok(marchPage.includes("about: { '@id': `${SITE}/#organization` }"));
   assert.ok(marchPage.includes('primaryImageOfPage:'));
 });
+
+test('Step 23: updates article WebPage+BlogPosting @graph, safe image/reviewer E-E-A-T, about desc <=160, and directory primaryImageOfPage', () => {
+  const jsonLd = read('src/lib/json-ld.ts');
+  assert.ok(jsonLd.includes('export function safeJsonLdImageUrl('));
+
+  const updateSlugPage = read('src/app/updates/[slug]/page.tsx');
+  assert.ok(updateSlugPage.includes('safeJsonLdImageUrl('));
+  assert.ok(updateSlugPage.includes("'@type': 'WebPage'"));
+  assert.ok(updateSlugPage.includes("'@id': `${canonical}#webpage`"));
+  assert.ok(updateSlugPage.includes('teamPersonSchema('));
+  assert.ok(updateSlugPage.includes('schemaDescription'));
+
+  const updateClient = read('src/app/updates/[slug]/UpdateClient.tsx');
+  assert.ok(updateClient.includes('href={categoryHref(category)}'));
+
+  const aboutPage = read('src/app/about/page.tsx');
+  const aboutDescMatch = aboutPage.match(/description:\s*\n\s*'([^']+)'/);
+  assert.ok(aboutDescMatch && aboutDescMatch[1].length <= 160, 'about/page.tsx description must stay <= 160 chars');
+
+  for (const dirFile of [
+    'src/app/china-universities/page.tsx',
+    'src/app/china-universities/[city]/page.tsx',
+    'src/app/universities/page.tsx',
+  ]) {
+    assert.ok(read(dirFile).includes('primaryImageOfPage:'), `${dirFile} CollectionPage must include primaryImageOfPage`);
+  }
+});
+
+test('Step 24: heading hierarchy skips eliminated across ProgramFinder and Malaysia guides, plus shared primaryImageOfPage', () => {
+  const finder = read('src/components/finders/ProgramFinder.tsx');
+  assert.ok(finder.includes("heading = 'Recorded programs'"));
+  assert.ok(finder.includes('<h2 className="sr-only">{heading}</h2>'));
+
+  const cityPage = read('src/app/china-universities/[city]/page.tsx');
+  assert.ok(cityPage.includes('heading={`All recorded programs in ${match.city}`}'));
+
+  for (const myFile of [
+    'src/app/malaysia-study-cost-bangladesh/page.tsx',
+    'src/app/malaysia-student-visa-bangladesh/page.tsx',
+    'src/app/study-in-malaysia-from-bangladesh/page.tsx',
+  ]) {
+    assert.ok(!/<h4\b/i.test(read(myFile)), `${myFile} must not skip from h2 to h4`);
+  }
+
+  for (const tplFile of [
+    'src/components/china/ChinaGuidePage.tsx',
+    'src/app/[slug]/page.tsx',
+    'src/app/programs/page.tsx',
+    'src/app/programs/[segment]/page.tsx',
+  ]) {
+    assert.ok(read(tplFile).includes('primaryImageOfPage:'), `${tplFile} must include primaryImageOfPage`);
+  }
+});

@@ -75,6 +75,7 @@ export default async function ProgramSegmentPage({ params }: Props) {
           name: segment.h1,
           description: segment.description,
           inLanguage: 'en-BD',
+          primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE_URL}/og/china.jpg` },
           isPartOf: { '@id': `${SITE_URL}/#website` },
           publisher: { '@id': `${SITE_URL}/#organization` },
           breadcrumb: { '@id': `${url}#breadcrumb` },

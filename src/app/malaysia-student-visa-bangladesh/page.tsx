@@ -351,7 +351,7 @@ export default async function MalaysiaStudentVisaPage() {
             <div className="mb-3 inline-flex size-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-900">
               <AlertTriangle size={20} />
             </div>
-            <h4 className="text-sm font-bold text-petrol-800">Academic Discrepancies</h4>
+            <h3 className="text-sm font-bold text-petrol-800">Academic Discrepancies</h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-600">
               Unverified certificates or inconsistent subject marks will cause immediate EMGS rejection. Every certificate must match your official Board and University records.
             </p>
@@ -361,7 +361,7 @@ export default async function MalaysiaStudentVisaPage() {
             <div className="mb-3 inline-flex size-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-900">
               <Hospital size={20} />
             </div>
-            <h4 className="text-sm font-bold text-petrol-800">Medical Screening Failure</h4>
+            <h3 className="text-sm font-bold text-petrol-800">Medical Screening Failure</h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-600">
               Active Hepatitis B, untreated pulmonary tuberculosis, or drug traces result in immediate Student Pass cancellation and repatriation. Conduct a pre-screening health check in Dhaka first.
             </p>
@@ -371,7 +371,7 @@ export default async function MalaysiaStudentVisaPage() {
             <div className="mb-3 inline-flex size-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-900">
               <Clock size={20} />
             </div>
-            <h4 className="text-sm font-bold text-petrol-800">Short Passport Validity</h4>
+            <h3 className="text-sm font-bold text-petrol-800">Short Passport Validity</h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-600">
               Malaysian Immigration rejects applications with less than 18 months remaining passport validity. Always renew your passport before applying if it has under 2 years remaining.
             </p>

@@ -148,6 +148,7 @@ export default async function EvidencePageRoute({ params }: Props) {
         inLanguage: 'en-BD',
         dateModified: page.reviewedAt,
         datePublished: page.reviewedAt,
+        primaryImageOfPage: { '@type': 'ImageObject', url: absoluteUrl('/og-image.jpg') },
         isPartOf: { '@id': `${SITE_URL}/#website` },
         publisher: { '@id': `${SITE_URL}/#organization` },
         about: { '@id': `${SITE_URL}/#organization` },

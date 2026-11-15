@@ -1,4 +1,4 @@
-import { breadcrumbJsonLd, citationJsonLd, serializeJsonLd } from '@/lib/json-ld';
+import { breadcrumbJsonLd, citationJsonLd, safeJsonLdImageUrl, serializeJsonLd } from '@/lib/json-ld';
 import { RSS_FEED } from '@/lib/seo';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -35,6 +35,27 @@ const parseJsonCategories = (value: string | null): string[] => {
   } catch {
     return [];
   }
+};
+
+const clampMetaText = (text: string, maxLen: number) => {
+  const normalized = text.replace(/\s+/g, ' ').trim();
+  if (normalized.length <= maxLen) return normalized;
+  const cut = normalized.slice(0, maxLen - 1);
+  const lastSpace = cut.lastIndexOf(' ');
+  return `${lastSpace > maxLen * 0.6 ? cut.slice(0, lastSpace) : cut}…`;
+};
+
+const teamPersonSchema = (name: string | null | undefined) => {
+  const cleaned = name?.trim();
+  if (!cleaned) return null;
+  const member = teamMembers.find(item => item.name.toLowerCase() === cleaned.toLowerCase());
+  if (!member) return null;
+  return {
+    '@type': 'Person',
+    name: member.name,
+    jobTitle: member.role,
+    worksFor: { '@type': 'Organization', '@id': 'https://eduexpressint.com/#organization' },
+  };
 };
 
 // Posts interlink through shared categories so the library never strands a
@@ -86,13 +107,6 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
 
     const tags = update.tags ? JSON.parse(update.tags) : [];
     const plainBody = htmlToText(update.content, 300);
-    const clampMetaText = (text: string, maxLen: number) => {
-      const normalized = text.replace(/\s+/g, ' ').trim();
-      if (normalized.length <= maxLen) return normalized;
-      const cut = normalized.slice(0, maxLen - 1);
-      const lastSpace = cut.lastIndexOf(' ');
-      return `${lastSpace > maxLen * 0.6 ? cut.slice(0, lastSpace) : cut}…`;
-    };
 
     // Search results show about 60 characters: keyword-first meta title plus a
     // short brand once only, falling back to the headline when it fits.
@@ -196,44 +210,67 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     // E-E-A-T: posts signed by a listed team member get a Person author with
     // their verified role; anonymous or generic admin bylines stay attributed to the organization.
     const authorName = normalizeContentAuthor(update.author);
-    const teamMember = teamMembers.find(m => m.name.toLowerCase() === authorName.toLowerCase());
-    const authorSchema = teamMember
-      ? {
-          '@type': 'Person',
-          name: teamMember.name,
-          jobTitle: teamMember.role,
-          worksFor: { '@type': 'Organization', '@id': 'https://eduexpressint.com/#organization' },
-        }
-      : isOrganizationContentAuthor(authorName)
+    const authorSchema =
+      teamPersonSchema(authorName) ??
+      (isOrganizationContentAuthor(authorName)
         ? { '@id': 'https://eduexpressint.com/#organization' }
-        : { '@type': 'Organization', name: authorName, url: 'https://eduexpressint.com' };
+        : { '@type': 'Organization', name: authorName, url: 'https://eduexpressint.com' });
+    const reviewerSchema =
+      teamPersonSchema(update.reviewer) ?? { '@id': 'https://eduexpressint.com/#organization' };
+    const primaryImage =
+      safeJsonLdImageUrl(update.featuredImage) || 'https://eduexpressint.com/og-image.jpg';
+    const schemaDescription = clampMetaText(
+      update.metaDescription || update.excerpt || htmlToText(update.content, 300),
+      160,
+    );
+    const datePublished = update.publishedAt?.toISOString() || update.createdAt.toISOString();
+    const dateModified = update.updatedAt.toISOString();
     const structuredData = {
       '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
-      '@id': `${canonical}#article`,
-      headline: update.title,
-      description: update.excerpt || htmlToText(update.content, 300).slice(0, 160),
-      image: update.featuredImage
-        ? [update.featuredImage.startsWith('/') ? `https://eduexpressint.com${update.featuredImage}` : update.featuredImage]
-        : ['https://eduexpressint.com/og-image.jpg'],
-      datePublished: update.publishedAt?.toISOString() || update.createdAt.toISOString(),
-      dateModified: update.updatedAt.toISOString(),
-      author: authorSchema,
-      publisher: { '@id': 'https://eduexpressint.com/#organization' },
-      reviewedBy: { '@id': 'https://eduexpressint.com/#organization' },
-      isPartOf: { '@id': 'https://eduexpressint.com/#website' },
-      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
-      breadcrumb: { '@id': `${canonical}#breadcrumb` },
-      inLanguage: 'en-BD',
-      keywords: tags.join(', ') || undefined,
-      articleSection: categories[0] || update.category || undefined,
-      ...citationJsonLd(
-        Array.isArray(sourceUrls)
-          ? sourceUrls
-              .filter((u): u is string => typeof u === 'string' && u.trim().length > 0)
-              .map((href) => ({ label: href, href }))
-          : [],
-      ),
+      '@graph': [
+        {
+          '@type': 'WebPage',
+          '@id': `${canonical}#webpage`,
+          url: canonical,
+          mainEntityOfPage: canonical,
+          name: update.title,
+          description: schemaDescription,
+          inLanguage: 'en-BD',
+          datePublished,
+          dateModified,
+          primaryImageOfPage: { '@type': 'ImageObject', url: primaryImage },
+          isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+          about: { '@id': 'https://eduexpressint.com/#organization' },
+          publisher: { '@id': 'https://eduexpressint.com/#organization' },
+          breadcrumb: { '@id': `${canonical}#breadcrumb` },
+          mainEntity: { '@id': `${canonical}#article` },
+        },
+        {
+          '@type': 'BlogPosting',
+          '@id': `${canonical}#article`,
+          headline: update.title,
+          description: schemaDescription,
+          image: [primaryImage],
+          datePublished,
+          dateModified,
+          author: authorSchema,
+          publisher: { '@id': 'https://eduexpressint.com/#organization' },
+          reviewedBy: reviewerSchema,
+          isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+          mainEntityOfPage: { '@id': `${canonical}#webpage` },
+          breadcrumb: { '@id': `${canonical}#breadcrumb` },
+          inLanguage: 'en-BD',
+          keywords: tags.join(', ') || undefined,
+          articleSection: categories[0] || update.category || undefined,
+          ...citationJsonLd(
+            Array.isArray(sourceUrls)
+              ? sourceUrls
+                  .filter((u): u is string => typeof u === 'string' && u.trim().length > 0)
+                  .map((href) => ({ label: href, href }))
+              : [],
+          ),
+        },
+      ],
     };
 
     return (

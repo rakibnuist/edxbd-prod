@@ -30,6 +30,7 @@ import type { FitPreviewResult, FitResponseLanguage } from '@/lib/fit-matcher';
 import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 import { destinationLinks } from '@/data/siteNavigation';
 import TranscriptUploadModal from '@/components/assessment/TranscriptUploadModal';
+import DownloadRoadmapModal from '@/components/assessment/DownloadRoadmapModal';
 
 const PRIVACY_VERSION = '2026-07-19';
 
@@ -770,6 +771,15 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
           {screen === 'results' && (
             <>
               <button type="button" onClick={() => setScreen('plan')} className={secondaryButton}><ArrowLeft size={16} aria-hidden="true" /> Edit answers</button>
+              <DownloadRoadmapModal
+                initialStudentName={form.name}
+                initialDegree={form.academicLevel.includes('Master') ? 'Master' : form.academicLevel.includes('PhD') ? 'PhD' : form.academicLevel.includes('Medicine') ? 'MBBS' : 'Bachelor'}
+                initialMajor={form.subject || 'Engineering & Technology'}
+                initialGpa={form.academicResults || '4.50'}
+                initialIntake={form.intake || 'March 2027'}
+                buttonLabel="Download Roadmap (PDF)"
+                buttonVariant="outline"
+              />
               <button type="button" onClick={() => setScreen('contact')} className={`ml-auto ${primaryButton}`}>Get a written shortlist <ArrowRight size={17} aria-hidden="true" /></button>
             </>
           )}

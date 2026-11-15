@@ -73,6 +73,7 @@ export default async function CityPage({ params }: Props) {
             name: `Universities in ${match.city}, China`,
             description: `Compare recorded universities, yearly CNY tuition, English-taught programs and scholarships in ${match.city}, China for Bangladeshi students.`,
             inLanguage: 'en-BD',
+            primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE_URL}/og/china.jpg` },
             isPartOf: { '@id': `${SITE_URL}/#website` },
             publisher: { '@id': `${SITE_URL}/#organization` },
             breadcrumb: { '@id': `${url}#breadcrumb` },
@@ -118,7 +119,7 @@ export default async function CityPage({ params }: Props) {
           })}
         </ul>
       </Section>
-      {programs.length > 0 && <><h2 className="sr-only">All recorded programs in {match.city}</h2><ProgramFinder rows={programs} /></>}
+      {programs.length > 0 && <ProgramFinder rows={programs} heading={`All recorded programs in ${match.city}`} />}
       <FaqBlock items={faqs} title={`Studying in ${match.city}: common questions`} tone="white" />
       {cities.length > 1 && (
         <Section tone="sage" title="Other cities &amp; tools">

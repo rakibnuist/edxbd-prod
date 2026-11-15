@@ -10,6 +10,7 @@ import { config } from '@/lib/config';
 import { normalizeContentAuthor } from '@/lib/content-author';
 import { trackPhoneClick, trackWhatsAppClick } from '@/lib/conversion-events';
 import { toSafeExternalUrl } from '@/lib/safe-url';
+import { categoryHref } from '@/lib/update-categories';
 import type { UpdateClientProps } from '@/lib/types';
 
 const SITE = 'https://eduexpressint.com';
@@ -75,9 +76,15 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
           </nav>
 
           <div className="mt-6 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center rounded-full bg-lime-pale px-3.5 py-1.5 text-[14px] font-semibold text-lime-deep">
-              {stale?.archived ? 'Closed intake · Archive' : category}
-            </span>
+            {!stale?.archived && (update.category || update.categories?.[0]) ? (
+              <Link href={categoryHref(category)} className="inline-flex items-center rounded-full bg-lime-pale px-3.5 py-1.5 text-[14px] font-semibold text-lime-deep transition hover:bg-lime/40">
+                {category}
+              </Link>
+            ) : (
+              <span className="inline-flex items-center rounded-full bg-lime-pale px-3.5 py-1.5 text-[14px] font-semibold text-lime-deep">
+                {stale?.archived ? 'Closed intake · Archive' : category}
+              </span>
+            )}
             {deadline && !stale?.archived && (
               <span className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[14px] font-semibold ${deadlinePassed ? 'bg-white text-ink-soft' : 'bg-peach text-petrol-800'}`}>
                 <CalendarClock size={15} aria-hidden="true" /> {deadlinePassed ? `Deadline passed ${deadline}` : `Apply by ${deadline}`}

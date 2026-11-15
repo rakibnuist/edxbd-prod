@@ -198,6 +198,7 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
     name: guide.title,
     description: guide.description,
     image: `${SITE}/og/china-guide.jpg`,
+    primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE}/og/china-guide.jpg` },
     inLanguage: 'en-BD',
     mainEntityOfPage: url,
     datePublished: guideDateIso,
