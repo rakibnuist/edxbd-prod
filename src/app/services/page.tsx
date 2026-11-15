@@ -90,6 +90,8 @@ const structuredData = {
       '@type': 'WebPage',
       '@id': `${PAGE_URL}#webpage`,
       url: PAGE_URL,
+      mainEntityOfPage: PAGE_URL,
+      dateModified: '2026-11-15',
       name: 'Study abroad services',
       inLanguage: 'en-BD',
       about: { '@id': 'https://eduexpressint.com/#organization' },

@@ -186,11 +186,12 @@ export default function EducationFitAssessmentPage() {
               We don&apos;t just suggest countries. We compare realistic options against your profile and show the tradeoffs in
               writing, checked against published rules.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/better-education-standard" className="ed-btn ed-btn-outline min-h-[52px] px-7">
                 See our evidence standard <ArrowRight size={18} aria-hidden="true" />
               </Link>
               <Link href="/how-we-verify-universities" className="ed-btn ed-btn-soft min-h-[52px] px-7">How we verify</Link>
+              <Link href="/china-study-report-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">China data &amp; cost benchmark</Link>
             </div>
           </div>
           <ol data-anim="stagger" className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">

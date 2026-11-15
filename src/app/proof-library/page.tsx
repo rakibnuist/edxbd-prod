@@ -23,6 +23,8 @@ const structuredData = {
   '@type': 'CollectionPage',
   '@id': `${PAGE_URL}#webpage`,
   url: PAGE_URL,
+  mainEntityOfPage: PAGE_URL,
+  dateModified: '2026-11-15',
   name: 'EduExpress proof library',
   description: 'Company records with definitions, privacy-safe authorization and admission evidence, student feedback and office details.',
   inLanguage: 'en-BD',
@@ -216,9 +218,14 @@ export default async function ProofLibraryPage() {
                 <li className="flex gap-3"><MapPin size={19} className="mt-0.5 shrink-0 text-lime" aria-hidden="true" /><span>{office.address}</span></li>
                 <li className="flex gap-3"><Clock size={19} className="mt-0.5 shrink-0 text-lime" aria-hidden="true" /><span>{office.hours}</span></li>
               </ul>
-              <Link href="/contact" className="ed-btn ed-btn-signal mt-7 min-h-[52px] px-7">
-                Visit or contact us <ArrowRight size={18} aria-hidden="true" />
-              </Link>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link href="/contact" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+                  Visit or contact us <ArrowRight size={18} aria-hidden="true" />
+                </Link>
+                <Link href="/education-consultant-dhaka" className="ed-btn ed-btn-on-dark min-h-[52px] px-7">
+                  Dhanmondi office guide
+                </Link>
+              </div>
             </div>
           </div>
         </Section>

@@ -291,3 +291,50 @@ test('built HTML checks — success stories schema/cross-links and all Bengali C
     }
   }
 });
+
+test('Step 14 built HTML checks — ChinaGuidePage counterparts, refreshed commercial hubs and benchmark links', () => {
+  const chinaScholarshipsHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'china-scholarships-bangladesh.html'), 'utf8');
+  assert.ok(
+    chinaScholarshipsHtml.includes('href="/bn/csc-scholarship-bangladesh"') &&
+      chinaScholarshipsHtml.includes('href="/china-march-2027-intake"'),
+    'china-scholarships-bangladesh.html must link Bengali CSC twin and March 2027 intake',
+  );
+
+  const admReqHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'china-admission-requirements.html'), 'utf8');
+  assert.ok(
+    admReqHtml.includes('href="/bn/study-in-china"') &&
+      admReqHtml.includes('href="/china-march-2027-intake"'),
+    'china-admission-requirements.html must link Bengali hub and March 2027 intake',
+  );
+
+  const findEduHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'find-education.html'), 'utf8');
+  assert.ok(
+    findEduHtml.includes('2026-11-15') &&
+      findEduHtml.includes('href="/china-march-2027-intake"') &&
+      findEduHtml.includes('href="/china-study-report-bangladesh"') &&
+      findEduHtml.includes('href="/study-in-malaysia-from-bangladesh"'),
+    'find-education.html must carry 2026-11-15 review date and commercial starting points',
+  );
+
+  const feesHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'fees-and-transparency.html'), 'utf8');
+  assert.ok(
+    feesHtml.includes('2026-11-15') &&
+      feesHtml.includes('href="/china-study-report-bangladesh"') &&
+      feesHtml.includes('href="/malaysia-study-cost-bangladesh"'),
+    'fees-and-transparency.html must carry 2026-11-15 review date and benchmark/Malaysia fee links',
+  );
+
+  const scholarshipsHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'scholarships.html'), 'utf8');
+  assert.ok(
+    scholarshipsHtml.includes('2026-11-15') &&
+      scholarshipsHtml.includes('href="/updates/csca-guide-study-in-china"'),
+    'scholarships.html must carry 2026-11-15 review date and CSCA guide link',
+  );
+
+  const proofHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'proof-library.html'), 'utf8');
+  assert.ok(
+    proofHtml.includes('2026-11-15') &&
+      proofHtml.includes('href="/education-consultant-dhaka"'),
+    'proof-library.html must carry 2026-11-15 review date and Dhanmondi office guide link',
+  );
+});

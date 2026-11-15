@@ -236,7 +236,9 @@ export default async function FeesAndTransparencyPage() {
             {[
               { label: 'How we verify universities', href: '/how-we-verify-universities' },
               { label: 'Proof library and company records', href: '/proof-library' },
+              { label: 'Bangladesh–China study cost benchmark', href: '/china-study-report-bangladesh' },
               { label: 'Cost of studying in China', href: '/study-in-china-cost-bangladesh' },
+              { label: 'Study in Malaysia fees (RM & BDT)', href: '/malaysia-study-cost-bangladesh' },
               { label: 'Guidance for parents and sponsors', href: '/for-parents' },
             ].map(link => (
               <li key={link.href}>

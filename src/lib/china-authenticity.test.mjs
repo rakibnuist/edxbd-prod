@@ -368,3 +368,37 @@ test('Step 13 — success stories, updates category, and Bengali China hub cross
     assert.ok(read(bnFile).includes('<BnChinaRelatedGuides'), `${bnFile} must render <BnChinaRelatedGuides>`);
   }
 });
+
+test('Step 14 — llms.txt, IndexNow, ChinaGuidePage bilingual links & core conversion pages stay fresh', () => {
+  const llms = read('public/llms.txt');
+  for (const needle of [
+    'https://eduexpressint.com/sitemap.xml',
+    'https://eduexpressint.com/updates/csca-guide-study-in-china',
+    'https://eduexpressint.com/updates/china-k-visa',
+    'https://eduexpressint.com/china-success-stories',
+  ]) {
+    assert.ok(llms.includes(needle), `public/llms.txt must include ${needle}`);
+  }
+
+  const indexNow = read('src/lib/indexnow.ts');
+  assert.ok(indexNow.includes("'/updates/csca-guide-study-in-china'"));
+  assert.ok(indexNow.includes("'/updates/china-k-visa'"));
+
+  const chinaGuideComp = read('src/components/china/ChinaGuidePage.tsx');
+  assert.ok(chinaGuideComp.includes("'/china-scholarships-bangladesh'"));
+  assert.ok(chinaGuideComp.includes("'/bn/csc-scholarship-bangladesh'"));
+  assert.ok(chinaGuideComp.includes("'/china-march-2027-intake'"));
+
+  for (const freshFile of [
+    'src/app/find-education/page.tsx',
+    'src/app/scholarships/page.tsx',
+    'src/app/your-study-journey/page.tsx',
+    'src/app/education-fit-assessment/page.tsx',
+    'src/app/fees-and-transparency/page.tsx',
+    'src/app/for-parents/page.tsx',
+    'src/app/services/page.tsx',
+    'src/app/proof-library/page.tsx',
+  ]) {
+    assert.ok(read(freshFile).includes('2026-11-15'), `${freshFile} must carry refreshed 2026-11-15 review date`);
+  }
+});
