@@ -161,13 +161,14 @@ export default function StickyDishaChat({
     pathname.startsWith('/dashboard') ||
     pathname.startsWith('/login');
 
-  // Initial welcome message
+  // Initial welcome message with upfront Lead Capture Card
   useEffect(() => {
     const welcomeEn: ChatMessage = {
       id: 'disha-welcome',
       role: 'assistant',
       content:
-        "👋 **Hi, I'm Disha (দিশা)** — your EduExpress AI Study Advisor.\n\nI can help you check university eligibility, scholarships, true costs, or BMDC recognition in China, Malaysia, the UK, and more.\n\nAsk me anything below, or request a **Free Profile Assessment** for a personalized written cost schedule!",
+        "👋 **Hi, I'm Disha (দিশা)** — your EduExpress AI Study Advisor.\n\nTo find suitable universities, scholarship options, and get an **itemized written cost schedule**, enter your details below. Our senior counselor from Dhanmondi will evaluate your file within 1 working day:\n\n*(You can also ask me any questions directly below!)*",
+      isLeadForm: true,
       timestamp: Date.now(),
     };
 
@@ -175,7 +176,8 @@ export default function StickyDishaChat({
       id: 'disha-welcome-bn',
       role: 'assistant',
       content:
-        "👋 **নমস্কার/হ্যালো! আমি দিশা (Disha)** — এডুএক্সপ্রেসের এআই স্টাডি অ্যাডভাইজর।\n\nচীন, মালয়েশিয়া, যুক্তরাজ্য বা অন্যান্য দেশে উচ্চশিক্ষা, স্কলারশিপ, সম্পূর্ণ খরচ এবং ভিসা প্রসেস সম্পর্কে আপনার যেকোনো প্রশ্ন করতে পারেন।\n\nআপনার প্রোফাইলের জন্য একটি **ফ্রি প্রোফাইল মূল্যায়ন** নিতে নিচের অপশনগুলো বেছে নিন!",
+        "👋 **নমস্কার/হ্যালো! আমি দিশা (Disha)** — এডুএক্সপ্রেসের এআই স্টাডি অ্যাডভাইজর।\n\nআপনার রেজাল্ট ও বাজেট অনুযায়ী উপযুক্ত বিশ্ববিদ্যালয়, স্কলারশিপ ও **লিখিত সম্পূর্ণ খরচ শিডিউল** পেতে নিচে আপনার তথ্য দিন। আমাদের ধানমন্ডি অফিস থেকে দ্রুত ফাইল যাচাই করা হবে:\n\n*(অথবা নিচে আপনার যেকোনো প্রশ্ন সরাসরি টাইপ করতে পারেন!)*",
+      isLeadForm: true,
       timestamp: Date.now(),
     };
 
@@ -238,6 +240,15 @@ export default function StickyDishaChat({
   };
 
   const triggerLeadForm = () => {
+    const activeForm = messages.find((m) => m.isLeadForm && !m.leadSubmitted);
+    if (activeForm) {
+      const formEl = document.getElementById('disha-lead-form');
+      if (formEl) {
+        formEl.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
+
     const promptMsg: ChatMessage = {
       id: `lead-req-${++messageIdCounter.current}`,
       role: 'assistant',
@@ -674,7 +685,7 @@ export default function StickyDishaChat({
 
                   {/* IN-CHAT LEAD GENERATION MICRO-FORM */}
                   {msg.isLeadForm && (
-                    <div className="mt-3 rounded-xl border border-petrol-700/20 bg-slate-50/70 p-3.5 text-left">
+                    <div id="disha-lead-form" className="mt-3 rounded-2xl border border-petrol-700/25 bg-slate-50/85 p-3.5 text-left shadow-xs">
                       {msg.leadSubmitted ? (
                         <div className="space-y-2 text-center">
                           <div className="mx-auto grid size-10 place-items-center rounded-full bg-emerald-100 text-emerald-600">
@@ -703,6 +714,20 @@ export default function StickyDishaChat({
                         </div>
                       ) : (
                         <form onSubmit={handleLeadSubmit} className="space-y-2.5">
+                          <div className="flex items-center gap-1.5 font-bold text-[13px] text-petrol-900">
+                            <Sparkles size={14} className="text-marigold" />
+                            <span>
+                              {language === 'bn'
+                                ? 'ফ্রি স্কলারশিপ ও খরচ তালিকা নিন'
+                                : 'Get Free Scholarship & Cost Shortlist'}
+                            </span>
+                          </div>
+                          <p className="text-[11px] leading-relaxed text-ink-soft">
+                            {language === 'bn'
+                              ? 'আপনার তথ্য দিন — আমাদের কাউন্সেলর যাচাই করে লিখিত খরচ শিডিউল পাঠাবেন:'
+                              : 'Enter your details to receive matched options and an itemized cost schedule:'}
+                          </p>
+
                           {leadError && (
                             <div className="rounded-lg bg-red-50 p-2 text-[12px] font-medium text-red-700">
                               {leadError}
@@ -804,7 +829,7 @@ export default function StickyDishaChat({
                           <button
                             type="submit"
                             disabled={leadSubmitting}
-                            className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-xl bg-petrol-700 py-2 text-[13px] font-bold text-white shadow-sm transition hover:bg-petrol-800 disabled:opacity-70"
+                            className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-xl bg-petrol-700 py-2.5 text-[13px] font-bold text-white shadow-sm transition hover:bg-petrol-800 disabled:opacity-70"
                           >
                             {leadSubmitting ? (
                               <>
@@ -813,7 +838,11 @@ export default function StickyDishaChat({
                               </>
                             ) : (
                               <>
-                                <span>{language === 'bn' ? 'ফ্রি মূল্যায়ন রিকোয়েস্ট করুন' : 'Get Free Assessment'}</span>
+                                <span>
+                                  {language === 'bn'
+                                    ? '👉 ফ্রি তালিকা ও খরচ শিডিউল নিন'
+                                    : '👉 Get My Free Shortlist & Costs'}
+                                </span>
                                 <ArrowRight size={13} />
                               </>
                             )}
