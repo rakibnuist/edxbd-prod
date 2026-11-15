@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Building2, Check, ExternalLink, FileText, GraduationCap, ShieldCheck, Wallet } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import SopReviewerCard from '@/components/assessment/SopReviewerCard';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { citationJsonLd } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
@@ -122,7 +123,9 @@ const structuredData = {
   description: 'Guide for Bangladeshi students applying for CSC Chinese Government Scholarships.',
   inLanguage: 'en-BD',
   mainEntityOfPage: `${SITE}${PATH}`,
-  dateModified: '2026-10-19T00:00:00Z',
+  image: `${SITE}/og/china.jpg`,
+  datePublished: '2026-11-15T00:00:00Z',
+  dateModified: '2026-11-15T00:00:00Z',
   author: { '@id': `${SITE}/#organization` },
   reviewedBy: { '@id': `${SITE}/#organization` },
   isPartOf: { '@id': `${SITE}/#website` },
@@ -150,6 +153,7 @@ export default function CscScholarshipBangladeshPage() {
         actions={
           <>
             <a href="#csc-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">Check your CSC eligibility <ArrowRight size={18} aria-hidden="true" /></a>
+            <a href="#sop-reviewer" className="ed-btn ed-btn-outline min-h-[52px] px-7">AI Study Plan Reviewer</a>
             <a href="https://www.campuschina.org/" target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Official portal: campuschina.org <ExternalLink size={16} aria-hidden="true" /><span className="sr-only">(opens in a new tab)</span>
             </a>
@@ -254,6 +258,15 @@ export default function CscScholarshipBangladeshPage() {
           <FileText size={18} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" />
           The receiving university or authority sets the final checklist. Your admission documents support both self-funded and scholarship applications.
         </p>
+      </Section>
+
+      <Section
+        id="sop-reviewer"
+        tone="sage"
+        title="Critique your CSC study plan with Gemini AI."
+        intro="The study plan is the single most scrutinised document in CSC Type A, Type B, and university scholarship reviews. Evaluate your draft against Chinese university rubrics before submitting."
+      >
+        <SopReviewerCard />
       </Section>
 
       <Section tone="navy" title="EduExpress China visa-first policy." intro={visaFirstTerms}>

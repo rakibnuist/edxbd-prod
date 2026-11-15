@@ -14,6 +14,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import VisaInterviewSimulator from '@/components/visa/VisaInterviewSimulator';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
 
@@ -131,6 +132,7 @@ export default function StudyJourneyPage() {
         '@type': 'WebPage',
         '@id': `${canonical}#webpage`,
         url: canonical,
+        mainEntityOfPage: canonical,
         name: 'Your complete study abroad journey',
         description:
           'Seven visible stages from education fit and applications to visa readiness, departure, arrival and university registration.',
@@ -138,6 +140,8 @@ export default function StudyJourneyPage() {
         dateModified: '2026-11-15',
         isPartOf: { '@id': `${SITE_URL}/#website` },
         about: { '@id': `${SITE_URL}/#organization` },
+        publisher: { '@id': `${SITE_URL}/#organization` },
+        mainEntity: { '@id': `${canonical}#stages` },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
       },
       {
@@ -265,6 +269,15 @@ export default function StudyJourneyPage() {
             );
           })}
         </div>
+      </Section>
+
+      <Section
+        id="visa-simulator"
+        tone="sage"
+        title="AI Visa Interview Simulator & Consular Coach."
+        intro="Stage 05 preparation powered by Google Gemini. Rehearse real consular questions asked at the Chinese Embassy in Dhaka and Malaysian immigration desks before your official visa appointment."
+      >
+        <VisaInterviewSimulator />
       </Section>
 
       <Section tone="sage" title="Proof, and its limits.">

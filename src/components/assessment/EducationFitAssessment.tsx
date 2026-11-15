@@ -29,6 +29,7 @@ import {
 import type { FitPreviewResult, FitResponseLanguage } from '@/lib/fit-matcher';
 import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 import { destinationLinks } from '@/data/siteNavigation';
+import TranscriptUploadModal from '@/components/assessment/TranscriptUploadModal';
 
 const PRIVACY_VERSION = '2026-07-19';
 
@@ -219,8 +220,23 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
   const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [summary, setSummary] = useState<FitPreviewResult | null>(null);
+  const [isScanModalOpen, setIsScanModalOpen] = useState(false);
   const startedRef = useRef(false);
   const previewAbortRef = useRef<AbortController | null>(null);
+
+  const handleScanResults = (gpa: string, academicLevel: string, subject: string) => {
+    let matchedLevel = form.academicLevel;
+    if (/hsc|alim|a level/i.test(academicLevel)) matchedLevel = 'HSC / A Level';
+    else if (/ssc|dakhil|o level/i.test(academicLevel)) matchedLevel = 'SSC / O Level';
+    else if (/bachelor|degree|bsc|ba|bba/i.test(academicLevel)) matchedLevel = "Bachelor's";
+    else if (/master|msc|mba/i.test(academicLevel)) matchedLevel = "Master's";
+
+    update({
+      academicResults: gpa ? `GPA ${gpa}` : form.academicResults,
+      academicLevel: matchedLevel || form.academicLevel,
+      subject: subject || form.subject,
+    });
+  };
 
   useEffect(() => {
     captureUtmParameters();
@@ -495,9 +511,19 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
       <div className="p-6 sm:p-8">
         {screen === 'profile' && (
           <div className="space-y-5">
-            <div>
-              <h3 className="font-display text-[24px] font-black leading-tight text-petrol-800">What do you want to study?</h3>
-              <p className="mt-2 text-[16px] leading-6 text-ink-soft">Start with what you know. Exact documents can come later.</p>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 className="font-display text-[24px] font-black leading-tight text-petrol-800">What do you want to study?</h3>
+                <p className="mt-2 text-[16px] leading-6 text-ink-soft">Start with what you know. Exact documents can come later.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsScanModalOpen(true)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-petrol-800/30 bg-lime-pale px-3.5 py-1.5 text-[13px] font-semibold text-petrol-900 transition-colors hover:bg-lime"
+              >
+                <Sparkles size={14} className="text-petrol-800" aria-hidden="true" />
+                Scan marksheet with Gemini
+              </button>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Current level" required>
@@ -757,6 +783,13 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
           )}
         </div>
       </div>
+
+      <TranscriptUploadModal
+        isOpen={isScanModalOpen}
+        onClose={() => setIsScanModalOpen(false)}
+        onApplyResults={handleScanResults}
+        initialLanguage={responseLanguage}
+      />
     </form>
   );
 }

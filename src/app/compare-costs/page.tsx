@@ -40,7 +40,26 @@ export default async function CompareCostsPage() {
 
   return (
     <>
-      <JsonLd data={{ '@context': 'https://schema.org', '@type': 'WebApplication', '@id': `${url}#app`, name: 'Study in China cost comparison', url, applicationCategory: 'EducationalApplication', operatingSystem: 'Any', isPartOf: { '@id': `${SITE_URL}/#website` }, breadcrumb: { '@id': `${url}#breadcrumb` }, offers: { '@type': 'Offer', price: '0', priceCurrency: 'BDT' }, inLanguage: 'en-BD' }} />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': ['WebPage', 'WebApplication'],
+          '@id': `${url}#app`,
+          name: 'Study in China cost comparison',
+          description:
+            'Compare up to three Chinese university programs side by side: yearly tuition, accommodation, insurance, medical check, residence permit and application fees.',
+          url,
+          mainEntityOfPage: url,
+          applicationCategory: 'EducationalApplication',
+          operatingSystem: 'Any',
+          dateModified: '2026-11-15',
+          isPartOf: { '@id': `${SITE_URL}/#website` },
+          publisher: { '@id': `${SITE_URL}/#organization` },
+          breadcrumb: { '@id': `${url}#breadcrumb` },
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'BDT' },
+          inLanguage: 'en-BD',
+        }}
+      />
       <PageHero
         path={PATH}
         trail={[{ name: 'Programs', path: '/programs' }, { name: 'Compare costs' }]}

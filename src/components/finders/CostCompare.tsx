@@ -7,6 +7,7 @@ import { AlertTriangle, ExternalLink, Plus, Search, X } from 'lucide-react';
 import { FEE_LABELS, FIRST_YEAR_FEES, firstYearEstimate, type FeeCategory, type FeeRow, type ProgramRow } from '@/lib/catalog-views';
 import { trackCompareCompleted, trackCompareStarted } from '@/lib/conversion-events';
 import { toSafeExternalUrl } from '@/lib/safe-url';
+import FinancialFeasibilityCard from '@/components/finders/FinancialFeasibilityCard';
 
 const MAX = 3;
 const number = (value: number) => value.toLocaleString('en-US', { maximumFractionDigits: 0 });
@@ -95,7 +96,22 @@ export default function CostCompare({ programs, fees }: Props) {
             </table>
           </div>
         )}
-        {columns.length > 0 && <p className="mt-4 text-[14px] leading-5 text-ink-mute">Figures are copied from recorded university fee schedules and may be out of date. A total appears only when tuition and every recorded first-year fee is one explicit CNY amount; ranges, room choices and unclear periods are left for you to confirm. Living costs, flights, visa and EduExpress service charges are not included. <Link href="/fees-and-transparency" className="font-bold text-petrol-800 underline">How we separate our fees</Link>.</p>}
+        {columns.length > 0 && (
+          <>
+            <p className="mt-4 text-[14px] leading-5 text-ink-mute">
+              Figures are copied from recorded university fee schedules and may be out of date. A total appears only when tuition and every recorded first-year fee is one explicit CNY amount; ranges, room choices and unclear periods are left for you to confirm. Living costs, flights, visa and EduExpress service charges are not included.{' '}
+              <Link href="/fees-and-transparency" className="font-bold text-petrol-800 underline">
+                How we separate our fees
+              </Link>.
+            </p>
+
+            <FinancialFeasibilityCard
+              selectedPrograms={selected}
+              fees={fees}
+              bdtRate={bdtRate}
+            />
+          </>
+        )}
       </div>
     </section>
   );

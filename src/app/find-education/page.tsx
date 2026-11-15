@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, BadgeDollarSign, CheckCircle2, Globe2, GraduationCap, Search, SlidersHorizontal } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, BadgeDollarSign, CheckCircle2, Globe2, GraduationCap, Search, SlidersHorizontal, Sparkles } from 'lucide-react';
 
+import StudyAdvisorChat from '@/components/finders/StudyAdvisorChat';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { activeCountries } from '@/lib/countries';
 import { pageMetadata } from '@/lib/seo';
@@ -132,6 +133,7 @@ export default async function FindEducationPage() {
         '@type': 'WebPage',
         '@id': `${canonical}#webpage`,
         url: canonical,
+        mainEntityOfPage: canonical,
         name: 'Find universities, programs and scholarships',
         description:
           'Compare universities, programs, tuition, scholarships and intakes across study destinations, then request a free education fit assessment.',
@@ -139,6 +141,8 @@ export default async function FindEducationPage() {
         dateModified: LAST_REVIEWED,
         isPartOf: { '@id': `${SITE_URL}/#website` },
         about: { '@id': `${SITE_URL}/#organization` },
+        publisher: { '@id': `${SITE_URL}/#organization` },
+        mainEntity: { '@id': `${canonical}#research-paths` },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
         primaryImageOfPage: { '@type': 'ImageObject', url: absoluteUrl('/images/students/students-campus.webp') },
       },
@@ -185,6 +189,9 @@ export default async function FindEducationPage() {
             <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Start the free fit assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="#advisor" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Ask the Study Advisor <Sparkles size={18} aria-hidden="true" />
+            </Link>
             <Link href="/universities" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Browse university records <Search size={18} aria-hidden="true" />
             </Link>
@@ -213,6 +220,15 @@ export default async function FindEducationPage() {
       />
 
       <TrustBar universities={universityCount > 0 ? universityCount : undefined} />
+
+      <Section
+        id="advisor"
+        tone="sage"
+        title="Ask the Verified Study & Cost Advisor."
+        intro="Direct answers powered by Google Gemini and grounded in EduExpress verified university records, ClearCost schedules, and BMDC/WDOMS medical recognition rules. No ungrounded claims or tuition myths."
+      >
+        <StudyAdvisorChat />
+      </Section>
 
       <Section
         title="Four ways to research, one decision."
