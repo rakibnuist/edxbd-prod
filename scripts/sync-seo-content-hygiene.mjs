@@ -14,6 +14,7 @@
  */
 import { readFile } from 'node:fs/promises';
 import { PrismaClient } from '@prisma/client';
+import { sync2027UniversityGuidesAndRecords } from './lib/seo-university-guides-2027.mjs';
 
 const prisma = new PrismaClient();
 const ARCHIVED_AT = new Date('2026-04-01T00:00:00.000Z');
@@ -333,6 +334,8 @@ async function main() {
       console.log(`Upgraded ${spec.slug} to 2027 cycle metadata & assets.`);
     }
   }
+
+  updated += await sync2027UniversityGuidesAndRecords(prisma);
 
   console.log(`SEO content hygiene sync complete (rows updated: ${updated}).`);
 }

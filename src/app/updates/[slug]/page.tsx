@@ -13,6 +13,7 @@ import { isOrganizationContentAuthor, normalizeContentAuthor } from '@/lib/conte
 import { categorySlug } from '@/lib/update-categories';
 import { chinaIntakeOverview } from '@/lib/china-intakes';
 import { htmlToText, sanitizeUpdateHtml } from '@/lib/content-html';
+import { extractFaqsFromHtml } from '@/lib/content-faq';
 import { getUniversityRecords } from '@/lib/university-records';
 import { getIndexableUniversitySitemapRecords } from '@/lib/university-guide-publication';
 import {
@@ -275,6 +276,9 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     );
     const datePublished = update.publishedAt?.toISOString() || update.createdAt.toISOString();
     const dateModified = update.updatedAt.toISOString();
+    const pageFaqs = cscDirectory?.faqs.length
+      ? cscDirectory.faqs
+      : extractFaqsFromHtml(update.content);
     const structuredData = {
       '@context': 'https://schema.org',
       '@graph': [
@@ -320,13 +324,13 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
               : [],
           ),
         },
-        ...(cscDirectory?.faqs.length
+        ...(pageFaqs.length
           ? [
               {
                 '@type': 'FAQPage',
                 '@id': `${canonical}#faq`,
                 isPartOf: { '@id': `${canonical}#webpage` },
-                mainEntity: faqJsonLd(cscDirectory.faqs).mainEntity,
+                mainEntity: faqJsonLd(pageFaqs).mainEntity,
               },
             ]
           : []),
