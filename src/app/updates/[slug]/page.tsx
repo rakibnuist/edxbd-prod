@@ -21,6 +21,7 @@ import { repairUpdateInternalLinks } from '@/lib/content-links';
 import { CGS_2027_TYPE_A_SLUG, CGS_2027_TYPE_A_DATA } from '@/data/cgsTypeAGuide2027';
 import { CMU_2027_SLUG, CMU_2027_DATA } from '@/data/cmuGuide2027';
 import { SDJU_2027_SLUG, SDJU_2027_DATA } from '@/data/sdjuLanguageGuide2027';
+import { NJUST_2027_SLUG, NJUST_2027_DATA } from '@/data/njustGuide2027';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -117,6 +118,9 @@ const getUpdate = cache(async (slug: string) => {
   }
   if (slug === SDJU_2027_SLUG) {
     return SDJU_2027_DATA;
+  }
+  if (slug === NJUST_2027_SLUG) {
+    return NJUST_2027_DATA;
   }
   return null;
 });

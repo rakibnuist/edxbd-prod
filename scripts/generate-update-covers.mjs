@@ -50,6 +50,14 @@ const posters = [
     info: 'Agency Numbers · Direct Application Links · Type A & B',
     deadline: 'Verified 2027 Directory',
   },
+  {
+    filename: 'njust-csc-and-lanshan-scholarships-2027.jpg',
+    category: 'SCHOLARSHIPS',
+    title: 'Nanjing Univ of Science & Tech',
+    subtitle: 'CSC Type B & Lanshan Scholarships 2027',
+    info: 'Agency No. 10288 · Full Tuition & Hostel · Up to 3,500 CNY/mo',
+    deadline: 'Deadlines: 5 Mar (CSC) · 15 May (Lanshan)',
+  },
 ];
 
 function escapeXml(str) {
