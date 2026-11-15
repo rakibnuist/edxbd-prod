@@ -9,12 +9,11 @@ import Footer from "@/components/Footer";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import MobileLeadBar from "@/components/MobileLeadBar";
 
-import WhatsAppWrapper from "@/components/WhatsAppWrapper";
+import StickyDishaChat from "@/components/chat/StickyDishaChat";
 import CookieConsent from "@/components/CookieConsent";
 import RevealObserver from "@/components/motion/RevealObserver";
 import MetaPixel from "@/components/MetaPixel";
 import GoogleTags from "@/components/GoogleTags";
-import MarchIntakePopup from "@/components/campaigns/MarchIntakePopup";
 
 import "./globals.css";
 import { getPublicTrustRecords } from '@/lib/trust-records';
@@ -335,12 +334,8 @@ export default async function RootLayout({
           </a>
           <ConditionalHeader office={office ? { phonePrimary: office.phonePrimary, phoneSecondary: office.phoneSecondary, hours: office.hours } : undefined} />
           <main id="main-content" tabIndex={-1} className="pb-[calc(76px+env(safe-area-inset-bottom,0px))] lg:pb-0">{children}</main>
-          <WhatsAppWrapper
-            phoneNumber={office?.phonePrimary || '+8801983333566'}
-            message="Hi, I would like an Education Fit Assessment. Please help me compare suitable universities, complete costs, recognition and scholarship availability."
-          />
+          <StickyDishaChat phoneNumber={office?.phonePrimary || '+8801983333566'} />
           <MobileLeadBar />
-          <MarchIntakePopup />
           <CookieConsent />
           <RevealObserver />
           <ConditionalFooter><Footer /></ConditionalFooter>
