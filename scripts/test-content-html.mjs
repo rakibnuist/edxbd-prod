@@ -140,7 +140,7 @@ test('the formatting editors use survives unchanged', () => {
     '<blockquote><p>Quoted</p></blockquote><pre><code>npm run dev</code></pre><hr />',
     '<p><a href="https://www.csc.edu.cn/">CSC</a> <a href="/updates/china-intake">Intake</a> <a href="#fees-2027">Fees</a> <a href="mailto:info@example.com">Email</a> <a href="tel:+8801700000000">Call</a></p>',
     '<figure><img src="https://eduexpressint.com/a.webp" alt="Campus" width="640" height="360" loading="lazy" /><figcaption>Campus</figcaption></figure>',
-    '<img src="data:image/png;base64,iVBORw0KGgo=" alt="inline" />',
+    '<img src="/uploads/campus.webp" alt="Uploaded campus photo" />',
     '<table><caption>Costs</caption><thead><tr><th scope="col" colspan="2">Item</th></tr></thead><tbody><tr><td rowspan="2">Visa</td><td>5,000</td></tr></tbody></table>',
     '<div class="callout"><p>Note</p></div><details><summary>More</summary><p>Hidden</p></details>',
     '<dl><dt>Term</dt><dd>Definition</dd></dl><p><abbr title="Chinese Scholarship Council">CSC</abbr> <time datetime="2027-03-01">1 March</time> <br />End</p>',
@@ -168,6 +168,11 @@ test('empty input is an empty string', () => {
   assert.equal(sanitizeUpdateHtml(null), '');
   assert.equal(sanitizeUpdateHtml(undefined), '');
   assert.equal(sanitizeUpdateHtml(''), '');
+});
+
+test('data: image URIs are stripped while relative and https image URLs remain', () => {
+  assert.equal(assertSafe('<img src="data:image/png;base64,iVBORw0KGgo=" alt="inline" />'), '<img alt="inline" />');
+  assert.equal(assertSafe('<img src="data:image/svg+xml,<svg/>" alt="svg" />'), '<img alt="svg" />');
 });
 
 test('plain-text extraction is unchanged', () => {

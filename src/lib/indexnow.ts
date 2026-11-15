@@ -3,6 +3,8 @@
  * Supports Bing, Yandex, and other IndexNow-compatible search engines
  */
 
+import { logAndFormatServerError } from './api-error'
+
 const INDEXNOW_API_KEY = '9303d37873c94ab5a25637e6d1ad9ece'
 const BASE_URL = 'https://eduexpressint.com'
 
@@ -109,13 +111,13 @@ export async function submitToIndexNow(
             return {
               engine,
               success: false,
-              error: `${engine}: ${error.message}`
+              error: `${engine}: Submission request failed`
             }
           }
           return {
             engine,
             success: false,
-            error: `${engine}: Unknown error`
+            error: `${engine}: Submission request failed`
           }
         }
       })
@@ -125,7 +127,7 @@ export async function submitToIndexNow(
     const errors: string[] = []
     submissions.forEach((result, _index) => {
       if (result.status === 'rejected') {
-        errors.push(`Submission failed: ${result.reason}`)
+        errors.push('Submission failed')
       } else if (!result.value.success) {
         errors.push(`${result.value.engine}: ${result.value.error}`)
       }
@@ -139,10 +141,11 @@ export async function submitToIndexNow(
     return results
 
   } catch (error) {
+    const { errorId } = logAndFormatServerError('IndexNow submit', error, 'IndexNow submission failed')
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'Unknown error occurred',
-      errors: [error instanceof Error ? error.message : 'Unknown error']
+      message: `IndexNow submission failed (${errorId})`,
+      errors: [`IndexNow submission failed (${errorId})`]
     }
   }
 }

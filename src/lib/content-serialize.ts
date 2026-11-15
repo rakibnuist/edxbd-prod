@@ -3,6 +3,7 @@
 
 // Relative import keeps this helper loadable by the node:test scripts.
 import { sanitizeUpdateHtml } from './content-html';
+import { toSafeExternalUrl, toSafeExternalUrlList, toSafeSitePathOrUrl } from './safe-url';
 
 const toArray = (v: unknown): string[] => {
   if (Array.isArray(v)) return v as string[];
@@ -19,9 +20,29 @@ export const serializeContent = (c: Record<string, unknown>): Record<string, unk
   sourceUrls: toArray(c.sourceUrls),
 });
 
+// Validate URLs submitted to admin content APIs before persisting.
+export const validateContentUrls = (body: Record<string, unknown>): string | null => {
+  if ('sourceUrls' in body && body.sourceUrls !== undefined && body.sourceUrls !== null) {
+    for (const item of toArray(body.sourceUrls)) {
+      if (typeof item !== 'string') return 'Every source URL must be a string.';
+      if (item.trim() && !toSafeExternalUrl(item)) {
+        return 'Every source URL must be a valid http:// or https:// URL.';
+      }
+    }
+  }
+  if ('featuredImage' in body && body.featuredImage !== undefined && body.featuredImage !== null) {
+    if (typeof body.featuredImage !== 'string') return 'Featured image URL must be a string.';
+    if (body.featuredImage.trim() && !toSafeSitePathOrUrl(body.featuredImage)) {
+      return 'Featured image URL must be a safe site path (/...) or an http(s) URL.';
+    }
+  }
+  return null;
+};
+
 // Build a clean Prisma payload from client input (arrays -> JSON strings).
 export const toContentData = (body: Record<string, unknown>, partial = false) => {
   const s = (v: unknown) => JSON.stringify(toArray(v));
+  const safeSources = (v: unknown) => JSON.stringify(toSafeExternalUrlList(toArray(v)));
   const date = (value: unknown) => value ? new Date(String(value)) : null;
   const all: Record<string, unknown> = {
     title: body.title,
@@ -34,14 +55,14 @@ export const toContentData = (body: Record<string, unknown>, partial = false) =>
     category: body.category ?? null,
     tags: s(body.tags),
     categories: s(body.categories),
-    featuredImage: body.featuredImage ?? null,
+    featuredImage: toSafeSitePathOrUrl(body.featuredImage) ?? null,
     isPublished: body.isPublished ?? false,
     isFeatured: body.isFeatured ?? false,
     metaTitle: body.metaTitle ?? null,
     metaDescription: body.metaDescription ?? null,
     author: body.author || 'Admin',
     reviewer: body.reviewer ?? null,
-    sourceUrls: s(body.sourceUrls),
+    sourceUrls: safeSources(body.sourceUrls),
     lastVerifiedAt: date(body.lastVerifiedAt),
     nextReviewAt: date(body.nextReviewAt),
     expiresAt: date(body.expiresAt),

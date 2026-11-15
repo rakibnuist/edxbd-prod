@@ -5,6 +5,7 @@ import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/
 import { config } from '@/lib/config';
 import { formatBangladeshPhone } from '@/lib/contact-format';
 import { pageMetadata } from '@/lib/seo';
+import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 import PaymentRules from '../contact/PaymentRules';
 
@@ -98,11 +99,14 @@ export default async function EducationConsultantDhakaPage() {
                   <li className="flex gap-3"><MapPin size={19} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" /><span>{office.address}</span></li>
                   <li className="flex gap-3"><Clock size={19} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" /><span>{office.hours}</span></li>
                 </ul>
-                {office.mapUrl && (
-                  <a href={office.mapUrl} target="_blank" rel="noopener noreferrer" className={`${kit.link} mt-5 min-h-[44px]`}>
-                    Open directions <ArrowRight size={16} aria-hidden="true" />
-                  </a>
-                )}
+                {(() => {
+                  const safeMapUrl = toSafeSitePathOrUrl(office.mapUrl);
+                  return safeMapUrl ? (
+                    <a href={safeMapUrl} target="_blank" rel="noopener noreferrer" className={`${kit.link} mt-5 min-h-[44px]`}>
+                      Open directions <ArrowRight size={16} aria-hidden="true" />
+                    </a>
+                  ) : null;
+                })()}
               </div>
             )}
           </article>

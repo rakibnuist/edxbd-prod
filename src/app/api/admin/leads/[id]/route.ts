@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { sendCrmStage } from '@/lib/meta-crm-events';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 import { validateLeadUpdate } from '@/lib/lead-workflow';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
@@ -10,9 +11,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -41,9 +42,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -84,9 +85,9 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -131,9 +132,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 

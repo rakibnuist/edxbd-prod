@@ -5,6 +5,7 @@ import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/
 import { config } from '@/lib/config';
 import { formatBangladeshPhone } from '@/lib/contact-format';
 import { ogImage, pageMetadata } from '@/lib/seo';
+import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 import PaymentRules from './PaymentRules';
 
@@ -106,11 +107,14 @@ export default async function ContactPage() {
                     <li className="flex gap-3"><Mail size={19} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" /><a href={`mailto:${office.email}`} className="break-all hover:underline">{office.email}</a></li>
                   )}
                 </ul>
-                {office.mapUrl && (
-                  <a href={office.mapUrl} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-soft mt-6 min-h-[48px] w-full px-6">
-                    Open in Google Maps <ArrowRight size={16} aria-hidden="true" />
-                  </a>
-                )}
+                {(() => {
+                  const safeMapUrl = toSafeSitePathOrUrl(office.mapUrl);
+                  return safeMapUrl ? (
+                    <a href={safeMapUrl} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-soft mt-6 min-h-[48px] w-full px-6">
+                      Open in Google Maps <ArrowRight size={16} aria-hidden="true" />
+                    </a>
+                  ) : null;
+                })()}
               </div>
             </article>
           )

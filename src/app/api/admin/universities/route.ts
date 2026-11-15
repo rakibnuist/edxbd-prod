@@ -1,15 +1,18 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
-import { serializeUniversity, universityAdminInclude, universityWriteData } from '@/lib/university-admin';
+import { serializeUniversity, universityAdminInclude, universityWriteData, validateUniversityUrls } from '@/lib/university-admin';
 import { revalidateUniversityPages } from '@/lib/university-cache';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
+import { parsePagination } from '@/lib/pagination';
 
-const isAdmin = (role?: string) => role === 'admin' || role === 'super_admin';
+const isAdmin = isAdminRole;
 
 export async function GET(request: NextRequest) {
     try {
-        const decoded = verifyTokenFromRequest(request);
+        const decoded = await verifyLiveAdminUser(request);
 
         if (!decoded || !isAdmin(decoded.role)) {
             return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
@@ -22,11 +25,11 @@ export async function GET(request: NextRequest) {
         const verification = searchParams.get('verification');
 
         // Pagination params
-        const requestedPage = Number.parseInt(searchParams.get('page') || '1', 10);
-        const requestedLimit = Number.parseInt(searchParams.get('limit') || '10', 10);
-        const page = Number.isFinite(requestedPage) ? Math.max(1, requestedPage) : 1;
-        const limit = Number.isFinite(requestedLimit) ? Math.min(50, Math.max(1, requestedLimit)) : 10;
-        const skip = (page - 1) * limit;
+        const { page, limit, skip } = parsePagination(
+            searchParams.get('page'),
+            searchParams.get('limit'),
+            { defaultLimit: 10, maxLimit: 50 },
+        );
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const query: any = {};
@@ -102,17 +105,22 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        const decoded = verifyTokenFromRequest(request);
+        const decoded = await verifyLiveAdminUser(request);
 
         if (!decoded || !isAdmin(decoded.role)) {
             return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
         }
 
-        const body = await request.json();
+        const body = await readLimitedJson(request, 1024 * 1024);
 
         // Basic validation
-        if (!body.name || !body.slug) {
+        if (typeof body.name !== 'string' || !body.name.trim() || typeof body.slug !== 'string' || !body.slug.trim()) {
             return NextResponse.json({ error: 'Name and Slug are required' }, { status: 400 });
+        }
+
+        const urlError = validateUniversityUrls(body);
+        if (urlError) {
+            return NextResponse.json({ error: urlError }, { status: 400 });
         }
 
         // Check unique slug
@@ -138,6 +146,8 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json(serializeUniversity(university), { status: 201 });
     } catch (error) {
+        const bodyErr = jsonBodyErrorResponse(error);
+        if (bodyErr) return bodyErr;
         console.error('Error creating university:', error);
         return NextResponse.json(
             { error: 'Failed to create university' },

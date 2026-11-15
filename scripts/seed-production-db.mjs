@@ -6,12 +6,23 @@ console.log('--- PRODUCTION DATABASE SYNC START ---');
 const dbPath = process.env.DATABASE_URL?.replace(/^file:/, '') || 'prisma/data/edxbd.db';
 console.log('Target database path:', dbPath);
 
-// 1. Create a timestamped backup before syncing
+// 1. Create a timestamped backup before syncing (owner-only mode, retain last 5).
 if (fs.existsSync(dbPath)) {
   const backupDir = path.join(path.dirname(dbPath), 'backups');
-  fs.mkdirSync(backupDir, { recursive: true });
+  fs.mkdirSync(backupDir, { recursive: true, mode: 0o700 });
+  fs.chmodSync(backupDir, 0o700);
   const backupPath = path.join(backupDir, `prod-backup-${Date.now()}.db`);
   fs.copyFileSync(dbPath, backupPath);
+  fs.chmodSync(backupPath, 0o600);
+  const oldBackups = fs
+    .readdirSync(backupDir)
+    .filter((name) => name.startsWith('prod-backup-') && name.endsWith('.db'))
+    .sort()
+    .reverse()
+    .slice(5);
+  for (const stale of oldBackups) {
+    fs.rmSync(path.join(backupDir, stale), { force: true });
+  }
   console.log(`Backup created at: ${backupPath}`);
 }
 

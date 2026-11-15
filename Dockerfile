@@ -48,9 +48,9 @@ COPY --from=builder /app/public ./public
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-# Ensure the database directory exists with correct permissions
-RUN mkdir -p /app/prisma/data
-RUN chown -R nextjs:nodejs /app/prisma
+# Ensure the database and persistent upload directories exist with correct permissions
+RUN mkdir -p /app/prisma/data /app/public/uploads
+RUN chown -R nextjs:nodejs /app/prisma /app/public/uploads
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
@@ -67,5 +67,8 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT=3000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+  CMD ["node", "-e", "fetch('http://' + (process.env.HOSTNAME && process.env.HOSTNAME !== '0.0.0.0' ? process.env.HOSTNAME : '127.0.0.1') + ':' + (process.env.PORT || '3000') + '/api/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
 
 ENTRYPOINT ["./docker-entrypoint.sh"]

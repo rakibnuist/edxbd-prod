@@ -15,10 +15,11 @@ import {
 } from '@/lib/request-body';
 
 export async function POST(request: NextRequest) {
-  const rateLimit = checkRateLimit(request, {
+  const rateLimit = await checkRateLimit(request, {
     name: 'contact-form',
     maxRequests: 10,
     windowMs: 60 * 60 * 1000,
+    persistent: true,
   });
   if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
 
@@ -65,6 +66,7 @@ export async function POST(request: NextRequest) {
     const consentPolicyVersion = getRequiredString(body, 'consentPolicyVersion', 100);
     const consentTimestamp = getRequiredDate(body, 'consentTimestamp');
     const landingPage = getOptionalString(body, 'landingPage', 2048);
+    const metaEventId = getOptionalString(body, 'metaEventId', 120);
     
     if (!email || !phone || body.consent !== true || !body.consentTimestamp || !body.consentPolicyVersion) {
       return NextResponse.json(
@@ -146,7 +148,7 @@ export async function POST(request: NextRequest) {
           country,
           program,
           message: message || 'Consultation request from ' + country
-        }, source, request, undefined, body.metaEventId).catch(trackingError => {
+        }, source, request, undefined, metaEventId).catch(trackingError => {
           console.error('Meta Conversion API tracking error (non-blocking):', trackingError);
         });
       } catch (trackingError) {

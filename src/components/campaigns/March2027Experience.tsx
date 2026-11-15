@@ -40,6 +40,7 @@ export default function March2027Experience({
   const totalRoutes = universities.reduce((sum, uni) => sum + uni.programmes.length, 0);
 
   useEffect(() => {
+    let active = true;
     try {
       const params = new URLSearchParams(window.location.search);
       const initialRoute = params.get('route');
@@ -49,11 +50,16 @@ export default function March2027Experience({
           initialRoute
         )
       ) {
-        setRoute(initialRoute);
+        queueMicrotask(() => {
+          if (active) setRoute(initialRoute);
+        });
       }
     } catch {
       // ignore URL parsing errors
     }
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {

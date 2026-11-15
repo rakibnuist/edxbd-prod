@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = verifyTokenFromRequest(request);
-    
-    if (!decoded) {
+    const liveUser = await verifyLiveAdminUser(request);
+
+    if (!liveUser) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: liveUser.userId },
       select: {
         id: true,
         name: true,
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     });
     
     if (!user) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     const response = NextResponse.json({

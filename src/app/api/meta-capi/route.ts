@@ -4,18 +4,20 @@ import { getMetaConfig } from '@/lib/settings';
 import { sendMetaEvents } from '@/lib/meta-api';
 import { recordMetaDelivery } from '@/lib/meta-health';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
-import { isAdminRequest } from '@/lib/auth';
-import { SITE_URL } from '@/lib/site-urls';
-import { classifyRequestOrigin, pickCustomData, resolveCapiEvent } from '@/lib/meta-capi-policy';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { extractClientIp } from '@/lib/client-ip';
+import {
+    classifyRequestOrigin,
+    pickCustomData,
+    resolveAllowedOriginHosts,
+    resolveCapiEvent,
+} from '@/lib/meta-capi-policy';
 import {
     getOptionalString,
     getRequiredString,
     jsonBodyErrorResponse,
     readLimitedJson,
 } from '@/lib/request-body';
-
-const SITE_HOST = new URL(SITE_URL).host;
-const SITE_HOSTS = [SITE_HOST, `www.${SITE_HOST}`];
 
 interface ConversionsAPIEvent {
     event_name: string;
@@ -119,10 +121,11 @@ function extractCookieFromHeader(cookieHeader: string | null, name: string): str
 }
 
 export async function POST(request: NextRequest) {
-    const rateLimit = checkRateLimit(request, {
+    const rateLimit = await checkRateLimit(request, {
         name: 'meta-capi',
         maxRequests: 60,
         windowMs: 60 * 1000,
+        persistent: false,
     });
     if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
 
@@ -139,11 +142,14 @@ export async function POST(request: NextRequest) {
 
         // Only pages on this site may report visitor events; value and
         // outcome events need an admin session/token (as /api/meta-conversion).
-        const origin = classifyRequestOrigin(request.headers, [request.headers.get('host') || '', ...SITE_HOSTS]);
+        const origin = classifyRequestOrigin(
+            request.headers,
+            resolveAllowedOriginHosts(request.headers.get('host')),
+        );
         if (origin === 'cross-site') {
             return NextResponse.json({ error: 'Cross-site conversion events are not accepted' }, { status: 403 });
         }
-        const isAdmin = isAdminRequest(request);
+        const isAdmin = Boolean(await verifyLiveAdminUser(request));
         if (event.access === 'admin' && !isAdmin) {
             return NextResponse.json({ error: 'Admin access is required for this event' }, { status: 403 });
         }
@@ -185,9 +191,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Get client IP and user agent from headers
-        const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0] ||
-            request.headers.get('x-real-ip') ||
-            undefined;
+        const clientIp = extractClientIp((name) => request.headers.get(name)) ?? undefined;
         const userAgent = request.headers.get('user-agent') || undefined;
 
         const cookieHeader = request.headers.get('cookie');

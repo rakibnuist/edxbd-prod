@@ -7,7 +7,7 @@ const port = process.env.PORT || '3000';
 const base = `http://${process.env.HOSTNAME || '127.0.0.1'}:${port}`;
 // The proxy upgrades plain-HTTP requests on public hosts; this call is internal.
 const headers = { 'x-forwarded-proto': 'https' };
-const secret = process.env.REVALIDATE_SECRET || process.env.JWT_SECRET || '';
+const secret = (process.env.REVALIDATE_SECRET || '').trim();
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function ready() {
@@ -22,7 +22,7 @@ async function ready() {
 
 try {
   if (!(await ready())) throw new Error('server did not answer within 2 minutes');
-  if (!secret) throw new Error('no REVALIDATE_SECRET or JWT_SECRET set');
+  if (!secret) throw new Error('no REVALIDATE_SECRET set');
   const revalidate = await fetch(`${base}/api/revalidate`, { method: 'POST', headers: { ...headers, 'x-revalidate-secret': secret } });
   if (!revalidate.ok) throw new Error(`revalidate returned ${revalidate.status}`);
 

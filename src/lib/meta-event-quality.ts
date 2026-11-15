@@ -1,5 +1,13 @@
 // Meta Event Quality Enhancement Utilities
 // This file contains utilities to implement Meta's Event Quality recommendations
+import {
+  clearTrackingState,
+  getOrCreateConsentedExternalId,
+  isAnalyticsConsentAccepted,
+  readCookieValue,
+  setTrackingCookie,
+  TRACKING_USER_ID_KEY,
+} from './tracking-consent';
 
 // Types for Meta Event Quality parameters
 export interface MetaEventQualityParams {
@@ -32,18 +40,9 @@ export interface EnhancedUserData {
   program?: string; // Program of interest
 }
 
-const advertisingAllowed = () => {
-  if (typeof window === 'undefined') return false;
-  try {
-    return localStorage.getItem('cookie-consent') === 'accepted';
-  } catch {
-    return false;
-  }
-};
-
 // Utility functions for client-side parameter extraction per Meta CAPI specifications
 export const getMetaParameters = (): MetaEventQualityParams => {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || !isAnalyticsConsentAccepted()) {
     return {};
   }
 
@@ -54,11 +53,7 @@ export const getMetaParameters = (): MetaEventQualityParams => {
     const fbclid = getUrlParameter('fbclid');
     if (fbclid) {
       fbc = `fb.1.${Date.now()}.${fbclid}`;
-      try {
-        document.cookie = `_fbc=${encodeURIComponent(fbc)};path=/;max-age=${90 * 86400};SameSite=Lax`;
-      } catch {
-        // Silent error handling
-      }
+      setTrackingCookie('_fbc', fbc, 90 * 86400);
     }
   }
 
@@ -83,51 +78,12 @@ export const getUrlParameter = (name: string): string | undefined => {
 
 // Get Facebook Browser ID from cookie
 export const getCookie = (name: string): string | undefined => {
-  if (typeof window === 'undefined') return undefined;
-
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    return parts.pop()?.split(';').shift() || undefined;
-  }
-  return undefined;
+  return readCookieValue(name);
 };
 
 // Get external ID (your internal user ID for cross-device matching)
 export const getExternalId = (): string | undefined => {
-  if (typeof window === 'undefined') return undefined;
-
-  // Try to get from localStorage first
-  const storedUserId = localStorage.getItem('user_id');
-  if (storedUserId) return storedUserId;
-
-  const cookieUid = getCookie('ee_uid');
-  if (cookieUid) {
-    try {
-      localStorage.setItem('user_id', cookieUid);
-    } catch {
-      /* ignore */
-    }
-    return cookieUid;
-  }
-
-  // Try to get from sessionStorage
-  const sessionUserId = sessionStorage.getItem('user_id');
-  if (sessionUserId) return sessionUserId;
-
-  // Generate a persistent ID for anonymous users
-  const tempId = sessionStorage.getItem('temp_user_id');
-  if (tempId) return tempId;
-
-  // Create and store a new temporary ID
-  const newTempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  try {
-    sessionStorage.setItem('temp_user_id', newTempId);
-    document.cookie = `ee_uid=${encodeURIComponent(newTempId)};path=/;max-age=${365 * 86400};SameSite=Lax`;
-  } catch {
-    /* ignore */
-  }
-  return newTempId;
+  return getOrCreateConsentedExternalId();
 };
 
 // Get Facebook Login ID (requires Facebook Login SDK)
@@ -160,7 +116,7 @@ export const sendToConversionsAPI = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   customData: Record<string, any> = {}
 ): Promise<void> => {
-  if (typeof window === 'undefined' || !advertisingAllowed()) return;
+  if (typeof window === 'undefined' || !isAnalyticsConsentAccepted()) return;
 
   try {
     const metaParams = getMetaParameters();
@@ -203,7 +159,7 @@ export const trackMetaEvent = (
   parameters: Record<string, unknown> = {},
   userData: EnhancedUserData = {}
 ): void => {
-  if (typeof window === 'undefined' || !advertisingAllowed() || !window.fbq) return;
+  if (typeof window === 'undefined' || !isAnalyticsConsentAccepted() || !window.fbq) return;
 
   const metaParams = getMetaParameters();
 
@@ -240,6 +196,8 @@ export const sendToServerSideAPI = async (
   eventData: Record<string, unknown>,
   eventId: string
 ): Promise<void> => {
+  if (typeof window === 'undefined' || !isAnalyticsConsentAccepted()) return;
+
   try {
     const response = await fetch('/api/meta-conversion', {
       method: 'POST',
@@ -425,7 +383,7 @@ export const trackEnrollmentCompletion = (userData: EnhancedUserData, university
 
 // Facebook Login integration
 export const initializeFacebookLogin = (): void => {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || !isAnalyticsConsentAccepted()) return;
 
   // Facebook Login requires HTTPS
   if (window.location.protocol !== 'https:') {
@@ -490,32 +448,18 @@ export const trackMetaEventWithFacebookLogin = async (
 
 // Utility to set user ID for external_id tracking
 export const setUserId = (userId: string, persistent: boolean = true): void => {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || !isAnalyticsConsentAccepted()) return;
 
   if (persistent) {
-    localStorage.setItem('user_id', userId);
+    localStorage.setItem(TRACKING_USER_ID_KEY, userId);
   } else {
-    sessionStorage.setItem('user_id', userId);
+    sessionStorage.setItem(TRACKING_USER_ID_KEY, userId);
   }
 };
 
 // Utility to clear user ID
 export const clearUserId = (): void => {
-  if (typeof window === 'undefined') return;
-
-  localStorage.removeItem('user_id');
-  sessionStorage.removeItem('user_id');
-  sessionStorage.removeItem('temp_user_id');
-};
-
-// Debug function to check current Meta parameters
-export const debugMetaParameters = (): void => {
-  if (typeof window === 'undefined') return;
-
-  const params = getMetaParameters();
-  console.log('Meta Event Quality Parameters:', params);
-  console.log('Current URL:', window.location.href);
-  console.log('All cookies:', document.cookie);
+  clearTrackingState();
 };
 
 // Global type declarations are handled in src/types/global.d.ts

@@ -1,16 +1,18 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
-import { serializeUniversity, universityAdminInclude, universityWriteData } from '@/lib/university-admin';
+import { serializeUniversity, universityAdminInclude, universityWriteData, validateUniversityUrls } from '@/lib/university-admin';
 import { revalidateUniversityPages } from '@/lib/university-cache';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
-const isAdmin = (role?: string) => role === 'admin' || role === 'super_admin';
+const isAdmin = isAdminRole;
 
 export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
     try {
-        const decoded = verifyTokenFromRequest(request);
+        const decoded = await verifyLiveAdminUser(request);
         if (!decoded || !isAdmin(decoded.role)) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }
@@ -33,12 +35,16 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
 export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
     try {
-        const decoded = verifyTokenFromRequest(request);
+        const decoded = await verifyLiveAdminUser(request);
         if (!decoded || !isAdmin(decoded.role)) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }
 
-        const body = await request.json();
+        const body = await readLimitedJson(request, 1024 * 1024);
+        const urlError = validateUniversityUrls(body);
+        if (urlError) {
+            return NextResponse.json({ error: urlError }, { status: 400 });
+        }
         const existing = await prisma.university.findFirst({ where: { OR: [{ id: params.id }, { slug: params.id }] } });
         if (!existing) return NextResponse.json({ error: 'University not found' }, { status: 404 });
         const university = await prisma.university.update({
@@ -55,6 +61,8 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
 
         return NextResponse.json(serializeUniversity(university));
     } catch (error) {
+        const bodyErr = jsonBodyErrorResponse(error);
+        if (bodyErr) return bodyErr;
         console.error('Update error:', error);
         return NextResponse.json({ error: 'Failed to update university' }, { status: 500 });
     }
@@ -63,7 +71,7 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
 export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
     const params = await props.params;
     try {
-        const decoded = verifyTokenFromRequest(request);
+        const decoded = await verifyLiveAdminUser(request);
         if (!decoded || !isAdmin(decoded.role)) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
         }

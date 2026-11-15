@@ -15,6 +15,7 @@ import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/c
 import { config } from '@/lib/config';
 import { formatBangladeshPhone } from '@/lib/contact-format';
 import { ogImage, pageMetadata } from '@/lib/seo';
+import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 import PaymentRules from '../contact/PaymentRules';
 
@@ -169,9 +170,12 @@ export default async function ParentsPage() {
               </ul>
               <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row">
                 <Link href="/contact" className="ed-btn ed-btn-soft min-h-[48px] px-6">Office details <ArrowRight size={16} aria-hidden="true" /></Link>
-                {office.mapUrl && (
-                  <a href={office.mapUrl} target="_blank" rel="noopener noreferrer" className={`${kit.link} min-h-[48px]`}>Open in Google Maps</a>
-                )}
+                {(() => {
+                  const safeMapUrl = toSafeSitePathOrUrl(office.mapUrl);
+                  return safeMapUrl ? (
+                    <a href={safeMapUrl} target="_blank" rel="noopener noreferrer" className={`${kit.link} min-h-[48px]`}>Open in Google Maps</a>
+                  ) : null;
+                })()}
               </div>
             </article>
           )}

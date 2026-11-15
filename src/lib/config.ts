@@ -12,7 +12,6 @@ export const config = {
   tracking: {
     gtm: process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX',
     metaPixel: process.env.NEXT_PUBLIC_META_PIXEL_ID || '1234567890',
-    metaAccessToken: process.env.META_ACCESS_TOKEN || '',
     ga4: process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX',
   },
 

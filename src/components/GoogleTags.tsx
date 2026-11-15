@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { CONSENT_CHANGE_EVENT, CONSENT_STORAGE_KEY } from '@/components/CookieConsent';
+import { CONSENT_CHANGE_EVENT } from '@/components/CookieConsent';
+import { isAnalyticsConsentAccepted } from '@/lib/tracking-consent';
 
 // Loads Google Tag Manager and/or GA4 at runtime using IDs from admin Settings
 // (DB) or environment. Changing them in /admin/settings takes effect on next
@@ -12,7 +13,7 @@ export default function GoogleTags() {
     const flag = window as unknown as { __googleTagsLoaded?: boolean };
 
     const load = async () => {
-      if (localStorage.getItem(CONSENT_STORAGE_KEY) !== 'accepted') return;
+      if (!isAnalyticsConsentAccepted()) return;
       if (flag.__googleTagsLoaded) return;
       try {
         const res = await fetch('/api/public-config');

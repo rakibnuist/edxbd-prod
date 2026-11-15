@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { isLeadStatus } from '@/lib/lead-workflow';
+import { validateAdminLeadCreate } from '@/lib/payload-validation';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
 
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -48,19 +52,26 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    const body = await request.json();
+    const body = await readLimitedJson(request, 64 * 1024);
+    const validated = validateAdminLeadCreate(body, isLeadStatus);
+    if (!validated.data) {
+      return NextResponse.json({ error: validated.error || 'Invalid lead payload' }, { status: 400 });
+    }
+
     const lead = await prisma.lead.create({
-      data: body
+      data: validated.data,
     });
 
     return NextResponse.json(lead, { status: 201 });
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error);
+    if (bodyError) return bodyError;
     console.error('Error creating lead:', error);
     return NextResponse.json(
       { error: 'Failed to create lead' },
@@ -71,9 +82,9 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -91,8 +102,6 @@ export async function DELETE(request: NextRequest) {
     if (!deletedLead) {
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
     }
-
-    console.log(`Lead deleted: ${deletedLead.id} - ${deletedLead.name}`);
 
     return NextResponse.json({ message: 'Lead deleted successfully', deletedLead });
   } catch (error) {

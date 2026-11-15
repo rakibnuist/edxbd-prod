@@ -10,6 +10,7 @@ import { chinaGuideMetadata, chinaGuidePages } from '@/data/chinaGuidePages';
 import { evidencePages, type EvidencePage } from '@/data/evidencePages';
 import { staticRouteSlugs } from '@/data/staticRoutePages';
 import { countries } from '@/lib/countries';
+import { toSafeExternalUrl } from '@/lib/safe-url';
 import { pageMetadata } from '@/lib/seo';
 import { SITE_URL, absoluteUrl, destinationPath } from '@/lib/site-urls';
 
@@ -280,19 +281,22 @@ export default async function EvidencePageRoute({ params }: Props) {
                 </h2>
                 <p className="mt-3 text-[16px] leading-7 text-ink-soft">Links to official authorities referenced in this policy.</p>
                 <ul className="mt-5 grid gap-2">
-                  {page.sources.map((source) => (
-                    <li key={source.href}>
-                      <a
-                        href={source.href}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className="flex min-h-[52px] items-center justify-between gap-4 rounded-2xl bg-canvas-soft px-5 py-3 text-[16px] font-semibold text-petrol-800 hover:underline"
-                      >
-                        {source.label}
-                        <ArrowUpRight size={18} className="shrink-0" aria-hidden="true" />
-                      </a>
-                    </li>
-                  ))}
+                  {page.sources.map((source) => {
+                    const safeHref = toSafeExternalUrl(source.href);
+                    return safeHref ? (
+                      <li key={source.href}>
+                        <a
+                          href={safeHref}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="flex min-h-[52px] items-center justify-between gap-4 rounded-2xl bg-canvas-soft px-5 py-3 text-[16px] font-semibold text-petrol-800 hover:underline"
+                        >
+                          {source.label}
+                          <ArrowUpRight size={18} className="shrink-0" aria-hidden="true" />
+                        </a>
+                      </li>
+                    ) : null;
+                  })}
                 </ul>
               </section>
             ) : null}

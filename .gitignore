@@ -129,9 +129,15 @@ jspm_packages/
 
 /src/generated/prisma
 
-# Local databases (never commit)
+# Local databases and backups (never commit)
 *.db
+*.db.enc
+*.db-wal
+*.db-shm
+*.db-journal
 dev.db
 prisma/dev.db
 prisma/*.db
-prisma/data/*.db
+prisma/data/*.db*
+prisma/data/backups/
+data/*.db*

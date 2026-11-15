@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { isAdminRequest } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 
 const forbidden = () => NextResponse.json({ error: 'Admin access required' }, { status: 403 });
 
@@ -9,7 +9,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const { id } = await params;
 
     const country = await prisma.country.findUnique({ where: { id } });
@@ -35,7 +35,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const { id } = await params;
 
     const body = await request.json() as Record<string, unknown>;
@@ -76,7 +76,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const { id } = await params;
 
     const country = await prisma.country.delete({ where: { id } }).catch(() => null);

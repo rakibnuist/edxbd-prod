@@ -2,6 +2,7 @@ import 'server-only';
 /* eslint-disable @typescript-eslint/no-explicit-any -- Prisma relation records are normalized at this database boundary. */
 
 import type { IUniversity, IUniversityCostPlan, IUniversityFee, IUniversityProgram, IUniversityScholarship } from '@/types/university';
+import { toSafeExternalUrl, toSafeExternalUrlList, toSafeSitePathOrUrl } from './safe-url';
 
 export const universityAdminInclude = {
   programs: true,
@@ -20,6 +21,53 @@ const strings = (value: unknown) => Array.isArray(value) ? Array.from(new Set(va
 const joinCsv = (value: unknown) => strings(value).join(',');
 const jsonStrings = (value: unknown) => JSON.stringify(strings(value));
 const optional = (value: unknown) => String(value || '').trim() || null;
+const optionalExternalUrl = (value: unknown) => toSafeExternalUrl(value) ?? null;
+const optionalSitePathOrUrl = (value: unknown) => toSafeSitePathOrUrl(value) ?? null;
+
+function isInvalidOptionalUrl(value: unknown, validator: (v: unknown) => string | null): boolean {
+  if (value === undefined || value === null) return false;
+  if (typeof value !== 'string') return true;
+  return Boolean(value.trim()) && !validator(value);
+}
+
+/** Validate all external and asset URL fields submitted for a university record. */
+export function validateUniversityUrls(body: Partial<IUniversity>): string | null {
+  if (isInvalidOptionalUrl(body.officialUrl, toSafeExternalUrl)) {
+    return 'officialUrl must be a valid http:// or https:// URL.';
+  }
+  if (isInvalidOptionalUrl(body.relationshipEvidenceUrl, toSafeExternalUrl)) {
+    return 'relationshipEvidenceUrl must be a valid http:// or https:// URL.';
+  }
+  if (isInvalidOptionalUrl(body.recognitionSourceUrl, toSafeExternalUrl)) {
+    return 'recognitionSourceUrl must be a valid http:// or https:// URL.';
+  }
+  if (isInvalidOptionalUrl(body.logo, toSafeSitePathOrUrl)) {
+    return 'logo must be a safe site path (/...) or a valid http(s) URL.';
+  }
+  if (body.sourceUrls !== undefined) {
+    if (!Array.isArray(body.sourceUrls)) return 'sourceUrls must be a list of URLs.';
+    for (const url of body.sourceUrls) {
+      if (isInvalidOptionalUrl(url, toSafeExternalUrl)) {
+        return 'Every university sourceUrl must be a valid http:// or https:// URL.';
+      }
+    }
+  }
+  for (const [label, items] of [
+    ['program', body.programs],
+    ['fee', body.fees],
+    ['scholarship', body.scholarships],
+    ['cost plan', body.costPlans],
+  ] as const) {
+    if (items === undefined) continue;
+    if (!Array.isArray(items)) return `${label} list is invalid.`;
+    for (const item of items) {
+      if (item && typeof item === 'object' && 'sourceUrl' in item && isInvalidOptionalUrl(item.sourceUrl, toSafeExternalUrl)) {
+        return `Every ${label} sourceUrl must be a valid http:// or https:// URL.`;
+      }
+    }
+  }
+  return null;
+}
 
 const dateOrNull = (value: unknown) => {
   if (!value) return null;
@@ -162,16 +210,16 @@ export function universityWriteData(body: Partial<IUniversity>, includeRelations
     deadlineStartDate: optional(body.deadlines?.startDate),
     notes: jsonStrings(body.notes),
     badges: jsonStrings(body.badges),
-    logo: optional(body.logo),
+    logo: optionalSitePathOrUrl(body.logo),
     isActive: body.isActive !== false,
-    officialUrl: optional(body.officialUrl),
+    officialUrl: optionalExternalUrl(body.officialUrl),
     aliases: jsonStrings(body.aliases),
     legacySlugs: jsonStrings(body.legacySlugs),
     relationshipType: body.relationshipType || 'unverified',
-    relationshipEvidenceUrl: optional(body.relationshipEvidenceUrl),
+    relationshipEvidenceUrl: optionalExternalUrl(body.relationshipEvidenceUrl),
     recognitionAuthority: optional(body.recognitionAuthority),
-    recognitionSourceUrl: optional(body.recognitionSourceUrl),
-    sourceUrls: jsonStrings(body.sourceUrls),
+    recognitionSourceUrl: optionalExternalUrl(body.recognitionSourceUrl),
+    sourceUrls: JSON.stringify(toSafeExternalUrlList(strings(body.sourceUrls))),
     lastVerifiedAt: dateOrNull(body.lastVerifiedAt),
     verificationExpiresAt: dateOrNull(body.verificationExpiresAt),
     verificationStatus: body.verificationStatus || 'under_verification',
@@ -183,16 +231,16 @@ export function universityWriteData(body: Partial<IUniversity>, includeRelations
     programs: { deleteMany: {}, create: programs.map(program => ({
       level: program.level || 'Program', name: program.name.trim(), subject: optional(program.subject), languages: joinCsv(program.languages),
       duration: optional(program.duration), intakes: joinCsv(program.intakes), tuition: optional(program.tuition), tuitionAfterScholarship: optional(program.tuitionAfterScholarship),
-      applicationDeadline: optional(program.applicationDeadline), eligibility: jsonStrings(program.eligibility), sourceUrl: optional(program.sourceUrl), status: program.status || 'active',
+      applicationDeadline: optional(program.applicationDeadline), eligibility: jsonStrings(program.eligibility), sourceUrl: optionalExternalUrl(program.sourceUrl), status: program.status || 'active',
     })) },
     fees: { deleteMany: {}, create: fees.map(fee => ({
       item: fee.item.trim(), cost: fee.cost?.trim() || 'Prepared in the written cost plan', notes: optional(fee.notes), recipient: optional(fee.recipient),
-      refundable: fee.refundable || '', validFor: optional(fee.validFor), sourceUrl: optional(fee.sourceUrl),
+      refundable: fee.refundable || '', validFor: optional(fee.validFor), sourceUrl: optionalExternalUrl(fee.sourceUrl),
     })) },
     scholarships: { deleteMany: {}, create: scholarships.map(scholarship => ({
       title: scholarship.title.trim(), type: optional(scholarship.type), details: jsonStrings(scholarship.details), amount: optional(scholarship.amount),
       condition: optional(scholarship.condition), eligiblePrograms: jsonStrings(scholarship.eligiblePrograms), coverage: optional(scholarship.coverage),
-      renewal: optional(scholarship.renewal), deadline: optional(scholarship.deadline), sourceUrl: optional(scholarship.sourceUrl), status: scholarship.status || 'planned',
+      renewal: optional(scholarship.renewal), deadline: optional(scholarship.deadline), sourceUrl: optionalExternalUrl(scholarship.sourceUrl), status: scholarship.status || 'planned',
     })) },
     costPlans: { deleteMany: {}, create: costPlans.map(plan => ({
       title: plan.title.trim(), programName: optional(plan.programName), scholarshipTitle: optional(plan.scholarshipTitle), intake: optional(plan.intake),
@@ -200,7 +248,7 @@ export function universityWriteData(body: Partial<IUniversity>, includeRelations
       tuitionAfterScholarship: optional(plan.tuitionAfterScholarship), applicationFee: optional(plan.applicationFee), hostel: optional(plan.hostel),
       insurance: optional(plan.insurance), medical: optional(plan.medical), visa: optional(plan.visa), travel: optional(plan.travel), living: optional(plan.living),
       serviceFee: optional(plan.serviceFee), otherCosts: jsonStrings(plan.otherCosts), totalEstimate: optional(plan.totalEstimate), notes: jsonStrings(plan.notes),
-      sourceUrl: optional(plan.sourceUrl), lastVerifiedAt: dateOrNull(plan.lastVerifiedAt), isPublished: plan.isPublished === true,
+      sourceUrl: optionalExternalUrl(plan.sourceUrl), lastVerifiedAt: dateOrNull(plan.lastVerifiedAt), isPublished: plan.isPublished === true,
     })) },
   };
 }

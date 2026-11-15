@@ -4,6 +4,7 @@ import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/c
 import type { ChinaGuidePage as ChinaGuidePageData, ChinaGuideSection } from '@/data/chinaGuidePages';
 import research from '@/data/chinaStudyResearch.json';
 import scholarshipResearch from '../../../data/research/china-scholarship-guide.json';
+import { toSafeExternalUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
 const SITE = 'https://eduexpressint.com';
@@ -358,9 +359,11 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
           intro="Universities, scholarship bodies and the Chinese authorities make the official decisions. Check the current notice for your exact programme before you pay."
         >
           <ul data-anim="stagger" className="grid gap-3 md:grid-cols-2">
-            {sources.map(source => (
+            {sources.map(source => {
+              const safeHref = toSafeExternalUrl(source.href);
+              return safeHref ? (
               <li key={source.href}>
-                <a href={source.href} target="_blank" rel="noopener noreferrer" className="group flex h-full min-h-[72px] items-start justify-between gap-4 rounded-3xl bg-white p-5 transition-colors hover:bg-lime-pale">
+                <a href={safeHref} target="_blank" rel="noopener noreferrer" className="group flex h-full min-h-[72px] items-start justify-between gap-4 rounded-3xl bg-white p-5 transition-colors hover:bg-lime-pale">
                   <span>
                     <span className="block text-[16px] font-semibold leading-6 text-petrol-800 group-hover:underline">{source.label}</span>
                     {source.record?.title && <span className="mt-1 block text-[15px] leading-6 text-ink-soft">{source.record.title}</span>}
@@ -370,7 +373,8 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
                   <span className="sr-only">(opens in a new tab)</span>
                 </a>
               </li>
-            ))}
+              ) : null;
+            })}
           </ul>
         </Section>
       ) : null}

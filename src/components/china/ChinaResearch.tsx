@@ -1,16 +1,22 @@
 import Link from 'next/link';
 import { ArrowRight, BookOpen, ExternalLink } from 'lucide-react';
 import { getChinaStudyResearch, type ChinaStudyResearch } from '@/lib/china-study-research';
+import { toSafeExternalUrl } from '@/lib/safe-url';
 
 const sectionClass = 'scroll-mt-32 border-t border-slate-200 py-10 sm:py-12';
 const headingClass = 'font-heading text-2xl font-bold sm:text-3xl';
 const bodyClass = 'mt-3 text-sm leading-7 text-slate-600';
 
 function Sources({ ids, sources }: { ids: string[]; sources: ChinaStudyResearch['sources'] }) {
-  const selected = ids.map(id => sources.find(source => source.id === id)).filter(source => source !== undefined);
+  const selected = ids
+    .map(id => sources.find(source => source.id === id))
+    .filter((source): source is ChinaStudyResearch['sources'][number] => Boolean(source && toSafeExternalUrl(source.url)));
   if (!selected.length) return null;
   return <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs leading-5">
-    {selected.map(source => <a key={source.id} href={source.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-[#12436b] underline underline-offset-4">{source.publisher} source <ExternalLink size={12} aria-hidden="true" /></a>)}
+    {selected.map(source => {
+      const safeUrl = toSafeExternalUrl(source.url)!;
+      return <a key={source.id} href={safeUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-[#12436b] underline underline-offset-4">{source.publisher} source <ExternalLink size={12} aria-hidden="true" /></a>;
+    })}
   </div>;
 }
 
@@ -130,7 +136,10 @@ export default async function ChinaResearch() {
       <section id="china-official-sources" className={sectionClass}>
         <div className="flex items-center gap-3"><BookOpen size={22} className="text-[#12436b]" /><h3 className={headingClass}>Official sources and their scope</h3></div>
         <p className={bodyClass}>Follow the source for the detail that matters to your application. A historical guide remains useful for comparison but does not establish availability for a new intake.</p>
-        <ol className="mt-6 grid gap-3 sm:grid-cols-2">{research.sources.map(source => <li key={source.id} className="rounded-lg border border-slate-200 p-4 text-xs leading-6"><a href={source.url} target="_blank" rel="noreferrer" className="font-bold text-[#12436b] underline underline-offset-4">{source.publisher}: {source.title} ↗</a><p className="mt-1 text-slate-600">{source.scope}</p></li>)}</ol>
+        <ol className="mt-6 grid gap-3 sm:grid-cols-2">{research.sources.map(source => {
+          const safeUrl = toSafeExternalUrl(source.url);
+          return safeUrl ? <li key={source.id} className="rounded-lg border border-slate-200 p-4 text-xs leading-6"><a href={safeUrl} target="_blank" rel="noreferrer" className="font-bold text-[#12436b] underline underline-offset-4">{source.publisher}: {source.title} ↗</a><p className="mt-1 text-slate-600">{source.scope}</p></li> : null;
+        })}</ol>
       </section>
     </div>
   </section>;

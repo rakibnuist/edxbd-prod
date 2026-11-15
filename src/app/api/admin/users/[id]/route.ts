@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import type { Prisma } from '@prisma/client';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 
 const ALLOWED_ROLES = ['user', 'admin', 'super_admin'] as const;
 const MIN_PASSWORD_LENGTH = 12;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 // GET - Fetch single user (Admin only)
 export async function GET(
@@ -13,9 +15,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
 
-    if (!decoded || !['admin', 'super_admin'].includes(decoded.role)) {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -42,13 +44,14 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
 
-    if (!decoded || !['admin', 'super_admin'].includes(decoded.role)) {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    const { name, email, role, password } = await request.json();
+    const body = await request.json();
+    const { name, email, role, password } = body ?? {};
     const { id } = await params;
 
     const user = await prisma.user.findUnique({ where: { id } });
@@ -85,10 +88,10 @@ export async function PUT(
     const updateData: Prisma.UserUpdateInput = {};
 
     // Update fields
-    if (name) updateData.name = name.trim();
-    if (email) {
-      const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-      if (!emailRegex.test(email)) {
+    if (typeof name === 'string' && name.trim()) updateData.name = name.trim();
+    if (typeof email === 'string' && email.trim()) {
+      const normalizedEmail = email.toLowerCase().trim();
+      if (!EMAIL_REGEX.test(normalizedEmail)) {
         return NextResponse.json(
           { message: 'Please enter a valid email address' },
           { status: 400 }
@@ -97,7 +100,7 @@ export async function PUT(
 
       // Check if email is already taken by another user
       const existingUser = await prisma.user.findFirst({
-        where: { email: email.toLowerCase().trim(), id: { not: id } }
+        where: { email: normalizedEmail, id: { not: id } }
       });
       if (existingUser) {
         return NextResponse.json(
@@ -106,11 +109,14 @@ export async function PUT(
         );
       }
 
-      updateData.email = email.toLowerCase().trim();
+      updateData.email = normalizedEmail;
     }
-    if (role) updateData.role = role;
+    if (role) {
+      updateData.role = role;
+      if (role !== user.role) updateData.tokenVersion = { increment: 1 };
+    }
 
-    if (password) {
+    if (typeof password === 'string' && password.length > 0) {
       if (password.length < MIN_PASSWORD_LENGTH) {
         return NextResponse.json(
           { message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long` },
@@ -119,6 +125,11 @@ export async function PUT(
       }
       const saltRounds = 12;
       updateData.password = await bcrypt.hash(password, saltRounds);
+      updateData.tokenVersion = { increment: 1 };
+    }
+
+    if (updateData.email && updateData.email !== user.email) {
+      updateData.tokenVersion = { increment: 1 };
     }
 
     const updatedUser = await prisma.user.update({
@@ -143,9 +154,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
 
-    if (!decoded || !['admin', 'super_admin'].includes(decoded.role)) {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 

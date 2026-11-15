@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Partnership } from '@/lib/types';
 import { useAuth } from '@/contexts/AuthContext';
+import { toSafeExternalUrl } from '@/lib/safe-url';
 
 const AdminPartnershipsPage = () => {
   const { authenticatedFetch } = useAuth();
@@ -687,14 +688,21 @@ const AdminPartnershipsPage = () => {
                     <div>
                       <span className="font-medium">Years in Business:</span> {selectedPartnership.yearsInBusiness}
                     </div>
-                    {selectedPartnership.website && (
-                      <div>
-                        <span className="font-medium">Website:</span>
-                        <a href={selectedPartnership.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">
-                          {selectedPartnership.website}
-                        </a>
-                      </div>
-                    )}
+                    {selectedPartnership.website && (() => {
+                      const safeWebsite = toSafeExternalUrl(selectedPartnership.website);
+                      return (
+                        <div>
+                          <span className="font-medium">Website:</span>
+                          {safeWebsite ? (
+                            <a href={safeWebsite} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">
+                              {selectedPartnership.website}
+                            </a>
+                          ) : (
+                            <span className="ml-1 text-gray-600">{selectedPartnership.website}</span>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 

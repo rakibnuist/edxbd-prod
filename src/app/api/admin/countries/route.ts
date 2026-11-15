@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { isAdminRequest } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 
 const forbidden = () => NextResponse.json({ error: 'Admin access required' }, { status: 403 });
 
 export async function GET(request: NextRequest) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const countries = await prisma.country.findMany({
       orderBy: { name: 'asc' }
     });
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const body = await request.json() as Record<string, unknown>;
     const name = String(body.name || '').trim();
     const slug = String(body.slug || '').trim().toLowerCase();

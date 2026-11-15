@@ -1,26 +1,17 @@
 // Analytics and tracking utilities for EduExpress International
 import { getMetaParameters } from './meta-event-quality';
+import { isAnalyticsConsentAccepted } from './tracking-consent';
 
 // Configuration
 export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX';
 export const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
 export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '1234567890';
-export const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || '';
 
 
 
 // Generate unique event ID for deduplication
 const generateEventId = (): string => {
   return `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-};
-
-const analyticsAllowed = () => {
-  if (typeof window === 'undefined') return false;
-  try {
-    return localStorage.getItem('cookie-consent') === 'accepted';
-  } catch {
-    return false;
-  }
 };
 
 // Define UserData interface
@@ -102,7 +93,7 @@ const META_STANDARD_EVENTS: Record<string, string> = {
 // Track events
 export const trackEvent = (eventName: string, parameters?: Record<string, unknown>, _userData?: UserData) => {
   const eventId = (parameters?.event_id as string) || generateEventId();
-  if (!analyticsAllowed()) return eventId;
+  if (!isAnalyticsConsentAccepted()) return eventId;
   const eventData = {
     event_id: eventId,
     ...parameters
@@ -189,8 +180,8 @@ export const trackPageView = async (pageName: string, pageCategory?: string) => 
     page_location: typeof window !== 'undefined' ? window.location.href : ''
   });
 
-  // Send to CAPI
-  if (typeof window !== 'undefined') {
+  // Send to CAPI only after consent
+  if (typeof window !== 'undefined' && isAnalyticsConsentAccepted()) {
     const metaParams = getMetaParameters();
     const userData: UserData = {
       fbp: metaParams.fbp,
@@ -231,7 +222,7 @@ export const sendConversionAPIEvent = async (
   customData?: Record<string, unknown>,
   eventId?: string
 ) => {
-  if (!analyticsAllowed()) return null;
+  if (!isAnalyticsConsentAccepted()) return null;
   try {
     const response = await fetch('/api/meta-capi', {
       method: 'POST',
@@ -279,12 +270,14 @@ export const trackStudyAbroadLead = async (
   },
   source: string = 'website_contact_form'
 ) => {
+  if (typeof window === 'undefined' || !isAnalyticsConsentAccepted()) return;
+
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = formData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
 
   // Get Meta Event Quality Parameters (fbp, fbc, etc.)
-  const metaParams = typeof window !== 'undefined' ? getMetaParameters() : {};
+  const metaParams = getMetaParameters();
 
   const userData: UserData = {
     email: formData.email,

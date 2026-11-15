@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { logAndFormatServerError } from './api-error';
+import { parsePagination } from './pagination';
 
 // Common API response helpers
 export const apiResponse = {
@@ -42,11 +44,9 @@ export const withErrorHandling = (handler: ApiHandler) => {
     try {
       return await handler(request, context);
     } catch (error) {
-      console.error('API Error:', error);
-      return apiResponse.error(
-        'Internal server error',
-        500,
-        error instanceof Error ? error.message : 'Unknown error'
+      return NextResponse.json(
+        logAndFormatServerError('API Error', error, 'Internal server error'),
+        { status: 500, headers: { 'Cache-Control': 'no-store' } }
       );
     }
   };
@@ -61,13 +61,12 @@ export const validateRequired = (data: Record<string, unknown>, fields: string[]
 };
 
 // Common pagination helper
-export const getPaginationParams = (request: NextRequest) => {
+export const getPaginationParams = (request: NextRequest, maxLimit = 100) => {
   const { searchParams } = new URL(request.url);
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '10');
-  const skip = (page - 1) * limit;
-
-  return { page, limit, skip };
+  return parsePagination(searchParams.get('page'), searchParams.get('limit'), {
+    defaultLimit: 10,
+    maxLimit,
+  });
 };
 
 // Common sorting helper

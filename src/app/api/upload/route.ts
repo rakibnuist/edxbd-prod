@@ -4,7 +4,8 @@ import { join } from 'path';
 import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
 
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 
 export const runtime = 'nodejs';
 
@@ -13,8 +14,8 @@ const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const ALLOWED_FOLDERS = new Set(['content', 'evidence', 'team', 'testimonials']);
 
 export async function POST(request: NextRequest) {
-  const user = verifyTokenFromRequest(request);
-  if (user?.role !== 'admin') {
+  const user = await verifyLiveAdminUser(request);
+  if (!user || !isAdminRole(user.role)) {
     return NextResponse.json({ error: 'Admin access is required.' }, { status: 403 });
   }
 

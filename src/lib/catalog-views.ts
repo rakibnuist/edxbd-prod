@@ -1,5 +1,6 @@
 import type { CleanUniversityRecord } from './university-records';
 import { parseSourceFee } from './clear-cost';
+import { toSafeExternalUrl } from './safe-url';
 
 /** Flat, serializable views of the university catalogue for cross-university finders. */
 
@@ -39,7 +40,7 @@ export type ScholarshipRow = {
 
 export const SCHOLARSHIP_CATEGORIES: ScholarshipCategory[] = ['Chinese Government (CSC)', 'Provincial or city government', 'Belt and Road / ministry', 'Chinese language (CLEC)', 'University scholarship'];
 
-const httpUrl = (value?: string) => (value && /^https?:\/\//i.test(value) ? value : undefined);
+const httpUrl = (value?: string) => toSafeExternalUrl(value) ?? undefined;
 
 /** Map catalogue spellings ("Master's", "Masters", "Undergraduate") onto one label. */
 export function levelLabel(value: string): string {

@@ -19,6 +19,7 @@ import {
   Youtube,
 } from 'lucide-react';
 import { destinationLinks } from '@/data/siteNavigation';
+import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
 const chinaFlagshipLinks = [
@@ -253,16 +254,19 @@ export default async function Footer() {
                 <p className="mt-0.5 text-[13.5px] leading-5 text-white/75">
                   {office?.address ?? 'House 41/A, Road 4/A, Dhanmondi, Dhaka 1209'}
                 </p>
-                {office?.mapUrl && (
-                  <a
-                    href={office.mapUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-lime hover:underline"
-                  >
-                    <Navigation size={12} aria-hidden="true" /> Get directions on Maps
-                  </a>
-                )}
+                {(() => {
+                  const safeMapUrl = toSafeSitePathOrUrl(office?.mapUrl);
+                  return safeMapUrl ? (
+                    <a
+                      href={safeMapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-lime hover:underline"
+                    >
+                      <Navigation size={12} aria-hidden="true" /> Get directions on Maps
+                    </a>
+                  ) : null;
+                })()}
               </div>
             </div>
 

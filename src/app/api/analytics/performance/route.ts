@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 
 export async function GET(request: NextRequest) {
-  const decoded = verifyTokenFromRequest(request);
+  const decoded = await verifyLiveAdminUser(request);
   if (!decoded) {
     return NextResponse.json({ error: 'Admin access is required.' }, { status: 403 });
   }

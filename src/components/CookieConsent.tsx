@@ -4,8 +4,13 @@ import { useState, useEffect } from 'react';
 import { Cookie, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import {
+  CONSENT_STORAGE_KEY,
+  clearTrackingState,
+  isAnalyticsConsentAccepted,
+} from '@/lib/tracking-consent';
 
-export const CONSENT_STORAGE_KEY = 'cookie-consent';
+export { CONSENT_STORAGE_KEY };
 export const CONSENT_CHANGE_EVENT = 'eduexpress:consent-change';
 const OPEN_SETTINGS_EVENT = 'eduexpress:open-cookie-settings';
 
@@ -36,6 +41,9 @@ export default function CookieConsent() {
   }, []);
 
   useEffect(() => {
+    if (!isAnalyticsConsentAccepted()) {
+      clearTrackingState();
+    }
     const consent = localStorage.getItem(CONSENT_STORAGE_KEY);
     if (!consent) {
       const timer = setTimeout(() => setIsVisible(true), 1500);
@@ -51,6 +59,7 @@ export default function CookieConsent() {
 
   const handleDecline = () => {
     localStorage.setItem(CONSENT_STORAGE_KEY, 'declined');
+    clearTrackingState();
     announceConsent(false);
     setIsVisible(false);
   };

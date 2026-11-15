@@ -13,12 +13,10 @@ const url = require('url');
 
 // Configuration
 const PORT = process.env.PORT || 3000;
-const HOST = '0.0.0.0';
+const HOST = process.env.HOST || '127.0.0.1';
 const PROJECT_ROOT = process.cwd();
-const PUBLIC_DIR = path.join(PROJECT_ROOT, 'public');
-const NEXT_DIR = path.join(PROJECT_ROOT, '.next');
-const SRC_DIR = path.join(PROJECT_ROOT, 'src');
-const PAGES_DIR = path.join(PROJECT_ROOT, 'pages');
+const PUBLIC_DIR = path.resolve(PROJECT_ROOT, 'public');
+const NEXT_DIR = path.resolve(PROJECT_ROOT, '.next');
 
 // MIME types
 const MIME_TYPES = {
@@ -44,7 +42,7 @@ const MIME_TYPES = {
 function readFile(filePath) {
   try {
     return fs.readFileSync(filePath);
-  } catch (err) {
+  } catch {
     return null;
   }
 }
@@ -63,12 +61,28 @@ function isDirectory(filePath) {
   }
 }
 
-// Serve static files from public
-function servePublic(pathname, res) {
-  const filePath = path.join(PUBLIC_DIR, pathname);
+function resolveWithinDir(baseDir, rawPath) {
+  const relative = String(rawPath || '').replace(/^[/\\]+/, '');
+  const resolvedTarget = path.resolve(baseDir, relative);
+  if (resolvedTarget !== baseDir && !resolvedTarget.startsWith(baseDir + path.sep)) {
+    return null;
+  }
+  return resolvedTarget;
+}
 
-  // Security: prevent directory traversal
-  if (!filePath.startsWith(PUBLIC_DIR)) {
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Serve static files from public
+function servePublic(pathname, _res) {
+  const filePath = resolveWithinDir(PUBLIC_DIR, pathname);
+  if (!filePath) {
     return null;
   }
 
@@ -86,10 +100,9 @@ function servePublic(pathname, res) {
 }
 
 // Serve from .next/static
-function serveNextStatic(pathname, res) {
-  const filePath = path.join(NEXT_DIR, 'static', pathname.slice('/_next/static'.length));
-
-  if (!filePath.startsWith(NEXT_DIR)) {
+function serveNextStatic(pathname, _res) {
+  const filePath = resolveWithinDir(path.join(NEXT_DIR, 'static'), pathname.slice('/_next/static'.length));
+  if (!filePath) {
     return null;
   }
 
@@ -121,17 +134,12 @@ function sendHTML(res, content, statusCode = 200) {
 
 // Request handler
 const server = http.createServer((req, res) => {
-  const pathname = url.parse(req.url).pathname;
+  const pathname = url.parse(req.url || '/').pathname || '/';
   const ext = path.extname(pathname);
-
-  // Set CORS headers for development
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   // Handle OPTIONS
   if (req.method === 'OPTIONS') {
-    res.writeHead(200);
+    res.writeHead(204);
     res.end();
     return;
   }
@@ -199,7 +207,7 @@ const server = http.createServer((req, res) => {
       <body>
         <div class="container">
           <h1>404 - Page Not Found</h1>
-          <p>Path: <code>${pathname}</code></p>
+          <p>Path: <code>${escapeHtml(pathname)}</code></p>
           <p><a href="/">← Go Home</a></p>
           <hr>
           <p style="color: #94a3b8; font-size: 12px;">

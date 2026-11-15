@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
-import { isAdminRequest } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 
 const forbidden = () => NextResponse.json({ error: 'Admin access required' }, { status: 403 });
 
@@ -63,7 +63,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const { id } = await params;
 
     const t = await prisma.testimonial.findUnique({ where: { id } });
@@ -96,7 +96,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const { id } = await params;
     return updateTestimonial(request, id);
   } catch (_error) {
@@ -112,7 +112,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const { id } = await params;
     return updateTestimonial(request, id);
   } catch {
@@ -125,7 +125,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const { id } = await params;
     await prisma.testimonial.delete({ where: { id } }).catch(() => null);
     refreshTestimonials();

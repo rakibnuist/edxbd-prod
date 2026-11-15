@@ -1,25 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { validateAdminPartnershipCreate } from '@/lib/payload-validation';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
 import { serializePartnership } from '@/lib/partnership-serialize';
+import { parsePagination } from '@/lib/pagination';
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
 
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const status = searchParams.get('status');
-    const partnershipType = searchParams.get('partnershipType');
-    const country = searchParams.get('country');
-    const priority = searchParams.get('priority');
-    const search = searchParams.get('search');
+    const { page, limit, skip } = parsePagination(
+      searchParams.get('page'),
+      searchParams.get('limit'),
+      { defaultLimit: 10, maxLimit: 100 },
+    );
+    const status = searchParams.get('status')?.slice(0, 60) || null;
+    const partnershipType = searchParams.get('partnershipType')?.slice(0, 60) || null;
+    const country = searchParams.get('country')?.slice(0, 100) || null;
+    const priority = searchParams.get('priority')?.slice(0, 40) || null;
+    const search = searchParams.get('search')?.trim().slice(0, 200) || null;
 
     // Build filter object
     const filter: Prisma.PartnershipWhereInput = {};
@@ -38,9 +45,6 @@ export async function GET(request: NextRequest) {
         { state: { contains: search } }
       ];
     }
-
-    // Calculate pagination
-    const skip = (page - 1) * limit;
 
     // Get partnerships with pagination
     const partnerships = await prisma.partnership.findMany({
@@ -96,49 +100,24 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
 
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    const body = await request.json();
-    const {
-      companyName,
-      businessType,
-      contactPerson,
-      email,
-      phone,
-      partnershipType,
-      status = 'pending',
-      priority = 'medium',
-      assignedTo,
-      reviewNotes
-    } = body;
-
-    // Validate required fields
-    if (!companyName || !contactPerson || !email || !phone) {
+    const body = await readLimitedJson(request, 128 * 1024);
+    const validated = validateAdminPartnershipCreate(body);
+    if (!validated.data) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: validated.error || 'Invalid partnership payload' },
         { status: 400 }
       );
     }
 
-    // Create new partnership
+    // Create new partnership from explicit validated allowlist
     const partnership = await prisma.partnership.create({
-      data: {
-        companyName,
-        businessType,
-        contactPerson,
-        email,
-        phone,
-        partnershipType,
-        status,
-        priority,
-        assignedTo,
-        reviewNotes,
-        source: 'admin_created'
-      }
+      data: validated.data as Prisma.PartnershipCreateInput
     });
 
     return NextResponse.json(
@@ -150,6 +129,8 @@ export async function POST(request: NextRequest) {
     );
 
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error);
+    if (bodyError) return bodyError;
     console.error('Error creating partnership:', error);
     return NextResponse.json(
       { error: 'Failed to create partnership' },

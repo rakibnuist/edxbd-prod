@@ -8,6 +8,7 @@ import HomeLeadForm from '@/components/lead/HomeLeadForm';
 import { teamMembers } from '@/data/teamMembers';
 import { config } from '@/lib/config';
 import { trackPhoneClick, trackWhatsAppClick } from '@/lib/conversion-events';
+import { toSafeExternalUrl } from '@/lib/safe-url';
 import type { UpdateClientProps } from '@/lib/types';
 
 const SITE = 'https://eduexpressint.com';
@@ -150,28 +151,33 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
 
             <div className="update-body" dangerouslySetInnerHTML={{ __html: update.content }} />
 
-            {update.sourceUrls?.length ? (
-              <aside className="mt-12 rounded-3xl bg-canvas-soft p-6">
-                <h2 className="text-[19px] font-bold text-petrol-800">Official sources</h2>
-                <ul className="mt-3 grid gap-2">
-                  {update.sourceUrls.map(source => (
-                    <li key={source}>
-                      <a href={source} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[15px] font-semibold text-petrol-600 underline-offset-4 hover:underline">
-                        {host(source)} <ExternalLink size={14} aria-hidden="true" />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-4 flex items-start gap-2 text-[14px] leading-6 text-ink-soft">
-                  <ShieldCheck size={16} className="mt-0.5 shrink-0 text-green-600" aria-hidden="true" />
-                  <span>
-                    {checked ? `Last reviewed ${checked}` : 'Being re-checked for the current cycle'}
-                    {update.reviewer ? ` · Reviewed by ${update.reviewer}` : ''}
-                    {fmtDate(update.nextReviewAt) ? ` · Next review ${fmtDate(update.nextReviewAt)}` : ''}
-                  </span>
-                </p>
-              </aside>
-            ) : null}
+            {(() => {
+              const safeSourceUrls = (update.sourceUrls || [])
+                .map(url => toSafeExternalUrl(url))
+                .filter((url): url is string => Boolean(url));
+              return safeSourceUrls.length ? (
+                <aside className="mt-12 rounded-3xl bg-canvas-soft p-6">
+                  <h2 className="text-[19px] font-bold text-petrol-800">Official sources</h2>
+                  <ul className="mt-3 grid gap-2">
+                    {safeSourceUrls.map(source => (
+                      <li key={source}>
+                        <a href={source} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[15px] font-semibold text-petrol-600 underline-offset-4 hover:underline">
+                          {host(source)} <ExternalLink size={14} aria-hidden="true" />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-4 flex items-start gap-2 text-[14px] leading-6 text-ink-soft">
+                    <ShieldCheck size={16} className="mt-0.5 shrink-0 text-green-600" aria-hidden="true" />
+                    <span>
+                      {checked ? `Last reviewed ${checked}` : 'Being re-checked for the current cycle'}
+                      {update.reviewer ? ` · Reviewed by ${update.reviewer}` : ''}
+                      {fmtDate(update.nextReviewAt) ? ` · Next review ${fmtDate(update.nextReviewAt)}` : ''}
+                    </span>
+                  </p>
+                </aside>
+              ) : null;
+            })()}
 
             {stalePost && (
               <aside className="mt-10 rounded-3xl bg-canvas-soft p-6">

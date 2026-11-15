@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 
 const ALLOWED_ROLES = ['user', 'admin', 'super_admin'] as const;
 const MIN_PASSWORD_LENGTH = 12;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 // GET - Fetch all users (Admin only)
 export async function GET(request: NextRequest) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
 
-    if (!decoded || !['admin', 'super_admin'].includes(decoded.role)) {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -37,16 +39,21 @@ export async function GET(request: NextRequest) {
 // POST - Create new user (Admin only)
 export async function POST(request: NextRequest) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
 
-    if (!decoded || !['admin', 'super_admin'].includes(decoded.role)) {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    const { name, email, password, role = 'user' } = await request.json();
+    const body = await request.json();
+    const { name, email, password, role = 'user' } = body ?? {};
 
-    // Validate required fields
-    if (!name || !email || !password) {
+    // Validate required fields and primitive types
+    if (
+      typeof name !== 'string' || !name.trim() ||
+      typeof email !== 'string' || !email.trim() ||
+      typeof password !== 'string' || !password
+    ) {
       return NextResponse.json(
         { message: 'Name, email, and password are required' },
         { status: 400 }
@@ -64,9 +71,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate email format
-    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    if (!emailRegex.test(email)) {
+    // Normalize before format & uniqueness checks
+    const normalizedEmail = email.toLowerCase().trim();
+    if (!EMAIL_REGEX.test(normalizedEmail)) {
       return NextResponse.json(
         { message: 'Please enter a valid email address' },
         { status: 400 }
@@ -81,8 +88,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if user already exists
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    // Check if user already exists using normalized email
+    const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
     if (existingUser) {
       return NextResponse.json(
         { message: 'User with this email already exists' },
@@ -98,7 +105,7 @@ export async function POST(request: NextRequest) {
     const user = await prisma.user.create({
       data: {
         name: name.trim(),
-        email: email.toLowerCase().trim(),
+        email: normalizedEmail,
         password: hashedPassword,
         role
       }

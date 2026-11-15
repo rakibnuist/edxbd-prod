@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { ArrowRight, CheckCircle2, X } from 'lucide-react';
 
@@ -17,7 +17,6 @@ export default function MarchIntakePopup() {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   const isExcludedRoute =
     !pathname ||
@@ -26,21 +25,33 @@ export default function MarchIntakePopup() {
     pathname.startsWith('/admin') ||
     pathname.startsWith('/dashboard');
 
-  useEffect(() => {
-    setMounted(true);
-    if (isExcludedRoute) {
-      setOpen(false);
-      return;
-    }
-
+  const dismissPopup = useCallback(() => {
     try {
-      const dismissed = window.sessionStorage.getItem(STORAGE_KEY);
-      if (dismissed === '1') return;
+      window.sessionStorage.setItem(STORAGE_KEY, '1');
     } catch {
       // ignore storage errors
     }
+    setOpen(false);
+  }, []);
 
-    setOpen(true);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (isExcludedRoute) {
+        setOpen(false);
+        return;
+      }
+
+      try {
+        const dismissed = window.sessionStorage.getItem(STORAGE_KEY);
+        if (dismissed === '1') return;
+      } catch {
+        // ignore storage errors
+      }
+
+      setOpen(true);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, [isExcludedRoute]);
 
   useEffect(() => {
@@ -52,16 +63,7 @@ export default function MarchIntakePopup() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [open]);
-
-  const dismissPopup = () => {
-    try {
-      window.sessionStorage.setItem(STORAGE_KEY, '1');
-    } catch {
-      // ignore storage errors
-    }
-    setOpen(false);
-  };
+  }, [dismissPopup, open]);
 
   const handleGoToLeadGen = () => {
     try {
@@ -73,7 +75,7 @@ export default function MarchIntakePopup() {
     router.push(`${CAMPAIGN_PATH}#march-2027-assessment`);
   };
 
-  if (isExcludedRoute || !mounted || !open) {
+  if (isExcludedRoute || !open) {
     return null;
   }
 

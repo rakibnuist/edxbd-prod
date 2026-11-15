@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, CalendarClock, CheckCircle2, ExternalLink, MapPin, Search } from 'lucide-react';
 import { SCHOLARSHIP_CATEGORIES, type ScholarshipRow } from '@/lib/catalog-views';
+import { toSafeExternalUrl } from '@/lib/safe-url';
 
 const PAGE = 18;
 const fieldClass = 'mt-1.5 h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-[15px] font-semibold text-petrol-800 outline-none focus:border-petrol-800 focus:ring-4 focus:ring-lime/50';
@@ -53,7 +54,9 @@ export default function ScholarshipFinder({ rows }: { rows: ScholarshipRow[] }) 
 
         {filtered.length ? <>
           <ul className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {filtered.slice(0, visible).map(row => (
+            {filtered.slice(0, visible).map(row => {
+              const safeSourceUrl = toSafeExternalUrl(row.sourceUrl);
+              return (
               <li key={row.key} className="flex flex-col rounded-3xl border border-petrol-800/15 bg-white p-5">
                 <div className="flex flex-wrap gap-2 text-[14px] font-bold"><span className="rounded-full bg-lime-pale px-2.5 py-1 text-lime-deep">{row.category}</span>{row.deadlinePassed && <span className="rounded-full bg-amber-50 px-2.5 py-1 text-amber-800">Deadline passed</span>}</div>
                 <h3 className="mt-3 text-lg font-black leading-snug">{row.title}</h3>
@@ -64,10 +67,11 @@ export default function ScholarshipFinder({ rows }: { rows: ScholarshipRow[] }) 
                 <p className="mt-4 flex gap-2 text-[15px] text-ink-soft"><CalendarClock size={16} className="mt-0.5 shrink-0 text-petrol-800" />{row.deadline || 'Deadline not recorded'}</p>
                 <div className="mt-auto flex flex-wrap gap-2 pt-5">
                   <Link href={`/universities/${row.universitySlug}#costs`} className="ed-btn ed-btn-signal min-h-11 w-full text-[15px]">Cost after scholarship <ArrowRight size={15} /></Link>
-                  {row.sourceUrl ? <a href={row.sourceUrl} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-11 gap-1.5 px-4 text-[15px]">Source <ExternalLink size={14} /></a> : <span className="inline-flex min-h-11 items-center px-1 text-[14px] text-ink-mute">Source link pending</span>}
+                  {safeSourceUrl ? <a href={safeSourceUrl} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-11 gap-1.5 px-4 text-[15px]">Source <ExternalLink size={14} /></a> : <span className="inline-flex min-h-11 items-center px-1 text-[14px] text-ink-mute">Source link pending</span>}
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
           {visible < filtered.length && <div className="mt-8 text-center"><button type="button" onClick={() => setVisible(value => value + PAGE)} className="ed-btn ed-btn-outline min-h-[52px] px-7">Show {Math.min(PAGE, filtered.length - visible)} more scholarships</button></div>}
         </> : <p className="mt-6 rounded-3xl border border-dashed border-petrol-800/30 bg-white px-6 py-12 text-center text-[15px] text-ink-soft">No recorded scholarship matches these filters. Try another city or include passed deadlines.</p>}

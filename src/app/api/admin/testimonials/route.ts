@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
-import { isAdminRequest } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 
 const forbidden = () => NextResponse.json({ error: 'Admin access required' }, { status: 403 });
 
@@ -44,7 +44,7 @@ const testimonialData = (body: Record<string, unknown>) => ({
 
 export async function GET(request: NextRequest) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const raw = await prisma.testimonial.findMany({
       orderBy: { createdAt: 'desc' }
     });
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!isAdminRequest(request)) return forbidden();
+    if (!(await verifyLiveAdminUser(request))) return forbidden();
     const body = await request.json() as Record<string, unknown>;
     if ((body.isActive ?? body.isPublished) === true && !publicReady(body)) {
       return NextResponse.json({ error: 'Add the real photo, written-consent evidence, consent date and photo approval before publishing.' }, { status: 400 });

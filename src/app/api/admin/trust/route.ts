@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
+import { toSafeExternalUrl, toSafeSitePathOrUrl } from '@/lib/safe-url';
 
-const authorized = (request: NextRequest) => ['admin', 'super_admin'].includes(verifyTokenFromRequest(request)?.role || '');
+const authorized = async (request: NextRequest) => Boolean(await verifyLiveAdminUser(request));
 const refreshPublicTrustPages = () => {
   revalidatePath('/', 'layout');
   revalidatePath('/proof-library');
@@ -24,6 +26,25 @@ const privacyStatus = (value: unknown) => {
   return ['pending', 'redacted', 'restricted'].includes(status) ? status : 'pending';
 };
 
+const validateTrustUrls = (
+  body: Record<string, unknown>,
+  fields: Array<{ key: string; allowSitePath: boolean }>
+): string | null => {
+  for (const { key, allowSitePath } of fields) {
+    if (!(key in body) || body[key] === undefined || body[key] === null) continue;
+    if (typeof body[key] !== 'string') return `${key} must be a URL string.`;
+    const trimmed = body[key].trim();
+    if (!trimmed) continue;
+    const valid = allowSitePath ? toSafeSitePathOrUrl(trimmed) : toSafeExternalUrl(trimmed);
+    if (!valid) {
+      return allowSitePath
+        ? `${key} must be a site path (/...) or a valid http(s) URL.`
+        : `${key} must be a valid http:// or https:// URL.`;
+    }
+  }
+  return null;
+};
+
 const evidenceData = (body: Record<string, unknown>) => ({
   type: String(body.type || 'authorization').trim(),
   title: String(body.title || '').trim(),
@@ -32,14 +53,14 @@ const evidenceData = (body: Record<string, unknown>) => ({
   country: optional(body.country),
   universityId: optional(body.universityId),
   referenceLabel: optional(body.referenceLabel),
-  documentUrl: optional(body.documentUrl),
-  thumbnailUrl: optional(body.thumbnailUrl),
-  sourceUrl: optional(body.sourceUrl),
+  documentUrl: toSafeSitePathOrUrl(body.documentUrl),
+  thumbnailUrl: toSafeSitePathOrUrl(body.thumbnailUrl),
+  sourceUrl: toSafeExternalUrl(body.sourceUrl),
   issuedAt: dateOrNull(body.issuedAt),
   validUntil: dateOrNull(body.validUntil),
   lastVerifiedAt: dateOrNull(body.lastVerifiedAt),
   privacyStatus: privacyStatus(body.privacyStatus),
-  isPublished: body.isPublished === true && privacyStatus(body.privacyStatus) === 'redacted' && Boolean(optional(body.thumbnailUrl)),
+  isPublished: body.isPublished === true && privacyStatus(body.privacyStatus) === 'redacted' && Boolean(toSafeSitePathOrUrl(body.thumbnailUrl)),
   displayOrder: Number(body.displayOrder) || 0,
 });
 
@@ -52,7 +73,7 @@ const metricData = (body: Record<string, unknown>) => ({
 const officeData = (body: Record<string, unknown>) => ({
   name: String(body.name || '').trim(), slug: String(body.slug || '').trim(), address: String(body.address || '').trim(), city: String(body.city || '').trim(),
   postalCode: optional(body.postalCode), phonePrimary: String(body.phonePrimary || '').trim(), phoneSecondary: optional(body.phoneSecondary),
-  email: optional(body.email), hours: String(body.hours || '').trim(), mapUrl: optional(body.mapUrl), photoUrl: optional(body.photoUrl), isHeadOffice: body.isHeadOffice === true,
+  email: optional(body.email), hours: String(body.hours || '').trim(), mapUrl: toSafeSitePathOrUrl(body.mapUrl), photoUrl: toSafeSitePathOrUrl(body.photoUrl), isHeadOffice: body.isHeadOffice === true,
   isPublished: body.isPublished !== false, lastVerifiedAt: dateOrNull(body.lastVerifiedAt),
 });
 const validOffice = (body: Record<string, unknown>) => {
@@ -60,16 +81,15 @@ const validOffice = (body: Record<string, unknown>) => {
   if (required.some(key => !String(body[key] || '').trim())) return 'Office name, slug, address, city, primary phone and hours are required.';
   const email = optional(body.email);
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Enter a valid office email address.';
-  for (const key of ['mapUrl', 'photoUrl']) {
-    const value = optional(body[key]);
-    if (value && !value.startsWith('/') && !/^https?:\/\//i.test(value)) return `${key} must be a site path or http/https URL.`;
-  }
-  return null;
+  return validateTrustUrls(body, [
+    { key: 'mapUrl', allowSitePath: true },
+    { key: 'photoUrl', allowSitePath: true },
+  ]);
 };
 
 const teamData = (body: Record<string, unknown>) => ({
   slug: String(body.slug || '').trim(), name: String(body.name || '').trim(), role: String(body.role || '').trim(), shortRole: optional(body.shortRole),
-  bio: optional(body.bio), specialties: JSON.stringify(list(body.specialties)), photoUrl: optional(body.photoUrl),
+  bio: optional(body.bio), specialties: JSON.stringify(list(body.specialties)), photoUrl: toSafeSitePathOrUrl(body.photoUrl),
   consentConfirmedAt: dateOrNull(body.consentConfirmedAt), isPublished: body.isPublished === true, displayOrder: Number(body.displayOrder) || 0,
 });
 
@@ -82,7 +102,7 @@ const packageData = (body: Record<string, unknown>) => ({
 });
 
 export async function GET(request: NextRequest) {
-  if (!authorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+  if (!(await authorized(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   const [metrics, evidence, offices, team, universities, servicePackages] = await Promise.all([
     prisma.trustMetric.findMany({ orderBy: [{ displayOrder: 'asc' }, { key: 'asc' }] }),
     prisma.evidenceAsset.findMany({ orderBy: [{ displayOrder: 'asc' }, { updatedAt: 'desc' }] }),
@@ -95,10 +115,17 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  if (!authorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-  const body = await request.json() as Record<string, unknown>;
+  if (!(await authorized(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+  let body: Record<string, unknown>;
+  try {
+    body = await readLimitedJson(request, 64 * 1024);
+  } catch (error) {
+    return jsonBodyErrorResponse(error) || NextResponse.json({ error: 'Invalid JSON request body.' }, { status: 400 });
+  }
   if (body.kind === 'team') {
     if (!body.name || !body.role || !body.slug) return NextResponse.json({ error: 'Name, role and profile slug are required.' }, { status: 400 });
+    const urlError = validateTrustUrls(body, [{ key: 'photoUrl', allowSitePath: true }]);
+    if (urlError) return NextResponse.json({ error: urlError }, { status: 400 });
     const record = await prisma.teamMember.create({ data: teamData(body) });
     refreshPublicTrustPages();
     return NextResponse.json(record, { status: 201 });
@@ -114,15 +141,26 @@ export async function POST(request: NextRequest) {
   }
   if (body.kind !== 'evidence') return NextResponse.json({ error: 'Unknown record type.' }, { status: 400 });
   if (!body.title) return NextResponse.json({ error: 'Evidence title is required.' }, { status: 400 });
-  if (body.isPublished === true && !optional(body.thumbnailUrl)) return NextResponse.json({ error: 'A privacy-safe preview is required before publication.' }, { status: 400 });
+  const evidenceUrlError = validateTrustUrls(body, [
+    { key: 'documentUrl', allowSitePath: true },
+    { key: 'thumbnailUrl', allowSitePath: true },
+    { key: 'sourceUrl', allowSitePath: false },
+  ]);
+  if (evidenceUrlError) return NextResponse.json({ error: evidenceUrlError }, { status: 400 });
+  if (body.isPublished === true && !toSafeSitePathOrUrl(body.thumbnailUrl)) return NextResponse.json({ error: 'A privacy-safe preview is required before publication.' }, { status: 400 });
   const record = await prisma.evidenceAsset.create({ data: evidenceData(body) });
   refreshPublicTrustPages();
   return NextResponse.json(record, { status: 201 });
 }
 
 export async function PUT(request: NextRequest) {
-  if (!authorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-  const body = await request.json() as Record<string, unknown>;
+  if (!(await authorized(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+  let body: Record<string, unknown>;
+  try {
+    body = await readLimitedJson(request, 64 * 1024);
+  } catch (error) {
+    return jsonBodyErrorResponse(error) || NextResponse.json({ error: 'Invalid JSON request body.' }, { status: 400 });
+  }
   if (body.kind === 'metric') {
     const record = await prisma.trustMetric.update({ where: { id: String(body.id) }, data: metricData(body) });
     refreshPublicTrustPages();
@@ -136,7 +174,13 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json(record);
   }
   if (body.kind === 'evidence') {
-    if (body.isPublished === true && !optional(body.thumbnailUrl)) return NextResponse.json({ error: 'A privacy-safe preview is required before publication.' }, { status: 400 });
+    const evidenceUrlError = validateTrustUrls(body, [
+      { key: 'documentUrl', allowSitePath: true },
+      { key: 'thumbnailUrl', allowSitePath: true },
+      { key: 'sourceUrl', allowSitePath: false },
+    ]);
+    if (evidenceUrlError) return NextResponse.json({ error: evidenceUrlError }, { status: 400 });
+    if (body.isPublished === true && !toSafeSitePathOrUrl(body.thumbnailUrl)) return NextResponse.json({ error: 'A privacy-safe preview is required before publication.' }, { status: 400 });
     const record = await prisma.evidenceAsset.update({ where: { id: String(body.id) }, data: evidenceData(body) });
     refreshPublicTrustPages();
     return NextResponse.json(record);
@@ -147,6 +191,8 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json(record);
   }
   if (body.kind === 'team') {
+    const urlError = validateTrustUrls(body, [{ key: 'photoUrl', allowSitePath: true }]);
+    if (urlError) return NextResponse.json({ error: urlError }, { status: 400 });
     const record = await prisma.teamMember.update({ where: { id: String(body.id) }, data: teamData(body) });
     refreshPublicTrustPages();
     return NextResponse.json(record);
@@ -155,7 +201,7 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  if (!authorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+  if (!(await authorized(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   const { searchParams } = new URL(request.url);
   const kind = searchParams.get('kind');
   const id = searchParams.get('id');

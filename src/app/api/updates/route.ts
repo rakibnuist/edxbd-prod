@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import { serializeContent } from '@/lib/content-serialize';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { sanitizeUpdateHtml } from '@/lib/content-html';
+import { parsePagination } from '@/lib/pagination';
 
 export async function GET(request: NextRequest) {
   try {
@@ -40,23 +41,13 @@ export async function GET(request: NextRequest) {
       where.isFeatured = true;
     }
 
-    // Add pagination
-    let skip = undefined;
-    let take = undefined;
-
-    if (page && limit) {
-      const pageNum = parseInt(page);
-      const limitNum = parseInt(limit);
-      if (!isNaN(pageNum) && !isNaN(limitNum) && pageNum > 0 && limitNum > 0) {
-        skip = (pageNum - 1) * limitNum;
-        take = limitNum;
-      }
-    } else if (limit) {
-      const limitNum = parseInt(limit);
-      if (!isNaN(limitNum) && limitNum > 0) {
-        take = limitNum;
-      }
-    }
+    // Bound pagination to safe defaults so clients cannot request unbounded page sizes
+    const {
+      page: clampedPage,
+      limit: clampedLimit,
+      skip,
+    } = parsePagination(page, limit, { defaultLimit: 50, maxLimit: 100 });
+    const take = clampedLimit;
 
     const updates = await prisma.content.findMany({
       where,
@@ -108,9 +99,9 @@ export async function GET(request: NextRequest) {
       categories: ['All', ...normalizedCategories],
       authors: ['All', ...normalizedAuthors],
       pagination: {
-        page: page ? parseInt(page) : 1,
-        limit: limit ? parseInt(limit) : updates.length,
-        totalPages: limit ? Math.ceil(totalCount / parseInt(limit)) : 1
+        page: clampedPage,
+        limit: clampedLimit,
+        totalPages: Math.max(1, Math.ceil(totalCount / clampedLimit))
       }
     });
   } catch (error) {

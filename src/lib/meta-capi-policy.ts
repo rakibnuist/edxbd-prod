@@ -11,6 +11,21 @@
  *
  * Pure functions with no framework imports so node:test can exercise them.
  */
+import { isLocalHostname, normalizeHostHeader } from './proxy-redirect';
+import { SITE_URL } from './site-urls';
+
+const CANONICAL_HOST = new URL(SITE_URL).host;
+export const CANONICAL_SITE_HOSTS = [CANONICAL_HOST, `www.${CANONICAL_HOST}`] as const;
+
+export function resolveAllowedOriginHosts(requestHost: string | null): string[] {
+  const hosts: string[] = [...CANONICAL_SITE_HOSTS];
+  const rawTrimmed = (requestHost || '').trim().toLowerCase();
+  const normalized = normalizeHostHeader(requestHost);
+  if (normalized && isLocalHostname(normalized) && /^[a-z0-9.:\[\]-]+$/.test(rawTrimmed)) {
+    hosts.push(rawTrimmed);
+  }
+  return hosts;
+}
 
 export type CapiAccess = 'public' | 'admin';
 

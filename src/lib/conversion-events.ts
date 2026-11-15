@@ -1,5 +1,7 @@
 'use client';
 
+import { isAnalyticsConsentAccepted } from './tracking-consent';
+
 /**
  * EduExpress conversion event layer (Evidence-First Plan, Section 16).
  *
@@ -46,7 +48,6 @@ export interface ConversionContext {
 
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;
 const UTM_STORAGE_KEY = 'ee_utm';
-const CONSENT_KEY = 'cookie-consent';
 
 // GA4 standard-event mapping to Meta Pixel standard events (for the ones that map cleanly)
 const META_EVENT_MAP: Partial<Record<ConversionEvent, string>> = {
@@ -94,13 +95,7 @@ export function getUtmParameters(): Record<string, string> {
 
 /** Respect the cookie banner: only fire to third parties when analytics is accepted. */
 export function analyticsAllowed(): boolean {
-  if (typeof window === 'undefined') return false;
-  try {
-    // CookieConsent stores 'accepted' | 'declined' under 'cookie-consent'.
-    return localStorage.getItem(CONSENT_KEY) === 'accepted';
-  } catch {
-    return false;
-  }
+  return isAnalyticsConsentAccepted();
 }
 
 /** Generate one browser/server event ID so Meta can deduplicate the Lead. */

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { submitToIndexNow, submitAllImportantPages, submitNewContent } from '@/lib/indexnow'
-import { isAdminRequest } from '@/lib/auth'
+import { verifyLiveAdminUser } from '@/lib/auth-user'
+import { logAndFormatServerError } from '@/lib/api-error'
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body'
 
 export async function POST(request: NextRequest) {
-  if (!isAdminRequest(request)) {
+  if (!(await verifyLiveAdminUser(request))) {
     return NextResponse.json(
       { error: 'Admin access is required.' },
       { status: 403, headers: { 'Cache-Control': 'no-store' } },
@@ -52,14 +53,12 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error)
     if (bodyError) return bodyError
-    console.error('IndexNow API error:', error)
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Internal server error',
-        error: error instanceof Error ? error.message : 'Unknown error'
+      {
+        success: false,
+        ...logAndFormatServerError('IndexNow API error', error, 'Internal server error'),
       },
-      { status: 500 }
+      { status: 500, headers: { 'Cache-Control': 'no-store' } }
     )
   }
 }

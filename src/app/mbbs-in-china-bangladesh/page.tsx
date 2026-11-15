@@ -5,6 +5,7 @@ import MbbsUniversityFinder from '@/components/china/MbbsUniversityFinder';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getChinaMbbsGuide } from '@/lib/china-mbbs-guide';
 import { mbbsApplyHref } from '@/lib/mbbs-enquiry';
+import { toSafeExternalUrl } from '@/lib/safe-url';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 export const revalidate = 3600;
@@ -296,15 +297,18 @@ export default async function MbbsChinaPage() {
       {sources.length ? (
         <Section id="mbbs-sources" tone="sage" title="Official sources." intro={`The six featured programme examples come from the universities’ own published guides${fullDay(checkedAt) ? `, checked on ${fullDay(checkedAt)}` : ''}. Confirm the current notice for your intake before you pay.`}>
           <ul data-anim="stagger" className="grid gap-3 md:grid-cols-2">
-            {sources.map(source => (
+            {sources.map(source => {
+              const safeHref = toSafeExternalUrl(source.href);
+              return safeHref ? (
               <li key={source.href}>
-                <a href={source.href} target="_blank" rel="noopener noreferrer" className="group flex h-full min-h-[64px] items-start justify-between gap-4 rounded-3xl bg-white p-5 transition-colors hover:bg-lime-pale">
+                <a href={safeHref} target="_blank" rel="noopener noreferrer" className="group flex h-full min-h-[64px] items-start justify-between gap-4 rounded-3xl bg-white p-5 transition-colors hover:bg-lime-pale">
                   <span className="text-[16px] font-semibold leading-6 text-petrol-800 group-hover:underline">{source.label}</span>
                   <ExternalLink size={17} className="mt-1 shrink-0 text-petrol-800" aria-hidden="true" />
                   <span className="sr-only">(opens in a new tab)</span>
                 </a>
               </li>
-            ))}
+              ) : null;
+            })}
           </ul>
         </Section>
       ) : null}

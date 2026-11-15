@@ -4,6 +4,7 @@ import { cache } from 'react';
 import prisma from '@/lib/prisma';
 import { withPublicTestimonials } from '@/lib/testimonial-visibility';
 import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
+import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 
 const parseList = (value: string) => {
   try { return JSON.parse(value) as string[]; } catch { return []; }
@@ -58,18 +59,30 @@ export const getPublicTrustRecords = cache(async () => {
   }
   const [metrics, evidence, offices, team, servicePackages, testimonials, storyCount] = rows;
 
-  const publicOffices = offices.length > 0 ? offices : [{
+  const rawOffices = offices.length > 0 ? offices : [{
     id: 'default-dhanmondi-office',
     ...DEFAULT_OFFICE_RECORD,
     createdAt: new Date(0),
     updatedAt: new Date(0),
   }];
+  const publicOffices = rawOffices.map(office => ({
+    ...office,
+    mapUrl: toSafeSitePathOrUrl(office.mapUrl),
+    photoUrl: toSafeSitePathOrUrl(office.photoUrl),
+  }));
 
   return {
     metrics,
-    evidence,
+    evidence: evidence.map(asset => ({
+      ...asset,
+      thumbnailUrl: toSafeSitePathOrUrl(asset.thumbnailUrl),
+    })),
     offices: publicOffices,
-    team: team.map(member => ({ ...member, specialties: parseList(member.specialties) })),
+    team: team.map(member => ({
+      ...member,
+      photoUrl: toSafeSitePathOrUrl(member.photoUrl),
+      specialties: parseList(member.specialties),
+    })),
     servicePackages: servicePackages.map(item => ({
       ...item,
       includedItems: parseList(item.includedItems),

@@ -13,6 +13,7 @@ import {
   trackPhoneClick,
   trackWhatsAppClick,
 } from '@/lib/conversion-events';
+import { persistTrackingLeadId } from '@/lib/tracking-consent';
 
 const PRIVACY_VERSION = '2026-07-19';
 
@@ -117,18 +118,7 @@ export default function HomeLeadForm({
         throw new Error(data.error || 'We could not send your request. Please try again.');
       }
 
-      if (typeof window !== 'undefined') {
-        try {
-          if (data?.leadId) {
-            localStorage.setItem('user_id', data.leadId);
-            document.cookie = `ee_uid=${encodeURIComponent(data.leadId)};path=/;max-age=${365 * 86400};SameSite=Lax`;
-          }
-          if (email) localStorage.setItem('user_email', email);
-          if (phone) localStorage.setItem('user_phone', phone);
-        } catch {
-          /* ignore */
-        }
-      }
+      persistTrackingLeadId(data?.leadId);
 
       trackAssessmentSubmit({ destination, label: source, eventId });
       setStatus('done');

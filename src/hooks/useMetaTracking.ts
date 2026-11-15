@@ -140,7 +140,6 @@ export const useMetaTracking = () => {
       state: formData.state,
       country: formData.country,
       zipCode: formData.zipCode,
-      userId: formData.email // Use email as user ID if no specific ID
     };
 
     switch (formType) {

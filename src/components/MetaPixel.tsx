@@ -2,7 +2,12 @@
 
 import { useCallback, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { CONSENT_CHANGE_EVENT, CONSENT_STORAGE_KEY } from '@/components/CookieConsent';
+import { CONSENT_CHANGE_EVENT } from '@/components/CookieConsent';
+import {
+  buildMetaAdvancedMatching,
+  clearTrackingState,
+  isAnalyticsConsentAccepted,
+} from '@/lib/tracking-consent';
 
 type MetaWindow = Window & {
   __metaPixelLoaded?: boolean;
@@ -21,7 +26,10 @@ export default function MetaPixel() {
   const initialiseOrTrackPage = useCallback(async () => {
       if (typeof window === 'undefined') return;
       if (window.location.protocol !== 'https:') return;
-      if (localStorage.getItem(CONSENT_STORAGE_KEY) !== 'accepted') return;
+      if (!isAnalyticsConsentAccepted()) {
+        clearTrackingState();
+        return;
+      }
 
       const metaWindow = window as MetaWindow;
       if (metaWindow.__metaPixelLoaded) {
@@ -37,7 +45,7 @@ export default function MetaPixel() {
         const res = await fetch('/api/public-config');
         if (!res.ok) return;
         const { metaPixelId: pixelId } = await res.json();
-        if (!pixelId || localStorage.getItem(CONSENT_STORAGE_KEY) !== 'accepted') return;
+        if (!pixelId || !isAnalyticsConsentAccepted()) return;
 
         metaWindow.__metaPixelLoaded = true;
 
@@ -61,14 +69,8 @@ export default function MetaPixel() {
         })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         /* eslint-enable */
 
-        // Advanced Matching parameters for Meta Pixel
-        const advancedMatching: Record<string, string> = {};
-        const extId = localStorage.getItem('user_id') || localStorage.getItem('temp_user_id');
-        if (extId) advancedMatching.external_id = extId;
-        const storedEmail = localStorage.getItem('user_email');
-        if (storedEmail) advancedMatching.em = storedEmail.trim().toLowerCase();
-        const storedPhone = localStorage.getItem('user_phone');
-        if (storedPhone) advancedMatching.ph = storedPhone.replace(/\D/g, '');
+        // Advanced Matching parameters for Meta Pixel (strictly consent-gated, opaque ID only)
+        const advancedMatching = buildMetaAdvancedMatching();
 
         window.fbq?.('consent', 'grant');
         if (Object.keys(advancedMatching).length > 0) {
@@ -96,6 +98,7 @@ export default function MetaPixel() {
       if (accepted) {
         void initialiseOrTrackPage();
       } else {
+        clearTrackingState();
         window.fbq?.('consent', 'revoke');
       }
     };

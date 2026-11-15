@@ -102,9 +102,9 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
     td: ['colspan', 'rowspan', 'headers'],
   },
   // Links may point at web pages, email and phone numbers; images only at
-  // web URLs or inline data. Relative URLs stay allowed; `//host` does not.
+  // http(s) URLs or relative site paths (no inline data: URIs).
   allowedSchemes: ['http', 'https', 'mailto', 'tel'],
-  allowedSchemesByTag: { img: ['http', 'https', 'data'] },
+  allowedSchemesByTag: { img: ['http', 'https'] },
   allowedSchemesAppliedToAttributes: ['href', 'src', 'cite'],
   allowProtocolRelative: false,
   allowedStyles: {},

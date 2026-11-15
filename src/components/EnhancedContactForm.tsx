@@ -10,6 +10,7 @@ import {
   getUtmParameters,
   trackAssessmentSubmit,
 } from '@/lib/conversion-events';
+import { persistTrackingLeadId } from '@/lib/tracking-consent';
 import Link from 'next/link';
 import { destinationLinks } from '@/data/siteNavigation';
 
@@ -175,18 +176,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         throw new Error(resData.error || 'Failed to submit form');
       }
 
-      if (typeof window !== 'undefined') {
-        try {
-          if (resData?.leadId) {
-            localStorage.setItem('user_id', resData.leadId);
-            document.cookie = `ee_uid=${encodeURIComponent(resData.leadId)};path=/;max-age=${365 * 86400};SameSite=Lax`;
-          }
-          if (formData.email) localStorage.setItem('user_email', formData.email);
-          if (formData.phone) localStorage.setItem('user_phone', formData.phone);
-        } catch {
-          /* ignore */
-        }
-      }
+      persistTrackingLeadId(resData?.leadId);
 
       if (autoHide) setCountdown(Math.ceil(autoHideDelay / 1000));
       setIsSubmitted(true);

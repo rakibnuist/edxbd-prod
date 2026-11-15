@@ -3,6 +3,7 @@ import { sendCrmStage } from '@/lib/meta-crm-events';
 import prisma from '@/lib/prisma';
 import { routeLead } from '@/lib/lead-routing';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
+import { validateLeadAssessmentInput } from '@/lib/payload-validation';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import {
   getOptionalString,
@@ -15,10 +16,11 @@ import {
 } from '@/lib/request-body';
 
 export async function POST(request: NextRequest) {
-  const rateLimit = checkRateLimit(request, {
+  const rateLimit = await checkRateLimit(request, {
     name: 'lead-form',
     maxRequests: 10,
     windowMs: 60 * 60 * 1000,
+    persistent: true,
   });
   if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
 
@@ -77,15 +79,21 @@ export async function POST(request: NextRequest) {
     const metaFbc = adTrackingConsent ? cookieId('_fbc') : null;
     const metaFbp = adTrackingConsent ? cookieId('_fbp') : null;
 
+    const assessmentCheck = validateLeadAssessmentInput(body);
+    if (assessmentCheck.error) {
+      return NextResponse.json({ error: assessmentCheck.error }, { status: 400 });
+    }
+    const metaEventId = getOptionalString(body, 'metaEventId', 120);
+
     // Apply plan lead-routing rules server-side.
     const routing = routeLead({
-      destinationInterest: body.destinationInterest,
+      destinationInterest: assessmentCheck.routeDestinationInterest,
       country,
       program,
-      subject: body.assessment?.subject,
-      careerGoal: body.assessment?.careerGoal,
+      subject: assessmentCheck.assessment.subject,
+      careerGoal: assessmentCheck.assessment.careerGoal,
       source,
-      budget: body.assessment?.budget,
+      budget: assessmentCheck.assessment.budget,
     });
 
     // Create new lead using Prisma
@@ -100,7 +108,7 @@ export async function POST(request: NextRequest) {
         source,
         status: 'new',
         leadType,
-        destinationInterest: body.destinationInterest ? JSON.stringify(body.destinationInterest) : null,
+        destinationInterest: assessmentCheck.destinationInterest,
         assignedTeam: routing.assignedTeam,
         riskFlag: routing.riskFlag,
         medicalProgram: routing.medicalProgram,
@@ -112,14 +120,14 @@ export async function POST(request: NextRequest) {
         adTrackingConsent,
         metaFbc,
         metaFbp,
-        assessAcademicLevel: body.assessment?.academicLevel,
-        assessAcademicResults: body.assessment?.academicResults,
-        assessSubject: body.assessment?.subject,
-        assessBudget: body.assessment?.budget,
-        assessIntake: body.assessment?.intake,
-        assessLanguage: body.assessment?.language,
-        assessCareerGoal: body.assessment?.careerGoal,
-        assessPreferredCountries: body.assessment?.preferredCountries ? JSON.stringify(body.assessment.preferredCountries) : null,
+        assessAcademicLevel: assessmentCheck.assessment.academicLevel,
+        assessAcademicResults: assessmentCheck.assessment.academicResults,
+        assessSubject: assessmentCheck.assessment.subject,
+        assessBudget: assessmentCheck.assessment.budget,
+        assessIntake: assessmentCheck.assessment.intake,
+        assessLanguage: assessmentCheck.assessment.language,
+        assessCareerGoal: assessmentCheck.assessment.careerGoal,
+        assessPreferredCountries: assessmentCheck.assessment.preferredCountriesJson,
       }
     });
 
@@ -132,12 +140,12 @@ export async function POST(request: NextRequest) {
       try {
         await trackStudyAbroadLead({
           name,
-          email,
+          email: normalizedEmail,
           phone,
           country,
           program: program || 'Not specified',
           message: message || ''
-        }, source, request, undefined, body.metaEventId);
+        }, source, request, undefined, metaEventId);
       } catch (trackingError) {
         console.error('Meta Conversion API tracking error:', trackingError);
         // Don't fail the request if tracking fails

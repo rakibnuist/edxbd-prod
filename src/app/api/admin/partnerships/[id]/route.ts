@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import type { Prisma } from '@prisma/client';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { validateAdminPartnershipUpdate } from '@/lib/payload-validation';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
 import { serializePartnership } from '@/lib/partnership-serialize';
 
@@ -8,9 +12,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -41,18 +45,25 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     const { id } = await params;
-    const body = await request.json();
+    const body = await readLimitedJson(request, 128 * 1024);
+    const validated = validateAdminPartnershipUpdate(body);
+    if (!validated.data) {
+      return NextResponse.json(
+        { error: validated.error || 'Invalid partnership update' },
+        { status: 400 }
+      );
+    }
 
     const partnership = await prisma.partnership.update({
       where: { id },
-      data: { ...body, updatedAt: new Date() }
+      data: validated.data as Prisma.PartnershipUpdateInput
     }).catch(() => null);
 
     if (!partnership) {
@@ -68,6 +79,8 @@ export async function PUT(
     });
 
   } catch (error) {
+    const bodyError = jsonBodyErrorResponse(error);
+    if (bodyError) return bodyError;
     console.error('Error updating partnership:', error);
     return NextResponse.json(
       { error: 'Failed to update partnership' },
@@ -81,9 +94,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 

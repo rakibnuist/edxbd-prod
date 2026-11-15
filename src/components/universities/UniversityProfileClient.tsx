@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { type UpdateCardData } from '@/components/updates/UpdateCard';
 import { config } from '@/lib/config';
+import { toSafeExternalUrl } from '@/lib/safe-url';
 import type { CleanUniversityRecord } from '@/lib/university-records';
 import type { UniversityRanking } from '@/lib/university-rankings';
 import { feeText, normalizeProgramLevel, PROGRAM_LEVELS, type ProgramLevel } from '@/lib/university-profile-view';
@@ -469,16 +470,19 @@ export default function UniversityProfileClient({
                 <span>
                   <strong>Accreditation:</strong> {recognitionLabel}
                 </span>
-                {university.recognitionSourceUrl && (
-                  <a
-                    href={university.recognitionSourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ml-auto inline-flex items-center gap-1 text-[13px] font-bold text-lime hover:underline"
-                  >
-                    Verify Register <ExternalLink size={12} />
-                  </a>
-                )}
+                {(() => {
+                  const safeRecognitionUrl = toSafeExternalUrl(university.recognitionSourceUrl);
+                  return safeRecognitionUrl ? (
+                    <a
+                      href={safeRecognitionUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-auto inline-flex items-center gap-1 text-[13px] font-bold text-lime hover:underline"
+                    >
+                      Verify Register <ExternalLink size={12} />
+                    </a>
+                  ) : null;
+                })()}
               </div>
 
               <p className="mt-5 max-w-2xl text-[15px] sm:text-[16px] leading-relaxed text-white/85">
@@ -1246,16 +1250,19 @@ export default function UniversityProfileClient({
               <p className="mt-2 text-xs leading-relaxed text-slate-600">
                 Always evaluate university rankings alongside specific department laboratories, English-medium faculty strength, and total 4-year tuition & living budget.
               </p>
-              {university.recognitionSourceUrl && (
-                <a
-                  href={university.recognitionSourceUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-petrol-800 hover:underline"
-                >
-                  Inspect Official Recognition Register <ExternalLink size={12} />
-                </a>
-              )}
+              {(() => {
+                const safeRecognitionUrl = toSafeExternalUrl(university.recognitionSourceUrl);
+                return safeRecognitionUrl ? (
+                  <a
+                    href={safeRecognitionUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-petrol-800 hover:underline"
+                  >
+                    Inspect Official Recognition Register <ExternalLink size={12} />
+                  </a>
+                ) : null;
+              })()}
             </div>
           </div>
         </section>

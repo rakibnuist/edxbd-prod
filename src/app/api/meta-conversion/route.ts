@@ -33,7 +33,8 @@ import {
   testConversionAPI,
   extractEventQualityParams
 } from '@/lib/meta-conversion-api';
-import { isAdminRequest } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { classifyRequestOrigin, resolveAllowedOriginHosts } from '@/lib/meta-capi-policy';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
@@ -50,12 +51,21 @@ const ADMIN_ONLY_EVENTS = new Set([
 ]);
 
 export async function POST(request: NextRequest) {
-  const rateLimit = checkRateLimit(request, {
+  const rateLimit = await checkRateLimit(request, {
     name: 'meta-conversion',
     maxRequests: 60,
     windowMs: 60 * 1000,
+    persistent: false,
   });
   if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
+
+  const origin = classifyRequestOrigin(
+    request.headers,
+    resolveAllowedOriginHosts(request.headers.get('host')),
+  );
+  if (origin === 'cross-site') {
+    return NextResponse.json({ error: 'Cross-site conversion events are not accepted' }, { status: 403 });
+  }
 
   try {
     const body = await readLimitedJson(request, 32 * 1024);
@@ -65,11 +75,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid event payload' }, { status: 400 });
     }
 
-    if (ADMIN_ONLY_EVENTS.has(eventType)) {
-      if (!isAdminRequest(request)) {
-        return NextResponse.json({ error: 'Admin access is required.' }, { status: 403 });
-      }
-    } else if (trackingConsent !== true) {
+    const requiresAdminCheck = ADMIN_ONLY_EVENTS.has(eventType) || origin === 'unknown';
+    const isAdmin = requiresAdminCheck ? Boolean(await verifyLiveAdminUser(request)) : false;
+    if (ADMIN_ONLY_EVENTS.has(eventType) && !isAdmin) {
+      return NextResponse.json({ error: 'Admin access is required.' }, { status: 403 });
+    }
+    if (origin === 'unknown' && !isAdmin) {
+      return NextResponse.json({ error: 'Conversion events must come from the site.' }, { status: 403 });
+    }
+    if (!ADMIN_ONLY_EVENTS.has(eventType) && trackingConsent !== true) {
       return NextResponse.json({ error: 'Advertising consent required.' }, { status: 403 });
     }
 

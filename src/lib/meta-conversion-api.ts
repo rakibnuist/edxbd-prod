@@ -2,6 +2,7 @@
 // NOTE: server-only module (imports the DB layer). Client code must call the
 // /api/meta-conversion route instead of importing from here.
 import crypto from 'crypto';
+import { extractClientIp } from './client-ip';
 import { getMetaConfig } from '@/lib/settings';
 import { sendMetaEvents } from '@/lib/meta-api';
 import { recordMetaDelivery } from '@/lib/meta-health';
@@ -77,21 +78,7 @@ export const normalizeText = (text: string | undefined): string | undefined => {
 
 // Get client IP from request headers
 export const getClientIP = (request: Request): string => {
-  const forwarded = request.headers.get('x-forwarded-for');
-  const realIP = request.headers.get('x-real-ip');
-  const cfConnectingIP = request.headers.get('cf-connecting-ip');
-
-  if (forwarded) {
-    return forwarded.split(',')[0].trim();
-  }
-  if (realIP) {
-    return realIP;
-  }
-  if (cfConnectingIP) {
-    return cfConnectingIP;
-  }
-
-  return '0.0.0.0';
+  return extractClientIp((name) => request.headers.get(name)) ?? '0.0.0.0';
 };
 
 export interface MetaUserData {

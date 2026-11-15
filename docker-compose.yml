@@ -1,12 +1,21 @@
-version: '3.8'
-
 services:
   web:
+    # Build from the checked-out local workspace so deployments never pull a mutable branch head.
     build:
-      context: https://github.com/rakibnuist/edxbd-prod.git#main
+      context: .
       dockerfile: Dockerfile
     container_name: edxbd_web
     restart: always
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: 1024M
     # Secrets live in a .env file next to this compose file ON THE VPS (never in git).
     env_file:
       - .env
@@ -14,13 +23,24 @@ services:
       # Use a persistent location for the database inside the container
       - DATABASE_URL=file:/app/prisma/data/prod.db
       - NODE_ENV=production
-      # These are interpolated from the VPS .env; the app requires JWT_SECRET in prod.
+      # Required in prod from the VPS .env (never commit secrets or runtime admin passwords).
       - JWT_SECRET=${JWT_SECRET}
-      - ADMIN_EMAIL=${ADMIN_EMAIL}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
     volumes:
-      # Mount a local directory to persist the SQLite database
+      # Mount local SQLite directory and named upload volume so data & media survive rebuilds
       - ./prisma/data:/app/prisma/data
+      - uploads_data:/app/public/uploads
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://' + (process.env.HOSTNAME && process.env.HOSTNAME !== '0.0.0.0' ? process.env.HOSTNAME : '127.0.0.1') + ':' + (process.env.PORT || '3000') + '/api/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+      retries: 3
     labels:
       - "traefik.enable=true"
       # Route for eduexpressint.com and www.eduexpressint.com
@@ -46,6 +66,9 @@ services:
       - "traefik.http.middlewares.edxbd-https-redirect.redirectscheme.permanent=true"
     networks:
       - traefik-net
+
+volumes:
+  uploads_data:
 
 networks:
   traefik-net:

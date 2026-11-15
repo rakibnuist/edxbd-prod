@@ -1,19 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
-import { serializeContent, toContentData } from '@/lib/content-serialize';
+import { serializeContent, toContentData, validateContentUrls } from '@/lib/content-serialize';
 import { contentPublicationErrors, withPublicationDefaults } from '@/lib/content-governance';
 import { announcePublishedUpdate } from '@/lib/indexnow';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -42,15 +44,19 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
     const { id } = await params;
 
-    const body = await request.json();
+    const body = await readLimitedJson(request, 1024 * 1024);
+    const urlError = validateContentUrls(body);
+    if (urlError) {
+      return NextResponse.json({ error: urlError }, { status: 400 });
+    }
     const existing = await prisma.content.findUnique({ where: { id } });
     const data = withPublicationDefaults(toContentData(body, true) as Record<string, unknown>, existing as Record<string, unknown> | null);
     const publicationErrors = contentPublicationErrors({ ...(existing || {}), ...data });
@@ -77,6 +83,8 @@ export async function PUT(
     if (content.isPublished) announcePublishedUpdate(content.slug);
     return NextResponse.json(serializeContent(content as Record<string, unknown>));
   } catch (error) {
+    const bodyErr = jsonBodyErrorResponse(error);
+    if (bodyErr) return bodyErr;
     console.error('Update content error:', error);
     return NextResponse.json(
       { error: 'Failed to update content' },
@@ -90,9 +98,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 

@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { verifyTokenFromRequest } from '@/lib/auth';
+import { isAdminRole } from '@/lib/auth';
+import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
-import { serializeContent, toContentData } from '@/lib/content-serialize';
+import { serializeContent, toContentData, validateContentUrls } from '@/lib/content-serialize';
 import { contentPublicationErrors, withPublicationDefaults } from '@/lib/content-governance';
 import { announcePublishedUpdate } from '@/lib/indexnow';
+import { logAndFormatServerError } from '@/lib/api-error';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
 
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
@@ -30,32 +33,29 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const decoded = verifyTokenFromRequest(request);
+    const decoded = await verifyLiveAdminUser(request);
     
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded || !isAdminRole(decoded.role)) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    const body = await request.json();
-    console.log('Creating content with data:', body);
-    
+    const body = await readLimitedJson(request, 1024 * 1024);
+
     // Validate required fields
-    if (!body.title || !body.slug || !body.content || !body.author) {
-      console.error('Missing required fields:', { 
-        title: !!body.title, 
-        slug: !!body.slug, 
-        content: !!body.content, 
-        author: !!body.author 
-      });
+    if (typeof body.title !== 'string' || !body.title.trim() || typeof body.slug !== 'string' || !body.slug.trim() || typeof body.content !== 'string' || !body.content.trim() || typeof body.author !== 'string' || !body.author.trim()) {
       return NextResponse.json(
         { error: 'Missing required fields: title, slug, content, and author are required' },
         { status: 400 }
       );
     }
 
+    const urlError = validateContentUrls(body);
+    if (urlError) {
+      return NextResponse.json({ error: urlError }, { status: 400 });
+    }
+
     const existingContent = await prisma.content.findUnique({ where: { slug: body.slug } });
     if (existingContent) {
-      console.error('Slug already exists:', body.slug);
       return NextResponse.json(
         { error: 'Slug already exists. Please choose a different slug.' },
         { status: 400 }
@@ -73,14 +73,14 @@ export async function POST(request: NextRequest) {
     revalidatePath('/');
     revalidatePath(`/updates/${savedContent.slug}`);
     if (savedContent.isPublished) announcePublishedUpdate(savedContent.slug);
-    console.log('Content created successfully:', savedContent.id);
 
     return NextResponse.json(serializeContent(savedContent as Record<string, unknown>), { status: 201 });
   } catch (error) {
-    console.error('Error creating content:', error);
+    const bodyErr = jsonBodyErrorResponse(error);
+    if (bodyErr) return bodyErr;
     return NextResponse.json(
-      { error: 'Failed to create content', details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
+      logAndFormatServerError('Create content error', error, 'Failed to create content'),
+      { status: 500, headers: { 'Cache-Control': 'no-store' } }
     );
   }
 }

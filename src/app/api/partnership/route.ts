@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { trackPartnershipInquiry } from '@/lib/meta-conversion-api';
+import {
+  extractSanitizedClientIp,
+  normalizeFlatRecord,
+  normalizeSafeHttpUrl,
+  normalizeStringList,
+} from '@/lib/payload-validation';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import {
   getOptionalString,
@@ -18,51 +24,34 @@ function toCount(value: unknown): number {
 }
 
 export async function POST(request: NextRequest) {
-  const rateLimit = checkRateLimit(request, {
+  const rateLimit = await checkRateLimit(request, {
     name: 'partnership-form',
     maxRequests: 5,
     windowMs: 60 * 60 * 1000,
+    persistent: true,
   });
   if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
 
   try {
     const body = await readLimitedJson(request, 128 * 1024);
-    const {
-      // Company Information
-      businessType,
-      businessRegistrationNumber,
-      businessLicense,
-      website,
-      yearsInBusiness,
 
-      // Contact Information
-
-      // Business Details
-      partnershipType,
-      targetCountries,
-      currentClients,
-      monthlyTarget,
-      experience,
-      currentPartners,
-
-      // Financial Information
-      annualRevenue,
-      investmentCapacity,
-      expectedCommission,
-
-      // Marketing & Network
-      marketingChannels,
-      socialMediaPresence,
-      localNetwork,
-      referralSources,
-
-      // Documents
-      documents,
-
-      // Additional Information
-    } = body;
+    // Numeric required counts (0 is valid and not empty)
+    for (const countField of ['yearsInBusiness', 'currentClients', 'monthlyTarget'] as const) {
+      if (body[countField] === undefined || body[countField] === null || body[countField] === '') {
+        return NextResponse.json({ error: `Missing required field: ${countField}` }, { status: 400 });
+      }
+    }
 
     const companyName = getOptionalString(body, 'companyName', 200);
+    const businessType = getRequiredString(body, 'businessType', 100);
+    const businessRegistrationNumber = getOptionalString(body, 'businessRegistrationNumber', 100);
+    const businessLicense = getOptionalString(body, 'businessLicense', 200);
+    const websiteRes = normalizeSafeHttpUrl(body.website, 500);
+    if (websiteRes.error) {
+      return NextResponse.json({ error: websiteRes.error }, { status: 400 });
+    }
+    const yearsInBusiness = toCount(body.yearsInBusiness);
+
     const contactPerson = getRequiredString(body, 'contactPerson', 120);
     const email = getRequiredString(body, 'email', 254).toLowerCase();
     const phone = getRequiredString(body, 'phone', 40);
@@ -72,6 +61,55 @@ export async function POST(request: NextRequest) {
     const state = getRequiredString(body, 'state', 100);
     const country = getRequiredString(body, 'country', 100);
     const postalCode = getRequiredString(body, 'postalCode', 32);
+
+    const partnershipType = getRequiredString(body, 'partnershipType', 100);
+    const currentClients = toCount(body.currentClients);
+    const monthlyTarget = toCount(body.monthlyTarget);
+    const experience = getRequiredString(body, 'experience', 2000);
+    const annualRevenue = getOptionalString(body, 'annualRevenue', 100);
+    const investmentCapacity = getRequiredString(body, 'investmentCapacity', 100);
+    const expectedCommission = getRequiredString(body, 'expectedCommission', 100);
+    const localNetwork = getRequiredString(body, 'localNetwork', 1000);
+
+    const targetCountriesRes = normalizeStringList(body.targetCountries, 'targetCountries', 30, 100);
+    if (targetCountriesRes.error || !targetCountriesRes.list?.length) {
+      return NextResponse.json(
+        { error: targetCountriesRes.error || 'Missing required field: targetCountries' },
+        { status: 400 }
+      );
+    }
+
+    const currentPartnersRes = normalizeStringList(body.currentPartners, 'currentPartners', 30, 120);
+    if (currentPartnersRes.error) {
+      return NextResponse.json({ error: currentPartnersRes.error }, { status: 400 });
+    }
+
+    const marketingChannelsRes = normalizeStringList(body.marketingChannels, 'marketingChannels', 30, 100);
+    if (marketingChannelsRes.error || !marketingChannelsRes.list?.length) {
+      return NextResponse.json(
+        { error: marketingChannelsRes.error || 'Missing required field: marketingChannels' },
+        { status: 400 }
+      );
+    }
+
+    const socialMediaRes = normalizeFlatRecord(body.socialMediaPresence, 'socialMediaPresence', 10, 300);
+    if (socialMediaRes.error) {
+      return NextResponse.json({ error: socialMediaRes.error }, { status: 400 });
+    }
+
+    const referralSourcesRes = normalizeStringList(body.referralSources, 'referralSources', 30, 100);
+    if (referralSourcesRes.error || !referralSourcesRes.list?.length) {
+      return NextResponse.json(
+        { error: referralSourcesRes.error || 'Missing required field: referralSources' },
+        { status: 400 }
+      );
+    }
+
+    const documentsRes = normalizeFlatRecord(body.documents, 'documents', 20, 500);
+    if (documentsRes.error) {
+      return NextResponse.json({ error: documentsRes.error }, { status: 400 });
+    }
+
     const motivation = getRequiredString(body, 'motivation', 4000);
     const expectations = getRequiredString(body, 'expectations', 4000);
     const additionalInfo = getOptionalString(body, 'additionalInfo', 4000);
@@ -83,33 +121,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Recorded privacy consent is required' }, { status: 400 });
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
       return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
-    // Validate required fields
-    const requiredFields = [
-      'businessType', 'yearsInBusiness',
-      'contactPerson', 'email', 'phone', 'address', 'city', 'state', 'country', 'postalCode',
-      'partnershipType', 'targetCountries', 'currentClients', 'monthlyTarget', 'experience',
-      'investmentCapacity', 'expectedCommission', 'marketingChannels', 'localNetwork',
-      'referralSources', 'motivation', 'expectations'
-    ];
-
-    for (const field of requiredFields) {
-      if (body[field] === undefined || body[field] === null || body[field] === '') {
-        return NextResponse.json(
-          { error: `Missing required field: ${field}` },
-          { status: 400 }
-        );
-      }
-    }
-
-    // Get client IP and user agent
-    const ipAddress = request.headers.get('x-forwarded-for') ||
-      request.headers.get('x-real-ip') ||
-      'unknown';
-    const userAgent = request.headers.get('user-agent') || 'unknown';
+    const ipAddress = extractSanitizedClientIp((name) => request.headers.get(name));
+    const userAgent = (request.headers.get('user-agent') || 'unknown').slice(0, 500);
 
     // Create new partnership application using Prisma
     const partnership = await prisma.partnership.create({
@@ -119,8 +136,8 @@ export async function POST(request: NextRequest) {
         businessType,
         businessRegistrationNumber,
         businessLicense,
-        website,
-        yearsInBusiness: toCount(yearsInBusiness),
+        website: websiteRes.url,
+        yearsInBusiness,
 
         // Contact Information
         contactPerson,
@@ -135,11 +152,11 @@ export async function POST(request: NextRequest) {
 
         // Business Details
         partnershipType,
-        targetCountries: Array.isArray(targetCountries) ? JSON.stringify(targetCountries) : JSON.stringify([targetCountries].filter(Boolean)),
-        currentClients: toCount(currentClients),
-        monthlyTarget: toCount(monthlyTarget),
+        targetCountries: JSON.stringify(targetCountriesRes.list),
+        currentClients,
+        monthlyTarget,
         experience,
-        currentPartners: Array.isArray(currentPartners) ? JSON.stringify(currentPartners) : currentPartners ? JSON.stringify([currentPartners]) : null,
+        currentPartners: currentPartnersRes.list?.length ? JSON.stringify(currentPartnersRes.list) : null,
 
         // Financial Information
         annualRevenue,
@@ -147,14 +164,13 @@ export async function POST(request: NextRequest) {
         expectedCommission,
 
         // Marketing & Network
-        marketingChannels: Array.isArray(marketingChannels) ? JSON.stringify(marketingChannels) : JSON.stringify([marketingChannels].filter(Boolean)),
-        socialMediaPresence: typeof socialMediaPresence === 'object' ? JSON.stringify(socialMediaPresence) : socialMediaPresence,
+        marketingChannels: JSON.stringify(marketingChannelsRes.list),
+        socialMediaPresence: socialMediaRes.json,
         localNetwork,
-        // The form sends a list; the column is a JSON string (an array here 500'd every submission).
-        referralSources: Array.isArray(referralSources) ? JSON.stringify(referralSources) : JSON.stringify([referralSources].filter(Boolean)),
+        referralSources: JSON.stringify(referralSourcesRes.list),
 
         // Documents
-        documents: Array.isArray(documents) ? JSON.stringify(documents) : JSON.stringify([documents].filter(Boolean)),
+        documents: documentsRes.json,
 
         // Additional Information
         motivation,

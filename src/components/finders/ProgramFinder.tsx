@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, CalendarClock, ExternalLink, Languages, MapPin, Search, WalletCards } from 'lucide-react';
 import type { ProgramRow } from '@/lib/catalog-views';
+import { toSafeExternalUrl } from '@/lib/safe-url';
 
 type Sort = 'tuition-asc' | 'tuition-desc' | 'name' | 'university';
 const PAGE = 24;
@@ -86,7 +87,9 @@ export default function ProgramFinder({ rows }: { rows: ProgramRow[] }) {
 
         {filtered.length ? <>
           <ul className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {filtered.slice(0, visible).map(row => (
+            {filtered.slice(0, visible).map(row => {
+              const safeSourceUrl = toSafeExternalUrl(row.sourceUrl);
+              return (
               <li key={row.key} className="flex flex-col rounded-3xl border border-petrol-800/15 bg-white p-5 transition hover:border-petrol-800/35 ">
                 <div className="flex flex-wrap items-center gap-2 text-[14px] font-bold"><span className="rounded-full bg-lime-pale px-2.5 py-1 text-lime-deep">{row.level}</span>{row.deadlinePassed && <span className="rounded-full bg-amber-50 px-2.5 py-1 text-amber-800">Recorded deadline passed</span>}</div>
                 <h3 className="mt-3 text-lg font-black leading-snug">{row.name}</h3>
@@ -101,11 +104,12 @@ export default function ProgramFinder({ rows }: { rows: ProgramRow[] }) {
                   <div className="flex flex-wrap gap-2">
                     <Link href={`/universities/${row.universitySlug}#costs`} className="ed-btn ed-btn-signal min-h-11 w-full text-[15px]">Full cost breakdown <ArrowRight size={15} /></Link>
                     <Link href={`/compare-costs?p=${encodeURIComponent(row.key)}`} className="ed-btn ed-btn-outline min-h-11 px-4 text-[15px]">Compare</Link>
-                    {row.sourceUrl && <a href={row.sourceUrl} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-11 gap-1.5 px-4 text-[15px]">Source <ExternalLink size={14} /></a>}
+                    {safeSourceUrl && <a href={safeSourceUrl} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-11 gap-1.5 px-4 text-[15px]">Source <ExternalLink size={14} /></a>}
                   </div>
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
           {visible < filtered.length && <div className="mt-8 text-center"><button type="button" onClick={() => setVisible(value => value + PAGE)} className="ed-btn ed-btn-outline min-h-[52px] px-7">Show {Math.min(PAGE, filtered.length - visible)} more programs</button></div>}
         </> : <div className="mt-7 rounded-3xl border border-dashed border-petrol-800/30 bg-white px-6 py-14 text-center"><h2 className="font-display text-2xl font-bold">No recorded program matches every filter</h2><p className="mx-auto mt-3 max-w-xl text-[15px] leading-6 text-ink-soft">Try a higher budget or fewer filters, or ask a counselor to check programs we have not recorded yet.</p><Link href="/education-fit-assessment" className="mt-6 ed-btn ed-btn-signal min-h-12 text-[15px]">Get a free assessment <ArrowRight size={15} /></Link></div>}

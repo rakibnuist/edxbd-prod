@@ -2,6 +2,7 @@ import 'server-only';
 /* eslint-disable @typescript-eslint/no-explicit-any -- Legacy database fields are normalized into CleanUniversityRecord here. */
 import { cache } from 'react';
 import prisma from '@/lib/prisma';
+import { toSafeExternalUrl, toSafeExternalUrlList, toSafeSitePathOrUrl } from './safe-url';
 
 export type CleanUniversityRecord = {
   id: string;
@@ -120,7 +121,7 @@ function mapPrismaToClean(record: any): CleanUniversityRecord {
       tuitionAfterScholarship: p.tuitionAfterScholarship?.trim() || undefined,
       applicationDeadline: p.applicationDeadline?.trim() || undefined,
       eligibility: parseStringArray(p.eligibility),
-      sourceUrl: p.sourceUrl?.trim() || undefined,
+      sourceUrl: toSafeExternalUrl(p.sourceUrl) ?? undefined,
       status: ['active', 'planned', 'paused'].includes(p.status) ? p.status : 'active',
     })),
     program => normalizedKey(program.level, program.name, program.tuition, program.applicationDeadline),
@@ -134,7 +135,7 @@ function mapPrismaToClean(record: any): CleanUniversityRecord {
       recipient: f.recipient?.trim() || undefined,
       refundable: ['yes', 'no', 'conditional'].includes(f.refundable) ? f.refundable : '',
       validFor: f.validFor?.trim() || undefined,
-      sourceUrl: f.sourceUrl?.trim() || undefined,
+      sourceUrl: toSafeExternalUrl(f.sourceUrl) ?? undefined,
     })),
     fee => normalizedKey(fee.item, fee.cost, fee.validFor),
   );
@@ -150,7 +151,7 @@ function mapPrismaToClean(record: any): CleanUniversityRecord {
       coverage: s.coverage?.trim() || undefined,
       renewal: s.renewal?.trim() || undefined,
       deadline: s.deadline?.trim() || undefined,
-      sourceUrl: s.sourceUrl?.trim() || undefined,
+      sourceUrl: toSafeExternalUrl(s.sourceUrl) ?? undefined,
       status: ['active', 'planned', 'closed'].includes(s.status) ? s.status : 'planned',
     })),
     scholarship => normalizedKey(scholarship.title, scholarship.type, scholarship.amount, scholarship.deadline),
@@ -202,7 +203,7 @@ function mapPrismaToClean(record: any): CleanUniversityRecord {
       otherCosts: parseJson(plan.otherCosts, []),
       totalEstimate: plan.totalEstimate || undefined,
       notes: parseJson(plan.notes, []),
-      sourceUrl: plan.sourceUrl || undefined,
+      sourceUrl: toSafeExternalUrl(plan.sourceUrl) ?? undefined,
       lastVerifiedAt: plan.lastVerifiedAt?.toISOString(),
       isPublished: plan.isPublished,
     })),
@@ -213,14 +214,14 @@ function mapPrismaToClean(record: any): CleanUniversityRecord {
     },
     notes: parseJson(record.notes, []),
     badges: parseJson(record.badges, []),
-    logo: record.logo ?? undefined,
+    logo: toSafeSitePathOrUrl(record.logo) ?? undefined,
     isActive: record.isActive,
-    officialUrl: record.officialUrl ?? undefined,
+    officialUrl: toSafeExternalUrl(record.officialUrl) ?? undefined,
     relationshipType: record.relationshipType as any,
-    relationshipEvidenceUrl: record.relationshipEvidenceUrl ?? undefined,
+    relationshipEvidenceUrl: toSafeExternalUrl(record.relationshipEvidenceUrl) ?? undefined,
     recognitionAuthority: record.recognitionAuthority ?? undefined,
-    recognitionSourceUrl: record.recognitionSourceUrl ?? undefined,
-    sourceUrls: parseJson(record.sourceUrls, []),
+    recognitionSourceUrl: toSafeExternalUrl(record.recognitionSourceUrl) ?? undefined,
+    sourceUrls: toSafeExternalUrlList(parseJson(record.sourceUrls, [])),
     lastVerifiedAt: record.lastVerifiedAt ? record.lastVerifiedAt.toISOString() : undefined,
     verificationExpiresAt: record.verificationExpiresAt ? record.verificationExpiresAt.toISOString() : undefined,
     verificationStatus: record.verificationStatus as any,

@@ -7,7 +7,8 @@ import ts from 'typescript';
 const transpile = async name => ts.transpileModule(await readFile(new URL(name, import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
 const dataUrl = code => `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`;
 const clearCostUrl = dataUrl(await transpile('./clear-cost.ts'));
-const views = await import(dataUrl((await transpile('./catalog-views.ts')).replace("'./clear-cost'", `'${clearCostUrl}'`)));
+const safeUrlModuleUrl = dataUrl(await transpile('./safe-url.ts'));
+const views = await import(dataUrl((await transpile('./catalog-views.ts')).replace("'./clear-cost'", `'${clearCostUrl}'`).replace("'./safe-url'", `'${safeUrlModuleUrl}'`)));
 
 const now = new Date(2026, 9, 20, 12);
 
