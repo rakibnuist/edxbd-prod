@@ -1,4 +1,4 @@
-import { breadcrumbJsonLd, citationJsonLd, safeJsonLdImageUrl, serializeJsonLd } from '@/lib/json-ld';
+import { breadcrumbJsonLd, citationJsonLd, faqJsonLd, safeJsonLdImageUrl, serializeJsonLd } from '@/lib/json-ld';
 import { RSS_FEED } from '@/lib/seo';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -8,11 +8,19 @@ import UpdateClient from './UpdateClient';
 import type { Update } from '@/lib/types';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { teamMembers } from '@/data/teamMembers';
-import { serializeUpdate } from '@/lib/content-records';
+import { getPublishedUpdates, serializeUpdate } from '@/lib/content-records';
 import { isOrganizationContentAuthor, normalizeContentAuthor } from '@/lib/content-author';
 import { categorySlug } from '@/lib/update-categories';
 import { chinaIntakeOverview } from '@/lib/china-intakes';
 import { htmlToText, sanitizeUpdateHtml } from '@/lib/content-html';
+import { getUniversityRecords } from '@/lib/university-records';
+import { getIndexableUniversityGuides } from '@/lib/university-guide-publication';
+import {
+  CSC_DIRECTORY_SLUG,
+  buildCscDirectoryEnrichment,
+  linkCscDirectoryUniversities,
+  type CscDirectoryEnrichment,
+} from '@/lib/csc-directory-enrichment';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -183,7 +191,23 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
 
     const tags = update.tags ? JSON.parse(update.tags) : [];
     const categories = update.categories ? JSON.parse(update.categories) : [];
-    const sourceUrls = update.sourceUrls ? JSON.parse(update.sourceUrls) : [];
+    const parsedSourceUrls = update.sourceUrls ? JSON.parse(update.sourceUrls) : [];
+    const isCscDirectory = update.slug === CSC_DIRECTORY_SLUG;
+    const rawFeatured = update.featuredImage?.trim();
+    const effectiveFeaturedImage =
+      isCscDirectory && (!rawFeatured || !rawFeatured.startsWith('/'))
+        ? '/og/china.jpg'
+        : update.featuredImage || undefined;
+    const sourceUrls = isCscDirectory
+      ? Array.from(
+          new Set([
+            'https://www.campuschina.org/',
+            'https://eduexpressint.com/csc-scholarship-bangladesh',
+            'https://eduexpressint.com/china-universities',
+            ...(Array.isArray(parsedSourceUrls) ? parsedSourceUrls : []),
+          ]),
+        )
+      : parsedSourceUrls;
 
     const updateData: Update = {
       id: update.id,
@@ -197,7 +221,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       categories: categories,
       tags: tags,
       sourceUrls,
-      featuredImage: update.featuredImage || undefined,
+      featuredImage: effectiveFeaturedImage,
       isFeatured: update.isFeatured,
       author: normalizeContentAuthor(update.author),
       reviewer: update.reviewer || undefined,
@@ -214,6 +238,23 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       views: update.views
     };
 
+    let cscDirectory: CscDirectoryEnrichment | undefined;
+    if (isCscDirectory) {
+      const [chinaUniversities, indexableSlugs, publishedUpdates] = await Promise.all([
+        getUniversityRecords('China'),
+        getIndexableUniversityGuides(),
+        getPublishedUpdates(undefined, false),
+      ]);
+      const indexableChinaUniversities = chinaUniversities.filter((u) => indexableSlugs.has(u.slug));
+      const linked = linkCscDirectoryUniversities(updateData.content, indexableChinaUniversities);
+      updateData.content = linked.html;
+      cscDirectory = buildCscDirectoryEnrichment(
+        indexableChinaUniversities,
+        publishedUpdates,
+        linked.matchedSlugs,
+      );
+    }
+
     const canonical = `https://eduexpressint.com/updates/${update.slug}`;
     // E-E-A-T: posts signed by a listed team member get a Person author with
     // their verified role; anonymous or generic admin bylines stay attributed to the organization.
@@ -226,7 +267,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
     const reviewerSchema =
       teamPersonSchema(update.reviewer) ?? { '@id': 'https://eduexpressint.com/#organization' };
     const primaryImage =
-      safeJsonLdImageUrl(update.featuredImage) || 'https://eduexpressint.com/og-image.jpg';
+      safeJsonLdImageUrl(effectiveFeaturedImage) || 'https://eduexpressint.com/og-image.jpg';
     const schemaDescription = clampMetaText(
       update.metaDescription || update.excerpt || htmlToText(update.content, 300),
       160,
@@ -278,6 +319,16 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
               : [],
           ),
         },
+        ...(cscDirectory?.faqs.length
+          ? [
+              {
+                '@type': 'FAQPage',
+                '@id': `${canonical}#faq`,
+                isPartOf: { '@id': `${canonical}#webpage` },
+                mainEntity: faqJsonLd(cscDirectory.faqs).mainEntity,
+              },
+            ]
+          : []),
       ],
     };
 
@@ -285,7 +336,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd([{ name: 'Updates', path: '/updates' }, { name: update.title }], `/updates/${update.slug}`)) }} />
-        <UpdateClient update={updateData} related={related} stale={stale} />
+        <UpdateClient update={updateData} related={related} stale={stale} cscDirectory={cscDirectory} />
       </>
     );
 }

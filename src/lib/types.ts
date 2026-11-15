@@ -306,4 +306,5 @@ export interface UpdateClientProps {
     // Current intake windows from the verified calendar module
     windows?: { name: string; status: string; summary: string }[];
   };
+  cscDirectory?: import('./csc-directory-enrichment').CscDirectoryEnrichment;
 }

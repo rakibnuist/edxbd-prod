@@ -12,6 +12,7 @@ import { trackPhoneClick, trackWhatsAppClick } from '@/lib/conversion-events';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import { categoryHref } from '@/lib/update-categories';
 import type { UpdateClientProps } from '@/lib/types';
+import { CscDirectoryFooter, CscDirectoryOverview } from './CscDirectorySections';
 
 const SITE = 'https://eduexpressint.com';
 const wrap = 'mx-auto max-w-[1200px] px-5 lg:px-8';
@@ -28,7 +29,7 @@ const host = (url: string) => {
   try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; }
 };
 
-export default function UpdateClient({ update, related = [], stale }: UpdateClientProps) {
+export default function UpdateClient({ update, related = [], stale, cscDirectory }: UpdateClientProps) {
   const [copied, setCopied] = useState(false);
   const authorName = normalizeContentAuthor(update.author);
   const teamMember = teamMembers.find(m => m.name.toLowerCase() === authorName.toLowerCase());
@@ -158,7 +159,11 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
               </aside>
             )}
 
+            {cscDirectory && <CscDirectoryOverview data={cscDirectory} />}
+
             <div className="update-body" dangerouslySetInnerHTML={{ __html: update.content }} />
+
+            {cscDirectory && <CscDirectoryFooter data={cscDirectory} />}
 
             {(() => {
               const safeSourceUrls = (update.sourceUrls || [])

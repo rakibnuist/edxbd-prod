@@ -216,6 +216,57 @@ async function main() {
     }
   }
 
+  // 7. Replace third-party polito.it cover image and refresh primary sources on the flagship CSC directory post
+  const cscPost = await prisma.content.findUnique({
+    where: { slug: 'complete-csc-universities-list-2026' },
+    select: {
+      id: true,
+      featuredImage: true,
+      sourceUrls: true,
+      lastVerifiedAt: true,
+      nextReviewAt: true,
+    },
+  });
+  if (cscPost) {
+    const requiredSources = [
+      'https://www.campuschina.org/',
+      'https://eduexpressint.com/csc-scholarship-bangladesh',
+      'https://eduexpressint.com/china-universities',
+    ];
+    let existingSources = [];
+    if (typeof cscPost.sourceUrls === 'string' && cscPost.sourceUrls.trim()) {
+      try {
+        const parsed = JSON.parse(cscPost.sourceUrls);
+        if (Array.isArray(parsed)) {
+          existingSources = parsed.filter((u) => typeof u === 'string' && u.trim().length > 0);
+        }
+      } catch {
+        existingSources = [];
+      }
+    }
+    const mergedSources = Array.from(new Set([...requiredSources, ...existingSources]));
+    const mergedSourcesJson = JSON.stringify(mergedSources);
+    const currentImage = typeof cscPost.featuredImage === 'string' ? cscPost.featuredImage.trim() : '';
+    const needsLocalImage = !currentImage || !currentImage.startsWith('/');
+    const needsSourcesUpdate = cscPost.sourceUrls !== mergedSourcesJson;
+
+    if (needsLocalImage || needsSourcesUpdate || !cscPost.lastVerifiedAt) {
+      const verifiedAt = new Date();
+      const reviewAt = new Date(verifiedAt.getTime() + 90 * 24 * 60 * 60 * 1000);
+      await prisma.content.update({
+        where: { id: cscPost.id },
+        data: {
+          featuredImage: needsLocalImage ? '/og/china.jpg' : currentImage,
+          sourceUrls: mergedSourcesJson,
+          lastVerifiedAt: verifiedAt,
+          nextReviewAt: reviewAt,
+        },
+      });
+      updated++;
+      console.log('Upgraded flagship CSC directory post metadata (first-party cover image & sources).');
+    }
+  }
+
   console.log(`SEO content hygiene sync complete (rows updated: ${updated}).`);
 }
 
