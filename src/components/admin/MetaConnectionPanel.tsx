@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Send } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import type { MetaHealth } from '@/lib/meta-health';
 
@@ -15,6 +15,7 @@ export default function MetaConnectionPanel({ refreshKey = 0, pendingChanges = f
   const [health, setHealth] = useState<MetaHealth | null>(null);
   const [loading, setLoading] = useState(true);
   const [checking, setChecking] = useState(false);
+  const [testing, setTesting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [checkFeedback, setCheckFeedback] = useState<string | null>(null);
   const [retry, setRetry] = useState(0);
@@ -38,6 +39,28 @@ export default function MetaConnectionPanel({ refreshKey = 0, pendingChanges = f
     } catch (error) { setError(error instanceof Error ? error.message : 'Connection check failed.'); }
     finally { setChecking(false); }
   };
+  const sendTestEvent = async () => {
+    setTesting(true); setError(null); setCheckFeedback(null);
+    try {
+      const response = await authenticatedFetch('/api/meta-conversion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ eventType: 'test', data: {} }),
+      });
+      const data = await response.json().catch(() => ({}));
+      const statusResponse = await authenticatedFetch('/api/meta-status', { cache: 'no-store' });
+      if (statusResponse.ok) setHealth(await statusResponse.json());
+      if (!response.ok || data.success === false) {
+        throw new Error(data.error || 'Meta rejected the test event.');
+      }
+      setCheckFeedback('Test PageView event accepted by Meta. Conversions API delivery is active.');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Test event failed.');
+    } finally {
+      setTesting(false);
+    }
+  };
+  const busy = checking || testing || loading;
   const healthy = health && ['active', 'connected'].includes(health.state);
   return <section aria-labelledby="meta-connection-title" className="rounded-xl border border-gray-200 bg-white p-5 text-gray-900">
     <div className="flex flex-wrap items-start justify-between gap-3"><div><h2 id="meta-connection-title" className="text-base font-semibold">Meta tracking</h2><p className="mt-1 text-xs text-gray-600">Website Pixel and server-side Conversions API.</p></div>
@@ -46,10 +69,12 @@ export default function MetaConnectionPanel({ refreshKey = 0, pendingChanges = f
       <div><dt className="text-xs text-gray-600">Conversions API</dt><dd className={`mt-2 inline-flex rounded-md px-2 py-1 text-xs font-medium ${healthy ? 'bg-emerald-50 text-emerald-900' : health?.state === 'attention' ? 'bg-red-50 text-red-900' : 'bg-gray-100 text-gray-700'}`}>{loading && !health ? 'Checking…' : health ? labels[health.state] || 'Status unavailable' : 'Status unavailable'}</dd></div>
       <div><dt className="text-xs text-gray-600">Last accepted server event</dt><dd className="mt-2 text-sm">{health?.lastAcceptedAt ? new Date(health.lastAcceptedAt).toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' }) : 'No delivery recorded yet'}</dd><dd className="mt-1 text-xs text-gray-600">A saved token alone does not confirm delivery.</dd></div></dl>
     {health && <p className="mt-5 text-sm leading-6 text-gray-700">{health.message}</p>}
-    {checkFeedback && <p role="status" className="mt-3 text-sm text-gray-700">{checkFeedback}</p>}
+    {checkFeedback && checkFeedback !== health?.message && <p role="status" className="mt-3 text-sm text-emerald-900">{checkFeedback}</p>}
     {pendingChanges && <p className="mt-3 text-sm text-amber-900">Save your new credentials before checking the connection.</p>}
     {error && <p role="alert" className="mt-3 text-sm text-red-800">{error} <button type="button" onClick={() => { setLoading(true); setError(null); setRetry(value => value + 1); }} className="font-semibold underline">Retry</button></p>}
-    <div className="mt-4 flex flex-wrap items-center gap-3"><button type="button" onClick={check} disabled={checking || loading || !health?.accessTokenConfigured || pendingChanges} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-gray-300 px-3 text-sm font-medium hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#12436b] disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-600"><RefreshCw size={14} className={checking ? 'animate-spin' : ''} />{checking ? 'Checking connection…' : 'Check connection'}</button>
-      <span className="text-xs text-gray-600">Checks dataset access without sending conversion events.</span></div>
+    <div className="mt-4 flex flex-wrap items-center gap-3">
+      <button type="button" onClick={check} disabled={busy || !health?.accessTokenConfigured || pendingChanges} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-gray-300 px-3 text-sm font-medium hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-[#12436b] disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-600"><RefreshCw size={14} className={checking ? 'animate-spin' : ''} />{checking ? 'Checking connection…' : 'Check connection'}</button>
+      <button type="button" onClick={sendTestEvent} disabled={busy || !health?.pixelActive || !health?.accessTokenConfigured || pendingChanges} className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#12436b] px-3 text-sm font-medium text-white hover:bg-[#0f3a5c] focus-visible:ring-2 focus-visible:ring-[#12436b] disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-600"><Send size={14} className={testing ? 'animate-pulse' : ''} />{testing ? 'Sending test event…' : 'Send test event'}</button>
+      <span className="text-xs text-gray-600">Check connection tests dataset read access without sending events. Send test event sends a PageView to verify live delivery.</span></div>
   </section>;
 }

@@ -10,6 +10,7 @@ import {
     classifyRequestOrigin,
     pickCustomData,
     resolveAllowedOriginHosts,
+    resolveCanonicalEventSourceUrl,
     resolveCapiEvent,
 } from '@/lib/meta-capi-policy';
 import {
@@ -99,19 +100,6 @@ function hashText(text: string | undefined): string | undefined {
     if (!text) return undefined;
     const normalized = text.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
     return hashData(normalized);
-}
-
-function trustedEventSource(value: unknown): string {
-    if (typeof value !== 'string' || value.length > 2048) return 'https://eduexpressint.com';
-    try {
-        const url = new URL(value);
-        if (url.protocol === 'https:' && ['eduexpressint.com', 'www.eduexpressint.com'].includes(url.hostname)) {
-            return url.toString();
-        }
-    } catch {
-        // Fall back to the canonical site URL for malformed or untrusted sources.
-    }
-    return 'https://eduexpressint.com';
 }
 
 function extractCookieFromHeader(cookieHeader: string | null, name: string): string | undefined {
@@ -213,7 +201,7 @@ export async function POST(request: NextRequest) {
             event_name: event.eventName,
             event_time: Math.floor(Date.now() / 1000),
             event_id: eventId,
-            event_source_url: trustedEventSource(eventSourceUrl),
+            event_source_url: resolveCanonicalEventSourceUrl(eventSourceUrl),
             action_source: 'website', // Required parameter
             user_data: {
                 client_ip_address: clientIp,

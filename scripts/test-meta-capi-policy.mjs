@@ -1,8 +1,17 @@
 // Access policy for the public Meta Conversions API route (/api/meta-capi).
 // Run: node --test scripts/test-meta-capi-policy.mjs
 import assert from 'node:assert/strict';
+import { register } from 'node:module';
 import test from 'node:test';
-import { classifyRequestOrigin, pickCustomData, resolveCapiEvent } from '../src/lib/meta-capi-policy.ts';
+
+register(new URL('./lib/typescript-source-resolver.mjs', import.meta.url));
+
+const {
+  classifyRequestOrigin,
+  pickCustomData,
+  resolveCanonicalEventSourceUrl,
+  resolveCapiEvent,
+} = await import('../src/lib/meta-capi-policy.ts');
 
 test('anonymous visitors can only report page, content, contact and lead events', () => {
   for (const [input, eventName] of [['page_view', 'PageView'], ['PageView', 'PageView'], ['ViewContent', 'ViewContent'], ['Contact', 'Contact'], ['study_abroad_lead', 'Lead'], ['Lead', 'Lead']]) {
@@ -98,4 +107,13 @@ test('cross-site and opaque origins are rejected', () => {
 test('requests without browser provenance are unknown', () => {
   assert.equal(classifyRequestOrigin(headers({}), hosts), 'unknown');
   assert.equal(classifyRequestOrigin(headers({ 'user-agent': 'curl/8' }), hosts), 'unknown');
+});
+
+test('event_source_url always resolves to a canonical https eduexpressint.com URL', () => {
+  assert.equal(resolveCanonicalEventSourceUrl('https://eduexpressint.com/contact?utm_source=fb'), 'https://eduexpressint.com/contact?utm_source=fb');
+  assert.equal(resolveCanonicalEventSourceUrl('https://www.eduexpressint.com/study-in-china-from-bangladesh'), 'https://www.eduexpressint.com/study-in-china-from-bangladesh');
+  assert.equal(resolveCanonicalEventSourceUrl('http://0.0.0.0:3000/api/meta-conversion'), 'https://eduexpressint.com');
+  assert.equal(resolveCanonicalEventSourceUrl('https://evil.example/phish'), 'https://eduexpressint.com');
+  assert.equal(resolveCanonicalEventSourceUrl('not-a-url'), 'https://eduexpressint.com');
+  assert.equal(resolveCanonicalEventSourceUrl(undefined), 'https://eduexpressint.com');
 });

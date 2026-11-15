@@ -17,6 +17,20 @@ import { SITE_URL } from './site-urls';
 const CANONICAL_HOST = new URL(SITE_URL).host;
 export const CANONICAL_SITE_HOSTS = [CANONICAL_HOST, `www.${CANONICAL_HOST}`] as const;
 
+export function resolveCanonicalEventSourceUrl(candidate?: unknown): string {
+  if (typeof candidate === 'string' && candidate.length <= 2048) {
+    try {
+      const url = new URL(candidate);
+      if (url.protocol === 'https:' && (CANONICAL_SITE_HOSTS as readonly string[]).includes(url.hostname.toLowerCase())) {
+        return url.toString();
+      }
+    } catch {
+      // Fall back to the canonical site URL when missing or non-canonical.
+    }
+  }
+  return SITE_URL;
+}
+
 export function resolveAllowedOriginHosts(requestHost: string | null): string[] {
   const hosts: string[] = [...CANONICAL_SITE_HOSTS];
   const rawTrimmed = (requestHost || '').trim().toLowerCase();

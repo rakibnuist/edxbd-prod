@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import { extractClientIp } from './client-ip';
 import { getMetaConfig } from '@/lib/settings';
 import { sendMetaEvents } from '@/lib/meta-api';
+import { resolveCanonicalEventSourceUrl } from '@/lib/meta-capi-policy';
 import { recordMetaDelivery } from '@/lib/meta-health';
 
 // Optional explicit credentials; when omitted the DB config is used.
@@ -253,7 +254,9 @@ export const sendConversionAPIEvent = async (
             client_user_agent: userAgent,
           },
           custom_data: customData || {},
-          event_source_url: request ? new URL(request.url).href : '',
+          event_source_url: resolveCanonicalEventSourceUrl(
+            request?.headers.get('referer') || request?.url,
+          ),
           action_source: 'website',
         },
       ],
@@ -946,11 +949,9 @@ export const testConversionAPI = async (
   const eventId = generateEventId();
 
   const customData = {
-    content_name: 'Test Event',
-    content_category: 'Testing',
+    content_name: 'Connection Verification',
+    content_category: 'Admin Test',
     test_event: true,
-    value: 0,
-    currency: 'BDT',
   };
 
   return await sendConversionAPIEvent('PageView', {}, customData, eventId, request);

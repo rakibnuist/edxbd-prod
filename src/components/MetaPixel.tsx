@@ -6,20 +6,60 @@ import { CONSENT_CHANGE_EVENT } from '@/components/CookieConsent';
 import {
   buildMetaAdvancedMatching,
   clearTrackingState,
+  getOrCreateConsentedExternalId,
   isAnalyticsConsentAccepted,
+  readCookieValue,
 } from '@/lib/tracking-consent';
 
 type MetaWindow = Window & {
   __metaPixelLoaded?: boolean;
+  __metaPixelInitializing?: boolean;
   __metaPixelId?: string;
   __metaPixelLastPath?: string;
 };
 
+// Internal tools set no marketing cookies or ad-tracking events.
+const EXCLUDED_ROUTE = /^\/(admin|dashboard|login)(\/|$)/;
+
+function createPageViewEventId(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return `pv_${crypto.randomUUID()}`;
+  }
+  return `pv_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function dispatchServerPageView(eventId: string, pageUrl: string, pageTitle: string): void {
+  if (typeof window === 'undefined' || window.location.protocol !== 'https:') return;
+  if (!isAnalyticsConsentAccepted()) return;
+
+  const externalId = getOrCreateConsentedExternalId();
+  const fbp = readCookieValue('_fbp');
+  const fbc = readCookieValue('_fbc');
+
+  void fetch('/api/meta-capi', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    keepalive: true,
+    body: JSON.stringify({
+      event_name: 'PageView',
+      event_id: eventId,
+      event_source_url: pageUrl,
+      user_data: {
+        ...(fbp ? { fbp } : {}),
+        ...(fbc ? { fbc } : {}),
+        ...(externalId ? { external_id: externalId } : {}),
+      },
+      custom_data: {
+        ...(pageTitle ? { page_title: pageTitle } : {}),
+      },
+      trackingConsent: true,
+    }),
+  }).catch(() => undefined);
+}
+
 // Loads the Meta (Facebook) Pixel at runtime using the Pixel ID stored in the
-// admin Settings (DB) or environment. Because the ID is fetched on the client
-// after load, changing it in /admin/settings takes effect on next page load —
-// no rebuild required. Once fbq is initialised, all fbq('track', ...) calls
-// elsewhere route to this pixel automatically.
+// admin Settings (DB) or environment, and sends a deduplicated server-side
+// PageView via /api/meta-capi once the visitor grants consent.
 export default function MetaPixel() {
   const pathname = usePathname();
 
@@ -28,29 +68,38 @@ export default function MetaPixel() {
       if (window.location.protocol !== 'https:') return;
       if (!isAnalyticsConsentAccepted()) {
         clearTrackingState();
+        (window as MetaWindow).__metaPixelLastPath = undefined;
         return;
       }
+      if (EXCLUDED_ROUTE.test(pathname ?? '')) return;
 
       const metaWindow = window as MetaWindow;
       if (metaWindow.__metaPixelLoaded) {
         window.fbq?.('consent', 'grant');
         if (metaWindow.__metaPixelLastPath !== pathname) {
-          window.fbq?.('track', 'PageView');
           metaWindow.__metaPixelLastPath = pathname;
+          const eventId = createPageViewEventId();
+          window.fbq?.('track', 'PageView', {}, { eventID: eventId });
+          dispatchServerPageView(eventId, window.location.href, document.title);
         }
         return;
       }
+      if (metaWindow.__metaPixelInitializing) return;
+      metaWindow.__metaPixelInitializing = true;
 
       try {
         const res = await fetch('/api/public-config');
         if (!res.ok) return;
         const { metaPixelId: pixelId } = await res.json();
-        if (!pixelId || !isAnalyticsConsentAccepted()) return;
+        if (!pixelId || !isAnalyticsConsentAccepted() || EXCLUDED_ROUTE.test(pathname ?? '')) return;
 
         metaWindow.__metaPixelLoaded = true;
+        metaWindow.__metaPixelId = pixelId;
+        metaWindow.__metaPixelLastPath = pathname;
 
         /* eslint-disable */
         // Standard Meta Pixel bootstrap.
+        let scriptEl: HTMLScriptElement | null = null;
         (function (f: any, b: any, e: any, v: any) {
           if (f.fbq) return;
           const n: any = (f.fbq = function () {
@@ -64,13 +113,18 @@ export default function MetaPixel() {
           const t = b.createElement(e);
           t.async = true;
           t.src = v;
+          scriptEl = t;
           const s = b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t, s);
+          if (s?.parentNode) s.parentNode.insertBefore(t, s);
+          else b.head?.appendChild(t);
         })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         /* eslint-enable */
 
         // Advanced Matching parameters for Meta Pixel (strictly consent-gated, opaque ID only)
         const advancedMatching = buildMetaAdvancedMatching();
+        const eventId = createPageViewEventId();
+        const pageUrl = window.location.href;
+        const pageTitle = document.title;
 
         window.fbq?.('consent', 'grant');
         if (Object.keys(advancedMatching).length > 0) {
@@ -78,13 +132,29 @@ export default function MetaPixel() {
         } else {
           window.fbq?.('init', pixelId);
         }
-        window.fbq?.('track', 'PageView');
+        window.fbq?.('track', 'PageView', {}, { eventID: eventId });
 
-        // Expose for any code that wants to check configuration at runtime.
-        metaWindow.__metaPixelId = pixelId;
-        metaWindow.__metaPixelLastPath = pathname;
+        // Wait briefly for fbevents.js to write `_fbp` before firing server CAPI,
+        // while still delivering even if an ad blocker blocks the browser script.
+        let dispatched = false;
+        const flushServerPageView = () => {
+          if (dispatched) return;
+          dispatched = true;
+          window.clearTimeout(fallbackTimer);
+          dispatchServerPageView(eventId, pageUrl, pageTitle);
+        };
+        const fallbackTimer = window.setTimeout(flushServerPageView, 700);
+        const injectedScript = scriptEl as HTMLScriptElement | null;
+        if (injectedScript) {
+          injectedScript.addEventListener('load', flushServerPageView, { once: true });
+          injectedScript.addEventListener('error', flushServerPageView, { once: true });
+        } else {
+          flushServerPageView();
+        }
       } catch {
         /* silent — analytics must never break the page */
+      } finally {
+        metaWindow.__metaPixelInitializing = false;
       }
   }, [pathname]);
 
@@ -99,6 +169,7 @@ export default function MetaPixel() {
         void initialiseOrTrackPage();
       } else {
         clearTrackingState();
+        (window as MetaWindow).__metaPixelLastPath = undefined;
         window.fbq?.('consent', 'revoke');
       }
     };
