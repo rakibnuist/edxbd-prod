@@ -103,6 +103,7 @@ const faqs = [
 ];
 
 const related = [
+  { label: 'CGS 2027/2028 Type A embassy notice', href: '/updates/cgs-2027-2028-type-a-scholarship-bangladesh' },
   { label: 'China scholarships: every route compared', href: '/china-scholarships-bangladesh' },
   { label: 'CSC Type A bilateral guide', href: '/updates/how-to-apply-csc-type-a-scholarship-complete-guide' },
   { label: 'Complete CSC universities list (306)', href: '/updates/complete-csc-universities-list-2026' },
@@ -191,6 +192,30 @@ export default function CscScholarshipBangladeshPage() {
       />
 
       <TrustBar />
+
+      <div className="mx-auto max-w-[1200px] px-5 sm:px-6 lg:px-8 mt-10">
+        <div className="rounded-2xl border-2 border-signal/25 bg-peach/70 p-6 sm:p-7 shadow-sm">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 rounded-full bg-signal px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                Official 2027/2028 Embassy Notice
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-petrol-800">
+                Chinese Government Scholarship (CGS) Type A Open for Bangladesh
+              </h2>
+              <p className="max-w-2xl text-[15px] sm:text-[16px] leading-relaxed text-ink-soft">
+                The Embassy of China in Bangladesh has opened CGS 2027/2028 Type A applications for Bachelor’s, Master’s, Doctoral, and Scholar programs with full tuition, dorm, stipends &amp; airfare. Deadline: <strong>10 January 2027</strong> on campuschina.org.
+              </p>
+            </div>
+            <Link
+              href="/updates/cgs-2027-2028-type-a-scholarship-bangladesh"
+              className="ed-btn ed-btn-signal shrink-0 whitespace-nowrap px-6 py-3.5 text-base shadow-sm font-bold"
+            >
+              View 2027 Checklist &amp; Guide <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </div>
 
       <Section
         title="What does a CSC scholarship cover?"

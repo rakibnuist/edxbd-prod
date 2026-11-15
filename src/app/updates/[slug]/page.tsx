@@ -16,12 +16,8 @@ import { htmlToText, sanitizeUpdateHtml } from '@/lib/content-html';
 import { extractFaqsFromHtml } from '@/lib/content-faq';
 import { getUniversityRecords } from '@/lib/university-records';
 import { getIndexableUniversitySitemapRecords } from '@/lib/university-guide-publication';
-import {
-  CSC_DIRECTORY_SLUG,
-  buildCscDirectoryEnrichment,
-  linkCscDirectoryUniversities,
-  type CscDirectoryEnrichment,
-} from '@/lib/csc-directory-enrichment';
+import { CSC_DIRECTORY_SLUG, buildCscDirectoryEnrichment, linkCscDirectoryUniversities, type CscDirectoryEnrichment } from '@/lib/csc-directory-enrichment';
+import { CGS_2027_TYPE_A_SLUG, CGS_2027_TYPE_A_DATA } from '@/data/cgsTypeAGuide2027';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -105,9 +101,16 @@ const getRelated = cache(async (current: NonNullable<Awaited<ReturnType<typeof g
     .filter((record): record is Update => Boolean(record));
 });
 
-const getUpdate = cache((slug: string) => prisma.content.findFirst({
-  where: { slug, type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
-}));
+const getUpdate = cache(async (slug: string) => {
+  const fromDb = await prisma.content.findFirst({
+    where: { slug, type: { in: ['update', 'article'] }, ...currentVisibleContentWhere() },
+  });
+  if (fromDb) return fromDb;
+  if (slug === CGS_2027_TYPE_A_SLUG) {
+    return CGS_2027_TYPE_A_DATA;
+  }
+  return null;
+});
 
 export async function generateMetadata({ params }: UpdatePageProps): Promise<Metadata> {
   try {
