@@ -8,7 +8,7 @@ import type { IntakeStatus } from '@/lib/intake-status';
 // verification expires before a counselor re-checks the window, consumers
 // flip to "Under Verification" instead of showing a stale promise.
 
-export const CHINA_INTAKE_VERIFIED_ON = '26 October 2026';
+export const CHINA_INTAKE_VERIFIED_ON = '15 November 2026';
 export const CHINA_INTAKE_NEXT_REVIEW = 'January 2027 (before the March deadline window)';
 
 export interface ChinaIntakeRow {

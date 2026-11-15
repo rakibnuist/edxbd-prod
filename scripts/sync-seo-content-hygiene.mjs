@@ -31,9 +31,9 @@ const ACTIVE_CHINA_METADATA_DEFAULTS = [
   {
     slug: 'csca-guide-study-in-china',
     category: 'Exam Guide',
-    metaTitle: '2026 CSCA Entrance Test Guide: China | EduExpress',
+    metaTitle: '2027 CSCA Entrance Test Guide: China | EduExpress',
     metaDescription:
-      '2026 China CSCA entrance exam guide for Bangladeshi students: test structure, schedule, registration fees, scoring and preparation rules.',
+      '2027 China CSCA entrance exam guide for Bangladeshi students: test structure, schedule, registration fees, scoring and preparation rules.',
     sources: ['https://www.csca.cn', 'https://www.campuschina.org/'],
   },
   {
@@ -50,9 +50,9 @@ const ACTIVE_CHINA_METADATA_DEFAULTS = [
   {
     slug: 'complete-csc-universities-list-2026',
     category: 'Scholarships',
-    metaTitle: 'CSC Universities List 2026 (306 Schools) | EduExpress',
+    metaTitle: 'CSC Universities List 2027 (306 Schools) | EduExpress',
     metaDescription:
-      'Directory of 306 Chinese universities accepting Chinese Government Scholarship (CSC) applications for 2026, with verified admission criteria.',
+      '2027 directory of 306 Chinese universities accepting Chinese Government Scholarship (CSC) applications, with verified admission criteria & guides.',
     sources: ['https://www.campuschina.org/'],
   },
   {
@@ -216,27 +216,70 @@ async function main() {
     }
   }
 
-  // 7. Replace third-party polito.it cover image and refresh primary sources on the flagship CSC directory post
-  const cscPost = await prisma.content.findUnique({
-    where: { slug: 'complete-csc-universities-list-2026' },
-    select: {
-      id: true,
-      featuredImage: true,
-      sourceUrls: true,
-      lastVerifiedAt: true,
-      nextReviewAt: true,
+  // 7. Upgrade flagship CSC directory and CSCA guide to 2027 metadata, first-party assets, and headings
+  const flagship2027Upgrades = [
+    {
+      slug: 'complete-csc-universities-list-2026',
+      title: 'Complete CSC Universities List (2027 Cycle) - 306 Universities',
+      metaTitle: 'CSC Universities List 2027 (306 Schools) | EduExpress',
+      metaDescription:
+        '2027 directory of 306 Chinese universities accepting Chinese Government Scholarship (CSC) applications, with verified admission criteria & guides.',
+      excerpt:
+        '2027 directory of 306 universities accepting Chinese Government Scholarship (CSC) applications for international students, with verified Bangladeshi admission profiles and Type A/B guidance.',
+      featuredImage: '/og/china.jpg',
+      requireLocalImage: true,
+      requiredSources: [
+        'https://www.campuschina.org/',
+        'https://eduexpressint.com/csc-scholarship-bangladesh',
+        'https://eduexpressint.com/china-universities',
+      ],
+      headingReplacements: [
+        ['Complete CSC Universities List (2026)', 'Complete CSC Universities List (2027 Cycle)'],
+        ['for international students in 2026', 'for international students in 2027'],
+      ],
     },
-  });
-  if (cscPost) {
-    const requiredSources = [
-      'https://www.campuschina.org/',
-      'https://eduexpressint.com/csc-scholarship-bangladesh',
-      'https://eduexpressint.com/china-universities',
-    ];
+    {
+      slug: 'csca-guide-study-in-china',
+      title: '2027 CSCA Complete Guide: Your Path to Study in China',
+      metaTitle: '2027 CSCA Entrance Test Guide: China | EduExpress',
+      metaDescription:
+        '2027 China CSCA entrance exam guide for Bangladeshi students: test structure, schedule, registration fees, scoring and preparation rules.',
+      excerpt:
+        'Updated 2027 guide to the China Scholastic Competency Assessment (CSCA) for Chinese undergraduate admissions — exam format, dates, fees, scoring, and preparation steps.',
+      featuredImage: '',
+      requireLocalImage: false,
+      requiredSources: [
+        'https://www.csca.cn',
+        'https://www.campuschina.org/',
+      ],
+      headingReplacements: [
+        ['2026 CSCA Complete Guide: Your Path to Study in China', '2027 CSCA Complete Guide: Your Path to Study in China'],
+        ['starting in 2026', 'for 2027 intakes'],
+      ],
+    },
+  ];
+
+  for (const spec of flagship2027Upgrades) {
+    const post = await prisma.content.findUnique({
+      where: { slug: spec.slug },
+      select: {
+        id: true,
+        title: true,
+        metaTitle: true,
+        metaDescription: true,
+        excerpt: true,
+        content: true,
+        featuredImage: true,
+        sourceUrls: true,
+        lastVerifiedAt: true,
+      },
+    });
+    if (!post) continue;
+
     let existingSources = [];
-    if (typeof cscPost.sourceUrls === 'string' && cscPost.sourceUrls.trim()) {
+    if (typeof post.sourceUrls === 'string' && post.sourceUrls.trim()) {
       try {
-        const parsed = JSON.parse(cscPost.sourceUrls);
+        const parsed = JSON.parse(post.sourceUrls);
         if (Array.isArray(parsed)) {
           existingSources = parsed.filter((u) => typeof u === 'string' && u.trim().length > 0);
         }
@@ -244,26 +287,50 @@ async function main() {
         existingSources = [];
       }
     }
-    const mergedSources = Array.from(new Set([...requiredSources, ...existingSources]));
-    const mergedSourcesJson = JSON.stringify(mergedSources);
-    const currentImage = typeof cscPost.featuredImage === 'string' ? cscPost.featuredImage.trim() : '';
-    const needsLocalImage = !currentImage || !currentImage.startsWith('/');
-    const needsSourcesUpdate = cscPost.sourceUrls !== mergedSourcesJson;
+    const mergedSourcesJson = JSON.stringify(
+      Array.from(new Set([...spec.requiredSources, ...existingSources])),
+    );
 
-    if (needsLocalImage || needsSourcesUpdate || !cscPost.lastVerifiedAt) {
+    let nextContent = post.content;
+    for (const [from, to] of spec.headingReplacements) {
+      if (nextContent.includes(from)) {
+        nextContent = nextContent.replaceAll(from, to);
+      }
+    }
+
+    const currentImage = typeof post.featuredImage === 'string' ? post.featuredImage.trim() : '';
+    const needsLocalImage = spec.requireLocalImage && (!currentImage || !currentImage.startsWith('/'));
+    const nextImage = needsLocalImage ? spec.featuredImage : post.featuredImage;
+
+    const changed =
+      post.title !== spec.title ||
+      post.metaTitle !== spec.metaTitle ||
+      post.metaDescription !== spec.metaDescription ||
+      post.excerpt !== spec.excerpt ||
+      nextContent !== post.content ||
+      nextImage !== post.featuredImage ||
+      post.sourceUrls !== mergedSourcesJson ||
+      !post.lastVerifiedAt;
+
+    if (changed) {
       const verifiedAt = new Date();
       const reviewAt = new Date(verifiedAt.getTime() + 90 * 24 * 60 * 60 * 1000);
       await prisma.content.update({
-        where: { id: cscPost.id },
+        where: { id: post.id },
         data: {
-          featuredImage: needsLocalImage ? '/og/china.jpg' : currentImage,
+          title: spec.title,
+          metaTitle: spec.metaTitle,
+          metaDescription: spec.metaDescription,
+          excerpt: spec.excerpt,
+          content: nextContent,
+          featuredImage: nextImage,
           sourceUrls: mergedSourcesJson,
           lastVerifiedAt: verifiedAt,
           nextReviewAt: reviewAt,
         },
       });
       updated++;
-      console.log('Upgraded flagship CSC directory post metadata (first-party cover image & sources).');
+      console.log(`Upgraded ${spec.slug} to 2027 cycle metadata & assets.`);
     }
   }
 

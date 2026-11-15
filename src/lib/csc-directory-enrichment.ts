@@ -49,7 +49,7 @@ const SAFE_SLUG_RE = /^[a-z0-9-]+$/;
 const CSC_DIRECTORY_FAQS: CscDirectoryFaq[] = [
   {
     question:
-      'Where can I verify the official 2026-2027 CSC designated university list, 5-digit Agency Number, and updated admissions email?',
+      'Where can I verify the official 2027 CSC designated university list, 5-digit Agency Number, and updated admissions email?',
     answer:
       'Official designated university participation, 5-digit Type B Agency Numbers, degree catalogs, and current international admissions emails are published on the China Scholarship Council portal (campuschina.org) and each university international office notice. EduExpress links verified university profiles and 2027 CSC guides on this page so Bangladeshi applicants can cross-check live entry details without relying on outdated email spreadsheets.',
   },

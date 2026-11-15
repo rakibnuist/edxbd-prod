@@ -14,7 +14,7 @@ import { categorySlug } from '@/lib/update-categories';
 import { chinaIntakeOverview } from '@/lib/china-intakes';
 import { htmlToText, sanitizeUpdateHtml } from '@/lib/content-html';
 import { getUniversityRecords } from '@/lib/university-records';
-import { getIndexableUniversityGuides } from '@/lib/university-guide-publication';
+import { getIndexableUniversitySitemapRecords } from '@/lib/university-guide-publication';
 import {
   CSC_DIRECTORY_SLUG,
   buildCscDirectoryEnrichment,
@@ -240,11 +240,12 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
 
     let cscDirectory: CscDirectoryEnrichment | undefined;
     if (isCscDirectory) {
-      const [chinaUniversities, indexableSlugs, publishedUpdates] = await Promise.all([
+      const [chinaUniversities, indexableRecords, publishedUpdates] = await Promise.all([
         getUniversityRecords('China'),
-        getIndexableUniversityGuides(),
+        getIndexableUniversitySitemapRecords(),
         getPublishedUpdates(undefined, false),
       ]);
+      const indexableSlugs = new Set(indexableRecords.map((record) => record.slug));
       const indexableChinaUniversities = chinaUniversities.filter((u) => indexableSlugs.has(u.slug));
       const linked = linkCscDirectoryUniversities(updateData.content, indexableChinaUniversities);
       updateData.content = linked.html;

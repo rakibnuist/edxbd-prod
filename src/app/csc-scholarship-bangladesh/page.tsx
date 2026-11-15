@@ -97,7 +97,7 @@ const faqs = [
     answer: 'Published CSC criteria set exclusive upper limits: Bachelor’s applicants must be under 25, Master’s under 35, Doctoral (PhD) under 40, General Scholars under 45, and Senior Scholars under 50.',
   },
   {
-    question: 'Where can Bangladeshi students check the 2026–2027 CSC university list, Agency Numbers and admissions contacts?',
+    question: 'Where can Bangladeshi students check the 2027 CSC university list, Agency Numbers and admissions contacts?',
     answer: 'Each designated Chinese university publishes its current 5-digit CSC Agency Number and international admissions office contact on its official admission notice and on campuschina.org. EduExpress also maintains an indexed 306-university CSC directory alongside verified China university profiles so students can shortlist departments safely without relying on outdated third-party email sheets.',
   },
 ];
@@ -106,7 +106,7 @@ const related = [
   { label: 'China scholarships: every route compared', href: '/china-scholarships-bangladesh' },
   { label: 'CSC Type A bilateral guide', href: '/updates/how-to-apply-csc-type-a-scholarship-complete-guide' },
   { label: 'Complete CSC universities list (306)', href: '/updates/complete-csc-universities-list-2026' },
-  { label: '2026 CSCA entrance test guide', href: '/updates/csca-guide-study-in-china' },
+  { label: '2027 CSCA entrance test guide', href: '/updates/csca-guide-study-in-china' },
   { label: 'China intakes and deadlines', href: '/china-intakes-deadlines' },
   { label: 'China admission requirements', href: '/china-admission-requirements' },
   { label: 'Study in China without IELTS', href: '/study-in-china-without-ielts' },

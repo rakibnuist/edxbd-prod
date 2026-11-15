@@ -16,7 +16,7 @@ export function CscDirectoryOverview({ data }: { data: CscDirectoryEnrichment })
           <ShieldCheck className="mt-1 h-5 w-5 shrink-0 text-teal-700" aria-hidden="true" />
           <div className="space-y-3">
             <h2 className="text-[19px] font-bold text-petrol-800">
-              2026-2027 CSC Quick Navigation for Bangladeshi Students
+              2027 CSC Quick Navigation for Bangladeshi Students
             </h2>
             <p className="text-sm leading-relaxed text-slate-700">
               Every highlighted Chinese university below links directly to its EduExpress admission profile (
@@ -173,7 +173,7 @@ export function CscDirectoryFooter({ data }: { data: CscDirectoryEnrichment }) {
       {data.faqs.length > 0 && (
         <section aria-labelledby="csc-faq-heading">
           <h2 id="csc-faq-heading" className="mb-4 text-[22px] font-bold text-petrol-800">
-            Frequently Asked Questions: CSC University List 2026-2027
+            Frequently Asked Questions: CSC University List 2027
           </h2>
           <div className="space-y-4">
             {data.faqs.map((faq) => (

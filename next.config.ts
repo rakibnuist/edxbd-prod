@@ -163,7 +163,17 @@ const nextConfig: NextConfig = {
         source: '/destinations/:country',
         destination: '/study-in-:country-from-bangladesh',
         permanent: true,
-      }
+      },
+      {
+        source: '/updates/complete-csc-universities-list-2027',
+        destination: '/updates/complete-csc-universities-list-2026',
+        permanent: true,
+      },
+      {
+        source: '/csc-universities-list-2027',
+        destination: '/updates/complete-csc-universities-list-2026',
+        permanent: true,
+      },
     ];
   },
 

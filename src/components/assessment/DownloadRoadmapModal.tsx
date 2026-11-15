@@ -256,7 +256,7 @@ export default function DownloadRoadmapModal({
                   >
                     <option value="March 2027">March 2027 Intake</option>
                     <option value="September 2027">September 2027 Intake</option>
-                    <option value="September 2026">September 2026 Intake</option>
+                    <option value="March 2028">March 2028 Intake</option>
                   </select>
                 </div>
               </div>

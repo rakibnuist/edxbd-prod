@@ -63,7 +63,7 @@ const guides = [
   { label: 'CSC scholarship from Bangladesh', text: 'Chinese Government Scholarship routes', href: '/csc-scholarship-bangladesh' },
   { label: 'CSC স্কলারশিপ গাইড (বাংলা)', text: 'Type A ও Type B নিয়ম, মাসিক ভাতা ও ডকুমেন্টস', href: '/bn/csc-scholarship-bangladesh' },
   { label: 'China study data & cost report', text: 'Live CNY tuition quartiles and scholarship counts', href: '/china-study-report-bangladesh' },
-  { label: '2026 CSCA entrance exam guide', text: 'China Scholastic Competency Assessment (CSCA) structure and rules', href: '/updates/csca-guide-study-in-china' },
+  { label: '2027 CSCA entrance exam guide', text: 'China Scholastic Competency Assessment (CSCA) structure and rules', href: '/updates/csca-guide-study-in-china' },
   { label: 'Cost of studying in China', text: 'Tuition, hostel, insurance, visa and travel', href: '/study-in-china-cost-bangladesh' },
   { label: 'University and program finder', text: 'Scholarships on file, per university', href: '/universities' },
 ];
