@@ -105,12 +105,12 @@ export const countries: Country[] = [
       currency: 'USD'
     },
     scholarships: ['CSC Scholarship (Type A & B)', 'University Presidential Scholarship', 'Belt & Road Scholarship', 'Provincial Government Scholarship'],
-    benefits: ['100% Free Tuition & Hostel Accommodation', 'Global Top 100 QS Ranking Universities', 'No IELTS Options for Bangladeshi Students'],
+    benefits: ['CSC & provincial scholarships (partial to full tuition + accommodation, subject to eligibility)', 'Universities listed in MoE China & international rankings', 'Medium of Instruction (MOI) accepted by select universities (CSCA still checked per program)'],
     isActive: true,
     featured: true,
     images: ['/images/destinations/china-hero.webp'],
-    metaTitle: 'Best Agency for China in Bangladesh | Scholarships 2027',
-    metaDescription: 'EduExpress is the best education consultancy in Bangladesh for studying in China. Get full free CSC scholarships for MBBS and Engineering.',
+    metaTitle: 'Study in China from Bangladesh | Scholarships & Visa 2027',
+    metaDescription: 'Study in China from Bangladesh with itemised total costs, CSC & university scholarship checks, BMDC-verified MBBS options, and no EduExpress fee before your China visa.',
     nextDeadline: 'December 15th',
     intakesText: 'March & September',
     factText: 'Chinese universities host state-of-the-art research labs and represent the frontier of AI, clean tech, and high-speed rail development.',
@@ -142,29 +142,29 @@ export const countries: Country[] = [
     ],
     faqs: [
       {
-        question: 'Which is the best agency for China in Bangladesh?',
-        answer: 'EduExpress International is widely recognized as the best agency for China in Bangladesh. We have successfully sent hundreds of Bangladeshi students to top Chinese universities with full CSC scholarships.'
+        question: 'How does EduExpress handle service charges for China admission?',
+        answer: 'No file opening charge and no EduExpress service fee before China visa approval. Before you apply, we put your itemized costs and package terms in writing (BDT 2,00,000 package payable after visa issuance, or an optional refundable BDT 15,000 deposit route if you keep your original documents). University, embassy, medical, and courier fees are third-party charges and are itemized separately.'
       },
       {
         question: 'Can Bangladeshi students study in China without IELTS?',
-        answer: 'Yes! Many top universities in China accept an English Proficiency Certificate from your previous school or college in Bangladesh instead of IELTS.'
+        answer: 'Yes. Many Chinese universities accept a Medium of Instruction (MOI) or English Proficiency Certificate from your previous institution in Bangladesh instead of IELTS, though CSCA, interview, or subject requirements are still checked per university.'
       },
       {
         question: 'How to apply for the CSC Scholarship from Bangladesh?',
-        answer: 'The CSC Scholarship requires applying through the official CSC portal and the university portal. EduExpress International provides complete, free assistance to Bangladeshi students for CSC Type A and Type B applications.'
+        answer: 'CSC Type A routes apply through the Bangladesh Ministry of Education / Chinese Embassy channel, while Type B routes apply directly through the CSC and university portals. EduExpress helps verify your eligibility, prepare notarized documents, and shortlist realistic supervisors with full fees disclosed in writing before you start.'
       },
       {
         question: 'Is a Chinese MBBS degree valid in Bangladesh?',
-        answer: 'Yes, MBBS degrees from BMDC (Bangladesh Medical and Dental Council) recognized Chinese universities are fully valid in Bangladesh. You just need to pass the BMDC licensing exam upon return.'
+        answer: 'An MBBS degree from an MoE-approved Chinese university listed in BMDC and WHO directories is eligible for medical licensing in Bangladesh, provided you meet current BMDC eligibility rules before admission and pass the BMDC licensing examination upon return.'
       }
     ],
     serviceStatus: 'Flagship',
-    valueStatement: 'China offers world-class research universities with massive government funding, allowing Bangladeshi students to study Engineering and Medicine for a fraction of Western costs—or entirely free with a CSC Scholarship.',
+    valueStatement: 'China offers research-intensive public universities with substantial government scholarship programs, allowing Bangladeshi students to study Engineering, Computer Science, Business, and Medicine at verified costs far below Western destinations.',
     whoItFits: [
-      'Students seeking top 100 QS-ranked global universities',
-      'Those aiming for full-ride scholarships (tuition + hostel + stipend)',
+      'Students seeking MoE-recognised Chinese public & research universities',
+      'Those aiming for CSC, provincial, or university scholarships (tuition waivers to full funding, subject to award)',
       'Engineering, MBBS, and AI/Tech focused students',
-      'Students with strong academic records but low IELTS scores'
+      'Students with strong academic records and MOI / English readiness'
     ],
     whoShouldReconsider: [
       'Students looking for immediate permanent residency (PR) options',
@@ -181,12 +181,12 @@ export const countries: Country[] = [
       countryA: 'UK',
       countryA_description: 'The UK offers the Graduate Route for eligible graduates (2 years for applications on or before 31 December 2026; 18 months from January 2027) and 1-year master’s degrees. China’s published tuition and living costs are often lower — compare the exact university, city and scholarship, not a country average.',
       countryB: 'Malaysia',
-      countryB_description: 'Malaysia has a similar cost profile and tropical climate, but China has higher globally ranked universities and better funding.'
+      countryB_description: 'Malaysia offers English-medium campuses, UK/Australian branch degrees, and Bangladesh Bank Student File remittance; China offers lower average public tuition and larger government scholarship quotas.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Senior Admissions Counselors',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'November 2026',
       primarySources: ['CSC Official Portal', 'Chinese Embassy in Dhaka', 'Ministry of Education (MOE) China']
     }
   },
@@ -208,12 +208,12 @@ export const countries: Country[] = [
       currency: 'USD'
     },
     scholarships: ['GKS (Global Korea Scholarship)', 'Professor Scholarship', 'University Merit Scholarship'],
-    benefits: ['GKS Full Funding (Tuition, Flight, Monthly Stipend)', 'Part-time Work Allowed (Up to 25 hours/week)', 'World-Leader in Tech & Semiconductor Research'],
+    benefits: ['GKS scholarship pathway (tuition, flight and monthly stipend for selected awardees)', 'Part-time Work Allowed (Up to 25 hours/week)', 'World-Leader in Tech & Semiconductor Research'],
     isActive: true,
     featured: true,
     images: ['/images/destinations/south-korea-hero.webp'],
     metaTitle: 'Study in South Korea from Bangladesh | GKS Scholarship 2027',
-    metaDescription: 'Apply for GKS Scholarship in South Korea. Study in top tech universities with full funding and living allowance.',
+    metaDescription: 'Study in South Korea from Bangladesh: GKS scholarship requirements, apostilled document rules, D-2 visa bank solvency and semester tuition.',
     nextDeadline: 'October 30th',
     intakesText: 'March & September',
     factText: 'South Korea has the highest R&D expenditure per capita globally, making it a dream destination for technology, AI, and engineering students.',
@@ -239,19 +239,33 @@ export const countries: Country[] = [
       { name: 'Professor-Funded Internships', amount: 'Tuition Waiver + Monthly Stipend (KRW 1M - 1.5M)', deadline: 'Varies by Lab', icon: 'Award' },
       { name: 'University Academic Excellence', amount: '30% - 100% Tuition Waiver based on GPA', deadline: 'Varies', icon: 'School' }
     ],
+    faqs: [
+      {
+        question: 'Can Bangladeshi students apply to South Korea without TOPIK?',
+        answer: 'Yes for English-track degrees, where universities typically ask for IELTS 5.5–6.0 or an approved English test. For Korean-track courses or wider part-time work eligibility, TOPIK Level 3–4+ or 1 year of Korean language training is normally required.'
+      },
+      {
+        question: 'What documents need apostille or consular verification for South Korea?',
+        answer: 'South Korean universities and D-2 visa rules require authenticated academic certificates and transcripts from Bangladesh, alongside a valid bank solvency certificate (typically around $20,000 equivalent unless holding a full scholarship). Exact rules are confirmed per university.'
+      },
+      {
+        question: 'When do Global Korea Scholarship (GKS) applications open for Bangladesh?',
+        answer: 'GKS Undergraduate rounds usually run around September–October, while Graduate rounds typically open in February–March through both Embassy and University tracks. Always verify the current year NIIED guidelines before preparing documents.'
+      }
+    ],
     serviceStatus: 'Active',
-    valueStatement: 'South Korea offers exceptional technological universities with full-ride government scholarships (GKS). It is a top choice for students willing to learn Korean to unlock zero-cost engineering and AI degrees.',
+    valueStatement: 'South Korea offers leading technology and engineering universities alongside government (GKS) and professor-backed research awards for qualified applicants prepared to meet strict academic, document apostille, and TOPIK/language requirements.',
     whoItFits: [
       'Students seeking world-leading tech and engineering programs',
-      'Applicants with strong academics aiming for the fully-funded GKS Scholarship',
+      'Applicants with strong academics aiming for the GKS or professor-funded route',
       'Those willing to dedicate 1 year to intensive Korean language learning'
     ],
     whoShouldReconsider: [
       'Students looking for 100% English-speaking daily environments',
-      'Those who want guaranteed permanent residency strictly through a post-study work visa',
+      'Those expecting permanent residency automatically through a post-study visa',
       'Applicants with low academic scores expecting full scholarships'
     ],
-    educationSystemAndRecognition: 'South Korean universities (e.g. SNU, KAIST) rank among the top 50 globally. Degrees in tech and business are universally recognized and highly valued by global corporations.',
+    educationSystemAndRecognition: 'South Korean research universities (including KAIST, SNU, Yonsei and Korea University) hold high global engineering and technology rankings and follow recognised credit frameworks.',
     workRightsAndCareer: {
       rights: 'International students can work part-time up to 25 hours per week (varies by TOPIK level).',
       opportunities: 'Massive demand for STEM graduates in semiconductor, automotive, and IT industries (Samsung, Hyundai).',
@@ -259,14 +273,14 @@ export const countries: Country[] = [
     },
     comparisons: {
       countryA: 'China',
-      countryA_description: 'Both offer strong tech degrees and full scholarships, but South Korea has a higher living cost and a more prominent K-culture influence.',
+      countryA_description: 'Both offer strong tech degrees and full scholarships, but South Korea has a higher living cost and stricter D-2 financial solvency rules.',
       countryB: 'Japan',
-      countryB_description: 'South Korea\'s GKS offers a slightly higher stipend and more straightforward application process compared to Japan\'s MEXT scholarship.'
+      countryB_description: 'Compare GKS and MEXT scholarship quotas, language year rules, and engineering faculty supervisors side by side.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Senior East Asia Admissions Counselor',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'November 2026',
       primarySources: ['NIIED (Study in Korea)', 'Embassy of the Republic of Korea in Bangladesh']
     }
   },
@@ -288,12 +302,12 @@ export const countries: Country[] = [
       currency: 'GBP'
     },
     scholarships: ['Chevening Scholarship', 'Great Scholarship', 'Vice Chancellor Excellence'],
-    benefits: ['Graduate Route post-study work visa (2 years for applications on or before 31 December 2026; 18 months from January 2027)', 'Spouse Visa Integration Options', 'Accelerated 1-Year Masters Programs saving time & cost'],
+    benefits: ['Graduate Route post-study work visa (2 years for applications on or before 31 December 2026; 18 months from January 2027)', 'Accelerated 1-Year Masters Programs saving time & cost', 'Wide English-taught subject selection across UKVI-licensed sponsors'],
     isActive: true,
     featured: true,
     images: ['/images/destinations/united-kingdom-hero.webp'],
     metaTitle: 'Study in UK from Bangladesh - Graduate Route Work Visa',
-    metaDescription: 'Study in UK with the Graduate Route post-study work visa. Gap accepted. Top Russell Group universities.',
+    metaDescription: 'Compare UK universities from Bangladesh: 1-year Master\'s costs, Graduate Route rules (2 years until 31 Dec 2026; 18 months from Jan 2027), IELTS/MOI and CAS.',
     nextDeadline: 'August 15th',
     intakesText: 'January & September',
     factText: 'A British Masters degree takes only one year, allowing you to save on living costs and re-enter the workforce much faster than elsewhere.',
@@ -310,8 +324,8 @@ export const countries: Country[] = [
       { name: 'Law & Social Sciences', programs: ['Corporate Law (LLM)', 'Public Health (MPH)', 'International Relations'], icon: 'BookOpen' }
     ],
     citiesList: [
-      { name: 'London', stats: '9.0M Pop • World\'s #1 Student City', highlights: ['Global Financial Hub', 'Unmatched Networking', 'Imperial & UCL campuses'], imageQuery: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=2070&auto=format&fit=crop' },
-      { name: 'Manchester', stats: ' student capital of the North', highlights: ['Affordable Living', 'Vibrant Music & Art Scene', 'Leading Research Center'], imageQuery: 'https://images.unsplash.com/photo-1508711046474-2f4c2d3d30ca?q=80&w=2070&auto=format&fit=crop' },
+      { name: 'London', stats: '9.0M Pop • Major Global Student City', highlights: ['Global Financial Hub', 'Unmatched Networking', 'Imperial & UCL campuses'], imageQuery: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=2070&auto=format&fit=crop' },
+      { name: 'Manchester', stats: 'Major Northern Student Hub', highlights: ['Affordable Living', 'Vibrant Music & Art Scene', 'Leading Research Center'], imageQuery: 'https://images.unsplash.com/photo-1508711046474-2f4c2d3d30ca?q=80&w=2070&auto=format&fit=crop' },
       { name: 'Edinburgh', stats: 'Historic Capital of Scotland', highlights: ['Majestic Castle Views', 'UNESCO World Heritage', 'High Quality of Life'], imageQuery: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070&auto=format&fit=crop' }
     ],
     scholarshipsList: [
@@ -319,6 +333,20 @@ export const countries: Country[] = [
       { name: 'Commonwealth Scholarships', amount: 'Full Tuition Waiver + Living Allowance + Airfare', deadline: 'December 10th', icon: 'Globe' },
       { name: 'GREAT Scholarships', amount: 'Minimum £10,000 Tuition Waiver contribution', deadline: 'Varies', icon: 'Award' },
       { name: 'University Vice Chancellor Awards', amount: '£2,000 - £5,000 Automatic Entry Discounts', deadline: 'Automatic', icon: 'School' }
+    ],
+    faqs: [
+      {
+        question: 'How long is the UK Graduate Route work visa for Bangladeshi students?',
+        answer: 'Under current UKVI rules, eligible Bachelor\'s and Master\'s graduates receive 2 years if they apply on or before 31 December 2026, and 18 months for applications from January 2027 onward (3 years for PhD graduates). Confirm current rules with UKVI before applying.'
+      },
+      {
+        question: 'Can taught Master\'s students bring dependants to the UK?',
+        answer: 'No. Under UK immigration rules effective since January 2024, students on taught undergraduate or standard taught Master\'s courses cannot bring dependants unless enrolled in a PhD, other doctoral qualification, or research-based higher degree.'
+      },
+      {
+        question: 'What is the 28-day bank statement rule for UK student visas?',
+        answer: 'Your remaining first-year tuition plus required UKVI monthly maintenance funds must sit untouched in an eligible bank account for at least 28 consecutive days before you submit your online Student Visa application, with the closing date within 31 days of application.'
+      }
     ],
     serviceStatus: 'Active',
     valueStatement: 'The UK offers prestigious, accelerated 1-year Master\'s degrees and the Graduate Route post-study work visa, making it a strong choice for rapid career advancement and global employability.',
@@ -370,20 +398,20 @@ export const countries: Country[] = [
       currency: 'EUR'
     },
     scholarships: ['Stipendium Hungaricum (Full Free + Monthly Stipend)', 'Diaspora Scholarship'],
-    benefits: ['100% Free Tuition & Accommodation', 'Free Travel across 27 Schengen Countries', 'Low Cost of Living in Central Europe'],
+    benefits: ['Stipendium Hungaricum scholarship route (tuition waiver, housing contribution and monthly stipend for selected awardees)', 'Schengen student residence permit mobility within participating Schengen states (subject to visa rules)', 'Low Cost of Living in Central Europe'],
     isActive: true,
     featured: true,
     images: ['/images/destinations/hungary-hero.webp'],
     metaTitle: 'Study in Hungary from Bangladesh | Stipendium Hungaricum 2027',
-    metaDescription: 'Apply for Stipendium Hungaricum Scholarship in Hungary. Full free tuition + Dormitory + Monthly stipend. Easy Schengen travel.',
+    metaDescription: 'Study in Hungary from Bangladesh: Stipendium Hungaricum nomination requirements, MBBS & engineering tuition ranges, HUF/EUR living costs and Schengen visa checklist.',
     nextDeadline: 'January 15th',
     intakesText: 'September (Main Intake)',
     factText: 'Hungary has produced 13 Nobel laureates and has a rich tradition in scientific and medical research, making its degrees highly prestigious.',
     degreesList: [
       { title: 'Bachelor Degree', duration: '3-4 Years', desc: 'Undergraduate programs in Engineering, Humanities, and Business.', icon: 'GraduationCap', color: 'bg-blue-50 text-blue-600 border-blue-100' },
       { title: 'One-Tier Masters', duration: '5-6 Years', desc: 'Integrated programs combining Bachelor & Masters (e.g., Medicine, Dentistry).', icon: 'Scroll', color: 'bg-teal-50 text-teal-600 border-teal-100' },
-      { title: 'Masters Degree', duration: '1-2 Years', desc: 'Postgraduate specialization, often fully funded.', icon: 'Award', color: 'bg-purple-50 text-purple-600 border-purple-100' },
-      { title: 'PhD / Doctoral', duration: '4 Years', desc: 'Advanced research programs with high government funding.', icon: 'Landmark', color: 'bg-amber-50 text-amber-600 border-amber-100' }
+      { title: 'Masters Degree', duration: '1-2 Years', desc: 'Postgraduate specialization, often funded via scholarships.', icon: 'Award', color: 'bg-purple-50 text-purple-600 border-purple-100' },
+      { title: 'PhD / Doctoral', duration: '4 Years', desc: 'Advanced research programs with government funding options.', icon: 'Landmark', color: 'bg-amber-50 text-amber-600 border-amber-100' }
     ],
     popularProgramsList: [
       { name: 'Medicine & Pharmacy', programs: ['General Medicine (MD)', 'Dentistry (DMD)', 'Pharmacy', 'Nursing'], icon: 'CheckCircle2' },
@@ -396,22 +424,36 @@ export const countries: Country[] = [
       { name: 'Pécs', stats: '145k Pop • Safe University Town', highlights: ['Mediterranean Vibe', 'Oldest University in Hungary', 'UNESCO Heritage Sites'], imageQuery: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop' }
     ],
     scholarshipsList: [
-      { name: 'Stipendium Hungaricum', amount: '100% Tuition Waiver + Free Dormitory + HUF 43,700 Monthly Stipend + Health Insurance', deadline: 'January 15th', icon: 'Crown' },
+      { name: 'Stipendium Hungaricum', amount: '100% Tuition Waiver + Dormitory/Housing Contribution + HUF 43,700 Monthly Stipend + Health Insurance', deadline: 'January 15th', icon: 'Crown' },
       { name: 'Erasmus+ Mobility Grants', amount: '€400 - €600 / month for exchange semesters', deadline: 'Varies by Faculty', icon: 'Globe' },
       { name: 'Hungarian Diaspora Scholarship', amount: 'Full Tuition + Monthly Stipend for members of Hungarian heritage communities', deadline: 'January 31st', icon: 'Award' }
     ],
+    faqs: [
+      {
+        question: 'How do Bangladeshi students apply for the Stipendium Hungaricum Scholarship?',
+        answer: 'Bangladeshi applicants must apply through both the Tempus Public Foundation online portal and the sending partner in Bangladesh (typically UGC/Ministry of Education) before the January deadline, including medical fitness clearance and language proof.'
+      },
+      {
+        question: 'Is a Hungarian MBBS / MD degree recognised by BMDC in Bangladesh?',
+        answer: 'Medical degrees from recognised Hungarian public medical schools (such as Debrecen, Pécs, Szeged, and Semmelweis) follow EU standards and appear in international directories; applicants must still confirm current BMDC eligibility rules and pass the BMDC licensing exam in Bangladesh.'
+      },
+      {
+        question: 'Does the Stipendium Hungaricum monthly stipend cover all living expenses?',
+        answer: 'No. The standard HUF 43,700 monthly living contribution covers only part of food and transport, and dormitory places can be limited, so students should budget supplementary personal funds.'
+      }
+    ],
     serviceStatus: 'Active',
-    valueStatement: 'Hungary provides a European gateway with the prestigious Stipendium Hungaricum scholarship, offering fully-funded degrees with a monthly stipend in a safe, affordable, and historic environment.',
+    valueStatement: 'Hungary provides a European gateway through Bologna-process universities and the Stipendium Hungaricum scholarship, alongside self-funded English-taught Medicine and Engineering degrees at lower tuition than Western Europe.',
     whoItFits: [
       'High-achieving students targeting the Stipendium Hungaricum full scholarship',
       'Medical and Engineering students seeking affordable European degrees',
-      'Students looking for Schengen mobility during their studies'
+      'Students planning EU academic mobility within published Schengen rules'
     ],
     whoShouldReconsider: [
-      'Students who expect high-paying part-time jobs during their studies (wages are low)',
-      'Applicants looking for immediate, guaranteed post-study work visas (options exist, but require securing a job fast)'
+      'Students who expect high-paying part-time jobs during their studies (wages are modest)',
+      'Applicants expecting automatic post-study residency without securing an employer sponsor within 9 months'
     ],
-    educationSystemAndRecognition: 'Hungarian universities are deeply integrated into the European Higher Education Area (Bologna Process). Medical degrees are globally recognized, including by the BMDC in Bangladesh.',
+    educationSystemAndRecognition: 'Hungarian universities are deeply integrated into the European Higher Education Area (Bologna Process). Medical degrees from listed Hungarian public universities are widely recognised internationally, subject to local medical council licensing.',
     workRightsAndCareer: {
       rights: 'Students can work part-time up to 24 hours per week during term time.',
       opportunities: 'Growing tech and shared-services hubs in Budapest offer English-speaking corporate roles.',
@@ -419,14 +461,14 @@ export const countries: Country[] = [
     },
     comparisons: {
       countryA: 'Finland',
-      countryA_description: 'Finland offers a clearer PR pathway and higher wages, but Hungary is significantly cheaper and offers the 100% funded Stipendium Hungaricum.',
+      countryA_description: 'Finland offers higher post-study salary levels and documented work-based residence routes, while Hungary is lower in living cost and participates in Stipendium Hungaricum.',
       countryB: 'UK',
-      countryB_description: 'Hungary provides affordable Schengen access and free tuition options, whereas the UK charges high tuition but offers the Graduate Route post-study work visa.'
+      countryB_description: 'Hungary provides lower tuition and Schengen residency rules, whereas the UK offers 1-year Master\'s degrees and the Graduate Route work visa at higher tuition.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Europe Admissions Counselor',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'November 2026',
       primarySources: ['Tempus Public Foundation', 'Study in Hungary Official Portal']
     }
   },
@@ -434,33 +476,33 @@ export const countries: Country[] = [
     name: 'Finland',
     slug: 'finland',
     flag: '🇫🇮',
-    description: 'Happiest Country & High Tech Education',
+    description: 'High-Tech Universities & Documented Post-Study Options',
     universities: ['Aalto University', 'LUT University', 'Tampere University', 'University of Helsinki', 'University of Oulu', 'Metropolia UAS'],
     programs: ['IT', 'Business', 'Game Design', 'Sustainable Engineering'],
     requirements: {
       language: ['IELTS Academic 6.0+ required', 'PTE Academic 55+', 'Duolingo 105+ accepted by select Universities of Applied Sciences'],
       documents: ['SAT Test scores (frequently required for Bachelors)', 'Motivation Video Statement', 'Transcripts and graduation certificates'],
-      visa: ['Type A Residence Permit (Electronic application)', 'Proof of funds (€6,720 per academic year minimum)']
+      visa: ['Type A Residence Permit (Electronic application)', 'Proof of liquid funds (€800/month — €9,600 per academic year minimum, separate from tuition)']
     },
     costs: {
-      tuition: '€6,000 - €12,000 / year (Scholarships reduce this by 50-100%)',
-      living: '€600 - €800 / month',
+      tuition: '€6,000 - €12,000 / year (Institutional scholarships reduce tuition by 20-100% depending on university rules)',
+      living: '€800 / month (€9,600/year official Migri living-funds benchmark)',
       currency: 'EUR'
     },
     scholarships: ['Finland Scholarship (100% + €5000)', 'Early Bird Discount (50%)'],
-    benefits: ['Exceptional PR & Permanent Residency Pathways', 'Spouse Can Work Full-time (No hours restriction)', 'Voted the Happiest Country in the World 7 years in a row'],
+    benefits: ['High-tech Research Universities and practical Universities of Applied Sciences (UAS)', 'Legal part-time work rights (up to 30 hours/week) under student residence permit rules', 'Documented scholarship & tuition-waiver routes published by Finnish universities'],
     isActive: true,
     featured: false,
     images: ['/images/destinations/finland-hero.webp'],
-    metaTitle: 'Study in Finland - PR Pathways & Huge Scholarships',
-    metaDescription: 'Study in Finland with huge scholarships. Easy PR pathway after graduation. Bring your spouse and family.',
+    metaTitle: 'Study in Finland from Bangladesh | Tuition, Visas & Aid 2027',
+    metaDescription: 'Compare Finnish Research Universities and UAS from Bangladesh: €6,000–€12,000 tuition, SAT/IELTS rules, €9,600 (€800/month) bank proof and Migri Type A permit steps.',
     nextDeadline: 'January 20th',
     intakesText: 'September (Joint Application)',
-    factText: 'Finland has a unique education system where lecturers are highly accessible, and students are encouraged to work on practical, real-world startups.',
+    factText: 'Finland separates higher education into Research Universities and practical Universities of Applied Sciences (UAS), with documented English-taught degree tracks.',
     degreesList: [
       { title: 'Bachelor Degree', duration: '3.5 - 4 Years', desc: 'Offered by Universities of Applied Sciences (UAS) and Research Universities.', icon: 'GraduationCap', color: 'bg-blue-50 text-blue-600 border-blue-100' },
       { title: 'Masters Degree', duration: '2 Years', desc: 'Advanced professional and research degrees.', icon: 'Award', color: 'bg-purple-50 text-purple-600 border-purple-100' },
-      { title: 'PhD / Doctoral', duration: '4 Years', desc: 'Free tuition for doctoral studies with research salaries.', icon: 'Landmark', color: 'bg-amber-50 text-amber-600 border-amber-100' }
+      { title: 'PhD / Doctoral', duration: '4 Years', desc: 'Tuition-exempt doctoral studies in Finland (funding depends on supervisor/research grant).', icon: 'Landmark', color: 'bg-amber-50 text-amber-600 border-amber-100' }
     ],
     popularProgramsList: [
       { name: 'Technology & Gaming', programs: ['Information Technology', 'Software Engineering', 'Game Design & Development', 'Artificial Intelligence'], icon: 'Building2' },
@@ -473,37 +515,51 @@ export const countries: Country[] = [
       { name: 'Oulu', stats: '200k Pop • Northern Tech Hub', highlights: ['High Tech Center (Nokia)', 'Safe & Bike-Friendly', 'Northern Lights views'], imageQuery: 'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2070&auto=format&fit=crop' }
     ],
     scholarshipsList: [
-      { name: 'Finland Scholarships', amount: '100% Tuition Waiver + €5,000 relocation grant for Master programs', deadline: 'January 22nd', icon: 'Crown' },
+      { name: 'Finland Scholarships', amount: '100% Tuition Waiver + €5,000 relocation grant for Master programs (university-specific rules apply)', deadline: 'January 22nd', icon: 'Crown' },
       { name: 'University Tuition Waivers', amount: '50% - 100% Tuition fee discounts based on academic performance or SAT', deadline: 'Varies', icon: 'Award' },
       { name: 'Early Bird Discounts', amount: 'Automatic 10% - 50% discount on paying tuition fee within 2 weeks of offer', deadline: 'Offer Dependent', icon: 'School' }
     ],
+    faqs: [
+      {
+        question: 'How much bank balance do Bangladeshi students need for a Finnish residence permit?',
+        answer: 'Under current Finnish Immigration Service (Migri) rules, non-EU students must prove liquid funds in their own bank account of at least €800/month (€9,600 per year for studies lasting one year or longer), alongside paid first-year tuition or sufficient additional funds, plus VFS/embassy biometrics where required.'
+      },
+      {
+        question: 'Do Finnish Bachelor\'s programs require SAT or an entrance exam?',
+        answer: 'Most English-taught Bachelor\'s degrees in Finland require either an International UAS Exam / institution-specific test or valid SAT scores, in addition to HSC results and IELTS/PTE proof.'
+      },
+      {
+        question: 'Can Bangladeshi students bring a spouse to Finland?',
+        answer: 'Eligible residence permit holders may apply for family reunification under current Migri rules if sufficient financial means for both adults (and any children) are proved in advance. Check current Migri income thresholds before planning relocation.'
+      }
+    ],
     serviceStatus: 'Active',
-    valueStatement: 'Finland is a global leader in education and tech. Many universities publish tuition scholarships for non-EU students, and the coverage and conditions differ by university and program. It also offers a high quality of life and documented post-study residence routes.',
+    valueStatement: 'Finland is a global leader in education and tech. Many universities publish tuition scholarships for non-EU students, and the coverage and conditions differ by university and program. It also offers documented post-study job-seeking permit options under Migri regulations.',
     whoItFits: [
       'Students looking for high-tech, sustainability, and game design programs',
-      'Married students (spouses get full work rights)',
-      'Those seeking a clear, stable pathway to Permanent Residency (PR)'
+      'Eligible families meeting full Migri financial thresholds for residence applications',
+      'Graduates planning long-term technical careers (subject to employment and Finnish residence rules)'
     ],
     whoShouldReconsider: [
-      'Students with a very low budget (proof of €6,720/year is strictly required)',
+      'Students with a very low budget (proof of €800/month — €9,600/year living funds plus tuition is strictly required by Migri)',
       'Those unable to adapt to extreme winter climates and darker months'
     ],
     educationSystemAndRecognition: 'Finland\'s education system is world-renowned. It divides into Research Universities (theoretical/academic) and Universities of Applied Sciences (UAS - practical/industry-focused).',
     workRightsAndCareer: {
-      rights: 'Students can work up to 30 hours per week. Spouses can work full-time.',
+      rights: 'Students can work up to 30 hours per week. Spouses with valid family residence permits can work without student-hour limits.',
       opportunities: 'High demand for IT, engineering, and healthcare professionals. Strong startup ecosystem (Slush).',
       caveats: 'While tech jobs operate in English, learning Finnish is crucial for long-term integration and broader job prospects.'
     },
     comparisons: {
       countryA: 'UK',
-      countryA_description: 'Finland provides a more stable long-term PR pathway and allows dependent spouses full work rights, unlike current UK rules for taught masters.',
+      countryA_description: 'Finland offers lower tuition on scholarship tiers and Type A family rules (with full Migri income proof), whereas the UK offers 1-year Master\'s degrees and a larger English-speaking job market.',
       countryB: 'Hungary',
-      countryB_description: 'Finland is more expensive but offers vastly superior post-graduation salaries and residency pathways.'
+      countryB_description: 'Finland is higher in cost of living but offers higher post-study wage benchmarks, while Hungary offers Stipendium Hungaricum funding.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Nordic Admissions Specialist',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'November 2026',
       primarySources: ['Migri (Finnish Immigration Service)', 'Study in Finland']
     }
   },
@@ -517,7 +573,7 @@ export const countries: Country[] = [
     requirements: {
       language: ['No IELTS required (Institutional English assessment upon arrival)', 'Basic English communication is sufficient'],
       documents: ['High School Transcript & Certificate', 'Passport Copy', 'Minimal bank statement'],
-      visa: ['On-Arrival Student Pass (Northern Cyprus)', 'Schengen-adjacent Student Visa (Southern Cyprus)']
+      visa: ['On-Arrival Student Pass (Northern Cyprus)', 'Republic of Cyprus Student Visa (EU member state migration & embassy clearance)']
     },
     costs: {
       tuition: '€2,500 - €4,500 / year (partial waivers available for eligible students)',
@@ -550,12 +606,26 @@ export const countries: Country[] = [
       { name: 'Limassol', stats: '180k Pop • Port & Beach Resort', highlights: ['Maritime Hub', 'Luxury Hotel Internships', 'Beaches & Tourism'], imageQuery: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2070&auto=format&fit=crop' }
     ],
     scholarshipsList: [
-      { name: '50% International Tuition Waiver', amount: 'Automatic 50% discount on standard tuition fees for all Asian students', deadline: 'Automatic', icon: 'Crown' },
-      { name: 'Academic Merit Scholarship', amount: 'Up to 75% - 100% Tuition fee reduction based on Semester GPA', deadline: 'Varies', icon: 'Award' },
+      { name: 'Institutional Tuition Waiver', amount: 'Up to 50% tuition reduction at participating institutions based on intake and academic profile', deadline: 'Intake Dependent', icon: 'Crown' },
+      { name: 'Academic Merit Scholarship', amount: 'Higher tuition fee reduction on renewal semesters based on GPA, where offered by the institution', deadline: 'Varies', icon: 'Award' },
       { name: 'Sports Scholarship', amount: '20% - 50% reduction for students representing university athletic teams', deadline: 'Varies', icon: 'School' }
     ],
+    faqs: [
+      {
+        question: 'What is the difference between studying in the Republic of Cyprus vs Northern Cyprus?',
+        answer: 'The Republic of Cyprus is an EU member state accredited by CYQAA with EU-standard ECTS recognition, while Northern Cyprus is accredited separately (YÖDAK) with different visa and travel rules. Before you apply, EduExpress confirms exact campus jurisdiction, accreditation, and recognition in writing.'
+      },
+      {
+        question: 'Do Bangladeshi students need IELTS to study in Cyprus?',
+        answer: 'Many Cypriot institutions assess English via an internal interview or placement test alongside SSC/HSC transcripts, though certain Republic of Cyprus degree programmes require IELTS or equivalent proof for embassy visa clearance.'
+      },
+      {
+        question: 'Can international students work part-time in Cyprus?',
+        answer: 'In the Republic of Cyprus, third-country students may work part-time in approved sectors after the initial waiting period subject to permit rules; in Northern Cyprus work options are generally limited. Do not rely on part-time earnings to fund tuition or primary living expenses.'
+      }
+    ],
     serviceStatus: 'Active',
-    valueStatement: 'Cyprus provides affordable European higher education, specialized hospitality management, and clear pathways with 50% tuition waivers for international applicants. Jurisdiction (Republic vs Northern) is verified before application.',
+    valueStatement: 'Cyprus provides affordable European higher education, specialized hospitality management, and merit waivers at participating institutions. Jurisdiction (Republic vs Northern) and recognition are verified before application.',
     whoItFits: [
       'Students looking for affordable European degree programs without strict entrance exams',
       'Hospitality and Tourism majors seeking paid internships in Mediterranean resorts',
@@ -575,12 +645,12 @@ export const countries: Country[] = [
       countryA: 'Malaysia',
       countryA_description: 'Cyprus offers European regional proximity and Mediterranean hospitality internships, while Malaysia offers direct UK branch campus degrees.',
       countryB: 'Hungary',
-      countryB_description: 'Hungary offers full Schengen travel rights and Stipendium scholarships, whereas Cyprus provides easier direct admissions and paid resort internships.'
+      countryB_description: 'Hungary offers Schengen mobility and Stipendium Hungaricum funding routes, whereas Cyprus offers English-taught private/hospitality admissions without strict national exams.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'European Admissions Compliance',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'November 2026',
       primarySources: ['Ministry of Education, Sport and Youth (Cyprus)', 'CYQAA / YÖDAK Accreditation Portals']
     }
   },
@@ -588,16 +658,16 @@ export const countries: Country[] = [
     name: 'Croatia',
     slug: 'croatia',
     flag: '🇭🇷',
-    description: 'Schengen Country & Tourism Hub',
+    description: 'EU Higher Education in IT, Engineering & Hospitality',
     universities: ['University of Zagreb', 'Algebra University College', 'RIT Croatia', 'University of Split', 'University of Rijeka'],
     programs: ['Tourism', 'Digital Marketing', 'Computer Science'],
     requirements: {
       language: ['IELTS 6.0 overall preferred', 'English Proficiency Interview conducted by some universities'],
       documents: ['Apostilled & Notarized Transcripts', 'Police Clearance Certificate (with EU translation)', 'Sufficient Health Insurance coverage'],
-      visa: ['Temporary Residence Permit (Schengen Visa)', 'Proof of financial solvency (€5,000+ in bank)']
+      visa: ['Temporary Residence Permit & D-Type Visa (Croatian MUP rules)', 'Proof of financial solvency and verified accommodation']
     },
     costs: {
-      tuition: '€3,000 - €5,500 / year (Very affordable for a Schengen State)',
+      tuition: '€3,000 - €5,500 / year (varies by university and degree program)',
       living: '€500 - €700 / month',
       currency: 'EUR'
     },
@@ -606,11 +676,11 @@ export const countries: Country[] = [
     isActive: true,
     featured: false,
     images: ['/images/destinations/croatia-hero.webp'],
-    metaTitle: 'Study in Croatia - Schengen Visa & Placements',
+    metaTitle: 'Study in Croatia from Bangladesh | Universities & Costs',
     metaDescription: 'Compare Croatia education options, recognition, total costs and visa readiness for Bangladeshi students.',
     nextDeadline: 'July 15th',
     intakesText: 'October (Winter Intake)',
-    factText: 'Croatia is one of the safest countries in the EU. Its capital, Zagreb, has won awards for the best student lifestyle and Christmas markets.',
+    factText: 'Croatia follows European ECTS standards under the ASHE quality framework, with English-taught degrees in IT, Engineering, Business and Hospitality.',
     degreesList: [
       { title: 'Bachelor Degree', duration: '3 Years', desc: 'Standard European undergraduate programs fully taught in English.', icon: 'GraduationCap', color: 'bg-blue-50 text-blue-600 border-blue-100' },
       { title: 'Masters Degree', duration: '2 Years', desc: 'Advanced postgraduate degrees with Erasmus exchange semesters.', icon: 'Award', color: 'bg-purple-50 text-purple-600 border-purple-100' },
@@ -622,17 +692,31 @@ export const countries: Country[] = [
       { name: 'Business', programs: ['Digital Marketing', 'Global MBA', 'E-Commerce'], icon: 'Wallet' }
     ],
     citiesList: [
-      { name: 'Zagreb', stats: '800k Pop • Cultural Capital', highlights: ['Thriving Student Population', 'Schengen Central Location', 'High Tech Job Market'], imageQuery: 'https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=80&w=2070&auto=format&fit=crop' },
+      { name: 'Zagreb', stats: '800k Pop • Cultural Capital', highlights: ['Thriving Student Population', 'EU & ECTS Accredited Campuses', 'High Tech Job Market'], imageQuery: 'https://images.unsplash.com/photo-1555992336-03a23c7b20ee?q=80&w=2070&auto=format&fit=crop' },
       { name: 'Split', stats: '180k Pop • Coastal History', highlights: ['Dubrovnik proximity', 'Historic Roman Palace', 'Beaches & Nightlife'], imageQuery: 'https://images.unsplash.com/photo-1572297794908-32219fdfd70a?q=80&w=2070&auto=format&fit=crop' }
     ],
     scholarshipsList: [
-      { name: 'Croatian Government Scholarship', amount: 'Full Tuition Waiver + HUF 1500+ Stipend support (Varies by bilateral agreements)', deadline: 'May 31st', icon: 'Crown' },
+      { name: 'Croatian Bilateral / Institutional Awards', amount: 'Partial to full tuition support where bilateral or institutional grants apply in that intake', deadline: 'May 31st', icon: 'Crown' },
       { name: 'Erasmus+ Exchange Grants', amount: '€400 - €700 / month during exchange semesters in Western Europe', deadline: 'Biannual', icon: 'Globe' }
     ],
+    faqs: [
+      {
+        question: 'How much does it cost to study in Croatia from Bangladesh?',
+        answer: 'Recorded English-taught tuition typically ranges between €3,000 and €5,500 per year depending on the university and major, with living costs roughly €500–€700/month and proof of financial solvency required for the residence permit.'
+      },
+      {
+        question: 'What documents from Bangladesh need legalisation or apostille for Croatia?',
+        answer: 'Applicants normally require Ministry/MOFA-authenticated academic certificates and transcripts, a Police Clearance Certificate with certified translation, valid health insurance, accommodation proof, and bank solvency before Croatian visa/residence submission.'
+      },
+      {
+        question: 'Can students work part-time while studying in Croatia?',
+        answer: 'Non-EU students holding a valid Croatian temporary residence permit for study can undertake part-time work via the Student Servis system within statutory hour limits, though part-time earnings must never be relied upon to fund initial tuition or visa solvency.'
+      }
+    ],
     serviceStatus: 'Active',
-    valueStatement: 'Croatia offers high-quality Schengen European education in IT, Engineering, and Hospitality with affordable tuition (€3,000–€5,500/year) and full EU Schengen travel rights.',
+    valueStatement: 'Croatia offers EU higher education in IT, Engineering, and Hospitality accredited by ASHE under the European ECTS framework, with tuition typically around €3,000–€5,500/year.',
     whoItFits: [
-      'Students looking for affordable English-taught degree options in a European Schengen country',
+      'Students looking for affordable English-taught European degree programs with ECTS recognition',
       'Technology, Engineering, and Digital Business majors seeking EU study-exchange opportunities (Erasmus+)',
       'Students preferring safe Mediterranean living with reasonable living costs (€500–€700/mo)'
     ],
@@ -644,18 +728,18 @@ export const countries: Country[] = [
     workRightsAndCareer: {
       rights: 'International students with a Croatian temporary residence permit can work up to 20 hours/week via the Student Centre (Student Servis).',
       opportunities: 'Growing career opportunities in IT development, digital marketing, tourism, and European tech startups in Zagreb.',
-      caveats: 'No "Schengen visa selling" language — visa issuance depends on official embassy financial and document verification.'
+      caveats: 'Visa and temporary residence approval depend solely on Croatian immigration authorities reviewing verified admission, apostilled records and financial solvency.'
     },
     comparisons: {
       countryA: 'Hungary',
-      countryA_description: 'Croatia and Hungary both offer affordable Schengen education, but Hungary offers the Stipendium Hungaricum full scholarship scheme.',
+      countryA_description: 'Croatia and Hungary both offer affordable European education in English, while Hungary offers the Stipendium Hungaricum full scholarship scheme.',
       countryB: 'Finland',
       countryB_description: 'Croatia offers significantly lower living expenses and tuition fees than Nordic nations, while Finland offers higher tech research funding.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'European Admissions Compliance',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'November 2026',
       primarySources: ['Ministry of Science and Education (Croatia)', 'ASHE Accreditation Agency']
     }
   },
@@ -677,7 +761,7 @@ export const countries: Country[] = [
       currency: 'USD'
     },
     scholarships: ['Merit based tuition discounts'],
-    benefits: ['Many MBBS programs admit on school results and an interview rather than a separate entrance exam; confirm the current rule for each university', 'WHO-listed / ECFMG-recognized universities (local licensing exams required to practise abroad)', 'Low tuition fees and very affordable living costs'],
+    benefits: ['Many MBBS programs admit on school results and an interview rather than a separate entrance exam; confirm the current rule for each university', 'WDOMS-listed & NCEQE-accredited universities (verify current BMDC rules and licensing exam requirements per university)', 'Low tuition fees and very affordable living costs'],
     isActive: true,
     featured: true,
     images: ['/images/destinations/georgia-hero.webp'],
@@ -703,8 +787,22 @@ export const countries: Country[] = [
     scholarshipsList: [
       { name: 'University Merit Discount', amount: '10% - 25% Tuition waiver for students scoring 90%+ in semester GPA', deadline: 'Biannual', icon: 'Award' }
     ],
+    faqs: [
+      {
+        question: 'Is an MBBS/MD degree from Georgia recognised by BMDC in Bangladesh?',
+        answer: 'Medical universities accredited by Georgia\'s NCEQE and listed in WDOMS are internationally recognised, provided Bangladeshi students also verify current BMDC foreign medical study eligibility rules before enrolment and pass the BMDC licensing examination upon return.'
+      },
+      {
+        question: 'How much does MBBS in Georgia cost per year for Bangladeshi students?',
+        answer: 'Annual tuition typically falls between $4,500 and $6,500 USD per year, with living costs roughly $300–$500/month. Note that full-ride scholarships for Georgian medical degrees are rare, though merit discounts exist.'
+      },
+      {
+        question: 'What HSC Biology and Chemistry grades are required for MBBS in Georgia?',
+        answer: 'Most accredited Georgian medical universities require SSC and HSC (Science with Biology and Chemistry), usually with competitive Biology/Chemistry scores and an English admissions interview rather than IELTS.'
+      }
+    ],
     serviceStatus: 'Active',
-    valueStatement: 'Georgia is a premier destination for affordable, English-medium Medical (MD/MBBS) and Dental education following European curriculum guidelines, with WHO and ECFMG recognition.',
+    valueStatement: 'Georgia offers English-medium Medical (MD/MBBS) and Dental education following European ECTS curriculum guidelines, where NCEQE accreditation, WDOMS listing, and current BMDC foreign medical eligibility rules are verified program by program.',
     whoItFits: [
       'Students aspiring to study MBBS/MD in English at an affordable tuition fee ($4,500 - $6,500/year)',
       'Applicants seeking medical qualifications compliant with USMLE (ECFMG), PLAB (UK), and BMDC standards',
@@ -724,12 +822,12 @@ export const countries: Country[] = [
       countryA: 'China',
       countryA_description: 'Georgia offers 6-year European-standard medical degrees in English, while China offers CSC scholarship options and extensive hospital infrastructure.',
       countryB: 'UK',
-      countryB_description: 'Georgia MBBS costs 80% less than UK medical schools while allowing graduates to sit for the UK PLAB exam.'
+      countryB_description: 'Georgia MBBS tuition is substantially lower than UK medical schools, while NCEQE/WDOMS graduates remain eligible to sit licensing exams such as UK PLAB/UKMLA subject to GMC rules.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Medical Admissions & Compliance Lead',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'November 2026',
       primarySources: ['NCEQE Georgia', 'World Directory of Medical Schools (WDOMS)']
     }
   },
@@ -751,15 +849,15 @@ export const countries: Country[] = [
       currency: 'MYR'
     },
     scholarships: ['University Merit Scholarship', 'MIS Scholarship'],
-    benefits: ['Affordable tuition fees with direct foreign degree matching', 'Easy Credit Transfer options to Australia, UK, and USA', 'Modern, multicultural environment in Southeast Asia'],
+    benefits: ['RM 12,000 - RM 45,000 yearly tuition (~BDT 3.2L - 12.0L) with UK/Australian branch campus degrees', 'BDT 0 EduExpress service fee for partner applications and EMGS guidance', 'Supports Bangladesh Bank Student File remittance for tuition and living costs'],
     isActive: true,
     featured: true,
     images: ['/images/destinations/malaysia-hero.webp'],
-    metaTitle: 'Study in Malaysia from Bangladesh - Affordable Quality Education',
-    metaDescription: 'Compare Malaysian universities, program quality, costs and student pass readiness for Bangladeshi students.',
+    metaTitle: 'Study in Malaysia from Bangladesh | Costs, EMGS & Zero Fee',
+    metaDescription: 'Compare Malaysian public, private and UK/AU branch campus universities from Bangladesh with RM/BDT costs, EMGS VAL & Bangladesh Bank Student File support.',
     nextDeadline: 'June 30th',
     intakesText: 'February & September (Multiple intakes year-round)',
-    factText: 'Many top universities in the UK and Australia (like Monash, Nottingham, Heriot-Watt) have campuses in Malaysia offering the exact same degree at 1/3 of the cost.',
+    factText: 'Many top universities in the UK and Australia (like Monash, Nottingham, Heriot-Watt) have campuses in Malaysia offering the exact same degree at roughly one-third of UK/Australian tuition.',
     degreesList: [
       { title: 'Foundation Program', duration: '1 Year', desc: 'Pre-university preparation programs for O-level / High School graduates.', icon: 'Sparkles', color: 'bg-indigo-50 text-indigo-600 border-indigo-100' },
       { title: 'Diploma Program', duration: '2 - 2.5 Years', desc: 'Practical vocational courses with industry internships.', icon: 'Scroll', color: 'bg-teal-50 text-teal-600 border-teal-100' },
@@ -777,35 +875,51 @@ export const countries: Country[] = [
       { name: 'Penang', stats: '700k Pop • Food & Tech Hub', highlights: ['Street Food Capital', 'Silicon Valley of the East', 'Historic George Town'], imageQuery: 'https://images.unsplash.com/photo-1616832880699-8541b04005ec?q=80&w=2070&auto=format&fit=crop' }
     ],
     scholarshipsList: [
-      { name: 'Malaysia International Scholarship (MIS)', amount: '100% Tuition Waiver + Monthly Living Allowance + Book allowance', deadline: 'June 15th', icon: 'Crown' },
+      { name: 'Malaysia International Scholarship (MIS)', amount: 'Full Tuition Waiver + Monthly Stipend (for selected Postgraduate awardees)', deadline: 'June 15th', icon: 'Crown' },
       { name: 'University Presidential Merit Awards', amount: '20% - 50% Tuition fee discounts based on academic average', deadline: 'Intake Dependent', icon: 'Award' }
     ],
+    faqs: [
+      {
+        question: 'Does EduExpress charge a service fee for Malaysia university applications?',
+        answer: 'No. EduExpress charges BDT 0 consultancy or file-opening service fee for partner Malaysian university applications, EMGS VAL follow-up, and Bangladesh Bank Student File documentation guidance. Official university fees, EMGS charges, and embassy visa fees are paid directly by the student.'
+      },
+      {
+        question: 'How long does EMGS Visa Approval Letter (VAL) processing take from Bangladesh?',
+        answer: 'EMGS processing typically takes 4 to 8 weeks after complete document and medical declaration submission, followed by a Single Entry Visa (SEV / e-Visa) before travel. Track every stage via the official EMGS portal.'
+      },
+      {
+        question: 'Can Bangladeshi students open a Bangladesh Bank Student File for Malaysia?',
+        answer: 'Yes. Students with a valid offer letter and EMGS VAL/approval can open a formal Bangladesh Bank Student File through an Authorised Dealer (AD) bank in Bangladesh to remit official tuition and approved living expenses legally.'
+      }
+    ],
     serviceStatus: 'Active',
-    valueStatement: 'Malaysia offers internationally recognised degrees, including Western branch-campus programs, with English-taught teaching and living costs well below Western destinations.',
+    valueStatement: 'Malaysia offers MQA-accredited Malaysian universities alongside official UK and Australian branch campuses at substantially lower tuition and living cost, with BDT 0 EduExpress service fee and structured EMGS Student Pass steps.',
     whoItFits: [
-      'Students looking for affordable European/Asian education options',
-      'Those interested in exploring emerging international study destinations'
+      'Students seeking English-medium Malaysian or UK/Australian branch-campus degrees at RM 12,000 - 45,000/year (~BDT 3.2L - 12.0L)',
+      'Families preferring legal tuition remittance via Bangladesh Bank Student File and zero consultancy service charge',
+      'Students targeting February, May/July, or September intakes with predictable EMGS tracking'
     ],
     whoShouldReconsider: [
-      'Students who require an already established, fully verified EduExpress route'
+      'Students expecting to rely on part-time wages to fund tuition (student pass work is strictly restricted to up to 20 hrs/week during semester breaks)',
+      'Applicants seeking immediate permanent residency routes post-graduation'
     ],
-    educationSystemAndRecognition: 'Education quality, recognition, and accreditation are currently under review by our team.',
+    educationSystemAndRecognition: 'Higher education is regulated by the Ministry of Higher Education (MOHE) and quality-assured by the Malaysian Qualifications Agency (MQA). Public universities (e.g. UM, UTM), private universities (Taylor\'s, Sunway, UCSI, APU), and UK/Australian branch campuses (Monash, Nottingham, Heriot-Watt) carry international recognition.',
     workRightsAndCareer: {
-      rights: 'Work rights during and after study are being verified with official immigration sources.',
-      opportunities: 'Career pathways are being assessed.',
-      caveats: 'Always verify post-study work rules directly with the respective embassy.'
+      rights: 'Student Pass holders may apply through their university to work up to 20 hours per week only during semester breaks or holidays exceeding 7 consecutive days in permitted service sectors.',
+      opportunities: 'Regional tech, finance, shared-services, and multinational employer hubs around Kuala Lumpur and Cyberjaya.',
+      caveats: 'Part-time employment during active classes is not permitted under Immigration Malaysia rules, and post-study employment requires employer Employment Pass sponsorship.'
     },
     comparisons: {
       countryA: 'China',
-      countryA_description: 'Compare this destination with China for cost and scholarship opportunities.',
+      countryA_description: 'China offers larger full government scholarship quotas (CSC) and often lower hostel fees, while Malaysia offers year-round English-taught campus life and UK/Australian branch-campus degrees.',
       countryB: 'UK',
-      countryB_description: 'Compare this destination with the UK for post-study work and degree duration.'
+      countryB_description: 'Branch campuses in Malaysia award identical UK/Australian university degrees at roughly one-third of mainland tuition and lower living costs.'
     },
     reviewerInfo: {
       name: 'EduExpress Review Team',
-      role: 'Research & Compliance',
-      lastVerifiedDate: 'July 2026',
-      primarySources: ['Official Ministry of Education', 'National Immigration Authority']
+      role: 'Malaysia & Southeast Asia Admissions',
+      lastVerifiedDate: 'November 2026',
+      primarySources: ['EMGS (Education Malaysia Global Services)', 'MQA (Malaysian Qualifications Agency)', 'MOHE Malaysia']
     }
   },
   {
@@ -827,6 +941,16 @@ export const countries: Country[] = [
     },
     scholarships: [],
     benefits: ['English taught program exploration', 'Active university and study group routes', 'Written education fit and cost review'],
+    faqs: [
+      {
+        question: 'Is Malta an English-speaking Schengen study destination for Bangladeshi students?',
+        answer: 'Yes. English is an official language in Malta alongside Maltese, and Malta is part of the Schengen Area. Higher education programmes are overseen by MFHEA under the European Qualifications Framework.'
+      },
+      {
+        question: 'Can international students work part-time while studying in Malta?',
+        answer: 'Eligible third-country students may work up to 20 hours per week after 90 days in Malta once a Jobsplus employment license is approved, though students still need documented upfront financial solvency for the visa.'
+      }
+    ],
     isActive: true,
     featured: true,
     images: ['/images/destinations/malta-hero.webp'],
@@ -860,7 +984,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'European Admissions Specialist',
-      lastVerifiedDate: 'October 2026',
+      lastVerifiedDate: 'November 2026',
       primarySources: ['MFHEA Malta', 'Central Visa Unit Malta']
     }
   },
@@ -883,6 +1007,16 @@ export const countries: Country[] = [
     },
     scholarships: [],
     benefits: ['University collaboration active', 'English taught program exploration', 'Recognition and total cost review'],
+    faqs: [
+      {
+        question: 'Are there English-taught degree programmes in Greece for Bangladeshi students?',
+        answer: 'Yes. Several public and accredited partner institutions in Greece offer English-taught programmes in Business, Shipping/Maritime, Tourism, and Technology under HAHE accreditation.'
+      },
+      {
+        question: 'What is required for a Greek National Type D student visa from Bangladesh?',
+        answer: 'Applicants generally need an official university acceptance letter, paid registration/deposit receipt as required by the institution, authenticated academic documents, medical insurance, Police Clearance, and proof of financial means verified ahead of the embassy appointment.'
+      }
+    ],
     isActive: true,
     featured: true,
     images: ['/images/destinations/greece-hero.webp'],
@@ -916,7 +1050,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'European Admissions Counselor',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'November 2026',
       primarySources: ['Ministry of Education and Religious Affairs (Greece)', 'HAHE Accreditation Portal']
     }
   },
@@ -939,6 +1073,16 @@ export const countries: Country[] = [
     },
     scholarships: [],
     benefits: ['International program exploration', 'Active university and study group routes', 'Quality and total cost review'],
+    faqs: [
+      {
+        question: 'Why consider international universities in Thailand from Bangladesh?',
+        answer: 'Recognised Thai institutions offer MHESI-accredited English-medium Business, Hospitality, IT, and International programmes with close proximity to Bangladesh and typical living budgets lower than Western destinations.'
+      },
+      {
+        question: 'Can Bangladeshi students work off-campus on a Thailand ED student visa?',
+        answer: 'No. Standard Thailand Non-Immigrant ED visa holders are restricted to full-time study and cannot take regular off-campus paid employment, so living and tuition costs must be funded upfront.'
+      }
+    ],
     isActive: true,
     featured: true,
     images: ['/images/destinations/thailand-hero.webp'],
@@ -972,7 +1116,7 @@ export const countries: Country[] = [
     reviewerInfo: {
       name: 'EduExpress Review Team',
       role: 'Southeast Asia Admissions Lead',
-      lastVerifiedDate: 'July 2026',
+      lastVerifiedDate: 'November 2026',
       primarySources: ['MHESI Thailand', 'Thai Immigration Bureau']
     }
   }

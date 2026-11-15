@@ -23,16 +23,17 @@ import {
   Wallet,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import BnChinaRelatedGuides from '@/components/page/BnChinaRelatedGuides';
 import { JsonLd, Section, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
-import { breadcrumbJsonLd } from '@/lib/json-ld';
+import { breadcrumbJsonLd, citationJsonLd, type Crumb } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
 const PATH = '/bn/china-student-visa-bangladesh';
 const EN_PATH = '/china-student-visa-bangladesh';
-const trail = [
-  { name: 'চীনে উচ্চশিক্ষা', href: '/bn/study-in-china' },
+const trail: Crumb[] = [
+  { name: 'চীনে উচ্চশিক্ষা', path: '/bn/study-in-china' },
   { name: 'চায়না স্টুডেন্ট ভিসা (X1 ও X2) সম্পূর্ণ গাইড' },
 ];
 
@@ -42,6 +43,7 @@ export const metadata = pageMetadata({
     'বাংলাদেশী শিক্ষার্থীদের জন্য চায়না স্টুডেন্ট ভিসা (X1/X2) আবেদন নির্দেশিকা: JW202/JW201 ফর্ম, এম্বাসি ডকুমেন্টস চেকলিস্ট, ভিসা ফি এবং ভিসা নিশ্চিতের আগে BDT 0 সার্ভিস ফি পলিসি।',
   path: PATH,
   image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
+  type: 'article',
   locale: 'bn_BD',
   languages: {
     'en-BD': EN_PATH,
@@ -56,10 +58,10 @@ const visaTypes = [
     period: '১৮০ দিনের বেশি সময়কাল',
     courses: 'Bachelor, Master’s, PhD, MBBS এবং ১ বছরের ডিপ্লোমা বা ল্যাঙ্গুয়েজ কোর্স',
     features: [
-      'চীনে প্রবেশের পর ৩০ দিনের মধ্যে Residence Permit-এ কনভার্ট করতে হয়',
-      'মাল্টিপল এন্ট্রি (Multiple Entry) সুবিধা পাওয়া যায়',
-      'JW201 (CSC) অথবা JW202 (প্রভিন্সিয়াল/সেলফ-ফান্ডেড) ফর্ম আবশ্যক',
-      'মেডিকেল সার্টিফিকেট (Physical Examination Form) বাধ্যতামূলক',
+      'চীনে প্রবেশের পর ৩০ দিনের মধ্যে স্থানীয় PSB থেকে Residence Permit-এ রূপান্তর করতে হয়',
+      'Residence Permit ইস্যুর পর নির্ধারিত মেয়াদে একাধিকবার আসা-যাওয়া (Multiple Entry) করা যায়',
+      'JW201 (CSC/সরকারি) অথবা JW202 ফর্ম এবং অফিশিয়াল Admission Notice আবশ্যক',
+      'মেডিকেল সার্টিফিকেট (Physical Examination Record) ও ব্যাংক/স্কলারশিপ প্রমাণ প্রযোজ্য',
     ],
     tag: 'সর্বাধিক জনপ্রিয় ক্যাটাগরি',
     badgeTone: 'bg-emerald-50 text-emerald-800 border-emerald-200',
@@ -101,19 +103,19 @@ const checklistCategories = [
   {
     title: '৩. শিক্ষা ও একাডেমিক ডকুমেন্টস',
     items: [
-      'সর্বশেষ সকল একাডেমিক সার্টিফিকেট ও মার্কশিটের মূল ও নোটারাইজড কপি',
-      'শিক্ষা বোর্ড ও শিক্ষা মন্ত্রণালয়/পররাষ্ট্র মন্ত্রণালয় কর্তৃক সত্যায়িত কপি',
-      'ইংরেজি মাধ্যমের প্রমাণপত্র (Medium of Instruction - MOI Certificate) বা IELTS (যদি থাকে)',
-      'স্টাডি প্ল্যান বা পার্সোনাল স্টেটমেন্ট (Study Plan / SOP)',
+      'সকল একাডেমিক সার্টিফিকেট ও নম্বরপত্রের মূল ও নোটারাইজড কপি',
+      'প্রোগ্রাম, বিশ্ববিদ্যালয় বা ভিসা-সেন্টারের চাহিদা অনুযায়ী শিক্ষা বোর্ড বা MOFA সত্যায়ন',
+      'প্রযোজ্য ভাষা প্রমাণপত্র (IELTS / HSK / বিশ্ববিদ্যালয় অনুমোদিত MOI বা ইন্টারভিউ প্রমাণ)',
+      'স্টাডি প্ল্যান বা পার্সোনাল স্টেটমেন্ট (যে প্রোগ্রামে প্রযোজ্য)',
     ],
   },
   {
     title: '৪. মেডিকেল ও পুলিশ ক্লিয়ারেন্স',
     items: [
-      'Physical Examination Record for Foreigner (অনুমোদিত মেডিকেল টেস্টের সম্পূর্ণ রিপোর্ট)',
-      'রক্ত পরীক্ষা, বুকের এক্স-রে, ইসিজি ও ডাক্তারের সিল-স্বাক্ষরযুক্ত কপি (মেয়াদ ৬ মাস)',
+      'Physical Examination Record for Foreigner (অধ্যয়নের মেয়াদ অনুযায়ী প্রযোজ্য হলে)',
+      'রক্ত পরীক্ষা, বুকের এক্স-রে, ইসিজি ও ডাক্তারের সিল-স্বাক্ষরযুক্ত রিপোর্ট (মেয়াদ ও ফর্ম্যাট নির্দেশিকা অনুযায়ী)',
       'পুলিশ ক্লিয়ারেন্স সার্টিফিকেট (Police Clearance Certificate - PCC)',
-      'পররাষ্ট্র মন্ত্রণালয় (MOFA) কর্তৃক সত্যায়িত অরিজিনাল পুলিশ ক্লিয়ারেন্স',
+      'প্রয়োজন অনুযায়ী নোটারাইজড বা সত্যায়িত কপি ও অনলাইন আপলোড কপি',
     ],
   },
 ];
@@ -167,33 +169,42 @@ const arrivalChecklist = [
 const faqs = [
   {
     q: 'চায়না স্টুডেন্ট ভিসা প্রসেসিং হতে কত দিন সময় লাগে?',
-    a: 'ঢাকায় চাইনিজ ভিসা সেন্টারে ফাইল ও বায়োমেট্রিক জমা দেওয়ার পর নিয়মিত প্রক্রিয়ায় সাধারণত ৪ থেকে ৭ কার্যদিবসের মধ্যে ভিসা পাওয়া যায়। এক্সপ্রেস সার্ভিসে ২ থেকে ৩ কার্যদিবসের মধ্যেও ডেলিভারি পাওয়া সম্ভব।',
+    a: 'ভিসা প্রসেসিং সময় অনলাইন প্রাক-যাচাই (pre-check), বায়োমেট্রিক জমা ও দূতাবাসের তাৎক্ষণিক কর্মচাপের ওপর নির্ভর করে—CVASC ঢাকা পোর্টালে বর্তমান সময়সূচি দেখা যায়। এডমিশন লেটার হাতে পাওয়ার আগে নন-রিফান্ডেবল ফ্লাইট টিকিট না কেনাই নিরাপদ।',
   },
   {
     q: 'X1 ভিসা পাওয়ার পর কি চীনে আর কোনো কাগজপত্র করতে হয়?',
-    a: 'হ্যাঁ। X1 ভিসা সাধারণত ৩ মাসের সিঙ্গেল এন্ট্রি হিসেবে ইস্যু করা হয়। চীনে পৌঁছানোর ৩০ দিনের মধ্যে বিশ্ববিদ্যালয়ের মাধ্যমে স্থানীয় PSB (ইমিগ্রেশন) অফিসে গিয়ে এটিকে পূর্ণ মেয়াদের Residence Permit-এ রূপান্তর করতে হয়।',
+    a: 'হ্যাঁ। X1 ভিসা ১৮০ দিনের বেশি অধ্যয়নের এন্ট্রি ভিসা—চীনে পৌঁছানোর ৩০ দিনের মধ্যে বিশ্ববিদ্যালয়ের সহায়তায় স্থানীয় PSB (Public Security Bureau) অফিসে আবেদন করে এটিকে পূর্ণ মেয়াদের Residence Permit-এ রূপান্তর করতে হয়।',
   },
   {
     q: 'ভিসার জন্য ব্যাংকে কত টাকা দেখাতে হয়?',
-    a: 'ফুল সিএসসি (CSC) স্কলারশিপের ক্ষেত্রে স্কলারশিপ অ্যাওয়ার্ড পেপারই প্রধান আর্থিক প্রমাণ। আংশিক স্কলারশিপ বা সেলফ-ফান্ডেড প্রোগ্রামের ক্ষেত্রে সাধারণ ব্যাংক ব্যালেন্স (সাধারণত ৫ থেকে ৮ লাখ টাকা) দেখানো যথেষ্ট।',
+    a: 'পূর্ণ CSC বা সম্পূর্ণ স্কলারশিপ থাকলে অফিশিয়াল স্কলারশিপ অ্যাওয়ার্ড প্রমাণ প্রযোজ্য হয়। স্ব-অর্থায়িত (Self-funded) X1 আবেদনে ঢাকাস্থ চীনা দূতাবাসের প্রকাশিত নির্দেশনা অনুযায়ী প্রতি শিক্ষাবর্ষের জন্য অন্তত USD ২,৫০০ সমপরিমাণ ব্যাংক প্রমাণ চাওয়া হয়—এটি নথিগত মানদণ্ড মাত্র, সম্পূর্ণ পড়াশোনার মোট বাজেট নয়।',
   },
   {
-    q: 'ভিসা রিজেক্ট হলে কি EduExpress-কে কোনো সার্ভিস চার্জ দিতে হবে?',
-    a: 'না, কোনো সার্ভিস ফি দিতে হবে না। আমাদের চায়না প্যাকেজের সবচেয়ে বড় নিশ্চয়তা হলো "Visa-First Commitment"—ভিসা অনুমোদনের পূর্বে কোনো ফাইল ওপেনিং চার্জ বা সার্ভিস ফি নেই। ভিসা ১০০% নিশ্চিত হওয়ার পরেই প্যাকেজ ফি প্রদেয়।',
+    q: 'ভিসা না হলে বা ভিসার আগে EduExpress-কে কি কোনো সার্ভিস চার্জ দিতে হবে?',
+    a: 'না। আমাদের Visa-First নীতিমালা অনুযায়ী কোনো ফাইল ওপেনিং চার্জ নেই এবং চায়না ভিসা অনুমোদনের পূর্বে EduExpress কোনো সার্ভিস ফি নেয় না। ভিসা অনুমোদনের পরেই Complete China Support Package-এর নির্ধারিত সার্ভিস ফি BDT ২,০০,০০০ (অথবা লিখিত চুক্তিতে নির্ধারিত শর্ত) প্রদেয়; বিশ্ববিদ্যালয় বা থার্ড-পার্টি ফি আগে প্রযোজ্য হলে তা আগেই লিখিতভাবে জানানো হয়।',
   },
 ];
 
 const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'Article',
+  '@type': ['WebPage', 'Article'],
   '@id': `${SITE}${PATH}#article`,
   url: `${SITE}${PATH}`,
   headline: 'চায়না স্টুডেন্ট ভিসা (X1 ও X2) আবেদন গাইড ২০২৭: ঢাকা এম্বাসি প্রসেস',
   description:
     'বাংলাদেশী শিক্ষার্থীদের জন্য চায়না স্টুডেন্ট ভিসা আবেদন, ঢাকা ভিসা সেন্টারের নিয়মাবলী ও পোস্ট-অ্যারাইভাল গাইড।',
   inLanguage: 'bn-BD',
+  mainEntityOfPage: `${SITE}${PATH}`,
+  author: { '@id': `${SITE}/#organization` },
+  reviewedBy: { '@id': `${SITE}/#organization` },
   publisher: { '@id': `${SITE}/#organization` },
+  isPartOf: { '@id': `${SITE}/#website` },
   breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
+  ...citationJsonLd([
+    { label: 'Chinese Embassy in Bangladesh', href: 'https://bd.china-embassy.gov.cn/eng/' },
+    { label: 'Chinese Embassy Bangladesh Visa Application Agencies Notice', href: 'https://bd.china-embassy.gov.cn/eng/lsyw/lsxx/202605/t20260520_11914015.htm' },
+    { label: 'Chinese Visa Application Service Center in Dhaka (CVASC)', href: 'https://www.visaforchina.cn/DAC4_EN/' },
+  ]),
 };
 
 const faqStructuredData = {
@@ -289,15 +300,15 @@ export default function BengaliChinaVisaPage() {
           <div className="flex items-center gap-3">
             <Clock className="size-8 text-lime shrink-0" />
             <div>
-              <p className="text-[15px] font-bold text-petrol-800">৪–৭ কর্মদিবস</p>
-              <p className="text-[13px] text-ink-soft">ঢাকা ভিসা সেন্টারে নিয়মিত প্রসেসিং সময়</p>
+              <p className="text-[15px] font-bold text-petrol-800">CVASC ঢাকা প্রক্রিয়া</p>
+              <p className="text-[13px] text-ink-soft">অফিশিয়াল পোর্টালে অনলাইন প্রাক-যাচাই ও জমা</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <BadgeCheck className="size-8 text-lime shrink-0" />
             <div>
-              <p className="text-[15px] font-bold text-petrol-800">মক ইন্টারভিউ ও ফাইল স্ক্রুটিনি</p>
-              <p className="text-[13px] text-ink-soft">শতভাগ নির্ভুল ফাইল প্রস্তুতির অঙ্গীকার</p>
+              <p className="text-[15px] font-bold text-petrol-800">সতর্ক ডকুমেন্ট যাচাই</p>
+              <p className="text-[13px] text-ink-soft">পাসপোর্ট, তারিখ ও নাম হুবহু মিলিয়ে প্রস্তুতি</p>
             </div>
           </div>
         </div>
@@ -438,10 +449,10 @@ export default function BengaliChinaVisaPage() {
                 <ShieldCheck size={16} /> ভিসা-ফার্স্ট (Visa-First) পলিসি
               </span>
               <h3 className="mt-4 font-display text-[26px] font-bold sm:text-[32px]">
-                ভিসা স্ট্যাম্পিং নিশ্চিতের আগে আমাদের সার্ভিস ফি BDT 0
+                ভিসা অনুমোদনের আগে আমাদের সার্ভিস ফি BDT 0
               </h3>
               <p className="mt-4 text-[16px] leading-relaxed text-white/85">
-                চায়না প্যাকেজের জন্য ফাইল ওপেনিং চার্জ সম্পূর্ণ ০ টাকা। চায়না স্টুডেন্ট ভিসা অনুমোদনের পূর্বে EduExpress কোনো কনসালটেন্সি সার্ভিস চার্জ নেয় না। ভিসা ১০০% নিশ্চিত হওয়ার পর নির্ধারিত প্যাকেজ ফি (BDT 2,00,000) প্রদেয়।
+                চায়না প্যাকেজের জন্য ফাইল ওপেনিং চার্জ সম্পূর্ণ ০ টাকা। চায়না স্টুডেন্ট ভিসা অনুমোদনের পূর্বে EduExpress কোনো কনসালটেন্সি সার্ভিস চার্জ নেয় না। ভিসা অনুমোদনের পর Complete China Support Package-এর নির্ধারিত সার্ভিস ফি BDT ২,০০,০০০ প্রদেয়, এবং প্রতিটি থার্ড-পার্টি ফি আগেই লিখিত কস্ট শিটে আলাদাভাবে উল্লেখ থাকে।
               </p>
               <p className="mt-3 text-[14px] leading-relaxed text-white/70">
                 *বিশ্ববিদ্যালয় কর্তৃক নির্ধারিত আবেদন ফি, অনুমোদিত মেডিকেল টেস্ট বা সরকারি ভিসা সেন্টার ফি শিক্ষার্থীর সরাসরি প্রদেয় অফিসিয়াল খরচ যা আবেদনের শুরুতেই লিখিত কস্ট শিটে জানিয়ে দেওয়া হয়।
@@ -512,6 +523,12 @@ export default function BengaliChinaVisaPage() {
           </div>
         </div>
       </section>
+
+      <BnChinaRelatedGuides
+        currentPath="/bn/china-student-visa-bangladesh"
+        englishTwin={{ label: 'China Student Visa Guide (English)', href: '/china-student-visa-bangladesh' }}
+        tone="white"
+      />
     </div>
   );
 }

@@ -3,11 +3,34 @@ import { chinaGuidePages } from '@/data/chinaGuidePages';
 import { staticRouteGuides } from '@/data/staticRoutePages';
 import { sitemapResponse } from '@/lib/sitemap-xml';
 
-// Guide URLs come from three owners. Each URL appears exactly once, and each
+// Guide URLs come from four owners. Each URL appears exactly once, and each
 // owner is the single source of truth for its own pages:
-//   - staticRouteGuides: slugs rendered by a hand-built route under src/app/
-//   - chinaGuidePages  : slugs rendered by app/[slug] via ChinaGuidePage
-//   - evidencePages    : slugs rendered by app/[slug] as an evidence page
+//   - staticRouteGuides    : slugs in staticRoutePages.ts with hand-built routes
+//   - handbuiltStaticGuides: standalone campaign/destination guides under src/app/
+//   - chinaGuidePages      : slugs rendered via ChinaGuidePage
+//   - evidencePages        : slugs rendered via app/[slug] as an evidence page
+const handbuiltStaticGuides = new Set([
+  'csc-scholarship-bangladesh',
+  'china-march-2027-intake',
+  'malaysia-study-cost-bangladesh',
+  'malaysia-student-visa-bangladesh',
+  'bn/china-student-visa-bangladesh',
+  'bn/study-in-china-cost-bangladesh',
+  'bn/csc-scholarship-bangladesh',
+  'bn/mbbs-in-china-bangladesh',
+]);
+
+const handbuiltLastmod: Record<string, string> = {
+  'csc-scholarship-bangladesh': '2026-11-15',
+  'china-march-2027-intake': '2026-11-15',
+  'malaysia-study-cost-bangladesh': '2026-11-15',
+  'malaysia-student-visa-bangladesh': '2026-11-15',
+  'bn/china-student-visa-bangladesh': '2026-11-15',
+  'bn/study-in-china-cost-bangladesh': '2026-11-15',
+  'bn/csc-scholarship-bangladesh': '2026-11-15',
+  'bn/mbbs-in-china-bangladesh': '2026-11-15',
+};
+
 const guideSlugs = [
   'china-universities',
   'china-scholarships-bangladesh',
@@ -19,14 +42,35 @@ const guideSlugs = [
   'china-intakes-deadlines',
   'life-in-china-bangladeshi-students',
   'china-visa-first-policy',
+  'csc-scholarship-bangladesh',
+  'china-march-2027-intake',
+  'malaysia-study-cost-bangladesh',
+  'malaysia-student-visa-bangladesh',
+  'bn/china-student-visa-bangladesh',
+  'bn/study-in-china-cost-bangladesh',
+  'bn/csc-scholarship-bangladesh',
+  'bn/mbbs-in-china-bangladesh',
 ];
 
 export function GET() {
   const entries = guideSlugs
-    .filter(slug => slug in staticRouteGuides || slug in chinaGuidePages || slug in evidencePages)
+    .filter(
+      slug =>
+        slug in staticRouteGuides ||
+        handbuiltStaticGuides.has(slug) ||
+        slug in chinaGuidePages ||
+        slug in evidencePages,
+    )
     .map(slug => ({
       loc: `https://eduexpressint.com/${slug}`,
-      lastmod: slug in staticRouteGuides ? staticRouteGuides[slug] : slug in chinaGuidePages ? undefined : evidencePages[slug]?.reviewedAt,
+      lastmod:
+        slug in staticRouteGuides
+          ? staticRouteGuides[slug]
+          : handbuiltStaticGuides.has(slug)
+            ? handbuiltLastmod[slug]
+            : slug in chinaGuidePages
+              ? undefined
+              : evidencePages[slug]?.reviewedAt,
     }));
 
   return sitemapResponse(entries);

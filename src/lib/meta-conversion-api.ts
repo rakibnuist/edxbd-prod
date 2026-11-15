@@ -7,6 +7,13 @@ import { getMetaConfig } from '@/lib/settings';
 import { sendMetaEvents } from '@/lib/meta-api';
 import { resolveCanonicalEventSourceUrl } from '@/lib/meta-capi-policy';
 import { recordMetaDelivery } from '@/lib/meta-health';
+import {
+  buildServerMetaParams,
+  PII_DATA_TYPE,
+  sanitizeMetaExternalId,
+  sanitizeMetaParamValue,
+  type CookieSettings,
+} from '@/lib/meta-param-builder-server';
 
 // Optional explicit credentials; when omitted the DB config is used.
 export type MetaConfigOverride = { pixelId?: string | null; accessToken?: string | null };
@@ -95,6 +102,7 @@ export interface MetaUserData {
   fbp?: string;
   external_id?: string;
   fb_login_id?: string;
+  eventSourceUrl?: string;
 }
 
 export const extractCookie = (request: Request, name: string): string | undefined => {
@@ -104,31 +112,19 @@ export const extractCookie = (request: Request, name: string): string | undefine
   return match ? decodeURIComponent(match[1]) : undefined;
 };
 
-// Extract Event Quality parameters from request
+// Extract Event Quality parameters from request using Meta Parameter Builder
 export const extractEventQualityParams = (request: Request): {
   fbc?: string;
   fbp?: string;
   external_id?: string;
   fb_login_id?: string;
 } => {
-  let fbc = extractCookie(request, '_fbc');
-  if (!fbc) {
-    try {
-      const url = new URL(request.url);
-      const fbclid = url.searchParams.get('fbclid');
-      if (fbclid) fbc = `fb.1.${Date.now()}.${fbclid}`;
-    } catch {
-      /* ignore */
-    }
-  }
-
-  const fbp = extractCookie(request, '_fbp');
-  const external_id = extractCookie(request, 'ee_uid');
+  const serverParams = buildServerMetaParams(request);
 
   return {
-    fbc,
-    fbp,
-    external_id,
+    fbc: serverParams.fbc,
+    fbp: serverParams.fbp,
+    external_id: serverParams.externalId,
     fb_login_id: undefined
   };
 };
@@ -151,7 +147,14 @@ export const sendConversionAPIEvent = async (
   eventId?: string,
   request?: Request,
   metaConfig?: MetaConfigOverride
-): Promise<{ success: boolean; eventId: string; error?: string }> => {
+): Promise<{
+  success: boolean;
+  eventId: string;
+  cookiesToSet?: CookieSettings[];
+  fbc?: string;
+  fbp?: string;
+  error?: string;
+}> => {
   // Skip Meta API calls during build to prevent DNS issues
   if (process.env.NODE_ENV === 'production' && process.env.VERCEL === '1' && !request) {
     return {
@@ -175,55 +178,71 @@ export const sendConversionAPIEvent = async (
 
   try {
     const finalEventId = eventId || generateEventId();
+    const serverMetaParams = buildServerMetaParams(request, {
+      fbc: userData.fbc,
+      fbp: userData.fbp,
+      externalId: userData.external_id,
+      eventSourceUrl: userData.eventSourceUrl,
+    });
 
-    // Prepare user data with hashed values per Meta's Customer Information Parameters specification
+    // Prepare user data with Parameter Builder normalized/hashed PII + fallback SHA-256
     const hashedUserData: Record<string, string[] | string> = {};
 
     const cleanEmail = normalizeEmail(userData.email);
     if (cleanEmail) {
-      hashedUserData.em = [hashData(cleanEmail)];
+      const hashed = serverMetaParams.hashPii(cleanEmail, PII_DATA_TYPE.EMAIL) ?? hashData(cleanEmail);
+      hashedUserData.em = [hashed];
     }
 
     const cleanPhone = normalizePhone(userData.phone);
     if (cleanPhone) {
-      hashedUserData.ph = [hashData(cleanPhone)];
+      const hashed = serverMetaParams.hashPii(cleanPhone, PII_DATA_TYPE.PHONE) ?? hashData(cleanPhone);
+      hashedUserData.ph = [hashed];
     }
 
     const cleanFn = normalizeText(userData.firstName);
     if (cleanFn) {
-      hashedUserData.fn = [hashData(cleanFn)];
+      const hashed = serverMetaParams.hashPii(cleanFn, PII_DATA_TYPE.FIRST_NAME) ?? hashData(cleanFn);
+      hashedUserData.fn = [hashed];
     }
 
     const cleanLn = normalizeText(userData.lastName);
     if (cleanLn) {
-      hashedUserData.ln = [hashData(cleanLn)];
+      const hashed = serverMetaParams.hashPii(cleanLn, PII_DATA_TYPE.LAST_NAME) ?? hashData(cleanLn);
+      hashedUserData.ln = [hashed];
     }
 
     const cleanCity = normalizeText(userData.city);
     if (cleanCity) {
-      hashedUserData.ct = [hashData(cleanCity)];
+      const hashed = serverMetaParams.hashPii(cleanCity, PII_DATA_TYPE.CITY) ?? hashData(cleanCity);
+      hashedUserData.ct = [hashed];
     }
 
     const cleanState = normalizeText(userData.state);
     if (cleanState) {
-      hashedUserData.st = [hashData(cleanState)];
+      const hashed = serverMetaParams.hashPii(cleanState, PII_DATA_TYPE.STATE) ?? hashData(cleanState);
+      hashedUserData.st = [hashed];
     }
 
     const cleanCountry = normalizeCountry(userData.country);
     if (cleanCountry) {
-      hashedUserData.country = [hashData(cleanCountry)];
+      const hashed = serverMetaParams.hashPii(cleanCountry, PII_DATA_TYPE.COUNTRY) ?? hashData(cleanCountry);
+      hashedUserData.country = [hashed];
     }
 
     if (userData.zipCode) {
       const cleanZip = userData.zipCode.replace(/\s+/g, '').toLowerCase();
-      hashedUserData.zp = [hashData(cleanZip)];
+      const hashed = serverMetaParams.hashPii(cleanZip, PII_DATA_TYPE.ZIP_CODE) ?? hashData(cleanZip);
+      hashedUserData.zp = [hashed];
     }
 
-    // Add Event Quality parameters per Meta CAPI specifications
-    const cookieParams = request ? extractEventQualityParams(request) : {};
-    const finalFbc = userData.fbc || cookieParams.fbc;
-    const finalFbp = userData.fbp || cookieParams.fbp;
-    const finalExtId = userData.external_id || cookieParams.external_id;
+    // Add Event Quality parameters via Meta Parameter Builder
+    const finalFbc = serverMetaParams.fbc ?? sanitizeMetaParamValue(userData.fbc);
+    const finalFbp = serverMetaParams.fbp ?? sanitizeMetaParamValue(userData.fbp);
+    const rawExtId = sanitizeMetaExternalId(userData.external_id) ?? serverMetaParams.externalId;
+    const finalExtId = rawExtId
+      ? (serverMetaParams.hashPii(rawExtId, PII_DATA_TYPE.EXTERNAL_ID) ?? hashData(rawExtId))
+      : undefined;
 
     if (finalFbc) {
       hashedUserData.fbc = finalFbc;
@@ -238,9 +257,10 @@ export const sendConversionAPIEvent = async (
       hashedUserData.fb_login_id = userData.fb_login_id;
     }
 
-    // Get client IP and user agent
-    const clientIP = request ? getClientIP(request) : '0.0.0.0';
-    const userAgent = request ? request.headers.get('user-agent') || '' : '';
+    // Get trusted client IP (Parameter Builder preferred, with extractClientIp fallback) and user agent
+    const trustedIp = request ? extractClientIp((name) => request.headers.get(name)) : null;
+    const clientIP = serverMetaParams.clientIpAddress ?? trustedIp ?? undefined;
+    const userAgent = request ? request.headers.get('user-agent') || undefined : undefined;
 
     const eventData = {
       data: [
@@ -250,12 +270,12 @@ export const sendConversionAPIEvent = async (
           event_id: finalEventId,
           user_data: {
             ...hashedUserData,
-            client_ip_address: clientIP,
-            client_user_agent: userAgent,
+            ...(clientIP ? { client_ip_address: clientIP } : {}),
+            ...(userAgent ? { client_user_agent: userAgent } : {}),
           },
           custom_data: customData || {},
-          event_source_url: resolveCanonicalEventSourceUrl(
-            request?.headers.get('referer') || request?.url,
+          event_source_url: serverMetaParams.eventSourceUrl || resolveCanonicalEventSourceUrl(
+            userData.eventSourceUrl || request?.headers.get('referer') || request?.url,
           ),
           action_source: 'website',
         },
@@ -266,11 +286,23 @@ export const sendConversionAPIEvent = async (
     const activeConfig = { pixelId: activePixelId, accessToken: activeAccessToken };
     const delivery = await sendMetaEvents(activeConfig, eventData.data);
     await recordMetaDelivery(activeConfig, delivery);
-    if (!delivery.ok) return { success: false, eventId: finalEventId, error: delivery.error };
+    if (!delivery.ok) {
+      return {
+        success: false,
+        eventId: finalEventId,
+        cookiesToSet: serverMetaParams.cookiesToSet,
+        fbc: finalFbc,
+        fbp: finalFbp,
+        error: delivery.error,
+      };
+    }
 
     return {
       success: true,
       eventId: finalEventId,
+      cookiesToSet: serverMetaParams.cookiesToSet,
+      fbc: finalFbc,
+      fbp: finalFbp,
     };
   } catch (error) {
     console.error('Meta Conversion API delivery failed.');
@@ -294,17 +326,28 @@ export const trackStudyAbroadLead = async (
     city?: string;
     state?: string;
     zipCode?: string;
+    fbc?: string;
+    fbp?: string;
+    externalId?: string;
+    eventSourceUrl?: string;
   },
   source: string = 'website_contact_form',
   request?: Request,
   metaConfig?: MetaConfigOverride,
   sharedEventId?: string
-): Promise<{ success: boolean; eventId: string; error?: string }> => {
+): Promise<{
+  success: boolean;
+  eventId: string;
+  cookiesToSet?: CookieSettings[];
+  fbc?: string;
+  fbp?: string;
+  error?: string;
+}> => {
   const eventId = sharedEventId || generateEventId();
   const [firstName, ...lastNameParts] = formData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
 
-  const userData = {
+  const userData: MetaUserData = {
     email: formData.email,
     phone: formData.phone,
     firstName: firstName,
@@ -313,6 +356,10 @@ export const trackStudyAbroadLead = async (
     state: formData.state,
     country: formData.country,
     zipCode: formData.zipCode,
+    fbc: formData.fbc,
+    fbp: formData.fbp,
+    external_id: formData.externalId,
+    eventSourceUrl: formData.eventSourceUrl,
   };
 
   const customData = {
@@ -917,9 +964,20 @@ export const trackPartnershipInquiry = async (
     phone?: string;
     company?: string;
     message?: string;
+    fbc?: string;
+    fbp?: string;
+    externalId?: string;
+    eventSourceUrl?: string;
   },
   request?: Request
-): Promise<{ success: boolean; eventId: string; error?: string }> => {
+): Promise<{
+  success: boolean;
+  eventId: string;
+  cookiesToSet?: CookieSettings[];
+  fbc?: string;
+  fbp?: string;
+  error?: string;
+}> => {
   const eventId = generateEventId();
   const [firstName, ...lastNameParts] = userData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
@@ -939,6 +997,10 @@ export const trackPartnershipInquiry = async (
     phone: userData.phone,
     firstName: firstName,
     lastName: lastName,
+    fbc: userData.fbc,
+    fbp: userData.fbp,
+    external_id: userData.externalId,
+    eventSourceUrl: userData.eventSourceUrl,
   }, customData, eventId, request);
 };
 

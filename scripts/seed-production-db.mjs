@@ -40,6 +40,15 @@ try {
   console.log('Running seed-march-2027-campaign.mjs...');
   execSync('node --experimental-strip-types scripts/seed-march-2027-campaign.mjs', { stdio: 'inherit' });
 
+  console.log('Running seed-trust-records.js...');
+  execSync('node scripts/seed-trust-records.js', { stdio: 'inherit' });
+
+  console.log('Running archive-expired-intake-posts.mjs...');
+  execSync('node scripts/archive-expired-intake-posts.mjs', { stdio: 'inherit' });
+
+  console.log('Running sync-seo-content-hygiene.mjs...');
+  execSync('node scripts/sync-seo-content-hygiene.mjs', { stdio: 'inherit' });
+
   console.log('--- PRODUCTION DATABASE SYNC COMPLETED SUCCESSFULLY ---');
 } catch (err) {
   console.error('Error during production database sync:', err);

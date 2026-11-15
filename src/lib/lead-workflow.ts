@@ -67,11 +67,151 @@ export function validateLeadUpdate(value: unknown): { data?: { status?: LeadStat
   return Object.keys(data).length ? { data } : { error: 'Choose a status or update the counselor notes.' };
 }
 export function leadContactLinks(lead: Pick<LeadRecord, 'phone' | 'email' | 'name'>) {
-  const digits = (lead.phone || '').replace(/[^0-9]/g, '');
+  const rawDigits = (lead.phone || '').replace(/[^0-9]/g, '');
+  const digits = /^88001[0-9]{9}$/.test(rawDigits) ? `880${rawDigits.slice(4)}` : rawDigits;
   const whatsapp = digits.startsWith('00880') ? digits.slice(2) : /^01[0-9]{9}$/.test(digits) ? `88${digits}` : digits;
   return {
     call: digits ? `tel:${(lead.phone || '').trim().startsWith('+') ? '+' : ''}${digits}` : null,
     email: lead.email ? `mailto:${encodeURIComponent(lead.email)}` : null,
     whatsapp: whatsapp ? `https://wa.me/${whatsapp}` : null,
   };
+}
+
+export type MetaLeadImportPayload = {
+  name: string;
+  email: string;
+  phone: string;
+  country: string;
+  program: string;
+  message: string;
+  status: 'new';
+  source: string;
+  leadType: string;
+  assignedTeam: string;
+  destinationInterest: string;
+  landingPage: string;
+  consentTimestamp: string;
+  consentPolicyVersion: string;
+};
+
+function parseCsvLine(line: string, delimiter: string): string[] {
+  const out: string[] = [];
+  let cur = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        cur += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (ch === delimiter && !inQuotes) {
+      out.push(cur.trim());
+      cur = '';
+    } else {
+      cur += ch;
+    }
+  }
+  out.push(cur.trim());
+  return out;
+}
+
+export function normalizeMetaLeadPhone(raw: string): string {
+  const cleaned = raw.trim().replace(/[^\d+]/g, '');
+  if (/^\+?88001[3-9]\d{8}$/.test(cleaned)) {
+    return `+880${cleaned.replace(/^\+?8800/, '')}`;
+  }
+  if (/^8801[3-9]\d{8}$/.test(cleaned)) {
+    return `+${cleaned}`;
+  }
+  if (/^01[3-9]\d{8}$/.test(cleaned)) {
+    return `+880${cleaned.slice(1)}`;
+  }
+  return cleaned;
+}
+
+export function parseMetaLeadTimestamp(raw: string): string {
+  const trimmed = raw.trim();
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(am|pm)$/i.exec(trimmed);
+  if (m) {
+    let hour = Number.parseInt(m[4], 10);
+    if (m[6].toLowerCase() === 'pm' && hour < 12) hour += 12;
+    if (m[6].toLowerCase() === 'am' && hour === 12) hour = 0;
+    const isoDhaka = `${m[3]}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}T${String(hour).padStart(2, '0')}:${m[5]}:00+06:00`;
+    const parsed = new Date(isoDhaka);
+    if (!Number.isNaN(parsed.getTime())) return parsed.toISOString();
+  }
+  const direct = new Date(trimmed);
+  if (!Number.isNaN(direct.getTime())) return direct.toISOString();
+  return new Date().toISOString();
+}
+
+export function parseMetaLeadsCsv(csvText: string): MetaLeadImportPayload[] {
+  const lines = csvText
+    .replace(/^\uFEFF/, '')
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
+  if (lines.length < 2) return [];
+
+  const delimiter = lines[0].includes('\t') ? '\t' : ',';
+  const headers = parseCsvLine(lines[0], delimiter).map((h) => h.toLowerCase().trim());
+  const idx = (names: string[]) => headers.findIndex((h) => names.includes(h));
+
+  const nameIdx = idx(['name', 'full_name', 'full name']);
+  const emailIdx = idx(['email', 'email_address', 'email address']);
+  const phoneIdx = idx(['phone', 'phone_number', 'phone number']);
+  const secPhoneIdx = idx(['secondary phone number', 'secondary_phone_number']);
+  const waPhoneIdx = idx(['whatsapp number', 'whatsapp_number']);
+  const createdIdx = idx(['created', 'created_time', 'date']);
+  const formIdx = idx(['form', 'form_name']);
+
+  const parsedRows: MetaLeadImportPayload[] = [];
+  for (const line of lines.slice(1)) {
+    const cols = parseCsvLine(line, delimiter);
+    const name = (nameIdx >= 0 ? cols[nameIdx] : '')?.trim() || 'Student';
+    const rawPhone =
+      (phoneIdx >= 0 ? cols[phoneIdx] : '') ||
+      (waPhoneIdx >= 0 ? cols[waPhoneIdx] : '') ||
+      (secPhoneIdx >= 0 ? cols[secPhoneIdx] : '') ||
+      '';
+    const phone = normalizeMetaLeadPhone(rawPhone.replace(/^p:/i, ''));
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length < 7) continue;
+
+    const rawEmail = (emailIdx >= 0 ? cols[emailIdx] : '')?.trim().toLowerCase() || '';
+    const email =
+      rawEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(rawEmail)
+        ? rawEmail
+        : `no-email+${digits}@leads.eduexpressint.com`;
+    const created = (createdIdx >= 0 ? cols[createdIdx] : '')?.trim() || '';
+    const formName = (formIdx >= 0 ? cols[formIdx] : '')?.trim() || 'WebLead&InstantForm_18_4_2026';
+
+    parsedRows.push({
+      name: name.slice(0, 120),
+      email,
+      phone,
+      country: 'China',
+      program: 'China March 2027 Intake',
+      message: [
+        `Meta Instant Form (${formName})`,
+        'Campaign: META_Leads_BD_China-Mar2027_2026Q1',
+        created && `Created: ${created}`,
+      ]
+        .filter(Boolean)
+        .join(' | '),
+      status: 'new',
+      source: 'meta_china_march_2027',
+      leadType: 'assessment',
+      assignedTeam: 'china_desk',
+      destinationInterest: 'china',
+      landingPage: '/china-march-2027-intake',
+      consentTimestamp: parseMetaLeadTimestamp(created),
+      consentPolicyVersion: '2026-04-privacy-v1',
+    });
+  }
+
+  return parsedRows.reverse();
 }

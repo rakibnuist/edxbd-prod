@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { AlertTriangle, ExternalLink, Plus, Search, X } from 'lucide-react';
 import { FEE_LABELS, FIRST_YEAR_FEES, firstYearEstimate, type FeeCategory, type FeeRow, type ProgramRow } from '@/lib/catalog-views';
+import { trackCompareCompleted, trackCompareStarted } from '@/lib/conversion-events';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 
 const MAX = 3;
@@ -29,13 +30,28 @@ export default function CostCompare({ programs, fees }: Props) {
   const selectedKeys = useMemo(() => (searchParams.get('p') || '').split(',').filter(key => programs.some(row => row.key === key)).slice(0, MAX), [searchParams, programs]);
   const selected = selectedKeys.flatMap(key => programs.find(row => row.key === key) || []);
   const bdtRate = /^\d+(\.\d+)?$/.test(rate.trim()) && Number(rate) > 0 ? Number(rate) : null;
+  const lastCompleted = useRef('');
+
+  useEffect(() => {
+    if (selectedKeys.length < 2) return;
+    const signature = [...selectedKeys].sort().join(',');
+    if (signature === lastCompleted.current) return;
+    lastCompleted.current = signature;
+    trackCompareCompleted({ destination: 'china', label: signature, count: selectedKeys.length });
+  }, [selectedKeys]);
 
   const setSelection = (keys: string[]) => {
     const next = new URLSearchParams(window.location.search);
     if (keys.length) next.set('p', keys.join(',')); else next.delete('p');
     window.history.replaceState(null, '', `${pathname}${next.size ? `?${next}` : ''}`);
   };
-  const add = (key: string) => { setSelection([...selectedKeys, key].slice(0, MAX)); setQuery(''); };
+  const add = (key: string) => {
+    if (selectedKeys.length === 0) {
+      trackCompareStarted({ destination: 'china', label: key });
+    }
+    setSelection([...selectedKeys, key].slice(0, MAX));
+    setQuery('');
+  };
   const remove = (key: string) => setSelection(selectedKeys.filter(item => item !== key));
 
   const suggestions = useMemo(() => {

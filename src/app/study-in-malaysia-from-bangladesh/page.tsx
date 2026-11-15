@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   Clock,
   Compass,
+  ExternalLink,
   FileText,
   GraduationCap,
   HelpCircle,
@@ -26,6 +27,7 @@ import {
 import prisma from '@/lib/prisma';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import { citationJsonLd } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
@@ -34,13 +36,19 @@ const canonical = `${SITE}${PATH}`;
 const applyHref = '/apply?country=Malaysia';
 export const revalidate = 3600;
 
+const MALAYSIA_HUB_SOURCES = [
+  { label: 'Education Malaysia Global Services (EMGS)', href: 'https://educationmalaysia.gov.my/' },
+  { label: 'Malaysian Qualifications Agency (MQA)', href: 'https://www2.mqa.gov.my/mqr/' },
+  { label: 'Ministry of Higher Education Malaysia (MoHE)', href: 'https://www.mohe.gov.my/en' },
+];
+
 export async function generateMetadata() {
   return pageMetadata({
     title: 'Study in Malaysia from Bangladesh | EduExpress',
     description:
       'Study in Malaysia from Bangladesh: MQA accreditation, UK dual degrees, EMGS eVAL visa guide, and BDT 0 service charge at EduExpress International.',
     path: PATH,
-    locale: 'en_GB',
+    locale: 'en_BD',
     image: ogImage('malaysia', 'Study in Malaysia from Bangladesh — EduExpress International'),
   });
 }
@@ -121,7 +129,7 @@ const universitiesStatic = [
     name: 'Asia Pacific University (APU)',
     city: 'Kuala Lumpur',
     type: 'Premier Digital Tech Institution (MDEC)',
-    ranking: 'QS World #621 · 100% Employability Track Record',
+    ranking: 'QS World #621 · Premier Digital Tech Institution (MDEC)',
     tuition: 'RM 26,000 – RM 38,000 / yr (~BDT 7.0L – 10.2L)',
     highlights: 'Cybersecurity, AI, Computing & FinTech hub with De Montfort UK dual awards.',
     logo: '/images/universities/logos/asia-pacific-university.webp',
@@ -142,7 +150,7 @@ const faqs = [
   {
     question: 'Why is Malaysia so popular among Bangladeshi students?',
     answer:
-      'Malaysia offers globally recognized UK and Australian degrees (via foreign branch campuses like Monash and Nottingham, or dual-award private universities like Sunway and Taylor’s) at 60%–70% lower tuition and living costs than London or Melbourne. Instruction is 100% in English, MQA qualifications are recognized by UGC Bangladesh, and Malaysia is a welcoming, multicultural Muslim-majority nation with universal halal food and a short 3.5-hour direct flight from Dhaka.',
+      'Malaysia offers globally recognized UK and Australian degrees (via foreign branch campuses like Monash and Nottingham, or dual-award private universities like Sunway and Taylor’s) at 60%–70% lower tuition and living costs than London or Melbourne. Instruction across international degree programs is in English, MQA-accredited qualifications are recognized for global higher study and employment, and Malaysia is a welcoming, multicultural Muslim-majority nation with widely available halal food and a short 3.5-hour direct flight from Dhaka.',
   },
   {
     question: 'What is EduExpress’s service charge for Malaysian university applications?',
@@ -185,6 +193,7 @@ export default async function StudyInMalaysiaPage() {
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
+        ...citationJsonLd(MALAYSIA_HUB_SOURCES),
       },
       {
         '@type': 'ItemList',
@@ -220,7 +229,7 @@ export default async function StudyInMalaysiaPage() {
         trail={[{ name: 'Destinations', path: '/destinations' }, { name: 'Malaysia' }]}
         eyebrow="MQA Accredited · UK & Australian Dual Degrees · BDT 0 Agency Fee"
         title="Study in Malaysia from Bangladesh."
-        lead="Earn a globally recognized UK, Australian, or Malaysian degree at 60%–70% lower total cost. Transparent tuition fees in MYR & BDT, step-by-step EMGS eVAL visa guidance, and 100% free counseling with zero service charge."
+        lead="Earn a globally recognized UK, Australian, or Malaysian degree at 60%–70% lower total cost. Transparent tuition fees in MYR & BDT, step-by-step EMGS eVAL visa guidance, and free counseling with BDT 0 EduExpress service charge."
         actions={
           <>
             <Link href={applyHref} className="ed-btn ed-btn-signal min-h-[52px] px-7">
@@ -249,7 +258,7 @@ export default async function StudyInMalaysiaPage() {
                 Kuala Lumpur & Selangor Campus Hubs
               </span>
               <span className="rounded-full bg-lime/40 px-2.5 py-0.5 text-[11px] font-bold text-petrol-800">
-                1 MYR ≈ 27 BDT
+                Planning ref: 1 MYR ≈ 27 BDT
               </span>
             </figcaption>
           </figure>
@@ -377,7 +386,7 @@ export default async function StudyInMalaysiaPage() {
               <li className="flex items-start gap-3">
                 <span className="mt-1 size-1.5 shrink-0 rounded-full bg-emerald-600" />
                 <span>
-                  <strong>Comfortable Cultural Transition:</strong> Families who value safety, modern infrastructure, 100% halal lifestyle, and close proximity to Dhaka (3.5 hours flight time).
+                  <strong>Comfortable Cultural Transition:</strong> Families who value safety, modern infrastructure, widely available halal food, and close proximity to Dhaka (3.5 hours flight time).
                 </span>
               </li>
             </ul>
@@ -723,9 +732,9 @@ export default async function StudyInMalaysiaPage() {
               </tr>
               <tr>
                 <td className="p-4 font-bold text-petrol-800">Medium of Instruction</td>
-                <td className="p-4 font-bold text-emerald-800">100% English medium across campuses</td>
+                <td className="p-4 font-bold text-emerald-800">English medium across international programs</td>
                 <td className="p-4">English or Chinese (HSK required for bilingual)</td>
-                <td className="p-4">100% English medium</td>
+                <td className="p-4">English medium</td>
               </tr>
               <tr>
                 <td className="p-4 font-bold text-petrol-800">Degree Type</td>
@@ -775,6 +784,21 @@ export default async function StudyInMalaysiaPage() {
             <p className="mt-2 text-xs leading-relaxed text-slate-600">
               Data verified against Malaysian Qualifications Agency (MQA), Education Malaysia Global Services (EMGS), and Ministry of Higher Education Malaysia (MoHE).
             </p>
+            <ul className="mt-3 space-y-1.5 text-xs font-semibold text-petrol-800">
+              {MALAYSIA_HUB_SOURCES.map((source) => (
+                <li key={source.href}>
+                  <a
+                    href={source.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-start gap-1.5 underline-offset-4 hover:underline"
+                  >
+                    <ExternalLink size={12} className="mt-0.5 shrink-0 text-emerald-700" aria-hidden="true" />
+                    <span>{source.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </Section>

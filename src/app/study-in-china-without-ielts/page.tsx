@@ -4,7 +4,14 @@ import { ogImage, pageMetadata } from '@/lib/seo';
 
 const guide = chinaGuidePages['study-in-china-without-ielts'];
 
-export const metadata = pageMetadata({ title: guide.metaTitle, description: guide.description, path: '/study-in-china-without-ielts', image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing') });
+export const metadata = pageMetadata({
+  title: guide.metaTitle,
+  description: guide.description,
+  path: '/study-in-china-without-ielts',
+  type: 'article',
+  locale: 'en_BD',
+  image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
+});
 
 export default function ChinaLanguageGuidePage() {
   return <ChinaGuidePage guide={guide} />;

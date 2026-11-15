@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, Search, ShieldCheck } from 'lucide-react';
 import UpdateCard, { updateCategory, type UpdateCardData } from '@/components/updates/UpdateCard';
 import { daysLeft } from '@/lib/update-deadlines';
+import { categoryHref } from '@/lib/update-categories';
 
 export type LibraryItem = UpdateCardData & { id: string; search: string };
 
@@ -129,6 +130,17 @@ export default function UpdatesClient({ items, now }: { items: LibraryItem[]; no
                 Show more updates ({filtered.length - shown} more)
               </button>
             </div>
+          )}
+
+          {categories.length > 0 && (
+            <nav aria-label="Category archives" className="mt-10 flex flex-wrap items-center gap-2 border-t border-canvas-soft pt-6 text-[14px]">
+              <span className="font-semibold text-ink-soft">Category archives:</span>
+              {categories.map(item => (
+                <Link key={item.label} href={categoryHref(item.label)} className="rounded-full bg-canvas-soft px-3.5 py-1.5 font-semibold text-petrol-800 transition-colors hover:bg-lime-pale">
+                  {item.label} ({item.count})
+                </Link>
+              ))}
+            </nav>
           )}
         </>
       ) : (

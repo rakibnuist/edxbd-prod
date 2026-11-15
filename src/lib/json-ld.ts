@@ -1,3 +1,5 @@
+import { toSafeExternalUrl } from './safe-url';
+
 /**
  * Serialize structured data for a `<script type="application/ld+json">` tag.
  * Escapes "<" so a CMS value containing "</script>" cannot close the tag early
@@ -38,4 +40,15 @@ export function faqJsonLd(items: { question: string; answer: string }[]) {
       acceptedAnswer: { '@type': 'Answer', text: item.answer },
     })),
   };
+}
+
+/** Schema.org `citation` list built from verified http(s) primary sources. */
+export function citationJsonLd(sources: { label: string; href: string }[]) {
+  const items = sources
+    .map(source => {
+      const safe = toSafeExternalUrl(source.href);
+      return safe ? { '@type': 'CreativeWork', name: source.label, url: safe } : null;
+    })
+    .filter((item): item is { '@type': 'CreativeWork'; name: string; url: string } => item !== null);
+  return items.length ? { citation: items } : {};
 }

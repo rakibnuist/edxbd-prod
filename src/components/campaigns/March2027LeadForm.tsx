@@ -4,7 +4,9 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Building2, Check, CheckCircle2, Loader2, LockKeyhole, MessageCircle, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { analyticsAllowed, captureUtmParameters, createConversionEventId, getUtmParameters, trackAssessmentStart, trackAssessmentSubmit, trackConversion, trackWhatsAppClick } from '@/lib/conversion-events';
+import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 import { emptyMarchEnquiry, marchAcademicLevels, marchEnquiryPayload, marchStudyRoutes, validateMarchEnquiry, type MarchEnquiryErrors, type MarchEnquiryFields } from '@/lib/march-campaign-enquiry';
+import { captureLandingFbclid, persistTrackingLeadId } from '@/lib/tracking-consent';
 
 type Selection = { university: string; program: string } | null;
 type Props = { whatsappNumber: string; route: string; onRoute: (route: string) => void; selection: Selection; onClearSelection: () => void };
@@ -32,6 +34,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
   const currentFields = { ...fields, route };
 
   useEffect(() => {
+    captureLandingFbclid();
     captureUtmParameters();
     // eslint-disable-next-line react-hooks/set-state-in-effect -- gate submission until after hydration
     setReady(true);
@@ -55,30 +58,45 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
     setRequestError('');
   };
 
-  const validateField = (key: keyof MarchEnquiryFields) =>
+  const validateField = (key: keyof MarchEnquiryFields) => {
+    const val = currentFields[key];
+    const hasValue = typeof val === 'boolean' ? val : String(val ?? '').trim().length > 0;
+    if (!hasValue && !errors[key]) return;
     setErrors(old => ({ ...old, [key]: validateMarchEnquiry(currentFields)[key] }));
+  };
 
   const firstErrorFocus = (next: MarchEnquiryErrors) =>
     (formRef.current?.elements.namedItem(Object.keys(next)[0]) as HTMLElement | null)?.focus();
 
+  const continueToStep2 = () => {
+    if (!ready || busy.current) return;
+    start();
+    const allErrors = validateMarchEnquiry(currentFields);
+    const next = Object.fromEntries(
+      Object.entries(allErrors).filter(([key]) => ['academicLevel', 'result', 'route'].includes(key))
+    ) as MarchEnquiryErrors;
+    setErrors(next);
+    setRequestError('');
+    if (Object.keys(next).length) {
+      firstErrorFocus(next);
+      return;
+    }
+    trackConversion('assessment_step_completed', { ...context(), step: 'academic_profile' });
+    setErrors({});
+    setStep(2);
+    requestAnimationFrame(() => {
+      formRef.current?.closest('#march-2027-assessment')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  };
+
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     if (!ready || busy.current) return;
-    const allErrors = validateMarchEnquiry(currentFields);
     if (step === 1) {
-      const next = Object.fromEntries(
-        Object.entries(allErrors).filter(([key]) => ['academicLevel', 'result', 'route'].includes(key))
-      ) as MarchEnquiryErrors;
-      setErrors(next);
-      if (Object.keys(next).length) {
-        firstErrorFocus(next);
-        return;
-      }
-      trackConversion('assessment_step_completed', { ...context(), step: 'academic_profile' });
-      setStep(2);
-      requestAnimationFrame(() => (formRef.current?.elements.namedItem('name') as HTMLElement | null)?.focus());
+      continueToStep2();
       return;
     }
+    const allErrors = validateMarchEnquiry(currentFields);
     setErrors(allErrors);
     setRequestError('');
     if (Object.keys(allErrors).length) {
@@ -90,6 +108,8 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
     setStatus('pending');
     const eventId = createConversionEventId('march_2027_lead');
     try {
+      const allowTracking = analyticsAllowed();
+      const metaParams = allowTracking ? await getConsentedSubmissionMetaParams().catch(() => ({})) : {};
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -99,13 +119,23 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
             program: selection?.program,
             consentTimestamp: new Date().toISOString(),
             utm: getUtmParameters(),
-            trackingConsent: process.env.NODE_ENV === 'production' && analyticsAllowed(),
+            trackingConsent: allowTracking,
             eventId,
+            ...metaParams,
           })
         ),
       });
-      if (!response.ok)
-        throw new Error('We couldn’t send your request. Your details are still here. Please try again or call us.');
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(
+          typeof data?.error === 'string' && data.error.trim()
+            ? data.error
+            : 'We couldn’t send your request. Your details are still here. Please try again or call us.'
+        );
+      }
+      if (typeof data?.leadId === 'string') {
+        persistTrackingLeadId(data.leadId);
+      }
       trackAssessmentSubmit({ ...context(), route, eventId });
       setStatus('done');
     } catch (error) {
@@ -428,36 +458,50 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
           )}
 
           <div className="mt-5 flex gap-2.5">
-            {step === 2 && (
+            {step === 1 ? (
               <button
+                key="march-step-1-continue"
                 type="button"
-                disabled={status === 'pending'}
-                onClick={() => {
-                  setStep(1);
-                  setErrors({});
-                }}
-                aria-label="Go to the previous step"
-                className="grid min-h-[3.25rem] w-12 shrink-0 place-items-center rounded-xl border border-slate-300 text-slate-700 transition hover:bg-slate-50"
+                disabled={!ready || status === 'pending'}
+                onClick={continueToStep2}
+                className="ed-btn ed-btn-signal inline-flex min-h-[3.25rem] flex-1 items-center justify-center gap-2 rounded-xl px-5 py-3 text-[15px] font-bold text-petrol-800 shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12436b] disabled:cursor-wait disabled:opacity-60"
               >
-                <ArrowLeft size={18} />
+                Continue to contact details
+                <ArrowRight size={18} />
               </button>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  disabled={status === 'pending'}
+                  onClick={() => {
+                    setStep(1);
+                    setErrors({});
+                  }}
+                  aria-label="Go to the previous step"
+                  className="grid min-h-[3.25rem] w-12 shrink-0 place-items-center rounded-xl border border-slate-300 text-slate-700 transition hover:bg-slate-50"
+                >
+                  <ArrowLeft size={18} />
+                </button>
+                <button
+                  key="march-step-2-submit"
+                  type="submit"
+                  disabled={!ready || status === 'pending'}
+                  className="ed-btn ed-btn-signal inline-flex min-h-[3.25rem] flex-1 items-center justify-center gap-2 rounded-xl px-5 py-3 text-[15px] font-bold text-petrol-800 shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12436b] disabled:cursor-wait disabled:opacity-60"
+                >
+                  {status === 'pending' ? (
+                    <>
+                      <Loader2 size={18} className="animate-spin" /> Sending your request…
+                    </>
+                  ) : (
+                    <>
+                      Get my free study plan
+                      <ArrowRight size={18} />
+                    </>
+                  )}
+                </button>
+              </>
             )}
-            <button
-              type="submit"
-              disabled={!ready || status === 'pending'}
-              className="ed-btn ed-btn-signal inline-flex min-h-[3.25rem] flex-1 items-center justify-center gap-2 rounded-xl px-5 py-3 text-[15px] font-bold text-petrol-800 shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12436b] disabled:cursor-wait disabled:opacity-60"
-            >
-              {status === 'pending' ? (
-                <>
-                  <Loader2 size={18} className="animate-spin" /> Sending your request…
-                </>
-              ) : (
-                <>
-                  {step === 1 ? 'Continue to contact details' : 'Get my free study plan'}
-                  <ArrowRight size={18} />
-                </>
-              )}
-            </button>
           </div>
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-slate-100 pt-3.5 text-center text-xs font-medium text-slate-500">

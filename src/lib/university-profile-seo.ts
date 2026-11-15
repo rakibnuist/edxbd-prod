@@ -69,7 +69,7 @@ export function universityProfileFaq(university: UniversityIdentity, programs: U
   } else if (isMalaysia) {
     items.push({
       question: `What is the EduExpress service charge and visa process for ${identity.shortName} in Malaysia?`,
-      answer: `EduExpress International provides 100% free application and EMGS visa processing (BDT 0 service charge) for ${identity.shortName}. Students pay official EMGS and tuition fees directly according to the university's offer letter and invoice.`,
+      answer: `EduExpress International provides free application and EMGS visa processing (BDT 0 service charge) for ${identity.shortName}. Students pay official EMGS and tuition fees directly according to the university's offer letter and invoice.`,
     });
   }
   if (facts.rankings?.length) {

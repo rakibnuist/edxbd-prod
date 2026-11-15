@@ -10,8 +10,8 @@ export type EvidencePage = {
   nextReviewAt: string;
 };
 
-const reviewedAt = '2026-07-19';
-const nextReviewAt = '2026-10-19';
+const reviewedAt = '2026-11-15';
+const nextReviewAt = '2027-02-15';
 
 const page = (data: Omit<EvidencePage, 'reviewedAt' | 'nextReviewAt'>): EvidencePage => ({
   ...data,
@@ -31,6 +31,12 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
       { heading: 'What you receive', body: 'Where appropriate, the assessment leads to an EduFit Decision Report comparing at least three suitable options, followed by an Itemised Fee Schedule and an Application Proof Pack.' },
       { heading: 'Who this process serves best', body: 'This process is designed for students who value an evidence based recommendation and understand that universities, scholarship bodies and government authorities issue the official decisions.' },
     ],
+    sources: [
+      { label: 'Campus China (Ministry of Education / CSC Official Portal)', href: 'https://www.campuschina.org/' },
+      { label: 'Bangladesh Medical & Dental Council (BMDC)', href: 'https://www.bmdc.org.bd/' },
+      { label: 'Malaysian Qualifications Register (MQR / MQA)', href: 'https://www2.mqa.gov.my/mqr/' },
+      { label: 'UK Visas and Immigration — Student Visas', href: 'https://www.gov.uk/browse/visas-immigration/student-visas' },
+    ],
   }),
   page({
     slug: 'how-we-verify-universities',
@@ -42,6 +48,13 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
       { heading: 'Verification record', body: 'Each record uses a unique ID and stores aliases, official links, recognition notes, exact program names, tuition periods, intake dates and source-expiry dates.' },
       { heading: 'Relationship labels', body: 'Direct partner, authorized representative, network access, public direct application and unverified are different relationships. We use “partner” only when supporting evidence is current.' },
       { heading: 'Current detail review', body: 'After its review date, time sensitive information enters a fresh source check. Application action becomes available again when the current deadline and official source are recorded.' },
+    ],
+    sources: [
+      { label: 'Ministry of Education of the People’s Republic of China', href: 'http://en.moe.gov.cn/' },
+      { label: 'Campus China (Official Study in China Portal)', href: 'https://www.campuschina.org/' },
+      { label: 'Malaysian Qualifications Register (MQR / MQA)', href: 'https://www2.mqa.gov.my/mqr/' },
+      { label: 'World Directory of Medical Schools (WDOMS)', href: 'https://www.wdoms.org/' },
+      { label: 'Bangladesh Medical & Dental Council (BMDC)', href: 'https://www.bmdc.org.bd/' },
     ],
   }),
   page({
@@ -80,6 +93,14 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
       { heading: 'Service status matters', body: 'All 12 listed destination services are open. China is the flagship because it has the deepest published EduExpress evidence base; every other listed country is active for counselling and application support.' },
       { heading: 'Your next step', body: 'Complete the Education Fit Assessment to receive a written summary of suitable routes, risks and missing information.' },
     ],
+    sources: [
+      { label: 'Campus China (Official Study in China Portal)', href: 'https://www.campuschina.org/' },
+      { label: 'Education Malaysia Global Services (EMGS)', href: 'https://educationmalaysia.gov.my/' },
+      { label: 'UK Visas and Immigration — Student Visa', href: 'https://www.gov.uk/student-visa' },
+      { label: 'Study in Korea (NIIED Official Portal)', href: 'https://www.studyinkorea.go.kr/' },
+      { label: 'Study in Finland (EDUFI Official Guide)', href: 'https://www.studyinfinland.fi/' },
+      { label: 'Study in Hungary (Tempus Public Foundation)', href: 'https://studyinhungary.hu/' },
+    ],
   }),
   page({
     slug: 'country-status',
@@ -91,6 +112,12 @@ export const evidencePages: Record<string, EvidencePage> = Object.fromEntries([
       { heading: 'Flagship', body: 'China — the current proof engine and most developed EduExpress destination service with visa-first service terms.' },
       { heading: 'Active Destination Services', body: 'United Kingdom, Hungary, South Korea, Finland, Malaysia, Malta, Cyprus, Georgia, Greece, Croatia, and Thailand have active education services with trained country ownership, clear costs, and institution verification.' },
       { heading: 'Evidence & Integrity Rule', body: 'Every destination operates under the Better Education Standard. Success statistics and student testimonials are never borrowed from another country.' },
+    ],
+    sources: [
+      { label: 'Campus China (Official Study in China Portal)', href: 'https://www.campuschina.org/' },
+      { label: 'Embassy of the People’s Republic of China in Bangladesh', href: 'https://bd.china-embassy.gov.cn/eng/' },
+      { label: 'Education Malaysia Global Services (EMGS)', href: 'https://educationmalaysia.gov.my/' },
+      { label: 'UK Visas and Immigration — Student Visa', href: 'https://www.gov.uk/student-visa' },
     ],
   }),
 ].map((item) => [item.slug, item]));

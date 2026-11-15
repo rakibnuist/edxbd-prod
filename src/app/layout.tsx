@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_BD",
     url: "https://eduexpressint.com",
     siteName: "EduExpress International",
     title: "EduExpress International | Evidence First Education Consultancy",
@@ -135,6 +135,7 @@ export default async function RootLayout({
     "name": "EduExpress International",
     "alternateName": ["EduExpress", "EduExpress International Consultancy"],
     "description": "Bangladesh's Evidence First Education Consultancy, comparing education quality, costs, recognition and career fit with written proof.",
+    "disambiguatingDescription": "Independent Bangladeshi study abroad consultancy founded in Dhaka in 2018 (Dhanmondi, Dhaka 1209); unaffiliated with unrelated companies sharing a similar name outside Bangladesh.",
     "url": "https://eduexpressint.com",
     "logo": {
       "@type": "ImageObject",
@@ -163,6 +164,9 @@ export default async function RootLayout({
     "foundingDate": "2018-03-08",
     "founder": { "@type": "Person", "name": "Abdullah Al Rakib", "jobTitle": "Founder and CEO" },
     "slogan": "Better Education. Clear Costs. Written Proof.",
+    "publishingPrinciples": "https://eduexpressint.com/how-we-verify-universities",
+    "actionableFeedbackPolicy": "https://eduexpressint.com/complaints-and-resolution",
+    "areaServed": { "@type": "Country", "name": "Bangladesh" },
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
@@ -245,6 +249,14 @@ export default async function RootLayout({
     "priceRange": "Written cost breakdown provided",
     "knowsAbout": [
       "Study Abroad",
+      "Study in China from Bangladesh",
+      "Chinese Government Scholarship (CSC)",
+      "Study in Malaysia from Bangladesh",
+      "EMGS Student Pass and VAL",
+      "Bangladesh Bank Student File",
+      "China X1 and X2 Student Visa",
+      "BMDC Recognized MBBS in China",
+      "Study Abroad Total Cost Comparison",
       "Scholarship Applications",
       "Visa Processing",
       "University Applications",
@@ -315,7 +327,7 @@ export default async function RootLayout({
           <CookieConsent />
           <RevealObserver />
           <ConditionalFooter><Footer /></ConditionalFooter>
-          {enableProductionTracking && (
+          {enableProductionTracking && process.env.VERCEL === '1' && (
             <>
               <Analytics />
               <SpeedInsights />

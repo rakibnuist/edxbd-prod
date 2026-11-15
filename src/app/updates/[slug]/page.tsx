@@ -1,4 +1,4 @@
-import { breadcrumbJsonLd, serializeJsonLd } from '@/lib/json-ld';
+import { breadcrumbJsonLd, citationJsonLd, serializeJsonLd } from '@/lib/json-ld';
 import { RSS_FEED } from '@/lib/seo';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -87,9 +87,13 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
     const plainBody = htmlToText(update.content, 300);
 
     // Search results show about 60 characters: keyword-first meta title plus a
-    // short brand, falling back to the headline when it fits.
+    // short brand once only, falling back to the headline when it fits.
     const base = update.metaTitle || update.title;
-    const title = `${base} | EduExpress`.length <= 62 ? `${base} | EduExpress` : base;
+    const title = /eduexpress/i.test(base)
+      ? base
+      : `${base} | EduExpress`.length <= 62
+        ? `${base} | EduExpress`
+        : base;
     const image = update.featuredImage
       ? { url: update.featuredImage, width: 1200, height: 630, alt: update.title }
       : { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' };
@@ -104,6 +108,7 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
       openGraph: {
         images: [image],
         url: `/updates/${slug}`,
+        locale: 'en_BD',
         title: update.title,
         description: update.excerpt || plainBody.slice(0, 160),
         type: 'article',
@@ -202,10 +207,18 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
           }
         : { '@type': 'Organization', name: update.author || 'EduExpress International', url: 'https://eduexpressint.com' },
       publisher: { '@id': 'https://eduexpressint.com/#organization' },
+      reviewedBy: { '@id': 'https://eduexpressint.com/#organization' },
       mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
       inLanguage: 'en-BD',
       keywords: tags.join(', ') || undefined,
       articleSection: categories[0] || update.category || undefined,
+      ...citationJsonLd(
+        Array.isArray(sourceUrls)
+          ? sourceUrls
+              .filter((u): u is string => typeof u === 'string' && u.trim().length > 0)
+              .map((href) => ({ label: href, href }))
+          : [],
+      ),
     };
 
     return (

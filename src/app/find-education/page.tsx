@@ -12,7 +12,7 @@ export const revalidate = 3600;
 
 const PATH = '/find-education';
 const canonical = `${SITE_URL}${PATH}`;
-const LAST_REVIEWED = '2026-11-04';
+const LAST_REVIEWED = '2026-11-15';
 
 export const metadata = pageMetadata({
   title: 'Find Universities, Programs & Scholarships 2027 | EduExpress',
@@ -62,8 +62,11 @@ const discoveryPaths = [
 
 const startingPoints = [
   { label: 'Study in China from Bangladesh', href: '/study-in-china-from-bangladesh' },
+  { label: 'China March 2027 intake', href: '/china-march-2027-intake' },
   { label: 'Cost of studying in China', href: '/study-in-china-cost-bangladesh' },
   { label: 'China scholarships explained', href: '/china-scholarships-bangladesh' },
+  { label: 'Bangladesh–China data & cost report', href: '/china-study-report-bangladesh' },
+  { label: 'Study in Malaysia (BDT 0 service fee)', href: '/study-in-malaysia-from-bangladesh' },
   { label: 'University and program finder', href: '/universities' },
   { label: 'Compare study destinations', href: '/compare-study-destinations' },
   { label: 'Guidance for parents and sponsors', href: '/for-parents' },

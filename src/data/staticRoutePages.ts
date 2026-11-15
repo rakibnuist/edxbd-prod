@@ -13,9 +13,9 @@ export const staticRouteGuides: Record<string, string | undefined> = {
   'study-in-china-cost-bangladesh': '2026-07-19',
   'study-in-china-without-ielts': '2026-07-19',
   'mbbs-in-china-bangladesh': '2026-10-24',
-  'china-intakes-deadlines': '2026-07-19',
+  'china-intakes-deadlines': '2026-11-15',
   'life-in-china-bangladeshi-students': '2026-07-19',
-  'study-in-china-from-bangladesh': '2026-07-19',
+  'study-in-china-from-bangladesh': '2026-11-15',
   'china-admission-requirements': undefined,
 };
 

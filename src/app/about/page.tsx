@@ -24,7 +24,7 @@ const timeline = [
   { year: 'Pre-COVID', title: 'University cooperation', text: 'Formal recruitment relationships were established, including a student-recruitment agreement with Linyi University.' },
   { year: 'COVID', title: 'Operations paused', text: 'International operations were temporarily suspended during the pandemic.' },
   { year: '2023', title: 'Bangladesh relaunch', text: 'EduExpress resumed operations in Dhaka from RK Tower, Banglamotor.' },
-  { year: 'Today', title: 'Dhanmondi office', text: 'Evergreen Latif, House 12/1, Road 4/A, Ground Floor, Dhanmondi, Dhaka 1209.' },
+  { year: 'Today', title: 'Dhanmondi office', text: 'Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209.' },
 ];
 
 const services = [
@@ -43,6 +43,12 @@ const structuredData = {
   description: 'Evidence-first study abroad consultancy in Dhanmondi, Dhaka since 2018.',
   inLanguage: 'en-BD',
   about: { '@id': 'https://eduexpressint.com/#organization' },
+  mainEntity: {
+    '@type': 'Person',
+    name: 'Abdullah Al Rakib',
+    jobTitle: 'Founder and CEO',
+    worksFor: { '@id': 'https://eduexpressint.com/#organization' },
+  },
   isPartOf: { '@id': 'https://eduexpressint.com/#website' },
   breadcrumb: { '@id': 'https://eduexpressint.com/about#breadcrumb' },
 };
@@ -104,9 +110,14 @@ export default async function About() {
             <p>
               Regional partner operations followed in Thailand and Vietnam. After a pause during COVID-19, EduExpress relaunched its
               Bangladesh operation in 2023 and now works from Dhanmondi 4/A, Dhaka, serving students and education agency partners
-              under strict transparency standards.
+              under strict transparency standards. EduExpress International (Bangladesh) is an independent consultancy based in Dhaka
+              and is unaffiliated with unrelated companies bearing similar names (such as UK-registered EduExpress Ltd.).
             </p>
-            <Link href="/proof-library" className={kit.link}>See our published records <ArrowRight size={16} aria-hidden="true" /></Link>
+            <div className="flex flex-wrap gap-5 pt-1">
+              <Link href="/proof-library" className={kit.link}>See our published records <ArrowRight size={16} aria-hidden="true" /></Link>
+              <Link href="/how-we-verify-universities" className={kit.link}>How we verify universities <ArrowRight size={16} aria-hidden="true" /></Link>
+              <Link href="/education-consultant-dhaka" className={kit.link}>Dhanmondi office guide <ArrowRight size={16} aria-hidden="true" /></Link>
+            </div>
           </div>
 
           <ol data-anim="stagger" className="relative space-y-4 border-l-2 border-dashed border-petrol-800/25 pl-7">

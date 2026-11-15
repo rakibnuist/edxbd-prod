@@ -221,6 +221,43 @@ export default function PartnershipPage() {
         </div>
       </Section>
 
+      <Section
+        id="institutional-cooperation"
+        tone="sage"
+        title="Universities, Bangladeshi schools &amp; media verification desk."
+        intro="Alongside consultancy agreements, our Dhanmondi office works directly with Chinese university international offices, Bangladeshi colleges and education journalists on verified information."
+      >
+        <div data-anim="stagger" className="grid gap-5 md:grid-cols-3">
+          <article className={kit.card}>
+            <h3 className={kit.h3}>Chinese university offices</h3>
+            <p className="mt-2 text-[15px] leading-7 text-ink-soft">
+              Update official tuition, scholarship seats or Bangladesh admissions representative listings. Relationship records are published only when written authorization is on file.
+            </p>
+            <Link href="/how-we-verify-universities" className={`mt-4 ${kit.link}`}>
+              How we verify records <ArrowRight size={15} aria-hidden="true" />
+            </Link>
+          </article>
+          <article className={kit.card}>
+            <h3 className={kit.h3}>Bangladeshi schools &amp; colleges</h3>
+            <p className="mt-2 text-[15px] leading-7 text-ink-soft">
+              Host evidence-first seminars for HSC students and parents covering realistic China costs, CSC scholarship competition, X1/X2 visa rules and BMDC awareness.
+            </p>
+            <Link href="/education-consultant-dhaka" className={`mt-4 ${kit.link}`}>
+              Dhanmondi consultation desk <ArrowRight size={15} aria-hidden="true" />
+            </Link>
+          </article>
+          <article className={kit.card}>
+            <h3 className={kit.h3}>Media &amp; researchers</h3>
+            <p className="mt-2 text-[15px] leading-7 text-ink-soft">
+              Cite live explicit CNY tuition quartiles, first-year non-tuition ranges and primary regulatory links directly from our open benchmark and JSON feed.
+            </p>
+            <Link href="/china-study-report-bangladesh" className={`mt-4 ${kit.link}`}>
+              China study benchmark <ArrowRight size={15} aria-hidden="true" />
+            </Link>
+          </article>
+        </div>
+      </Section>
+
       <section className="bg-petrol-800 py-16 text-white lg:py-20">
         <div className={`${kit.wrap} flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between`}>
           <div className="max-w-2xl">

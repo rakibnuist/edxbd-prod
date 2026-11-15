@@ -20,16 +20,17 @@ import {
   Zap,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import BnChinaRelatedGuides from '@/components/page/BnChinaRelatedGuides';
 import { JsonLd, Section, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
-import { breadcrumbJsonLd } from '@/lib/json-ld';
+import { breadcrumbJsonLd, citationJsonLd, type Crumb } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
 const PATH = '/bn/study-in-china-cost-bangladesh';
 const EN_PATH = '/study-in-china-cost-bangladesh';
-const trail = [
-  { name: 'চীনে উচ্চশিক্ষা', href: '/bn/study-in-china' },
+const trail: Crumb[] = [
+  { name: 'চীনে উচ্চশিক্ষা', path: '/bn/study-in-china' },
   { name: 'পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড' },
 ];
 
@@ -39,6 +40,7 @@ export const metadata = pageMetadata({
     'চীনে Bachelor, Master’s ও MBBS পড়ার বাস্তবসম্মত খরচ (টাকা ও RMB হিসাব)। ভিসার আগে কোনো সার্ভিস ফি নেই এবং CSC ও Provincial স্কলারশিপের পূর্ণাঙ্গ বিবরণ।',
   path: PATH,
   image: ogImage('china', 'Chinese university campus and cost planning guide'),
+  type: 'article',
   locale: 'bn_BD',
   languages: {
     'en-BD': EN_PATH,
@@ -50,35 +52,35 @@ export const metadata = pageMetadata({
 const costTiers = [
   {
     title: 'Full CSC Scholarship (Type A / B)',
-    tag: 'সর্বোচ্চ সাশ্রয়ী (Fully Funded)',
-    highlight: '১০০% Tuition Fee ও Dormitory ফ্রি + মাসিক হ্যান্ডসাম Stipend',
-    tuition: 'BDT 0 (সম্পূর্ণ Tuition Waiver)',
-    hostel: 'ফ্রি ইউনিভার্সিটি ডরমিটরি (Single / Double Room)',
-    stipend: 'মাসিক 2,500 – 3,500 RMB (প্রায় ৪৬,০০০ – ৬৫,০০০ টাকা)',
+    tag: 'পূর্ণ সরকারি স্কলারশিপ রুট',
+    highlight: 'পূর্ণ টিউশন ও ডরমিটরি কাভারেজ + মাসিক স্টাইপেন্ড (অফিশিয়াল অ্যাওয়ার্ড অনুযায়ী)',
+    tuition: 'সম্পূর্ণ টিউশন মওকুফ (Full CSC Award অনুযায়ী)',
+    hostel: 'ফ্রি ক্যাম্পাস ডরমিটরি বা নির্ধারিত আবাসন ভাতা',
+    stipend: 'Bachelor: CNY ২,৫০০ · Master’s / General Scholar: CNY ৩,০০০ · PhD / Senior Scholar: CNY ৩,৫০০ / মাস',
     outOfPocket:
-      'শুধুমাত্র Medical Insurance (৮০০ RMB/বছর), Residence Permit (৪০০ RMB) এবং এককালীন বিমান ভাড়া।',
+      'মেডিকেল ইন্স্যুরেন্স নীতিগত মান CNY ৮০০/বছর (৬ মাসের কমে CNY ৪০০) স্কলারশিপের অংশ হলেও বিমান ভাড়া, পাসপোর্ট, ডকুমেন্ট নোটারি, ভিসা এবং স্টাইপেন্ড আসার আগের প্রাথমিক খরচ হাতে রাখতে হয়।',
     badgeTone: 'bg-emerald-50 text-emerald-800 border-emerald-200',
   },
   {
-    title: 'Partial / Provincial Scholarship',
-    tag: 'সবচেয়ে জনপ্রিয় বিকল্প',
-    highlight: '৫০% থেকে ১০০% পর্যন্ত Tuition Fee ছাড়',
-    tuition: '০ – ১৫,০০০ RMB / বছর (প্রায় BDT 0 – ২.৮০ লাখ)',
-    hostel: '১,৫০০ – ৪,৫০০ RMB / বছর (প্রায় ২৮,০০০ – ৮৪,০০০ টাকা)',
-    stipend: 'কিছু বিশ্ববিদ্যালয় বার্ষিক এককালীন মেরিট স্টাইপেন্ড প্রদান করে',
+    title: 'Partial / Provincial / University Scholarship',
+    tag: 'আংশিক বা বিশ্ববিদ্যালয় স্কলারশিপ',
+    highlight: 'লিখিত অ্যাওয়ার্ড লেটার অনুযায়ী আংশিক বা পূর্ণ টিউশন ছাড়',
+    tuition: 'মূল টিউশন থেকে অ্যাওয়ার্ডের অংশ বাদে বাকি পরিমাণ CNY-তে নির্ধারিত (উদাহরণস্বরূপ প্রোগ্রামভেদে ১৫,০০০–৩০,০০০ CNY মূল ফি থেকে ছাড়)',
+    hostel: 'ক্যাম্পাস ডরমিটরি রুমভেদে ভিন্ন হয় (যেমন Tsinghua বেইজিং ক্যাম্পাস উদাহরণ: দৈনিক ৩০–৪০ CNY প্রতি শয্যা; সিট বুকিং সাপেক্ষ)',
+    stipend: 'কিছু বিশ্ববিদ্যালয় বা প্রভিন্সিয়াল স্কলারশিপে আংশিক বা বার্ষিক ভাতা থাকতে পারে (নিশ্চিত অ্যাওয়ার্ড দেখে হিসাব করুন)',
     outOfPocket:
-      'খাবার ও ব্যক্তিগত পকেট খরচ: মাসিক ১,০০০ – ১,৫০০ RMB (প্রায় ১৮,০০০ – ২৮,০০০ টাকা)।',
+      'খাবার, স্থানীয় যাতায়াত, ইউটিলিটি ও ব্যক্তিগত জীবনযাত্রার খরচ শহর ও শিক্ষার্থীর অভ্যাসের ওপর ভিত্তি করে CNY-তে আলাদা বাজেট করতে হয়।',
     badgeTone: 'bg-blue-50 text-blue-800 border-blue-200',
   },
   {
-    title: 'Self-Funded (স্ব-অর্থায়ন)',
+    title: 'Self-Funded (স্ব-অর্থায়ন রুট)',
     tag: 'সরাসরি ভর্তি (Direct Admission)',
-    highlight: 'সাশ্রয়ী টিউশনে আন্তর্জাতিক মানের ডিগ্রি',
-    tuition: 'Engineering / Business: ১২,০০০ – ২৫,০০০ RMB / বছর (প্রায় ২.২৫ – ৪.৬৭ লাখ টাকা)',
-    hostel: '২,০০০ – ৬,০০০ RMB / বছর (প্রায় ৩৭,০০০ – ১.১২ লাখ টাকা)',
-    stipend: 'প্রযোজ্য নয় (তবে ২য় বর্ষ থেকে রেজাল্টের ভিত্তিতে University Merit Scholarship সম্ভব)',
+    highlight: 'প্রকাশিত বিশ্ববিদ্যালয় ফি শিডিউল অনুযায়ী CNY-তে টিউশন হিসাব',
+    tuition: 'বিশ্ববিদ্যালয়, বিষয় ও ভাষার ওপর নির্ভরশীল (যেমন প্রকাশিত উদাহরণ: Shandong-এ মানবিক/অর্থনীতি চাইনিজ মাধ্যম CNY ২০,০০০ ও বিজ্ঞান-প্রযুক্তি ইংরেজি মাধ্যম CNY ৩০,০০০/বছর; AHUT-এ প্রোগ্রামভেদে CNY ১৫,০০০–৩০,০০০/বছর)',
+    hostel: 'উদাহরণ: AHUT ডাবল রুম CNY ৩,০০০/বছর; ডরমিটরি প্রাপ্যতা ও ইউটিলিটি নিয়ম বিশ্ববিদ্যালয়ভেদে ভিন্ন',
+    stipend: 'সাধারণত প্রযোজ্য নয় (কোনো পরবর্তী বর্ষের মেধা-পুরস্কার নিশ্চিত ধরে নেওয়া উচিত নয়)',
     outOfPocket:
-      'MBBS প্রোগ্রামের বার্ষিক Tuition Fee সাধারণত ৩০,০০০ – ৫০,০০০ RMB (প্রায় ৫.৬০ – ৯.৩৩ লাখ টাকা; BMDC ও WHO স্বীকৃত)।',
+      'ইংরেজি মাধ্যমের MBBS প্রোগ্রাম চূড়ান্ত করতে হলে চীনের MoE (Ministry of Education) অনুমোদন ও WDOMS তালিকা যাচাই করুন এবং দেশে ফিরে BMDC-র RQE নীতিমালা অনুসরণ করুন। প্রতিটি প্রোগ্রামের আসল CNY ফি ডিরেক্টরিতে যাচাই করুন।',
     badgeTone: 'bg-canvas-soft text-petrol-800 border-rule',
   },
 ];
@@ -86,38 +88,38 @@ const costTiers = [
 const annualComparisonRows = [
   {
     category: 'Full CSC Scholarship',
-    tuition: '০ টাকা (ফ্রি)',
-    hostel: 'ফ্রি ডরমিটরি',
-    foodPersonal: 'মাসিক Stipend থেকেই খাবার খরচ মেটানো যায়',
-    totalOutPocket: 'শুধু Insurance, Visa ও বিমান ভাড়া',
+    tuition: 'অফিশিয়াল অ্যাওয়ার্ডে মওকুফ (CNY ০)',
+    hostel: 'ফ্রি ডরমিটরি বা আবাসন ভাতা',
+    foodPersonal: 'মাসিক CNY ২,৫০০–৩,৫০০ স্টাইপেন্ড (প্রোগ্রাম ভেদে)',
+    totalOutPocket: 'ভিসা, ডকুমেন্টস, বিমান ভাড়া ও শুরুর দিনের নিজস্ব রিজার্ভ (BDT/CNY)',
   },
   {
-    category: 'Provincial / University Scholarship (Tuition Free)',
-    tuition: '০ টাকা (100% Waiver)',
-    hostel: '২৮,০০০ – ৫৫,০০০ টাকা',
-    foodPersonal: '২.২০ – ২.৮০ লাখ টাকা',
-    totalOutPocket: 'বার্ষিক প্রায় ২.৫০ – ৩.৪০ লাখ টাকা',
+    category: 'Provincial / University Scholarship (Tuition Waiver)',
+    tuition: 'লিখিত অ্যাওয়ার্ড অনুযায়ী মওকুফ',
+    hostel: 'বিশ্ববিদ্যালয় নির্ধারিত ডরমিটরি ফি (CNY)',
+    foodPersonal: 'শহর ও লাইফস্টাইল ভেদে নিজস্ব খাবার ও চলাচল ব্যয় (CNY)',
+    totalOutPocket: 'ডরমিটরি, ইন্স্যুরেন্স, যাতায়াত ও জীবনযাত্রার খরচ (ব্যাংক রেটে BDT রূপান্তর)',
   },
   {
-    category: 'Partial Scholarship (50% Tuition Waiver)',
-    tuition: '১.২০ – ১.৮০ লাখ টাকা',
-    hostel: '২৮,০০০ – ৫৫,০০০ টাকা',
-    foodPersonal: '২.২০ – ২.৮০ লাখ টাকা',
-    totalOutPocket: 'বার্ষিক প্রায় ৩.৭০ – ৫.১৫ লাখ টাকা',
+    category: 'Partial Scholarship',
+    tuition: 'মূল CNY টিউশন থেকে নিশ্চিত ডিসকাউন্ট বাদ দিয়ে বাকি অংশ',
+    hostel: 'রুম ও ক্যাম্পাস ভেদে নির্ধারিত CNY ফি',
+    foodPersonal: 'শহর ও লাইফস্টাইল ভেদে নিজস্ব ব্যয় (CNY)',
+    totalOutPocket: 'বাকি টিউশন + আবাসন + জীবনযাত্রা (একক গড় অনুমান নয়)',
   },
   {
-    category: 'Self-Funded (Engineering / BBA / CS)',
-    tuition: '২.২৫ – ৪.৫০ লাখ টাকা',
-    hostel: '৩৭,০০০ – ৮০,০০০ টাকা',
-    foodPersonal: '২.২০ – ২.৮০ লাখ টাকা',
-    totalOutPocket: 'বার্ষিক প্রায় ৪.৮০ – ৭.৫০ লাখ টাকা',
+    category: 'Self-Funded (Degree Examples)',
+    tuition: 'প্রকাশিত উদাহরণ: CNY ১৫,০০০ – ৩০,০০০+/বছর (প্রোগ্রামভেদে)',
+    hostel: 'প্রকাশিত উদাহরণ: AHUT CNY ৩,০০০/বছর বা দৈনিক CNY ৩০–৪০',
+    foodPersonal: 'মেডিকেল ইন্স্যুরেন্স CNY ৮০০/বছর + খাবার ও ব্যক্তিগত ব্যয়',
+    totalOutPocket: 'কোর্স ও শহরভেদে লিখিত ফি-শিট + ব্যাংকের তারিখভুক্ত রেটে BDT হিসাব',
   },
   {
     category: 'Self-Funded MBBS (English Medium)',
-    tuition: '৫.৬০ – ৯.৩০ লাখ টাকা',
-    hostel: '৫৫,০০০ – ১.১০ লাখ টাকা',
-    foodPersonal: '২.৫০ – ৩.২০ লাখ টাকা',
-    totalOutPocket: 'বার্ষিক প্রায় ৮.৬৫ – ১৩.৬০ লাখ টাকা',
+    tuition: 'বিশ্ববিদ্যালয় অনুযায়ী আলাদা (MoE অনুমোদিত প্রোগ্রাম তালিকা দেখে নিশ্চিত করুন)',
+    hostel: 'বিশ্ববিদ্যালয়ের নির্ধারিত ডরমিটরি ও ইউটিলিটি ফি (CNY)',
+    foodPersonal: 'ইন্স্যুরেন্স, রেসিডেন্স পারমিট ও ৫–৬ বছরের ব্যক্তিগত বাজেট (CNY)',
+    totalOutPocket: 'আমাদের China Directory-তে প্রতিটি মেডিকেল স্কুলের প্রকাশিত ফি যাচাই করুন',
   },
 ];
 
@@ -150,26 +152,35 @@ const faqs = [
     a: 'শিক্ষার্থী ভ্রমণের সময় আইনসম্মতভাবে পাসপোর্টে ডলার বা ইউয়ান এনডোর্স করে সাথে ক্যাশ নিতে পারেন। এছাড়া ইন্টারন্যাশনাল কার্ড বা পরবর্তীতে লোকাল ব্যাংক অ্যাকাউন্টের মাধ্যমেও খরচ ম্যানেজ করা যায়।',
   },
   {
-    q: 'চীনে পড়ার জন্য কি ব্যাংকে বড় অঙ্কের Bank Solvency দেখাতে হয়?',
-    a: 'চায়না এম্বাসির ভিসার জন্য সাধারণ একটি ব্যাংক স্টেটমেন্ট বা সলভেন্সি সার্টিফিকেটই যথেষ্ট (সাধারণত ৫ থেকে ৮ লাখ টাকা সমপরিমাণ ব্যালেন্স)। কোনো অস্বাভাবিক লেনদেন বা জটিল প্রমাণের প্রয়োজন পড়ে না।',
+    q: 'চীনে পড়ার জন্য কি ব্যাংকে কত ব্যালেন্স দেখাতে হয় (Bank Evidence)?',
+    a: 'পূর্ণ স্কলারশিপ থাকলে অফিশিয়াল স্কলারশিপ অ্যাওয়ার্ড প্রমাণ ব্যবহৃত হয়। স্ব-অর্থায়িত (Self-funded) X1 ভিসার ক্ষেত্রে ঢাকাস্থ চীনা দূতাবাসের প্রকাশিত নির্দেশনায় প্রতি শিক্ষাবর্ষের জন্য অন্তত USD ২,৫০০ সমপরিমাণ ব্যাংক প্রমাণ চাওয়া হয়—এটি ভিসার ন্যূনতম নথিগত মানদণ্ড মাত্র, পড়াশোনার মোট বাস্তব বাজেট নয়।',
   },
   {
     q: 'ভিসা হওয়ার আগে EduExpress-কে কি কোনো সার্ভিস চার্জ দিতে হবে?',
-    a: 'একদমই না। আমাদের চায়না প্যাকেজে ফাইল ওপেনিং চার্জ সম্পূর্ণ ০ টাকা। চায়না স্টুডেন্ট ভিসা (X1/X2) কনফার্ম হওয়ার পূর্বে আমাদের কোনো সার্ভিস ফি নেই। ভিসা শতভাগ নিশ্চিত হওয়ার পর নির্ধারিত প্যাকেজ ফি (BDT 2,00,000) প্রদেয়।',
+    a: 'একদমই না। কোনো ফাইল ওপেনিং চার্জ নেই এবং চায়না স্টুডেন্ট ভিসা (X1/X2) অনুমোদনের আগে EduExpress কোনো সার্ভিস ফি নেয় না। ভিসা অনুমোদনের পর আমাদের Complete China Support Package-এর নির্ধারিত সার্ভিস ফি BDT ২,০০,০০০ (যেটি বিশ্ববিদ্যালয়ের টিউশন বা স্কলারশিপ থেকে সম্পূর্ণ আলাদা; লিখিত চুক্তিতে সব শর্ত স্পষ্ট থাকে)। বিশ্ববিদ্যালয়, এম্বাসি বা মেডিকেল ধরনের থার্ড-পার্টি ফি আগে প্রযোজ্য হলে তা আগেই লিখিতভাবে তালিকাভুক্ত করা হয়।',
   },
 ];
 
 const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'Article',
+  '@type': ['WebPage', 'Article'],
   '@id': `${SITE}${PATH}#article`,
   url: `${SITE}${PATH}`,
   headline: 'চীনে পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড ২০২৭',
   description:
     'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে পড়াশোনার পূর্ণাঙ্গ ব্যয় বিবরণী ও স্কলারশিপ গাইড।',
   inLanguage: 'bn-BD',
+  mainEntityOfPage: `${SITE}${PATH}`,
+  author: { '@id': `${SITE}/#organization` },
+  reviewedBy: { '@id': `${SITE}/#organization` },
   publisher: { '@id': `${SITE}/#organization` },
+  isPartOf: { '@id': `${SITE}/#website` },
   breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
+  ...citationJsonLd([
+    { label: 'CampusChina — Chinese Government Scholarship', href: 'https://www.campuschina.org/' },
+    { label: 'Chinese Embassy in Bangladesh', href: 'https://bd.china-embassy.gov.cn/eng/' },
+    { label: 'Chinese Visa Application Service Center in Dhaka (CVASC)', href: 'https://www.visaforchina.cn/DAC4_EN/' },
+  ]),
 };
 
 const faqStructuredData = {
@@ -258,15 +269,15 @@ export default function BengaliChinaCostPage() {
           <div className="flex items-center gap-3">
             <CheckCircle2 className="size-8 text-lime shrink-0" />
             <div>
-              <p className="text-[15px] font-bold text-petrol-800">১০০% স্বচ্ছ হিসাব</p>
-              <p className="text-[13px] text-ink-soft">কোনো গোপন বা অপ্রত্যাশিত চার্জ নেই</p>
+              <p className="text-[15px] font-bold text-petrol-800">লিখিত ও স্বচ্ছ হিসাব</p>
+              <p className="text-[13px] text-ink-soft">প্রতিটি পেমেন্ট ও প্রাপক আগে লিখিত থাকে</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <Calculator className="size-8 text-lime shrink-0" />
             <div>
-              <p className="text-[15px] font-bold text-petrol-800">BDT ও RMB রূপান্তর</p>
-              <p className="text-[13px] text-ink-soft">১ RMB ≈ ১৮.৬৬ টাকা (মার্কেট রেট অনুযায়ী)</p>
+              <p className="text-[15px] font-bold text-petrol-800">BDT ও CNY পৃথক হিসাব</p>
+              <p className="text-[13px] text-ink-soft">ব্যাংকের তারিখভুক্ত রেট অনুযায়ী রূপান্তর</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -367,8 +378,8 @@ export default function BengaliChinaCostPage() {
                 <th className="p-4 sm:p-5">ক্যাটাগরি / কোর্স</th>
                 <th className="p-4 sm:p-5">বার্ষিক Tuition Fee</th>
                 <th className="p-4 sm:p-5">বার্ষিক ডরমিটরি</th>
-                <th className="p-4 sm:p-5">খাবার ও হাতখরচ (বার্ষিক)</th>
-                <th className="p-4 sm:p-5 font-black text-petrol-800">অভিভাবকের সম্ভাব্য খরচ</th>
+                <th className="p-4 sm:p-5">জীবনযাত্রা ও স্টাইপেন্ড (CNY)</th>
+                <th className="p-4 sm:p-5 font-black text-petrol-800">বাজেট নোট ও মুদ্রা (CNY / BDT)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-rule text-ink-soft">
@@ -385,7 +396,7 @@ export default function BengaliChinaCostPage() {
           </table>
         </div>
         <p className="mt-4 text-[13px] text-ink-mute leading-relaxed">
-          *হিসাবটি আনুমানিক এবং ১ RMB = ১৮.৬৬ টাকা ও ১ USD = ১২২ টাকা ধরে রূপান্তর করা হয়েছে। কোর্স, শহর এবং শিক্ষার্থীর নিজস্ব লাইফস্টাইলের ওপর নির্ভর করে খরচ কিছুটা কম-বেশি হতে পারে।
+          *বিভিন্ন বিশ্ববিদ্যালয়ের প্রকাশিত উদাহরণগুলো জাতীয় গড় বা চূড়ান্ত ব্যক্তিগত কোট নয়; আসল ফি ও মুদ্রা বিশ্ববিদ্যালয়, শহর ও ইনটেক অনুযায়ী নির্ধারিত হয়। আমরা কোনো স্থির CNY/RMB-টু-BDT রেট অনুমান করি না—BDT বাজেট করার সময় আপনার ব্যাংক বা রেমিট্যান্স মাধ্যমের তারিখভুক্ত বিনিময় হার ও স্থানান্তর চার্জ আলাদাভাবে যোগ করুন।
         </p>
       </Section>
 
@@ -398,13 +409,13 @@ export default function BengaliChinaCostPage() {
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-lime/20 px-3.5 py-1 text-[13px] font-semibold text-lime">
-                <ShieldCheck size={16} /> ভিসা-ফার্স্ট (Visa-First) প্রতিশ্রুতি
+                <ShieldCheck size={16} /> ভিসা-ফার্স্ট (Visa-First) নীতিমালা
               </span>
               <h3 className="mt-4 font-display text-[26px] font-bold sm:text-[32px]">
-                ভিসা নিশ্চিত হওয়ার আগে আমাদের সার্ভিস ফি BDT 0
+                ভিসা অনুমোদনের আগে আমাদের সার্ভিস ফি BDT 0
               </h3>
               <p className="mt-4 text-[16px] leading-relaxed text-white/85">
-                চায়না প্যাকেজের জন্য ফাইল ওপেনিং চার্জ সম্পূর্ণ ০ টাকা। চায়না ভিসা স্ট্যাম্পিংয়ের আগে EduExpress কোনো সার্ভিস ফি গ্রহণ করে না। ভিসা শতভাগ নিশ্চিত হওয়ার পর নির্ধারিত প্যাকেজ ফি (BDT 2,00,000) পরিশোধযোগ্য।
+                চায়না প্যাকেজের জন্য ফাইল ওপেনিং চার্জ সম্পূর্ণ ০ টাকা। চায়না ভিসা অনুমোদনের আগে EduExpress কোনো সার্ভিস ফি গ্রহণ করে না। ভিসা অনুমোদনের পর Complete China Support Package-এর নির্ধারিত সার্ভিস ফি BDT ২,০০,০০০ প্রদেয়, যা বিশ্ববিদ্যালয়ের টিউশন বা থার্ড-পার্টি খরচ থেকে সম্পূর্ণ আলাদা এবং লিখিত চুক্তিতে নির্ধারিত।
               </p>
               <p className="mt-3 text-[14px] leading-relaxed text-white/70">
                 *বিশ্ববিদ্যালয় কর্তৃক নির্ধারিত Application Fee, অনুমোদিত মেডিকেল টেস্ট বা সরকারি এম্বাসি ফি সরাসরি সংশ্লিষ্ট কর্তৃপক্ষকে প্রদেয় এবং আবেদনের পূর্বেই লিখিত কস্ট শিটে স্পষ্ট উল্লেখ থাকে।
@@ -475,6 +486,12 @@ export default function BengaliChinaCostPage() {
           </div>
         </div>
       </section>
+
+      <BnChinaRelatedGuides
+        currentPath="/bn/study-in-china-cost-bangladesh"
+        englishTwin={{ label: 'Cost of Studying in China (English)', href: '/study-in-china-cost-bangladesh' }}
+        tone="white"
+      />
     </div>
   );
 }

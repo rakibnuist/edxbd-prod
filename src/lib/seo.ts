@@ -53,7 +53,7 @@ export function pageMetadata(seo: PageSeo): Metadata {
       url: seo.path,
       siteName: SITE_NAME,
       type: seo.type ?? 'website',
-      ...(seo.locale ? { locale: seo.locale } : {}),
+      locale: seo.locale ?? 'en_BD',
       images: [image],
     },
     twitter: {

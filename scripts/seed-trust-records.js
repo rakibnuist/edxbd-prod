@@ -38,6 +38,11 @@ async function main() {
     },
   });
 
+  // Remove legacy duplicate office slug so only dhanmondi-decision-desk exists in Office
+  await prisma.office.deleteMany({
+    where: { slug: 'dhanmondi-head-office' },
+  });
+
   const metrics = [
     {
       key: 'admission_jw202_records', value: '100+', label: 'Admission notices and JW202 records on file',
@@ -107,6 +112,16 @@ async function main() {
   };
   const packages = [
     {
+      slug: 'china-complete-support-package',
+      title: 'Complete China Support Package',
+      packageType: 'complete_support',
+      priceLabel: '2,00,000 BDT',
+      summary: 'One complete package for your China application, visa preparation, travel and arrival support.',
+      outcomeScope: 'The university award determines scholarship coverage. University tuition, accommodation and other study costs are itemised separately from the EduExpress support package.',
+      displayOrder: 1,
+      isPublished: true,
+    },
+    {
       slug: 'china-full-scholarship-package',
       title: 'Full Scholarship Service Package',
       packageType: 'full_scholarship',
@@ -114,6 +129,7 @@ async function main() {
       summary: 'A complete China application and arrival support package for students pursuing a scholarship route.',
       outcomeScope: 'Used for a scholarship award that may cover 100% tuition, accommodation, a monthly stipend, or a stated combination according to the official award letter.',
       displayOrder: 1,
+      isPublished: false,
     },
     {
       slug: 'china-partial-scholarship-package',
@@ -123,6 +139,7 @@ async function main() {
       summary: 'A complete China application and arrival support package when the student pays part or all of tuition and other study costs.',
       outcomeScope: 'The scholarship award and the student paid tuition, accommodation and other costs are itemized together before the student proceeds.',
       displayOrder: 2,
+      isPublished: false,
     },
   ];
   for (const servicePackage of packages) {
@@ -149,6 +166,13 @@ async function main() {
       create: { slug, name, role, shortRole, bio, specialties: JSON.stringify(specialties), displayOrder, isPublished: true },
     });
   }
+
+  console.log('Synced canonical Dhanmondi office, trust metrics, service packages, and team members.');
 }
 
-main().finally(() => prisma.$disconnect());
+main()
+  .catch((error) => {
+    console.error('Failed to seed trust records:', error);
+    process.exitCode = 1;
+  })
+  .finally(() => prisma.$disconnect());

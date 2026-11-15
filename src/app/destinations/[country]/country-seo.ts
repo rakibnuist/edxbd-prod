@@ -67,7 +67,7 @@ export const COUNTRY_SEO: Record<string, CountrySeo> = {
     displayName: 'Malaysia',
     title: 'Study in Malaysia from Bangladesh: Costs & EMGS | EduExpress',
     description:
-      'Study in Malaysia from Bangladesh: $3,500–$7,000 yearly tuition, February and September intakes, IELTS 5.0–6.0, and EMGS visa approval letter steps explained.',
+      'Study in Malaysia from Bangladesh: RM 12,000–45,000 yearly tuition, RM 1,200–2,000 monthly living, EMGS VAL & Bangladesh Bank Student File with BDT 0 EduExpress fee.',
     photoAlt: 'The Petronas Twin Towers and the Kuala Lumpur skyline at dusk',
   },
   malta: {
@@ -91,4 +91,48 @@ export const COUNTRY_SEO: Record<string, CountrySeo> = {
       'Study in Thailand from Bangladesh: English-taught business, hospitality and technology programs, with university checks, dated written costs and visa checks.',
     photoAlt: 'Thai temple buildings and gardens under a blue sky',
   },
+};
+
+export const OFFICIAL_COUNTRY_SOURCES: Record<string, { label: string; href: string }[]> = {
+  uk: [
+    { label: 'UK Visas and Immigration (UKVI) — Student Visa Official Guidance', href: 'https://www.gov.uk/student-visa' },
+    { label: 'GOV.UK — Register of Licensed Student Sponsors', href: 'https://www.gov.uk/government/publications/register-of-licensed-sponsors-students' },
+    { label: 'British Council — Study UK Official Portal', href: 'https://study-uk.britishcouncil.org/' },
+  ],
+  'south-korea': [
+    { label: 'NIIED — Study in Korea & Global Korea Scholarship (GKS) Portal', href: 'https://www.studyinkorea.go.kr/' },
+    { label: 'Embassy of the Republic of Korea in Bangladesh', href: 'https://overseas.mofa.go.kr/bd-en/index.do' },
+  ],
+  hungary: [
+    { label: 'Tempus Public Foundation — Stipendium Hungaricum Official Portal', href: 'https://stipendiumhungaricum.hu/' },
+    { label: 'Study in Hungary — Official Higher Education Portal', href: 'https://studyinhungary.hu/' },
+  ],
+  finland: [
+    { label: 'Studyinfo.fi — Official Finnish National Application Portal', href: 'https://opintopolku.fi/konfo/en/' },
+    { label: 'Finnish Immigration Service (Migri) — Student Residence Permit & Means of Support', href: 'https://migri.fi/en/studying-in-finland' },
+  ],
+  cyprus: [
+    { label: 'Cyprus Agency of Quality Assurance and Accreditation in Higher Education (CYQAA)', href: 'https://www.dipae.ac.cy/index.php/en/' },
+    { label: 'Ministry of Education, Sport and Youth — Republic of Cyprus', href: 'https://www.moec.gov.cy/en/' },
+  ],
+  croatia: [
+    { label: 'Agency for Science and Higher Education (ASHE / AZVO) — Croatia', href: 'https://www.azvo.hr/en/' },
+    { label: 'Study in Croatia — Official Higher Education Portal', href: 'https://www.studyincroatia.hr/' },
+  ],
+  georgia: [
+    { label: 'National Center for Educational Quality Enhancement (NCEQE) — Georgia', href: 'https://eqe.ge/en' },
+    { label: 'Bangladesh Medical & Dental Council (BMDC)', href: 'https://www.bmdc.org.bd/' },
+  ],
+  malta: [
+    { label: 'Malta Further & Higher Education Authority (MFHEA)', href: 'https://mfhea.mt/' },
+    { label: 'Identità Malta — Central Visa Unit & Student Residence', href: 'https://identita.gov.mt/' },
+  ],
+  greece: [
+    { label: 'Study in Greece — Official Higher Education Portal', href: 'https://studyingreece.edu.gr/' },
+    { label: 'Hellenic Authority for Higher Education (HAHE / ETHAAE)', href: 'https://www.ethaae.gr/en/' },
+  ],
+  thailand: [
+    { label: 'Ministry of Higher Education, Science, Research and Innovation (MHESI) — Thailand', href: 'https://www.mhesi.go.th/' },
+    { label: 'Royal Thai Embassy, Dhaka — Consular & Non-Immigrant ED Visa', href: 'https://dhaka.thaiembassy.org/' },
+  ],
 };

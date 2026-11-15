@@ -12,6 +12,7 @@ import { DESTINATION_PHOTOS } from '@/components/destinations/DestinationCover';
 import { programSegments } from '@/lib/program-segments';
 import { chinaCities } from '@/lib/city-pages';
 import { getUniversityRecords } from '@/lib/university-records';
+import { publicTestimonialWhere } from '@/lib/testimonial-visibility';
 
 const SITE = 'https://eduexpressint.com';
 const abs = (src: string) => (src.startsWith('http') ? src : `${SITE}${src}`);
@@ -57,7 +58,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/for-parents',
     '/proof-library',
     '/csc-scholarship-bangladesh',
+    '/china-study-report-bangladesh',
     '/bn/study-in-china',
+    '/bn/china-student-visa-bangladesh',
+    '/bn/study-in-china-cost-bangladesh',
+    '/bn/csc-scholarship-bangladesh',
+    '/bn/mbbs-in-china-bangladesh',
+    '/malaysia-study-cost-bangladesh',
+    '/malaysia-student-visa-bangladesh',
     '/programs',
     ...programSegments.map((segment) => `/programs/${segment.slug}`),
     '/compare-costs',
@@ -71,20 +79,48 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]));
   // Static pages were rebuilt on the shared page kit on this date.
   const STATIC_CONTENT_UPDATED = new Date('2026-11-06');
-  const routes = staticPaths.map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: STATIC_CONTENT_UPDATED,
-    changeFrequency: 'weekly' as const,
-    priority: route === '' ? 1 : route === '/education-fit-assessment' ? 0.9 : 0.8,
-    ...(PAGE_IMAGES[route] ? { images: PAGE_IMAGES[route].map(abs) } : {}),
-  }));
+  const NOVEMBER_MID_UPDATED = new Date('2026-11-15');
+  const novemberMidPaths = new Set([
+    '/china-study-report-bangladesh',
+    '/education-consultant-dhaka',
+    '/study-in-china-from-bangladesh',
+    '/china-intakes-deadlines',
+    '/china-march-2027-intake',
+    '/csc-scholarship-bangladesh',
+    '/bn/study-in-china',
+    '/bn/china-student-visa-bangladesh',
+    '/bn/study-in-china-cost-bangladesh',
+    '/bn/csc-scholarship-bangladesh',
+    '/bn/mbbs-in-china-bangladesh',
+    '/study-in-malaysia-from-bangladesh',
+    '/malaysia-study-cost-bangladesh',
+    '/malaysia-student-visa-bangladesh',
+    '/programs',
+    '/china-universities',
+    '/updates',
+  ]);
+  const routes = staticPaths.map((route) => {
+    const slug = route.replace(/^\//, '');
+    const evidenceReviewedAt = evidencePages[slug]?.reviewedAt;
+    return {
+      url: `${baseUrl}${route}`,
+      lastModified: evidenceReviewedAt
+        ? new Date(evidenceReviewedAt)
+        : novemberMidPaths.has(route)
+          ? NOVEMBER_MID_UPDATED
+          : STATIC_CONTENT_UPDATED,
+      changeFrequency: 'weekly' as const,
+      priority: route === '' ? 1 : route === '/education-fit-assessment' ? 0.9 : 0.8,
+      ...(PAGE_IMAGES[route] ? { images: PAGE_IMAGES[route].map(abs) } : {}),
+    };
+  });
 
   // Dynamic routes (Countries)
   const countryRoutes: MetadataRoute.Sitemap = activeCountries
     .filter((country) => country.slug !== 'china')
     .map((country) => ({
     url: `${baseUrl}${destinationPath(country.slug)}`,
-    lastModified: new Date('2026-11-06'),
+    lastModified: country.slug === 'malaysia' ? NOVEMBER_MID_UPDATED : new Date('2026-11-06'),
     changeFrequency: 'weekly' as const,
     priority: 0.85,
     ...(DESTINATION_PHOTOS[country.slug] ? { images: [abs(DESTINATION_PHOTOS[country.slug])] } : {}),
@@ -124,7 +160,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ));
     const categoryRoutes: MetadataRoute.Sitemap = categoryPaths.map((slug) => ({
       url: `${baseUrl}/updates/category/${slug}`,
-      lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.6,
     }));
@@ -132,12 +167,44 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // China city landing pages, built from the same university records
     const cityRoutes: MetadataRoute.Sitemap = chinaCities(await getUniversityRecords('China')).map((city) => ({
       url: `${baseUrl}/china-universities/${city.slug}`,
-      lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.75,
     }));
 
-    return [...routes, ...countryRoutes, ...universityRoutes, ...cityRoutes, ...updateRoutes, ...categoryRoutes];
+    const publishedTestimonials = publicTestimonialWhere();
+    const [allStoriesCount, chinaStoriesCount] = await Promise.all([
+      prisma.testimonial.count({ where: publishedTestimonials }),
+      prisma.testimonial.count({
+        where: { AND: [publishedTestimonials, { country: { contains: 'China' } }] },
+      }),
+    ]);
+    const storyRoutes: MetadataRoute.Sitemap = [
+      ...(allStoriesCount > 0
+        ? [
+            {
+              url: `${baseUrl}/success-stories`,
+              lastModified: STATIC_CONTENT_UPDATED,
+              changeFrequency: 'weekly' as const,
+              priority: 0.75,
+              ...(PAGE_IMAGES['/success-stories']
+                ? { images: PAGE_IMAGES['/success-stories'].map(abs) }
+                : {}),
+            },
+          ]
+        : []),
+      ...(chinaStoriesCount > 0
+        ? [
+            {
+              url: `${baseUrl}/china-success-stories`,
+              lastModified: STATIC_CONTENT_UPDATED,
+              changeFrequency: 'weekly' as const,
+              priority: 0.75,
+            },
+          ]
+        : []),
+    ];
+
+    return [...routes, ...countryRoutes, ...universityRoutes, ...cityRoutes, ...updateRoutes, ...categoryRoutes, ...storyRoutes];
   } catch (error) {
     console.warn('Sitemap generated without database routes:', error);
     return [...routes, ...countryRoutes];

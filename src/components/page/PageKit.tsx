@@ -151,7 +151,7 @@ export function TrustBar({ universities, destination, feeNote }: { universities?
   const feeText = feeNote || (isMalaysia ? 'Free admission guidance for Malaysia' : 'No EduExpress fee before visa approval');
   const items = [
     { icon: CalendarCheck, title: 'Since 2018', text: 'Counselling families from Dhanmondi, Dhaka' },
-    { icon: MapPin, title: 'Visit in person', text: 'Saturday to Thursday, 11 AM to 6 PM' },
+    { icon: MapPin, title: 'Visit in person', text: 'Saturday to Thursday, 11:00 AM to 6:00 PM' },
     { icon: Wallet, title: feeTitle, text: feeText },
     universities
       ? { icon: BadgeCheck, title: `${universities} universities`, text: 'Fees and scholarships checked at source' }

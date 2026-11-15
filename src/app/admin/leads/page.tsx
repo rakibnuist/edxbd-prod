@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import LeadWorkspace from '@/components/admin/LeadWorkspace';
-import type { LeadRecord } from '@/lib/lead-workflow';
+import { parseMetaLeadsCsv, type LeadRecord } from '@/lib/lead-workflow';
 
 export default function LeadsPage() {
   const { isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
   const [leads, setLeads] = useState<LeadRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [importing, setImporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
@@ -43,5 +44,71 @@ export default function LeadsPage() {
       setLeads(previous => previous.filter(lead => lead.id !== id)); setNotice('Lead deleted.'); return true;
     } catch (error) { setError(error instanceof Error ? error.message : 'Delete failed.'); return false; }
   };
-  return <LeadWorkspace leads={leads} loading={loading || authLoading} error={error} notice={notice} savingId={savingId} onRefresh={() => { setLoading(true); setError(null); setRefresh(value => value + 1); }} onUpdate={update} onDelete={remove} />;
+  const copilot = async (id: string, options: { language: 'en' | 'bn'; focus?: string }) => {
+    try {
+      const response = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(id)}/copilot`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(options),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        return { error: result.error || result.message || 'Could not generate counselor co-pilot brief.' };
+      }
+      return { data: result };
+    } catch (err) {
+      return { error: err instanceof Error ? err.message : 'Unable to reach counselor co-pilot service.' };
+    }
+  };
+  const importCsv = async (file: File) => {
+    setImporting(true);
+    setError(null);
+    setNotice(null);
+    try {
+      const buffer = await file.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
+      const isUtf16Le = bytes.length >= 2 && bytes[0] === 0xff && bytes[1] === 0xfe;
+      const text = new TextDecoder(isUtf16Le ? 'utf-16le' : 'utf-8').decode(buffer);
+      const rows = parseMetaLeadsCsv(text);
+      if (!rows.length) {
+        setError('No valid lead rows found in the selected CSV file.');
+        return;
+      }
+      const existingPhones = new Set(
+        leads.map((l) => String(l.phone || '').replace(/\D/g, '').slice(-10)).filter(Boolean),
+      );
+      let importedCount = 0;
+      let skippedCount = 0;
+      const createdLeads: LeadRecord[] = [];
+      for (const row of rows) {
+        const key10 = row.phone.replace(/\D/g, '').slice(-10);
+        if (key10 && existingPhones.has(key10)) {
+          skippedCount++;
+          continue;
+        }
+        const response = await authenticatedFetch('/api/admin/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(row),
+        });
+        if (response.ok) {
+          const created: LeadRecord = await response.json();
+          createdLeads.push(created);
+          importedCount++;
+          if (key10) existingPhones.add(key10);
+        }
+      }
+      if (createdLeads.length) {
+        setLeads((prev) => [...createdLeads.reverse(), ...prev]);
+      }
+      setNotice(
+        `Imported ${importedCount} Meta ${importedCount === 1 ? 'lead' : 'leads'}${skippedCount ? ` (${skippedCount} existing skipped)` : ''}.`,
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'CSV import failed.');
+    } finally {
+      setImporting(false);
+    }
+  };
+  return <LeadWorkspace leads={leads} loading={loading || authLoading} importing={importing} error={error} notice={notice} savingId={savingId} onRefresh={() => { setLoading(true); setError(null); setRefresh(value => value + 1); }} onUpdate={update} onDelete={remove} onCopilot={copilot} onImportCsv={importCsv} />;
 }

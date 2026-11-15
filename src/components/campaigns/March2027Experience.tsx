@@ -43,15 +43,33 @@ export default function March2027Experience({
     let active = true;
     try {
       const params = new URLSearchParams(window.location.search);
-      const initialRoute = params.get('route');
-      if (
-        initialRoute &&
-        ['Foundation → Bachelor', 'Direct Bachelor', 'Master’s', 'Chinese language', 'Help me choose a route'].includes(
-          initialRoute
-        )
-      ) {
+      const rawRoute = params.get('route')?.trim();
+      const routeAliases: Record<string, string> = {
+        foundation: 'Foundation → Bachelor',
+        'foundation -> bachelor': 'Foundation → Bachelor',
+        'foundation → bachelor': 'Foundation → Bachelor',
+        bachelor: 'Direct Bachelor',
+        'direct bachelor': 'Direct Bachelor',
+        'direct-bachelor': 'Direct Bachelor',
+        mbbs: 'Direct Bachelor',
+        masters: 'Master’s',
+        "master's": 'Master’s',
+        'master’s': 'Master’s',
+        language: 'Chinese language',
+        'chinese language': 'Chinese language',
+        'chinese-language': 'Chinese language',
+        help: 'Help me choose a route',
+        'help me choose a route': 'Help me choose a route',
+      };
+      const resolvedRoute = rawRoute
+        ? routeAliases[rawRoute.toLowerCase()] ||
+          (['Foundation → Bachelor', 'Direct Bachelor', 'Master’s', 'Chinese language', 'Help me choose a route'].includes(rawRoute)
+            ? rawRoute
+            : undefined)
+        : undefined;
+      if (resolvedRoute) {
         queueMicrotask(() => {
-          if (active) setRoute(initialRoute);
+          if (active) setRoute(resolvedRoute);
         });
       }
     } catch {

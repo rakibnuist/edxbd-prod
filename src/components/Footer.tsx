@@ -19,6 +19,7 @@ import {
   Youtube,
 } from 'lucide-react';
 import { destinationLinks } from '@/data/siteNavigation';
+import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
 import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
@@ -30,14 +31,18 @@ const chinaFlagshipLinks = [
   { name: 'MBBS in China', href: '/mbbs-in-china-bangladesh' },
   { name: 'China Student Visa Guide', href: '/china-student-visa-bangladesh' },
   { name: 'Intakes & Deadlines', href: '/china-intakes-deadlines' },
+  { name: 'China Cost Benchmark Report', href: '/china-study-report-bangladesh' },
   { name: 'Visa-First Policy (BDT 0)', href: '/china-visa-first-policy' },
+  { name: 'বাংলা গাইড (Study in China)', href: '/bn/study-in-china' },
 ];
 
 const planLinks = [
-  ['University Directory (120)', '/universities'],
+  ['University Directory', '/universities'],
   ['Programs by Budget', '/programs'],
   ['Compare Study Costs', '/compare-costs'],
   ['Scholarship Database', '/scholarships#scholarship-database'],
+  ['Malaysia Study Costs (RM/BDT)', '/malaysia-study-cost-bangladesh'],
+  ['Malaysia Student Visa (EMGS)', '/malaysia-student-visa-bangladesh'],
   ['Proof Library', '/proof-library'],
   ['How We Verify Universities', '/how-we-verify-universities'],
   ['Free Fit Assessment', '/education-fit-assessment'],
@@ -45,6 +50,7 @@ const planLinks = [
 
 const companyLinks = [
   ['About EduExpress', '/about'],
+  ['Education Consultant Dhaka', '/education-consultant-dhaka'],
   ['How It Works', '/your-study-journey'],
   ['What We Do', '/services'],
   ['Student Success Stories', '/success-stories'],
@@ -252,7 +258,7 @@ export default async function Footer() {
               <div className="text-sm leading-6">
                 <p className="font-bold text-white">Dhanmondi Office</p>
                 <p className="mt-0.5 text-[13.5px] leading-5 text-white/75">
-                  {office?.address ?? 'House 41/A, Road 4/A, Dhanmondi, Dhaka 1209'}
+                  {office?.address ?? DEFAULT_OFFICE_RECORD.address}
                 </p>
                 {(() => {
                   const safeMapUrl = toSafeSitePathOrUrl(office?.mapUrl);
@@ -278,7 +284,7 @@ export default async function Footer() {
               <div className="text-sm leading-6">
                 <p className="font-bold text-white">Counselling Hours</p>
                 <p className="mt-0.5 text-[13.5px] leading-5 text-white/75">
-                  {office?.hours ?? 'Saturday to Thursday, 11:00 AM to 6:00 PM'}
+                  {office?.hours ?? DEFAULT_OFFICE_RECORD.hours}
                 </p>
                 <p className="mt-1.5 text-xs font-semibold text-lime">Parents welcome at every session</p>
               </div>

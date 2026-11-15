@@ -14,7 +14,14 @@ export function universityEnquiryPayload(
   fields: UniversityEnquiryFields,
   context: { university: string; country: string; program?: string; level?: string; scholarship?: string },
   consentTimestamp: string,
-  options: { eventId?: string; trackingConsent?: boolean } = {},
+  options: {
+    eventId?: string;
+    trackingConsent?: boolean;
+    metaFbc?: string;
+    metaFbp?: string;
+    metaExternalId?: string;
+    metaEventSourceUrl?: string;
+  } = {},
 ) {
   const destination = context.country === 'United Kingdom' ? 'uk' : context.country.toLowerCase().replace(/\s+/g, '-');
   return {
@@ -27,5 +34,9 @@ export function universityEnquiryPayload(
     consent: fields.consent, consentTimestamp, consentPolicyVersion: UNIVERSITY_ENQUIRY_PRIVACY_VERSION,
     trackingConsent: options.trackingConsent === true,
     ...(options.eventId ? { metaEventId: options.eventId } : {}),
+    ...(options.metaFbc ? { metaFbc: options.metaFbc } : {}),
+    ...(options.metaFbp ? { metaFbp: options.metaFbp } : {}),
+    ...(options.metaExternalId ? { metaExternalId: options.metaExternalId } : {}),
+    ...(options.metaEventSourceUrl ? { metaEventSourceUrl: options.metaEventSourceUrl } : {}),
   };
 }

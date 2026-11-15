@@ -8,10 +8,19 @@ export async function GET() {
     sitemap: {
       url: sitemapUrl,
       robots: robotsUrl,
-      lastModified: new Date().toISOString(),
-      totalPages: 50,
-      countries: 9,
-      services: 7
+      subSitemaps: [
+        'https://eduexpressint.com/sitemaps/pages.xml',
+        'https://eduexpressint.com/sitemaps/countries.xml',
+        'https://eduexpressint.com/sitemaps/guides.xml',
+        'https://eduexpressint.com/sitemaps/universities.xml',
+        'https://eduexpressint.com/sitemaps/success-stories.xml',
+      ],
+      machineReadable: [
+        'https://eduexpressint.com/llms.txt',
+        'https://eduexpressint.com/llms-full.txt',
+        'https://eduexpressint.com/pricing.md',
+        'https://eduexpressint.com/china-study-report.json',
+      ],
     },
     searchEngines: {
       google: {

@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import { citationJsonLd } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
@@ -32,13 +33,19 @@ const PATH = '/malaysia-student-visa-bangladesh';
 const canonical = `${SITE}${PATH}`;
 export const revalidate = 3600;
 
+const MALAYSIA_VISA_SOURCES = [
+  { label: 'Education Malaysia Global Services (EMGS) — eVAL & Application Tracker', href: 'https://educationmalaysia.gov.my/' },
+  { label: 'Immigration Department of Malaysia — Student Pass Regulations', href: 'https://www.imi.gov.my/index.php/en/main-services/pass/student-pass/' },
+  { label: 'High Commission of Malaysia in Dhaka — Consular & Visa Services', href: 'https://www.kln.gov.my/web/bgd_dhaka/home' },
+];
+
 export async function generateMetadata() {
   return pageMetadata({
     title: 'Malaysia Student Visa from Bangladesh 2027 | EduExpress',
     description:
       'Complete Malaysia student visa guide for Bangladeshi students: EMGS eVAL approval steps, Dhaka SEV application checklist, post-arrival medical, and i-KAD.',
     path: PATH,
-    locale: 'en_GB',
+    locale: 'en_BD',
     image: ogImage('malaysia', 'Malaysia Student Visa from Bangladesh — EduExpress International'),
   });
 }
@@ -95,6 +102,7 @@ export default async function MalaysiaStudentVisaPage() {
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
+        ...citationJsonLd(MALAYSIA_VISA_SOURCES),
       },
       {
         '@type': 'FAQPage',
@@ -119,7 +127,7 @@ export default async function MalaysiaStudentVisaPage() {
           { name: 'Malaysia', path: '/study-in-malaysia-from-bangladesh' },
           { name: 'Student Visa' },
         ]}
-        eyebrow="EMGS Centralized System · 100% Transparent Process · BDT 0 Agency Fee"
+        eyebrow="EMGS Centralized System · Step-by-Step eVAL & SEV Guide · BDT 0 Agency Fee"
         title="Malaysia Student Visa from Bangladesh."
         lead="A complete roadmap to the Malaysian student pass: EMGS electronic Visa Approval Letter (eVAL), Single Entry Visa (SEV) at the Dhaka High Commission, airport border protocol, and i-KAD issuance."
         actions={
@@ -386,10 +394,10 @@ export default async function MalaysiaStudentVisaPage() {
       <section className="bg-petrol-800 py-14 text-white">
         <div className={kit.wrap}>
           <div className="mx-auto max-w-3xl text-center">
-            <span className="text-xs font-bold uppercase tracking-wider text-lime">100% Free Visa Assistance</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-lime">Zero Agency Fee Visa Assistance</span>
             <h2 className="mt-1 text-2xl font-bold sm:text-3xl">BDT 0 EduExpress Service Charge</h2>
             <p className="mt-3 text-sm leading-relaxed text-white/80">
-              Our Dhanmondi, Dhaka office assists with full document auditing, EMGS portal tracking, and Dhaka High Commission submission checklists at absolutely zero charge.
+              Our Dhanmondi, Dhaka office assists with full document auditing, EMGS portal tracking, and Dhaka High Commission submission checklists at zero agency charge.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link href="/apply?country=Malaysia" className="ed-btn ed-btn-signal min-h-[48px] px-8 text-sm">
@@ -398,6 +406,27 @@ export default async function MalaysiaStudentVisaPage() {
               <Link href="/malaysia-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[48px] border-white text-white hover:bg-white/10 px-8 text-sm">
                 Review Full Cost Breakdown
               </Link>
+              <Link href="/study-in-malaysia-from-bangladesh" className="ed-btn ed-btn-outline min-h-[48px] border-white text-white hover:bg-white/10 px-8 text-sm">
+                Malaysia Study Hub
+              </Link>
+            </div>
+            <div className="mt-8 border-t border-white/15 pt-6 text-left">
+              <p className="text-xs font-bold uppercase tracking-wider text-lime">Official Regulatory Authorities</p>
+              <ul className="mt-3 grid gap-2 sm:grid-cols-3">
+                {MALAYSIA_VISA_SOURCES.map((source) => (
+                  <li key={source.href}>
+                    <a
+                      href={source.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-start gap-1.5 text-xs leading-relaxed text-white/85 underline-offset-4 hover:text-lime hover:underline"
+                    >
+                      <ExternalLink size={13} className="mt-0.5 shrink-0" aria-hidden="true" />
+                      <span>{source.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

@@ -1,9 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CircleDollarSign, Clock, FileCheck2, MapPin, Phone, ShieldCheck, Users } from 'lucide-react';
-import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
 import { formatBangladeshPhone } from '@/lib/contact-format';
+import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
 import { pageMetadata } from '@/lib/seo';
 import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
@@ -52,6 +53,25 @@ const steps = [
   { title: 'Check education fit', copy: 'Start with results, subject, budget and career direction.', icon: ShieldCheck, tone: kit.cardSage },
   { title: 'Compare complete costs', copy: 'Separate tuition, living, official and service charges.', icon: CircleDollarSign, tone: kit.cardLime },
   { title: 'Keep written records', copy: 'Understand documents, responsibilities and application actions.', icon: FileCheck2, tone: kit.cardSage },
+];
+
+const dhakaOfficeFaqs = [
+  {
+    question: 'Where is the EduExpress International office in Dhaka and what are the opening hours?',
+    answer: `Our sole office and decision desk is at ${DEFAULT_OFFICE_RECORD.address}. We are open ${DEFAULT_OFFICE_RECORD.hours} (closed Friday). Appointments and walk-ins can call ${formatBangladeshPhone(DEFAULT_OFFICE_RECORD.phonePrimary)}.`,
+  },
+  {
+    question: 'Is EduExpress International affiliated with any UK agency named EduExpress Ltd.?',
+    answer: 'No. EduExpress International (eduexpressint.com), established in 2018 in Dhanmondi, Dhaka, Bangladesh, is an independent Bangladeshi study-abroad consultancy and is not affiliated with any UK company sharing the word EduExpress.',
+  },
+  {
+    question: 'What is the EduExpress fee policy for China and Malaysia applications?',
+    answer: 'For China, EduExpress charges BDT 0 for file opening and BDT 0 EduExpress service fee before China student visa approval (the post-visa Complete China Support Package is BDT 2,00,000). For Malaysia, EduExpress charges BDT 0 service fee. University, embassy, medical, translation, and courier fees are always itemized in writing in advance.',
+  },
+  {
+    question: 'Can parents join the counselling session at the Dhanmondi office?',
+    answer: 'Yes. Parents and family guardians are encouraged to attend either in person at our Dhanmondi office or by phone/video so academic fit, recognition (such as MoE/BMDC for MBBS), and first-year costs are reviewed transparently together.',
+  },
 ];
 
 export default async function EducationConsultantDhakaPage() {
@@ -175,6 +195,8 @@ export default async function EducationConsultantDhakaPage() {
           </div>
         </div>
       </Section>
+
+      <FaqBlock items={dhakaOfficeFaqs} title="Visiting our Dhanmondi, Dhaka office." tone="sage" />
 
       <CtaBand title="Visit us, or start online." text="Come to the Dhanmondi office during opening hours or start the free assessment now. A counsellor reviews your profile and explains realistic options with the complete cost." />
     </>

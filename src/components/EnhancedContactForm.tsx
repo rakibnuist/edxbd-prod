@@ -10,6 +10,7 @@ import {
   getUtmParameters,
   trackAssessmentSubmit,
 } from '@/lib/conversion-events';
+import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 import { persistTrackingLeadId } from '@/lib/tracking-consent';
 import Link from 'next/link';
 import { destinationLinks } from '@/data/siteNavigation';
@@ -162,6 +163,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
         companyWebsite,
         trackingConsent: analyticsAllowed(),
         metaEventId,
+        ...(await getConsentedSubmissionMetaParams()),
       };
 
       // API Request

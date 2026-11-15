@@ -3,13 +3,14 @@ import Link from 'next/link';
 import { ArrowRight, BadgeCheck, CalendarCheck, ChevronRight, Globe2, MapPin, MessageCircle, ShieldCheck, Wallet } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import { JsonLd, Section, kit } from '@/components/page/PageKit';
+import { CHINA_REPORT_OFFICIAL_AUTHORITIES } from '@/lib/china-benchmark';
 import { config } from '@/lib/config';
-import { breadcrumbJsonLd } from '@/lib/json-ld';
+import { breadcrumbJsonLd, citationJsonLd, type Crumb } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
 const PATH = '/bn/study-in-china';
-const trail = [{ name: 'চীনে উচ্চশিক্ষা' }];
+const trail: Crumb[] = [{ name: 'চীনে উচ্চশিক্ষা' }];
 
 export const metadata = pageMetadata({
   title: 'চীনে উচ্চশিক্ষা ও স্কলারশিপ গাইড ২০২৭ | EduExpress',
@@ -54,13 +55,17 @@ const trustItems = [
 // Detailed guides are published in English or Bangla; links carry hrefLang so readers know.
 const guides = [
   { label: 'চীনে স্কলারশিপ: সব রুটের তুলনা', href: '/china-scholarships-bangladesh' },
-  { label: 'CSC স্কলারশিপ সম্পূর্ণ গাইড', href: '/csc-scholarship-bangladesh' },
+  { label: 'CSC স্কলারশিপ সম্পূর্ণ গাইড (বাংলা)', href: '/bn/csc-scholarship-bangladesh' },
   { label: 'ভর্তির রিকোয়ারমেন্ট ও ডকুমেন্টস', href: '/china-admission-requirements' },
   { label: 'পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড', href: '/bn/study-in-china-cost-bangladesh' },
   { label: 'চায়না স্টুডেন্ট ভিসা (X1/X2)', href: '/bn/china-student-visa-bangladesh' },
-  { label: 'চীনে MBBS ভর্তি গাইড', href: '/mbbs-in-china-bangladesh' },
+  { label: 'চীনে MBBS ভর্তি ও BMDC গাইড (বাংলা)', href: '/bn/mbbs-in-china-bangladesh' },
   { label: 'ইনটেক ও Application Deadlines', href: '/china-intakes-deadlines' },
+  { label: 'বাংলাদেশ-চীন ডেটা ও খরচ রিপোর্ট', href: '/china-study-report-bangladesh' },
   { label: 'চীনের শীর্ষ বিশ্ববিদ্যালয় তালিকা', href: '/china-universities' },
+  { label: 'মার্চ ২০২৭ স্প্রিং ইনটেক গাইড', href: '/china-march-2027-intake' },
+  { label: 'CSCA ভর্তি পরীক্ষার গাইড', href: '/updates/csca-guide-study-in-china' },
+  { label: 'চায়না K-Visa (STEM গ্র্যাজুয়েট)', href: '/updates/china-k-visa' },
 ];
 
 const structuredData = {
@@ -70,9 +75,12 @@ const structuredData = {
   url: `${SITE}${PATH}`,
   name: 'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা ২০২৭',
   inLanguage: 'bn-BD',
+  mainEntityOfPage: `${SITE}${PATH}`,
+  reviewedBy: { '@id': `${SITE}/#organization` },
   isPartOf: { '@id': `${SITE}/#website` },
   publisher: { '@id': `${SITE}/#organization` },
   breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
+  ...citationJsonLd([...CHINA_REPORT_OFFICIAL_AUTHORITIES]),
 };
 
 export default function BengaliStudyInChinaPage() {
@@ -153,12 +161,12 @@ export default function BengaliStudyInChinaPage() {
         </div>
       </Section>
 
-      <Section tone="sage" title="বিস্তারিত গাইড" intro="প্রতিটি বিষয়ে আমাদের বিস্তারিত গাইড ইংরেজিতে প্রকাশিত।">
+      <Section tone="sage" title="বিস্তারিত গাইড" intro="মূল বিষয়গুলো বাংলায় এবং বিস্তারিত প্রোগ্রাম ও প্রযুক্তিগত গাইড ইংরেজিতে প্রকাশিত।">
         <nav aria-label="চীনে উচ্চশিক্ষার গাইড">
           <ul data-anim="stagger" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {guides.map(item => (
               <li key={item.href}>
-                <Link href={item.href} hrefLang="en" className="flex h-full min-h-[64px] items-center justify-between gap-3 rounded-3xl bg-white px-5 py-4 text-[16px] font-semibold text-petrol-800 transition-colors hover:bg-lime-pale">
+                <Link href={item.href} hrefLang={item.href.startsWith('/bn/') ? 'bn' : 'en'} className="flex h-full min-h-[64px] items-center justify-between gap-3 rounded-3xl bg-white px-5 py-4 text-[16px] font-semibold text-petrol-800 transition-colors hover:bg-lime-pale">
                   {item.label}<ArrowRight size={17} className="shrink-0" aria-hidden="true" />
                 </Link>
               </li>

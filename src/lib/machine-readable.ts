@@ -1,5 +1,7 @@
 import { chinaGuidePages } from '@/data/chinaGuidePages';
 import { evidencePages } from '@/data/evidencePages';
+import { OFFICIAL_COUNTRY_SOURCES } from '@/app/destinations/[country]/country-seo';
+import { CHINA_REPORT_OFFICIAL_AUTHORITIES } from '@/lib/china-benchmark';
 import { getChinaIntakes } from '@/lib/china-intakes';
 import { getPublishedUpdates } from '@/lib/content-records';
 import { activeCountries } from '@/lib/countries';
@@ -44,14 +46,15 @@ function companyBlock(office: Awaited<ReturnType<typeof loadOffice>>) {
     '## Company facts',
     '',
     '- Name: EduExpress International (EduExpress)',
-    '- What it is: an evidence-first study abroad consultancy for students and families in Bangladesh.',
+    '- What it is: an evidence-first study abroad consultancy for students and families in Bangladesh (unaffiliated with unrelated companies named EduExpress registered outside Bangladesh).',
     '- Founded: 8 March 2018, by Abdullah Al Rakib (Founder and CEO), in Chinese university admissions; a China entity (Wuxi Haiying Culture and Art Consulting Co., Ltd.) was formed in 2019; the Bangladesh operation relaunched in 2023.',
     office?.address ? `- Office: ${clean(office.address)}` : '- Office: Dhanmondi, Dhaka, Bangladesh',
     office?.hours ? `- Opening hours: ${clean(office.hours)}` : '',
     phones ? `- Phone / WhatsApp: ${phones}` : '',
     office?.email ? `- Email: ${office.email}` : '',
+    `- Dhaka office & local guide: ${url('/education-consultant-dhaka')}`,
     `- Website: ${SITE}`,
-    '- Languages: English and Bengali (Bengali guide: ' + url('/bn/study-in-china') + ')',
+    `- Languages: English and Bengali (Bengali China guide: ${url('/bn/study-in-china')}, Bengali visa guide: ${url('/bn/china-student-visa-bangladesh')}, Bengali cost guide: ${url('/bn/study-in-china-cost-bangladesh')}, Bengali CSC scholarship guide: ${url('/bn/csc-scholarship-bangladesh')}, Bengali MBBS guide: ${url('/bn/mbbs-in-china-bangladesh')})`,
     '',
   ].filter(line => line !== '').join('\n') + '\n';
 }
@@ -60,8 +63,9 @@ const policyBlock = [
   '## Policies that never change',
   '',
   '- The first profile assessment is free and carries no obligation.',
-  '- China: no EduExpress service fee is due before the student’s China visa is approved.',
-  '- University tuition, deposits, embassy, medical, translation and courier costs are paid to those recipients and are listed in writing before payment.',
+  '- China: BDT 0 file opening charge and no EduExpress service fee is due before the student’s China visa is approved.',
+  '- Malaysia: BDT 0 EduExpress service fee for university application and EMGS Student Pass guidance, including Bangladesh Bank Student File documentation support.',
+  '- University tuition, deposits, embassy, EMGS, medical, translation and courier costs are paid to those recipients and are listed in writing before payment.',
   '- Admission, scholarship, visa and employment outcomes are never guaranteed; the university and the authorities decide.',
   `- Fee policy: ${url('/fees-and-transparency')} · Visa-first policy: ${url('/china-visa-first-policy')} · Complaints: ${url('/complaints-and-resolution')}`,
   '',
@@ -160,6 +164,54 @@ async function updatesBlock() {
   }
 }
 
+function malaysiaAndKeyRoutesBlock() {
+  return [
+    '## Malaysia & key campaign guides',
+    '',
+    `- [Study in Malaysia from Bangladesh](${url('/study-in-malaysia-from-bangladesh')}): public, private and UK/Australian branch campuses; RM 12,000-45,000 typical tuition; BDT 0 EduExpress service fee`,
+    `- [Malaysia study costs & Student File guide](${url('/malaysia-study-cost-bangladesh')}): MYR and BDT itemised budget, EMGS processing and Bangladesh Bank Student File remittance steps`,
+    `- [Malaysia student visa (EMGS & VAL)](${url('/malaysia-student-visa-bangladesh')}): EMGS application, Visa Approval Letter (VAL), Single Entry Visa (SEV) and arrival clearance`,
+    `- [China March 2027 intake](${url('/china-march-2027-intake')}): open Spring 2027 programmes, deadlines and Visa-First study plan`,
+    `- [China city university guides](${url('/china-universities')}): compare recorded universities, tuition and scholarships by Chinese city`,
+    `- [Bangladesh to China Study Data & Cost Report](${url('/china-study-report-bangladesh')}): live CNY tuition quartiles, first-year fee distributions, scholarship counts and verification transparency across Chinese universities ([JSON dataset](${url('/china-study-report.json')}))`,
+    `- [Program and tuition finder](${url('/programs')}) · [Compare first-year costs](${url('/compare-costs')})`,
+    '',
+  ].join('\n') + '\n';
+}
+
+const MALAYSIA_OFFICIAL_AUTHORITIES = [
+  { label: 'Education Malaysia Global Services (EMGS)', href: 'https://educationmalaysia.gov.my/' },
+  { label: 'Malaysian Qualifications Register (MQR / MQA)', href: 'https://www2.mqa.gov.my/mqr/' },
+  { label: 'Ministry of Higher Education Malaysia (MoHE)', href: 'https://www.mohe.gov.my/en' },
+  { label: 'Immigration Department of Malaysia — Student Pass', href: 'https://www.imi.gov.my/index.php/en/main-services/pass/student-pass/' },
+];
+
+function officialAuthoritiesBlock() {
+  const destinationSources = [
+    ...MALAYSIA_OFFICIAL_AUTHORITIES,
+    ...Object.values(OFFICIAL_COUNTRY_SOURCES).flat(),
+  ];
+  const seen = new Set<string>(CHINA_REPORT_OFFICIAL_AUTHORITIES.map(item => item.href));
+  const uniqueDestinationSources = destinationSources.filter(source => {
+    if (seen.has(source.href)) return false;
+    seen.add(source.href);
+    return true;
+  });
+
+  return [
+    '## Primary official & regulatory authorities verified against',
+    '',
+    '### China (flagship)',
+    ...CHINA_REPORT_OFFICIAL_AUTHORITIES.map(
+      source => `- [${source.label}](${source.href}): ${clean(source.note)}`,
+    ),
+    '',
+    '### Malaysia & active destination regulators',
+    ...uniqueDestinationSources.map(source => `- [${source.label}](${source.href})`),
+    '',
+  ].join('\n') + '\n';
+}
+
 export async function buildLlmsFull(): Promise<string> {
   const [office, universities, updates] = await Promise.all([loadOffice(), universityBlock(), updatesBlock()]);
   return [
@@ -170,9 +222,12 @@ export async function buildLlmsFull(): Promise<string> {
     companyBlock(office),
     policyBlock,
     `Pricing summary: ${url('/pricing.md')}`,
+    `China live data benchmark JSON: ${url('/china-study-report.json')}`,
     '',
     intakeBlock(),
     destinationBlock(),
+    malaysiaAndKeyRoutesBlock(),
+    officialAuthoritiesBlock(),
     guideBlock(),
     universities,
     updates,
@@ -199,6 +254,13 @@ export async function buildPricing(): Promise<string> {
     '- What you get: a counsellor reviews your results, budget and preferred country and explains realistic options, costs and documents.',
     `- Start: ${url('/education-fit-assessment')}`,
     '',
+    '## Malaysia Application Support',
+    '- Destination: Malaysia',
+    '- Price: BDT 0 EduExpress service fee',
+    '- Summary: Zero consultancy or file-opening charge from EduExpress for partner Malaysian university applications, offer letter follow-up, EMGS Student Pass guidance and Bangladesh Bank Student File documentation support.',
+    '- Not included (paid directly at published rates): University application/registration fees, EMGS Student Pass & insurance charges, SEV visa fee, medical test, air ticket and university tuition paid directly to the institution (via Student File where applicable).',
+    `- Details: ${url('/study-in-malaysia-from-bangladesh')} · ${url('/malaysia-study-cost-bangladesh')}`,
+    '',
   ];
   for (const item of packages) {
     lines.push(
@@ -219,7 +281,8 @@ export async function buildPricing(): Promise<string> {
   }
   lines.push(
     '## Rules',
-    '- No EduExpress service fee before China visa approval.',
+    '- China: no EduExpress service fee before China visa approval.',
+    '- Malaysia: BDT 0 EduExpress service fee; tuition and EMGS fees are paid directly by the student.',
     '- Every cost is listed with item, amount, recipient, due date and refund status before payment.',
     '- No admission, scholarship or visa outcome is guaranteed.',
     '',

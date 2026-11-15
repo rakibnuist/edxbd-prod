@@ -5,6 +5,7 @@ import { FormEvent, useRef, useState } from 'react';
 import { ArrowRight, CheckCircle2, LockKeyhole, ShieldCheck } from 'lucide-react';
 import { trackAssessmentSubmit, trackFormFieldFocus, trackFormStart } from '@/lib/analytics';
 import { analyticsAllowed, createConversionEventId } from '@/lib/conversion-events';
+import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 
 type FormState = {
   name: string;
@@ -66,10 +67,12 @@ export default function ChinaCampaignLeadForm() {
     const metaEventId = createConversionEventId('lead');
 
     try {
+      const metaParams = await getConsentedSubmissionMetaParams();
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          ...metaParams,
           name: cleanName,
           phone: cleanPhone,
           email: cleanEmail,

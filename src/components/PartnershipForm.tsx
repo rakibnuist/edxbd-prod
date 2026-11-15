@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { trackFormSubmission, getUserDevice } from '@/lib/vercel-analytics';
 import { analyticsAllowed } from '@/lib/conversion-events';
+import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 import Link from 'next/link';
 
 const PRIVACY_POLICY_VERSION = '2026-10-11';
@@ -121,12 +122,14 @@ const PartnershipForm = () => {
     setSubmitStatus('idle');
 
     try {
+      const metaParams = await getConsentedSubmissionMetaParams();
       const response = await fetch('/api/partnership', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          ...metaParams,
           // Essential fields from form
           companyName: formData.companyName || `${formData.contactPerson} - ${formData.partnershipType === 'individual_agent' ? 'Individual Agent' : 'Company'}`,
           contactPerson: formData.contactPerson,

@@ -68,6 +68,11 @@ const transformAll: sanitizeHtml.Transformer = (tagName, attribs) => {
   }
 
   if (tagName === 'a') {
+    const rawHref = String(next.href ?? '').trim();
+    // Never emit CMS template placeholder hrefs like "[Link to ...]"; unwrap to plain text span.
+    if (/^\[[^\]]*\]$/.test(rawHref) || /^\{[^}]*\}$/.test(rawHref)) {
+      return { tagName: 'span', attribs: next.class ? { class: next.class } : {} };
+    }
     const target = String(next.target ?? '').trim().toLowerCase();
     if (target === '_blank') {
       const rel = new Set(String(next.rel ?? '').toLowerCase().split(/\s+/).filter(Boolean));

@@ -3,6 +3,11 @@ import { sendCrmStage } from '@/lib/meta-crm-events';
 import prisma from '@/lib/prisma';
 import { routeLead } from '@/lib/lead-routing';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
+import {
+  applyMetaParamCookies,
+  buildServerMetaParams,
+  extractMetaParamOverridesFromBody,
+} from '@/lib/meta-param-builder-server';
 import { validateLeadAssessmentInput } from '@/lib/payload-validation';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import {
@@ -70,14 +75,30 @@ export async function POST(request: NextRequest) {
     }
 
     const safeUtm = getSafeUtm(body.utm);
-    // Meta click/browser IDs (set by the Pixel only after cookie consent), kept for CRM matching.
+    // Only derive and persist Meta click/browser parameters when advertising consent is explicitly granted.
     const adTrackingConsent = body.trackingConsent === true;
-    const cookieId = (name: string) => {
-      const value = request.cookies.get(name)?.value?.trim();
-      return value && /^fb\.\d\.\d+\.[\w.-]{4,240}$/.test(value) ? value : null;
-    };
-    const metaFbc = adTrackingConsent ? cookieId('_fbc') : null;
-    const metaFbp = adTrackingConsent ? cookieId('_fbp') : null;
+    const serverMetaParams = adTrackingConsent
+      ? buildServerMetaParams(request, extractMetaParamOverridesFromBody(body))
+      : null;
+    const metaFbc = serverMetaParams?.fbc ?? null;
+    const metaFbp = serverMetaParams?.fbp ?? null;
+
+    const isMarchLanding =
+      landingPage === '/china-march-2027-intake' ||
+      source === 'china_march_2027_landing' ||
+      source === 'meta_china_march_2027';
+    const hasMetaSignal =
+      /^(meta|facebook|fb|instagram|ig|msg|messenger|an|threads|fb_ads|meta_ads|facebook_ads|instagram_ads|ig_ads)$/i.test(
+        safeUtm?.utm_source || '',
+      ) ||
+      /\b(meta|facebook|instagram)\b/i.test(safeUtm?.utm_source || '') ||
+      Boolean(safeUtm?.fbclid) ||
+      Boolean(metaFbc) ||
+      /[?&]fbclid=[^&#]+/i.test(request.headers.get('referer') || '') ||
+      /[?&]fbclid=[^&#]+/i.test(getOptionalString(body, 'metaEventSourceUrl', 2048) || '') ||
+      /FBAN|FBAV|FB_IAB|FBIOS|Instagram/i.test(request.headers.get('user-agent') || '');
+    const resolvedSource =
+      isMarchLanding && hasMetaSignal ? 'meta_china_march_2027' : source;
 
     const assessmentCheck = validateLeadAssessmentInput(body);
     if (assessmentCheck.error) {
@@ -92,7 +113,7 @@ export async function POST(request: NextRequest) {
       program,
       subject: assessmentCheck.assessment.subject,
       careerGoal: assessmentCheck.assessment.careerGoal,
-      source,
+      source: resolvedSource,
       budget: assessmentCheck.assessment.budget,
     });
 
@@ -105,7 +126,7 @@ export async function POST(request: NextRequest) {
         country,
         program,
         message,
-        source,
+        source: resolvedSource,
         status: 'new',
         leadType,
         destinationInterest: assessmentCheck.destinationInterest,
@@ -144,22 +165,29 @@ export async function POST(request: NextRequest) {
           phone,
           country,
           program: program || 'Not specified',
-          message: message || ''
-        }, source, request, undefined, metaEventId);
+          message: message || '',
+          fbc: metaFbc ?? undefined,
+          fbp: metaFbp ?? undefined,
+          externalId: serverMetaParams?.externalId,
+          eventSourceUrl: serverMetaParams?.eventSourceUrl,
+        }, resolvedSource, request, undefined, metaEventId);
       } catch (trackingError) {
         console.error('Meta Conversion API tracking error:', trackingError);
         // Don't fail the request if tracking fails
       }
     }
 
-    // Return success response
-    return NextResponse.json(
+    // Return success response and persist Parameter Builder cookies on consented submissions
+    const response = NextResponse.json(
       { 
         message: 'Lead submitted successfully',
         leadId: lead.id 
       },
       { status: 201 }
     );
+    return serverMetaParams
+      ? applyMetaParamCookies(response, request, serverMetaParams.cookiesToSet)
+      : response;
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);
     if (bodyError) return bodyError;

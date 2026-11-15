@@ -33,7 +33,7 @@ export function buildContentSecurityPolicy(options: { isProduction: boolean }): 
     'frame-src https://www.googletagmanager.com https://www.facebook.com',
     "object-src 'none'",
     "base-uri 'self'",
-    "form-action 'self'",
+    "form-action 'self' https://www.facebook.com",
     "frame-ancestors 'none'",
     ...(options.isProduction ? ['upgrade-insecure-requests'] : []),
   ];

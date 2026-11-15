@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, FileCheck2, ShieldCheck } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import PageConversionBeacon from '@/components/analytics/PageConversionBeacon';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { StandardsGrid, StoryCard, getPublishedStories } from '../success-stories/stories';
 
@@ -32,6 +33,7 @@ export default async function ChinaSuccessStoriesPage() {
     '@type': 'CollectionPage',
     '@id': `${canonical}#page`,
     url: canonical,
+    mainEntityOfPage: canonical,
     name: 'China Student Success Stories',
     inLanguage: 'en-BD',
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
@@ -47,6 +49,10 @@ export default async function ChinaSuccessStoriesPage() {
   return (
     <>
       <JsonLd data={structuredData} />
+      <PageConversionBeacon
+        event="success_story_view"
+        context={{ destination: 'china', label: 'china_success_stories', count: stories.length }}
+      />
 
       <PageHero
         path={PATH}
@@ -91,6 +97,11 @@ export default async function ChinaSuccessStoriesPage() {
 
       <Section title="Three checks before a story goes public." intro="Offer and timeline facts are checked before publication, and the student decides what is shown.">
         <StandardsGrid />
+        <nav aria-label="Related student evidence resources" className="mt-6 flex flex-wrap gap-3">
+          <Link href="/success-stories" className="ed-btn ed-btn-soft min-h-[48px] px-6">All student success stories</Link>
+          <Link href="/proof-library" className="ed-btn ed-btn-outline min-h-[48px] px-6">Inspect the proof library</Link>
+          <Link href="/china-study-report-bangladesh" className="ed-btn ed-btn-outline min-h-[48px] px-6">Bangladesh–China cost benchmark</Link>
+        </nav>
       </Section>
 
       <Section

@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { trackPartnershipInquiry } from '@/lib/meta-conversion-api';
 import {
+  applyMetaParamCookies,
+  buildServerMetaParams,
+  extractMetaParamOverridesFromBody,
+} from '@/lib/meta-param-builder-server';
+import {
   extractSanitizedClientIp,
   normalizeFlatRecord,
   normalizeSafeHttpUrl,
@@ -186,15 +191,24 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Track partnership inquiry with Meta Conversion API
-    if (body.trackingConsent === true) {
+    // Track partnership inquiry with Meta Conversion API only after explicit tracking consent
+    const serverMetaParams =
+      body.trackingConsent === true
+        ? buildServerMetaParams(request, extractMetaParamOverridesFromBody(body))
+        : null;
+
+    if (serverMetaParams) {
       try {
         await trackPartnershipInquiry({
           name: contactPerson,
           email,
           phone,
           company: companyName,
-          message: motivation
+          message: motivation,
+          fbc: serverMetaParams.fbc,
+          fbp: serverMetaParams.fbp,
+          externalId: serverMetaParams.externalId,
+          eventSourceUrl: serverMetaParams.eventSourceUrl,
         }, request);
       } catch (trackingError) {
         console.error('Meta Conversion API tracking error:', trackingError);
@@ -205,13 +219,16 @@ export async function POST(request: NextRequest) {
     // Send confirmation email (you can implement this later)
     // await sendPartnershipConfirmationEmail(partnership);
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         message: 'Partnership application submitted successfully',
         id: partnership.id
       },
       { status: 201 }
     );
+    return serverMetaParams
+      ? applyMetaParamCookies(response, request, serverMetaParams.cookiesToSet)
+      : response;
 
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);

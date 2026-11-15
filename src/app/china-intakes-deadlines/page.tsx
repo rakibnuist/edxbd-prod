@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { ArrowRight, Calendar, ShieldCheck } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
-import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getChinaIntakes, CHINA_INTAKE_VERIFIED_ON, CHINA_INTAKE_NEXT_REVIEW } from '@/lib/china-intakes';
+import { CHINA_REPORT_OFFICIAL_AUTHORITIES } from '@/lib/china-benchmark';
+import { citationJsonLd } from '@/lib/json-ld';
 import { canApplyToIntake } from '@/lib/intake-status';
 import type { IntakeStatus } from '@/lib/intake-status';
 import { ogImage, pageMetadata } from '@/lib/seo';
@@ -17,6 +19,8 @@ export const metadata = pageMetadata({
   description:
     'March 2027 and September 2027 China intake windows for Bangladeshi students: applications, CSC and university deadlines, checked with admissions offices.',
   path: PATH,
+  type: 'article',
+  locale: 'en_BD',
   image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
 });
 
@@ -42,16 +46,44 @@ const timelineSteps = [
   { step: 'Fit assessment & document prep', window: '4–6 months before intake', detail: 'Gather SSC/HSC/Degree transcripts, passport, physical exam, and police clearance.' },
   { step: 'University & CSC portal submission', window: '3–5 months before intake', detail: 'Submit application to target universities and CSC portal with verified certificates.' },
   { step: 'Admission notice & JW201/JW202 issuance', window: '2–3 months before intake', detail: 'Receive official admission package and Chinese Ministry of Education JW form.' },
-  { step: 'Visa application & flight to China', window: '1 month before intake', detail: 'Apply for X1 visa at Chinese Visa Center Dhaka and book pre-departure flights.' },
+  { step: 'Visa filing via CVASC Dhaka', window: 'Before departure', detail: 'Submit your X1/X2 student visa application via Chinese Visa Center Dhaka and avoid non-refundable tickets until approval.' },
 ];
 
 const guides = [
   { label: 'March 2027 university shortlist', href: '/china-march-2027-intake' },
   { label: 'China scholarships for Bangladeshi students', href: '/china-scholarships-bangladesh' },
   { label: 'CSC scholarship guide', href: '/csc-scholarship-bangladesh' },
+  { label: 'MBBS in China & BMDC guide', href: '/mbbs-in-china-bangladesh' },
   { label: 'China admission requirements', href: '/china-admission-requirements' },
   { label: 'China student visa from Bangladesh', href: '/china-student-visa-bangladesh' },
+  { label: 'CSCA entrance exam guide', href: '/updates/csca-guide-study-in-china' },
+  { label: 'China K-Visa STEM graduate route', href: '/updates/china-k-visa' },
+  { label: 'Bangladesh-China cost benchmark', href: '/china-study-report-bangladesh' },
+  { label: 'Program & tuition finder', href: '/programs' },
   { label: 'Study in China from Bangladesh', href: '/study-in-china-from-bangladesh' },
+];
+
+const intakeFaqs = [
+  {
+    question: 'Should Bangladeshi students aim for March or September intake in China?',
+    answer:
+      'September (Autumn) is the primary intake in China: nearly all English-taught Bachelor’s, Master’s, PhD and MBBS degrees open, and the widest Chinese Government (CSC) and provincial scholarship quotas target September. March (Spring) offers faster entry without waiting another year, mainly for Chinese language, preparatory tracks and selected engineering/business programmes.',
+  },
+  {
+    question: 'When do CSC scholarships close for the September intake?',
+    answer:
+      'Most CSC Type A and Type B windows close between December and March ahead of the September term, while university self-funded or partial-award deadlines often continue through April to June depending on seat availability.',
+  },
+  {
+    question: 'Can I apply before my final HSC or Bachelor transcript is published?',
+    answer:
+      'Some Chinese universities accept an official expected-graduation or pre-graduation letter during early rounds, subject to submitting the final notarised certificate and transcript before registration or JW201/JW202 issuance. Confirm your exact university rule before paying any application fee.',
+  },
+  {
+    question: 'Does EduExpress submit student visas through a special Embassy quota?',
+    answer:
+      'No. As publicly notified by the Chinese Embassy in Bangladesh, China does not appoint exclusive or special visa agencies, and visa applications go through CVASC Dhaka. Admission, scholarships and visas remain independent decisions, and EduExpress charges zero service fee before China visa approval.',
+  },
 ];
 
 const structuredData = {
@@ -62,9 +94,14 @@ const structuredData = {
   name: 'China University Intakes & Deadlines 2027',
   description: 'March 2027 and September 2027 China intake windows, CSC and university deadlines for Bangladeshi applicants.',
   inLanguage: 'en-BD',
+  mainEntityOfPage: `${SITE}${PATH}`,
+  dateModified: '2026-10-26T00:00:00Z',
+  author: { '@id': `${SITE}/#organization` },
+  reviewedBy: { '@id': `${SITE}/#organization` },
   isPartOf: { '@id': `${SITE}/#website` },
   publisher: { '@id': `${SITE}/#organization` },
   breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
+  ...citationJsonLd([...CHINA_REPORT_OFFICIAL_AUTHORITIES]),
 };
 
 export default function ChinaIntakesDeadlinesPage() {
@@ -191,7 +228,11 @@ export default function ChinaIntakesDeadlinesPage() {
         </nav>
       </Section>
 
-      <Section id="intake-assessment" tone="sage" title="Check your intake fit." intro="Share your results, subject and preferred intake. A counsellor reviews which March or September 2027 routes suit you.">
+      <div id="intake-faq" className="scroll-mt-28">
+        <FaqBlock items={intakeFaqs} title="China intake & deadline FAQs." tone="sage" />
+      </div>
+
+      <Section id="intake-assessment" title="Check your intake fit." intro="Share your results, subject and preferred intake. A counsellor reviews which March or September 2027 routes suit you.">
         <EducationFitAssessment />
       </Section>
 

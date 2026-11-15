@@ -2,7 +2,7 @@ export const CONSENT_STORAGE_KEY = 'cookie-consent';
 export const TRACKING_USER_ID_KEY = 'user_id';
 export const TRACKING_TEMP_USER_ID_KEY = 'temp_user_id';
 export const LEGACY_PII_STORAGE_KEYS = ['user_email', 'user_phone'] as const;
-export const TRACKING_COOKIE_NAMES = ['ee_uid', '_fbc'] as const;
+export const TRACKING_COOKIE_NAMES = ['ee_uid', '_fbc', '_fbp', '_fbi'] as const;
 
 const TRACKING_MAX_ID_LENGTH = 255;
 
@@ -132,15 +132,68 @@ export function setTrackingCookie(
   }
 }
 
+let inMemoryLandingUrlWithFbclid: string | null = null;
+
+/**
+ * Captures the landing URL containing `fbclid` in volatile JS memory only (no cookies or Web Storage)
+ * so Next.js soft SPA navigation does not drop `fbclid` before analytics consent is granted.
+ */
+export function captureLandingFbclid(rawUrl?: string): string | null {
+  const candidate =
+    rawUrl ?? (typeof window !== 'undefined' ? window.location.href : undefined);
+  if (!candidate) return inMemoryLandingUrlWithFbclid;
+  try {
+    const parsed = new URL(candidate);
+    const fbclid = parsed.searchParams.get('fbclid')?.trim();
+    if (fbclid) {
+      const cleanUrl = `${parsed.origin}${parsed.pathname}${parsed.search}`.slice(0, 2000);
+      inMemoryLandingUrlWithFbclid = cleanUrl;
+    }
+  } catch {
+    /* ignore invalid URL */
+  }
+  return inMemoryLandingUrlWithFbclid;
+}
+
+export function getCapturedLandingUrlWithFbclid(): string | null {
+  if (typeof window !== 'undefined') {
+    captureLandingFbclid(window.location.href);
+  }
+  return inMemoryLandingUrlWithFbclid;
+}
+
+function getCookieExpirationDomains(hostname?: string): string[] {
+  if (!hostname) return [];
+  const host = hostname.trim().toLowerCase();
+  if (!host || host === 'localhost' || !host.includes('.') || /^\d+(?:\.\d+)+$/.test(host) || host.includes(':')) {
+    return [];
+  }
+  const domains = [`.${host}`];
+  const parts = host.split('.').filter(Boolean);
+  if (parts.length > 2) {
+    const parentDomain = `.${parts.slice(-2).join('.')}`;
+    if (!domains.includes(parentDomain)) {
+      domains.push(parentDomain);
+    }
+  }
+  return domains;
+}
+
 function expireTrackingCookie(name: string, resolved: TrackingBrowserEnv): void {
   if (!resolved.document) return;
   try {
-    resolved.document.cookie = buildTrackingCookieString(
+    const baseExpired = buildTrackingCookieString(
       name,
       '',
       0,
       isHttpsProtocol(resolved),
     );
+    resolved.document.cookie = baseExpired;
+
+    const hostname = (resolved.location as { hostname?: string } | undefined)?.hostname;
+    for (const domain of getCookieExpirationDomains(hostname)) {
+      resolved.document.cookie = `${baseExpired};domain=${domain}`;
+    }
   } catch {
     /* ignore */
   }
@@ -163,6 +216,14 @@ export function scrubLegacyTrackingPii(env?: TrackingBrowserEnv): void {
  */
 export function clearTrackingState(env?: TrackingBrowserEnv): void {
   const resolved = resolveEnv(env);
+  if (!env) {
+    const storedDecision = safeGetItem(resolved.localStorage, CONSENT_STORAGE_KEY);
+    if (typeof window === 'undefined' || storedDecision !== null) {
+      inMemoryLandingUrlWithFbclid = null;
+    } else {
+      captureLandingFbclid(window.location.href);
+    }
+  }
   scrubLegacyTrackingPii(resolved);
   for (const key of [TRACKING_USER_ID_KEY, TRACKING_TEMP_USER_ID_KEY]) {
     safeRemoveItem(resolved.localStorage, key);

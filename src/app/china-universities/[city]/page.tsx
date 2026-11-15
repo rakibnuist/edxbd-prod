@@ -28,6 +28,7 @@ export async function generateMetadata({ params }: Props) {
     title: `Study in ${match.city}, China: Universities and Fees | EduExpress`,
     description: `Compare ${count} recorded ${count === 1 ? 'university' : 'universities'} in ${match.city}, China for Bangladeshi students: programs, yearly tuition, teaching language, scholarships and deadlines.`,
     path: `/china-universities/${match.slug}`,
+    locale: 'en_BD',
     image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
   });
 }
@@ -64,8 +65,8 @@ export default async function CityPage({ params }: Props) {
       <JsonLd data={{
         '@context': 'https://schema.org',
         '@graph': [
-          { '@type': 'CollectionPage', '@id': `${url}#page`, url, name: `Universities in ${match.city}, China`, inLanguage: 'en-BD', about: { '@type': 'City', name: match.city, containedInPlace: { '@type': 'Country', name: 'China' } } },
-          { '@type': 'ItemList', numberOfItems: match.universities.length, itemListElement: match.universities.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, url: `${SITE_URL}/universities/${item.slug}` })) },
+          { '@type': 'CollectionPage', '@id': `${url}#page`, url, name: `Universities in ${match.city}, China`, inLanguage: 'en-BD', isPartOf: { '@id': `${SITE_URL}/#website` }, breadcrumb: { '@id': `${url}#breadcrumb` }, mainEntity: { '@id': `${url}#city-universities` }, about: { '@type': 'City', name: match.city, containedInPlace: { '@type': 'Country', name: 'China' } } },
+          { '@type': 'ItemList', '@id': `${url}#city-universities`, numberOfItems: match.universities.length, itemListElement: match.universities.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, url: `${SITE_URL}/universities/${item.slug}` })) },
         ],
       }} />
       <PageHero
@@ -107,9 +108,16 @@ export default async function CityPage({ params }: Props) {
       {programs.length > 0 && <><h2 className="sr-only">All recorded programs in {match.city}</h2><ProgramFinder rows={programs} /></>}
       <FaqBlock items={faqs} title={`Studying in ${match.city}: common questions`} tone="white" />
       {cities.length > 1 && (
-        <Section tone="sage" title="Other cities">
+        <Section tone="sage" title="Other cities &amp; tools">
           <ul className="flex flex-wrap gap-2">
             {cities.filter(item => item.slug !== match.slug).map(item => <li key={item.slug}><Link href={`/china-universities/${item.slug}`} className="ed-btn ed-btn-outline min-h-11 text-[15px]">{item.city}</Link></li>)}
+            <li><Link href="/study-in-china-from-bangladesh" className="ed-btn ed-btn-outline min-h-11 text-[15px]">Study in China hub</Link></li>
+            <li><Link href="/programs" className="ed-btn ed-btn-outline min-h-11 text-[15px]">Program &amp; tuition finder</Link></li>
+            <li><Link href="/compare-costs" className="ed-btn ed-btn-outline min-h-11 text-[15px]">Compare first-year costs</Link></li>
+            <li><Link href="/china-intakes-deadlines" className="ed-btn ed-btn-outline min-h-11 text-[15px]">Intakes &amp; deadlines</Link></li>
+            <li><Link href="/china-study-report-bangladesh" className="ed-btn ed-btn-outline min-h-11 text-[15px]">China data &amp; cost report</Link></li>
+            <li><Link href="/china-universities" className="ed-btn ed-btn-outline min-h-11 text-[15px]">All China universities</Link></li>
+            <li><Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-11 text-[15px]">Free fit assessment</Link></li>
           </ul>
         </Section>
       )}

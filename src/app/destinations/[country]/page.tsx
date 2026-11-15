@@ -10,6 +10,7 @@ import {
   Check,
   CheckCircle2,
   Clock,
+  ExternalLink,
   GraduationCap,
   House,
   Info,
@@ -19,9 +20,10 @@ import {
 import DestinationCover, { destinationPhoto, destinationPhotoAlt } from '@/components/destinations/DestinationCover';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
 import { countries } from '@/lib/countries';
+import { citationJsonLd } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
-import { COUNTRY_SEO, type CountrySeo } from './country-seo';
+import { COUNTRY_SEO, OFFICIAL_COUNTRY_SOURCES, type CountrySeo } from './country-seo';
 
 type Props = { params: Promise<{ country: string }> };
 type CountryRecord = (typeof countries)[number];
@@ -116,6 +118,7 @@ export default async function CountryPage({ params }: Props) {
     'Higher education authority',
     'Immigration authority',
   ];
+  const officialSourceLinks = OFFICIAL_COUNTRY_SOURCES[slug] ?? [];
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -133,6 +136,7 @@ export default async function CountryPage({ params }: Props) {
         reviewedBy: { '@id': `${SITE_URL}/#organization` },
         breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
         ...(photo ? { primaryImageOfPage: { '@type': 'ImageObject', url: absoluteUrl(photo) } } : {}),
+        ...citationJsonLd(officialSourceLinks),
       },
       {
         '@type': 'ItemList',
@@ -472,12 +476,26 @@ export default async function CountryPage({ params }: Props) {
           <article className={kit.card}>
             <p className="text-[14px] font-semibold text-ink-soft">Primary sources</p>
             <ul className="mt-3 grid gap-2.5">
-              {sources.map((source) => (
-                <li key={source} className="flex items-start gap-2.5 text-[16px] leading-6 text-petrol-800">
-                  <Check size={18} className="mt-0.5 shrink-0 text-lime-deep" aria-hidden="true" />
-                  <span>{source}</span>
-                </li>
-              ))}
+              {officialSourceLinks.length > 0
+                ? officialSourceLinks.map((source) => (
+                    <li key={source.href} className="flex items-start gap-2.5 text-[16px] leading-6 text-petrol-800">
+                      <ExternalLink size={16} className="mt-1 shrink-0 text-lime-deep" aria-hidden="true" />
+                      <a
+                        href={source.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline-offset-4 hover:underline"
+                      >
+                        {source.label}
+                      </a>
+                    </li>
+                  ))
+                : sources.map((source) => (
+                    <li key={source} className="flex items-start gap-2.5 text-[16px] leading-6 text-petrol-800">
+                      <Check size={18} className="mt-0.5 shrink-0 text-lime-deep" aria-hidden="true" />
+                      <span>{source}</span>
+                    </li>
+                  ))}
             </ul>
           </article>
         </div>

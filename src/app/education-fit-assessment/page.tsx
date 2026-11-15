@@ -10,7 +10,7 @@ import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
 
 const PATH = '/education-fit-assessment';
 const canonical = absoluteUrl(PATH);
-const LAST_REVIEWED = '2026-11-04';
+const LAST_REVIEWED = '2026-11-15';
 
 export const metadata = pageMetadata({
   title: 'Free Education Fit Assessment for Study Abroad | EduExpress',

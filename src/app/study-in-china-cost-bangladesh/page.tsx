@@ -8,6 +8,8 @@ export const metadata = pageMetadata({
   title: guide.metaTitle,
   description: guide.description,
   path: '/study-in-china-cost-bangladesh',
+  type: 'article',
+  locale: 'en_BD',
   image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
   languages: {
     'en-BD': '/study-in-china-cost-bangladesh',

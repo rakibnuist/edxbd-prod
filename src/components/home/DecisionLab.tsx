@@ -25,6 +25,7 @@ import {
   trackCompareCompleted,
   trackCompareStarted,
 } from '@/lib/conversion-events';
+import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 
 const priorities = [
   { value: 'cost', code: '01', title: 'Control the cost', note: 'Start from what your family can realistically sustain.' },
@@ -162,10 +163,12 @@ export default function DecisionLab() {
     setSubmitting(true);
     const metaEventId = createConversionEventId('lead');
     try {
+      const metaParams = await getConsentedSubmissionMetaParams();
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          ...metaParams,
           name: form.name,
           email: form.email,
           phone: form.phone,

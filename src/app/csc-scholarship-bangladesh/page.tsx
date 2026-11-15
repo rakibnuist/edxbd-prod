@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, Building2, Check, ExternalLink, FileText, GraduationCap, ShieldCheck, Wallet } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { citationJsonLd } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
@@ -13,6 +14,13 @@ export const metadata = pageMetadata({
     'Chinese Government (CSC) Scholarship guide for Bangladeshi students: Type A and Type B routes, what a full award covers, stipends, age limits and documents.',
   path: PATH,
   image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
+  type: 'article',
+  locale: 'en_BD',
+  languages: {
+    'en-BD': PATH,
+    'bn-BD': '/bn/csc-scholarship-bangladesh',
+    'x-default': PATH,
+  },
 });
 
 const visaFirstTerms = 'No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.';
@@ -31,12 +39,12 @@ const cscCoverage = [
   },
   {
     title: 'Monthly living stipend',
-    detail: 'Undergraduate: CNY 2,500 a month. Master’s: CNY 3,000 a month. PhD: CNY 3,500 a month.',
+    detail: 'Standard full CSC award: Bachelor’s CNY 2,500/month, Master’s & General Scholars CNY 3,000/month, PhD & Senior Scholars CNY 3,500/month.',
     icon: Wallet,
   },
   {
     title: 'Comprehensive insurance',
-    detail: 'CNY 800/year medical insurance covered for emergency hospitalization and outpatient treatment in China.',
+    detail: 'Comprehensive medical insurance valued under CSC policy at CNY 800 per year (CNY 400 for programmes under 6 months)—coverage, not cash.',
     icon: ShieldCheck,
   },
 ];
@@ -44,71 +52,88 @@ const cscCoverage = [
 const cscTypes = [
   {
     type: 'Type A · bilateral programme',
-    appliedThrough: 'Ministry of Education (MoE) Bangladesh / Chinese Embassy in Dhaka',
-    bestFor: 'Students applying through Bangladesh government nomination rounds',
-    deadline: 'December – February',
-    keyNote: 'Requires MoE Bangladesh primary screening and embassy interview endorsement.',
+    appliedThrough: 'Designated dispatching authorities / Chinese Embassy notices',
+    bestFor: 'Students applying through government or bilateral nomination channels',
+    deadline: 'Annual notice window (often opens in winter; closes around Jan–Mar)',
+    keyNote: 'Subject to dispatching authority procedures and country eligibility (regional EU, AUN and PIF schemes do not apply automatically).',
   },
   {
     type: 'Type B · Chinese university programme',
     appliedThrough: 'Directly through designated Chinese universities (CSC agency code)',
-    bestFor: 'Students applying directly for Bachelor’s, Master’s, or PhD at target universities',
-    deadline: 'January – April',
-    keyNote: 'Requires university pre-admission letter or professor acceptance letter for postgraduate applicants.',
+    bestFor: 'Students applying directly via participating universities for degree tracks',
+    deadline: 'University notice window (typically winter to spring for Sept entry)',
+    keyNote: 'Submitted with the host university’s 5-digit Agency Number; whether pre-admission or an advisor letter is needed depends on each university’s call.',
   },
 ];
 
 const requiredDocuments = [
-  'CSC Online Application Form (downloaded from campuschina.org)',
-  'Highest Diploma/Degree Certificate (Notarized by Ministry of Foreign Affairs Bangladesh)',
-  'Academic Transcripts (Notarized SSC, HSC, or Bachelor transcripts)',
-  'Study Plan or Research Proposal (Minimum 800 words for Master’s/PhD)',
-  'Two Recommendation Letters from Associate Professors or Professors',
-  'Foreigner Physical Examination Form (completed at recognized BD diagnostic center)',
-  'Non-Criminal Record Certificate (Police Clearance Certificate from Bangladesh Police)',
-  'Language Certificate (IELTS/TOEFL for English-taught, or HSK for Chinese-taught)',
-  'Passport Copy (Valid for at least 12 months)',
+  'CSC Online Application Form (completed on campuschina.org)',
+  'Highest diploma or degree certificate (notarized or authenticated per the current call)',
+  'Academic transcripts matching the latest qualification (or official pre-graduation proof)',
+  'Study plan or research proposal (length follows the target university’s current guide)',
+  'Recommendation letters (typically two from Professors or Associate Professors where specified)',
+  'Foreigner Physical Examination Form (completed according to stay-duration instructions)',
+  'Non-Criminal Record Certificate (Police Clearance Certificate)',
+  'Language evidence (HSK, IELTS/TOEFL, MOI or interview, only where accepted by the call)',
+  'Valid ordinary passport copy meeting the validity stated in the current call',
 ];
 
 const faqs = [
   {
     question: 'Can Bangladeshi students apply for CSC Scholarship without IELTS?',
-    answer: 'Yes, many Chinese universities accept Medium of Instruction (MOI) certificates from Bangladeshi schools/colleges where previous instruction was in English. However, top-tier Double First Class universities or specific medical/engineering programs may mandate IELTS (5.5+) or HSK.',
+    answer: 'Only when the chosen university and CSC programme expressly accept alternatives such as a Medium of Instruction (MOI) certificate or university interview. Top-tier or English-medium programmes may still require IELTS, TOEFL, or CSCA.',
   },
   {
     question: 'What is the difference between CSC Type A and Type B for Bangladeshi applicants?',
-    answer: 'Type A is processed through the Bangladesh Ministry of Education (MoE) and the Chinese Embassy in Dhaka under bilateral quota. Type B is submitted directly to designated Chinese universities using their unique 5-digit Agency Number.',
+    answer: 'Type A refers to bilateral / dispatching-authority routes (such as ministry or embassy calls), while Type B refers to applications submitted directly through designated Chinese universities using their Agency Number. Coverage depends on the actual scholarship award, not just Type A vs Type B.',
   },
   {
     question: 'Is there any application fee for CSC Scholarship?',
-    answer: 'The official CSC application portal (campuschina.org) is free of charge. However, some individual Chinese universities charge an application processing fee (CNY 400 - 800) directly payable to the university bank account.',
+    answer: 'The official CSC portal (campuschina.org) does not charge a portal submission fee. Individual universities under Type B may require their own non-refundable university application fee (published examples range from CNY 400 to CNY 800 at universities such as Shandong, Zhejiang or Tsinghua), confirmed in each notice.',
   },
   {
     question: 'What are the age limits for CSC Scholarship applicants from Bangladesh?',
-    answer: 'Undergraduate applicants must be under 25 years old; Master’s degree applicants must be under 35 years old; Doctoral (PhD) applicants must be under 40 years old.',
+    answer: 'Published CSC criteria set exclusive upper limits: Bachelor’s applicants must be under 25, Master’s under 35, Doctoral (PhD) under 40, General Scholars under 45, and Senior Scholars under 50.',
   },
 ];
 
 const related = [
   { label: 'China scholarships: every route compared', href: '/china-scholarships-bangladesh' },
+  { label: 'CSC Type A bilateral guide', href: '/updates/how-to-apply-csc-type-a-scholarship-complete-guide' },
+  { label: 'Complete CSC universities list (306)', href: '/updates/complete-csc-universities-list-2026' },
+  { label: '2026 CSCA entrance test guide', href: '/updates/csca-guide-study-in-china' },
   { label: 'China intakes and deadlines', href: '/china-intakes-deadlines' },
   { label: 'China admission requirements', href: '/china-admission-requirements' },
   { label: 'Study in China without IELTS', href: '/study-in-china-without-ielts' },
   { label: 'Study Costs & Budgeting', href: '/study-in-china-cost-bangladesh' },
+  { label: 'Bangladesh-China data & cost report', href: '/china-study-report-bangladesh' },
+  { label: 'China program & tuition finder', href: '/programs' },
+  { label: 'CSC স্কলারশিপ সম্পূর্ণ গাইড (বাংলা)', href: '/bn/csc-scholarship-bangladesh' },
   { label: 'Study in China from Bangladesh', href: '/study-in-china-from-bangladesh' },
 ];
 
 const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'WebPage',
+  '@type': ['WebPage', 'Article'],
   '@id': `${SITE}${PATH}#page`,
   url: `${SITE}${PATH}`,
+  headline: 'CSC Scholarship from Bangladesh: Type A, Type B & Complete Rules',
   name: 'CSC Scholarship from Bangladesh (Chinese Government Scholarship)',
   description: 'Guide for Bangladeshi students applying for CSC Chinese Government Scholarships.',
   inLanguage: 'en-BD',
+  mainEntityOfPage: `${SITE}${PATH}`,
+  dateModified: '2026-10-19T00:00:00Z',
+  author: { '@id': `${SITE}/#organization` },
+  reviewedBy: { '@id': `${SITE}/#organization` },
   isPartOf: { '@id': `${SITE}/#website` },
   publisher: { '@id': `${SITE}/#organization` },
   breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
+  ...citationJsonLd([
+    { label: 'Chinese Government Scholarship Portal (CampusChina)', href: 'https://www.campuschina.org/' },
+    { label: 'China Scholastic Competency Assessment (CSCA)', href: 'https://csca.cn/' },
+    { label: 'Chinese Embassy Bangladesh Consular Notices', href: 'https://bd.china-embassy.gov.cn/eng/' },
+    { label: 'Chinese Visa Application Service Center Dhaka (CVASC)', href: 'https://www.visaforchina.cn/DAC4_EN/' },
+  ]),
 };
 
 export default function CscScholarshipBangladeshPage() {
@@ -128,6 +153,9 @@ export default function CscScholarshipBangladeshPage() {
             <a href="https://www.campuschina.org/" target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Official portal: campuschina.org <ExternalLink size={16} aria-hidden="true" /><span className="sr-only">(opens in a new tab)</span>
             </a>
+            <Link href="/bn/csc-scholarship-bangladesh" hrefLang="bn-BD" lang="bn" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              বাংলায় CSC গাইড
+            </Link>
           </>
         }
         aside={
@@ -212,7 +240,7 @@ export default function CscScholarshipBangladeshPage() {
 
       <Section
         title="Required document checklist for Bangladesh."
-        intro="All academic certificates and transcripts must be notarized and verified by the Ministry of Foreign Affairs (MOFA) Bangladesh before submitting to CSC."
+        intro="Requirements vary by programme, degree level and university notice. Prepare authentic, consistent records matching your current CSC and university call."
       >
         <ol data-anim="stagger" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {requiredDocuments.map((doc, index) => (

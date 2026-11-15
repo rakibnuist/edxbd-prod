@@ -340,7 +340,7 @@ export default function UniversityProfileClient({
       );
     } else if (isMalaysia) {
       supplementalParagraphs.push(
-        `Bangladeshi students applying to ${shortName} through EduExpress International receive 100% free admission counseling and EMGS eVAL visa processing (BDT 0 agency service fee). All tuition and EMGS payments follow the university's official offer letter and invoice.`
+        `Bangladeshi students applying to ${shortName} through EduExpress International receive free admission counseling and EMGS eVAL visa processing (BDT 0 agency service fee). All tuition and EMGS payments follow the university's official offer letter and invoice.`
       );
     }
   }
@@ -914,7 +914,7 @@ export default function UniversityProfileClient({
                   </div>
                   <div className="mt-4 rounded-lg bg-emerald-50/80 border border-emerald-200/70 p-3 text-[11px] leading-relaxed text-emerald-950">
                     {isMalaysia
-                      ? 'Malaysia Policy: EduExpress service is 100% free (BDT 0). You only pay official university & EMGS fees.'
+                      ? 'Malaysia Policy: BDT 0 EduExpress agency service fee. You only pay official university & EMGS fees.'
                       : 'China Policy: BDT 0 EduExpress service fee before visa approval. Service fee is payable only after your student visa is issued.'}
                   </div>
                 </div>

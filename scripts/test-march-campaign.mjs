@@ -30,6 +30,17 @@ test('organic visitors and undecided students retain an honest enquiry context',
   assert.equal(payload.program,'Help me choose a route');
   assert.equal(payload.leadType,'campaign_assessment');
 });
+test('march campaign enquiry normalizes Bengali phone digits, invisible marks, and detects fbclid/Meta ad variants', () => {
+  assert.deepEqual(validateMarchEnquiry({ ...fields, result: '5', phone: '+৮৮০ ১৭১২-৩৪৫৬৭৮' }), {});
+  assert.deepEqual(validateMarchEnquiry({ ...fields, phone: '\u202A01712345678\u202C' }), {});
+  const bnPayload = marchEnquiryPayload({ ...fields, phone: '০১৭১২৩৪৫৬৭৮' }, { ...context, utm: { fbclid: 'IwAR123456' } });
+  assert.equal(bnPayload.phone, '01712345678');
+  assert.equal(bnPayload.source, 'meta_china_march_2027');
+  const fbAdsPayload = marchEnquiryPayload(fields, { ...context, utm: { utm_source: 'fb_ads' } });
+  assert.equal(fbAdsPayload.source, 'meta_china_march_2027');
+  const fbcPayload = marchEnquiryPayload(fields, { ...context, utm: {}, metaFbc: 'fb.1.1700000000000.IwAR999' });
+  assert.equal(fbcPayload.source, 'meta_china_march_2027');
+});
 test('researched costs retain correct billing periods and do not republish preliminary fee claims', async () => {
   const data=JSON.parse(await readFile(new URL('../data/research/china-march-2027-landing.json',import.meta.url),'utf8'));
   assert.equal(data.examples.find(item=>item.id==='hust-language').tuition,'CNY 8,000');

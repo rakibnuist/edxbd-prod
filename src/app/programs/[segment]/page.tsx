@@ -22,6 +22,7 @@ export async function generateMetadata({ params }: Props) {
     title: `${segment.title} | EduExpress`,
     description: segment.description,
     path: `/programs/${segment.slug}`,
+    locale: 'en_BD',
     image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
   });
 }
@@ -64,7 +65,7 @@ export default async function ProgramSegmentPage({ params }: Props) {
 
   return (
     <>
-      <JsonLd data={{ '@context': 'https://schema.org', '@type': 'CollectionPage', '@id': `${url}#page`, url, name: segment.h1, description: segment.description, inLanguage: 'en-BD' }} />
+      <JsonLd data={{ '@context': 'https://schema.org', '@type': 'CollectionPage', '@id': `${url}#page`, url, name: segment.h1, description: segment.description, inLanguage: 'en-BD', isPartOf: { '@id': `${SITE_URL}/#website` }, breadcrumb: { '@id': `${url}#breadcrumb` } }} />
       <PageHero
         path={path}
         trail={[{ name: 'Programs', path: '/programs' }, { name: segment.h1 }]}
@@ -86,6 +87,8 @@ export default async function ProgramSegmentPage({ params }: Props) {
         <ul className="flex flex-wrap gap-2">
           {programSegments.filter(item => item.slug !== segment.slug).map(item => <li key={item.slug}><Link href={`/programs/${item.slug}`} className="ed-btn ed-btn-outline min-h-11 text-[15px]">{item.h1}</Link></li>)}
           <li><Link href="/programs" className="ed-btn ed-btn-outline min-h-11 text-[15px]">All programs</Link></li>
+          <li><Link href="/compare-costs" className="ed-btn ed-btn-outline min-h-11 text-[15px]">Compare first-year costs</Link></li>
+          <li><Link href="/china-study-report-bangladesh" className="ed-btn ed-btn-outline min-h-11 text-[15px]">China data &amp; cost report</Link></li>
         </ul>
       </Section>
       <CtaBand title="Not sure which program fits?" text="Share your results, subject and budget. A counsellor compares at least three suitable options in writing, with the full cost for each." />

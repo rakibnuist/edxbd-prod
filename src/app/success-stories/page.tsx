@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, GraduationCap, Star, Users } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import PageConversionBeacon from '@/components/analytics/PageConversionBeacon';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { StandardsGrid, StoryCard, getPublishedStories } from './stories';
 
@@ -36,11 +37,13 @@ export default async function SuccessStoriesPage() {
     '@type': 'CollectionPage',
     '@id': `${canonical}#page`,
     url: canonical,
+    mainEntityOfPage: canonical,
     name: 'Student Success Stories',
     description: 'Education stories from EduExpress students.',
     inLanguage: 'en-BD',
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
     about: { '@id': 'https://eduexpressint.com/#organization' },
+    breadcrumb: { '@id': `${canonical}#breadcrumb` },
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: stories.length,
@@ -56,6 +59,10 @@ export default async function SuccessStoriesPage() {
   return (
     <>
       <JsonLd data={structuredData} />
+      <PageConversionBeacon
+        event="success_story_view"
+        context={{ destination: 'all', label: 'all_success_stories', count: stories.length }}
+      />
 
       <PageHero
         path={PATH}
@@ -151,6 +158,11 @@ export default async function SuccessStoriesPage() {
         <p className={`mt-6 ${kit.body}`}>
           Want to share your own story or update one? <Link href="/contact" className={kit.link}>Contact the admissions desk</Link>.
         </p>
+        <nav aria-label="Related student evidence resources" className="mt-6 flex flex-wrap gap-3">
+          <Link href="/china-success-stories" className="ed-btn ed-btn-soft min-h-[48px] px-6">China student success stories</Link>
+          <Link href="/proof-library" className="ed-btn ed-btn-outline min-h-[48px] px-6">Inspect the proof library</Link>
+          <Link href="/china-study-report-bangladesh" className="ed-btn ed-btn-outline min-h-[48px] px-6">Bangladesh–China cost benchmark</Link>
+        </nav>
       </Section>
 
       <CtaBand

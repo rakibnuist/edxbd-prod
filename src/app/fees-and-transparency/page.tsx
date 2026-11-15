@@ -44,6 +44,8 @@ const structuredData = {
   '@id': `${SITE_URL}${PATH}#webpage`,
   name: 'University Costs, Scholarships & Fee Schedules',
   url: `${SITE_URL}${PATH}`,
+  mainEntityOfPage: `${SITE_URL}${PATH}`,
+  dateModified: '2026-11-15',
   description: 'How EduExpress aligns university programs, scholarships and itemized study costs.',
   inLanguage: 'en-BD',
   isPartOf: { '@id': `${SITE_URL}/#website` },

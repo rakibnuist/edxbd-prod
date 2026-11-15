@@ -67,15 +67,34 @@ export function captureUtmParameters(): Record<string, string> {
     const params = new URLSearchParams(window.location.search);
     const found: Record<string, string> = {};
     for (const key of UTM_KEYS) {
-      const v = params.get(key);
+      const v = params.get(key)?.trim();
       if (v) found[key] = v;
+    }
+    const fbclid = params.get('fbclid')?.trim();
+    if (fbclid) {
+      found.fbclid = fbclid;
+      if (!found.utm_source) found.utm_source = 'facebook';
+      if (!found.utm_medium) found.utm_medium = 'paid_social';
     }
     if (Object.keys(found).length > 0) {
       sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(found));
       return found;
     }
     const stored = sessionStorage.getItem(UTM_STORAGE_KEY);
-    return stored ? (JSON.parse(stored) as Record<string, string>) : {};
+    if (stored) {
+      return JSON.parse(stored) as Record<string, string>;
+    }
+    const ua = typeof navigator !== 'undefined' ? navigator.userAgent || '' : '';
+    const ref = typeof document !== 'undefined' ? document.referrer || '' : '';
+    if (/FBAN|FBAV|FB_IAB|FBIOS|Instagram/i.test(ua) || /\b(facebook|fb|instagram)\.com\b/i.test(ref)) {
+      const inferred: Record<string, string> = {
+        utm_source: /instagram/i.test(ua) || /instagram\.com/i.test(ref) ? 'instagram' : 'facebook',
+        utm_medium: 'paid_social',
+      };
+      sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(inferred));
+      return inferred;
+    }
+    return {};
   } catch {
     return {};
   }

@@ -2,9 +2,9 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Sitemap Submission - EduExpress International',
-  description: 'Submit your sitemap to major search engines including Google, Bing, and OpenAI for better website indexing and visibility.',
-  robots: 'noindex, nofollow', // Don't index this page itself
+  title: { absolute: 'Sitemap Submission | EduExpress International' },
+  description: 'Internal search engine and AI crawler sitemap reference for eduexpressint.com.',
+  robots: { index: false, follow: false, noarchive: true },
 }
 
 export default function SitemapSubmissionPage() {
@@ -151,15 +151,17 @@ export default function SitemapSubmissionPage() {
             </ul>
           </div>
 
-          {/* Sitemap Statistics */}
+          {/* Sitemap Index & Endpoints */}
           <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg mt-6">
-            <h3 className="text-lg font-semibold text-blue-800 mb-4">📊 Sitemap Statistics</h3>
+            <h3 className="text-lg font-semibold text-blue-800 mb-4">📊 Live XML Sitemaps &amp; Machine-Readable Endpoints</h3>
             <ul className="list-disc list-inside text-blue-700 space-y-2">
-              <li>Total pages: 50+ pages</li>
-              <li>Country destinations: 9 countries</li>
-              <li>Service pages: 7 services</li>
-              <li>Update pages: Dynamic content</li>
-              <li>Sitemap generated automatically</li>
+              <li><code>https://eduexpressint.com/sitemap.xml</code> — full unified XML sitemap</li>
+              <li><code>https://eduexpressint.com/sitemaps/pages.xml</code> — core, program segment &amp; benchmark pages</li>
+              <li><code>https://eduexpressint.com/sitemaps/countries.xml</code> — destination guides &amp; Bengali China hub</li>
+              <li><code>https://eduexpressint.com/sitemaps/guides.xml</code> — China, Malaysia &amp; Bengali topic guides</li>
+              <li><code>https://eduexpressint.com/sitemaps/universities.xml</code> — active university profiles &amp; city pages</li>
+              <li><code>https://eduexpressint.com/sitemaps/success-stories.xml</code> — consented student stories</li>
+              <li><code>https://eduexpressint.com/china-study-report.json</code> &amp; <code>/llms.txt</code> — live benchmark dataset &amp; AI discovery index</li>
             </ul>
           </div>
 

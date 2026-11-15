@@ -6,6 +6,7 @@ import {
   Building,
   CheckCircle2,
   CreditCard,
+  ExternalLink,
   FileCheck,
   FileText,
   HelpCircle,
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react';
 import { FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import { citationJsonLd } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
@@ -29,13 +31,19 @@ const PATH = '/malaysia-study-cost-bangladesh';
 const canonical = `${SITE}${PATH}`;
 export const revalidate = 3600;
 
+const MALAYSIA_COST_SOURCES = [
+  { label: 'Education Malaysia Global Services (EMGS) — Official Visa & Student Pass Portal', href: 'https://educationmalaysia.gov.my/' },
+  { label: 'Malaysian Qualifications Agency (MQA) — Malaysian Qualifications Register', href: 'https://www2.mqa.gov.my/mqr/' },
+  { label: 'Bangladesh Bank — Foreign Exchange Guidelines & Student File Regulations', href: 'https://www.bb.org.bd/en/index.php/fepd/fepdguideline' },
+];
+
 export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in Malaysia from Bangladesh 2027 | EduExpress',
     description:
       'Complete cost of studying in Malaysia for Bangladeshi students: tuition in MYR and BDT, monthly living expenses, EMGS fees, and bank Student File remittance.',
     path: PATH,
-    locale: 'en_GB',
+    locale: 'en_BD',
     image: ogImage('malaysia', 'Cost of Studying in Malaysia from Bangladesh — EduExpress International'),
   });
 }
@@ -59,7 +67,7 @@ const faqs = [
   {
     question: 'Are halal food and accommodation affordable in Malaysia?',
     answer:
-      'Yes, Malaysia is a Muslim-majority country where 100% halal food is universally available and very affordable. Campus and off-campus shared accommodations range from RM 500 to RM 900 per month (~13,500 to 24,000 BDT), while campus dining and local restaurants average RM 20 to RM 35 per day (~550 to 950 BDT).',
+      'Yes, Malaysia is a Muslim-majority country where certified halal food is widely available across campus cafeterias and local restaurants and very affordable. Campus and off-campus shared accommodations range from RM 500 to RM 900 per month (~13,500 to 24,000 BDT), while campus dining and local restaurants average RM 20 to RM 35 per day (~550 to 950 BDT).',
   },
   {
     question: 'Does EduExpress charge any service fee for Malaysian admissions?',
@@ -87,6 +95,7 @@ export default async function MalaysiaStudyCostPage() {
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
+        ...citationJsonLd(MALAYSIA_COST_SOURCES),
       },
       {
         '@type': 'FAQPage',
@@ -111,7 +120,7 @@ export default async function MalaysiaStudyCostPage() {
           { name: 'Malaysia', path: '/study-in-malaysia-from-bangladesh' },
           { name: 'Study Costs' },
         ]}
-        eyebrow="Transparent Cost Planning · 1 MYR ≈ 27 BDT · BDT 0 EduExpress Fee"
+        eyebrow="Transparent Cost Planning · Planning Assumption: 1 MYR ≈ 27 BDT · BDT 0 EduExpress Fee"
         title="Cost of Studying in Malaysia from Bangladesh."
         lead="A comprehensive financial guide for Bangladeshi families. Granular breakdown of tuition fees, EMGS visa expenses, monthly accommodation and food, plus step-by-step Bangladesh Bank Student File remittance."
         actions={
@@ -136,7 +145,10 @@ export default async function MalaysiaStudyCostPage() {
               RM
             </span>
             <span>
-              Official Planning Baseline: <strong>1 Malaysian Ringgit (MYR) ≈ 27 Bangladeshi Taka (BDT)</strong>
+              Planning Assumption (Nov 2026): <strong>1 MYR ≈ 27 BDT</strong>{' '}
+              <span className="font-normal text-slate-500">
+                (illustrative planning reference — confirm live Authorized Dealer bank TT selling rates before remittance)
+              </span>
             </span>
           </div>
           <div className="flex items-center gap-4 text-petrol-800">
@@ -206,7 +218,7 @@ export default async function MalaysiaStudyCostPage() {
                 <td className="p-4">EduExpress Service Charge</td>
                 <td className="p-4">RM 0</td>
                 <td className="p-4">BDT 0 (Free Service)</td>
-                <td className="p-4">100% Free counseling & visa guidance</td>
+                <td className="p-4">Free counseling & EMGS visa guidance (BDT 0 service fee)</td>
               </tr>
             </tbody>
           </table>
@@ -466,6 +478,44 @@ export default async function MalaysiaStudyCostPage() {
       {/* Module 6: FAQs */}
       <Section id="faq" tone="sage" title="Frequently Asked Questions" intro="Clear, evidence-backed answers on tuition, remittances, and living expenses in Malaysia.">
         <FaqBlock items={faqs} />
+      </Section>
+
+      {/* Official Regulatory Sources & Cross-Links */}
+      <Section id="official-sources" title="Official Regulatory Sources & Related Malaysia Guides">
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="rounded-3xl border border-rule bg-white p-6 shadow-sm">
+            <h3 className="text-base font-bold text-petrol-800">Verified Official Authorities</h3>
+            <ul className="mt-4 space-y-2.5 text-xs leading-relaxed text-slate-700">
+              {MALAYSIA_COST_SOURCES.map((source) => (
+                <li key={source.href}>
+                  <a
+                    href={source.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-start gap-1.5 font-semibold text-petrol-800 underline-offset-4 hover:underline"
+                  >
+                    <ExternalLink size={13} className="mt-0.5 shrink-0 text-emerald-700" aria-hidden="true" />
+                    <span>{source.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-3xl border border-rule bg-canvas-soft p-6 shadow-sm">
+            <h3 className="text-base font-bold text-petrol-800">Related Malaysia & Cost Guides</h3>
+            <div className="mt-4 flex flex-col gap-3 text-xs font-semibold">
+              <Link href="/study-in-malaysia-from-bangladesh" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
+                Study in Malaysia Hub <ArrowRight size={14} aria-hidden="true" />
+              </Link>
+              <Link href="/malaysia-student-visa-bangladesh" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
+                Malaysia Student Visa & EMGS eVAL Guide <ArrowRight size={14} aria-hidden="true" />
+              </Link>
+              <Link href="/compare-costs" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
+                Compare Study Costs Across Destinations <ArrowRight size={14} aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </div>
       </Section>
 
       {/* Module 7: Free Eligibility Assessment CTA */}

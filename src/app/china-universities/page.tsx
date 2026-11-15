@@ -38,6 +38,7 @@ export async function generateMetadata({ searchParams }: Props) {
     title: 'China Universities for Bangladeshi Students | EduExpress',
     description: `Compare ${count > 0 ? `${count} ` : ''}China university records for Bangladeshi students by subject, degree, teaching language, city and intake, with recorded costs and source status.`,
     path: PATH,
+    locale: 'en_BD',
     image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
     // Filtered views stay crawlable but out of the index; the canonical stays the unfiltered directory.
     noindex: filtered,
@@ -49,8 +50,14 @@ const guides = [
   { label: 'MBBS in China', href: '/mbbs-in-china-bangladesh' },
   { label: 'China admission requirements', href: '/china-admission-requirements' },
   { label: 'China scholarships', href: '/china-scholarships-bangladesh' },
+  { label: 'CSC scholarship guide', href: '/csc-scholarship-bangladesh' },
+  { label: 'CSCA entrance exam guide', href: '/updates/csca-guide-study-in-china' },
+  { label: 'China K-Visa STEM route', href: '/updates/china-k-visa' },
   { label: 'Study Costs & Budgeting', href: '/study-in-china-cost-bangladesh' },
   { label: 'Intakes and deadlines', href: '/china-intakes-deadlines' },
+  { label: 'China tuition & fee benchmark', href: '/china-study-report-bangladesh' },
+  { label: 'China visa-first policy', href: '/china-visa-first-policy' },
+  { label: 'চীনে উচ্চশিক্ষা বাংলা গাইড', href: '/bn/study-in-china' },
 ];
 
 export default async function ChinaUniversitiesPage({ searchParams }: Props) {

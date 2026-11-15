@@ -4,18 +4,59 @@ import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/c
 import type { ChinaGuidePage as ChinaGuidePageData, ChinaGuideSection } from '@/data/chinaGuidePages';
 import research from '@/data/chinaStudyResearch.json';
 import scholarshipResearch from '../../../data/research/china-scholarship-guide.json';
+import { citationJsonLd } from '@/lib/json-ld';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
+
+const BN_COUNTERPARTS: Record<string, { label: string; href: string }> = {
+  '/study-in-china-cost-bangladesh': {
+    label: 'বাংলায় খরচ গাইড পড়ুন',
+    href: '/bn/study-in-china-cost-bangladesh',
+  },
+  '/china-student-visa-bangladesh': {
+    label: 'বাংলায় ভিসা গাইড পড়ুন',
+    href: '/bn/china-student-visa-bangladesh',
+  },
+  '/china-scholarships-bangladesh': {
+    label: 'বাংলায় CSC স্কলারশিপ গাইড',
+    href: '/bn/csc-scholarship-bangladesh',
+  },
+  '/china-visa-first-policy': {
+    label: 'বাংলায় চায়না উচ্চশিক্ষা গাইড',
+    href: '/bn/study-in-china',
+  },
+  '/china-admission-requirements': {
+    label: 'বাংলায় চায়না উচ্চশিক্ষা গাইড',
+    href: '/bn/study-in-china',
+  },
+  '/study-in-china-without-ielts': {
+    label: 'বাংলায় চায়না উচ্চশিক্ষা গাইড',
+    href: '/bn/study-in-china',
+  },
+  '/life-in-china-bangladeshi-students': {
+    label: 'বাংলায় চায়না উচ্চশিক্ষা গাইড',
+    href: '/bn/study-in-china',
+  },
+};
 
 const SITE = 'https://eduexpressint.com';
 const applyHref = '/apply?country=China';
 const topics = [
   { label: 'Admission requirements', href: '/china-admission-requirements' },
+  { label: 'CSCA entrance test guide', href: '/updates/csca-guide-study-in-china' },
   { label: 'Scholarships', href: '/china-scholarships-bangladesh' },
+  { label: 'CSC scholarship', href: '/csc-scholarship-bangladesh' },
   { label: 'Costs & budget', href: '/study-in-china-cost-bangladesh' },
   { label: 'Student visa', href: '/china-student-visa-bangladesh' },
+  { label: 'China K Visa (STEM)', href: '/updates/china-k-visa' },
+  { label: 'MBBS in China', href: '/mbbs-in-china-bangladesh' },
+  { label: 'China March 2027 intake', href: '/china-march-2027-intake' },
+  { label: 'Intakes & deadlines', href: '/china-intakes-deadlines' },
   { label: 'English & IELTS', href: '/study-in-china-without-ielts' },
   { label: 'Life in China', href: '/life-in-china-bangladeshi-students' },
+  { label: 'Data & cost benchmark', href: '/china-study-report-bangladesh' },
+  { label: 'Program finder', href: '/programs' },
+  { label: 'Compare first-year costs', href: '/compare-costs' },
 ];
 const visaFirstTerms = 'No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.';
 
@@ -148,16 +189,25 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
 
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
+    '@type': ['WebPage', 'Article'],
     '@id': `${url}#page`,
     url,
+    headline: guide.metaTitle,
     name: guide.title,
     description: guide.description,
     inLanguage: 'en-BD',
+    mainEntityOfPage: url,
+    ...(checkedDates.length ? { dateModified: `${checkedDates[checkedDates.length - 1]}T00:00:00Z` } : {}),
+    author: { '@id': `${SITE}/#organization` },
+    reviewedBy: { '@id': `${SITE}/#organization` },
+    about: { '@type': 'Thing', name: 'Higher education in China for Bangladeshi students' },
     isPartOf: { '@id': `${SITE}/#website` },
     publisher: { '@id': `${SITE}/#organization` },
     breadcrumb: { '@id': `${url}#breadcrumb` },
+    ...citationJsonLd(guide.sources),
   };
+
+  const bnCounterpart = BN_COUNTERPARTS[path];
 
   return (
     <article>
@@ -175,6 +225,11 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
               Apply with EduExpress <ArrowRight size={18} aria-hidden="true" />
             </Link>
             <Link href="/universities?country=china" className="ed-btn ed-btn-outline min-h-[52px] px-7">Explore Chinese universities</Link>
+            {bnCounterpart && (
+              <Link href={bnCounterpart.href} hrefLang="bn-BD" lang="bn" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+                {bnCounterpart.label}
+              </Link>
+            )}
           </>
         }
         aside={guide.facts.length ? (

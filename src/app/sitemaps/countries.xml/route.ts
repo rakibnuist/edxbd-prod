@@ -6,8 +6,8 @@ export function GET() {
   return sitemapResponse([
     ...activeCountries.map((country) => ({
       loc: `https://eduexpressint.com${destinationPath(country.slug)}`,
-      lastmod: '2026-11-06',
+      lastmod: country.slug === 'china' || country.slug === 'malaysia' ? '2026-11-15' : '2026-11-06',
     })),
-    { loc: 'https://eduexpressint.com/bn/study-in-china', lastmod: '2026-11-06' },
+    { loc: 'https://eduexpressint.com/bn/study-in-china', lastmod: '2026-11-15' },
   ]);
 }

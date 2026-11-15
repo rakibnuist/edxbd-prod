@@ -172,7 +172,7 @@ const malaysiaUniversities = [
     tuitionDetails: JSON.stringify({ currency: 'MYR', bdtMultiplier: 27 }),
     documents: JSON.stringify(['Passport Copy', 'SSC & HSC Transcripts', 'Passport Photos (White background)', 'EMGS Health Form', 'English Proficiency Proof (MOI accepted)']),
     deadlineApplication: 'Rolling admissions; apply 6–8 weeks before intake month',
-    notes: JSON.stringify(['Premier Digital Tech Institution awarded by MDEC', 'Dual Degree option with De Montfort University (DMU), UK', '100% graduate employment track record']),
+    notes: JSON.stringify(['Premier Digital Tech Institution awarded by MDEC', 'Dual Degree option with De Montfort University (DMU), UK', 'Strong graduate employability track record across tech and business sectors']),
     badges: JSON.stringify(['Premier Digital Tech University', 'UK Dual Degree Option', 'High Tech Campus']),
     officialUrl: 'https://www.apu.edu.my',
     recognitionAuthority: 'MQA & De Montfort University UK (Dual Degree)',

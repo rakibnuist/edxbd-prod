@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 
 import UniversityProfile from '@/components/universities/UniversityProfile';
+import PageConversionBeacon from '@/components/analytics/PageConversionBeacon';
 import { getUniversityRoute, getUniversityRouteSlugs } from '@/lib/university-records';
 import { universityIsIndexable } from '@/lib/university-governance';
 import { getUniversityProfileDetails } from '@/lib/university-profile-details';
@@ -41,6 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     robots: { index: indexable, follow: true },
     openGraph: {
       type: 'website',
+      locale: 'en_BD',
       url: canonical,
       title,
       description,
@@ -64,6 +66,14 @@ export default async function UniversityDetailPage({ params }: { params: Promise
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }} />
+      <PageConversionBeacon
+        event="university_view"
+        context={{
+          destination: university.country,
+          university: university.name,
+          label: university.slug,
+        }}
+      />
       <UniversityProfile university={university} />
     </>
   );

@@ -18,6 +18,7 @@ import {
   trackAssessmentStart,
   trackAssessmentSubmit,
 } from '@/lib/conversion-events';
+import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 
 const levels = ['SSC / O Level', 'HSC / A Level', 'Diploma', "Bachelor's", "Master's"];
 
@@ -107,10 +108,12 @@ export default function HomeAssessment({ whatsappNumber }: { whatsappNumber: str
     setSubmitting(true);
     try {
       const metaEventId = createConversionEventId('lead');
+      const metaParams = await getConsentedSubmissionMetaParams();
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          ...metaParams,
           name: form.name.trim(),
           email: form.email.trim(),
           phone: form.phone.trim(),

@@ -13,6 +13,7 @@ export const metadata = pageMetadata({
   title: 'Compare Study in China Costs Side by Side | EduExpress',
   description: 'Pick up to three China programs and compare tuition, accommodation, insurance, medical check, residence permit and application fees in one table.',
   path: PATH,
+  locale: 'en_BD',
   image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
 });
 
@@ -39,14 +40,19 @@ export default async function CompareCostsPage() {
 
   return (
     <>
-      <JsonLd data={{ '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Study in China cost comparison', url, applicationCategory: 'EducationalApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'BDT' }, inLanguage: 'en-BD' }} />
+      <JsonLd data={{ '@context': 'https://schema.org', '@type': 'WebApplication', '@id': `${url}#app`, name: 'Study in China cost comparison', url, applicationCategory: 'EducationalApplication', operatingSystem: 'Any', isPartOf: { '@id': `${SITE_URL}/#website` }, breadcrumb: { '@id': `${url}#breadcrumb` }, offers: { '@type': 'Offer', price: '0', priceCurrency: 'BDT' }, inLanguage: 'en-BD' }} />
       <PageHero
         path={PATH}
         trail={[{ name: 'Programs', path: '/programs' }, { name: 'Compare costs' }]}
         eyebrow="Compare before you commit"
         title="Compare first-year costs side by side"
         lead="Choose up to three programs. See tuition and every recorded first-year fee in one table, and where a figure is unclear, see exactly what to confirm with the university."
-        actions={<Link href="/programs" className="ed-btn ed-btn-outline min-h-[54px] px-7">Browse all programs</Link>}
+        actions={
+          <div className="flex flex-wrap gap-3">
+            <Link href="/programs" className="ed-btn ed-btn-outline min-h-[54px] px-7">Browse all programs</Link>
+            <Link href="/china-study-report-bangladesh" className="ed-btn ed-btn-outline min-h-[54px] px-7">Data &amp; cost benchmark report</Link>
+          </div>
+        }
       />
       <Suspense fallback={<div className="bg-canvas-soft py-20 text-center text-[15px] text-ink-soft">Loading cost comparison…</div>}>
         <CostCompare programs={programs} fees={fees} />

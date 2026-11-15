@@ -178,3 +178,14 @@ test('data: image URIs are stripped while relative and https image URLs remain',
 test('plain-text extraction is unchanged', () => {
   assert.equal(htmlToText('<h1>Title</h1><p>One &amp; two</p><script>x()</script>'), 'Title One & two');
 });
+
+test('CMS template placeholder href links are unwrapped to plain spans', () => {
+  assert.equal(
+    assertSafe('<p><a href="[Link to your scholarship page]" class="accent-link" target="_blank">CSC guide</a></p>'),
+    '<p><span class="accent-link">CSC guide</span></p>',
+  );
+  assert.equal(
+    assertSafe('<a href="{contactUrl}">Contact</a>'),
+    '<span>Contact</span>',
+  );
+});

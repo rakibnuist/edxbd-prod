@@ -4,6 +4,7 @@ import { ArrowRight, BookOpen, Check, ExternalLink, GraduationCap, ShieldCheck, 
 import MbbsUniversityFinder from '@/components/china/MbbsUniversityFinder';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getChinaMbbsGuide } from '@/lib/china-mbbs-guide';
+import { citationJsonLd } from '@/lib/json-ld';
 import { mbbsApplyHref } from '@/lib/mbbs-enquiry';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import { ogImage, pageMetadata } from '@/lib/seo';
@@ -50,6 +51,13 @@ export async function generateMetadata() {
     description: guide.description,
     path: PATH,
     image: ogImage('china-guide', heroImage.alt),
+    type: 'article',
+    locale: 'en_BD',
+    languages: {
+      'en-BD': PATH,
+      'bn-BD': '/bn/mbbs-in-china-bangladesh',
+      'x-default': PATH,
+    },
   });
 }
 
@@ -65,7 +73,23 @@ export default async function MbbsChinaPage() {
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: 'MBBS in China for Bangladeshi Students', description: guide.description, inLanguage: 'en', isPartOf: { '@id': `${SITE}/#website` }, publisher: { '@id': `${SITE}/#organization` }, breadcrumb: { '@id': `${canonical}#breadcrumb` } },
+      {
+        '@type': ['WebPage', 'Article'],
+        '@id': `${canonical}#webpage`,
+        url: canonical,
+        headline: 'MBBS in China for Bangladeshi Students | EduExpress',
+        name: 'MBBS in China for Bangladeshi Students',
+        description: guide.description,
+        inLanguage: 'en-BD',
+        mainEntityOfPage: canonical,
+        ...(checkedAt ? { dateModified: `${checkedAt}T00:00:00Z` } : {}),
+        author: { '@id': `${SITE}/#organization` },
+        reviewedBy: { '@id': `${SITE}/#organization` },
+        isPartOf: { '@id': `${SITE}/#website` },
+        publisher: { '@id': `${SITE}/#organization` },
+        breadcrumb: { '@id': `${canonical}#breadcrumb` },
+        ...citationJsonLd(sources),
+      },
       { '@type': 'ItemList', name: 'MBBS university options in China', itemListElement: guide.universities.map((item, i) => ({ '@type': 'ListItem', position: i + 1, name: item.name, url: `${canonical}#mbbs-${item.id}` })) },
     ],
   };
@@ -85,6 +109,7 @@ export default async function MbbsChinaPage() {
           <>
             <Link href={mbbsApplyHref()} className="ed-btn ed-btn-signal min-h-[52px] px-7">Build my MBBS shortlist <ArrowRight size={18} aria-hidden="true" /></Link>
             <a href="#mbbs-universities" className="ed-btn ed-btn-outline min-h-[52px] px-7">Explore universities</a>
+            <Link href="/bn/mbbs-in-china-bangladesh" hrefLang="bn-BD" lang="bn" className="ed-btn ed-btn-outline min-h-[52px] px-7">বাংলায় MBBS গাইড</Link>
           </>
         }
         aside={
@@ -329,6 +354,14 @@ export default async function MbbsChinaPage() {
               </li>
             ))}
           </ul>
+          <p className="mt-6 flex flex-wrap items-center gap-4 text-[15px] text-ink-soft">
+            <Link href="/bn/mbbs-in-china-bangladesh" hrefLang="bn-BD" className={kit.link}>
+              বাংলায় চীনে MBBS গাইড পড়ুন <ArrowRight size={15} aria-hidden="true" />
+            </Link>
+            <Link href="/china-study-report-bangladesh" className={kit.link}>
+              Bangladesh–China university &amp; cost report <ArrowRight size={15} aria-hidden="true" />
+            </Link>
+          </p>
         </nav>
       </Section>
 

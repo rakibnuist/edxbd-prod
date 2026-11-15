@@ -67,6 +67,8 @@ export const chinaNavigation: SiteLink[] = [
   { name: 'Student visa guide', href: '/china-student-visa-bangladesh', note: 'Prepare for the X1 or X2 route' },
   { name: 'Cost planner', href: '/study-in-china-cost-bangladesh', note: 'Plan tuition and living costs' },
   { name: 'Intakes and deadlines', href: '/china-intakes-deadlines', note: 'Review the application cycle' },
+  { name: 'China cost & data report', href: '/china-study-report-bangladesh', note: 'Live CNY tuition quartiles and scholarship counts' },
+  { name: 'বাংলা চায়না গাইড', href: '/bn/study-in-china', note: 'বাংলাদেশি শিক্ষার্থীদের জন্য সম্পূর্ণ বাংলা গাইড' },
 ];
 
 export const proofNavigation: SiteLink[] = [
@@ -103,16 +105,19 @@ export const costNavigation: SiteLink[] = [
   { name: 'Scholarship guidance', href: '/scholarships', note: 'What awards really cover and who qualifies' },
   { name: 'China scholarships', href: '/china-scholarships-bangladesh', note: 'CSC, provincial and university awards' },
   { name: 'Cost of studying in China', href: '/study-in-china-cost-bangladesh', note: 'Tuition, hostel, insurance, visa and travel' },
+  { name: 'Cost of studying in Malaysia', href: '/malaysia-study-cost-bangladesh', note: 'RM/BDT tuition, EMGS, Student File and BDT 0 service fee' },
   { name: 'Our fees, in writing', href: '/fees-and-transparency', note: 'What you pay us, when, and what is refundable' },
   { name: 'Compare destinations', href: '/compare-study-destinations', note: 'Cost and entry side by side' },
 ];
 
 export const aboutNavigation: SiteLink[] = [
   { name: 'About EduExpress', href: '/about', note: 'Our team and Dhanmondi office, since 2018' },
+  { name: 'Education consultant in Dhaka', href: '/education-consultant-dhaka', note: 'Visit our Dhanmondi office or book free counselling' },
   { name: 'How it works', href: '/your-study-journey', note: 'From free assessment to arrival' },
   { name: 'What we do for you', href: '/services', note: 'Counselling, applications and visa support' },
   { name: 'Student success stories', href: '/success-stories', note: 'Stories from our students' },
   { name: 'Proof library', href: '/proof-library', note: 'Redacted evidence and company records' },
   { name: 'For parents', href: '/for-parents', note: 'Costs, safety and responsibilities' },
+  { name: 'বাংলা গাইড (Study in China)', href: '/bn/study-in-china', note: 'চীন পড়াশোনা, খরচ ও ভিসা গাইড (বাংলায়)' },
   { name: 'Contact and visit us', href: '/contact', note: 'Phone, WhatsApp and office hours' },
 ];

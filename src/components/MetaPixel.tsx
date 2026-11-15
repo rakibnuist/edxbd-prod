@@ -1,5 +1,15 @@
 'use client';
 
+import {
+  ensureClientMetaParams,
+  getClientMetaParamsSync,
+} from '@/lib/meta-param-builder-client';
+import { captureLandingFbclid } from '@/lib/tracking-consent';
+
+if (typeof window !== 'undefined') {
+  captureLandingFbclid(window.location.href);
+}
+
 import { useCallback, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { CONSENT_CHANGE_EVENT } from '@/components/CookieConsent';
@@ -33,8 +43,9 @@ function dispatchServerPageView(eventId: string, pageUrl: string, pageTitle: str
   if (!isAnalyticsConsentAccepted()) return;
 
   const externalId = getOrCreateConsentedExternalId();
-  const fbp = readCookieValue('_fbp');
-  const fbc = readCookieValue('_fbc');
+  const { fbc: clientFbc, fbp: clientFbp } = getClientMetaParamsSync();
+  const fbp = readCookieValue('_fbp') || clientFbp;
+  const fbc = readCookieValue('_fbc') || clientFbc;
 
   void fetch('/api/meta-capi', {
     method: 'POST',
@@ -79,8 +90,12 @@ export default function MetaPixel() {
         if (metaWindow.__metaPixelLastPath !== pathname) {
           metaWindow.__metaPixelLastPath = pathname;
           const eventId = createPageViewEventId();
+          const currentHref = window.location.href;
+          const currentTitle = document.title;
           window.fbq?.('track', 'PageView', {}, { eventID: eventId });
-          dispatchServerPageView(eventId, window.location.href, document.title);
+          void ensureClientMetaParams(currentHref).finally(() => {
+            dispatchServerPageView(eventId, currentHref, currentTitle);
+          });
         }
         return;
       }
@@ -135,13 +150,16 @@ export default function MetaPixel() {
         window.fbq?.('track', 'PageView', {}, { eventID: eventId });
 
         // Wait briefly for fbevents.js to write `_fbp` before firing server CAPI,
-        // while still delivering even if an ad blocker blocks the browser script.
+        // while ensuring Meta Parameter Builder populates `_fbp`/`_fbc` locally even if fbevents.js is blocked.
+        const paramsPromise = ensureClientMetaParams(pageUrl);
         let dispatched = false;
         const flushServerPageView = () => {
           if (dispatched) return;
           dispatched = true;
           window.clearTimeout(fallbackTimer);
-          dispatchServerPageView(eventId, pageUrl, pageTitle);
+          void paramsPromise.finally(() => {
+            dispatchServerPageView(eventId, pageUrl, pageTitle);
+          });
         };
         const fallbackTimer = window.setTimeout(flushServerPageView, 700);
         const injectedScript = scriptEl as HTMLScriptElement | null;

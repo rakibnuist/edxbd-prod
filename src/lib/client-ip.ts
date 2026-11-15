@@ -121,14 +121,19 @@ export function extractClientIp(
   }
 
   // Traefik sets/overwrites X-Real-IP with the peer IP of the TCP connection.
+  // Skip private/loopback proxy hops (e.g. Docker bridge 172.x / 127.0.0.1) when a
+  // public client IP is available in X-Forwarded-For or CF-Connecting-IP.
   const realIp = parseValidatedIp(getHeader('x-real-ip'));
-  if (realIp) return realIp;
+  if (realIp && !isPrivateOrLoopbackIp(realIp)) return realIp;
 
   const xffIp = extractRightmostTrustedXffIp(getHeader('x-forwarded-for'));
-  if (xffIp) return xffIp;
+  if (xffIp && !isPrivateOrLoopbackIp(xffIp)) return xffIp;
 
-  // Fall back to CF-Connecting-IP only when no Traefik/XFF IP was supplied.
-  return parseValidatedIp(getHeader('cf-connecting-ip'));
+  // Fall back to CF-Connecting-IP (or private proxy IP in local dev) when no public Traefik/XFF IP was supplied.
+  const fallbackCfIp = parseValidatedIp(getHeader('cf-connecting-ip'));
+  if (fallbackCfIp && !isPrivateOrLoopbackIp(fallbackCfIp)) return fallbackCfIp;
+
+  return realIp ?? xffIp ?? fallbackCfIp;
 }
 
 export function extractSanitizedClientIp(getHeader: (name: string) => string | null): string {

@@ -45,6 +45,7 @@ export const metadata: Metadata = {
     description: 'Free profile assessment. Clear costs, written proof and a counsellor in Dhanmondi, Dhaka.',
     url: '/',
     type: 'website',
+    locale: 'en_BD',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Study abroad with the costs in writing' }],
   },
   twitter: {
@@ -197,7 +198,9 @@ const delay = (ms: number) => ({ '--d': `${ms}ms` }) as CSSProperties;
 export default async function Home() {
   const [trust, guides, plannerData] = await Promise.all([loadTrustRecords(), loadGuides(), loadPlannerData()]);
   const office = trust.offices.find(item => item.isHeadOffice) ?? trust.offices[0] ?? null;
-  const fullPackage = trust.servicePackages.find(item => item.packageType === 'full_scholarship');
+  const fullPackage =
+    trust.servicePackages.find(item => item.packageType === 'complete_support' || item.packageType === 'full_scholarship') ??
+    trust.servicePackages.find(item => item.destination === 'China');
   const testimonials = trust.testimonials.slice(0, 16);
   const storyCards: StoryCardData[] = testimonials.map(item => ({
     id: item.id,
@@ -347,7 +350,7 @@ export default async function Home() {
               <span className="size-2 rounded-full bg-[#2ead4b]" aria-hidden="true" /> {intakeBadge}
             </p>
             <h1 style={delay(60)} className="anim-lift mt-6 font-display text-[50px] font-black leading-[0.95] tracking-[-0.02em] text-petrol-800 sm:text-[80px] lg:text-[96px]">
-              <span className="sr-only">Study abroad. Every cost in writing.</span>
+              <span className="sr-only">Study abroad from Bangladesh in China, Malaysia, the UK, Korea and Hungary. Every cost in writing.</span>
               <span aria-hidden="true">
                 Study in{' '}
                 <span className="inline-block h-[1.02em] overflow-hidden rounded-[0.28em] bg-lime px-[0.18em] align-[-0.12em]">

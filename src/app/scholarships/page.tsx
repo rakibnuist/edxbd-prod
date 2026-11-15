@@ -11,13 +11,14 @@ import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
 
 const PATH = '/scholarships';
 const canonical = absoluteUrl(PATH);
-const LAST_REVIEWED = '2026-11-04';
+const LAST_REVIEWED = '2026-11-15';
 
 export const metadata = pageMetadata({
   title: 'Scholarship Guidance for Bangladeshi Students | EduExpress',
   description:
     'Scholarship guidance for Bangladeshi students: check eligibility, exact coverage, renewal rules and what your family still pays before you apply abroad.',
   path: PATH,
+  locale: 'en_BD',
   image: { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — scholarship guidance for Bangladeshi students' },
 });
 
@@ -60,6 +61,9 @@ const comparisonItems = [
 const guides = [
   { label: 'China scholarships explained', text: 'CSC, provincial and university awards', href: '/china-scholarships-bangladesh' },
   { label: 'CSC scholarship from Bangladesh', text: 'Chinese Government Scholarship routes', href: '/csc-scholarship-bangladesh' },
+  { label: 'CSC স্কলারশিপ গাইড (বাংলা)', text: 'Type A ও Type B নিয়ম, মাসিক ভাতা ও ডকুমেন্টস', href: '/bn/csc-scholarship-bangladesh' },
+  { label: 'China study data & cost report', text: 'Live CNY tuition quartiles and scholarship counts', href: '/china-study-report-bangladesh' },
+  { label: '2026 CSCA entrance exam guide', text: 'China Scholastic Competency Assessment (CSCA) structure and rules', href: '/updates/csca-guide-study-in-china' },
   { label: 'Cost of studying in China', text: 'Tuition, hostel, insurance, visa and travel', href: '/study-in-china-cost-bangladesh' },
   { label: 'University and program finder', text: 'Scholarships on file, per university', href: '/universities' },
 ];

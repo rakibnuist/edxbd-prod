@@ -47,7 +47,36 @@ export default async function ProgramsPage() {
 
   return (
     <>
-      <JsonLd data={{ '@context': 'https://schema.org', '@type': 'CollectionPage', '@id': `${url}#page`, url, name: 'China University Programs and Tuition Finder', inLanguage: 'en-BD', about: { '@type': 'Thing', name: 'Higher education in China' } }} />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@graph': [
+            {
+              '@type': 'CollectionPage',
+              '@id': `${url}#page`,
+              url,
+              name: 'China University Programs and Tuition Finder',
+              inLanguage: 'en-BD',
+              isPartOf: { '@id': `${SITE_URL}/#website` },
+              about: { '@type': 'Thing', name: 'Higher education in China' },
+              breadcrumb: { '@id': `${url}#breadcrumb` },
+              mainEntity: { '@id': `${url}#segments` },
+            },
+            {
+              '@type': 'ItemList',
+              '@id': `${url}#segments`,
+              name: 'China degree & language programme categories',
+              numberOfItems: programSegments.length,
+              itemListElement: programSegments.map((segment, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                name: segment.h1,
+                url: `${SITE_URL}/programs/${segment.slug}`,
+              })),
+            },
+          ],
+        }}
+      />
       <PageHero
         path={PATH}
         trail={[{ name: 'Universities', path: '/universities' }, { name: 'Programs' }]}
@@ -70,7 +99,7 @@ export default async function ProgramsPage() {
       <ProgramFinder rows={rows} />
       <FaqBlock items={faqsFor(rows)} title="Questions about programs and tuition" tone="white" />
       <section className="bg-white pb-16">
-        <p className={`${kit.wrap} ${kit.body}`}>Related: <Link href="/scholarships#scholarship-database" className={kit.link}>China scholarship database</Link> · <Link href="/china-universities" className={kit.link}>China universities</Link> · <Link href="/study-in-china-cost-bangladesh" className={kit.link}>Study in China cost guide</Link></p>
+        <p className={`${kit.wrap} ${kit.body}`}>Related: <Link href="/scholarships#scholarship-database" className={kit.link}>China scholarship database</Link> · <Link href="/china-universities" className={kit.link}>China universities</Link> · <Link href="/study-in-china-cost-bangladesh" className={kit.link}>Study in China cost guide</Link> · <Link href="/china-study-report-bangladesh" className={kit.link}>China data &amp; cost report</Link> · <Link href="/china-intakes-deadlines" className={kit.link}>Intakes &amp; deadlines</Link> · <Link href="/updates/csca-guide-study-in-china" className={kit.link}>CSCA exam guide</Link></p>
       </section>
       <CtaBand title="Want a shortlist in writing?" text="Share your results, subject and budget. A counsellor compares at least three suitable programs for you in writing, with the full cost of each." />
     </>

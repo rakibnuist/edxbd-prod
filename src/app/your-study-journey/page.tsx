@@ -135,7 +135,7 @@ export default function StudyJourneyPage() {
         description:
           'Seven visible stages from education fit and applications to visa readiness, departure, arrival and university registration.',
         inLanguage: 'en-BD',
-        dateModified: '2026-11-04',
+        dateModified: '2026-11-15',
         isPartOf: { '@id': `${SITE_URL}/#website` },
         about: { '@id': `${SITE_URL}/#organization` },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },

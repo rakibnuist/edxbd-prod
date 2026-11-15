@@ -1,13 +1,18 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowDownUp, ChevronLeft, ChevronRight, Mail, MessageCircle, Phone, RefreshCw, Search, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowDownUp, ChevronLeft, ChevronRight, Mail, MessageCircle, Phone, RefreshCw, Search, SlidersHorizontal, Upload, X } from 'lucide-react';
+import LeadCopilotPanel from '@/components/admin/LeadCopilotPanel';
+import type { FitResponseLanguage } from '@/lib/fit-matcher';
+import type { LeadCopilotResult } from '@/lib/lead-copilot';
 import { filterLeads, leadContactLinks, leadCounts, leadStatusLabel, leadStatusTone, LEAD_STATUSES, type LeadQueue, type LeadRecord } from '@/lib/lead-workflow';
 
 type Props = {
-  leads: LeadRecord[]; loading: boolean; error: string | null; notice: string | null; savingId: string | null;
+  leads: LeadRecord[]; loading: boolean; importing?: boolean; error: string | null; notice: string | null; savingId: string | null;
   onRefresh: () => void; onUpdate: (id: string, data: { status?: string; notes?: string }) => Promise<boolean>;
   onDelete: (id: string) => Promise<boolean>;
+  onCopilot?: (id: string, options: { language: FitResponseLanguage; focus?: string }) => Promise<{ data?: LeadCopilotResult; error?: string }>;
+  onImportCsv?: (file: File) => void;
 };
 const control = 'min-h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none focus-visible:ring-2 focus-visible:ring-[#12436b] disabled:cursor-wait disabled:opacity-60';
 const quietButton = `${control} inline-flex items-center justify-center gap-2 hover:bg-gray-50 disabled:cursor-not-allowed`;
@@ -27,7 +32,7 @@ function StatusSelect({ lead, saving, update }: { lead: LeadRecord; saving: bool
   </select>{saving && <RefreshCw size={14} className="animate-spin text-gray-500" aria-label="Saving" />}</div>{failed && <p role="alert" className="mt-2 text-xs text-red-800">Status could not be saved. Please retry.</p>}</div>;
 }
 
-function Detail({ lead, saving, onClose, onUpdate, onDelete }: { lead: LeadRecord; saving: boolean; onClose: () => void; onUpdate: Props['onUpdate']; onDelete: Props['onDelete'] }) {
+function Detail({ lead, saving, onClose, onUpdate, onDelete, onCopilot }: { lead: LeadRecord; saving: boolean; onClose: () => void; onUpdate: Props['onUpdate']; onDelete: Props['onDelete']; onCopilot?: Props['onCopilot'] }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [notes, setNotes] = useState(lead.notes || '');
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -60,6 +65,19 @@ function Detail({ lead, saving, onClose, onUpdate, onDelete }: { lead: LeadRecor
       <dl className="grid grid-cols-2 gap-x-5 gap-y-4">{fields.map(([label, value]) => <div key={label}><dt className="text-xs text-gray-600">{label}</dt><dd className="mt-1 break-words text-sm">{value || '—'}</dd></div>)}</dl>
       {lead.message && <section><h3 className="text-sm font-semibold">Student’s message</h3><p className="mt-2 whitespace-pre-wrap break-words rounded-lg bg-gray-50 p-4 text-sm leading-6">{lead.message}</p></section>}
       {assessment.length > 0 && <section><h3 className="mb-3 text-sm font-semibold">Assessment details</h3><dl className="space-y-3">{assessment.map(([label, value]) => <div key={label}><dt className="text-xs text-gray-600">{label}</dt><dd className="mt-1 whitespace-pre-wrap break-words text-sm">{value}</dd></div>)}</dl></section>}
+      {onCopilot && (
+        <LeadCopilotPanel
+          lead={lead}
+          onGenerate={onCopilot}
+          onAppendNotes={snippet => {
+            setNotes(previous => {
+              const trimmed = previous.trim();
+              const combined = trimmed ? `${trimmed}\n\n${snippet}` : snippet;
+              return combined.slice(0, 12000);
+            });
+          }}
+        />
+      )}
       <section><label htmlFor="counselor-notes" className="text-sm font-semibold">Counselor notes</label><p className="mt-1 text-xs text-gray-600">Internal follow-up notes for your admissions team.</p>
         <textarea id="counselor-notes" value={notes} maxLength={12000} onChange={event => setNotes(event.target.value)} rows={5} className={`${control} mt-3 w-full py-3`} placeholder="Record the last conversation and next action…" />
         <div className="mt-2 flex items-center justify-between gap-3"><span className="text-xs text-gray-600">{notes.trim() === (lead.notes || '') ? 'No unsaved changes' : 'Unsaved changes'}</span>
@@ -71,7 +89,8 @@ function Detail({ lead, saving, onClose, onUpdate, onDelete }: { lead: LeadRecor
   </dialog>;
 }
 
-export default function LeadWorkspace({ leads, loading, error, notice, savingId, onRefresh, onUpdate, onDelete }: Props) {
+export default function LeadWorkspace({ leads, loading, importing, error, notice, savingId, onRefresh, onUpdate, onDelete, onCopilot, onImportCsv }: Props) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [search, setSearch] = useState('');
   const [queue, setQueue] = useState<LeadQueue>('all');
   const [status, setStatus] = useState('all');
@@ -94,7 +113,13 @@ export default function LeadWorkspace({ leads, loading, error, notice, savingId,
   const reset = () => { setSearch(''); setQueue('all'); setStatus('all'); setCountry('all'); setSource('all'); setPage(1); };
   return <div data-ui className="space-y-6 text-gray-900">
     <div className="flex items-start justify-between gap-4"><div><h1 className="text-2xl font-semibold tracking-tight">Leads</h1><p className="mt-1 text-sm text-gray-600">Your admissions queue. Find the next student to follow up with.</p></div>
-      <button className={quietButton} onClick={onRefresh} disabled={loading}><RefreshCw size={15} className={loading ? 'animate-spin' : ''} /><span className="hidden sm:inline">Refresh</span></button></div>
+      <div className="flex items-center gap-2">
+        {onImportCsv && <>
+          <input ref={fileInputRef} type="file" accept=".csv,.tsv,text/csv,text/tab-separated-values" className="hidden" onChange={event => { const file = event.target.files?.[0]; if (file) onImportCsv(file); event.target.value = ''; }} />
+          <button className={quietButton} onClick={() => fileInputRef.current?.click()} disabled={loading || importing}><Upload size={15} /><span>{importing ? 'Importing…' : 'Import CSV'}</span></button>
+        </>}
+        <button className={quietButton} onClick={onRefresh} disabled={loading || importing}><RefreshCw size={15} className={loading ? 'animate-spin' : ''} /><span className="hidden sm:inline">Refresh</span></button>
+      </div></div>
     <dl className="grid grid-cols-2 gap-y-5 rounded-lg bg-gray-50 p-4 sm:grid-cols-4 sm:divide-x sm:divide-gray-200">{[
       ['Total enquiries', counts.all], ['New enquiries', counts.new], ['No Response', counts.no_response], ['In progress', counts.in_progress],
     ].map(([label, value], index) => <div key={label} className={index ? 'sm:px-5' : 'sm:pr-5'}><dt className="text-xs text-gray-600">{label}</dt><dd className={`mt-1 text-2xl font-semibold tabular-nums ${label === 'New enquiries' && value ? 'text-[#12436b]' : ''}`}>{loading && !leads.length ? '—' : value}</dd></div>)}</dl>
@@ -124,6 +149,6 @@ export default function LeadWorkspace({ leads, loading, error, notice, savingId,
       </div>
       {filtered.length > 0 && <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 pt-4 text-xs text-gray-600"><span className="tabular-nums">{(currentPage - 1) * size + 1}–{Math.min(currentPage * size, filtered.length)} of {filtered.length}</span><div className="flex items-center gap-3"><button aria-label="Previous page" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)} className={quietButton}><ChevronLeft size={16} /></button><span className="tabular-nums">{currentPage} / {pages}</span><button aria-label="Next page" disabled={currentPage === pages} onClick={() => setPage(currentPage + 1)} className={quietButton}><ChevronRight size={16} /></button></div></div>}
     </div>
-    {selected && <Detail key={selected.id} lead={selected} saving={savingId === selected.id} onClose={() => setSelectedId(null)} onUpdate={onUpdate} onDelete={onDelete} />}
+    {selected && <Detail key={selected.id} lead={selected} saving={savingId === selected.id} onClose={() => setSelectedId(null)} onUpdate={onUpdate} onDelete={onDelete} onCopilot={onCopilot} />}
   </div>;
 }

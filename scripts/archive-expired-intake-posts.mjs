@@ -25,6 +25,7 @@ const slugs = [
   'pzu-march-2026-admissions-direct-major-panzhihua-university',
   'zjut-march-2026-chinese-language-program',
   'cauc-march-2026-foundation-program-scholarship',
+  'bnu-zhuhai-mba-mpa-scholarship-2026',
 ];
 
 async function main() {

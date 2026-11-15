@@ -158,9 +158,11 @@ export default async function UniversitiesPage({ searchParams }: Props) {
   const waNumber = config.contact.whatsapp.replace(/\D/g, '');
   const formWa = `https://wa.me/${waNumber}?text=${encodeURIComponent('Assalamu alaikum. I am looking at universities on your website. Please suggest a shortlist for me.')}`;
 
+  const malaysiaCount = universities.filter(u => u.isActive && u.country.toLowerCase() === 'malaysia').length;
+  const chinaCount = universities.filter(u => u.isActive && u.country.toLowerCase() === 'china').length;
   const quickPicks = [
-    { href: '/universities?country=Malaysia', label: '🇲🇾 Malaysia (9)' },
-    { href: '/universities?country=China', label: '🇨🇳 China (110)' },
+    { href: '/universities?country=Malaysia', label: `🇲🇾 Malaysia (${malaysiaCount})` },
+    { href: '/universities?country=China', label: `🇨🇳 China (${chinaCount})` },
     { href: '/universities?scholarship=1', label: '🎁 Scholarships Available' },
     { href: '/universities?language=English', label: '🌐 English-Taught' },
     { href: '/universities?search=Computer', label: '💻 Computer Science' },

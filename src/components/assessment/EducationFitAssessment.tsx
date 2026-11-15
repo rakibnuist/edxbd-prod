@@ -2,12 +2,16 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   ArrowLeft,
   ArrowRight,
+  Building2,
   CheckCircle2,
   ClipboardCheck,
+  GraduationCap,
   Loader2,
+  MapPin,
   SearchCheck,
   ShieldCheck,
   Sparkles,
@@ -22,6 +26,8 @@ import {
   trackCompareCompleted,
   trackCompareStarted,
 } from '@/lib/conversion-events';
+import type { FitPreviewResult, FitResponseLanguage } from '@/lib/fit-matcher';
+import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 import { destinationLinks } from '@/data/siteNavigation';
 
 const PRIVACY_VERSION = '2026-07-19';
@@ -74,12 +80,6 @@ interface RouteRecommendation {
   href: string;
 }
 
-interface Summary {
-  routes: RouteRecommendation[];
-  checks: string[];
-  missing: string[];
-}
-
 type Screen = 'profile' | 'plan' | 'results' | 'contact' | 'done';
 
 const EMPTY: FormState = {
@@ -101,7 +101,8 @@ function getDestination(value: string) {
   return DESTINATIONS.find(destination => destination.value === value);
 }
 
-function buildSummary(form: FormState): Summary {
+function buildFallbackSummary(form: FormState, language: FitResponseLanguage): FitPreviewResult {
+  const bn = language === 'bn';
   const routes: RouteRecommendation[] = [];
   const checks: string[] = [];
   const missing: string[] = [];
@@ -112,20 +113,28 @@ function buildSummary(form: FormState): Summary {
 
   if (wantsChina) {
     routes.push({
-      title: medical ? 'China medical route — verify first' : 'China university route',
-      badge: medical ? 'Recognition check required' : 'Flagship route',
+      title: medical
+        ? (bn ? 'চীনে মেডিকেল (MBBS) রুট — আগে স্বীকৃতি যাচাই করুন' : 'China medical route — verify first')
+        : (bn ? 'চায়না বিশ্ববিদ্যালয় রুট' : 'China university route'),
+      badge: medical
+        ? (bn ? 'স্বীকৃতি যাচাই জরুরি' : 'Recognition check required')
+        : (bn ? 'ফ্ল্যাগশিপ রুট' : 'Flagship route'),
       note: medical
-        ? 'Start with university recognition, licensing and current eligibility before comparing scholarships or price.'
-        : 'Start with universities that match your academic level, subject, budget and English readiness. Scholarship conditions are checked per intake.',
-      href: medical ? '/mbbs-in-china-bangladesh' : '/china-universities',
+        ? (bn ? 'খরচ বা স্কলারশিপ তুলনা করার আগে WDOMS ও BMDC স্বীকৃতি এবং যোগ্যতা যাচাই করুন।' : 'Start with university recognition, licensing and current eligibility before comparing scholarships or price.')
+        : (bn ? 'আপনার অ্যাকাডেমিক স্তর, বিষয়, বাজেট ও ইংরেজি প্রস্তুতি অনুযায়ী উপযুক্ত বিশ্ববিদ্যালয় দেখুন।' : 'Start with universities that match your academic level, subject, budget and English readiness. Scholarship conditions are checked per intake.'),
+      href: medical
+        ? (bn ? '/bn/mbbs-in-china-bangladesh' : '/mbbs-in-china-bangladesh')
+        : '/china-universities',
     });
   }
 
   if (wantsMalaysia && !medical) {
     routes.push({
-      title: 'Malaysia pathway',
-      badge: 'Second route to compare',
-      note: 'Compare Foundation, Diploma and Bachelor pathways by entry level, English requirement and complete first-year cost.',
+      title: bn ? 'মালয়েশিয়া পাথওয়ে' : 'Malaysia pathway',
+      badge: bn ? 'তুলনা করার দ্বিতীয় পথ' : 'Second route to compare',
+      note: bn
+        ? 'ফাউন্ডেশন, ডিপ্লোমা ও ব্যাচেলর প্রোগ্রামের প্রথম বছরের সম্পূর্ণ খরচ ও ভর্তির শর্ত তুলনা করুন।'
+        : 'Compare Foundation, Diploma and Bachelor pathways by entry level, English requirement and complete first-year cost.',
       href: '/study-in-malaysia-from-bangladesh',
     });
   }
@@ -134,53 +143,90 @@ function buildSummary(form: FormState): Summary {
     const destination = getDestination(value);
     if (!destination) continue;
     routes.push({
-      title: `${destination.label} study route`,
-      badge: 'Profile review needed',
-      note: 'Entry rules, recognition, complete cost and visa readiness must be checked against your exact program and intake.',
+      title: bn ? `${destination.label} স্টাডি রুট` : `${destination.label} study route`,
+      badge: bn ? 'প্রোফাইল যাচাই প্রয়োজন' : 'Profile review needed',
+      note: bn
+        ? 'আপনার নির্দিষ্ট প্রোগ্রাম ও ইনটেক অনুযায়ী ভর্তির নিয়ম, স্বীকৃতি ও সম্পূর্ণ খরচ যাচাই করতে হবে।'
+        : 'Entry rules, recognition, complete cost and visa readiness must be checked against your exact program and intake.',
       href: destination.href,
     });
   }
 
   if (routes.length === 0) {
     routes.push({
-      title: 'Compare active destinations',
-      badge: 'Open comparison',
-      note: 'A counselor can compare suitable routes after checking your academic profile, budget, subject and English readiness.',
+      title: bn ? 'সক্রিয় দেশগুলো তুলনা করুন' : 'Compare active destinations',
+      badge: bn ? 'তুলনা' : 'Open comparison',
+      note: bn
+        ? 'আপনার প্রোফাইল, বাজেট ও বিষয় অনুযায়ী কাউন্সেলর বাস্তবসম্মত বিকল্প তুলনা করে জানাবেন।'
+        : 'A counselor can compare suitable routes after checking your academic profile, budget, subject and English readiness.',
       href: '/destinations',
     });
   }
 
-  if (!form.academicResults) missing.push('Latest GPA, CGPA or grades');
-  if (!form.budget || form.budget === 'Not sure yet') missing.push('A realistic yearly budget including living costs');
-  if (!form.language || form.language === 'Not sure yet') missing.push('English test status or preparation plan');
-  if (!form.intake || form.intake === 'Not sure yet') missing.push('Preferred intake and application timing');
+  if (!form.academicResults) missing.push(bn ? 'সর্বশেষ GPA, CGPA বা পরীক্ষার ফলাফল' : 'Latest GPA, CGPA or grades');
+  if (!form.budget || form.budget === 'Not sure yet') missing.push(bn ? 'থাকা-খাওয়াসহ বাৎসরিক বাস্তব বাজেট' : 'A realistic yearly budget including living costs');
+  if (!form.language || form.language === 'Not sure yet') missing.push(bn ? 'ইংরেজি টেস্টের অবস্থা বা প্রস্তুতি' : 'English test status or preparation plan');
+  if (!form.intake || form.intake === 'Not sure yet') missing.push(bn ? 'পছন্দের ইনটেক ও সময়সীমা' : 'Preferred intake and application timing');
 
-  checks.push('University recognition and program fit');
-  checks.push('Tuition, living and third-party fees separately');
-  checks.push('Scholarship conditions and renewal rules');
-  if (medical) checks.push('Bangladesh licensing and recognition pathway');
-  else checks.push('Visa readiness and document gaps');
+  if (bn) {
+    checks.push('বিশ্ববিদ্যালয়ের স্বীকৃতি ও প্রোগ্রাম ফিট');
+    checks.push('টিউশন, থাকা-খাওয়া ও থার্ড-পার্টি ফি আলাদাভাবে');
+    checks.push('স্কলারশিপের শর্ত ও নবায়নের নিয়ম');
+    checks.push(medical ? 'বাংলাদেশ (BMDC) ও WDOMS লাইসেন্সিং পথ' : 'ভিসা ডকুমেন্ট ও ফাইল প্রস্তুতি');
+  } else {
+    checks.push('University recognition and program fit');
+    checks.push('Tuition, living and third-party fees separately');
+    checks.push('Scholarship conditions and renewal rules');
+    if (medical) checks.push('Bangladesh licensing and recognition pathway');
+    else checks.push('Visa readiness and document gaps');
+  }
 
-  return { routes: routes.slice(0, 3), checks, missing };
+  return {
+    mode: 'catalog',
+    language,
+    summaryHeadline: bn ? 'প্রথমে দেখার মতো পথগুলো' : 'Routes worth checking first',
+    summaryNote: bn
+      ? 'আপনার প্রাথমিক প্রোফাইল অনুযায়ী এই গাইড ও দেশগুলো থেকে তুলনা শুরু করা যাবে।'
+      : 'Use these starting routes to review costs, entry criteria, and verification requirements before applying.',
+    universityMatches: [],
+    routes: routes.slice(0, 3),
+    checks,
+    missing,
+  };
 }
 
-type InitialContext = { intake?: string; university?: string; program?: string; country?: string; intent?: 'application' };
+type InitialContext = {
+  intake?: string;
+  university?: string;
+  program?: string;
+  country?: string;
+  intent?: 'application';
+  language?: FitResponseLanguage;
+};
 
 export default function EducationFitAssessment({ initialContext }: { initialContext?: InitialContext } = {}) {
+  const pathname = usePathname();
+  const inferredLanguage: FitResponseLanguage = initialContext?.language ?? (pathname?.startsWith('/bn') ? 'bn' : 'en');
   const isApplication = initialContext?.intent === 'application';
   const eventLabel = isApplication ? 'university_application' : 'homepage_discovery';
   const [form, setForm] = useState<FormState>(() => {
     const country = initialContext?.country ? destinationValue(initialContext.country) : '';
     return { ...EMPTY, intake: initialContext?.intake || '', subject: initialContext?.program || '', preferredCountries: DESTINATIONS.some(destination => destination.value === country) ? [country] : [] };
   });
+  const [responseLanguage, setResponseLanguage] = useState<FitResponseLanguage>(inferredLanguage);
   const [screen, setScreen] = useState<Screen>('profile');
+  const [matching, setMatching] = useState(false);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
-  const [summary, setSummary] = useState<Summary | null>(null);
+  const [summary, setSummary] = useState<FitPreviewResult | null>(null);
   const startedRef = useRef(false);
+  const previewAbortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     captureUtmParameters();
+    return () => {
+      previewAbortRef.current?.abort();
+    };
   }, []);
 
   const markStarted = () => {
@@ -221,15 +267,79 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
     setScreen('plan');
   };
 
-  const showResults = () => {
+  const requestPreview = async (lang: FitResponseLanguage, currentForm: FormState): Promise<FitPreviewResult | null> => {
+    previewAbortRef.current?.abort();
+    const controller = new AbortController();
+    previewAbortRef.current = controller;
+    setMatching(true);
+
+    try {
+      const response = await fetch('/api/ai/fit-preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          academicLevel: currentForm.academicLevel,
+          academicResults: currentForm.academicResults,
+          subject: currentForm.subject,
+          careerGoal: currentForm.careerGoal,
+          budget: currentForm.budget,
+          intake: currentForm.intake,
+          language: currentForm.language,
+          preferredCountries: currentForm.preferredCountries,
+          responseLanguage: lang,
+        }),
+      });
+
+      if (!response.ok) {
+        return buildFallbackSummary(currentForm, lang);
+      }
+
+      const data = (await response.json()) as FitPreviewResult;
+      if (!data || !Array.isArray(data.routes)) {
+        return buildFallbackSummary(currentForm, lang);
+      }
+      return data;
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return null;
+      }
+      return buildFallbackSummary(currentForm, lang);
+    } finally {
+      if (previewAbortRef.current === controller) {
+        setMatching(false);
+      }
+    }
+  };
+
+  const handleLanguageChange = async (lang: FitResponseLanguage) => {
+    if (lang === responseLanguage) return;
+    setResponseLanguage(lang);
+    if (screen === 'results' && !isApplication) {
+      const refreshed = await requestPreview(lang, form);
+      if (refreshed) setSummary(refreshed);
+    }
+  };
+
+  const showResults = async () => {
     setErrorMsg('');
-    const nextSummary = buildSummary(form);
+    if (isApplication) {
+      const nextSummary = buildFallbackSummary(form, responseLanguage);
+      setSummary(nextSummary);
+      setScreen('contact');
+      return;
+    }
+
+    const nextSummary = await requestPreview(responseLanguage, form);
+    if (!nextSummary) return;
+
     setSummary(nextSummary);
-    setScreen(isApplication ? 'contact' : 'results');
-    if (!isApplication) trackCompareCompleted({
+    setScreen('results');
+    trackCompareCompleted({
       destination: form.preferredCountries[0] || 'not-sure',
       label: 'homepage_discovery',
       route_count: nextSummary.routes.length,
+      match_mode: nextSummary.mode,
     });
   };
 
@@ -250,18 +360,27 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
     const primaryDestination = form.preferredCountries.find(country => country !== 'not-sure') || 'not-sure';
     const metaEventId = createConversionEventId('lead');
 
+    const matchedSummaryNames = summary?.universityMatches.map(item =>
+      item.matchedProgram ? `${item.name} (${item.matchedProgram})` : item.name,
+    ) || [];
+    const previewNote = matchedSummaryNames.length
+      ? `Fit preview (${summary?.mode || 'catalog'}, ${responseLanguage}): ${matchedSummaryNames.join(', ')}`.slice(0, 1900)
+      : undefined;
+
     try {
+      const metaParams = await getConsentedSubmissionMetaParams();
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          ...metaParams,
           name: form.name,
           email: form.email,
           phone: form.phone,
           country: getDestination(primaryDestination)?.label || 'Not specified',
           program: form.subject || 'Not specified',
           message: [isApplication && 'University application support request', initialContext?.university && `University: ${initialContext.university}`, initialContext?.program && `Selected program: ${initialContext.program}`, `Career goal: ${form.careerGoal || 'not provided'}`].filter(Boolean).join('\n'),
-          notes: isApplication ? ['Application support requested through the university profile', initialContext?.university && `University: ${initialContext.university}`, initialContext?.program && `Selected program: ${initialContext.program}`, initialContext?.country && `Selected country: ${initialContext.country}`].filter(Boolean).join(' | ') : undefined,
+          notes: isApplication ? ['Application support requested through the university profile', initialContext?.university && `University: ${initialContext.university}`, initialContext?.program && `Selected program: ${initialContext.program}`, initialContext?.country && `Selected country: ${initialContext.country}`].filter(Boolean).join(' | ') : previewNote,
           source: isApplication ? 'university_profile_application' : 'homepage_admissions_discovery',
           leadType: isApplication ? 'application' : 'assessment',
           destinationInterest: primaryDestination,
@@ -274,7 +393,10 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
             language: form.language,
             careerGoal: form.careerGoal,
             preferredCountries: form.preferredCountries,
-            suggestedRoutes: summary?.routes.map(route => route.title) || [],
+            suggestedRoutes: [
+              ...matchedSummaryNames,
+              ...(summary?.routes.map(route => route.title) || []),
+            ].slice(0, 8),
           },
           consent: form.consent,
           consentTimestamp: new Date().toISOString(),
@@ -340,7 +462,25 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
               <h2 className="mt-1 font-display text-[26px] font-black leading-[1.05] tracking-[-0.01em] text-lime sm:text-[30px]">{isApplication ? 'Tell us about your study plans' : 'See your starting routes'}</h2>
             </div>
           </div>
-          <span className="shrink-0 rounded-full bg-white/10 px-3 py-1.5 text-[14px] font-semibold text-white/85">2 min</span>
+          <div className="flex shrink-0 flex-col items-end gap-2">
+            <span className="rounded-full bg-white/10 px-3 py-1.5 text-[14px] font-semibold text-white/85">2 min</span>
+            {!isApplication && (
+              <div className="inline-flex rounded-full bg-white/10 p-0.5" role="group" aria-label="Assessment language">
+                {(['en', 'bn'] as const).map(lang => (
+                  <button
+                    key={lang}
+                    type="button"
+                    onClick={() => void handleLanguageChange(lang)}
+                    aria-pressed={responseLanguage === lang}
+                    disabled={matching}
+                    className={`min-h-[34px] rounded-full px-3 text-[13px] font-semibold transition ${responseLanguage === lang ? 'bg-lime text-petrol-800' : 'text-white/80 hover:text-white'}`}
+                  >
+                    {lang === 'en' ? 'EN' : 'বাংলা'}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className="mt-6 grid grid-cols-3 gap-2" aria-label={`Step ${progress} of 3`}>
           {(isApplication ? ['Profile', 'Study plan', 'Contact'] : ['Profile', 'Routes', 'Review']).map((label, index) => (
@@ -430,19 +570,93 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
 
         {screen === 'results' && summary && (
           <div className="space-y-6">
-            <div className="flex items-start gap-3">
-              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-lime-pale text-lime-deep"><Sparkles size={19} aria-hidden="true" /></span>
-              <div>
-                <p className="text-[15px] font-semibold text-ink-soft">Your instant starting point</p>
-                <h3 className="mt-1 font-display text-[24px] font-black leading-tight text-petrol-800">Routes worth checking first</h3>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="flex min-w-0 items-start gap-3">
+                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-lime-pale text-lime-deep"><Sparkles size={19} aria-hidden="true" /></span>
+                <div className="min-w-0">
+                  <p className="text-[14px] font-semibold text-ink-soft">
+                    {summary.mode === 'gemini'
+                      ? (summary.language === 'bn' ? 'Gemini AI · যাচাইকৃত বিশ্ববিদ্যালয় রেকর্ডের ভিত্তিতে' : 'Gemini AI · Grounded in verified university records')
+                      : (summary.language === 'bn' ? 'যাচাইকৃত বিশ্ববিদ্যালয় রেকর্ডের ভিত্তিতে' : 'Matched from verified university records')}
+                  </p>
+                  <h3 className="mt-1 font-display text-[24px] font-black leading-tight text-petrol-800">{summary.summaryHeadline}</h3>
+                </div>
               </div>
+              {matching && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-canvas-soft px-3 py-1 text-[13px] font-semibold text-petrol-800">
+                  <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+                  {responseLanguage === 'bn' ? 'আপডেট হচ্ছে…' : 'Updating…'}
+                </span>
+              )}
             </div>
+
+            {summary.summaryNote && (
+              <p className="rounded-2xl bg-canvas-soft px-4 py-3.5 text-[15px] leading-6 text-ink-soft">
+                {summary.summaryNote}
+              </p>
+            )}
+
+            {summary.universityMatches.length > 0 && (
+              <div className="space-y-3">
+                <p className="text-[15px] font-bold text-petrol-800">
+                  {summary.language === 'bn' ? 'আপনার প্রোফাইলের সাথে মানানসই বিশ্ববিদ্যালয়' : 'Recorded university matches to check first'}
+                </p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {summary.universityMatches.map(match => (
+                    <Link
+                      key={match.slug}
+                      href={match.href}
+                      className="group flex min-w-0 flex-col rounded-2xl border border-petrol-800/15 bg-white p-4 transition hover:border-petrol-800/40 hover:bg-canvas-soft"
+                    >
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex rounded-full bg-lime-pale px-2.5 py-1 text-[13px] font-semibold text-lime-deep">
+                          {match.badge}
+                        </span>
+                        <span className="inline-flex rounded-full bg-canvas-soft px-2.5 py-1 text-[12px] font-semibold text-ink-soft">
+                          {match.verificationStatus === 'verified'
+                            ? (summary.language === 'bn' ? 'যাচাইকৃত রেকর্ড' : 'Verified record')
+                            : (summary.language === 'bn' ? 'তথ্য যাচাই চলমান' : 'Under verification')}
+                        </span>
+                      </div>
+                      <span className="mt-3 flex items-start justify-between gap-2">
+                        <strong className="min-w-0 break-words text-[16px] font-bold leading-snug text-petrol-800">{match.name}</strong>
+                        <ArrowRight size={17} className="mt-0.5 shrink-0 text-petrol-800 transition group-hover:translate-x-1" aria-hidden="true" />
+                      </span>
+                      <span className="mt-1 inline-flex items-center gap-1.5 text-[14px] text-ink-soft">
+                        <MapPin size={14} className="shrink-0 text-petrol-800" aria-hidden="true" />
+                        {match.city}, {match.country}
+                      </span>
+                      {match.matchedProgram && (
+                        <span className="mt-2 inline-flex items-start gap-1.5 text-[14px] font-semibold text-petrol-800">
+                          <GraduationCap size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
+                          <span className="min-w-0 break-words">{match.matchedProgram}</span>
+                        </span>
+                      )}
+                      <span className="mt-1.5 inline-flex items-start gap-1.5 text-[14px] text-ink-soft">
+                        <Building2 size={14} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" />
+                        <span className="min-w-0 break-words">{match.tuitionSummary}</span>
+                      </span>
+                      {match.scholarshipNote && (
+                        <span className="mt-1 text-[13px] font-medium text-lime-deep">{match.scholarshipNote}</span>
+                      )}
+                      {match.recognitionNote && (
+                        <span className="mt-1 text-[13px] text-ink-mute">{match.recognitionNote}</span>
+                      )}
+                      <span className="mt-2.5 block border-t border-canvas-soft pt-2.5 text-[14px] leading-5 text-ink-soft">
+                        {match.reason}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="space-y-3">
               {summary.routes.map(route => (
-                <Link key={route.title} href={route.href} className="group block rounded-2xl bg-canvas-soft p-5 transition-colors hover:bg-lime-pale">
+                <Link key={`${route.href}-${route.title}`} href={route.href} className="group block rounded-2xl bg-canvas-soft p-5 transition-colors hover:bg-lime-pale">
                   <span className="inline-flex rounded-full bg-white px-3 py-1 text-[14px] font-semibold text-lime-deep">{route.badge}</span>
                   <span className="mt-3 flex items-center justify-between gap-4">
-                    <strong className="text-[17px] text-petrol-800">{route.title}</strong>
+                    <strong className="min-w-0 break-words text-[17px] text-petrol-800">{route.title}</strong>
                     <ArrowRight size={18} className="shrink-0 text-petrol-800 transition group-hover:translate-x-1" aria-hidden="true" />
                   </span>
                   <span className="mt-2 block text-[15px] leading-6 text-ink-soft">{route.note}</span>
@@ -451,17 +665,22 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
             </div>
             <div className="grid gap-5 rounded-2xl bg-petrol-800 p-5 text-white sm:grid-cols-2 sm:p-6">
               <div>
-                <p className="text-[15px] font-semibold text-lime">We will verify</p>
+                <p className="text-[15px] font-semibold text-lime">{summary.language === 'bn' ? 'আমরা যা যাচাই করব' : 'We will verify'}</p>
                 <ul className="mt-3 space-y-2 text-[14px] leading-6 text-white/85">
                   {summary.checks.map(item => <li key={item} className="flex gap-2"><CheckCircle2 size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" />{item}</li>)}
                 </ul>
               </div>
               <div>
-                <p className="text-[15px] font-semibold text-lime">Still needed</p>
+                <p className="text-[15px] font-semibold text-lime">{summary.language === 'bn' ? 'আরও যা প্রয়োজন' : 'Still needed'}</p>
                 <ul className="mt-3 space-y-2 text-[14px] leading-6 text-white/85">
-                  {(summary.missing.length ? summary.missing : ['Your documents for a final eligibility check']).map(item => <li key={item} className="flex gap-2"><ShieldCheck size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" />{item}</li>)}
+                  {(summary.missing.length ? summary.missing : [summary.language === 'bn' ? 'চূড়ান্ত যোগ্যতা যাচাইয়ের জন্য আপনার কাগজপত্র' : 'Your documents for a final eligibility check']).map(item => <li key={item} className="flex gap-2"><ShieldCheck size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" />{item}</li>)}
                 </ul>
               </div>
+              {summary.clarifyingQuestion && (
+                <div className="border-t border-white/15 pt-4 text-[14px] leading-6 text-white/90 sm:col-span-2">
+                  <strong className="font-semibold text-lime">{summary.language === 'bn' ? 'পরবর্তী প্রশ্ন:' : 'Next question to confirm:'}</strong> {summary.clarifyingQuestion}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -496,8 +715,30 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
           )}
           {screen === 'plan' && (
             <>
-              <button type="button" onClick={() => { setErrorMsg(''); setScreen('profile'); }} className={secondaryButton}><ArrowLeft size={16} aria-hidden="true" /> Back</button>
-              <button type="button" onClick={showResults} className={`ml-auto ${primaryButton}`}>{isApplication ? 'Continue to contact details' : 'Show my starting routes'} <SearchCheck size={17} aria-hidden="true" /></button>
+              <button
+                type="button"
+                onClick={() => {
+                  previewAbortRef.current?.abort();
+                  setMatching(false);
+                  setErrorMsg('');
+                  setScreen('profile');
+                }}
+                className={secondaryButton}
+              >
+                <ArrowLeft size={16} aria-hidden="true" /> Back
+              </button>
+              <button type="button" onClick={() => void showResults()} disabled={matching} className={`ml-auto ${primaryButton} disabled:opacity-60`}>
+                {matching ? (
+                  <>
+                    <Loader2 className="animate-spin" size={17} aria-hidden="true" />
+                    {responseLanguage === 'bn' ? 'বিশ্ববিদ্যালয় খোঁজা হচ্ছে…' : 'Matching verified universities…'}
+                  </>
+                ) : (
+                  <>
+                    {isApplication ? 'Continue to contact details' : 'Show my starting routes'} <SearchCheck size={17} aria-hidden="true" />
+                  </>
+                )}
+              </button>
             </>
           )}
           {screen === 'results' && (

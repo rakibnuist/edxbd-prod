@@ -1,8 +1,26 @@
+import { evidencePages } from '@/data/evidencePages';
 import { sitemapResponse } from '@/lib/sitemap-xml';
 import { programSegments } from '@/lib/program-segments';
 
-const pages = ['', '/find-education', '/destinations', '/universities', '/programs', ...programSegments.map(segment => `/programs/${segment.slug}`), '/scholarships', '/compare-costs', '/your-study-journey', '/services', '/updates', '/education-fit-assessment', '/for-parents', '/proof-library', '/about', '/contact', '/better-education-standard', '/fees-and-transparency', '/how-we-verify-universities', '/student-data-privacy', '/complaints-and-resolution', '/education-consultant-dhaka', '/compare-study-destinations', '/country-status'];
+const evidenceSlugs = [
+  'better-education-standard',
+  'how-we-verify-universities',
+  'student-data-privacy',
+  'complaints-and-resolution',
+  'compare-study-destinations',
+  'country-status',
+] as const;
+
+const pages: { path: string; lastmod: string }[] = [
+  ...['', '/find-education', '/destinations', '/universities', '/programs', ...programSegments.map(segment => `/programs/${segment.slug}`), '/scholarships', '/compare-costs', '/your-study-journey', '/services', '/updates', '/partnership', '/education-fit-assessment', '/for-parents', '/proof-library', '/about', '/contact', '/fees-and-transparency'].map(path => ({ path, lastmod: '2026-11-06' })),
+  ...evidenceSlugs.map(slug => ({
+    path: `/${slug}`,
+    lastmod: evidencePages[slug]?.reviewedAt ?? '2026-11-15',
+  })),
+  { path: '/china-study-report-bangladesh', lastmod: '2026-11-15' },
+  { path: '/education-consultant-dhaka', lastmod: '2026-11-15' },
+];
 
 export function GET() {
-  return sitemapResponse(pages.map((path) => ({ loc: `https://eduexpressint.com${path}`, lastmod: '2026-11-06' })));
+  return sitemapResponse(pages.map(({ path, lastmod }) => ({ loc: `https://eduexpressint.com${path}`, lastmod })));
 }

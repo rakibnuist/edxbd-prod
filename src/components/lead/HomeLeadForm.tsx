@@ -13,6 +13,7 @@ import {
   trackPhoneClick,
   trackWhatsAppClick,
 } from '@/lib/conversion-events';
+import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 import { persistTrackingLeadId } from '@/lib/tracking-consent';
 
 const PRIVACY_VERSION = '2026-07-19';
@@ -86,10 +87,12 @@ export default function HomeLeadForm({
     const country = destination === 'Not sure yet' ? 'Not specified' : destination;
 
     try {
+      const metaParams = await getConsentedSubmissionMetaParams();
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          ...metaParams,
           name,
           email,
           phone,

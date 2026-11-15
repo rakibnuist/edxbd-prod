@@ -2,6 +2,11 @@ import { NextRequest, NextResponse, after } from 'next/server';
 import { sendCrmStage } from '@/lib/meta-crm-events';
 import prisma from '@/lib/prisma';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
+import {
+  applyMetaParamCookies,
+  buildServerMetaParams,
+  extractMetaParamOverridesFromBody,
+} from '@/lib/meta-param-builder-server';
 import { routeLead } from '@/lib/lead-routing';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import {
@@ -106,10 +111,11 @@ export async function POST(request: NextRequest) {
 
     // Meta click/browser IDs (set by the Pixel only after cookie consent), kept for CRM matching.
     const adTrackingConsent = body.trackingConsent === true;
-    const cookieId = (name: string) => {
-      const value = request.cookies.get(name)?.value?.trim();
-      return value && /^fb\.\d\.\d+\.[\w.-]{4,240}$/.test(value) ? value : null;
-    };
+    const serverMetaParams = adTrackingConsent
+      ? buildServerMetaParams(request, extractMetaParamOverridesFromBody(body))
+      : null;
+    const metaFbc = serverMetaParams?.fbc ?? null;
+    const metaFbp = serverMetaParams?.fbp ?? null;
 
     // Create new lead from contact form using Prisma
     const lead = await prisma.lead.create({
@@ -131,8 +137,8 @@ export async function POST(request: NextRequest) {
         landingPage,
         utm: safeUtm ? JSON.stringify(safeUtm) : null,
         adTrackingConsent,
-        metaFbc: adTrackingConsent ? cookieId('_fbc') : null,
-        metaFbp: adTrackingConsent ? cookieId('_fbp') : null,
+        metaFbc,
+        metaFbp,
       }
     });
     // First CRM stage for Meta's CRM integration, after the response is sent.
@@ -147,7 +153,11 @@ export async function POST(request: NextRequest) {
           phone,
           country,
           program,
-          message: message || 'Consultation request from ' + country
+          message: message || 'Consultation request from ' + country,
+          fbc: metaFbc ?? undefined,
+          fbp: metaFbp ?? undefined,
+          externalId: serverMetaParams?.externalId,
+          eventSourceUrl: serverMetaParams?.eventSourceUrl,
         }, source, request, undefined, metaEventId).catch(trackingError => {
           console.error('Meta Conversion API tracking error (non-blocking):', trackingError);
         });
@@ -157,14 +167,17 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Return success response
-    return NextResponse.json(
+    // Return success response and persist Parameter Builder cookies on consented submissions
+    const response = NextResponse.json(
       { 
         message: 'Message sent successfully',
         leadId: lead.id 
       },
       { status: 201 }
     );
+    return serverMetaParams
+      ? applyMetaParamCookies(response, request, serverMetaParams.cookiesToSet)
+      : response;
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);
     if (bodyError) return bodyError;

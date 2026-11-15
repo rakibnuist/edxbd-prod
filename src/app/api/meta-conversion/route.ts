@@ -30,9 +30,13 @@ import {
   trackSchedule,
   trackSubmitApplication,
   trackSubscribe,
-  testConversionAPI,
-  extractEventQualityParams
+  testConversionAPI
 } from '@/lib/meta-conversion-api';
+import {
+  applyMetaParamCookies,
+  buildServerMetaParams,
+  extractMetaParamOverridesFromBody,
+} from '@/lib/meta-param-builder-server';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
 import { classifyRequestOrigin, resolveAllowedOriginHosts } from '@/lib/meta-capi-policy';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
@@ -87,19 +91,44 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Advertising consent required.' }, { status: 403 });
     }
 
-    // Extract Event Quality parameters from the request
-    const eventQualityParams = extractEventQualityParams(request);
+    // Build Event Quality parameters via Meta Parameter Builder when visitor tracking consent is active
+    const nestedUserData =
+      data.userData && typeof data.userData === 'object' && !Array.isArray(data.userData)
+        ? (data.userData as Record<string, unknown>)
+        : undefined;
+    const overrides = extractMetaParamOverridesFromBody(
+      data as Record<string, unknown>,
+      nestedUserData,
+    );
+    const serverMetaParams =
+      trackingConsent === true
+        ? buildServerMetaParams(request, overrides)
+        : null;
 
-    // Merge Event Quality parameters with user data if available
-    if (data.userData) {
+    if (serverMetaParams) {
+      if (serverMetaParams.fbc) data.fbc = serverMetaParams.fbc;
+      if (serverMetaParams.fbp) data.fbp = serverMetaParams.fbp;
+      if (serverMetaParams.externalId) data.externalId = serverMetaParams.externalId;
+      data.eventSourceUrl = serverMetaParams.eventSourceUrl;
+
+      if (data.userData) {
+        data.userData = {
+          ...data.userData,
+          ...(serverMetaParams.fbc ? { fbc: serverMetaParams.fbc } : {}),
+          ...(serverMetaParams.fbp ? { fbp: serverMetaParams.fbp } : {}),
+          ...(serverMetaParams.externalId ? { external_id: serverMetaParams.externalId } : {}),
+          eventSourceUrl: serverMetaParams.eventSourceUrl,
+          fb_login_id: data.fb_login_id ?? nestedUserData?.fb_login_id,
+        };
+      }
+    } else if (data.userData) {
       data.userData = {
         ...data.userData,
-        ...eventQualityParams,
-        // Override with client-provided parameters if available
-        fbc: data.fbc || eventQualityParams.fbc,
-        fbp: data.fbp || eventQualityParams.fbp,
-        external_id: data.external_id || eventQualityParams.external_id,
-        fb_login_id: data.fb_login_id || eventQualityParams.fb_login_id
+        ...(overrides.fbc ? { fbc: overrides.fbc } : {}),
+        ...(overrides.fbp ? { fbp: overrides.fbp } : {}),
+        ...(overrides.externalId ? { external_id: overrides.externalId } : {}),
+        ...(overrides.eventSourceUrl ? { eventSourceUrl: overrides.eventSourceUrl } : {}),
+        fb_login_id: data.fb_login_id ?? nestedUserData?.fb_login_id,
       };
     }
 
@@ -238,7 +267,10 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    return NextResponse.json(result);
+    const response = NextResponse.json(result);
+    return serverMetaParams
+      ? applyMetaParamCookies(response, request, serverMetaParams.cookiesToSet)
+      : response;
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);
     if (bodyError) return bodyError;

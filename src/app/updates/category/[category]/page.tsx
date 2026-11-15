@@ -84,16 +84,29 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!data) notFound();
   const { posts, label } = data;
   const path = `/updates/category/${slug}`;
+  const url = `https://eduexpressint.com${path}`;
+  const latestPostDate = posts
+    .map(post => post.publishedAt || post.createdAt)
+    .filter((value): value is string => Boolean(value))
+    .map(value => new Date(value))
+    .filter(date => !Number.isNaN(date.getTime()))
+    .map(date => date.toISOString())
+    .sort()
+    .at(-1);
 
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    url: `https://eduexpressint.com${path}`,
+    '@id': `${url}#blog`,
+    url,
+    mainEntityOfPage: url,
     name: `EduExpress Updates — ${label}`,
     description: `Dated ${label.toLowerCase()} posts for Bangladeshi students.`,
     inLanguage: 'en-BD',
+    ...(latestPostDate ? { dateModified: latestPostDate } : {}),
+    isPartOf: { '@id': 'https://eduexpressint.com/#website' },
     publisher: { '@id': 'https://eduexpressint.com/#organization' },
-    breadcrumb: { '@id': `https://eduexpressint.com${path}#breadcrumb` },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
     blogPost: posts.slice(0, 20).map(post => ({
       '@type': 'BlogPosting',
       headline: post.title,

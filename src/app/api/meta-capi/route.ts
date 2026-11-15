@@ -7,6 +7,19 @@ import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
 import { extractClientIp } from '@/lib/client-ip';
 import {
+    hashData,
+    normalizeCountry,
+    normalizeEmail,
+    normalizePhone,
+    normalizeText,
+} from '@/lib/meta-conversion-api';
+import {
+    applyMetaParamCookies,
+    buildServerMetaParams,
+    extractMetaParamOverridesFromBody,
+    PII_DATA_TYPE,
+} from '@/lib/meta-param-builder-server';
+import {
     classifyRequestOrigin,
     pickCustomData,
     resolveAllowedOriginHosts,
@@ -42,70 +55,6 @@ interface ConversionsAPIEvent {
         country?: string; // hashed country
     };
     custom_data?: Record<string, string | number | boolean>;
-}
-
-// SHA256 hashing function for PII
-function hashData(data: string | undefined): string | undefined {
-    if (!data) return undefined;
-    return crypto.createHash('sha256').update(data).digest('hex');
-}
-
-function hashEmail(email: string | undefined): string | undefined {
-    if (!email) return undefined;
-    return hashData(email.trim().toLowerCase());
-}
-
-function hashPhone(phone: string | undefined): string | undefined {
-    if (!phone) return undefined;
-    let digits = phone.replace(/\D/g, '');
-    if (!digits) return undefined;
-    if (digits.startsWith('01') && digits.length === 11) {
-        digits = `880${digits.slice(1)}`;
-    } else if (!digits.startsWith('880') && digits.length === 10 && digits.startsWith('1')) {
-        digits = `880${digits}`;
-    }
-    return hashData(digits);
-}
-
-const COUNTRY_CODE_MAP: Record<string, string> = {
-    bangladesh: 'bd',
-    china: 'cn',
-    uk: 'gb',
-    'united kingdom': 'gb',
-    malaysia: 'my',
-    hungary: 'hu',
-    'south korea': 'kr',
-    korea: 'kr',
-    finland: 'fi',
-    malta: 'mt',
-    cyprus: 'cy',
-    georgia: 'ge',
-    greece: 'gr',
-    croatia: 'hr',
-    thailand: 'th',
-    usa: 'us',
-    'united states': 'us',
-    canada: 'ca',
-    australia: 'au',
-};
-
-function hashCountry(country: string | undefined): string | undefined {
-    if (!country) return undefined;
-    const clean = country.trim().toLowerCase();
-    const code = clean.length === 2 ? clean : (COUNTRY_CODE_MAP[clean] || clean.slice(0, 2));
-    return hashData(code);
-}
-
-function hashText(text: string | undefined): string | undefined {
-    if (!text) return undefined;
-    const normalized = text.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
-    return hashData(normalized);
-}
-
-function extractCookieFromHeader(cookieHeader: string | null, name: string): string | undefined {
-    if (!cookieHeader) return undefined;
-    const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
-    return match ? decodeURIComponent(match[1]) : undefined;
 }
 
 export async function POST(request: NextRequest) {
@@ -182,42 +131,67 @@ export async function POST(request: NextRequest) {
         const clientIp = extractClientIp((name) => request.headers.get(name)) ?? undefined;
         const userAgent = request.headers.get('user-agent') || undefined;
 
-        const cookieHeader = request.headers.get('cookie');
-        const fbp = getOptionalString(userData, 'fbp', 255) || extractCookieFromHeader(cookieHeader, '_fbp');
-        let fbc = getOptionalString(userData, 'fbc', 255) || extractCookieFromHeader(cookieHeader, '_fbc');
-        if (!fbc) {
-            try {
-                const url = new URL(request.url);
-                const fbclid = url.searchParams.get('fbclid');
-                if (fbclid) fbc = `fb.1.${Date.now()}.${fbclid}`;
-            } catch {
-                /* ignore */
-            }
-        }
-        const externalId = getOptionalString(userData, 'external_id', 255) || extractCookieFromHeader(cookieHeader, 'ee_uid');
+        const bodyOverrides = extractMetaParamOverridesFromBody(
+            body as Record<string, unknown>,
+            userData as Record<string, unknown>,
+        );
+        const serverMetaParams = buildServerMetaParams(request, {
+            ...bodyOverrides,
+            ...(typeof eventSourceUrl === 'string' && eventSourceUrl.trim()
+                ? { eventSourceUrl: eventSourceUrl.trim() }
+                : {}),
+        });
 
-        // Build the event payload with hashed PII
+        const cleanEmail = normalizeEmail(getOptionalString(userData, 'email', 254));
+        const cleanPhone = normalizePhone(getOptionalString(userData, 'phone', 40));
+        const cleanFn = normalizeText(getOptionalString(userData, 'firstName', 100));
+        const cleanLn = normalizeText(getOptionalString(userData, 'lastName', 100));
+        const cleanCt = normalizeText(getOptionalString(userData, 'city', 100));
+        const cleanSt = normalizeText(getOptionalString(userData, 'state', 100));
+        const cleanZp = getOptionalString(userData, 'zipCode', 32)?.replace(/\s+/g, '').toLowerCase();
+        const cleanCountry = normalizeCountry(getOptionalString(userData, 'country', 100));
+
+        // Build the event payload with Parameter Builder normalized & hashed PII
         const eventPayload: ConversionsAPIEvent = {
             event_name: event.eventName,
             event_time: Math.floor(Date.now() / 1000),
             event_id: eventId,
-            event_source_url: resolveCanonicalEventSourceUrl(eventSourceUrl),
+            event_source_url: resolveCanonicalEventSourceUrl(eventSourceUrl || serverMetaParams.eventSourceUrl),
             action_source: 'website', // Required parameter
             user_data: {
-                client_ip_address: clientIp,
+                client_ip_address: serverMetaParams.clientIpAddress ?? clientIp,
                 client_user_agent: userAgent,
-                fbp: fbp,
-                fbc: fbc,
-                external_id: externalId ? hashData(externalId) : undefined,
+                fbp: serverMetaParams.fbp,
+                fbc: serverMetaParams.fbc,
+                external_id: serverMetaParams.externalId
+                    ? (serverMetaParams.hashPii(serverMetaParams.externalId, PII_DATA_TYPE.EXTERNAL_ID) ??
+                        hashData(serverMetaParams.externalId))
+                    : undefined,
                 // Hash PII data per Meta's Customer Information Parameters requirements
-                em: hashEmail(getOptionalString(userData, 'email', 254)),
-                ph: hashPhone(getOptionalString(userData, 'phone', 40)),
-                fn: hashText(getOptionalString(userData, 'firstName', 100)),
-                ln: hashText(getOptionalString(userData, 'lastName', 100)),
-                ct: hashText(getOptionalString(userData, 'city', 100)),
-                st: hashText(getOptionalString(userData, 'state', 100)),
-                zp: hashData(getOptionalString(userData, 'zipCode', 32)?.replace(/\s+/g, '').toLowerCase()),
-                country: hashCountry(getOptionalString(userData, 'country', 100)),
+                em: cleanEmail
+                    ? (serverMetaParams.hashPii(cleanEmail, PII_DATA_TYPE.EMAIL) ?? hashData(cleanEmail))
+                    : undefined,
+                ph: cleanPhone
+                    ? (serverMetaParams.hashPii(cleanPhone, PII_DATA_TYPE.PHONE) ?? hashData(cleanPhone))
+                    : undefined,
+                fn: cleanFn
+                    ? (serverMetaParams.hashPii(cleanFn, PII_DATA_TYPE.FIRST_NAME) ?? hashData(cleanFn))
+                    : undefined,
+                ln: cleanLn
+                    ? (serverMetaParams.hashPii(cleanLn, PII_DATA_TYPE.LAST_NAME) ?? hashData(cleanLn))
+                    : undefined,
+                ct: cleanCt
+                    ? (serverMetaParams.hashPii(cleanCt, PII_DATA_TYPE.CITY) ?? hashData(cleanCt))
+                    : undefined,
+                st: cleanSt
+                    ? (serverMetaParams.hashPii(cleanSt, PII_DATA_TYPE.STATE) ?? hashData(cleanSt))
+                    : undefined,
+                zp: cleanZp
+                    ? (serverMetaParams.hashPii(cleanZp, PII_DATA_TYPE.ZIP_CODE) ?? hashData(cleanZp))
+                    : undefined,
+                country: cleanCountry
+                    ? (serverMetaParams.hashPii(cleanCountry, PII_DATA_TYPE.COUNTRY) ?? hashData(cleanCountry))
+                    : undefined,
             },
             custom_data: customData,
         };
@@ -226,7 +200,12 @@ export async function POST(request: NextRequest) {
         const result = await sendMetaEvents(config, [eventPayload]);
         await recordMetaDelivery(config, result);
         if (!result.ok) return NextResponse.json({ error: result.error }, { status: 502 });
-        return NextResponse.json({ success: true, event_id: eventId, meta_response: { events_received: result.eventsReceived } });
+        const response = NextResponse.json({
+            success: true,
+            event_id: eventId,
+            meta_response: { events_received: result.eventsReceived },
+        });
+        return applyMetaParamCookies(response, request, serverMetaParams.cookiesToSet);
 
     } catch (error) {
         const bodyError = jsonBodyErrorResponse(error);

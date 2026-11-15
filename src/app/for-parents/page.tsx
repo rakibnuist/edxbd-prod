@@ -34,6 +34,8 @@ const structuredData = {
   '@type': 'WebPage',
   '@id': 'https://eduexpressint.com/for-parents#webpage',
   url: 'https://eduexpressint.com/for-parents',
+  mainEntityOfPage: 'https://eduexpressint.com/for-parents',
+  dateModified: '2026-11-15',
   name: 'Study abroad guide for parents in Bangladesh',
   inLanguage: 'en-BD',
   audience: { '@type': 'Audience', audienceType: 'Parents of students planning to study abroad' },

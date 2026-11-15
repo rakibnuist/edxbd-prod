@@ -9,9 +9,10 @@ Goal: become the most trusted education consultant in Dhanmondi, then expand cit
 
 ## Single NAP source (use character-for-character everywhere)
 
-House 12/1, Ground Floor, Road 4/A, Dhanmondi, Dhaka 1209
+EduExpress International Dhanmondi Office
+Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209
 +880 1983-333566 / +880 1329-663505
-Saturday-Thursday 9:00 AM-6:00 PM, Friday closed
+Saturday to Thursday, 11:00 AM to 6:00 PM (Friday closed)
 
 Footer, contact page, schema, GBP, LinkedIn, Facebook, and citations must match exactly unless management formally changes the record.
 

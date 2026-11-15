@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { ArrowRight, BookOpen, Check, MapPin, ShieldCheck, Stethoscope } from 'lucide-react';
 import ChinaStudyPlanner from '@/components/china/ChinaStudyPlanner';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { CHINA_REPORT_OFFICIAL_AUTHORITIES } from '@/lib/china-benchmark';
+import { citationJsonLd } from '@/lib/json-ld';
 import { getUniversityRoute } from '@/lib/university-records';
 import { getChinaStudyHub } from '@/lib/china-study-hub';
 import { ogImage, pageMetadata } from '@/lib/seo';
@@ -19,7 +21,7 @@ export async function generateMetadata() {
     title: 'Study in China from Bangladesh | EduExpress International',
     description: content.description,
     path: PATH,
-    locale: 'en_GB',
+    locale: 'en_BD',
     languages: { 'en-BD': PATH, 'bn-BD': '/bn/study-in-china', 'x-default': PATH },
     image: ogImage('china-guide', content.photos.hero.alt),
   });
@@ -44,10 +46,27 @@ export default async function StudyInChinaFromBangladeshPage() {
   }))]);
   const universities = records.filter(record => record !== null);
   const reviewed = monthYear(content.research?.checkedAt);
+  const checkedAt = content.research?.checkedAt;
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: 'Study in China from Bangladesh', description: content.description, inLanguage: 'en-BD', isPartOf: { '@id': `${SITE}/#website` }, publisher: { '@id': `${SITE}/#organization` }, breadcrumb: { '@id': `${canonical}#breadcrumb` }, mainEntity: { '@id': `${canonical}#guides` } },
+      {
+        '@type': 'WebPage',
+        '@id': `${canonical}#page`,
+        url: canonical,
+        name: 'Study in China from Bangladesh',
+        description: content.description,
+        inLanguage: 'en-BD',
+        mainEntityOfPage: canonical,
+        ...(checkedAt ? { dateModified: `${checkedAt}T00:00:00Z` } : {}),
+        author: { '@id': `${SITE}/#organization` },
+        reviewedBy: { '@id': `${SITE}/#organization` },
+        isPartOf: { '@id': `${SITE}/#website` },
+        publisher: { '@id': `${SITE}/#organization` },
+        breadcrumb: { '@id': `${canonical}#breadcrumb` },
+        mainEntity: { '@id': `${canonical}#guides` },
+        ...citationJsonLd([...CHINA_REPORT_OFFICIAL_AUTHORITIES]),
+      },
       { '@type': 'ItemList', '@id': `${canonical}#guides`, name: 'Study in China topic guides for Bangladeshi students', numberOfItems: content.guides.length, itemListElement: content.guides.map((guide, i) => ({ '@type': 'ListItem', position: i + 1, name: guide.title, url: `${SITE}${guide.href}` })) },
     ],
   };
@@ -67,6 +86,7 @@ export default async function StudyInChinaFromBangladeshPage() {
           <>
             <Link href={applyHref} className="ed-btn ed-btn-signal min-h-[52px] px-7">Get my China study plan <ArrowRight size={18} aria-hidden="true" /></Link>
             <a href="#study-routes" className="ed-btn ed-btn-outline min-h-[52px] px-7">Find a programme</a>
+            <Link href="/bn/study-in-china" hrefLang="bn-BD" lang="bn" className="ed-btn ed-btn-outline min-h-[52px] px-7">বাংলায় পড়ুন</Link>
           </>
         }
         aside={
@@ -190,6 +210,7 @@ export default async function StudyInChinaFromBangladeshPage() {
             <p className={`mt-2 ${kit.body}`}>Teaching-language evidence and academic entrance results serve different purposes. English-taught programmes specify accepted IELTS, TOEFL or MOI evidence; Chinese-taught routes specify HSK requirements. CSCA Mathematics and any required Physics, Chemistry or Professional Chinese depend on your undergraduate route.</p>
             <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
               <Link href="/china-admission-requirements#guide-3-understand-csca-and-language-proof" className={kit.link}>Understand CSCA <ArrowRight size={15} aria-hidden="true" /></Link>
+              <Link href="/updates/csca-guide-study-in-china" className={kit.link}>CSCA exam guide <ArrowRight size={15} aria-hidden="true" /></Link>
               <Link href="/study-in-china-without-ielts" className={kit.link}>English & MOI options <ArrowRight size={15} aria-hidden="true" /></Link>
             </div>
           </div>

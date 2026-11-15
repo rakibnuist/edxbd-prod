@@ -83,9 +83,13 @@ export default async function UpdatesPage() {
     '@type': 'Blog',
     '@id': 'https://eduexpressint.com/updates#blog',
     url: 'https://eduexpressint.com/updates',
+    mainEntityOfPage: 'https://eduexpressint.com/updates',
     name: 'EduExpress Education Updates',
     description: 'Dated scholarship, admission and exam updates for Bangladeshi students, written and checked by EduExpress International.',
     inLanguage: 'en-BD',
+    ...(latest ? { dateModified: latest } : {}),
+    isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+    breadcrumb: { '@id': 'https://eduexpressint.com/updates#breadcrumb' },
     publisher: { '@id': 'https://eduexpressint.com/#organization' },
     blogPost: updates.slice(0, 30).map(update => ({
       '@type': 'BlogPosting',
