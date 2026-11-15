@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import { readLimitedJson } from '@/lib/request-body';
 import { normalizeRoadmapRequest } from '@/lib/roadmap-generator';
@@ -21,6 +22,43 @@ export async function POST(request: NextRequest) {
     }
 
     const roadmapReq = normalizeRoadmapRequest(rawBody);
+
+    // Save lead to CRM if phone number was provided
+    if (roadmapReq.studentPhone) {
+      try {
+        const cleanPhone = roadmapReq.studentPhone.trim();
+        const safeEmail =
+          roadmapReq.studentEmail?.trim().toLowerCase() ||
+          `${cleanPhone.replace(/[^\d]/g, '') || 'scholar'}@lead.eduexpressint.com`;
+        const isMed =
+          roadmapReq.targetDegree === 'MBBS' ||
+          /mbbs|medicine|clinical/i.test(roadmapReq.intendedMajor);
+
+        await prisma.lead.create({
+          data: {
+            name: roadmapReq.studentName,
+            email: safeEmail,
+            phone: cleanPhone,
+            country: roadmapReq.targetCountry,
+            program: `${roadmapReq.targetDegree} in ${roadmapReq.intendedMajor}`,
+            source: 'roadmap_pdf_download',
+            leadType: 'pdf_roadmap',
+            status: 'new',
+            medicalProgram: isMed,
+            assessAcademicLevel: roadmapReq.targetDegree,
+            assessAcademicResults: roadmapReq.gpa,
+            assessSubject: roadmapReq.intendedMajor,
+            assessIntake: roadmapReq.targetIntake,
+            consentTimestamp: new Date(),
+            consentPolicyVersion: '2026-07-19',
+            message: `Generated Official Study Abroad Roadmap PDF for ${roadmapReq.targetDegree} in ${roadmapReq.intendedMajor} (${roadmapReq.targetIntake}, Standing: ${roadmapReq.gpa}).`,
+          },
+        });
+      } catch (leadErr) {
+        console.warn('[RoadmapLeadCapture] Non-blocking lead save failed:', leadErr);
+      }
+    }
+
     const summary = await generateRoadmapSummary(roadmapReq);
     const pdfBytes = await buildStudyRoadmapPdf(summary);
 

@@ -7,6 +7,7 @@ import {
   FileDown,
   GraduationCap,
   Loader2,
+  MessageCircle,
   Sparkles,
   X,
 } from 'lucide-react';
@@ -35,11 +36,14 @@ export default function DownloadRoadmapModal({
 }: DownloadRoadmapModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [studentName, setStudentName] = useState(initialStudentName);
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [country, setCountry] = useState<RoadmapTargetCountry>(initialCountry);
   const [degree, setDegree] = useState<RoadmapTargetDegree>(initialDegree);
   const [major, setMajor] = useState(initialMajor);
   const [gpa, setGpa] = useState(initialGpa);
   const [intake, setIntake] = useState(initialIntake);
+  const [consent, setConsent] = useState(true);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,6 +51,11 @@ export default function DownloadRoadmapModal({
 
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!phone.trim() || phone.trim().length < 8) {
+      setError('Please provide a valid WhatsApp / Phone number (e.g. 017XXXXXXXX).');
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setDownloadSuccess(false);
@@ -57,11 +66,14 @@ export default function DownloadRoadmapModal({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           studentName: studentName.trim() || 'Prospective Scholar',
+          studentPhone: phone.trim(),
+          studentEmail: email.trim() || undefined,
           targetCountry: country,
           targetDegree: degree,
           intendedMajor: major,
           targetIntake: intake,
           gpa,
+          consent,
         }),
       });
 
@@ -138,7 +150,7 @@ export default function DownloadRoadmapModal({
             <form onSubmit={handleDownload} className="mt-6 space-y-4">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-ink-soft">
-                  Student Full Name
+                  Student Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -148,6 +160,41 @@ export default function DownloadRoadmapModal({
                   placeholder="e.g. Md. Tanvir Ahmed"
                   className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3.5 py-2.5 text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
                 />
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-ink-soft">
+                    WhatsApp / Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    placeholder="01XXXXXXXXX"
+                    className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3.5 py-2.5 text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
+                  />
+                  <span className="mt-1 block text-[11px] text-ink-soft">
+                    Used to send your PDF and admission deadline alerts.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-ink-soft">
+                    Email Address <span className="text-[10px] text-ink-soft">(Optional)</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="tanvir@example.com"
+                    className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3.5 py-2.5 text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
+                  />
+                  <span className="mt-1 block text-[11px] text-ink-soft">
+                    Receive copy in your inbox.
+                  </span>
+                </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -228,6 +275,19 @@ export default function DownloadRoadmapModal({
                 />
               </div>
 
+              <div className="flex items-start gap-2.5 pt-1">
+                <input
+                  type="checkbox"
+                  id="roadmap-consent"
+                  checked={consent}
+                  onChange={e => setConsent(e.target.checked)}
+                  className="mt-0.5 size-4 rounded border-canvas-soft text-signal focus:ring-petrol-800"
+                />
+                <label htmlFor="roadmap-consent" className="text-[11px] leading-snug text-ink-soft">
+                  I agree to receive my PDF roadmap, intake deadlines, and scholarship notices via WhatsApp / SMS from EduExpress International. (No spam guaranteed).
+                </label>
+              </div>
+
               {error && (
                 <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-800">
                   {error}
@@ -235,9 +295,25 @@ export default function DownloadRoadmapModal({
               )}
 
               {downloadSuccess && (
-                <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-800">
-                  <CheckCircle2 size={16} className="shrink-0 text-emerald-600" />
-                  <span>Roadmap PDF generated and downloaded successfully!</span>
+                <div className="space-y-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800">
+                    <CheckCircle2 size={16} className="shrink-0 text-emerald-600" />
+                    <span>Roadmap PDF generated and downloaded to your device!</span>
+                  </div>
+                  <p className="text-xs text-petrol-900">
+                    Want an EduExpress senior counselor to review your admission chances right now?
+                  </p>
+                  <a
+                    href={`https://wa.me/8801983333566?text=${encodeURIComponent(
+                      `Hello EduExpress! I just downloaded my ${degree} in ${major} roadmap for ${country}. My phone is ${phone} and GPA is ${gpa}. Can I discuss my scholarship and visa application with a senior counselor?`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-emerald-700"
+                  >
+                    <MessageCircle size={15} />
+                    <span>Chat on WhatsApp with Senior Counselor</span>
+                  </a>
                 </div>
               )}
 

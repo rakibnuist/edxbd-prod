@@ -6,6 +6,7 @@ export type RoadmapTargetCountry = 'China' | 'Malaysia' | 'General';
 export interface RoadmapRequest {
   studentName: string;
   studentPhone?: string;
+  studentEmail?: string;
   targetCountry: RoadmapTargetCountry;
   targetDegree: RoadmapTargetDegree;
   intendedMajor: string;
@@ -13,6 +14,7 @@ export interface RoadmapRequest {
   gpa: string;
   budgetRange?: string;
   language?: FitResponseLanguage;
+  consent?: boolean;
 }
 
 export interface RoadmapInstitutionRecommendation {
@@ -63,10 +65,12 @@ export function normalizeRoadmapRequest(input: unknown): RoadmapRequest {
 
   const studentName = cleanText(obj.studentName, 100) || 'Prospective Scholar';
   const studentPhone = cleanText(obj.studentPhone, 30) || undefined;
+  const studentEmail = cleanText(obj.studentEmail, 150) || undefined;
   const intendedMajor = cleanText(obj.intendedMajor, 120) || 'General Science & Engineering';
   const targetIntake = cleanText(obj.targetIntake, 50) || 'March 2027';
   const gpa = cleanText(obj.gpa, 30) || '4.50 / 5.00';
   const budgetRange = cleanText(obj.budgetRange, 80) || 'CNY 15,000–25,000 / year';
+  const consent = Boolean(obj.consent);
 
   let targetCountry: RoadmapTargetCountry = 'China';
   const rawCountry = String(obj.targetCountry || '').toLowerCase();
@@ -84,6 +88,7 @@ export function normalizeRoadmapRequest(input: unknown): RoadmapRequest {
   return {
     studentName,
     studentPhone,
+    studentEmail,
     targetCountry,
     targetDegree,
     intendedMajor,
@@ -91,6 +96,7 @@ export function normalizeRoadmapRequest(input: unknown): RoadmapRequest {
     gpa,
     budgetRange,
     language,
+    consent,
   };
 }
 

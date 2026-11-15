@@ -9,6 +9,7 @@ import {
   ExternalLink,
   GraduationCap,
   Loader2,
+  MessageCircle,
   RefreshCw,
   Send,
   Sparkles,
@@ -330,6 +331,25 @@ export default function StudyAdvisorChat() {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* WhatsApp Counselor Transfer Button */}
+          <a
+            href={`https://wa.me/8801983333566?text=${encodeURIComponent(
+              language === 'bn'
+                ? 'আসসালামু আলাইকুম EduExpress, আমি ওয়েবসাইটে AI অ্যাডভাইজরের সাথে চ্যাট করছিলাম। আমি একজন সিনিয়র কাউন্সেলরের সাথে সরাসরি কথা বলতে চাই।'
+                : 'Hello EduExpress! I am using the online AI Study Advisor and would like to speak directly with a senior counselor on WhatsApp.'
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-1.5 text-[12px] font-bold text-white shadow-sm transition-all hover:bg-emerald-700"
+            title="Chat with counselor on WhatsApp"
+          >
+            <MessageCircle size={14} aria-hidden="true" />
+            <span className="hidden sm:inline">
+              {language === 'bn' ? 'কাউন্সেলর হোয়াটসঅ্যাপ' : 'WhatsApp Counselor'}
+            </span>
+            <span className="sm:hidden">WhatsApp</span>
+          </a>
+
           {/* Language Switcher */}
           <div className="inline-flex rounded-xl bg-stone-200/70 p-1 text-[13px] font-semibold">
             <button
@@ -549,6 +569,28 @@ export default function StudyAdvisorChat() {
                     </div>
                   )}
                 </div>
+              </div>
+            )}
+
+            {messages.length > 0 && !isStreaming && (
+              <div className="flex justify-center pt-2">
+                <a
+                  href={`https://wa.me/8801983333566?text=${encodeURIComponent(
+                    language === 'bn'
+                      ? 'আসসালামু আলাইকুম EduExpress, আমি ওয়েবসাইটে AI অ্যাডভাইজরের মাধ্যমে তথ্য যাচাই করেছি। আমি আমার পছন্দের বিশ্ববিদ্যালয় ও প্রোফাইল নিয়ে সরাসরি একজন কাউন্সেলরের সাথে পরামর্শ করতে চাই।'
+                      : 'Hello EduExpress! I was exploring university and cost options with your AI Advisor. Can I speak with an admission counselor about my profile and options?'
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-emerald-300 bg-emerald-50/80 px-4 py-2.5 text-xs font-semibold text-emerald-900 transition-all hover:bg-emerald-100 hover:shadow-sm"
+                >
+                  <MessageCircle size={15} className="text-emerald-700" />
+                  <span>
+                    {language === 'bn'
+                      ? 'পছন্দের বিশ্ববিদ্যালয় নিশ্চিত করতে হোয়াটসঅ্যাপে কাউন্সেলরের সাথে কথা বলুন'
+                      : 'Transfer to EduExpress Counselor on WhatsApp (+880 1983-333566)'}
+                  </span>
+                </a>
               </div>
             )}
 

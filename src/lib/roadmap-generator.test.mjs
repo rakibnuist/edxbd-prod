@@ -44,18 +44,24 @@ test('normalizeRoadmapRequest normalizes inputs and sets safe defaults', () => {
 
   const normalized = normalizeRoadmapRequest({
     studentName: 'Md. Tanvir Ahmed',
+    studentPhone: '01711223344',
+    studentEmail: 'tanvir@example.com',
     targetCountry: 'China (CSC)',
     targetDegree: 'Master of Engineering',
     intendedMajor: 'Computer Science',
     targetIntake: 'March 2027',
     gpa: '3.80 / 4.00',
+    consent: true,
   });
 
   assert.equal(normalized.studentName, 'Md. Tanvir Ahmed');
+  assert.equal(normalized.studentPhone, '01711223344');
+  assert.equal(normalized.studentEmail, 'tanvir@example.com');
   assert.equal(normalized.targetCountry, 'China');
   assert.equal(normalized.targetDegree, 'Master');
   assert.equal(normalized.intendedMajor, 'Computer Science');
   assert.equal(normalized.targetIntake, 'March 2027');
+  assert.equal(normalized.consent, true);
 });
 
 test('buildCatalogRoadmapFallback generates grounded recommendations and ClearCost itemization', () => {

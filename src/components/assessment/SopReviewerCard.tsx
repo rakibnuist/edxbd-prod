@@ -11,6 +11,7 @@ import {
   GraduationCap,
   Lightbulb,
   Loader2,
+  MessageCircle,
   RotateCcw,
   ShieldAlert,
   Sparkles,
@@ -485,6 +486,40 @@ export default function SopReviewerCard() {
               </div>
             </div>
           )}
+
+          {/* High-Intent Lead Conversion Card */}
+          <div className="mt-8 rounded-2xl border border-emerald-300 bg-gradient-to-br from-emerald-50/80 via-white to-petrol-50/50 p-5 shadow-sm sm:p-6">
+            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+              <div>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-bold text-emerald-800">
+                  <CheckCircle2 size={13} />
+                  {language === 'bn' ? 'কাউন্সেলর রিভিউ ও সিএসসি সহায়তা' : 'Expert Counselor Review Available'}
+                </span>
+                <h4 className="mt-2 text-lg font-bold text-petrol-900">
+                  {language === 'bn'
+                    ? 'আপনার স্টাডি প্ল্যান ও স্কলারশিপ ফাইল চূড়ান্ত করতে চান?'
+                    : 'Need a Senior Counselor to Polish Your SOP & Finalize University Submission?'}
+                </h4>
+                <p className="mt-1 text-xs leading-relaxed text-ink-soft sm:text-sm">
+                  {language === 'bn'
+                    ? 'এডুএক্সপ্রেস ধানমন্ডি অফিসের চীন ও আন্তর্জাতিক স্কলারশিপ স্পেশালিস্টদের সাথে সরাসরি হোয়াটসঅ্যাপে পরামর্শ করুন। ভিসা অনুমোদনের পূর্বে কোনো সার্ভিস ফি নেই।'
+                    : 'Connect directly with an EduExpress Dhanmondi specialist to review professor communications, CSC Type A/B strategies, and admissions. Zero service fee before visa approval.'}
+                </p>
+              </div>
+
+              <a
+                href={`https://wa.me/8801983333566?text=${encodeURIComponent(
+                  `Hello EduExpress! I ran the AI Study Plan Review for ${degree} in ${subject || 'my subject'} (${country}). My overall score is ${result.overallScore}/100 (rating: ${result.status}). Could a senior counselor help me polish my study plan and review my university shortlist?`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-xs font-bold text-white shadow-md transition-all hover:bg-emerald-700 hover:shadow-lg sm:text-sm"
+              >
+                <MessageCircle size={16} />
+                <span>{language === 'bn' ? 'হোয়াটসঅ্যাপে কাউন্সেলরের সাথে কথা বলুন' : 'Chat on WhatsApp with Specialist'}</span>
+              </a>
+            </div>
+          </div>
 
           {/* EduExpress Service Note & Disclaimer */}
           <div className="mt-6 border-t border-petrol-100 pt-4 text-xs text-ink-soft">

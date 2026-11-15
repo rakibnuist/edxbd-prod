@@ -8,6 +8,7 @@ import {
   Bot,
   HelpCircle,
   Loader2,
+  MessageCircle,
   RefreshCw,
   ShieldAlert,
   ShieldCheck,
@@ -463,13 +464,28 @@ export default function VisaInterviewSimulator() {
                 <p className="text-[12px] text-stone-500">
                   {bn ? 'চায়না ভিসার ক্ষেত্রে ভিসা অনুমোদনের পূর্বে কোনো সার্ভিস ফি নেই।' : 'No consultancy service fee before China visa approval.'}
                 </p>
-                <Link
-                  href="/contact"
-                  className="ed-btn ed-btn-signal min-h-[38px] px-4 text-[13px]"
-                >
-                  {bn ? 'কাউন্সেলরের সাথে ১-অন-১ মক বুক করুন' : 'Book 1-on-1 Visa Mock'}
-                  <ArrowRight size={14} aria-hidden="true" />
-                </Link>
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href={`https://wa.me/8801983333566?text=${encodeURIComponent(
+                      bn
+                        ? `আসসালামু আলাইকুম EduExpress, আমি ওয়েবসাইট থেকে ${destination.toUpperCase()} স্টুডেন্ট ভিসা ইন্টারভিউ সিমুলেটর সম্পন্ন করেছি। আমার প্রস্তুতি স্কোর ${feedback.readinessScore}/100 (${feedback.verdictLabel})। আমি কি একজন ভিসা স্পেশালিস্টের সাথে আমার ফাইল ও ইন্টারভিউ প্রস্তুতি নিয়ে কথা বলতে পারি?`
+                        : `Hello EduExpress! I completed the AI Student Visa Interview Simulator for ${destination.toUpperCase()}. My readiness score is ${feedback.readinessScore}/100 (${feedback.verdictLabel}). Can I speak with a visa counselor to prepare my application file?`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-[12px] font-bold text-white shadow-sm transition-all hover:bg-emerald-700"
+                  >
+                    <MessageCircle size={14} aria-hidden="true" />
+                    <span>{bn ? 'হোয়াটসঅ্যাপে ভিসা কাউন্সিলিং' : 'Discuss on WhatsApp'}</span>
+                  </a>
+                  <Link
+                    href="/contact"
+                    className="ed-btn ed-btn-signal min-h-[38px] px-4 text-[13px]"
+                  >
+                    {bn ? '১-অন-১ মক বুক করুন' : 'Book 1-on-1 Mock'}
+                    <ArrowRight size={14} aria-hidden="true" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
