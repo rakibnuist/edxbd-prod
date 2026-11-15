@@ -69,7 +69,7 @@ export default function RouteUniverse() {
           <div className="flex min-w-0 gap-4">
             <span className="relative hidden size-16 shrink-0 overflow-hidden rounded-2xl sm:block">
               {active.image ? (
-                <Image src={active.image} alt="" fill sizes="64px" className="object-cover" />
+                <Image src={active.image} alt={active.name} fill sizes="64px" className="object-cover" />
               ) : (
                 <span className="grid h-full w-full place-items-center bg-petrol-800 text-[13px] font-bold tracking-[0.12em] text-mint-300">
                   {active.code}

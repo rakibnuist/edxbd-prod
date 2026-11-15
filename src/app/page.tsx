@@ -695,7 +695,7 @@ export default async function Home() {
               {featured.map((item, index) => (
                 <Link key={item.slug} href={item.href} className={`group flex flex-col rounded-3xl bg-canvas-soft p-3 transition hover:-translate-y-1 ${index === 0 ? 'sm:col-span-2' : ''}`}>
                   <div className={`relative overflow-hidden rounded-2xl ${index === 0 ? 'aspect-[16/8]' : 'aspect-[16/10]'}`}>
-                    {item.image && <Image src={item.image} alt="" fill sizes={index === 0 ? '(max-width:1024px) 100vw, 760px' : '(max-width:640px) 100vw, 380px'} className="object-cover transition duration-500 group-hover:scale-105" />}
+                    {item.image && <Image src={item.image} alt={`${item.name} study destination`} fill sizes={index === 0 ? '(max-width:1024px) 100vw, 760px' : '(max-width:640px) 100vw, 380px'} className="object-cover transition duration-500 group-hover:scale-105" />}
                     {index === 0 && <span className={`absolute left-4 top-4 ${badge}`}>Most data available</span>}
                   </div>
                   <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
@@ -877,7 +877,7 @@ export default async function Home() {
             {guideRows[0] && (
               <Link href={guideRows[0].href} className="group flex flex-col rounded-3xl bg-canvas-soft p-3 transition hover:-translate-y-1">
                 <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
-                  <Image src={guideRows[0].image} alt="" fill sizes="(max-width:1024px) 100vw, 640px" className="object-cover transition duration-700 group-hover:scale-[1.03]" />
+                  <Image src={guideRows[0].image} alt={guideRows[0].title} fill sizes="(max-width:1024px) 100vw, 640px" className="object-cover transition duration-700 group-hover:scale-[1.03]" />
                   {guides.length > 0 && <span className="absolute left-4 top-4 rounded-full bg-lime px-3 py-1 text-[14px] font-semibold text-petrol-800">Latest</span>}
                 </div>
                 <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
@@ -898,7 +898,7 @@ export default async function Home() {
                 <li key={row.key}>
                   <Link href={row.href} className="group flex gap-4 rounded-3xl bg-canvas-soft p-3 transition hover:bg-lime-pale">
                     <span className="relative size-24 shrink-0 overflow-hidden rounded-2xl sm:size-28">
-                      <Image src={row.image} alt="" fill sizes="112px" className="object-cover" />
+                      <Image src={row.image} alt={row.title} fill sizes="112px" className="object-cover" />
                     </span>
                     <span className="flex min-w-0 flex-col justify-center py-1 pr-2">
                       <span className="text-[14px] font-semibold text-ink-mute">

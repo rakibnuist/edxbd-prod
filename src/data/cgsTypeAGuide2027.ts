@@ -244,7 +244,7 @@ export const CGS_2027_TYPE_A_DATA = {
 
 <details>
   <summary>How can I get my study plan and documents reviewed?</summary>
-  <p>You can use our <a href="/assessment">Education Fit Assessment</a> or submit your draft proposal to our team in Dhanmondi, Dhaka for an evidence-first evaluation against Chinese university admissions rubrics.</p>
+  <p>You can use our <a href="/education-fit-assessment">Education Fit Assessment</a> or submit your draft proposal to our team in Dhanmondi, Dhaka for an evidence-first evaluation against Chinese university admissions rubrics.</p>
 </details>
 
 <p class="note"><strong>Official Verification Sources:</strong> Sourced directly from the Embassy of the People's Republic of China in Bangladesh and the China Scholarship Council portal (<a href="https://www.campuschina.org/" target="_blank" rel="noopener noreferrer">campuschina.org</a>). Last verified by EduExpress counseling team on 15 November 2026. Next review scheduled for 10 January 2027.</p>`,

@@ -239,7 +239,7 @@ const GUIDE_2027_SPECS = [
 </details>
 <details>
   <summary>How can I get my study plan and documents reviewed?</summary>
-  <p>You can use our <a href="/assessment">Education Fit Assessment</a> or submit your draft proposal to our team in Dhanmondi, Dhaka for an evidence-first evaluation against Chinese university admissions rubrics.</p>
+  <p>You can use our <a href="/education-fit-assessment">Education Fit Assessment</a> or submit your draft proposal to our team in Dhanmondi, Dhaka for an evidence-first evaluation against Chinese university admissions rubrics.</p>
 </details>
 <p class="note"><strong>Official Verification Sources:</strong> Sourced directly from the Embassy of the People's Republic of China in Bangladesh and the China Scholarship Council portal (<a href="https://www.campuschina.org/" target="_blank" rel="noopener noreferrer">campuschina.org</a>). Last verified by EduExpress counseling team on 15 November 2026. Next review scheduled for 10 January 2027.</p>`,
   },
@@ -304,7 +304,7 @@ const GUIDE_2027_SPECS = [
   <li>Valid language proficiency certificate (HSK 4+ for Chinese-taught programs; official English proficiency / MOI documentation for English-medium consideration).</li>
 </ul>
 <div class="callout">
-  <p><strong>Need evidence-first document review for September 2027?</strong> Check your eligibility and compare Nanchang University with other Chinese public universities through our <a href="/assessment">Education Fit Assessment</a> or browse full intake timelines at <a href="/china-intakes-deadlines">China Intakes &amp; Deadlines</a>.</p>
+  <p><strong>Need evidence-first document review for September 2027?</strong> Check your eligibility and compare Nanchang University with other Chinese public universities through our <a href="/education-fit-assessment">Education Fit Assessment</a> or browse full intake timelines at <a href="/china-intakes-deadlines">China Intakes &amp; Deadlines</a>.</p>
 </div>
 <h2>Frequently asked questions</h2>
 <details><summary>What is Nanchang University’s CSC Agency Number for 2027?</summary><p>The official Chinese Government Scholarship (CSC) agency number for Nanchang University is 10403 for Type B High-Level Postgraduate applications.</p></details>
@@ -372,7 +372,7 @@ const GUIDE_2027_SPECS = [
   <li>Valid passport, Academic Transcripts &amp; Certificates, Foreigner Physical Examination Form, Police Clearance, and <strong>written supporting documents explaining any study gap</strong>.</li>
 </ul>
 <div class="callout">
-  <p><strong>Applying to Chengdu or Sichuan in 2027?</strong> Get an honest cost and admission-odds check through the <a href="/assessment">EduExpress Education Fit Assessment</a> before paying any fee.</p>
+  <p><strong>Applying to Chengdu or Sichuan in 2027?</strong> Get an honest cost and admission-odds check through the <a href="/education-fit-assessment">EduExpress Education Fit Assessment</a> before paying any fee.</p>
 </div>
 <h2>Frequently asked questions</h2>
 <details><summary>What is the official website of Chengdu Normal University?</summary><p>Chengdu Normal University’s official institutional website is https://www.cdnu.edu.cn/ (and international student portal https://lxs.cdnu.edu.cn/). Avoid third-party lookalike domains that do not end in cdnu.edu.cn.</p></details>

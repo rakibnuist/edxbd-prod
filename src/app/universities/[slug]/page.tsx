@@ -10,7 +10,7 @@ import { profilePrograms } from '@/lib/university-profile-view';
 import { prepareUniversityPrograms } from '@/lib/university-profile-public';
 import { getIndexableUniversityGuides } from '@/lib/university-guide-publication';
 import { universityProfileLogo } from '@/lib/university-profile-assets';
-import { UNIVERSITY_SITE_URL, universityProfileSeo, universityProfileStructuredData } from '@/lib/university-profile-seo';
+import { UNIVERSITY_SITE_URL, universityProfileBrowserTitle, universityProfileSeo, universityProfileStructuredData } from '@/lib/university-profile-seo';
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -32,11 +32,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   const university = result.record;
   const [details, guides] = await Promise.all([getUniversityProfileDetails(university.slug), getIndexableUniversityGuides()]);
-  const { canonical, description, title } = universityProfileSeo(university, prepareUniversityPrograms(profilePrograms(university, details)));
+  const preparedPrograms = prepareUniversityPrograms(profilePrograms(university, details));
+  const { canonical, description, title } = universityProfileSeo(university, preparedPrograms);
+  const browserTitle = universityProfileBrowserTitle(university, preparedPrograms);
   const indexable = guides.has(university.slug) || universityIsIndexable(university);
 
   return {
-    title: { absolute: `${title} | EduExpress International` },
+    title: { absolute: browserTitle },
     description,
     alternates: { canonical },
     robots: { index: indexable, follow: true },

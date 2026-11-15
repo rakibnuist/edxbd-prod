@@ -124,6 +124,41 @@ export function universityProfileSeo(university: UniversityIdentity, programs: U
   return { ...identity, title, description, canonical: `${UNIVERSITY_SITE_URL}/universities/${university.slug}` };
 }
 
+const MAX_BROWSER_TITLE_LENGTH = 64;
+
+/**
+ * Compact HTML <title> formatted to stay <= 64 characters for Bing/Google SERP limits
+ * while preserving the full university name ahead of acronym/brand suffixes.
+ */
+export function universityProfileBrowserTitle(
+  university: UniversityIdentity,
+  programs: UniversityProgramDetail[] = [],
+): string {
+  const identity = universitySearchIdentity(university);
+  const medical = programs.find(program =>
+    /\bMBBS\b|clinical medicine|ophthalmological and optometric medicine/i.test(program.name),
+  );
+  const medicalLabel = medical && /\bMBBS\b/i.test(medical.name) ? 'MBBS' : medical ? 'Medicine' : '';
+  const mid = medicalLabel ? `${medicalLabel}, ` : '';
+  const name = university.name.trim();
+  const candidates = [
+    `${identity.displayName}: ${mid}Fees & Scholarships | EduExpress International`,
+    `${identity.displayName}: ${mid}Fees & Scholarships | EduExpress`,
+    `${name}: ${mid}Fees & Scholarships | EduExpress`,
+    `${identity.displayName}: ${mid}Fees & Scholarships`,
+    `${name}: ${mid}Fees & Scholarships`,
+    `${identity.displayName}: ${mid}Fees & Aid`,
+    `${name}: ${mid}Fees & Aid`,
+    `${name}: ${mid}Fees`,
+    `${name} | EduExpress`,
+    name,
+  ];
+  for (const candidate of candidates) {
+    if (candidate.length <= MAX_BROWSER_TITLE_LENGTH) return candidate;
+  }
+  return `${name.slice(0, MAX_BROWSER_TITLE_LENGTH - 3).trimEnd()}...`;
+}
+
 function courseDescription(program: UniversityProgramDetail, university: Pick<CleanUniversityRecord, 'name' | 'city' | 'country'>): string {
   const parts = [`${program.level} programme in ${program.name} at ${university.name}, ${university.city}, ${university.country}`];
   if (program.duration) parts.push(`duration ${program.duration}`);

@@ -283,7 +283,7 @@ export default function UpdateClient({ update, related = [], stale, cscDirectory
                   <Link href={`/updates/${post.slug}`} className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white transition hover:-translate-y-1">
                     <div className="relative aspect-[16/10] bg-petrol-800">
                       {post.featuredImage
-                        ? <Image src={post.featuredImage} alt="" fill sizes="(max-width:640px) 100vw, 33vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
+                        ? <Image src={post.featuredImage} alt={post.title} fill sizes="(max-width:640px) 100vw, 33vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
                         : <div className="grid h-full place-items-center font-display text-[22px] font-black text-lime">EduExpress</div>}
                     </div>
                     <div className="flex flex-1 flex-col p-5">

@@ -72,6 +72,26 @@ const ORPHAN_ROWS_TO_ARCHIVE = [
   'china-k-visa-for-stem-a-guide-for-bangladeshi-graduates',
 ];
 
+const INTERNAL_HREF_FIXES = [
+  [/href=(["'])(?:https?:\/\/(?:www\.)?eduexpressint\.com)?\/assessment\/?([?#][^"']*)?\1/gi, (_m, q, s = '') => `href=${q}/education-fit-assessment${s}${q}`],
+  [/href=(["'])(?:https?:\/\/(?:www\.)?eduexpressint\.com)?\/universities\/zhengzhou-university\/?((?:\/clear-cost)?(?:[?#][^"']*)?)\1/gi, (_m, q, s = '') => `href=${q}/universities/zzu${s}${q}`],
+  [/href=(["'])(?:https?:\/\/(?:www\.)?eduexpressint\.com)?\/universities\/northwestern-polytechnical-university\/?((?:\/clear-cost)?(?:[?#][^"']*)?)\1/gi, (_m, q, s = '') => `href=${q}/universities/npu${s}${q}`],
+  [/href=(["'])(?:https?:\/\/(?:www\.)?eduexpressint\.com)?\/universities\/jiangsu-normal-university\/?((?:\/clear-cost)?(?:[?#][^"']*)?)\1/gi, (_m, q, s = '') => `href=${q}/universities/jsnu${s}${q}`],
+  [/href=(["'])(?:https?:\/\/(?:www\.)?eduexpressint\.com)?\/universities\/nanjing-university-of-posts-and-telecommunications\/?((?:\/clear-cost)?(?:[?#][^"']*)?)\1/gi, (_m, q, s = '') => `href=${q}/universities/njupt${s}${q}`],
+];
+
+function sanitizeStoredContentHtmlHygiene(html) {
+  let next = html || '';
+  for (const [pattern, replacer] of INTERNAL_HREF_FIXES) {
+    next = next.replace(pattern, replacer);
+  }
+  next = next.replace(/<h1(\b[^>]*)>/gi, '<h2$1>').replace(/<\/h1>/gi, '</h2>');
+  next = next.replace(/<img\b([^>]*)>/gi, (match, attrs) =>
+    /\balt\s*=/i.test(attrs) ? match : `<img alt=""${attrs}>`,
+  );
+  return next;
+}
+
 async function main() {
   let updated = 0;
 
@@ -145,6 +165,22 @@ async function main() {
       });
       updated++;
       console.log(`Archived orphan non-update draft: ${slug}`);
+    }
+  }
+
+  // 3b. Fix legacy /assessment + university alias links, stored <h1>, and missing img alt across ALL Content rows
+  const allContentsForHygiene = await prisma.content.findMany({
+    select: { id: true, slug: true, content: true },
+  });
+  for (const row of allContentsForHygiene) {
+    const cleaned = sanitizeStoredContentHtmlHygiene(row.content);
+    if (cleaned !== row.content) {
+      await prisma.content.update({
+        where: { id: row.id },
+        data: { content: cleaned },
+      });
+      updated++;
+      console.log(`Cleaned HTML internal links / heading / alt hygiene for ${row.slug}`);
     }
   }
 

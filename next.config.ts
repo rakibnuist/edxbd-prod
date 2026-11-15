@@ -174,6 +174,31 @@ const nextConfig: NextConfig = {
         destination: '/updates/complete-csc-universities-list-2026',
         permanent: true,
       },
+      {
+        source: '/assessment',
+        destination: '/education-fit-assessment',
+        permanent: true,
+      },
+      {
+        source: '/universities/zhengzhou-university',
+        destination: '/universities/zzu',
+        permanent: true,
+      },
+      {
+        source: '/universities/northwestern-polytechnical-university',
+        destination: '/universities/npu',
+        permanent: true,
+      },
+      {
+        source: '/universities/jiangsu-normal-university',
+        destination: '/universities/jsnu',
+        permanent: true,
+      },
+      {
+        source: '/universities/nanjing-university-of-posts-and-telecommunications',
+        destination: '/universities/njupt',
+        permanent: true,
+      },
     ];
   },
 

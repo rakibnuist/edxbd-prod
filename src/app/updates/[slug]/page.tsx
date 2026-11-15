@@ -14,9 +14,10 @@ import { categorySlug } from '@/lib/update-categories';
 import { chinaIntakeOverview } from '@/lib/china-intakes';
 import { htmlToText, sanitizeUpdateHtml } from '@/lib/content-html';
 import { extractFaqsFromHtml } from '@/lib/content-faq';
-import { getUniversityRecords } from '@/lib/university-records';
+import { getUniversityRecords, getUniversityRouteSlugs } from '@/lib/university-records';
 import { getIndexableUniversitySitemapRecords } from '@/lib/university-guide-publication';
 import { CSC_DIRECTORY_SLUG, buildCscDirectoryEnrichment, linkCscDirectoryUniversities, type CscDirectoryEnrichment } from '@/lib/csc-directory-enrichment';
+import { repairUpdateInternalLinks } from '@/lib/content-links';
 import { CGS_2027_TYPE_A_SLUG, CGS_2027_TYPE_A_DATA } from '@/data/cgsTypeAGuide2027';
 
 interface UpdatePageProps {
@@ -259,6 +260,9 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
         linked.matchedSlugs,
       );
     }
+
+    const universitySlugs = new Set(await getUniversityRouteSlugs());
+    updateData.content = repairUpdateInternalLinks(updateData.content, universitySlugs);
 
     const canonical = `https://eduexpressint.com/updates/${update.slug}`;
     // E-E-A-T: posts signed by a listed team member get a Person author with

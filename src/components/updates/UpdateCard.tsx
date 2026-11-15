@@ -30,7 +30,7 @@ function Cover({ update, sizes, priority }: { update: UpdateCardData; sizes: str
     return (
       <Image
         src={update.featuredImage}
-        alt=""
+        alt={update.title}
         fill
         sizes={sizes}
         priority={priority}
