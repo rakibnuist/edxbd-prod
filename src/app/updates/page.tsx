@@ -103,7 +103,7 @@ export default async function UpdatesPage() {
       {/* Hero: what this library is + the zero-friction lead (WhatsApp alerts) */}
       <section className="relative overflow-hidden bg-petrol-800 text-white">
         <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-40 size-[520px] rounded-full bg-lime/10 blur-3xl" />
-        <div className={`${kit.wrap} relative grid gap-10 py-12 sm:py-16 lg:grid-cols-[1.35fr_1fr] lg:items-center lg:gap-14 lg:py-20`}>
+        <div className={`${kit.wrap} relative grid gap-10 pb-12 pt-[92px] sm:pb-16 sm:pt-[108px] lg:grid-cols-[1.35fr_1fr] lg:items-center lg:gap-14 lg:pb-20 lg:pt-[144px]`}>
           <div>
             <DarkCrumbs trail={[{ name: 'Updates' }]} path={PATH} />
             <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[14px] font-semibold text-lime">

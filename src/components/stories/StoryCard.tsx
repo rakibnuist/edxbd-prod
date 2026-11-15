@@ -105,7 +105,7 @@ export default function StoryCard({
 
           <div className="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between gap-2">
             {story.university ? (
-              <p className="flex min-w-0 items-center gap-1.5 text-xs font-bold leading-snug text-white drop-shadow-xs">
+              <p className="flex min-w-0 items-center gap-1.5 text-xs font-bold leading-snug text-white drop-shadow-sm">
                 <GraduationCap size={15} className="shrink-0 text-lime" aria-hidden="true" />
                 <span className="truncate">{story.university}</span>
               </p>

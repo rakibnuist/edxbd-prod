@@ -512,7 +512,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
       <div className="p-6 sm:p-8">
         {screen === 'profile' && (
           <div className="space-y-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h3 className="font-display text-[24px] font-black leading-tight text-petrol-800">What do you want to study?</h3>
                 <p className="mt-2 text-[16px] leading-6 text-ink-soft">Start with what you know. Exact documents can come later.</p>
@@ -520,7 +520,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
               <button
                 type="button"
                 onClick={() => setIsScanModalOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-petrol-800/30 bg-lime-pale px-3.5 py-1.5 text-[13px] font-semibold text-petrol-900 transition-colors hover:bg-lime"
+                className="inline-flex min-h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-petrol-800/30 bg-lime-pale px-4 py-2 text-[13px] font-bold text-petrol-900 transition-colors hover:bg-lime"
               >
                 <Sparkles size={14} className="text-petrol-800" aria-hidden="true" />
                 Scan marksheet with Gemini
@@ -528,7 +528,7 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Current level" required>
-                <select value={form.academicLevel} onChange={event => update({ academicLevel: event.target.value })} className={inputClass}>
+                <select value={form.academicLevel} onChange={event => update({ academicLevel: event.target.value })} className={`ed-select appearance-none ${inputClass}`}>
                   <option value="">Choose your level</option>
                   {ACADEMIC_LEVELS.map(level => <option key={level} value={level}>{level}</option>)}
                 </select>
@@ -554,19 +554,19 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="Yearly budget">
-                <select value={form.budget} onChange={event => update({ budget: event.target.value })} className={inputClass}>
+                <select value={form.budget} onChange={event => update({ budget: event.target.value })} className={`ed-select appearance-none ${inputClass}`}>
                   <option value="">Choose a range</option>
                   {BUDGETS.map(value => <option key={value} value={value}>{value}</option>)}
                 </select>
               </Field>
               <Field label="Target intake">
-                <select value={form.intake} onChange={event => update({ intake: event.target.value })} className={inputClass}>
+                <select value={form.intake} onChange={event => update({ intake: event.target.value })} className={`ed-select appearance-none ${inputClass}`}>
                   <option value="">Choose an intake</option>
                   {form.intake && !(isApplication ? APPLICATION_INTAKES : INTAKES).includes(form.intake) && <option value={form.intake}>{form.intake}</option>}{(isApplication ? APPLICATION_INTAKES : INTAKES).map(value => <option key={value} value={value}>{value}</option>)}
                 </select>
               </Field>
               <Field label="English readiness">
-                <select value={form.language} onChange={event => update({ language: event.target.value })} className={inputClass}>
+                <select value={form.language} onChange={event => update({ language: event.target.value })} className={`ed-select appearance-none ${inputClass}`}>
                   <option value="">Choose one</option>
                   {LANGUAGES.map(value => <option key={value} value={value}>{value}</option>)}
                 </select>

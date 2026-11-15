@@ -186,7 +186,7 @@ export default async function UniversitiesPage({ searchParams }: Props) {
         <div aria-hidden="true" className="pointer-events-none absolute -left-40 bottom-[-220px] size-[520px] rounded-full bg-lime/10 blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 size-[400px] rounded-full bg-emerald-500/10 blur-3xl" />
 
-        <div className={`${kit.wrap} relative py-12 sm:py-16 lg:py-20`}>
+        <div className={`${kit.wrap} relative pb-8 pt-[86px] sm:pb-12 sm:pt-[102px] lg:pb-16 lg:pt-[140px]`}>
           <DarkCrumbs trail={[{ name: 'Universities' }]} path={PATH} />
 
           <div className="mt-6 grid gap-10 lg:grid-cols-[1.3fr_0.9fr] lg:items-end lg:gap-14">
@@ -273,9 +273,10 @@ export default async function UniversitiesPage({ searchParams }: Props) {
       </section>
 
       {/* Destination Tabs Bar */}
+      {/* Browse by destination (clean single-line mobile strip, non-occluding on scroll) */}
       {listedDestinations.length > 0 && (
-        <nav aria-label="Browse verified universities by destination" className="sticky top-0 z-20 border-b border-rule bg-white/95 py-3.5 backdrop-blur-md shadow-sm">
-          <div className={`${kit.wrap} flex flex-wrap items-center gap-2`}>
+        <nav aria-label="Browse verified universities by destination" className="border-b border-rule bg-white py-3 shadow-sm">
+          <div className={`${kit.wrap} flex items-center gap-2 overflow-x-auto whitespace-nowrap pb-1 scroll-smooth overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:overflow-visible sm:pb-0`}>
             <Link
               href="/universities"
               className={`inline-flex min-h-[42px] items-center gap-2 rounded-full px-4 text-xs font-bold transition-all ${

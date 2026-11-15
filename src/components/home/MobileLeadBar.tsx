@@ -44,7 +44,10 @@ export default function MobileLeadBar({ whatsappHref }: { whatsappHref: string }
   if (!scrolled || formVisible || footerVisible) return null;
 
   return (
-    <div className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 rounded-[22px] border border-rule bg-white/95 px-2.5 py-2 shadow-[0_18px_40px_-18px_rgba(15,53,87,0.45)] backdrop-blur lg:hidden">
+    <div
+      data-mobile-bar="open"
+      className="mobile-lead-bar fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 rounded-[22px] border border-rule bg-white/95 px-2.5 py-2 shadow-[0_18px_40px_-18px_rgba(15,53,87,0.45)] backdrop-blur lg:hidden"
+    >
       <div className="mx-auto grid max-w-md grid-cols-3 gap-2">
         <a
           href="tel:+8801983333566"

@@ -26,21 +26,21 @@ export function CscDirectoryOverview({ data }: { data: CscDirectoryEnrichment })
             <div className="flex flex-wrap gap-2.5 pt-1 text-sm font-medium">
               <Link
                 href="/csc-scholarship-bangladesh"
-                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-petrol-800 shadow-xs ring-1 ring-slate-200 transition hover:ring-petrol-600"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-petrol-800 shadow-sm ring-1 ring-slate-200 transition hover:ring-petrol-600"
               >
                 CSC Scholarship Bangladesh Guide
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
               </Link>
               <Link
                 href="/bn/csc-scholarship-bangladesh"
-                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-petrol-800 shadow-xs ring-1 ring-slate-200 transition hover:ring-petrol-600"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-petrol-800 shadow-sm ring-1 ring-slate-200 transition hover:ring-petrol-600"
               >
                 বাংলাদেশি শিক্ষার্থীদের CSC গাইড
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
               </Link>
               <Link
                 href="/china-universities"
-                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-petrol-800 shadow-xs ring-1 ring-slate-200 transition hover:ring-petrol-600"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-petrol-800 shadow-sm ring-1 ring-slate-200 transition hover:ring-petrol-600"
               >
                 Verified China University Profiles
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -49,7 +49,7 @@ export function CscDirectoryOverview({ data }: { data: CscDirectoryEnrichment })
                 href="https://www.campuschina.org/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-teal-800 shadow-xs ring-1 ring-slate-200 transition hover:ring-teal-600"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-teal-800 shadow-sm ring-1 ring-slate-200 transition hover:ring-teal-600"
               >
                 Official CSC Portal (campuschina.org)
                 <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />

@@ -28,7 +28,7 @@ function Logo({ university }: { university: MarchCatalogueUniversity }) {
   const wide = university.id === 'wuzhou-university';
   return (
     <div
-      className={`relative grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl border border-slate-200/90 shadow-2xs ${
+      className={`relative grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl border border-slate-200/90 shadow-sm ${
         wide ? 'bg-[#0b2b45]' : 'bg-white p-1.5'
       }`}
     >
@@ -96,14 +96,14 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
               Compare all {universities.length} universities in our March 2027 shortlist. Inspect rankings, tuition fees, scholarship tiers, and majors before choosing your route.
             </p>
           </div>
-          <span className="inline-flex items-center gap-2 rounded-2xl border border-[#cfe7f5] bg-white px-4 py-2.5 text-xs font-bold text-[#12436b] shadow-2xs">
+          <span className="inline-flex items-center gap-2 rounded-2xl border border-[#cfe7f5] bg-white px-4 py-2.5 text-xs font-bold text-[#12436b] shadow-sm">
             <BookOpen size={16} className="text-[#2c6a97]" />
             {universities.length} universities · {universities.reduce((n, u) => n + u.programmes.length, 0)} routes
           </span>
         </div>
 
         {/* Search & Filter Control Box */}
-        <div className="mt-7 rounded-3xl border border-slate-200/90 bg-white p-5 shadow-xs sm:p-6">
+        <div className="mt-7 rounded-3xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6">
           <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <label htmlFor="march-university-search" className="sr-only">
@@ -117,7 +117,7 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder="Search university name, city (e.g. Wuhan, Shanghai, Chongqing) or major…"
-                  className="h-12 w-full rounded-xl border border-slate-300 bg-slate-50/60 pl-11 pr-4 text-sm font-medium text-[#0b2b45] outline-none transition placeholder:font-normal placeholder:text-slate-400 focus:border-[#12436b] focus:bg-white focus:ring-3 focus:ring-[#12436b]/15"
+                  className="h-12 w-full rounded-xl border border-slate-300 bg-slate-50/60 pl-11 pr-4 text-[15px] font-medium text-[#0b2b45] outline-none transition placeholder:font-normal placeholder:text-slate-400 focus:border-[#12436b] focus:bg-white focus:ring-2 focus:ring-[#12436b]/15 sm:text-sm"
                 />
               </div>
             </div>
@@ -130,7 +130,7 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
                 id="march-university-sort"
                 value={sort}
                 onChange={event => setSort(event.target.value as MarchCatalogueSort)}
-                className="h-12 min-h-12 flex-1 rounded-xl border border-slate-300 bg-white px-3.5 text-xs font-bold text-[#12436b] outline-none transition focus:border-[#12436b] focus:ring-3 focus:ring-[#12436b]/15"
+                className="ed-select h-12 min-h-12 flex-1 rounded-xl border border-slate-300 bg-white px-3.5 text-xs font-bold text-[#12436b] outline-none transition focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/15"
               >
                 <option value="recommended">Recommended</option>
                 <option value="world-ranking">World ranking: highest first</option>
@@ -153,7 +153,7 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
                   onClick={() => setRoute(value)}
                   className={`min-h-10 rounded-xl border px-3.5 text-xs font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12436b] ${
                     route === value
-                      ? 'border-[#12436b] bg-[#12436b] text-white shadow-2xs'
+                      ? 'border-[#12436b] bg-[#12436b] text-white shadow-sm'
                       : 'border-slate-200 bg-slate-50/70 text-[#12436b] hover:border-[#cfe7f5] hover:bg-[#e3f0f9]'
                   }`}
                 >
@@ -190,7 +190,7 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
             return (
               <article
                 key={university.id}
-                className="group flex min-w-0 flex-col overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#12436b]/35 hover:shadow-[0_18px_40px_rgba(15,58,92,.10)]"
+                className="group flex min-w-0 flex-col overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#12436b]/35 hover:shadow-[0_18px_40px_rgba(15,58,92,.10)]"
               >
                 {/* Card Header */}
                 <div className="flex items-start gap-3.5 border-b border-slate-100 p-5">
@@ -347,7 +347,7 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
             if (event.target === event.currentTarget) dialog.current?.close();
           }}
           aria-labelledby="march-detail-title"
-          className="fixed inset-0 m-auto max-h-[90dvh] w-[calc(100%_-_2rem)] max-w-3xl overflow-y-auto overscroll-contain rounded-3xl bg-white p-0 text-[#0b2b45] shadow-2xl backdrop:bg-[#071e30]/70 backdrop:backdrop-blur-xs"
+          className="fixed inset-0 m-auto max-h-[90dvh] w-[calc(100%_-_2rem)] max-w-3xl overflow-y-auto overscroll-contain rounded-3xl bg-white p-0 text-[#0b2b45] shadow-2xl backdrop:bg-[#071e30]/70 backdrop:backdrop-blur-sm"
         >
           {detail && (
             <>
@@ -549,7 +549,7 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
                               onChange={event =>
                                 setMajors(current => ({ ...current, [programme.id]: event.target.value }))
                               }
-                              className="mt-1.5 min-h-12 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-sm font-medium outline-none focus:border-[#12436b] focus:ring-3 focus:ring-[#12436b]/15"
+                              className="ed-select mt-1.5 min-h-12 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-[15px] font-medium outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/15 sm:text-sm"
                             >
                               <option value="">Help me choose a major</option>
                               {programme.majors.map(major => (
@@ -562,7 +562,7 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
                         <button
                           type="button"
                           onClick={() => choose(detail, programme)}
-                          className="ed-btn ed-btn-signal inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold text-petrol-800 shadow-xs"
+                          className="ed-btn ed-btn-signal inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold text-petrol-800 shadow-sm"
                         >
                           Get my plan for this programme
                           <ArrowRight size={16} />

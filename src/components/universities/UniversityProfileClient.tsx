@@ -60,8 +60,8 @@ const LEVEL_LABELS: Record<ProgramLevel, string> = {
 
 const titleClass = 'font-display text-[26px] font-black leading-tight tracking-[-0.01em] text-petrol-800 sm:text-[32px] lg:text-[36px]';
 const mutedClass = 'text-sm leading-7 text-slate-500';
-const selectClass = 'mt-2 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-xs sm:text-sm font-semibold text-slate-800 outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/10';
-const sheetClass = 'rounded-2xl bg-white p-6 sm:p-8 shadow-xs border border-slate-200/90';
+const selectClass = 'ed-select mt-2 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-xs sm:text-sm font-semibold text-slate-800 outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/10';
+const sheetClass = 'rounded-2xl bg-white p-6 sm:p-8 shadow-sm border border-slate-200/90';
 const applyClass = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-petrol-800 px-6 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-petrol-900 shadow-sm';
 
 type Props = {
@@ -348,7 +348,7 @@ export default function UniversityProfileClient({
   const allOverviewParagraphs = [...overviewParagraphs, ...supplementalParagraphs];
 
   return (
-    <article className="min-h-screen bg-[#f8fafc] pb-20 pt-[76px] text-ink xl:pt-[112px]">
+    <article className="min-h-screen bg-[#f8fafc] pb-20 pt-[72px] text-ink sm:pt-[80px] lg:pt-[114px]">
       {/* Executive Hero Header */}
       <header className="relative overflow-hidden bg-petrol-800 text-white">
         <div aria-hidden="true" className="pointer-events-none absolute -right-48 -top-48 size-[560px] rounded-full bg-lime/10 blur-3xl" />
@@ -605,23 +605,26 @@ export default function UniversityProfileClient({
       </header>
 
       {/* Sticky Sub-Navigation Bar */}
-      <nav aria-label="On this university page" className="sticky top-[76px] z-20 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-xs xl:top-[112px]">
+      <nav aria-label="On this university page" className="sticky top-[67px] z-20 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur-md sm:top-[75px] lg:top-[109px]">
         <div className="mx-auto flex max-w-[1280px] items-center gap-3 px-5 sm:px-8 lg:px-10">
-          <div className="flex min-w-0 flex-1 overflow-x-auto no-scrollbar">
-            {PANELS.map((item) => (
-              <a
-                key={item.id}
-                href={'#' + item.id}
-                onClick={() => setPanel(item.id)}
-                aria-current={panel === item.id ? 'location' : undefined}
-                className={
-                  'inline-flex min-h-14 shrink-0 items-center border-b-2 px-4 text-sm font-bold first:pl-0 transition-colors ' +
-                  (panel === item.id ? 'border-lime text-petrol-800' : 'border-transparent text-slate-500 hover:text-petrol-800')
-                }
-              >
-                {item.label}
-              </a>
-            ))}
+          <div className="relative flex min-w-0 flex-1 items-center">
+            <div className="flex min-w-0 flex-1 overflow-x-auto pr-6 no-scrollbar sm:pr-0">
+              {PANELS.map((item) => (
+                <a
+                  key={item.id}
+                  href={'#' + item.id}
+                  onClick={() => setPanel(item.id)}
+                  aria-current={panel === item.id ? 'location' : undefined}
+                  className={
+                    'inline-flex min-h-14 shrink-0 items-center border-b-2 px-4 text-sm font-bold first:pl-0 transition-colors ' +
+                    (panel === item.id ? 'border-lime text-petrol-800' : 'border-transparent text-slate-500 hover:text-petrol-800')
+                  }
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+            <span aria-hidden="true" className="pointer-events-none absolute inset-y-1 right-0 w-8 bg-gradient-to-l from-white/95 to-transparent sm:hidden" />
           </div>
           <a
             href={assessmentHref}
@@ -633,7 +636,7 @@ export default function UniversityProfileClient({
       </nav>
 
       {/* Main Content Area */}
-      <div className="mx-auto max-w-[1200px] space-y-9 px-5 pt-9 sm:px-8 lg:px-10 [&>section]:scroll-mt-[148px] xl:[&>section]:scroll-mt-[184px]">
+      <div className="mx-auto max-w-[1200px] space-y-9 px-5 pt-9 sm:px-8 lg:px-10 [&>section]:scroll-mt-[126px] sm:[&>section]:scroll-mt-[136px] lg:[&>section]:scroll-mt-[176px]">
         {/* 1. Overview & Student Snapshot Section */}
         <section {...panelProps('overview')} className={sheetClass}>
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
@@ -786,7 +789,7 @@ export default function UniversityProfileClient({
           {feePreviews.length > 0 && (
             <div className="mt-6 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
               {feePreviews.map((fee) => (
-                <div key={fee.level} className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-4 shadow-xs">
+                <div key={fee.level} className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-4 shadow-sm">
                   <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                     {LEVEL_LABELS[fee.level]} Indicative Tuition
                   </p>
@@ -815,7 +818,7 @@ export default function UniversityProfileClient({
 
           {/* 360° Selected Program Complete Dossier */}
           {selected && (
-            <div className="mt-8 rounded-2xl border-2 border-emerald-200/90 bg-white p-6 sm:p-7 shadow-xs">
+            <div className="mt-8 rounded-2xl border-2 border-emerald-200/90 bg-white p-6 shadow-sm sm:p-7">
               <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-200 pb-5">
                 <div>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-900">
@@ -1100,7 +1103,7 @@ export default function UniversityProfileClient({
                       onClick={() => setSelectedDocLevel(lvl)}
                       className={`rounded-lg px-3.5 py-2 text-xs font-bold transition-all ${
                         isActive
-                          ? 'bg-petrol-800 text-white shadow-xs'
+                          ? 'bg-petrol-800 text-white shadow-sm'
                           : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
                       }`}
                     >

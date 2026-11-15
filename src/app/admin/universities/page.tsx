@@ -236,7 +236,7 @@ export default function UniversitiesPage() {
             {/* Delete Confirmation Modal */}
             {deleteId && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-                    <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl animate-in fade-in zoom-in duration-200">
+                    <div className="ed-pop-in bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
                         <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mb-4 mx-auto text-red-600">
                             <Trash2 size={24} />
                         </div>

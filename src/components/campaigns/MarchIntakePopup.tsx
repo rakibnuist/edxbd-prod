@@ -90,7 +90,7 @@ export default function MarchIntakePopup() {
       <div
         onClick={dismissPopup}
         aria-hidden="true"
-        className="fixed inset-0 bg-[#051827]/70 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-[#051827]/70 backdrop-blur-sm transition-opacity"
       />
 
       {/* Clean, Minimal Single-Column Modal */}

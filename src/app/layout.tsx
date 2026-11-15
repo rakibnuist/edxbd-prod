@@ -300,6 +300,14 @@ export default async function RootLayout({
         className="antialiased"
         style={{ marginTop: 0 }}
       >
+          {/* Raw CSS guard so LightningCSS browserslist pruning never strips -webkit-appearance on selects */}
+          <style
+            id="ed-select-appearance"
+            dangerouslySetInnerHTML={{
+              __html:
+                'select.ed-field,.ed-select,select.appearance-none{-webkit-appearance:none!important;-moz-appearance:none!important;appearance:none!important;}select.ed-field::picker-icon,.ed-select::picker-icon,select.appearance-none::picker-icon{display:none!important;content:none!important;opacity:0!important;}',
+            }}
+          />
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}

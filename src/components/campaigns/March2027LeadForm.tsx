@@ -12,7 +12,7 @@ type Selection = { university: string; program: string } | null;
 type Props = { whatsappNumber: string; route: string; onRoute: (route: string) => void; selection: Selection; onClearSelection: () => void };
 
 const inputClass =
-  'mt-1.5 h-12 min-h-12 w-full rounded-xl border border-slate-300 bg-slate-50/60 px-3.5 text-sm font-medium text-[#0b2b45] outline-none transition placeholder:font-normal placeholder:text-slate-400 focus:border-[#12436b] focus:bg-white focus:ring-3 focus:ring-[#12436b]/15';
+  'mt-1.5 h-12 min-h-12 w-full rounded-xl border border-slate-300 bg-slate-50/60 px-3.5 text-[15px] font-medium text-[#0b2b45] outline-none transition placeholder:font-normal placeholder:text-slate-400 focus:border-[#12436b] focus:bg-white focus:ring-2 focus:ring-[#12436b]/15 sm:text-sm';
 
 const context = () => ({
   destination: 'china',
@@ -256,7 +256,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
             <div
               className={`flex items-center justify-center gap-2 rounded-xl py-2 transition ${
                 step === 1
-                  ? 'bg-white text-[#0b2b45] shadow-xs'
+                  ? 'bg-white text-[#0b2b45] shadow-sm'
                   : 'text-emerald-800'
               }`}
             >
@@ -272,7 +272,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
             <div
               className={`flex items-center justify-center gap-2 rounded-xl py-2 transition ${
                 step === 2
-                  ? 'bg-white text-[#0b2b45] shadow-xs'
+                  ? 'bg-white text-[#0b2b45] shadow-sm'
                   : 'text-slate-500'
               }`}
             >
@@ -327,7 +327,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
                     onChange={e => update('academicLevel', e.target.value)}
                     onBlur={() => validateField('academicLevel')}
                     {...ariaFor('academicLevel')}
-                    className={inputClass}
+                    className={`ed-select ${inputClass}`}
                   >
                     <option value="">Select qualification</option>
                     {marchAcademicLevels.map(item => (
@@ -372,7 +372,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
                     }}
                     onBlur={() => validateField('route')}
                     {...ariaFor('route')}
-                    className={inputClass}
+                    className={`ed-select ${inputClass}`}
                   >
                     <option value="">Select a study route</option>
                     {marchStudyRoutes.map(item => (
@@ -395,7 +395,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
                       setStep(1);
                       setErrors({});
                     }}
-                    className="rounded-lg bg-white px-3 py-1.5 font-bold text-[#12436b] shadow-2xs ring-1 ring-slate-200 transition hover:bg-slate-50"
+                    className="rounded-lg bg-white px-3 py-1.5 font-bold text-[#12436b] shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50"
                   >
                     Edit
                   </button>

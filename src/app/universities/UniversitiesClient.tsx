@@ -252,6 +252,7 @@ export default function UniversitiesClient({ directory }: Props) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [compare, setCompare] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -350,23 +351,36 @@ export default function UniversitiesClient({ directory }: Props) {
             action="/universities"
             method="get"
             onSubmit={submitSearch}
-            className="lg:sticky lg:top-[88px] lg:self-start rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm"
+            className="lg:sticky lg:top-[124px] lg:self-start lg:max-h-[calc(100dvh-144px)] lg:overflow-y-auto rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-sm"
           >
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <span className="text-[14px] font-bold uppercase tracking-wider text-slate-800">Filters</span>
-              {chips.length > 0 && (
+              <div className="flex items-center gap-3">
+                {chips.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={clearFilters}
+                    className="text-xs font-bold text-rose-600 hover:underline"
+                  >
+                    Reset ({chips.length})
+                  </button>
+                )}
                 <button
                   type="button"
-                  onClick={clearFilters}
-                  className="text-xs font-bold text-rose-600 hover:underline"
+                  onClick={() => setMobileFiltersOpen(value => !value)}
+                  aria-expanded={mobileFiltersOpen}
+                  aria-controls="directory-facet-controls"
+                  className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 text-xs font-bold text-petrol-800 transition hover:bg-slate-100 lg:hidden"
                 >
-                  Reset ({chips.length})
+                  <SlidersHorizontal size={13} aria-hidden="true" />
+                  <span>{mobileFiltersOpen ? 'Hide options' : 'Country & criteria'}</span>
+                  <ChevronDown size={13} className={`transition-transform ${mobileFiltersOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                 </button>
-              )}
+              </div>
             </div>
 
-            {/* Keyword Search */}
-            <div className="mt-4">
+            {/* Keyword Search (always visible) */}
+            <div className="mt-3.5 sm:mt-4">
               <label htmlFor="university-search" className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Keyword Search
               </label>
@@ -384,19 +398,22 @@ export default function UniversitiesClient({ directory }: Props) {
                   }}
                   placeholder="Name, city, major..."
                   autoComplete="off"
-                  className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-9 pr-3 text-xs font-medium text-slate-800 placeholder:text-slate-400 outline-none focus:border-petrol-800 focus:bg-white"
+                  className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-9 pr-3 text-[15px] font-medium text-slate-800 placeholder:text-slate-400 outline-none focus:border-petrol-800 focus:bg-white sm:text-xs"
                 />
               </div>
             </div>
 
-            <div className="mt-4 grid gap-3.5">
+            <div
+              id="directory-facet-controls"
+              className={mobileFiltersOpen ? 'mt-4 grid gap-3.5' : 'mt-4 hidden gap-3.5 lg:grid'}
+            >
               <div>
                 <label htmlFor="filter-country" className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
                   Destination Country
                 </label>
                 <select
                   id="filter-country"
-                  className="mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-xs font-semibold text-slate-800 outline-none focus:border-petrol-800 focus:bg-white"
+                  className="ed-select mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-[15px] font-semibold text-slate-800 outline-none focus:border-petrol-800 focus:bg-white sm:text-xs"
                   value={filters.country}
                   onChange={event => setFilters({ country: event.target.value, city: '', subject: '', cscaFree: false })}
                 >
@@ -415,7 +432,7 @@ export default function UniversitiesClient({ directory }: Props) {
                 </label>
                 <select
                   id="filter-level"
-                  className="mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-xs font-semibold text-slate-800 outline-none focus:border-petrol-800 focus:bg-white"
+                  className="ed-select mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-[15px] font-semibold text-slate-800 outline-none focus:border-petrol-800 focus:bg-white sm:text-xs"
                   value={filters.level}
                   onChange={event => setFilters({ level: event.target.value })}
                 >
@@ -455,7 +472,7 @@ export default function UniversitiesClient({ directory }: Props) {
                   </label>
                   <select
                     id="filter-subject"
-                    className="mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-petrol-800"
+                    className="ed-select mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[15px] font-semibold text-slate-800 outline-none focus:border-petrol-800 sm:text-xs"
                     value={filters.subject}
                     onChange={event => setFilters({ subject: event.target.value })}
                   >
@@ -474,7 +491,7 @@ export default function UniversitiesClient({ directory }: Props) {
                   </label>
                   <select
                     id="filter-city"
-                    className="mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-petrol-800"
+                    className="ed-select mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[15px] font-semibold text-slate-800 outline-none focus:border-petrol-800 sm:text-xs"
                     value={filters.city}
                     onChange={event => setFilters({ city: event.target.value })}
                   >
@@ -493,7 +510,7 @@ export default function UniversitiesClient({ directory }: Props) {
                   </label>
                   <select
                     id="filter-intake"
-                    className="mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-2.5 text-xs font-semibold text-slate-800 outline-none focus:border-petrol-800"
+                    className="ed-select mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[15px] font-semibold text-slate-800 outline-none focus:border-petrol-800 sm:text-xs"
                     value={filters.intake}
                     onChange={event => setFilters({ intake: event.target.value })}
                   >
@@ -526,6 +543,16 @@ export default function UniversitiesClient({ directory }: Props) {
                   <span>CSCA Exam Exempt</span>
                 </label>
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileFiltersOpen(false);
+                  document.getElementById('university-results')?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+                }}
+                className="ed-btn ed-btn-signal min-h-11 w-full text-sm lg:hidden"
+              >
+                Show {filtered.length} matching {filtered.length === 1 ? 'university' : 'universities'}
+              </button>
             </div>
 
             {chips.length > 0 && (
@@ -550,22 +577,22 @@ export default function UniversitiesClient({ directory }: Props) {
 
           {/* Results Area */}
           <div>
-            <div id="university-results" className="mb-5 flex scroll-mt-32 flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200/90 bg-white px-5 py-3.5 shadow-sm xl:scroll-mt-40">
+            <div id="university-results" className="mb-5 flex scroll-mt-[84px] flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200/90 bg-white px-5 py-3.5 shadow-sm sm:scroll-mt-[92px] lg:scroll-mt-[126px]">
               <div className="flex items-center gap-2.5">
                 <span className="text-sm font-semibold text-slate-600">
                   Showing <strong className="font-extrabold text-slate-900">{filtered.length}</strong> {filtered.length === 1 ? 'University' : 'Universities'}
                   {filters.country && <span> in <strong className="text-emerald-700">{filters.country}</strong></span>}
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
-                <label htmlFor="university-sort">Sort:</label>
+              <div className="flex w-full items-center justify-between gap-2 text-xs font-bold text-slate-600 sm:w-auto sm:justify-start">
+                <label htmlFor="university-sort" className="shrink-0">Sort:</label>
                 <select
                   id="university-sort"
                   value={filters.sort}
                   onChange={event =>
                     setFilters({ sort: ['name', 'city', 'fee', 'ranking', 'scholarship'].includes(event.target.value) ? (event.target.value as DirectoryFilters['sort']) : 'recommended' })
                   }
-                  className="h-9 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-bold text-slate-800 outline-none focus:border-petrol-800"
+                  className="ed-select h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[13.5px] font-bold text-slate-800 outline-none focus:border-petrol-800 sm:w-auto sm:text-xs"
                 >
                   <option value="recommended">Recommended (Top Ranked & Funding)</option>
                   <option value="ranking">Highest World Ranking</option>
@@ -612,7 +639,7 @@ export default function UniversitiesClient({ directory }: Props) {
                         <li>
                           <article
                             aria-label={university.name}
-                            className="group relative flex h-full flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-lg"
+                            className="group relative flex h-full flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-lg"
                           >
                             <div>
                               {/* Header: Logo, Location & Status Badge */}
@@ -627,7 +654,7 @@ export default function UniversitiesClient({ directory }: Props) {
 
                                 <div className="shrink-0">
                                   {row.ranking ? (
-                                    <span className="inline-flex items-center gap-1 rounded-md bg-petrol-800 px-2 py-0.5 text-[11px] font-bold text-white shadow-xs">
+                                    <span className="inline-flex items-center gap-1 rounded-md bg-petrol-800 px-2 py-0.5 text-[11px] font-bold text-white shadow-sm">
                                       <Trophy size={11} className="text-lime" aria-hidden="true" />
                                       #{row.ranking.rank} <span className="font-normal text-white/70">{row.ranking.publisher}</span>
                                     </span>
@@ -658,7 +685,7 @@ export default function UniversitiesClient({ directory }: Props) {
                               <div className="mt-4 grid grid-cols-2 divide-x divide-slate-100 border-y border-slate-100 py-3 text-xs">
                                 <div className="pr-3">
                                   <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400">Indicative Tuition</span>
-                                  <span className="mt-0.5 block font-bold text-slate-900 text-[13px] truncate">
+                                  <span className={`mt-0.5 block truncate ${row.showTuition ? 'font-bold text-slate-900 text-[13px]' : 'font-medium text-slate-500 text-xs'}`}>
                                     {row.showTuition ? row.tuition : 'See programs on profile'}
                                   </span>
                                 </div>
@@ -677,6 +704,11 @@ export default function UniversitiesClient({ directory }: Props) {
                                     {level}
                                   </span>
                                 ))}
+                                {row.levels.length > 4 && (
+                                  <span className="rounded-md bg-slate-50 border border-slate-200/80 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500" title={row.levels.slice(4).join(', ')}>
+                                    +{row.levels.length - 4}
+                                  </span>
+                                )}
                                 {row.englishTaught && (
                                   <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700">
                                     ● English Medium
@@ -726,7 +758,7 @@ export default function UniversitiesClient({ directory }: Props) {
                                 aria-pressed={selected}
                                 aria-label={selected ? `Remove ${university.name} from comparison` : `Add ${university.name} to comparison`}
                                 title={selected ? 'In comparison' : 'Compare'}
-                                className={`grid size-10 shrink-0 place-items-center rounded-xl border transition-all ${
+                                className={`grid size-[42px] shrink-0 place-items-center rounded-xl border transition-all ${
                                   selected ? 'border-petrol-800 bg-petrol-800 text-white' : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
                                 }`}
                               >
@@ -793,17 +825,20 @@ export default function UniversitiesClient({ directory }: Props) {
 
       {/* Compare tray */}
       {compare.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-[60] bg-petrol-800 px-4 py-3 text-white shadow-deep">
-          <div className="mx-auto flex max-w-shell flex-wrap items-center justify-between gap-3">
-            <div className="flex min-w-0 items-center gap-3">
-              <span className="font-display text-[18px] font-black text-lime">{compare.length}/4</span>
-              <p className="truncate text-[14px] text-white/85">{compareRows.map(row => row.university.name).join(' · ')}</p>
+        <div
+          data-compare-tray="open"
+          className="fixed inset-x-0 bottom-0 z-[55] bg-petrol-800 px-3.5 py-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] text-white shadow-deep sm:px-4 sm:py-3"
+        >
+          <div className="mx-auto flex max-w-shell flex-nowrap items-center justify-between gap-2.5 sm:gap-3">
+            <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+              <span className="shrink-0 font-display text-[17px] font-black text-lime sm:text-[18px]">{compare.length}/4</span>
+              <p className="truncate text-[13px] text-white/85 sm:text-[14px]">{compareRows.map(row => row.university.name).join(' · ')}</p>
             </div>
-            <div className="flex items-center gap-2">
-              <button type="button" onClick={() => setCompare([])} className="min-h-11 px-3 text-[14px] font-semibold text-white/75 hover:text-white">
+            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+              <button type="button" onClick={() => setCompare([])} className="min-h-10 px-2.5 text-[13px] font-semibold text-white/75 hover:text-white sm:min-h-11 sm:px-3 sm:text-[14px]">
                 Clear
               </button>
-              <button type="button" onClick={() => setCompareOpen(true)} className="ed-btn ed-btn-signal min-h-11 px-5 text-[15px]">
+              <button type="button" onClick={() => setCompareOpen(true)} className="ed-btn ed-btn-signal min-h-10 whitespace-nowrap px-3.5 text-[13.5px] sm:min-h-11 sm:px-5 sm:text-[15px]">
                 Compare {compare.length}
               </button>
             </div>

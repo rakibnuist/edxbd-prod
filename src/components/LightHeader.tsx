@@ -136,9 +136,9 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
           'border-rule bg-white'
         } ${scrolled || openMenu ? 'shadow-[0_8px_24px_-18px_rgba(15,23,42,.45)]' : ''}`}
       >
-        <div className="mx-auto flex h-[64px] max-w-shell items-center justify-between px-4 sm:h-[72px] sm:px-6">
+        <div className="mx-auto flex h-[64px] max-w-shell items-center justify-between gap-2 px-3.5 sm:h-[72px] sm:px-6">
           <Link href="/" aria-label="EduExpress International home" className="shrink-0">
-            <Image src="/logo.png" alt="EduExpress International" width={180} height={51} priority className="h-8 w-auto sm:h-9 lg:h-10" />
+            <Image src="/logo.png" alt="EduExpress International" width={180} height={51} priority className="h-7 w-auto sm:h-9 lg:h-10" />
           </Link>
 
           <div
@@ -221,7 +221,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
             })}
           </div>
 
-          <div className="flex shrink-0 items-center gap-2 xl:ml-4">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 xl:ml-4">
             <span className="hidden sm:block">
               <SearchPalette />
             </span>
@@ -229,14 +229,14 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
               href={telHref}
               onClick={() => trackPhoneClick({ label: 'header_mobile_phone' })}
               aria-label={`Call ${formatBangladeshPhone(phone)}`}
-              className="grid size-10 place-items-center rounded-lg border lg:hidden border-rule text-petrol-600 hover:bg-chalk-100"
+              className="grid size-9 place-items-center rounded-lg border border-rule text-petrol-600 hover:bg-chalk-100 sm:size-10 lg:hidden"
             >
-              <Phone size={18} aria-hidden="true" />
+              <Phone size={17} aria-hidden="true" />
             </a>
             <Link
               href={assessmentHref}
               onClick={() => trackAssessmentStart({ label: 'header_free_assessment_btn' })}
-              className="ed-btn ed-btn-signal min-h-10 px-4 text-[14px] sm:text-[15px]"
+              className="ed-btn ed-btn-signal min-h-9 whitespace-nowrap px-3 text-[13px] sm:min-h-10 sm:px-4 sm:text-[15px]"
             >
               Free assessment
             </Link>
@@ -246,7 +246,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
               aria-expanded={mobileOpen}
               aria-controls="mobile-navigation"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              className="grid size-10 place-items-center rounded-lg border xl:hidden border-rule bg-white text-petrol-700"
+              className="grid size-9 place-items-center rounded-lg border border-rule bg-white text-petrol-700 sm:size-10 xl:hidden"
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>

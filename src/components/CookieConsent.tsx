@@ -67,30 +67,38 @@ export default function CookieConsent() {
   if (!isVisible || HIDDEN_ROUTE.test(pathname ?? '')) return null;
 
   return (
-    <div className="fixed inset-x-4 bottom-4 z-[65] animate-[cookie-in_.3s_ease-out] sm:inset-x-auto sm:bottom-5 sm:left-5 sm:max-w-[380px]">
-      <div className="relative overflow-hidden border border-rule bg-chalk shadow-deep">
-        <div className="flex items-start justify-between gap-3 border-b border-rule bg-chalk-100 px-4 py-2.5">
-          <p className="inline-flex items-center gap-2 text-[14px] font-semibold text-petrol-700">
-            <Cookie className="size-3.5" aria-hidden="true" /> Cookies and measurement
+    <div
+      data-cookie-banner="open"
+      className="fixed inset-x-3 bottom-3 z-[45] animate-[cookie-in_.25s_ease-out] sm:inset-x-auto sm:bottom-5 sm:left-5 sm:max-w-[360px]"
+    >
+      <div className="relative overflow-hidden rounded-2xl border border-rule bg-chalk/95 shadow-deep backdrop-blur-md">
+        <div className="flex items-center justify-between gap-2 border-b border-rule/80 bg-canvas-soft/70 px-3.5 py-2">
+          <p className="inline-flex items-center gap-1.5 text-[12.5px] font-bold text-petrol-800">
+            <Cookie className="size-3.5 text-petrol-600" aria-hidden="true" /> Cookies &amp; analytics
           </p>
-          <button type="button" onClick={handleDecline} className="text-ink-mute transition-colors hover:text-ink" aria-label="Dismiss cookie notice">
-            <X className="size-4" />
+          <button
+            type="button"
+            onClick={handleDecline}
+            className="rounded-full p-1 text-ink-mute transition-colors hover:bg-white hover:text-ink"
+            aria-label="Dismiss cookie notice"
+          >
+            <X className="size-3.5" />
           </button>
         </div>
 
-        <div className="px-4 py-3.5">
-          <p className="text-[14px] leading-6 text-ink-soft">
-            We use cookies to measure traffic and advertising performance. Nothing non-essential loads until you accept. Read the{' '}
-            <Link href="/privacy" className="font-semibold text-petrol-600 underline underline-offset-2 hover:text-petrol-800">
-              privacy policy
+        <div className="px-3.5 py-2.5 sm:py-3">
+          <p className="text-[12.5px] leading-5 text-ink-soft">
+            Optional cookies measure site performance.{' '}
+            <Link href="/privacy" className="font-semibold text-petrol-700 underline underline-offset-2 hover:text-petrol-900">
+              Privacy policy
             </Link>
             .
           </p>
-          <div className="mt-3 flex items-center gap-2">
-            <button type="button" onClick={handleAccept} className="ed-btn ed-btn-primary min-h-9 flex-1 px-3 text-[14px]">
+          <div className="mt-2.5 flex items-center gap-2">
+            <button type="button" onClick={handleAccept} className="ed-btn ed-btn-signal min-h-9 flex-1 px-3 py-1.5 text-[13px]">
               Accept all
             </button>
-            <button type="button" onClick={handleDecline} className="ed-btn ed-btn-outline min-h-9 flex-1 px-3 text-[14px]">
+            <button type="button" onClick={handleDecline} className="ed-btn ed-btn-outline min-h-9 flex-1 bg-white px-3 py-1.5 text-[13px]">
               Essential only
             </button>
           </div>

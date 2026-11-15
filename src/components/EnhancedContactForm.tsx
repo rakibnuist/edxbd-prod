@@ -210,7 +210,7 @@ const EnhancedContactForm: React.FC<EnhancedContactFormProps> = ({
 
   if (isSubmitted) {
     return (
-      <div className={`${surface} text-center animate-in fade-in zoom-in-95`} role="status">
+      <div className={`${surface} ed-pop-in text-center`} role="status">
         <span className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-lime text-petrol-800">
           <CheckCircle className="size-7" aria-hidden="true" />
         </span>

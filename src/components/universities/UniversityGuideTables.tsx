@@ -136,7 +136,7 @@ export function UniversityProgramTable({
                       e.stopPropagation();
                       onChoose(program.id);
                     }}
-                    className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-xs font-bold transition-all shadow-xs ${
+                    className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-xs font-bold shadow-sm transition-all ${
                       isSelected
                         ? 'bg-emerald-700 text-white'
                         : 'bg-petrol-800 text-white hover:bg-emerald-700'
@@ -172,7 +172,7 @@ export function UniversityProgramTable({
               onClick={() => setActiveLevel('ALL')}
               className={`rounded-xl px-3 py-1.5 text-xs font-bold transition-colors ${
                 activeLevel === 'ALL'
-                  ? 'bg-petrol-800 text-white shadow-xs'
+                  ? 'bg-petrol-800 text-white shadow-sm'
                   : 'bg-white text-slate-600 border border-slate-200 hover:text-petrol-800'
               }`}
             >
@@ -187,7 +187,7 @@ export function UniversityProgramTable({
                   onClick={() => setActiveLevel(lvl)}
                   className={`rounded-xl px-3 py-1.5 text-xs font-bold transition-colors ${
                     activeLevel === lvl
-                      ? 'bg-petrol-800 text-white shadow-xs'
+                      ? 'bg-petrol-800 text-white shadow-sm'
                       : 'bg-white text-slate-600 border border-slate-200 hover:text-petrol-800'
                   }`}
                 >
@@ -225,7 +225,7 @@ export function UniversityProgramTable({
         </div>
       )}
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200/90 shadow-xs">
+      <div className="overflow-hidden rounded-2xl border border-slate-200/90 shadow-sm">
         {filtered.length > 0 ? (
           <>
             {renderRows(filtered.slice(0, 12))}
@@ -271,7 +271,7 @@ export function UniversityFundingTable({
       {options.map((option) => (
         <article
           key={option.id}
-          className="flex flex-col justify-between rounded-2xl border border-emerald-200/80 bg-gradient-to-br from-emerald-50/50 via-white to-slate-50/60 p-6 shadow-xs transition-all hover:border-emerald-300"
+          className="flex flex-col justify-between rounded-2xl border border-emerald-200/80 bg-gradient-to-br from-emerald-50/50 via-white to-slate-50/60 p-6 shadow-sm transition-all hover:border-emerald-300"
         >
           <div>
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -429,7 +429,7 @@ export function UniversityEntrySummary({
             key={index}
             className={`rounded-2xl border p-5 sm:p-6 transition-all ${
               isHighlighted
-                ? 'border-emerald-300 bg-emerald-50/30 shadow-xs'
+                ? 'border-emerald-300 bg-emerald-50/30 shadow-sm'
                 : 'border-slate-200/90 bg-slate-50/50'
             }`}
           >

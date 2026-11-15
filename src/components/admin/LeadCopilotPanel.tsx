@@ -270,7 +270,7 @@ export default function LeadCopilotPanel({
                   aria-selected={channel === 'whatsapp'}
                   onClick={() => setChannel('whatsapp')}
                   className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium ${
-                    channel === 'whatsapp' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600'
+                    channel === 'whatsapp' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'
                   }`}
                 >
                   <MessageCircle size={13} aria-hidden="true" />
@@ -282,7 +282,7 @@ export default function LeadCopilotPanel({
                   aria-selected={channel === 'email'}
                   onClick={() => setChannel('email')}
                   className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium ${
-                    channel === 'email' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600'
+                    channel === 'email' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'
                   }`}
                 >
                   <Mail size={13} aria-hidden="true" />

@@ -203,6 +203,15 @@ export default function StickyDishaChat({
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen]);
+
   const openWhatsAppDirect = (customText?: string) => {
     const defaultMsg =
       language === 'bn'
@@ -507,15 +516,15 @@ export default function StickyDishaChat({
   return (
     <>
       {/* 1. MINIMALIST STICKY LAUNCHER DOCK */}
-      <div className="fixed bottom-20 right-4 z-40 flex flex-col items-end gap-2.5 sm:bottom-6 sm:right-6">
-        {/* Subtle Teaser Speech Bubble (Light & Clean) */}
+      <div className="sticky-disha-dock fixed bottom-4 right-4 z-40 flex flex-col items-end gap-2.5 transition-[bottom,opacity,transform] duration-300 lg:bottom-6 lg:right-6">
+        {/* Subtle Teaser Speech Bubble (hidden on compact phones so hero CTAs stay unobstructed) */}
         {showTeaser && !isOpen && (
           <div
             role="status"
-            className="relative flex max-w-[270px] items-start gap-2.5 rounded-2xl border border-petrol-700/10 bg-white p-3 shadow-[0_10px_28px_rgba(15,53,87,0.18)] animate-in fade-in slide-in-from-bottom-2 sm:max-w-[300px]"
+            className="ed-pop-in relative hidden max-w-[270px] items-start gap-2.5 rounded-2xl border border-petrol-700/10 bg-white p-3 shadow-[0_10px_28px_rgba(15,53,87,0.18)] sm:flex sm:max-w-[300px]"
           >
-            <div className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-petrol-700 text-white">
-              <Sparkles size={13} className="text-marigold" />
+            <div className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-petrol-800 text-lime">
+              <Sparkles size={13} />
             </div>
             <div className="flex-1 text-left">
               <div className="flex items-center justify-between">
@@ -537,7 +546,7 @@ export default function StickyDishaChat({
               </p>
               <button
                 onClick={handleOpenChat}
-                className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-petrol-700 px-3 py-1 text-[11.5px] font-bold text-white transition hover:bg-petrol-800"
+                className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-petrol-800 px-3 py-1 text-[11.5px] font-bold text-white transition hover:bg-petrol-900"
               >
                 {language === 'bn' ? 'চ্যাট করুন' : 'Chat with Disha'}
                 <ArrowRight size={11} />
@@ -551,36 +560,36 @@ export default function StickyDishaChat({
           {/* Quick Direct WhatsApp Button */}
           <button
             onClick={() => openWhatsAppDirect()}
-            className="group relative flex size-12 items-center justify-center rounded-full border border-emerald-400/30 bg-white shadow-[0_6px_20px_rgba(16,185,129,0.2)] transition hover:scale-105 hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 sm:size-12"
+            className="group relative flex size-11 items-center justify-center rounded-full border border-emerald-400/35 bg-white shadow-[0_6px_20px_rgba(16,185,129,0.2)] transition hover:scale-105 hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 sm:size-12"
             title="Chat directly on WhatsApp"
             aria-label="Chat directly on WhatsApp"
           >
-            <MessageCircle size={21} className="text-emerald-600 transition group-hover:scale-110" />
+            <MessageCircle size={20} className="text-emerald-600 transition group-hover:scale-110" />
             <span className="sr-only">WhatsApp Counselor</span>
           </button>
 
           {/* Disha Floating Launcher Button */}
           <button
             onClick={isOpen ? handleCloseChat : handleOpenChat}
-            className="group relative flex items-center gap-2.5 rounded-full border border-petrol-600/90 bg-petrol-700 px-3.5 py-2.5 text-white shadow-[0_10px_30px_rgba(15,53,87,0.3)] transition-all hover:-translate-y-0.5 hover:bg-petrol-800 hover:shadow-[0_14px_36px_rgba(15,53,87,0.4)] focus:outline-none focus:ring-4 focus:ring-petrol-600/30"
+            className="group relative flex items-center gap-2 rounded-full border border-petrol-600/90 bg-petrol-800 px-3 py-2 text-white shadow-[0_10px_30px_rgba(15,53,87,0.3)] transition-all hover:-translate-y-0.5 hover:bg-petrol-900 hover:shadow-[0_14px_36px_rgba(15,53,87,0.4)] focus:outline-none focus:ring-4 focus:ring-lime/50 sm:gap-2.5 sm:px-3.5 sm:py-2.5"
             aria-expanded={isOpen}
             aria-label="Open Disha Study Advisor Chatbot"
           >
             <div className="relative">
-              <div className="grid size-8 place-items-center rounded-full bg-petrol-800 text-marigold ring-2 ring-white/30">
-                <Sparkles size={16} />
+              <div className="grid size-7 place-items-center rounded-full bg-petrol-700 text-lime ring-2 ring-white/25 sm:size-8">
+                <Sparkles size={15} />
               </div>
               {/* Pulsing online indicator */}
               <span className="absolute -bottom-0.5 -right-0.5 flex size-2.5">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex size-2.5 rounded-full border-2 border-petrol-700 bg-emerald-500" />
+                <span className="relative inline-flex size-2.5 rounded-full border-2 border-petrol-800 bg-emerald-500" />
               </span>
             </div>
 
             <div className="hidden text-left sm:block">
               <div className="flex items-center gap-1.5">
                 <span className="text-[13px] font-bold tracking-tight text-white">Ask Disha</span>
-                <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.2 text-[9.5px] font-semibold text-emerald-300">
+                <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.5 text-[9.5px] font-semibold text-emerald-300">
                   Online
                 </span>
               </div>
@@ -596,16 +605,16 @@ export default function StickyDishaChat({
           role="dialog"
           aria-modal="true"
           aria-labelledby="disha-chat-title"
-          className="fixed bottom-24 right-4 z-50 flex h-[calc(100dvh-130px)] max-h-[620px] w-[calc(100vw-32px)] max-w-[400px] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-[#fbfbf8] shadow-[0_20px_60px_rgba(11,43,69,0.3)] animate-in fade-in slide-in-from-bottom-3 sm:bottom-22 sm:right-6 sm:h-[580px]"
+          className="ed-pop-in fixed bottom-4 left-4 right-4 z-[70] flex h-[calc(100dvh-96px)] max-h-[600px] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-[#fbfbf8] shadow-[0_20px_60px_rgba(11,43,69,0.32)] sm:bottom-[88px] sm:left-auto sm:right-6 sm:h-[580px] sm:w-[400px]"
         >
           {/* Light Header */}
-          <div className="flex items-center justify-between border-b border-petrol-800/10 bg-petrol-700 px-4 py-3 text-white">
+          <div className="flex items-center justify-between border-b border-petrol-900/15 bg-petrol-800 px-4 py-3 text-white">
             <div className="flex items-center gap-2.5">
               <div className="relative">
-                <div className="grid size-8 place-items-center rounded-full bg-petrol-800 text-marigold ring-2 ring-white/20">
+                <div className="grid size-8 place-items-center rounded-full bg-petrol-700 text-lime ring-2 ring-white/25">
                   <Sparkles size={16} />
                 </div>
-                <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full border-2 border-petrol-700 bg-emerald-500" />
+                <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full border-2 border-petrol-800 bg-emerald-500" />
               </div>
               <div>
                 <h3 id="disha-chat-title" className="text-[13.5px] font-bold leading-tight text-white">
@@ -649,12 +658,12 @@ export default function StickyDishaChat({
           </div>
 
           {/* Micro Notice Strip (Clean hairlines) */}
-          <div className="flex items-center justify-between bg-petrol-800 px-3.5 py-1 text-[10.5px] text-slate-300">
+          <div className="flex items-center justify-between bg-petrol-900 px-3.5 py-1.5 text-[10.5px] text-slate-300">
             <span className="inline-flex items-center gap-1">
               <ShieldCheck size={11} className="text-emerald-400" />
               <span>Evidence-First Guidance</span>
             </span>
-            <span className="font-semibold text-marigold">BDT 0 Fee Before Visa</span>
+            <span className="font-semibold text-lime">BDT 0 Fee Before Visa</span>
           </div>
 
           {/* Messages Stream */}
@@ -665,7 +674,7 @@ export default function StickyDishaChat({
                 className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {msg.role === 'assistant' && (
-                  <div className="mt-0.5 grid size-6.5 shrink-0 place-items-center rounded-full bg-petrol-700 text-marigold">
+                  <div className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-petrol-800 text-lime">
                     <Sparkles size={12} />
                   </div>
                 )}
@@ -674,7 +683,7 @@ export default function StickyDishaChat({
                   <div
                     className={`rounded-2xl p-3 text-[13.5px] leading-relaxed ${
                       msg.role === 'user'
-                        ? 'bg-petrol-700 text-white shadow-xs'
+                        ? 'bg-petrol-800 text-white shadow-sm'
                         : 'border border-slate-200/80 bg-white text-ink shadow-[0_1px_4px_rgba(0,0,0,0.03)]'
                     }`}
                   >
@@ -689,7 +698,7 @@ export default function StickyDishaChat({
                             href={cit.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 rounded bg-petrol-50 px-2 py-0.5 text-[10.5px] font-semibold text-petrol-700 hover:bg-petrol-100"
+                            className="inline-flex items-center gap-1 rounded bg-canvas-soft px-2 py-0.5 text-[10.5px] font-semibold text-petrol-800 hover:bg-lime-pale"
                           >
                             <span className="truncate max-w-[130px]">{cit.title}</span>
                             <ExternalLink size={9} />
@@ -708,7 +717,7 @@ export default function StickyDishaChat({
                               `Hi, my name is ${msg.leadName}. I was chatting with Disha on eduexpressint.com about studying in ${msg.leadDestination}. Can we discuss my options?`,
                             )
                           }
-                          className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-[12.5px] font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-95"
+                          className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-[12.5px] font-bold text-white shadow-sm transition hover:bg-emerald-700 active:scale-95"
                         >
                           <MessageCircle size={15} />
                           <span>{language === 'bn' ? 'সরাসরি হোয়াটসঅ্যাপে কথা বলুন' : 'Chat on WhatsApp Now'}</span>
@@ -725,7 +734,7 @@ export default function StickyDishaChat({
                           key={`opt-${oIdx}`}
                           type="button"
                           onClick={() => handleSelectOption(opt.value, opt.label)}
-                          className="rounded-full border border-petrol-700/20 bg-white px-3 py-1.5 text-[12px] font-medium text-petrol-800 shadow-2xs transition hover:border-petrol-700 hover:bg-petrol-50 active:scale-95"
+                          className="rounded-full border border-petrol-700/20 bg-white px-3 py-1.5 text-[12px] font-medium text-petrol-800 shadow-sm transition hover:border-petrol-700 hover:bg-canvas-soft active:scale-95"
                         >
                           {opt.label}
                         </button>
@@ -739,7 +748,7 @@ export default function StickyDishaChat({
             {/* Live Streaming Response Bubble */}
             {isStreaming && (
               <div className="flex gap-2.5">
-                <div className="mt-0.5 grid size-6.5 shrink-0 place-items-center rounded-full bg-petrol-700 text-marigold">
+                <div className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full bg-petrol-800 text-lime">
                   <Sparkles size={12} />
                 </div>
                 <div className="max-w-[85%] rounded-2xl border border-slate-200/80 bg-white p-3 text-[13.5px] text-ink shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
@@ -809,12 +818,12 @@ export default function StickyDishaChat({
                 onKeyDown={handleKeyDown}
                 placeholder={getInputPlaceholder()}
                 disabled={isStreaming}
-                className="flex-1 rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2 text-[13px] text-ink placeholder:text-slate-400 focus:border-petrol-600 focus:bg-white focus:outline-none"
+                className="flex-1 rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2 text-[15px] text-ink placeholder:text-slate-400 focus:border-petrol-600 focus:bg-white focus:outline-none sm:text-[13.5px]"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isStreaming}
-                className="grid size-8.5 place-items-center rounded-xl bg-petrol-700 text-white shadow-2xs transition hover:bg-petrol-800 disabled:opacity-40"
+                className="grid size-9 place-items-center rounded-xl bg-petrol-800 text-white shadow-sm transition hover:bg-petrol-900 disabled:opacity-40"
                 aria-label="Send message"
               >
                 {isStreaming ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}

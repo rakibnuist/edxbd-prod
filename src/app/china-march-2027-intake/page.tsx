@@ -184,95 +184,95 @@ export default async function Page() {
         </div>
 
         {/* Tier 2: Main Sticky Navigation Bar */}
-        <div className="border-b border-slate-200/90 bg-white/95 px-5 backdrop-blur-md sm:px-8">
-          <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 py-3">
-            <div className="flex items-center gap-4 sm:gap-5">
+        <div className="border-b border-slate-200/90 bg-white/95 px-4 backdrop-blur-md sm:px-6 lg:px-8">
+          <div className="mx-auto flex max-w-shell items-center justify-between gap-3 py-2.5 sm:gap-4 sm:py-3">
+            <div className="flex min-w-0 items-center gap-3 sm:gap-5">
               <Link href="/" aria-label="EduExpress International home" className="shrink-0">
                 <Image
                   src="/logo.png"
                   alt="EduExpress International"
                   width={205}
                   height={58}
-                  className="h-auto w-36 sm:w-44"
+                  className="h-7 w-auto sm:h-9 xl:h-10"
                   priority
                 />
               </Link>
 
               <div className="hidden h-7 w-px bg-slate-200 sm:block" aria-hidden="true" />
 
-              <div className="hidden sm:block xl:hidden 2xl:block">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#2c6a97]">
+              <div className="hidden sm:block xl:hidden">
+                <p className="whitespace-nowrap text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#2c6a97]">
                   China Spring 2027
                 </p>
-                <p className="text-xs font-bold text-petrol-800">Official Intake Desk</p>
+                <p className="whitespace-nowrap text-xs font-bold text-petrol-800">Official Intake Desk</p>
               </div>
 
               <nav
                 aria-label="Campaign sections"
-                className="hidden items-center gap-1 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-1 text-[13px] font-bold text-slate-600 lg:flex"
+                className="hidden items-center gap-1 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-1 text-[13px] font-bold text-slate-600 xl:flex"
               >
                 <a
                   href="#study-options"
-                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                  className="whitespace-nowrap rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-sm"
                 >
                   {universityCount} Universities
                 </a>
                 <a
                   href="#costs"
-                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                  className="whitespace-nowrap rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-sm"
                 >
                   Cost Plan
                 </a>
                 <a
                   href="#support-package"
-                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                  className="whitespace-nowrap rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-sm"
                 >
-                  Support Package
+                  Support
                 </a>
                 <a
                   href="#documents"
-                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                  className="whitespace-nowrap rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-sm"
                 >
                   Documents
                 </a>
                 <a
                   href="#student-stories"
-                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                  className="whitespace-nowrap rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-sm"
                 >
-                  Student Stories
+                  Stories
                 </a>
                 <a
                   href="#faq"
-                  className="rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-2xs"
+                  className="whitespace-nowrap rounded-xl px-3 py-1.5 transition hover:bg-white hover:text-petrol-800 hover:shadow-sm"
                 >
                   FAQ
                 </a>
               </nav>
             </div>
 
-            <div className="flex items-center gap-2 sm:gap-2.5">
+            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
               <March2027ContactLink
                 kind="phone"
                 href={`tel:${phone}`}
-                className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-bold text-petrol-800 transition hover:border-petrol-800/30 hover:bg-slate-100 sm:px-3.5 sm:text-sm"
+                className="inline-flex size-9 shrink-0 items-center justify-center whitespace-nowrap rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-petrol-800 transition hover:border-petrol-800/30 hover:bg-slate-100 sm:h-10 sm:w-auto sm:gap-2 sm:px-3.5 sm:text-sm"
               >
-                <Phone size={15} className="text-[#12436b]" aria-hidden="true" />
+                <Phone size={15} className="shrink-0 text-[#12436b]" aria-hidden="true" />
                 <span className="hidden md:inline">{formatBangladeshPhone(phone)}</span>
-                <span className="md:hidden">Call</span>
+                <span className="sr-only md:hidden">Call admissions desk</span>
               </March2027ContactLink>
 
               <March2027ContactLink
                 kind="whatsapp"
                 href={whatsappHref}
-                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3 text-xs font-bold text-emerald-900 transition hover:bg-emerald-100 sm:px-3.5 sm:text-sm"
+                className="inline-flex h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl border border-emerald-200 bg-emerald-50 px-2.5 text-xs font-bold text-emerald-900 transition hover:bg-emerald-100 sm:h-10 sm:px-3.5 sm:text-sm"
               >
-                <MessageCircle size={15} className="text-emerald-700" aria-hidden="true" />
+                <MessageCircle size={14} className="shrink-0 text-emerald-700" aria-hidden="true" />
                 <span>WhatsApp</span>
               </March2027ContactLink>
 
               <a
                 href="#march-2027-assessment"
-                className="ed-btn ed-btn-signal hidden min-h-10 px-4 text-xs font-extrabold sm:inline-flex sm:text-sm"
+                className="ed-btn ed-btn-signal hidden min-h-10 shrink-0 whitespace-nowrap px-4 text-xs font-extrabold sm:inline-flex sm:text-sm"
               >
                 Free Study Plan
                 <ArrowRight size={15} aria-hidden="true" />
@@ -291,7 +291,7 @@ export default async function Page() {
       <section id="costs" aria-labelledby="cost-title" className="scroll-mt-24 bg-canvas-soft px-5 py-14 sm:px-8 lg:py-20">
         <div className="mx-auto max-w-[1180px]">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-petrol-800 shadow-2xs">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-petrol-800 shadow-sm">
               Written Cost Governance
             </span>
             <h2 id="cost-title" data-anim="up" className={`mt-3 ${kit.h2}`}>
@@ -326,7 +326,7 @@ export default async function Page() {
             ].map(group => (
               <article
                 key={group.subtitle}
-                className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-2xs sm:p-7"
+                className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-7"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
                   <h3 className={kit.h3}>{group.title}</h3>
@@ -553,7 +553,7 @@ export default async function Page() {
       <section id="faq" aria-labelledby="faq-title" className="scroll-mt-24 bg-canvas-soft px-5 py-14 sm:px-8 lg:py-20">
         <div className="mx-auto grid max-w-[1180px] gap-8 lg:grid-cols-[.65fr_1.35fr] lg:gap-14">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-petrol-800 shadow-2xs">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-petrol-800 shadow-sm">
               March 2027 Intake FAQ
             </span>
             <h2 id="faq-title" data-anim="up" className={`mt-3 ${kit.h2}`}>
@@ -573,7 +573,7 @@ export default async function Page() {
             {campaign.faqs.map(item => (
               <details
                 key={item.question}
-                className="faq-smooth group rounded-3xl border border-slate-200/70 bg-white px-6 shadow-2xs"
+                className="faq-smooth group rounded-3xl border border-slate-200/70 bg-white px-6 shadow-sm"
               >
                 <summary className="flex min-h-[68px] cursor-pointer list-none items-center justify-between gap-5 py-4 text-[17px] font-bold leading-snug text-petrol-800 [&::-webkit-details-marker]:hidden">
                   {item.question}

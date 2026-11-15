@@ -397,7 +397,7 @@ export default async function Home() {
             </label>
             <label className="mt-4 block">
               <span className="text-[14px] font-semibold text-petrol-800">Study level</span>
-              <select name="level" defaultValue="" className="mt-1.5 min-h-[50px] w-full rounded-xl border border-petrol-800 bg-white px-4 text-[16px] text-petrol-800 focus:outline-none focus:ring-4 focus:ring-lime/60">
+              <select name="level" defaultValue="" className="ed-select mt-1.5 h-[50px] w-full appearance-none rounded-xl border border-petrol-800 bg-white px-4 py-2.5 text-[16px] text-petrol-800 focus:outline-none focus:ring-4 focus:ring-lime/60">
                 <option value="">Any level</option>
                 {levels.map(level => <option key={level} value={level}>{level}</option>)}
               </select>
@@ -427,15 +427,15 @@ export default async function Home() {
         </div>
 
         {/* Real photographs, rounded like every card in the system */}
-        <div className={`${wrap} mt-12 grid grid-cols-3 gap-3 sm:gap-5`}>
+        <div className={`${wrap} mt-12 flex snap-x snap-mandatory gap-3.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-3 sm:gap-5 sm:overflow-visible sm:pb-0`}>
           {[
             { src: '/images/students/campus-nuist.webp', alt: 'A student at the I love NUIST sign on campus in Nanjing', caption: 'On campus in Nanjing', position: 'object-[60%_45%]' },
             { src: '/images/students/students-campus.webp', alt: 'Bangladeshi students in front of a Chinese university admissions board', caption: 'Admitted and enrolled', position: 'object-[center_35%]' },
             { src: '/images/students/departure-family.webp', alt: 'A Bangladeshi family seeing a student off at Dhaka airport', caption: 'Departure day, Dhaka', position: 'object-center' },
           ].map((photo, index) => (
-            <figure key={photo.src} style={delay(320 + index * 90)} className="anim-rise group relative aspect-[3/4] overflow-hidden rounded-3xl sm:aspect-[4/3]">
-              <Image src={photo.src} alt={photo.alt} fill sizes="(max-width:640px) 33vw, 380px" className={`object-cover transition duration-700 group-hover:scale-105 ${photo.position}`} />
-              <figcaption className="absolute bottom-3 left-3 hidden rounded-full bg-white px-3 py-1 text-[13px] font-semibold text-petrol-800 sm:block">{photo.caption}</figcaption>
+            <figure key={photo.src} style={delay(320 + index * 90)} className="anim-rise group relative aspect-[4/3] w-[76vw] max-w-[300px] shrink-0 snap-start overflow-hidden rounded-3xl sm:w-auto sm:max-w-none">
+              <Image src={photo.src} alt={photo.alt} fill sizes="(max-width:640px) 76vw, 380px" className={`object-cover transition duration-700 group-hover:scale-105 ${photo.position}`} />
+              <figcaption className="absolute bottom-3 left-3 rounded-full bg-white/95 px-3 py-1 text-[13px] font-semibold text-petrol-800 shadow-sm backdrop-blur-sm">{photo.caption}</figcaption>
             </figure>
           ))}
         </div>
@@ -582,7 +582,7 @@ export default async function Home() {
                     <Link
                       key={route.title}
                       href={route.href}
-                      className="group flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-canvas-soft/60 p-3.5 transition hover:-translate-y-0.5 hover:border-petrol-800 hover:bg-white hover:shadow-xs"
+                      className="group flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-canvas-soft/60 p-3.5 transition hover:-translate-y-0.5 hover:border-petrol-800 hover:bg-white hover:shadow-sm"
                     >
                       <div>
                         <div className="flex items-center justify-between gap-1.5">
@@ -749,12 +749,17 @@ export default async function Home() {
             <span className="ticket-notch -bottom-[14px] left-[316px] hidden lg:block" aria-hidden="true" />
 
             {/* Route */}
-            <ol data-anim="route" className="relative grid gap-8 border-dashed border-petrol-800/30 p-7 sm:grid-cols-2 sm:p-8 lg:grid-cols-4 lg:border-l-2 lg:p-10">
-              <span className="route-line absolute left-10 right-10 top-[72px] hidden border-t-2 border-dashed border-petrol-800/25 lg:block" aria-hidden="true" />
-              <span className="route-flyer absolute left-10 right-10 top-[26px] hidden text-petrol-800 lg:block" aria-hidden="true"><Plane size={28} className="rotate-45" /></span>
+            <ol data-anim="route" className="relative grid gap-8 border-dashed border-petrol-800/30 p-6 sm:grid-cols-2 sm:p-8 lg:border-l-2 xl:grid-cols-4 xl:p-10">
+              <span className="route-flyer absolute left-14 right-[20%] top-[14px] hidden text-petrol-800 xl:block" aria-hidden="true"><Plane size={24} className="rotate-45" /></span>
               {steps.map((step, index) => (
                 <li key={step.title} className="relative">
-                  <span className="route-stop relative grid size-12 place-items-center rounded-full bg-lime font-display text-[20px] font-black text-petrol-800" aria-hidden="true">
+                  {index < steps.length - 1 && (
+                    <span
+                      aria-hidden="true"
+                      className="route-line absolute -right-8 left-[56px] top-6 hidden border-t-2 border-dashed border-petrol-800/25 xl:block"
+                    />
+                  )}
+                  <span className="route-stop relative z-10 grid size-12 place-items-center rounded-full bg-lime font-display text-[20px] font-black text-petrol-800" aria-hidden="true">
                     {index + 1}
                   </span>
                   <p className="mt-5 text-[13px] font-bold uppercase tracking-[0.14em] text-ink-mute">{['Consult', 'Compare', 'Apply', 'Fly'][index]}</p>

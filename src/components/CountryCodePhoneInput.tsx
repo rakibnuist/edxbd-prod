@@ -199,7 +199,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
 
           {/* Dropdown */}
           {isOpen && (
-            <div className="absolute top-[140%] left-0 z-50 w-72 bg-white border border-slate-200 rounded-xl shadow-xl max-h-64 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="ed-pop-in absolute top-[140%] left-0 z-50 w-72 max-h-64 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
               {/* Search Input */}
               <div className="p-2 border-b border-slate-100 bg-slate-50">
                 <input

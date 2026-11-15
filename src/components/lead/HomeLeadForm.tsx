@@ -134,10 +134,10 @@ export default function HomeLeadForm({
   if (status === 'done') {
     return (
       <div className={embedded ? 'p-0 text-center' : 'rounded-[26px] border border-rule bg-white p-6 text-center shadow-[0_26px_60px_-42px_rgba(15,53,87,0.4)] sm:p-8'}>
-        <span className="mx-auto grid size-12 place-items-center rounded-full bg-mint-100 text-jade">
+        <span className="mx-auto grid size-12 place-items-center rounded-full bg-lime/30 text-petrol-800">
           <CheckCircle2 size={26} aria-hidden="true" />
         </span>
-        <h2 className="mt-4 font-heading text-[27px] font-semibold leading-tight text-ink">Request received.</h2>
+        <h2 className="mt-4 font-display text-[26px] font-black leading-tight text-petrol-800">Request received.</h2>
         <p className="mt-2 text-[14px] leading-6 text-ink-soft">
           A counsellor will review your profile and contact you within one working day.
         </p>
@@ -169,13 +169,13 @@ export default function HomeLeadForm({
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[15px] font-bold uppercase tracking-[0.1em] text-petrol-600">{eyebrow}</p>
-          <h2 className="mt-1.5 font-heading text-[27px] font-semibold leading-tight text-ink">{heading}</h2>
+          <p className="text-[12px] font-bold uppercase tracking-[0.12em] text-petrol-700">{eyebrow}</p>
+          <h2 className="mt-1.5 font-display text-[26px] font-black leading-[1.08] tracking-[-0.015em] text-petrol-800 sm:text-[28px]">{heading}</h2>
         </div>
-        <span className="shrink-0 rounded-full bg-mint-100 px-3 py-1.5 text-[15px] font-bold text-petrol-700">2 min</span>
+        <span className="shrink-0 rounded-full bg-lime-pale px-3 py-1 text-[12px] font-bold text-petrol-800">2 min</span>
       </div>
 
-      <p className="mt-2 text-[15px] leading-6 text-ink-soft">{intro}</p>
+      <p className="mt-2.5 text-[14.5px] leading-6 text-ink-soft">{intro}</p>
 
       <div className="mt-5 grid gap-3.5">
         <div>
@@ -295,7 +295,7 @@ export default function HomeLeadForm({
           </p>
         )}
 
-        <button type="submit" disabled={status === 'submitting'} className="ed-btn ed-btn-signal min-h-12 w-full text-[14px] disabled:cursor-not-allowed disabled:opacity-70">
+        <button type="submit" disabled={status === 'submitting'} className="ed-btn ed-btn-signal min-h-[52px] w-full text-[15.5px] font-bold disabled:cursor-not-allowed disabled:opacity-70">
           {status === 'submitting' ? (
             <>
               <Loader2 size={16} className="animate-spin" aria-hidden="true" /> Sending request…
@@ -307,7 +307,7 @@ export default function HomeLeadForm({
           )}
         </button>
 
-        <p className="text-center text-[15px] leading-5 text-ink-mute">
+        <p className="text-center text-[13px] leading-5 text-ink-mute">
           No obligation. No service fee before China visa approval.
         </p>
       </div>

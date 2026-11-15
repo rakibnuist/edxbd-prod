@@ -106,7 +106,7 @@ export default async function Footer() {
     >
       <FooterCta />
 
-      <div className="mx-auto max-w-[1200px] px-5 pb-28 pt-14 lg:px-8 lg:pb-12 lg:pt-16">
+      <div className="mx-auto max-w-[1200px] px-5 pb-32 pt-14 lg:px-8 lg:pb-24 lg:pt-16">
         {/* Top Institutional Navigation Grid */}
         <div data-anim="stagger" className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           {/* Col 1–4: Brand Identity & Written Governance */}
@@ -121,7 +121,7 @@ export default async function Footer() {
               />
             </Link>
 
-            <p className="mt-4 max-w-sm text-[15px] leading-6.5 text-white/80">
+            <p className="mt-4 max-w-sm text-[15px] leading-[1.65] text-white/80">
               Bangladesh&apos;s evidence-first study abroad consultancy since 2018. Compare verified universities, realistic scholarship tiers, and your complete written cost schedule from our Dhanmondi head office.
             </p>
 

@@ -50,7 +50,7 @@ export default function JourneyProgress() {
 
   return (
     <>
-      <div className="sticky top-[74px] z-30 -mx-5 border-y border-[#cbd5e1] bg-white/95 px-5 py-3 shadow-[0_12px_30px_rgba(18,67,107,.08)] backdrop-blur-xl sm:-mx-8 sm:px-8 lg:hidden xl:top-[106px]">
+      <div className="sticky top-[67px] z-30 -mx-5 border-y border-[#cbd5e1] bg-white/95 px-5 py-3 shadow-[0_12px_30px_rgba(18,67,107,.08)] backdrop-blur-xl sm:-mx-8 sm:top-[75px] sm:px-8 lg:hidden">
         <div className="mx-auto flex max-w-[760px] items-center gap-4">
           <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#12436b] text-white"><MapPin size={16} /></span>
           <div className="min-w-0 flex-1">

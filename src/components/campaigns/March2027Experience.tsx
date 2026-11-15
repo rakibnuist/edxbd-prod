@@ -169,9 +169,9 @@ export default function March2027Experience({
           <div className="grid gap-10 lg:grid-cols-[1.18fr_1fr] lg:items-start lg:gap-12">
             {/* Left Hero Column */}
             <div className="min-w-0">
-              <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-[12.5px] font-bold uppercase tracking-wider text-lime">
-                <Sparkles size={13} aria-hidden="true" />
-                China Spring 2027 Admissions Desk · Dhaka
+              <div className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider leading-snug text-lime sm:rounded-full sm:px-4 sm:text-[12.5px]">
+                <Sparkles size={13} className="shrink-0" aria-hidden="true" />
+                <span className="min-w-0">China Spring 2027 Admissions Desk · Dhaka</span>
               </div>
 
               <h1 className="mt-5 font-display text-[42px] font-black leading-[0.95] tracking-[-0.02em] text-white sm:text-[56px] lg:text-[64px]">
@@ -190,7 +190,7 @@ export default function March2027Experience({
 
               {/* 4 Key Executive Metric Cards */}
               <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-xs">
+                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-sm">
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
                     <Building2 size={14} className="text-lime" aria-hidden="true" />
                     Shortlist
@@ -199,7 +199,7 @@ export default function March2027Experience({
                   <p className="text-[11px] text-white/70">{totalRoutes} verified routes</p>
                 </div>
 
-                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-xs">
+                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-sm">
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
                     <Award size={14} className="text-lime" aria-hidden="true" />
                     Scholarships
@@ -208,7 +208,7 @@ export default function March2027Experience({
                   <p className="text-[11px] text-white/70">Tuition + stipends</p>
                 </div>
 
-                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-xs">
+                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-sm">
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
                     <ShieldCheck size={14} className="text-lime" aria-hidden="true" />
                     Service Fee
@@ -217,7 +217,7 @@ export default function March2027Experience({
                   <p className="text-[11px] text-white/70">Before visa approval</p>
                 </div>
 
-                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-xs">
+                <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-3.5 backdrop-blur-sm">
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-white/70">
                     <Compass size={14} className="text-lime" aria-hidden="true" />
                     Pathways
@@ -352,7 +352,7 @@ export default function March2027Experience({
               key={item.title}
               className="flex items-start gap-4 rounded-2xl border border-slate-200/80 bg-[#f8fafc] p-5"
             >
-              <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-lime text-petrol-800 shadow-2xs">
+              <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-lime text-petrol-800 shadow-sm">
                 <item.icon size={21} aria-hidden="true" />
               </span>
               <div>
@@ -372,7 +372,10 @@ export default function March2027Experience({
 
       {/* Mobile Sticky CTA Bar */}
       {showSticky && (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-canvas-soft bg-white p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(15,58,92,.08)] lg:hidden">
+        <div
+          data-mobile-bar="open"
+          className="mobile-lead-bar fixed inset-x-0 bottom-0 z-40 border-t border-canvas-soft bg-white p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(15,58,92,.08)] lg:hidden"
+        >
           <a
             href="#march-2027-assessment"
             className="ed-btn ed-btn-signal mx-auto flex min-h-12 w-full max-w-lg"

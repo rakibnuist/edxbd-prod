@@ -463,7 +463,7 @@ export default function SopReviewerCard() {
                   <div key={idx} className="rounded-2xl border border-canvas-soft bg-white p-5 shadow-sm">
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <strong className="text-base font-semibold text-petrol-900">{sug.title}</strong>
-                      <span className="rounded-full bg-petrol-50 px-2.5 py-0.5 text-xs font-semibold text-petrol-800">
+                      <span className="rounded-full bg-canvas-soft px-2.5 py-0.5 text-xs font-semibold text-petrol-800">
                         {sug.category.replace('_', ' ')}
                       </span>
                     </div>
