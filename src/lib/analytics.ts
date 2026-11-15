@@ -94,23 +94,31 @@ const META_STANDARD_EVENTS: Record<string, string> = {
 export const trackEvent = (eventName: string, parameters?: Record<string, unknown>, _userData?: UserData) => {
   const eventId = (parameters?.event_id as string) || generateEventId();
   if (!isAnalyticsConsentAccepted()) return eventId;
-  const eventData = {
-    event_id: eventId,
-    ...parameters
-  };
 
-  // GTM tracking
-  if (typeof window !== 'undefined' && window.gtag && GTM_ID !== 'GTM-XXXXXXX') {
+  // GTM / GA4 tracking (supports runtime tag IDs configured via /admin/settings
+  // and loaded by GoogleTags, not just build-time NEXT_PUBLIC_GTM_ID).
+  if (typeof window !== 'undefined') {
+    const gaPayload = {
+      event_category: 'engagement',
+      event_label: parameters?.label || '',
+      value: parameters?.value || 0,
+      event_id: eventId,
+      ...parameters,
+    };
+
     try {
-      window.gtag('event', eventName, {
-        event_category: 'engagement',
-        event_label: parameters?.label || '',
-        value: parameters?.value || 0,
-        event_id: eventId,
-        ...parameters
-      });
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: eventName, ...gaPayload });
     } catch {
       // Silent error handling
+    }
+
+    if (typeof window.gtag === 'function') {
+      try {
+        window.gtag('event', eventName, gaPayload);
+      } catch {
+        // Silent error handling
+      }
     }
   }
 
