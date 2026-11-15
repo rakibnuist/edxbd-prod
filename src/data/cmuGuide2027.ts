@@ -27,7 +27,7 @@ export const CMU_2027_DATA = {
   metaTitle: 'China Medical University CSC 2027: Type B Medical Guide',
   metaDescription:
     'China Medical University 2027 CSC Type B guide: Agency No. 10159, Clinical Medicine & Stomatology, apply by 25 Feb 2027. Full tuition, dorm & stipend.',
-  featuredImage: '/og/china.jpg',
+  featuredImage: '/updates/covers/china-medical-university-csc-scholarship-2027.jpg',
   author: 'Md Tauhidul Islam Nur',
   reviewer: 'Abdullah Al Rakib',
   sourceUrls: JSON.stringify(CMU_OFFICIAL_SOURCES),

@@ -63,7 +63,8 @@ const GUIDE_2027_SPECS = [
     ]),
     author: 'Md Tauhidul Islam Nur',
     reviewer: 'Abdullah Al Rakib',
-    featuredImage: '/og/china.jpg',
+    featuredImage:
+      '/updates/covers/shanghai-dianji-university-spring-2027-chinese-language.jpg',
     sourceUrls: JSON.stringify(SDJU_OFFICIAL_SOURCES),
     deadlineAt: new Date('2026-12-15T15:59:59.000Z'),
     content: `<p class="lede"><strong><a href="/universities/shanghai-dianji-university">Shanghai DianJi University</a> (上海电机学院, SDJU)</strong> has officially opened international student admissions for its <strong>Spring 2027 Chinese Language Program (2027年春季国际学生汉语项目)</strong>. Situated in the prestigious Lin-gang Special Area of the Shanghai Pilot Free Trade Zone, this comprehensive 1-year Mandarin program runs from early March 2027 to early January 2028 with 640 intensive instructional hours (20 hours/week over 32 weeks). Applications are accepted directly through the SDJU international student portal until <strong>15 December 2026</strong> or until enrollment quotas are met.</p>
@@ -235,7 +236,8 @@ const GUIDE_2027_SPECS = [
     ]),
     author: 'Md Tauhidul Islam Nur',
     reviewer: 'Abdullah Al Rakib',
-    featuredImage: '/og/china.jpg',
+    featuredImage:
+      '/updates/covers/china-medical-university-csc-scholarship-2027.jpg',
     sourceUrls: JSON.stringify(CMU_OFFICIAL_SOURCES),
     deadlineAt: new Date('2027-02-25T15:59:59.000Z'),
     content: `<p class="lede"><strong><a href="/universities/china-medical-university">China Medical University</a> (中国医科大学, CMU)</strong> in Shenyang, Liaoning has officially published its 2027 application guide for the <strong>Chinese Government Scholarship — High-Level Graduate Program (Type B)</strong>. For Bangladeshi medical graduates (MBBS / BDS) and healthcare scholars targeting Master’s or PhD research in <strong>Clinical Medicine</strong>, <strong>Stomatology</strong>, <strong>Public Health</strong>, or <strong>Pharmacy</strong>, CMU provides full government sponsorship through CSC Agency Number <strong>10159</strong> with an online submission deadline of <strong>25 February 2027</strong>.</p>
@@ -645,7 +647,8 @@ const GUIDE_2027_SPECS = [
     ]),
     author: 'Md Tauhidul Islam Nur',
     reviewer: 'Abdullah Al Rakib',
-    featuredImage: '/og/china.jpg',
+    featuredImage:
+      '/updates/covers/nanchang-university-msc-ai-csc-scholarship-2027.jpg',
     sourceUrls: JSON.stringify(NANCHANG_OFFICIAL_SOURCES),
     deadlineAt: new Date('2027-03-01T15:59:59.000Z'),
     content: `<p class="lede"><strong><a href="/universities/nanchang-university">Nanchang University</a> (南昌大学, NCU)</strong> published its official 2027–2028 Chinese Government Scholarship (CSC) Type B High-Level Postgraduate notice on 5 November 2026 via its <a href="https://iec.ncu.edu.cn/info/1691/22826.htm" target="_blank" rel="noopener noreferrer">International Education College (IEC)</a>. For Bangladeshi students targeting Master’s research in <strong>Artificial Intelligence</strong> and <strong>Computer Science and Technology</strong>, all postgraduate majors at NCU are eligible under the CSC Type B window closing <strong>1 March 2027</strong>.</p>
@@ -715,7 +718,8 @@ const GUIDE_2027_SPECS = [
     ]),
     author: 'Md Tauhidul Islam Nur',
     reviewer: 'Abdullah Al Rakib',
-    featuredImage: '/og/china.jpg',
+    featuredImage:
+      '/updates/covers/chengdu-normal-university-csc-admission-guide-2027.jpg',
     sourceUrls: JSON.stringify(CHENGDU_NORMAL_OFFICIAL_SOURCES),
     deadlineAt: new Date('2027-08-15T15:59:59.000Z'),
     content: `<p class="lede"><strong><a href="/universities/chengdu-normal-university">Chengdu Normal University</a> (成都师范学院, CDNU)</strong> is a public university located in Chengdu, Sichuan Province. For the September 2027 intake, Bangladeshi students need clarity on three points before applying: CDNU’s <strong>verified official domain (<a href="https://www.cdnu.edu.cn/" target="_blank" rel="noopener noreferrer">cdnu.edu.cn</a>)</strong>, documented English-taught tuition baselines (<strong>CNY 5,000/year after university reduction</strong>), and how to verify CSC versus Sichuan/university scholarship availability before relying on third-party promises.</p>
@@ -1405,7 +1409,14 @@ export async function sync2027UniversityGuidesAndRecords(prisma) {
   for (const spec of GUIDE_2027_SPECS) {
     const existing = await prisma.content.findUnique({
       where: { slug: spec.slug },
-      select: { id: true, title: true, content: true, metaDescription: true, lastVerifiedAt: true },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        metaDescription: true,
+        featuredImage: true,
+        lastVerifiedAt: true,
+      },
     });
 
     if (!existing) {
@@ -1441,6 +1452,7 @@ export async function sync2027UniversityGuidesAndRecords(prisma) {
       existing.title !== spec.title ||
       existing.metaDescription !== spec.metaDescription ||
       existing.content !== spec.content ||
+      existing.featuredImage !== spec.featuredImage ||
       !existing.lastVerifiedAt
     ) {
       await prisma.content.update({

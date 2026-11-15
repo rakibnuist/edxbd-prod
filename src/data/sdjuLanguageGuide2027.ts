@@ -27,7 +27,7 @@ export const SDJU_2027_DATA = {
   metaTitle: 'Shanghai DianJi University Spring 2027 Language Admission',
   metaDescription:
     'Shanghai DianJi University opens Spring 2027 Chinese language admission. Tuition CNY 16,000/yr, dorm CNY 9,600, apply by 15 Dec 2026 via intlst.sdju.edu.cn.',
-  featuredImage: '/og/china.jpg',
+  featuredImage: '/updates/covers/shanghai-dianji-university-spring-2027-chinese-language.jpg',
   author: 'Md Tauhidul Islam Nur',
   reviewer: 'Abdullah Al Rakib',
   sourceUrls: JSON.stringify(SDJU_OFFICIAL_SOURCES),

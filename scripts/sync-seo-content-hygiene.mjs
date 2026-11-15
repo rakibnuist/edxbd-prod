@@ -263,7 +263,7 @@ async function main() {
         '2027 directory of 306 Chinese universities accepting Chinese Government Scholarship (CSC) applications, with verified admission criteria & guides.',
       excerpt:
         '2027 directory of 306 universities accepting Chinese Government Scholarship (CSC) applications for international students, with verified Bangladeshi admission profiles and Type A/B guidance.',
-      featuredImage: '/og/china.jpg',
+      featuredImage: '/updates/covers/complete-csc-universities-list-2027.jpg',
       requireLocalImage: true,
       requiredSources: [
         'https://www.campuschina.org/',
@@ -336,8 +336,7 @@ async function main() {
     }
 
     const currentImage = typeof post.featuredImage === 'string' ? post.featuredImage.trim() : '';
-    const needsLocalImage = spec.requireLocalImage && (!currentImage || !currentImage.startsWith('/'));
-    const nextImage = needsLocalImage ? spec.featuredImage : post.featuredImage;
+    const nextImage = spec.featuredImage || currentImage;
 
     const changed =
       post.title !== spec.title ||
