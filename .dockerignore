@@ -12,3 +12,6 @@ README.md
 .env.*
 !.env.example
 prisma/data
+data/*.db*
+data/vps-snapshot
+data/research/backups

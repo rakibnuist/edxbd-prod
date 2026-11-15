@@ -57,6 +57,11 @@ RUN chown -R nextjs:nodejs /app/prisma /app/public/uploads
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
+COPY --from=builder --chown=nextjs:nodejs /app/data/research ./data/research
+COPY --from=builder --chown=nextjs:nodejs /app/src/data/chinaMarch2027Campaign.ts ./src/data/chinaMarch2027Campaign.ts
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/bcryptjs ./node_modules/bcryptjs
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/dotenv ./node_modules/dotenv
 
 # Copy startup script
 COPY --chown=nextjs:nodejs docker-entrypoint.sh docker-warm-cache.mjs ./

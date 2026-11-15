@@ -38,7 +38,7 @@ try {
   execSync('node scripts/complete-student-testimonials.mjs', { stdio: 'inherit' });
 
   console.log('Running seed-march-2027-campaign.mjs...');
-  execSync('node scripts/seed-march-2027-campaign.mjs', { stdio: 'inherit' });
+  execSync('node --experimental-strip-types scripts/seed-march-2027-campaign.mjs', { stdio: 'inherit' });
 
   console.log('--- PRODUCTION DATABASE SYNC COMPLETED SUCCESSFULLY ---');
 } catch (err) {
