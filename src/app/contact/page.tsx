@@ -24,11 +24,14 @@ const structuredData = {
   '@type': 'ContactPage',
   '@id': 'https://eduexpressint.com/contact#webpage',
   url: 'https://eduexpressint.com/contact',
+  mainEntityOfPage: 'https://eduexpressint.com/contact',
+  dateModified: '2026-11-15',
   name: 'Contact EduExpress International',
   description: 'Phone, WhatsApp, email and the Dhanmondi office address and hours for EduExpress International.',
   inLanguage: 'en-BD',
   about: { '@id': 'https://eduexpressint.com/#organization' },
   isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+  publisher: { '@id': 'https://eduexpressint.com/#organization' },
   breadcrumb: { '@id': 'https://eduexpressint.com/contact#breadcrumb' },
 };
 

@@ -98,6 +98,7 @@ const structuredData = {
       '@type': 'WebPage',
       '@id': `${canonical}#webpage`,
       url: canonical,
+      mainEntityOfPage: canonical,
       name: 'Scholarship guidance for Bangladeshi students',
       description:
         'Understand scholarship eligibility, exact coverage, renewal conditions, remaining costs and application readiness before applying for overseas education.',
@@ -105,6 +106,8 @@ const structuredData = {
       dateModified: LAST_REVIEWED,
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': `${SITE_URL}/#organization` },
+      publisher: { '@id': `${SITE_URL}/#organization` },
+      mainEntity: { '@id': `${canonical}#service` },
       breadcrumb: { '@id': `${canonical}#breadcrumb` },
       primaryImageOfPage: { '@type': 'ImageObject', url: absoluteUrl('/images/home/consultation-family.webp') },
     },

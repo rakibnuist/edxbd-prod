@@ -37,6 +37,7 @@ export default async function ChinaSuccessStoriesPage() {
     name: 'China Student Success Stories',
     inLanguage: 'en-BD',
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+    publisher: { '@id': 'https://eduexpressint.com/#organization' },
     about: { '@id': 'https://eduexpressint.com/#organization' },
     breadcrumb: { '@id': `${canonical}#breadcrumb` },
     mainEntity: {

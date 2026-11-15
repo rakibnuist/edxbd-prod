@@ -4,6 +4,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: { absolute: 'Sitemap Submission | EduExpress International' },
   description: 'Internal search engine and AI crawler sitemap reference for eduexpressint.com.',
+  alternates: { canonical: '/sitemap-submission' },
   robots: { index: false, follow: false, noarchive: true },
 }
 

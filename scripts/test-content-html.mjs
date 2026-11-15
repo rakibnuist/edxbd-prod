@@ -5,6 +5,7 @@ import { register } from 'node:module';
 import test from 'node:test';
 
 register(new URL('./lib/typescript-source-resolver.mjs', import.meta.url));
+const { normalizeContentAuthor, isOrganizationContentAuthor } = await import('../src/lib/content-author.ts');
 const { sanitizeUpdateHtml, htmlToText, ALLOWED_CONTENT_TAGS } = await import('../src/lib/content-html.ts');
 const { toContentData } = await import('../src/lib/content-serialize.ts');
 
@@ -188,4 +189,17 @@ test('CMS template placeholder href links are unwrapped to plain spans', () => {
     assertSafe('<a href="{contactUrl}">Contact</a>'),
     '<span>Contact</span>',
   );
+});
+
+test('generic Admin and blank authors normalize to EduExpress International while named authors stay intact', () => {
+  assert.equal(normalizeContentAuthor('Admin'), 'EduExpress International');
+  assert.equal(normalizeContentAuthor(' administrator '), 'EduExpress International');
+  assert.equal(normalizeContentAuthor(''), 'EduExpress International');
+  assert.equal(normalizeContentAuthor('EduExpress'), 'EduExpress International');
+  assert.equal(normalizeContentAuthor('Abdullah Al Rakib'), 'Abdullah Al Rakib');
+  assert.equal(isOrganizationContentAuthor('Admin'), true);
+  assert.equal(isOrganizationContentAuthor('EduExpress Editorial'), true);
+  assert.equal(isOrganizationContentAuthor('Abdullah Al Rakib'), false);
+  const created = toContentData({ title: 'T', slug: 't', content: '<p>x</p>' });
+  assert.equal(created.author, 'EduExpress International');
 });

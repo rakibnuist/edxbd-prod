@@ -169,8 +169,11 @@ const structuredData = {
   headline: 'চীনে পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড ২০২৭',
   description:
     'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে পড়াশোনার পূর্ণাঙ্গ ব্যয় বিবরণী ও স্কলারশিপ গাইড।',
+  image: `${SITE}/og/china.jpg`,
   inLanguage: 'bn-BD',
   mainEntityOfPage: `${SITE}${PATH}`,
+  datePublished: '2026-11-15T00:00:00Z',
+  dateModified: '2026-11-15T00:00:00Z',
   author: { '@id': `${SITE}/#organization` },
   reviewedBy: { '@id': `${SITE}/#organization` },
   publisher: { '@id': `${SITE}/#organization` },

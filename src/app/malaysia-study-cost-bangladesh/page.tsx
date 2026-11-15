@@ -89,22 +89,16 @@ export default async function MalaysiaStudyCostPage() {
         '@type': 'WebPage',
         '@id': `${canonical}#page`,
         url: canonical,
+        mainEntityOfPage: canonical,
+        dateModified: '2026-11-15',
         name: 'Cost of Studying in Malaysia from Bangladesh | Full BDT & MYR Breakdown',
         description:
           'Complete financial planning guide for Bangladeshi students: tuition in MYR and BDT, living costs, EMGS visa fees, and Bangladesh Bank Student File remittance.',
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
+        breadcrumb: { '@id': `${canonical}#breadcrumb` },
         ...citationJsonLd(MALAYSIA_COST_SOURCES),
-      },
-      {
-        '@type': 'FAQPage',
-        '@id': `${canonical}#faq`,
-        mainEntity: faqs.map((faq) => ({
-          '@type': 'Question',
-          name: faq.question,
-          acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-        })),
       },
     ],
   };

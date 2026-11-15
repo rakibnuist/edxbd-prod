@@ -296,20 +296,20 @@ export default async function Home() {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'WebSite',
-        '@id': 'https://eduexpressint.com/#website',
+        '@type': 'WebPage',
+        '@id': 'https://eduexpressint.com/#webpage',
         url: 'https://eduexpressint.com/',
-        name: 'EduExpress International',
+        mainEntityOfPage: 'https://eduexpressint.com/',
+        name: 'Study Abroad Consultancy in Bangladesh | EduExpress',
+        description:
+          'Free study abroad assessment in Dhanmondi, Dhaka. Compare universities, scholarships and the full cost in writing, with no fee before your China visa.',
         inLanguage: 'en-BD',
+        dateModified: '2026-11-15',
+        isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+        about: { '@id': 'https://eduexpressint.com/#organization' },
         publisher: { '@id': 'https://eduexpressint.com/#organization' },
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: {
-            '@type': 'EntryPoint',
-            urlTemplate: 'https://eduexpressint.com/universities?search={search_term_string}',
-          },
-          'query-input': 'required name=search_term_string',
-        },
+        mainEntity: { '@id': 'https://eduexpressint.com/#study-abroad-consultancy' },
+        primaryImageOfPage: { '@type': 'ImageObject', url: 'https://eduexpressint.com/og-image.jpg' },
       },
       {
         '@type': 'Service',

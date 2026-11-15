@@ -696,7 +696,7 @@ export default function UniversityProfileClient({
                     <dt className="font-semibold text-slate-500">EduExpress Service Fee</dt>
                     <dd className="font-bold text-emerald-800">
                       {isMalaysia
-                        ? 'BDT 0 (100% Free Application & EMGS Visa Processing)'
+                        ? 'BDT 0 EduExpress Service Fee (Free Application & EMGS Visa Processing)'
                         : 'BDT 0 Before Visa (Service fee payable only after visa approval)'}
                     </dd>
                   </div>

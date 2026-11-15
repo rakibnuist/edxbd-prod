@@ -2,6 +2,7 @@
 // but the admin UI works with arrays. These helpers convert between the two.
 
 // Relative import keeps this helper loadable by the node:test scripts.
+import { normalizeContentAuthor } from './content-author';
 import { sanitizeUpdateHtml } from './content-html';
 import { toSafeExternalUrl, toSafeExternalUrlList, toSafeSitePathOrUrl } from './safe-url';
 
@@ -60,7 +61,7 @@ export const toContentData = (body: Record<string, unknown>, partial = false) =>
     isFeatured: body.isFeatured ?? false,
     metaTitle: body.metaTitle ?? null,
     metaDescription: body.metaDescription ?? null,
-    author: body.author || 'Admin',
+    author: normalizeContentAuthor(body.author),
     reviewer: body.reviewer ?? null,
     sourceUrls: safeSources(body.sourceUrls),
     lastVerifiedAt: date(body.lastVerifiedAt),

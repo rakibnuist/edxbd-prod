@@ -41,11 +41,14 @@ const structuredData = {
   '@type': 'WebPage',
   '@id': `${SITE_URL}${PATH}#webpage`,
   url: `${SITE_URL}${PATH}`,
+  mainEntityOfPage: `${SITE_URL}${PATH}`,
   name: 'Apply with EduExpress International',
   description: 'Request university application support: eligibility, documents and the application process.',
   inLanguage: 'en-BD',
+  dateModified: '2026-11-15',
   isPartOf: { '@id': `${SITE_URL}/#website` },
   about: { '@id': `${SITE_URL}/#organization` },
+  publisher: { '@id': `${SITE_URL}/#organization` },
   breadcrumb: { '@id': `${SITE_URL}${PATH}#breadcrumb` },
 };
 

@@ -64,6 +64,10 @@ const nextConfig: NextConfig = {
         source: '/sitemap-submission',
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
       },
+      {
+        source: '/api/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+      },
     ];
 
     if (process.env.NODE_ENV !== 'production') {
@@ -148,6 +152,11 @@ const nextConfig: NextConfig = {
       {
         source: '/destinations/united-kingdom',
         destination: '/study-in-uk-from-bangladesh',
+        permanent: true,
+      },
+      {
+        source: '/destinations/netherlands',
+        destination: '/destinations',
         permanent: true,
       },
       {

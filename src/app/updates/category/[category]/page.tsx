@@ -6,6 +6,7 @@ import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { chinaGuides } from '../../guides';
 import { CtaBand, JsonLd, PageHero, Section } from '@/components/page/PageKit';
 import { getPublishedUpdates } from '@/lib/content-records';
+import { blogPostSummaryJsonLd } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
 import UpdateCard from '@/components/updates/UpdateCard';
 import { requestTime } from '@/lib/update-deadlines';
@@ -96,7 +97,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'Blog',
+    '@type': ['CollectionPage', 'Blog'],
     '@id': `${url}#blog`,
     url,
     mainEntityOfPage: url,
@@ -107,12 +108,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
     publisher: { '@id': 'https://eduexpressint.com/#organization' },
     breadcrumb: { '@id': `${url}#breadcrumb` },
-    blogPost: posts.slice(0, 20).map(post => ({
-      '@type': 'BlogPosting',
-      headline: post.title,
-      url: `https://eduexpressint.com/updates/${post.slug}`,
-      datePublished: post.publishedAt || post.createdAt,
-    })),
+    blogPost: blogPostSummaryJsonLd(posts.slice(0, 20)),
   };
 
   const now = requestTime();

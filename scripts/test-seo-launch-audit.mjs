@@ -338,3 +338,224 @@ test('Step 14 built HTML checks — ChinaGuidePage counterparts, refreshed comme
     'proof-library.html must carry 2026-11-15 review date and Dhanmondi office guide link',
   );
 });
+
+test('Step 15 built HTML checks — single FAQPage on Malaysia guides, clean Malaysia uni fees, institutional schema & login noindex', () => {
+  for (const slug of [
+    'study-in-malaysia-from-bangladesh',
+    'malaysia-study-cost-bangladesh',
+    'malaysia-student-visa-bangladesh',
+  ]) {
+    const html = fs.readFileSync(path.join(BUILD_APP_DIR, `${slug}.html`), 'utf8');
+    const faqCount = (html.match(/"@type":"FAQPage"/g) || []).length;
+    assert.equal(faqCount, 1, `${slug}.html must emit exactly 1 FAQPage schema block (got ${faqCount})`);
+    assert.ok(
+      html.includes('2026-11-15') &&
+        html.includes('mainEntityOfPage') &&
+        html.includes(`https://eduexpressint.com/${slug}#breadcrumb`),
+      `${slug}.html must include dateModified, mainEntityOfPage, and #breadcrumb`,
+    );
+  }
+
+  for (const uniSlug of [
+    'asia-pacific-university',
+    'heriot-watt-university-malaysia',
+    'monash-university-malaysia',
+    'sunway-university',
+    'taylors-university',
+    'ucsi-university',
+    'universiti-malaya',
+    'universiti-teknologi-malaysia',
+    'university-of-nottingham-malaysia',
+  ]) {
+    const html = fs.readFileSync(path.join(BUILD_APP_DIR, 'universities', `${uniSlug}.html`), 'utf8');
+    assert.ok(!html.includes('100% Free Application'), `${uniSlug}.html must not contain "100% Free Application"`);
+    assert.ok(html.includes('BDT 0 EduExpress Service Fee'), `${uniSlug}.html must clearly label BDT 0 EduExpress Service Fee`);
+  }
+
+  for (const instSlug of ['about', 'partnership', 'contact']) {
+    const html = fs.readFileSync(path.join(BUILD_APP_DIR, `${instSlug}.html`), 'utf8');
+    assert.ok(
+      html.includes('2026-11-15') && html.includes('mainEntityOfPage'),
+      `${instSlug}.html must include 2026-11-15 dateModified and mainEntityOfPage`,
+    );
+  }
+
+  const loginHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'login.html'), 'utf8');
+  assert.ok(
+    loginHtml.includes('noindex') && loginHtml.includes('rel="canonical"'),
+    'login.html must emit noindex meta robots and canonical URL',
+  );
+});
+
+test('Step 16 built HTML checks — bn visa SERP bounds, homepage WebPage schema, Dhaka NAP/links & mainEntityOfPage parity', () => {
+  const bnVisaHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'bn', 'china-student-visa-bangladesh.html'), 'utf8');
+  const bnTitle = (bnVisaHtml.match(/<title[^>]*>(.*?)<\/title>/i) || ['', ''])[1];
+  const bnDesc = (bnVisaHtml.match(/<meta\s+name="description"\s+content="([^"]*)"/i) || ['', ''])[1];
+  assert.ok(bnTitle.length <= 62, `bn/china-student-visa-bangladesh title length ${bnTitle.length} must be <= 62`);
+  assert.ok(bnDesc.length <= 160, `bn/china-student-visa-bangladesh description length ${bnDesc.length} must be <= 160`);
+  assert.ok(bnVisaHtml.includes('2026-11-15T00:00:00Z'), 'bn/china-student-visa-bangladesh.html must include dateModified');
+
+  const homeHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'index.html'), 'utf8');
+  assert.ok(
+    homeHtml.includes('"@type":"WebPage"') &&
+      homeHtml.includes('"mainEntityOfPage":"https://eduexpressint.com/"') &&
+      homeHtml.includes('2026-11-15'),
+    'index.html must include WebPage node with mainEntityOfPage and dateModified',
+  );
+
+  const dhakaHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'education-consultant-dhaka.html'), 'utf8');
+  assert.ok(
+    dhakaHtml.includes('"mainEntityOfPage":"https://eduexpressint.com/education-consultant-dhaka"') &&
+      dhakaHtml.includes('1983-333566') &&
+      dhakaHtml.includes('1329-663505') &&
+      dhakaHtml.includes('href="/china-study-report-bangladesh"') &&
+      dhakaHtml.includes('href="/fees-and-transparency"'),
+    'education-consultant-dhaka.html must contain full NAP, mainEntityOfPage, and trust/benchmark links',
+  );
+
+  for (const slug of [
+    'destinations',
+    'find-education',
+    'scholarships',
+    'education-fit-assessment',
+    'your-study-journey',
+    'china-study-report-bangladesh',
+    'china-march-2027-intake',
+    'programs',
+    'programs/masters-in-china',
+    'compare-costs',
+    'bn/study-in-china',
+    'bn/study-in-china-cost-bangladesh',
+    'privacy',
+    'terms',
+    'universities/asia-pacific-university',
+    'csc-scholarship-bangladesh',
+    'bn/csc-scholarship-bangladesh',
+    'destinations/uk',
+    'destinations/south-korea',
+    'destinations/hungary',
+    'destinations/finland',
+    'destinations/cyprus',
+    'destinations/croatia',
+    'destinations/georgia',
+    'destinations/malta',
+    'destinations/greece',
+    'destinations/thailand',
+  ]) {
+    const html = fs.readFileSync(path.join(BUILD_APP_DIR, `${slug}.html`), 'utf8');
+    assert.ok(html.includes('"mainEntityOfPage":"https://eduexpressint.com/'), `${slug}.html must include mainEntityOfPage`);
+    assert.ok(
+      html.includes('"isPartOf":{"@id":"https://eduexpressint.com/#website"}'),
+      `${slug}.html must include #website isPartOf link`,
+    );
+  }
+  for (const csc of ['csc-scholarship-bangladesh', 'bn/csc-scholarship-bangladesh']) {
+    const html = fs.readFileSync(path.join(BUILD_APP_DIR, `${csc}.html`), 'utf8');
+    assert.ok(html.includes('"dateModified":"2026-11-15T00:00:00Z"'), `${csc}.html must include refreshed dateModified`);
+  }
+  const indexHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'index.html'), 'utf8');
+  assert.equal(
+    (indexHtml.match(/"@type":"WebSite","@id":"https:\/\/eduexpressint\.com\/#website"/g) || []).length,
+    1,
+    'index.html must define #website entity once without duplication',
+  );
+  for (const rel of [
+    'about',
+    'destinations/uk',
+    'how-we-verify-universities',
+    'better-education-standard',
+    'privacy',
+    'bn/study-in-china',
+    'universities/asia-pacific-university',
+  ]) {
+    const html = fs.readFileSync(path.join(BUILD_APP_DIR, `${rel}.html`), 'utf8');
+    assert.ok(
+      html.includes('"@id":"https://eduexpressint.com/#website","url":"https://eduexpressint.com/"'),
+      `${rel}.html must define the global #website entity in RootLayout`,
+    );
+  }
+});
+
+function walkBuiltHtml(dir, acc = []) {
+  for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = path.join(dir, ent.name);
+    if (ent.isDirectory()) walkBuiltHtml(fullPath, acc);
+    else if (ent.name.endsWith('.html')) acc.push(fullPath);
+  }
+  return acc;
+}
+
+function collectJsonLdIds(node, defined, referenced) {
+  if (Array.isArray(node)) {
+    for (const item of node) collectJsonLdIds(item, defined, referenced);
+    return;
+  }
+  if (!node || typeof node !== 'object') return;
+  const keys = Object.keys(node);
+  if (typeof node['@id'] === 'string') {
+    if (keys.length === 1 || (keys.length === 2 && keys.includes('@type'))) referenced.push(node['@id']);
+    else defined.push(node['@id']);
+  }
+  for (const [k, v] of Object.entries(node)) {
+    if (k !== '@id') collectJsonLdIds(v, defined, referenced);
+  }
+}
+
+test('Built indexable HTML pages have unique @ids, resolved references, WebPage publisher, and Article rich fields', () => {
+  const htmlFiles = walkBuiltHtml(BUILD_APP_DIR).sort();
+  assert.ok(htmlFiles.length > 150, `Expected > 150 built HTML files, found ${htmlFiles.length}`);
+
+  for (const file of htmlFiles) {
+    const html = fs.readFileSync(file, 'utf8');
+    const rel = path.relative(BUILD_APP_DIR, file);
+    if (rel.startsWith('_') || /noindex|NEXT_HTTP_ERROR_FALLBACK|NEXT_REDIRECT/.test(html)) continue;
+
+    const defined = [];
+    const referenced = [];
+    let hasWebPage = false;
+
+    for (const match of html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {
+      const parsed = JSON.parse(match[1]);
+      collectJsonLdIds(parsed, defined, referenced);
+      const nodes = parsed['@graph'] ? parsed['@graph'] : [parsed];
+      for (const n of nodes) {
+        if (!n || typeof n !== 'object') continue;
+        const types = Array.isArray(n['@type']) ? n['@type'].join(',') : String(n['@type'] || '');
+        if (/(WebPage|CollectionPage|AboutPage|ContactPage|ProfilePage)/.test(types)) {
+          hasWebPage = true;
+          for (const field of ['mainEntityOfPage', 'isPartOf', 'publisher', 'inLanguage', 'url']) {
+            assert.ok(n[field], `${rel} WebPage node missing ${field}`);
+          }
+        }
+        if (/(Article|BlogPosting|Report|ScholarlyArticle)/.test(types)) {
+          for (const field of ['mainEntityOfPage', 'publisher', 'inLanguage', 'image', 'datePublished', 'dateModified']) {
+            assert.ok(n[field], `${rel} Article node missing ${field}`);
+          }
+        }
+      }
+    }
+
+    assert.ok(hasWebPage, `${rel} must include a WebPage/CollectionPage JSON-LD node`);
+    const counts = new Map();
+    for (const id of defined) counts.set(id, (counts.get(id) ?? 0) + 1);
+    for (const [id, count] of counts) {
+      assert.equal(count, 1, `${rel} defines duplicate JSON-LD @id ${id}`);
+    }
+    const defSet = new Set(defined);
+    for (const ref of referenced) {
+      assert.ok(defSet.has(ref), `${rel} has unresolved JSON-LD @id reference ${ref}`);
+    }
+  }
+
+  const intakesHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'china-intakes-deadlines.html'), 'utf8');
+  assert.ok(intakesHtml.includes('"primaryImageOfPage"'), 'china-intakes-deadlines.html must include primaryImageOfPage');
+
+  const marchHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'china-march-2027-intake.html'), 'utf8');
+  assert.ok(marchHtml.includes('"primaryImageOfPage":{"@type":"ImageObject","url":"https://eduexpressint.com/og/march-2027.jpg"}'));
+  assert.ok(marchHtml.includes('content="en_GB"'));
+
+  const sitemapBody = fs.readFileSync(path.join(BUILD_APP_DIR, 'sitemap.xml.body'), 'utf8');
+  for (const legacy of ['/destinations/china', '/destinations/malaysia', '/destinations/netherlands']) {
+    assert.ok(!sitemapBody.includes(`<loc>https://eduexpressint.com${legacy}</loc>`), `sitemap.xml must not emit redirect URL ${legacy}`);
+  }
+});

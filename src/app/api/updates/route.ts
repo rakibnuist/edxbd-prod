@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
+import { normalizeContentAuthor } from '@/lib/content-author';
 import { serializeContent } from '@/lib/content-serialize';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { sanitizeUpdateHtml } from '@/lib/content-html';
@@ -88,12 +89,16 @@ export async function GET(request: NextRequest) {
       ...multiCategories
     ]);
 
-    const normalizedAuthors = normalizeList(authors);
+    const normalizedAuthors = normalizeList(authors.map(normalizeContentAuthor));
 
     return NextResponse.json({
       updates: updates.map(update => {
         const serialized = serializeContent(update as unknown as Record<string, unknown>);
-        return { ...serialized, content: sanitizeUpdateHtml(String(serialized.content ?? '')) };
+        return {
+          ...serialized,
+          author: normalizeContentAuthor(serialized.author),
+          content: sanitizeUpdateHtml(String(serialized.content ?? '')),
+        };
       }),
       totalCount,
       categories: ['All', ...normalizedCategories],

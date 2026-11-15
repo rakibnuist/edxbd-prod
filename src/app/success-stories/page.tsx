@@ -42,6 +42,7 @@ export default async function SuccessStoriesPage() {
     description: 'Education stories from EduExpress students.',
     inLanguage: 'en-BD',
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+    publisher: { '@id': 'https://eduexpressint.com/#organization' },
     about: { '@id': 'https://eduexpressint.com/#organization' },
     breadcrumb: { '@id': `${canonical}#breadcrumb` },
     mainEntity: {

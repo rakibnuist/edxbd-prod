@@ -402,3 +402,260 @@ test('Step 14 — llms.txt, IndexNow, ChinaGuidePage bilingual links & core conv
     assert.ok(read(freshFile).includes('2026-11-15'), `${freshFile} must carry refreshed 2026-11-15 review date`);
   }
 });
+
+test('Step 15 — Malaysia single FAQPage schema, superlative-free profile client, institutional schema & login noindex', () => {
+  const client = read('src/components/universities/UniversityProfileClient.tsx');
+  assert.ok(!client.includes('100% Free Application'), 'UniversityProfileClient must not advertise 100% Free Application');
+
+  for (const myFile of [
+    'src/app/study-in-malaysia-from-bangladesh/page.tsx',
+    'src/app/malaysia-study-cost-bangladesh/page.tsx',
+    'src/app/malaysia-student-visa-bangladesh/page.tsx',
+  ]) {
+    const src = read(myFile);
+    assert.ok(!src.includes("'@type': 'FAQPage'"), `${myFile} must rely on <FaqBlock /> alone so FAQPage schema is not duplicated`);
+    assert.ok(src.includes('<FaqBlock'), `${myFile} must render <FaqBlock>`);
+    assert.ok(src.includes('mainEntityOfPage: canonical'), `${myFile} must emit mainEntityOfPage`);
+    assert.ok(src.includes('2026-11-15'), `${myFile} must carry 2026-11-15 dateModified`);
+    assert.ok(src.includes('#breadcrumb'), `${myFile} must reference #breadcrumb`);
+  }
+
+  for (const instFile of [
+    'src/app/about/page.tsx',
+    'src/app/partnership/page.tsx',
+    'src/app/contact/page.tsx',
+  ]) {
+    const src = read(instFile);
+    assert.ok(src.includes('mainEntityOfPage'), `${instFile} must include mainEntityOfPage`);
+    assert.ok(src.includes('2026-11-15'), `${instFile} must include 2026-11-15 dateModified`);
+  }
+
+  const loginLayout = read('src/app/login/layout.tsx');
+  assert.ok(loginLayout.includes('index: false') && loginLayout.includes('follow: false'), 'login/layout.tsx must emit noindex, nofollow');
+});
+
+test('Step 16 — bn visa SERP lengths, homepage WebPage schema, Dhaka local NAP/cross-links, knowledge graph mainEntityOfPage & sitemap parity', () => {
+  const bnVisa = read('src/app/bn/china-student-visa-bangladesh/page.tsx');
+  assert.ok(bnVisa.includes("title: 'চায়না স্টুডেন্ট ভিসা (X1 ও X2) গাইড ২০২৭ | EduExpress'"));
+  assert.ok(!bnVisa.includes('ঢাকা এম্বাসি চেকলিস্ট | EduExpress'));
+  for (const bnFile of [
+    'src/app/bn/china-student-visa-bangladesh/page.tsx',
+    'src/app/bn/study-in-china-cost-bangladesh/page.tsx',
+    'src/app/bn/study-in-china/page.tsx',
+  ]) {
+    const src = read(bnFile);
+    assert.ok(src.includes("dateModified: '2026-11-15T00:00:00Z'"), `${bnFile} must include dateModified matching sitemap`);
+  }
+
+  const home = read('src/app/page.tsx');
+  assert.ok(home.includes("'@type': 'WebPage'") && home.includes("mainEntityOfPage: 'https://eduexpressint.com/'"));
+
+  const dhaka = read('src/app/education-consultant-dhaka/page.tsx');
+  assert.ok(
+    dhaka.includes('mainEntityOfPage: PAGE_URL') &&
+      dhaka.includes("dateModified: '2026-11-15'") &&
+      dhaka.includes('office.phoneSecondary') &&
+      dhaka.includes('href="/china-study-report-bangladesh"') &&
+      dhaka.includes('href="/fees-and-transparency"'),
+    'education-consultant-dhaka must emit full WebPage schema, dual phones, and flagship/trust links',
+  );
+
+  for (const schemaFile of [
+    'src/app/destinations/page.tsx',
+    'src/app/find-education/page.tsx',
+    'src/app/scholarships/page.tsx',
+    'src/app/education-fit-assessment/page.tsx',
+    'src/app/your-study-journey/page.tsx',
+    'src/app/china-study-report-bangladesh/page.tsx',
+    'src/app/china-march-2027-intake/page.tsx',
+    'src/app/apply/page.tsx',
+    'src/app/programs/page.tsx',
+    'src/app/programs/[segment]/page.tsx',
+    'src/app/compare-costs/page.tsx',
+    'src/app/china-universities/page.tsx',
+    'src/app/china-universities/[city]/page.tsx',
+    'src/app/universities/page.tsx',
+  ]) {
+    const src = read(schemaFile);
+    assert.ok(src.includes('mainEntityOfPage:'), `${schemaFile} schema must set mainEntityOfPage`);
+  }
+
+  const pagesXml = read('src/app/sitemaps/pages.xml/route.ts');
+  const mainSitemap = read('src/app/sitemap.ts');
+  assert.ok(pagesXml.includes("'/apply'") && mainSitemap.includes("'/apply'"));
+  assert.ok(pagesXml.includes("lastmod: '2026-11-15'"));
+  assert.ok(mainSitemap.includes('staticRouteGuides') && mainSitemap.includes('slug in chinaGuidePages'));
+});
+
+test('Step 17: RSS feed, legal policies, university profiles, updates blog schema, and IndexNow are complete', () => {
+  const feedRoute = read('src/app/updates/feed.xml/route.ts');
+  assert.ok(feedRoute.includes('xmlns:dc="http://purl.org/dc/elements/1.1/"'));
+  assert.ok(feedRoute.includes('<managingEditor>'));
+  assert.ok(feedRoute.includes('<dc:creator>'));
+  assert.ok(feedRoute.includes('config.contact.email'));
+
+  for (const legalFile of ['src/app/privacy/PrivacyClient.tsx', 'src/app/terms/TermsClient.tsx']) {
+    const src = read(legalFile);
+    assert.ok(src.includes('mainEntityOfPage: PAGE_URL'), `${legalFile} missing mainEntityOfPage`);
+    assert.ok(
+      src.includes("publisher: { '@id': 'https://eduexpressint.com/#organization' }"),
+      `${legalFile} missing publisher @id`,
+    );
+  }
+
+  const uniSeo = read('src/lib/university-profile-seo.ts');
+  assert.ok(uniSeo.includes('mainEntityOfPage: seo.canonical'));
+  assert.ok(uniSeo.includes('isPartOf: { \'@id\': `${UNIVERSITY_SITE_URL}/#website` }'));
+
+  const updatePage = read('src/app/updates/[slug]/page.tsx');
+  assert.ok(updatePage.includes('update.metaDescription'));
+  assert.ok(updatePage.includes("isPartOf: { '@id': 'https://eduexpressint.com/#website' }"));
+  assert.ok(updatePage.includes("breadcrumb: { '@id': `${canonical}#breadcrumb` }"));
+
+  const indexNow = read('src/lib/indexnow.ts');
+  assert.ok(indexNow.includes("'/apply'"));
+});
+
+test('Step 18: generic Admin author eliminated across write/render layers, destination schemas complete, and CSC dates aligned', () => {
+  const countryPage = read('src/app/destinations/[country]/page.tsx');
+  assert.ok(countryPage.includes('mainEntityOfPage: pageUrl'));
+  assert.ok(countryPage.includes('publisher: { \'@id\': `${SITE_URL}/#organization` }'));
+
+  const countriesXml = read('src/app/sitemaps/countries.xml/route.ts');
+  assert.ok(countriesXml.includes("lastmod: '2026-11-15'"));
+  assert.ok(!countriesXml.includes('2026-11-06'));
+
+  for (const cscFile of ['src/app/csc-scholarship-bangladesh/page.tsx', 'src/app/bn/csc-scholarship-bangladesh/page.tsx']) {
+    const src = read(cscFile);
+    assert.ok(src.includes("dateModified: '2026-11-15T00:00:00Z'"), `${cscFile} must use 2026-11-15 dateModified`);
+    assert.ok(!src.includes('2026-10-19'), `${cscFile} must not carry stale 2026-10-19 dateModified`);
+  }
+
+  for (const rel of [
+    'src/lib/content-serialize.ts',
+    'src/lib/content-records.ts',
+    'src/app/api/updates/route.ts',
+    'src/app/updates/feed.xml/route.ts',
+    'src/app/updates/[slug]/page.tsx',
+    'src/app/updates/[slug]/UpdateClient.tsx',
+  ]) {
+    assert.ok(read(rel).includes('normalizeContentAuthor'), `${rel} must normalize generic authors`);
+  }
+  assert.ok(!read('src/lib/content-serialize.ts').includes("|| 'Admin'"));
+  assert.ok(read('scripts/sync-seo-content-hygiene.mjs').includes('Normalized generic Content author'));
+});
+
+test('Step 19: global WebSite schema entity lives once in RootLayout, evidence graph is complete, and SEO routing/headers are tight', () => {
+  const layout = read('src/app/layout.tsx');
+  assert.ok(layout.includes('"@id": "https://eduexpressint.com/#website"'));
+  assert.ok(layout.includes('"@type": "SearchAction"'));
+  assert.ok(layout.includes('"https://twitter.com/eduexpressint"'));
+
+  const homepage = read('src/app/page.tsx');
+  assert.ok(!homepage.includes("'@type': 'WebSite'"));
+
+  const slugPage = read('src/app/[slug]/page.tsx');
+  assert.ok(slugPage.includes('mainEntityOfPage: canonical'));
+  assert.ok(slugPage.includes('publisher: { \'@id\': `${SITE_URL}/#organization` }'));
+  assert.ok(slugPage.includes('mainEntity: { \'@id\': `${canonical}#article` }'));
+
+  const nextConfig = read('next.config.ts');
+  assert.ok(nextConfig.includes("source: '/destinations/netherlands'"));
+  assert.ok(nextConfig.includes("source: '/api/:path*'"));
+});
+
+test('Step 20: unique #organization @id, complete WebPage publisher links, and Article rich-result fields', () => {
+  const destinationsPage = read('src/app/destinations/page.tsx');
+  assert.ok(!destinationsPage.includes("'@type': 'EducationalOrganization'"), 'destinations page must not duplicate #organization');
+  assert.ok(destinationsPage.includes("publisher: { '@id': `${SITE_URL}/#organization` }"));
+
+  const updatesPage = read('src/app/updates/page.tsx');
+  assert.ok(updatesPage.includes("'@type': ['CollectionPage', 'Blog']"));
+
+  for (const rel of [
+    'src/app/page.tsx',
+    'src/app/education-consultant-dhaka/page.tsx',
+    'src/app/education-fit-assessment/page.tsx',
+    'src/app/fees-and-transparency/page.tsx',
+    'src/app/find-education/page.tsx',
+    'src/app/for-parents/page.tsx',
+    'src/app/partnership/page.tsx',
+    'src/app/proof-library/page.tsx',
+    'src/app/scholarships/page.tsx',
+    'src/app/services/page.tsx',
+    'src/app/your-study-journey/page.tsx',
+  ]) {
+    const src = read(rel);
+    assert.ok(src.includes('#organization'), `${rel} must link to #organization`);
+    assert.ok(/publisher:\s*(\{\s*'@id'|ORG)/.test(src), `${rel} must include WebPage publisher`);
+  }
+
+  for (const rel of [
+    'src/components/china/ChinaGuidePage.tsx',
+    'src/app/[slug]/page.tsx',
+    'src/app/csc-scholarship-bangladesh/page.tsx',
+    'src/app/mbbs-in-china-bangladesh/page.tsx',
+    'src/app/china-study-report-bangladesh/page.tsx',
+    'src/app/bn/csc-scholarship-bangladesh/page.tsx',
+    'src/app/bn/mbbs-in-china-bangladesh/page.tsx',
+    'src/app/bn/china-student-visa-bangladesh/page.tsx',
+    'src/app/bn/study-in-china-cost-bangladesh/page.tsx',
+  ]) {
+    const src = read(rel);
+    assert.ok(src.includes('datePublished'), `${rel} must emit datePublished on Article/Report schema`);
+    assert.ok(src.includes('dateModified'), `${rel} must emit dateModified on Article/Report schema`);
+    assert.ok(src.includes('image:'), `${rel} must emit image on Article/Report schema`);
+  }
+
+  const adminLayout = read('src/app/admin/layout.tsx');
+  assert.ok(adminLayout.includes('index: false') && adminLayout.includes('follow: false'));
+});
+
+test('Step 21: dynamic /apply and category archive schemas, shared BlogPosting summary helper, ISR sitemap, and llms.txt /apply', () => {
+  const jsonLd = read('src/lib/json-ld.ts');
+  assert.ok(jsonLd.includes('export function blogPostSummaryJsonLd'));
+
+  const updatesPage = read('src/app/updates/page.tsx');
+  const categoryPage = read('src/app/updates/category/[category]/page.tsx');
+  assert.ok(updatesPage.includes('blogPostSummaryJsonLd('));
+  assert.ok(categoryPage.includes("'@type': ['CollectionPage', 'Blog']"));
+  assert.ok(categoryPage.includes('blogPostSummaryJsonLd('));
+
+  const applyPage = read('src/app/apply/page.tsx');
+  assert.ok(applyPage.includes("publisher: { '@id': `${SITE_URL}/#organization` }"));
+
+  const intakesPage = read('src/app/china-intakes-deadlines/page.tsx');
+  assert.ok(intakesPage.includes('primaryImageOfPage:'));
+
+  const sitemapTs = read('src/app/sitemap.ts');
+  assert.ok(/export const revalidate\s*=\s*\d+/.test(sitemapTs), 'sitemap.ts must configure ISR revalidation');
+
+  assert.ok(read('public/llms.txt').includes('https://eduexpressint.com/apply'));
+});
+
+test('Step 22: flagship update SERP metadata lengths, clamped update fallback metadata, and March 2027 Knowledge Graph image', () => {
+  const syncScript = read('scripts/sync-seo-content-hygiene.mjs');
+  for (const slug of [
+    'csca-guide-study-in-china',
+    'china-k-visa',
+    'complete-csc-universities-list-2026',
+    'how-to-apply-csc-type-a-scholarship-complete-guide',
+  ]) {
+    assert.ok(syncScript.includes(`slug: '${slug}'`), `sync script must include ${slug}`);
+  }
+  for (const match of syncScript.matchAll(/metaTitle:\s*'([^']+)'/g)) {
+    assert.ok(match[1].length <= 60, `sync metaTitle too long (${match[1].length}): ${match[1]}`);
+  }
+  for (const match of syncScript.matchAll(/metaDescription:\s*\n\s*'([^']+)'/g)) {
+    assert.ok(match[1].length >= 120 && match[1].length <= 160, `sync metaDescription out of 120..160 (${match[1].length}): ${match[1]}`);
+  }
+
+  const updateSlugPage = read('src/app/updates/[slug]/page.tsx');
+  assert.ok(updateSlugPage.includes('clampMetaText('));
+  assert.ok(updateSlugPage.includes('description: metaDescription'));
+
+  const marchPage = read('src/app/china-march-2027-intake/page.tsx');
+  assert.ok(marchPage.includes("locale: 'en_GB'"));
+  assert.ok(marchPage.includes("about: { '@id': `${SITE}/#organization` }"));
+  assert.ok(marchPage.includes('primaryImageOfPage:'));
+});

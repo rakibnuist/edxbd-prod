@@ -50,6 +50,7 @@ const structuredData = {
   inLanguage: 'en-BD',
   isPartOf: { '@id': `${SITE_URL}/#website` },
   about: { '@id': `${SITE_URL}/#organization` },
+  publisher: { '@id': `${SITE_URL}/#organization` },
   breadcrumb: { '@id': `${SITE_URL}${PATH}#breadcrumb` },
 };
 

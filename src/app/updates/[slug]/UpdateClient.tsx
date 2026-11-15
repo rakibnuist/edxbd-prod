@@ -7,6 +7,7 @@ import { ArrowRight, CalendarClock, Check, ChevronRight, Clock, ExternalLink, Li
 import HomeLeadForm from '@/components/lead/HomeLeadForm';
 import { teamMembers } from '@/data/teamMembers';
 import { config } from '@/lib/config';
+import { normalizeContentAuthor } from '@/lib/content-author';
 import { trackPhoneClick, trackWhatsAppClick } from '@/lib/conversion-events';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import type { UpdateClientProps } from '@/lib/types';
@@ -28,7 +29,8 @@ const host = (url: string) => {
 
 export default function UpdateClient({ update, related = [], stale }: UpdateClientProps) {
   const [copied, setCopied] = useState(false);
-  const teamMember = teamMembers.find(m => m.name.toLowerCase() === (update.author || '').trim().toLowerCase());
+  const authorName = normalizeContentAuthor(update.author);
+  const teamMember = teamMembers.find(m => m.name.toLowerCase() === authorName.toLowerCase());
   const pageUrl = `${SITE}/updates/${update.slug}`;
   const category = update.category || update.categories?.[0] || 'Update';
   const words = update.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
@@ -93,7 +95,7 @@ export default function UpdateClient({ update, related = [], stale }: UpdateClie
 
           <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-[15px] text-ink-soft">
             <span>
-              By <strong className="text-petrol-800">{update.author || 'EduExpress International'}</strong>
+              By <strong className="text-petrol-800">{authorName}</strong>
               {teamMember ? `, ${teamMember.role}` : ''}
             </span>
             {published && <span>Published <time dateTime={update.publishedAt || update.createdAt}>{published}</time></span>}

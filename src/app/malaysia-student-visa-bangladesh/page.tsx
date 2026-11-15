@@ -96,22 +96,16 @@ export default async function MalaysiaStudentVisaPage() {
         '@type': 'WebPage',
         '@id': `${canonical}#page`,
         url: canonical,
+        mainEntityOfPage: canonical,
+        dateModified: '2026-11-15',
         name: 'Malaysia Student Visa from Bangladesh | EMGS eVAL, SEV & Embassy Checklist',
         description:
           'Step-by-step Malaysia student visa and pass guide for Bangladeshi students: EMGS portal tracking, Dhaka High Commission checklist, post-arrival medical, and i-KAD.',
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
+        breadcrumb: { '@id': `${canonical}#breadcrumb` },
         ...citationJsonLd(MALAYSIA_VISA_SOURCES),
-      },
-      {
-        '@type': 'FAQPage',
-        '@id': `${canonical}#faq`,
-        mainEntity: faqs.map((faq) => ({
-          '@type': 'Question',
-          name: faq.question,
-          acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-        })),
       },
     ],
   };

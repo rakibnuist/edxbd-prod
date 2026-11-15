@@ -31,11 +31,17 @@ const ACTIVE_CHINA_METADATA_DEFAULTS = [
   {
     slug: 'csca-guide-study-in-china',
     category: 'Exam Guide',
+    metaTitle: '2026 CSCA Entrance Test Guide: China | EduExpress',
+    metaDescription:
+      '2026 China CSCA entrance exam guide for Bangladeshi students: test structure, schedule, registration fees, scoring and preparation rules.',
     sources: ['https://www.csca.cn', 'https://www.campuschina.org/'],
   },
   {
     slug: 'china-k-visa',
     category: 'Visa & Policy',
+    metaTitle: 'China K-Visa Guide for STEM Graduates | EduExpress',
+    metaDescription:
+      'China K-Visa guide for Bangladeshi STEM graduates: eligibility rules, required documents and application steps without employer sponsorship.',
     sources: [
       'https://bd.china-embassy.gov.cn/eng/',
       'https://www.visaforchina.cn/DAC3_EN/qianzhengyewu',
@@ -44,11 +50,17 @@ const ACTIVE_CHINA_METADATA_DEFAULTS = [
   {
     slug: 'complete-csc-universities-list-2026',
     category: 'Scholarships',
+    metaTitle: 'CSC Universities List 2026 (306 Schools) | EduExpress',
+    metaDescription:
+      'Directory of 306 Chinese universities accepting Chinese Government Scholarship (CSC) applications for 2026, with verified admission criteria.',
     sources: ['https://www.campuschina.org/'],
   },
   {
     slug: 'how-to-apply-csc-type-a-scholarship-complete-guide',
     category: 'Scholarships',
+    metaTitle: 'CSC Type A Scholarship Application Guide | EduExpress',
+    metaDescription:
+      'Step-by-step CSC Type A (Bilateral Program) scholarship guide for Bangladeshi applicants: eligibility rules, required documents and key deadlines.',
     sources: ['https://www.campuschina.org/'],
   },
 ];
@@ -86,8 +98,15 @@ async function main() {
 
     const patch = {};
     if (!row.category && spec.category) patch.category = spec.category;
-    if ((!row.excerpt || !row.excerpt.trim()) && row.metaDescription?.trim()) {
-      patch.excerpt = row.metaDescription.trim();
+    if (spec.metaTitle && (!row.metaTitle?.trim() || row.metaTitle.trim().length > 60)) {
+      patch.metaTitle = spec.metaTitle;
+    }
+    if (spec.metaDescription && (!row.metaDescription?.trim() || row.metaDescription.trim().length > 160)) {
+      patch.metaDescription = spec.metaDescription;
+    }
+    const nextMetaDescription = patch.metaDescription ?? row.metaDescription;
+    if ((!row.excerpt || !row.excerpt.trim()) && nextMetaDescription?.trim()) {
+      patch.excerpt = nextMetaDescription.trim();
     }
     if (!row.publishedAt && row.createdAt) {
       patch.publishedAt = row.createdAt;
@@ -179,6 +198,22 @@ async function main() {
     });
     updated++;
     console.log('Cleaned "100% free admission processing" superlatives in university-profile-details.');
+  }
+
+  // 6. Replace blank or generic "Admin"/"Administrator" Content authors with the organization name
+  const contentRows = await prisma.content.findMany({
+    select: { id: true, slug: true, author: true },
+  });
+  for (const row of contentRows) {
+    const trimmed = typeof row.author === 'string' ? row.author.trim() : '';
+    if (!trimmed || /^(admin|administrator|eduexpress)$/i.test(trimmed)) {
+      await prisma.content.update({
+        where: { id: row.id },
+        data: { author: 'EduExpress International' },
+      });
+      updated++;
+      console.log(`Normalized generic Content author for ${row.slug}.`);
+    }
   }
 
   console.log(`SEO content hygiene sync complete (rows updated: ${updated}).`);

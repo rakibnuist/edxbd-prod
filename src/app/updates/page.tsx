@@ -9,6 +9,7 @@ import HomeLeadForm from '@/components/lead/HomeLeadForm';
 import UpdateCard from '@/components/updates/UpdateCard';
 import { getPublishedUpdates } from '@/lib/content-records';
 import { config } from '@/lib/config';
+import { blogPostSummaryJsonLd } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
 import { fmtDay, openByDeadline, requestTime } from '@/lib/update-deadlines';
 import type { Update } from '@/lib/types';
@@ -80,7 +81,7 @@ export default async function UpdatesPage() {
 
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'Blog',
+    '@type': ['CollectionPage', 'Blog'],
     '@id': 'https://eduexpressint.com/updates#blog',
     url: 'https://eduexpressint.com/updates',
     mainEntityOfPage: 'https://eduexpressint.com/updates',
@@ -91,13 +92,7 @@ export default async function UpdatesPage() {
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
     breadcrumb: { '@id': 'https://eduexpressint.com/updates#breadcrumb' },
     publisher: { '@id': 'https://eduexpressint.com/#organization' },
-    blogPost: updates.slice(0, 30).map(update => ({
-      '@type': 'BlogPosting',
-      headline: update.title,
-      url: `https://eduexpressint.com/updates/${update.slug}`,
-      datePublished: update.publishedAt || update.createdAt,
-      ...(update.featuredImage ? { image: update.featuredImage.startsWith('/') ? `https://eduexpressint.com${update.featuredImage}` : update.featuredImage } : {}),
-    })),
+    blogPost: blogPostSummaryJsonLd(updates.slice(0, 30)),
   };
 
   return (

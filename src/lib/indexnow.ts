@@ -195,6 +195,7 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/find-education',
     '/destinations',
     '/universities',
+    '/apply',
     '/programs',
     '/compare-costs',
     '/your-study-journey',

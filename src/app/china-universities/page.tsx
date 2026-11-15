@@ -74,7 +74,20 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
   const structuredData = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'CollectionPage', '@id': `${canonical}#page`, url: canonical, name: 'China Universities for Bangladeshi Students', inLanguage: 'en-BD', isPartOf: { '@id': `${SITE}/#website` }, breadcrumb: { '@id': `${canonical}#breadcrumb` }, mainEntity: { '@id': `${canonical}#directory` } },
+      {
+        '@type': 'CollectionPage',
+        '@id': `${canonical}#page`,
+        url: canonical,
+        mainEntityOfPage: canonical,
+        name: 'China Universities for Bangladeshi Students',
+        description:
+          'Compare Chinese university records for Bangladeshi students by subject, degree, teaching language, city and intake, with recorded costs and source status.',
+        inLanguage: 'en-BD',
+        isPartOf: { '@id': `${SITE}/#website` },
+        publisher: { '@id': `${SITE}/#organization` },
+        breadcrumb: { '@id': `${canonical}#breadcrumb` },
+        mainEntity: { '@id': `${canonical}#directory` },
+      },
       { '@type': 'ItemList', '@id': `${canonical}#directory`, numberOfItems: visibleUniversities.length, itemListElement: visibleUniversities.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, url: `${SITE}/universities/${item.slug}` })) },
       ...visibleUniversities.map(item => ({
         '@type': 'CollegeOrUniversity',

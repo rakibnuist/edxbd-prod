@@ -30,21 +30,32 @@ const structuredData = {
       '@type': 'WebPage',
       '@id': `${PAGE_URL}#webpage`,
       url: PAGE_URL,
+      mainEntityOfPage: PAGE_URL,
       name: 'Education consultant in Dhanmondi, Dhaka',
+      description:
+        'Visit EduExpress International Bangladesh in Dhanmondi, Dhaka for education fit guidance, university comparison, complete cost planning and application support.',
       inLanguage: 'en-BD',
+      dateModified: '2026-11-15',
       about: ORG,
+      publisher: ORG,
+      reviewedBy: ORG,
       isPartOf: { '@id': 'https://eduexpressint.com/#website' },
       breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
       mainEntity: { '@id': `${PAGE_URL}#service` },
+      primaryImageOfPage: { '@type': 'ImageObject', url: 'https://eduexpressint.com/images/office/dhanmondi-desk.webp' },
     },
     {
       '@type': 'Service',
       '@id': `${PAGE_URL}#service`,
-      name: 'Study abroad education consultancy',
+      name: 'Study abroad education consultancy in Dhanmondi, Dhaka',
+      url: PAGE_URL,
       serviceType: 'Education consultancy',
-      description: 'Education fit guidance, university comparison, complete cost planning and application support from the Dhanmondi office.',
+      description: 'Education fit guidance, university comparison, complete cost planning and application support from the Dhanmondi, Dhaka office.',
       provider: ORG,
-      areaServed: { '@type': 'Country', name: 'Bangladesh' },
+      areaServed: [
+        { '@type': 'City', name: 'Dhaka' },
+        { '@type': 'Country', name: 'Bangladesh' },
+      ],
     },
   ],
 };
@@ -117,6 +128,7 @@ export default async function EducationConsultantDhakaPage() {
                 <h2 className="text-[22px] font-semibold leading-snug tracking-[-0.02em] text-petrol-800">{office.name}</h2>
                 <ul className="mt-4 space-y-3 text-[16px] leading-6 text-ink-soft">
                   <li className="flex gap-3"><MapPin size={19} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" /><span>{office.address}</span></li>
+                  <li className="flex gap-3"><Phone size={19} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" /><span>{[office.phonePrimary, office.phoneSecondary].filter((value): value is string => Boolean(value)).map(formatBangladeshPhone).join(' / ')}</span></li>
                   <li className="flex gap-3"><Clock size={19} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" /><span>{office.hours}</span></li>
                 </ul>
                 {(() => {
@@ -148,6 +160,14 @@ export default async function EducationConsultantDhakaPage() {
             </li>
           ))}
         </ol>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/study-in-china-from-bangladesh" className="ed-btn ed-btn-outline min-h-[46px] px-5 text-[15px]">Study in China hub</Link>
+          <Link href="/china-study-report-bangladesh" className="ed-btn ed-btn-outline min-h-[46px] px-5 text-[15px]">China data &amp; cost report</Link>
+          <Link href="/fees-and-transparency" className="ed-btn ed-btn-outline min-h-[46px] px-5 text-[15px]">Fees &amp; transparency</Link>
+          <Link href="/how-we-verify-universities" className="ed-btn ed-btn-outline min-h-[46px] px-5 text-[15px]">How we verify universities</Link>
+          <Link href="/china-visa-first-policy" className="ed-btn ed-btn-outline min-h-[46px] px-5 text-[15px]">China visa-first policy</Link>
+          <Link href="/success-stories" className="ed-btn ed-btn-outline min-h-[46px] px-5 text-[15px]">Student stories</Link>
+        </div>
       </Section>
 
       {records.length > 0 && (

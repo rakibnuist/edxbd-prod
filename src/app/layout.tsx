@@ -200,7 +200,8 @@ export default async function RootLayout({
       "https://www.facebook.com/eduexpressint",
       "https://www.linkedin.com/company/eduexpress",
       "https://www.instagram.com/eduexpressint/",
-      "https://www.youtube.com/@EduExpressInt"
+      "https://www.youtube.com/@EduExpressInt",
+      "https://twitter.com/eduexpressint"
     ],
     "serviceArea": {
       "@type": "Country",
@@ -273,6 +274,22 @@ export default async function RootLayout({
         "priceCurrency": "BDT"
       }
     ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://eduexpressint.com/#website",
+      "url": "https://eduexpressint.com/",
+      "name": "EduExpress International",
+      "inLanguage": ["en-BD", "bn-BD"],
+      "publisher": { "@id": "https://eduexpressint.com/#organization" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://eduexpressint.com/universities?search={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
     }
     ]
   };

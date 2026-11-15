@@ -5,7 +5,6 @@ import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import DestinationsClient from './DestinationsClient';
 import { DESTINATION_PHOTOS } from '@/components/destinations/DestinationCover';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
-import { config } from '@/lib/config';
 import { activeCountries } from '@/lib/countries';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { SITE_URL, absoluteUrl, destinationPath } from '@/lib/site-urls';
@@ -36,7 +35,6 @@ const researchLinks = [
 ];
 
 export default function DestinationsPage() {
-  const { address } = config.contact;
   const structuredData = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -44,13 +42,17 @@ export default function DestinationsPage() {
         '@type': 'WebPage',
         '@id': `${canonical}#webpage`,
         url: canonical,
+        mainEntityOfPage: canonical,
         name: 'Study abroad destinations for Bangladeshi students',
         description: 'Compare active study destination services with education fit, institution checks, recognition, clear costs and visa readiness.',
         inLanguage: 'en-BD',
         dateModified: LAST_REVIEWED,
         isPartOf: { '@id': `${SITE_URL}/#website` },
         about: { '@id': `${SITE_URL}/#organization` },
+        publisher: { '@id': `${SITE_URL}/#organization` },
+        mainEntity: { '@id': `${canonical}#destinations` },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
+        primaryImageOfPage: { '@type': 'ImageObject', url: absoluteUrl('/og/destinations.jpg') },
       },
       {
         '@type': 'ItemList',
@@ -63,27 +65,6 @@ export default function DestinationsPage() {
           name: `Study in ${country.name} from Bangladesh`,
           url: absoluteUrl(destinationPath(country.slug)),
         })),
-      },
-      {
-        '@type': 'EducationalOrganization',
-        '@id': `${SITE_URL}/#organization`,
-        name: 'EduExpress International',
-        url: SITE_URL,
-        logo: absoluteUrl('/logo.png'),
-        description: 'Evidence-first education consultancy helping Bangladeshi students compare overseas study options with written proof.',
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: address.street,
-          addressLocality: address.city,
-          postalCode: address.postalCode,
-          addressCountry: address.country,
-        },
-        contactPoint: {
-          '@type': 'ContactPoint',
-          telephone: config.contact.phone,
-          contactType: 'customer service',
-          email: config.contact.email,
-        },
       },
     ],
   };

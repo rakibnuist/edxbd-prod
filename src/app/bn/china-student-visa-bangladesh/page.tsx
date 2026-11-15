@@ -38,9 +38,9 @@ const trail: Crumb[] = [
 ];
 
 export const metadata = pageMetadata({
-  title: 'চায়না স্টুডেন্ট ভিসা (X1 ও X2) আবেদন গাইড ২০২৭: ঢাকা এম্বাসি চেকলিস্ট | EduExpress',
+  title: 'চায়না স্টুডেন্ট ভিসা (X1 ও X2) গাইড ২০২৭ | EduExpress',
   description:
-    'বাংলাদেশী শিক্ষার্থীদের জন্য চায়না স্টুডেন্ট ভিসা (X1/X2) আবেদন নির্দেশিকা: JW202/JW201 ফর্ম, এম্বাসি ডকুমেন্টস চেকলিস্ট, ভিসা ফি এবং ভিসা নিশ্চিতের আগে BDT 0 সার্ভিস ফি পলিসি।',
+    'চায়না স্টুডেন্ট ভিসা (X1/X2) আবেদন নির্দেশিকা: JW202/JW201 ফর্ম, ঢাকা ভিসা সেন্টার ডকুমেন্টস চেকলিস্ট ও ভিসা নিশ্চিতের আগে BDT 0 সার্ভিস ফি।',
   path: PATH,
   image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
   type: 'article',
@@ -193,8 +193,11 @@ const structuredData = {
   headline: 'চায়না স্টুডেন্ট ভিসা (X1 ও X2) আবেদন গাইড ২০২৭: ঢাকা এম্বাসি প্রসেস',
   description:
     'বাংলাদেশী শিক্ষার্থীদের জন্য চায়না স্টুডেন্ট ভিসা আবেদন, ঢাকা ভিসা সেন্টারের নিয়মাবলী ও পোস্ট-অ্যারাইভাল গাইড।',
+  image: `${SITE}/og/china.jpg`,
   inLanguage: 'bn-BD',
   mainEntityOfPage: `${SITE}${PATH}`,
+  datePublished: '2026-11-15T00:00:00Z',
+  dateModified: '2026-11-15T00:00:00Z',
   author: { '@id': `${SITE}/#organization` },
   reviewedBy: { '@id': `${SITE}/#organization` },
   publisher: { '@id': `${SITE}/#organization` },

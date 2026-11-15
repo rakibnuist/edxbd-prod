@@ -55,9 +55,13 @@ export default async function ProgramsPage() {
               '@type': 'CollectionPage',
               '@id': `${url}#page`,
               url,
+              mainEntityOfPage: url,
               name: 'China University Programs and Tuition Finder',
+              description:
+                'Search bachelor, master, PhD, MBBS and Chinese language programs at Chinese universities by yearly tuition, language, city and deadline.',
               inLanguage: 'en-BD',
               isPartOf: { '@id': `${SITE_URL}/#website` },
+              publisher: { '@id': `${SITE_URL}/#organization` },
               about: { '@type': 'Thing', name: 'Higher education in China' },
               breadcrumb: { '@id': `${url}#breadcrumb` },
               mainEntity: { '@id': `${url}#segments` },

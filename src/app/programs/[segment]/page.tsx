@@ -65,7 +65,21 @@ export default async function ProgramSegmentPage({ params }: Props) {
 
   return (
     <>
-      <JsonLd data={{ '@context': 'https://schema.org', '@type': 'CollectionPage', '@id': `${url}#page`, url, name: segment.h1, description: segment.description, inLanguage: 'en-BD', isPartOf: { '@id': `${SITE_URL}/#website` }, breadcrumb: { '@id': `${url}#breadcrumb` } }} />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          '@id': `${url}#page`,
+          url,
+          mainEntityOfPage: url,
+          name: segment.h1,
+          description: segment.description,
+          inLanguage: 'en-BD',
+          isPartOf: { '@id': `${SITE_URL}/#website` },
+          publisher: { '@id': `${SITE_URL}/#organization` },
+          breadcrumb: { '@id': `${url}#breadcrumb` },
+        }}
+      />
       <PageHero
         path={path}
         trail={[{ name: 'Programs', path: '/programs' }, { name: segment.h1 }]}

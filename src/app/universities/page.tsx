@@ -136,13 +136,19 @@ export default async function UniversitiesPage({ searchParams }: Props) {
         '@type': 'CollectionPage',
         '@id': `${canonical}#page`,
         url: canonical,
+        mainEntityOfPage: canonical,
         name: 'Universities and Study Options',
+        description:
+          'Find and compare verified universities, programs, tuition and scholarships across study destinations for Bangladeshi students.',
         inLanguage: 'en-BD',
         isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+        publisher: { '@id': 'https://eduexpressint.com/#organization' },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
+        mainEntity: { '@id': `${canonical}#directory` },
       },
       {
         '@type': 'ItemList',
+        '@id': `${canonical}#directory`,
         numberOfItems: visibleUniversities.length,
         itemListElement: visibleUniversities.map((item, index) => ({
           '@type': 'ListItem', position: index + 1, name: item.name, url: `${canonical}/${item.slug}`

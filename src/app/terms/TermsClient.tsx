@@ -42,11 +42,13 @@ export default function TermsClient() {
     '@type': 'WebPage',
     '@id': `${PAGE_URL}#webpage`,
     url: PAGE_URL,
+    mainEntityOfPage: PAGE_URL,
     name: 'Terms of service',
     description: 'The written terms governing EduExpress International student evaluations, fee schedules and application support.',
     inLanguage: 'en-BD',
     dateModified: POLICY_VERSION,
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+    publisher: { '@id': 'https://eduexpressint.com/#organization' },
     about: { '@id': 'https://eduexpressint.com/#organization' },
     breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
   };

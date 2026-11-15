@@ -187,12 +187,15 @@ export default async function StudyInMalaysiaPage() {
         '@type': 'WebPage',
         '@id': `${canonical}#page`,
         url: canonical,
+        mainEntityOfPage: canonical,
+        dateModified: '2026-11-15',
         name: 'Study in Malaysia from Bangladesh | Costs, Visa & Universities',
         description:
           'Comprehensive guide for Bangladeshi students: MQA accreditation, UK/AU dual degrees, EMGS eVAL visa guide, itemized costs, and BDT 0 service charge.',
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
+        breadcrumb: { '@id': `${canonical}#breadcrumb` },
         ...citationJsonLd(MALAYSIA_HUB_SOURCES),
       },
       {
@@ -205,15 +208,6 @@ export default async function StudyInMalaysiaPage() {
           position: i + 1,
           name: u.name,
           url: `${SITE}/universities/${u.slug}`,
-        })),
-      },
-      {
-        '@type': 'FAQPage',
-        '@id': `${canonical}#faq`,
-        mainEntity: faqs.map((faq) => ({
-          '@type': 'Question',
-          name: faq.question,
-          acceptedAnswer: { '@type': 'Answer', text: faq.answer },
         })),
       },
     ],

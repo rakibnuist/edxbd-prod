@@ -65,7 +65,20 @@ export default async function CityPage({ params }: Props) {
       <JsonLd data={{
         '@context': 'https://schema.org',
         '@graph': [
-          { '@type': 'CollectionPage', '@id': `${url}#page`, url, name: `Universities in ${match.city}, China`, inLanguage: 'en-BD', isPartOf: { '@id': `${SITE_URL}/#website` }, breadcrumb: { '@id': `${url}#breadcrumb` }, mainEntity: { '@id': `${url}#city-universities` }, about: { '@type': 'City', name: match.city, containedInPlace: { '@type': 'Country', name: 'China' } } },
+          {
+            '@type': 'CollectionPage',
+            '@id': `${url}#page`,
+            url,
+            mainEntityOfPage: url,
+            name: `Universities in ${match.city}, China`,
+            description: `Compare recorded universities, yearly CNY tuition, English-taught programs and scholarships in ${match.city}, China for Bangladeshi students.`,
+            inLanguage: 'en-BD',
+            isPartOf: { '@id': `${SITE_URL}/#website` },
+            publisher: { '@id': `${SITE_URL}/#organization` },
+            breadcrumb: { '@id': `${url}#breadcrumb` },
+            mainEntity: { '@id': `${url}#city-universities` },
+            about: { '@type': 'City', name: match.city, containedInPlace: { '@type': 'Country', name: 'China' } },
+          },
           { '@type': 'ItemList', '@id': `${url}#city-universities`, numberOfItems: match.universities.length, itemListElement: match.universities.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, url: `${SITE_URL}/universities/${item.slug}` })) },
         ],
       }} />

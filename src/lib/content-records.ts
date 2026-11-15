@@ -3,6 +3,7 @@ import 'server-only';
 import { cache } from 'react';
 import prisma from '@/lib/prisma';
 import type { Update } from '@/lib/types';
+import { normalizeContentAuthor } from '@/lib/content-author';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { sanitizeUpdateHtml } from '@/lib/content-html';
 
@@ -32,7 +33,7 @@ export const serializeUpdate = (record: Awaited<ReturnType<typeof prisma.content
     sourceUrls: parseList(record.sourceUrls),
     featuredImage: record.featuredImage || undefined,
     isFeatured: record.isFeatured,
-    author: record.author,
+    author: normalizeContentAuthor(record.author),
     reviewer: record.reviewer || undefined,
     publishedAt: record.publishedAt?.toISOString(),
     archived: Boolean(record.archivedAt),

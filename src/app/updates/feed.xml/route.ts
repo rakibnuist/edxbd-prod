@@ -1,4 +1,6 @@
 import prisma from '@/lib/prisma';
+import { config } from '@/lib/config';
+import { normalizeContentAuthor } from '@/lib/content-author';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { categoriesFromUpdate } from '@/lib/update-categories';
 import { htmlToText } from '@/lib/content-html';
@@ -38,11 +40,16 @@ export async function GET() {
       },
     });
 
+    const formatRssMailbox = (name: string) =>
+      name.includes('@') ? name : `${config.contact.email} (${name})`;
+
     const items = posts.map(post => {
       const link = `${SITE_URL}/updates/${post.slug}`;
       const pubDate = (post.publishedAt || post.updatedAt).toUTCString();
       const description = post.excerpt || htmlToText(post.content, 280);
       const categories = Array.from(new Set(categoriesFromUpdate(post)));
+      const authorName = normalizeContentAuthor(post.author);
+      const authorEmail = formatRssMailbox(authorName);
       return [
         '    <item>',
         `      <title>${escapeXml(post.title)}</title>`,
@@ -50,7 +57,8 @@ export async function GET() {
         `      <guid isPermaLink="true">${escapeXml(link)}</guid>`,
         `      <pubDate>${pubDate}</pubDate>`,
         `      <description>${escapeXml(description)}</description>`,
-        `      <author>${escapeXml(post.author || 'EduExpress International')}</author>`,
+        `      <author>${escapeXml(authorEmail)}</author>`,
+        `      <dc:creator>${escapeXml(authorName)}</dc:creator>`,
         ...categories.map(category => `      <category>${escapeXml(category)}</category>`),
         '    </item>',
       ].join('\n');
@@ -60,13 +68,15 @@ export async function GET() {
       ? (posts[0].publishedAt || posts[0].updatedAt).toUTCString()
       : new Date().toUTCString();
 
+    const editorIdentity = escapeXml(formatRssMailbox('EduExpress International'));
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>EduExpress International — Updates &amp; Guides</title>
     <link>${SITE_URL}/updates</link>
     <atom:link href="${SITE_URL}/updates/feed.xml" rel="self" type="application/rss+xml" />
     <description>Verified study-abroad updates, guides and university announcements for Bangladeshi students.</description>
+    <managingEditor>${editorIdentity}</managingEditor>
     <language>en-bd</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <image>

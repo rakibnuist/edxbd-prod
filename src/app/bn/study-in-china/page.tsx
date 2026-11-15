@@ -76,6 +76,7 @@ const structuredData = {
   name: 'বাংলাদেশী শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা ২০২৭',
   inLanguage: 'bn-BD',
   mainEntityOfPage: `${SITE}${PATH}`,
+  dateModified: '2026-11-15T00:00:00Z',
   reviewedBy: { '@id': `${SITE}/#organization` },
   isPartOf: { '@id': `${SITE}/#website` },
   publisher: { '@id': `${SITE}/#organization` },

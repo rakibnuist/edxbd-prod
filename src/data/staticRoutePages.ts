@@ -8,7 +8,7 @@
 // Values are recorded content review dates used for sitemap <lastmod>. New
 // routes without a recorded review date omit it rather than inventing one.
 export const staticRouteGuides: Record<string, string | undefined> = {
-  'china-universities': '2026-07-19',
+  'china-universities': '2026-11-15',
   'china-student-visa-bangladesh': '2026-07-19',
   'study-in-china-cost-bangladesh': '2026-07-19',
   'study-in-china-without-ielts': '2026-07-19',
@@ -21,8 +21,8 @@ export const staticRouteGuides: Record<string, string | undefined> = {
 
 // Non-guide pages that also own their slug via a static route.
 export const staticRoutePages: Record<string, string> = {
-  'fees-and-transparency': '2026-07-19',
-  'education-consultant-dhaka': '2026-07-19',
+  'fees-and-transparency': '2026-11-15',
+  'education-consultant-dhaka': '2026-11-15',
 };
 
 // Pages that own a static route but must NOT be listed in the main sitemap,

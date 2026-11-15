@@ -187,6 +187,8 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
   const faqTone = sources.length ? 'white' as const : 'sage' as const;
   const relatedTone = guide.faqs.length ? (faqTone === 'white' ? 'sage' : 'white') : (sources.length ? 'white' : 'sage');
 
+  const guideDateIso = checkedDates.length ? `${checkedDates[checkedDates.length - 1]}T00:00:00Z` : '2026-11-15T00:00:00Z';
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': ['WebPage', 'Article'],
@@ -195,9 +197,11 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
     headline: guide.metaTitle,
     name: guide.title,
     description: guide.description,
+    image: `${SITE}/og/china-guide.jpg`,
     inLanguage: 'en-BD',
     mainEntityOfPage: url,
-    ...(checkedDates.length ? { dateModified: `${checkedDates[checkedDates.length - 1]}T00:00:00Z` } : {}),
+    datePublished: guideDateIso,
+    dateModified: guideDateIso,
     author: { '@id': `${SITE}/#organization` },
     reviewedBy: { '@id': `${SITE}/#organization` },
     about: { '@type': 'Thing', name: 'Higher education in China for Bangladeshi students' },

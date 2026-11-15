@@ -42,11 +42,13 @@ export default function PrivacyClient() {
     '@type': 'WebPage',
     '@id': `${PAGE_URL}#webpage`,
     url: PAGE_URL,
+    mainEntityOfPage: PAGE_URL,
     name: 'Privacy policy',
     description: 'How EduExpress International collects, uses and protects student data and documents.',
     inLanguage: 'en-BD',
     dateModified: POLICY_VERSION,
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+    publisher: { '@id': 'https://eduexpressint.com/#organization' },
     about: { '@id': 'https://eduexpressint.com/#organization' },
     breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
   };

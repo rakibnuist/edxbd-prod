@@ -95,6 +95,7 @@ const structuredData = {
       name: 'Study abroad services',
       inLanguage: 'en-BD',
       about: { '@id': 'https://eduexpressint.com/#organization' },
+      publisher: { '@id': 'https://eduexpressint.com/#organization' },
       isPartOf: { '@id': 'https://eduexpressint.com/#website' },
       breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
       mainEntity: { '@id': `${PAGE_URL}#services` },

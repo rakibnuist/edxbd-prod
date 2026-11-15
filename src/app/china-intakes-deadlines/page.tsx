@@ -101,6 +101,7 @@ const structuredData = {
   isPartOf: { '@id': `${SITE}/#website` },
   publisher: { '@id': `${SITE}/#organization` },
   breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
+  primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE}/og/china.jpg` },
   ...citationJsonLd([...CHINA_REPORT_OFFICIAL_AUTHORITIES]),
 };
 

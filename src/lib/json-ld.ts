@@ -52,3 +52,31 @@ export function citationJsonLd(sources: { label: string; href: string }[]) {
     .filter((item): item is { '@type': 'CreativeWork'; name: string; url: string } => item !== null);
   return items.length ? { citation: items } : {};
 }
+
+type BlogPostSummaryInput = {
+  title: string;
+  slug: string;
+  publishedAt?: string | null;
+  createdAt: string;
+  featuredImage?: string | null;
+};
+
+/** Schema.org `BlogPosting` summary entries shared by updates and category archives. */
+export function blogPostSummaryJsonLd(posts: BlogPostSummaryInput[]) {
+  const site = 'https://eduexpressint.com';
+  return posts.map(post => {
+    const rawImage = post.featuredImage?.trim();
+    const image = rawImage
+      ? rawImage.startsWith('/')
+        ? `${site}${rawImage}`
+        : toSafeExternalUrl(rawImage)
+      : null;
+    return {
+      '@type': 'BlogPosting',
+      headline: post.title,
+      url: `${site}/updates/${post.slug}`,
+      datePublished: post.publishedAt || post.createdAt,
+      ...(image ? { image } : {}),
+    };
+  });
+}

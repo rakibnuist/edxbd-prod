@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import prisma from '@/lib/prisma';
 import { evidencePages } from '@/data/evidencePages';
 import { chinaGuidePages } from '@/data/chinaGuidePages';
-import { sitemapStaticRouteSlugs } from '@/data/staticRoutePages';
+import { sitemapStaticRouteSlugs, staticRouteGuides } from '@/data/staticRoutePages';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { categoriesFromUpdate, categorySlug } from '@/lib/update-categories';
 import { activeCountries } from '@/lib/countries';
@@ -37,6 +37,8 @@ const PAGE_IMAGES: Record<string, string[]> = {
 // - added /services, /updates, /partnership to static routes
 // - added published update posts (/updates/[slug]) so Google & AI crawlers
 //   discover every article
+export const revalidate = 300;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://eduexpressint.com';
 
@@ -49,6 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/your-study-journey',
     '/scholarships',
     '/universities',
+    '/apply',
     '/services',
     '/updates',
     '/partnership',
@@ -81,6 +84,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const STATIC_CONTENT_UPDATED = new Date('2026-11-06');
   const NOVEMBER_MID_UPDATED = new Date('2026-11-15');
   const novemberMidPaths = new Set([
+    '',
+    '/about',
+    '/apply',
+    '/compare-costs',
+    '/contact',
+    '/education-fit-assessment',
+    '/fees-and-transparency',
+    '/find-education',
+    '/for-parents',
+    '/partnership',
+    '/proof-library',
+    '/scholarships',
+    '/services',
+    '/universities',
+    '/your-study-journey',
     '/china-study-report-bangladesh',
     '/education-consultant-dhaka',
     '/study-in-china-from-bangladesh',
@@ -96,19 +114,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/malaysia-study-cost-bangladesh',
     '/malaysia-student-visa-bangladesh',
     '/programs',
+    ...programSegments.map((segment) => `/programs/${segment.slug}`),
     '/china-universities',
     '/updates',
   ]);
   const routes = staticPaths.map((route) => {
     const slug = route.replace(/^\//, '');
     const evidenceReviewedAt = evidencePages[slug]?.reviewedAt;
+    const guideDate = slug in staticRouteGuides ? staticRouteGuides[slug] : undefined;
+    const lastModified = evidenceReviewedAt
+      ? new Date(evidenceReviewedAt)
+      : slug in staticRouteGuides
+        ? guideDate
+          ? new Date(guideDate)
+          : undefined
+        : slug in chinaGuidePages
+          ? undefined
+          : novemberMidPaths.has(route)
+            ? NOVEMBER_MID_UPDATED
+            : STATIC_CONTENT_UPDATED;
     return {
       url: `${baseUrl}${route}`,
-      lastModified: evidenceReviewedAt
-        ? new Date(evidenceReviewedAt)
-        : novemberMidPaths.has(route)
-          ? NOVEMBER_MID_UPDATED
-          : STATIC_CONTENT_UPDATED,
+      ...(lastModified ? { lastModified } : {}),
       changeFrequency: 'weekly' as const,
       priority: route === '' ? 1 : route === '/education-fit-assessment' ? 0.9 : 0.8,
       ...(PAGE_IMAGES[route] ? { images: PAGE_IMAGES[route].map(abs) } : {}),
@@ -120,7 +147,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((country) => country.slug !== 'china')
     .map((country) => ({
     url: `${baseUrl}${destinationPath(country.slug)}`,
-    lastModified: country.slug === 'malaysia' ? NOVEMBER_MID_UPDATED : new Date('2026-11-06'),
+    lastModified: NOVEMBER_MID_UPDATED,
     changeFrequency: 'weekly' as const,
     priority: 0.85,
     ...(DESTINATION_PHOTOS[country.slug] ? { images: [abs(DESTINATION_PHOTOS[country.slug])] } : {}),
@@ -183,7 +210,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ? [
             {
               url: `${baseUrl}/success-stories`,
-              lastModified: STATIC_CONTENT_UPDATED,
+              lastModified: NOVEMBER_MID_UPDATED,
               changeFrequency: 'weekly' as const,
               priority: 0.75,
               ...(PAGE_IMAGES['/success-stories']
@@ -196,7 +223,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ? [
             {
               url: `${baseUrl}/china-success-stories`,
-              lastModified: STATIC_CONTENT_UPDATED,
+              lastModified: NOVEMBER_MID_UPDATED,
               changeFrequency: 'weekly' as const,
               priority: 0.75,
             },

@@ -29,6 +29,7 @@ const structuredData = {
   description: 'Company records with definitions, privacy-safe authorization and admission evidence, student feedback and office details.',
   inLanguage: 'en-BD',
   about: { '@id': 'https://eduexpressint.com/#organization' },
+  publisher: { '@id': 'https://eduexpressint.com/#organization' },
   isPartOf: { '@id': 'https://eduexpressint.com/#website' },
   breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
 };

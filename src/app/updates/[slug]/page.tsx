@@ -9,6 +9,7 @@ import type { Update } from '@/lib/types';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { teamMembers } from '@/data/teamMembers';
 import { serializeUpdate } from '@/lib/content-records';
+import { isOrganizationContentAuthor, normalizeContentAuthor } from '@/lib/content-author';
 import { categorySlug } from '@/lib/update-categories';
 import { chinaIntakeOverview } from '@/lib/china-intakes';
 import { htmlToText, sanitizeUpdateHtml } from '@/lib/content-html';
@@ -85,22 +86,30 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
 
     const tags = update.tags ? JSON.parse(update.tags) : [];
     const plainBody = htmlToText(update.content, 300);
+    const clampMetaText = (text: string, maxLen: number) => {
+      const normalized = text.replace(/\s+/g, ' ').trim();
+      if (normalized.length <= maxLen) return normalized;
+      const cut = normalized.slice(0, maxLen - 1);
+      const lastSpace = cut.lastIndexOf(' ');
+      return `${lastSpace > maxLen * 0.6 ? cut.slice(0, lastSpace) : cut}…`;
+    };
 
     // Search results show about 60 characters: keyword-first meta title plus a
     // short brand once only, falling back to the headline when it fits.
-    const base = update.metaTitle || update.title;
+    const base = (update.metaTitle || update.title).trim();
     const title = /eduexpress/i.test(base)
-      ? base
+      ? clampMetaText(base, 62)
       : `${base} | EduExpress`.length <= 62
         ? `${base} | EduExpress`
-        : base;
+        : clampMetaText(base, 62);
+    const metaDescription = clampMetaText(update.metaDescription || update.excerpt || plainBody, 160);
     const image = update.featuredImage
       ? { url: update.featuredImage, width: 1200, height: 630, alt: update.title }
       : { url: '/og-image.jpg', width: 1200, height: 630, alt: 'EduExpress International — Better Education. Clear Costs. Written Proof.' };
 
     return {
       title: { absolute: title },
-      description: update.metaDescription || update.excerpt || plainBody.slice(0, 160),
+      description: metaDescription,
       alternates: { canonical: `/updates/${slug}`, types: RSS_FEED },
       // Closed intakes stay reachable for transparency and backlinks, but they
       // must not compete in search with the current intake pages.
@@ -109,18 +118,18 @@ export async function generateMetadata({ params }: UpdatePageProps): Promise<Met
         images: [image],
         url: `/updates/${slug}`,
         locale: 'en_BD',
-        title: update.title,
-        description: update.excerpt || plainBody.slice(0, 160),
+        title,
+        description: metaDescription,
         type: 'article',
         publishedTime: update.publishedAt?.toISOString(),
         modifiedTime: update.updatedAt.toISOString(),
-        authors: update.author ? [update.author] : undefined,
+        authors: [normalizeContentAuthor(update.author)],
         tags: tags,
       },
       twitter: {
         card: 'summary_large_image',
-        title: update.title,
-        description: update.excerpt || plainBody.slice(0, 160),
+        title,
+        description: metaDescription,
         images: [image.url],
       }
     };
@@ -168,7 +177,7 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
       sourceUrls,
       featuredImage: update.featuredImage || undefined,
       isFeatured: update.isFeatured,
-      author: update.author || 'EduExpress',
+      author: normalizeContentAuthor(update.author),
       reviewer: update.reviewer || undefined,
       publishedAt: update.publishedAt?.toISOString(),
       lastVerifiedAt: update.lastVerifiedAt?.toISOString(),
@@ -185,8 +194,19 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
 
     const canonical = `https://eduexpressint.com/updates/${update.slug}`;
     // E-E-A-T: posts signed by a listed team member get a Person author with
-    // their verified role; anonymous bylines stay attributed to the organization.
-    const teamMember = teamMembers.find(m => m.name.toLowerCase() === (update.author || '').trim().toLowerCase());
+    // their verified role; anonymous or generic admin bylines stay attributed to the organization.
+    const authorName = normalizeContentAuthor(update.author);
+    const teamMember = teamMembers.find(m => m.name.toLowerCase() === authorName.toLowerCase());
+    const authorSchema = teamMember
+      ? {
+          '@type': 'Person',
+          name: teamMember.name,
+          jobTitle: teamMember.role,
+          worksFor: { '@type': 'Organization', '@id': 'https://eduexpressint.com/#organization' },
+        }
+      : isOrganizationContentAuthor(authorName)
+        ? { '@id': 'https://eduexpressint.com/#organization' }
+        : { '@type': 'Organization', name: authorName, url: 'https://eduexpressint.com' };
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
@@ -198,17 +218,12 @@ export default async function UpdatePage({ params }: UpdatePageProps) {
         : ['https://eduexpressint.com/og-image.jpg'],
       datePublished: update.publishedAt?.toISOString() || update.createdAt.toISOString(),
       dateModified: update.updatedAt.toISOString(),
-      author: teamMember
-        ? {
-            '@type': 'Person',
-            name: teamMember.name,
-            jobTitle: teamMember.role,
-            worksFor: { '@type': 'Organization', '@id': 'https://eduexpressint.com/#organization' },
-          }
-        : { '@type': 'Organization', name: update.author || 'EduExpress International', url: 'https://eduexpressint.com' },
+      author: authorSchema,
       publisher: { '@id': 'https://eduexpressint.com/#organization' },
       reviewedBy: { '@id': 'https://eduexpressint.com/#organization' },
+      isPartOf: { '@id': 'https://eduexpressint.com/#website' },
       mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+      breadcrumb: { '@id': `${canonical}#breadcrumb` },
       inLanguage: 'en-BD',
       keywords: tags.join(', ') || undefined,
       articleSection: categories[0] || update.category || undefined,

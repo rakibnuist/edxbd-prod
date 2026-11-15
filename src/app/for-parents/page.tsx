@@ -40,6 +40,7 @@ const structuredData = {
   inLanguage: 'en-BD',
   audience: { '@type': 'Audience', audienceType: 'Parents of students planning to study abroad' },
   about: { '@id': 'https://eduexpressint.com/#organization' },
+  publisher: { '@id': 'https://eduexpressint.com/#organization' },
   isPartOf: { '@id': 'https://eduexpressint.com/#website' },
   breadcrumb: { '@id': 'https://eduexpressint.com/for-parents#breadcrumb' },
 };

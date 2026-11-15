@@ -22,10 +22,13 @@ const structuredData = {
   '@type': 'WebPage',
   '@id': `${PAGE_URL}#webpage`,
   url: PAGE_URL,
+  mainEntityOfPage: PAGE_URL,
+  dateModified: '2026-11-15',
   name: 'EduExpress Global Partner Programme',
   description: 'Documented cooperation models for education agencies and referral partners, with a published China partner service schedule.',
   inLanguage: 'en-BD',
   about: { '@id': 'https://eduexpressint.com/#organization' },
+  publisher: { '@id': 'https://eduexpressint.com/#organization' },
   isPartOf: { '@id': 'https://eduexpressint.com/#website' },
   breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
 };

@@ -49,6 +49,7 @@ lint_results.*
 temp_*.html
 curl_*_stderr.txt
 analyze_*.js
+*.csv
 
 # vercel
 .vercel

@@ -12,7 +12,27 @@ const evidenceSlugs = [
 ] as const;
 
 const pages: { path: string; lastmod: string }[] = [
-  ...['', '/find-education', '/destinations', '/universities', '/programs', ...programSegments.map(segment => `/programs/${segment.slug}`), '/scholarships', '/compare-costs', '/your-study-journey', '/services', '/updates', '/partnership', '/education-fit-assessment', '/for-parents', '/proof-library', '/about', '/contact', '/fees-and-transparency'].map(path => ({ path, lastmod: '2026-11-06' })),
+  { path: '/destinations', lastmod: '2026-11-06' },
+  ...[
+    '',
+    '/find-education',
+    '/universities',
+    '/apply',
+    '/programs',
+    ...programSegments.map(segment => `/programs/${segment.slug}`),
+    '/scholarships',
+    '/compare-costs',
+    '/your-study-journey',
+    '/services',
+    '/updates',
+    '/partnership',
+    '/education-fit-assessment',
+    '/for-parents',
+    '/proof-library',
+    '/about',
+    '/contact',
+    '/fees-and-transparency',
+  ].map(path => ({ path, lastmod: '2026-11-15' })),
   ...evidenceSlugs.map(slug => ({
     path: `/${slug}`,
     lastmod: evidencePages[slug]?.reviewedAt ?? '2026-11-15',
