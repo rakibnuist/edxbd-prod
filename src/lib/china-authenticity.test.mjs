@@ -785,3 +785,26 @@ test('Step 26: shared primaryImageOfPageSchema covers all 20 remaining routes an
     assert.equal(actual, check.sizes, `${check.rel} dimensions mismatch: got ${actual}, expected ${check.sizes}`);
   }
 });
+
+test('Step 27: Bing & AI citation optimization — llms, dynamic IndexNow sitemap parity, related post dedupe, and CSC directory links', () => {
+  const llms = read('public/llms.txt');
+  assert.ok(llms.includes('/updates/complete-csc-universities-list-2026'));
+  assert.ok(llms.includes('/updates/how-to-apply-csc-type-a-scholarship-complete-guide'));
+
+  const mr = read('src/lib/machine-readable.ts');
+  assert.ok(mr.includes('getPublishedUpdates(undefined, false)'), '/llms-full.txt must not cap active updates at 25');
+  assert.ok(mr.includes('!post.archived'));
+
+  const indexNow = read('src/lib/indexnow.ts');
+  assert.ok(indexNow.includes("'/updates/complete-csc-universities-list-2026'"));
+  assert.ok(indexNow.includes('getIndexableUpdatesForSitemap'));
+  assert.ok(indexNow.includes('getIndexableUniversitySitemapRecords'));
+
+  const updatePage = read('src/app/updates/[slug]/page.tsx');
+  assert.ok(updatePage.includes('archivedAt: null'), 'getRelated must exclude archived intake posts');
+  assert.ok(updatePage.includes('seenIds'), 'getRelated must deduplicate shared/pool cards');
+
+  const csc = read('src/app/csc-scholarship-bangladesh/page.tsx');
+  assert.ok(csc.includes('/updates/nanjing-university-csc-type-b-scholarship-2027'));
+  assert.ok(csc.includes('5-digit CSC Agency Number'));
+});

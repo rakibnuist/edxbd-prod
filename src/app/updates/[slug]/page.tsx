@@ -66,6 +66,7 @@ const getRelated = cache(async (current: NonNullable<Awaited<ReturnType<typeof g
     where: {
       id: { not: current.id },
       type: { in: ['update', 'article'] },
+      archivedAt: null,
       ...currentVisibleContentWhere(),
     },
     orderBy: [{ isFeatured: 'desc' }, { publishedAt: 'desc' }, { updatedAt: 'desc' }],
@@ -82,7 +83,14 @@ const getRelated = cache(async (current: NonNullable<Awaited<ReturnType<typeof g
     [post.category, ...parseJsonCategories(post.categories)].some(label => label?.trim() && currentSlugs.has(categorySlug(label))),
   );
 
-  return [...shared, ...pool]
+  const seenIds = new Set<string>();
+  const unique = [...shared, ...pool].filter((record) => {
+    if (seenIds.has(record.id)) return false;
+    seenIds.add(record.id);
+    return true;
+  });
+
+  return unique
     .slice(0, limit)
     .map(record => serializeUpdate(record))
     .filter((record): record is Update => Boolean(record));

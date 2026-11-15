@@ -204,6 +204,8 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/updates',
     '/updates/csca-guide-study-in-china',
     '/updates/china-k-visa',
+    '/updates/complete-csc-universities-list-2026',
+    '/updates/how-to-apply-csc-type-a-scholarship-complete-guide',
     '/about',
     '/for-parents',
     '/partnership',
@@ -254,7 +256,35 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/education-fit-assessment'
   ]
 
-  return submitToIndexNow(importantPages)
+  const dynamicPaths: string[] = [];
+  try {
+    const [
+      { getIndexableUpdatesForSitemap },
+      { getIndexableUniversitySitemapRecords },
+      { chinaCities },
+      { getUniversityRecords },
+    ] = await Promise.all([
+      import('@/lib/content-records'),
+      import('@/lib/university-guide-publication'),
+      import('@/lib/city-pages'),
+      import('@/lib/university-records'),
+    ]);
+
+    const [updatesData, universities, chinaRecords] = await Promise.all([
+      getIndexableUpdatesForSitemap(),
+      getIndexableUniversitySitemapRecords(),
+      getUniversityRecords('China'),
+    ]);
+
+    for (const u of universities) dynamicPaths.push(`/universities/${u.slug}`);
+    for (const city of chinaCities(chinaRecords)) dynamicPaths.push(`/china-universities/${city.slug}`);
+    for (const post of updatesData.updates) dynamicPaths.push(`/updates/${post.slug}`);
+    for (const catSlug of updatesData.categorySlugs) dynamicPaths.push(`/updates/category/${catSlug}`);
+  } catch {
+    // Fall back gracefully to static importantPages if DB is unavailable (e.g. build/tests).
+  }
+
+  return submitToIndexNow(Array.from(new Set([...importantPages, ...dynamicPaths])))
 }
 
 /**

@@ -143,13 +143,13 @@ async function universityBlock() {
 
 async function updatesBlock() {
   try {
-    const posts = await getPublishedUpdates(25, false);
+    const posts = (await getPublishedUpdates(undefined, false)).filter(post => !post.archived);
     if (!posts.length) return '';
     const day = (value?: string) => (value ? new Date(value).toISOString().slice(0, 10) : '');
     return [
-      `## Latest education updates (${posts.length} newest)`,
+      `## Active education updates & CSC university guides (${posts.length})`,
       '',
-      'New universities, scholarships, programs and study tips, newest first. Each is dated; check the page for the current status.',
+      'New universities, scholarships, programs and study guides, newest first. Each is dated; check the page for the current status.',
       '',
       ...posts.map(post => {
         const summary = clean(post.excerpt || post.metaDescription);

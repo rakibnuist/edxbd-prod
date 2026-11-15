@@ -96,6 +96,10 @@ const faqs = [
     question: 'What are the age limits for CSC Scholarship applicants from Bangladesh?',
     answer: 'Published CSC criteria set exclusive upper limits: Bachelor’s applicants must be under 25, Master’s under 35, Doctoral (PhD) under 40, General Scholars under 45, and Senior Scholars under 50.',
   },
+  {
+    question: 'Where can Bangladeshi students check the 2026–2027 CSC university list, Agency Numbers and admissions contacts?',
+    answer: 'Each designated Chinese university publishes its current 5-digit CSC Agency Number and international admissions office contact on its official admission notice and on campuschina.org. EduExpress also maintains an indexed 306-university CSC directory alongside verified China university profiles so students can shortlist departments safely without relying on outdated third-party email sheets.',
+  },
 ];
 
 const related = [
@@ -238,7 +242,13 @@ export default function CscScholarshipBangladeshPage() {
           ))}
         </div>
         <p className="mt-6 text-[16px] leading-7 text-ink-soft">
-          Windows vary by year and by university. Check the current notice for your route, and see{' '}
+          Windows vary by year and by university. Check the current notice for your route, explore the{' '}
+          <Link href="/updates/complete-csc-universities-list-2026" className="font-semibold text-petrol-800 underline underline-offset-4">306 participating CSC universities directory</Link>,
+          browse{' '}
+          <Link href="/china-universities" className="font-semibold text-petrol-800 underline underline-offset-4">China university profiles &amp; requirements</Link>{' '}
+          (including sample 2027 Type B calls like{' '}
+          <Link href="/updates/nanjing-university-csc-type-b-scholarship-2027" className="font-semibold text-petrol-800 underline underline-offset-4">Nanjing University CSC</Link>),
+          and see{' '}
           <Link href="/china-intakes-deadlines" className="font-semibold text-petrol-800 underline underline-offset-4">China intakes and deadlines</Link> for the March and September 2027 windows.
         </p>
       </Section>
