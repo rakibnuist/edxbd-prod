@@ -9,6 +9,7 @@ import { sanitizeUpdateHtml } from '@/lib/content-html';
 import { categoriesFromUpdate, categorySlug } from '@/lib/update-categories';
 import { CGS_2027_TYPE_A_SLUG, CGS_2027_TYPE_A_DATA } from '@/data/cgsTypeAGuide2027';
 import { CMU_2027_SLUG, CMU_2027_DATA } from '@/data/cmuGuide2027';
+import { SDJU_2027_SLUG, SDJU_2027_DATA } from '@/data/sdjuLanguageGuide2027';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -62,6 +63,10 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   });
 
   const serialized = records.map(record => serializeUpdate(record)).filter((record): record is Update => Boolean(record));
+  if (!serialized.some(u => u.slug === SDJU_2027_SLUG)) {
+    const fallback = serializeUpdate(SDJU_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
   if (!serialized.some(u => u.slug === CMU_2027_SLUG)) {
     const fallback = serializeUpdate(CMU_2027_DATA);
     if (fallback) serialized.unshift(fallback);
@@ -79,6 +84,15 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
     where: { type: { in: ['update', 'article'] }, archivedAt: null, ...currentVisibleContentWhere() },
     select: { slug: true, updatedAt: true, publishedAt: true, category: true, categories: true },
   });
+  if (!updates.some(u => u.slug === SDJU_2027_SLUG)) {
+    updates.unshift({
+      slug: SDJU_2027_DATA.slug,
+      updatedAt: SDJU_2027_DATA.updatedAt,
+      publishedAt: SDJU_2027_DATA.publishedAt,
+      category: SDJU_2027_DATA.category,
+      categories: SDJU_2027_DATA.categories,
+    });
+  }
   if (!updates.some(u => u.slug === CMU_2027_SLUG)) {
     updates.unshift({
       slug: CMU_2027_DATA.slug,
