@@ -69,6 +69,14 @@ export function safeJsonLdImageUrl(rawUrl: string | null | undefined, site = 'ht
   return toSafeExternalUrl(trimmed);
 }
 
+/** Structured `ImageObject` for a `WebPage` `primaryImageOfPage`, falling back to the default brand OG card. */
+export function primaryImageOfPageSchema(rawUrl?: string | null, site = 'https://eduexpressint.com') {
+  return {
+    '@type': 'ImageObject' as const,
+    url: safeJsonLdImageUrl(rawUrl, site) ?? `${site}/og-image.jpg`,
+  };
+}
+
 /** Schema.org `BlogPosting` summary entries shared by updates and category archives. */
 export function blogPostSummaryJsonLd(posts: BlogPostSummaryInput[]) {
   const site = 'https://eduexpressint.com';

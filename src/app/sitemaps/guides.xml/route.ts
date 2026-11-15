@@ -1,7 +1,10 @@
 import { evidencePages } from '@/data/evidencePages';
 import { chinaGuidePages } from '@/data/chinaGuidePages';
 import { staticRouteGuides } from '@/data/staticRoutePages';
+import { getIndexableUpdatesForSitemap } from '@/lib/content-records';
 import { sitemapResponse } from '@/lib/sitemap-xml';
+
+export const revalidate = 300;
 
 // Guide URLs come from four owners. Each URL appears exactly once, and each
 // owner is the single source of truth for its own pages:
@@ -52,8 +55,8 @@ const guideSlugs = [
   'bn/mbbs-in-china-bangladesh',
 ];
 
-export function GET() {
-  const entries = guideSlugs
+export async function GET() {
+  const staticEntries = guideSlugs
     .filter(
       slug =>
         slug in staticRouteGuides ||
@@ -73,5 +76,17 @@ export function GET() {
               : evidencePages[slug]?.reviewedAt,
     }));
 
-  return sitemapResponse(entries);
+  try {
+    const { updates, categorySlugs } = await getIndexableUpdatesForSitemap();
+    const updateEntries = updates.map(post => ({
+      loc: `https://eduexpressint.com/updates/${post.slug}`,
+      lastmod: (post.updatedAt ?? post.publishedAt)?.toISOString().slice(0, 10),
+    }));
+    const categoryEntries = categorySlugs.map(slug => ({
+      loc: `https://eduexpressint.com/updates/category/${slug}`,
+    }));
+    return sitemapResponse([...staticEntries, ...updateEntries, ...categoryEntries]);
+  } catch {
+    return sitemapResponse(staticEntries);
+  }
 }

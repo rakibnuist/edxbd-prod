@@ -57,6 +57,7 @@ export default async function StudyInChinaFromBangladeshPage() {
         name: 'Study in China from Bangladesh',
         description: content.description,
         inLanguage: 'en-BD',
+        primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE}/og/china-guide.jpg` },
         mainEntityOfPage: canonical,
         ...(checkedAt ? { dateModified: `${checkedAt}T00:00:00Z` } : {}),
         author: { '@id': `${SITE}/#organization` },

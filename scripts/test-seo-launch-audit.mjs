@@ -580,7 +580,52 @@ test('Built indexable HTML pages have unique @ids, resolved references, WebPage 
     }
   }
 
-  for (const imgRel of ['programs.html', 'china-student-visa-bangladesh.html', 'how-we-verify-universities.html']) {
+  for (const imgRel of [
+    'programs.html',
+    'china-student-visa-bangladesh.html',
+    'how-we-verify-universities.html',
+    'updates.html',
+    'study-in-china-from-bangladesh.html',
+    'csc-scholarship-bangladesh.html',
+    'china-study-report-bangladesh.html',
+    'about.html',
+    'contact.html',
+  ]) {
     assert.ok(fs.readFileSync(path.join(BUILD_APP_DIR, imgRel), 'utf8').includes('"primaryImageOfPage"'), `${imgRel} must include primaryImageOfPage`);
+  }
+});
+
+test('Step 26 built HTML check: all 20 Step 26 routes emit primaryImageOfPage ImageObject', () => {
+  const step26HtmlFiles = [
+    'privacy.html',
+    'terms.html',
+    'fees-and-transparency.html',
+    'partnership.html',
+    'proof-library.html',
+    'services.html',
+    'for-parents.html',
+    'your-study-journey.html',
+    'compare-costs.html',
+    'mbbs-in-china-bangladesh.html',
+    'success-stories.html',
+    'china-success-stories.html',
+    'study-in-malaysia-from-bangladesh.html',
+    'malaysia-study-cost-bangladesh.html',
+    'malaysia-student-visa-bangladesh.html',
+    'bn/study-in-china.html',
+    'bn/csc-scholarship-bangladesh.html',
+    'bn/mbbs-in-china-bangladesh.html',
+    'bn/study-in-china-cost-bangladesh.html',
+    'bn/china-student-visa-bangladesh.html',
+  ];
+  for (const rel of step26HtmlFiles) {
+    const filePath = path.join(BUILD_APP_DIR, rel);
+    assert.ok(fs.existsSync(filePath), `Missing built HTML: ${rel}`);
+    const html = fs.readFileSync(filePath, 'utf8');
+    assert.match(
+      html,
+      /"primaryImageOfPage":\{"@type":"ImageObject","url":"https:\/\/eduexpressint\.com\//,
+      `Missing primaryImageOfPage ImageObject in ${rel}`
+    );
   }
 });

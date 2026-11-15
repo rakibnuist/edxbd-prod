@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { AlertTriangle, ArrowRight, CheckCircle, Mail, MapPin, Phone, Scale, Shield } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { LegalDocument, LegalList, type LegalSection } from '../privacy/LegalDocument';
 
 const PATH = '/terms';
@@ -50,6 +51,7 @@ export default function TermsClient() {
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
     publisher: { '@id': 'https://eduexpressint.com/#organization' },
     about: { '@id': 'https://eduexpressint.com/#organization' },
+    primaryImageOfPage: primaryImageOfPageSchema('/og-image.jpg'),
     breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
   };
 

@@ -104,6 +104,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     name: `EduExpress Updates — ${label}`,
     description: `Dated ${label.toLowerCase()} posts for Bangladeshi students.`,
     inLanguage: 'en-BD',
+    primaryImageOfPage: { '@type': 'ImageObject', url: 'https://eduexpressint.com/og-image.jpg' },
     ...(latestPostDate ? { dateModified: latestPostDate } : {}),
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
     publisher: { '@id': 'https://eduexpressint.com/#organization' },

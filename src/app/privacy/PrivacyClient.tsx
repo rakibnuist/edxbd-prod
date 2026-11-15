@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, Eye, Lock, Mail, MapPin, Phone, Shield, Users } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { LegalDocument, LegalList, type LegalSection } from './LegalDocument';
 
 const PATH = '/privacy';
@@ -50,6 +51,7 @@ export default function PrivacyClient() {
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
     publisher: { '@id': 'https://eduexpressint.com/#organization' },
     about: { '@id': 'https://eduexpressint.com/#organization' },
+    primaryImageOfPage: primaryImageOfPageSchema('/og-image.jpg'),
     breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
   };
 

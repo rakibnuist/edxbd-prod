@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, ClipboardCheck, Fingerprint, Search, Wallet } from 'lucide-react';
 import ChinaServicePackages from '@/components/china/ChinaServicePackages';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 import { getUniversityRecords } from '@/lib/university-records';
@@ -93,10 +94,12 @@ const structuredData = {
       mainEntityOfPage: PAGE_URL,
       dateModified: '2026-11-15',
       name: 'Study abroad services',
+      description: 'Evidence-first education guidance covering education fit, written cost comparison, application proof tracking and visa readiness.',
       inLanguage: 'en-BD',
       about: { '@id': 'https://eduexpressint.com/#organization' },
       publisher: { '@id': 'https://eduexpressint.com/#organization' },
       isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+      primaryImageOfPage: primaryImageOfPageSchema('/og-image.jpg'),
       breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
       mainEntity: { '@id': `${PAGE_URL}#services` },
     },

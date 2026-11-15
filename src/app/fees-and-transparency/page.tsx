@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, BadgeCheck, CheckCircle2, CircleSlash, Download, FileSearch, GraduationCap, ReceiptText, Sparkles } from 'lucide-react';
 
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
 import { SITE_URL } from '@/lib/site-urls';
 import { getPublicTrustRecords } from '@/lib/trust-records';
@@ -51,6 +52,7 @@ const structuredData = {
   isPartOf: { '@id': `${SITE_URL}/#website` },
   about: { '@id': `${SITE_URL}/#organization` },
   publisher: { '@id': `${SITE_URL}/#organization` },
+  primaryImageOfPage: primaryImageOfPageSchema('/og-image.jpg'),
   breadcrumb: { '@id': `${SITE_URL}${PATH}#breadcrumb` },
 };
 

@@ -124,6 +124,7 @@ const structuredData = {
   inLanguage: 'en-BD',
   mainEntityOfPage: `${SITE}${PATH}`,
   image: `${SITE}/og/china.jpg`,
+  primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE}/og/china.jpg` },
   datePublished: '2026-11-15T00:00:00Z',
   dateModified: '2026-11-15T00:00:00Z',
   author: { '@id': `${SITE}/#organization` },

@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import CostCompare from '@/components/finders/CostCompare';
 import { CtaBand, FaqBlock, JsonLd, PageHero } from '@/components/page/PageKit';
 import { toFeeRows, toProgramRows, type FeeRow } from '@/lib/catalog-views';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { SITE_URL, ogImage, pageMetadata } from '@/lib/seo';
 import { getUniversityRecords } from '@/lib/university-records';
 
@@ -55,6 +56,7 @@ export default async function CompareCostsPage() {
           dateModified: '2026-11-15',
           isPartOf: { '@id': `${SITE_URL}/#website` },
           publisher: { '@id': `${SITE_URL}/#organization` },
+          primaryImageOfPage: primaryImageOfPageSchema('/og/china.jpg'),
           breadcrumb: { '@id': `${url}#breadcrumb` },
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'BDT' },
           inLanguage: 'en-BD',

@@ -712,3 +712,76 @@ test('Step 24: heading hierarchy skips eliminated across ProgramFinder and Malay
     assert.ok(read(tplFile).includes('primaryImageOfPage:'), `${tplFile} must include primaryImageOfPage`);
   }
 });
+
+test('Step 25: guides.xml shares getIndexableUpdatesForSitemap parity with sitemap.ts, and core hubs include primaryImageOfPage', () => {
+  const contentRecords = read('src/lib/content-records.ts');
+  assert.ok(contentRecords.includes('export const getIndexableUpdatesForSitemap'));
+
+  const guidesXml = read('src/app/sitemaps/guides.xml/route.ts');
+  const mainSitemap = read('src/app/sitemap.ts');
+  assert.ok(guidesXml.includes('getIndexableUpdatesForSitemap'));
+  assert.ok(mainSitemap.includes('getIndexableUpdatesForSitemap'));
+  assert.ok(guidesXml.includes('export async function GET()'));
+  assert.ok(guidesXml.includes('/updates/${post.slug}'));
+  assert.ok(guidesXml.includes('/updates/category/${slug}'));
+
+  for (const hubFile of [
+    'src/app/updates/page.tsx',
+    'src/app/updates/category/[category]/page.tsx',
+    'src/app/study-in-china-from-bangladesh/page.tsx',
+    'src/app/csc-scholarship-bangladesh/page.tsx',
+    'src/app/china-study-report-bangladesh/page.tsx',
+    'src/app/about/page.tsx',
+    'src/app/apply/page.tsx',
+    'src/app/contact/page.tsx',
+  ]) {
+    assert.ok(read(hubFile).includes('primaryImageOfPage:'), `${hubFile} must include primaryImageOfPage`);
+  }
+});
+
+test('Step 26: shared primaryImageOfPageSchema covers all 20 remaining routes and site.webmanifest PNG icons exist with exact square dimensions', () => {
+  const jsonLdSrc = read('src/lib/json-ld.ts');
+  assert.ok(jsonLdSrc.includes('export function primaryImageOfPageSchema('));
+  assert.ok(jsonLdSrc.includes('safeJsonLdImageUrl(rawUrl, site)'));
+
+  const step26Routes = [
+    'src/app/privacy/PrivacyClient.tsx',
+    'src/app/terms/TermsClient.tsx',
+    'src/app/fees-and-transparency/page.tsx',
+    'src/app/partnership/page.tsx',
+    'src/app/proof-library/page.tsx',
+    'src/app/services/page.tsx',
+    'src/app/for-parents/page.tsx',
+    'src/app/your-study-journey/page.tsx',
+    'src/app/compare-costs/page.tsx',
+    'src/app/mbbs-in-china-bangladesh/page.tsx',
+    'src/app/success-stories/page.tsx',
+    'src/app/china-success-stories/page.tsx',
+    'src/app/study-in-malaysia-from-bangladesh/page.tsx',
+    'src/app/malaysia-study-cost-bangladesh/page.tsx',
+    'src/app/malaysia-student-visa-bangladesh/page.tsx',
+    'src/app/bn/study-in-china/page.tsx',
+    'src/app/bn/csc-scholarship-bangladesh/page.tsx',
+    'src/app/bn/mbbs-in-china-bangladesh/page.tsx',
+    'src/app/bn/study-in-china-cost-bangladesh/page.tsx',
+    'src/app/bn/china-student-visa-bangladesh/page.tsx',
+  ];
+  for (const rel of step26Routes) {
+    const src = read(rel);
+    assert.ok(src.includes('primaryImageOfPage: primaryImageOfPageSchema('), `${rel} must use primaryImageOfPageSchema()`);
+  }
+
+  const manifest = JSON.parse(read('public/site.webmanifest'));
+  const iconChecks = [
+    ...manifest.icons.map((icon) => ({ rel: `public${icon.src}`, sizes: icon.sizes })),
+    { rel: 'public/apple-touch-icon.png', sizes: '180x180' },
+  ];
+  for (const check of iconChecks) {
+    const abs = path.join(ROOT, check.rel);
+    assert.ok(fs.existsSync(abs), `Missing icon file: ${check.rel}`);
+    const buf = fs.readFileSync(abs);
+    assert.equal(buf[0], 0x89, `${check.rel} must be a PNG`);
+    const actual = `${buf.readUInt32BE(16)}x${buf.readUInt32BE(20)}`;
+    assert.equal(actual, check.sizes, `${check.rel} dimensions mismatch: got ${actual}, expected ${check.sizes}`);
+  }
+});

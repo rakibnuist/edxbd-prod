@@ -145,6 +145,7 @@ export default async function ChinaStudyReportPage() {
         headline: 'Bangladesh to China Study Data & Cost Benchmark Report | EduExpress International',
         description: `Live catalogue benchmark covering ${report.universityCount} Chinese universities, ${report.programCounts.total} degree and language programmes, CNY tuition quartiles, and ${report.scholarshipTotal} recorded scholarships.`,
         image: `${SITE}/og/china.jpg`,
+        primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE}/og/china.jpg` },
         inLanguage: 'en-BD',
         isAccessibleForFree: true,
         datePublished: report.latestVerifiedIso ? `${report.latestVerifiedIso}T00:00:00Z` : '2026-11-15T00:00:00Z',

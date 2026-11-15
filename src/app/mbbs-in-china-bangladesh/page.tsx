@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, Check, ExternalLink, GraduationCap, ShieldCheck, 
 import MbbsUniversityFinder from '@/components/china/MbbsUniversityFinder';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getChinaMbbsGuide } from '@/lib/china-mbbs-guide';
-import { citationJsonLd } from '@/lib/json-ld';
+import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import { mbbsApplyHref } from '@/lib/mbbs-enquiry';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import { ogImage, pageMetadata } from '@/lib/seo';
@@ -81,6 +81,7 @@ export default async function MbbsChinaPage() {
         name: 'MBBS in China for Bangladeshi Students',
         description: guide.description,
         image: `${SITE}/og/china-guide.jpg`,
+        primaryImageOfPage: primaryImageOfPageSchema('/og/china-guide.jpg'),
         inLanguage: 'en-BD',
         mainEntityOfPage: canonical,
         datePublished: checkedAt ? `${checkedAt}T00:00:00Z` : '2026-11-15T00:00:00Z',

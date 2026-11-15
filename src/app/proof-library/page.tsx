@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Building2, Clock, FileCheck2, MapPin, MessageSquareQuote, ShieldCheck } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
@@ -31,6 +32,7 @@ const structuredData = {
   about: { '@id': 'https://eduexpressint.com/#organization' },
   publisher: { '@id': 'https://eduexpressint.com/#organization' },
   isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+  primaryImageOfPage: primaryImageOfPageSchema('/og-image.jpg'),
   breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
 };
 

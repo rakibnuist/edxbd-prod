@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import VisaInterviewSimulator from '@/components/visa/VisaInterviewSimulator';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
 
@@ -141,6 +142,7 @@ export default function StudyJourneyPage() {
         isPartOf: { '@id': `${SITE_URL}/#website` },
         about: { '@id': `${SITE_URL}/#organization` },
         publisher: { '@id': `${SITE_URL}/#organization` },
+        primaryImageOfPage: primaryImageOfPageSchema('/og/journey.jpg'),
         mainEntity: { '@id': `${canonical}#stages` },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
       },

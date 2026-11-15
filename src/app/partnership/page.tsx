@@ -5,6 +5,7 @@ import PartnershipForm from '@/components/PartnershipForm';
 import { JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
 import { countries } from '@/lib/countries';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
 
 const PATH = '/partnership';
@@ -30,6 +31,7 @@ const structuredData = {
   about: { '@id': 'https://eduexpressint.com/#organization' },
   publisher: { '@id': 'https://eduexpressint.com/#organization' },
   isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+  primaryImageOfPage: primaryImageOfPageSchema('/og-image.jpg'),
   breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
 };
 

@@ -44,6 +44,7 @@ const structuredData = {
   name: 'About EduExpress International',
   description: 'Evidence-first study abroad consultancy in Dhanmondi, Dhaka since 2018.',
   inLanguage: 'en-BD',
+  primaryImageOfPage: { '@type': 'ImageObject', url: 'https://eduexpressint.com/og/about.jpg' },
   about: { '@id': 'https://eduexpressint.com/#organization' },
   mainEntity: {
     '@type': 'Person',

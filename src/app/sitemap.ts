@@ -3,8 +3,7 @@ import prisma from '@/lib/prisma';
 import { evidencePages } from '@/data/evidencePages';
 import { chinaGuidePages } from '@/data/chinaGuidePages';
 import { sitemapStaticRouteSlugs, staticRouteGuides } from '@/data/staticRoutePages';
-import { currentVisibleContentWhere } from '@/lib/content-governance';
-import { categoriesFromUpdate, categorySlug } from '@/lib/update-categories';
+import { getIndexableUpdatesForSitemap } from '@/lib/content-records';
 import { activeCountries } from '@/lib/countries';
 import { destinationPath } from '@/lib/site-urls';
 import { getIndexableUniversitySitemapRecords } from '@/lib/university-guide-publication';
@@ -163,29 +162,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
       ...(uni.logo ? { images: [abs(uni.logo)] } : {}),
     }));
-    // Published updates/articles
-    const updates = await prisma.content.findMany({
-      where: { type: { in: ['update', 'article'] }, archivedAt: null, ...currentVisibleContentWhere() },
-      select: { slug: true, updatedAt: true, publishedAt: true, category: true, categories: true }
-    });
+    // Published updates/articles and category archives (shared with /sitemaps/guides.xml)
+    const { updates, categorySlugs } = await getIndexableUpdatesForSitemap();
     const updateRoutes = updates.map((post) => ({
-    url: `${baseUrl}/updates/${post.slug}`,
-    lastModified: post.updatedAt
-      ? new Date(post.updatedAt)
-      : post.publishedAt
-        ? new Date(post.publishedAt)
-        : new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.7,
-  }));
+      url: `${baseUrl}/updates/${post.slug}`,
+      lastModified: post.updatedAt
+        ? new Date(post.updatedAt)
+        : post.publishedAt
+          ? new Date(post.publishedAt)
+          : new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }));
 
-    // Category archives, derived from the same rows (no extra query)
-    const categoryPaths = Array.from(new Set(
-      updates
-        .flatMap(post => categoriesFromUpdate(post))
-        .map(label => categorySlug(label)),
-    ));
-    const categoryRoutes: MetadataRoute.Sitemap = categoryPaths.map((slug) => ({
+    const categoryRoutes: MetadataRoute.Sitemap = categorySlugs.map((slug) => ({
       url: `${baseUrl}/updates/category/${slug}`,
       changeFrequency: 'weekly' as const,
       priority: 0.6,

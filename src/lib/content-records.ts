@@ -6,6 +6,7 @@ import type { Update } from '@/lib/types';
 import { normalizeContentAuthor } from '@/lib/content-author';
 import { currentVisibleContentWhere } from '@/lib/content-governance';
 import { sanitizeUpdateHtml } from '@/lib/content-html';
+import { categoriesFromUpdate, categorySlug } from '@/lib/update-categories';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -59,4 +60,16 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   });
 
   return records.map(record => serializeUpdate(record)).filter((record): record is Update => Boolean(record));
+});
+
+/** Unarchived indexable updates and derived category archive slugs shared by sitemaps. */
+export const getIndexableUpdatesForSitemap = cache(async () => {
+  const updates = await prisma.content.findMany({
+    where: { type: { in: ['update', 'article'] }, archivedAt: null, ...currentVisibleContentWhere() },
+    select: { slug: true, updatedAt: true, publishedAt: true, category: true, categories: true },
+  });
+  const categorySlugs = Array.from(
+    new Set(updates.flatMap(post => categoriesFromUpdate(post)).map(label => categorySlug(label))),
+  );
+  return { updates, categorySlugs };
 });

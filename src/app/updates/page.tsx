@@ -88,6 +88,7 @@ export default async function UpdatesPage() {
     name: 'EduExpress Education Updates',
     description: 'Dated scholarship, admission and exam updates for Bangladeshi students, written and checked by EduExpress International.',
     inLanguage: 'en-BD',
+    primaryImageOfPage: { '@type': 'ImageObject', url: 'https://eduexpressint.com/og-image.jpg' },
     ...(latest ? { dateModified: latest } : {}),
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
     breadcrumb: { '@id': 'https://eduexpressint.com/updates#breadcrumb' },

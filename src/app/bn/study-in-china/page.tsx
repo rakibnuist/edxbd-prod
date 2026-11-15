@@ -5,7 +5,7 @@ import EducationFitAssessment from '@/components/assessment/EducationFitAssessme
 import { JsonLd, Section, kit } from '@/components/page/PageKit';
 import { CHINA_REPORT_OFFICIAL_AUTHORITIES } from '@/lib/china-benchmark';
 import { config } from '@/lib/config';
-import { breadcrumbJsonLd, citationJsonLd, type Crumb } from '@/lib/json-ld';
+import { breadcrumbJsonLd, citationJsonLd, primaryImageOfPageSchema, type Crumb } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
@@ -80,6 +80,7 @@ const structuredData = {
   reviewedBy: { '@id': `${SITE}/#organization` },
   isPartOf: { '@id': `${SITE}/#website` },
   publisher: { '@id': `${SITE}/#organization` },
+  primaryImageOfPage: primaryImageOfPageSchema('/og/china.jpg'),
   breadcrumb: { '@id': `${SITE}${PATH}#breadcrumb` },
   ...citationJsonLd([...CHINA_REPORT_OFFICIAL_AUTHORITIES]),
 };

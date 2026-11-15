@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
-import { citationJsonLd } from '@/lib/json-ld';
+import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
@@ -97,6 +97,7 @@ export default async function MalaysiaStudyCostPage() {
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
+        primaryImageOfPage: primaryImageOfPageSchema('/og/malaysia.jpg'),
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
         ...citationJsonLd(MALAYSIA_COST_SOURCES),
       },

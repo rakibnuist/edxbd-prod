@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, FileCheck2, ShieldCheck } from 'lucide-react';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import PageConversionBeacon from '@/components/analytics/PageConversionBeacon';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { StandardsGrid, StoryCard, getPublishedStories } from '../success-stories/stories';
 
@@ -39,6 +40,7 @@ export default async function ChinaSuccessStoriesPage() {
     isPartOf: { '@id': 'https://eduexpressint.com/#website' },
     publisher: { '@id': 'https://eduexpressint.com/#organization' },
     about: { '@id': 'https://eduexpressint.com/#organization' },
+    primaryImageOfPage: primaryImageOfPageSchema('/og/china.jpg'),
     breadcrumb: { '@id': `${canonical}#breadcrumb` },
     mainEntity: {
       '@type': 'ItemList',

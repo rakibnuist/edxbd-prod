@@ -14,6 +14,7 @@ import {
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
 import { formatBangladeshPhone } from '@/lib/contact-format';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
@@ -38,11 +39,13 @@ const structuredData = {
   mainEntityOfPage: 'https://eduexpressint.com/for-parents',
   dateModified: '2026-11-15',
   name: 'Study abroad guide for parents in Bangladesh',
+  description: 'A practical guide for Bangladeshi parents comparing recognition, full study costs, student safety, application proof and visa responsibility.',
   inLanguage: 'en-BD',
   audience: { '@type': 'Audience', audienceType: 'Parents of students planning to study abroad' },
   about: { '@id': 'https://eduexpressint.com/#organization' },
   publisher: { '@id': 'https://eduexpressint.com/#organization' },
   isPartOf: { '@id': 'https://eduexpressint.com/#website' },
+  primaryImageOfPage: primaryImageOfPageSchema('/og/parents.jpg'),
   breadcrumb: { '@id': 'https://eduexpressint.com/for-parents#breadcrumb' },
 };
 

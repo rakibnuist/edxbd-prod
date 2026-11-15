@@ -18,7 +18,7 @@ import BnChinaRelatedGuides from '@/components/page/BnChinaRelatedGuides';
 import { CtaBand, FaqBlock, JsonLd, Section, kit } from '@/components/page/PageKit';
 import { getChinaMbbsGuide } from '@/lib/china-mbbs-guide';
 import { config } from '@/lib/config';
-import { breadcrumbJsonLd, citationJsonLd, type Crumb } from '@/lib/json-ld';
+import { breadcrumbJsonLd, citationJsonLd, primaryImageOfPageSchema, type Crumb } from '@/lib/json-ld';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
@@ -124,6 +124,7 @@ export default async function BengaliMbbsInChinaPage() {
         inLanguage: 'bn-BD',
         mainEntityOfPage: url,
         image: `${SITE}/og/china-guide.jpg`,
+        primaryImageOfPage: primaryImageOfPageSchema('/og/china-guide.jpg'),
         datePublished: guide.research?.checkedAt ? `${guide.research.checkedAt}T00:00:00Z` : '2026-11-15T00:00:00Z',
         dateModified: guide.research?.checkedAt ? `${guide.research.checkedAt}T00:00:00Z` : '2026-11-15T00:00:00Z',
         author: { '@id': `${SITE}/#organization` },

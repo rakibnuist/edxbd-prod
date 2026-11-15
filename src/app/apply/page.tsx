@@ -45,6 +45,7 @@ const structuredData = {
   name: 'Apply with EduExpress International',
   description: 'Request university application support: eligibility, documents and the application process.',
   inLanguage: 'en-BD',
+  primaryImageOfPage: { '@type': 'ImageObject', url: `${SITE_URL}/og-image.jpg` },
   dateModified: '2026-11-15',
   isPartOf: { '@id': `${SITE_URL}/#website` },
   about: { '@id': `${SITE_URL}/#organization` },

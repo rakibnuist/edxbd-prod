@@ -29,6 +29,7 @@ const structuredData = {
   name: 'Contact EduExpress International',
   description: 'Phone, WhatsApp, email and the Dhanmondi office address and hours for EduExpress International.',
   inLanguage: 'en-BD',
+  primaryImageOfPage: { '@type': 'ImageObject', url: 'https://eduexpressint.com/og/contact.jpg' },
   about: { '@id': 'https://eduexpressint.com/#organization' },
   isPartOf: { '@id': 'https://eduexpressint.com/#website' },
   publisher: { '@id': 'https://eduexpressint.com/#organization' },
