@@ -126,6 +126,15 @@ export function universityProfileSeo(university: UniversityIdentity, programs: U
 
 const MAX_BROWSER_TITLE_LENGTH = 64;
 
+function htmlTitleLength(str: string): number {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/'/g, '&#x27;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').length;
+}
+
 /**
  * Compact HTML <title> formatted to stay <= 64 characters for Bing/Google SERP limits
  * while preserving the full university name ahead of acronym/brand suffixes.
@@ -154,7 +163,7 @@ export function universityProfileBrowserTitle(
     name,
   ];
   for (const candidate of candidates) {
-    if (candidate.length <= MAX_BROWSER_TITLE_LENGTH) return candidate;
+    if (htmlTitleLength(candidate) <= MAX_BROWSER_TITLE_LENGTH) return candidate;
   }
   return `${name.slice(0, MAX_BROWSER_TITLE_LENGTH - 3).trimEnd()}...`;
 }
