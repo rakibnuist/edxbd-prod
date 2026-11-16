@@ -35,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const base = pageMetadata({
     title: 'Scholarships & Admissions 2027: China Updates | EduExpress',
     description:
-      'New 2027 scholarships, university admissions, deadlines and exam dates for Bangladeshi students. Every update is dated, sourced and checked by EduExpress.',
+      'New 2027 scholarships, university admissions, deadlines and exam dates for international students worldwide. Every update is dated, sourced and checked by EduExpress.',
     path: PATH,
     // An empty archive is a thin page; a failed read is not treated as empty.
     noindex: loaded && updates.length === 0,
@@ -86,7 +86,7 @@ export default async function UpdatesPage() {
     url: 'https://eduexpressint.com/updates',
     mainEntityOfPage: 'https://eduexpressint.com/updates',
     name: 'EduExpress Education Updates',
-    description: 'Dated scholarship, admission and exam updates for Bangladeshi students, written and checked by EduExpress International.',
+    description: 'Dated scholarship, admission and exam updates for international students worldwide, written and checked by EduExpress International.',
     inLanguage: 'en-BD',
     primaryImageOfPage: { '@type': 'ImageObject', url: 'https://eduexpressint.com/og-image.jpg' },
     ...(latest ? { dateModified: latest } : {}),
@@ -113,7 +113,7 @@ export default async function UpdatesPage() {
               New scholarships, admissions and <span className="text-lime">deadlines.</span>
             </h1>
             <p className="mt-5 max-w-[58ch] text-[18px] leading-[1.6] text-white/80">
-              Fresh 2027 notices from Chinese universities, rewritten in plain English for Bangladeshi students: what is covered, who can apply, the documents and the exact deadline.
+              Fresh 2027 notices from Chinese universities, rewritten in plain English for international applicants worldwide: what is covered, who can apply, the documents and the exact deadline.
             </p>
             <ul className="mt-7 flex flex-wrap gap-2.5 text-[15px]">
               <li className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2">

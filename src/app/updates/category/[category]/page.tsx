@@ -51,8 +51,8 @@ function categoryTitle(label: string) {
 function categoryDescription(label: string) {
   const lower = label.toLowerCase();
   const options = [
-    `Dated ${lower} posts from EduExpress International for Bangladeshi students: intake news, study guides and university announcements, with sources.`,
-    `Dated ${lower} posts for Bangladeshi students: intake news, study guides and announcements from EduExpress, with sources.`,
+    `Dated ${lower} posts from EduExpress International for international students: intake news, study guides and university announcements, with sources.`,
+    `Dated ${lower} posts for international applicants: intake news, study guides and announcements from EduExpress, with sources.`,
   ];
   return options.find(option => option.length <= 160) ?? `${options[1].slice(0, 157)}…`;
 }
@@ -102,7 +102,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     url,
     mainEntityOfPage: url,
     name: `EduExpress Updates — ${label}`,
-    description: `Dated ${label.toLowerCase()} posts for Bangladeshi students.`,
+    description: `Dated ${label.toLowerCase()} posts for international students.`,
     inLanguage: 'en-BD',
     primaryImageOfPage: { '@type': 'ImageObject', url: 'https://eduexpressint.com/og-image.jpg' },
     ...(latestPostDate ? { dateModified: latestPostDate } : {}),

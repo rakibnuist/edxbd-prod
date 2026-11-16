@@ -75,7 +75,7 @@ export async function GET() {
     <title>EduExpress International — Updates &amp; Guides</title>
     <link>${SITE_URL}/updates</link>
     <atom:link href="${SITE_URL}/updates/feed.xml" rel="self" type="application/rss+xml" />
-    <description>Verified study-abroad updates, guides and university announcements for Bangladeshi students.</description>
+    <description>Verified study-abroad updates, guides and university announcements for international students.</description>
     <managingEditor>${editorIdentity}</managingEditor>
     <language>en-bd</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>

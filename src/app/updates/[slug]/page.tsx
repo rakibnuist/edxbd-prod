@@ -23,8 +23,10 @@ import { CMU_2027_SLUG, CMU_2027_DATA } from '@/data/cmuGuide2027';
 import { SDJU_2027_SLUG, SDJU_2027_DATA } from '@/data/sdjuLanguageGuide2027';
 import { NJUST_2027_SLUG, NJUST_2027_DATA } from '@/data/njustGuide2027';
 import { NEW_GUIDES_2027_DATA } from '@/data/newGuides2027';
+import { WECHAT_15_GUIDES_DATA } from '@/data/newWechatGuides2027';
 import { TOP_MS_CS_AI_2027_SLUG, TOP_MS_CS_AI_2027_DATA } from '@/data/topMsCsAiChina2027Guide';
 import { OPEN_UNIVERSITIES_2027_SLUG, OPEN_UNIVERSITIES_2027_DATA } from '@/data/chinaUniversitiesOpen2027Guide';
+import { CSC_UNIVERSITY_LIST_2027_SLUG, CSC_UNIVERSITY_LIST_2027_DATA } from '@/data/cscUniversityList2027Guide';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -131,8 +133,14 @@ const getUpdate = cache(async (slug: string) => {
   if (slug === OPEN_UNIVERSITIES_2027_SLUG) {
     return OPEN_UNIVERSITIES_2027_DATA;
   }
+  if (slug === CSC_UNIVERSITY_LIST_2027_SLUG) {
+    return CSC_UNIVERSITY_LIST_2027_DATA;
+  }
   if (NEW_GUIDES_2027_DATA[slug]) {
     return NEW_GUIDES_2027_DATA[slug];
+  }
+  if (WECHAT_15_GUIDES_DATA[slug]) {
+    return WECHAT_15_GUIDES_DATA[slug];
   }
   return null;
 });

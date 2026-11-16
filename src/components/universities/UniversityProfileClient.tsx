@@ -332,15 +332,15 @@ export default function UniversityProfileClient({
       : 'multiple annual intakes';
 
     supplementalParagraphs.push(
-      `Located in ${university.city}, ${university.country}, ${displayName} offers ${programs.length || 'multiple'} documented academic programs across ${levelText} levels. International applicants from Bangladesh can apply to courses taught in ${langText}, with primary admission cycles in ${intakeText}.`
+      `Located in ${university.city}, ${university.country}, ${displayName} offers ${programs.length || 'multiple'} documented academic programs across ${levelText} levels. International applicants worldwide can apply to courses taught in ${langText}, with primary admission cycles in ${intakeText}.`
     );
     if (isChina) {
       supplementalParagraphs.push(
-        `For Bangladeshi students and families, EduExpress International provides end-to-end admission support for ${shortName}—covering major selection, scholarship evaluation, document verification, and JW202 visa processing from Dhaka—under a strict BDT 0 Before Visa policy.`
+        `For international students and families worldwide, EduExpress International provides comprehensive admission support for ${shortName}—covering major selection, scholarship evaluation, document verification, and official JW202 / student visa guidance.`
       );
     } else if (isMalaysia) {
       supplementalParagraphs.push(
-        `Bangladeshi students applying to ${shortName} through EduExpress International receive free admission counseling and EMGS eVAL visa processing (BDT 0 agency service fee). All tuition and EMGS payments follow the university's official offer letter and invoice.`
+        `International students applying to ${shortName} through EduExpress International receive transparent admission counseling and visa processing guidance. All tuition payments follow the university's official offer letter and invoice.`
       );
     }
   }
@@ -1087,7 +1087,7 @@ export default function UniversityProfileClient({
               </span>
               <h2 className={titleClass}>{shortName} Required Documents</h2>
               <p className="mt-1.5 text-sm text-slate-600">
-                Complete list of documents required from Bangladeshi students by study level (Bachelor’s, Master’s, PhD).
+                Complete list of documents required for international applicants by study level (Bachelor’s, Master’s, PhD).
               </p>
             </div>
             {availableLevels.length > 1 && (

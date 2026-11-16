@@ -139,7 +139,7 @@ export default async function UniversitiesPage({ searchParams }: Props) {
         mainEntityOfPage: canonical,
         name: 'Universities and Study Options',
         description:
-          'Find and compare verified universities, programs, tuition and scholarships across study destinations for Bangladeshi students.',
+          'Find and compare verified universities, programs, tuition and scholarships across global study destinations for international students.',
         inLanguage: 'en-BD',
         primaryImageOfPage: { '@type': 'ImageObject', url: 'https://eduexpressint.com/og-image.jpg' },
         isPartOf: { '@id': 'https://eduexpressint.com/#website' },

@@ -41,7 +41,7 @@ export function universityProfileFaq(university: UniversityIdentity, programs: U
         : 'Tuition depends on the selected degree level and major. Select any program in the catalog above to view its itemized annual tuition and campus living costs.',
     },
     {
-      question: `Can Bangladeshi students study in English at ${identity.shortName}?`,
+      question: `Can international students study in English at ${identity.shortName}?`,
       answer: languages.some(language => /english/i.test(language))
         ? `Yes. ${identity.shortName} offers English-taught programs alongside ${languages.filter(l => !/english/i.test(l)).join(' / ') || 'other'} routes. Each major in the table above specifies its exact medium of instruction and English proficiency requirement (such as IELTS, TOEFL, or Medium of Instruction certificate where accepted).`
         : `Check the medium of instruction column for each major in the catalog above. Our counselors can guide you on language readiness and preparatory requirements.`,
@@ -50,21 +50,21 @@ export function universityProfileFaq(university: UniversityIdentity, programs: U
   if (facts.intakeMonths?.length) {
     items.push({
       question: `Which intake months are available at ${identity.shortName}?`,
-      answer: `Documented intakes at ${identity.shortName} include ${facts.intakeMonths.join(' and ')}. Early application (3–5 months before intake) is recommended for Bangladeshi applicants seeking scholarship consideration and timely visa processing.`,
+      answer: `Documented intakes at ${identity.shortName} include ${facts.intakeMonths.join(' and ')}. Early application (3–5 months before intake) is recommended for international applicants seeking scholarship consideration and timely visa processing.`,
     });
   }
   if (facts.scholarshipOptions?.length) {
     const first = facts.scholarshipOptions[0];
     const example = first.coverage?.[0] || first.title;
     items.push({
-      question: `What scholarships are available at ${identity.shortName} for Bangladeshi students?`,
+      question: `What scholarships are available at ${identity.shortName} for international students?`,
       answer: `${facts.scholarshipOptions.length} scholarship route${facts.scholarshipOptions.length === 1 ? ' is' : 's are'} documented for ${identity.shortName}, including ${example}. Final scholarship tier and renewal depend on academic merit, program quota, and the university's official admission notice.`,
     });
   }
   if (isChina) {
     items.push({
-      question: `What is the EduExpress service fee for applying to ${identity.shortName}?`,
-      answer: `EduExpress International follows a strict BDT 0 Before Visa policy for ${identity.shortName}. There is no agency service charge before your China student visa is approved; official university application, medical, or visa center charges are itemized separately.`,
+      question: `What is the EduExpress service policy for applying to ${identity.shortName}?`,
+      answer: `EduExpress International provides comprehensive application evaluation and admission guidance for ${identity.shortName}. International students receive transparent advice, verified document checklists, and direct guidance with no hidden markups.`,
     });
   } else if (isMalaysia) {
     items.push({
@@ -81,8 +81,8 @@ export function universityProfileFaq(university: UniversityIdentity, programs: U
     });
   }
   items.push({
-    question: `How do I apply to ${identity.shortName} from Bangladesh?`,
-    answer: `Select your preferred major on this page, review the entry requirements and document checklist, and submit the Free Eligibility Check form. An EduExpress counselor in Dhaka will verify your transcripts, prepare your application dossier, track your official offer letter, and guide your student visa submission.`,
+    question: `How do I apply to ${identity.shortName}?`,
+    answer: `Select your preferred major on this page, review the entry requirements and document checklist, and submit the Free Eligibility Check form. An EduExpress admissions counselor will evaluate your academic transcripts, help prepare your application dossier, track your official admission notice, and guide your student visa submission.`,
   });
   return items;
 }

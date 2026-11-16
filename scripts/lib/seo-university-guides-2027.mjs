@@ -1,6 +1,8 @@
 import { NEW_7_GUIDE_SPECS, upsert7NewUniversities } from './seo-new-7-guides-2027.mjs';
+import { WECHAT_15_GUIDE_SPECS, upsert15WechatUniversities } from './seo-wechat-15-guides-2027.mjs';
 import { TOP_MS_CS_AI_2027_DATA } from '../../src/data/topMsCsAiChina2027Guide.ts';
 import { OPEN_UNIVERSITIES_2027_DATA } from '../../src/data/chinaUniversitiesOpen2027Guide.ts';
+import { CSC_UNIVERSITY_LIST_2027_DATA } from '../../src/data/cscUniversityList2027Guide.ts';
 
 /**
  * Official verified university data repairs and 2027 E-E-A-T update guides for
@@ -55,6 +57,7 @@ const NJUST_OFFICIAL_SOURCES = [
 ];
 
 const GUIDE_2027_SPECS = [
+  CSC_UNIVERSITY_LIST_2027_DATA,
   TOP_MS_CS_AI_2027_DATA,
   OPEN_UNIVERSITIES_2027_DATA,
   {
@@ -2098,11 +2101,12 @@ async function upsertOfficialProgramsAndScholarships(prisma) {
 export async function sync2027UniversityGuidesAndRecords(prisma) {
   let updated = await upsertOfficialProgramsAndScholarships(prisma);
   updated += await upsert7NewUniversities(prisma);
+  updated += await upsert15WechatUniversities(prisma);
 
   const now = new Date();
   const reviewAt = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
 
-  const allSpecs = [...GUIDE_2027_SPECS, ...NEW_7_GUIDE_SPECS];
+  const allSpecs = [...GUIDE_2027_SPECS, ...NEW_7_GUIDE_SPECS, ...WECHAT_15_GUIDE_SPECS];
 
   for (const spec of allSpecs) {
     const existing = await prisma.content.findUnique({

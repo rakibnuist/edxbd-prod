@@ -779,18 +779,18 @@ async function main() {
       : `recognized by ${recognitionAuthority}`;
 
     let overview = existingDetail?.overview || '';
-    if (!overview || overview.length < 220) {
+    if (!overview || overview.length < 220 || /from Bangladesh|Bangladeshi applicants|Bangladeshi students/i.test(overview)) {
       overview = [
-        `${u.name} is a prominent public/accredited higher education institution located in ${u.city}, ${u.country}, ${rankSummaryText}. Recognized under ${recognitionAuthority}, the university welcomes international students from Bangladesh across ${allLevels.join(', ') || 'undergraduate and postgraduate'} programs taught in ${allLangs.join(' and ') || 'English'}.`,
+        `${u.name} is a prominent public/accredited higher education institution located in ${u.city}, ${u.country}, ${rankSummaryText}. Recognized under ${recognitionAuthority}, the university welcomes international students worldwide across ${allLevels.join(', ') || 'undergraduate and postgraduate'} programs taught in ${allLangs.join(' and ') || 'English'}.`,
         `For the upcoming academic intake (${allIntakes.join(' and ') || 'September'}), ${u.name} offers ${dbPrograms.length} documented degree options—including ${allMajors.slice(0, 4).join(', ')}${allMajors.length > 4 ? ', and related disciplines' : ''}—with published annual tuition starting at ${cleanUniTuition} before scholarship deductions.`,
         isMalaysia
-          ? `Bangladeshi applicants applying to ${u.name} through EduExpress International in Dhanmondi, Dhaka receive free admission processing and EMGS eVAL student visa support (BDT 0 agency service fee), with transparent guidance on MQA accreditation, credit transfer options, and campus accommodation in ${u.city}.`
-          : `Bangladeshi students applying to ${u.name} through EduExpress International benefit from a strict BDT 0 Before Visa service policy, comprehensive scholarship evaluation (${scholarshipOptions.map((s) => s.title).slice(0, 2).join(' and ') || 'merit tuition waivers'}), and full JW202 / X1 student visa processing from Dhaka.`,
+          ? `International applicants applying to ${u.name} through EduExpress International receive transparent admission counseling and student visa processing guidance, with comprehensive information on MQA accreditation, credit transfer pathways, and international student accommodation in ${u.city}.`
+          : `International students applying to ${u.name} through EduExpress International benefit from expert evaluation (${scholarshipOptions.map((s) => s.title).slice(0, 2).join(' and ') || 'merit tuition waivers'}), personalized academic planning, and complete admission and student visa support.`,
       ].join('\n\n');
     }
 
     let highlights = existingDetail?.highlights || [];
-    if (!highlights.length) {
+    if (!highlights.length || highlights.some((h) => /Dhaka/i.test(h.title || ''))) {
       highlights = [
         {
           title: 'Ranking & Statutory Recognition',
@@ -805,8 +805,8 @@ async function main() {
           description: `Annual tuition is ${cleanUniTuition} (before scholarship), with on-campus international student dormitory at ${currency} ${hostelAmt.toLocaleString('en-US')}/year.`,
         },
         {
-          title: 'Scholarships & Dhaka Support',
-          description: `${scholarshipOptions.length} scholarship route(s) available (${scholarshipOptions[0]?.title || 'Merit Tuition Waiver'}) with ${isMalaysia ? 'BDT 0 Free Service' : 'BDT 0 Before Visa'} processing in Dhaka.`,
+          title: 'Scholarships & Application Support',
+          description: `${scholarshipOptions.length} scholarship route(s) available (${scholarshipOptions[0]?.title || 'Merit Tuition Waiver'}) with dedicated international application guidance through EduExpress International.`,
         },
       ];
     }
