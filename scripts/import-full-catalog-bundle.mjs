@@ -29,6 +29,8 @@ console.log(`Backup created at: ${backupPath}`);
 const bundle = JSON.parse(fs.readFileSync(bundlePath, 'utf8'));
 const targetDb = new DatabaseSync(targetDbPath);
 
+targetDb.exec('PRAGMA busy_timeout = 60000;');
+targetDb.exec('PRAGMA journal_mode = WAL;');
 targetDb.exec('PRAGMA foreign_keys = OFF;');
 
 const tableMap = {
@@ -41,25 +43,32 @@ const tableMap = {
   testimonials: 'Testimonial',
 };
 
-for (const [key, tableName] of Object.entries(tableMap)) {
-  const rows = bundle[key];
-  if (!rows || rows.length === 0) continue;
+targetDb.exec('BEGIN IMMEDIATE;');
+try {
+  for (const [key, tableName] of Object.entries(tableMap)) {
+    const rows = bundle[key];
+    if (!rows || rows.length === 0) continue;
 
-  targetDb.prepare(`DELETE FROM "${tableName}"`).run();
+    targetDb.prepare(`DELETE FROM "${tableName}"`).run();
 
-  const sample = rows[0];
-  const columns = Object.keys(sample);
-  const placeholders = columns.map(() => '?').join(', ');
-  const insertStmt = targetDb.prepare(
-    `INSERT INTO "${tableName}" (${columns.map((c) => `"${c}"`).join(', ')}) VALUES (${placeholders})`
-  );
+    const sample = rows[0];
+    const columns = Object.keys(sample);
+    const placeholders = columns.map(() => '?').join(', ');
+    const insertStmt = targetDb.prepare(
+      `INSERT INTO "${tableName}" (${columns.map((c) => `"${c}"`).join(', ')}) VALUES (${placeholders})`
+    );
 
-  for (const row of rows) {
-    const values = columns.map((c) => row[c]);
-    insertStmt.run(...values);
+    for (const row of rows) {
+      const values = columns.map((c) => row[c]);
+      insertStmt.run(...values);
+    }
+
+    console.log(`✓ Synced ${tableName}: ${rows.length} rows`);
   }
-
-  console.log(`✓ Synced ${tableName}: ${rows.length} rows`);
+  targetDb.exec('COMMIT;');
+} catch (err) {
+  targetDb.exec('ROLLBACK;');
+  throw err;
 }
 
 targetDb.exec('PRAGMA foreign_keys = ON;');
