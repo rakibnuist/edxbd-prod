@@ -1905,6 +1905,19 @@
       ]
     },
     {
+      "slug": "nanjing-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/nanjing-university"
+        }
+      ]
+    },
+    {
       "slug": "nanjing-university-of-science-and-technology",
       "rankings": [
         {

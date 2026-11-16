@@ -33,8 +33,7 @@ export async function upsert18WechatBatch2Universities(prisma) {
     where: {
       OR: [
         { slug: 'nanjing-university' },
-        { aliases: { contains: 'Nanjing University' } },
-        { legacySlugs: { contains: 'nju' } },
+        { name: 'Nanjing University' },
       ],
     },
     include: { programs: true, scholarships: true, fees: true },
