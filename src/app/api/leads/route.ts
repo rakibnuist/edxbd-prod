@@ -87,6 +87,10 @@ export async function POST(request: NextRequest) {
       landingPage === '/china-march-2027-intake' ||
       source === 'china_march_2027_landing' ||
       source === 'meta_china_march_2027';
+    const isChinaPillarLanding =
+      landingPage === '/study-in-china-from-bangladesh' ||
+      source === 'china_study_landing' ||
+      source === 'meta_china_study_page';
     const hasMetaSignal =
       /^(meta|facebook|fb|instagram|ig|msg|messenger|an|threads|fb_ads|meta_ads|facebook_ads|instagram_ads|ig_ads)$/i.test(
         safeUtm?.utm_source || '',
@@ -98,7 +102,11 @@ export async function POST(request: NextRequest) {
       /[?&]fbclid=[^&#]+/i.test(getOptionalString(body, 'metaEventSourceUrl', 2048) || '') ||
       /FBAN|FBAV|FB_IAB|FBIOS|Instagram/i.test(request.headers.get('user-agent') || '');
     const resolvedSource =
-      isMarchLanding && hasMetaSignal ? 'meta_china_march_2027' : source;
+      isMarchLanding && hasMetaSignal
+        ? 'meta_china_march_2027'
+        : isChinaPillarLanding && hasMetaSignal
+          ? 'meta_china_study_page'
+          : source;
 
     const assessmentCheck = validateLeadAssessmentInput(body);
     if (assessmentCheck.error) {

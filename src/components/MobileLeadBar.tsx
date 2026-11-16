@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, MessageCircle, Phone } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { trackAssessmentStart, trackPhoneClick, trackWhatsAppClick } from '@/lib/conversion-events';
 
 const PHONE = '+8801983333566';
 
@@ -18,9 +19,9 @@ export default function MobileLeadBar() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     // Do not cover the lead form or the footer links.
-    const targets = [document.getElementById('assessment'), document.getElementById('site-footer')].filter(
-      (element): element is HTMLElement => Boolean(element),
-    );
+    const targets = ['assessment', 'china-fit-form', 'china-fit-form-bottom', 'site-footer']
+      .map(id => document.getElementById(id))
+      .filter((element): element is HTMLElement => Boolean(element));
     const observer = new IntersectionObserver(
       (entries) => {
         setBlocked(entries.some((entry) => entry.isIntersecting));
@@ -45,10 +46,15 @@ export default function MobileLeadBar() {
     return null;
   }
 
-  const assessmentHref = pathname === '/' ? '#assessment' : '/education-fit-assessment';
+  const isChinaHub = pathname === '/study-in-china-from-bangladesh';
+  const assessmentHref = isChinaHub ? '#china-fit-form' : '/education-fit-assessment';
   const whatsappHref =
     `https://wa.me/${PHONE.replace(/\D/g, '')}?text=` +
-    encodeURIComponent('Assalamu alaikum. I would like counselling for studying abroad.');
+    encodeURIComponent(
+      isChinaHub
+        ? 'Assalamu alaikum. I would like a free Study in China plan from EduExpress International.'
+        : 'Assalamu alaikum. I would like counselling for studying abroad.',
+    );
   const visible = scrolled && !blocked;
 
   return (
@@ -63,6 +69,7 @@ export default function MobileLeadBar() {
         <div className="grid grid-cols-3 gap-1.5 rounded-2xl border border-rule bg-white/95 p-1.5 shadow-[0_-20px_60px_-30px_rgba(15,53,87,0.5)] backdrop-blur-md">
           <a
             href={`tel:${PHONE}`}
+            onClick={() => trackPhoneClick({ label: 'mobile_bar_phone' })}
             className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-2 text-[14px] font-bold text-petrol-700 transition-colors hover:bg-mint-100"
           >
             <Phone size={15} aria-hidden="true" />
@@ -72,18 +79,31 @@ export default function MobileLeadBar() {
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppClick({ label: 'mobile_bar_whatsapp' })}
             className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl px-2 text-[14px] font-bold text-jade transition-colors hover:bg-mint-100"
           >
             <MessageCircle size={15} aria-hidden="true" />
             WhatsApp
           </a>
-          <Link
-            href={assessmentHref}
-            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-petrol-700 px-2 text-[14px] font-bold text-white transition-colors hover:bg-petrol-600"
-          >
-            Assess
-            <ArrowRight size={14} aria-hidden="true" />
-          </Link>
+          {assessmentHref.startsWith('#') ? (
+            <a
+              href={assessmentHref}
+              onClick={() => trackAssessmentStart({ destination: 'china', label: 'mobile_bar_china_assess' })}
+              className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-lime px-2 text-[14px] font-bold text-petrol-800 transition-colors hover:bg-lime-hover"
+            >
+              Free Plan
+              <ArrowRight size={14} aria-hidden="true" />
+            </a>
+          ) : (
+            <Link
+              href={assessmentHref}
+              onClick={() => trackAssessmentStart({ label: 'mobile_bar_assess' })}
+              className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-petrol-700 px-2 text-[14px] font-bold text-white transition-colors hover:bg-petrol-600"
+            >
+              Assess
+              <ArrowRight size={14} aria-hidden="true" />
+            </Link>
+          )}
         </div>
       </div>
     </div>

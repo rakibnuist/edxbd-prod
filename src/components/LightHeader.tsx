@@ -98,7 +98,8 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
   const whatsappHref = `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(
     'Assalamu alaikum. I would like counselling for studying abroad.',
   )}`;
-  const assessmentHref = pathname === '/' ? '#assessment' : '/education-fit-assessment';
+  const assessmentHref =
+    pathname === '/' ? '#assessment' : pathname === '/study-in-china-from-bangladesh' ? '#china-fit-form' : '/education-fit-assessment';
 
   return (
     <header className="fixed inset-x-0 top-0 z-[60]">

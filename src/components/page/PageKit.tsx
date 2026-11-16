@@ -207,9 +207,11 @@ export function FaqBlock({
 export function CtaBand({
   title = 'Not sure where to start?',
   text = 'Tell us your results, budget and preferred country. A counsellor calls you within one working day with realistic options, the costs and the documents to prepare.',
+  assessmentHref = '/education-fit-assessment',
 }: {
   title?: string;
   text?: string;
+  assessmentHref?: string;
 }) {
   const whatsapp = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent('Assalamu alaikum. I would like counselling for studying abroad.')}`;
   return (
@@ -220,9 +222,15 @@ export function CtaBand({
           <p className="mt-5 text-[18px] leading-[1.6] text-white/85">{text}</p>
         </div>
         <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-          <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[54px] px-7">
-            Get my free assessment <ArrowRight size={18} aria-hidden="true" />
-          </Link>
+          {assessmentHref.startsWith('#') ? (
+            <a href={assessmentHref} className="ed-btn ed-btn-signal min-h-[54px] px-7">
+              Get my free assessment <ArrowRight size={18} aria-hidden="true" />
+            </a>
+          ) : (
+            <Link href={assessmentHref} className="ed-btn ed-btn-signal min-h-[54px] px-7">
+              Get my free assessment <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+          )}
           <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-on-dark min-h-[54px] px-7">
             <MessageCircle size={18} aria-hidden="true" /> WhatsApp a counsellor
           </a>
