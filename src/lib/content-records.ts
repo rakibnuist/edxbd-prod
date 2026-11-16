@@ -14,6 +14,7 @@ import { NJUST_2027_SLUG, NJUST_2027_DATA } from '@/data/njustGuide2027';
 import { NEW_GUIDES_2027_DATA } from '@/data/newGuides2027';
 import { WECHAT_15_GUIDES_DATA } from '@/data/newWechatGuides2027';
 import { WECHAT_BATCH2_18_GUIDES_DATA } from '@/data/newWechatBatch2Guides2027';
+import { WECHAT_BATCH3_25_GUIDES_DATA } from '@/data/newWechatBatch3Guides2027';
 import { TOP_MS_CS_AI_2027_SLUG, TOP_MS_CS_AI_2027_DATA } from '@/data/topMsCsAiChina2027Guide';
 import { OPEN_UNIVERSITIES_2027_SLUG, OPEN_UNIVERSITIES_2027_DATA } from '@/data/chinaUniversitiesOpen2027Guide';
 import { CSC_UNIVERSITY_LIST_2027_SLUG, CSC_UNIVERSITY_LIST_2027_DATA } from '@/data/cscUniversityList2027Guide';
@@ -95,6 +96,13 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
     }
   }
   for (const [slug, data] of Object.entries(WECHAT_BATCH2_18_GUIDES_DATA)) {
+    if (!serialized.some(u => u.slug === slug)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const fallback = serializeUpdate(data as any);
+      if (fallback) serialized.unshift(fallback);
+    }
+  }
+  for (const [slug, data] of Object.entries(WECHAT_BATCH3_25_GUIDES_DATA)) {
     if (!serialized.some(u => u.slug === slug)) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const fallback = serializeUpdate(data as any);
@@ -190,6 +198,17 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
     }
   }
   for (const [slug, data] of Object.entries(WECHAT_BATCH2_18_GUIDES_DATA)) {
+    if (!updates.some(u => u.slug === slug)) {
+      updates.unshift({
+        slug: data.slug,
+        updatedAt: data.updatedAt,
+        publishedAt: data.publishedAt,
+        category: data.category,
+        categories: data.categories,
+      });
+    }
+  }
+  for (const [slug, data] of Object.entries(WECHAT_BATCH3_25_GUIDES_DATA)) {
     if (!updates.some(u => u.slug === slug)) {
       updates.unshift({
         slug: data.slug,

@@ -25,6 +25,7 @@ import { NJUST_2027_SLUG, NJUST_2027_DATA } from '@/data/njustGuide2027';
 import { NEW_GUIDES_2027_DATA } from '@/data/newGuides2027';
 import { WECHAT_15_GUIDES_DATA } from '@/data/newWechatGuides2027';
 import { WECHAT_BATCH2_18_GUIDES_DATA } from '@/data/newWechatBatch2Guides2027';
+import { WECHAT_BATCH3_25_GUIDES_DATA } from '@/data/newWechatBatch3Guides2027';
 import { TOP_MS_CS_AI_2027_SLUG, TOP_MS_CS_AI_2027_DATA } from '@/data/topMsCsAiChina2027Guide';
 import { OPEN_UNIVERSITIES_2027_SLUG, OPEN_UNIVERSITIES_2027_DATA } from '@/data/chinaUniversitiesOpen2027Guide';
 import { CSC_UNIVERSITY_LIST_2027_SLUG, CSC_UNIVERSITY_LIST_2027_DATA } from '@/data/cscUniversityList2027Guide';
@@ -169,6 +170,9 @@ const getUpdate = cache(async (slug: string) => {
   }
   if (WECHAT_BATCH2_18_GUIDES_DATA[slug]) {
     return WECHAT_BATCH2_18_GUIDES_DATA[slug];
+  }
+  if (WECHAT_BATCH3_25_GUIDES_DATA[slug]) {
+    return WECHAT_BATCH3_25_GUIDES_DATA[slug];
   }
   return null;
 });

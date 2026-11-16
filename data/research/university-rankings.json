@@ -863,6 +863,45 @@
       ]
     },
     {
+      "slug": "guangdong-pharmaceutical-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/guangdong-pharmaceutical-university"
+        }
+      ]
+    },
+    {
+      "slug": "guangdong-polytechnic-normal-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/guangdong-polytechnic-normal-university"
+        }
+      ]
+    },
+    {
+      "slug": "guangdong-university-of-foreign-studies",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/guangdong-university-of-foreign-studies"
+        }
+      ]
+    },
+    {
       "slug": "guangxi-medical-university",
       "rankings": [
         {
@@ -907,6 +946,19 @@
           "scope": "subject",
           "subject": "Pharmacy & Pharmaceutical Sciences",
           "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
+        }
+      ]
+    },
+    {
+      "slug": "guangxi-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/guangxi-university"
         }
       ]
     },
@@ -2100,6 +2152,19 @@
       ]
     },
     {
+      "slug": "northeast-agricultural-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/northeast-agricultural-university"
+        }
+      ]
+    },
+    {
       "slug": "northeast-forestry-university",
       "rankings": [
         {
@@ -2422,6 +2487,19 @@
       ]
     },
     {
+      "slug": "renmin-university-of-china",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/renmin-university-of-china"
+        }
+      ]
+    },
+    {
       "slug": "scut",
       "rankings": [
         {
@@ -2495,6 +2573,19 @@
           "rank": "350+",
           "scope": "national",
           "sourceUrl": "https://www.shanghairanking.com/institution/shanghai-dianji-university"
+        }
+      ]
+    },
+    {
+      "slug": "shanghai-institute-of-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/shanghai-institute-of-technology"
         }
       ]
     },
