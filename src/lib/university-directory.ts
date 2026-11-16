@@ -147,7 +147,7 @@ export function programIsCscaFree(program: CleanUniversityRecord['programs'][num
   if (!program.sourceUrl || !/^https?:\/\//i.test(program.sourceUrl)) return false;
   return program.eligibility.some(text => {
     const statements = text.split(/[.;\n]/).map(value => value.trim());
-    return statements.some(statement => /^(?:CSCA(?: exam(?:ination)?)? (?:is )?not required|No CSCA(?: exam(?:ination)?)? (?:is )?required|Exempt from (?:the )?CSCA(?: exam(?:ination)?)?)[.!]?$/i.test(statement));
+    return statements.some(statement => /^(?:(?:No\s+)?CSCA(?:\s+(?:exam(?:ination)?|score|test|result))?\s+(?:is\s+)?not\s+required|No\s+CSCA(?:\s+(?:exam(?:ination)?|score|test|result))?\s+(?:is\s+)?required|Exempt\s+from\s+(?:the\s+)?CSCA(?:\s+exam(?:ination)?)?)(?:\s+(?:for\s+(?:admission|entry)))?[.!]?$/i.test(statement));
   });
 }
 

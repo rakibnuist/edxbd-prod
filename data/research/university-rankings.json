@@ -334,6 +334,19 @@
       ]
     },
     {
+      "slug": "changchun-sci-tech-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/changchun-sci-tech-university"
+        }
+      ]
+    },
+    {
       "slug": "changchun-university-of-science-and-technology",
       "rankings": [
         {
@@ -2306,6 +2319,19 @@
           "scope": "subject",
           "subject": "Computer Science",
           "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/nanjing-university-information-science-and-technology"
+        }
+      ]
+    },
+    {
+      "slug": "panzhihua-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/panzhihua-university"
         }
       ]
     },

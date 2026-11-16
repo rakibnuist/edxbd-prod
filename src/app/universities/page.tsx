@@ -67,7 +67,8 @@ async function getUniversities() {
         return {
           name: programName(program.name), level: normalizeProgramLevel(program.level), languages: program.languages,
           subject: programName(program.name), duration: evergreenText(program.duration), intakes: intakeMonths([program.intake || '', ...(prior?.intakes || [])]),
-          tuition: tuition ? feeText(tuition) : undefined, eligibility: [...program.qualifications, ...program.languageRequirements, ...program.notes], sourceUrl: prior?.sourceUrl,
+          tuition: tuition ? feeText(tuition) : undefined, eligibility: [...(prior?.eligibility || []), ...program.qualifications, ...program.languageRequirements, ...program.notes],
+          sourceUrl: prior?.sourceUrl || record.officialUrl || (record.sourceUrls && record.sourceUrls[0]),
           status: prior?.status === 'active' ? 'active' as const : 'planned' as const,
         };
       }) : [];

@@ -17,6 +17,7 @@ import {
   filterUniversities,
   fundingMatchesProgram,
   matchingPrograms,
+  programIsCscaFree,
   readDirectoryFilters,
   writeDirectoryFilters,
   type DirectoryFilters,
@@ -109,6 +110,7 @@ type Row = {
   awardValue: string;
   levels: string[];
   englishTaught: boolean;
+  cscaFree?: boolean;
   relationship?: string;
 };
 
@@ -135,6 +137,7 @@ function buildRow(university: DirectoryUniversity, filters: DirectoryFilters): R
   const isAwkwardTuition = /dated official fee|next-cycle|require confirmation|research below|not recorded|contact|request|not specified|not confirmed|unknown/i.test(rawTuition);
   const tuition = isAwkwardTuition ? 'View program fees' : rawTuition;
   const showTuition = Boolean(tuition) && !isAwkwardTuition;
+  const cscaFree = university.country.toLowerCase() === 'china' && programs.some(program => programIsCscaFree(program));
 
   return {
     university,
@@ -145,6 +148,7 @@ function buildRow(university: DirectoryUniversity, filters: DirectoryFilters): R
     awardValue: route?.value || (legacyAward ? legacyScholarshipValue(legacyAward) : ''),
     levels,
     englishTaught: teaching.some(language => /english/i.test(language)),
+    cscaFree,
     relationship: university.relationship,
   };
 }
@@ -712,6 +716,11 @@ export default function UniversitiesClient({ directory }: Props) {
                                 {row.englishTaught && (
                                   <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700">
                                     ● English Medium
+                                  </span>
+                                )}
+                                {row.cscaFree && (
+                                  <span className="rounded-md bg-sky-50 border border-sky-200/80 px-2 py-0.5 text-[11px] font-bold text-sky-800" title="CSCA standardized examination is not required for admission">
+                                    ● No CSCA Required
                                   </span>
                                 )}
                               </div>

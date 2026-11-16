@@ -31,6 +31,9 @@ try {
   console.log('Running import-full-catalog-bundle.mjs...');
   execSync('node scripts/import-full-catalog-bundle.mjs', { stdio: 'inherit' });
 
+  console.log('Running seed-no-csca-universities.mjs...');
+  execSync('node scripts/seed-no-csca-universities.mjs', { stdio: 'inherit' });
+
   console.log('Running complete-all-universities-data.mjs...');
   execSync('node scripts/complete-all-universities-data.mjs', { stdio: 'inherit' });
 

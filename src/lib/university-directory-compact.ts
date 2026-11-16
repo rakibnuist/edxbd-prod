@@ -57,7 +57,7 @@ export function compactDirectory(universities: DirectoryUniversity[]): CompactUn
         .map(award => ({
           title: award.title,
           status: award.status,
-          details: FULL_WAIVER.test(award.details.join('; ')) ? ['Tuition: 100% waived'] : [],
+          details: FULL_WAIVER.test(Array.isArray(award.details) ? award.details.join('; ') : String(award.details || '')) ? ['Tuition: 100% waived'] : [],
           eligiblePrograms: [],
           ...(award.coverage ? { coverage: award.coverage } : {}),
           ...(award.amount ? { amount: award.amount } : {}),

@@ -106,6 +106,9 @@ test('CSCA exemption requires explicit sourced evidence on the matching China pr
   const required = { ...program('Management', 'Bachelor', ['Chinese'], ['March']), sourceUrl: 'https://example.edu/admission', eligibility: ['CSCA required.'] };
   const uni = university({ programs: [exempt, required] });
   assert.equal(directory.universityMatchesFilters(uni, filters({ cscaFree: true })), true);
+  assert.equal(directory.programIsCscaFree({ ...exempt, eligibility: ['No CSCA score is required for admission.'] }), true);
+  assert.equal(directory.programIsCscaFree({ ...exempt, eligibility: ['No CSCA exam required.'] }), true);
+  assert.equal(directory.programIsCscaFree({ ...exempt, eligibility: ['CSCA not required.'] }), true);
   assert.equal(directory.universityMatchesFilters(uni, filters({ cscaFree: true, language: 'Chinese' })), false);
   assert.equal(directory.universityMatchesFilters(university(), filters({ cscaFree: true })), false);
   for (const eligibility of [[], ['English applicants are exempt from Professional Chinese in CSCA.'], ['CSCA may not be required.'], ['CSCA not required for some applicants.']]) {
