@@ -1,3 +1,5 @@
+import { NEW_7_GUIDE_SPECS, upsert7NewUniversities } from './seo-new-7-guides-2027.mjs';
+
 /**
  * Official verified university data repairs and 2027 E-E-A-T update guides for
  * priority high-volume search topics (Nanchang University MSc/CSC Type B &
@@ -2091,11 +2093,14 @@ async function upsertOfficialProgramsAndScholarships(prisma) {
 
 export async function sync2027UniversityGuidesAndRecords(prisma) {
   let updated = await upsertOfficialProgramsAndScholarships(prisma);
+  updated += await upsert7NewUniversities(prisma);
 
   const now = new Date();
   const reviewAt = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
 
-  for (const spec of GUIDE_2027_SPECS) {
+  const allSpecs = [...GUIDE_2027_SPECS, ...NEW_7_GUIDE_SPECS];
+
+  for (const spec of allSpecs) {
     const existing = await prisma.content.findUnique({
       where: { slug: spec.slug },
       select: {

@@ -10,6 +10,8 @@ import { categoriesFromUpdate, categorySlug } from '@/lib/update-categories';
 import { CGS_2027_TYPE_A_SLUG, CGS_2027_TYPE_A_DATA } from '@/data/cgsTypeAGuide2027';
 import { CMU_2027_SLUG, CMU_2027_DATA } from '@/data/cmuGuide2027';
 import { SDJU_2027_SLUG, SDJU_2027_DATA } from '@/data/sdjuLanguageGuide2027';
+import { NJUST_2027_SLUG, NJUST_2027_DATA } from '@/data/njustGuide2027';
+import { NEW_GUIDES_2027_DATA } from '@/data/newGuides2027';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -63,6 +65,16 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   });
 
   const serialized = records.map(record => serializeUpdate(record)).filter((record): record is Update => Boolean(record));
+  if (!serialized.some(u => u.slug === NJUST_2027_SLUG)) {
+    const fallback = serializeUpdate(NJUST_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  for (const [slug, data] of Object.entries(NEW_GUIDES_2027_DATA)) {
+    if (!serialized.some(u => u.slug === slug)) {
+      const fallback = serializeUpdate(data as any);
+      if (fallback) serialized.unshift(fallback);
+    }
+  }
   if (!serialized.some(u => u.slug === SDJU_2027_SLUG)) {
     const fallback = serializeUpdate(SDJU_2027_DATA);
     if (fallback) serialized.unshift(fallback);
@@ -84,6 +96,26 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
     where: { type: { in: ['update', 'article'] }, archivedAt: null, ...currentVisibleContentWhere() },
     select: { slug: true, updatedAt: true, publishedAt: true, category: true, categories: true },
   });
+  if (!updates.some(u => u.slug === NJUST_2027_SLUG)) {
+    updates.unshift({
+      slug: NJUST_2027_DATA.slug,
+      updatedAt: NJUST_2027_DATA.updatedAt,
+      publishedAt: NJUST_2027_DATA.publishedAt,
+      category: NJUST_2027_DATA.category,
+      categories: NJUST_2027_DATA.categories,
+    });
+  }
+  for (const [slug, data] of Object.entries(NEW_GUIDES_2027_DATA)) {
+    if (!updates.some(u => u.slug === slug)) {
+      updates.unshift({
+        slug: data.slug,
+        updatedAt: data.updatedAt,
+        publishedAt: data.publishedAt,
+        category: data.category,
+        categories: data.categories,
+      });
+    }
+  }
   if (!updates.some(u => u.slug === SDJU_2027_SLUG)) {
     updates.unshift({
       slug: SDJU_2027_DATA.slug,

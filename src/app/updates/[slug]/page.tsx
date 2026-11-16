@@ -22,6 +22,7 @@ import { CGS_2027_TYPE_A_SLUG, CGS_2027_TYPE_A_DATA } from '@/data/cgsTypeAGuide
 import { CMU_2027_SLUG, CMU_2027_DATA } from '@/data/cmuGuide2027';
 import { SDJU_2027_SLUG, SDJU_2027_DATA } from '@/data/sdjuLanguageGuide2027';
 import { NJUST_2027_SLUG, NJUST_2027_DATA } from '@/data/njustGuide2027';
+import { NEW_GUIDES_2027_DATA } from '@/data/newGuides2027';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -121,6 +122,9 @@ const getUpdate = cache(async (slug: string) => {
   }
   if (slug === NJUST_2027_SLUG) {
     return NJUST_2027_DATA;
+  }
+  if (NEW_GUIDES_2027_DATA[slug]) {
+    return NEW_GUIDES_2027_DATA[slug];
   }
   return null;
 });
