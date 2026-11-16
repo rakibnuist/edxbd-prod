@@ -2131,6 +2131,7 @@ export async function sync2027UniversityGuidesAndRecords(prisma) {
         id: true,
         title: true,
         content: true,
+        metaTitle: true,
         metaDescription: true,
         featuredImage: true,
         lastVerifiedAt: true,
@@ -2168,6 +2169,7 @@ export async function sync2027UniversityGuidesAndRecords(prisma) {
       console.log(`Created 2027 priority guide: ${spec.slug}`);
     } else if (
       existing.title !== spec.title ||
+      existing.metaTitle !== spec.metaTitle ||
       existing.metaDescription !== spec.metaDescription ||
       existing.content !== spec.content ||
       existing.featuredImage !== spec.featuredImage ||
