@@ -103,8 +103,10 @@ const faqs = [
 ];
 
 const related = [
+  { label: 'CSC Scholarship University List 2027', href: '/updates/csc-scholarship-university-list-2027' },
   { label: 'Chinese Universities Open for 2027 Intake', href: '/updates/chinese-universities-open-for-2027-intake' },
   { label: 'Top MS in Computer Science & AI (2027 CSC)', href: '/updates/top-ms-computer-science-ai-china-csc-scholarship-2027' },
+  { label: 'Confucius Institute Scholarship 2027 (CLEC)', href: '/updates/confucius-institute-scholarship-2027' },
   { label: 'CGS 2027/2028 Type A embassy notice', href: '/updates/cgs-2027-2028-type-a-scholarship-bangladesh' },
   { label: 'China scholarships: every route compared', href: '/china-scholarships-bangladesh' },
   { label: 'CSC Type A bilateral guide', href: '/updates/how-to-apply-csc-type-a-scholarship-complete-guide' },
@@ -155,9 +157,9 @@ export default function CscScholarshipBangladeshPage() {
       <PageHero
         path={PATH}
         trail={[{ name: 'Study in China', path: '/study-in-china-from-bangladesh' }, { name: 'CSC scholarship' }]}
-        eyebrow="Chinese Government Scholarship guide"
-        title="CSC scholarship from Bangladesh."
-        lead="For awarded scholars, the Chinese Government Scholarship (CSC) covers tuition and university housing and provides a monthly stipend of CNY 2,500 to 3,500 for Bangladeshi undergraduate and postgraduate students. Awards are renewed through the annual CSC review."
+        eyebrow="China Fully Funded Scholarship 2027/2028"
+        title="CSC Scholarship 2027: Application Guide & Requirements."
+        lead="For awarded scholars, the 2027/2028 Chinese Government Scholarship (CSC / CGS) is a premier fully funded award covering 100% tuition, free university housing, comprehensive medical insurance, and a monthly stipend of CNY 2,500 to 3,500 for undergraduate, Master's, and Doctoral students."
         actions={
           <>
             <a href="#csc-assessment" className="ed-btn ed-btn-signal min-h-[52px] px-7">Check your CSC eligibility <ArrowRight size={18} aria-hidden="true" /></a>
@@ -220,8 +222,8 @@ export default function CscScholarshipBangladeshPage() {
       </div>
 
       <Section
-        title="What does a CSC scholarship cover?"
-        intro="CSC (China Scholarship Council) is one of the most generous fully-funded government scholarships available to students from Bangladesh."
+        title="China Fully Funded Scholarship: What Does CSC 2027 Cover?"
+        intro="The Chinese Government Scholarship (CSC) is premier fully funded award in China for 2027/2028, offering full tuition, accommodation, and living stipends for Bachelor, Master, and PhD students from Bangladesh."
         action={<Link href="/china-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[48px] px-6">Compare every scholarship route <ArrowRight size={16} aria-hidden="true" /></Link>}
       >
         <div data-anim="stagger" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -270,6 +272,8 @@ export default function CscScholarshipBangladeshPage() {
         </div>
         <p className="mt-6 text-[16px] leading-7 text-ink-soft">
           Windows vary by year and by university. Check the current notice for your route, explore the{' '}
+          <Link href="/updates/csc-scholarship-university-list-2027" className="font-semibold text-petrol-800 underline underline-offset-4">2027 CSC scholarship university list directory</Link>{' '}
+          alongside the{' '}
           <Link href="/updates/complete-csc-universities-list-2026" className="font-semibold text-petrol-800 underline underline-offset-4">306 participating CSC universities directory</Link>,
           browse{' '}
           <Link href="/china-universities" className="font-semibold text-petrol-800 underline underline-offset-4">China university profiles &amp; requirements</Link>{' '}

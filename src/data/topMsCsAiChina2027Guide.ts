@@ -116,6 +116,64 @@ export const TOP_MS_CS_AI_2027_DATA = {
   <li><strong>Scholarship Quota:</strong> <strong>CSC Type B (Agency No. 10699)</strong>. Standard tuition CNY 25,000/year waived for scholarship recipients.</li>
 </ul>
 
+<h2>QS World Rankings in Computer Science: Top Chinese Universities</h2>
+<p>For international applicants prioritizing global employability and academic prestige, Chinese universities dominate the upper tier of the <strong>QS World University Rankings by Subject (Computer Science &amp; Information Systems)</strong>. Below is a verified comparison of top-ranked institutions, their global CS ranking tier, key technical strengths, and CSC Type B Agency Numbers:</p>
+
+<table class="ed-table">
+  <thead>
+    <tr>
+      <th>University</th>
+      <th>QS Subject Rank (CS)</th>
+      <th>Key Technical Strengths</th>
+      <th>CSC 2027 Agency No.</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Tsinghua University (THU)</strong></td>
+      <td>#15 Globally</td>
+      <td>AI, High-Performance Computing, Systems</td>
+      <td>10003 (Type B)</td>
+    </tr>
+    <tr>
+      <td><strong>Peking University (PKU)</strong></td>
+      <td>#17 Globally</td>
+      <td>Theoretical CS, Machine Learning, NLP</td>
+      <td>10001 (Type B)</td>
+    </tr>
+    <tr>
+      <td><strong>Shanghai Jiao Tong University (SJTU)</strong></td>
+      <td>#28 Globally</td>
+      <td>Computer Vision, Autonomous Systems, John Hopcroft Center</td>
+      <td>10248 (Type B)</td>
+    </tr>
+    <tr>
+      <td><strong>Zhejiang University (ZJU)</strong></td>
+      <td>#32 Globally</td>
+      <td>Big Data, CAD &amp; Graphics, Distributed Systems</td>
+      <td>10335 (Type B)</td>
+    </tr>
+    <tr>
+      <td><strong>Harbin Institute of Technology (HIT)</strong></td>
+      <td>Top 50&ndash;100</td>
+      <td>Robotics, Aerospace Software, Cybersecurity</td>
+      <td>10213 (Type B)</td>
+    </tr>
+    <tr>
+      <td><strong>Univ. of Science &amp; Technology of China (USTC)</strong></td>
+      <td>Top 50&ndash;100</td>
+      <td>Quantum Computing, Cognitive Intelligence, Speech</td>
+      <td>10358 (Type B)</td>
+    </tr>
+    <tr>
+      <td><strong>Nanjing Univ. of Science &amp; Technology (NJUST)</strong></td>
+      <td>ESI Top 1&permil;</td>
+      <td>Pattern Recognition, Computer Vision, AI Systems</td>
+      <td>10288 (Type B)</td>
+    </tr>
+  </tbody>
+</table>
+
 <h2>Academic &amp; Document Eligibility for Bangladeshi Candidates</h2>
 <p>To successfully pass technical file review and secure university nomination for CSC Type B awards, applicants must assemble an evidence-first document dossier:</p>
 <ol>

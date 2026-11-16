@@ -234,6 +234,150 @@ const posters = [
     info: 'Upper-Intermediate Chinese · 5 Academic Modules · Shanghai',
     deadline: 'Apply by 10 December 2026',
   },
+  {
+    "filename": "guizhou-university-csc-scholarship-2027.jpg",
+    "category": "SCHOLARSHIP",
+    "title": "Guizhou University (GZU)",
+    "subtitle": "CSC High-Level Postgraduate Program 2027/28",
+    "info": "Agency No. 10657 · 100% Tuition + Living Stipend · Guiyang",
+    "deadline": "Apply by 15 March 2027"
+},
+  {
+    "filename": "southeast-university-international-graduate-admissions-2027.jpg",
+    "category": "ADMISSIONS",
+    "title": "Southeast University (SEU)",
+    "subtitle": "International Graduate Admissions 2027",
+    "info": "Double First-Class A · 985/211 · Architecture & STEM · Nanjing",
+    "deadline": "CSC Deadline: 28 Feb 2027"
+},
+  {
+    "filename": "northeast-normal-university-doctoral-programs-2027-2028.jpg",
+    "category": "PHD PROGRAMS",
+    "title": "Northeast Normal University",
+    "subtitle": "International Doctoral Programs 2027–2028",
+    "info": "Double First-Class · 6 Key Disciplines · Changchun",
+    "deadline": "CSC: 31 March 2027"
+},
+  {
+    "filename": "tianjin-university-of-finance-and-economics-csc-scholarship-2027.jpg",
+    "category": "SCHOLARSHIP",
+    "title": "Tianjin Univ of Finance & Econ",
+    "subtitle": "CSC High-Level Graduate Program 2027",
+    "info": "Agency No. 10070 · Economics, Finance & Management · Tianjin",
+    "deadline": "Apply by 28 February 2027"
+},
+  {
+    "filename": "shanxi-university-of-chinese-medicine-admissions-2027.jpg",
+    "category": "ADMISSIONS",
+    "title": "Shanxi Univ of Chinese Medicine",
+    "subtitle": "2027 International Student Admissions",
+    "info": "TCM, Acupuncture & Clinical Medicine · Taiyuan/Jinzhong",
+    "deadline": "Apply by 30 June 2027"
+},
+  {
+    "filename": "tsinghua-university-international-undergraduate-admissions-2027.jpg",
+    "category": "TOP UNIVERSITY",
+    "title": "Tsinghua University (THU)",
+    "subtitle": "Undergraduate Admissions 2027: No CSCA",
+    "info": "Global Top 20 · SAT/ACT/IB/A-Levels Accepted · Beijing",
+    "deadline": "Rolling Rounds: Nov 2026 – Mar 2027"
+},
+  {
+    "filename": "nanjing-university-international-undergraduate-admissions-2027.jpg",
+    "category": "TOP UNIVERSITY",
+    "title": "Nanjing University (NJU)",
+    "subtitle": "2027 Fall Undergraduate Admissions Open",
+    "info": "C9 League Member · Double First-Class · Nanjing",
+    "deadline": "Apply by 31 March 2027"
+},
+  {
+    "filename": "shanghai-jiao-tong-university-undergraduate-admissions-2027.jpg",
+    "category": "TOP UNIVERSITY",
+    "title": "Shanghai Jiao Tong Univ (SJTU)",
+    "subtitle": "2027 International Undergraduate Admissions",
+    "info": "C9 League · Joint Institute & English Degrees · Shanghai",
+    "deadline": "Deadlines: Dec 2026 – Apr 2027"
+},
+  {
+    "filename": "sustech-international-undergraduate-admissions-fellowships-2027.jpg",
+    "category": "SCHOLARSHIP",
+    "title": "SUSTech Shenzhen",
+    "subtitle": "2027 Undergraduate Admissions & Fellowships",
+    "info": "100% English Taught · Presidential Fellowships · Shenzhen",
+    "deadline": "Rounds Dec 2026 – Apr 2027"
+},
+  {
+    "filename": "xiamen-university-international-undergraduate-admissions-2027.jpg",
+    "category": "ADMISSIONS",
+    "title": "Xiamen University (XMU)",
+    "subtitle": "2027 International Undergraduate Admissions",
+    "info": "Double First-Class · Economics, STEM & Marine · Xiamen",
+    "deadline": "Phase 1: 15 Feb · Phase 2: 15 Apr 2027"
+},
+  {
+    "filename": "dalian-university-of-technology-undergraduate-admissions-2027.jpg",
+    "category": "ADMISSIONS",
+    "title": "Dalian Univ of Technology (DUT)",
+    "subtitle": "2027 Undergraduate Admissions (EN/ZH)",
+    "info": "985/211 Engineering · Chemical, Civil & CS · Dalian",
+    "deadline": "Apply by 30 May 2027"
+},
+  {
+    "filename": "nankai-university-international-undergraduate-admissions-2027.jpg",
+    "category": "ADMISSIONS",
+    "title": "Nankai University (NKU)",
+    "subtitle": "2027 International Undergraduate Admissions",
+    "info": "Top 10 in China · Economics, Business & Science · Tianjin",
+    "deadline": "Batches Dec 2026 – Apr 2027"
+},
+  {
+    "filename": "central-china-normal-university-csc-scholarship-2027.jpg",
+    "category": "SCHOLARSHIP",
+    "title": "Central China Normal Univ (CCNU)",
+    "subtitle": "CSC High-Level Graduate Program 2027",
+    "info": "Agency No. 10511 · Education, Psychology & STEM · Wuhan",
+    "deadline": "Apply by 5 March 2027"
+},
+  {
+    "filename": "wenzhou-medical-university-international-premed-foundation-2027.jpg",
+    "category": "PRE-MED PROGRAM",
+    "title": "Wenzhou Medical University (WMU)",
+    "subtitle": "International Medical Foundation Track 2027",
+    "info": "Direct Progression to MBBS & BDS · Wenzhou",
+    "deadline": "Spring: 15 Jan · Autumn: 15 Jul 2027"
+},
+  {
+    "filename": "southwest-university-presidents-scholarship-guide-2027.jpg",
+    "category": "SCHOLARSHIP",
+    "title": "Southwest University (SWU)",
+    "subtitle": "President’s Scholarship Guidelines 2027",
+    "info": "New Silk Road · Full Tuition & Monthly Stipend · Chongqing",
+    "deadline": "Apply by 31 March 2027"
+},
+  {
+    "filename": "yunnan-provincial-government-scholarship-vocational-diploma-2027.jpg",
+    "category": "SCHOLARSHIP",
+    "title": "Yunnan Provincial Govt Scholarship",
+    "subtitle": "Engineering & Mechatronics Diploma 2027",
+    "info": "100% Free Tuition + Monthly Stipend · YVCMET Kunming",
+    "deadline": "Apply by 30 May 2027"
+},
+  {
+    "filename": "changchun-university-of-science-and-technology-csc-graduate-2027.jpg",
+    "category": "SCHOLARSHIP",
+    "title": "Changchun Univ of Sci & Tech",
+    "subtitle": "CSC Type B Graduate Admissions 2027",
+    "info": "Agency No. 10186 · Optics, Robotics & Computing · Changchun",
+    "deadline": "Apply by 1 March 2027"
+},
+  {
+    "filename": "yunnan-minzu-university-admissions-provincial-scholarships-2027.jpg",
+    "category": "SCHOLARSHIP",
+    "title": "Yunnan Minzu University (YMU)",
+    "subtitle": "2027 Admissions & Provincial Scholarships",
+    "info": "Bachelor, Master & PhD · Language & Commerce · Kunming",
+    "deadline": "Apply by 30 April 2027"
+},
 ];
 
 function escapeXml(str) {

@@ -308,6 +308,19 @@
       ]
     },
     {
+      "slug": "central-china-normal-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/central-china-normal-university"
+        }
+      ]
+    },
+    {
       "slug": "central-south-university-of-forestry-and-technology",
       "rankings": [
         {
@@ -2614,6 +2627,19 @@
       ]
     },
     {
+      "slug": "shanxi-university-of-chinese-medicine",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/shanxi-university-of-chinese-medicine"
+        }
+      ]
+    },
+    {
       "slug": "shaoxing-university",
       "rankings": [
         {
@@ -2996,6 +3022,19 @@
       ]
     },
     {
+      "slug": "southern-university-of-science-and-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/southern-university-of-science-and-technology"
+        }
+      ]
+    },
+    {
       "slug": "southwest-medical-university",
       "rankings": [
         {
@@ -3287,6 +3326,19 @@
           "rank": "19",
           "scope": "national",
           "sourceUrl": "https://www.shanghairanking.com/institution/tianjin-university"
+        }
+      ]
+    },
+    {
+      "slug": "tianjin-university-of-finance-and-economics",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/tianjin-university-of-finance-and-economics"
         }
       ]
     },
@@ -3864,6 +3916,19 @@
       ]
     },
     {
+      "slug": "yunnan-minzu-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/yunnan-minzu-university"
+        }
+      ]
+    },
+    {
       "slug": "yunnan-normal-university",
       "rankings": [
         {
@@ -3886,6 +3951,19 @@
           "rank": "76",
           "scope": "national",
           "sourceUrl": "https://www.shanghairanking.com/institution/yunnan-university"
+        }
+      ]
+    },
+    {
+      "slug": "yunnan-vocational-college-of-mechanical-and-electrical-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/yunnan-vocational-college-of-mechanical-and-electrical-technology"
         }
       ]
     },
