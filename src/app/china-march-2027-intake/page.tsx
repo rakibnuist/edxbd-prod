@@ -504,6 +504,80 @@ export default async function Page() {
         </div>
       </section>
 
+      {/* Official Admission & JW202 / DQ Visa Form Document Verification Preview */}
+      {(trust?.evidence?.length ?? 0) > 0 && (
+        <section
+          id="verified-documents"
+          aria-labelledby="verified-documents-title"
+          className="border-b border-canvas-soft bg-white px-5 py-14 sm:px-8 lg:py-20"
+        >
+          <div className="mx-auto max-w-[1180px]">
+            <div className="flex flex-wrap items-end justify-between gap-5">
+              <div className="max-w-2xl">
+                <span className="inline-flex items-center gap-2 rounded-full bg-lime-pale px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-lime-deep">
+                  <ShieldCheck size={14} aria-hidden="true" />
+                  Official Proof &amp; Authenticity
+                </span>
+                <h2 id="verified-documents-title" data-anim="up" className={`mt-3 ${kit.h2}`}>
+                  Genuine admission notices &amp; visa forms.
+                </h2>
+                <p className={`mt-3 ${kit.lead}`}>
+                  Every admission notice and JW202/DQ visa application form is issued directly by Chinese university admissions offices and checked for authenticity. Personal identifiers are redacted for student privacy.
+                </p>
+              </div>
+              <Link href="/proof-library" className="ed-btn ed-btn-outline min-h-12 px-6 text-sm">
+                Open full proof library
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            </div>
+
+            <ul data-anim="stagger" className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {trust!.evidence
+                .slice(0, 4)
+                .map(asset => (
+                  <li
+                    key={asset.id}
+                    className="flex flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-canvas-soft shadow-sm"
+                  >
+                    <div className="relative aspect-[4/3] bg-white">
+                      {asset.thumbnailUrl ? (
+                        <Image
+                          src={asset.thumbnailUrl}
+                          alt={`Privacy checked preview: ${asset.title}`}
+                          fill
+                          sizes="(max-width:640px) 100vw, 280px"
+                          className="object-contain p-3"
+                        />
+                      ) : (
+                        <div className="grid h-full place-items-center">
+                          <FileCheck2 size={42} className="text-petrol-800" aria-hidden="true" />
+                        </div>
+                      )}
+                      <span className="absolute left-3 top-3 rounded-full bg-petrol-800 px-3 py-1 text-[11px] font-bold text-white">
+                        Privacy checked
+                      </span>
+                    </div>
+                    <div className="flex flex-1 flex-col p-5">
+                      <span className="text-xs font-semibold capitalize text-ink-mute">
+                        {asset.type.replaceAll('_', ' ')}
+                      </span>
+                      <h3 className="mt-1.5 text-[16px] font-bold leading-snug text-petrol-800">{asset.title}</h3>
+                      {asset.university && (
+                        <Link
+                          href={`/universities/${asset.university.slug}`}
+                          className="mt-auto inline-flex items-center gap-1 pt-3 text-xs font-bold text-petrol-700 hover:underline"
+                        >
+                          View {asset.university.name} <ArrowRight size={13} aria-hidden="true" />
+                        </Link>
+                      )}
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
       {/* Real Student Testimonials Section (single-line infinite loop carousel, uses <div> cards to preserve exact <article> count) */}
       {(trust?.testimonials?.length ?? 0) > 0 && (
         <section id="student-stories" aria-labelledby="student-stories-title" className="scroll-mt-24 overflow-hidden bg-petrol-800 py-14 text-white lg:py-20">
@@ -591,24 +665,55 @@ export default async function Page() {
         </div>
       </section>
 
-      {/* Closing Executive CTA Band */}
-      <section className="border-b border-white/10 bg-gradient-to-r from-[#071f33] via-petrol-800 to-[#12436b] px-5 py-14 text-white sm:px-8 lg:py-16">
-        <div className="mx-auto flex max-w-[1180px] flex-col justify-between gap-6 sm:flex-row sm:items-center">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-lime">
-              Free Profile Assessment · Dhaka Office
-            </span>
-            <h2 data-anim="pop" className="mt-3 font-display text-[34px] font-black leading-[0.98] text-lime sm:text-[44px]">
-              Your next step starts with your profile.
-            </h2>
-            <p className="mt-3 text-[18px] text-white/85">
-              Your universities, funding options and costs. One clear plan in writing.
-            </p>
+      {/* Closing Executive CTA & Dhanmondi Consultation Zone */}
+      <section className="border-b border-white/10 bg-gradient-to-br from-[#051827] via-petrol-800 to-[#12436b] px-5 py-14 text-white sm:px-8 lg:py-16">
+        <div className="mx-auto max-w-[1180px]">
+          <div className="grid gap-8 lg:grid-cols-[1.3fr_.7fr] lg:items-center">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-lime">
+                <Sparkles size={13} aria-hidden="true" />
+                Free Profile Assessment · Dhaka Office
+              </span>
+              <h2 data-anim="pop" className="mt-3 font-display text-[34px] font-black leading-[0.98] text-lime sm:text-[44px]">
+                Your next step starts with your profile.
+              </h2>
+              <p className="mt-3 max-w-xl text-[18px] leading-7 text-white/85">
+                Compare {universityCount} shortlisted Chinese universities, check your scholarship eligibility, and receive your itemized cost plan in writing.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-4">
+                <a href="#march-2027-assessment" className="ed-btn ed-btn-signal min-h-[54px] px-8 text-base font-extrabold">
+                  Get my free study plan
+                  <ArrowRight size={18} aria-hidden="true" />
+                </a>
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-[54px] items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-6 font-bold text-white transition hover:bg-white/20"
+                >
+                  <MessageCircle size={18} className="text-lime" aria-hidden="true" />
+                  Chat on WhatsApp
+                </a>
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-white/15 bg-white/[0.08] p-6 backdrop-blur-sm sm:p-7">
+              <p className="text-xs font-bold uppercase tracking-wider text-lime">Dhanmondi Admissions Desk</p>
+              <p className="mt-2 text-base font-bold text-white">Visit our Dhaka Head Office</p>
+              <p className="mt-2 flex items-start gap-2.5 text-sm leading-6 text-white/80">
+                <MapPin size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" />
+                <span>{address}</span>
+              </p>
+              <p className="mt-2 flex items-center gap-2.5 text-sm text-white/80">
+                <Clock3 size={15} className="shrink-0 text-lime" aria-hidden="true" />
+                <span>{hours}</span>
+              </p>
+              <div className="mt-5 border-t border-white/10 pt-4">
+                <p className="text-xs font-semibold text-white/70">Hotline: <strong className="text-white">{formatBangladeshPhone(phone)}</strong></p>
+                <p className="mt-1 text-xs text-white/60">Parents are welcome to attend with the student.</p>
+              </div>
+            </div>
           </div>
-          <a href="#march-2027-assessment" className="ed-btn ed-btn-signal min-h-[54px] shrink-0 px-7">
-            Get my free study plan
-            <ArrowRight size={18} aria-hidden="true" />
-          </a>
         </div>
       </section>
 

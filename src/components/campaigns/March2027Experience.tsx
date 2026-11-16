@@ -20,9 +20,9 @@ import MarchUniversityCatalogue from './MarchUniversityCatalogue';
 import type { MarchCatalogueUniversity, MarchCatalogueProgramme } from '@/lib/march-campaign-catalogue';
 
 const quickRoutes = [
-  { label: 'Foundation → Bachelor', value: 'Foundation → Bachelor', badge: '12 Universities' },
-  { label: 'Direct Bachelor', value: 'Direct Bachelor', badge: '4 Universities' },
-  { label: 'Chinese Language', value: 'Chinese language', badge: '3 Institutions' },
+  { label: 'Foundation → Bachelor', value: 'Foundation → Bachelor', badge: '13 Universities' },
+  { label: 'Direct Bachelor', value: 'Direct Bachelor', badge: '5 Universities' },
+  { label: 'Chinese Language', value: 'Chinese language', badge: '4 Institutions' },
   { label: 'Master’s Degree', value: 'Master’s', badge: 'Postgraduate' },
 ];
 
@@ -35,7 +35,6 @@ export default function March2027Experience({
 }) {
   const [route, setRoute] = useState('');
   const [selection, setSelection] = useState<{ university: string; program: string } | null>(null);
-  const [showSticky, setShowSticky] = useState(false);
 
   const totalRoutes = universities.reduce((sum, uni) => sum + uni.programmes.length, 0);
 
@@ -77,29 +76,6 @@ export default function March2027Experience({
     }
     return () => {
       active = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    const form = document.getElementById('march-2027-assessment');
-    if (!form) return;
-    let formVisible = false;
-    const sync = () =>
-      setShowSticky(!formVisible && !['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName || ''));
-    const observer = new IntersectionObserver(
-      entries => {
-        formVisible = entries[0].isIntersecting;
-        sync();
-      },
-      { threshold: 0 }
-    );
-    observer.observe(form);
-    document.addEventListener('focusin', sync);
-    document.addEventListener('focusout', sync);
-    return () => {
-      observer.disconnect();
-      document.removeEventListener('focusin', sync);
-      document.removeEventListener('focusout', sync);
     };
   }, []);
 
@@ -157,10 +133,10 @@ export default function March2027Experience({
 
             <div className="flex flex-wrap items-center gap-3">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-lime/30 bg-lime/15 px-3 py-1 font-bold text-lime">
-                <span className="size-1.5 rounded-full bg-lime" aria-hidden="true" />
-                Applications Open · Apply by 31 Jan 2027
+                <span className="size-2 animate-ping rounded-full bg-lime" aria-hidden="true" />
+                Applications Open · 31 Jan 2027 Priority Deadline
               </span>
-              <span lang="bn" className="hidden rounded-full bg-white/10 px-3 py-1 font-bold text-white/95 sm:inline-block">
+              <span lang="bn" className="rounded-full bg-white/10 px-3 py-1 font-bold text-white/95">
                 ভিসার আগে ০ টাকা সার্ভিস চার্জ
               </span>
             </div>
@@ -242,6 +218,10 @@ export default function March2027Experience({
                         onClick={() => {
                           setRoute(item.value);
                           setSelection(null);
+                          if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+                            const form = document.getElementById('march-2027-assessment');
+                            form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }
                         }}
                         className={`inline-flex items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-bold transition ${
                           active
@@ -322,6 +302,62 @@ export default function March2027Experience({
         </div>
       </section>
 
+      {/* Shortlisted Universities Moving Ticker */}
+      <div className="overflow-hidden border-y border-white/10 bg-[#051827] py-3.5 text-white">
+        <div className="mx-auto mb-2 flex max-w-[1180px] flex-wrap items-center justify-between gap-2 px-5 text-xs sm:px-8">
+          <span className="inline-flex items-center gap-2 font-bold uppercase tracking-wider text-lime">
+            <Sparkles size={13} aria-hidden="true" />
+            {universities.length} Verified Chinese Universities · Direct March 2027 Intakes
+          </span>
+          <span className="hidden text-white/60 sm:inline">Tap any university to inspect tuition and scholarship options</span>
+        </div>
+        <div className="home-ticker">
+          <div
+            className="home-ticker-track items-center"
+            style={{ ['--ticker-duration' as string]: `${Math.max(48, Math.round(universities.length * 2.8))}s` }}
+          >
+            {[0, 1].map(copy => (
+              <ul
+                key={copy}
+                className="flex shrink-0 items-center gap-3.5 pr-3.5"
+                aria-hidden={copy === 1 ? true : undefined}
+                inert={copy === 1 ? true : undefined}
+              >
+                {universities.map(item => (
+                  <li key={`${item.id}-${copy}`} className="shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => choose(item, item.programmes[0])}
+                      title={`Select ${item.name} for free study plan`}
+                      className="group inline-flex h-14 items-center gap-3 rounded-2xl border border-white/15 bg-white/[0.07] px-3.5 py-2 backdrop-blur-sm transition hover:border-lime hover:bg-white/15"
+                    >
+                      <div className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-sm">
+                        <Image
+                          src={item.logo}
+                          alt={`${item.name} logo`}
+                          width={36}
+                          height={36}
+                          unoptimized
+                          className="max-h-8 w-auto max-w-[32px] object-contain"
+                        />
+                      </div>
+                      <div className="text-left">
+                        <span className="block font-display text-xs font-black text-lime transition group-hover:text-white">
+                          {item.acronym}
+                        </span>
+                        <span className="block max-w-[170px] truncate text-[11px] font-medium text-white/80">
+                          {item.name}
+                        </span>
+                      </div>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* 3-Step Executive Value Strip */}
       <div className="border-b border-slate-200/80 bg-white px-5 sm:px-8">
         <div
@@ -367,25 +403,8 @@ export default function March2027Experience({
         </div>
       </div>
 
-      {/* 18-University Catalogue */}
+      {/* 19-University Catalogue */}
       <MarchUniversityCatalogue universities={universities} onChoose={choose} />
-
-      {/* Mobile Sticky CTA Bar */}
-      {showSticky && (
-        <div
-          data-mobile-bar="open"
-          className="mobile-lead-bar fixed inset-x-0 bottom-0 z-40 border-t border-canvas-soft bg-white p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(15,58,92,.08)] lg:hidden"
-        >
-          <a
-            href="#march-2027-assessment"
-            className="ed-btn ed-btn-signal mx-auto flex min-h-12 w-full max-w-lg"
-          >
-            <Sparkles size={17} aria-hidden="true" />
-            Get my free study plan
-            <ArrowRight size={17} aria-hidden="true" />
-          </a>
-        </div>
-      )}
     </>
   );
 }

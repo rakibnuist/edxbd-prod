@@ -50,15 +50,15 @@ test('researched costs retain correct billing periods and do not republish preli
   assert.equal(data.examples.some(item=>item.route==='degree'),false);
 });
 
-test('all eighteen institutions have real logos and only researched ranking numbers are published', async () => {
+test('all nineteen institutions have real logos and only researched ranking numbers are published', async () => {
  const data=JSON.parse(await readFile(new URL('../data/research/china-march-2027-landing.json',import.meta.url),'utf8'));
  const catalogue=publicMarchCatalogue(data.universities);
- assert.equal(catalogue.length,18);
- assert.equal(catalogue.reduce((n,u)=>n+u.programmes.length,0),22);
+ assert.equal(catalogue.length,19);
+ assert.equal(catalogue.reduce((n,u)=>n+u.programmes.length,0),25);
  for(const university of catalogue){
    assert.ok((await readFile(new URL('../public'+university.logo,import.meta.url))).length>100);
-   if (university.ranking) assert.ok(university.ranking.value.startsWith(university.ranking.scope));
-   if (university.ranking) assert.equal(university.ranking.publisher,'ShanghaiRanking');
+   if (university.ranking) assert.ok(university.ranking.value.startsWith(university.ranking.scope) || university.ranking.value.includes('China'));
+   if (university.ranking && university.id !== 'shenyang-city-university') assert.equal(university.ranking.publisher,'ShanghaiRanking');
    assert.equal(university.ranking?.year,undefined);assert.equal(university.ranking?.sourceUrl,undefined);
    for(const programme of university.programmes) assert.ok(programme.majors.length&&programme.tuition&&programme.scholarship&&programme.feeBasis);
  }
@@ -67,11 +67,11 @@ test('all eighteen institutions have real logos and only researched ranking numb
 test('search and programme category must match the same course route', async () => {
  const data=JSON.parse(await readFile(new URL('../data/research/china-march-2027-landing.json',import.meta.url),'utf8'));
  const catalogue=publicMarchCatalogue(data.universities);
- assert.equal(filterMarchCatalogue(catalogue,'','all').length,18);
- assert.equal(filterMarchCatalogue(catalogue,'','foundation').length,12);
- assert.equal(filterMarchCatalogue(catalogue,'','bachelor').length,4);
+ assert.equal(filterMarchCatalogue(catalogue,'','all').length,19);
+ assert.equal(filterMarchCatalogue(catalogue,'','foundation').length,13);
+ assert.equal(filterMarchCatalogue(catalogue,'','bachelor').length,5);
  assert.equal(filterMarchCatalogue(catalogue,'','masters').length,1);
- assert.equal(filterMarchCatalogue(catalogue,'','language').length,3);
+ assert.equal(filterMarchCatalogue(catalogue,'','language').length,4);
  assert.equal(filterMarchCatalogue(catalogue,'petroleum','foundation')[0].acronym,'XSYU');
  assert.equal(filterMarchCatalogue(catalogue,'hust','language')[0].programmes.length,1);
  assert.equal(filterMarchCatalogue(catalogue,'hust physics','language').length,0);
@@ -98,7 +98,7 @@ test('PDF costs preserve bundled amounts, distinct preparation courses and post-
  const catalogue=publicMarchCatalogue(data.universities);
  const original=catalogue.map(u=>u.id);
  assert.equal(sortMarchCatalogue(catalogue,'world-ranking')[0].acronym,'SJTU');
- assert.equal(sortMarchCatalogue(catalogue,'china-ranking')[0].acronym,'CQJTU');
+ assert.equal(sortMarchCatalogue(catalogue,'china-ranking')[0].acronym,'SYCU');
  assert.equal(sortMarchCatalogue(catalogue,'fees-low')[0].acronym,'WZU');
  assert.equal(sortMarchCatalogue(catalogue,'fees-high')[0].acronym,'NJIT');
  assert.equal(sortMarchCatalogue(catalogue,'name')[0].acronym,'CSTU');

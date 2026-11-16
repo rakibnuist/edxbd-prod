@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Building2, Check, CheckCircle2, Loader2, LockKeyhole, MessageCircle, ShieldCheck, Sparkles, X } from 'lucide-react';
-import { analyticsAllowed, captureUtmParameters, createConversionEventId, getUtmParameters, trackAssessmentStart, trackAssessmentSubmit, trackConversion, trackWhatsAppClick } from '@/lib/conversion-events';
+import { ArrowLeft, ArrowRight, Building2, Check, CheckCircle2, Loader2, LockKeyhole, MessageCircle, Phone, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { analyticsAllowed, captureUtmParameters, createConversionEventId, getUtmParameters, trackAssessmentStart, trackAssessmentSubmit, trackConversion, trackPhoneClick, trackWhatsAppClick } from '@/lib/conversion-events';
 import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 import { emptyMarchEnquiry, marchAcademicLevels, marchEnquiryPayload, marchStudyRoutes, validateMarchEnquiry, type MarchEnquiryErrors, type MarchEnquiryFields } from '@/lib/march-campaign-enquiry';
 import { captureLandingFbclid, persistTrackingLeadId } from '@/lib/tracking-consent';
@@ -191,6 +191,14 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
         <p className="mt-1.5 text-sm leading-6 text-white/80">
           Your university options, scholarship eligibility and written cost plan, matched to your profile.
         </p>
+      </div>
+
+      {/* Visual Completion Progress Bar */}
+      <div className="h-1.5 w-full bg-slate-100" role="progressbar" aria-valuenow={status === 'done' ? 100 : step === 1 ? 50 : 85} aria-valuemin={0} aria-valuemax={100}>
+        <div
+          className="h-full bg-gradient-to-r from-lime via-emerald-400 to-[#38bdf8] transition-all duration-500 ease-out"
+          style={{ width: status === 'done' ? '100%' : step === 1 ? '50%' : '85%' }}
+        />
       </div>
 
       {status === 'done' ? (
@@ -401,30 +409,81 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
                   </button>
                 </div>
 
-                {(['name', 'phone', 'email'] as const).map(key => (
-                  <div key={key}>
-                    <label htmlFor={`march-${key}`} className="block text-sm font-bold text-[#0b2b45]">
-                      {{ name: 'Full name', phone: 'Phone / WhatsApp number', email: 'Email address' }[key]}{' '}
-                      <span aria-hidden="true" className="text-red-600">*</span>
-                    </label>
+                <div>
+                  <label htmlFor="march-name" className="block text-sm font-bold text-[#0b2b45]">
+                    Full name <span aria-hidden="true" className="text-red-600">*</span>
+                  </label>
+                  <input
+                    id="march-name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    required
+                    maxLength={120}
+                    value={fields.name}
+                    onChange={e => update('name', e.target.value)}
+                    onBlur={() => validateField('name')}
+                    placeholder="Your full name"
+                    {...ariaFor('name')}
+                    className={inputClass}
+                  />
+                  {errorFor('name')}
+                </div>
+
+                <div>
+                  <label htmlFor="march-phone" className="block text-sm font-bold text-[#0b2b45]">
+                    Phone / WhatsApp number <span aria-hidden="true" className="text-red-600">*</span>
+                  </label>
+                  <div className="relative mt-1.5">
+                    <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-xs font-bold text-slate-500">
+                      🇧🇩 +880
+                    </span>
                     <input
-                      id={`march-${key}`}
-                      name={key}
-                      type={key === 'phone' ? 'tel' : key === 'email' ? 'email' : 'text'}
-                      inputMode={key === 'phone' ? 'tel' : key === 'email' ? 'email' : 'text'}
-                      autoComplete={key === 'phone' ? 'tel' : key}
+                      id="march-phone"
+                      name="phone"
+                      type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
                       required
-                      maxLength={key === 'name' ? 120 : key === 'phone' ? 30 : 254}
-                      value={fields[key]}
-                      onChange={e => update(key, e.target.value)}
-                      onBlur={() => validateField(key)}
-                      placeholder={{ name: 'Your full name', phone: '01XXXXXXXXX', email: 'name@example.com' }[key]}
-                      {...ariaFor(key)}
-                      className={inputClass}
+                      maxLength={30}
+                      value={fields.phone}
+                      onChange={e => update('phone', e.target.value)}
+                      onBlur={() => validateField('phone')}
+                      placeholder="17XXXXXXXX"
+                      {...ariaFor('phone')}
+                      className={`${inputClass} !mt-0 pl-20`}
                     />
-                    {errorFor(key)}
                   </div>
-                ))}
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    We will send your university shortlist &amp; scholarship plan on WhatsApp.
+                  </p>
+                  {errorFor('phone')}
+                </div>
+
+                <div>
+                  <label htmlFor="march-email" className="block text-sm font-bold text-[#0b2b45]">
+                    Email address <span aria-hidden="true" className="text-red-600">*</span>
+                  </label>
+                  <input
+                    id="march-email"
+                    name="email"
+                    type="email"
+                    inputMode="email"
+                    autoComplete="email"
+                    required
+                    maxLength={254}
+                    value={fields.email}
+                    onChange={e => update('email', e.target.value)}
+                    onBlur={() => validateField('email')}
+                    placeholder="name@example.com"
+                    {...ariaFor('email')}
+                    className={inputClass}
+                  />
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    To receive your official prospectus and written cost schedule.
+                  </p>
+                  {errorFor('email')}
+                </div>
 
                 <div>
                   <label className="flex items-start gap-2.5 rounded-xl bg-slate-50 p-3 text-xs leading-5 text-slate-600">
@@ -504,10 +563,37 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
             )}
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-slate-100 pt-3.5 text-center text-xs font-medium text-slate-500">
+          {/* Direct Drop-off Rescue Fallback */}
+          <div className="mt-4 border-t border-slate-100 pt-3 text-center">
+            <p className="text-xs font-semibold text-slate-500">
+              Prefer immediate answers? Speak with our Dhanmondi admissions desk:
+            </p>
+            <div className="mt-2.5 grid grid-cols-2 gap-2">
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackWhatsAppClick({ ...context(), label: 'march_form_rescue_whatsapp' })}
+                className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-2.5 text-xs font-bold text-emerald-900 transition hover:bg-emerald-100"
+              >
+                <MessageCircle size={15} className="text-emerald-700" />
+                <span>WhatsApp Desk</span>
+              </a>
+              <a
+                href={`tel:${whatsappNumber}`}
+                onClick={() => trackPhoneClick({ ...context(), label: 'march_form_rescue_phone' })}
+                className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-2.5 text-xs font-bold text-petrol-800 transition hover:bg-slate-100"
+              >
+                <Phone size={14} className="text-[#12436b]" />
+                <span>Direct Call</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-3.5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-slate-100 pt-3 text-center text-xs font-medium text-slate-500">
             <span className="inline-flex items-center gap-1.5">
               <LockKeyhole size={13} className="shrink-0 text-petrol-700" />
-              No payment or document upload required
+              No file opening charge
             </span>
             <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-800">
               <ShieldCheck size={14} className="shrink-0 text-emerald-600" />

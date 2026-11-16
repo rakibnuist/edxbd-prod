@@ -19,7 +19,7 @@ export default function MobileLeadBar() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     // Do not cover the lead form or the footer links.
-    const targets = ['assessment', 'china-fit-form', 'china-fit-form-bottom', 'site-footer']
+    const targets = ['assessment', 'china-fit-form', 'china-fit-form-bottom', 'march-2027-assessment', 'site-footer']
       .map(id => document.getElementById(id))
       .filter((element): element is HTMLElement => Boolean(element));
     const observer = new IntersectionObserver(
@@ -47,13 +47,20 @@ export default function MobileLeadBar() {
   }
 
   const isChinaHub = pathname === '/study-in-china-from-bangladesh';
-  const assessmentHref = isChinaHub ? '#china-fit-form' : '/education-fit-assessment';
+  const isMarchCampaign = pathname === '/china-march-2027-intake';
+  const assessmentHref = isChinaHub
+    ? '#china-fit-form'
+    : isMarchCampaign
+      ? '#march-2027-assessment'
+      : '/education-fit-assessment';
   const whatsappHref =
     `https://wa.me/${PHONE.replace(/\D/g, '')}?text=` +
     encodeURIComponent(
       isChinaHub
         ? 'Assalamu alaikum. I would like a free Study in China plan from EduExpress International.'
-        : 'Assalamu alaikum. I would like counselling for studying abroad.',
+        : isMarchCampaign
+          ? 'Assalamu alaikum. I would like a study plan for China March 2027 intake.'
+          : 'Assalamu alaikum. I would like counselling for studying abroad.',
     );
   const visible = scrolled && !blocked;
 
