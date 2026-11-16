@@ -39,7 +39,7 @@ export const GKS_SCHOLARSHIP_2027_DATA: GuideData = {
   ]),
   excerpt:
     'Comprehensive operational guide for the 2027 Global Korea Scholarship (GKS / KGSP) administered by NIIED: official undergraduate and graduate deadlines, Embassy vs University tracks, 100% tuition waiver, airfare, and KRW 1,000,000+ monthly stipends.',
-  metaTitle: 'GKS Scholarship 2027: Application Guide & Deadlines | EduExpress',
+  metaTitle: 'GKS Scholarship 2027 Guide & Deadlines | EduExpress',
   metaDescription:
     'Complete 2027 Global Korea Scholarship (GKS/KGSP) guide: undergraduate & graduate deadlines, Embassy vs University tracks, 100% funding & stipends.',
   featuredImage: '/updates/covers/gks-scholarship-2027-korea-application-guide.jpg',

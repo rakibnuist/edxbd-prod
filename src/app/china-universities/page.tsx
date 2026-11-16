@@ -35,7 +35,7 @@ export async function generateMetadata({ searchParams }: Props) {
   const query = await searchParams;
   const filtered = Object.values(query).some(value => Array.isArray(value) ? value.some(Boolean) : Boolean(value));
   return pageMetadata({
-    title: 'Best Universities in China: 2027 Rankings & Fees | EduExpress',
+    title: 'Best Universities in China: 2027 Rankings | EduExpress',
     description: `Compare best universities in China for 2027: ${count > 0 ? `${count} ` : ''}official rankings, English-taught degrees, tuition fees, CSC scholarships and intakes.`,
     path: PATH,
     locale: 'en_BD',

@@ -20,7 +20,7 @@ export const WECHAT_15_GUIDES_DATA: Record<string, GuideData> = {
     ]),
     excerpt:
       'Official breakdown of the China Scholastic Competency Assessment (CSCA): mandatory implementation roadmap (2026/2027 scholarship applicants first, universal by 2028), syllabus subjects, exam formats, fee structures, and sample question standards for international undergraduate applicants.',
-    metaTitle: 'CSCA Exam Guide 2026–2028 | Syllabus & Timetable | EduExpress',
+    metaTitle: 'CSCA Exam Guide 2026–2028: Syllabus & Dates | EduExpress',
     metaDescription:
       'Official guide to the CSCA (China Scholastic Competency Assessment): 2026–2028 timetable, syllabus, test subjects, fees, and university requirements.',
     featuredImage: '/updates/covers/csca-exam-guide-chinese-universities-2026-2027.jpg',

@@ -185,7 +185,7 @@ export const WECHAT_BATCH2_18_GUIDES_DATA: Record<string, GuideData> = {
     categories: JSON.stringify(["Scholarships", "China", "Doctoral"]),
     tags: JSON.stringify(["northeast normal university", "nenu", "phd in china", "doctoral admissions 2027", "double first class", "csc scholarship", "changchun"]),
     excerpt: "Official guide to Doctoral (PhD) Programs for International Students 2027\u20132028 at Northeast Normal University (NENU, Changchun, Double First-Class): 6 world-class disciplines (Education, Chemistry, Statistics, Materials Science, World History, Marxist Theory), CSC Type B and Jilin Provincial Scholarship coverage, entry requirements, and deadlines.",
-    metaTitle: "NENU Doctoral Programs 2027\u20132028 | PhD in China | EduExpress",
+    metaTitle: "NENU Doctoral Admissions 2027–2028 | PhD China | EduExpress",
     metaDescription: "Apply for PhD programs at Northeast Normal University (NENU) 2027\u20132028: Double First-Class disciplines, CSC funding, requirements, and deadlines.",
     featuredImage: '/updates/covers/northeast-normal-university-doctoral-programs-2027-2028.jpg',
     author: 'Md Tauhidul Islam Nur',

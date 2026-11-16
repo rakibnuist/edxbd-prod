@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     'Free study abroad assessment in Dhanmondi, Dhaka. Compare universities, scholarships and the full cost in writing, with no fee before your China visa.',
   alternates: { canonical: '/', types: RSS_FEED },
   openGraph: {
-    title: 'Study Abroad, With the Costs in Writing | EduExpress International',
+    title: 'Study Abroad, With the Costs in Writing | EduExpress',
     description: 'Free profile assessment. Clear costs, written proof and a counsellor in Dhanmondi, Dhaka.',
     url: '/',
     type: 'website',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Study Abroad, With the Costs in Writing | EduExpress International',
+    title: 'Study Abroad, With the Costs in Writing | EduExpress',
     description: 'Free profile assessment. Clear costs, written proof and a counsellor in Dhanmondi, Dhaka.',
     images: ['/og-image.jpg'],
   },

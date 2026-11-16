@@ -40,7 +40,7 @@ export const MALAYSIA_UNIVERSITIES_2027_DATA: GuideData = {
   ]),
   excerpt:
     'Comprehensive evaluation of the best public, private, and foreign branch universities in Malaysia for 2026/2027: QS World rankings, English-medium UK/Australian dual degrees, MQA accreditation, annual tuition fees, and scholarship opportunities.',
-  metaTitle: 'Best Universities in Malaysia 2027: Rankings & Fees | EduExpress',
+  metaTitle: 'Best Universities in Malaysia 2027: Rankings | EduExpress',
   metaDescription:
     'Compare top public & private universities in Malaysia: QS rankings, English-taught UK dual degrees, MQA accreditation, fees, and 2027 scholarships.',
   featuredImage: '/updates/covers/best-universities-in-malaysia-rankings-scholarships-2027.jpg',
