@@ -2757,6 +2757,27 @@
       ]
     },
     {
+      "slug": "shenyang-city-university",
+      "rankings": [
+        {
+          "publisher": "Alumni Association (CUAA) / Wushulian",
+          "rankingName": "China Applied Private Universities Ranking",
+          "year": 2026,
+          "rank": "6",
+          "scope": "national",
+          "sourceUrl": "https://www.shenyangcu.edu.cn"
+        },
+        {
+          "publisher": "Liaoning Provincial Education Evaluation",
+          "rankingName": "Liaoning Applied University Standing",
+          "year": 2026,
+          "rank": "1",
+          "scope": "provincial",
+          "sourceUrl": "https://www.shenyangcu.edu.cn"
+        }
+      ]
+    },
+    {
       "slug": "shenyang-jianzhu-university",
       "rankings": [
         {

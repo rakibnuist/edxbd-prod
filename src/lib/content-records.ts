@@ -15,6 +15,7 @@ import { NEW_GUIDES_2027_DATA } from '@/data/newGuides2027';
 import { WECHAT_15_GUIDES_DATA } from '@/data/newWechatGuides2027';
 import { WECHAT_BATCH2_18_GUIDES_DATA } from '@/data/newWechatBatch2Guides2027';
 import { WECHAT_BATCH3_25_GUIDES_DATA } from '@/data/newWechatBatch3Guides2027';
+import { SHENYANG_CITY_UNIVERSITY_GUIDE_DATA } from '@/data/shenyangCityUniversityGuide2027';
 import { TOP_MS_CS_AI_2027_SLUG, TOP_MS_CS_AI_2027_DATA } from '@/data/topMsCsAiChina2027Guide';
 import { OPEN_UNIVERSITIES_2027_SLUG, OPEN_UNIVERSITIES_2027_DATA } from '@/data/chinaUniversitiesOpen2027Guide';
 import { CSC_UNIVERSITY_LIST_2027_SLUG, CSC_UNIVERSITY_LIST_2027_DATA } from '@/data/cscUniversityList2027Guide';
@@ -110,6 +111,11 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
       const fallback = serializeUpdate(data as any);
       if (fallback) serialized.unshift(fallback);
     }
+  }
+  if (!serialized.some(u => u.slug === SHENYANG_CITY_UNIVERSITY_GUIDE_DATA.slug)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fallback = serializeUpdate(SHENYANG_CITY_UNIVERSITY_GUIDE_DATA as any);
+    if (fallback) serialized.unshift(fallback);
   }
   if (!serialized.some(u => u.slug === SDJU_2027_SLUG)) {
     const fallback = serializeUpdate(SDJU_2027_DATA);
@@ -228,6 +234,15 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
         categories: data.categories,
       });
     }
+  }
+  if (!updates.some(u => u.slug === SHENYANG_CITY_UNIVERSITY_GUIDE_DATA.slug)) {
+    updates.unshift({
+      slug: SHENYANG_CITY_UNIVERSITY_GUIDE_DATA.slug,
+      updatedAt: SHENYANG_CITY_UNIVERSITY_GUIDE_DATA.updatedAt,
+      publishedAt: SHENYANG_CITY_UNIVERSITY_GUIDE_DATA.publishedAt,
+      category: SHENYANG_CITY_UNIVERSITY_GUIDE_DATA.category,
+      categories: SHENYANG_CITY_UNIVERSITY_GUIDE_DATA.categories,
+    });
   }
   if (!updates.some(u => u.slug === SDJU_2027_SLUG)) {
     updates.unshift({

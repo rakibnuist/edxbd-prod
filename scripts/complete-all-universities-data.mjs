@@ -52,6 +52,10 @@ function parseRankInt(rankStr = '') {
 
 // Authoritative national/world rankings for universities not yet in university-rankings.json
 const EXTRA_RANKINGS = {
+  'shenyang-city-university': [
+    { publisher: 'Alumni Association (CUAA) / Wushulian', rankingName: 'China Applied Private Universities Ranking', year: 2026, rank: '6', scope: 'national', sourceUrl: 'https://www.shenyangcu.edu.cn' },
+    { publisher: 'Liaoning Provincial Education Evaluation', rankingName: 'Liaoning Applied University Standing', year: 2026, rank: '1', scope: 'provincial', sourceUrl: 'https://www.shenyangcu.edu.cn' },
+  ],
   'cczu': [
     { publisher: 'Times Higher Education', rankingName: 'World University Rankings', year: 2026, rank: '1201–1500', scope: 'world', sourceUrl: 'https://www.timeshighereducation.com/world-university-rankings/changzhou-university' },
     { publisher: 'ShanghaiRanking', rankingName: 'Best Chinese Universities Ranking', year: 2026, rank: '158', scope: 'national', sourceUrl: 'https://www.shanghairanking.com/institution/changzhou-university' },
