@@ -695,12 +695,12 @@ export const NEW_GUIDES_2027_DATA: Record<string, GuideData> = {
     complianceApprovedAt: new Date('2026-11-16T03:00:00.000Z'),
     seoApprovedAt: new Date('2026-11-16T03:00:00.000Z'),
     archivedAt: null,
-    content: `<p class="lede"><strong><a href="/universities/nanjing-university-of-posts-and-telecommunications">Nanjing University of Posts and Telecommunications</a> (南京邮电大学, NJUPT)</strong>, a national Double First-Class university and leading information technology powerhouse in Nanjing, has officially opened applications for the <strong>2027 Chinese Government Scholarship &ndash; High-Level Postgraduate Program (Type B, Agency No. 10293)</strong>. Offering high-impact <strong>2-year English-taught Master's degrees</strong> and 4-year Doctoral programs in Artificial Intelligence, Computer Technology, Electronic Information, and Business Administration, NJUPT provides full financial sponsorship covering tuition, housing, health insurance, and monthly living stipends.</p>
+    content: `<p class="lede"><strong><a href="/universities/njupt">Nanjing University of Posts and Telecommunications</a> (南京邮电大学, NJUPT)</strong>, a national Double First-Class university and leading information technology powerhouse in Nanjing, has officially opened applications for the <strong>2027 Chinese Government Scholarship &ndash; High-Level Postgraduate Program (Type B, Agency No. 10293)</strong>. Offering high-impact <strong>2-year English-taught Master's degrees</strong> and 4-year Doctoral programs in Artificial Intelligence, Computer Technology, Electronic Information, and Business Administration, NJUPT provides full financial sponsorship covering tuition, housing, health insurance, and monthly living stipends.</p>
 
 <aside class="key-facts">
   <h2>NJUPT CSC 2027: Key Facts at a Glance</h2>
   <table><tbody>
-    <tr><th>Host Institution</th><td><a href="/universities/nanjing-university-of-posts-and-telecommunications">Nanjing University of Posts and Telecommunications (NJUPT)</a></td></tr>
+    <tr><th>Host Institution</th><td><a href="/universities/njupt">Nanjing University of Posts and Telecommunications (NJUPT)</a></td></tr>
     <tr><th>Location</th><td>Nanjing, Jiangsu Province, China</td></tr>
     <tr><th>Academic Standing</th><td>National Double First-Class University &middot; Top Telecommunications &amp; AI Center</td></tr>
     <tr><th>Scholarship Scheme</th><td>Chinese Government Scholarship &ndash; High-Level Postgraduate Program (Type B)</td></tr>

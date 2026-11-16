@@ -10,9 +10,9 @@ const SITE = 'https://eduexpressint.com';
 const PATH = '/csc-scholarship-bangladesh';
 
 export const metadata = pageMetadata({
-  title: 'CSC Scholarship from Bangladesh: Full Guide | EduExpress',
+  title: 'CSC Scholarship 2027: Application Guide | EduExpress',
   description:
-    'Chinese Government (CSC) Scholarship guide for Bangladeshi students: Type A and Type B routes, what a full award covers, stipends, age limits and documents.',
+    'Complete 2027/2028 Chinese Government (CSC) Scholarship guide for Bangladeshi students: Type A & Type B routes, full coverage, stipends and open deadlines.',
   path: PATH,
   image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
   type: 'article',
@@ -103,6 +103,8 @@ const faqs = [
 ];
 
 const related = [
+  { label: 'Chinese Universities Open for 2027 Intake', href: '/updates/chinese-universities-open-for-2027-intake' },
+  { label: 'Top MS in Computer Science & AI (2027 CSC)', href: '/updates/top-ms-computer-science-ai-china-csc-scholarship-2027' },
   { label: 'CGS 2027/2028 Type A embassy notice', href: '/updates/cgs-2027-2028-type-a-scholarship-bangladesh' },
   { label: 'China scholarships: every route compared', href: '/china-scholarships-bangladesh' },
   { label: 'CSC Type A bilateral guide', href: '/updates/how-to-apply-csc-type-a-scholarship-complete-guide' },

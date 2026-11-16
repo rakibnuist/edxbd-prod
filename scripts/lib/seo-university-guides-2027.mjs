@@ -1,4 +1,6 @@
 import { NEW_7_GUIDE_SPECS, upsert7NewUniversities } from './seo-new-7-guides-2027.mjs';
+import { TOP_MS_CS_AI_2027_DATA } from '../../src/data/topMsCsAiChina2027Guide.ts';
+import { OPEN_UNIVERSITIES_2027_DATA } from '../../src/data/chinaUniversitiesOpen2027Guide.ts';
 
 /**
  * Official verified university data repairs and 2027 E-E-A-T update guides for
@@ -53,6 +55,8 @@ const NJUST_OFFICIAL_SOURCES = [
 ];
 
 const GUIDE_2027_SPECS = [
+  TOP_MS_CS_AI_2027_DATA,
+  OPEN_UNIVERSITIES_2027_DATA,
   {
     slug: 'njust-csc-and-lanshan-scholarships-2027',
     title:

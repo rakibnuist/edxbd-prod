@@ -12,6 +12,8 @@ import { CMU_2027_SLUG, CMU_2027_DATA } from '@/data/cmuGuide2027';
 import { SDJU_2027_SLUG, SDJU_2027_DATA } from '@/data/sdjuLanguageGuide2027';
 import { NJUST_2027_SLUG, NJUST_2027_DATA } from '@/data/njustGuide2027';
 import { NEW_GUIDES_2027_DATA } from '@/data/newGuides2027';
+import { TOP_MS_CS_AI_2027_SLUG, TOP_MS_CS_AI_2027_DATA } from '@/data/topMsCsAiChina2027Guide';
+import { OPEN_UNIVERSITIES_2027_SLUG, OPEN_UNIVERSITIES_2027_DATA } from '@/data/chinaUniversitiesOpen2027Guide';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -71,6 +73,7 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   }
   for (const [slug, data] of Object.entries(NEW_GUIDES_2027_DATA)) {
     if (!serialized.some(u => u.slug === slug)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const fallback = serializeUpdate(data as any);
       if (fallback) serialized.unshift(fallback);
     }
@@ -85,6 +88,14 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   }
   if (!serialized.some(u => u.slug === CGS_2027_TYPE_A_SLUG)) {
     const fallback = serializeUpdate(CGS_2027_TYPE_A_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  if (!serialized.some(u => u.slug === TOP_MS_CS_AI_2027_SLUG)) {
+    const fallback = serializeUpdate(TOP_MS_CS_AI_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  if (!serialized.some(u => u.slug === OPEN_UNIVERSITIES_2027_SLUG)) {
+    const fallback = serializeUpdate(OPEN_UNIVERSITIES_2027_DATA);
     if (fallback) serialized.unshift(fallback);
   }
   return take ? serialized.slice(0, take) : serialized;
@@ -141,6 +152,24 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
       publishedAt: CGS_2027_TYPE_A_DATA.publishedAt,
       category: CGS_2027_TYPE_A_DATA.category,
       categories: CGS_2027_TYPE_A_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === TOP_MS_CS_AI_2027_SLUG)) {
+    updates.unshift({
+      slug: TOP_MS_CS_AI_2027_DATA.slug,
+      updatedAt: TOP_MS_CS_AI_2027_DATA.updatedAt,
+      publishedAt: TOP_MS_CS_AI_2027_DATA.publishedAt,
+      category: TOP_MS_CS_AI_2027_DATA.category,
+      categories: TOP_MS_CS_AI_2027_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === OPEN_UNIVERSITIES_2027_SLUG)) {
+    updates.unshift({
+      slug: OPEN_UNIVERSITIES_2027_DATA.slug,
+      updatedAt: OPEN_UNIVERSITIES_2027_DATA.updatedAt,
+      publishedAt: OPEN_UNIVERSITIES_2027_DATA.publishedAt,
+      category: OPEN_UNIVERSITIES_2027_DATA.category,
+      categories: OPEN_UNIVERSITIES_2027_DATA.categories,
     });
   }
   const categorySlugs = Array.from(
