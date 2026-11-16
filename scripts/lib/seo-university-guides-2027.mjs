@@ -3,6 +3,8 @@ import { WECHAT_15_GUIDE_SPECS, upsert15WechatUniversities } from './seo-wechat-
 import { TOP_MS_CS_AI_2027_DATA } from '../../src/data/topMsCsAiChina2027Guide.ts';
 import { OPEN_UNIVERSITIES_2027_DATA } from '../../src/data/chinaUniversitiesOpen2027Guide.ts';
 import { CSC_UNIVERSITY_LIST_2027_DATA } from '../../src/data/cscUniversityList2027Guide.ts';
+import { CONFUCIUS_SCHOLARSHIP_2027_DATA } from '../../src/data/confuciusInstituteScholarship2027Guide.ts';
+import { FOUNDATION_SCHOLARSHIPS_DATA } from '../../src/data/foundationYearScholarshipsGuide.ts';
 
 /**
  * Official verified university data repairs and 2027 E-E-A-T update guides for
@@ -57,6 +59,8 @@ const NJUST_OFFICIAL_SOURCES = [
 ];
 
 const GUIDE_2027_SPECS = [
+  CONFUCIUS_SCHOLARSHIP_2027_DATA,
+  FOUNDATION_SCHOLARSHIPS_DATA,
   CSC_UNIVERSITY_LIST_2027_DATA,
   TOP_MS_CS_AI_2027_DATA,
   OPEN_UNIVERSITIES_2027_DATA,

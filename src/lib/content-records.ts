@@ -16,6 +16,8 @@ import { WECHAT_15_GUIDES_DATA } from '@/data/newWechatGuides2027';
 import { TOP_MS_CS_AI_2027_SLUG, TOP_MS_CS_AI_2027_DATA } from '@/data/topMsCsAiChina2027Guide';
 import { OPEN_UNIVERSITIES_2027_SLUG, OPEN_UNIVERSITIES_2027_DATA } from '@/data/chinaUniversitiesOpen2027Guide';
 import { CSC_UNIVERSITY_LIST_2027_SLUG, CSC_UNIVERSITY_LIST_2027_DATA } from '@/data/cscUniversityList2027Guide';
+import { CONFUCIUS_SCHOLARSHIP_2027_SLUG, CONFUCIUS_SCHOLARSHIP_2027_DATA } from '@/data/confuciusInstituteScholarship2027Guide';
+import { FOUNDATION_SCHOLARSHIPS_SLUG, FOUNDATION_SCHOLARSHIPS_DATA } from '@/data/foundationYearScholarshipsGuide';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -111,6 +113,14 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
     const fallback = serializeUpdate(CSC_UNIVERSITY_LIST_2027_DATA);
     if (fallback) serialized.unshift(fallback);
   }
+  if (!serialized.some(u => u.slug === CONFUCIUS_SCHOLARSHIP_2027_SLUG)) {
+    const fallback = serializeUpdate(CONFUCIUS_SCHOLARSHIP_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  if (!serialized.some(u => u.slug === FOUNDATION_SCHOLARSHIPS_SLUG)) {
+    const fallback = serializeUpdate(FOUNDATION_SCHOLARSHIPS_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
   return take ? serialized.slice(0, take) : serialized;
 });
 
@@ -203,6 +213,24 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
       publishedAt: CSC_UNIVERSITY_LIST_2027_DATA.publishedAt,
       category: CSC_UNIVERSITY_LIST_2027_DATA.category,
       categories: CSC_UNIVERSITY_LIST_2027_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === CONFUCIUS_SCHOLARSHIP_2027_SLUG)) {
+    updates.unshift({
+      slug: CONFUCIUS_SCHOLARSHIP_2027_DATA.slug,
+      updatedAt: CONFUCIUS_SCHOLARSHIP_2027_DATA.updatedAt,
+      publishedAt: CONFUCIUS_SCHOLARSHIP_2027_DATA.publishedAt,
+      category: CONFUCIUS_SCHOLARSHIP_2027_DATA.category,
+      categories: CONFUCIUS_SCHOLARSHIP_2027_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === FOUNDATION_SCHOLARSHIPS_SLUG)) {
+    updates.unshift({
+      slug: FOUNDATION_SCHOLARSHIPS_DATA.slug,
+      updatedAt: FOUNDATION_SCHOLARSHIPS_DATA.updatedAt,
+      publishedAt: FOUNDATION_SCHOLARSHIPS_DATA.publishedAt,
+      category: FOUNDATION_SCHOLARSHIPS_DATA.category,
+      categories: FOUNDATION_SCHOLARSHIPS_DATA.categories,
     });
   }
   const categorySlugs = Array.from(

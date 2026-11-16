@@ -27,6 +27,8 @@ import { WECHAT_15_GUIDES_DATA } from '@/data/newWechatGuides2027';
 import { TOP_MS_CS_AI_2027_SLUG, TOP_MS_CS_AI_2027_DATA } from '@/data/topMsCsAiChina2027Guide';
 import { OPEN_UNIVERSITIES_2027_SLUG, OPEN_UNIVERSITIES_2027_DATA } from '@/data/chinaUniversitiesOpen2027Guide';
 import { CSC_UNIVERSITY_LIST_2027_SLUG, CSC_UNIVERSITY_LIST_2027_DATA } from '@/data/cscUniversityList2027Guide';
+import { CONFUCIUS_SCHOLARSHIP_2027_SLUG, CONFUCIUS_SCHOLARSHIP_2027_DATA } from '@/data/confuciusInstituteScholarship2027Guide';
+import { FOUNDATION_SCHOLARSHIPS_SLUG, FOUNDATION_SCHOLARSHIPS_DATA } from '@/data/foundationYearScholarshipsGuide';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -135,6 +137,12 @@ const getUpdate = cache(async (slug: string) => {
   }
   if (slug === CSC_UNIVERSITY_LIST_2027_SLUG) {
     return CSC_UNIVERSITY_LIST_2027_DATA;
+  }
+  if (slug === CONFUCIUS_SCHOLARSHIP_2027_SLUG) {
+    return CONFUCIUS_SCHOLARSHIP_2027_DATA;
+  }
+  if (slug === FOUNDATION_SCHOLARSHIPS_SLUG) {
+    return FOUNDATION_SCHOLARSHIPS_DATA;
   }
   if (NEW_GUIDES_2027_DATA[slug]) {
     return NEW_GUIDES_2027_DATA[slug];
