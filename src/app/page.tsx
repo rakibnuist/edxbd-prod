@@ -468,7 +468,7 @@ export default async function Home() {
                       >
                         <Image
                           src={item.logo as string}
-                          alt={copy === 0 ? item.name : ''}
+                          alt={`${item.name} logo`}
                           width={116}
                           height={48}
                           unoptimized

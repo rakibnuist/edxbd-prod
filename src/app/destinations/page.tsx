@@ -97,7 +97,7 @@ export default function DestinationsPage() {
                 <li key={item.slug} className="relative aspect-[4/5] overflow-hidden rounded-3xl">
                   <Image
                     src={DESTINATION_PHOTOS[item.slug]}
-                    alt=""
+                    alt={`Study abroad in ${item.label}`}
                     fill
                     priority={index < 2}
                     sizes="(max-width:1024px) 50vw, 240px"
