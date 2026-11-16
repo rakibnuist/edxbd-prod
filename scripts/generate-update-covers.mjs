@@ -378,6 +378,22 @@ const posters = [
     "info": "Bachelor, Master & PhD · Language & Commerce · Kunming",
     "deadline": "Apply by 30 April 2027"
 },
+  {
+    filename: 'china-bachelor-degree-undergraduate-scholarships-2027.jpg',
+    category: 'BACHELOR DEGREES',
+    title: 'China Bachelor Scholarships',
+    subtitle: '2027 Undergraduate Admissions & Grants',
+    info: 'CSC Type A & University Awards · Full & Partial Funding · 4-Year Degrees',
+    deadline: 'Spring: 15 Jan · Autumn: 30 June 2027',
+  },
+  {
+    filename: 'georgia-mbbs-fees-cost-breakdown-2027.jpg',
+    category: 'MEDICAL STUDY',
+    title: 'MBBS in Georgia Fees 2027',
+    subtitle: 'Complete Cost Breakdown & BMDC Rules',
+    info: '$4,500–$8,000/yr Tuition · WDOMS & WFME Recognized · Tbilisi & Batumi',
+    deadline: 'Spring: Feb 2027 · Autumn: Sep 2027',
+  },
 ];
 
 function escapeXml(str) {

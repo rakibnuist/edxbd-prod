@@ -35,8 +35,8 @@ export async function generateMetadata({ searchParams }: Props) {
   const query = await searchParams;
   const filtered = Object.values(query).some(value => Array.isArray(value) ? value.some(Boolean) : Boolean(value));
   return pageMetadata({
-    title: 'China Universities for Bangladeshi Students | EduExpress',
-    description: `Compare ${count > 0 ? `${count} ` : ''}China university records for Bangladeshi students by subject, degree, teaching language, city and intake, with recorded costs and source status.`,
+    title: 'Best Universities in China: 2027 Rankings & Fees | EduExpress',
+    description: `Compare best universities in China for 2027: ${count > 0 ? `${count} ` : ''}official rankings, English-taught degrees, tuition fees, CSC scholarships and intakes.`,
     path: PATH,
     locale: 'en_BD',
     image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),

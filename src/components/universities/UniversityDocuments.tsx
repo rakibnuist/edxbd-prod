@@ -92,19 +92,19 @@ export default function UniversityDocuments({
         </div>
       )}
 
-      {/* Practical Preparation Tips for Bangladeshi Students */}
+      {/* Practical Preparation Tips for International Students */}
       <div className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-5">
         <div className="flex items-start gap-3">
           <ShieldCheck size={20} className="text-emerald-700 shrink-0 mt-0.5" />
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-              Document Preparation Tips for Bangladeshi Applicants
+              Document Preparation Tips for International Applicants
             </h4>
             <ul className="mt-2 grid gap-2 text-xs leading-5 text-slate-600 sm:grid-cols-2">
-              <li>• Ensure your name and parents’ names match exactly across your Passport, SSC, and HSC/Bachelor certificates.</li>
-              <li>• Scan original color documents at 300 DPI (PDF/JPG) — mobile phone shadows or cropped edges can delay university review.</li>
+              <li>• Ensure your name and details match exactly across your Passport, National ID, and Academic Certificates/Transcripts.</li>
+              <li>• Scan original color documents at 300 DPI (PDF/JPG) — avoid mobile shadows or cropped edges to prevent review delays.</li>
               <li>• Passport must have at least 12–18 months validity remaining from the intended intake date.</li>
-              <li>• EduExpress counselors review and format your entire application file free of charge before university portal submission.</li>
+              <li>• EduExpress international counselors review and format your entire application dossier free of charge before portal submission.</li>
             </ul>
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function UniversityDocuments({
         <div>
           <h4 className="text-sm font-bold text-white">Want a free document check before applying?</h4>
           <p className="mt-0.5 text-xs leading-5 text-white/80">
-            Send your transcripts to our Dhaka counseling team for a same-day eligibility and document verification.
+            Send your transcripts to our admissions counseling team for a same-day eligibility and document verification.
           </p>
         </div>
         <Link

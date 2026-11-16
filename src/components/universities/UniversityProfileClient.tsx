@@ -655,7 +655,7 @@ export default function UniversityProfileClient({
               <div className="mt-7 overflow-hidden rounded-2xl border border-slate-200/90 bg-slate-50/50">
                 <div className="border-b border-slate-200 bg-slate-100/70 px-5 py-3">
                   <h3 className="text-xs font-bold uppercase tracking-wider text-petrol-800">
-                    {shortName} Key Facts for Bangladeshi Students
+                    {shortName} Key Facts for International Students
                   </h3>
                 </div>
                 <dl className="divide-y divide-slate-200/70 text-xs sm:text-sm">
@@ -893,7 +893,7 @@ export default function UniversityProfileClient({
                   <div>
                     <h4 className="border-b border-slate-200 pb-2.5 text-xs font-bold uppercase tracking-wider text-petrol-800 flex items-center gap-1.5">
                       <PlaneTakeoff size={14} className="text-emerald-700 shrink-0" />
-                      Before Departure from Bangladesh
+                      Before Departure (Pre-Flight Preparation)
                     </h4>
                     <dl className="mt-2 divide-y divide-slate-200/60 text-xs">
                       {selected.fees
@@ -973,7 +973,7 @@ export default function UniversityProfileClient({
               <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
                 Scholarships & Tuition Waivers
               </span>
-              <h2 className={titleClass}>{shortName} Scholarships for Bangladeshi Students</h2>
+              <h2 className={titleClass}>{shortName} Scholarships for International Students</h2>
               <p className="mt-1.5 text-sm text-slate-600">
                 Compare documented scholarship routes, tuition waivers, coverage scope, and annual renewal rules.
               </p>
@@ -1025,7 +1025,7 @@ export default function UniversityProfileClient({
           {/* Student Guidance on Scholarships */}
           <div className="mt-6 rounded-2xl border border-slate-200/90 bg-slate-50/80 p-5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-petrol-800">
-              How Scholarships Work for Bangladeshi Applicants
+              How Scholarships Work for International Applicants
             </h3>
             <div className="mt-2.5 grid gap-4 text-xs leading-relaxed text-slate-600 sm:grid-cols-3">
               <div>
@@ -1129,14 +1129,14 @@ export default function UniversityProfileClient({
           </div>
         </section>
 
-        {/* 6. Step-by-Step Application & Visa Roadmap from Bangladesh */}
-        <section aria-label="How to apply from Bangladesh" className={sheetClass}>
+        {/* 6. Step-by-Step International Application & Visa Roadmap */}
+        <section aria-label="International admission roadmap" className={sheetClass}>
           <span className="text-[13px] font-bold uppercase tracking-wider text-emerald-800">
             Step-by-Step Admission Roadmap
           </span>
-          <h2 className={titleClass}>How to Apply to {shortName} from Bangladesh</h2>
+          <h2 className={titleClass}>How to Apply to {shortName} (International Student Guide)</h2>
           <p className="mt-1.5 text-sm text-slate-600">
-            A clear 4-step process managed with our Dhanmondi, Dhaka counseling office.
+            A clear 4-step admissions and visa roadmap for international students worldwide.
           </p>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1144,7 +1144,7 @@ export default function UniversityProfileClient({
               {
                 step: 'Step 01',
                 title: 'Free Eligibility & Major Check',
-                desc: `Share your SSC, HSC, or Bachelor transcripts. We verify your GPA and language readiness for ${shortName} at zero cost.`,
+                desc: `Share your High School, College, or Bachelor transcripts. We verify your GPA and language readiness for ${shortName} at zero cost.`,
               },
               {
                 step: 'Step 02',
@@ -1162,7 +1162,7 @@ export default function UniversityProfileClient({
                 step: 'Step 04',
                 title: 'Visa Stamp & Campus Arrival',
                 desc: isChina
-                  ? 'Submit your X1/X2 visa application in Dhaka. Pay EduExpress service fee only after your visa is approved, then fly to China.'
+                  ? 'Submit your X1/X2 visa application at your local Chinese Embassy or Visa Center. Settle service fee after approval, then fly to campus.'
                   : 'Complete Single Entry Visa (SEV), fly to Malaysia, and complete post-arrival medical and i-KAD registration.',
               },
             ].map((item) => (
@@ -1277,7 +1277,7 @@ export default function UniversityProfileClient({
           </span>
           <h2 className={titleClass}>{shortName}: Frequently Asked Questions</h2>
           <p className="mt-1.5 text-sm text-slate-600">
-            Direct answers on tuition fees, English-medium study, scholarships, and applying from Bangladesh.
+            Direct answers on tuition fees, English-medium study, scholarships, and international student admissions.
           </p>
           <div className="mt-6 space-y-3">
             {faq.map((item, idx) => (
@@ -1302,7 +1302,7 @@ export default function UniversityProfileClient({
         {isChina && (
           <section aria-label="Related China study guides" className={sheetClass}>
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Destination Resources</span>
-            <h2 className="mt-1 text-xl font-bold text-slate-900">Explore China Study Guides for Bangladeshi Students</h2>
+            <h2 className="mt-1 text-xl font-bold text-slate-900">Explore China Study & Scholarship Guides</h2>
             <p className="mt-1 text-xs text-slate-500">Official policies, CNY & BDT cost breakdowns, and X1/X2 student visa guides.</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {[
