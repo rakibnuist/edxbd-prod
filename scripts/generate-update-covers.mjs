@@ -394,6 +394,22 @@ const posters = [
     info: '$4,500–$8,000/yr Tuition · WDOMS & WFME Recognized · Tbilisi & Batumi',
     deadline: 'Spring: Feb 2027 · Autumn: Sep 2027',
   },
+  {
+    filename: 'the-chinese-university-of-hong-kong-best-known-programs-2027.jpg',
+    category: 'TOP PROGRAMS',
+    title: 'Chinese Univ of Hong Kong',
+    subtitle: 'CUHK & CUHK Shenzhen Best Known Programs 2027',
+    info: 'Data Science, AI, Business & Medicine · Full Scholarships',
+    deadline: 'Round 1: Jan 2027 · Final: May 2027',
+  },
+  {
+    filename: 'popular-programs-courses-red-brick-universities-uk-2027.jpg',
+    category: 'UK ADMISSIONS',
+    title: 'UK Red Brick Universities',
+    subtitle: 'Popular Programs, Courses & Entry Guide 2027',
+    info: 'Manchester, Bristol, Birmingham, Leeds, Sheffield & Liverpool',
+    deadline: 'UCAS Deadline: Jan 2027 · Autumn Intake',
+  },
 ];
 
 function escapeXml(str) {

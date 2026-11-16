@@ -35,6 +35,8 @@ import { MALAYSIA_UNIVERSITIES_2027_SLUG, MALAYSIA_UNIVERSITIES_2027_DATA } from
 import { GKS_SCHOLARSHIP_2027_SLUG, GKS_SCHOLARSHIP_2027_DATA } from '@/data/gksScholarship2027Guide';
 import { CHINA_BACHELOR_SCHOLARSHIPS_2027_SLUG, CHINA_BACHELOR_SCHOLARSHIPS_2027_DATA } from '@/data/chinaBachelorDegreeScholarships2027Guide';
 import { GEORGIA_MBBS_FEES_2027_SLUG, GEORGIA_MBBS_FEES_2027_DATA } from '@/data/georgiaMbbsFees2027Guide';
+import { CUHK_PROGRAMS_2027_SLUG, CUHK_PROGRAMS_2027_DATA } from '@/data/cuhkProgramsGuide2027';
+import { UK_RED_BRICK_2027_SLUG, UK_RED_BRICK_2027_DATA } from '@/data/ukRedBrickUniversitiesGuide2027';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -161,6 +163,12 @@ const getUpdate = cache(async (slug: string) => {
   }
   if (slug === GEORGIA_MBBS_FEES_2027_SLUG) {
     return GEORGIA_MBBS_FEES_2027_DATA;
+  }
+  if (slug === CUHK_PROGRAMS_2027_SLUG) {
+    return CUHK_PROGRAMS_2027_DATA;
+  }
+  if (slug === UK_RED_BRICK_2027_SLUG) {
+    return UK_RED_BRICK_2027_DATA;
   }
   if (NEW_GUIDES_2027_DATA[slug]) {
     return NEW_GUIDES_2027_DATA[slug];

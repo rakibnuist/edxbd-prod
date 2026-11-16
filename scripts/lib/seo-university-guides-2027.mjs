@@ -11,6 +11,8 @@ import { MALAYSIA_UNIVERSITIES_2027_DATA } from '../../src/data/malaysiaUniversi
 import { GKS_SCHOLARSHIP_2027_DATA } from '../../src/data/gksScholarship2027Guide.ts';
 import { CHINA_BACHELOR_SCHOLARSHIPS_2027_DATA } from '../../src/data/chinaBachelorDegreeScholarships2027Guide.ts';
 import { GEORGIA_MBBS_FEES_2027_DATA } from '../../src/data/georgiaMbbsFees2027Guide.ts';
+import { CUHK_PROGRAMS_2027_DATA } from '../../src/data/cuhkProgramsGuide2027.ts';
+import { UK_RED_BRICK_2027_DATA } from '../../src/data/ukRedBrickUniversitiesGuide2027.ts';
 
 /**
  * Official verified university data repairs and 2027 E-E-A-T update guides for
@@ -65,6 +67,8 @@ const NJUST_OFFICIAL_SOURCES = [
 ];
 
 const GUIDE_2027_SPECS = [
+  CUHK_PROGRAMS_2027_DATA,
+  UK_RED_BRICK_2027_DATA,
   CHINA_BACHELOR_SCHOLARSHIPS_2027_DATA,
   GEORGIA_MBBS_FEES_2027_DATA,
   MALAYSIA_UNIVERSITIES_2027_DATA,

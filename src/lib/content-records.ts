@@ -24,6 +24,8 @@ import { MALAYSIA_UNIVERSITIES_2027_SLUG, MALAYSIA_UNIVERSITIES_2027_DATA } from
 import { GKS_SCHOLARSHIP_2027_SLUG, GKS_SCHOLARSHIP_2027_DATA } from '@/data/gksScholarship2027Guide';
 import { CHINA_BACHELOR_SCHOLARSHIPS_2027_SLUG, CHINA_BACHELOR_SCHOLARSHIPS_2027_DATA } from '@/data/chinaBachelorDegreeScholarships2027Guide';
 import { GEORGIA_MBBS_FEES_2027_SLUG, GEORGIA_MBBS_FEES_2027_DATA } from '@/data/georgiaMbbsFees2027Guide';
+import { CUHK_PROGRAMS_2027_SLUG, CUHK_PROGRAMS_2027_DATA } from '@/data/cuhkProgramsGuide2027';
+import { UK_RED_BRICK_2027_SLUG, UK_RED_BRICK_2027_DATA } from '@/data/ukRedBrickUniversitiesGuide2027';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -155,6 +157,14 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   }
   if (!serialized.some(u => u.slug === GEORGIA_MBBS_FEES_2027_SLUG)) {
     const fallback = serializeUpdate(GEORGIA_MBBS_FEES_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  if (!serialized.some(u => u.slug === CUHK_PROGRAMS_2027_SLUG)) {
+    const fallback = serializeUpdate(CUHK_PROGRAMS_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  if (!serialized.some(u => u.slug === UK_RED_BRICK_2027_SLUG)) {
+    const fallback = serializeUpdate(UK_RED_BRICK_2027_DATA);
     if (fallback) serialized.unshift(fallback);
   }
   return take ? serialized.slice(0, take) : serialized;
@@ -325,6 +335,24 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
       publishedAt: GEORGIA_MBBS_FEES_2027_DATA.publishedAt,
       category: GEORGIA_MBBS_FEES_2027_DATA.category,
       categories: GEORGIA_MBBS_FEES_2027_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === CUHK_PROGRAMS_2027_SLUG)) {
+    updates.unshift({
+      slug: CUHK_PROGRAMS_2027_DATA.slug,
+      updatedAt: CUHK_PROGRAMS_2027_DATA.updatedAt,
+      publishedAt: CUHK_PROGRAMS_2027_DATA.publishedAt,
+      category: CUHK_PROGRAMS_2027_DATA.category,
+      categories: CUHK_PROGRAMS_2027_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === UK_RED_BRICK_2027_SLUG)) {
+    updates.unshift({
+      slug: UK_RED_BRICK_2027_DATA.slug,
+      updatedAt: UK_RED_BRICK_2027_DATA.updatedAt,
+      publishedAt: UK_RED_BRICK_2027_DATA.publishedAt,
+      category: UK_RED_BRICK_2027_DATA.category,
+      categories: UK_RED_BRICK_2027_DATA.categories,
     });
   }
   const categorySlugs = Array.from(
