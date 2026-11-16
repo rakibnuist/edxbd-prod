@@ -439,6 +439,27 @@
       ]
     },
     {
+      "slug": "china-university-of-geosciences",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "42",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/china-university-of-geosciences-wuhan"
+        },
+        {
+          "publisher": "QS",
+          "rankingName": "QS World University Rankings",
+          "year": 2026,
+          "rank": "401–500",
+          "scope": "world",
+          "sourceUrl": "https://www.topuniversities.com/universities/china-university-of-geosciences"
+        }
+      ]
+    },
+    {
       "slug": "china-university-of-petroleum-east-china",
       "rankings": [
         {

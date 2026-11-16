@@ -2440,6 +2440,83 @@
           "fundingHighlight": "Tuition + Hostel: CNY 13,200/yr (X1 Visa)"
         }
       ]
+    },
+    {
+      "id": "guizhou-university",
+      "name": "Guizhou University",
+      "acronym": "GZU",
+      "city": "Guiyang",
+      "logo": "/images/universities/logos/gzu.webp",
+      "ranking": {
+        "value": "National #124",
+        "scope": "National",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/institution/guizhou-university"
+      },
+      "programmes": [
+        {
+          "id": "guizhou-university-language-spring",
+          "route": "language",
+          "name": "Spring 2027 Non-Degree Chinese Language Program",
+          "tuition": "CNY 6,000",
+          "period": "semester",
+          "feeBasis": "Published tuition schedule",
+          "extra": "Registration CNY 500, Insurance CNY 400/semester. On-campus dorm CNY 1,500–3,000/semester.",
+          "awardTitle": "Provincial & CSC Degree Progression Eligibility",
+          "scholarship": "Self-funded language semester with progression pathway to Guizhou Provincial and CSC Scholarships for degree programs.",
+          "majors": [
+            "Comprehensive Chinese",
+            "Spoken Communication",
+            "Listening & Speaking",
+            "Reading & Writing",
+            "HSK 3–5 Preparation"
+          ],
+          "eligibility": "High school diploma or above, aged 16–35, non-Chinese citizen in good health with clean criminal record.",
+          "duration": "1 semester (March–July 2027)",
+          "entry": "Spring language route",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "Chinese",
+          "costItems": [
+            {
+              "item": "Tuition",
+              "amount": "CNY 6,000 / semester",
+              "note": "Spring 2027 intake"
+            },
+            {
+              "item": "Registration Fee",
+              "amount": "CNY 500",
+              "note": "One-time application fee"
+            },
+            {
+              "item": "Insurance",
+              "amount": "CNY 400 / semester",
+              "note": "Comprehensive medical insurance"
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Progression Degree Awards",
+              "coverage": "Guizhou Provincial Government Scholarship (CNY 10,000–20,000/year) and CSC Scholarships available upon degree matriculation."
+            }
+          ],
+          "documentChecklist": [
+            "Valid passport photo page",
+            "High school diploma or enrollment proof",
+            "Academic transcripts",
+            "Foreigner Physical Examination Record",
+            "Non-Criminal Record Report (Police Clearance)",
+            "Bank statement showing minimum RMB 20,000 equivalent"
+          ],
+          "scholarshipConditions": "Degree scholarship competition upon reaching HSK 4/5.",
+          "professionalNote": "",
+          "csca": "No CSCA required for language program. CSCA required for subsequent undergraduate degree applications.",
+          "majorGroups": [],
+          "fundingStage": "Language study",
+          "fundingHighlight": "Affordable CNY 6,000/semester tuition"
+        }
+      ]
     }
   ]
 }
