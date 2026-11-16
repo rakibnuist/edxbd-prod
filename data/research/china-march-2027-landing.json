@@ -52,6 +52,12 @@
         "url": "https://sis.wmu.edu.cn/zw24/lxwy/bksxm/bkszsjz.htm",
         "title": "WMU undergraduate admission guide",
         "facts": "English MBBS6years/BDS5years CNY33000 annual tuition; hostel4400/year; insurance800/year; firstyearregistration600. Scholarship20k/10k/5k allocations25%/25%/50%; fulltuitionpaidfirst, awards rankedbyCSCA; degreeCSCAEnglishmathchemistry. Autumn degreeentry, not spring MBBS."
+      },
+      {
+        "id": "sycu-brochure-2027",
+        "url": "https://www.shenyangcu.edu.cn",
+        "title": "Shenyang City University 2027 Spring International Student Admission Brochure",
+        "facts": "March 2027 intake 4.5-year bachelor track (0.5-year Chinese foundation + 4-year major) and direct 4-year September bachelor track. 4 bilingual majors: Business Administration, CS, AI, Civil Engineering. Gross tuition CNY 22,000/yr less CNY 10,000/yr scholarship = Net CNY 12,000/yr. Language program: 0.5-year CNY 5,000 net, 1-year CNY 10,000 net. Dormitory: 4-bed CNY 3,500/yr, standard double CNY 5,000/yr, all private bathrooms. Application deposit CNY 1,000 deductible on registration. Registration Feb 22–Mar 14 2027. Undergraduates pay first 1.5 years on arrival."
       }
     ],
     "corrections": [
@@ -264,6 +270,254 @@
     }
   ],
   "universities": [
+    {
+      "id": "shenyang-city-university",
+      "name": "Shenyang City University",
+      "acronym": "SYCU",
+      "city": "Shenyang, Liaoning",
+      "logo": "/images/universities/logos/shenyang-city-university.webp",
+      "ranking": {
+        "value": "Top 6 China Applied / #1 Liaoning",
+        "scope": "China",
+        "publisher": "Alumni Association (CUAA)",
+        "rankingName": "China Applied Private Universities Ranking"
+      },
+      "programmes": [
+        {
+          "id": "sycu-foundation-bachelor-4-5yr",
+          "route": "foundation",
+          "name": "4.5-Year Degree Track: Chinese Foundation + Bachelor Degree",
+          "tuition": "CNY 12,000",
+          "period": "year",
+          "feeBasis": "Official 2027 Spring Brochure (CNY 10,000/yr guaranteed institutional scholarship)",
+          "duration": "4.5 years (0.5-year foundation + 4-year degree)",
+          "entry": "March 2027 intake (Spring)",
+          "extra": "0.5-Year Foundation: CNY 5,000 (after CNY 3,000 scholarship). Bachelor: CNY 12,000/year (after CNY 10,000 scholarship). Dorm: CNY 3,500–5,000/year (all private bathroom). Deposit: CNY 1,000 (credited to tuition). Insurance: CNY 800/year.",
+          "awardTitle": "Institutional Undergraduate Scholarship",
+          "scholarship": "CNY 10,000 / year guaranteed tuition reduction, lowering annual tuition from CNY 22,000 to CNY 12,000 per academic year.",
+          "majors": [
+            "Business Administration (工商管理)",
+            "Computer Science and Technology (计算机科学与技术)",
+            "Artificial Intelligence (人工智能)",
+            "Civil Engineering (土木工程)"
+          ],
+          "eligibility": "High school graduation or equivalent qualification. Age 18–30 (under 18 with notarized guardianship in China). No criminal record. Good physical health.",
+          "tuitionLabel": "Annual tuition after scholarship",
+          "teachingLanguage": "Bilingual (Chinese & English)",
+          "costItems": [
+            {
+              "item": "Undergraduate Tuition (Net after CNY 10,000 Scholarship)",
+              "amount": "CNY 12,000 / year",
+              "note": "Original gross tuition CNY 22,000 / year."
+            },
+            {
+              "item": "0.5-Year Chinese Foundation Tuition (Net after CNY 3,000 Scholarship)",
+              "amount": "CNY 5,000 / 0.5 year",
+              "note": "Original gross tuition CNY 8,000 / 0.5 year."
+            },
+            {
+              "item": "On-Campus Standard Double Room",
+              "amount": "CNY 5,000 / year",
+              "note": "Equipped with private bathroom."
+            },
+            {
+              "item": "On-Campus 4-Bed Dormitory",
+              "amount": "CNY 3,500 / year",
+              "note": "Equipped with private bathroom."
+            },
+            {
+              "item": "Application Fee & Admission Deposit",
+              "amount": "CNY 1,000",
+              "note": "Non-refundable, 100% credited toward tuition upon on-campus registration."
+            },
+            {
+              "item": "Comprehensive Medical Insurance",
+              "amount": "CNY 800 / year",
+              "note": "Mandatory international student insurance in China."
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Undergraduate Institutional Scholarship",
+              "coverage": "CNY 10,000 / year tuition waiver (Tuition reduces from CNY 22,000 to CNY 12,000/year)."
+            },
+            {
+              "name": "Foundation Language Scholarship",
+              "coverage": "CNY 3,000 tuition reduction for the 0.5-year spring semester."
+            }
+          ],
+          "documentChecklist": [
+            "International Student Application Form",
+            "Valid passport scan (all pages, 18+ months validity)",
+            "White-background passport ID photo (≥295×413 px, ≤200 KB)",
+            "Highest education diploma (original, English translation, notarized)",
+            "Complete academic transcripts (with certified English translation)",
+            "Foreigner Physical Examination Form (within 6 months)",
+            "Non-criminal record clearance certificate (within 6 months)",
+            "Family financial statement / bank solvency proof (within 6 months)",
+            "2-minute English self-introduction video",
+            "Guardian authorization and undertaking (for applicants under 18)"
+          ],
+          "scholarshipConditions": "Applicants must be aged 18–30 with high school completion. Students must complete the 4.5-year curriculum, earn required credits, defend undergraduate thesis, and pass HSK Level 4 before graduation. Undergraduates in the 4.5-year track pay tuition, accommodation, and insurance for the first 1.5 years upon on-campus registration.",
+          "professionalNote": "Shenyang City University (SYCU), located in Sujiatun District, Shenyang, Liaoning. Dual-stage JW202 visa processing (initial JW202 for 0.5-year language; secondary JW202 issued on campus for 4-year degree).",
+          "csca": "No CSCA score is required for admission.",
+          "majorGroups": [],
+          "fundingStage": "CNY 10,000/yr scholarship",
+          "fundingHighlight": "Tuition: CNY 12,000/yr · Dorm: CNY 3,500–5,000/yr"
+        },
+        {
+          "id": "sycu-direct-bachelor-4yr",
+          "route": "bachelor",
+          "name": "4-Year Direct Bachelor Degree (Autumn Progression)",
+          "tuition": "CNY 12,000",
+          "period": "year",
+          "feeBasis": "Official 2027 Brochure (CNY 10,000/yr guaranteed institutional scholarship)",
+          "duration": "4 years",
+          "entry": "September 2027 intake (with spring early reservation)",
+          "extra": "Annual tuition after scholarship: CNY 12,000/year (original CNY 22,000). On-campus dorm: CNY 3,500–5,000/year. All rooms feature private bathrooms. Insurance: CNY 800/year.",
+          "awardTitle": "Institutional Undergraduate Scholarship",
+          "scholarship": "CNY 10,000 / year guaranteed tuition reduction, reducing tuition from CNY 22,000 to CNY 12,000 per academic year for all 4 years.",
+          "majors": [
+            "Business Administration (工商管理)",
+            "Computer Science and Technology (计算机科学与技术)",
+            "Artificial Intelligence (人工智能)",
+            "Civil Engineering (土木工程)"
+          ],
+          "eligibility": "High school completion or equivalent. Age 18–30. Non-Chinese citizen with valid passport and clean criminal record.",
+          "tuitionLabel": "Annual tuition after scholarship",
+          "teachingLanguage": "Bilingual (Chinese & English)",
+          "costItems": [
+            {
+              "item": "Undergraduate Tuition (Net after CNY 10,000 Scholarship)",
+              "amount": "CNY 12,000 / year",
+              "note": "Original gross tuition CNY 22,000 / year."
+            },
+            {
+              "item": "Standard Double Room (Private Bathroom)",
+              "amount": "CNY 5,000 / year",
+              "note": "Equipped with private bathroom."
+            },
+            {
+              "item": "4-Bed Dormitory (Private Bathroom)",
+              "amount": "CNY 3,500 / year",
+              "note": "Equipped with private bathroom."
+            },
+            {
+              "item": "Application Fee & Admission Deposit",
+              "amount": "CNY 1,000",
+              "note": "Non-refundable, 100% credited toward tuition upon on-campus registration."
+            },
+            {
+              "item": "Comprehensive Medical Insurance",
+              "amount": "CNY 800 / year",
+              "note": "Mandatory international student insurance in China."
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Undergraduate Institutional Scholarship",
+              "coverage": "CNY 10,000 / year tuition reduction (Tuition reduces from CNY 22,000 to CNY 12,000/year)."
+            }
+          ],
+          "documentChecklist": [
+            "International Student Application Form",
+            "Valid passport scan (all pages, 18+ months validity)",
+            "Digital passport photo",
+            "High school diploma (original, translated, notarized)",
+            "Complete academic transcripts",
+            "Foreigner Physical Examination Form (within 6 months)",
+            "Non-criminal record clearance",
+            "Bank financial statement",
+            "2-minute English self-introduction video"
+          ],
+          "scholarshipConditions": "Age 18–30. High school graduate. Must complete all required credits, defend bachelor thesis, and pass HSK 4 before graduation.",
+          "professionalNote": "Direct 4-year undergraduate route for candidates starting in September.",
+          "csca": "No CSCA score is required for admission.",
+          "majorGroups": [],
+          "fundingStage": "CNY 10,000/yr scholarship",
+          "fundingHighlight": "Tuition: CNY 12,000/yr · 4 Years"
+        },
+        {
+          "id": "sycu-chinese-language-spring",
+          "route": "language",
+          "name": "Chinese Language Program (Zero-Beginner 0.5-Year / 1-Year)",
+          "tuition": "CNY 5,000",
+          "period": "semester",
+          "feeBasis": "Official 2027 Spring Brochure (after CNY 3,000–6,000 scholarship)",
+          "duration": "0.5 year (1 semester) or 1 year",
+          "entry": "March 2027 intake",
+          "extra": "0.5-Year: CNY 5,000/semester (after CNY 3,000 scholarship). 1-Year: CNY 10,000/year (after CNY 6,000 scholarship). Dorm: CNY 1,750–2,500/semester (CNY 3,500–5,000/year).",
+          "awardTitle": "Language Program Scholarship",
+          "scholarship": "CNY 3,000 tuition discount for 0.5-year or CNY 6,000 tuition discount for 1-year.",
+          "majors": [
+            "Chinese Language (0-Beginner)",
+            "Listening & Speaking",
+            "Reading & Writing",
+            "HSK Preparation",
+            "Chinese Culture"
+          ],
+          "eligibility": "High school completion or above. Age 18–30. Valid passport, physical examination form, and police clearance.",
+          "tuitionLabel": "Semester tuition after scholarship",
+          "teachingLanguage": "Chinese & English",
+          "costItems": [
+            {
+              "item": "0.5-Year Chinese Language Tuition (Net after CNY 3,000 Scholarship)",
+              "amount": "CNY 5,000 / 0.5 year",
+              "note": "Original gross tuition CNY 8,000 / 0.5 year."
+            },
+            {
+              "item": "1-Year Chinese Language Tuition (Net after CNY 6,000 Scholarship)",
+              "amount": "CNY 10,000 / year",
+              "note": "Original gross tuition CNY 16,000 / year."
+            },
+            {
+              "item": "Standard Double Room (Private Bathroom)",
+              "amount": "CNY 2,500 / semester",
+              "note": "CNY 5,000 / year."
+            },
+            {
+              "item": "4-Bed Dormitory (Private Bathroom)",
+              "amount": "CNY 1,750 / semester",
+              "note": "CNY 3,500 / year."
+            },
+            {
+              "item": "Application Fee & Admission Deposit",
+              "amount": "CNY 1,000",
+              "note": "Non-refundable, 100% credited toward tuition upon registration."
+            },
+            {
+              "item": "Medical Insurance",
+              "amount": "CNY 400 / semester",
+              "note": "CNY 800 / year."
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "0.5-Year Language Scholarship",
+              "coverage": "CNY 3,000 tuition discount (net tuition CNY 5,000/semester)."
+            },
+            {
+              "name": "1-Year Language Scholarship",
+              "coverage": "CNY 6,000 tuition discount (net tuition CNY 10,000/year)."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport scan and photograph",
+            "High school diploma and transcripts",
+            "Foreigner Physical Examination Form",
+            "Non-criminal record clearance",
+            "Family financial statement"
+          ],
+          "scholarshipConditions": "Non-degree language track open to zero-beginner and advancing students aged 18–30.",
+          "professionalNote": "X2 visa for 0.5-year study or X1 visa for 1-year study.",
+          "csca": "No CSCA score is required.",
+          "majorGroups": [],
+          "fundingStage": "CNY 3,000–6,000 scholarship",
+          "fundingHighlight": "Tuition: CNY 5,000/sem · CNY 10,000/yr"
+        }
+      ]
+    },
     {
       "id": "chongqing-jiaotong-university",
       "name": "Chongqing Jiaotong University",

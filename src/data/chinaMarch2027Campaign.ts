@@ -31,6 +31,17 @@ export const chinaMarch2027Routes: March2027RouteGroup[] = [
     summary: 'Begin with a preparatory semester in March, then progress to a bachelor route after meeting the stated requirements.',
     opportunities: [
       {
+        name: 'Shenyang City University',
+        location: 'Shenyang, Liaoning',
+        level: 'Foundation + Bachelor (4.5 Years)',
+        pathway: 'March 0.5-year intensive Chinese foundation, followed by 4-year bachelor degree',
+        indicativeCost: 'Foundation: CNY 5,000 (0.5 yr); Bachelor after scholarship: CNY 12,000/year; Hostel: CNY 3,500–5,000/year (all private bathroom)',
+        scholarship: 'Guaranteed CNY 10,000/year institutional scholarship reducing annual tuition from CNY 22,000 to CNY 12,000/year for all 4 years.',
+        subjects: ['Business Administration', 'Computer Science and Technology', 'Artificial Intelligence', 'Civil Engineering'],
+        deadline: 'Individual: 25 November 2026; Agency: 25 December 2026.',
+        universitySlug: 'shenyang-city-university',
+      },
+      {
         name: 'Chongqing Jiaotong University',
         location: 'Chongqing',
         level: 'Foundation + Bachelor',
@@ -114,6 +125,17 @@ export const chinaMarch2027Routes: March2027RouteGroup[] = [
     summary: 'Selected institutions in the supplied sheet list direct bachelor entry for eligible students without a separate foundation route.',
     opportunities: [
       {
+        name: 'Shenyang City University',
+        location: 'Shenyang, Liaoning',
+        level: 'Bachelor (4-Year Direct)',
+        pathway: 'Four-year direct bachelor degree starting in September (with spring early reservation)',
+        indicativeCost: 'Sheet estimate after scholarship: CNY 12,000 tuition + CNY 3,500–5,000 hostel (private bathroom)',
+        scholarship: 'Guaranteed CNY 10,000/year institutional scholarship reducing tuition from CNY 22,000 to CNY 12,000/year.',
+        subjects: ['Business Administration', 'Computer Science and Technology', 'Artificial Intelligence', 'Civil Engineering'],
+        deadline: 'Applications open for 2027 cycle; apply by 30 June 2027.',
+        universitySlug: 'shenyang-city-university',
+      },
+      {
         name: 'Wuzhou University',
         location: 'Wuzhou, Guangxi',
         level: 'Bachelor',
@@ -141,6 +163,17 @@ export const chinaMarch2027Routes: March2027RouteGroup[] = [
     shortTitle: 'Chinese Language',
     summary: 'Semester language study can be a standalone goal or preparation for a later diploma or degree application.',
     opportunities: [
+      {
+        name: 'Shenyang City University',
+        location: 'Shenyang, Liaoning',
+        level: 'Chinese Language (0.5-Year or 1-Year)',
+        pathway: '0.5-Year (1 semester) or 1-Year language immersion starting in March 2027',
+        indicativeCost: '0.5-Year: CNY 5,000 (after CNY 3,000 scholarship); 1-Year: CNY 10,000 (after CNY 6,000 scholarship)',
+        scholarship: 'CNY 3,000 scholarship for 0.5-year or CNY 6,000 scholarship for 1-year language students.',
+        subjects: ['Chinese Language (0-Beginner)', 'Listening & Speaking', 'Reading & Writing', 'HSK Preparation'],
+        deadline: 'Individual: 25 November 2026; Agency: 25 December 2026.',
+        universitySlug: 'shenyang-city-university',
+      },
       {
         name: 'Shanghai Jiao Tong University',
         location: 'Shanghai',
