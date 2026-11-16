@@ -29,6 +29,8 @@ import { OPEN_UNIVERSITIES_2027_SLUG, OPEN_UNIVERSITIES_2027_DATA } from '@/data
 import { CSC_UNIVERSITY_LIST_2027_SLUG, CSC_UNIVERSITY_LIST_2027_DATA } from '@/data/cscUniversityList2027Guide';
 import { CONFUCIUS_SCHOLARSHIP_2027_SLUG, CONFUCIUS_SCHOLARSHIP_2027_DATA } from '@/data/confuciusInstituteScholarship2027Guide';
 import { FOUNDATION_SCHOLARSHIPS_SLUG, FOUNDATION_SCHOLARSHIPS_DATA } from '@/data/foundationYearScholarshipsGuide';
+import { MALAYSIA_UNIVERSITIES_2027_SLUG, MALAYSIA_UNIVERSITIES_2027_DATA } from '@/data/malaysiaUniversities2027Guide';
+import { GKS_SCHOLARSHIP_2027_SLUG, GKS_SCHOLARSHIP_2027_DATA } from '@/data/gksScholarship2027Guide';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -143,6 +145,12 @@ const getUpdate = cache(async (slug: string) => {
   }
   if (slug === FOUNDATION_SCHOLARSHIPS_SLUG) {
     return FOUNDATION_SCHOLARSHIPS_DATA;
+  }
+  if (slug === MALAYSIA_UNIVERSITIES_2027_SLUG) {
+    return MALAYSIA_UNIVERSITIES_2027_DATA;
+  }
+  if (slug === GKS_SCHOLARSHIP_2027_SLUG) {
+    return GKS_SCHOLARSHIP_2027_DATA;
   }
   if (NEW_GUIDES_2027_DATA[slug]) {
     return NEW_GUIDES_2027_DATA[slug];

@@ -18,6 +18,8 @@ import { OPEN_UNIVERSITIES_2027_SLUG, OPEN_UNIVERSITIES_2027_DATA } from '@/data
 import { CSC_UNIVERSITY_LIST_2027_SLUG, CSC_UNIVERSITY_LIST_2027_DATA } from '@/data/cscUniversityList2027Guide';
 import { CONFUCIUS_SCHOLARSHIP_2027_SLUG, CONFUCIUS_SCHOLARSHIP_2027_DATA } from '@/data/confuciusInstituteScholarship2027Guide';
 import { FOUNDATION_SCHOLARSHIPS_SLUG, FOUNDATION_SCHOLARSHIPS_DATA } from '@/data/foundationYearScholarshipsGuide';
+import { MALAYSIA_UNIVERSITIES_2027_SLUG, MALAYSIA_UNIVERSITIES_2027_DATA } from '@/data/malaysiaUniversities2027Guide';
+import { GKS_SCHOLARSHIP_2027_SLUG, GKS_SCHOLARSHIP_2027_DATA } from '@/data/gksScholarship2027Guide';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -119,6 +121,14 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   }
   if (!serialized.some(u => u.slug === FOUNDATION_SCHOLARSHIPS_SLUG)) {
     const fallback = serializeUpdate(FOUNDATION_SCHOLARSHIPS_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  if (!serialized.some(u => u.slug === MALAYSIA_UNIVERSITIES_2027_SLUG)) {
+    const fallback = serializeUpdate(MALAYSIA_UNIVERSITIES_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  if (!serialized.some(u => u.slug === GKS_SCHOLARSHIP_2027_SLUG)) {
+    const fallback = serializeUpdate(GKS_SCHOLARSHIP_2027_DATA);
     if (fallback) serialized.unshift(fallback);
   }
   return take ? serialized.slice(0, take) : serialized;
@@ -231,6 +241,24 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
       publishedAt: FOUNDATION_SCHOLARSHIPS_DATA.publishedAt,
       category: FOUNDATION_SCHOLARSHIPS_DATA.category,
       categories: FOUNDATION_SCHOLARSHIPS_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === MALAYSIA_UNIVERSITIES_2027_SLUG)) {
+    updates.unshift({
+      slug: MALAYSIA_UNIVERSITIES_2027_DATA.slug,
+      updatedAt: MALAYSIA_UNIVERSITIES_2027_DATA.updatedAt,
+      publishedAt: MALAYSIA_UNIVERSITIES_2027_DATA.publishedAt,
+      category: MALAYSIA_UNIVERSITIES_2027_DATA.category,
+      categories: MALAYSIA_UNIVERSITIES_2027_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === GKS_SCHOLARSHIP_2027_SLUG)) {
+    updates.unshift({
+      slug: GKS_SCHOLARSHIP_2027_DATA.slug,
+      updatedAt: GKS_SCHOLARSHIP_2027_DATA.updatedAt,
+      publishedAt: GKS_SCHOLARSHIP_2027_DATA.publishedAt,
+      category: GKS_SCHOLARSHIP_2027_DATA.category,
+      categories: GKS_SCHOLARSHIP_2027_DATA.categories,
     });
   }
   const categorySlugs = Array.from(

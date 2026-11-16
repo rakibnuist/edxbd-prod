@@ -5,6 +5,8 @@ import { OPEN_UNIVERSITIES_2027_DATA } from '../../src/data/chinaUniversitiesOpe
 import { CSC_UNIVERSITY_LIST_2027_DATA } from '../../src/data/cscUniversityList2027Guide.ts';
 import { CONFUCIUS_SCHOLARSHIP_2027_DATA } from '../../src/data/confuciusInstituteScholarship2027Guide.ts';
 import { FOUNDATION_SCHOLARSHIPS_DATA } from '../../src/data/foundationYearScholarshipsGuide.ts';
+import { MALAYSIA_UNIVERSITIES_2027_DATA } from '../../src/data/malaysiaUniversities2027Guide.ts';
+import { GKS_SCHOLARSHIP_2027_DATA } from '../../src/data/gksScholarship2027Guide.ts';
 
 /**
  * Official verified university data repairs and 2027 E-E-A-T update guides for
@@ -59,6 +61,8 @@ const NJUST_OFFICIAL_SOURCES = [
 ];
 
 const GUIDE_2027_SPECS = [
+  MALAYSIA_UNIVERSITIES_2027_DATA,
+  GKS_SCHOLARSHIP_2027_DATA,
   CONFUCIUS_SCHOLARSHIP_2027_DATA,
   FOUNDATION_SCHOLARSHIPS_DATA,
   CSC_UNIVERSITY_LIST_2027_DATA,
