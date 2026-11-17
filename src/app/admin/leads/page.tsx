@@ -14,6 +14,8 @@ export default function LeadsPage() {
   const [notice, setNotice] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [refresh, setRefresh] = useState(0);
+  const [syncingMeta, setSyncingMeta] = useState(false);
+
   useEffect(() => {
     if (authLoading || !isAuthenticated) return;
     const controller = new AbortController();
@@ -24,6 +26,28 @@ export default function LeadsPage() {
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [authLoading, isAuthenticated, refresh, authenticatedFetch]);
+
+  const syncMeta = async () => {
+    setSyncingMeta(true);
+    setError(null);
+    setNotice(null);
+    try {
+      const response = await authenticatedFetch('/api/admin/leads?sync=1', { cache: 'no-store' });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Failed to sync with Meta Graph API.');
+      if (Array.isArray(result)) {
+        setLeads(result);
+        setNotice(`Meta Graph API synced successfully! Loaded ${result.length} enquiries.`);
+      } else {
+        setRefresh((v) => v + 1);
+        setNotice('Meta Graph API sync complete.');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Meta sync failed.');
+    } finally {
+      setSyncingMeta(false);
+    }
+  };
   const update = async (id: string, data: { status?: string; notes?: string }) => {
     setSavingId(id); setError(null); setNotice(null);
     try {
@@ -101,5 +125,25 @@ export default function LeadsPage() {
       setImporting(false);
     }
   };
-  return <LeadWorkspace leads={leads} loading={loading || authLoading} importing={importing} error={error} notice={notice} savingId={savingId} onRefresh={() => { setLoading(true); setError(null); setRefresh(value => value + 1); }} onUpdate={update} onDelete={remove} onCopilot={copilot} onImportCsv={importCsv} />;
+  return (
+    <LeadWorkspace
+      leads={leads}
+      loading={loading || authLoading}
+      importing={importing}
+      syncingMeta={syncingMeta}
+      error={error}
+      notice={notice}
+      savingId={savingId}
+      onRefresh={() => {
+        setLoading(true);
+        setError(null);
+        setRefresh((value) => value + 1);
+      }}
+      onSyncMeta={syncMeta}
+      onUpdate={update}
+      onDelete={remove}
+      onCopilot={copilot}
+      onImportCsv={importCsv}
+    />
+  );
 }

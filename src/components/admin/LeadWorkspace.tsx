@@ -1,15 +1,23 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowDownUp, ChevronLeft, ChevronRight, Mail, MessageCircle, Phone, RefreshCw, Search, SlidersHorizontal, Upload, X } from 'lucide-react';
+import { ArrowDownUp, ChevronLeft, ChevronRight, Download, Mail, MessageCircle, Phone, RefreshCw, Search, SlidersHorizontal, Upload, X } from 'lucide-react';
 import LeadCopilotPanel from '@/components/admin/LeadCopilotPanel';
 import type { FitResponseLanguage } from '@/lib/fit-matcher';
 import type { LeadCopilotResult } from '@/lib/lead-copilot';
 import { filterLeads, leadContactLinks, leadCounts, leadStatusLabel, leadStatusTone, LEAD_STATUSES, type LeadQueue, type LeadRecord } from '@/lib/lead-workflow';
 
 type Props = {
-  leads: LeadRecord[]; loading: boolean; importing?: boolean; error: string | null; notice: string | null; savingId: string | null;
-  onRefresh: () => void; onUpdate: (id: string, data: { status?: string; notes?: string }) => Promise<boolean>;
+  leads: LeadRecord[];
+  loading: boolean;
+  importing?: boolean;
+  syncingMeta?: boolean;
+  error: string | null;
+  notice: string | null;
+  savingId: string | null;
+  onRefresh: () => void;
+  onSyncMeta?: () => Promise<void>;
+  onUpdate: (id: string, data: { status?: string; notes?: string }) => Promise<boolean>;
   onDelete: (id: string) => Promise<boolean>;
   onCopilot?: (id: string, options: { language: FitResponseLanguage; focus?: string }) => Promise<{ data?: LeadCopilotResult; error?: string }>;
   onImportCsv?: (file: File) => void;
@@ -89,7 +97,21 @@ function Detail({ lead, saving, onClose, onUpdate, onDelete, onCopilot }: { lead
   </dialog>;
 }
 
-export default function LeadWorkspace({ leads, loading, importing, error, notice, savingId, onRefresh, onUpdate, onDelete, onCopilot, onImportCsv }: Props) {
+export default function LeadWorkspace({
+  leads,
+  loading,
+  importing,
+  syncingMeta,
+  error,
+  notice,
+  savingId,
+  onRefresh,
+  onSyncMeta,
+  onUpdate,
+  onDelete,
+  onCopilot,
+  onImportCsv,
+}: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [search, setSearch] = useState('');
   const [queue, setQueue] = useState<LeadQueue>('all');
@@ -111,15 +133,98 @@ export default function LeadWorkspace({ leads, loading, importing, error, notice
   const selected = leads.find(lead => lead.id === selectedId);
   const hasFilters = Boolean(search || status !== 'all' || country !== 'all' || source !== 'all' || queue !== 'all');
   const reset = () => { setSearch(''); setQueue('all'); setStatus('all'); setCountry('all'); setSource('all'); setPage(1); };
+
+  const handleExportCsv = () => {
+    const headers = [
+      'Lead ID',
+      'Received Date',
+      'Student Name',
+      'Phone',
+      'Email',
+      'Country / Destination',
+      'Program / Track',
+      'Academic Level',
+      'Result / GPA',
+      'Budget',
+      'Intake',
+      'Language',
+      'Status',
+      'Source',
+      'Campaign / Form',
+      'Counselor Notes',
+    ];
+
+    const escapeCsv = (val: string | null | undefined) => {
+      if (!val) return '""';
+      const clean = String(val).replace(/"/g, '""');
+      return `"${clean}"`;
+    };
+
+    const csvRows = filtered.map((l) => [
+      escapeCsv(l.id),
+      escapeCsv(new Date(l.createdAt).toISOString().split('T')[0]),
+      escapeCsv(l.name),
+      escapeCsv(l.phone),
+      escapeCsv(l.email),
+      escapeCsv(l.country || l.destinationInterest),
+      escapeCsv(l.program || l.assessSubject),
+      escapeCsv(l.assessAcademicLevel),
+      escapeCsv(l.assessAcademicResults),
+      escapeCsv(l.assessBudget),
+      escapeCsv(l.assessIntake),
+      escapeCsv(l.assessLanguage),
+      escapeCsv(l.status),
+      escapeCsv(l.source),
+      escapeCsv(l.landingPage || ''),
+      escapeCsv(l.notes),
+    ]);
+
+    const csvContent = [headers.join(','), ...csvRows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `eduexpress-leads-${queue}-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return <div data-ui className="space-y-6 text-gray-900">
-    <div className="flex items-start justify-between gap-4"><div><h1 className="text-2xl font-semibold tracking-tight">Leads</h1><p className="mt-1 text-sm text-gray-600">Your admissions queue. Find the next student to follow up with.</p></div>
-      <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Leads</h1>
+        <p className="mt-1 text-sm text-slate-500">Your admissions pipeline. Contact students, update status, and manage enquiries.</p>
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        {onSyncMeta && (
+          <button
+            className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 text-xs font-bold text-blue-800 hover:bg-blue-100 disabled:opacity-60 transition"
+            onClick={onSyncMeta}
+            disabled={loading || syncingMeta || importing}
+            title="Fetch all new leads directly from Meta Graph API"
+          >
+            <RefreshCw size={14} className={syncingMeta ? 'animate-spin' : ''} />
+            <span>{syncingMeta ? 'Syncing Meta…' : 'Sync Meta Leads'}</span>
+          </button>
+        )}
+        <button
+          className={quietButton}
+          onClick={handleExportCsv}
+          disabled={loading || !filtered.length}
+          title={`Export ${filtered.length} leads to CSV for Excel`}
+        >
+          <Download size={15} />
+          <span className="hidden sm:inline">Export CSV</span>
+        </button>
         {onImportCsv && <>
           <input ref={fileInputRef} type="file" accept=".csv,.tsv,text/csv,text/tab-separated-values" className="hidden" onChange={event => { const file = event.target.files?.[0]; if (file) onImportCsv(file); event.target.value = ''; }} />
           <button className={quietButton} onClick={() => fileInputRef.current?.click()} disabled={loading || importing}><Upload size={15} /><span>{importing ? 'Importing…' : 'Import CSV'}</span></button>
         </>}
         <button className={quietButton} onClick={onRefresh} disabled={loading || importing}><RefreshCw size={15} className={loading ? 'animate-spin' : ''} /><span className="hidden sm:inline">Refresh</span></button>
-      </div></div>
+      </div>
+    </div>
     <dl className="grid grid-cols-2 gap-y-5 rounded-lg bg-gray-50 p-4 sm:grid-cols-4 sm:divide-x sm:divide-gray-200">{[
       ['Total enquiries', counts.all], ['New enquiries', counts.new], ['No Response', counts.no_response], ['In progress', counts.in_progress],
     ].map(([label, value], index) => <div key={label} className={index ? 'sm:px-5' : 'sm:pr-5'}><dt className="text-xs text-gray-600">{label}</dt><dd className={`mt-1 text-2xl font-semibold tabular-nums ${label === 'New enquiries' && value ? 'text-[#12436b]' : ''}`}>{loading && !leads.length ? '—' : value}</dd></div>)}</dl>
@@ -136,13 +241,61 @@ export default function LeadWorkspace({ leads, loading, importing, error, notice
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-600"><span role="status">{loading && !leads.length ? 'Loading enquiries…' : `${filtered.length} ${filtered.length === 1 ? 'lead' : 'leads'}${hasFilters ? ' match your filters' : ' in this queue'}`}</span>{hasFilters && <button onClick={reset} className="min-h-8 font-medium text-[#12436b] hover:underline">Clear filters</button>}</div>
       {error && <div role="alert" className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-900"><span>{error}</span><button className="font-semibold underline" onClick={onRefresh}>Retry</button></div>}
       {notice && <p role="status" className="mb-4 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-900">{notice}</p>}
-      <div aria-busy={loading}><table className="w-full table-fixed border-collapse text-left text-sm"><thead className="hidden md:table-header-group"><tr className="text-xs font-normal text-gray-600"><th className="w-[29%] py-3 pr-4 font-normal">Student / contact</th><th className="w-[24%] py-3 pr-4 font-normal">Study interest</th><th className="w-[23%] py-3 pr-4 font-normal">Status</th><th className="w-[15%] py-3 pr-4 font-normal">Received</th><th className="w-[9%] py-3 text-right font-normal"><span className="sr-only">Open enquiry</span></th></tr></thead>
+      <div aria-busy={loading}><table className="w-full table-fixed border-collapse text-left text-sm"><thead className="hidden md:table-header-group"><tr className="text-xs font-normal text-gray-600"><th className="w-[30%] py-3 pr-4 font-normal">Student / contact</th><th className="w-[23%] py-3 pr-4 font-normal">Study interest</th><th className="w-[23%] py-3 pr-4 font-normal">Status</th><th className="w-[15%] py-3 pr-4 font-normal">Received</th><th className="w-[9%] py-3 text-right font-normal"><span className="sr-only">Open enquiry</span></th></tr></thead>
         <tbody className="block md:table-row-group">{rows.map(lead => { const links = leadContactLinks(lead); return <tr key={lead.id} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-3 border-t border-gray-100 py-4 align-top hover:bg-gray-50/70 md:table-row md:py-0">
-          <td className="min-w-0 md:py-4 md:pr-4"><button onClick={() => setSelectedId(lead.id)} className="max-w-full break-words text-left font-semibold hover:text-[#12436b] hover:underline">{lead.name}</button><p className="mt-1 break-all text-xs leading-5 text-gray-600">{lead.email || 'Email not provided'}</p>{links.call && <a href={links.call} className="mt-1 inline-block text-xs leading-5 text-gray-600 hover:text-[#12436b] hover:underline">{lead.phone}</a>}</td>
-          <td className="col-start-1 row-start-2 min-w-0 md:py-4 md:pr-4"><p className="break-words">{lead.country || 'Destination to discuss'}</p><p className="mt-1 break-words text-xs leading-5 text-gray-600">{lead.program || lead.assessSubject || 'Program to discuss'}</p><p className="mt-1 break-words text-xs leading-5 text-gray-600">{lead.source || 'Source not provided'}</p></td>
+          <td className="min-w-0 md:py-4 md:pr-4">
+            <div className="flex items-center justify-between gap-2">
+              <button onClick={() => setSelectedId(lead.id)} className="max-w-full break-words text-left font-bold text-slate-900 hover:text-[#12436b] hover:underline">
+                {lead.name}
+              </button>
+              {links.whatsapp && (
+                <a
+                  href={links.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`Chat with ${lead.name} on WhatsApp`}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-md border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-800 hover:bg-emerald-100 transition-colors"
+                >
+                  <MessageCircle size={12} className="text-emerald-600" />
+                  <span className="hidden xl:inline">WhatsApp</span>
+                </a>
+              )}
+            </div>
+            <p className="mt-1 break-all text-xs leading-5 text-gray-500">{lead.email || 'Email not provided'}</p>
+            {links.call && (
+              <a href={links.call} className="mt-0.5 inline-flex items-center gap-1 text-xs font-medium leading-5 text-gray-700 hover:text-[#12436b] hover:underline">
+                <Phone size={11} className="text-slate-400" />
+                {lead.phone}
+              </a>
+            )}
+            {(lead.assessAcademicLevel || lead.assessAcademicResults) && (
+              <div className="mt-1 flex flex-wrap gap-1 text-[10px]">
+                <span className="rounded bg-slate-100 px-1.5 py-0.5 font-medium text-slate-700">
+                  {[lead.assessAcademicLevel, lead.assessAcademicResults].filter(Boolean).join(' · ')}
+                </span>
+              </div>
+            )}
+          </td>
+          <td className="col-start-1 row-start-2 min-w-0 md:py-4 md:pr-4">
+            <p className="font-semibold text-slate-900">{lead.country || 'Destination to discuss'}</p>
+            <p className="mt-0.5 break-words text-xs leading-5 text-gray-600">{lead.program || lead.assessSubject || 'Program to discuss'}</p>
+            <div className="mt-1.5">
+              {lead.source?.includes('meta') ? (
+                <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-blue-700 border border-blue-200/60">
+                  <span className="size-1.5 rounded-full bg-blue-600" />
+                  Meta Form
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-slate-700 border border-slate-200">
+                  <span className="size-1.5 rounded-full bg-slate-500" />
+                  Website
+                </span>
+              )}
+            </div>
+          </td>
           <td className="col-span-2 row-start-3 md:py-4 md:pr-4"><StatusSelect lead={lead} saving={savingId === lead.id} update={onUpdate} /></td>
           <td className="col-start-2 row-start-2 text-right text-xs leading-5 tabular-nums text-gray-600 md:py-4 md:pr-4 md:text-left">{date(lead.createdAt)}</td>
-          <td className="col-start-2 row-start-1 text-right md:py-4"><button aria-label={`Open details for ${lead.name}`} onClick={() => setSelectedId(lead.id)} className="min-h-10 px-1 text-sm font-medium text-[#12436b] hover:underline">Open</button></td>
+          <td className="col-start-2 row-start-1 text-right md:py-4"><button aria-label={`Open details for ${lead.name}`} onClick={() => setSelectedId(lead.id)} className="min-h-10 px-2 text-sm font-semibold text-[#12436b] hover:underline">Open</button></td>
         </tr>; })}</tbody></table>
         {loading && !leads.length && <div className="space-y-4 py-6" aria-label="Loading leads">{[0, 1, 2, 3].map(row => <div key={row} className="h-14 rounded bg-gray-100" />)}</div>}
         {!loading && !rows.length && <div className="py-12 text-center"><h2 className="text-base font-semibold">{leads.length ? 'No matching enquiries' : 'Your lead queue is clear'}</h2><p className="mt-2 text-sm text-gray-600">{leads.length ? 'Try another search or clear your filters.' : 'New student enquiries will appear here when received.'}</p>{hasFilters && <button className={`${quietButton} mt-4`} onClick={reset}>Clear filters</button>}</div>}
