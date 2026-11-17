@@ -1,7 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
 import { isLeadStatus } from '@/lib/lead-workflow';
+import { sendCrmStage } from '@/lib/meta-crm-events';
+import { syncMetaInstantFormLeads } from '@/lib/meta-leads-sync';
 import { validateAdminLeadCreate } from '@/lib/payload-validation';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
@@ -15,6 +17,13 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
+    await syncMetaInstantFormLeads({
+      force: searchParams.get('sync') === '1',
+      onLeadCreated: (lead) => {
+        after(() => sendCrmStage(lead, 'new'));
+      },
+    }).catch(() => {});
+
     const status = searchParams.get('status');
     const source = searchParams.get('source');
     const country = searchParams.get('country');

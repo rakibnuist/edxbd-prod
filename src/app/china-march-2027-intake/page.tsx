@@ -717,7 +717,7 @@ export default async function Page() {
       </section>
 
       {/* Executive Institutional Campaign Footer */}
-      <footer className="bg-[#051827] px-5 py-12 text-white sm:px-8">
+      <footer id="site-footer" className="bg-[#051827] px-5 py-12 text-white sm:px-8">
         <div className="mx-auto max-w-[1180px]">
           <div className="grid gap-8 border-b border-white/10 pb-10 lg:grid-cols-[1.2fr_1fr_1fr]">
             <div>

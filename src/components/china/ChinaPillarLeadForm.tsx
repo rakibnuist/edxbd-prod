@@ -54,7 +54,7 @@ type Props = {
 };
 
 const inputClass =
-  'mt-1.5 h-12 min-h-12 w-full rounded-xl border border-slate-300 bg-slate-50/70 px-3.5 text-[15px] font-medium text-[#0b2b45] outline-none transition placeholder:font-normal placeholder:text-slate-400 focus:border-[#12436b] focus:bg-white focus:ring-2 focus:ring-[#12436b]/15 sm:text-sm';
+  'mt-1.5 h-12 min-h-12 w-full scroll-mt-36 rounded-xl border border-slate-300 bg-slate-50/70 px-3.5 text-[15px] font-medium text-[#0b2b45] outline-none transition placeholder:font-normal placeholder:text-slate-400 focus:border-[#12436b] focus:bg-white focus:ring-2 focus:ring-[#12436b]/15 sm:text-sm';
 
 const ROUTE_ALIASES: Record<string, string> = {
   bachelor: 'Bachelor’s Degree',
@@ -218,7 +218,7 @@ export default function ChinaPillarLeadForm({
     setErrors({});
     setStep(2);
     requestAnimationFrame(() => {
-      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   };
 
@@ -302,17 +302,25 @@ export default function ChinaPillarLeadForm({
     started.current = false;
   };
 
-  const errorFor = (key: keyof ChinaEnquiryFields) =>
-    errors[key] ? (
+  const errorMessage = (key: keyof ChinaEnquiryFields) =>
+    key === 'route' && activeRoute.trim().length > 0 ? undefined : errors[key];
+
+  const errorFor = (key: keyof ChinaEnquiryFields) => {
+    const msg = errorMessage(key);
+    return msg ? (
       <p id={`${uid}-${key}-error`} className="mt-1.5 text-xs font-medium leading-5 text-red-700" role="alert">
-        {errors[key]}
+        {msg}
       </p>
     ) : null;
+  };
 
-  const ariaFor = (key: keyof ChinaEnquiryFields) => ({
-    'aria-invalid': Boolean(errors[key]),
-    'aria-describedby': errors[key] ? `${uid}-${key}-error` : undefined,
-  });
+  const ariaFor = (key: keyof ChinaEnquiryFields) => {
+    const msg = errorMessage(key);
+    return {
+      'aria-invalid': Boolean(msg),
+      'aria-describedby': msg ? `${uid}-${key}-error` : undefined,
+    };
+  };
 
   const cleanDigits = whatsappNumber.replace(/\D/g, '');
   const whatsappHref = `https://wa.me/${cleanDigits}?text=${encodeURIComponent(
@@ -325,7 +333,7 @@ export default function ChinaPillarLeadForm({
     <section
       id={sectionId}
       aria-labelledby={`${uid}-form-title`}
-      className="scroll-mt-24 overflow-hidden rounded-3xl border border-slate-200/80 bg-white text-[#0b2b45] shadow-[0_24px_64px_rgba(7,30,48,0.22)]"
+      className="scroll-mt-36 overflow-hidden rounded-3xl border border-slate-200/80 bg-white text-[#0b2b45] shadow-[0_24px_64px_rgba(7,30,48,0.22)]"
     >
       {/* Form Header */}
       <div className="relative overflow-hidden border-b border-slate-200/80 bg-gradient-to-br from-[#071f33] via-[#0b2b45] to-[#12436b] px-6 py-5 text-white sm:px-7 sm:py-6">
@@ -631,7 +639,7 @@ export default function ChinaPillarLeadForm({
                       checked={fields.consent}
                       onChange={event => update('consent', event.target.checked)}
                       {...ariaFor('consent')}
-                      className="mt-0.5 size-4 shrink-0 accent-[#12436b]"
+                      className="mt-0.5 size-4 shrink-0 scroll-mt-36 accent-[#12436b]"
                     />
                     <span>
                       I agree that EduExpress may contact me about this China assessment and have read the{' '}

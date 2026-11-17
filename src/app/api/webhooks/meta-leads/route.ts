@@ -2,7 +2,12 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { NextRequest, NextResponse, after } from 'next/server';
 import { META_API_VERSION } from '@/lib/meta-api';
 import { sendCrmStage } from '@/lib/meta-crm-events';
-import { normalizeMetaLeadPhone, parseMetaLeadTimestamp } from '@/lib/lead-workflow';
+import {
+  buildMetaInstantFormMessage,
+  extractMetaFormFields,
+  normalizeMetaLeadPhone,
+  parseMetaLeadTimestamp,
+} from '@/lib/lead-workflow';
 import prisma from '@/lib/prisma';
 import { getMetaConfig } from '@/lib/settings';
 
@@ -25,6 +30,7 @@ type GraphLeadResponse = {
 
 type WebhookChangeValue = {
   leadgen_id?: string;
+  page_id?: string;
   form_id?: string;
   form_name?: string;
   ad_name?: string;
@@ -55,25 +61,8 @@ function verifyMetaWebhookSignature(rawBody: string, signatureHeader: string | n
 }
 
 function parseWebhookTimestamp(raw: string | number | undefined): Date {
-  if (typeof raw === 'number' && Number.isFinite(raw) && raw > 0) {
-    const ms = raw < 1e12 ? raw * 1000 : raw;
-    return new Date(ms);
-  }
-  if (typeof raw === 'string' && raw.trim()) {
-    const trimmed = raw.trim();
-    if (/^\d+$/.test(trimmed)) {
-      const num = Number(trimmed);
-      if (Number.isFinite(num) && num > 0) {
-        return new Date(num < 1e12 ? num * 1000 : num);
-      }
-    }
-    const isoFixed = trimmed.replace(/([+-]\d{2})(\d{2})$/, '$1:$2');
-    const direct = new Date(isoFixed);
-    if (!Number.isNaN(direct.getTime())) return direct;
-    const parsed = new Date(parseMetaLeadTimestamp(trimmed));
-    if (!Number.isNaN(parsed.getTime())) return parsed;
-  }
-  return new Date();
+  const parsed = new Date(parseMetaLeadTimestamp(raw));
+  return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
 }
 
 function extractFieldDataMap(fieldData?: GraphLeadField[]): Record<string, string> {
@@ -91,21 +80,188 @@ function extractFieldDataMap(fieldData?: GraphLeadField[]): Record<string, strin
   return map;
 }
 
-async function fetchMetaLeadDetails(leadgenId: string, accessToken: string): Promise<GraphLeadResponse | null> {
+async function resolvePageToken(pageId: string, accessToken: string): Promise<string | null> {
   try {
-    const url = new URL(`https://graph.facebook.com/${META_API_VERSION}/${encodeURIComponent(leadgenId)}`);
-    url.searchParams.set('fields', 'created_time,field_data,form_id,ad_name,campaign_name');
+    const url = new URL(`https://graph.facebook.com/${META_API_VERSION}/${encodeURIComponent(pageId)}`);
+    url.searchParams.set('fields', 'access_token');
     const response = await fetch(url.toString(), {
       headers: { Authorization: `Bearer ${accessToken}` },
       cache: 'no-store',
-      signal: AbortSignal.timeout(8000),
+      signal: AbortSignal.timeout(5000),
     });
     if (!response.ok) return null;
-    const data = (await response.json()) as GraphLeadResponse;
-    return data && typeof data === 'object' ? data : null;
+    const data = (await response.json()) as { access_token?: string };
+    return typeof data?.access_token === 'string' && data.access_token.trim() ? data.access_token.trim() : null;
   } catch {
     return null;
   }
+}
+
+async function fetchMetaLeadDetails(
+  leadgenId: string,
+  accessToken: string,
+  pageId?: string,
+): Promise<GraphLeadResponse | null> {
+  const queryLead = async (token: string): Promise<GraphLeadResponse | null> => {
+    try {
+      const url = new URL(`https://graph.facebook.com/${META_API_VERSION}/${encodeURIComponent(leadgenId)}`);
+      url.searchParams.set('fields', 'created_time,field_data,form_id,form_name,ad_name,campaign_name');
+      const response = await fetch(url.toString(), {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!response.ok) return null;
+      const data = (await response.json()) as GraphLeadResponse;
+      return data && typeof data === 'object' ? data : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const direct = await queryLead(accessToken);
+  if (direct) return direct;
+
+  if (pageId) {
+    const pageToken = await resolvePageToken(pageId, accessToken);
+    if (pageToken) {
+      return queryLead(pageToken);
+    }
+  }
+  return null;
+}
+
+function getWebhookSecretCandidates(): string[] {
+  return Array.from(
+    new Set(
+      [process.env.META_WEBHOOK_VERIFY_TOKEN, process.env.REVALIDATE_SECRET]
+        .map((v) => (v || '').trim())
+        .filter(Boolean),
+    ),
+  );
+}
+
+function matchesAnySecret(provided: string, candidates: string[]): boolean {
+  if (!provided || candidates.length === 0) return false;
+  return candidates.some((expected) => safeTokenEqual(provided, expected));
+}
+
+function isDirectWebhookAuthorized(request: NextRequest): boolean {
+  const candidates = getWebhookSecretCandidates();
+  if (candidates.length === 0) return false;
+
+  const queryToken = new URL(request.url).searchParams.get('token')?.trim() || '';
+  const headerToken = request.headers.get('x-webhook-secret')?.trim() || '';
+  const authHeader = request.headers.get('authorization')?.trim() || '';
+  const bearerToken = authHeader.toLowerCase().startsWith('bearer ') ? authHeader.slice(7).trim() : '';
+
+  return (
+    matchesAnySecret(queryToken, candidates) ||
+    matchesAnySecret(headerToken, candidates) ||
+    matchesAnySecret(bearerToken, candidates)
+  );
+}
+
+type NormalizedWebhookLeadInput = {
+  rawName: string;
+  rawPhone: string;
+  rawEmail: string;
+  formName: string;
+  campaignName: string;
+  adName: string;
+  leadgenId: string;
+  lastDegree: string;
+  gpa: string;
+  englishScore: string;
+  whatsappPhone: string;
+  createdRaw?: string | number;
+};
+
+async function persistNormalizedWebhookLead(
+  input: NormalizedWebhookLeadInput,
+  existingPhones: Set<string>,
+): Promise<'stored' | 'skipped'> {
+  const phone = normalizeMetaLeadPhone(input.rawPhone);
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length < 7) return 'skipped';
+
+  const key10 = digits.slice(-10);
+  if (key10 && existingPhones.has(key10)) return 'skipped';
+
+  const email =
+    input.rawEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(input.rawEmail)
+      ? input.rawEmail
+      : `no-email+${digits}@leads.eduexpressint.com`;
+  const createdAt = parseWebhookTimestamp(input.createdRaw);
+
+  const createdLead = await prisma.lead.create({
+    data: {
+      name: (input.rawName || 'Student').slice(0, 120),
+      email,
+      phone,
+      country: 'China',
+      program: 'China March 2027 Intake',
+      message: buildMetaInstantFormMessage({
+        formName: input.formName,
+        campaignName: input.campaignName || 'META_Leads_BD_China-Mar2027_2026Q1',
+        adName: input.adName,
+        leadId: input.leadgenId,
+        lastDegree: input.lastDegree,
+        gpa: input.gpa,
+        englishScore: input.englishScore,
+        whatsappPhone: input.whatsappPhone,
+        primaryPhone: phone,
+      }),
+      status: 'new',
+      source: 'meta_china_march_2027',
+      leadType: 'assessment',
+      assignedTeam: 'china',
+      destinationInterest: 'china',
+      landingPage: '/china-march-2027-intake',
+      ...(input.lastDegree ? { assessAcademicLevel: input.lastDegree.slice(0, 120) } : {}),
+      ...(input.gpa ? { assessAcademicResults: input.gpa.slice(0, 120) } : {}),
+      ...(input.englishScore ? { assessLanguage: input.englishScore.slice(0, 120) } : {}),
+      adTrackingConsent: true,
+      consentTimestamp: createdAt,
+      consentPolicyVersion: '2026-04-privacy-v1',
+      ...(createdAt.getTime() <= Date.now() + 60_000 ? { createdAt } : {}),
+    },
+  });
+
+  after(() => sendCrmStage(createdLead, 'new'));
+  if (key10) existingPhones.add(key10);
+  return 'stored';
+}
+
+function normalizeDirectLeadRecord(raw: Record<string, unknown>): NormalizedWebhookLeadInput {
+  const stringMap: Record<string, string> = {};
+  for (const [k, v] of Object.entries(raw)) {
+    const key = k.trim().toLowerCase();
+    if (!key || v === null || v === undefined) continue;
+    const text = typeof v === 'string' ? v.trim() : typeof v === 'number' ? String(v) : '';
+    if (text) stringMap[key] = text;
+  }
+
+  const extracted = extractMetaFormFields(stringMap);
+  const createdRaw =
+    typeof raw.created_time === 'string' || typeof raw.created_time === 'number'
+      ? raw.created_time
+      : stringMap.created || stringMap.created_at || stringMap.date || undefined;
+
+  return {
+    rawName: extracted.name,
+    rawPhone: extracted.phone,
+    rawEmail: extracted.email,
+    formName: stringMap.form_name || stringMap.form || 'WebLead&InstantForm_18_4_2026',
+    campaignName: stringMap.campaign_name || stringMap.campaign || 'META_Leads_BD_China-Mar2027_2026Q1',
+    adName: stringMap.ad_name || stringMap.ad || '',
+    leadgenId: stringMap.leadgen_id || stringMap.lead_id || stringMap.id || '',
+    lastDegree: extracted.lastDegree,
+    gpa: extracted.gpa,
+    englishScore: extracted.englishScore,
+    whatsappPhone: extracted.whatsappPhone,
+    createdRaw,
+  };
 }
 
 export async function GET(request: NextRequest) {
@@ -114,13 +270,9 @@ export async function GET(request: NextRequest) {
   const verifyToken = searchParams.get('hub.verify_token') || '';
   const challenge = searchParams.get('hub.challenge') || '';
 
-  const expectedToken = (
-    process.env.META_WEBHOOK_VERIFY_TOKEN ||
-    process.env.REVALIDATE_SECRET ||
-    ''
-  ).trim();
+  const candidates = getWebhookSecretCandidates();
 
-  if (mode !== 'subscribe' || !expectedToken || !verifyToken || !safeTokenEqual(verifyToken, expectedToken)) {
+  if (mode !== 'subscribe' || !matchesAnySecret(verifyToken, candidates)) {
     return NextResponse.json({ error: 'Webhook verification failed' }, { status: 403 });
   }
 
@@ -142,16 +294,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Payload too large' }, { status: 413 });
     }
 
+    const directAuthorized = isDirectWebhookAuthorized(request);
     const appSecret = process.env.META_APP_SECRET?.trim();
-    if (appSecret) {
+    if (appSecret && !directAuthorized) {
       const signature = request.headers.get('x-hub-signature-256');
       if (!verifyMetaWebhookSignature(rawBody, signature, appSecret)) {
         return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 401 });
       }
     }
 
-    let payload: {
+    let parsedBody: unknown;
+    try {
+      parsedBody = JSON.parse(rawBody);
+    } catch {
+      return NextResponse.json({ error: 'Malformed JSON body' }, { status: 400 });
+    }
+
+    const payload = parsedBody as {
       object?: string;
+      leads?: unknown[];
       entry?: Array<{
         changes?: Array<{
           field?: string;
@@ -159,14 +320,10 @@ export async function POST(request: NextRequest) {
         }>;
       }>;
     };
-    try {
-      payload = JSON.parse(rawBody);
-    } catch {
-      return NextResponse.json({ error: 'Malformed JSON body' }, { status: 400 });
-    }
 
-    if (payload?.object !== 'page' || !Array.isArray(payload.entry)) {
-      return NextResponse.json({ ok: true, processed: 0, stored: 0 }, { status: 200 });
+    const isMetaPagePayload = payload?.object === 'page' && Array.isArray(payload.entry);
+    if (!isMetaPagePayload && !directAuthorized) {
+      return NextResponse.json({ error: 'Unauthorized webhook payload' }, { status: 401 });
     }
 
     const { accessToken } = await getMetaConfig();
@@ -179,95 +336,89 @@ export async function POST(request: NextRequest) {
     let stored = 0;
     let skipped = 0;
 
-    for (const entry of payload.entry) {
-      if (!Array.isArray(entry?.changes)) continue;
-      for (const change of entry.changes) {
-        if (change?.field !== 'leadgen' || !change.value || typeof change.value !== 'object') continue;
-        processed++;
+    if (isMetaPagePayload) {
+      for (const entry of payload.entry!) {
+        if (!Array.isArray(entry?.changes)) continue;
+        for (const change of entry.changes) {
+          if (change?.field !== 'leadgen' || !change.value || typeof change.value !== 'object') continue;
+          processed++;
 
-        const val = change.value;
-        const leadgenId = typeof val.leadgen_id === 'string' ? val.leadgen_id.trim() : '';
+          const val = change.value;
+          const leadgenId = typeof val.leadgen_id === 'string' ? val.leadgen_id.trim() : '';
+          const pageId = typeof val.page_id === 'string' ? val.page_id.trim() : '';
 
-        let rawName = (val.full_name || val.name || '').trim();
-        let rawPhone = (val.phone_number || val.phone || val.whatsapp_number || '').trim();
-        let rawEmail = (val.email || '').trim().toLowerCase();
-        let formName = (val.form_name || '').trim();
-        let adName = (val.ad_name || '').trim();
-        let campaignName = (val.campaign_name || '').trim();
-        let createdRaw: string | number | undefined = val.created_time;
+          let rawName = (val.full_name || val.name || '').trim();
+          let rawPhone = (val.phone_number || val.phone || val.whatsapp_number || '').trim();
+          let rawEmail = (val.email || '').trim().toLowerCase();
+          let formName = (val.form_name || '').trim();
+          let adName = (val.ad_name || '').trim();
+          let campaignName = (val.campaign_name || '').trim();
+          let createdRaw: string | number | undefined = val.created_time;
 
-        const inlineMap = extractFieldDataMap(val.field_data);
-        if (!rawName) rawName = inlineMap.full_name || inlineMap.name || inlineMap.first_name || '';
-        if (!rawPhone) rawPhone = inlineMap.phone_number || inlineMap.phone || inlineMap.whatsapp_number || '';
-        if (!rawEmail) rawEmail = (inlineMap.email || inlineMap.email_address || '').toLowerCase();
+          const inlineFields = extractMetaFormFields(extractFieldDataMap(val.field_data));
+          rawName = inlineFields.name || rawName;
+          rawPhone = rawPhone || inlineFields.phone;
+          rawEmail = rawEmail || inlineFields.email;
+          let lastDegree = inlineFields.lastDegree;
+          let gpa = inlineFields.gpa;
+          let englishScore = inlineFields.englishScore;
+          let whatsappPhone = inlineFields.whatsappPhone;
 
-        if (!rawPhone && leadgenId && accessToken) {
-          const graphLead = await fetchMetaLeadDetails(leadgenId, accessToken);
-          if (graphLead) {
-            const graphMap = extractFieldDataMap(graphLead.field_data);
-            rawName = rawName || graphMap.full_name || graphMap.name || graphMap.first_name || '';
-            rawPhone = rawPhone || graphMap.phone_number || graphMap.phone || graphMap.whatsapp_number || '';
-            rawEmail = rawEmail || (graphMap.email || graphMap.email_address || '').toLowerCase();
-            formName = formName || (graphLead.form_name || '').trim();
-            adName = adName || (graphLead.ad_name || '').trim();
-            campaignName = campaignName || (graphLead.campaign_name || '').trim();
-            createdRaw = graphLead.created_time ?? createdRaw;
+          if ((!rawPhone || !lastDegree) && leadgenId && accessToken) {
+            const graphLead = await fetchMetaLeadDetails(leadgenId, accessToken, pageId || undefined);
+            if (graphLead) {
+              const graphFields = extractMetaFormFields(extractFieldDataMap(graphLead.field_data));
+              rawName = graphFields.name || rawName;
+              rawPhone = rawPhone || graphFields.phone;
+              rawEmail = rawEmail || graphFields.email;
+              lastDegree = lastDegree || graphFields.lastDegree;
+              gpa = gpa || graphFields.gpa;
+              englishScore = englishScore || graphFields.englishScore;
+              whatsappPhone = whatsappPhone || graphFields.whatsappPhone;
+              formName = formName || (graphLead.form_name || '').trim();
+              adName = adName || (graphLead.ad_name || '').trim();
+              campaignName = campaignName || (graphLead.campaign_name || '').trim();
+              createdRaw = graphLead.created_time ?? createdRaw;
+            }
           }
+
+          const outcome = await persistNormalizedWebhookLead(
+            {
+              rawName,
+              rawPhone,
+              rawEmail,
+              formName: formName || (val.form_id ? `Form ${val.form_id}` : 'WebLead&InstantForm_18_4_2026'),
+              campaignName,
+              adName,
+              leadgenId,
+              lastDegree,
+              gpa,
+              englishScore,
+              whatsappPhone,
+              createdRaw,
+            },
+            existingPhones,
+          );
+          if (outcome === 'stored') stored++;
+          else skipped++;
         }
-
-        const phone = normalizeMetaLeadPhone(rawPhone);
-        const digits = phone.replace(/\D/g, '');
-        if (digits.length < 7) {
-          skipped++;
-          continue;
-        }
-
-        const key10 = digits.slice(-10);
-        if (key10 && existingPhones.has(key10)) {
-          skipped++;
-          continue;
-        }
-
-        const email =
-          rawEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(rawEmail)
-            ? rawEmail
-            : `no-email+${digits}@leads.eduexpressint.com`;
-        const createdAt = parseWebhookTimestamp(createdRaw);
-        const resolvedFormName = formName || (val.form_id ? `Form ${val.form_id}` : 'WebLead&InstantForm_18_4_2026');
-
-        const createdLead = await prisma.lead.create({
-          data: {
-            name: (rawName || 'Student').slice(0, 120),
-            email,
-            phone,
-            country: 'China',
-            program: 'China March 2027 Intake',
-            message: [
-              `Meta Instant Form (${resolvedFormName})`,
-              `Campaign: ${campaignName || 'META_Leads_BD_China-Mar2027_2026Q1'}`,
-              adName && `Ad: ${adName}`,
-              leadgenId && `Lead ID: ${leadgenId}`,
-            ]
-              .filter(Boolean)
-              .join(' | '),
-            status: 'new',
-            source: 'meta_china_march_2027',
-            leadType: 'assessment',
-            assignedTeam: 'china',
-            destinationInterest: 'china',
-            landingPage: '/china-march-2027-intake',
-            adTrackingConsent: true,
-            consentTimestamp: createdAt,
-            consentPolicyVersion: '2026-04-privacy-v1',
-            ...(createdAt.getTime() <= Date.now() + 60_000 ? { createdAt } : {}),
-          },
-        });
-
-        after(() => sendCrmStage(createdLead, 'new'));
-
-        stored++;
-        if (key10) existingPhones.add(key10);
       }
+      return NextResponse.json({ ok: true, processed, stored, skipped }, { status: 200 });
+    }
+
+    const directItems = Array.isArray(parsedBody)
+      ? parsedBody
+      : Array.isArray(payload?.leads)
+        ? payload.leads
+        : [parsedBody];
+
+    for (const item of directItems) {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) continue;
+      processed++;
+      const normalized = normalizeDirectLeadRecord(item as Record<string, unknown>);
+      const outcome = await persistNormalizedWebhookLead(normalized, existingPhones);
+      if (outcome === 'stored') stored++;
+      else skipped++;
     }
 
     return NextResponse.json({ ok: true, processed, stored, skipped }, { status: 200 });

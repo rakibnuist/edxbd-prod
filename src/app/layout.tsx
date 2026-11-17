@@ -312,16 +312,12 @@ export default async function RootLayout({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}
           />
-          {enableProductionTracking && (
-            <>
-              <EducationTracking
-                whatsappSource="floating_widget"
-                phoneSource="header_contact"
-              />
-              <MetaPixel />
-              <GoogleTags />
-            </>
-          )}
+          <EducationTracking
+            whatsappSource="floating_widget"
+            phoneSource="header_contact"
+          />
+          <MetaPixel />
+          <GoogleTags />
           {/*
             Scroll-reveal blocks are server-rendered with opacity:0 and are
             brought in by Framer Motion once they enter the viewport. If scripts

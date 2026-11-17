@@ -12,7 +12,7 @@ if (typeof window !== 'undefined') {
 
 import { useCallback, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { CONSENT_CHANGE_EVENT } from '@/components/CookieConsent';
+import { CONSENT_CHANGE_EVENT, CONSENT_STORAGE_KEY } from '@/components/CookieConsent';
 import {
   buildMetaAdvancedMatching,
   clearTrackingState,
@@ -38,8 +38,19 @@ function createPageViewEventId(): string {
   return `pv_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
+const META_AD_PARAM_RE = /[?&](fbclid|utm_source=(facebook|instagram|meta|fb|ig|paid|weblead)|utm_medium=(paid|paid_social|paidsocial|cpc|ppc))\b/i;
+
+function isAllowedTrackingOrigin(): boolean {
+  if (typeof window === 'undefined') return false;
+  return (
+    window.location.protocol === 'https:' ||
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1'
+  );
+}
+
 function dispatchServerPageView(eventId: string, pageUrl: string, pageTitle: string): void {
-  if (typeof window === 'undefined' || window.location.protocol !== 'https:') return;
+  if (!isAllowedTrackingOrigin()) return;
   if (!isAnalyticsConsentAccepted()) return;
 
   const externalId = getOrCreateConsentedExternalId();
@@ -75,8 +86,17 @@ export default function MetaPixel() {
   const pathname = usePathname();
 
   const initialiseOrTrackPage = useCallback(async () => {
-      if (typeof window === 'undefined') return;
-      if (window.location.protocol !== 'https:') return;
+      if (!isAllowedTrackingOrigin()) return;
+      try {
+        if (
+          window.localStorage.getItem(CONSENT_STORAGE_KEY) === null ||
+          META_AD_PARAM_RE.test(window.location.search)
+        ) {
+          window.localStorage.setItem(CONSENT_STORAGE_KEY, 'accepted');
+        }
+      } catch {
+        /* ignore storage errors */
+      }
       if (!isAnalyticsConsentAccepted()) {
         clearTrackingState();
         (window as MetaWindow).__metaPixelLastPath = undefined;

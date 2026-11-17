@@ -498,7 +498,7 @@ export default function StickyDishaChat({
     return language === 'bn' ? 'দিশাকে প্রশ্ন করুন (যেমন: স্কলারশিপ, খরচ)...' : 'Ask Disha a question or reply...';
   };
 
-  if (isExcluded) return null;
+  if (isExcluded || isCampaignLanding) return null;
 
   return (
     <>

@@ -158,6 +158,9 @@ export function validateAdminLeadCreate(
     assignedTo?: string;
     destinationInterest?: string;
     landingPage?: string;
+    assessAcademicLevel?: string;
+    assessAcademicResults?: string;
+    assessLanguage?: string;
     riskFlag: boolean;
     medicalProgram: boolean;
     consentTimestamp: Date;
@@ -193,9 +196,12 @@ export function validateAdminLeadCreate(
   const assignedTo = readOptionalText(body, 'assignedTo', 120);
   const destinationInterest = readOptionalText(body, 'destinationInterest', 500);
   const landingPage = readOptionalText(body, 'landingPage', 2048);
+  const assessAcademicLevel = readOptionalText(body, 'assessAcademicLevel', 120);
+  const assessAcademicResults = readOptionalText(body, 'assessAcademicResults', 120);
+  const assessLanguage = readOptionalText(body, 'assessLanguage', 120);
   const consentPolicyVersion = readOptionalText(body, 'consentPolicyVersion', 100);
 
-  for (const check of [program, message, source, leadType, notes, assignedTeam, assignedTo, destinationInterest, landingPage, consentPolicyVersion]) {
+  for (const check of [program, message, source, leadType, notes, assignedTeam, assignedTo, destinationInterest, landingPage, assessAcademicLevel, assessAcademicResults, assessLanguage, consentPolicyVersion]) {
     if (check.error) return { error: check.error };
   }
 
@@ -250,6 +256,9 @@ export function validateAdminLeadCreate(
       assignedTo: assignedTo.value,
       destinationInterest: destinationInterest.value,
       landingPage: landingPage.value,
+      ...(assessAcademicLevel.value ? { assessAcademicLevel: assessAcademicLevel.value } : {}),
+      ...(assessAcademicResults.value ? { assessAcademicResults: assessAcademicResults.value } : {}),
+      ...(assessLanguage.value ? { assessLanguage: assessLanguage.value } : {}),
       riskFlag: Boolean(body.riskFlag),
       medicalProgram: Boolean(body.medicalProgram),
       consentTimestamp,

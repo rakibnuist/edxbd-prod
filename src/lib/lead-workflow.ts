@@ -95,10 +95,176 @@ export type MetaLeadImportPayload = {
   assignedTeam: string;
   destinationInterest: string;
   landingPage: string;
+  assessAcademicLevel?: string;
+  assessAcademicResults?: string;
+  assessLanguage?: string;
   adTrackingConsent: boolean;
   consentTimestamp: string;
   consentPolicyVersion: string;
 };
+
+export type ExtractedMetaFormFields = {
+  name: string;
+  phone: string;
+  whatsappPhone: string;
+  email: string;
+  lastDegree: string;
+  gpa: string;
+  englishScore: string;
+};
+
+const NON_PERSON_NAME_KEY_RE = /(?:^|_|\s)(?:form|ad|adset|campaign|page|owner|stage|source|channel|labels|city|country|university|program)(?:$|_|\s)/i;
+
+function pickFieldValues(
+  entries: Array<[string, string]>,
+  exactKeys: string[],
+  matchers: RegExp[],
+  shouldExcludeKey?: (key: string) => boolean,
+): string[] {
+  const seen = new Set<string>();
+  const results: string[] = [];
+  const pushVal = (val: string) => {
+    const trimmed = val.trim();
+    if (trimmed && !seen.has(trimmed)) {
+      seen.add(trimmed);
+      results.push(trimmed);
+    }
+  };
+
+  for (const targetKey of exactKeys) {
+    for (const [k, v] of entries) {
+      if (k === targetKey) pushVal(v);
+    }
+  }
+  for (const matcher of matchers) {
+    for (const [k, v] of entries) {
+      if (shouldExcludeKey?.(k)) continue;
+      if (matcher.test(k)) pushVal(v);
+    }
+  }
+  return results;
+}
+
+/**
+ * Extracts student name, phone, WhatsApp, email, and academic fields from Meta Instant Form
+ * `field_data` maps or CSV columns (including Bengali+English labels on WebLead&InstantForm_18_4_2026).
+ */
+export function extractMetaFormFields(fieldMap: Record<string, string>): ExtractedMetaFormFields {
+  const entries: Array<[string, string]> = Object.entries(fieldMap)
+    .map(([k, v]): [string, string] => [k.trim().toLowerCase(), typeof v === 'string' ? v.trim() : ''])
+    .filter(([, v]) => Boolean(v));
+
+  const name = pickFieldValues(
+    entries,
+    ['আপনার নাম (name)', 'আপনার_নাম_(name)', 'full_name', 'full name', 'name', 'first_name', 'first name'],
+    [/^(?:full[_\s]?)?name$/i, /(?:\bname\b|নাম|full_?name|first_?name)/i],
+    (key) => NON_PERSON_NAME_KEY_RE.test(key),
+  )[0] || '';
+
+  const phoneCandidates = pickFieldValues(
+    entries,
+    [
+      'phone_number', 'phone number', 'phone',
+      'mobile_number', 'mobile number', 'contact_number', 'contact number',
+      'হোয়াটসঅ্যাপ নাম্বার (phone)', 'হোয়াটসঅ্যাপ_নাম্বার_(phone)',
+      'whatsapp_number', 'whatsapp number', 'whatsapp',
+      'secondary phone number', 'secondary_phone_number',
+    ],
+    [/(?:phone|whatsapp|mobile|contact[_\s]?number|হোয়াটসঅ্যাপ|নাম্বার|মোবাইল)/i],
+    (key) => /(?:^|_)(?:id|code|country)$/i.test(key),
+  );
+
+  let phone = '';
+  for (const candidate of phoneCandidates) {
+    const normalized = normalizeMetaLeadPhone(candidate);
+    if (normalized.replace(/\D/g, '').length >= 7) {
+      phone = normalized;
+      break;
+    }
+  }
+  if (!phone && phoneCandidates[0]) {
+    phone = normalizeMetaLeadPhone(phoneCandidates[0]);
+  }
+
+  const whatsappCandidates = pickFieldValues(
+    entries,
+    ['হোয়াটসঅ্যাপ নাম্বার (phone)', 'হোয়াটসঅ্যাপ_নাম্বার_(phone)', 'whatsapp_number', 'whatsapp number', 'whatsapp'],
+    [/(?:whatsapp|হোয়াটসঅ্যাপ)/i],
+  );
+  let whatsappPhone = '';
+  for (const candidate of whatsappCandidates) {
+    const normalized = normalizeMetaLeadPhone(candidate);
+    if (normalized.replace(/\D/g, '').length >= 7) {
+      whatsappPhone = normalized;
+      break;
+    }
+  }
+
+  const email = pickFieldValues(
+    entries,
+    ['email', 'email_address', 'email address'],
+    [/(?:email|ইমেইল)/i],
+  )[0]?.toLowerCase() || '';
+
+  const lastDegree = pickFieldValues(
+    entries,
+    ['সর্বশেষ ডিগ্রি (last degree)', 'সর্বশেষ_ডিগ্রি_(last_degree)', 'last_degree', 'last degree', 'degree'],
+    [/(?:degree|ডিগ্রি|qualification)/i],
+  )[0] || '';
+
+  const gpa = pickFieldValues(
+    entries,
+    ['রেজাল্ট (gpa)', 'রেজাল্ট_(gpa)', 'gpa', 'cgpa', 'result'],
+    [/(?:\bgpa\b|\bcgpa\b|রেজাল্ট|result)/i],
+  )[0] || '';
+
+  const englishScore = pickFieldValues(
+    entries,
+    [
+      'ইংলিশ স্কোর (ielts/duolingo/toefl) - optional',
+      'ইংলিশ_স্কোর_(ielts/duolingo/toefl)_-_optional',
+      'english_score', 'english score', 'ielts',
+    ],
+    [/(?:ielts|duolingo|toefl|english[_\s]?score|ইংলিশ)/i],
+  )[0] || '';
+
+  return { name, phone, whatsappPhone, email, lastDegree, gpa, englishScore };
+}
+
+/** Formats consistent summary notes for Meta Instant Form leads across CSV, webhook, and Graph sync. */
+export function buildMetaInstantFormMessage(details: {
+  formName?: string;
+  campaignName?: string;
+  adName?: string;
+  leadId?: string;
+  created?: string;
+  lastDegree?: string;
+  gpa?: string;
+  englishScore?: string;
+  whatsappPhone?: string;
+  primaryPhone?: string;
+}): string {
+  const formLabel = details.formName?.trim() || 'WebLead&InstantForm_18_4_2026';
+  const campaignLabel = details.campaignName?.trim() || 'META_Leads_BD_China-Mar2027_2026Q1';
+  const distinctWhatsapp =
+    details.whatsappPhone && details.whatsappPhone !== details.primaryPhone
+      ? `WhatsApp: ${details.whatsappPhone}`
+      : '';
+
+  return [
+    `Meta Instant Form (${formLabel})`,
+    `Campaign: ${campaignLabel}`,
+    details.adName?.trim() && `Ad: ${details.adName.trim()}`,
+    details.lastDegree?.trim() && `Last Degree: ${details.lastDegree.trim()}`,
+    details.gpa?.trim() && `GPA: ${details.gpa.trim()}`,
+    details.englishScore?.trim() && `English Score: ${details.englishScore.trim()}`,
+    distinctWhatsapp,
+    details.leadId?.trim() && `Lead ID: ${details.leadId.trim()}`,
+    details.created?.trim() && `Created: ${details.created.trim()}`,
+  ]
+    .filter(Boolean)
+    .join(' | ');
+}
 
 function parseCsvLine(line: string, delimiter: string): string[] {
   const out: string[] = [];
@@ -162,9 +328,23 @@ export function normalizeMetaLeadPhone(raw: string): string {
   return cleaned;
 }
 
-export function parseMetaLeadTimestamp(raw: string): string {
-  const trimmed = raw.trim();
-  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(am|pm)$/i.exec(trimmed);
+/** Parses Meta CSV, Leads Center, and Graph API timestamps (unix seconds/ms, Dhaka AM/PM, or ISO) to UTC ISO strings. */
+export function parseMetaLeadTimestamp(raw: string | number | undefined): string {
+  if (typeof raw === 'number' && Number.isFinite(raw) && raw > 0) {
+    const ms = raw < 1e12 ? raw * 1000 : raw;
+    return new Date(ms).toISOString();
+  }
+  const trimmed = typeof raw === 'string' ? raw.trim() : '';
+  if (!trimmed) return new Date().toISOString();
+
+  if (/^\d+$/.test(trimmed)) {
+    const num = Number(trimmed);
+    if (Number.isFinite(num) && num > 0) {
+      return new Date(num < 1e12 ? num * 1000 : num).toISOString();
+    }
+  }
+
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})\s*(am|pm)$/i.exec(trimmed);
   if (m) {
     let hour = Number.parseInt(m[4], 10);
     if (m[6].toLowerCase() === 'pm' && hour < 12) hour += 12;
@@ -173,7 +353,11 @@ export function parseMetaLeadTimestamp(raw: string): string {
     const parsed = new Date(isoDhaka);
     if (!Number.isNaN(parsed.getTime())) return parsed.toISOString();
   }
-  const direct = new Date(trimmed);
+
+  const normalized = trimmed
+    .replace(/([+-]\d{2})(\d{2})$/, '$1:$2')
+    .replace(/(\d{1,2}:\d{2})(am|pm)\b/i, '$1 $2');
+  const direct = new Date(normalized);
   if (!Number.isNaN(direct.getTime())) return direct.toISOString();
   return new Date().toISOString();
 }
@@ -188,66 +372,143 @@ export function parseMetaLeadsCsv(csvText: string): MetaLeadImportPayload[] {
 
   const delimiter = lines[0].includes('\t') ? '\t' : ',';
   const headers = parseCsvLine(lines[0], delimiter).map((h) => h.toLowerCase().trim());
-  const idx = (names: string[]) => headers.findIndex((h) => names.includes(h));
-
-  const nameIdx = idx(['name', 'full_name', 'full name']);
-  const emailIdx = idx(['email', 'email_address', 'email address']);
-  const phoneIdx = idx(['phone', 'phone_number', 'phone number', 'contact_number', 'contact number', 'mobile_number', 'mobile number']);
-  const secPhoneIdx = idx(['secondary phone number', 'secondary_phone_number']);
-  const waPhoneIdx = idx(['whatsapp number', 'whatsapp_number']);
-  const createdIdx = idx(['created', 'created_time', 'date']);
-  const formIdx = idx(['form', 'form_name']);
-  const adNameIdx = idx(['ad_name', 'ad name']);
-  const campaignNameIdx = idx(['campaign_name', 'campaign name']);
 
   const parsedRows: MetaLeadImportPayload[] = [];
   for (const line of lines.slice(1)) {
     const cols = parseCsvLine(line, delimiter);
-    const name = (nameIdx >= 0 ? cols[nameIdx] : '')?.trim() || 'Student';
-    const rawPhone =
-      (phoneIdx >= 0 ? cols[phoneIdx] : '') ||
-      (waPhoneIdx >= 0 ? cols[waPhoneIdx] : '') ||
-      (secPhoneIdx >= 0 ? cols[secPhoneIdx] : '') ||
-      '';
-    const phone = normalizeMetaLeadPhone(rawPhone);
-    const digits = phone.replace(/\D/g, '');
-    if (digits.length < 7) continue;
+    const rowMap: Record<string, string> = {};
+    for (let i = 0; i < headers.length; i++) {
+      const key = headers[i];
+      const val = (cols[i] ?? '').trim();
+      if (key && val && !rowMap[key]) {
+        rowMap[key] = val;
+      }
+    }
 
-    const rawEmail = (emailIdx >= 0 ? cols[emailIdx] : '')?.trim().toLowerCase() || '';
-    const email =
-      rawEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(rawEmail)
-        ? rawEmail
-        : `no-email+${digits}@leads.eduexpressint.com`;
-    const created = (createdIdx >= 0 ? cols[createdIdx] : '')?.trim() || '';
-    const formName = (formIdx >= 0 ? cols[formIdx] : '')?.trim() || 'WebLead&InstantForm_18_4_2026';
-    const campaignName = (campaignNameIdx >= 0 ? cols[campaignNameIdx] : '')?.trim() || 'META_Leads_BD_China-Mar2027_2026Q1';
-    const adName = (adNameIdx >= 0 ? cols[adNameIdx] : '')?.trim() || '';
+    const extracted = extractMetaFormFields(rowMap);
+    const created = rowMap.created || rowMap.created_time || rowMap['created time'] || rowMap.date || '';
+    const formName =
+      rowMap.form || rowMap.form_name || rowMap['form name'] || 'WebLead&InstantForm_18_4_2026';
+    const campaignName =
+      rowMap.campaign_name || rowMap['campaign name'] || 'META_Leads_BD_China-Mar2027_2026Q1';
+    const adName = rowMap.ad_name || rowMap['ad name'] || '';
+    const leadId = rowMap.lead_id || rowMap['lead id'] || rowMap.id || '';
 
-    parsedRows.push({
-      name: name.slice(0, 120),
-      email,
-      phone,
-      country: 'China',
-      program: 'China March 2027 Intake',
-      message: [
-        `Meta Instant Form (${formName})`,
-        `Campaign: ${campaignName}`,
-        adName && `Ad: ${adName}`,
-        created && `Created: ${created}`,
-      ]
-        .filter(Boolean)
-        .join(' | '),
-      status: 'new',
-      source: 'meta_china_march_2027',
-      leadType: 'assessment',
-      assignedTeam: 'china',
-      destinationInterest: 'china',
-      landingPage: '/china-march-2027-intake',
-      adTrackingConsent: true,
-      consentTimestamp: parseMetaLeadTimestamp(created),
-      consentPolicyVersion: '2026-04-privacy-v1',
+    const payload = buildMetaLeadPayload(extracted, {
+      created,
+      formName,
+      campaignName,
+      adName,
+      leadId,
+      includeCreatedText: true,
     });
+    if (payload) {
+      parsedRows.push(payload);
+    }
   }
 
   return parsedRows.reverse();
+}
+
+export type MetaGraphLeadField = {
+  name?: string;
+  values?: string[];
+};
+
+export type MetaGraphLeadInput = {
+  id?: string;
+  created_time?: string | number;
+  form_id?: string;
+  form_name?: string;
+  ad_name?: string;
+  campaign_name?: string;
+  field_data?: MetaGraphLeadField[];
+};
+
+function buildMetaLeadPayload(
+  extracted: ExtractedMetaFormFields,
+  meta: {
+    created?: string | number;
+    formName?: string;
+    campaignName?: string;
+    adName?: string;
+    leadId?: string;
+    includeCreatedText?: boolean;
+  },
+): MetaLeadImportPayload | null {
+  const phone = extracted.phone;
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length < 7) return null;
+
+  const email =
+    extracted.email && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(extracted.email)
+      ? extracted.email
+      : `no-email+${digits}@leads.eduexpressint.com`;
+
+  const createdStr = typeof meta.created === 'string' ? meta.created.trim() : '';
+
+  return {
+    name: (extracted.name || 'Student').slice(0, 120),
+    email,
+    phone,
+    country: 'China',
+    program: 'China March 2027 Intake',
+    message: buildMetaInstantFormMessage({
+      formName: meta.formName,
+      campaignName: meta.campaignName,
+      adName: meta.adName,
+      leadId: meta.leadId,
+      created: meta.includeCreatedText ? createdStr : undefined,
+      lastDegree: extracted.lastDegree,
+      gpa: extracted.gpa,
+      englishScore: extracted.englishScore,
+      whatsappPhone: extracted.whatsappPhone,
+      primaryPhone: phone,
+    }),
+    status: 'new',
+    source: 'meta_china_march_2027',
+    leadType: 'assessment',
+    assignedTeam: 'china',
+    destinationInterest: 'china',
+    landingPage: '/china-march-2027-intake',
+    ...(extracted.lastDegree ? { assessAcademicLevel: extracted.lastDegree.slice(0, 120) } : {}),
+    ...(extracted.gpa ? { assessAcademicResults: extracted.gpa.slice(0, 120) } : {}),
+    ...(extracted.englishScore ? { assessLanguage: extracted.englishScore.slice(0, 120) } : {}),
+    adTrackingConsent: true,
+    consentTimestamp: parseMetaLeadTimestamp(meta.created),
+    consentPolicyVersion: '2026-04-privacy-v1',
+  };
+}
+
+/** Converts a Meta Graph API `field_data` lead object into a normalized MetaLeadImportPayload, or null if phone is invalid. */
+export function mapMetaGraphLeadToImportPayload(
+  lead: MetaGraphLeadInput,
+  defaults?: { formName?: string; campaignName?: string; adName?: string },
+): MetaLeadImportPayload | null {
+  const fieldMap: Record<string, string> = {};
+  if (Array.isArray(lead.field_data)) {
+    for (const entry of lead.field_data) {
+      const key = typeof entry?.name === 'string' ? entry.name.trim().toLowerCase() : '';
+      const firstVal = Array.isArray(entry?.values)
+        ? entry.values.find((v) => typeof v === 'string' && v.trim())
+        : undefined;
+      if (key && firstVal) {
+        fieldMap[key] = firstVal.trim();
+      }
+    }
+  }
+
+  const extracted = extractMetaFormFields(fieldMap);
+  const resolvedFormName =
+    lead.form_name?.trim() ||
+    defaults?.formName?.trim() ||
+    (lead.form_id ? `Form ${lead.form_id}` : 'WebLead&InstantForm_18_4_2026');
+
+  return buildMetaLeadPayload(extracted, {
+    created: lead.created_time,
+    formName: resolvedFormName,
+    campaignName: lead.campaign_name?.trim() || defaults?.campaignName?.trim() || 'META_Leads_BD_China-Mar2027_2026Q1',
+    adName: lead.ad_name?.trim() || defaults?.adName?.trim() || '',
+    leadId: lead.id?.trim() || '',
+  });
 }

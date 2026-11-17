@@ -22,9 +22,11 @@ export default function MobileLeadBar() {
     const targets = ['assessment', 'china-fit-form', 'china-fit-form-bottom', 'march-2027-assessment', 'site-footer']
       .map(id => document.getElementById(id))
       .filter((element): element is HTMLElement => Boolean(element));
+    const intersecting = new Map<Element, boolean>();
     const observer = new IntersectionObserver(
       (entries) => {
-        setBlocked(entries.some((entry) => entry.isIntersecting));
+        for (const entry of entries) intersecting.set(entry.target, entry.isIntersecting);
+        setBlocked(Array.from(intersecting.values()).some(Boolean));
       },
       { threshold: 0.04 },
     );

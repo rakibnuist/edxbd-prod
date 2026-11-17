@@ -1,7 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { register } from 'node:module';
-import { LEAD_STATUSES, leadCounts, filterLeads, validateLeadUpdate, leadContactLinks, parseMetaLeadsCsv } from '../src/lib/lead-workflow.ts';
+import {
+  LEAD_STATUSES,
+  leadCounts,
+  filterLeads,
+  validateLeadUpdate,
+  leadContactLinks,
+  parseMetaLeadsCsv,
+  extractMetaFormFields,
+  mapMetaGraphLeadToImportPayload,
+} from '../src/lib/lead-workflow.ts';
 
 register(new URL('./lib/typescript-source-resolver.mjs', import.meta.url));
 const { validateAdminLeadCreate } = await import('../src/lib/payload-validation.ts');
@@ -72,4 +81,68 @@ test('10-digit BD numbers and admin import timestamps normalize cleanly', () => 
   assert.equal(historical.error, undefined);
   assert.equal(historical.data?.phone, '+8801712345678');
   assert.equal(historical.data?.createdAt?.toISOString(), '2026-11-12T10:00:00.000Z');
+});
+
+test('extractMetaFormFields and parseMetaLeadsCsv handle WebLead&InstantForm_18_4_2026 Bengali+English labels', () => {
+  const fields = extractMetaFormFields({
+    'ad_name': 'AD4-NUAA',
+    'form_name': 'WebLead&InstantForm_18_4_2026',
+    'campaign_name': 'META_Leads_BD_China-Mar2027_2026Q1',
+    'সর্বশেষ ডিগ্রি (last degree)': 'HSC / Alim',
+    'আপনার নাম (name)': 'Md Amir Hamza',
+    'হোয়াটসঅ্যাপ নাম্বার (phone)': '01568387429',
+    'রেজাল্ট (gpa)': '4.58',
+    'ইংলিশ স্কোর (ielts/duolingo/toefl) - optional': '5.5',
+    'phone number': '+8801568387429',
+  });
+  assert.equal(fields.name, 'Md Amir Hamza');
+  assert.equal(fields.phone, '+8801568387429');
+  assert.equal(fields.whatsappPhone, '+8801568387429');
+  assert.equal(fields.lastDegree, 'HSC / Alim');
+  assert.equal(fields.gpa, '4.58');
+  assert.equal(fields.englishScore, '5.5');
+
+  const instantCsv = [
+    'id,created_time,ad_name,form_name,campaign_name,"সর্বশেষ ডিগ্রি (Last Degree)","আপনার নাম (Name)","হোয়াটসঅ্যাপ নাম্বার (Phone)","রেজাল্ট (GPA)","ইংলিশ স্কোর (IELTS/Duolingo/Toefl) - optional","Phone number"',
+    'l:986182003780725_1,2026-11-17T11:57:00+0000,AD4-NUAA,WebLead&InstantForm_18_4_2026,META_Leads_BD_China-Mar2027_2026Q1,"HSC / Alim","Md Amir Hamza","01568387429","4.58","5.5","+8801568387429"',
+  ].join('\n');
+  const parsedCsv = parseMetaLeadsCsv(instantCsv);
+  assert.equal(parsedCsv.length, 1);
+  assert.equal(parsedCsv[0].name, 'Md Amir Hamza');
+  assert.equal(parsedCsv[0].phone, '+8801568387429');
+  assert.equal(parsedCsv[0].assessAcademicLevel, 'HSC / Alim');
+  assert.equal(parsedCsv[0].assessAcademicResults, '4.58');
+  assert.equal(parsedCsv[0].assessLanguage, '5.5');
+  assert.match(parsedCsv[0].message, /Last Degree: HSC \/ Alim/);
+  assert.match(parsedCsv[0].message, /GPA: 4\.58/);
+  assert.match(parsedCsv[0].message, /Ad: AD4-NUAA/);
+});
+
+test('mapMetaGraphLeadToImportPayload converts Graph API field_data from form 986182003780725', () => {
+  const mapped = mapMetaGraphLeadToImportPayload({
+    id: '153987654321001',
+    created_time: '2026-11-17T05:57:00+0000',
+    form_id: '986182003780725',
+    ad_name: 'AD4-NUAA',
+    campaign_name: 'META_Leads_BD_China-Mar2027_2026Q1',
+    field_data: [
+      { name: 'সর্বশেষ ডিগ্রি (Last Degree)', values: ['HSC / Alim'] },
+      { name: 'আপনার নাম (Name)', values: ['Md Sayful Islam Noyon'] },
+      { name: 'হোয়াটসঅ্যাপ নাম্বার (Phone)', values: ['01799887766'] },
+      { name: 'রেজাল্ট (GPA)', values: ['4.90'] },
+      { name: 'ইংলিশ স্কোর (IELTS/Duolingo/Toefl) - optional', values: ['6.0'] },
+      { name: 'Phone number', values: ['+8801799887766'] },
+    ],
+  }, { formName: 'WebLead&InstantForm_18_4_2026' });
+
+  assert.ok(mapped);
+  assert.equal(mapped.name, 'Md Sayful Islam Noyon');
+  assert.equal(mapped.phone, '+8801799887766');
+  assert.equal(mapped.email, 'no-email+8801799887766@leads.eduexpressint.com');
+  assert.equal(mapped.assessAcademicLevel, 'HSC / Alim');
+  assert.equal(mapped.assessAcademicResults, '4.90');
+  assert.equal(mapped.assessLanguage, '6.0');
+  assert.equal(mapped.adTrackingConsent, true);
+  assert.equal(mapped.consentTimestamp, '2026-11-17T05:57:00.000Z');
+  assert.match(mapped.message, /Lead ID: 153987654321001/);
 });

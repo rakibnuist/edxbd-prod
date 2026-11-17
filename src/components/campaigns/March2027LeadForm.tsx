@@ -12,7 +12,7 @@ type Selection = { university: string; program: string } | null;
 type Props = { whatsappNumber: string; route: string; onRoute: (route: string) => void; selection: Selection; onClearSelection: () => void };
 
 const inputClass =
-  'mt-1.5 h-12 min-h-12 w-full rounded-xl border border-slate-300 bg-slate-50/60 px-3.5 text-[15px] font-medium text-[#0b2b45] outline-none transition placeholder:font-normal placeholder:text-slate-400 focus:border-[#12436b] focus:bg-white focus:ring-2 focus:ring-[#12436b]/15 sm:text-sm';
+  'mt-1.5 h-12 min-h-12 w-full scroll-mt-36 rounded-xl border border-slate-300 bg-slate-50/60 px-3.5 text-[15px] font-medium text-[#0b2b45] outline-none transition placeholder:font-normal placeholder:text-slate-400 focus:border-[#12436b] focus:bg-white focus:ring-2 focus:ring-[#12436b]/15 sm:text-sm';
 
 const context = () => ({
   destination: 'china',
@@ -85,7 +85,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
     setErrors({});
     setStep(2);
     requestAnimationFrame(() => {
-      formRef.current?.closest('#march-2027-assessment')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      formRef.current?.closest('#march-2027-assessment')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   };
 
@@ -146,17 +146,27 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
     }
   };
 
-  const errorFor = (key: keyof MarchEnquiryFields) =>
-    errors[key] && (
-      <p id={`march-${key}-error`} className="mt-1.5 text-xs font-medium leading-5 text-red-700">
-        {errors[key]}
-      </p>
-    );
+  const errorMessage = (key: keyof MarchEnquiryFields) =>
+    key === 'route' && route.trim().length > 0 ? undefined : errors[key];
 
-  const ariaFor = (key: keyof MarchEnquiryFields) => ({
-    'aria-invalid': Boolean(errors[key]),
-    'aria-describedby': errors[key] ? `march-${key}-error` : undefined,
-  });
+  const errorFor = (key: keyof MarchEnquiryFields) => {
+    const message = errorMessage(key);
+    return (
+      message && (
+        <p id={`march-${key}-error`} className="mt-1.5 text-xs font-medium leading-5 text-red-700">
+          {message}
+        </p>
+      )
+    );
+  };
+
+  const ariaFor = (key: keyof MarchEnquiryFields) => {
+    const message = errorMessage(key);
+    return {
+      'aria-invalid': Boolean(message),
+      'aria-describedby': message ? `march-${key}-error` : undefined,
+    };
+  };
 
   const whatsappHref = `https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(
     'Hello, I would like to speak with a counsellor about a China March 2027 study plan.'
@@ -166,7 +176,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
     <section
       id="march-2027-assessment"
       aria-labelledby="march-form-title"
-      className="scroll-mt-20 overflow-hidden rounded-3xl border border-white/20 bg-white text-[#0b2b45] shadow-[0_24px_64px_rgba(7,30,48,0.28)]"
+      className="scroll-mt-36 overflow-hidden rounded-3xl border border-white/20 bg-white text-[#0b2b45] shadow-[0_24px_64px_rgba(7,30,48,0.28)]"
     >
       {/* Form Header */}
       <div className="relative overflow-hidden border-b border-slate-200/80 bg-gradient-to-br from-[#071f33] via-[#0b2b45] to-[#12436b] px-6 py-5 text-white sm:px-7 sm:py-6">
@@ -493,7 +503,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
                       checked={fields.consent}
                       onChange={e => update('consent', e.target.checked)}
                       {...ariaFor('consent')}
-                      className="mt-0.5 size-4 shrink-0 accent-[#12436b]"
+                      className="mt-0.5 size-4 shrink-0 scroll-mt-36 accent-[#12436b]"
                     />
                     <span>
                       I agree to be contacted about this enquiry and have read the{' '}

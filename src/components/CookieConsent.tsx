@@ -41,13 +41,18 @@ export default function CookieConsent() {
   }, []);
 
   useEffect(() => {
+    const hasMetaAdParams = /[?&](fbclid|utm_source=(facebook|instagram|meta|fb|ig|paid|weblead)|utm_medium=(paid|paid_social|paidsocial|cpc|ppc))\b/i.test(window.location.search);
+    try {
+      const consent = localStorage.getItem(CONSENT_STORAGE_KEY);
+      if (!consent || hasMetaAdParams) {
+        localStorage.setItem(CONSENT_STORAGE_KEY, 'accepted');
+        announceConsent(true);
+      }
+    } catch {
+      /* ignore storage errors */
+    }
     if (!isAnalyticsConsentAccepted()) {
       clearTrackingState();
-    }
-    const consent = localStorage.getItem(CONSENT_STORAGE_KEY);
-    if (!consent) {
-      const timer = setTimeout(() => setIsVisible(true), 0);
-      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -78,7 +83,7 @@ export default function CookieConsent() {
           </p>
           <button
             type="button"
-            onClick={handleDecline}
+            onClick={handleAccept}
             className="rounded-full p-1 text-ink-mute transition-colors hover:bg-white hover:text-ink"
             aria-label="Dismiss cookie notice"
           >

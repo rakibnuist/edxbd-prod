@@ -184,10 +184,13 @@ export function trackConversion(event: ConversionEvent, context: ConversionConte
     /* ignore */
   }
 
-  // Meta Pixel (only for cleanly-mapped standard events, HTTPS only)
+  // Meta Pixel (only for cleanly-mapped standard events, HTTPS or localhost)
   try {
     const metaEvent = META_EVENT_MAP[event];
-    const isHttps = window.location.protocol === 'https:';
+    const isHttps =
+      window.location.protocol === 'https:' ||
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1';
     if (metaEvent && isHttps && typeof window.fbq === 'function') {
       const eventId = typeof context.eventId === 'string' ? context.eventId : undefined;
       const eventData = {
