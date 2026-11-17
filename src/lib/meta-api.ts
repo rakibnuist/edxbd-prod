@@ -37,19 +37,42 @@ export async function verifyMetaDataset(config: MetaCredentials, request: typeof
     return { ok: false, checkedAt, message: 'The server could not reach Meta. Please retry the connection check.' };
   }
 }
-export async function sendMetaEvents(config: MetaCredentials, events: unknown[], request: typeof fetch = fetch, testEventCode?: string): Promise<MetaDelivery> {
-  if (!config.pixelId || !config.accessToken) return { ok: false, eventsReceived: 0, error: 'Meta access token or Pixel / dataset ID is missing.' };
+async function postMetaEventsOnce(
+  pixelId: string,
+  accessToken: string,
+  events: unknown[],
+  request: typeof fetch,
+  testEventCode?: string,
+): Promise<MetaDelivery & { errorCode?: number }> {
   try {
-    const response = await request(`https://graph.facebook.com/${META_API_VERSION}/${encodeURIComponent(config.pixelId)}/events`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${config.accessToken}` },
+    const response = await request(`https://graph.facebook.com/${META_API_VERSION}/${encodeURIComponent(pixelId)}/events`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({ data: events, ...(testEventCode ? { test_event_code: testEventCode } : {}) }), signal: AbortSignal.timeout(10000), cache: 'no-store',
     });
     const result = await response.json();
-    if (!response.ok || result.error) return { ok: false, eventsReceived: 0, error: metaFailure(result.error?.code) };
+    if (!response.ok || result.error) {
+      const code = typeof result.error?.code === 'number' ? result.error.code : undefined;
+      return { ok: false, eventsReceived: 0, error: metaFailure(code), errorCode: code };
+    }
     const received = result.events_received;
     if (!Number.isInteger(received) || received < 1) return { ok: false, eventsReceived: 0, error: 'Meta returned no accepted events for this request.' };
     return { ok: true, eventsReceived: received };
   } catch {
     return { ok: false, eventsReceived: 0, error: 'The server could not deliver the event to Meta. Please check the connection.' };
   }
+}
+
+export async function sendMetaEvents(config: MetaCredentials, events: unknown[], request: typeof fetch = fetch, testEventCode?: string): Promise<MetaDelivery> {
+  if (!config.pixelId || !config.accessToken) return { ok: false, eventsReceived: 0, error: 'Meta access token or Pixel / dataset ID is missing.' };
+  const primary = await postMetaEventsOnce(config.pixelId, config.accessToken, events, request, testEventCode);
+  if (primary.ok) return { ok: true, eventsReceived: primary.eventsReceived };
+
+  const envFallback = process.env.META_ACCESS_TOKEN?.trim();
+  const isPermissionOrAuthCode =
+    primary.errorCode === 10 || primary.errorCode === 100 || primary.errorCode === 190 || primary.errorCode === 200;
+  if (isPermissionOrAuthCode && envFallback && envFallback !== config.accessToken.trim()) {
+    const fallback = await postMetaEventsOnce(config.pixelId, envFallback, events, request, testEventCode);
+    if (fallback.ok) return { ok: true, eventsReceived: fallback.eventsReceived };
+  }
+  return { ok: false, eventsReceived: 0, error: primary.error };
 }

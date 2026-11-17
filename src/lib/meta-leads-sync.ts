@@ -3,7 +3,8 @@ import { META_API_VERSION } from '@/lib/meta-api';
 import { sendCrmStage, type CrmLead } from '@/lib/meta-crm-events';
 import { mapMetaGraphLeadToImportPayload, type MetaGraphLeadInput } from '@/lib/lead-workflow';
 import prisma from '@/lib/prisma';
-import { getMetaConfig } from '@/lib/settings';
+import { decryptSecret } from '@/lib/secret-box';
+import { getAllSettings } from '@/lib/settings';
 
 const SYNC_INTERVAL_MS = 30_000;
 const GRAPH_TIMEOUT_MS = 5000;
@@ -70,7 +71,7 @@ async function graphGet<T>(
   }
 }
 
-async function resolveTokensAndForms(accessToken: string, request: typeof fetch) {
+async function resolveTokensAndForms(seedTokens: string[], request: typeof fetch) {
   const pageIds = parseEnvList(process.env.META_PAGE_IDS, DEFAULT_PAGE_IDS);
   const formIds = new Set(parseEnvList(process.env.META_LEAD_FORM_IDS, DEFAULT_FORM_IDS));
   const formNames = new Map<string, string>();
@@ -83,29 +84,34 @@ async function resolveTokensAndForms(accessToken: string, request: typeof fetch)
   type AccountsResponse = { data?: Array<{ id?: string; access_token?: string }> };
   type PageTokenResponse = { id?: string; access_token?: string };
 
-  const [accountsRes, ...pageResList] = await Promise.allSettled([
-    graphGet<AccountsResponse>('me/accounts', { fields: 'id,access_token', limit: '25' }, accessToken, request),
+  const lookupCalls = seedTokens.flatMap((token) => [
+    graphGet<AccountsResponse>('me/accounts', { fields: 'id,access_token', limit: '25' }, token, request).then((res) => ({ kind: 'accounts' as const, res })),
     ...pageIds.map((id) =>
-      graphGet<PageTokenResponse>(id, { fields: 'id,access_token' }, accessToken, request),
+      graphGet<PageTokenResponse>(id, { fields: 'id,access_token' }, token, request).then((res) => ({ kind: 'page' as const, res })),
     ),
   ]);
 
-  if (accountsRes.status === 'fulfilled' && accountsRes.value.ok && Array.isArray(accountsRes.value.data?.data)) {
-    for (const acct of accountsRes.value.data.data) {
-      if (acct?.id && !pageIds.includes(acct.id)) pageIds.push(acct.id);
-      pushToken(acct?.access_token);
+  const settledLookups = await Promise.allSettled(lookupCalls);
+  for (const settled of settledLookups) {
+    if (settled.status !== 'fulfilled') continue;
+    if (settled.value.kind === 'accounts' && settled.value.res.ok && Array.isArray(settled.value.res.data?.data)) {
+      for (const acct of settled.value.res.data.data) {
+        if (acct?.id && !pageIds.includes(acct.id)) pageIds.push(acct.id);
+        pushToken(acct?.access_token);
+      }
+    } else if (settled.value.kind === 'page' && settled.value.res.ok) {
+      pushToken(settled.value.res.data?.access_token);
     }
   }
-  for (const res of pageResList) {
-    if (res.status === 'fulfilled' && res.value.ok) {
-      pushToken(res.value.data?.access_token);
-    }
+  for (const token of seedTokens) {
+    pushToken(token);
   }
-  pushToken(accessToken);
 
   type FormsResponse = { data?: Array<{ id?: string; name?: string }> };
-  const formDiscoveryCalls = pageIds.slice(0, 4).map((pageId) =>
-    graphGet<FormsResponse>(`${encodeURIComponent(pageId)}/leadgen_forms`, { fields: 'id,name', limit: '25' }, tokens[0], request),
+  const formDiscoveryCalls = pageIds.slice(0, 4).flatMap((pageId) =>
+    tokens.slice(0, 3).map((tok) =>
+      graphGet<FormsResponse>(`${encodeURIComponent(pageId)}/leadgen_forms`, { fields: 'id,name', limit: '25' }, tok, request),
+    ),
   );
   const discovered = await Promise.allSettled(formDiscoveryCalls);
   for (const res of discovered) {
@@ -185,17 +191,32 @@ async function fetchCampaignAdLeads(
   return [];
 }
 
+async function collectCandidateSeedTokens(): Promise<string[]> {
+  const settings = await getAllSettings();
+  const rawCandidates = [
+    process.env.META_LEAD_ACCESS_TOKEN,
+    decryptSecret(settings.metaAccessToken),
+    process.env.META_ACCESS_TOKEN,
+  ];
+  const unique: string[] = [];
+  for (const candidate of rawCandidates) {
+    const clean = typeof candidate === 'string' ? candidate.trim() : '';
+    if (clean && !unique.includes(clean)) unique.push(clean);
+  }
+  return unique;
+}
+
 async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
   const syncedAt = new Date().toISOString();
   const request = options?.request ?? fetch;
 
   try {
-    const { accessToken } = await getMetaConfig();
-    if (!accessToken) {
+    const seedTokens = await collectCandidateSeedTokens();
+    if (seedTokens.length === 0) {
       return { ok: false, importedCount: 0, skippedCount: 0, formsChecked: 0, syncedAt, error: 'Meta access token not configured.' };
     }
 
-    const { tokens, formIds, formNames } = await resolveTokensAndForms(accessToken, request);
+    const { tokens, formIds, formNames } = await resolveTokensAndForms(seedTokens, request);
     const campaignIds = parseEnvList(process.env.META_CAMPAIGN_IDS, DEFAULT_CAMPAIGN_IDS);
 
     const [formResults, campaignResults] = await Promise.all([

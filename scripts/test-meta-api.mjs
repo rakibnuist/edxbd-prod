@@ -41,3 +41,23 @@ test('credential changes invalidate earlier connection evidence', () => {
   assert.notEqual(metaFingerprint(config), metaFingerprint({ ...config, accessToken: 'replacement' }));
   assert.notEqual(metaFingerprint(config), metaFingerprint({ ...config, pixelId: '9999999999999999' }));
 });
+test('sendMetaEvents falls back to env META_ACCESS_TOKEN when primary token lacks dataset permission', async () => {
+  const prev = process.env.META_ACCESS_TOKEN;
+  process.env.META_ACCESS_TOKEN = 'env-capi-dataset-token';
+  try {
+    const seenAuth = [];
+    const sent = await sendMetaEvents(config, [{ event_name: 'Lead' }], async (_url, options) => {
+      seenAuth.push(options.headers.Authorization);
+      if (options.headers.Authorization === 'Bearer env-capi-dataset-token') {
+        return response({ events_received: 1 });
+      }
+      return response({ error: { code: 200, message: 'No dataset permission' } }, 403);
+    });
+    assert.equal(sent.ok, true);
+    assert.equal(sent.eventsReceived, 1);
+    assert.deepEqual(seenAuth, [`Bearer ${config.accessToken}`, 'Bearer env-capi-dataset-token']);
+  } finally {
+    if (prev === undefined) delete process.env.META_ACCESS_TOKEN;
+    else process.env.META_ACCESS_TOKEN = prev;
+  }
+});
