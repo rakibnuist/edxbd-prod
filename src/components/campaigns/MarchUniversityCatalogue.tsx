@@ -25,7 +25,7 @@ const filters = [
 ];
 
 function Logo({ university }: { university: MarchCatalogueUniversity }) {
-  const wide = university.id === 'wuzhou-university';
+  const wide = false;
   return (
     <div
       className={`relative grid size-16 shrink-0 place-items-center overflow-hidden rounded-2xl border border-slate-200/90 shadow-sm ${

@@ -181,6 +181,11 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
     const fallback = serializeUpdate(UK_RED_BRICK_2027_DATA);
     if (fallback) serialized.unshift(fallback);
   }
+  // Fallbacks are unshifted above; re-sort so the newest posts (DB or fallback) lead the feed.
+  const ts = (u: Update) => new Date(u.publishedAt ?? u.createdAt ?? 0).getTime() || 0;
+  serialized.sort((a, b) =>
+    (prioritizeFeatured ? Number(Boolean(b.isFeatured)) - Number(Boolean(a.isFeatured)) : 0) || ts(b) - ts(a),
+  );
   return take ? serialized.slice(0, take) : serialized;
 });
 

@@ -96,7 +96,7 @@
         "HUST latest CNY8,000 and current age/schedule remain, rather than project CNY7,500.",
         "WMU official hostel CNY4,400 supersedes project CNY4,800. Full upfront tuition before scholarship is preserved.",
         "Hebei four-year bachelor and unpriced Chinese language reference not conflated. No numeric ranking invented.",
-        "Wuzhou Computer Science CNY10,000 reference is separated from CNY2,000 selected-major planning amount.",
+        "Wuzhou March 2027: 4-year scholarship package, tuition + twin-share room CNY 9,000–9,900/year by major; 35 seats per major; deadline 30 Dec 2026.",
         "Six-month consortium has no named institution and an ambiguous six-month/year billing period. Retained internally, not fabricated as a university.",
         "CTGU user PDF missing at supplied local path. Official download presents CAPTCHA; no bypass attempted. Alternate official language guide describes an autumn-start one-year programme, not proof of a spring opening. CTGU not added to March inventory on that basis."
       ]
@@ -1232,7 +1232,7 @@
       "name": "Wuzhou University",
       "acronym": "WZU",
       "city": "Wuzhou",
-      "logo": "/images/campaigns/march-2027/wuzhou-university.png",
+      "logo": "/images/universities/logos/wuzhou-university.webp",
       "ranking": {
         "value": "China #500+",
         "scope": "China",
@@ -1245,173 +1245,84 @@
         {
           "id": "wuzhou-university-bachelor",
           "route": "bachelor",
-          "name": "Bachelor route assessment",
-          "tuition": "CNY 2,000",
-          "period": "first-year tuition estimate",
-          "feeBasis": "Campaign planning estimate",
-          "extra": "Hostel CNY 3,800/year. Computer Science has a separate CNY 10,000/year fee reference in the campaign sheet.",
-          "awardTitle": "Performance-based tuition support",
-          "scholarship": "The campaign first-year tuition estimate includes its listed award. Renewal and later-year tuition depend on performance and university review.",
+          "name": "Direct Major Bachelor Degree (4-Year Scholarship)",
+          "tuition": "CNY 9,000",
+          "period": "year (tuition + room)",
+          "feeBasis": "University March 2027 scholarship package",
+          "extra": "Near Guangzhou & Shenzhen. Tuition and twin-share room combined: Business English CNY 9,000; International Economics & Trade CNY 9,300; Computer Science & AI CNY 9,900 per year. 35 seats per major.",
+          "awardTitle": "4-year unconditional scholarship",
+          "scholarship": "Unconditional scholarship on admission for the full 4-year degree; annual payable amount includes twin-share accommodation.",
           "majors": [
             "International Economics and Trade",
-            "Mechanical Engineering",
-            "Logistics Management",
-            "Business English"
+            "Business English",
+            "Computer Science and Technology",
+            "Artificial Intelligence"
           ],
-          "eligibility": "High-school qualification; age 18–25. English-medium programme requirements apply.",
+          "eligibility": "Secondary school completion with minimum 60% marks; age 18–23; open to all nationalities; no CSCA exam.",
           "duration": "4 years",
-          "entry": "Degree entry term matched to your programme",
-          "tuitionLabel": "Selected-major tuition after award",
+          "entry": "March 2027 (direct major, no foundation year)",
+          "tuitionLabel": "Tuition + twin-share room after scholarship",
           "teachingLanguage": "English",
           "costItems": [
             {
-              "item": "Selected-major tuition after award",
-              "amount": "CNY 2,000 / first year",
-              "note": ""
+              "item": "International Economics and Trade",
+              "amount": "CNY 9,300 / year",
+              "note": "Tuition + twin-share room"
             },
             {
-              "item": "Hostel",
-              "amount": "CNY 3,800 / year",
-              "note": ""
+              "item": "Business English",
+              "amount": "CNY 9,000 / year",
+              "note": "Tuition + twin-share room"
             },
             {
-              "item": "Computer Science fee reference",
-              "amount": "CNY 10,000 / year",
-              "note": "Programme-specific quote; do not assume the CNY 2,000 selected-major amount applies."
+              "item": "Computer Science and Technology",
+              "amount": "CNY 9,900 / year",
+              "note": "Tuition + twin-share room"
             },
             {
-              "item": "Application",
-              "amount": "CNY 500 / year",
-              "note": ""
+              "item": "Artificial Intelligence",
+              "amount": "CNY 9,900 / year",
+              "note": "Tuition + twin-share room"
             },
             {
-              "item": "Insurance",
-              "amount": "CNY 800 / year",
-              "note": ""
-            },
-            {
-              "item": "Medical examination",
-              "amount": "CNY 100–400",
-              "note": "First year."
-            },
-            {
-              "item": "Residence permit",
-              "amount": "CNY 400 / year",
-              "note": ""
+              "item": "Proof of funds",
+              "amount": "USD 3,000",
+              "note": "Bank statement at application; not a fee."
             }
           ],
           "scholarshipTiers": [
             {
-              "name": "Years 2–4: top 10%",
-              "coverage": "Tuition + hostel payable CNY 5,900/year."
+              "name": "International Economics and Trade",
+              "coverage": "Total payable CNY 9,300/year for 4 years (room included). 35 seats."
             },
             {
-              "name": "Years 2–4: 11–50%",
-              "coverage": "Tuition + hostel payable CNY 7,900/year."
+              "name": "Business English",
+              "coverage": "Total payable CNY 9,000/year for 4 years (room included). 35 seats."
             },
             {
-              "name": "Years 2–4: 51–100%",
-              "coverage": "Tuition + hostel payable CNY 8,900/year."
+              "name": "Computer Science and Technology",
+              "coverage": "Total payable CNY 9,900/year for 4 years (room included). 35 seats."
+            },
+            {
+              "name": "Artificial Intelligence",
+              "coverage": "Total payable CNY 9,900/year for 4 years (room included). 35 seats."
             }
           ],
           "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
+            "Valid ordinary passport",
+            "Photograph with white background",
+            "Academic certificates and transcripts with English translation",
+            "Bank statement (minimum USD 3,000)",
+            "Police clearance (valid 6 months)",
+            "Physical examination (valid 6 months)",
+            "2-minute English self-introduction video"
           ],
-          "scholarshipConditions": "Later-year performance bands are payable tuition-plus-hostel totals, not cash scholarship amounts. Computer Science is quoted separately.",
+          "scholarshipConditions": "Unconditional for 4 years subject to normal enrolment, attendance and conduct. Mandatory 2-minute English introduction video.",
           "professionalNote": "",
-          "csca": "",
+          "csca": "Not required",
           "majorGroups": [],
           "fundingStage": "Bachelor funding",
-          "fundingHighlight": "First-year tuition from CNY 2,000"
-        },
-        {
-          "id": "wuzhou-computer-science",
-          "route": "bachelor",
-          "name": "Computer Science and Technology",
-          "tuition": "CNY 10,000",
-          "period": "year",
-          "feeBasis": "Programme-specific campaign fee reference",
-          "extra": "Course-specific CNY 10,000 annual tuition reference; hostel CNY 3,800/year. The CNY 2,000 selected-major amount is not assumed for this course.",
-          "awardTitle": "Performance-based tuition support",
-          "scholarship": "The campaign first-year tuition estimate includes its listed award. Renewal and later-year tuition depend on performance and university review.",
-          "majors": [
-            "Computer Science and Technology"
-          ],
-          "eligibility": "High-school qualification; age 18–25. English-medium programme requirements apply.",
-          "duration": "4 years",
-          "entry": "Degree entry term matched to your programme",
-          "tuitionLabel": "Computer Science fee reference",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "Selected-major tuition after award",
-              "amount": "CNY 2,000 / first year",
-              "note": ""
-            },
-            {
-              "item": "Hostel",
-              "amount": "CNY 3,800 / year",
-              "note": ""
-            },
-            {
-              "item": "Computer Science fee reference",
-              "amount": "CNY 10,000 / year",
-              "note": "Programme-specific quote; do not assume the CNY 2,000 selected-major amount applies."
-            },
-            {
-              "item": "Application",
-              "amount": "CNY 500 / year",
-              "note": ""
-            },
-            {
-              "item": "Insurance",
-              "amount": "CNY 800 / year",
-              "note": ""
-            },
-            {
-              "item": "Medical examination",
-              "amount": "CNY 100–400",
-              "note": "First year."
-            },
-            {
-              "item": "Residence permit",
-              "amount": "CNY 400 / year",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Years 2–4: top 10%",
-              "coverage": "Tuition + hostel payable CNY 5,900/year."
-            },
-            {
-              "name": "Years 2–4: 11–50%",
-              "coverage": "Tuition + hostel payable CNY 7,900/year."
-            },
-            {
-              "name": "Years 2–4: 51–100%",
-              "coverage": "Tuition + hostel payable CNY 8,900/year."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Later-year performance bands are payable tuition-plus-hostel totals, not cash scholarship amounts. Computer Science is quoted separately.",
-          "professionalNote": "",
-          "csca": "",
-          "majorGroups": [],
-          "fundingStage": "Bachelor funding",
-          "fundingHighlight": "Performance-based degree awards"
+          "fundingHighlight": "4-year scholarship · from CNY 9,000/yr incl. room"
         }
       ]
     },

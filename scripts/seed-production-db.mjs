@@ -34,6 +34,9 @@ try {
   console.log('Running seed-no-csca-universities.mjs...');
   execSync('node scripts/seed-no-csca-universities.mjs', { stdio: 'inherit' });
 
+  console.log('Running seed-wuzhou-university.mjs...');
+  execSync('node scripts/seed-wuzhou-university.mjs', { stdio: 'inherit' });
+
   console.log('Running complete-all-universities-data.mjs...');
   execSync('node scripts/complete-all-universities-data.mjs', { stdio: 'inherit' });
 
