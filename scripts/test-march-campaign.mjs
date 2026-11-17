@@ -40,6 +40,15 @@ test('march campaign enquiry normalizes Bengali phone digits, invisible marks, a
   assert.equal(fbAdsPayload.source, 'meta_china_march_2027');
   const fbcPayload = marchEnquiryPayload(fields, { ...context, utm: {}, metaFbc: 'fb.1.1700000000000.IwAR999' });
   assert.equal(fbcPayload.source, 'meta_china_march_2027');
+
+  assert.deepEqual(validateMarchEnquiry({ ...fields, phone: '1712345678' }), {});
+  assert.deepEqual(validateMarchEnquiry({ ...fields, phone: '1712-345678' }), {});
+  assert.deepEqual(validateMarchEnquiry({ ...fields, email: '' }, { allowEmptyEmail: true }), {});
+  const emptyEmailPayload = marchEnquiryPayload({ ...fields, email: '' }, context);
+  assert.equal(emptyEmailPayload.email, 'no-email+8801700000000@leads.eduexpressint.com');
+  const tenDigitPayload = marchEnquiryPayload({ ...fields, phone: '1712345678' }, { ...context, utm: { utm_medium: 'paid', utm_campaign: 'WebLead&InstantForm_18_4_2026' } });
+  assert.equal(tenDigitPayload.phone, '01712345678');
+  assert.equal(tenDigitPayload.source, 'meta_china_march_2027');
 });
 test('researched costs retain correct billing periods and do not republish preliminary fee claims', async () => {
   const data=JSON.parse(await readFile(new URL('../data/research/china-march-2027-landing.json',import.meta.url),'utf8'));
@@ -50,10 +59,10 @@ test('researched costs retain correct billing periods and do not republish preli
   assert.equal(data.examples.some(item=>item.route==='degree'),false);
 });
 
-test('all nineteen institutions have real logos and only researched ranking numbers are published', async () => {
+test('all twenty institutions have real logos and only researched ranking numbers are published', async () => {
  const data=JSON.parse(await readFile(new URL('../data/research/china-march-2027-landing.json',import.meta.url),'utf8'));
  const catalogue=publicMarchCatalogue(data.universities);
- assert.equal(catalogue.length,19);
+ assert.equal(catalogue.length,20);
  assert.equal(catalogue.reduce((n,u)=>n+u.programmes.length,0),25);
  for(const university of catalogue){
    assert.ok((await readFile(new URL('../public'+university.logo,import.meta.url))).length>100);
@@ -67,11 +76,11 @@ test('all nineteen institutions have real logos and only researched ranking numb
 test('search and programme category must match the same course route', async () => {
  const data=JSON.parse(await readFile(new URL('../data/research/china-march-2027-landing.json',import.meta.url),'utf8'));
  const catalogue=publicMarchCatalogue(data.universities);
- assert.equal(filterMarchCatalogue(catalogue,'','all').length,19);
+ assert.equal(filterMarchCatalogue(catalogue,'','all').length,20);
  assert.equal(filterMarchCatalogue(catalogue,'','foundation').length,13);
  assert.equal(filterMarchCatalogue(catalogue,'','bachelor').length,5);
  assert.equal(filterMarchCatalogue(catalogue,'','masters').length,1);
- assert.equal(filterMarchCatalogue(catalogue,'','language').length,4);
+ assert.equal(filterMarchCatalogue(catalogue,'','language').length,5);
  assert.equal(filterMarchCatalogue(catalogue,'petroleum','foundation')[0].acronym,'XSYU');
  assert.equal(filterMarchCatalogue(catalogue,'hust','language')[0].programmes.length,1);
  assert.equal(filterMarchCatalogue(catalogue,'hust physics','language').length,0);
@@ -88,7 +97,7 @@ test('PDF costs preserve bundled amounts, distinct preparation courses and post-
  assert.match(programme('CSTU').costItems[2].note,/not an extra/);
  assert.match(programme('WMU').scholarshipConditions,/Full tuition/);assert.equal(programme('WMU').professionalNote,'');
  assert.equal(data.universities.find(u=>u.acronym==='HBAFA').ranking,null);
- assert.equal(data.universities.find(u=>u.acronym==='WZU').programmes.length,2);
+ assert.equal(data.universities.find(u=>u.acronym==='WZU').programmes.length,1);
  assert.equal(programme('HDU').scholarshipTiers.length,3);
  assert.equal(data.research.attachedProjectPdf.pages,16);assert.ok(data.research.attachedProjectPdf.sha256);
 });
@@ -99,7 +108,7 @@ test('PDF costs preserve bundled amounts, distinct preparation courses and post-
  const original=catalogue.map(u=>u.id);
  assert.equal(sortMarchCatalogue(catalogue,'world-ranking')[0].acronym,'SJTU');
  assert.equal(sortMarchCatalogue(catalogue,'china-ranking')[0].acronym,'SYCU');
- assert.equal(sortMarchCatalogue(catalogue,'fees-low')[0].acronym,'WZU');
+ assert.equal(sortMarchCatalogue(catalogue,'fees-low')[0].acronym,'XSYU');
  assert.equal(sortMarchCatalogue(catalogue,'fees-high')[0].acronym,'NJIT');
  assert.equal(sortMarchCatalogue(catalogue,'name')[0].acronym,'CSTU');
  assert.deepEqual(catalogue.map(u=>u.id),original);

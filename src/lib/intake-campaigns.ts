@@ -26,9 +26,9 @@ const fallbackCampaign: ChinaMarch2027Campaign = {
   requiredDocuments: march2027RequiredDocuments,
   faqs: march2027Faqs,
   sourceLabel: 'Owner-supplied “2027 Projects” planning sheet',
-  verificationStatus: 'preliminary',
-  lastReviewedAt: new Date('2026-10-11T00:00:00+06:00'),
-  nextReviewAt: new Date('2026-11-15T00:00:00+06:00'),
+  verificationStatus: 'source-reviewed',
+  lastReviewedAt: new Date('2026-11-17T00:00:00+06:00'),
+  nextReviewAt: new Date('2026-12-15T00:00:00+06:00'),
   fromDatabase: false,
 };
 

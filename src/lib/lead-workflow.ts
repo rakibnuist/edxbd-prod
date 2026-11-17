@@ -68,10 +68,15 @@ export function validateLeadUpdate(value: unknown): { data?: { status?: LeadStat
 }
 export function leadContactLinks(lead: Pick<LeadRecord, 'phone' | 'email' | 'name'>) {
   const rawDigits = (lead.phone || '').replace(/[^0-9]/g, '');
-  const digits = /^88001[0-9]{9}$/.test(rawDigits) ? `880${rawDigits.slice(4)}` : rawDigits;
+  const digits = /^88001[0-9]{9}$/.test(rawDigits)
+    ? `880${rawDigits.slice(4)}`
+    : /^1[3-9][0-9]{8}$/.test(rawDigits)
+      ? `880${rawDigits}`
+      : rawDigits;
   const whatsapp = digits.startsWith('00880') ? digits.slice(2) : /^01[0-9]{9}$/.test(digits) ? `88${digits}` : digits;
+  const callPrefix = (lead.phone || '').trim().startsWith('+') || /^8801[0-9]{9}$/.test(digits) ? '+' : '';
   return {
-    call: digits ? `tel:${(lead.phone || '').trim().startsWith('+') ? '+' : ''}${digits}` : null,
+    call: digits ? `tel:${callPrefix}${digits}` : null,
     email: lead.email ? `mailto:${encodeURIComponent(lead.email)}` : null,
     whatsapp: whatsapp ? `https://wa.me/${whatsapp}` : null,
   };
@@ -90,6 +95,7 @@ export type MetaLeadImportPayload = {
   assignedTeam: string;
   destinationInterest: string;
   landingPage: string;
+  adTrackingConsent: boolean;
   consentTimestamp: string;
   consentPolicyVersion: string;
 };
@@ -118,16 +124,40 @@ function parseCsvLine(line: string, delimiter: string): string[] {
   return out;
 }
 
+const BENGALI_DIGITS = '০১২৩৪৫৬৭৮৯';
+const ARABIC_INDIC_DIGITS = '٠١٢٣٤٥٦٧٨٩';
+
 export function normalizeMetaLeadPhone(raw: string): string {
-  const cleaned = raw.trim().replace(/[^\d+]/g, '');
+  let ascii = '';
+  for (const ch of raw) {
+    const bnIdx = BENGALI_DIGITS.indexOf(ch);
+    if (bnIdx !== -1) {
+      ascii += String(bnIdx);
+      continue;
+    }
+    const arIdx = ARABIC_INDIC_DIGITS.indexOf(ch);
+    if (arIdx !== -1) {
+      ascii += String(arIdx);
+      continue;
+    }
+    ascii += ch;
+  }
+  const cleaned = ascii
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, '')
+    .trim()
+    .replace(/^(?:p|tel):/i, '')
+    .replace(/[^\d+]/g, '');
   if (/^\+?88001[3-9]\d{8}$/.test(cleaned)) {
     return `+880${cleaned.replace(/^\+?8800/, '')}`;
   }
-  if (/^8801[3-9]\d{8}$/.test(cleaned)) {
-    return `+${cleaned}`;
+  if (/^\+?8801[3-9]\d{8}$/.test(cleaned)) {
+    return `+${cleaned.replace(/^\+/, '')}`;
   }
   if (/^01[3-9]\d{8}$/.test(cleaned)) {
     return `+880${cleaned.slice(1)}`;
+  }
+  if (/^1[3-9]\d{8}$/.test(cleaned)) {
+    return `+880${cleaned}`;
   }
   return cleaned;
 }
@@ -162,11 +192,13 @@ export function parseMetaLeadsCsv(csvText: string): MetaLeadImportPayload[] {
 
   const nameIdx = idx(['name', 'full_name', 'full name']);
   const emailIdx = idx(['email', 'email_address', 'email address']);
-  const phoneIdx = idx(['phone', 'phone_number', 'phone number']);
+  const phoneIdx = idx(['phone', 'phone_number', 'phone number', 'contact_number', 'contact number', 'mobile_number', 'mobile number']);
   const secPhoneIdx = idx(['secondary phone number', 'secondary_phone_number']);
   const waPhoneIdx = idx(['whatsapp number', 'whatsapp_number']);
   const createdIdx = idx(['created', 'created_time', 'date']);
   const formIdx = idx(['form', 'form_name']);
+  const adNameIdx = idx(['ad_name', 'ad name']);
+  const campaignNameIdx = idx(['campaign_name', 'campaign name']);
 
   const parsedRows: MetaLeadImportPayload[] = [];
   for (const line of lines.slice(1)) {
@@ -177,7 +209,7 @@ export function parseMetaLeadsCsv(csvText: string): MetaLeadImportPayload[] {
       (waPhoneIdx >= 0 ? cols[waPhoneIdx] : '') ||
       (secPhoneIdx >= 0 ? cols[secPhoneIdx] : '') ||
       '';
-    const phone = normalizeMetaLeadPhone(rawPhone.replace(/^p:/i, ''));
+    const phone = normalizeMetaLeadPhone(rawPhone);
     const digits = phone.replace(/\D/g, '');
     if (digits.length < 7) continue;
 
@@ -188,6 +220,8 @@ export function parseMetaLeadsCsv(csvText: string): MetaLeadImportPayload[] {
         : `no-email+${digits}@leads.eduexpressint.com`;
     const created = (createdIdx >= 0 ? cols[createdIdx] : '')?.trim() || '';
     const formName = (formIdx >= 0 ? cols[formIdx] : '')?.trim() || 'WebLead&InstantForm_18_4_2026';
+    const campaignName = (campaignNameIdx >= 0 ? cols[campaignNameIdx] : '')?.trim() || 'META_Leads_BD_China-Mar2027_2026Q1';
+    const adName = (adNameIdx >= 0 ? cols[adNameIdx] : '')?.trim() || '';
 
     parsedRows.push({
       name: name.slice(0, 120),
@@ -197,7 +231,8 @@ export function parseMetaLeadsCsv(csvText: string): MetaLeadImportPayload[] {
       program: 'China March 2027 Intake',
       message: [
         `Meta Instant Form (${formName})`,
-        'Campaign: META_Leads_BD_China-Mar2027_2026Q1',
+        `Campaign: ${campaignName}`,
+        adName && `Ad: ${adName}`,
         created && `Created: ${created}`,
       ]
         .filter(Boolean)
@@ -205,9 +240,10 @@ export function parseMetaLeadsCsv(csvText: string): MetaLeadImportPayload[] {
       status: 'new',
       source: 'meta_china_march_2027',
       leadType: 'assessment',
-      assignedTeam: 'china_desk',
+      assignedTeam: 'china',
       destinationInterest: 'china',
       landingPage: '/china-march-2027-intake',
+      adTrackingConsent: true,
       consentTimestamp: parseMetaLeadTimestamp(created),
       consentPolicyVersion: '2026-04-privacy-v1',
     });

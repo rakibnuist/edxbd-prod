@@ -512,13 +512,13 @@ export default async function Home() {
                 </h2>
 
                 <p className="mt-4 max-w-xl text-[17.5px] leading-[1.6] text-white/85">
-                  Don&apos;t lose a full academic year waiting for September. Compare 18 verified Chinese universities offering Foundation → Bachelor, Direct Bachelor, Master&apos;s, and Language routes with up to 100% tuition scholarships.
+                  Don&apos;t lose a full academic year waiting for September. Compare 20 verified Chinese universities offering Foundation → Bachelor, Direct Bachelor, Master&apos;s, and Language routes with up to 100% tuition scholarships.
                 </p>
 
                 <dl className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/10 sm:gap-4 sm:p-5">
                   <div>
                     <dt className="text-xs font-semibold uppercase tracking-wider text-white/70">Universities</dt>
-                    <dd className="mt-1 font-display text-[26px] font-black leading-none text-white sm:text-[32px]">18</dd>
+                    <dd className="mt-1 font-display text-[26px] font-black leading-none text-white sm:text-[32px]">20</dd>
                   </div>
                   <div>
                     <dt className="text-xs font-semibold uppercase tracking-wider text-white/70">Scholarships</dt>
@@ -556,13 +556,13 @@ export default async function Home() {
                   {[
                     {
                       title: 'Foundation → Bachelor',
-                      badge: '12 Unis',
+                      badge: '13 Unis',
                       desc: '1-semester prep + 4-year degree with up to 100% tuition waiver & stipends',
                       href: '/china-march-2027-intake?route=Foundation%20%E2%86%92%20Bachelor#march-2027-assessment',
                     },
                     {
                       title: 'Direct Bachelor',
-                      badge: '4 Unis',
+                      badge: '5 Unis',
                       desc: 'Direct March entry in CS, AI, Engineering, Business, Pharmacy & MBBS',
                       href: '/china-march-2027-intake?route=Direct%20Bachelor#march-2027-assessment',
                     },
@@ -574,7 +574,7 @@ export default async function Home() {
                     },
                     {
                       title: 'Chinese Language',
-                      badge: '3 Unis',
+                      badge: '5 Unis',
                       desc: 'Study at SJTU, HUST & GZCCC (Guangzhou) from CNY 7,000 / semester',
                       href: '/china-march-2027-intake?route=Chinese%20language#march-2027-assessment',
                     },
@@ -601,9 +601,9 @@ export default async function Home() {
                 </div>
 
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-canvas-soft px-4 py-3 text-xs font-semibold text-petrol-800">
-                  <span>Includes SJTU, HIT, HUST, NUAA, CQMU, GZCCC & 12 more</span>
+                  <span>Includes SJTU, HIT, HUST, NUAA, CQMU, GZCCC & 14 more</span>
                   <Link href="/china-march-2027-intake#study-options" className="font-bold underline underline-offset-4">
-                    View all 18 universities →
+                    View all 20 universities →
                   </Link>
                 </div>
               </div>

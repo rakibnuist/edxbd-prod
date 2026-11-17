@@ -685,15 +685,14 @@ export default async function Page() {
                   Get my free study plan
                   <ArrowRight size={18} aria-hidden="true" />
                 </a>
-                <a
+                <March2027ContactLink
+                  kind="whatsapp"
                   href={whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="inline-flex min-h-[54px] items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-6 font-bold text-white transition hover:bg-white/20"
                 >
                   <MessageCircle size={18} className="text-lime" aria-hidden="true" />
                   Chat on WhatsApp
-                </a>
+                </March2027ContactLink>
               </div>
             </div>
 
@@ -773,22 +772,22 @@ export default async function Page() {
                 <span>{hours}</span>
               </p>
               <div className="mt-4 flex flex-wrap gap-2.5">
-                <a
+                <March2027ContactLink
+                  kind="phone"
                   href={`tel:${phone}`}
                   className="inline-flex items-center gap-1.5 rounded-xl bg-white/10 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-lime hover:text-petrol-800"
                 >
                   <Phone size={14} aria-hidden="true" />
                   {formatBangladeshPhone(phone)}
-                </a>
-                <a
+                </March2027ContactLink>
+                <March2027ContactLink
+                  kind="whatsapp"
                   href={whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-xl bg-lime px-3.5 py-2 text-xs font-bold text-petrol-800 transition hover:bg-white"
                 >
                   <MessageCircle size={14} aria-hidden="true" />
                   WhatsApp Desk
-                </a>
+                </March2027ContactLink>
               </div>
             </div>
           </div>

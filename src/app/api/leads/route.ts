@@ -23,7 +23,7 @@ import {
 export async function POST(request: NextRequest) {
   const rateLimit = await checkRateLimit(request, {
     name: 'lead-form',
-    maxRequests: 10,
+    maxRequests: 60,
     windowMs: 60 * 60 * 1000,
     persistent: true,
   });
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Lead submitted successfully' }, { status: 201 });
     }
     const name = getRequiredString(body, 'name', 120);
-    const email = getRequiredString(body, 'email', 254);
+    const rawEmail = getOptionalString(body, 'email', 254);
     const phone = getValidatedPhone(body);
     const country = getRequiredString(body, 'country', 120);
     const program = getOptionalString(body, 'program', 200);
@@ -55,16 +55,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate email format
+    // Validate email format when provided; synthesize deterministic fallback for phone-only campaign leads
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (rawEmail && !emailRegex.test(rawEmail)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
         { status: 400 }
       );
     }
     
-    const normalizedEmail = email.trim().toLowerCase();
+    const phoneDigits = phone.replace(/\D/g, '');
+    const normalizedEmail = rawEmail
+      ? rawEmail.trim().toLowerCase()
+      : `no-email+${phoneDigits}@leads.eduexpressint.com`;
     const duplicate = await prisma.lead.findFirst({
       where: { email: normalizedEmail, phone, createdAt: { gte: new Date(Date.now() - 5 * 60 * 1000) } },
       orderBy: { createdAt: 'desc' },
@@ -75,10 +78,23 @@ export async function POST(request: NextRequest) {
     }
 
     const safeUtm = getSafeUtm(body.utm);
-    // Only derive and persist Meta click/browser parameters when advertising consent is explicitly granted.
-    const adTrackingConsent = body.trackingConsent === true;
+    const bodyOverrides = extractMetaParamOverridesFromBody(body);
+    const hasMetaSignal =
+      /^(meta|facebook|fb|instagram|ig|msg|messenger|an|threads|fb_ads|meta_ads|facebook_ads|instagram_ads|ig_ads)$/i.test(
+        safeUtm?.utm_source || '',
+      ) ||
+      /\b(meta|facebook|instagram|paid|weblead)\b/i.test(safeUtm?.utm_source || '') ||
+      /^(paid|paid_social|paidsocial|cpc|ppc|meta_paid|social_paid)$/i.test(safeUtm?.utm_medium || '') ||
+      /\b(meta|facebook|instagram|fb|ig|weblead|instantform)\b/i.test(safeUtm?.utm_campaign || '') ||
+      Boolean(safeUtm?.fbclid) ||
+      Boolean(bodyOverrides.fbc) ||
+      /[?&]fbclid=[^&#]+/i.test(request.headers.get('referer') || '') ||
+      /[?&]fbclid=[^&#]+/i.test(getOptionalString(body, 'metaEventSourceUrl', 2048) || '') ||
+      /FBAN|FBAV|FB_IAB|FBIOS|Instagram/i.test(request.headers.get('user-agent') || '');
+    // Derive and persist Meta click/browser parameters on explicit cookie consent or consented Meta campaign submissions.
+    const adTrackingConsent = Boolean(body.trackingConsent === true || (body.consent === true && hasMetaSignal));
     const serverMetaParams = adTrackingConsent
-      ? buildServerMetaParams(request, extractMetaParamOverridesFromBody(body))
+      ? buildServerMetaParams(request, bodyOverrides)
       : null;
     const metaFbc = serverMetaParams?.fbc ?? null;
     const metaFbp = serverMetaParams?.fbp ?? null;
@@ -91,16 +107,6 @@ export async function POST(request: NextRequest) {
       landingPage === '/study-in-china-from-bangladesh' ||
       source === 'china_study_landing' ||
       source === 'meta_china_study_page';
-    const hasMetaSignal =
-      /^(meta|facebook|fb|instagram|ig|msg|messenger|an|threads|fb_ads|meta_ads|facebook_ads|instagram_ads|ig_ads)$/i.test(
-        safeUtm?.utm_source || '',
-      ) ||
-      /\b(meta|facebook|instagram)\b/i.test(safeUtm?.utm_source || '') ||
-      Boolean(safeUtm?.fbclid) ||
-      Boolean(metaFbc) ||
-      /[?&]fbclid=[^&#]+/i.test(request.headers.get('referer') || '') ||
-      /[?&]fbclid=[^&#]+/i.test(getOptionalString(body, 'metaEventSourceUrl', 2048) || '') ||
-      /FBAN|FBAV|FB_IAB|FBIOS|Instagram/i.test(request.headers.get('user-agent') || '');
     const resolvedSource =
       isMarchLanding && hasMetaSignal
         ? 'meta_china_march_2027'
@@ -163,29 +169,33 @@ export async function POST(request: NextRequest) {
     // First CRM stage for Meta's CRM integration, after the response is sent.
     if (adTrackingConsent) after(() => sendCrmStage(lead, 'new'));
 
-    // Advertising consent is separate from permission to contact the lead.
-    // Only send hashed lead data to Meta when the visitor explicitly accepted.
-    if (body.trackingConsent === true) {
-      try {
-        await trackStudyAbroadLead({
-          name,
-          email: normalizedEmail,
-          phone,
-          country,
-          program: program || 'Not specified',
-          message: message || '',
-          fbc: metaFbc ?? undefined,
-          fbp: metaFbp ?? undefined,
-          externalId: serverMetaParams?.externalId,
-          eventSourceUrl: serverMetaParams?.eventSourceUrl,
-        }, resolvedSource, request, undefined, metaEventId);
-      } catch (trackingError) {
-        console.error('Meta Conversion API tracking error:', trackingError);
-        // Don't fail the request if tracking fails
-      }
+    // Server-side CAPI lead tracking runs asynchronously after the response when adTrackingConsent is enabled.
+    if (adTrackingConsent) {
+      after(() =>
+        trackStudyAbroadLead(
+          {
+            name,
+            email: normalizedEmail,
+            phone,
+            country,
+            program: program || 'Not specified',
+            message: message || '',
+            fbc: metaFbc ?? undefined,
+            fbp: metaFbp ?? undefined,
+            externalId: serverMetaParams?.externalId,
+            eventSourceUrl: serverMetaParams?.eventSourceUrl,
+          },
+          resolvedSource,
+          request,
+          undefined,
+          metaEventId,
+        ).catch((trackingError) => {
+          console.error('Meta Conversion API tracking error:', trackingError);
+        }),
+      );
     }
 
-    // Return success response and persist Parameter Builder cookies on consented submissions
+    // Return success response and persist Parameter Builder cookies only on explicit browser cookie consent
     const response = NextResponse.json(
       { 
         message: 'Lead submitted successfully',
@@ -193,7 +203,7 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-    return serverMetaParams
+    return body.trackingConsent === true && serverMetaParams
       ? applyMetaParamCookies(response, request, serverMetaParams.cookiesToSet)
       : response;
   } catch (error) {

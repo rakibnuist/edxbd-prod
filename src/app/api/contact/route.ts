@@ -22,7 +22,7 @@ import {
 export async function POST(request: NextRequest) {
   const rateLimit = await checkRateLimit(request, {
     name: 'contact-form',
-    maxRequests: 10,
+    maxRequests: 60,
     windowMs: 60 * 60 * 1000,
     persistent: true,
   });
@@ -109,10 +109,24 @@ export async function POST(request: NextRequest) {
     // submitted through contact-style forms reach the right team.
     const routing = routeLead({ country, program, source });
 
-    // Meta click/browser IDs (set by the Pixel only after cookie consent), kept for CRM matching.
-    const adTrackingConsent = body.trackingConsent === true;
+    const bodyOverrides = extractMetaParamOverridesFromBody(body);
+    const hasMetaSignal =
+      /^(meta|facebook|fb|instagram|ig|msg|messenger|an|threads|fb_ads|meta_ads|facebook_ads|instagram_ads|ig_ads)$/i.test(
+        safeUtm?.utm_source || '',
+      ) ||
+      /\b(meta|facebook|instagram|paid|weblead)\b/i.test(safeUtm?.utm_source || '') ||
+      /^(paid|paid_social|paidsocial|cpc|ppc|meta_paid|social_paid)$/i.test(safeUtm?.utm_medium || '') ||
+      /\b(meta|facebook|instagram|fb|ig|weblead|instantform)\b/i.test(safeUtm?.utm_campaign || '') ||
+      Boolean(safeUtm?.fbclid) ||
+      Boolean(bodyOverrides.fbc) ||
+      /[?&]fbclid=[^&#]+/i.test(request.headers.get('referer') || '') ||
+      /[?&]fbclid=[^&#]+/i.test(getOptionalString(body, 'metaEventSourceUrl', 2048) || '') ||
+      /FBAN|FBAV|FB_IAB|FBIOS|Instagram/i.test(request.headers.get('user-agent') || '');
+
+    // Meta click/browser IDs (set by cookie consent or consented Meta ad lead), kept for CRM matching.
+    const adTrackingConsent = Boolean(body.trackingConsent === true || (body.consent === true && hasMetaSignal));
     const serverMetaParams = adTrackingConsent
-      ? buildServerMetaParams(request, extractMetaParamOverridesFromBody(body))
+      ? buildServerMetaParams(request, bodyOverrides)
       : null;
     const metaFbc = serverMetaParams?.fbc ?? null;
     const metaFbp = serverMetaParams?.fbp ?? null;
@@ -144,8 +158,8 @@ export async function POST(request: NextRequest) {
     // First CRM stage for Meta's CRM integration, after the response is sent.
     if (adTrackingConsent) after(() => sendCrmStage(lead, 'new'));
 
-    // Contact consent does not automatically authorize advertising tracking.
-    if (body.trackingConsent === true) {
+    // Server-side CAPI lead tracking runs when adTrackingConsent is enabled (explicit cookie consent or consented Meta ad lead).
+    if (adTrackingConsent) {
       try {
         trackStudyAbroadLead({
           name: fullName,
@@ -167,7 +181,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Return success response and persist Parameter Builder cookies on consented submissions
+    // Return success response and persist Parameter Builder cookies only on explicit browser cookie consent
     const response = NextResponse.json(
       { 
         message: 'Message sent successfully',
@@ -175,7 +189,7 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-    return serverMetaParams
+    return body.trackingConsent === true && serverMetaParams
       ? applyMetaParamCookies(response, request, serverMetaParams.cookiesToSet)
       : response;
   } catch (error) {

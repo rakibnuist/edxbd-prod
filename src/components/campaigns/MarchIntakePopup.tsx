@@ -8,7 +8,7 @@ const STORAGE_KEY = 'edx_march_2027_popup_dismissed_v3';
 const CAMPAIGN_PATH = '/china-march-2027-intake';
 
 const HIGHLIGHTS = [
-  '18 Partner Universities (Bachelor, Foundation, Master’s & Language)',
+  '20 Partner Universities (Bachelor, Foundation, Master’s & Language)',
   'Up to 100% Tuition Scholarships & monthly stipends',
   'BDT 0 Service Fee Before Visa · ভিসার আগে এক টাকাও না',
 ];
@@ -121,7 +121,7 @@ export default function MarchIntakePopup() {
         </h2>
 
         <p className="mt-2.5 text-[15px] leading-6 text-slate-600">
-          Compare 18 verified universities, scholarship tiers, and your complete cost breakdown in writing.
+          Compare 20 verified universities, scholarship tiers, and your complete cost breakdown in writing.
         </p>
 
         {/* Clean 3-Point Checklist */}

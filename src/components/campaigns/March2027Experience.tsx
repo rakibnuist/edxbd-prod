@@ -22,7 +22,7 @@ import type { MarchCatalogueUniversity, MarchCatalogueProgramme } from '@/lib/ma
 const quickRoutes = [
   { label: 'Foundation → Bachelor', value: 'Foundation → Bachelor', badge: '13 Universities' },
   { label: 'Direct Bachelor', value: 'Direct Bachelor', badge: '5 Universities' },
-  { label: 'Chinese Language', value: 'Chinese language', badge: '4 Institutions' },
+  { label: 'Chinese Language', value: 'Chinese language', badge: '5 Institutions' },
   { label: 'Master’s Degree', value: 'Master’s', badge: 'Postgraduate' },
 ];
 
@@ -403,7 +403,7 @@ export default function March2027Experience({
         </div>
       </div>
 
-      {/* 19-University Catalogue */}
+      {/* 20-University Catalogue */}
       <MarchUniversityCatalogue universities={universities} onChoose={choose} />
     </>
   );

@@ -1,4 +1,9 @@
 import { createHash } from 'node:crypto';
+import dns from 'node:dns';
+import net from 'node:net';
+
+dns.setDefaultResultOrder('ipv4first');
+net.setDefaultAutoSelectFamily?.(false);
 
 // Kept aligned with Meta's official Node Business SDK (26.0.2).
 export const META_API_VERSION = 'v26.0';

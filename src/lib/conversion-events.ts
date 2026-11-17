@@ -1,6 +1,6 @@
 'use client';
 
-import { isAnalyticsConsentAccepted } from './tracking-consent';
+import { getCapturedLandingUrlWithFbclid, isAnalyticsConsentAccepted } from './tracking-consent';
 
 /**
  * EduExpress conversion event layer (Evidence-First Plan, Section 16).
@@ -70,15 +70,40 @@ export function captureUtmParameters(): Record<string, string> {
       const v = params.get(key)?.trim();
       if (v) found[key] = v;
     }
-    const fbclid = params.get('fbclid')?.trim();
+    let fbclid = params.get('fbclid')?.trim();
+    if (!fbclid) {
+      const landingUrl = getCapturedLandingUrlWithFbclid();
+      if (landingUrl) {
+        try {
+          const landingParams = new URL(landingUrl).searchParams;
+          fbclid = landingParams.get('fbclid')?.trim() || undefined;
+          for (const key of UTM_KEYS) {
+            if (!found[key]) {
+              const lv = landingParams.get(key)?.trim();
+              if (lv) found[key] = lv;
+            }
+          }
+        } catch {
+          /* ignore */
+        }
+      }
+    }
     if (fbclid) {
       found.fbclid = fbclid;
       if (!found.utm_source) found.utm_source = 'facebook';
       if (!found.utm_medium) found.utm_medium = 'paid_social';
     }
     if (Object.keys(found).length > 0) {
-      sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(found));
-      return found;
+      let existing: Record<string, string> = {};
+      try {
+        const storedRaw = sessionStorage.getItem(UTM_STORAGE_KEY);
+        if (storedRaw) existing = JSON.parse(storedRaw) as Record<string, string>;
+      } catch {
+        /* ignore */
+      }
+      const merged = { ...existing, ...found };
+      sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(merged));
+      return merged;
     }
     const stored = sessionStorage.getItem(UTM_STORAGE_KEY);
     if (stored) {

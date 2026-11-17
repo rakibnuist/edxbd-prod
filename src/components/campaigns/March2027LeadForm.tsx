@@ -62,7 +62,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
     const val = currentFields[key];
     const hasValue = typeof val === 'boolean' ? val : String(val ?? '').trim().length > 0;
     if (!hasValue && !errors[key]) return;
-    setErrors(old => ({ ...old, [key]: validateMarchEnquiry(currentFields)[key] }));
+    setErrors(old => ({ ...old, [key]: validateMarchEnquiry(currentFields, { allowEmptyEmail: true })[key] }));
   };
 
   const firstErrorFocus = (next: MarchEnquiryErrors) =>
@@ -71,7 +71,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
   const continueToStep2 = () => {
     if (!ready || busy.current) return;
     start();
-    const allErrors = validateMarchEnquiry(currentFields);
+    const allErrors = validateMarchEnquiry(currentFields, { allowEmptyEmail: true });
     const next = Object.fromEntries(
       Object.entries(allErrors).filter(([key]) => ['academicLevel', 'result', 'route'].includes(key))
     ) as MarchEnquiryErrors;
@@ -96,7 +96,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
       continueToStep2();
       return;
     }
-    const allErrors = validateMarchEnquiry(currentFields);
+    const allErrors = validateMarchEnquiry(currentFields, { allowEmptyEmail: true });
     setErrors(allErrors);
     setRequestError('');
     if (Object.keys(allErrors).length) {
@@ -462,7 +462,7 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
 
                 <div>
                   <label htmlFor="march-email" className="block text-sm font-bold text-[#0b2b45]">
-                    Email address <span aria-hidden="true" className="text-red-600">*</span>
+                    Email address <span className="font-normal text-slate-400">(optional)</span>
                   </label>
                   <input
                     id="march-email"
@@ -470,7 +470,6 @@ export default function March2027LeadForm({ whatsappNumber, route, onRoute, sele
                     type="email"
                     inputMode="email"
                     autoComplete="email"
-                    required
                     maxLength={254}
                     value={fields.email}
                     onChange={e => update('email', e.target.value)}

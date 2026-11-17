@@ -192,7 +192,7 @@ export default function ChinaPillarLeadForm({
     const val = currentFields[key];
     const hasValue = typeof val === 'boolean' ? val : String(val ?? '').trim().length > 0;
     if (!hasValue && !errors[key]) return;
-    setErrors(old => ({ ...old, [key]: validateChinaEnquiry(currentFields)[key] }));
+    setErrors(old => ({ ...old, [key]: validateChinaEnquiry(currentFields, { allowEmptyEmail: true })[key] }));
   };
 
   const firstErrorFocus = (next: ChinaEnquiryErrors) => {
@@ -204,7 +204,7 @@ export default function ChinaPillarLeadForm({
   const continueToStep2 = () => {
     if (busy.current) return;
     start();
-    const allErrors = validateChinaEnquiry(currentFields);
+    const allErrors = validateChinaEnquiry(currentFields, { allowEmptyEmail: true });
     const next = Object.fromEntries(
       Object.entries(allErrors).filter(([key]) => ['academicLevel', 'result', 'route'].includes(key)),
     ) as ChinaEnquiryErrors;
@@ -236,7 +236,7 @@ export default function ChinaPillarLeadForm({
       return;
     }
 
-    const allErrors = validateChinaEnquiry(currentFields);
+    const allErrors = validateChinaEnquiry(currentFields, { allowEmptyEmail: true });
     setErrors(allErrors);
     setRequestError('');
     if (Object.keys(allErrors).length) {
@@ -601,7 +601,7 @@ export default function ChinaPillarLeadForm({
 
                   <div>
                     <label htmlFor={`${uid}-email`} className="block text-sm font-bold text-[#0b2b45]">
-                      Email address <span aria-hidden="true" className="text-red-600">*</span>
+                      Email address <span className="font-normal text-slate-400">(optional)</span>
                     </label>
                     <input
                       id={`${uid}-email`}
@@ -609,7 +609,6 @@ export default function ChinaPillarLeadForm({
                       type="email"
                       inputMode="email"
                       autoComplete="email"
-                      required
                       maxLength={254}
                       value={fields.email}
                       onChange={event => update('email', event.target.value)}

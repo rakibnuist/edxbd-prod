@@ -37,7 +37,6 @@ interface ChatMessage {
   isCompleteCard?: boolean;
   leadName?: string;
   leadDestination?: string;
-  timestamp?: number;
 }
 
 type ConversationStage = 'country' | 'level' | 'name' | 'phone' | 'done' | 'freeform';
@@ -62,6 +61,18 @@ const LEVEL_OPTIONS = [
 const TEASER_DISMISSED_KEY = 'edx_disha_teaser_dismissed_v1';
 const CHAT_PHONE = '+8801983333566';
 const PRIVACY_VERSION = '2026-07-19';
+
+function getInitialMessage(lang: FitResponseLanguage): ChatMessage {
+  return {
+    id: 'disha-intro',
+    role: 'assistant',
+    content:
+      lang === 'bn'
+        ? '👋 **হ্যালো! আমি দিশা**, এডুএক্সপ্রেসের এআই স্টাডি কাউন্সেলর।\n\nউপযুক্ত বিশ্ববিদ্যালয়, স্কলারশিপ ও খরচের সঠিক হিসাব পেতে আপনি কোন দেশে উচ্চশিক্ষার জন্য যেতে চান?'
+        : "👋 **Hi! I'm Disha**, your study advisor at EduExpress.\n\nI can help you check university eligibility, scholarships, and real total costs. **Which country are you interested in?**",
+    options: COUNTRY_OPTIONS,
+  };
+}
 
 function renderFormattedMessage(text: string) {
   const lines = text.split('\n');
@@ -118,7 +129,7 @@ export default function StickyDishaChat({
   const [streamingStatus, setStreamingStatus] = useState<string | null>(null);
   const [streamingText, setStreamingText] = useState('');
   const [streamingCitations, setStreamingCitations] = useState<AdvisorCitation[]>([]);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [getInitialMessage('en')]);
 
   // Conversational Lead State
   const [stage, setStage] = useState<ConversationStage>('country');
@@ -139,29 +150,13 @@ export default function StickyDishaChat({
     pathname.startsWith('/dashboard') ||
     pathname.startsWith('/login');
 
-  // Build the initial conversation starter
-  const getInitialMessage = useCallback((lang: FitResponseLanguage): ChatMessage => {
-    return {
-      id: 'disha-intro',
-      role: 'assistant',
-      content:
-        lang === 'bn'
-          ? '👋 **হ্যালো! আমি দিশা**, এডুএক্সপ্রেসের এআই স্টাডি কাউন্সেলর।\n\nউপযুক্ত বিশ্ববিদ্যালয়, স্কলারশিপ ও খরচের সঠিক হিসাব পেতে আপনি কোন দেশে উচ্চশিক্ষার জন্য যেতে চান?'
-          : "👋 **Hi! I'm Disha**, your study advisor at EduExpress.\n\nI can help you check university eligibility, scholarships, and real total costs. **Which country are you interested in?**",
-      options: COUNTRY_OPTIONS,
-      timestamp: Date.now(),
-    };
-  }, []);
+  const isCampaignLanding =
+    pathname === '/china-march-2027-intake' ||
+    pathname === '/study-in-china-from-bangladesh';
 
-  // Initialize or reset when language switches
+  // Teaser bubble timer (skip on campaign landing pages so the floating bubble never overlaps form CTAs)
   useEffect(() => {
-    setMessages([getInitialMessage(language)]);
-    setStage('country');
-  }, [language, getInitialMessage]);
-
-  // Teaser bubble timer
-  useEffect(() => {
-    if (isExcluded) return;
+    if (isExcluded || isCampaignLanding) return;
 
     const timer = setTimeout(() => {
       try {
@@ -279,7 +274,6 @@ export default function StickyDishaChat({
       id: `usr-${++messageIdCounter.current}`,
       role: 'user',
       content: label,
-      timestamp: Date.now(),
     };
 
     if (stage === 'country') {
@@ -296,7 +290,6 @@ export default function StickyDishaChat({
         role: 'assistant',
         content: replyContent,
         options: LEVEL_OPTIONS,
-        timestamp: Date.now(),
       };
 
       setMessages((prev) => [...prev, userMsg, botReply]);
@@ -313,7 +306,6 @@ export default function StickyDishaChat({
         id: `asst-${++messageIdCounter.current}`,
         role: 'assistant',
         content: replyContent,
-        timestamp: Date.now(),
       };
 
       setMessages((prev) => [...prev, userMsg, botReply]);
@@ -332,7 +324,6 @@ export default function StickyDishaChat({
       id: `usr-${++messageIdCounter.current}`,
       role: 'user',
       content: trimmed,
-      timestamp: Date.now(),
     };
 
     // If currently asking for Name in the conversational flow:
@@ -348,7 +339,6 @@ export default function StickyDishaChat({
             language === 'bn'
               ? `ধন্যবাদ **${trimmed}**! 👋\n\n**আপনার হোয়াটসঅ্যাপ/ফোন নম্বরটি লিখুন:**\nআমাদের ধানমন্ডি অফিস থেকে সিনিয়র কাউন্সেলর আপনার ফাইল দেখে উপযুক্ত স্কলারশিপ তালিকা ও লিখিত খরচের শিডিউল পাঠাবেন।`
               : `Nice to meet you, **${trimmed}**! 👋\n\n**What's your WhatsApp number?**\nOur senior counselor from Dhanmondi will review your background and send a tailored scholarship shortlist & written cost schedule.`,
-          timestamp: Date.now(),
         };
 
         setMessages((prev) => [...prev, userMsg, botReply]);
@@ -377,7 +367,6 @@ export default function StickyDishaChat({
           isCompleteCard: true,
           leadName: studentName || 'Student',
           leadDestination: studentCountry,
-          timestamp: Date.now(),
         };
 
         setMessages((prev) => [...prev, userMsg, botReply]);
@@ -469,7 +458,6 @@ export default function StickyDishaChat({
         role: 'assistant',
         content: finalText,
         citations: accumulatedCitations,
-        timestamp: Date.now(),
       };
 
       setMessages((prev) => [...prev, finalAssistantMsg]);
@@ -485,7 +473,6 @@ export default function StickyDishaChat({
           language === 'bn'
             ? 'সার্ভিস সংযোগে সাময়িক সমস্যা হয়েছে। সরাসরি আমাদের কাউন্সেলরের সাথে হোয়াটসঅ্যাপে কথা বলতে পারেন।'
             : 'A momentary connection error occurred. Feel free to talk directly with our senior counselor on WhatsApp.',
-        timestamp: Date.now(),
       };
       setMessages((prev) => [...prev, errorMsg]);
     } finally {
@@ -629,7 +616,12 @@ export default function StickyDishaChat({
             <div className="flex items-center gap-1.5">
               {/* Language Switcher */}
               <button
-                onClick={() => setLanguage((prev) => (prev === 'en' ? 'bn' : 'en'))}
+                onClick={() => {
+                  const nextLang = language === 'en' ? 'bn' : 'en';
+                  setLanguage(nextLang);
+                  setStage('country');
+                  setMessages([getInitialMessage(nextLang)]);
+                }}
                 className="rounded-lg border border-white/20 bg-white/10 px-2 py-0.5 text-[10.5px] font-bold tracking-wider text-white transition hover:bg-white/20"
                 title="Switch Language"
               >

@@ -74,32 +74,23 @@ export default function LeadsPage() {
         setError('No valid lead rows found in the selected CSV file.');
         return;
       }
-      const existingPhones = new Set(
-        leads.map((l) => String(l.phone || '').replace(/\D/g, '').slice(-10)).filter(Boolean),
-      );
-      let importedCount = 0;
-      let skippedCount = 0;
-      const createdLeads: LeadRecord[] = [];
-      for (const row of rows) {
-        const key10 = row.phone.replace(/\D/g, '').slice(-10);
-        if (key10 && existingPhones.has(key10)) {
-          skippedCount++;
-          continue;
-        }
-        const response = await authenticatedFetch('/api/admin/leads', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(row),
-        });
-        if (response.ok) {
-          const created: LeadRecord = await response.json();
-          createdLeads.push(created);
-          importedCount++;
-          if (key10) existingPhones.add(key10);
-        }
+
+      const response = await authenticatedFetch('/api/admin/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leads: rows }),
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(result?.error || result?.message || 'CSV import failed.');
       }
+
+      const createdLeads: LeadRecord[] = Array.isArray(result?.created) ? result.created : [];
+      const importedCount = typeof result?.importedCount === 'number' ? result.importedCount : createdLeads.length;
+      const skippedCount = typeof result?.skippedCount === 'number' ? result.skippedCount : 0;
+
       if (createdLeads.length) {
-        setLeads((prev) => [...createdLeads.reverse(), ...prev]);
+        setLeads((prev) => [...createdLeads.slice().reverse(), ...prev]);
       }
       setNotice(
         `Imported ${importedCount} Meta ${importedCount === 1 ? 'lead' : 'leads'}${skippedCount ? ` (${skippedCount} existing skipped)` : ''}.`,

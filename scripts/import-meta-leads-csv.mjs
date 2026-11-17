@@ -32,10 +32,13 @@ for (const row of rows) {
     skipped += 1;
     continue;
   }
+  const parsedConsent = new Date(row.consentTimestamp);
+  const validConsent = !Number.isNaN(parsedConsent.getTime()) ? parsedConsent : new Date();
   await prisma.lead.create({
     data: {
       ...row,
-      consentTimestamp: new Date(row.consentTimestamp),
+      consentTimestamp: validConsent,
+      ...(validConsent.getTime() <= Date.now() + 60_000 ? { createdAt: validConsent } : {}),
     },
   });
   imported += 1;

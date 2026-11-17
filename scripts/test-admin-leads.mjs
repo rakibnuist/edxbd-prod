@@ -1,6 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { register } from 'node:module';
 import { LEAD_STATUSES, leadCounts, filterLeads, validateLeadUpdate, leadContactLinks, parseMetaLeadsCsv } from '../src/lib/lead-workflow.ts';
+
+register(new URL('./lib/typescript-source-resolver.mjs', import.meta.url));
+const { validateAdminLeadCreate } = await import('../src/lib/payload-validation.ts');
 const rows = [
   { id: 'a', name: 'Sample inquiry A', email: 'a@example.test', phone: '01712345678', country: 'China', program: 'Computer Science', status: 'new', source: 'website', createdAt: '2026-01-01', updatedAt: '2026-01-06' },
   { id: 'b', name: 'Sample inquiry B', email: 'b@example.test', phone: '+447123456789', country: 'UK', status: 'no_response', source: 'assessment', createdAt: '2026-01-02', updatedAt: '2026-01-05' },
@@ -49,6 +53,23 @@ test('parseMetaLeadsCsv parses Meta Leads Center CSV, normalizes +88001 phones, 
   assert.equal(parsed[0].name, 'Humayun Kabir');
   assert.equal(parsed[0].phone, '+8801639659911');
   assert.equal(parsed[0].source, 'meta_china_march_2027');
+  assert.equal(parsed[0].assignedTeam, 'china');
   assert.equal(parsed[1].name, 'Jibon Chandra Roy');
   assert.equal(parsed[1].phone, '+8801846107433');
+});
+test('10-digit BD numbers and admin import timestamps normalize cleanly', () => {
+  assert.equal(leadContactLinks({ phone: '1712345678', email: '', name: '' }).whatsapp, 'https://wa.me/8801712345678');
+  assert.equal(leadContactLinks({ phone: '1712345678', email: '', name: '' }).call, 'tel:+8801712345678');
+
+  const historical = validateAdminLeadCreate({
+    name: 'WebLead Student',
+    email: 'no-email+8801712345678@leads.eduexpressint.com',
+    phone: '+88001712345678',
+    country: 'China',
+    assignedTeam: 'china',
+    consentTimestamp: '2026-11-12T10:00:00.000Z',
+  });
+  assert.equal(historical.error, undefined);
+  assert.equal(historical.data?.phone, '+8801712345678');
+  assert.equal(historical.data?.createdAt?.toISOString(), '2026-11-12T10:00:00.000Z');
 });

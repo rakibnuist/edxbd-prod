@@ -262,6 +262,7 @@ test('all lead/contact forms and CAPI routes wire Parameter Builder without M-5 
     'src/components/assessment/EducationFitAssessment.tsx',
     'src/components/universities/UniversityEnquiryForm.tsx',
     'src/components/campaigns/March2027LeadForm.tsx',
+    'src/components/china/ChinaPillarLeadForm.tsx',
     'src/components/EnhancedContactForm.tsx',
     'src/components/china/ChinaCampaignLeadForm.tsx',
     'src/components/PartnershipForm.tsx',

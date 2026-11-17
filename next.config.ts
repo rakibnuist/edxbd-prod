@@ -35,8 +35,8 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['framer-motion'],
 
-    // Security upgrade marker: Next.js 16.4.0 → 16.4.3 security-patch upgrade.
-    agentUpgrade: 'security',
+    // Disable interactive upgrade halt so non-interactive CI/Docker builds succeed.
+    agentUpgrade: false,
   },
 
   // Basic security headers

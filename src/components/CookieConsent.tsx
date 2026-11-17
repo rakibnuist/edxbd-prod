@@ -46,7 +46,7 @@ export default function CookieConsent() {
     }
     const consent = localStorage.getItem(CONSENT_STORAGE_KEY);
     if (!consent) {
-      const timer = setTimeout(() => setIsVisible(true), 1500);
+      const timer = setTimeout(() => setIsVisible(true), 0);
       return () => clearTimeout(timer);
     }
   }, []);

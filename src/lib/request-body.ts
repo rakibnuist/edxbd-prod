@@ -153,6 +153,7 @@ export function getValidatedPhone(body: Record<string, unknown>, field = 'phone'
   // counsellor's WhatsApp and tel: links work.
   if (/^88001\d{9}$/.test(digits)) digits = `880${digits.slice(4)}`;
   else if (!hasPlus && /^01\d{9}$/.test(digits)) return `+880${digits.slice(1)}`;
+  else if (!hasPlus && /^1[3-9]\d{8}$/.test(digits)) return `+880${digits}`;
   if (digits.length < 7 || digits.length > 15) {
     throw new JsonBodyError('Enter a valid phone number including country code.', 400);
   }

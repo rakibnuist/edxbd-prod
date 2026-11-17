@@ -22,11 +22,19 @@ export function normalizeMarchPhoneInput(raw: string): string {
     }
     out += ch;
   }
-  return out
+  const normalized = out
     .replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, '')
     .replace(/\u00A0/g, ' ')
     .trim()
+    .replace(/^(?:p|tel):/i, '')
+    .trim()
     .replace(/^(\+?880)[\s-]*0(1[3-9]\d{8})$/, '$1$2');
+
+  const compact = normalized.replace(/[\s().-]+/g, '');
+  if (/^1[3-9]\d{8}$/.test(compact)) {
+    return `0${compact}`;
+  }
+  return normalized;
 }
 
 export function isMetaMarchCampaignAttribution(context: {
@@ -35,10 +43,18 @@ export function isMetaMarchCampaignAttribution(context: {
   metaEventSourceUrl?: string;
 }): boolean {
   const utmSource = (context.utm?.utm_source || '').trim();
+  const utmMedium = (context.utm?.utm_medium || '').trim();
+  const utmCampaign = (context.utm?.utm_campaign || '').trim();
   if (/^(meta|facebook|fb|instagram|ig|msg|messenger|an|threads|fb_ads|meta_ads|facebook_ads|instagram_ads|ig_ads)$/i.test(utmSource)) {
     return true;
   }
-  if (/\b(meta|facebook|instagram)\b/i.test(utmSource)) {
+  if (/\b(meta|facebook|instagram|paid|weblead)\b/i.test(utmSource)) {
+    return true;
+  }
+  if (/^(paid|paid_social|paidsocial|cpc|ppc|meta_paid|social_paid)$/i.test(utmMedium)) {
+    return true;
+  }
+  if (/\b(meta|facebook|instagram|fb|ig|weblead|instantform)\b/i.test(utmCampaign)) {
     return true;
   }
   if ((context.utm?.fbclid || '').trim()) {
@@ -53,7 +69,10 @@ export function isMetaMarchCampaignAttribution(context: {
   return false;
 }
 
-export function validateMarchEnquiry(fields: MarchEnquiryFields): MarchEnquiryErrors {
+export function validateMarchEnquiry(
+  fields: MarchEnquiryFields,
+  options?: { allowEmptyEmail?: boolean },
+): MarchEnquiryErrors {
   const errors: MarchEnquiryErrors = {};
   if (!marchAcademicLevels.includes(fields.academicLevel as typeof marchAcademicLevels[number])) errors.academicLevel = 'Select your current academic qualification.';
   if (fields.result.trim().length < 1) errors.result = 'Enter your latest result, for example HSC GPA 4.50.';
@@ -62,7 +81,10 @@ export function validateMarchEnquiry(fields: MarchEnquiryFields): MarchEnquiryEr
   const cleanPhone = normalizeMarchPhoneInput(fields.phone);
   const digits = cleanPhone.replace(/\D/g, '');
   if (!/^\+?[\d\s().-]+$/.test(cleanPhone) || digits.length < 10 || digits.length > 15) errors.phone = 'Enter a valid phone number, including your country code.';
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email.trim())) errors.email = 'Enter a valid email address, for example name@example.com.';
+  const trimmedEmail = fields.email.trim();
+  if ((!options?.allowEmptyEmail || trimmedEmail.length > 0) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+    errors.email = 'Enter a valid email address, for example name@example.com.';
+  }
   if (!fields.consent) errors.consent = 'Please agree so we can contact you about this enquiry.';
   return errors;
 }
@@ -82,8 +104,11 @@ export function marchEnquiryPayload(
   },
 ) {
   const selected = [context.university, context.program].filter(Boolean).join(' — ');
+  const cleanPhone = normalizeMarchPhoneInput(fields.phone);
+  const cleanEmail = fields.email.trim().toLowerCase();
+  const email = cleanEmail || `no-email+${cleanPhone.replace(/\D/g, '')}@leads.eduexpressint.com`;
   return {
-    name: fields.name.trim(), phone: normalizeMarchPhoneInput(fields.phone), email: fields.email.trim().toLowerCase(), country: 'China', program: selected || fields.route,
+    name: fields.name.trim(), phone: cleanPhone, email, country: 'China', program: selected || fields.route,
     message: [`China March 2027 study plan.`, `Study route: ${fields.route}.`, `Qualification: ${fields.academicLevel}.`, `Result: ${fields.result.trim()}.`, selected && `Selected option: ${selected}.`, 'Requested: university shortlist, scholarship eligibility, written costs and application document checklist.'].filter(Boolean).join('\n'),
     notes: ['Campaign: China March 2027', selected && `Selected option: ${selected}`].filter(Boolean).join(' | '),
     source: isMetaMarchCampaignAttribution(context) ? 'meta_china_march_2027' : 'china_march_2027_landing',

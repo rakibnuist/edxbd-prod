@@ -50,7 +50,10 @@ export const emptyChinaEnquiry: ChinaEnquiryFields = {
   consent: false,
 };
 
-export function validateChinaEnquiry(fields: ChinaEnquiryFields): ChinaEnquiryErrors {
+export function validateChinaEnquiry(
+  fields: ChinaEnquiryFields,
+  options?: { allowEmptyEmail?: boolean },
+): ChinaEnquiryErrors {
   const errors: ChinaEnquiryErrors = {};
   if (!chinaAcademicLevels.includes(fields.academicLevel as (typeof chinaAcademicLevels)[number])) {
     errors.academicLevel = 'Select your current academic qualification.';
@@ -69,7 +72,8 @@ export function validateChinaEnquiry(fields: ChinaEnquiryFields): ChinaEnquiryEr
   if (!/^\+?[\d\s().-]+$/.test(cleanPhone) || digits.length < 10 || digits.length > 15) {
     errors.phone = 'Enter a valid WhatsApp or phone number (e.g. 01XXXXXXXXX).';
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email.trim())) {
+  const trimmedEmail = fields.email.trim();
+  if ((!options?.allowEmptyEmail || trimmedEmail.length > 0) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
     errors.email = 'Enter a valid email address, e.g. name@example.com.';
   }
   if (!fields.consent) {
@@ -95,10 +99,13 @@ export function chinaPillarEnquiryPayload(
 ) {
   const selected = [context.university, context.program].filter(Boolean).join(' — ');
   const isMeta = isMetaMarchCampaignAttribution(context);
+  const cleanPhone = normalizeMarchPhoneInput(fields.phone);
+  const cleanEmail = fields.email.trim().toLowerCase();
+  const email = cleanEmail || `no-email+${cleanPhone.replace(/\D/g, '')}@leads.eduexpressint.com`;
   return {
     name: fields.name.trim(),
-    phone: normalizeMarchPhoneInput(fields.phone),
-    email: fields.email.trim().toLowerCase(),
+    phone: cleanPhone,
+    email,
     country: 'China',
     program: selected || fields.route,
     message: [

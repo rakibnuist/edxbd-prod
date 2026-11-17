@@ -92,7 +92,7 @@ const META_STANDARD_EVENTS: Record<string, string> = {
 
 // Track events
 export const trackEvent = (eventName: string, parameters?: Record<string, unknown>, _userData?: UserData) => {
-  const eventId = (parameters?.event_id as string) || generateEventId();
+  const eventId = (parameters?.event_id as string) || (parameters?.eventId as string) || generateEventId();
   if (!isAnalyticsConsentAccepted()) return eventId;
 
   // GTM / GA4 tracking (supports runtime tag IDs configured via /admin/settings

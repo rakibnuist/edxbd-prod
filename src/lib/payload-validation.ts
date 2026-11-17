@@ -1,4 +1,5 @@
 import { extractSanitizedClientIp } from './client-ip';
+import { normalizeMetaLeadPhone } from './lead-workflow';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -161,6 +162,7 @@ export function validateAdminLeadCreate(
     medicalProgram: boolean;
     consentTimestamp: Date;
     consentPolicyVersion: string;
+    createdAt?: Date;
   };
   error?: string;
 } {
@@ -177,6 +179,7 @@ export function validateAdminLeadCreate(
 
   const phone = readOptionalText(body, 'phone', 40);
   if (phone.error || !phone.value) return { error: phone.error || 'Phone is required.' };
+  const normalizedPhone = normalizeMetaLeadPhone(phone.value) || phone.value;
 
   const country = readOptionalText(body, 'country', 120);
   if (country.error || !country.value) return { error: country.error || 'Country is required.' };
@@ -209,19 +212,33 @@ export function validateAdminLeadCreate(
     return { error: 'medicalProgram must be a boolean.' };
   }
 
+  let hasExplicitConsentTimestamp = false;
   let consentTimestamp = new Date();
   if ('consentTimestamp' in body && body.consentTimestamp !== undefined && body.consentTimestamp !== '') {
     if (typeof body.consentTimestamp !== 'string') return { error: 'consentTimestamp must be a date string.' };
     const parsed = new Date(body.consentTimestamp);
     if (Number.isNaN(parsed.getTime())) return { error: 'consentTimestamp must be a valid date.' };
     consentTimestamp = parsed;
+    hasExplicitConsentTimestamp = true;
+  }
+
+  let explicitCreatedAt: Date | undefined;
+  if ('createdAt' in body && body.createdAt !== undefined && body.createdAt !== '') {
+    if (typeof body.createdAt !== 'string') return { error: 'createdAt must be a date string.' };
+    const parsedCreated = new Date(body.createdAt);
+    if (Number.isNaN(parsedCreated.getTime())) return { error: 'createdAt must be a valid date.' };
+    if (parsedCreated.getTime() <= Date.now() + 60_000) {
+      explicitCreatedAt = parsedCreated;
+    }
+  } else if (hasExplicitConsentTimestamp && consentTimestamp.getTime() <= Date.now() + 60_000) {
+    explicitCreatedAt = consentTimestamp;
   }
 
   return {
     data: {
       name: name.value,
       email,
-      phone: phone.value,
+      phone: normalizedPhone,
       country: country.value,
       program: program.value,
       message: message.value,
@@ -237,6 +254,7 @@ export function validateAdminLeadCreate(
       medicalProgram: Boolean(body.medicalProgram),
       consentTimestamp,
       consentPolicyVersion: consentPolicyVersion.value || 'admin-entry',
+      ...(explicitCreatedAt ? { createdAt: explicitCreatedAt } : {}),
     },
   };
 }

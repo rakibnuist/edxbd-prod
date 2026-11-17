@@ -43,14 +43,22 @@ export type CrmLead = {
 };
 
 const sha256 = (value: string) => createHash('sha256').update(value).digest('hex');
-const normalEmail = (value: string) => value.trim().toLowerCase();
+const normalEmail = (value: string) => {
+  const clean = value.trim().toLowerCase();
+  if (!clean || /^no-email\+[^@]+@leads\.eduexpressint\.com$/i.test(clean) || /@leads?\.eduexpressint\.com$/i.test(clean)) {
+    return '';
+  }
+  return clean;
+};
 const normalName = (value: string) => value.trim().toLowerCase().replace(/[^\p{L}]/gu, '');
 
 /** Digits with country code; Bangladeshi local numbers (01XXXXXXXXX) get 880. */
 export function normalPhone(value: string) {
   let digits = value.replace(/\D/g, '');
   if (digits.startsWith('00')) digits = digits.slice(2);
-  if (digits.length === 11 && digits.startsWith('01')) digits = `88${digits}`;
+  if (/^88001[3-9]\d{8}$/.test(digits)) digits = `880${digits.slice(4)}`;
+  else if (digits.length === 11 && digits.startsWith('01')) digits = `88${digits}`;
+  else if (digits.length === 10 && /^1[3-9]\d{8}$/.test(digits)) digits = `880${digits}`;
   return digits;
 }
 
@@ -59,6 +67,7 @@ export function buildCrmEvent(lead: CrmLead, status: string, eventTime = Date.no
   const stage = crmStageName(status);
   if (!stage) return null;
   const [first, ...rest] = lead.name.trim().split(/\s+/);
+  const email = lead.email ? normalEmail(lead.email) : '';
   const phone = normalPhone(lead.phone || '');
   const firstName = first ? normalName(first) : '';
   const lastName = rest.length ? normalName(rest.join('')) : '';
@@ -68,7 +77,7 @@ export function buildCrmEvent(lead: CrmLead, status: string, eventTime = Date.no
     action_source: 'system_generated',
     custom_data: { event_source: 'crm', lead_event_source: CRM_LEAD_EVENT_SOURCE },
     user_data: {
-      ...(lead.email ? { em: [sha256(normalEmail(lead.email))] } : {}),
+      ...(email ? { em: [sha256(email)] } : {}),
       ...(phone ? { ph: [sha256(phone)] } : {}),
       ...(firstName ? { fn: [sha256(firstName)] } : {}),
       ...(lastName ? { ln: [sha256(lastName)] } : {}),

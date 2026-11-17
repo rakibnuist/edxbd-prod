@@ -31,9 +31,17 @@ export const hashData = (data: string): string => {
 // Customer Information Normalization Helpers per Meta Specifications
 // https://developers.facebook.com/documentation/ads-commerce/conversions-api/parameters/customer-information-parameters
 
+export const isSyntheticLeadEmail = (email: string | undefined): boolean => {
+  if (!email) return false;
+  const clean = email.trim().toLowerCase();
+  return /^no-email\+[^@]+@leads\.eduexpressint\.com$/i.test(clean) || /@leads?\.eduexpressint\.com$/i.test(clean);
+};
+
 export const normalizeEmail = (email: string | undefined): string | undefined => {
   if (!email) return undefined;
-  return email.trim().toLowerCase();
+  const clean = email.trim().toLowerCase();
+  if (!clean || isSyntheticLeadEmail(clean)) return undefined;
+  return clean;
 };
 
 export const normalizePhone = (phone: string | undefined): string | undefined => {
@@ -41,8 +49,11 @@ export const normalizePhone = (phone: string | undefined): string | undefined =>
   // Digits only: remove all +, -, spaces, parentheses, dots
   let digits = phone.replace(/\D/g, '');
   if (!digits) return undefined;
-  // If Bangladesh local number starting with 01..., prepend 880
-  if (digits.startsWith('01') && digits.length === 11) {
+  if (digits.startsWith('00')) digits = digits.slice(2);
+  if (/^88001[3-9]\d{8}$/.test(digits)) {
+    digits = `880${digits.slice(4)}`;
+  } else if (digits.startsWith('01') && digits.length === 11) {
+    // If Bangladesh local number starting with 01..., prepend 880
     digits = `880${digits.slice(1)}`;
   } else if (!digits.startsWith('880') && digits.length === 10 && digits.startsWith('1')) {
     digits = `880${digits}`;
