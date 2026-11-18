@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import March2027Experience from '@/components/campaigns/March2027Experience';
 import March2027ContactLink from '@/components/campaigns/March2027ContactLink';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import StoryMarquee from '@/components/stories/StoryMarquee';
 import { JsonLd, TrustBar, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
@@ -662,6 +663,13 @@ export default async function Page() {
               </details>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* CSCA Master Pro Preparation & Exemption Notice */}
+      <section className="border-b border-canvas-soft bg-white px-5 py-10 sm:px-8">
+        <div className="mx-auto max-w-[1180px]">
+          <CscaMasterProOfferCard compact />
         </div>
       </section>
 

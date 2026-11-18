@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, Database, SearchCheck, ShieldCheck } from 'lucide-react';
 import { Suspense } from 'react';
 import UniversitiesClient from '@/app/universities/UniversitiesClient';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import { compactDirectory } from '@/lib/university-directory-compact';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getUniversityRecords } from '@/lib/university-records';
@@ -150,7 +151,12 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
             <ul className="mt-3 flex flex-wrap gap-2">
               {cities.map(item => <li key={item.slug}><Link href={`/china-universities/${item.slug}`} className="ed-btn ed-btn-soft min-h-11 text-[15px]">{item.city} <span className="text-ink-soft">({item.universities.length})</span></Link></li>)}
             </ul>
-            <p className="mt-4 text-[15px] text-ink-soft">Or search by budget: <Link href="/programs" className={kit.link}>program and tuition finder</Link> · <Link href="/compare-costs" className={kit.link}>compare first-year costs</Link></p>
+            <p className="mt-4 text-[15px] text-ink-soft">
+              Or search by budget &amp; entrance requirement:{' '}
+              <Link href="/programs" className={kit.link}>program and tuition finder</Link> ·{' '}
+              <Link href="/compare-costs" className={kit.link}>compare first-year costs</Link> ·{' '}
+              <Link href="/universities?country=China&cscaFree=1" className={kit.link}>CSCA-exempt universities</Link>
+            </p>
           </nav>
         )}
       </section>
@@ -160,6 +166,10 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
           <UniversitiesClient directory={compactDirectory(universities)} />
         </Suspense>
       </div>
+
+      <Section title="Free CSCA Master Pro prep for EduExpress China applicants.">
+        <CscaMasterProOfferCard assessmentHref="/education-fit-assessment" compact />
+      </Section>
 
       <Section tone="sage" title="How to use this directory.">
         <div className="grid gap-5 lg:grid-cols-2">

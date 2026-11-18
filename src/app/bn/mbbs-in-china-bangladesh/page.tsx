@@ -14,6 +14,7 @@ import {
   Wallet,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import BnChinaRelatedGuides from '@/components/page/BnChinaRelatedGuides';
 import { CtaBand, FaqBlock, JsonLd, Section, kit } from '@/components/page/PageKit';
 import { getChinaMbbsGuide } from '@/lib/china-mbbs-guide';
@@ -323,6 +324,9 @@ export default async function BengaliMbbsInChinaPage() {
               সম্পূর্ণ পলিসি <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>
+        </div>
+        <div className="mt-8">
+          <CscaMasterProOfferCard lang="bn" assessmentHref="#bn-mbbs-assessment" compact />
         </div>
       </Section>
 

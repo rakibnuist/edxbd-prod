@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, Building2, Check, ExternalLink, FileText, GraduationCap, ShieldCheck, Wallet } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import SopReviewerCard from '@/components/assessment/SopReviewerCard';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { citationJsonLd } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
@@ -100,6 +101,10 @@ const faqs = [
     question: 'Where can Bangladeshi students check the 2027 CSC university list, Agency Numbers and admissions contacts?',
     answer: 'Each designated Chinese university publishes its current 5-digit CSC Agency Number and international admissions office contact on its official admission notice and on campuschina.org. EduExpress also maintains an indexed 306-university CSC directory alongside verified China university profiles so students can shortlist departments safely without relying on outdated third-party email sheets.',
   },
+  {
+    question: 'How do I get free CSCA Master Pro exam preparation when applying through EduExpress?',
+    answer: 'Students who complete a free Education Fit Assessment and open a verified China undergraduate or CSC scholarship application file with EduExpress (BDT 0 file-opening charge; no EduExpress service fee before China visa approval) receive a complimentary CSCA Master Pro activation code (worth CNY 99 per intake on cscamaster.com). It unlocks unlimited attempts across 155 full-length mock papers, 21 timed official past papers, and 2,867 syllabus drills. Official CSCA exam registration (CNY 450–700) remains payable directly on the official csca.cn portal.',
+  },
 ];
 
 const related = [
@@ -112,6 +117,8 @@ const related = [
   { label: 'CSC Type A bilateral guide', href: '/updates/how-to-apply-csc-type-a-scholarship-complete-guide' },
   { label: 'Complete CSC universities list (306)', href: '/updates/complete-csc-universities-list-2026' },
   { label: '2027 CSCA entrance test guide', href: '/updates/csca-guide-study-in-china' },
+  { label: 'CSCA University Policy 2026–2028', href: '/updates/csca-exam-guide-chinese-universities-2026-2027' },
+  { label: 'CSCA ভর্তি পরীক্ষার গাইড (বাংলা)', href: '/bn/csca-exam-bangladesh' },
   { label: 'China intakes and deadlines', href: '/china-intakes-deadlines' },
   { label: 'China admission requirements', href: '/china-admission-requirements' },
   { label: 'Study in China without IELTS', href: '/study-in-china-without-ielts' },
@@ -144,6 +151,7 @@ const structuredData = {
   ...citationJsonLd([
     { label: 'Chinese Government Scholarship Portal (CampusChina)', href: 'https://www.campuschina.org/' },
     { label: 'China Scholastic Competency Assessment (CSCA)', href: 'https://csca.cn/' },
+    { label: 'CSCA Master — Independent CSCA Mock Exam & Preparation Platform', href: 'https://www.cscamaster.com/' },
     { label: 'Chinese Embassy Bangladesh Consular Notices', href: 'https://bd.china-embassy.gov.cn/eng/' },
     { label: 'Chinese Visa Application Service Center Dhaka (CVASC)', href: 'https://www.visaforchina.cn/DAC4_EN/' },
   ]),
@@ -180,6 +188,7 @@ export default function CscScholarshipBangladeshPage() {
                 ['Tuition', 'Full waiver'],
                 ['Stipend', 'CNY 2,500–3,500 / month'],
                 ['Housing', 'University dormitory or housing stipend'],
+                ['CSCA Master Pro', 'Free (CNY 99 value) on file opening'],
                 ['EduExpress terms', 'No service fee before visa approval'],
               ].map(([term, value]) => (
                 <div key={term} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3.5">
@@ -301,6 +310,14 @@ export default function CscScholarshipBangladeshPage() {
           <FileText size={18} className="mt-0.5 shrink-0 text-petrol-800" aria-hidden="true" />
           The receiving university or authority sets the final checklist. Your admission documents support both self-funded and scholarship applications.
         </p>
+      </Section>
+
+      <Section
+        id="csca-master-pro"
+        title="Complimentary CSCA Master Pro Access for EduExpress Applicants."
+        intro="Undergraduate CSC scholarship and Chinese university applicants need strong CSCA scores. Open your verified China file with EduExpress at BDT 0 file-opening fee and receive full CSCA Master Pro access on cscamaster.com."
+      >
+        <CscaMasterProOfferCard assessmentHref="#csc-assessment" />
       </Section>
 
       <Section

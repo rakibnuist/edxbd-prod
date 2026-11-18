@@ -7,6 +7,7 @@ import { chinaScholarshipGuide } from './chinaScholarshipGuide';
 const sourcesFor = (...ids: string[]) => research.sources.filter(source => ids.includes(source.id)).map(source => ({ label: source.publisher, href: source.url }));
 const visaCenter = { label: 'Chinese Visa Application Service Center in Dhaka', href: 'https://www.visaforchina.cn/DAC4_EN/' };
 const csca = { label: 'Official CSCA portal', href: 'https://csca.cn/' };
+const cscaMaster = { label: 'CSCA Master — Independent CSCA Mock Exam & Preparation Platform', href: 'https://www.cscamaster.com/' };
 const chinaTerms = 'No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.';
 const commonRelated = [
   { label: 'Study in China', href: '/study-in-china-from-bangladesh' },
@@ -64,8 +65,9 @@ export const chinaFocusedGuides: ChinaGuidePage[] = [
       { question: 'Are documents only needed for scholarships?', answer: 'No. Admission documents support self-funded and scholarship applications. Each university sets its checklist; a funding route may require additional evidence.' },
       { question: 'Can I apply before final results are issued?', answer: 'Some universities accept expected-graduation or current-student evidence. Confirm the accepted proof and the final documents needed to meet offer conditions.' },
       { question: 'Does English-taught admission remove the CSCA requirement?', answer: research.faqs[2].answer },
+      { question: 'How do I receive complimentary CSCA Master Pro exam preparation with EduExpress?', answer: 'Students who complete a free Education Fit Assessment and open a verified China undergraduate or CSC scholarship application file with EduExpress (BDT 0 file-opening charge; no EduExpress service fee before China visa approval) receive a complimentary CSCA Master Pro seat activation code (CNY 99 value on cscamaster.com), unlocking 155 full-length mock papers and 21 timed official past papers. Official CSCA exam registration (CNY 450–700) is paid separately on csca.cn.' },
     ],
-    sources: [...sourcesFor('zju-2026', 'thu-2027', 'usst-2026', 'csca-guidance', 'bmdc-eligibility'), csca],
+    sources: [...sourcesFor('zju-2026', 'thu-2027', 'usst-2026', 'csca-guidance', 'bmdc-eligibility'), csca, cscaMaster],
     related: [...commonRelated, { label: 'English proof and MOI', href: '/study-in-china-without-ielts' }, { label: 'Scholarship requirements', href: '/china-scholarships-bangladesh' }],
     ctaTitle: 'Find your admission route', ctaText: 'Share your qualifications and preferred subject. EduExpress International can help you compare suitable programmes and prepare the right application file.',
   },

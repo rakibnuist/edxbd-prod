@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import ProgramFinder from '@/components/finders/ProgramFinder';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
 import { toProgramRows, type ProgramRow } from '@/lib/catalog-views';
@@ -97,11 +98,15 @@ export default async function ProgramSegmentPage({ params }: Props) {
         }
       />
       <ProgramFinder rows={rows} />
+      <Section title="Free CSCA Master Pro access for EduExpress China applicants.">
+        <CscaMasterProOfferCard assessmentHref="/education-fit-assessment" compact />
+      </Section>
       <FaqBlock items={[costFaq, ...segment.faqs]} title="Common questions" tone="white" />
       <Section tone="sage" title="Other program types">
         <ul className="flex flex-wrap gap-2">
           {programSegments.filter(item => item.slug !== segment.slug).map(item => <li key={item.slug}><Link href={`/programs/${item.slug}`} className="ed-btn ed-btn-outline min-h-11 text-[15px]">{item.h1}</Link></li>)}
           <li><Link href="/programs" className="ed-btn ed-btn-outline min-h-11 text-[15px]">All programs</Link></li>
+          <li><Link href="/universities?country=China&cscaFree=1" className="ed-btn ed-btn-outline min-h-11 text-[15px]">CSCA-exempt universities</Link></li>
           <li><Link href="/compare-costs" className="ed-btn ed-btn-outline min-h-11 text-[15px]">Compare first-year costs</Link></li>
           <li><Link href="/china-study-report-bangladesh" className="ed-btn ed-btn-outline min-h-11 text-[15px]">China data &amp; cost report</Link></li>
         </ul>

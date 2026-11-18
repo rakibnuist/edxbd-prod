@@ -454,13 +454,46 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
             {isApplication ? 'A counselor will review your preferred university, program and academic profile, then help with eligibility, documents and the application process. This request is not a university admission offer.' : 'We have your study plan and starting routes. A counselor can now check the exact university, cost and document details.'}
           </p>
         </div>
-        <div className="grid gap-3 p-6 sm:grid-cols-2 sm:p-8">
-          <Link href="/universities" className="ed-btn ed-btn-signal min-h-12 px-5">
-            Browse universities <ArrowRight size={16} aria-hidden="true" />
-          </Link>
-          <Link href="/contact" className="ed-btn ed-btn-outline min-h-12 px-5">
-            Contact the office <ArrowRight size={16} aria-hidden="true" />
-          </Link>
+        <div className="space-y-4 p-6 sm:p-8">
+          {(form.preferredCountries.length === 0 ||
+            form.preferredCountries.includes('china') ||
+            form.preferredCountries.includes('not-sure')) && (
+            <div className="rounded-2xl border border-lime/60 bg-canvas-soft p-5">
+              <p className="text-[14px] font-bold uppercase tracking-wider text-petrol-800">
+                Complimentary China Prep · CNY 99 Value Included
+              </p>
+              <p className="mt-1.5 text-[15px] leading-6 text-ink-soft">
+                Applying for an undergraduate degree or CSC scholarship in China? Once your counselor verifies your academic documents to open your China application file (<strong className="text-petrol-800">BDT 0 file-opening fee</strong>), you receive a free <strong className="text-petrol-800">CSCA Master Pro activation code</strong> unlocking 155 mock tests and 21 timed official past papers on{' '}
+                <a
+                  href="https://www.cscamaster.com/free-exam?utm_source=eduexpressint&utm_medium=assessment_done&utm_campaign=csca_pro_access"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-petrol-800 underline underline-offset-4"
+                >
+                  cscamaster.com
+                </a>
+                .
+              </p>
+              <div className="mt-3 flex flex-wrap gap-3">
+                <a
+                  href="https://www.cscamaster.com/free-exam?utm_source=eduexpressint&utm_medium=assessment_done&utm_campaign=csca_pro_access"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ed-btn ed-btn-outline min-h-10 bg-white px-4 text-[14px]"
+                >
+                  Start Free 10-Question CSCA Diagnostic <ArrowRight size={15} aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+          )}
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Link href="/universities" className="ed-btn ed-btn-signal min-h-12 px-5">
+              Browse universities <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+            <Link href="/contact" className="ed-btn ed-btn-outline min-h-12 px-5">
+              Contact the office <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </div>
     );

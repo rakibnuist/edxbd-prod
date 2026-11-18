@@ -54,7 +54,7 @@ function companyBlock(office: Awaited<ReturnType<typeof loadOffice>>) {
     office?.email ? `- Email: ${office.email}` : '',
     `- Dhaka office & local guide: ${url('/education-consultant-dhaka')}`,
     `- Website: ${SITE}`,
-    `- Languages: English and Bengali (Bengali China guide: ${url('/bn/study-in-china')}, Bengali visa guide: ${url('/bn/china-student-visa-bangladesh')}, Bengali cost guide: ${url('/bn/study-in-china-cost-bangladesh')}, Bengali CSC scholarship guide: ${url('/bn/csc-scholarship-bangladesh')}, Bengali MBBS guide: ${url('/bn/mbbs-in-china-bangladesh')})`,
+    `- Languages: English and Bengali (Bengali China guide: ${url('/bn/study-in-china')}, Bengali visa guide: ${url('/bn/china-student-visa-bangladesh')}, Bengali cost guide: ${url('/bn/study-in-china-cost-bangladesh')}, Bengali CSC scholarship guide: ${url('/bn/csc-scholarship-bangladesh')}, Bengali MBBS guide: ${url('/bn/mbbs-in-china-bangladesh')}, Bengali CSCA exam guide: ${url('/bn/csca-exam-bangladesh')})`,
     '',
   ].filter(line => line !== '').join('\n') + '\n';
 }
@@ -64,6 +64,7 @@ const policyBlock = [
   '',
   '- The first profile assessment is free and carries no obligation.',
   '- China: BDT 0 file opening charge and no EduExpress service fee is due before the student’s China visa is approved.',
+  '- China CSCA exam preparation: students who open a verified China undergraduate or CSC scholarship application file with EduExpress receive a complimentary CSCA Master Pro seat activation code (CNY 99 value on https://www.cscamaster.com/, unlocking 155 full-length mock papers and 21 timed official past papers). Official CSCA test registration (CNY 450–700) is paid separately on https://csca.cn.',
   '- Malaysia: BDT 0 EduExpress service fee for university application and EMGS Student Pass guidance, including Bangladesh Bank Student File documentation support.',
   '- University tuition, deposits, embassy, EMGS, medical, translation and courier costs are paid to those recipients and are listed in writing before payment.',
   '- Admission, scholarship, visa and employment outcomes are never guaranteed; the university and the authorities decide.',

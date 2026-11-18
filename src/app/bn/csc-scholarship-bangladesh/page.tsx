@@ -14,6 +14,7 @@ import {
   Wallet,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import BnChinaRelatedGuides from '@/components/page/BnChinaRelatedGuides';
 import { CtaBand, FaqBlock, JsonLd, Section, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
@@ -108,6 +109,7 @@ const documentItems = [
 const officialLinks = [
   { label: 'CampusChina — অফিশিয়াল CSC পোর্টাল', href: 'https://www.campuschina.org/' },
   { label: 'CSCA — আন্ডারগ্র্যাজুয়েট প্রবেশিকা পোর্টাল', href: 'https://csca.cn/' },
+  { label: 'CSCA Master — ফ্রি মক টেস্ট ও প্রস্তুতি প্ল্যাটফর্ম', href: 'https://www.cscamaster.com/' },
   { label: 'ঢাকাস্থ চীনা দূতাবাস — অফিশিয়াল বিজ্ঞপ্তি', href: 'https://bd.china-embassy.gov.cn/eng/' },
   { label: 'চায়না ভিসা সেন্টার ঢাকা (CVASC)', href: 'https://www.visaforchina.cn/DAC4_EN/' },
 ];
@@ -136,6 +138,11 @@ const bnFaqs = [
   {
     question: 'ভর্তি বা স্কলারশিপ আবেদনের আগে এডুএক্সপ্রেসকে কি কোনো সার্ভিস ফি দিতে হয়?',
     answer: visaFirstTermsBn,
+  },
+  {
+    question: 'এডুএক্সপ্রেসের মাধ্যমে চায়না ফাইল ওপেন করলে কি ফ্রি CSCA Master Pro অ্যাক্সেস পাওয়া যায়?',
+    answer:
+      'হ্যাঁ। এডুএক্সপ্রেসে ফ্রি এডুকেশন ফিট অ্যাসেসমেন্টের পর যাচাইকৃত চায়না আন্ডারগ্র্যাজুয়েট বা CSC স্কলারশিপ অ্যাপ্লিকেশন ফাইল ওপেন করলে (ফাইল ওপেনিং চার্জ ০ টাকা এবং ভিসার আগে এডুএক্সপ্রেসের কোনো সার্ভিস ফি নেই) আপনি cscamaster.com-এর একটি ফ্রি CSCA Master Pro সিট অ্যাক্টিভেশন কোড (মূল্য CNY ৯৯ / ইনটেক) পাবেন। এতে ১৫৫টি পূর্ণাঙ্গ মক টেস্ট, ২১টি টাইমড অফিশিয়াল প্রশ্নপত্র এবং ২,৮৬৭টি টপিক ড্রিল আনলিমিটেড অনুশীলন করা যায়। অফিশিয়াল CSCA পরীক্ষার রেজিস্ট্রেশন ফি (CNY ৪৫০–৭০০) আলাদাভাবে csca.cn পোর্টালে প্রদেয়।',
   },
 ];
 
@@ -306,6 +313,14 @@ export default function BengaliCscScholarshipPage() {
             </div>
           ))}
         </div>
+      </Section>
+
+      <Section
+        id="bn-csca-master-pro"
+        title="এডুএক্সপ্রেসে চায়না ফাইল ওপেন করলেই ফ্রি CSCA Master Pro প্রস্তুতি"
+        intro="আন্ডারগ্র্যাজুয়েট সিএসসি স্কলারশিপ ও চীনা বিশ্ববিদ্যালয়ে ভর্তির জন্য CSCA পরীক্ষায় ভালো স্কোর জরুরি। ০ টাকা ফাইল ওপেনিং চার্জে এডুএক্সপ্রেসে ফাইল ওপেন করে cscamaster.com-এর সম্পূর্ণ Pro অ্যাক্সেস নিন।"
+      >
+        <CscaMasterProOfferCard lang="bn" assessmentHref="#bn-csc-assessment" />
       </Section>
 
       <Section tone="navy" title="ভিসা-ফার্স্ট সার্ভিস নীতি">

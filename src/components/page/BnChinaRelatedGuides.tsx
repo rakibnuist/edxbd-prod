@@ -14,6 +14,7 @@ export const BN_CHINA_GUIDE_LINKS: readonly BnChinaGuideLink[] = [
   { label: 'CSC স্কলারশিপ সম্পূর্ণ গাইড (বাংলা)', href: '/bn/csc-scholarship-bangladesh', lang: 'bn' },
   { label: 'চায়না স্টুডেন্ট ভিসা গাইড (বাংলা)', href: '/bn/china-student-visa-bangladesh', lang: 'bn' },
   { label: 'চীনে MBBS ভর্তি ও BMDC গাইড (বাংলা)', href: '/bn/mbbs-in-china-bangladesh', lang: 'bn' },
+  { label: 'CSCA ভর্তি পরীক্ষার গাইড (বাংলা)', href: '/bn/csca-exam-bangladesh', lang: 'bn' },
   { label: 'মার্চ ২০২৭ স্প্রিং ইনটেক গাইড', href: '/china-march-2027-intake', lang: 'en' },
   { label: 'বাংলাদেশ-চীন শিক্ষা ডেটা ও খরচ রিপোর্ট', href: '/china-study-report-bangladesh', lang: 'en' },
   { label: 'চীনা বিশ্ববিদ্যালয় ডিরেক্টরি', href: '/china-universities', lang: 'en' },

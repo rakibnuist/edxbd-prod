@@ -141,6 +141,20 @@ export default function HomeLeadForm({
         <p className="mt-2 text-[14px] leading-6 text-ink-soft">
           A counsellor will review your profile and contact you within one working day.
         </p>
+        {(!destination || destination === 'Not sure yet' || destination.toLowerCase().includes('china')) && (
+          <div className="mt-4 rounded-2xl border border-lime/60 bg-canvas-soft p-4 text-left text-[13.5px] leading-5 text-ink-soft">
+            <strong className="text-petrol-800">China applicants — Free CSCA Master Pro (CNY 99 value):</strong> Open your verified China file at BDT 0 file-opening fee to receive a complimentary Pro activation code on{' '}
+            <a
+              href="https://www.cscamaster.com/free-exam?utm_source=eduexpressint&utm_medium=lead_form_done&utm_campaign=csca_pro_access"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-petrol-800 underline underline-offset-2"
+            >
+              cscamaster.com
+            </a>
+            .
+          </div>
+        )}
         <div className="mt-6 grid gap-2.5">
           <a
             href={whatsappHref}

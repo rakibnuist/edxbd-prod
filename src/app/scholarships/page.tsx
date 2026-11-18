@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, BadgeDollarSign, CheckCircle2, CircleAlert, FileSearch, GraduationCap, WalletCards } from 'lucide-react';
 
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import ScholarshipFinder from '@/components/finders/ScholarshipFinder';
 import { toScholarshipRows } from '@/lib/catalog-views';
 import { pageMetadata } from '@/lib/seo';
@@ -64,6 +65,7 @@ const guides = [
   { label: 'CSC স্কলারশিপ গাইড (বাংলা)', text: 'Type A ও Type B নিয়ম, মাসিক ভাতা ও ডকুমেন্টস', href: '/bn/csc-scholarship-bangladesh' },
   { label: 'China study data & cost report', text: 'Live CNY tuition quartiles and scholarship counts', href: '/china-study-report-bangladesh' },
   { label: '2027 CSCA entrance exam guide', text: 'China Scholastic Competency Assessment (CSCA) structure and rules', href: '/updates/csca-guide-study-in-china' },
+  { label: 'CSCA ভর্তি পরীক্ষার গাইড (বাংলা)', text: 'ঢাকা সময়সূচি, ফি ও ফ্রি CSCA Master Pro মক টেস্ট', href: '/bn/csca-exam-bangladesh' },
   { label: 'Cost of studying in China', text: 'Tuition, hostel, insurance, visa and travel', href: '/study-in-china-cost-bangladesh' },
   { label: 'University and program finder', text: 'Scholarships on file, per university', href: '/universities' },
 ];
@@ -228,6 +230,9 @@ export default async function ScholarshipsPage() {
               </li>
             ))}
           </ul>
+        </div>
+        <div className="mt-10">
+          <CscaMasterProOfferCard assessmentHref="/education-fit-assessment" compact />
         </div>
       </Section>
 

@@ -448,6 +448,13 @@ export function buildAllowedGuides(
         : 'Coverage, renewal conditions, and what remains payable under CSC, provincial, and university awards.',
     );
     push(
+      bn ? 'CSCA ভর্তি পরীক্ষার গাইড ও ফ্রি মক টেস্ট' : '2027 CSCA entrance exam & free Pro prep',
+      bn ? '/bn/csca-exam-bangladesh' : '/updates/csca-guide-study-in-china',
+      bn
+        ? 'CSCA সিলেবাস, ঢাকা সময়সূচি (UTC+6) এবং এডুএক্সপ্রেসে ফাইল ওপেন করলেই ফ্রি CSCA Master Pro অ্যাক্সেস।'
+        : 'CSCA subjects, Dhaka schedule, CSCA-exempt options, and complimentary CSCA Master Pro access upon China file opening.',
+    );
+    push(
       bn ? 'চায়না স্টুডেন্ট ভিসা (X1/X2)' : 'China student visa guide',
       bn ? '/bn/china-student-visa-bangladesh' : '/china-student-visa-bangladesh',
       bn

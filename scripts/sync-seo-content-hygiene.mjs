@@ -23,10 +23,80 @@ const CSCA_LINK_REPLACEMENTS = [
   ['href="[Link to your Chinese Government Scholarship info page]"', 'href="/csc-scholarship-bangladesh"'],
   ['href="[Link to a general \'Study in China\' page on your site]"', 'href="/study-in-china-from-bangladesh"'],
   ['href="[Link to HSK info page on your site or official HSK site]"', 'href="/china-admission-requirements"'],
-  ['href="[Link to Study in China Entrance Exam Mock Test, if available]"', 'href="https://www.csca.cn"'],
+  ['href="[Link to Study in China Entrance Exam Mock Test, if available]"', 'href="https://www.cscamaster.com/free-exam"'],
+  ['<a href="https://www.csca.cn" target="_blank" rel="noopener noreferrer" class="accent-link">“Study in China” Entrance Exam Mock Test</a>', '<a href="https://www.cscamaster.com/free-exam" target="_blank" rel="noopener noreferrer" class="accent-link">CSCA Master Free Entrance Exam Mock Test</a>'],
   ['href="[Link to a page on your site listing Chinese universities or foundation programs]"', 'href="/china-universities"'],
   ['href="[Link to your contact page or consultation form]"', 'href="/education-fit-assessment"'],
 ];
+
+const CSCA_BANGLADESH_ACTION_SECTION = `
+  <section class="section" id="bangladesh-csca-action-guide">
+    <div class="container">
+      <div class="card">
+        <h2 id="bangladesh-csca-guide">🇧🇩 VII. Bangladesh Applicant Action Guide: Dhaka Timetable (UTC+6), Fee Payment &amp; Home Proctoring</h2>
+        <p>Bangladeshi students preparing for the 2026/2027 CSCA sittings face three practical hurdles: converting Beijing test blocks to Dhaka time, paying the CNY exam fee without local mobile wallets, and passing remote AI proctoring during power or broadband fluctuations. Use this verified checklist:</p>
+
+        <h3>1. 2026–2027 CSCA Sitting Schedule in Bangladesh Standard Time (Dhaka UTC+6)</h3>
+        <p>All official CSCA sessions on <a href="https://www.csca.cn" target="_blank" rel="noopener noreferrer">csca.cn</a> are published in Beijing Time (UTC+8), which is <strong>2 hours ahead of Dhaka (UTC+6)</strong>. Sessions alternate between two start blocks (check live countdowns on <a href="https://www.cscamaster.com/csca/countries/bangladesh" target="_blank" rel="noopener noreferrer">CSCA Master Bangladesh Schedule</a>):</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Sitting Dates</th>
+              <th>Day 1 (Dhaka Time · UTC+6)</th>
+              <th>Day 2 (Dhaka Time · UTC+6)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>14–15 Nov 2026 · 23–24 Jan 2027 · 13–14 Mar 2027 · 24–25 Apr 2027</strong> (14:00 Beijing Block)</td>
+              <td>Professional Chinese: <strong>12:00 PM – 1:30 PM</strong><br/>Mathematics: <strong>3:00 PM – 4:00 PM</strong></td>
+              <td>Physics: <strong>12:00 PM – 1:00 PM</strong><br/>Chemistry: <strong>2:30 PM – 3:30 PM</strong></td>
+            </tr>
+            <tr>
+              <td><strong>19–20 Dec 2026 · 26–27 Jun 2027</strong> (08:00 Beijing Block)</td>
+              <td>Professional Chinese: <strong>6:00 AM – 7:30 AM</strong><br/>Mathematics: <strong>9:00 AM – 10:00 AM</strong></td>
+              <td>Physics: <strong>6:00 AM – 7:00 AM</strong><br/>Chemistry: <strong>8:30 AM – 9:30 AM</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>2. How to Pay the CNY 450 / CNY 700 CSCA Fee from Bangladesh</h3>
+        <ul class="list styled">
+          <li><strong>Dual-Currency Card Endorsement:</strong> Local BDT-only cards, bKash, and Nagad do not work directly on <code>csca.cn</code>. Use a <strong>Bangladeshi Visa or Mastercard endorsed for international e-commerce against your passport</strong> (or an authorized guardian/family international card).</li>
+          <li><strong>Exact Passport Matching:</strong> Your registered full name, date of birth, and passport number on <code>csca.cn</code> must match your passport and your <a href="/csc-scholarship-bangladesh">CSC scholarship / university application</a> character-for-character. Any mismatch can void your score report or block entry on test day.</li>
+        </ul>
+
+        <h3>3. Remote Home-Based Test Survival Checklist (Bangladesh Power &amp; Broadband)</h3>
+        <ul class="list styled">
+          <li><strong>Windows Computer Required:</strong> The remote-proctored home test client requires a Windows desktop or laptop with a working webcam and microphone (macOS, iPads, and Chromebooks are not supported for the primary exam client).</li>
+          <li><strong>Dual-Device Camera Setup:</strong> A secondary smartphone or tablet is required as your side/rear monitoring camera under AI proctoring rules.</li>
+          <li><strong>Load-Shedding &amp; 20 Mbps Fail-Safe:</strong> Connect your Wi-Fi router to a mini-UPS, keep both your laptop and secondary phone at 100% charge, and keep a 4G mobile data hotspot (minimum 20 Mbps symmetric stability) ready so brief electricity cuts do not disconnect your proctored session.</li>
+        </ul>
+
+        <h3>4. Free CSCA Master Pro Access (CNY 99 Value) &amp; CSCA-Exempt Routes</h3>
+        <p>Students who open a verified China undergraduate or CSC scholarship application file with EduExpress (<strong>BDT 0 file-opening charge</strong> and <strong>no EduExpress service fee before China visa approval</strong>) receive a complimentary <strong>CSCA Master Pro seat activation code</strong> on <a href="https://www.cscamaster.com/" target="_blank" rel="noopener noreferrer">cscamaster.com</a> — unlocking unlimited attempts across 155 full-length mock papers, 21 timed official past papers, and 2,867 syllabus drills. Want to check which Chinese universities require CSCA in 2027 vs 2028 or explore exemptions? Read our <a href="/updates/csca-exam-guide-chinese-universities-2026-2027">2026–2028 University CSCA Policy &amp; Exemption Roadmap</a> or <a href="/universities?country=China&amp;cscaFree=1">browse Chinese universities with CSCA-exempt options</a>.</p>
+
+        <h2>❓ VIII. Frequently Asked Questions (FAQ)</h2>
+        <details>
+          <summary>Is the CSCA exam required for Master’s or PhD CSC Scholarship applicants from Bangladesh?</summary>
+          <p>No. The CSCA is strictly an undergraduate (Bachelor’s) admission and scholarship assessment. Master’s and Doctoral (PhD) applicants for the Chinese Government Scholarship (CSC Type A and Type B) do not need to sit the CSCA; they are evaluated on their bachelor’s/master’s transcripts, research proposal, recommendation letters, and language proof.</p>
+        </details>
+        <details>
+          <summary>How do I get free CSCA Master Pro exam preparation with EduExpress?</summary>
+          <p>Complete a <a href="/education-fit-assessment">Free Education Fit Assessment</a> and open your verified China undergraduate or CSC scholarship application file with EduExpress (BDT 0 file-opening charge; no EduExpress service fee before China visa approval). Once your core academic documents are verified, your counselor issues a complimentary CSCA Master Pro activation code (worth CNY 99 per intake on cscamaster.com) unlocking all 155 mock tests and 21 timed official past papers. Note that official exam registration (CNY 450–700) is paid separately on csca.cn.</p>
+        </details>
+        <details>
+          <summary>What is the CSCA exam time in Bangladesh (Dhaka time)?</summary>
+          <p>Bangladesh (UTC+6) is 2 hours behind Beijing Time (UTC+8). For 14:00 Beijing sessions (Nov, Jan, Mar, Apr), Day 1 exams start at 12:00 PM Dhaka time (Professional Chinese) and 3:00 PM Dhaka time (Mathematics), while Day 2 starts at 12:00 PM (Physics) and 2:30 PM (Chemistry). For 08:00 Beijing sessions (Dec, Jun), exams start at 6:00 AM and 9:00 AM Dhaka time on Day 1, and 6:00 AM and 8:30 AM Dhaka time on Day 2.</p>
+        </details>
+        <details>
+          <summary>Can I apply to Chinese universities for a Bachelor’s degree without taking CSCA?</summary>
+          <p>While CSCA is mandatory for 2026/2027 Chinese Government Scholarship (CGS) undergraduate applicants and selected top-tier universities, several self-funded and university-scholarship undergraduate tracks still waive or do not require CSCA for the 2027 intake before universal rollout in 2028. Use our <a href="/universities?country=China&amp;cscaFree=1">CSCA-exempt Chinese university filter</a> to compare verified options.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+`;
 
 const ACTIVE_CHINA_METADATA_DEFAULTS = [
   {
@@ -288,10 +358,14 @@ async function main() {
       requiredSources: [
         'https://www.csca.cn',
         'https://www.campuschina.org/',
+        'https://www.cscamaster.com/csca/countries/bangladesh',
       ],
       headingReplacements: [
         ['2026 CSCA Complete Guide: Your Path to Study in China', '2027 CSCA Complete Guide: Your Path to Study in China'],
         ['starting in 2026', 'for 2027 intakes'],
+        ['Start preparing now for the 2026 CSCA', 'Start preparing now for the 2026–2027 CSCA'],
+        ['First Global Test: <strong>December 21, 2025</strong>', '2026–2027 Sittings: <strong>Jan, Mar, Apr, Jun, Nov &amp; Dec</strong>'],
+        ['Registration Opens: <strong>November 2025</strong>', 'Mock Practice: <a href="https://www.cscamaster.com/free-exam" target="_blank" rel="noopener noreferrer"><strong>Free on CSCA Master</strong></a>'],
       ],
     },
   ];
@@ -332,6 +406,27 @@ async function main() {
     for (const [from, to] of spec.headingReplacements) {
       if (nextContent.includes(from)) {
         nextContent = nextContent.replaceAll(from, to);
+      }
+    }
+    if (
+      spec.slug === 'csca-guide-study-in-china' &&
+      !nextContent.includes('id="bangladesh-csca-action-guide"')
+    ) {
+      const conclusionAnchor = '<h2 id="conclusion">';
+      const idx = nextContent.indexOf(conclusionAnchor);
+      if (idx !== -1) {
+        const sectionStart = nextContent.lastIndexOf('<section class="section">', idx);
+        if (sectionStart !== -1) {
+          nextContent =
+            nextContent.slice(0, sectionStart) +
+            CSCA_BANGLADESH_ACTION_SECTION +
+            '\n' +
+            nextContent.slice(sectionStart);
+        } else {
+          nextContent += CSCA_BANGLADESH_ACTION_SECTION;
+        }
+      } else {
+        nextContent += CSCA_BANGLADESH_ACTION_SECTION;
       }
     }
 

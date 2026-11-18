@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Check, ChevronDown, ExternalLink, ShieldCheck } from 'lucide-react';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import type { ChinaGuidePage as ChinaGuidePageData, ChinaGuideSection } from '@/data/chinaGuidePages';
 import research from '@/data/chinaStudyResearch.json';
@@ -44,6 +45,7 @@ const applyHref = '/apply?country=China';
 const topics = [
   { label: 'Admission requirements', href: '/china-admission-requirements' },
   { label: 'CSCA entrance test guide', href: '/updates/csca-guide-study-in-china' },
+  { label: 'CSCA গাইড (বাংলা)', href: '/bn/csca-exam-bangladesh' },
   { label: 'Scholarships', href: '/china-scholarships-bangladesh' },
   { label: 'CSC scholarship', href: '/csc-scholarship-bangladesh' },
   { label: 'Costs & budget', href: '/study-in-china-cost-bangladesh' },
@@ -317,6 +319,10 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
             </div>
 
             {guide.sections.map((section, index) => <GuideSection key={`${index}-${section.heading}`} section={section} index={index} />)}
+
+            <section id="csca-master-pro-offer" className="scroll-mt-28">
+              <CscaMasterProOfferCard assessmentHref={applyHref} compact headingLevel="h2" />
+            </section>
 
             {guide.slug === 'study-in-china-cost-bangladesh' ? (
               <section className={kit.cardSage}>

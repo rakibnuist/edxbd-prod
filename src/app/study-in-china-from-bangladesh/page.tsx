@@ -19,6 +19,7 @@ import ChinaPillarHero from '@/components/china/ChinaPillarHero';
 import ChinaPillarLeadForm from '@/components/china/ChinaPillarLeadForm';
 import ChinaSelectAction from '@/components/china/ChinaSelectAction';
 import ChinaStudyPlanner from '@/components/china/ChinaStudyPlanner';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import { CtaBand, FaqBlock, JsonLd, Section, TrustBar, kit } from '@/components/page/PageKit';
 import StoryMarquee from '@/components/stories/StoryMarquee';
 import type { StoryCardData } from '@/components/stories/StoryCard';
@@ -803,6 +804,9 @@ export default async function StudyInChinaFromBangladeshPage() {
               Keep names consistent across your passport and academic records. Programme documents apply to self-funded and scholarship applicants.
             </p>
           </div>
+        </div>
+        <div className="mt-6">
+          <CscaMasterProOfferCard assessmentHref="/education-fit-assessment" compact />
         </div>
         <p className="mt-6 text-[16px] leading-7 text-ink-soft">
           <strong className="text-petrol-800">Choosing a start: </strong>

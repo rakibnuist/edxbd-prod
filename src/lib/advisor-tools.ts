@@ -157,6 +157,16 @@ const VERIFIED_GUIDES: GuideEntry[] = [
     bnSummary: 'CSC, প্রাদেশিক ও বিশ্ববিদ্যালয় বৃত্তির কভারেজ, কোন খরচ বাকি থাকে এবং নবায়নের (renewal) GPA শর্ত।',
   },
   {
+    title: '2027 CSCA Entrance Exam Guide & Free CSCA Master Pro Prep',
+    bnTitle: 'CSCA ভর্তি পরীক্ষার গাইড ২০২৭ (বাংলা)',
+    href: '/updates/csca-guide-study-in-china',
+    bnHref: '/bn/csca-exam-bangladesh',
+    category: 'guide',
+    keywords: /csca|entrance.*exam|mock.*test|cscamaster|admission.*test|ভর্তি.*পরীক্ষা|মক.*টেস্ট/i,
+    summary: 'China Scholastic Competency Assessment (CSCA) subjects, Dhaka (UTC+6) schedule, CNY 450/700 fee rules, CSCA-exempt options, and complimentary CSCA Master Pro access (CNY 99 value on cscamaster.com) when opening a verified China application file with EduExpress at BDT 0 file-opening charge.',
+    bnSummary: 'চীনে আন্ডারগ্র্যাজুয়েট ভর্তির CSCA পরীক্ষার সিলেবাস, ঢাকা সময়সূচি (UTC+6), ফি পেমেন্ট এবং এডুএক্সপ্রেসে ফাইল ওপেন করলেই ফ্রি CSCA Master Pro (CNY ৯৯ মূল্য) মক টেস্ট অ্যাক্সেস।',
+  },
+  {
     title: 'China Student Visa Guide (X1 / X2)',
     bnTitle: 'চায়না স্টুডেন্ট ভিসা গাইড (X1/X2)',
     href: '/china-student-visa-bangladesh',

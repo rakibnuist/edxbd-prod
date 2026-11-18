@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Check, ExternalLink, GraduationCap, ShieldCheck, Stethoscope } from 'lucide-react';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import MbbsUniversityFinder from '@/components/china/MbbsUniversityFinder';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getChinaMbbsGuide } from '@/lib/china-mbbs-guide';
@@ -223,6 +224,9 @@ export default async function MbbsChinaPage() {
             <p className="mt-5 border-t border-canvas-soft pt-4 text-[15px] leading-6 text-ink-soft">Use English or Chinese translations where required. Add award-specific evidence and any programme-specific documents to this file.</p>
             <Link href={mbbsApplyHref()} className="ed-btn ed-btn-signal mt-5 min-h-[50px] px-6">Get help with my application <ArrowRight size={16} aria-hidden="true" /></Link>
           </aside>
+        </div>
+        <div className="mt-8">
+          <CscaMasterProOfferCard assessmentHref={mbbsApplyHref()} compact />
         </div>
       </Section>
 

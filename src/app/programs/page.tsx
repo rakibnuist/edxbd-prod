@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import ProgramFinder from '@/components/finders/ProgramFinder';
-import { CtaBand, FaqBlock, JsonLd, PageHero, kit } from '@/components/page/PageKit';
+import { CtaBand, FaqBlock, JsonLd, PageHero, Section, kit } from '@/components/page/PageKit';
 import { toProgramRows, type ProgramRow } from '@/lib/catalog-views';
 import { programSegments } from '@/lib/program-segments';
 import { SITE_URL, ogImage, pageMetadata } from '@/lib/seo';
@@ -102,9 +103,12 @@ export default async function ProgramsPage() {
         </div>
       </nav>
       <ProgramFinder rows={rows} />
+      <Section title="Free CSCA Master Pro access for EduExpress China applicants.">
+        <CscaMasterProOfferCard assessmentHref="/education-fit-assessment" compact />
+      </Section>
       <FaqBlock items={faqsFor(rows)} title="Questions about programs and tuition" tone="white" />
       <section className="bg-white pb-16">
-        <p className={`${kit.wrap} ${kit.body}`}>Related: <Link href="/scholarships#scholarship-database" className={kit.link}>China scholarship database</Link> · <Link href="/china-universities" className={kit.link}>China universities</Link> · <Link href="/study-in-china-cost-bangladesh" className={kit.link}>Study in China cost guide</Link> · <Link href="/china-study-report-bangladesh" className={kit.link}>China data &amp; cost report</Link> · <Link href="/china-intakes-deadlines" className={kit.link}>Intakes &amp; deadlines</Link> · <Link href="/updates/csca-guide-study-in-china" className={kit.link}>CSCA exam guide</Link></p>
+        <p className={`${kit.wrap} ${kit.body}`}>Related: <Link href="/scholarships#scholarship-database" className={kit.link}>China scholarship database</Link> · <Link href="/china-universities" className={kit.link}>China universities</Link> · <Link href="/universities?country=China&cscaFree=1" className={kit.link}>CSCA-exempt universities</Link> · <Link href="/study-in-china-cost-bangladesh" className={kit.link}>Study in China cost guide</Link> · <Link href="/china-study-report-bangladesh" className={kit.link}>China data &amp; cost report</Link> · <Link href="/china-intakes-deadlines" className={kit.link}>Intakes &amp; deadlines</Link> · <Link href="/updates/csca-guide-study-in-china" className={kit.link}>CSCA exam guide</Link> · <Link href="/bn/csca-exam-bangladesh" hrefLang="bn-BD" lang="bn" className={kit.link}>CSCA গাইড (বাংলা)</Link></p>
       </section>
       <CtaBand title="Want a shortlist in writing?" text="Share your results, subject and budget. A counsellor compares at least three suitable programs for you in writing, with the full cost of each." />
     </>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Calendar, ShieldCheck } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { getChinaIntakes, CHINA_INTAKE_VERIFIED_ON, CHINA_INTAKE_NEXT_REVIEW } from '@/lib/china-intakes';
 import { CHINA_REPORT_OFFICIAL_AUTHORITIES } from '@/lib/china-benchmark';
@@ -44,7 +45,8 @@ const statusStyles: Record<IntakeStatus, string> = {
 
 const timelineSteps = [
   { step: 'Fit assessment & document prep', window: '4–6 months before intake', detail: 'Gather SSC/HSC/Degree transcripts, passport, physical exam, and police clearance.' },
-  { step: 'University & CSC portal submission', window: '3–5 months before intake', detail: 'Submit application to target universities and CSC portal with verified certificates.' },
+  { step: 'CSCA test sitting (Undergraduate CSC applicants)', window: 'Dec 2026, Jan 2027 or Mar 2027', detail: 'Sit the mandatory CSCA entrance examination (Math, Physics, Chemistry, Chinese, or Humanities) if applying for Bachelor CSC scholarships. EduExpress provides free CSCA Master Pro access to applicants opening a file.' },
+  { step: 'University & CSC portal submission', window: '3–5 months before intake', detail: 'Submit application to target universities and CSC portal with verified certificates and exam scores.' },
   { step: 'Admission notice & JW201/JW202 issuance', window: '2–3 months before intake', detail: 'Receive official admission package and Chinese Ministry of Education JW form.' },
   { step: 'Visa filing via CVASC Dhaka', window: 'Before departure', detail: 'Submit your X1/X2 student visa application via Chinese Visa Center Dhaka and avoid non-refundable tickets until approval.' },
 ];
@@ -56,10 +58,12 @@ const guides = [
   { label: 'March 2027 university shortlist', href: '/china-march-2027-intake' },
   { label: 'China scholarships for Bangladeshi students', href: '/china-scholarships-bangladesh' },
   { label: 'CSC scholarship guide', href: '/csc-scholarship-bangladesh' },
+  { label: 'CSCA exam guide Bangladesh (বাংলা গাইড)', href: '/bn/csca-exam-bangladesh' },
+  { label: 'CSCA entrance exam action guide', href: '/updates/csca-guide-study-in-china' },
+  { label: 'CSCA-exempt universities in China', href: '/universities?country=China&cscaFree=1' },
   { label: 'MBBS in China & BMDC guide', href: '/mbbs-in-china-bangladesh' },
   { label: 'China admission requirements', href: '/china-admission-requirements' },
   { label: 'China student visa from Bangladesh', href: '/china-student-visa-bangladesh' },
-  { label: 'CSCA entrance exam guide', href: '/updates/csca-guide-study-in-china' },
   { label: 'China K-Visa STEM graduate route', href: '/updates/china-k-visa' },
   { label: 'Bangladesh-China cost benchmark', href: '/china-study-report-bangladesh' },
   { label: 'Program & tuition finder', href: '/programs' },
@@ -71,6 +75,11 @@ const intakeFaqs = [
     question: 'Should Bangladeshi students aim for March or September intake in China?',
     answer:
       'September (Autumn) is the primary intake in China: nearly all English-taught Bachelor’s, Master’s, PhD and MBBS degrees open, and the widest Chinese Government (CSC) and provincial scholarship quotas target September. March (Spring) offers faster entry without waiting another year, mainly for Chinese language, preparatory tracks and selected engineering/business programmes.',
+  },
+  {
+    question: 'Is CSCA required for March intake or only September intake?',
+    answer:
+      'CSCA is strictly required for Bachelor degree applicants under Chinese Government Scholarship (CSC) and selective tier-1 university undergraduate admissions, which primarily open for September (Autumn) intake. March (Spring) intake courses consist primarily of Chinese language and foundation pathways where CSCA is NOT required for entry. Master and PhD applicants across both intakes are also completely exempt from CSCA.',
   },
   {
     question: 'When do CSC scholarships close for the September intake?',
@@ -209,6 +218,10 @@ export default function ChinaIntakesDeadlinesPage() {
             </li>
           ))}
         </ol>
+
+        <div className="mt-8">
+          <CscaMasterProOfferCard compact />
+        </div>
       </Section>
 
       <Section tone="navy" title="Visa-first service terms." intro="EduExpress International tracks intake windows directly with university admissions offices. No file opening charge, and no EduExpress service fee before your China visa approval. University, embassy and other third-party charges required earlier are itemised in writing before you proceed.">

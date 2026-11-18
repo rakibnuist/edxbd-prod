@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CalendarClock, Check, ChevronRight, Clock, ExternalLink, Link2, MessageCircle, Phone, ShieldCheck } from 'lucide-react';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import HomeLeadForm from '@/components/lead/HomeLeadForm';
 import { teamMembers } from '@/data/teamMembers';
 import { config } from '@/lib/config';
@@ -163,6 +164,14 @@ export default function UpdateClient({ update, related = [], stale, cscDirectory
 
             <div className="update-body" dangerouslySetInnerHTML={{ __html: update.content }} />
 
+            {(category.toLowerCase() === 'china' ||
+              /csca|csc|cgs|china|chinese/i.test(update.slug) ||
+              /csca|csc/i.test(update.title)) && (
+              <div className="mt-10">
+                <CscaMasterProOfferCard assessmentHref="#apply-help" compact headingLevel="h2" />
+              </div>
+            )}
+
             {cscDirectory && <CscDirectoryFooter data={cscDirectory} />}
 
             {(() => {
@@ -234,6 +243,7 @@ export default function UpdateClient({ update, related = [], stale, cscDirectory
               </div>
               <ul className="mt-5 grid gap-2 border-t border-white/15 pt-5 text-[14px] leading-6 text-white/80">
                 <li className="flex gap-2"><Check size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" /> No EduExpress fee before your China visa is approved</li>
+                <li className="flex gap-2"><Check size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" /> Free CSCA Master Pro access (CNY 99 value) when you open your China file</li>
                 <li className="flex gap-2"><Check size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" /> Every cost in writing</li>
                 <li className="flex gap-2"><Check size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" /> Office in Dhanmondi, Dhaka since 2018</li>
               </ul>

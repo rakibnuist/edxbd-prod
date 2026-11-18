@@ -23,6 +23,7 @@ export const programSegments: ProgramSegment[] = [
     match: row => row.level === 'Bachelor' && row.languages.includes('English'),
     faqs: [
       { question: 'Do English-taught bachelor programs in China need IELTS?', answer: 'Many accept IELTS or an equivalent test, and some accept an English-medium HSC certificate or an online interview instead. The rule differs by university and can change each intake, so check the specific program before you apply.' },
+      { question: 'Do English-taught bachelor programs in China require the CSCA exam?', answer: 'Chinese Government Scholarship (CSC) undergraduate applicants and selected Chinese universities require CSCA (Mathematics in English, plus Physics or Chemistry where specified). Several self-funded and university-scholarship English-taught bachelor tracks still waive CSCA for 2027. Students who open a verified China file with EduExpress (BDT 0 file-opening fee) receive complimentary CSCA Master Pro access (CNY 99 value on cscamaster.com).' },
       { question: 'How long is a bachelor degree in China?', answer: 'Most bachelor programs take four years. Architecture, some engineering programs and medicine can take five or six. Chinese-taught programs may add a year of language study first.' },
     ],
   },
@@ -47,6 +48,7 @@ export const programSegments: ProgramSegment[] = [
     match: row => row.level === 'Master',
     faqs: [
       { question: "What documents do I need for a master's in China?", answer: 'Usually a bachelor degree certificate and transcript, a passport, a study plan, two recommendation letters, an English or HSK result, and a physical examination form. Some programs also ask for a supervisor acceptance letter.' },
+      { question: "Is the CSCA entrance exam required for a master's degree in China?", answer: "No. The CSCA exam is strictly an undergraduate (bachelor's) admission requirement. Master's and PhD applicants are exempt from CSCA and are evaluated on their bachelor's transcripts, study plan or research proposal, recommendation letters, and language proof." },
       { question: "Can I get a scholarship for a master's in China?", answer: "Yes. Many universities record partial or full tuition scholarships for master's students, and some add a stipend. See the scholarship database for the recorded terms at each university." },
     ],
   },

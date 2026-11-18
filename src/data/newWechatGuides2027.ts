@@ -1,28 +1,28 @@
 import type { GuideData } from './newGuides2027';
 
 export const WECHAT_15_GUIDES_DATA: Record<string, GuideData> = {
-  // 1. CSCA Exam Guide
+  // 1. CSCA Exam Guide (University Policy & Exemption Roadmap)
   'csca-exam-guide-chinese-universities-2026-2027': {
     id: 'csca-exam-guide-chinese-universities-2026-2027',
-    title: 'Will Every Chinese University Require the CSCA from 2026? Syllabus, Timetable & Preparation Guide',
+    title: 'Which Chinese Universities Require CSCA in 2026–2028? Mandatory Policy, Major Tracks & Exemptions',
     slug: 'csca-exam-guide-chinese-universities-2026-2027',
     type: 'update',
     category: 'China',
     categories: JSON.stringify(['China', 'Admissions', 'Exam Guide']),
     tags: JSON.stringify([
-      'csca',
-      'csca exam 2026',
-      'csca syllabus',
-      'study in china',
+      'csca university requirements',
+      'csca exempt universities china',
+      'csca mandatory 2027 2028',
+      'study in china without csca',
       'china undergraduate entrance exam',
       'chinese government scholarship',
-      'international students china',
+      'csca subjects by major',
     ]),
     excerpt:
-      'Official breakdown of the China Scholastic Competency Assessment (CSCA): mandatory implementation roadmap (2026/2027 scholarship applicants first, universal by 2028), syllabus subjects, exam formats, fee structures, and sample question standards for international undergraduate applicants.',
-    metaTitle: 'CSCA Exam Guide 2026–2028: Syllabus & Dates | EduExpress',
+      'University-by-university policy analysis of the China Scholastic Competency Assessment (CSCA): Phase 1 (2026/2027 CGS scholarship mandate) vs Phase 2 (2028 universal rollout), subject combinations by major, Master/PhD exemptions, and CSCA-exempt undergraduate routes.',
+    metaTitle: 'CSCA University Policy 2026–2028 & Exemptions | EduExpress',
     metaDescription:
-      'Official guide to the CSCA (China Scholastic Competency Assessment): 2026–2028 timetable, syllabus, test subjects, fees, and university requirements.',
+      'Which Chinese universities require the CSCA exam in 2026–2028? Compare mandatory CGS rules, subject tracks by major, and CSCA-exempt university options.',
     featuredImage: '/updates/covers/csca-exam-guide-chinese-universities-2026-2027.jpg',
     author: 'Md Tauhidul Islam Nur',
     reviewer: 'Abdullah Al Rakib',
@@ -107,7 +107,24 @@ export const WECHAT_15_GUIDES_DATA: Record<string, GuideData> = {
 </table>
 
 <h2>3. How Universities Use CSCA Scores</h2>
-<p>Universities evaluate CSCA score reports in conjunction with secondary school transcripts (Grade 12 / High School Diploma / A-Levels / IB) and language proficiency certifications. Admissions committees receive both raw subject scores and candidate percentile rankings benchmarked against global test-takers, enabling fair cross-national academic comparisons.</p>`,
+<p>Universities evaluate CSCA score reports in conjunction with secondary school transcripts (Grade 12 / High School Diploma / A-Levels / IB) and language proficiency certifications. Admissions committees receive both raw subject scores and candidate percentile rankings benchmarked against global test-takers, enabling fair cross-national academic comparisons.</p>
+
+<h2>4. Complimentary CSCA Master Pro Access for EduExpress China Applicants</h2>
+<p>Bangladeshi students who complete a <a href="/education-fit-assessment">Free Education Fit Assessment</a> and open a verified China undergraduate or <a href="/csc-scholarship-bangladesh">CSC scholarship</a> application file with EduExpress (at <strong>BDT 0 file-opening charge</strong> and <strong>no EduExpress service fee before China visa approval</strong>) receive a complimentary <strong>CSCA Master Pro seat activation code</strong> (worth CNY 99 per intake on <a href="https://www.cscamaster.com/" target="_blank" rel="noopener noreferrer">cscamaster.com</a>). It unlocks unlimited attempts across 155 full-length mock papers, 21 timed official past papers, and 2,867 syllabus drills. Looking for Dhaka (UTC+6) sitting times, dual-currency card fee payment steps, and home-proctoring tips? Read our <a href="/updates/csca-guide-study-in-china">2027 Bangladesh CSCA Entrance Test &amp; Preparation Guide</a>, take a <a href="https://www.cscamaster.com/free-exam" target="_blank" rel="noopener noreferrer">free 10-question diagnostic mock test on CSCA Master</a>, or <a href="/universities?country=China&amp;cscaFree=1">browse Chinese universities with CSCA-exempt options</a>.</p>
+
+<h2>5. Frequently Asked Questions on CSCA University Policy</h2>
+<details>
+  <summary>Do Master’s and PhD applicants to Chinese universities need to take the CSCA?</summary>
+  <p>No. The CSCA mandate applies strictly to undergraduate (Bachelor’s) admission and scholarship candidates. Postgraduate (Master’s and Doctoral) applicants are assessed via academic transcripts, research proposals, recommendation letters, and English/Chinese language certificates.</p>
+</details>
+<details>
+  <summary>Which Chinese universities waive or do not require CSCA for 2027 intake?</summary>
+  <p>During Phase 1 (2026/2027), CSCA is mandatory for Chinese Government Scholarship (CGS) undergraduate applicants and specific universities that list it in their admission brochure (such as NJUST, GUCM, WMU, CQMU, and Fudan). Several self-funded and university-scholarship English-taught Bachelor’s programs still accept direct applications without CSCA prior to the 2028 universal rollout. Check our <a href="/universities?country=China&amp;cscaFree=1">verified CSCA-exempt Chinese university directory</a>.</p>
+</details>
+<details>
+  <summary>How can Bangladeshi students get free CSCA Master Pro mock tests?</summary>
+  <p>When you open a verified China university or CSC scholarship application file with EduExpress International (BDT 0 file-opening charge and no EduExpress service fee before China visa approval), you receive a complimentary CSCA Master Pro activation code (CNY 99 value on cscamaster.com) covering 155 mock tests and 21 timed official past papers.</p>
+</details>`,
   },
 
   // 2. Fudan University ICES Spring 2027

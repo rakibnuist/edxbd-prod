@@ -940,6 +940,20 @@ export default function UniversityProfileClient({
                         <li className="text-slate-500">Standard {selected.level} academic transcripts and language proficiency apply.</li>
                       )}
                     </ul>
+
+                    {isChina && (
+                      <div className="mt-3 rounded-lg border border-emerald-200/60 bg-emerald-50/50 p-2.5 text-[11px] leading-relaxed text-slate-700">
+                        {selected.level === 'Bachelor' ? (
+                          <span>
+                            <strong className="text-petrol-800">CSCA Exam Note:</strong> CSC Bachelor applicants require CSCA exam scores. EduExpress files include complimentary <Link href="/updates/csca-guide-study-in-china" className="font-semibold text-emerald-800 underline">CSCA Master Pro</Link> access (worth ¥99).
+                          </span>
+                        ) : (
+                          <span>
+                            <strong className="text-petrol-800">CSCA Exemption:</strong> CSCA is strictly for Bachelor admissions. {selected.level} applications are <strong className="text-emerald-800">CSCA-exempt</strong>.
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-4 border-t border-slate-200/80 pt-3 flex flex-wrap items-center justify-between gap-2">
@@ -1059,6 +1073,42 @@ export default function UniversityProfileClient({
           <div className="mt-6">
             <UniversityEntrySummary programs={programs} selectedId={selected?.id || ''} />
           </div>
+
+          {isChina && (
+            <div className="mt-6 rounded-2xl border border-emerald-200/90 bg-emerald-50/40 p-5 sm:p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/60 pb-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-900">
+                  <ShieldCheck size={14} className="text-emerald-700" />
+                  CSCA Entrance Exam &amp; Exemption Rules
+                </span>
+                <span className="text-xs font-semibold text-emerald-800">2026 / 2027 Admission Cycle</span>
+              </div>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2 text-xs leading-relaxed text-slate-700">
+                <div className="rounded-xl border border-emerald-200/60 bg-white p-4">
+                  <p className="font-bold text-petrol-800 text-[13px]">Bachelor &amp; CSC Candidates</p>
+                  <p className="mt-1 text-slate-600">
+                    CSCA (China Scholastic Competency Assessment) is mandatory for Chinese Government Scholarship (CSC) undergraduate applicants. Students opening a file with EduExpress receive complimentary <strong>CSCA Master Pro</strong> access (worth ¥99) to practice official mock tests.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
+                    <Link href="/updates/csca-guide-study-in-china" className="font-bold text-emerald-800 hover:underline">CSCA Guide (EN) →</Link>
+                    <span>·</span>
+                    <Link href="/bn/csca-exam-bangladesh" className="font-bold text-emerald-800 hover:underline">CSCA গাইড (বাংলা) →</Link>
+                  </div>
+                </div>
+                <div className="rounded-xl border border-emerald-200/60 bg-white p-4">
+                  <p className="font-bold text-petrol-800 text-[13px]">Master’s, PhD &amp; Non-CSCA Routes</p>
+                  <p className="mt-1 text-slate-600">
+                    Master’s and PhD applicants are <strong>completely exempt</strong> from CSCA. Additionally, selected English-taught self-funded undergraduate and foundation programs accept direct entry without CSCA scores.
+                  </p>
+                  <div className="mt-3 text-[11px]">
+                    <Link href="/universities?country=China&cscaFree=1" className="font-bold text-emerald-800 hover:underline">
+                      Explore CSCA-Exempt China Universities →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="mt-7 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5">
             <div>

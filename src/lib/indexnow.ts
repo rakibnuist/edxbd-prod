@@ -239,6 +239,7 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/bn/study-in-china-cost-bangladesh',
     '/bn/csc-scholarship-bangladesh',
     '/bn/mbbs-in-china-bangladesh',
+    '/bn/csca-exam-bangladesh',
     '/study-in-malaysia-from-bangladesh',
     '/malaysia-study-cost-bangladesh',
     '/malaysia-student-visa-bangladesh',

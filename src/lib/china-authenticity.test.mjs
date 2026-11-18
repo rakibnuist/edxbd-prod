@@ -808,3 +808,40 @@ test('Step 27: Bing & AI citation optimization — llms, dynamic IndexNow sitema
   assert.ok(csc.includes('/updates/nanjing-university-csc-type-b-scholarship-2027'));
   assert.ok(csc.includes('5-digit CSC Agency Number'));
 });
+
+test('Step 28: Complimentary CSCA Master Pro offer card is integrated across EN/BN China, CSC, MBBS, Guide, Update, and LLM files', () => {
+  const offerCard = read('src/components/china/CscaMasterProOfferCard.tsx');
+  assert.ok(offerCard.includes('https://www.cscamaster.com/free-exam'));
+  assert.ok(offerCard.includes('https://www.cscamaster.com/csca/countries/bangladesh'));
+  assert.ok(offerCard.includes('/universities?country=China&cscaFree=1'));
+
+  for (const rel of [
+    'src/app/csc-scholarship-bangladesh/page.tsx',
+    'src/app/bn/csc-scholarship-bangladesh/page.tsx',
+    'src/app/bn/csca-exam-bangladesh/page.tsx',
+    'src/app/study-in-china-from-bangladesh/page.tsx',
+    'src/app/bn/study-in-china/page.tsx',
+    'src/app/mbbs-in-china-bangladesh/page.tsx',
+    'src/app/bn/mbbs-in-china-bangladesh/page.tsx',
+    'src/app/scholarships/page.tsx',
+    'src/app/china-universities/page.tsx',
+    'src/components/china/ChinaGuidePage.tsx',
+    'src/app/updates/[slug]/UpdateClient.tsx',
+  ]) {
+    assert.ok(read(rel).includes('CscaMasterProOfferCard'), `${rel} must render CscaMasterProOfferCard`);
+  }
+
+  const bnCsca = read('src/app/bn/csca-exam-bangladesh/page.tsx');
+  assert.ok(bnCsca.includes('const trail: Crumb[] ='));
+  assert.ok(bnCsca.includes('citationJsonLd('));
+  assert.ok(bnCsca.includes('primaryImageOfPage: primaryImageOfPageSchema('));
+  assert.ok(bnCsca.includes('<BnChinaRelatedGuides'));
+  assert.ok(!bnCsca.includes('১০০%') && !bnCsca.includes('শতভাগ'));
+
+  assert.ok(read('src/app/sitemaps/guides.xml/route.ts').includes("'bn/csca-exam-bangladesh'"));
+  assert.ok(read('src/app/sitemap.ts').includes("'/bn/csca-exam-bangladesh'"));
+  assert.ok(read('src/lib/indexnow.ts').includes("'/bn/csca-exam-bangladesh'"));
+  assert.ok(read('public/llms.txt').includes('https://www.cscamaster.com/'));
+  assert.ok(read('public/llms.txt').includes('https://eduexpressint.com/bn/csca-exam-bangladesh'));
+  assert.ok(read('src/lib/machine-readable.ts').includes('https://www.cscamaster.com/'));
+});

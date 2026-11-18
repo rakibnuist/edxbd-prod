@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, BadgeCheck, CalendarCheck, ChevronRight, Globe2, MapPin, MessageCircle, ShieldCheck, Wallet } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import { JsonLd, Section, kit } from '@/components/page/PageKit';
 import { CHINA_REPORT_OFFICIAL_AUTHORITIES } from '@/lib/china-benchmark';
 import { config } from '@/lib/config';
@@ -60,6 +61,7 @@ const guides = [
   { label: 'পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড', href: '/bn/study-in-china-cost-bangladesh' },
   { label: 'চায়না স্টুডেন্ট ভিসা (X1/X2)', href: '/bn/china-student-visa-bangladesh' },
   { label: 'চীনে MBBS ভর্তি ও BMDC গাইড (বাংলা)', href: '/bn/mbbs-in-china-bangladesh' },
+  { label: 'CSCA ভর্তি পরীক্ষার গাইড (বাংলা)', href: '/bn/csca-exam-bangladesh' },
   { label: 'ইনটেক ও Application Deadlines', href: '/china-intakes-deadlines' },
   { label: 'বাংলাদেশ-চীন ডেটা ও খরচ রিপোর্ট', href: '/china-study-report-bangladesh' },
   { label: 'চীনের শীর্ষ বিশ্ববিদ্যালয় তালিকা', href: '/china-universities' },
@@ -148,6 +150,9 @@ export default function BengaliStudyInChinaPage() {
               <p className="mt-3 text-[16px] leading-7 text-ink-soft">{feature.detail}</p>
             </div>
           ))}
+        </div>
+        <div className="mt-6">
+          <CscaMasterProOfferCard lang="bn" assessmentHref="#bn-assessment" compact />
         </div>
       </Section>
 

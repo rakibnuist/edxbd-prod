@@ -275,6 +275,7 @@ test('built HTML checks — success stories schema/cross-links and all Bengali C
     ['bn/china-student-visa-bangladesh.html', '/china-student-visa-bangladesh'],
     ['bn/csc-scholarship-bangladesh.html', '/csc-scholarship-bangladesh'],
     ['bn/mbbs-in-china-bangladesh.html', '/mbbs-in-china-bangladesh'],
+    ['bn/csca-exam-bangladesh.html', '/updates/csca-guide-study-in-china'],
   ];
 
   for (const [file, englishTwin] of bnPages) {
@@ -615,6 +616,7 @@ test('Step 26 built HTML check: all 20 Step 26 routes emit primaryImageOfPage Im
     'bn/study-in-china.html',
     'bn/csc-scholarship-bangladesh.html',
     'bn/mbbs-in-china-bangladesh.html',
+    'bn/csca-exam-bangladesh.html',
     'bn/study-in-china-cost-bangladesh.html',
     'bn/china-student-visa-bangladesh.html',
   ];
