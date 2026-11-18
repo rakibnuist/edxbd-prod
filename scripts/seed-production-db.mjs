@@ -37,6 +37,9 @@ try {
   console.log('Running seed-wuzhou-university.mjs...');
   execSync('node scripts/seed-wuzhou-university.mjs', { stdio: 'inherit' });
 
+  console.log('Running seed-march-2027-new-universities.mjs...');
+  execSync('node scripts/seed-march-2027-new-universities.mjs', { stdio: 'inherit' });
+
   console.log('Running complete-all-universities-data.mjs...');
   execSync('node scripts/complete-all-universities-data.mjs', { stdio: 'inherit' });
 

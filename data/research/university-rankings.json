@@ -2598,6 +2598,19 @@
       ]
     },
     {
+      "slug": "shandong-university-of-technology",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/shandong-university-of-technology"
+        }
+      ]
+    },
+    {
       "slug": "shanghai-business-school",
       "rankings": [
         {
@@ -3815,6 +3828,19 @@
           "rank": "=165",
           "scope": "world",
           "sourceUrl": "https://www.topuniversities.com/universities/wuhan-university"
+        }
+      ]
+    },
+    {
+      "slug": "wuzhou-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "350+",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/wuzhou-university"
         }
       ]
     },

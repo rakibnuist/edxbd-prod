@@ -1928,7 +1928,7 @@
       "name": "Shandong University of Technology",
       "acronym": "SDUT",
       "city": "Zibo, Shandong",
-      "logo": "/images/campaigns/march-2027/shandong-university-of-technology.png",
+      "logo": "/images/universities/logos/shandong-university-of-technology.webp",
       "ranking": {
         "value": "World #801–900",
         "scope": "World",
@@ -1940,40 +1940,30 @@
       "programmes": [
         {
           "tuitionLabel": "Chinese language tuition",
-          "teachingLanguage": "Chinese preparation; English or Chinese bachelor",
+          "teachingLanguage": "English-taught bachelor (with Chinese language semester)",
           "costItems": [
             {
-              "item": "Chinese language tuition — one semester",
+              "item": "Chinese language tuition",
               "amount": "CNY 5,000 / semester",
-              "note": ""
+              "note": "March–July 2027"
             },
             {
-              "item": "Chinese language tuition — full academic year",
-              "amount": "CNY 8,000 / year",
-              "note": "Alternative to the semester course."
-            },
-            {
-              "item": "Chinese-taught arts and business bachelor",
-              "amount": "CNY 10,000 / year",
-              "note": ""
-            },
-            {
-              "item": "English-taught bachelor / Chinese-taught science and engineering",
+              "item": "English-taught bachelor tuition",
               "amount": "CNY 12,000 / year",
-              "note": ""
+              "note": "From September 2027, 4 years"
             },
             {
-              "item": "Four-person dormitory",
+              "item": "Four-person (quad) dormitory",
               "amount": "Free",
               "note": ""
             },
             {
-              "item": "Double room",
+              "item": "Double room (optional)",
               "amount": "CNY 5,200 / year",
               "note": ""
             },
             {
-              "item": "Single room",
+              "item": "Single room (optional)",
               "amount": "CNY 10,400 / year",
               "note": ""
             }
@@ -1990,24 +1980,23 @@
           ],
           "documentChecklist": [
             "Valid passport and recent photograph",
-            "High-school certificate and academic transcripts",
-            "Valid CSCA score report for bachelor entry",
-            "Evidence of good conduct",
-            "Language evidence for the selected bachelor programme",
-            "Programme-specific application and supporting documents"
+            "Secondary school certificate and transcripts (English translation)",
+            "CSCA score report (before June 2027 for bachelor entry)",
+            "Police clearance / evidence of good conduct",
+            "Foreigner Physical Examination Form"
           ],
-          "scholarshipConditions": "For the language-tuition credit, complete the spring language course and meet the selected bachelor programme’s admission requirements. Submit a valid CSCA result and maintain good conduct. The credit applies on approved transfer.",
+          "scholarshipConditions": "Free quad-room accommodation. Bachelor progression requires a valid CSCA result submitted before June 2027. Eligible regions: Asia and North Africa. Age 18–25.",
           "professionalNote": "",
-          "csca": "A valid CSCA score report is required for bachelor progression.",
+          "csca": "CSCA score required before June 2027 for bachelor entry.",
           "id": "sdut-language-bachelor-pathway",
           "route": "foundation",
-          "name": "Chinese language → Bachelor",
+          "name": "Chinese Language → English-taught Bachelor (4.5 Years)",
           "tuition": "CNY 5,000",
           "period": "semester",
           "feeBasis": "Owner-supplied 2027 pathway offer",
           "duration": "0.5-year language + 4-year bachelor",
-          "entry": "Spring Chinese language → autumn bachelor application",
-          "extra": "Free four-person dormitory. Double room CNY 5,200/year; single room CNY 10,400/year.",
+          "entry": "March 2027 language semester → September 2027 bachelor",
+          "extra": "Free four-person (quad) dormitory. Language CNY 5,000/semester; bachelor CNY 12,000/year. Deadline 30 December 2026.",
           "awardTitle": "Free shared dormitory + tuition credit",
           "scholarship": "The pathway includes a free four-person dormitory. Spring language tuition may be credited towards first-year bachelor tuition after an eligible transfer.",
           "majors": [
@@ -2017,12 +2006,10 @@
             "Civil Engineering",
             "Electrical Engineering and Automation",
             "Energy and Power Engineering — Vehicle Engine Specialization",
-            "English — Business English Specialization",
-            "Resource Exploration Engineering",
-            "Chinese Language and Literature",
-            "Business Administration"
+            "Business English",
+            "Resource Exploration Engineering"
           ],
-          "eligibility": "High-school qualification; valid CSCA score for bachelor entry; good conduct and the academic and language requirements of the selected undergraduate programme.",
+          "eligibility": "Secondary school completion; age 18–25; no entrance exam or interview; open to applicants from Asia and North Africa. A valid CSCA score is required before June 2027 to start the bachelor.",
           "majorGroups": [
             {
               "label": "English-taught bachelor’s majors",
@@ -2033,20 +2020,13 @@
                 "Civil Engineering",
                 "Electrical Engineering and Automation",
                 "Energy and Power Engineering — Vehicle Engine Specialization",
-                "English — Business English Specialization",
+                "Business English",
                 "Resource Exploration Engineering"
-              ]
-            },
-            {
-              "label": "Chinese-taught bachelor’s majors",
-              "majors": [
-                "Chinese Language and Literature",
-                "Business Administration"
               ]
             }
           ],
           "fundingStage": "Bachelor pathway benefits",
-          "fundingHighlight": "Free four-person dormitory + tuition credit"
+          "fundingHighlight": "Free quad room · bachelor CNY 12,000/yr"
         }
       ]
     },
@@ -2426,6 +2406,158 @@
           "majorGroups": [],
           "fundingStage": "Language study",
           "fundingHighlight": "Affordable CNY 6,000/semester tuition"
+        }
+      ]
+    },
+    {
+      "id": "civil-aviation-university-of-china",
+      "name": "Civil Aviation University of China",
+      "acronym": "CAUC",
+      "city": "Tianjin",
+      "logo": "/images/universities/logos/civil-aviation-university-of-china.webp",
+      "ranking": {
+        "value": "China #295",
+        "scope": "China",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/civil-aviation-university-of-china"
+      },
+      "programmes": [
+        {
+          "id": "cauc-foundation-bachelor",
+          "route": "foundation",
+          "name": "Half-Year Foundation → English-taught Bachelor (0.5 + 4 Years)",
+          "tuition": "CNY 7,500",
+          "period": "semester",
+          "feeBasis": "University March 2027 foundation offer",
+          "extra": "Double room CNY 3,000/semester during foundation; application fee CNY 400. Direct entry to English-taught bachelor after foundation.",
+          "awardTitle": "1st / 2nd-class scholarship eligibility",
+          "scholarship": "After completing the foundation, students become eligible for the university first- or second-class bachelor scholarship.",
+          "majors": [
+            "English-taught bachelor programmes (aviation, engineering and management tracks)"
+          ],
+          "eligibility": "Age 17–24; minimum 60% in secondary school; IELTS 5.5 / TOEFL 70 / Duolingo 85; no exam or interview; no country restriction.",
+          "duration": "0.5-year foundation + 4-year bachelor",
+          "entry": "March 2027 foundation → September 2027 bachelor",
+          "tuitionLabel": "Foundation tuition",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "Foundation tuition",
+              "amount": "CNY 7,500 / semester",
+              "note": ""
+            },
+            {
+              "item": "Foundation accommodation (double room)",
+              "amount": "CNY 3,000 / semester",
+              "note": ""
+            },
+            {
+              "item": "Application fee",
+              "amount": "CNY 400",
+              "note": "One-off"
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "First-class scholarship",
+              "coverage": "Available to eligible students after the foundation (subject to university assessment)."
+            },
+            {
+              "name": "Second-class scholarship",
+              "coverage": "Available to eligible students after the foundation (subject to university assessment)."
+            }
+          ],
+          "documentChecklist": [
+            "Valid passport and photograph",
+            "Secondary school certificate and transcripts (English translation)",
+            "Foreigner Physical Examination Form",
+            "Police clearance certificate",
+            "English proficiency certificate (IELTS 5.5 / TOEFL 70 / Duolingo 85)"
+          ],
+          "scholarshipConditions": "Scholarship class is determined after the foundation based on academic results.",
+          "professionalNote": "",
+          "csca": "Not required for foundation entry",
+          "majorGroups": [],
+          "fundingStage": "Foundation → bachelor",
+          "fundingHighlight": "Scholarship eligible after foundation"
+        }
+      ]
+    },
+    {
+      "id": "hechi-university",
+      "name": "Hechi University",
+      "acronym": "HCU",
+      "city": "Hechi, Guangxi",
+      "logo": "/images/universities/logos/hechi-university.webp",
+      "ranking": {
+        "value": "China #510",
+        "scope": "China",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/hechi-university"
+      },
+      "programmes": [
+        {
+          "id": "hechi-chinese-language-1-5yr",
+          "route": "language",
+          "name": "Intensive Chinese Language (1.5 Years or 0.5 Year)",
+          "tuition": "CNY 9,000",
+          "period": "full 1.5 years",
+          "feeBasis": "University March 2027 language offer",
+          "extra": "March 2027 – June 2028, targets HSK 5, beginners accepted. Quad room CNY 3,000 for the full 1.5 years. 0.5-year option: CNY 3,000 tuition + CNY 1,500 room.",
+          "awardTitle": "Merit scholarship",
+          "scholarship": "CNY 1,000 / year after the first semester for students scoring above 80%.",
+          "majors": [
+            "Chinese Language (Beginner → HSK 5)"
+          ],
+          "eligibility": "Age 18–25; secondary school completion; beginners accepted; open to all nationalities.",
+          "duration": "1.5 years (or 0.5 year)",
+          "entry": "March 2027",
+          "tuitionLabel": "Tuition (full 1.5 years)",
+          "teachingLanguage": "Chinese",
+          "costItems": [
+            {
+              "item": "1.5-year tuition",
+              "amount": "CNY 9,000 total",
+              "note": "March 2027 – June 2028"
+            },
+            {
+              "item": "1.5-year accommodation (quad room)",
+              "amount": "CNY 3,000 total",
+              "note": ""
+            },
+            {
+              "item": "0.5-year tuition",
+              "amount": "CNY 3,000 total",
+              "note": ""
+            },
+            {
+              "item": "0.5-year accommodation (quad room)",
+              "amount": "CNY 1,500 total",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Merit scholarship",
+              "coverage": "CNY 1,000 / year from the second semester if score > 80%."
+            }
+          ],
+          "documentChecklist": [
+            "Valid passport and photograph",
+            "Secondary school certificate and transcripts (English translation)",
+            "Foreigner Physical Examination Form",
+            "Police clearance certificate"
+          ],
+          "scholarshipConditions": "Score above 80% in the first semester.",
+          "professionalNote": "",
+          "csca": "Not required",
+          "majorGroups": [],
+          "fundingStage": "Language funding",
+          "fundingHighlight": "1.5 yrs CNY 12,000 total incl. room"
         }
       ]
     }
