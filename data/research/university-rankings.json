@@ -559,12 +559,10 @@
       "slug": "civil-aviation-university-of-china",
       "rankings": [
         {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Best Chinese Universities Ranking",
+          "source": "ShanghaiRanking",
           "year": 2026,
-          "rank": "295",
-          "scope": "national",
-          "sourceUrl": "https://www.shanghairanking.com/institution/civil-aviation-university-of-china"
+          "scope": "National",
+          "rank": "295"
         }
       ]
     },
@@ -2007,12 +2005,16 @@
       "slug": "nanjing-university-of-science-and-technology",
       "rankings": [
         {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Best Chinese Universities Ranking",
+          "source": "ShanghaiRanking",
           "year": 2026,
-          "rank": "350+",
-          "scope": "national",
-          "sourceUrl": "https://www.shanghairanking.com/institution/nanjing-university-of-science-and-technology"
+          "scope": "National",
+          "rank": "34"
+        },
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "World",
+          "rank": "201-300"
         }
       ]
     },
@@ -4554,6 +4556,57 @@
           "rank": "3",
           "scope": "national",
           "sourceUrl": "https://www.topuniversities.com/universities/university-nottingham"
+        }
+      ]
+    },
+    {
+      "slug": "kunming-university-of-science-and-technology",
+      "rankings": [
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "National",
+          "rank": "138"
+        },
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "World",
+          "rank": "601-700"
+        }
+      ]
+    },
+    {
+      "slug": "southwest-jiaotong-university",
+      "rankings": [
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "National",
+          "rank": "53"
+        },
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "World",
+          "rank": "501-600"
+        }
+      ]
+    },
+    {
+      "slug": "central-south-university",
+      "rankings": [
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "National",
+          "rank": "13"
+        },
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "World",
+          "rank": "101-150"
         }
       ]
     }

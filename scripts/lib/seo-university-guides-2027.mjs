@@ -4,6 +4,7 @@ import { WECHAT_BATCH2_18_GUIDE_SPECS, upsert18WechatBatch2Universities } from '
 import { WECHAT_BATCH3_25_GUIDE_SPECS, upsert25WechatBatch3Universities } from './seo-wechat-25-batch3-guides-2027.mjs';
 import { SHENYANG_CITY_UNIVERSITY_GUIDE_SPECS, upsertShenyangCityUniversity } from './seo-shenyang-city-university-2027.mjs';
 import { WECHAT_BATCH4_9_GUIDE_SPECS, upsertWechatBatch4Universities } from './seo-wechat-batch4-guides-2027.mjs';
+import { WECHAT_BATCH5_7_GUIDE_SPECS, upsertWechatBatch5Universities } from './seo-wechat-batch5-guides-2027.mjs';
 import { TOP_MS_CS_AI_2027_DATA } from '../../src/data/topMsCsAiChina2027Guide.ts';
 import { OPEN_UNIVERSITIES_2027_DATA } from '../../src/data/chinaUniversitiesOpen2027Guide.ts';
 import { CSC_UNIVERSITY_LIST_2027_DATA } from '../../src/data/cscUniversityList2027Guide.ts';
@@ -2126,11 +2127,12 @@ export async function sync2027UniversityGuidesAndRecords(prisma) {
   updated += await upsert25WechatBatch3Universities(prisma);
   updated += await upsertShenyangCityUniversity(prisma);
   updated += await upsertWechatBatch4Universities(prisma);
+  updated += await upsertWechatBatch5Universities(prisma);
 
   const now = new Date();
   const reviewAt = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
 
-  const allSpecs = [...GUIDE_2027_SPECS, ...NEW_7_GUIDE_SPECS, ...WECHAT_15_GUIDE_SPECS, ...WECHAT_BATCH2_18_GUIDE_SPECS, ...WECHAT_BATCH3_25_GUIDE_SPECS, ...SHENYANG_CITY_UNIVERSITY_GUIDE_SPECS, ...WECHAT_BATCH4_9_GUIDE_SPECS];
+  const allSpecs = [...GUIDE_2027_SPECS, ...NEW_7_GUIDE_SPECS, ...WECHAT_15_GUIDE_SPECS, ...WECHAT_BATCH2_18_GUIDE_SPECS, ...WECHAT_BATCH3_25_GUIDE_SPECS, ...SHENYANG_CITY_UNIVERSITY_GUIDE_SPECS, ...WECHAT_BATCH4_9_GUIDE_SPECS, ...WECHAT_BATCH5_7_GUIDE_SPECS];
 
   for (const spec of allSpecs) {
     const existing = await prisma.content.findUnique({
