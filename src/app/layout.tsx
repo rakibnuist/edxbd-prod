@@ -8,8 +8,7 @@ import EducationTracking from "@/components/EducationTracking";
 import Footer from "@/components/Footer";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import MobileLeadBar from "@/components/MobileLeadBar";
-
-import StickyDishaChat from "@/components/chat/StickyDishaChat";
+import StickyDishaChat from "@/components/chat/LazyStickyDishaChat";
 import CookieConsent from "@/components/CookieConsent";
 import RevealObserver from "@/components/motion/RevealObserver";
 import MetaPixel from "@/components/MetaPixel";

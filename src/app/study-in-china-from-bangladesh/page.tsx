@@ -321,9 +321,9 @@ export default async function StudyInChinaFromBangladeshPage() {
                           alt={`${item.name} logo`}
                           width={116}
                           height={48}
-                          unoptimized
-                          loading="eager"
-                          decoding="sync"
+                          sizes="116px"
+                          loading="lazy"
+                          decoding="async"
                           className="max-h-11 w-auto max-w-[116px] object-contain"
                         />
                       </Link>

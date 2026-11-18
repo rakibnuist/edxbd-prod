@@ -29,7 +29,7 @@ export function buildContentSecurityPolicy(options: { isProduction: boolean }): 
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
-    "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com https://connect.facebook.net https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+    "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com https://connect.facebook.net https://*.conversionsapigateway.com https://*.run.app https://vitals.vercel-insights.com https://va.vercel-scripts.com",
     'frame-src https://www.googletagmanager.com https://www.facebook.com',
     "object-src 'none'",
     "base-uri 'self'",

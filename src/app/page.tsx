@@ -258,6 +258,7 @@ export default async function Home() {
     seenLogos.add(item.logo);
     return true;
   });
+  const tickerLogos = logos.slice(0, 26);
   const levels = [...new Set(plannerData.flatMap(item => item.levels))].filter(level => ['Bachelor’s', 'Master’s', 'PhD'].includes(level));
 
   const activeDestinations = countries.filter(country => country.isActive);
@@ -422,7 +423,7 @@ export default async function Home() {
             <button type="submit" className="ed-btn ed-btn-signal mt-6 min-h-[52px] w-full">
               Find universities <ArrowRight size={18} aria-hidden="true" />
             </button>
-            <p className="mt-3 text-center text-[13px] leading-5 text-ink-mute">University tuition and deposits are paid to the university and listed separately.</p>
+            <p className="mt-3 text-center text-[13px] leading-5 text-ink-soft">University tuition and deposits are paid to the university and listed separately.</p>
           </form>
         </div>
 
@@ -450,7 +451,7 @@ export default async function Home() {
           <div className="home-ticker mt-6">
             <div
               className="home-ticker-track items-center"
-              style={{ ['--ticker-duration' as string]: `${Math.max(60, Math.round(logos.length * 1.8))}s` }}
+              style={{ ['--ticker-duration' as string]: `${Math.max(48, Math.round(tickerLogos.length * 2))}s` }}
             >
               {[0, 1].map(copy => (
                 <ul
@@ -459,7 +460,7 @@ export default async function Home() {
                   aria-hidden={copy === 1 ? true : undefined}
                   inert={copy === 1 ? true : undefined}
                 >
-                  {logos.map(item => (
+                  {tickerLogos.map(item => (
                     <li key={`${item.slug}-${copy}`} className="shrink-0">
                       <Link
                         href={`/universities/${item.slug}`}
@@ -471,9 +472,9 @@ export default async function Home() {
                           alt={`${item.name} logo`}
                           width={116}
                           height={48}
-                          unoptimized
-                          loading="eager"
-                          decoding="sync"
+                          sizes="116px"
+                          loading="lazy"
+                          decoding="async"
                           className="max-h-11 w-auto max-w-[116px] object-contain"
                         />
                       </Link>
@@ -547,7 +548,7 @@ export default async function Home() {
                     <p className="text-xs font-bold uppercase tracking-wider text-[#2c6a97]">March 2027 Study Routes</p>
                     <h3 className="mt-0.5 text-[20px] font-bold leading-snug text-petrol-800">Choose your entry pathway</h3>
                   </div>
-                  <span lang="bn" className="rounded-full bg-lime-pale px-3 py-1 text-xs font-bold text-lime-deep">
+                  <span lang="bn" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }} className="rounded-full bg-lime-pale px-3 py-1 text-xs font-bold text-lime-deep">
                     ভিসার আগে ০ টাকা
                   </span>
                 </div>
@@ -762,7 +763,7 @@ export default async function Home() {
                   <span className="route-stop relative z-10 grid size-12 place-items-center rounded-full bg-lime font-display text-[20px] font-black text-petrol-800" aria-hidden="true">
                     {index + 1}
                   </span>
-                  <p className="mt-5 text-[13px] font-bold uppercase tracking-[0.14em] text-ink-mute">{['Consult', 'Compare', 'Apply', 'Fly'][index]}</p>
+                  <p className="mt-5 text-[13px] font-bold uppercase tracking-[0.14em] text-ink-soft">{['Consult', 'Compare', 'Apply', 'Fly'][index]}</p>
                   <h3 className="mt-1 text-[20px] font-semibold leading-snug tracking-[-0.02em] text-petrol-800">
                     <span className="sr-only">Step {index + 1}: </span>
                     {step.title}
@@ -880,13 +881,13 @@ export default async function Home() {
 
           <div className="mt-12 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
             {guideRows[0] && (
-              <Link href={guideRows[0].href} className="group flex flex-col rounded-3xl bg-canvas-soft p-3 transition hover:-translate-y-1">
+              <Link href={guideRows[0].href} aria-label={`Read update: ${guideRows[0].title}`} className="group flex flex-col rounded-3xl bg-canvas-soft p-3 transition hover:-translate-y-1">
                 <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
                   <Image src={guideRows[0].image} alt={guideRows[0].title} fill sizes="(max-width:1024px) 100vw, 640px" className="object-cover transition duration-700 group-hover:scale-[1.03]" />
                   {guides.length > 0 && <span className="absolute left-4 top-4 rounded-full bg-lime px-3 py-1 text-[14px] font-semibold text-petrol-800">Latest</span>}
                 </div>
                 <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
-                  <span className="text-[14px] font-semibold text-ink-mute">
+                  <span className="text-[14px] font-semibold text-ink-soft">
                     {guideRows[0].category}
                     {guideRows[0].date && <> · <time dateTime={guideRows[0].dateTime}>{guideRows[0].date}</time></>}
                   </span>
@@ -901,12 +902,12 @@ export default async function Home() {
             <ul className="grid content-start gap-3">
               {guideRows.slice(1, 5).map(row => (
                 <li key={row.key}>
-                  <Link href={row.href} className="group flex gap-4 rounded-3xl bg-canvas-soft p-3 transition hover:bg-lime-pale">
+                  <Link href={row.href} aria-label={`Read update: ${row.title}`} className="group flex gap-4 rounded-3xl bg-canvas-soft p-3 transition hover:bg-lime-pale">
                     <span className="relative size-24 shrink-0 overflow-hidden rounded-2xl sm:size-28">
                       <Image src={row.image} alt={row.title} fill sizes="112px" className="object-cover" />
                     </span>
                     <span className="flex min-w-0 flex-col justify-center py-1 pr-2">
-                      <span className="text-[14px] font-semibold text-ink-mute">
+                      <span className="text-[14px] font-semibold text-ink-soft">
                         {row.category}
                         {row.date && <> · <time dateTime={row.dateTime}>{row.date}</time></>}
                       </span>
@@ -936,10 +937,10 @@ export default async function Home() {
             <h2 data-anim="up" className={displaySection}>Questions parents ask first.</h2>
             <p className={`mt-5 ${lead}`}>Your situation is different? Ask a counsellor directly.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Chat with EduExpress counsellors on WhatsApp regarding questions" className="ed-btn ed-btn-signal min-h-[52px] px-7">
                 <MessageCircle size={18} aria-hidden="true" /> WhatsApp us
               </a>
-              <a href={telHref} className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              <a href={telHref} aria-label={`Call EduExpress counsellors at ${formatBangladeshPhone(officePhone)}`} className="ed-btn ed-btn-outline min-h-[52px] px-7">
                 <Phone size={18} aria-hidden="true" /> {formatBangladeshPhone(officePhone)}
               </a>
             </div>

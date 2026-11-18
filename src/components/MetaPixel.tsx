@@ -197,7 +197,66 @@ export default function MetaPixel() {
   }, [pathname]);
 
   useEffect(() => {
-    void initialiseOrTrackPage();
+    // If pixel is already loaded (e.g. client route transitions), track immediately.
+    const metaWindow = typeof window !== 'undefined' ? (window as MetaWindow) : undefined;
+    if (metaWindow?.__metaPixelLoaded) {
+      void initialiseOrTrackPage();
+      return;
+    }
+
+    // On initial page load, defer pixel bootstrap to an idle period or first user
+    // interaction so it doesn't block critical hydration or degrade mobile TBT.
+    let timeoutId: number | undefined;
+    let idleId: number | undefined;
+    let didInit = false;
+
+    const runInit = () => {
+      if (didInit) return;
+      didInit = true;
+      cleanupListeners();
+      if (typeof window !== 'undefined' && 'cancelIdleCallback' in window && idleId !== undefined) {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+      }
+      void initialiseOrTrackPage();
+    };
+
+    if (typeof window === 'undefined') return;
+
+    const cleanupListeners = () => {
+      window.removeEventListener('scroll', runInit);
+      window.removeEventListener('pointerdown', runInit);
+      window.removeEventListener('keydown', runInit);
+      window.removeEventListener('touchstart', runInit);
+    };
+
+    window.addEventListener('scroll', runInit, { passive: true, once: true });
+    window.addEventListener('pointerdown', runInit, { passive: true, once: true });
+    window.addEventListener('keydown', runInit, { passive: true, once: true });
+    window.addEventListener('touchstart', runInit, { passive: true, once: true });
+
+    const win = window as unknown as {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+
+    if (typeof win.requestIdleCallback === 'function') {
+      idleId = win.requestIdleCallback(runInit, { timeout: 3000 });
+    } else {
+      timeoutId = window.setTimeout(runInit, 2500);
+    }
+
+    return () => {
+      cleanupListeners();
+      if (idleId !== undefined && typeof win.cancelIdleCallback === 'function') {
+        win.cancelIdleCallback(idleId);
+      }
+      if (timeoutId !== undefined) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [initialiseOrTrackPage]);
 
   useEffect(() => {

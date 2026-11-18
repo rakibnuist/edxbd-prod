@@ -118,7 +118,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
             </span>
           </div>
           <div className="flex items-center gap-5">
-            <Link href="/bn/study-in-china" hrefLang="bn-BD" lang="bn" className="font-semibold text-petrol-700 hover:text-petrol-900">
+            <Link href="/bn/study-in-china" hrefLang="bn-BD" lang="bn" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }} className="font-semibold text-petrol-700 hover:text-petrol-900">
               বাংলা
             </Link>
             <a href={telHref} onClick={() => trackPhoneClick({ label: 'header_desktop_phone' })} className="inline-flex items-center gap-1.5 font-semibold text-petrol-700 hover:text-petrol-900">
@@ -327,6 +327,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
                 href="/bn/study-in-china"
                 hrefLang="bn-BD"
                 lang="bn"
+                style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
                 className="mt-4 flex items-center justify-between border-t border-rule pt-3 text-[15px] font-semibold text-petrol-700"
               >
                 বাংলায় পড়ুন <span aria-hidden="true">→</span>

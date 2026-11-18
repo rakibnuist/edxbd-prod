@@ -161,7 +161,11 @@ export default async function Footer() {
             <ul className="grid gap-2.5">
               {chinaFlagshipLinks.map(link => (
                 <li key={link.href}>
-                  <Link href={link.href} className={`${linkClass} inline-flex items-center gap-2`}>
+                  <Link
+                    href={link.href}
+                    className={`${linkClass} inline-flex items-center gap-2`}
+                    style={link.href.startsWith('/bn/') ? { fontFamily: 'system-ui, -apple-system, sans-serif' } : undefined}
+                  >
                     <span>{link.name}</span>
                     {link.badge && (
                       <span className="rounded-full bg-lime px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-petrol-800">
@@ -374,6 +378,7 @@ export default async function Footer() {
                 href="/bn/study-in-china"
                 lang="bn"
                 hrefLang="bn-BD"
+                style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
                 className="rounded-lg border border-white/15 bg-white/[0.06] px-2.5 py-1 font-bold text-lime transition hover:bg-lime hover:text-petrol-800"
               >
                 বাংলা
