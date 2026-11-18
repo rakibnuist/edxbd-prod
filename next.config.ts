@@ -149,6 +149,22 @@ const nextConfig: NextConfig = {
         destination: '/complaints-and-resolution',
         permanent: true,
       },
+      // 2027 Cycle URL Upgrade: complete-csc-universities-list-2026 -> complete-csc-universities-list-2027
+      {
+        source: '/updates/complete-csc-universities-list-2026',
+        destination: '/updates/complete-csc-universities-list-2027',
+        permanent: true,
+      },
+      {
+        source: '/updates/complete-csc-universities-list',
+        destination: '/updates/complete-csc-universities-list-2027',
+        permanent: true,
+      },
+      {
+        source: '/csc-universities-list-2027',
+        destination: '/updates/complete-csc-universities-list-2027',
+        permanent: true,
+      },
       {
         source: '/destinations/united-kingdom',
         destination: '/study-in-uk-from-bangladesh',
@@ -162,16 +178,6 @@ const nextConfig: NextConfig = {
       {
         source: '/destinations/:country',
         destination: '/study-in-:country-from-bangladesh',
-        permanent: true,
-      },
-      {
-        source: '/updates/complete-csc-universities-list-2027',
-        destination: '/updates/complete-csc-universities-list-2026',
-        permanent: true,
-      },
-      {
-        source: '/csc-universities-list-2027',
-        destination: '/updates/complete-csc-universities-list-2026',
         permanent: true,
       },
       {

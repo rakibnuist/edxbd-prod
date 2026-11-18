@@ -119,7 +119,7 @@ const ACTIVE_CHINA_METADATA_DEFAULTS = [
     ],
   },
   {
-    slug: 'complete-csc-universities-list-2026',
+    slug: 'complete-csc-universities-list-2027',
     category: 'Scholarships',
     metaTitle: 'CSC Universities List 2027 (306 Schools) | EduExpress',
     metaDescription:
@@ -323,10 +323,22 @@ async function main() {
     }
   }
 
+  // 6.5. Migrate legacy 2026 CSC directory slug to 2027
+  const legacyCscDirectory = await prisma.content.findUnique({
+    where: { slug: 'complete-csc-universities-list-2026' },
+  });
+  if (legacyCscDirectory) {
+    await prisma.content.update({
+      where: { id: legacyCscDirectory.id },
+      data: { slug: 'complete-csc-universities-list-2027' },
+    });
+    console.log('Migrated legacy CSC directory slug complete-csc-universities-list-2026 -> complete-csc-universities-list-2027');
+  }
+
   // 7. Upgrade flagship CSC directory and CSCA guide to 2027 metadata, first-party assets, and headings
   const flagship2027Upgrades = [
     {
-      slug: 'complete-csc-universities-list-2026',
+      slug: 'complete-csc-universities-list-2027',
       title: 'Complete CSC Universities List (2027 Cycle) - 306 Universities',
       metaTitle: 'CSC Universities List 2027 (306 Schools) | EduExpress',
       metaDescription:

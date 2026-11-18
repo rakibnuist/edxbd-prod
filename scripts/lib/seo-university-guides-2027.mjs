@@ -971,7 +971,7 @@ const GUIDE_2027_SPECS = [
 <ol>
   <li><strong>Verify passport expiry:</strong> NCU explicitly requires applicant passports to remain valid beyond <strong>September 2027</strong>.</li>
   <li><strong>Submit the Nanchang University online application:</strong> Register and upload your complete dossier on <a href="https://apply.ncu.edu.cn/" target="_blank" rel="noopener noreferrer">apply.ncu.edu.cn</a> by <strong>1 March 2027</strong>.</li>
-  <li><strong>Submit the CSC Online Application (Agency Code 10403):</strong> Apply on the <a href="https://www.campuschina.org/" target="_blank" rel="noopener noreferrer">CSC Study in China portal</a> under Type B using agency code <strong>10403</strong> before the same deadline. See our <a href="/csc-scholarship-bangladesh">CSC Scholarship guide for Bangladesh</a> and <a href="/updates/complete-csc-universities-list-2026">Complete CSC Universities List 2027</a> to compare parallel Type B options.</li>
+  <li><strong>Submit the CSC Online Application (Agency Code 10403):</strong> Apply on the <a href="https://www.campuschina.org/" target="_blank" rel="noopener noreferrer">CSC Study in China portal</a> under Type B using agency code <strong>10403</strong> before the same deadline. See our <a href="/csc-scholarship-bangladesh">CSC Scholarship guide for Bangladesh</a> and <a href="/updates/complete-csc-universities-list-2027">Complete CSC Universities List 2027</a> to compare parallel Type B options.</li>
   <li><strong>Complete university interview &amp; nomination:</strong> NCU IEC evaluates academic merit and conducts an interview assessment before recommending nominated candidates to CSC.</li>
 </ol>
 <h2>Required application documents (official 2027 checklist)</h2>
@@ -1041,11 +1041,11 @@ const GUIDE_2027_SPECS = [
 </ul>
 <p>Adding recorded quadruple-room accommodation (<strong>CNY 1,500/year</strong>), medical insurance (<strong>CNY 550/year</strong>), visa extension (<strong>CNY 400/year</strong>), and one-time registration (<strong>CNY 500</strong>) / local medical checkup (<strong>CNY 400–500</strong>), recurring annual university charges remain under <strong>CNY 7,500/year</strong> when qualifying for the reduced rate — always confirm your final payable figure in writing on CDNU’s official fee schedule before transfer.</p>
 <h2>CSC Scholarship vs CDNU university &amp; Sichuan regional funding</h2>
-<p>Students frequently search for “Chengdu Normal University CSC scholarship.” Because <a href="/updates/complete-csc-universities-list-2026">Chinese Government Scholarship (CSC) university-nominated quotas</a> vary by degree level, year, and bilateral vs university track, follow these verification rules:</p>
+<p>Students frequently search for “Chengdu Normal University CSC scholarship.” Because <a href="/updates/complete-csc-universities-list-2027">Chinese Government Scholarship (CSC) university-nominated quotas</a> vary by degree level, year, and bilateral vs university track, follow these verification rules:</p>
 <ol>
   <li><strong>Distinguish university tuition waivers from CSC full stipends:</strong> CDNU’s widely offered fee reduction (bringing tuition to <strong>CNY 5,000/year</strong> in recorded catalog routes) is a university-level reduction — not an automatic full CSC living-stipend award.</li>
   <li><strong>Check CampusChina and CDNU directly:</strong> Confirm active CSC program codes and Sichuan Provincial / Chengdu Government international student scholarship quotas directly on <a href="https://www.campuschina.org/" target="_blank" rel="noopener noreferrer">campuschina.org</a> and <a href="https://www.cdnu.edu.cn/" target="_blank" rel="noopener noreferrer">cdnu.edu.cn</a>.</li>
-  <li><strong>Compare CSC-dedicated universities:</strong> If your goal is a fully funded Type B Master’s/PhD stipend, compare institutions in our <a href="/csc-scholarship-bangladesh">CSC Scholarship Bangladesh guide</a> and <a href="/updates/complete-csc-universities-list-2026">Complete CSC Universities List 2027</a> alongside CDNU.</li>
+  <li><strong>Compare CSC-dedicated universities:</strong> If your goal is a fully funded Type B Master’s/PhD stipend, compare institutions in our <a href="/csc-scholarship-bangladesh">CSC Scholarship Bangladesh guide</a> and <a href="/updates/complete-csc-universities-list-2027">Complete CSC Universities List 2027</a> alongside CDNU.</li>
 </ol>
 <h2>Admission eligibility &amp; documents for Bangladeshi applicants</h2>
 <ul>

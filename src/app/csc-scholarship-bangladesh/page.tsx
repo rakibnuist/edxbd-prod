@@ -115,7 +115,7 @@ const related = [
   { label: 'CGS 2027/2028 Type A embassy notice', href: '/updates/cgs-2027-2028-type-a-scholarship-bangladesh' },
   { label: 'China scholarships: every route compared', href: '/china-scholarships-bangladesh' },
   { label: 'CSC Type A bilateral guide', href: '/updates/how-to-apply-csc-type-a-scholarship-complete-guide' },
-  { label: 'Complete CSC universities list (306)', href: '/updates/complete-csc-universities-list-2026' },
+  { label: 'Complete CSC universities list (306)', href: '/updates/complete-csc-universities-list-2027' },
   { label: '2027 CSCA entrance test guide', href: '/updates/csca-guide-study-in-china' },
   { label: 'CSCA University Policy 2026–2028', href: '/updates/csca-exam-guide-chinese-universities-2026-2027' },
   { label: 'CSCA ভর্তি পরীক্ষার গাইড (বাংলা)', href: '/bn/csca-exam-bangladesh' },
@@ -283,7 +283,7 @@ export default function CscScholarshipBangladeshPage() {
           Windows vary by year and by university. Check the current notice for your route, explore the{' '}
           <Link href="/updates/csc-scholarship-university-list-2027" className="font-semibold text-petrol-800 underline underline-offset-4">2027 CSC scholarship university list directory</Link>{' '}
           alongside the{' '}
-          <Link href="/updates/complete-csc-universities-list-2026" className="font-semibold text-petrol-800 underline underline-offset-4">306 participating CSC universities directory</Link>,
+          <Link href="/updates/complete-csc-universities-list-2027" className="font-semibold text-petrol-800 underline underline-offset-4">306 participating CSC universities directory</Link>,
           browse{' '}
           <Link href="/china-universities" className="font-semibold text-petrol-800 underline underline-offset-4">China university profiles &amp; requirements</Link>{' '}
           (including sample 2027 Type B calls like{' '}

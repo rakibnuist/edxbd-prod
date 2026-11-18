@@ -1,4 +1,4 @@
-export const CSC_DIRECTORY_SLUG = 'complete-csc-universities-list-2026';
+export const CSC_DIRECTORY_SLUG = 'complete-csc-universities-list-2027';
 
 export interface CscDirectoryUniversityInput {
   name: string;

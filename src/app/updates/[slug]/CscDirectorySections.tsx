@@ -6,7 +6,7 @@ import type { CscDirectoryEnrichment } from '@/lib/csc-directory-enrichment';
 
 /**
  * Top orientation block and verified CSC university comparison table rendered
- * above the 300+ university directory body on `complete-csc-universities-list-2026`.
+ * above the 300+ university directory body on `complete-csc-universities-list-2027`.
  */
 export function CscDirectoryOverview({ data }: { data: CscDirectoryEnrichment }) {
   return (

@@ -204,7 +204,7 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/updates',
     '/updates/csca-guide-study-in-china',
     '/updates/china-k-visa',
-    '/updates/complete-csc-universities-list-2026',
+    '/updates/complete-csc-universities-list-2027',
     '/updates/how-to-apply-csc-type-a-scholarship-complete-guide',
     '/about',
     '/for-parents',

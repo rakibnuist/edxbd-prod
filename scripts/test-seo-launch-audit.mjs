@@ -151,7 +151,7 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
 
   const cscHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'csc-scholarship-bangladesh.html'), 'utf8');
   assert.ok(
-    cscHtml.includes('/updates/complete-csc-universities-list-2026') &&
+    cscHtml.includes('/updates/complete-csc-universities-list-2027') &&
       cscHtml.includes('/updates/csca-guide-study-in-china'),
   );
 

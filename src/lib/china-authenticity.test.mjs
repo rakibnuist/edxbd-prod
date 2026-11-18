@@ -215,7 +215,7 @@ test('Step 2 SEO: citationJsonLd, bilingual trails/cross-links, OG locale, sitem
   assert.ok(prodSeed.includes('scripts/sync-seo-content-hygiene.mjs'), 'seed-production-db.mjs must run SEO content hygiene on deploy');
   assert.ok(read('scripts/archive-expired-intake-posts.mjs').includes('bnu-zhuhai-mba-mpa-scholarship-2026'));
 
-  assert.ok(read('src/app/csc-scholarship-bangladesh/page.tsx').includes('/updates/complete-csc-universities-list-2026'));
+  assert.ok(read('src/app/csc-scholarship-bangladesh/page.tsx').includes('/updates/complete-csc-universities-list-2027'));
   assert.ok(guideComp.includes('/updates/csca-guide-study-in-china') && guideComp.includes('/updates/china-k-visa'));
 
   const dhakaPage = read('src/app/education-consultant-dhaka/page.tsx');
@@ -638,7 +638,7 @@ test('Step 22: flagship update SERP metadata lengths, clamped update fallback me
   for (const slug of [
     'csca-guide-study-in-china',
     'china-k-visa',
-    'complete-csc-universities-list-2026',
+    'complete-csc-universities-list-2027',
     'how-to-apply-csc-type-a-scholarship-complete-guide',
   ]) {
     assert.ok(syncScript.includes(`slug: '${slug}'`), `sync script must include ${slug}`);
@@ -788,7 +788,7 @@ test('Step 26: shared primaryImageOfPageSchema covers all 20 remaining routes an
 
 test('Step 27: Bing & AI citation optimization — llms, dynamic IndexNow sitemap parity, related post dedupe, and CSC directory links', () => {
   const llms = read('public/llms.txt');
-  assert.ok(llms.includes('/updates/complete-csc-universities-list-2026'));
+  assert.ok(llms.includes('/updates/complete-csc-universities-list-2027'));
   assert.ok(llms.includes('/updates/how-to-apply-csc-type-a-scholarship-complete-guide'));
 
   const mr = read('src/lib/machine-readable.ts');
@@ -796,7 +796,7 @@ test('Step 27: Bing & AI citation optimization — llms, dynamic IndexNow sitema
   assert.ok(mr.includes('!post.archived'));
 
   const indexNow = read('src/lib/indexnow.ts');
-  assert.ok(indexNow.includes("'/updates/complete-csc-universities-list-2026'"));
+  assert.ok(indexNow.includes("'/updates/complete-csc-universities-list-2027'"));
   assert.ok(indexNow.includes('getIndexableUpdatesForSitemap'));
   assert.ok(indexNow.includes('getIndexableUniversitySitemapRecords'));
 
