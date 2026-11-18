@@ -1191,5 +1191,339 @@ export async function upsertWechatBatch5Universities(prisma) {
     );
   }
 
+  // ==========================================
+  // 7. Beijing Technology and Business University (BTBU) - NEW
+  // ==========================================
+  let btbu = await prisma.university.findFirst({
+    where: {
+      OR: [
+        { slug: 'beijing-technology-and-business-university' },
+        { slug: 'btbu' },
+        { name: 'Beijing Technology and Business University' },
+      ],
+    },
+    include: { programs: true, scholarships: true, fees: true },
+  });
+
+  if (!btbu) {
+    btbu = await prisma.university.create({
+      data: {
+        slug: 'beijing-technology-and-business-university',
+        name: 'Beijing Technology and Business University',
+        location: 'Beijing, China',
+        country: 'China',
+        city: 'Beijing',
+        intake: 'September',
+        degree: 'Bachelor, Master, PhD',
+        taught: 'English, Chinese',
+        rankingCountry: 178,
+        rankingWorld: 750,
+        rankingNational: 178,
+        majors:
+          'Accounting, Computer Science & Technology, Cosmetic Technology & Engineering, Artificial Intelligence, Software Engineering, International Economics & Trade',
+        tuition: 'CNY 20,000 – 27,000 / year',
+        tuitionDetails: '[]',
+        documents: JSON.stringify([
+          'Passport Photo Page (including Chinese visa pages if applicable)',
+          'White Background Passport Photo',
+          'Notarized High School Diploma in Chinese or English',
+          'Notarized High School Academic Transcripts',
+          'China Scholastic Competency Assessment (CSCA) Score Report',
+          'Proof of Chinese or English Language Proficiency',
+          'Personal Statement / Study Plan (min 800 words)',
+          'Foreigner Physical Examination Form (valid within 6 months)',
+          'Certificate of No Criminal Record (Police Clearance valid within 6 months)',
+          'Scholarship Application Form (for Beijing Government Scholarship)',
+          'Proof of Financial Support',
+          'Artworks Portfolio (min 2 pieces for School of Design and Art applicants)',
+        ]),
+        deadlineApplication: '1 June 2027',
+        deadlineStartDate: 'September 2027',
+        notes: JSON.stringify([
+          'Mandatory CSCA exam required for all undergraduate applicants (submit score before interview).',
+          'Accounting offered 100% in English (CSCA requirement: Mathematics only).',
+          'Beijing Municipal Government Scholarship: Category A (Full), Category B (Partial), Category C (Tuition).',
+          'Online application via btbu.17gz.org before 1 June 2027.',
+          'Application Fee: CNY 420.00 (non-refundable).',
+        ]),
+        badges: JSON.stringify([
+          'Beijing Municipal Key University',
+          '9 ESI Top 1% Disciplines',
+          'Double First-Class Candidate',
+          'English Accounting Bachelor',
+          'Beijing Government Scholarship',
+          'Liangxiang Campus',
+        ]),
+        logo: '/images/universities/logos/beijing-technology-and-business-university.webp',
+        isActive: true,
+        officialUrl: 'http://www.btbu.edu.cn',
+        aliases: JSON.stringify([
+          'BTBU',
+          'Beijing Technology and Business University (BTBU)',
+          '北京工商大学',
+        ]),
+        legacySlugs: '[]',
+        relationshipType: 'unverified',
+        recognitionAuthority: 'Ministry of Education (MoE) PR China · Beijing Municipal Education Commission',
+        recognitionSourceUrl: 'http://www.moe.gov.cn/',
+        sourceUrls: JSON.stringify([
+          'http://www.btbu.edu.cn',
+          'http://btbu.17gz.org',
+          'https://english.beijing.gov.cn/studyinginbeijing/index.html',
+          'https://mp.weixin.qq.com/s/mxAjrnCH8SX6xrf0MkAPGw',
+        ]),
+        verificationStatus: 'verified',
+      },
+    });
+    changes++;
+
+    // Add Programs
+    await prisma.program.createMany({
+      data: [
+        {
+          universityId: btbu.id,
+          level: 'Bachelor',
+          name: 'Bachelor in Accounting (English Medium)',
+          subject: 'Accounting & Finance',
+          languages: 'English',
+          duration: '4 years',
+          intakes: 'September',
+          tuition: 'CNY 20,000 / year',
+          tuitionAfterScholarship: 'CNY 0 / year (Beijing Govt Scholarship Category A/B/C)',
+          applicationDeadline: '1 June 2027',
+          eligibility: JSON.stringify([
+            'High school diploma or equivalent',
+            'Age 18–25',
+            'IELTS >= 5.5 or TOEFL >= 80 (native English speakers exempt)',
+            'CSCA Test Subject: Mathematics only',
+          ]),
+          sourceUrl: 'http://btbu.17gz.org',
+          status: 'active',
+        },
+        {
+          universityId: btbu.id,
+          level: 'Bachelor',
+          name: 'Bachelor in Computer Science and Technology',
+          subject: 'Computer Science and Technology',
+          languages: 'Chinese',
+          duration: '4 years',
+          intakes: 'September',
+          tuition: 'CNY 23,000 / year',
+          tuitionAfterScholarship: 'CNY 0 / year (Beijing Govt Scholarship Category A/B/C)',
+          applicationDeadline: '1 June 2027',
+          eligibility: JSON.stringify([
+            'High school diploma or equivalent',
+            'Age 18–25',
+            'HSK Level 5 (180+)',
+            'CSCA Test Subjects: Chinese (STEM) + Mathematics + Physics',
+          ]),
+          sourceUrl: 'http://btbu.17gz.org',
+          status: 'active',
+        },
+        {
+          universityId: btbu.id,
+          level: 'Bachelor',
+          name: 'Bachelor in Artificial Intelligence (Engineering)',
+          subject: 'Artificial Intelligence',
+          languages: 'Chinese',
+          duration: '4 years',
+          intakes: 'September',
+          tuition: 'CNY 23,000 / year',
+          tuitionAfterScholarship: 'CNY 0 / year (Beijing Govt Scholarship Category A/B/C)',
+          applicationDeadline: '1 June 2027',
+          eligibility: JSON.stringify([
+            'High school diploma or equivalent',
+            'Age 18–25',
+            'HSK Level 5 (180+)',
+            'CSCA Test Subjects: Chinese (STEM) + Mathematics + Physics',
+          ]),
+          sourceUrl: 'http://btbu.17gz.org',
+          status: 'active',
+        },
+        {
+          universityId: btbu.id,
+          level: 'Bachelor',
+          name: 'Bachelor in Cosmetic Technology and Engineering',
+          subject: 'Cosmetic Technology & Light Industry',
+          languages: 'Chinese',
+          duration: '4 years',
+          intakes: 'September',
+          tuition: 'CNY 23,000 / year',
+          tuitionAfterScholarship: 'CNY 0 / year (Beijing Govt Scholarship Category A/B/C)',
+          applicationDeadline: '1 June 2027',
+          eligibility: JSON.stringify([
+            'High school diploma or equivalent',
+            'Age 18–25',
+            'HSK Level 5 (180+)',
+            'CSCA Test Subjects: Chinese (STEM) + Mathematics + Chemistry',
+          ]),
+          sourceUrl: 'http://btbu.17gz.org',
+          status: 'active',
+        },
+        {
+          universityId: btbu.id,
+          level: 'Bachelor',
+          name: 'Bachelor in International Economics and Trade',
+          subject: 'International Economics and Trade',
+          languages: 'Chinese',
+          duration: '4 years',
+          intakes: 'September',
+          tuition: 'CNY 20,000 / year',
+          tuitionAfterScholarship: 'CNY 0 / year (Beijing Govt Scholarship Category A/B/C)',
+          applicationDeadline: '1 June 2027',
+          eligibility: JSON.stringify([
+            'High school diploma or equivalent',
+            'Age 18–25',
+            'HSK Level 5 (180+)',
+            'CSCA Test Subjects: Chinese (Humanities) + Mathematics',
+          ]),
+          sourceUrl: 'http://btbu.17gz.org',
+          status: 'active',
+        },
+        {
+          universityId: btbu.id,
+          level: 'Bachelor',
+          name: 'Bachelor in Software Engineering',
+          subject: 'Software Engineering',
+          languages: 'Chinese',
+          duration: '4 years',
+          intakes: 'September',
+          tuition: 'CNY 23,000 / year',
+          tuitionAfterScholarship: 'CNY 0 / year (Beijing Govt Scholarship Category A/B/C)',
+          applicationDeadline: '1 June 2027',
+          eligibility: JSON.stringify([
+            'High school diploma or equivalent',
+            'Age 18–25',
+            'HSK Level 5 (180+)',
+            'CSCA Test Subjects: Chinese (STEM) + Mathematics + Physics',
+          ]),
+          sourceUrl: 'http://btbu.17gz.org',
+          status: 'active',
+        },
+      ],
+    });
+    changes += 6;
+
+    // Add Scholarships
+    await prisma.scholarship.createMany({
+      data: [
+        {
+          universityId: btbu.id,
+          title: 'Beijing Municipal Government Scholarship (Category A - Full Scholarship)',
+          type: 'Government',
+          amount:
+            'Full Scholarship: 100% Tuition Waiver + Free Campus Twin Dormitory + Monthly Living Allowance + Comprehensive Medical Insurance',
+          condition:
+            'Merit-based admission score, high school GPA 80%+, CSCA score report, and video interview score.',
+          eligiblePrograms: JSON.stringify(['All Undergraduate Programs', 'Accounting (English)']),
+          coverage:
+            '100% tuition waiver, on-campus twin room housing, monthly living allowance, and comprehensive insurance',
+          deadline: '1 June 2027',
+          sourceUrl: 'http://btbu.17gz.org',
+          status: 'active',
+          details: JSON.stringify([
+            '100% full tuition waiver across 4 years',
+            'Free on-campus twin room accommodation at Liangxiang West Campus',
+            'Monthly undergraduate living allowance',
+            'Comprehensive medical insurance (CNY 800/yr)',
+          ]),
+        },
+        {
+          universityId: btbu.id,
+          title: 'Beijing Municipal Government Scholarship (Category B - Partial Scholarship)',
+          type: 'Government',
+          amount: '100% Tuition Waiver + Free Campus Twin Dormitory + Comprehensive Medical Insurance',
+          condition:
+            'Merit-based admission score, high school GPA 75%+, CSCA score report, and interview score.',
+          eligiblePrograms: JSON.stringify(['All Undergraduate Programs']),
+          coverage: 'Tuition waiver, twin dormitory housing, and health insurance',
+          deadline: '1 June 2027',
+          sourceUrl: 'http://btbu.17gz.org',
+          status: 'active',
+          details: JSON.stringify([
+            '100% full tuition waiver',
+            'Free on-campus twin room housing at Liangxiang West Campus',
+            'Comprehensive medical insurance (CNY 800/yr)',
+          ]),
+        },
+        {
+          universityId: btbu.id,
+          title: 'Beijing Municipal Government Scholarship (Category C - Tuition Award)',
+          type: 'Government',
+          amount: '100% Tuition Waiver + Comprehensive Medical Insurance',
+          condition: 'Merit-based admission score, high school GPA 70%+, CSCA score report.',
+          eligiblePrograms: JSON.stringify(['All Undergraduate Programs']),
+          coverage: '100% annual tuition fee waiver and medical insurance',
+          deadline: '1 June 2027',
+          sourceUrl: 'http://btbu.17gz.org',
+          status: 'active',
+          details: JSON.stringify([
+            '100% annual tuition waiver',
+            'Comprehensive medical insurance (CNY 800/yr)',
+          ]),
+        },
+      ],
+    });
+    changes += 3;
+
+    // Add Fees
+    await prisma.fee.createMany({
+      data: [
+        {
+          universityId: btbu.id,
+          item: 'Application Fee',
+          cost: '420 CNY (Non-refundable)',
+          notes: 'Payable online via application portal',
+          sourceUrl: 'http://btbu.17gz.org',
+        },
+        {
+          universityId: btbu.id,
+          item: 'Tuition Fee (Category I - Economics, Management, Law)',
+          cost: '20,000 CNY/Year',
+          notes: 'Undergraduate programs in economics, business, management, law and humanities',
+          sourceUrl: 'http://btbu.17gz.org',
+        },
+        {
+          universityId: btbu.id,
+          item: 'Tuition Fee (Category II - Science, Engineering, Agriculture)',
+          cost: '23,000 CNY/Year',
+          notes: 'Undergraduate programs in STEM, computer science, AI, cosmetic tech, materials',
+          sourceUrl: 'http://btbu.17gz.org',
+        },
+        {
+          universityId: btbu.id,
+          item: 'Tuition Fee (Category III - Arts & Design)',
+          cost: '27,000 CNY/Year',
+          notes: 'Undergraduate programs in design, media art and visual arts',
+          sourceUrl: 'http://btbu.17gz.org',
+        },
+        {
+          universityId: btbu.id,
+          item: 'On-Campus Accommodation (Liangxiang Campus Twin Room)',
+          cost: '40 CNY/Day (~14,600 CNY/Year)',
+          notes: 'Twin room with private bathroom, air conditioning and internet',
+          sourceUrl: 'http://btbu.17gz.org',
+        },
+        {
+          universityId: btbu.id,
+          item: 'Comprehensive Medical Insurance Fee',
+          cost: '800 CNY/Year',
+          notes: 'Mandatory international student comprehensive health insurance',
+          sourceUrl: 'http://btbu.17gz.org',
+        },
+        {
+          universityId: btbu.id,
+          item: 'Residence Permit Fee',
+          cost: '400 CNY/Year',
+          notes: 'Collected by Beijing Municipal Public Security Bureau Exit-Entry Administration',
+          sourceUrl: 'http://btbu.17gz.org',
+        },
+      ],
+    });
+    changes += 7;
+
+    console.log('✓ Upserted Beijing Technology and Business University (BTBU) with programs, scholarships, and fees.');
+  }
+
   return changes;
 }

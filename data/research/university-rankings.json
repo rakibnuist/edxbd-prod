@@ -4403,6 +4403,27 @@
       ]
     },
     {
+      "slug": "beijing-technology-and-business-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking 2026",
+          "year": 2026,
+          "rank": "178",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/beijing-technology-and-business-university"
+        },
+        {
+          "publisher": "ESI",
+          "rankingName": "Essential Science Indicators (ESI) Top 1%",
+          "year": 2026,
+          "rank": "9 Disciplines in Global Top 1%",
+          "scope": "subject",
+          "sourceUrl": "https://clarivate.com/products/scientific-and-academic-research/research-discovery-and-workflow-solutions/essential-science-indicators/"
+        }
+      ]
+    },
+    {
       "slug": "asia-pacific-university",
       "rankings": [
         {

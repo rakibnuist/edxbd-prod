@@ -1490,5 +1490,396 @@ export const WECHAT_BATCH5_7_GUIDES_DATA: Record<string, GuideData> = {
 </article>
 `,
   },
+
+  // 9. Beijing Technology and Business University (BTBU) 2027 Undergraduate Admissions Guide
+  'btbu-international-undergraduate-admissions-guide-2027': {
+    id: 'btbu-international-undergraduate-admissions-guide-2027',
+    title:
+      'Beijing Technology and Business University (BTBU) 2027 Undergraduate Admissions Guide: Programs, CSCA Requirements & Beijing Government Scholarships',
+    slug: 'btbu-international-undergraduate-admissions-guide-2027',
+    type: 'update',
+    category: 'admissions',
+    categories: JSON.stringify(['Admissions', 'China', 'Scholarships']),
+    tags: JSON.stringify([
+      'Beijing Technology and Business University',
+      'BTBU',
+      'Undergraduate in China',
+      'Study in Beijing',
+      'CSCA Exam',
+      'Beijing Government Scholarship',
+      'Accounting in China',
+      'Computer Science and AI',
+    ]),
+    excerpt:
+      'Official 2027 international undergraduate admission book for Beijing Technology and Business University (BTBU): English-taught Accounting Bachelor and comprehensive Chinese-taught STEM/Business majors, major-specific CSCA test subjects, Category A/B/C Beijing Municipal Government Scholarships, on-campus twin accommodation, and application procedures via btbu.17gz.org before June 1, 2027.',
+    metaTitle: 'BTBU 2027 Undergraduate Admissions & Scholarship Guide | EduExpress',
+    metaDescription:
+      'Official 2027 Beijing Technology and Business University (BTBU) Bachelor admissions: English & Chinese majors, CSCA subject guide, fees & Beijing Government Scholarships.',
+    featuredImage:
+      '/updates/covers/btbu-international-undergraduate-admissions-guide-2027.jpg',
+    author: 'EduExpress International Admissions Team',
+    reviewer: 'Abdullah Al Rakib',
+    sourceUrls: JSON.stringify([
+      'http://www.btbu.edu.cn',
+      'http://btbu.17gz.org',
+      'https://english.beijing.gov.cn/studyinginbeijing/index.html',
+      'https://mp.weixin.qq.com/s/mxAjrnCH8SX6xrf0MkAPGw',
+    ]),
+    isPublished: true,
+    isFeatured: true,
+    views: 0,
+    createdAt: new Date('2026-11-18T21:30:00.000Z'),
+    updatedAt: new Date('2026-11-18T21:30:00.000Z'),
+    publishedAt: new Date('2026-11-18T21:30:00.000Z'),
+    lastVerifiedAt: new Date('2026-11-18T21:30:00.000Z'),
+    nextReviewAt: new Date('2027-06-01T23:59:59.000Z'),
+    deadlineAt: new Date('2027-06-01T23:59:59.000Z'),
+    complianceApprovedAt: new Date('2026-11-18T21:30:00.000Z'),
+    seoApprovedAt: new Date('2026-11-18T21:30:00.000Z'),
+    archivedAt: null,
+    expiresAt: null,
+    content: `
+<article class="space-y-8">
+  <section class="rounded-2xl border border-sky-100 bg-sky-50/60 p-6">
+    <h2 class="text-xl font-bold text-slate-900">Executive Summary: Study in China's Capital at Beijing Technology and Business University</h2>
+    <p class="mt-2 text-slate-700 leading-relaxed">
+      <strong>Beijing Technology and Business University (北京工商大学, BTBU)</strong>, a leading multidisciplinary research university directly supported by the Beijing Municipal Government, has officially released its <strong>2027 International Undergraduate Admission Book</strong>. Spanning 830,000 square meters across its historic Fucheng Road Campus and expansive Liangxiang West Campus in Beijing, BTBU comprises 11 academic schools, 3 residential colleges, and 62 undergraduate degree programs. With <strong>9 academic disciplines ranking in the global top 1% of ESI</strong>—most notably in Food Science, Cosmetic Technology, Light Industry, Materials Science, and Business Analytics—BTBU integrates business innovation with advanced engineering. For the 2027 cycle, international applicants can apply for direct entry into the <strong>English-taught Bachelor in Accounting</strong> or a wide suite of prestigious Chinese-taught programs in Computer Science &amp; AI, Light Industry &amp; Cosmetic Engineering, and International Economics &amp; Trade, supported by <strong>Beijing Municipal Government Scholarships (Categories A, B, and C)</strong>.
+    </p>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">1. Academic Programs & Major-Specific CSCA Test Requirements</h2>
+    <p class="text-slate-700 leading-relaxed">
+      In alignment with China's national standardized entrance standards, BTBU officially incorporates the <strong>China Scholastic Competency Assessment (CSCA)</strong> into its 2027 undergraduate evaluation matrix. Each program specifies exact compulsory subject papers:
+    </p>
+
+    <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-5">
+      <h3 class="font-bold text-emerald-900">English-Taught Bachelor Program</h3>
+      <div class="mt-3 overflow-x-auto">
+        <table class="min-w-full divide-y divide-emerald-200 text-left text-sm text-slate-700">
+          <thead class="bg-emerald-100 font-semibold text-emerald-950">
+            <tr>
+              <th class="px-4 py-2.5">Academic School</th>
+              <th class="px-4 py-2.5">Major / Degree Program</th>
+              <th class="px-4 py-2.5">Duration</th>
+              <th class="px-4 py-2.5">Required CSCA Test Subjects</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-emerald-200 bg-white">
+            <tr>
+              <td class="px-4 py-3 font-semibold text-slate-900">Business School</td>
+              <td class="px-4 py-3 font-medium text-emerald-800">Accounting (English Medium)</td>
+              <td class="px-4 py-3">4 Years</td>
+              <td class="px-4 py-3 font-bold text-sky-800">Mathematics Only</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-emerald-800">
+        *English Language Requirement: Minimum IELTS 5.5 or TOEFL 80. Native English speakers are exempt.
+      </p>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 class="font-bold text-slate-900">Chinese-Taught Bachelor Programs</h3>
+      <p class="mt-1 text-xs text-slate-500">Language Requirement: HSK Level 5 or above (obtained within the past 2 years).</p>
+      <div class="mt-3 overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
+          <thead class="bg-slate-100 font-semibold text-slate-900">
+            <tr>
+              <th class="px-4 py-2.5">Academic School</th>
+              <th class="px-4 py-2.5">Available Undergraduate Majors</th>
+              <th class="px-4 py-2.5">Duration</th>
+              <th class="px-4 py-2.5">Mandatory CSCA Subjects</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">School of Economics</td>
+              <td class="px-4 py-3">International Economics and Trade</td>
+              <td class="px-4 py-3">4 Years</td>
+              <td class="px-4 py-3 font-semibold text-slate-800">Chinese (Humanities) + Mathematics</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Business School</td>
+              <td class="px-4 py-3">
+                Business Administration (3 yrs) · Financial Management · Accounting · Marketing · Supply Chain Management · Logistics Management · Big Data Management &amp; Application
+              </td>
+              <td class="px-4 py-3">3–4 Years</td>
+              <td class="px-4 py-3 font-semibold text-slate-800">Chinese (Humanities) + Mathematics</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Advanced Materials &amp; Future Technology</td>
+              <td class="px-4 py-3">Polymer Materials and Engineering · Functional Materials</td>
+              <td class="px-4 py-3">4 Years</td>
+              <td class="px-4 py-3 font-semibold text-slate-800">Chinese (STEM) + Mathematics + Chemistry</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Advanced Materials &amp; Future Technology</td>
+              <td class="px-4 py-3">Optoelectronic Information Science and Engineering (Science)</td>
+              <td class="px-4 py-3">4 Years</td>
+              <td class="px-4 py-3 font-semibold text-slate-800">Chinese (STEM) + Mathematics + Physics</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Light Industry Science &amp; Engineering</td>
+              <td class="px-4 py-3">
+                Cosmetic Technology and Engineering · Environmental Engineering · Bioengineering · Applied Chemistry
+              </td>
+              <td class="px-4 py-3">4 Years</td>
+              <td class="px-4 py-3 font-semibold text-slate-800">Chinese (STEM) + Mathematics + Chemistry</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Computer &amp; Artificial Intelligence</td>
+              <td class="px-4 py-3">
+                Computer Science and Technology · Software Engineering · Artificial Intelligence (Engineering) · Information Engineering · Electrical Engineering &amp; Automation · Automation · Intelligent Manufacturing Engineering
+              </td>
+              <td class="px-4 py-3">4 Years</td>
+              <td class="px-4 py-3 font-semibold text-slate-800">Chinese (STEM) + Mathematics + Physics</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Mathematics and Statistics</td>
+              <td class="px-4 py-3">Data Science and Big Data Technology · Applied Statistics · Mathematics &amp; Applied Mathematics</td>
+              <td class="px-4 py-3">4 Years</td>
+              <td class="px-4 py-3 font-semibold text-slate-800">Chinese (STEM) + Mathematics + Physics</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-slate-900">Law, Languages &amp; Art</td>
+              <td class="px-4 py-3">Law · Journalism · Advertising · Product Design · Digital Media Art</td>
+              <td class="px-4 py-3">4 Years</td>
+              <td class="px-4 py-3 font-semibold text-slate-800">Chinese (Humanities) + Mathematics</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">2. Beijing Municipal Government Scholarship Coverage</h2>
+    <p class="text-slate-700 leading-relaxed">
+      BTBU international undergraduates are eligible for the <strong>Beijing Government Scholarship (BGS)</strong> awarded by the Beijing Municipal Education Commission. The scholarship is divided into three tiers:
+    </p>
+    <div class="overflow-x-auto rounded-xl border border-slate-200">
+      <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
+        <thead class="bg-slate-100 font-semibold text-slate-900">
+          <tr>
+            <th class="px-4 py-3">Scholarship Tier</th>
+            <th class="px-4 py-3">Tuition Waiver</th>
+            <th class="px-4 py-3">Campus Housing</th>
+            <th class="px-4 py-3">Living Allowance</th>
+            <th class="px-4 py-3">Comprehensive Medical Insurance</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 bg-white">
+          <tr class="bg-emerald-50/60">
+            <td class="px-4 py-3 font-bold text-emerald-900">Category A (Full Award)</td>
+            <td class="px-4 py-3 text-emerald-800 font-bold">100% Free (✓)</td>
+            <td class="px-4 py-3 text-emerald-800 font-bold">Free Twin Room (✓)</td>
+            <td class="px-4 py-3 text-emerald-800 font-bold">Monthly Stipend (✓)</td>
+            <td class="px-4 py-3 text-emerald-800 font-bold">CNY 800/yr Covered (✓)</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Category B (Partial Award)</td>
+            <td class="px-4 py-3 text-sky-800 font-bold">100% Free (✓)</td>
+            <td class="px-4 py-3 text-sky-800 font-bold">Free Twin Room (✓)</td>
+            <td class="px-4 py-3 text-slate-400">—</td>
+            <td class="px-4 py-3 text-sky-800 font-bold">CNY 800/yr Covered (✓)</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Category C (Tuition Award)</td>
+            <td class="px-4 py-3 text-slate-800 font-bold">100% Free (✓)</td>
+            <td class="px-4 py-3 text-slate-400">—</td>
+            <td class="px-4 py-3 text-slate-400">—</td>
+            <td class="px-4 py-3 text-slate-800 font-bold">CNY 800/yr Covered (✓)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rounded-xl border border-sky-100 bg-sky-50/70 p-4">
+      <h3 class="font-bold text-sky-900">Chinese Government Scholarship (CSC Type A)</h3>
+      <p class="mt-1 text-sm text-sky-800 leading-relaxed">
+        Undergraduate candidates can also apply for the Chinese Government Scholarship Bilateral Program (Type A) through the Chinese Embassy or educational dispatch authorities in their home country (November to April). Applicants must list <strong>Beijing Technology and Business University</strong> as their first-choice institution.
+      </p>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">3. Official Tuition Fees, Housing &amp; Living Costs Schedule</h2>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 class="font-bold text-slate-900">Annual Tuition Breakdown</h3>
+        <ul class="mt-3 space-y-2 text-sm text-slate-700">
+          <li><strong>Category I:</strong> <span class="font-bold text-sky-700">CNY 20,000 / year</span> (Philosophy, Economics, Law, Education, Literature, History, and Management)</li>
+          <li><strong>Category II:</strong> <span class="font-bold text-sky-700">CNY 23,000 / year</span> (Science, Engineering, and Agriculture)</li>
+          <li><strong>Category III:</strong> <span class="font-bold text-sky-700">CNY 27,000 / year</span> (Medicine and Arts &amp; Design)</li>
+          <li><strong>Application Fee:</strong> CNY 420.00 (non-refundable)</li>
+        </ul>
+      </div>
+
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 class="font-bold text-slate-900">Accommodation &amp; Compulsory Fees</h3>
+        <ul class="mt-3 space-y-2 text-sm text-slate-700">
+          <li><strong>On-Campus Accommodation:</strong> <span class="font-bold text-emerald-700">CNY 40.00 / day</span> (Twin room, Liangxiang West Campus, approx. CNY 14,600 / academic year)</li>
+          <li><strong>Comprehensive Medical Insurance:</strong> CNY 800.00 / year</li>
+          <li><strong>Residence Permit Processing:</strong> CNY 400.00 / year (collected directly by the Beijing Municipal Public Security Bureau Exit-Entry Administration)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">4. Eligibility &amp; Strict 11-Item Document Checklist</h2>
+    <p class="text-slate-700 leading-relaxed">
+      Applicants must be non-Chinese citizens aged <strong>18 to 25</strong>, in good physical and mental health, holding an accredited high school diploma or equivalent. All documents must be clear color scans uploaded to the application portal:
+    </p>
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+        <span class="font-bold text-slate-900">1. Valid Foreign Passport</span>
+        <p class="mt-1 text-xs text-slate-600">Scan of photo bio-data page (including previous Chinese visa pages if applicable).</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+        <span class="font-bold text-slate-900">2. Notarized High School Diploma</span>
+        <p class="mt-1 text-xs text-slate-600">Official graduation certificate in English or Chinese. Graduating students submit an expected graduation letter.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+        <span class="font-bold text-slate-900">3. Notarized Academic Transcripts</span>
+        <p class="mt-1 text-xs text-slate-600">Complete secondary school grade records (CGPA 75%+ or equivalent recommended).</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+        <span class="font-bold text-slate-900">4. Language Proficiency Certificate</span>
+        <p class="mt-1 text-xs text-slate-600">IELTS >= 5.5 / TOEFL >= 80 for English; HSK Level 5 (valid within 2 years) for Chinese.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+        <span class="font-bold text-slate-900">5. CSCA Score Report (Mandatory)</span>
+        <p class="mt-1 text-xs text-slate-600">Official CSCA score report. If exam is pending, submit proof of test registration from <a href="https://www.csca.cn" target="_blank" rel="noopener noreferrer" class="text-sky-700 underline">csca.cn</a>.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+        <span class="font-bold text-slate-900">6. Personal Statement &amp; Study Plan</span>
+        <p class="mt-1 text-xs text-slate-600">Statement of academic intent, motivation, and study goals at BTBU (minimum 800 words).</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+        <span class="font-bold text-slate-900">7. Foreigner Physical Examination Form</span>
+        <p class="mt-1 text-xs text-slate-600">Download from <a href="http://btbu.17gz.org" target="_blank" rel="noopener noreferrer" class="text-sky-700 underline">btbu.17gz.org</a>, complete hospital laboratory tests and hospital stamp (valid 6 months).</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+        <span class="font-bold text-slate-900">8. Certificate of No Criminal Record</span>
+        <p class="mt-1 text-xs text-slate-600">Official police clearance issued by local police station in home country (valid 6 months).</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+        <span class="font-bold text-slate-900">9. Scholarship Application Form</span>
+        <p class="mt-1 text-xs text-slate-600">Completed Beijing Government Scholarship application form if applying for financial awards.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
+        <span class="font-bold text-slate-900">10. Proof of Financial Support</span>
+        <p class="mt-1 text-xs text-slate-600">Bank statement showing sufficient funds for initial study and accommodation costs.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-sm md:col-span-2">
+        <span class="font-bold text-slate-900">11. Portfolio / Artwork (School of Design and Art Only)</span>
+        <p class="mt-1 text-xs text-slate-600">Applicants applying for Product Design or Digital Media Art must submit at least 2 original artworks/design pieces.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">5. Application Procedure &amp; Admission Workflow</h2>
+    <div class="space-y-3">
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-700 text-sm font-bold text-white">1</span>
+        <div>
+          <h3 class="font-bold text-slate-900">Online Registration</h3>
+          <p class="mt-1 text-sm text-slate-600">Create an account on the BTBU International Student Application System at <a href="http://btbu.17gz.org" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">btbu.17gz.org</a>.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-700 text-sm font-bold text-white">2</span>
+        <div>
+          <h3 class="font-bold text-slate-900">Submit Application Dossier</h3>
+          <p class="mt-1 text-sm text-slate-600">Fill in academic history, select major, upload all 11 required files, and await initial administrative screening.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-700 text-sm font-bold text-white">3</span>
+        <div>
+          <h3 class="font-bold text-slate-900">Pay Application Fee</h3>
+          <p class="mt-1 text-sm text-slate-600">Remit the non-refundable application fee of CNY 420.00 through the system payment gateway.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-700 text-sm font-bold text-white">4</span>
+        <div>
+          <h3 class="font-bold text-slate-900">CSCA Verification &amp; Academic Interview</h3>
+          <p class="mt-1 text-sm text-slate-600">Departmental review of academic transcripts and CSCA examination scores. Shortlisted applicants attend an online video interview. Upload your CSCA score report before the interview.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-700 text-sm font-bold text-white">5</span>
+        <div>
+          <h3 class="font-bold text-slate-900">Pre-Admission &amp; Official Visa Notice (JW202)</h3>
+          <p class="mt-1 text-sm text-slate-600">Successful candidates receive the official BTBU Admission Notice and electronic JW202/DQ form for X1 student visa application at Chinese Embassies.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">6. Frequently Asked Questions (FAQ)</h2>
+    <div class="space-y-3">
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          Can I apply to BTBU before sitting for the CSCA test?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          Yes. If your CSCA score report is not yet available at the time of online application, you can submit official proof of test registration from <a href="https://www.csca.cn" target="_blank" rel="noopener noreferrer" class="text-sky-700 underline">csca.cn</a>. However, the verified score report must be uploaded to <a href="http://btbu.17gz.org" target="_blank" rel="noopener noreferrer" class="text-sky-700 underline">btbu.17gz.org</a> before your comprehensive admission interview.
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          Which undergraduate major is taught entirely in English at BTBU?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          The <strong>Bachelor in Accounting</strong> offered by BTBU's Business School is taught fully in English. Its CSCA test requirement is <strong>Mathematics only</strong>, and language requirements are IELTS 5.5+ or TOEFL 80+.
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          What are the benefits of the Beijing Government Scholarship (Category A)?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          Category A is a comprehensive full scholarship providing a 100% tuition waiver, free on-campus twin accommodation at Liangxiang Campus, a monthly living allowance, and comprehensive medical insurance throughout the 4-year degree.
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          What is the official application deadline for 2027 admissions?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          The final application deadline for both university admissions and Beijing Government Scholarships is <strong>June 1, 2027</strong>. Early submission is strongly recommended to secure quota spots.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">7. Official Institutional Contacts &amp; Portals</h2>
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 class="font-bold text-slate-900">International Office, Beijing Technology and Business University</h3>
+      <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+        <strong>Office Address:</strong> Room A108, New Student Activity Center, Liangxiang West Campus, BTBU, Liangxiang Higher Education Park, Fangshan District, Beijing, China (Postcode: 100048)<br />
+        <strong>Contact Person:</strong> Ms. Wei<br />
+        <strong>Telephone:</strong> +86-10-81351883 / +86-10-68984404<br />
+        <strong>Email:</strong> <code>international_office@btbu.edu.cn</code><br />
+        <strong>Online Application Portal:</strong> <a href="http://btbu.17gz.org" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">btbu.17gz.org</a><br />
+        <strong>University Website:</strong> <a href="http://www.btbu.edu.cn" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">www.btbu.edu.cn</a>
+      </p>
+    </div>
+  </section>
+</article>
+`,
+  },
 };
+
 

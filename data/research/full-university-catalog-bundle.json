@@ -1252,11 +1252,11 @@
       "recognitionAuthority": "Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[]",
-      "lastVerifiedAt": 1794980724442,
+      "lastVerifiedAt": 1795009405199,
       "verificationExpiresAt": null,
       "verificationStatus": "under_verification",
       "createdAt": 1791713582681,
-      "updatedAt": 1794980724443
+      "updatedAt": 1795009405200
     },
     {
       "id": "69a413c66fb0e628ef20eabe",
@@ -1474,11 +1474,11 @@
       "recognitionAuthority": "Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[]",
-      "lastVerifiedAt": 1794980724451,
+      "lastVerifiedAt": 1795009405207,
       "verificationExpiresAt": null,
       "verificationStatus": "under_verification",
       "createdAt": 1791713583120,
-      "updatedAt": 1794980724451
+      "updatedAt": 1795009405207
     },
     {
       "id": "69a42aa86fb0e628ef210eb9",
@@ -1885,7 +1885,7 @@
       "verificationExpiresAt": null,
       "verificationStatus": "under_verification",
       "createdAt": 1791713583654,
-      "updatedAt": 1794980724473
+      "updatedAt": 1795009405228
     },
     {
       "id": "69a439d86fb0e628ef2126c0",
@@ -1955,11 +1955,11 @@
       "recognitionAuthority": "Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[\"https://cie.nuaa.edu.cn/2025/1121/c16499a388281/page.htm\"]",
-      "lastVerifiedAt": 1794980724445,
+      "lastVerifiedAt": 1795009405202,
       "verificationExpiresAt": null,
       "verificationStatus": "under_verification",
       "createdAt": 1791713583719,
-      "updatedAt": 1794980724446
+      "updatedAt": 1795009405203
     },
     {
       "id": "69a43a516fb0e628ef212789",
@@ -2029,11 +2029,11 @@
       "recognitionAuthority": "Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[\"https://www.njupt.edu.cn/\",\"http://admission.njupt.edu.cn/\",\"https://studyinchina.csc.edu.cn/\",\"https://www.campuschina.org/\"]",
-      "lastVerifiedAt": 1794980724404,
+      "lastVerifiedAt": 1795009405158,
       "verificationExpiresAt": null,
       "verificationStatus": "verified",
       "createdAt": 1791713583797,
-      "updatedAt": 1794980724405
+      "updatedAt": 1795009405159
     },
     {
       "id": "69a43d026fb0e628ef212b90",
@@ -2288,11 +2288,11 @@
       "recognitionAuthority": "Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[\"https://www.sdju.edu.cn/\",\"https://intlst.sdju.edu.cn\",\"https://mp.weixin.qq.com/s/8mY_ckNOqfgUzLAxt03e5g\"]",
-      "lastVerifiedAt": 1794980724390,
+      "lastVerifiedAt": 1795009405145,
       "verificationExpiresAt": null,
       "verificationStatus": "verified",
       "createdAt": 1791713584121,
-      "updatedAt": 1794980724391
+      "updatedAt": 1795009405145
     },
     {
       "id": "69a713666fb0e628ef2675ac",
@@ -3102,11 +3102,11 @@
       "recognitionAuthority": "Ministry of Education (MoE) PR China · WDOMS & BMDC Listed",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[\"https://www.cmu.edu.cn/\",\"https://www.cmu.edu.cn/gjjyxy/\",\"https://www.cmu.edu.cn/gjjyxy/zsxx/dsxx.htm\",\"https://www.campuschina.org/\"]",
-      "lastVerifiedAt": 1794980724379,
+      "lastVerifiedAt": 1795009405141,
       "verificationExpiresAt": null,
       "verificationStatus": "verified",
       "createdAt": 1792815574649,
-      "updatedAt": 1794980724380
+      "updatedAt": 1795009405142
     },
     {
       "id": "cmvlw3qt8000bozhhi5fyc6zp",
@@ -3583,11 +3583,11 @@
       "recognitionAuthority": "Ministry of Education (MoE) PR China · WDOMS & BMDC Listed",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[\"https://admissions.xmu.edu.cn/Admissions/Undergraduate_Students.htm\",\"https://admissions.xmu.edu.cn/info/1061/2189.htm\",\"https://xmu.edu.cn/\"]",
-      "lastVerifiedAt": 1794980724457,
+      "lastVerifiedAt": 1795009405212,
       "verificationExpiresAt": null,
       "verificationStatus": "under_verification",
       "createdAt": 1792815574731,
-      "updatedAt": 1794980724457
+      "updatedAt": 1795009405213
     },
     {
       "id": "cmvlw3qvn000oozhhj5zodov4",
@@ -4101,11 +4101,11 @@
       "recognitionAuthority": "Malaysian Qualifications Agency (MQA) & UGC Bangladesh",
       "recognitionSourceUrl": "https://www2.mqa.gov.my/mqr/",
       "sourceUrls": "[\"https://isc.um.edu.my\",\"https://educationmalaysia.gov.my\"]",
-      "lastVerifiedAt": 1794980724454,
+      "lastVerifiedAt": 1795009405210,
       "verificationExpiresAt": 1807747200000,
       "verificationStatus": "verified",
       "createdAt": 1794614613329,
-      "updatedAt": 1794980724454
+      "updatedAt": 1795009405210
     },
     {
       "id": "cmwfn7dyw000rm1zcwmh3pojw",
@@ -4471,11 +4471,11 @@
       "recognitionAuthority": "Ministry of Industry and Information Technology (MIIT) & Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "https://study.njust.edu.cn/",
       "sourceUrls": "[\"https://study.njust.edu.cn/\",\"https://njust.17gz.org/\",\"https://studyinchina.csc.edu.cn/\",\"https://www.csca.cn/\",\"https://mp.weixin.qq.com/s/QPiDsTTFgaHSEjgH3U4gug\",\"https://mp.weixin.qq.com/s/lDKxcSGHtDJDgMjB_zy8SA\"]",
-      "lastVerifiedAt": 1794980724448,
+      "lastVerifiedAt": 1795009405205,
       "verificationExpiresAt": null,
       "verificationStatus": "verified",
       "createdAt": 1794754812998,
-      "updatedAt": 1794980724449
+      "updatedAt": 1795009405205
     },
     {
       "id": "cmwiovfnl0000wrv5c0j1dwvm",
@@ -5845,6 +5845,43 @@
       "verificationStatus": "verified",
       "createdAt": 1794979827487,
       "updatedAt": 1794979827487
+    },
+    {
+      "id": "cmwm695bj0000t1yic7uj9sf6",
+      "slug": "beijing-technology-and-business-university",
+      "name": "Beijing Technology and Business University",
+      "location": "Beijing, China",
+      "country": "China",
+      "city": "Beijing",
+      "intake": "September",
+      "degree": "Bachelor, Master, PhD",
+      "taught": "English, Chinese",
+      "rankingCountry": 178,
+      "rankingWorld": 750,
+      "rankingNational": 178,
+      "majors": "Accounting, Computer Science & Technology, Cosmetic Technology & Engineering, Artificial Intelligence, Software Engineering, International Economics & Trade",
+      "tuition": "CNY 20,000 – 27,000 / year",
+      "tuitionDetails": "[]",
+      "documents": "[\"Passport Photo Page (including Chinese visa pages if applicable)\",\"White Background Passport Photo\",\"Notarized High School Diploma in Chinese or English\",\"Notarized High School Academic Transcripts\",\"China Scholastic Competency Assessment (CSCA) Score Report\",\"Proof of Chinese or English Language Proficiency\",\"Personal Statement / Study Plan (min 800 words)\",\"Foreigner Physical Examination Form (valid within 6 months)\",\"Certificate of No Criminal Record (Police Clearance valid within 6 months)\",\"Scholarship Application Form (for Beijing Government Scholarship)\",\"Proof of Financial Support\",\"Artworks Portfolio (min 2 pieces for School of Design and Art applicants)\"]",
+      "deadlineApplication": "1 June 2027",
+      "deadlineStartDate": "September 2027",
+      "notes": "[\"Mandatory CSCA exam required for all undergraduate applicants (submit score before interview).\",\"Accounting offered 100% in English (CSCA requirement: Mathematics only).\",\"Beijing Municipal Government Scholarship: Category A (Full), Category B (Partial), Category C (Tuition).\",\"Online application via btbu.17gz.org before 1 June 2027.\",\"Application Fee: CNY 420.00 (non-refundable).\"]",
+      "badges": "[\"Beijing Municipal Key University\",\"9 ESI Top 1% Disciplines\",\"Double First-Class Candidate\",\"English Accounting Bachelor\",\"Beijing Government Scholarship\",\"Liangxiang Campus\"]",
+      "logo": "/images/universities/logos/beijing-technology-and-business-university.webp",
+      "isActive": 1,
+      "officialUrl": "http://www.btbu.edu.cn",
+      "aliases": "[\"BTBU\",\"Beijing Technology and Business University (BTBU)\",\"北京工商大学\"]",
+      "legacySlugs": "[]",
+      "relationshipType": "unverified",
+      "relationshipEvidenceUrl": null,
+      "recognitionAuthority": "Ministry of Education (MoE) PR China · Beijing Municipal Education Commission",
+      "recognitionSourceUrl": "http://www.moe.gov.cn/",
+      "sourceUrls": "[\"http://www.btbu.edu.cn\",\"http://btbu.17gz.org\",\"https://english.beijing.gov.cn/studyinginbeijing/index.html\",\"https://mp.weixin.qq.com/s/mxAjrnCH8SX6xrf0MkAPGw\"]",
+      "lastVerifiedAt": null,
+      "verificationExpiresAt": null,
+      "verificationStatus": "verified",
+      "createdAt": 1795009405231,
+      "updatedAt": 1795009405231
     }
   ],
   "programs": [
@@ -17767,6 +17804,102 @@
       "eligibility": "[\"Master degree in Medicine or Life Sciences\",\"Age under 40\",\"Supervisor acceptance letter\",\"Detailed research proposal (minimum 3,000 words signed by supervisor)\"]",
       "sourceUrl": "https://zzu.17gz.org",
       "status": "active"
+    },
+    {
+      "id": "cmwm695bl0001t1yi3i2ryw3l",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "level": "Bachelor",
+      "name": "Bachelor in Accounting (English Medium)",
+      "subject": "Accounting & Finance",
+      "languages": "English",
+      "duration": "4 years",
+      "intakes": "September",
+      "tuition": "CNY 20,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Beijing Govt Scholarship Category A/B/C)",
+      "applicationDeadline": "1 June 2027",
+      "eligibility": "[\"High school diploma or equivalent\",\"Age 18–25\",\"IELTS >= 5.5 or TOEFL >= 80 (native English speakers exempt)\",\"CSCA Test Subject: Mathematics only\"]",
+      "sourceUrl": "http://btbu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwm695bl0002t1yipkbf8ui8",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "level": "Bachelor",
+      "name": "Bachelor in Computer Science and Technology",
+      "subject": "Computer Science and Technology",
+      "languages": "Chinese",
+      "duration": "4 years",
+      "intakes": "September",
+      "tuition": "CNY 23,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Beijing Govt Scholarship Category A/B/C)",
+      "applicationDeadline": "1 June 2027",
+      "eligibility": "[\"High school diploma or equivalent\",\"Age 18–25\",\"HSK Level 5 (180+)\",\"CSCA Test Subjects: Chinese (STEM) + Mathematics + Physics\"]",
+      "sourceUrl": "http://btbu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwm695bl0003t1yi3phlr7ky",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "level": "Bachelor",
+      "name": "Bachelor in Artificial Intelligence (Engineering)",
+      "subject": "Artificial Intelligence",
+      "languages": "Chinese",
+      "duration": "4 years",
+      "intakes": "September",
+      "tuition": "CNY 23,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Beijing Govt Scholarship Category A/B/C)",
+      "applicationDeadline": "1 June 2027",
+      "eligibility": "[\"High school diploma or equivalent\",\"Age 18–25\",\"HSK Level 5 (180+)\",\"CSCA Test Subjects: Chinese (STEM) + Mathematics + Physics\"]",
+      "sourceUrl": "http://btbu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwm695bl0004t1yisbf4fn4p",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "level": "Bachelor",
+      "name": "Bachelor in Cosmetic Technology and Engineering",
+      "subject": "Cosmetic Technology & Light Industry",
+      "languages": "Chinese",
+      "duration": "4 years",
+      "intakes": "September",
+      "tuition": "CNY 23,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Beijing Govt Scholarship Category A/B/C)",
+      "applicationDeadline": "1 June 2027",
+      "eligibility": "[\"High school diploma or equivalent\",\"Age 18–25\",\"HSK Level 5 (180+)\",\"CSCA Test Subjects: Chinese (STEM) + Mathematics + Chemistry\"]",
+      "sourceUrl": "http://btbu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwm695bl0005t1yioni5smnb",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "level": "Bachelor",
+      "name": "Bachelor in International Economics and Trade",
+      "subject": "International Economics and Trade",
+      "languages": "Chinese",
+      "duration": "4 years",
+      "intakes": "September",
+      "tuition": "CNY 20,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Beijing Govt Scholarship Category A/B/C)",
+      "applicationDeadline": "1 June 2027",
+      "eligibility": "[\"High school diploma or equivalent\",\"Age 18–25\",\"HSK Level 5 (180+)\",\"CSCA Test Subjects: Chinese (Humanities) + Mathematics\"]",
+      "sourceUrl": "http://btbu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwm695bl0006t1yitebzhqy2",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "level": "Bachelor",
+      "name": "Bachelor in Software Engineering",
+      "subject": "Software Engineering",
+      "languages": "Chinese",
+      "duration": "4 years",
+      "intakes": "September",
+      "tuition": "CNY 23,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Beijing Govt Scholarship Category A/B/C)",
+      "applicationDeadline": "1 June 2027",
+      "eligibility": "[\"High school diploma or equivalent\",\"Age 18–25\",\"HSK Level 5 (180+)\",\"CSCA Test Subjects: Chinese (STEM) + Mathematics + Physics\"]",
+      "sourceUrl": "http://btbu.17gz.org",
+      "status": "active"
     }
   ],
   "fees": [
@@ -26305,6 +26438,83 @@
       "refundable": "",
       "validFor": null,
       "sourceUrl": "https://international.zzu.edu.cn"
+    },
+    {
+      "id": "cmwm695bp000at1yibx5yj9f5",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "item": "Application Fee",
+      "cost": "420 CNY (Non-refundable)",
+      "notes": "Payable online via application portal",
+      "recipient": null,
+      "refundable": "",
+      "validFor": null,
+      "sourceUrl": "http://btbu.17gz.org"
+    },
+    {
+      "id": "cmwm695bp000bt1yiyb54zier",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "item": "Tuition Fee (Category I - Economics, Management, Law)",
+      "cost": "20,000 CNY/Year",
+      "notes": "Undergraduate programs in economics, business, management, law and humanities",
+      "recipient": null,
+      "refundable": "",
+      "validFor": null,
+      "sourceUrl": "http://btbu.17gz.org"
+    },
+    {
+      "id": "cmwm695bp000ct1yiipirj1zg",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "item": "Tuition Fee (Category II - Science, Engineering, Agriculture)",
+      "cost": "23,000 CNY/Year",
+      "notes": "Undergraduate programs in STEM, computer science, AI, cosmetic tech, materials",
+      "recipient": null,
+      "refundable": "",
+      "validFor": null,
+      "sourceUrl": "http://btbu.17gz.org"
+    },
+    {
+      "id": "cmwm695bp000dt1yip9a6qw3y",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "item": "Tuition Fee (Category III - Arts & Design)",
+      "cost": "27,000 CNY/Year",
+      "notes": "Undergraduate programs in design, media art and visual arts",
+      "recipient": null,
+      "refundable": "",
+      "validFor": null,
+      "sourceUrl": "http://btbu.17gz.org"
+    },
+    {
+      "id": "cmwm695bp000et1yicqodjp9h",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "item": "On-Campus Accommodation (Liangxiang Campus Twin Room)",
+      "cost": "40 CNY/Day (~14,600 CNY/Year)",
+      "notes": "Twin room with private bathroom, air conditioning and internet",
+      "recipient": null,
+      "refundable": "",
+      "validFor": null,
+      "sourceUrl": "http://btbu.17gz.org"
+    },
+    {
+      "id": "cmwm695bp000ft1yiohvx3rbt",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "item": "Comprehensive Medical Insurance Fee",
+      "cost": "800 CNY/Year",
+      "notes": "Mandatory international student comprehensive health insurance",
+      "recipient": null,
+      "refundable": "",
+      "validFor": null,
+      "sourceUrl": "http://btbu.17gz.org"
+    },
+    {
+      "id": "cmwm695bp000gt1yit58jjuyb",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "item": "Residence Permit Fee",
+      "cost": "400 CNY/Year",
+      "notes": "Collected by Beijing Municipal Public Security Bureau Exit-Entry Administration",
+      "recipient": null,
+      "refundable": "",
+      "validFor": null,
+      "sourceUrl": "http://btbu.17gz.org"
     }
   ],
   "scholarships": [
@@ -30041,6 +30251,51 @@
       "renewal": null,
       "deadline": "Round 1: 28 February 2027; Round 2: 31 May 2027",
       "sourceUrl": "https://zzu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwm695bo0007t1yif27flp5t",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "title": "Beijing Municipal Government Scholarship (Category A - Full Scholarship)",
+      "type": "Government",
+      "details": "[\"100% full tuition waiver across 4 years\",\"Free on-campus twin room accommodation at Liangxiang West Campus\",\"Monthly undergraduate living allowance\",\"Comprehensive medical insurance (CNY 800/yr)\"]",
+      "amount": "Full Scholarship: 100% Tuition Waiver + Free Campus Twin Dormitory + Monthly Living Allowance + Comprehensive Medical Insurance",
+      "condition": "Merit-based admission score, high school GPA 80%+, CSCA score report, and video interview score.",
+      "eligiblePrograms": "[\"All Undergraduate Programs\",\"Accounting (English)\"]",
+      "coverage": "100% tuition waiver, on-campus twin room housing, monthly living allowance, and comprehensive insurance",
+      "renewal": null,
+      "deadline": "1 June 2027",
+      "sourceUrl": "http://btbu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwm695bo0008t1yie4ckclre",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "title": "Beijing Municipal Government Scholarship (Category B - Partial Scholarship)",
+      "type": "Government",
+      "details": "[\"100% full tuition waiver\",\"Free on-campus twin room housing at Liangxiang West Campus\",\"Comprehensive medical insurance (CNY 800/yr)\"]",
+      "amount": "100% Tuition Waiver + Free Campus Twin Dormitory + Comprehensive Medical Insurance",
+      "condition": "Merit-based admission score, high school GPA 75%+, CSCA score report, and interview score.",
+      "eligiblePrograms": "[\"All Undergraduate Programs\"]",
+      "coverage": "Tuition waiver, twin dormitory housing, and health insurance",
+      "renewal": null,
+      "deadline": "1 June 2027",
+      "sourceUrl": "http://btbu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwm695bo0009t1yiqauf33yr",
+      "universityId": "cmwm695bj0000t1yic7uj9sf6",
+      "title": "Beijing Municipal Government Scholarship (Category C - Tuition Award)",
+      "type": "Government",
+      "details": "[\"100% annual tuition waiver\",\"Comprehensive medical insurance (CNY 800/yr)\"]",
+      "amount": "100% Tuition Waiver + Comprehensive Medical Insurance",
+      "condition": "Merit-based admission score, high school GPA 70%+, CSCA score report.",
+      "eligiblePrograms": "[\"All Undergraduate Programs\"]",
+      "coverage": "100% annual tuition fee waiver and medical insurance",
+      "renewal": null,
+      "deadline": "1 June 2027",
+      "sourceUrl": "http://btbu.17gz.org",
       "status": "active"
     }
   ],
