@@ -165,12 +165,14 @@ export default async function ChinaStudyReportPage() {
         description: `Structured database counts and explicit annual CNY tuition distributions across ${report.universityCount} active Chinese universities in ${report.cityCount} cities tracked for Bangladeshi students.`,
         url,
         isAccessibleForFree: true,
+        license: 'https://creativecommons.org/licenses/by/4.0/',
         ...(report.latestVerifiedIso ? { dateModified: `${report.latestVerifiedIso}T00:00:00Z` } : {}),
         measurementTechnique:
           'Direct aggregation of active university catalogue profiles with explicit single-year CNY tuition and non-tuition fee schedules; no synthetic currency conversion.',
         creator: { '@id': `${SITE}/#organization` },
         publisher: { '@id': `${SITE}/#organization` },
         spatialCoverage: { '@type': 'Place', name: 'China and Bangladesh' },
+        temporalCoverage: '2026/2027',
         distribution: [
           {
             '@type': 'DataDownload',
@@ -183,6 +185,12 @@ export default async function ChinaStudyReportPage() {
           'First-year university non-tuition charges in CNY',
           'Scholarship counts by awarding body',
           'City distribution of English-taught Chinese universities',
+        ],
+        keywords: [
+          'China university tuition benchmark',
+          'CSC scholarship data Bangladesh',
+          'Study in China fee distributions',
+          'Bangladesh to China university dataset',
         ],
       },
     ],
@@ -474,6 +482,18 @@ export default async function ChinaStudyReportPage() {
             <blockquote className="mt-3 rounded-2xl border border-white/15 bg-black/20 p-4 text-[14px] leading-6 text-white/90">
               EduExpress International ({now.getUTCFullYear()}). <em>Bangladesh to China Study Data &amp; Cost Benchmark Report</em>. Retrieved from {url}
             </blockquote>
+            <p className="mt-2 text-[13px] leading-5 text-white/75">
+              Open Research License:{' '}
+              <a
+                href="https://creativecommons.org/licenses/by/4.0/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-lime underline underline-offset-4 hover:text-white"
+              >
+                Creative Commons Attribution 4.0 International (CC BY 4.0)
+              </a>
+              . Free for academic, media, and school career counselling use with source attribution.
+            </p>
             <ReportCitationActions
               citationText={`EduExpress International (${now.getUTCFullYear()}). Bangladesh to China Study Data & Cost Benchmark Report. Retrieved from ${url}`}
               datasetUrl={`${SITE}/china-study-report.json`}

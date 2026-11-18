@@ -130,9 +130,13 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.equal(reportJson.publisher.hours, 'Saturday to Thursday, 11:00 AM to 6:00 PM');
 
+  assert.equal(reportJson.license, 'https://creativecommons.org/licenses/by/4.0/');
+  assert.equal(reportJson.methodology?.license, 'https://creativecommons.org/licenses/by/4.0/');
+
   const reportHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'china-study-report-bangladesh.html'), 'utf8');
   assert.ok(reportHtml.includes('https://eduexpressint.com/china-study-report.json'));
   assert.ok(reportHtml.includes('DataDownload'));
+  assert.ok(reportHtml.includes('https://creativecommons.org/licenses/by/4.0/'));
 
   const llmsFull = fs.readFileSync(path.join(BUILD_APP_DIR, 'llms-full.txt.body'), 'utf8');
   assert.ok(llmsFull.includes('https://eduexpressint.com/china-study-report.json'));

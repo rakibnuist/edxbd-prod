@@ -36,11 +36,13 @@ export async function GET() {
       },
       generatedAt: now.toISOString(),
       intakeVerifiedOn: CHINA_INTAKE_VERIFIED_ON,
+      license: 'https://creativecommons.org/licenses/by/4.0/',
       methodology: {
         tuitionCurrency: 'CNY',
         servicePackageCurrency: 'BDT',
         explicitSingleYearCnyOnly: true,
         noSyntheticFxConversion: true,
+        license: 'https://creativecommons.org/licenses/by/4.0/',
         chinaVisaFirstPolicy:
           'No file opening charge. No EduExpress service fee before China visa approval. Earlier third-party fees must be itemized in writing.',
       },

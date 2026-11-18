@@ -199,6 +199,11 @@ test('Step 2 SEO: citationJsonLd, bilingual trails/cross-links, OG locale, sitem
   const reportPage = read('src/app/china-study-report-bangladesh/page.tsx');
   const reportJson = read('src/app/china-study-report.json/route.ts');
   assert.ok(reportPage.includes("'@type': 'DataDownload'") && reportPage.includes('/china-study-report.json'));
+  assert.ok(
+    reportPage.includes("license: 'https://creativecommons.org/licenses/by/4.0/'") &&
+    reportJson.includes("license: 'https://creativecommons.org/licenses/by/4.0/'"),
+    'Dataset schema and JSON report must specify open research license for Google Search Console compliance',
+  );
   assert.ok(reportPage.includes('CHINA_REPORT_OFFICIAL_AUTHORITIES') && reportJson.includes('CHINA_REPORT_OFFICIAL_AUTHORITIES'));
   assert.ok(reportPage.includes('ReportCitationActions'));
   assert.ok(read('public/llms.txt').includes('/china-study-report.json'));
