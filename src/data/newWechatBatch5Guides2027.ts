@@ -1111,4 +1111,384 @@ export const WECHAT_BATCH5_7_GUIDES_DATA: Record<string, GuideData> = {
 </article>
 `,
   },
+
+  // 8. Zhengzhou University (ZZU) 2027 Master & PhD Admissions with Scholarship
+  'zhengzhou-university-postgraduate-scholarships-guide-2027': {
+    id: 'zhengzhou-university-postgraduate-scholarships-guide-2027',
+    title:
+      'Zhengzhou University 2027 Master & PhD Admissions with Scholarship: CSC Type B, Henan Government & President Awards',
+    slug: 'zhengzhou-university-postgraduate-scholarships-guide-2027',
+    type: 'update',
+    category: 'scholarships',
+    categories: JSON.stringify(['Scholarships', 'China', 'Admissions']),
+    tags: JSON.stringify([
+      'Zhengzhou University',
+      'ZZU',
+      'CSC Scholarship',
+      'Agency 10459',
+      'Henan Government Scholarship',
+      'President Scholarship',
+      'Master in China',
+      'PhD in China',
+      'Study in China',
+    ]),
+    excerpt:
+      'Official 2027 postgraduate admission & scholarship circular for Zhengzhou University (ZZU): Chinese Government Scholarship CSC Type B (Agency 10459, 50 seats), Henan Provincial Government Scholarship (Master), and ZZU President Full Scholarship (~100 PhD seats). Key deadlines, supervisor acceptance letter rules, and complete application steps.',
+    metaTitle: 'Zhengzhou University 2027 Master & PhD Scholarship Guide | EduExpress',
+    metaDescription:
+      'Official 2027 Zhengzhou University Master & PhD admissions: CSC Type B (Agency 10459), Henan Government & President Scholarships, deadlines, stipends & eligibility.',
+    featuredImage:
+      '/updates/covers/zhengzhou-university-postgraduate-scholarships-guide-2027.jpg',
+    author: 'EduExpress International Admissions Team',
+    reviewer: 'Abdullah Al Rakib',
+    sourceUrls: JSON.stringify([
+      'https://international.zzu.edu.cn',
+      'https://zzu.17gz.org',
+      'https://www.campuschina.org',
+      'https://zzu.17gz.org/html/article_content/202611/102B7B407D524940970B664331A5870E.shtml',
+    ]),
+    isPublished: true,
+    isFeatured: true,
+    views: 0,
+    createdAt: new Date('2026-11-18T13:40:00.000Z'),
+    updatedAt: new Date('2026-11-18T13:40:00.000Z'),
+    publishedAt: new Date('2026-11-18T13:40:00.000Z'),
+    lastVerifiedAt: new Date('2026-11-18T13:40:00.000Z'),
+    nextReviewAt: new Date('2027-05-31T23:59:59.000Z'),
+    deadlineAt: new Date('2027-05-31T23:59:59.000Z'),
+    complianceApprovedAt: new Date('2026-11-18T13:40:00.000Z'),
+    seoApprovedAt: new Date('2026-11-18T13:40:00.000Z'),
+    archivedAt: null,
+    expiresAt: null,
+    content: `
+<article class="space-y-8">
+  <section class="rounded-2xl border border-sky-100 bg-sky-50/60 p-6">
+    <h2 class="text-xl font-bold text-slate-900">Executive Summary: China's Largest University Announces 2027 Postgraduate Scholarship Admissions</h2>
+    <p class="mt-2 text-slate-700 leading-relaxed">
+      <strong>Zhengzhou University (郑州大学, ZZU)</strong>, a premier national <strong>Project 211</strong> and <strong>Double First-Class</strong> university jointly administered by China's Ministry of Education and the Henan Provincial Government, has officially released its international student admission circular for the <strong>2027 Master and PhD Intake</strong>. Known as the largest comprehensive university in China with over 75,000 enrolled students and more than 2,700 international scholars from 90+ countries, ZZU boasts exceptional funding capacity. In 2026 alone, <strong>563 international applicants were awarded university and government scholarships</strong>. For 2027, ZZU provides three competitive scholarship tracks: the <strong>Chinese Government Scholarship (CSC Type B, Agency No. 10459; 50 candidate quota)</strong>, the <strong>Henan Provincial Government Scholarship</strong> for Master's students (covering tuition up to CNY 30,000/year), and the prestigious <strong>President Scholarship of Zhengzhou University</strong> offering ~100 fully funded PhD awards with complete tuition waiver, accommodation, and living stipends.
+    </p>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">1. Institutional Prestige & Global Discipline Rankings</h2>
+    <p class="text-slate-700 leading-relaxed">
+      ZZU hosts four major campuses across Zhengzhou, Henan Province, covering 13 broad academic disciplines. It features three world-class development disciplines: <strong>Chemistry</strong>, <strong>Materials Science and Engineering</strong>, and <strong>Clinical Medicine</strong>. According to Essential Science Indicators (ESI), <strong>19 ZZU disciplines rank in the global top 1%</strong>, with 5 disciplines placing in the elite <strong>global top 1‰</strong>.
+    </p>
+    <div class="overflow-x-auto rounded-xl border border-slate-200">
+      <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
+        <thead class="bg-slate-100 font-semibold text-slate-900">
+          <tr>
+            <th class="px-4 py-3">Ranking System</th>
+            <th class="px-4 py-3">Global / National Standing</th>
+            <th class="px-4 py-3">Discipline Highlights & Focus Areas</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 bg-white">
+          <tr>
+            <td class="px-4 py-3 font-medium text-slate-900">CWTS Leiden Ranking</td>
+            <td class="px-4 py-3 text-sky-700 font-bold">25th Worldwide</td>
+            <td class="px-4 py-3">Global research output, international scientific collaboration & high-citation papers</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-slate-900">Nature Index World Ranking</td>
+            <td class="px-4 py-3 text-sky-700 font-bold">70th Worldwide</td>
+            <td class="px-4 py-3">Top-tier chemical sciences, physical sciences, advanced materials & life sciences</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-slate-900">ShanghaiRanking (ARWU)</td>
+            <td class="px-4 py-3 text-sky-700 font-bold">169th Worldwide</td>
+            <td class="px-4 py-3">Top-200 global comprehensive research powerhouse; 44th nationally in China</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-slate-900">ESI World Ranking</td>
+            <td class="px-4 py-3 text-sky-700 font-bold">194th Worldwide</td>
+            <td class="px-4 py-3">19 disciplines in global top 1%; Chemistry and Clinical Medicine in global top 1‰</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-slate-900">U.S. News Best Global</td>
+            <td class="px-4 py-3 text-sky-700 font-bold">203rd Worldwide</td>
+            <td class="px-4 py-3">Recognized for international reputation, regional research collaboration & publication volume</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-medium text-slate-900">QS World University Rankings</td>
+            <td class="px-4 py-3 text-slate-900 font-medium">511th Worldwide</td>
+            <td class="px-4 py-3">Strong employer reputation, international faculty ratio & academic citations per faculty</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">2. Critical Deadlines & Admission Calendar (2027 Intake)</h2>
+    <p class="text-slate-700 leading-relaxed">
+      ZZU follows a multi-tiered deadline structure. <strong>Early application in Round 1 is paramount</strong> because candidates are evaluated simultaneously for the Chinese Government Scholarship (CSC Type B) and provincial/university awards:
+    </p>
+    <div class="overflow-x-auto rounded-xl border border-slate-200">
+      <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
+        <thead class="bg-slate-100 font-semibold text-slate-900">
+          <tr>
+            <th class="px-4 py-3">Milestone / Scholarship Track</th>
+            <th class="px-4 py-3">Official Deadline</th>
+            <th class="px-4 py-3">Target Group & Instructions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 bg-white">
+          <tr class="bg-emerald-50/50">
+            <td class="px-4 py-3 font-semibold text-slate-900">Application Window Opens</td>
+            <td class="px-4 py-3 font-medium text-emerald-800">16 October 2026</td>
+            <td class="px-4 py-3">Online portal opens for registration, professor contacting & document uploads</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">CSC Type B (High-Level University Program)</td>
+            <td class="px-4 py-3 font-bold text-rose-700">28 February 2027</td>
+            <td class="px-4 py-3">Mandatory deadline for direct ZZU nomination (Agency No. <strong>10459</strong>; 50 candidate seats)</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Round 1: President Scholarship (PhD) & Henan Govt (Master)</td>
+            <td class="px-4 py-3 font-bold text-rose-700">28 February 2027</td>
+            <td class="px-4 py-3">Evaluated simultaneously with CSC Type B; provides dual-track backup guarantee</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">CSC Type A (Bilateral Program via Embassies)</td>
+            <td class="px-4 py-3 font-medium text-slate-800">30 April 2027</td>
+            <td class="px-4 py-3">Apply through Chinese Embassy or sending authorities in student's home country</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Round 2: President Scholarship (PhD) & Henan Govt (Master)</td>
+            <td class="px-4 py-3 font-bold text-amber-700">31 May 2027</td>
+            <td class="px-4 py-3">Final institutional deadline for self-funded applicants and secondary scholarship rounds</td>
+          </tr>
+          <tr class="bg-slate-50">
+            <td class="px-4 py-3 font-semibold text-slate-900">On-Campus Registration & Intake Commencement</td>
+            <td class="px-4 py-3 font-medium text-slate-800">6–8 September 2027</td>
+            <td class="px-4 py-3">In-person arrival, medical registration, residence permit conversion & orientation</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">3. Funding Schemes & Benefit Comparison Matrix</h2>
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+      <div class="rounded-xl border border-sky-200 bg-white p-5 shadow-sm">
+        <span class="inline-block rounded-md bg-sky-100 px-2.5 py-1 text-xs font-bold text-sky-800">NATIONAL FULL AWARD</span>
+        <h3 class="mt-2 text-lg font-bold text-slate-900">CSC Type B / Type A</h3>
+        <p class="mt-1 text-xs text-slate-500">Agency Code: 10459 · Master & PhD</p>
+        <ul class="mt-4 space-y-2 text-sm text-slate-700">
+          <li>✓ <strong>100% Tuition Waiver:</strong> Zero tuition across entire degree duration.</li>
+          <li>✓ <strong>Free Accommodation:</strong> On-campus university dormitory.</li>
+          <li>✓ <strong>Monthly Stipend:</strong>
+            <br />• Master's: <strong>CNY 3,000 / month</strong>
+            <br />• Doctoral (PhD): <strong>CNY 3,500 / month</strong>
+          </li>
+          <li>✓ <strong>Medical Insurance:</strong> Comprehensive cover (CNY 800/yr).</li>
+          <li>✓ <strong>Quota:</strong> 50 candidates directly nominated by ZZU.</li>
+        </ul>
+      </div>
+
+      <div class="rounded-xl border border-emerald-200 bg-white p-5 shadow-sm">
+        <span class="inline-block rounded-md bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-800">UNIVERSITY FULL AWARD</span>
+        <h3 class="mt-2 text-lg font-bold text-slate-900">ZZU President Scholarship</h3>
+        <p class="mt-1 text-xs text-slate-500">PhD Only · ~100 Seats Annually</p>
+        <ul class="mt-4 space-y-2 text-sm text-slate-700">
+          <li>✓ <strong>Full Scholarship:</strong> 100% Tuition fee waiver for 4-year doctoral studies.</li>
+          <li>✓ <strong>Free Accommodation:</strong> Dedicated single/double doctoral dormitory.</li>
+          <li>✓ <strong>Monthly Living Allowance:</strong> Generous monthly doctoral living stipend.</li>
+          <li>✓ <strong>Dual-Track Guarantee:</strong> Round 1 candidates nominated for CSC; if CSC quota is exhausted, ZZU guarantees full presidential funding.</li>
+        </ul>
+      </div>
+
+      <div class="rounded-xl border border-indigo-200 bg-white p-5 shadow-sm">
+        <span class="inline-block rounded-md bg-indigo-100 px-2.5 py-1 text-xs font-bold text-indigo-800">PROVINCIAL AWARD</span>
+        <h3 class="mt-2 text-lg font-bold text-slate-900">Henan Government Scholarship</h3>
+        <p class="mt-1 text-xs text-slate-500">Master's Degree Only · Two Rounds</p>
+        <ul class="mt-4 space-y-2 text-sm text-slate-700">
+          <li>✓ <strong>Tuition Coverage:</strong> Covers tuition up to <strong>CNY 30,000 / year</strong>.</li>
+          <li>✓ <strong>Master's Progression:</strong> Round 1 applicants are evaluated with CSC Type B.</li>
+          <li>✓ <strong>Fallback Mechanism:</strong> Admitted candidates recommended to CSC; those who do not win CSC automatically receive this provincial award.</li>
+          <li>✓ <strong>Doctoral Pipeline:</strong> Excellent Master graduates are preferentially sponsored for full PhD scholarships.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">4. Vital Requirement: Professor Outreach & Acceptance Letter</h2>
+    <div class="rounded-xl border border-amber-200 bg-amber-50/70 p-5">
+      <h3 class="text-lg font-bold text-amber-900">Mandatory Step 1 Before Formal Application</h3>
+      <p class="mt-2 text-sm text-amber-800 leading-relaxed">
+        Zhengzhou University explicitly notes: <em>"Please contact professors in similar research fields and get their acceptance letter first. It is of vital importance to your application!"</em> Applications submitted without a valid supervisor acceptance letter will be severely disadvantaged or rejected during initial departmental screening.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="http://international.zzu.edu.cn/uploads/attached/file/20261117/B17727597398818.doc" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-lg bg-amber-800 px-4 py-2 text-xs font-bold text-white hover:bg-amber-900">
+          Download Official ZZU Supervisor Acceptance Letter Template (.doc)
+        </a>
+        <a href="http://international.zzu.edu.cn/en/school?cid=3&amp;pid=3" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-lg border border-amber-800 bg-white px-4 py-2 text-xs font-bold text-amber-900 hover:bg-amber-50">
+          Browse ZZU Schools & Faculty Directory
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">5. Strict 10-Item Application Document Checklist</h2>
+    <p class="text-slate-700 leading-relaxed">
+      All materials must be scanned clearly in color and uploaded in English or Chinese. Documents in other languages must be accompanied by an official notarized translation:
+    </p>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h3 class="font-bold text-slate-900">1. Degree Certificates & Diplomas</h3>
+        <p class="mt-1 text-xs text-slate-600">Master applicants submit Bachelor degree; PhD applicants submit both Bachelor and Master degrees. Graduating students must provide an official Pre-Graduation Letter.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h3 class="font-bold text-slate-900">2. Complete Academic Transcripts</h3>
+        <p class="mt-1 text-xs text-slate-600">Official transcripts covering all semesters. Minimum competitive CGPA is 3.0/4.0 or 75%+ aggregate score.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h3 class="font-bold text-slate-900">3. Supervisor Acceptance Letter</h3>
+        <p class="mt-1 text-xs text-slate-600">Signed acceptance letter on the official ZZU format from an active associate professor or full professor at Zhengzhou University.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h3 class="font-bold text-slate-900">4. Research Proposal / Study Plan</h3>
+        <p class="mt-1 text-xs text-slate-600">For PhD: <strong>Strict minimum of 3,000 words</strong> covering background, objectives, and research methodology. Must be discussed with supervisor and signed on the title page. Plagiarism check applied.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h3 class="font-bold text-slate-900">5. Two Academic Recommendation Letters</h3>
+        <p class="mt-1 text-xs text-slate-600">From two scholars who are associate professors or professors in relevant fields, bearing institutional letterhead, contact emails, and original signatures.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h3 class="font-bold text-slate-900">6. Valid Ordinary Passport</h3>
+        <p class="mt-1 text-xs text-slate-600">Clean scan of passport bio-data page with <strong>at least 18 months of remaining validity</strong> at the time of submission.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h3 class="font-bold text-slate-900">7. Language Proficiency Certificate</h3>
+        <p class="mt-1 text-xs text-slate-600">English-taught: IELTS (6.0+), TOEFL (80+), Duolingo (100+), or official Medium of Instruction (MOI) letter. Chinese-taught: HSK Level 5 (180+) or HSK Level 6.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h3 class="font-bold text-slate-900">8. Physical Examination Form</h3>
+        <p class="mt-1 text-xs text-slate-600">Completed Foreigner Physical Examination Form (valid within 6 months) including blood test laboratory reports, chest X-ray, and official hospital seal.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h3 class="font-bold text-slate-900">9. Non-Criminal Record Certificate</h3>
+        <p class="mt-1 text-xs text-slate-600">Official police clearance certificate issued by authorities in the applicant's home country, dated within 6 months of application.</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <h3 class="font-bold text-slate-900">10. Prior China Stay Documents (If Applicable)</h3>
+        <p class="mt-1 text-xs text-slate-600">Applicants who have previously studied or resided in China must provide their latest residence permit and an official moral character certificate from their prior Chinese institution.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">6. Step-by-Step Application Submission Protocol</h2>
+    <div class="space-y-3">
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-700 text-sm font-bold text-white">1</span>
+        <div>
+          <h3 class="font-bold text-slate-900">Supervisor Matching & Acceptance Letter Acquisition</h3>
+          <p class="mt-1 text-sm text-slate-600">Consult the ZZU school directory (<a href="http://international.zzu.edu.cn/en/school?cid=3&amp;pid=3" target="_blank" rel="noopener noreferrer" class="text-sky-700 underline">international.zzu.edu.cn</a>) or the online AI consultation system (<a href="https://robot.360eol.com/robot/homePage/chatIndex?schoolId=NuoPDnz8wNc%3D&amp;type=1&amp;l=en_US" target="_blank" rel="noopener noreferrer" class="text-sky-700 underline">ZZU Consultation</a>). Email professors your CV, academic transcripts, and draft proposal to secure their signed acceptance letter.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-700 text-sm font-bold text-white">2</span>
+        <div>
+          <h3 class="font-bold text-slate-900">Submit Online Application on ZZU Portal</h3>
+          <p class="mt-1 text-sm text-slate-600">Register and fill out the complete international admission application at <a href="https://zzu.17gz.org/" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">zzu.17gz.org</a> before the deadline (28 Feb for Round 1; 31 May for Round 2). Select your desired scholarship category (CSC, Henan Government, or President Scholarship).</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-700 text-sm font-bold text-white">3</span>
+        <div>
+          <h3 class="font-bold text-slate-900">Dual Portal Submission on CSC Information System (For CSC Applicants)</h3>
+          <p class="mt-1 text-sm text-slate-600">Applicants seeking Chinese Government Scholarships must simultaneously register on the CSC portal at <a href="https://www.campuschina.org/scholarships" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">campuschina.org</a>. Select <strong>Program Category Type B</strong> and enter Zhengzhou University's Agency Code: <strong>10459</strong>.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-700 text-sm font-bold text-white">4</span>
+        <div>
+          <h3 class="font-bold text-slate-900">Departmental Review & CSC Council Recommendation</h3>
+          <p class="mt-1 text-sm text-slate-600">ZZU academic committees review dossiers. Admitted Round 1 candidates are nominated to the China Scholarship Council. If approved, candidates receive full CSC funding; if not, PhD candidates receive ZZU President Full Scholarship and Master candidates receive Henan Government Scholarship.</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-700 text-sm font-bold text-white">5</span>
+        <div>
+          <h3 class="font-bold text-slate-900">Visa Processing (JW201/JW202) & Enrollment</h3>
+          <p class="mt-1 text-sm text-slate-600">Successful candidates receive the official ZZU Admission Notice and JW201/JW202 visa form. Apply for an X1 student visa at your nearest Chinese Embassy/Consulate and report to Zhengzhou on 6–8 September 2027.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">7. Frequently Asked Questions (FAQ)</h2>
+    <div class="space-y-3">
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          Can I apply to Zhengzhou University without a supervisor acceptance letter?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          No. ZZU explicitly states that getting a supervisor acceptance letter first is of vital importance. You must contact professors in your discipline with your CV and research proposal to secure their signed commitment on the official ZZU acceptance form before submitting online.
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          What is the official CSC agency number for Zhengzhou University?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          The official agency code for Zhengzhou University under the Chinese Government Scholarship (CSC Type B) is <strong>10459</strong>.
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          What happens if my CSC Type B application is not approved by the CSC Council?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          ZZU provides an unmatched institutional guarantee: admitted PhD applicants in Round 1 who are nominated for CSC will be awarded the ZZU President Full Scholarship regardless of whether CSC approves them. Admitted Master applicants will automatically receive the Henan Provincial Government Scholarship (up to CNY 30,000/yr tuition award).
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          What are the specific requirements for the PhD research proposal?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          PhD research proposals must be a minimum of 3,000 words, including academic background, objectives, and detailed methodology with standard academic citations. You must discuss the proposal with your prospective supervisor and obtain their physical signature on the title page. ZZU runs a mandatory anti-plagiarism check on all proposals.
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          How many scholarship seats are available at ZZU each year?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          ZZU has one of the largest scholarship allocations in China. In 2026, 563 new international students were awarded scholarships. For 2027, ZZU has 50 CSC Type B candidate slots and approximately 100 new President Full Scholarship seats for PhD researchers, alongside substantial Henan Government quotas.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">8. Institutional Contacts & Verified Sources</h2>
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 class="font-bold text-slate-900">International Admissions Office, Zhengzhou University</h3>
+      <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+        <strong>Address:</strong> Main Campus of Zhengzhou University, No. 100 Science Avenue, High-tech Development Zone, Zhengzhou, Henan Province, China (Postcode: 450001)<br />
+        <strong>Telephone / Fax:</strong> +86-371-67780102 / +86-371-67780665<br />
+        <strong>Official Admissions Emails:</strong> <code>zhaochun@zzu.edu.cn</code> | <code>international@zzu.edu.cn</code><br />
+        <strong>International Student Portals:</strong> <a href="http://international.zzu.edu.cn" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">international.zzu.edu.cn</a> | <a href="https://www5.zzu.edu.cn/sie" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">www5.zzu.edu.cn/sie</a><br />
+        <strong>Application Web System:</strong> <a href="https://zzu.17gz.org" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">zzu.17gz.org</a><br />
+        <strong>Online AI Consultation:</strong> <a href="https://robot.360eol.com/robot/homePage/chatIndex?schoolId=NuoPDnz8wNc%3D&amp;type=1&amp;l=en_US" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">ZZU Interactive Chat Portal</a>
+      </p>
+    </div>
+  </section>
+</article>
+`,
+  },
 };
+

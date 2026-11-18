@@ -866,5 +866,330 @@ export async function upsertWechatBatch5Universities(prisma) {
     console.log('✓ Updated NJUST postgraduate programs and fees.');
   }
 
+  // ==========================================
+  // 6. Zhengzhou University (ZZU) - Upgrade to Master & PhD + CSC Type B, Henan Govt, President Scholarships
+  // ==========================================
+  const zzu = await prisma.university.findFirst({
+    where: {
+      OR: [
+        { slug: 'zzu' },
+        { slug: 'zhengzhou-university' },
+        { name: 'Zhengzhou University' },
+      ],
+    },
+    include: { programs: true, scholarships: true, fees: true },
+  });
+
+  if (zzu) {
+    await prisma.university.update({
+      where: { id: zzu.id },
+      data: {
+        degree: 'Bachelor, Master, PhD',
+        taught: 'English, Chinese',
+        rankingCountry: 44,
+        rankingWorld: 169,
+        rankingNational: 44,
+        badges: JSON.stringify([
+          'Double First-Class',
+          'Project 211',
+          'Nature Index: #70',
+          'CWTS Leiden: #25',
+          'ARWU: #169',
+          'U.S. News: #203',
+          'QS: #511',
+          'CSC Agency: 10459',
+          'President Scholarship (Full PhD)',
+          'Henan Govt Scholarship',
+          'MBBS & Postgrad',
+        ]),
+        documents: JSON.stringify([
+          'Passport (18+ months validity)',
+          'White Background Photo',
+          'Degree Certificate or Official Pre-Graduation Letter',
+          'Academic Transcripts (English/Chinese translated)',
+          'Supervisor Acceptance Letter (Official ZZU Template)',
+          'Two Academic Recommendation Letters (Associate Professor or higher)',
+          'Research Proposal (Min 3,000 words for PhD with Supervisor Signature) or Study Plan',
+          'Foreigner Physical Examination Form (valid within 6 months)',
+          'Non-Criminal Record Certificate (Police Clearance valid within 6 months)',
+          'Language Proficiency Certificate (IELTS/TOEFL/Duolingo or HSK)',
+        ]),
+        notes: JSON.stringify([
+          'Chinese Government Scholarship (CSC Type B): Agency No. 10459 · 50 Seats · Deadline 28 February 2027.',
+          'President Scholarship of Zhengzhou University: Full Scholarship for PhD (~100 seats/year) · Dual-track CSC guarantee.',
+          'Henan Provincial Government Scholarship: Up to CNY 30,000/yr tuition award for Master scholars.',
+          'Dual Online Application Required: zzu.17gz.org & campuschina.org before deadlines.',
+          'Mandatory Supervisor Acceptance Letter required before formal application.',
+        ]),
+        sourceUrls: JSON.stringify([
+          'https://international.zzu.edu.cn',
+          'https://zzu.17gz.org',
+          'https://www.campuschina.org',
+          'https://zzu.17gz.org/html/article_content/202611/102B7B407D524940970B664331A5870E.shtml',
+        ]),
+      },
+    });
+    changes++;
+
+    // Add ZZU Scholarships
+    const existingScholarships = zzu.scholarships.map((s) => s.title);
+    if (!existingScholarships.includes('Chinese Government Scholarship (CSC Type B - High-Level Postgraduate)')) {
+      await prisma.scholarship.create({
+        data: {
+          universityId: zzu.id,
+          title: 'Chinese Government Scholarship (CSC Type B - High-Level Postgraduate)',
+          type: 'Government',
+          details: JSON.stringify([
+            '100% full tuition waiver across program duration',
+            'Free on-campus accommodation in university dormitory',
+            'Monthly living allowance: Master CNY 3,000/mo, PhD CNY 3,500/mo',
+            'Comprehensive Medical Insurance (CNY 800/yr)',
+            'Agency No. 10459 with 50 designated candidate seats',
+          ]),
+          amount:
+            'Full Scholarship: 100% Tuition + Free Campus Dorm + Monthly Living Allowance (Master CNY 3,000/mo, PhD CNY 3,500/mo) + Comprehensive Medical Insurance',
+          condition:
+            'Agency No. 10459. Excellent academic merit (GPA 3.2+/4.0 or 80%+), supervisor acceptance letter, age under 35 (Master) or under 40 (PhD).',
+          eligiblePrograms: JSON.stringify([
+            'Master Programs',
+            'Doctoral Programs',
+            'Chemistry',
+            'Materials Science & Engineering',
+            'Clinical Medicine',
+            'Computer Science & Technology',
+            'Environmental & Chemical Engineering',
+          ]),
+          coverage: 'Full scholarship covering tuition, accommodation, living allowance, and medical insurance',
+          deadline: '28 February 2027',
+          sourceUrl: 'https://zzu.17gz.org',
+          status: 'active',
+        },
+      });
+      changes++;
+    }
+
+    if (!existingScholarships.includes('President Scholarship of Zhengzhou University (PhD Full Award)')) {
+      await prisma.scholarship.create({
+        data: {
+          universityId: zzu.id,
+          title: 'President Scholarship of Zhengzhou University (PhD Full Award)',
+          type: 'University',
+          details: JSON.stringify([
+            'Full scholarship covering 100% doctoral tuition waiver',
+            'Free on-campus accommodation in doctoral dormitory',
+            'Monthly doctoral living allowance',
+            'Dual-track backup guarantee with CSC Type B (~100 seats/year)',
+          ]),
+          amount: 'Full Scholarship: 100% Tuition Waiver + Free On-Campus Accommodation + Monthly Living Allowance',
+          condition:
+            'Doctoral degree applicants with strong research background, supervisor acceptance letter, signed 3,000+ word research proposal. Dual-track guarantee with CSC Type B (~100 seats/year).',
+          eligiblePrograms: JSON.stringify([
+            'Doctoral Programs',
+            'PhD in Chemistry',
+            'PhD in Materials Science',
+            'PhD in Clinical Medicine',
+            'PhD in Engineering',
+          ]),
+          coverage: 'Full tuition waiver, campus dorm, and monthly doctoral living allowance',
+          deadline: 'Round 1: 28 February 2027; Round 2: 31 May 2027',
+          sourceUrl: 'https://zzu.17gz.org',
+          status: 'active',
+        },
+      });
+      changes++;
+    }
+
+    if (!existingScholarships.includes('Henan Provincial Government Scholarship (Master Program)')) {
+      await prisma.scholarship.create({
+        data: {
+          universityId: zzu.id,
+          title: 'Henan Provincial Government Scholarship (Master Program)',
+          type: 'Provincial',
+          details: JSON.stringify([
+            'Tuition award covering up to CNY 30,000/year for Master programs',
+            'Two evaluation rounds (Round 1: 28 Feb 2027, Round 2: 31 May 2027)',
+            'Automatic fallback award for admitted Round 1 CSC Type B applicants',
+          ]),
+          amount: 'Tuition award up to CNY 30,000/year',
+          condition:
+            'Master degree applicants with bachelor degree, good academic standing, supervisor acceptance letter. Dual-track evaluation alongside CSC Type B.',
+          eligiblePrograms: JSON.stringify(['Master Programs', 'Postgraduate Degrees']),
+          coverage: 'Tuition fee coverage up to CNY 30,000/year',
+          deadline: 'Round 1: 28 February 2027; Round 2: 31 May 2027',
+          sourceUrl: 'https://zzu.17gz.org',
+          status: 'active',
+        },
+      });
+      changes++;
+    }
+
+    // Add ZZU Master & PhD Programs
+    const existingProgNames = zzu.programs.map((p) => p.name);
+    const newZzuPrograms = [
+      {
+        level: 'Master',
+        name: 'Master in Chemistry & Chemical Engineering',
+        subject: 'Chemistry & Chemical Engineering',
+        languages: 'English, Chinese',
+        duration: '3 years',
+        intakes: 'September',
+        tuition: 'CNY 28,000 / year',
+        tuitionAfterScholarship: 'CNY 0 / year (Full CSC or Henan Govt Scholarship)',
+        applicationDeadline: '28 February 2027 (CSC Type B) / 31 May 2027 (Round 2)',
+        eligibility: JSON.stringify([
+          'Bachelor degree in Chemistry, Chemical Engineering or related science field',
+          'GPA 3.0+/4.0 or 75%+',
+          'Age under 35',
+          'IELTS 6.0+ / TOEFL 80+ or HSK 5 (180+)',
+          'Supervisor acceptance letter',
+        ]),
+        sourceUrl: 'https://zzu.17gz.org',
+        status: 'active',
+      },
+      {
+        level: 'Master',
+        name: 'Master in Materials Science & Engineering',
+        subject: 'Materials Science & Engineering',
+        languages: 'English, Chinese',
+        duration: '3 years',
+        intakes: 'September',
+        tuition: 'CNY 28,000 / year',
+        tuitionAfterScholarship: 'CNY 0 / year (Full CSC or Henan Govt Scholarship)',
+        applicationDeadline: '28 February 2027 (CSC Type B) / 31 May 2027 (Round 2)',
+        eligibility: JSON.stringify([
+          'Bachelor degree in Materials Science, Physics, Chemistry, or Engineering',
+          'GPA 3.0+/4.0 or 75%+',
+          'Age under 35',
+          'IELTS 6.0+ / TOEFL 80+ or HSK 5 (180+)',
+          'Supervisor acceptance letter',
+        ]),
+        sourceUrl: 'https://zzu.17gz.org',
+        status: 'active',
+      },
+      {
+        level: 'Master',
+        name: 'Master in Clinical Medicine & Health Sciences',
+        subject: 'Clinical Medicine & Health Sciences',
+        languages: 'English, Chinese',
+        duration: '3 years',
+        intakes: 'September',
+        tuition: 'CNY 35,000 / year',
+        tuitionAfterScholarship: 'CNY 5,000 / year (Henan Govt) or CNY 0 (CSC Type B)',
+        applicationDeadline: '28 February 2027 (CSC Type B) / 31 May 2027 (Round 2)',
+        eligibility: JSON.stringify([
+          'MBBS or Bachelor degree in Medicine / Health Sciences',
+          'GPA 3.2+/4.0 or 80%+',
+          'Age under 35',
+          'IELTS 6.5+ / TOEFL 85+ or HSK 5 (210+)',
+          'Supervisor acceptance letter',
+        ]),
+        sourceUrl: 'https://zzu.17gz.org',
+        status: 'active',
+      },
+      {
+        level: 'Master',
+        name: 'Master in Computer Science & Technology (AI / Data Science)',
+        subject: 'Computer Science & Technology',
+        languages: 'English, Chinese',
+        duration: '3 years',
+        intakes: 'September',
+        tuition: 'CNY 28,000 / year',
+        tuitionAfterScholarship: 'CNY 0 / year (Full CSC or Henan Govt Scholarship)',
+        applicationDeadline: '28 February 2027 (CSC Type B) / 31 May 2027 (Round 2)',
+        eligibility: JSON.stringify([
+          'Bachelor degree in Computer Science, Software Engineering, IT or Mathematics',
+          'GPA 3.0+/4.0 or 75%+',
+          'Age under 35',
+          'IELTS 6.0+ / TOEFL 80+ or HSK 5 (180+)',
+          'Supervisor acceptance letter',
+        ]),
+        sourceUrl: 'https://zzu.17gz.org',
+        status: 'active',
+      },
+      {
+        level: 'Doctoral',
+        name: 'PhD in Chemistry, Materials Science & Advanced Engineering',
+        subject: 'Chemistry, Materials Science & Engineering',
+        languages: 'English, Chinese',
+        duration: '4 years',
+        intakes: 'September',
+        tuition: 'CNY 34,000 / year',
+        tuitionAfterScholarship: 'CNY 0 / year (Fully Funded via President Award / CSC Type B + Monthly Stipend)',
+        applicationDeadline: '28 February 2027 (Round 1) / 31 May 2027 (Round 2)',
+        eligibility: JSON.stringify([
+          'Master degree in relevant discipline',
+          'Age under 40',
+          'Strong research track record (publications preferred)',
+          'Supervisor acceptance letter',
+          'Detailed research proposal (minimum 3,000 words signed by supervisor)',
+        ]),
+        sourceUrl: 'https://zzu.17gz.org',
+        status: 'active',
+      },
+      {
+        level: 'Doctoral',
+        name: 'PhD in Clinical Medicine & Biomedical Sciences',
+        subject: 'Clinical Medicine & Biomedical Sciences',
+        languages: 'English, Chinese',
+        duration: '4 years',
+        intakes: 'September',
+        tuition: 'CNY 40,000 / year',
+        tuitionAfterScholarship: 'CNY 0 / year (Fully Funded via President Award / CSC Type B + Monthly Stipend)',
+        applicationDeadline: '28 February 2027 (Round 1) / 31 May 2027 (Round 2)',
+        eligibility: JSON.stringify([
+          'Master degree in Medicine or Life Sciences',
+          'Age under 40',
+          'Supervisor acceptance letter',
+          'Detailed research proposal (minimum 3,000 words signed by supervisor)',
+        ]),
+        sourceUrl: 'https://zzu.17gz.org',
+        status: 'active',
+      },
+    ];
+
+    for (const prog of newZzuPrograms) {
+      if (!existingProgNames.includes(prog.name)) {
+        await prisma.program.create({
+          data: {
+            universityId: zzu.id,
+            ...prog,
+          },
+        });
+        changes++;
+      }
+    }
+
+    // Add ZZU Fees
+    const existingFeeItems = zzu.fees.map((f) => f.item);
+    if (!existingFeeItems.includes('Postgraduate Master Tuition (Science & Engineering)')) {
+      await prisma.fee.create({
+        data: {
+          universityId: zzu.id,
+          item: 'Postgraduate Master Tuition (Science & Engineering)',
+          cost: '28,000 CNY/Year',
+          notes: 'Master degree programs in science, technology and engineering',
+          sourceUrl: 'https://international.zzu.edu.cn',
+        },
+      });
+      changes++;
+    }
+    if (!existingFeeItems.includes('Postgraduate Doctoral Tuition (Science & Engineering)')) {
+      await prisma.fee.create({
+        data: {
+          universityId: zzu.id,
+          item: 'Postgraduate Doctoral Tuition (Science & Engineering)',
+          cost: '34,000 CNY/Year',
+          notes: 'PhD research programs (fully waived for President / CSC scholarship holders)',
+          sourceUrl: 'https://international.zzu.edu.cn',
+        },
+      });
+      changes++;
+    }
+
+    console.log(
+      '✓ Updated Zhengzhou University (ZZU) with Master/PhD programs, CSC Type B, Henan Govt, and President Scholarships.'
+    );
+  }
+
   return changes;
 }

@@ -1252,11 +1252,11 @@
       "recognitionAuthority": "Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[]",
-      "lastVerifiedAt": 1794979827451,
+      "lastVerifiedAt": 1794980724442,
       "verificationExpiresAt": null,
       "verificationStatus": "under_verification",
       "createdAt": 1791713582681,
-      "updatedAt": 1794979827452
+      "updatedAt": 1794980724443
     },
     {
       "id": "69a413c66fb0e628ef20eabe",
@@ -1474,11 +1474,11 @@
       "recognitionAuthority": "Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[]",
-      "lastVerifiedAt": 1794979827459,
+      "lastVerifiedAt": 1794980724451,
       "verificationExpiresAt": null,
       "verificationStatus": "under_verification",
       "createdAt": 1791713583120,
-      "updatedAt": 1794979827460
+      "updatedAt": 1794980724451
     },
     {
       "id": "69a42aa86fb0e628ef210eb9",
@@ -1858,19 +1858,19 @@
       "country": "China",
       "city": "Zhengzhou",
       "intake": "September",
-      "degree": "Bachelor",
-      "taught": "English",
+      "degree": "Bachelor, Master, PhD",
+      "taught": "English, Chinese",
       "rankingCountry": 44,
-      "rankingWorld": 151,
+      "rankingWorld": 169,
       "rankingNational": 44,
       "majors": "Clinical Medicine (MBBS)",
       "tuition": "CNY 35,000 / year",
       "tuitionDetails": "[]",
-      "documents": "[\"Passport\",\"Photo\",\"High School Diploma / Secondary Leaving Certificate\",\"Official Academic Transcripts / Grade Sheets\",\"Medical Form\",\"English Proficiency\",\"Police Clearance\"]",
+      "documents": "[\"Passport (18+ months validity)\",\"White Background Photo\",\"Degree Certificate or Official Pre-Graduation Letter\",\"Academic Transcripts (English/Chinese translated)\",\"Supervisor Acceptance Letter (Official ZZU Template)\",\"Two Academic Recommendation Letters (Associate Professor or higher)\",\"Research Proposal (Min 3,000 words for PhD with Supervisor Signature) or Study Plan\",\"Foreigner Physical Examination Form (valid within 6 months)\",\"Non-Criminal Record Certificate (Police Clearance valid within 6 months)\",\"Language Proficiency Certificate (IELTS/TOEFL/Duolingo or HSK)\"]",
       "deadlineApplication": "May 30th, 2027 (Depends on Seats)",
       "deadlineStartDate": "September 2027",
-      "notes": "[\"Minimum Academic Requirement: High School GPA 75%+ or equivalent\",\"IELTS: 5.5 or DET: 95\",\"CSCA Required\",\"EFSET or MOI Acceptable\",\"Age Limit: 18-23\",\"Deadline for Application: May 30th, 2027 (Depends on Seats)\"]",
-      "badges": "[\"QS Rank: 618\",\"Times Higher Edu: 601-800\",\"U.S.News: 203\",\"Bachelor Degree (MBBS)\",\"English Medium\",\"MBBS (6 Years)\"]",
+      "notes": "[\"Chinese Government Scholarship (CSC Type B): Agency No. 10459 · 50 Seats · Deadline 28 February 2027.\",\"President Scholarship of Zhengzhou University: Full Scholarship for PhD (~100 seats/year) · Dual-track CSC guarantee.\",\"Henan Provincial Government Scholarship: Up to CNY 30,000/yr tuition award for Master scholars.\",\"Dual Online Application Required: zzu.17gz.org & campuschina.org before deadlines.\",\"Mandatory Supervisor Acceptance Letter required before formal application.\"]",
+      "badges": "[\"Double First-Class\",\"Project 211\",\"Nature Index: #70\",\"CWTS Leiden: #25\",\"ARWU: #169\",\"U.S. News: #203\",\"QS: #511\",\"CSC Agency: 10459\",\"President Scholarship (Full PhD)\",\"Henan Govt Scholarship\",\"MBBS & Postgrad\"]",
       "logo": "/images/universities/logos/zzu.webp",
       "isActive": 1,
       "officialUrl": "https://international.zzu.edu.cn",
@@ -1880,12 +1880,12 @@
       "relationshipEvidenceUrl": null,
       "recognitionAuthority": "Ministry of Education (MoE) PR China · WDOMS & BMDC Listed",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
-      "sourceUrls": "[]",
+      "sourceUrls": "[\"https://international.zzu.edu.cn\",\"https://zzu.17gz.org\",\"https://www.campuschina.org\",\"https://zzu.17gz.org/html/article_content/202611/102B7B407D524940970B664331A5870E.shtml\"]",
       "lastVerifiedAt": null,
       "verificationExpiresAt": null,
       "verificationStatus": "under_verification",
       "createdAt": 1791713583654,
-      "updatedAt": 1794977014420
+      "updatedAt": 1794980724473
     },
     {
       "id": "69a439d86fb0e628ef2126c0",
@@ -1955,11 +1955,11 @@
       "recognitionAuthority": "Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[\"https://cie.nuaa.edu.cn/2025/1121/c16499a388281/page.htm\"]",
-      "lastVerifiedAt": 1794979827454,
+      "lastVerifiedAt": 1794980724445,
       "verificationExpiresAt": null,
       "verificationStatus": "under_verification",
       "createdAt": 1791713583719,
-      "updatedAt": 1794979827455
+      "updatedAt": 1794980724446
     },
     {
       "id": "69a43a516fb0e628ef212789",
@@ -2029,11 +2029,11 @@
       "recognitionAuthority": "Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[\"https://www.njupt.edu.cn/\",\"http://admission.njupt.edu.cn/\",\"https://studyinchina.csc.edu.cn/\",\"https://www.campuschina.org/\"]",
-      "lastVerifiedAt": 1794979827411,
+      "lastVerifiedAt": 1794980724404,
       "verificationExpiresAt": null,
       "verificationStatus": "verified",
       "createdAt": 1791713583797,
-      "updatedAt": 1794979827411
+      "updatedAt": 1794980724405
     },
     {
       "id": "69a43d026fb0e628ef212b90",
@@ -2288,11 +2288,11 @@
       "recognitionAuthority": "Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[\"https://www.sdju.edu.cn/\",\"https://intlst.sdju.edu.cn\",\"https://mp.weixin.qq.com/s/8mY_ckNOqfgUzLAxt03e5g\"]",
-      "lastVerifiedAt": 1794979827396,
+      "lastVerifiedAt": 1794980724390,
       "verificationExpiresAt": null,
       "verificationStatus": "verified",
       "createdAt": 1791713584121,
-      "updatedAt": 1794979827397
+      "updatedAt": 1794980724391
     },
     {
       "id": "69a713666fb0e628ef2675ac",
@@ -3102,11 +3102,11 @@
       "recognitionAuthority": "Ministry of Education (MoE) PR China · WDOMS & BMDC Listed",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[\"https://www.cmu.edu.cn/\",\"https://www.cmu.edu.cn/gjjyxy/\",\"https://www.cmu.edu.cn/gjjyxy/zsxx/dsxx.htm\",\"https://www.campuschina.org/\"]",
-      "lastVerifiedAt": 1794979827393,
+      "lastVerifiedAt": 1794980724379,
       "verificationExpiresAt": null,
       "verificationStatus": "verified",
       "createdAt": 1792815574649,
-      "updatedAt": 1794979827394
+      "updatedAt": 1794980724380
     },
     {
       "id": "cmvlw3qt8000bozhhi5fyc6zp",
@@ -3583,11 +3583,11 @@
       "recognitionAuthority": "Ministry of Education (MoE) PR China · WDOMS & BMDC Listed",
       "recognitionSourceUrl": "http://www.moe.gov.cn/",
       "sourceUrls": "[\"https://admissions.xmu.edu.cn/Admissions/Undergraduate_Students.htm\",\"https://admissions.xmu.edu.cn/info/1061/2189.htm\",\"https://xmu.edu.cn/\"]",
-      "lastVerifiedAt": 1794979827464,
+      "lastVerifiedAt": 1794980724457,
       "verificationExpiresAt": null,
       "verificationStatus": "under_verification",
       "createdAt": 1792815574731,
-      "updatedAt": 1794979827465
+      "updatedAt": 1794980724457
     },
     {
       "id": "cmvlw3qvn000oozhhj5zodov4",
@@ -4101,11 +4101,11 @@
       "recognitionAuthority": "Malaysian Qualifications Agency (MQA) & UGC Bangladesh",
       "recognitionSourceUrl": "https://www2.mqa.gov.my/mqr/",
       "sourceUrls": "[\"https://isc.um.edu.my\",\"https://educationmalaysia.gov.my\"]",
-      "lastVerifiedAt": 1794979827462,
+      "lastVerifiedAt": 1794980724454,
       "verificationExpiresAt": 1807747200000,
       "verificationStatus": "verified",
       "createdAt": 1794614613329,
-      "updatedAt": 1794979827462
+      "updatedAt": 1794980724454
     },
     {
       "id": "cmwfn7dyw000rm1zcwmh3pojw",
@@ -4471,11 +4471,11 @@
       "recognitionAuthority": "Ministry of Industry and Information Technology (MIIT) & Ministry of Education (MoE), PR China",
       "recognitionSourceUrl": "https://study.njust.edu.cn/",
       "sourceUrls": "[\"https://study.njust.edu.cn/\",\"https://njust.17gz.org/\",\"https://studyinchina.csc.edu.cn/\",\"https://www.csca.cn/\",\"https://mp.weixin.qq.com/s/QPiDsTTFgaHSEjgH3U4gug\",\"https://mp.weixin.qq.com/s/lDKxcSGHtDJDgMjB_zy8SA\"]",
-      "lastVerifiedAt": 1794979827456,
+      "lastVerifiedAt": 1794980724448,
       "verificationExpiresAt": null,
       "verificationStatus": "verified",
       "createdAt": 1794754812998,
-      "updatedAt": 1794979827457
+      "updatedAt": 1794980724449
     },
     {
       "id": "cmwiovfnl0000wrv5c0j1dwvm",
@@ -17671,6 +17671,102 @@
       "eligibility": "[\"Master degree in Materials Science, Physics, or Chemistry\",\"Age under 40\",\"IELTS 5.5+ / TOEFL 80+ / Duolingo 90+\",\"Supervisor acceptance letter and research proposal\"]",
       "sourceUrl": "https://njust.17gz.org",
       "status": "active"
+    },
+    {
+      "id": "cmwlp6f3x0007pbucb81coyef",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "level": "Master",
+      "name": "Master in Chemistry & Chemical Engineering",
+      "subject": "Chemistry & Chemical Engineering",
+      "languages": "English, Chinese",
+      "duration": "3 years",
+      "intakes": "September",
+      "tuition": "CNY 28,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Full CSC or Henan Govt Scholarship)",
+      "applicationDeadline": "28 February 2027 (CSC Type B) / 31 May 2027 (Round 2)",
+      "eligibility": "[\"Bachelor degree in Chemistry, Chemical Engineering or related science field\",\"GPA 3.0+/4.0 or 75%+\",\"Age under 35\",\"IELTS 6.0+ / TOEFL 80+ or HSK 5 (180+)\",\"Supervisor acceptance letter\"]",
+      "sourceUrl": "https://zzu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwlp6f3y0009pbuchaapr10v",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "level": "Master",
+      "name": "Master in Materials Science & Engineering",
+      "subject": "Materials Science & Engineering",
+      "languages": "English, Chinese",
+      "duration": "3 years",
+      "intakes": "September",
+      "tuition": "CNY 28,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Full CSC or Henan Govt Scholarship)",
+      "applicationDeadline": "28 February 2027 (CSC Type B) / 31 May 2027 (Round 2)",
+      "eligibility": "[\"Bachelor degree in Materials Science, Physics, Chemistry, or Engineering\",\"GPA 3.0+/4.0 or 75%+\",\"Age under 35\",\"IELTS 6.0+ / TOEFL 80+ or HSK 5 (180+)\",\"Supervisor acceptance letter\"]",
+      "sourceUrl": "https://zzu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwlp6f3z000bpbucs22srk02",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "level": "Master",
+      "name": "Master in Clinical Medicine & Health Sciences",
+      "subject": "Clinical Medicine & Health Sciences",
+      "languages": "English, Chinese",
+      "duration": "3 years",
+      "intakes": "September",
+      "tuition": "CNY 35,000 / year",
+      "tuitionAfterScholarship": "CNY 5,000 / year (Henan Govt) or CNY 0 (CSC Type B)",
+      "applicationDeadline": "28 February 2027 (CSC Type B) / 31 May 2027 (Round 2)",
+      "eligibility": "[\"MBBS or Bachelor degree in Medicine / Health Sciences\",\"GPA 3.2+/4.0 or 80%+\",\"Age under 35\",\"IELTS 6.5+ / TOEFL 85+ or HSK 5 (210+)\",\"Supervisor acceptance letter\"]",
+      "sourceUrl": "https://zzu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwlp6f40000dpbuchg7opfj7",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "level": "Master",
+      "name": "Master in Computer Science & Technology (AI / Data Science)",
+      "subject": "Computer Science & Technology",
+      "languages": "English, Chinese",
+      "duration": "3 years",
+      "intakes": "September",
+      "tuition": "CNY 28,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Full CSC or Henan Govt Scholarship)",
+      "applicationDeadline": "28 February 2027 (CSC Type B) / 31 May 2027 (Round 2)",
+      "eligibility": "[\"Bachelor degree in Computer Science, Software Engineering, IT or Mathematics\",\"GPA 3.0+/4.0 or 75%+\",\"Age under 35\",\"IELTS 6.0+ / TOEFL 80+ or HSK 5 (180+)\",\"Supervisor acceptance letter\"]",
+      "sourceUrl": "https://zzu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwlp6f41000fpbuctyhzc7tv",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "level": "Doctoral",
+      "name": "PhD in Chemistry, Materials Science & Advanced Engineering",
+      "subject": "Chemistry, Materials Science & Engineering",
+      "languages": "English, Chinese",
+      "duration": "4 years",
+      "intakes": "September",
+      "tuition": "CNY 34,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Fully Funded via President Award / CSC Type B + Monthly Stipend)",
+      "applicationDeadline": "28 February 2027 (Round 1) / 31 May 2027 (Round 2)",
+      "eligibility": "[\"Master degree in relevant discipline\",\"Age under 40\",\"Strong research track record (publications preferred)\",\"Supervisor acceptance letter\",\"Detailed research proposal (minimum 3,000 words signed by supervisor)\"]",
+      "sourceUrl": "https://zzu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwlp6f42000hpbucrfhl5nqo",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "level": "Doctoral",
+      "name": "PhD in Clinical Medicine & Biomedical Sciences",
+      "subject": "Clinical Medicine & Biomedical Sciences",
+      "languages": "English, Chinese",
+      "duration": "4 years",
+      "intakes": "September",
+      "tuition": "CNY 40,000 / year",
+      "tuitionAfterScholarship": "CNY 0 / year (Fully Funded via President Award / CSC Type B + Monthly Stipend)",
+      "applicationDeadline": "28 February 2027 (Round 1) / 31 May 2027 (Round 2)",
+      "eligibility": "[\"Master degree in Medicine or Life Sciences\",\"Age under 40\",\"Supervisor acceptance letter\",\"Detailed research proposal (minimum 3,000 words signed by supervisor)\"]",
+      "sourceUrl": "https://zzu.17gz.org",
+      "status": "active"
     }
   ],
   "fees": [
@@ -26187,6 +26283,28 @@
       "refundable": "",
       "validFor": null,
       "sourceUrl": "https://study.njust.edu.cn"
+    },
+    {
+      "id": "cmwlp6f43000jpbuc1juzy6qz",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "item": "Postgraduate Master Tuition (Science & Engineering)",
+      "cost": "28,000 CNY/Year",
+      "notes": "Master degree programs in science, technology and engineering",
+      "recipient": null,
+      "refundable": "",
+      "validFor": null,
+      "sourceUrl": "https://international.zzu.edu.cn"
+    },
+    {
+      "id": "cmwlp6f43000lpbucsimo8037",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "item": "Postgraduate Doctoral Tuition (Science & Engineering)",
+      "cost": "34,000 CNY/Year",
+      "notes": "PhD research programs (fully waived for President / CSC scholarship holders)",
+      "recipient": null,
+      "refundable": "",
+      "validFor": null,
+      "sourceUrl": "https://international.zzu.edu.cn"
     }
   ],
   "scholarships": [
@@ -29878,6 +29996,51 @@
       "renewal": null,
       "deadline": "31 May 2027",
       "sourceUrl": "http://cauc.at0086.cn/student",
+      "status": "active"
+    },
+    {
+      "id": "cmwlp6f3u0001pbucssas5dtt",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "title": "Chinese Government Scholarship (CSC Type B - High-Level Postgraduate)",
+      "type": "Government",
+      "details": "[\"100% full tuition waiver across program duration\",\"Free on-campus accommodation in university dormitory\",\"Monthly living allowance: Master CNY 3,000/mo, PhD CNY 3,500/mo\",\"Comprehensive Medical Insurance (CNY 800/yr)\",\"Agency No. 10459 with 50 designated candidate seats\"]",
+      "amount": "Full Scholarship: 100% Tuition + Free Campus Dorm + Monthly Living Allowance (Master CNY 3,000/mo, PhD CNY 3,500/mo) + Comprehensive Medical Insurance",
+      "condition": "Agency No. 10459. Excellent academic merit (GPA 3.2+/4.0 or 80%+), supervisor acceptance letter, age under 35 (Master) or under 40 (PhD).",
+      "eligiblePrograms": "[\"Master Programs\",\"Doctoral Programs\",\"Chemistry\",\"Materials Science & Engineering\",\"Clinical Medicine\",\"Computer Science & Technology\",\"Environmental & Chemical Engineering\"]",
+      "coverage": "Full scholarship covering tuition, accommodation, living allowance, and medical insurance",
+      "renewal": null,
+      "deadline": "28 February 2027",
+      "sourceUrl": "https://zzu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwlp6f3v0003pbuc8zuv7gj8",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "title": "President Scholarship of Zhengzhou University (PhD Full Award)",
+      "type": "University",
+      "details": "[\"Full scholarship covering 100% doctoral tuition waiver\",\"Free on-campus accommodation in doctoral dormitory\",\"Monthly doctoral living allowance\",\"Dual-track backup guarantee with CSC Type B (~100 seats/year)\"]",
+      "amount": "Full Scholarship: 100% Tuition Waiver + Free On-Campus Accommodation + Monthly Living Allowance",
+      "condition": "Doctoral degree applicants with strong research background, supervisor acceptance letter, signed 3,000+ word research proposal. Dual-track guarantee with CSC Type B (~100 seats/year).",
+      "eligiblePrograms": "[\"Doctoral Programs\",\"PhD in Chemistry\",\"PhD in Materials Science\",\"PhD in Clinical Medicine\",\"PhD in Engineering\"]",
+      "coverage": "Full tuition waiver, campus dorm, and monthly doctoral living allowance",
+      "renewal": null,
+      "deadline": "Round 1: 28 February 2027; Round 2: 31 May 2027",
+      "sourceUrl": "https://zzu.17gz.org",
+      "status": "active"
+    },
+    {
+      "id": "cmwlp6f3w0005pbucfgi3o8bx",
+      "universityId": "69a439ac6fb0e628ef212670",
+      "title": "Henan Provincial Government Scholarship (Master Program)",
+      "type": "Provincial",
+      "details": "[\"Tuition award covering up to CNY 30,000/year for Master programs\",\"Two evaluation rounds (Round 1: 28 Feb 2027, Round 2: 31 May 2027)\",\"Automatic fallback award for admitted Round 1 CSC Type B applicants\"]",
+      "amount": "Tuition award up to CNY 30,000/year",
+      "condition": "Master degree applicants with bachelor degree, good academic standing, supervisor acceptance letter. Dual-track evaluation alongside CSC Type B.",
+      "eligiblePrograms": "[\"Master Programs\",\"Postgraduate Degrees\"]",
+      "coverage": "Tuition fee coverage up to CNY 30,000/year",
+      "renewal": null,
+      "deadline": "Round 1: 28 February 2027; Round 2: 31 May 2027",
+      "sourceUrl": "https://zzu.17gz.org",
       "status": "active"
     }
   ],

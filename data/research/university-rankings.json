@@ -4353,10 +4353,42 @@
           "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0406"
         },
         {
+          "publisher": "CWTS Leiden",
+          "rankingName": "CWTS Leiden Ranking 2026",
+          "year": 2026,
+          "rank": "25",
+          "scope": "world",
+          "sourceUrl": "https://www.leidenranking.com/"
+        },
+        {
+          "publisher": "Nature Index",
+          "rankingName": "Nature Index Academic Ranking 2026",
+          "year": 2026,
+          "rank": "70",
+          "scope": "world",
+          "sourceUrl": "https://www.nature.com/nature-index/"
+        },
+        {
+          "publisher": "U.S. News",
+          "rankingName": "U.S. News Best Global Universities 2026",
+          "year": 2026,
+          "rank": "203",
+          "scope": "world",
+          "sourceUrl": "https://www.usnews.com/education/best-global-universities/zhengzhou-university"
+        },
+        {
+          "publisher": "ESI",
+          "rankingName": "Essential Science Indicators (ESI) Global Ranking 2026",
+          "year": 2026,
+          "rank": "194",
+          "scope": "world",
+          "sourceUrl": "https://clarivate.com/products/scientific-and-academic-research/research-discovery-and-workflow-solutions/essential-science-indicators/"
+        },
+        {
           "publisher": "Times Higher Education",
           "rankingName": "THE World University Rankings 2027",
           "year": 2027,
-          "rank": "651–700",
+          "rank": "601–800",
           "scope": "world",
           "sourceUrl": "https://www.timeshighereducation.com/world-university-rankings/zhengzhou-university"
         },
@@ -4364,7 +4396,7 @@
           "publisher": "QS",
           "rankingName": "QS World University Rankings 2027",
           "year": 2027,
-          "rank": "=581",
+          "rank": "511",
           "scope": "world",
           "sourceUrl": "https://www.topuniversities.com/universities/zhengzhou-university"
         }
