@@ -354,6 +354,7 @@ test('H-4: session revocation and live DB tokenVersion checks are enforced acros
     'src/app/api/admin/settings/route.ts',
     'src/app/api/admin/trust/route.ts',
     'src/app/api/admin/leads/route.ts',
+    'src/app/api/admin/leads/auto-assign/route.ts',
     'src/app/api/admin/leads/[id]/route.ts',
     'src/app/api/admin/leads/[id]/portal/route.ts',
     'src/app/api/admin/kpi/route.ts',

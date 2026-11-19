@@ -217,6 +217,23 @@ function LeadsPageContent() {
         setRefresh((value) => value + 1);
       }}
       isCounselor={isCounselor}
+      onAutoAssign={isCounselor ? undefined : async (scope) => {
+        setError(null);
+        setNotice(null);
+        try {
+          const res = await authenticatedFetch('/api/admin/leads/auto-assign', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scope }),
+          });
+          const result = await res.json();
+          if (!res.ok) throw new Error(result.error || 'Auto-assignment failed.');
+          setRefresh((v) => v + 1);
+          setNotice(`Auto-assigned ${result.assignedCount} unassigned leads cleanly across counselors.`);
+        } catch (err) {
+          setError(err instanceof Error ? err.message : 'Auto-assignment failed.');
+        }
+      }}
       onSyncMeta={isCounselor ? undefined : syncMeta}
       onUpdate={update}
       onDelete={isCounselor ? undefined : remove}

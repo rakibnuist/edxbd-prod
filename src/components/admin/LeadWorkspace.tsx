@@ -30,6 +30,7 @@ type Props = {
   savingId: string | null;
   onRefresh: () => void;
   onSyncMeta?: () => Promise<void>;
+  onAutoAssign?: (scope: 'new' | 'all_active') => Promise<void>;
   onUpdate: (id: string, data: Record<string, unknown>) => Promise<boolean>;
   onDelete?: (id: string) => Promise<boolean>;
   isCounselor?: boolean;
@@ -385,6 +386,7 @@ export default function LeadWorkspace({
   savingId,
   onRefresh,
   onSyncMeta,
+  onAutoAssign,
   onUpdate,
   onDelete,
   onEnsureToken,
@@ -539,6 +541,18 @@ export default function LeadWorkspace({
             </button>
           </div>
 
+          {onAutoAssign && (
+            <button
+              type="button"
+              className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 hover:bg-indigo-100 disabled:opacity-60 transition"
+              onClick={() => onAutoAssign('all_active')}
+              disabled={loading || syncingMeta || importing}
+              title="Balance unassigned active leads evenly by counselor specialization"
+            >
+              <UserCheck size={14} />
+              <span>Auto-Assign Backlog</span>
+            </button>
+          )}
           {onSyncMeta && (
             <button
               className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 text-xs font-bold text-blue-800 hover:bg-blue-100 disabled:opacity-60 transition"

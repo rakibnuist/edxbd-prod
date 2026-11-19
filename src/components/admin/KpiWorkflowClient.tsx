@@ -53,6 +53,15 @@ type RecentActivity = {
 };
 
 type ApiKpiPayload = KpiReportResult & {
+  targets?: Array<{
+    employeeId: string | null;
+    consultant: string;
+    month: string;
+    targetDailyActions: number;
+    targetFollowups: number;
+    targetEnrolled: number;
+    maxSlaHours: number;
+  }>;
   recentDailyLogs: DailyLogItem[];
   openTasks: TaskItem[];
   recentActivities: RecentActivity[];
@@ -134,6 +143,9 @@ export default function KpiWorkflowClient() {
   const [empTeam, setEmpTeam] = useState('china');
   const [empPhone, setEmpPhone] = useState('');
   const [empEmail, setEmpEmail] = useState('');
+  const [rosterDrafts, setRosterDrafts] = useState<
+    Record<string, { phone?: string; email?: string; team?: string; role?: string }>
+  >({});
 
   // Trace drawer
   const [traceEmpId, setTraceEmpId] = useState<string | null>(null);
@@ -386,6 +398,76 @@ export default function KpiWorkflowClient() {
       await loadReport();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add employee');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleSaveEmployeeRow = async (emp: ComputedEmployeeKpi['employee']) => {
+    const draft = rosterDrafts[emp.id] || {};
+    setBusy(true);
+    setNotice(null);
+    setError(null);
+    try {
+      const res = await authenticatedFetch('/api/admin/employees', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: emp.id,
+          phone: draft.phone ?? emp.phone ?? '',
+          email: draft.email ?? emp.email ?? '',
+          team: draft.team ?? emp.team,
+          role: draft.role ?? emp.role,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not update employee');
+      setNotice(`Saved roster details for ${emp.name} (${emp.empId}).`);
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save employee');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleSeedDefaultTargets = async () => {
+    setBusy(true);
+    setNotice(null);
+    setError(null);
+    try {
+      const res = await authenticatedFetch('/api/admin/kpi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'seed_defaults', month }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not seed default targets');
+      setNotice(`Seeded default ${month} KPI targets (${data.createdCount} added).`);
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to seed targets');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleAutoAssignBacklog = async (scope: 'new' | 'all_active') => {
+    setBusy(true);
+    setNotice(null);
+    setError(null);
+    try {
+      const res = await authenticatedFetch('/api/admin/leads/auto-assign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scope }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Auto-assignment failed');
+      setNotice(`Auto-assigned ${data.assignedCount} unassigned leads evenly across counselors.`);
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Auto-assignment failed');
     } finally {
       setBusy(false);
     }
@@ -971,10 +1053,20 @@ export default function KpiWorkflowClient() {
           {/* KPI & SLA Target Setter + Team Roster */}
           <div className="space-y-5">
             <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm space-y-3">
-              <h2 className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
-                <Target size={16} className="text-indigo-600" />
-                Monthly KPI & SLA Targets ({month})
-              </h2>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h2 className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
+                  <Target size={16} className="text-indigo-600" />
+                  Monthly KPI & SLA Targets ({month})
+                </h2>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={handleSeedDefaultTargets}
+                  className="rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-[11px] font-bold text-indigo-800 hover:bg-indigo-100 disabled:opacity-50"
+                >
+                  Apply Recommended Targets (All)
+                </button>
+              </div>
               <form onSubmit={handleSaveTargets} className="space-y-3">
                 <select
                   value={targetEmpId}
@@ -1029,14 +1121,141 @@ export default function KpiWorkflowClient() {
                     />
                   </label>
                 </div>
-                <button
-                  type="submit"
-                  disabled={busy || !targetEmpId}
-                  className="rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-indigo-700 disabled:opacity-50"
-                >
-                  Save KPI Target
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="submit"
+                    disabled={busy || !targetEmpId}
+                    className="rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-indigo-700 disabled:opacity-50"
+                  >
+                    Save KPI Target
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => handleAutoAssignBacklog('new')}
+                    className="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-800 hover:bg-blue-100 disabled:opacity-50"
+                  >
+                    Auto-Assign New Leads
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => handleAutoAssignBacklog('all_active')}
+                    className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-100 disabled:opacity-50"
+                  >
+                    Auto-Assign Active Backlog
+                  </button>
+                </div>
               </form>
+
+              {report.targets && report.targets.length > 0 && (
+                <div className="border-t border-slate-100 pt-3">
+                  <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    Active {month} Targets ({report.targets.length})
+                  </p>
+                  <div className="grid gap-1.5 sm:grid-cols-2">
+                    {report.targets.map((t) => (
+                      <div key={`${t.consultant}-${t.month}`} className="flex items-center justify-between rounded-lg bg-slate-50 px-2.5 py-1.5 text-[11px]">
+                        <span className="font-bold text-slate-800 truncate">{t.consultant}</span>
+                        <span className="text-slate-600 font-mono">
+                          {t.targetDailyActions}/d · SLA {t.maxSlaHours}h · Goal {t.targetEnrolled}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Editable Team Roster & Missing WhatsApp Numbers */}
+            <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h2 className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
+                  <Users size={16} className="text-blue-600" />
+                  Counselor Contact &amp; WhatsApp Roster ({report.employees.length})
+                </h2>
+                <span className="text-[11px] font-medium text-slate-500">
+                  Direct WhatsApp shown on Student Tracking Portals
+                </span>
+              </div>
+              <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+                {report.employees.map(({ employee }) => {
+                  const draft = rosterDrafts[employee.id] || {};
+                  const phoneVal = draft.phone ?? employee.phone ?? '';
+                  const emailVal = draft.email ?? employee.email ?? '';
+                  const teamVal = draft.team ?? employee.team;
+                  const missingPhone = !phoneVal.trim();
+                  return (
+                    <div
+                      key={employee.id}
+                      className={`rounded-lg border p-3 text-xs ${
+                        missingPhone ? 'border-amber-200 bg-amber-50/40' : 'border-slate-200 bg-slate-50/50'
+                      }`}
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <div>
+                          <span className="font-bold text-slate-900">{employee.name}</span>{' '}
+                          <span className="text-[11px] text-slate-500">({employee.empId} · {employee.role})</span>
+                        </div>
+                        {missingPhone && (
+                          <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                            WhatsApp Phone Needed
+                          </span>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-12">
+                        <input
+                          type="text"
+                          value={phoneVal}
+                          onChange={(e) =>
+                            setRosterDrafts((prev) => ({
+                              ...prev,
+                              [employee.id]: { ...prev[employee.id], phone: e.target.value },
+                            }))
+                          }
+                          placeholder="+8801..."
+                          className="sm:col-span-4 rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs"
+                        />
+                        <input
+                          type="email"
+                          value={emailVal}
+                          onChange={(e) =>
+                            setRosterDrafts((prev) => ({
+                              ...prev,
+                              [employee.id]: { ...prev[employee.id], email: e.target.value },
+                            }))
+                          }
+                          placeholder="Email"
+                          className="sm:col-span-4 rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs"
+                        />
+                        <select
+                          value={teamVal}
+                          onChange={(e) =>
+                            setRosterDrafts((prev) => ({
+                              ...prev,
+                              [employee.id]: { ...prev[employee.id], team: e.target.value },
+                            }))
+                          }
+                          className="sm:col-span-2 rounded border border-slate-300 bg-white px-2 py-1.5 text-xs font-semibold"
+                        >
+                          <option value="china">china</option>
+                          <option value="europe">europe</option>
+                          <option value="malaysia">malaysia</option>
+                          <option value="general">general</option>
+                        </select>
+                        <button
+                          type="button"
+                          disabled={busy}
+                          onClick={() => handleSaveEmployeeRow(employee)}
+                          className="sm:col-span-2 rounded bg-[#0f3a5c] px-2.5 py-1.5 text-xs font-bold text-white hover:bg-[#12436b] disabled:opacity-50"
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm space-y-3">

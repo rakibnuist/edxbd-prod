@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
+import { seedDefaultMonthlyTargets } from '@/lib/crm-operations';
 import { computeEmployeeKpiReport, normalizeMonthParam, shiftIsoDays } from '@/lib/kpi-workflow';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
@@ -84,6 +85,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         ...report,
+        targets,
         recentDailyLogs: dailyLogs.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 20),
         openTasks: tasks.filter((t) => t.status !== 'done').slice(0, 60),
         recentActivities: activities.slice(0, 40),
@@ -104,6 +106,13 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await readLimitedJson(request, 16 * 1024);
+    const month = normalizeMonthParam(typeof body.month === 'string' ? body.month : null);
+
+    if (body.action === 'seed_defaults') {
+      const result = await seedDefaultMonthlyTargets(month);
+      return NextResponse.json({ ok: true, ...result }, { headers: { 'Cache-Control': 'no-store, private' } });
+    }
+
     const employeeId = typeof body.employeeId === 'string' && body.employeeId.trim() ? body.employeeId.trim() : null;
     let consultant = typeof body.consultant === 'string' ? body.consultant.trim() : '';
 
@@ -115,7 +124,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Employee or consultant name is required.' }, { status: 400 });
     }
 
-    const month = normalizeMonthParam(typeof body.month === 'string' ? body.month : null);
     const toInt = (val: unknown, def: number, min: number, max: number) => {
       const n = Number(val);
       return Number.isFinite(n) ? Math.min(max, Math.max(min, Math.round(n))) : def;

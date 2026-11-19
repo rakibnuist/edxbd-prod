@@ -22,9 +22,53 @@ export async function ensureLeadPublicToken(leadId: string): Promise<string | nu
   return token;
 }
 
+type PoolEmployee = {
+  id: string;
+  empId: string;
+  name: string;
+  team: string;
+  role: string;
+  activeCount: number;
+};
+
+const NON_COUNSELING_ROLE_RE = /\b(investor|managing)\b/i;
+
+function selectCounselorFromPool(
+  activeEmployees: PoolEmployee[],
+  input: { assignedTeam?: string | null; country?: string | null },
+): PoolEmployee | null {
+  if (!activeEmployees.length) return null;
+
+  const counselingStaff = activeEmployees.filter((emp) => !NON_COUNSELING_ROLE_RE.test(emp.role));
+  const candidatePool = counselingStaff.length ? counselingStaff : activeEmployees;
+
+  const teamKey = (input.assignedTeam || '').trim().toLowerCase();
+  const countryKey = (input.country || '').trim().toLowerCase();
+  const isChina = teamKey === 'china' || countryKey === 'china';
+
+  let pool = candidatePool.filter((emp) => {
+    const empTeam = emp.team.toLowerCase();
+    if (isChina) return empTeam === 'china';
+    if (teamKey === 'active_country_owner' || (!isChina && countryKey)) {
+      return empTeam === 'europe' || empTeam === 'malaysia' || empTeam === 'global';
+    }
+    if (teamKey === 'senior_review') return /senior|head|manager|lead|ceo/i.test(emp.role);
+    return true;
+  });
+
+  if (!pool.length) {
+    pool = candidatePool.filter((emp) => emp.team.toLowerCase() === 'china' || emp.team.toLowerCase() === 'europe');
+  }
+  if (!pool.length) {
+    pool = candidatePool;
+  }
+
+  return [...pool].sort((a, b) => a.activeCount - b.activeCount || a.empId.localeCompare(b.empId))[0] || null;
+}
+
 /**
  * Resolves an automatic counselor assignment based on destination team / specialization
- * and balances active lead count among matching active employees.
+ * and balances active lead count among matching active counselors.
  */
 export async function resolveAutoAssignment(input: {
   assignedTeam?: string | null;
@@ -51,38 +95,158 @@ export async function resolveAutoAssignment(input: {
         },
       },
     });
-    if (!activeEmployees.length) {
-      return { assignedTo: null, assignedEmployeeId: null };
-    }
-
-    const teamKey = (input.assignedTeam || '').trim().toLowerCase();
-    const countryKey = (input.country || '').trim().toLowerCase();
-    const isChina = teamKey === 'china' || countryKey === 'china';
-
-    let pool = activeEmployees.filter((emp) => {
-      const empTeam = emp.team.toLowerCase();
-      if (isChina) return empTeam === 'china';
-      if (teamKey === 'active_country_owner') return empTeam === 'europe' || empTeam === 'malaysia' || empTeam === 'global';
-      if (teamKey === 'senior_review') return /senior|head|manager|lead/i.test(emp.role);
-      return true;
-    });
-
-    if (!pool.length) {
-      pool = activeEmployees.filter((emp) => emp.team.toLowerCase() === 'china' || emp.team.toLowerCase() === 'general');
-    }
-    if (!pool.length) {
-      pool = activeEmployees;
-    }
-
-    // Balance assignment by choosing the matching counselor with fewest active leads
-    const chosen = [...pool].sort((a, b) => a._count.leads - b._count.leads || a.empId.localeCompare(b.empId))[0];
-    return {
-      assignedTo: chosen.name,
-      assignedEmployeeId: chosen.id,
-    };
+    const chosen = selectCounselorFromPool(
+      activeEmployees.map((e) => ({
+        id: e.id,
+        empId: e.empId,
+        name: e.name,
+        team: e.team,
+        role: e.role,
+        activeCount: e._count.leads,
+      })),
+      input,
+    );
+    return chosen
+      ? { assignedTo: chosen.name, assignedEmployeeId: chosen.id }
+      : { assignedTo: null, assignedEmployeeId: null };
   } catch {
     return { assignedTo: null, assignedEmployeeId: null };
   }
+}
+
+export async function seedDefaultMonthlyTargets(rawMonth?: string): Promise<{ month: string; createdCount: number }> {
+  const month = rawMonth && /^\d{4}-\d{2}$/.test(rawMonth)
+    ? rawMonth
+    : new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 7);
+
+  const employees = await prisma.employee.findMany({
+    where: { active: true },
+    orderBy: { empId: 'asc' },
+    select: { id: true, name: true, team: true, role: true },
+  });
+
+  let createdCount = 0;
+  for (const emp of employees) {
+    const existing = await prisma.kpiTarget.findUnique({
+      where: { consultant_month: { consultant: emp.name, month } },
+      select: { id: true },
+    });
+    if (existing) continue;
+
+    const team = emp.team.toLowerCase();
+    const isMgmt = NON_COUNSELING_ROLE_RE.test(emp.role) || team === 'general';
+    const isChina = team === 'china' && !NON_COUNSELING_ROLE_RE.test(emp.role);
+
+    await prisma.kpiTarget.create({
+      data: {
+        employeeId: emp.id,
+        consultant: emp.name,
+        month,
+        targetLeads: isChina ? 35 : isMgmt ? 15 : 25,
+        targetEnrolled: isChina ? 5 : isMgmt ? 2 : 3,
+        targetDailyActions: isChina ? 15 : isMgmt ? 8 : 12,
+        targetFollowups: isChina ? 10 : isMgmt ? 5 : 8,
+        maxSlaHours: isChina ? 12 : isMgmt ? 24 : 18,
+      },
+    });
+    createdCount++;
+  }
+
+  return { month, createdCount };
+}
+
+export async function distributeUnassignedLeads(options: {
+  scope: 'new' | 'all_active';
+  actorName?: string | null;
+  actorUserId?: string | null;
+}): Promise<{ assignedCount: number; breakdown: Record<string, number> }> {
+  const activeEmployees = await prisma.employee.findMany({
+    where: { active: true },
+    orderBy: { empId: 'asc' },
+    select: {
+      id: true,
+      empId: true,
+      name: true,
+      team: true,
+      role: true,
+      _count: {
+        select: {
+          leads: {
+            where: {
+              status: { notIn: ['closed', 'not_interested', 'enrolled', 'converted'] },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const pool: PoolEmployee[] = activeEmployees.map((e) => ({
+    id: e.id,
+    empId: e.empId,
+    name: e.name,
+    team: e.team,
+    role: e.role,
+    activeCount: e._count.leads,
+  }));
+  if (!pool.length) return { assignedCount: 0, breakdown: {} };
+
+  const statusFilter = options.scope === 'new'
+    ? { status: 'new' }
+    : { status: { notIn: ['closed', 'not_interested', 'enrolled', 'converted'] } };
+
+  const unassignedLeads = await prisma.lead.findMany({
+    where: {
+      assignedEmployeeId: null,
+      assignedTo: null,
+      ...statusFilter,
+    },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true,
+      name: true,
+      country: true,
+      assignedTeam: true,
+      publicToken: true,
+    },
+  });
+
+  const breakdown: Record<string, number> = {};
+  let assignedCount = 0;
+
+  for (const lead of unassignedLeads) {
+    const chosen = selectCounselorFromPool(pool, {
+      assignedTeam: lead.assignedTeam,
+      country: lead.country,
+    });
+    if (!chosen) continue;
+
+    await prisma.lead.update({
+      where: { id: lead.id },
+      data: {
+        assignedTo: chosen.name,
+        assignedEmployeeId: chosen.id,
+        ...(!lead.publicToken ? { publicToken: generatePublicToken(), publicEnabled: true } : {}),
+      },
+    });
+    chosen.activeCount++;
+    breakdown[chosen.name] = (breakdown[chosen.name] || 0) + 1;
+    assignedCount++;
+  }
+
+  if (assignedCount > 0) {
+    await logActivityEvent({
+      type: 'lead_assigned',
+      actorName: options.actorName || 'Auto-Assign Engine',
+      actorUserId: options.actorUserId || null,
+      toValue: `${assignedCount} ${options.scope === 'new' ? 'new' : 'active'} leads distributed`,
+      details: Object.entries(breakdown)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join(', '),
+    });
+  }
+
+  return { assignedCount, breakdown };
 }
 
 export async function logActivityEvent(input: {
