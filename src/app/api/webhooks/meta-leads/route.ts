@@ -2,6 +2,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { NextRequest, NextResponse, after } from 'next/server';
 import { META_API_VERSION } from '@/lib/meta-api';
 import { sendCrmStage } from '@/lib/meta-crm-events';
+import { syncLeadToCrm } from '@/lib/crm-sync';
 import {
   buildMetaInstantFormMessage,
   extractMetaFormFields,
@@ -229,6 +230,21 @@ async function persistNormalizedWebhookLead(
   });
 
   after(() => sendCrmStage(createdLead, 'new'));
+  after(() => {
+    syncLeadToCrm({
+      name: createdLead.name,
+      phone: createdLead.phone,
+      email: createdLead.email,
+      destination: createdLead.country,
+      program: createdLead.program,
+      source: createdLead.source,
+      page_url: createdLead.landingPage || undefined,
+      last_education: createdLead.assessAcademicLevel,
+      gpa: createdLead.assessAcademicResults ? Number(createdLead.assessAcademicResults) || null : null,
+      english_score: createdLead.assessLanguage,
+      notes: `Meta Lead Form: ${input.formName || 'instant_form'} | Campaign: ${input.campaignName || ''}`,
+    }).catch((err) => console.error('[meta-leads] CRM sync error:', err));
+  });
   if (key10) existingPhones.add(key10);
   return 'stored';
 }

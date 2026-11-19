@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { syncLeadToCrm } from '@/lib/crm-sync';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import { readLimitedJson } from '@/lib/request-body';
 import { normalizeRoadmapRequest } from '@/lib/roadmap-generator';
@@ -54,6 +55,21 @@ export async function POST(request: NextRequest) {
             message: `Generated Official Study Abroad Roadmap PDF for ${roadmapReq.targetDegree} in ${roadmapReq.intendedMajor} (${roadmapReq.targetIntake}, Standing: ${roadmapReq.gpa}).`,
           },
         });
+
+        // Sync to live CRM non-blocking
+        syncLeadToCrm({
+          name: roadmapReq.studentName,
+          phone: cleanPhone,
+          email: safeEmail,
+          destination: roadmapReq.targetCountry,
+          program: `${roadmapReq.targetDegree} in ${roadmapReq.intendedMajor}`,
+          major: roadmapReq.intendedMajor,
+          source: 'roadmap_pdf_download',
+          last_education: roadmapReq.targetDegree,
+          gpa: roadmapReq.gpa ? Number(roadmapReq.gpa) || null : null,
+          intake_term: roadmapReq.targetIntake,
+          notes: `Official Study Abroad Roadmap PDF generated for ${roadmapReq.targetCountry}`,
+        }).catch((crmErr) => console.warn('[RoadmapLeadCapture] CRM sync failed:', crmErr));
       } catch (leadErr) {
         console.warn('[RoadmapLeadCapture] Non-blocking lead save failed:', leadErr);
       }
