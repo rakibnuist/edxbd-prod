@@ -1,13 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import LeadWorkspace from '@/components/admin/LeadWorkspace';
+import type { EmployeeOption } from '@/components/admin/LeadPortalDrawerSection';
 import { parseMetaLeadsCsv, type LeadRecord } from '@/lib/lead-workflow';
 
-export default function LeadsPage() {
+function LeadsPageContent() {
+  const searchParams = useSearchParams();
+  const initialLeadId = searchParams.get('lead');
   const { isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
   const [leads, setLeads] = useState<LeadRecord[]>([]);
+  const [employees, setEmployees] = useState<EmployeeOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [importing, setImporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,11 +24,32 @@ export default function LeadsPage() {
   useEffect(() => {
     if (authLoading || !isAuthenticated) return;
     const controller = new AbortController();
+
     authenticatedFetch('/api/admin/leads', { signal: controller.signal, cache: 'no-store' })
-      .then(async response => { if (!response.ok) throw new Error('Could not load enquiries. Please try again.'); return response.json(); })
-      .then(data => { if (!Array.isArray(data)) throw new Error('Invalid enquiry response.'); setLeads(data); })
-      .catch(error => { if (!controller.signal.aborted) setError(error.message); })
-      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+      .then(async (response) => {
+        if (!response.ok) throw new Error('Could not load enquiries. Please try again.');
+        return response.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) throw new Error('Invalid enquiry response.');
+        setLeads(data);
+      })
+      .catch((err) => {
+        if (!controller.signal.aborted) setError(err.message);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+
+    authenticatedFetch('/api/admin/employees', { signal: controller.signal, cache: 'no-store' })
+      .then(async (res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data?.employees)) {
+          setEmployees(data.employees.filter((e: { active?: boolean }) => e.active !== false));
+        }
+      })
+      .catch(() => {});
+
     return () => controller.abort();
   }, [authLoading, isAuthenticated, refresh, authenticatedFetch]);
 
@@ -48,26 +74,72 @@ export default function LeadsPage() {
       setSyncingMeta(false);
     }
   };
-  const update = async (id: string, data: { status?: string; notes?: string }) => {
-    setSavingId(id); setError(null); setNotice(null);
+
+  const update = async (id: string, data: Record<string, unknown>) => {
+    setSavingId(id);
+    setError(null);
+    setNotice(null);
     try {
-      const response = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(id)}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      const response = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'The enquiry could not be updated. Please retry.');
-      setLeads(previous => previous.map(lead => lead.id === id ? result : lead));
-      setNotice(data.notes !== undefined ? 'Counselor notes saved.' : 'Lead status updated.');
+      setLeads((previous) => previous.map((lead) => (lead.id === id ? result : lead)));
+      setNotice(data.notes !== undefined ? 'Counselor notes saved.' : 'Lead updated.');
       return true;
-    } catch (error) { setError(error instanceof Error ? error.message : 'Update failed.'); return false; }
-    finally { setSavingId(null); }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Update failed.');
+      return false;
+    } finally {
+      setSavingId(null);
+    }
   };
-  const remove = async (id: string) => {
-    setError(null); setNotice(null);
+
+  const ensureToken = async (id: string): Promise<string | null> => {
     try {
-      const response = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(id)}`, { method: 'DELETE' });
-      if (!response.ok) throw new Error('The enquiry could not be deleted. Please retry.');
-      setLeads(previous => previous.filter(lead => lead.id !== id)); setNotice('Lead deleted.'); return true;
-    } catch (error) { setError(error instanceof Error ? error.message : 'Delete failed.'); return false; }
+      const res = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(id)}/portal`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'ensure_token' }),
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (data?.publicToken) {
+        setLeads((prev) =>
+          prev.map((l) => (l.id === id ? { ...l, publicToken: data.publicToken, publicEnabled: true } : l)),
+        );
+        return data.publicToken;
+      }
+      return null;
+    } catch {
+      return null;
+    }
   };
+
+  const handleTokenChanged = (id: string, token: string) => {
+    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, publicToken: token, publicEnabled: true } : l)));
+  };
+
+  const remove = async (id: string) => {
+    setError(null);
+    setNotice(null);
+    try {
+      const response = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('The enquiry could not be deleted. Please retry.');
+      setLeads((previous) => previous.filter((lead) => lead.id !== id));
+      setNotice('Lead deleted.');
+      return true;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Delete failed.');
+      return false;
+    }
+  };
+
   const copilot = async (id: string, options: { language: 'en' | 'bn'; focus?: string }) => {
     try {
       const response = await authenticatedFetch(`/api/admin/leads/${encodeURIComponent(id)}/copilot`, {
@@ -84,6 +156,7 @@ export default function LeadsPage() {
       return { error: err instanceof Error ? err.message : 'Unable to reach counselor co-pilot service.' };
     }
   };
+
   const importCsv = async (file: File) => {
     setImporting(true);
     setError(null);
@@ -125,9 +198,12 @@ export default function LeadsPage() {
       setImporting(false);
     }
   };
+
   return (
     <LeadWorkspace
       leads={leads}
+      employees={employees}
+      initialLeadId={initialLeadId}
       loading={loading || authLoading}
       importing={importing}
       syncingMeta={syncingMeta}
@@ -142,8 +218,18 @@ export default function LeadsPage() {
       onSyncMeta={syncMeta}
       onUpdate={update}
       onDelete={remove}
+      onEnsureToken={ensureToken}
+      onTokenChanged={handleTokenChanged}
       onCopilot={copilot}
       onImportCsv={importCsv}
     />
+  );
+}
+
+export default function LeadsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-sm text-slate-500">Loading leads…</div>}>
+      <LeadsPageContent />
+    </Suspense>
   );
 }

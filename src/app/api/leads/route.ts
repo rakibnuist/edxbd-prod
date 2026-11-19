@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { sendCrmStage } from '@/lib/meta-crm-events';
 import { syncLeadToCrm } from '@/lib/crm-sync';
+import { generatePublicToken, logActivityEvent, resolveAutoAssignment } from '@/lib/crm-operations';
+import { parseNumericGpa } from '@/lib/wa-templates';
 import prisma from '@/lib/prisma';
 import { routeLead } from '@/lib/lead-routing';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
@@ -121,7 +123,7 @@ export async function POST(request: NextRequest) {
     }
     const metaEventId = getOptionalString(body, 'metaEventId', 120);
 
-    // Apply plan lead-routing rules server-side.
+    // Apply plan lead-routing rules + counselor specialization auto-assignment server-side.
     const routing = routeLead({
       destinationInterest: assessmentCheck.routeDestinationInterest,
       country,
@@ -131,6 +133,11 @@ export async function POST(request: NextRequest) {
       source: resolvedSource,
       budget: assessmentCheck.assessment.budget,
     });
+    const autoAssigned = await resolveAutoAssignment({
+      assignedTeam: routing.assignedTeam,
+      country,
+    });
+    const parsedGpa = parseNumericGpa(null, assessmentCheck.assessment.academicResults);
 
     // Create new lead using Prisma
     const lead = await prisma.lead.create({
@@ -146,6 +153,12 @@ export async function POST(request: NextRequest) {
         leadType,
         destinationInterest: assessmentCheck.destinationInterest,
         assignedTeam: routing.assignedTeam,
+        assignedTo: autoAssigned.assignedTo,
+        assignedEmployeeId: autoAssigned.assignedEmployeeId,
+        publicToken: generatePublicToken(),
+        publicEnabled: true,
+        gpa: parsedGpa,
+        degree: assessmentCheck.assessment.academicLevel || null,
         riskFlag: routing.riskFlag,
         medicalProgram: routing.medicalProgram,
         notes: [notes, routing.routingNote].filter(Boolean).join(' | '),
@@ -166,6 +179,16 @@ export async function POST(request: NextRequest) {
         assessPreferredCountries: assessmentCheck.assessment.preferredCountriesJson,
       }
     });
+
+    after(() => logActivityEvent({
+      type: 'lead_created',
+      actorName: 'Website Form',
+      employeeId: autoAssigned.assignedEmployeeId,
+      leadId: lead.id,
+      leadName: lead.name,
+      toValue: autoAssigned.assignedTo || routing.assignedTeam,
+      details: `${country}${program ? ` · ${program}` : ''}`,
+    }));
 
     // First CRM stage for Meta's CRM integration, after the response is sent.
     if (adTrackingConsent) after(() => sendCrmStage(lead, 'new'));

@@ -1,0 +1,1197 @@
+'use client';
+
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import {
+  Activity, AlertTriangle, Award, Calendar, CheckCircle2, Clock,
+  ExternalLink, FileText, Flame, ListChecks, LogIn, LogOut,
+  Plus, RefreshCw, Target, Trash2, Users, X,
+} from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import type {
+  ComputedEmployeeKpi,
+  KpiReportResult,
+  WorkflowStageKey,
+} from '@/lib/kpi-workflow';
+import { buildWhatsAppUrl } from '@/lib/wa-templates';
+
+type DailyLogItem = {
+  id: string;
+  employeeId: string;
+  empId: string;
+  date: string;
+  accomplishments: string | null;
+  challenges: string | null;
+  tomorrowPlan: string | null;
+  submittedAt: string;
+};
+
+type TaskItem = {
+  id: string;
+  title: string;
+  details: string | null;
+  assignedTo: string | null;
+  employeeId: string | null;
+  assignedBy: string | null;
+  dueDate: string | null;
+  priority: string;
+  status: string;
+  category: string | null;
+  leadId: string | null;
+};
+
+type RecentActivity = {
+  id: string;
+  type: string;
+  actorName: string | null;
+  leadId: string | null;
+  leadName: string | null;
+  fromValue: string | null;
+  toValue: string | null;
+  details: string | null;
+  createdAt: string;
+};
+
+type ApiKpiPayload = KpiReportResult & {
+  recentDailyLogs: DailyLogItem[];
+  openTasks: TaskItem[];
+  recentActivities: RecentActivity[];
+};
+
+type TraceDetailPayload = {
+  kpi: ComputedEmployeeKpi | null;
+  employee: {
+    id: string;
+    empId: string;
+    name: string;
+    role: string;
+    email: string | null;
+    phone: string | null;
+    team: string;
+    specialization: string | null;
+  };
+  attendances: Array<{
+    id: string;
+    date: string;
+    checkIn: string | null;
+    checkOut: string | null;
+    hoursWorked: number;
+    status: string;
+  }>;
+  dailyLogs: DailyLogItem[];
+  tasks: TaskItem[];
+  activities: RecentActivity[];
+};
+
+const WORKFLOW_BADGES: Record<WorkflowStageKey, { label: string; cls: string }> = {
+  on_track: { label: 'On Track', cls: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
+  needs_attention: { label: 'SLA Attention', cls: 'bg-red-50 text-red-800 border-red-200' },
+  not_checked_in: { label: 'Not Checked In', cls: 'bg-amber-50 text-amber-800 border-amber-200' },
+  idle: { label: 'Quiet Today', cls: 'bg-slate-100 text-slate-700 border-slate-200' },
+  weekend: { label: 'Weekend / Off', cls: 'bg-blue-50 text-blue-700 border-blue-200' },
+};
+
+function currentMonthIso(): string {
+  return new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 7);
+}
+
+export default function KpiWorkflowClient() {
+  const { user, authenticatedFetch } = useAuth();
+  const [tab, setTab] = useState<'overview' | 'workspace' | 'manage'>('overview');
+  const [month, setMonth] = useState<string>(currentMonthIso);
+  const [report, setReport] = useState<ApiKpiPayload | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // Selected employee in My Workspace tab
+  const [activeEmpId, setActiveEmpId] = useState<string>('');
+  const [accomplishments, setAccomplishments] = useState('');
+  const [challenges, setChallenges] = useState('');
+  const [tomorrowPlan, setTomorrowPlan] = useState('');
+
+  // Task creation state
+  const [taskTitle, setTaskTitle] = useState('');
+  const [taskAssigneeId, setTaskAssigneeId] = useState('');
+  const [taskDueDate, setTaskDueDate] = useState('');
+  const [taskPriority, setTaskPriority] = useState('normal');
+  const [taskCategory, setTaskCategory] = useState('counseling');
+
+  // Target editor state
+  const [targetEmpId, setTargetEmpId] = useState('');
+  const [targetDailyActions, setTargetDailyActions] = useState('12');
+  const [targetFollowups, setTargetFollowups] = useState('10');
+  const [targetEnrolled, setTargetEnrolled] = useState('5');
+  const [maxSlaHours, setMaxSlaHours] = useState('24');
+
+  // New employee form state
+  const [empName, setEmpName] = useState('');
+  const [empCode, setEmpCode] = useState('');
+  const [empRole, setEmpRole] = useState('Admissions Counselor');
+  const [empTeam, setEmpTeam] = useState('china');
+  const [empPhone, setEmpPhone] = useState('');
+  const [empEmail, setEmpEmail] = useState('');
+
+  // Trace drawer
+  const [traceEmpId, setTraceEmpId] = useState<string | null>(null);
+  const [traceData, setTraceData] = useState<TraceDetailPayload | null>(null);
+  const [traceLoading, setTraceLoading] = useState(false);
+
+  const [refreshTick, setRefreshTick] = useState(0);
+  const userEmail = user?.email?.toLowerCase() || '';
+
+  const triggerReload = useCallback((showSpinner = false) => {
+    if (showSpinner) setLoading(true);
+    setRefreshTick((t) => t + 1);
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    authenticatedFetch(`/api/admin/kpi?month=${encodeURIComponent(month)}`, {
+      cache: 'no-store',
+      signal: controller.signal,
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to load KPI report');
+        setReport(data);
+        setError(null);
+        const list: ComputedEmployeeKpi[] = Array.isArray(data.employees) ? data.employees : [];
+        if (list.length > 0) {
+          const selfMatch = list.find((e) => e.employee.email?.toLowerCase() === userEmail) || list[0];
+          setActiveEmpId((prev) => prev || selfMatch.employee.id);
+          setTargetEmpId((prev) => prev || selfMatch.employee.id);
+          setTaskAssigneeId((prev) => prev || selfMatch.employee.id);
+        }
+      })
+      .catch((err) => {
+        if (!controller.signal.aborted) {
+          setError(err instanceof Error ? err.message : 'Failed to load KPI report');
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+    return () => controller.abort();
+  }, [authenticatedFetch, month, refreshTick, userEmail]);
+
+  const loadReport = async () => triggerReload(false);
+
+  const openTraceDrawer = async (empId: string) => {
+    setTraceEmpId(empId);
+    setTraceLoading(true);
+    try {
+      const res = await authenticatedFetch(`/api/admin/kpi/${encodeURIComponent(empId)}?month=${encodeURIComponent(month)}`, {
+        cache: 'no-store',
+      });
+      if (res.ok) {
+        setTraceData(await res.json());
+      }
+    } finally {
+      setTraceLoading(false);
+    }
+  };
+
+  const activeKpi = useMemo(
+    () => report?.employees.find((e) => e.employee.id === activeEmpId) || report?.employees[0] || null,
+    [report, activeEmpId],
+  );
+
+  // Aggregate daily chart bars across entire team
+  const teamDailyBars = useMemo(() => {
+    if (!report?.employees.length) return [];
+    const map = new Map<string, { date: string; total: number; isWeekend: boolean }>();
+    for (const row of report.employees) {
+      for (const pt of row.dailySeries) {
+        const cur = map.get(pt.date) || { date: pt.date, total: 0, isWeekend: pt.isWeekend };
+        cur.total += pt.actions;
+        map.set(pt.date, cur);
+      }
+    }
+    return Array.from(map.values()).sort((a, b) => a.date.localeCompare(b.date));
+  }, [report]);
+
+  const maxDailyTotal = Math.max(1, ...teamDailyBars.map((b) => b.total));
+
+  const handleAttendanceAction = async (mode: 'checkin' | 'checkout') => {
+    if (!activeKpi) return;
+    setBusy(true);
+    setNotice(null);
+    setError(null);
+    try {
+      const res = await authenticatedFetch('/api/admin/attendance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ employeeId: activeKpi.employee.id, mode }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Attendance update failed');
+      setNotice(
+        mode === 'checkin'
+          ? `${activeKpi.employee.name} checked in at ${data.checkIn} (${data.status}).`
+          : `${activeKpi.employee.name} checked out at ${data.checkOut} (${data.hoursWorked}h logged).`,
+      );
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Attendance error');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleSubmitDailyLog = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!activeKpi || !accomplishments.trim()) return;
+    setBusy(true);
+    setNotice(null);
+    setError(null);
+    try {
+      const res = await authenticatedFetch('/api/admin/daily-logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          employeeId: activeKpi.employee.id,
+          accomplishments: accomplishments.trim(),
+          challenges: challenges.trim(),
+          tomorrowPlan: tomorrowPlan.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to submit daily log');
+      setNotice(`Daily EOD reflection logged for ${activeKpi.employee.name}.`);
+      setAccomplishments('');
+      setChallenges('');
+      setTomorrowPlan('');
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Daily log error');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleCreateTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!taskTitle.trim()) return;
+    setBusy(true);
+    setNotice(null);
+    setError(null);
+    try {
+      const res = await authenticatedFetch('/api/admin/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: taskTitle.trim(),
+          employeeId: taskAssigneeId || null,
+          dueDate: taskDueDate || null,
+          priority: taskPriority,
+          category: taskCategory,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to assign task');
+      setTaskTitle('');
+      setNotice('Task directive assigned cleanly.');
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Task creation failed');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleTaskStatus = async (id: string, status: string) => {
+    setBusy(true);
+    try {
+      const res = await authenticatedFetch('/api/admin/tasks', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status }),
+      });
+      if (res.ok) await loadReport();
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleDeleteTask = async (id: string) => {
+    setBusy(true);
+    try {
+      const res = await authenticatedFetch(`/api/admin/tasks?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) await loadReport();
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleSaveTargets = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!targetEmpId) return;
+    setBusy(true);
+    setNotice(null);
+    try {
+      const res = await authenticatedFetch('/api/admin/kpi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          employeeId: targetEmpId,
+          month,
+          targetDailyActions: Number(targetDailyActions),
+          targetFollowups: Number(targetFollowups),
+          targetEnrolled: Number(targetEnrolled),
+          maxSlaHours: Number(maxSlaHours),
+        }),
+      });
+      if (!res.ok) throw new Error('Could not save KPI targets');
+      setNotice('KPI & SLA targets updated for selected counselor.');
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save targets');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleCreateEmployee = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!empName.trim()) return;
+    setBusy(true);
+    setNotice(null);
+    setError(null);
+    try {
+      const res = await authenticatedFetch('/api/admin/employees', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: empName.trim(),
+          empId: empCode.trim() || undefined,
+          role: empRole.trim(),
+          team: empTeam,
+          phone: empPhone.trim() || undefined,
+          email: empEmail.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Could not add employee');
+      setEmpName('');
+      setEmpCode('');
+      setEmpPhone('');
+      setEmpEmail('');
+      setNotice(`Added ${data.name} (${data.empId}) to active team roster.`);
+      await loadReport();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to add employee');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const openTasks = report?.openTasks || [];
+
+  return (
+    <div className="space-y-6 text-slate-900">
+      {/* Header */}
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-slate-900">
+            <Activity className="text-blue-600" size={24} />
+            Employee KPI & Workflow Tracer
+          </h1>
+          <p className="mt-1 text-sm text-slate-500">
+            4-Pillar Composite KPI (Attendance 25 + Daily Log 15 + CRM Activity 35 + SLA & Tasks 25) & Live Dhaka Operations.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
+            <Calendar size={14} className="text-slate-400" />
+            <input
+              type="month"
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              className="bg-transparent text-xs font-bold text-slate-900 outline-none"
+            />
+          </label>
+          <button
+            type="button"
+            onClick={loadReport}
+            disabled={loading}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-60"
+          >
+            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      {/* Mode Tabs */}
+      <div className="flex gap-2 overflow-x-auto border-b border-slate-200 pb-px">
+        {[
+          { id: 'overview' as const, label: 'Team KPI & Live Workflow', icon: Award },
+          { id: 'workspace' as const, label: 'My Check-In & Daily Logs', icon: Flame },
+          { id: 'manage' as const, label: 'Tasks, SLA Targets & Roster', icon: ListChecks },
+        ].map((t) => {
+          const Icon = t.icon;
+          const active = tab === t.id;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setTab(t.id)}
+              className={`inline-flex shrink-0 items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition ${
+                active
+                  ? 'border-[#0f3a5c] text-[#0f3a5c]'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <Icon size={15} />
+              {t.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {notice && (
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">
+          {notice}
+        </div>
+      )}
+      {error && (
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-900">
+          {error}
+        </div>
+      )}
+
+      {/* KPI Summary Cards */}
+      {report && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+          {[
+            { label: 'Team Avg KPI', value: `${report.summary.avgScore}/100`, tone: 'text-[#0f3a5c]' },
+            { label: 'Checked In Today', value: `${report.summary.checkedInToday}/${report.summary.activeEmployees}`, tone: 'text-emerald-700' },
+            { label: 'Logs Today', value: `${report.summary.logsSubmittedToday}/${report.summary.activeEmployees}`, tone: 'text-blue-700' },
+            { label: 'CRM Actions (Mo)', value: String(report.summary.totalEventsMonth), tone: 'text-indigo-700' },
+            { label: 'Untouched SLA', value: String(report.summary.totalUntouchedOverdue), tone: report.summary.totalUntouchedOverdue > 0 ? 'text-red-700' : 'text-slate-900' },
+            { label: 'Overdue Follow-ups', value: String(report.summary.totalOverdueFollowups), tone: report.summary.totalOverdueFollowups > 0 ? 'text-amber-700' : 'text-slate-900' },
+          ].map((card) => (
+            <div key={card.label} className="rounded-xl border border-slate-200/80 bg-white p-3.5 shadow-sm">
+              <p className="text-[11px] font-semibold text-slate-500">{card.label}</p>
+              <p className={`mt-1 text-2xl font-extrabold tabular-nums ${card.tone}`}>{card.value}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === 'overview' && report && (
+        <div className="space-y-6">
+          {/* Team Daily Output Chart */}
+          <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex items-center justify-between">
+              <div>
+                <h2 className="text-sm font-bold text-slate-900">Daily Team Workflow Throughput ({month})</h2>
+                <p className="text-xs text-slate-500">Tracked CRM actions, follow-up updates, logs, and attendance events per Dhaka calendar day</p>
+              </div>
+              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-slate-600">
+                Eff. working days: {report.effWorkingDays}/{report.workingDays}
+              </span>
+            </div>
+            <div className="flex h-32 items-end gap-1 pt-2">
+              {teamDailyBars.map((bar) => {
+                const heightPct = Math.max(bar.total > 0 ? 12 : 4, Math.round((bar.total / maxDailyTotal) * 100));
+                return (
+                  <div key={bar.date} className="group relative flex flex-1 flex-col items-center justify-end h-full">
+                    <div
+                      title={`${bar.date}: ${bar.total} CRM actions`}
+                      style={{ height: `${heightPct}%` }}
+                      className={`w-full rounded-t transition-all ${
+                        bar.isWeekend
+                          ? 'bg-slate-200'
+                          : bar.total > 0
+                            ? 'bg-gradient-to-t from-[#0f3a5c] to-blue-500 group-hover:from-blue-700 group-hover:to-cyan-500'
+                            : 'bg-slate-100'
+                      }`}
+                    />
+                    <span className="mt-1 hidden text-[9px] text-slate-400 md:block tabular-nums">
+                      {bar.date.slice(8)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Employee KPI & Live Matrix */}
+          <div className="rounded-xl border border-slate-200/80 bg-white shadow-sm overflow-hidden">
+            <div className="border-b border-slate-100 px-5 py-4">
+              <h2 className="text-sm font-bold text-slate-900">Counselor & Staff KPI Scorecard</h2>
+              <p className="text-xs text-slate-500">Click any row to open Deep Workflow Trace & Activity Timeline.</p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  <tr>
+                    <th className="px-4 py-3">Employee</th>
+                    <th className="px-3 py-3">Live Status</th>
+                    <th className="px-3 py-3">Composite Score</th>
+                    <th className="px-3 py-3">Pillars (A/D/C/S)</th>
+                    <th className="px-3 py-3">Today Actions</th>
+                    <th className="px-3 py-3">Leads & SLA</th>
+                    <th className="px-3 py-3">Tasks / Streak</th>
+                    <th className="px-4 py-3 text-right">Trace</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {report.employees.map((row) => {
+                    const wf = WORKFLOW_BADGES[row.workflowStage];
+                    return (
+                      <tr key={row.employee.id} className="hover:bg-slate-50/80 transition">
+                        <td className="px-4 py-3">
+                          <div className="font-bold text-slate-900">{row.employee.name}</div>
+                          <div className="text-[11px] text-slate-500">
+                            {row.employee.empId} · {row.employee.role} · <span className="uppercase">{row.employee.team}</span>
+                          </div>
+                        </td>
+                        <td className="px-3 py-3">
+                          <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-bold ${wf.cls}`}>
+                            {wf.label}
+                          </span>
+                          <div className="mt-1 text-[10px] text-slate-500">
+                            {row.attendance.todayCheckIn ? `In: ${row.attendance.todayCheckIn}` : 'No check-in'}
+                          </div>
+                        </td>
+                        <td className="px-3 py-3">
+                          <div className="flex items-center gap-2">
+                            <span className={`text-base font-extrabold tabular-nums ${
+                              row.score >= 80 ? 'text-emerald-700' : row.score >= 55 ? 'text-blue-700' : 'text-amber-700'
+                            }`}>
+                              {row.score}
+                            </span>
+                            <div className="h-2 w-20 overflow-hidden rounded-full bg-slate-100">
+                              <div
+                                style={{ width: `${Math.min(100, row.score)}%` }}
+                                className={`h-full rounded-full ${
+                                  row.score >= 80 ? 'bg-emerald-500' : row.score >= 55 ? 'bg-blue-600' : 'bg-amber-500'
+                                }`}
+                              />
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-3 py-3 font-mono text-[11px] text-slate-700">
+                          {row.pillars.attendance}/25 · {row.pillars.discipline}/15 · {row.pillars.activity}/35 · {row.pillars.execution}/25
+                        </td>
+                        <td className="px-3 py-3">
+                          <div className="font-bold text-slate-900 tabular-nums">{row.activity.todayEvents} today</div>
+                          <div className="text-[10px] text-slate-500">{row.activity.totalEvents} month (avg {row.activity.dailyAvg}/d)</div>
+                        </td>
+                        <td className="px-3 py-3">
+                          <div className="font-semibold text-slate-800">{row.funnel.activeLeads} active / {row.funnel.enrolledCount} won</div>
+                          <div className={`text-[10px] font-bold ${row.sla.uncontactedOverdue + row.sla.followupsOverdue > 0 ? 'text-red-600' : 'text-emerald-700'}`}>
+                            {row.sla.compliancePct}% SLA ({row.sla.uncontactedOverdue} new, {row.sla.followupsOverdue} due)
+                          </div>
+                        </td>
+                        <td className="px-3 py-3">
+                          <div className="font-semibold text-slate-800">{row.tasks.open + row.tasks.inProgress} open / {row.tasks.doneMonth} done</div>
+                          <div className="text-[10px] text-slate-500">Log streak: {row.discipline.streak}d</div>
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <button
+                            type="button"
+                            onClick={() => openTraceDrawer(row.employee.id)}
+                            className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-bold text-[#0f3a5c] hover:bg-slate-50"
+                          >
+                            Deep Trace
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  {report.employees.length === 0 && (
+                    <tr>
+                      <td colSpan={8} className="px-4 py-8 text-center text-sm text-slate-500">
+                        No active employees found yet. Add team members under &ldquo;Tasks, SLA Targets & Roster&rdquo;.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* SLA Bottleneck Queue */}
+          <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex items-center justify-between">
+              <div>
+                <h2 className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
+                  <AlertTriangle size={15} className="text-red-600" />
+                  Live SLA Bottleneck Queue ({report.slaBottlenecks.length})
+                </h2>
+                <p className="text-xs text-slate-500">
+                  New leads waiting &gt; SLA threshold without contact or overdue follow-up dates.
+                </p>
+              </div>
+              <Link href="/admin/leads" className="text-xs font-bold text-[#0f3a5c] hover:underline">
+                Open Leads Workspace →
+              </Link>
+            </div>
+            {report.slaBottlenecks.length === 0 ? (
+              <div className="rounded-lg bg-emerald-50 p-4 text-center text-xs font-semibold text-emerald-800">
+                Zero SLA bottlenecks right now — all active leads contacted on time.
+              </div>
+            ) : (
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {report.slaBottlenecks.slice(0, 12).map((b) => {
+                  const waUrl = buildWhatsAppUrl(b.phone);
+                  return (
+                    <div key={`${b.id}-${b.issueType}`} className="flex items-start justify-between gap-2 rounded-lg border border-slate-200 p-3">
+                      <div className="min-w-0">
+                        <Link
+                          href={`/admin/leads?lead=${encodeURIComponent(b.id)}`}
+                          className="truncate block text-xs font-bold text-slate-900 hover:text-blue-700 hover:underline"
+                        >
+                          {b.name}
+                        </Link>
+                        <p className="text-[11px] text-slate-500">{b.country} · {b.assignedTo || 'Unassigned'}</p>
+                        <span className={`mt-1 inline-block rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                          b.issueType === 'followup_overdue'
+                            ? 'bg-red-50 text-red-700'
+                            : b.issueType === 'untouched_sla'
+                              ? 'bg-amber-50 text-amber-800'
+                              : 'bg-blue-50 text-blue-700'
+                        }`}>
+                          {b.issueType === 'followup_overdue'
+                            ? `Overdue (${b.nextFollowup})`
+                            : b.issueType === 'untouched_sla'
+                              ? `Untouched ${b.ageHours}h (SLA ${b.maxSlaHours}h)`
+                              : 'Follow-up Today'}
+                        </span>
+                      </div>
+                      <div className="flex shrink-0 flex-col gap-1">
+                        {waUrl && (
+                          <a
+                            href={waUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="rounded border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-bold text-emerald-800 hover:bg-emerald-100"
+                          >
+                            WA
+                          </a>
+                        )}
+                        <Link
+                          href={`/admin/leads?lead=${encodeURIComponent(b.id)}`}
+                          className="rounded border border-slate-200 px-2 py-1 text-[10px] font-semibold text-slate-700 hover:bg-slate-50"
+                        >
+                          Open
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {tab === 'workspace' && report && (
+        <div className="grid gap-6 lg:grid-cols-3">
+          {/* Check-in + Reflection Form */}
+          <div className="space-y-5 lg:col-span-2">
+            <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div>
+                  <h2 className="text-sm font-bold text-slate-900">Employee Daily Check-In & EOD Log</h2>
+                  <p className="text-xs text-slate-500">Dhaka Time (GMT+6) · Date: {report.today}</p>
+                </div>
+                <select
+                  value={activeKpi?.employee.id || ''}
+                  onChange={(e) => setActiveEmpId(e.target.value)}
+                  className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-900"
+                >
+                  {report.employees.map((e) => (
+                    <option key={e.employee.id} value={e.employee.id}>
+                      {e.employee.name} ({e.employee.empId})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {activeKpi && (
+                <div className="mt-4 space-y-5">
+                  <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl bg-slate-50 p-4 border border-slate-200/80">
+                    <div>
+                      <p className="text-xs font-semibold text-slate-500">Today&apos;s Attendance Status</p>
+                      <p className="mt-1 text-base font-bold text-slate-900">
+                        {activeKpi.attendance.todayCheckIn
+                          ? `Checked in at ${activeKpi.attendance.todayCheckIn} (${activeKpi.attendance.todayStatus})`
+                          : 'Not checked in yet today'}
+                        {activeKpi.attendance.todayCheckOut ? ` · Out: ${activeKpi.attendance.todayCheckOut}` : ''}
+                      </p>
+                      <p className="mt-0.5 text-xs text-slate-500">
+                        Monthly Attendance: {activeKpi.attendance.pct}% · EOD Streak: {activeKpi.discipline.streak} days · Score: {activeKpi.score}/100
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        disabled={busy || Boolean(activeKpi.attendance.todayCheckIn)}
+                        onClick={() => handleAttendanceAction('checkin')}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50"
+                      >
+                        <LogIn size={14} /> Check In
+                      </button>
+                      <button
+                        type="button"
+                        disabled={busy || !activeKpi.attendance.todayCheckIn}
+                        onClick={() => handleAttendanceAction('checkout')}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-[#0f3a5c] px-3.5 py-2 text-xs font-bold text-white hover:bg-[#12436b] disabled:opacity-50"
+                      >
+                        <LogOut size={14} /> Check Out
+                      </button>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleSubmitDailyLog} className="space-y-3">
+                    <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
+                      <FileText size={14} /> Submit Daily Work Reflection Log
+                    </h3>
+                    <label className="block text-xs font-semibold text-slate-700">
+                      Key Accomplishments Today *
+                      <textarea
+                        required
+                        rows={3}
+                        value={accomplishments}
+                        onChange={(e) => setAccomplishments(e.target.value)}
+                        placeholder="Called 15 China leads, sent 6 WhatsApp templates, updated 2 JW202 stages…"
+                        className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900"
+                      />
+                    </label>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <label className="block text-xs font-semibold text-slate-700">
+                        Challenges / Blockers
+                        <textarea
+                          rows={2}
+                          value={challenges}
+                          onChange={(e) => setChallenges(e.target.value)}
+                          placeholder="Students missing passport scans…"
+                          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-xs text-slate-900"
+                        />
+                      </label>
+                      <label className="block text-xs font-semibold text-slate-700">
+                        Tomorrow&apos;s Priority Plan
+                        <textarea
+                          rows={2}
+                          value={tomorrowPlan}
+                          onChange={(e) => setTomorrowPlan(e.target.value)}
+                          placeholder="Follow up with high GPA China leads…"
+                          className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-xs text-slate-900"
+                        />
+                      </label>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={busy || !accomplishments.trim()}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-[#0f3a5c] px-4 py-2 text-xs font-bold text-white hover:bg-[#12436b] disabled:opacity-50"
+                    >
+                      <CheckCircle2 size={14} />
+                      {activeKpi.discipline.todayLogSubmitted ? 'Update Today\'s Daily Log' : 'Submit Daily Log'}
+                    </button>
+                  </form>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Personal Open Tasks & Recent Team Daily Logs */}
+          <div className="space-y-5">
+            <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-bold text-slate-900">Active Tasks</h3>
+              <div className="mt-3 space-y-2 max-h-72 overflow-y-auto">
+                {openTasks.filter((t) => !activeKpi || !t.employeeId || t.employeeId === activeKpi.employee.id).map((t) => (
+                  <div key={t.id} className="rounded-lg border border-slate-200 p-3 text-xs">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-bold text-slate-900">{t.title}</p>
+                      <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${
+                        t.priority === 'urgent' || t.priority === 'high' ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-600'
+                      }`}>{t.priority}</span>
+                    </div>
+                    <p className="mt-1 text-[11px] text-slate-500">
+                      {t.assignedTo || 'Unassigned'}{t.dueDate ? ` · Due ${t.dueDate}` : ''}
+                    </p>
+                    <div className="mt-2 flex gap-1.5">
+                      {t.status !== 'in_progress' && (
+                        <button
+                          type="button"
+                          onClick={() => handleTaskStatus(t.id, 'in_progress')}
+                          className="rounded border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-700"
+                        >
+                          Start
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleTaskStatus(t.id, 'done')}
+                        className="rounded border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800"
+                      >
+                        Mark Done
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {openTasks.length === 0 && <p className="text-xs text-slate-400">All clear — no pending tasks.</p>}
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-bold text-slate-900">Recent Daily Logs</h3>
+              <div className="mt-3 space-y-2.5 max-h-72 overflow-y-auto">
+                {report.recentDailyLogs.slice(0, 8).map((log) => (
+                  <div key={log.id} className="rounded-lg border border-slate-100 bg-slate-50 p-2.5 text-xs">
+                    <div className="flex justify-between font-bold text-slate-800">
+                      <span>{log.empId}</span>
+                      <span className="text-slate-500">{log.date}</span>
+                    </div>
+                    <p className="mt-1 text-slate-700 line-clamp-3">{log.accomplishments}</p>
+                  </div>
+                ))}
+                {report.recentDailyLogs.length === 0 && (
+                  <p className="text-xs text-slate-400">No daily logs submitted yet this month.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {tab === 'manage' && report && (
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* Task Directives Manager */}
+          <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm space-y-4">
+            <h2 className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
+              <ListChecks size={16} className="text-blue-600" />
+              Assign Task Directive
+            </h2>
+            <form onSubmit={handleCreateTask} className="space-y-3">
+              <input
+                type="text"
+                required
+                value={taskTitle}
+                onChange={(e) => setTaskTitle(e.target.value)}
+                placeholder="e.g. Call all GPA >= 4.0 China leads from yesterday…"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs text-slate-900"
+              />
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <select
+                  value={taskAssigneeId}
+                  onChange={(e) => setTaskAssigneeId(e.target.value)}
+                  className="rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs"
+                >
+                  <option value="">Any assignee</option>
+                  {report.employees.map((e) => (
+                    <option key={e.employee.id} value={e.employee.id}>{e.employee.name}</option>
+                  ))}
+                </select>
+                <input
+                  type="date"
+                  value={taskDueDate}
+                  onChange={(e) => setTaskDueDate(e.target.value)}
+                  className="rounded-lg border border-slate-300 px-2 py-2 text-xs"
+                />
+                <select
+                  value={taskPriority}
+                  onChange={(e) => setTaskPriority(e.target.value)}
+                  className="rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs"
+                >
+                  <option value="low">Low</option>
+                  <option value="normal">Normal</option>
+                  <option value="high">High</option>
+                  <option value="urgent">Urgent</option>
+                </select>
+                <select
+                  value={taskCategory}
+                  onChange={(e) => setTaskCategory(e.target.value)}
+                  className="rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs"
+                >
+                  <option value="counseling">Counseling</option>
+                  <option value="follow_up">Follow-up</option>
+                  <option value="documents">Documents</option>
+                  <option value="visa">Visa Desk</option>
+                </select>
+              </div>
+              <button
+                type="submit"
+                disabled={busy || !taskTitle.trim()}
+                className="inline-flex items-center gap-1 rounded-lg bg-[#0f3a5c] px-3.5 py-2 text-xs font-bold text-white hover:bg-[#12436b] disabled:opacity-50"
+              >
+                <Plus size={14} /> Create Task
+              </button>
+            </form>
+
+            <div className="space-y-2 border-t border-slate-100 pt-3 max-h-64 overflow-y-auto">
+              {openTasks.map((t) => (
+                <div key={t.id} className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs">
+                  <div className="min-w-0">
+                    <p className="truncate font-bold text-slate-900">{t.title}</p>
+                    <p className="text-[11px] text-slate-500">
+                      {t.assignedTo || 'Unassigned'} · {t.status} {t.dueDate ? `· Due ${t.dueDate}` : ''}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => handleTaskStatus(t.id, 'done')}
+                      className="rounded border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-bold text-emerald-800"
+                    >
+                      Done
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteTask(t.id)}
+                      className="rounded p-1 text-slate-400 hover:text-red-600"
+                      title="Delete task"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* KPI & SLA Target Setter + Team Roster */}
+          <div className="space-y-5">
+            <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm space-y-3">
+              <h2 className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
+                <Target size={16} className="text-indigo-600" />
+                Monthly KPI & SLA Targets ({month})
+              </h2>
+              <form onSubmit={handleSaveTargets} className="space-y-3">
+                <select
+                  value={targetEmpId}
+                  onChange={(e) => setTargetEmpId(e.target.value)}
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold"
+                >
+                  {report.employees.map((e) => (
+                    <option key={e.employee.id} value={e.employee.id}>
+                      {e.employee.name} ({e.employee.empId})
+                    </option>
+                  ))}
+                </select>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <label className="text-[11px] font-semibold text-slate-600">
+                    Daily Actions
+                    <input
+                      type="number"
+                      min={1}
+                      value={targetDailyActions}
+                      onChange={(e) => setTargetDailyActions(e.target.value)}
+                      className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs text-slate-900"
+                    />
+                  </label>
+                  <label className="text-[11px] font-semibold text-slate-600">
+                    Monthly Enrolled
+                    <input
+                      type="number"
+                      min={0}
+                      value={targetEnrolled}
+                      onChange={(e) => setTargetEnrolled(e.target.value)}
+                      className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs text-slate-900"
+                    />
+                  </label>
+                  <label className="text-[11px] font-semibold text-slate-600">
+                    Daily Follow-ups
+                    <input
+                      type="number"
+                      min={0}
+                      value={targetFollowups}
+                      onChange={(e) => setTargetFollowups(e.target.value)}
+                      className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs text-slate-900"
+                    />
+                  </label>
+                  <label className="text-[11px] font-semibold text-slate-600">
+                    Max SLA (Hours)
+                    <input
+                      type="number"
+                      min={1}
+                      value={maxSlaHours}
+                      onChange={(e) => setMaxSlaHours(e.target.value)}
+                      className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-xs text-slate-900"
+                    />
+                  </label>
+                </div>
+                <button
+                  type="submit"
+                  disabled={busy || !targetEmpId}
+                  className="rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-indigo-700 disabled:opacity-50"
+                >
+                  Save KPI Target
+                </button>
+              </form>
+            </div>
+
+            <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm space-y-3">
+              <h2 className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
+                <Users size={16} className="text-emerald-600" />
+                Add Counselor / Staff to Auto-Assignment Roster
+              </h2>
+              <form onSubmit={handleCreateEmployee} className="grid grid-cols-2 gap-2.5">
+                <input
+                  type="text"
+                  required
+                  value={empName}
+                  onChange={(e) => setEmpName(e.target.value)}
+                  placeholder="Full Name *"
+                  className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                />
+                <input
+                  type="text"
+                  value={empCode}
+                  onChange={(e) => setEmpCode(e.target.value)}
+                  placeholder="ID (e.g. E-08)"
+                  className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                />
+                <input
+                  type="text"
+                  value={empRole}
+                  onChange={(e) => setEmpRole(e.target.value)}
+                  placeholder="Role"
+                  className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                />
+                <select
+                  value={empTeam}
+                  onChange={(e) => setEmpTeam(e.target.value)}
+                  className="rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-semibold"
+                >
+                  <option value="china">China Desk (Flagship)</option>
+                  <option value="europe">Europe / UK</option>
+                  <option value="malaysia">Malaysia / Asia</option>
+                  <option value="general">General / Operations</option>
+                </select>
+                <input
+                  type="text"
+                  value={empPhone}
+                  onChange={(e) => setEmpPhone(e.target.value)}
+                  placeholder="WhatsApp Phone (+8801...)"
+                  className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                />
+                <input
+                  type="email"
+                  value={empEmail}
+                  onChange={(e) => setEmpEmail(e.target.value)}
+                  placeholder="Email (optional)"
+                  className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                />
+                <button
+                  type="submit"
+                  disabled={busy || !empName.trim()}
+                  className="col-span-2 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50"
+                >
+                  + Add Team Member
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Deep Workflow Trace Slide-over Drawer */}
+      {traceEmpId && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs">
+          <div className="h-full w-full max-w-2xl overflow-y-auto bg-white p-6 shadow-2xl">
+            <div className="flex items-start justify-between border-b border-slate-200 pb-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-blue-600">Deep Workflow Trace</p>
+                <h2 className="mt-1 text-xl font-bold text-slate-900">
+                  {traceData?.employee?.name || 'Loading…'}
+                </h2>
+                {traceData?.employee && (
+                  <p className="text-xs text-slate-500">
+                    {traceData.employee.empId} · {traceData.employee.role} · Team: {traceData.employee.team}
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setTraceEmpId(null);
+                  setTraceData(null);
+                }}
+                className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {traceLoading || !traceData ? (
+              <div className="py-12 text-center text-sm text-slate-500">Loading employee activity stream…</div>
+            ) : (
+              <div className="mt-5 space-y-6">
+                {traceData.kpi && (
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <div className="rounded-xl bg-slate-50 p-3">
+                      <p className="text-[11px] text-slate-500">Total Score</p>
+                      <p className="text-xl font-extrabold text-[#0f3a5c]">{traceData.kpi.score}/100</p>
+                    </div>
+                    <div className="rounded-xl bg-slate-50 p-3">
+                      <p className="text-[11px] text-slate-500">Attendance</p>
+                      <p className="text-xl font-extrabold text-emerald-700">{traceData.kpi.pillars.attendance}/25</p>
+                    </div>
+                    <div className="rounded-xl bg-slate-50 p-3">
+                      <p className="text-[11px] text-slate-500">CRM Activity</p>
+                      <p className="text-xl font-extrabold text-blue-700">{traceData.kpi.pillars.activity}/35</p>
+                    </div>
+                    <div className="rounded-xl bg-slate-50 p-3">
+                      <p className="text-[11px] text-slate-500">SLA & Execution</p>
+                      <p className="text-xl font-extrabold text-indigo-700">{traceData.kpi.pillars.execution}/25</p>
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500">
+                    <Clock size={13} /> Recent Activity Timeline ({traceData.activities.length})
+                  </h3>
+                  <div className="mt-2 space-y-2 max-h-80 overflow-y-auto pr-1">
+                    {traceData.activities.map((act) => (
+                      <div key={act.id} className="rounded-lg border border-slate-200 p-3 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-slate-900">{act.type.replaceAll('_', ' ')}</span>
+                          <span className="text-[11px] text-slate-400">
+                            {new Date(act.createdAt).toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' })}
+                          </span>
+                        </div>
+                        {act.leadName && (
+                          <div className="mt-1 flex items-center gap-1.5">
+                            <span className="font-semibold text-blue-700">{act.leadName}</span>
+                            {act.leadId && (
+                              <Link
+                                href={`/admin/leads?lead=${encodeURIComponent(act.leadId)}`}
+                                className="inline-flex items-center gap-0.5 text-[10px] text-slate-500 hover:underline"
+                              >
+                                <ExternalLink size={10} /> Open
+                              </Link>
+                            )}
+                          </div>
+                        )}
+                        {(act.fromValue || act.toValue) && (
+                          <p className="mt-1 text-slate-600">
+                            {act.fromValue ? `${act.fromValue} → ` : ''}{act.toValue}
+                          </p>
+                        )}
+                        {act.details && <p className="mt-1 text-slate-700">{act.details}</p>}
+                      </div>
+                    ))}
+                    {traceData.activities.length === 0 && (
+                      <p className="text-xs text-slate-400">No tracked CRM actions in {month}.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

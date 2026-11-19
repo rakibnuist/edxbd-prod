@@ -5,6 +5,8 @@ import { isLeadStatus } from '@/lib/lead-workflow';
 import { sendCrmStage } from '@/lib/meta-crm-events';
 import { syncMetaInstantFormLeads } from '@/lib/meta-leads-sync';
 import { validateAdminLeadCreate } from '@/lib/payload-validation';
+import { generatePublicToken, logActivityEvent, resolveAutoAssignment } from '@/lib/crm-operations';
+import { parseNumericGpa } from '@/lib/wa-templates';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
 
@@ -97,11 +99,31 @@ export async function POST(request: NextRequest) {
           skippedCount++;
           continue;
         }
+        const autoAssigned = await resolveAutoAssignment({
+          assignedTeam: validated.data.assignedTeam,
+          country: validated.data.country,
+        });
         const lead = await prisma.lead.create({
           data: {
             ...validated.data,
+            publicToken: generatePublicToken(),
+            publicEnabled: true,
+            gpa: parseNumericGpa(null, validated.data.assessAcademicResults),
+            degree: validated.data.assessAcademicLevel || null,
+            assignedTo: autoAssigned.assignedTo,
+            assignedEmployeeId: autoAssigned.assignedEmployeeId,
             ...(validated.data.source.startsWith('meta_') ? { adTrackingConsent: true } : {}),
           },
+        });
+        void logActivityEvent({
+          type: 'lead_created',
+          actorName: decoded.email,
+          actorUserId: decoded.userId,
+          employeeId: autoAssigned.assignedEmployeeId,
+          leadId: lead.id,
+          leadName: lead.name,
+          toValue: autoAssigned.assignedTo || lead.assignedTeam,
+          details: `Batch import (${lead.source})`,
         });
         created.push(lead);
         if (key10) existingPhones.add(key10);
@@ -122,8 +144,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: validated.error || 'Invalid lead payload' }, { status: 400 });
     }
 
+    const autoAssigned = await resolveAutoAssignment({
+      assignedTeam: validated.data.assignedTeam,
+      country: validated.data.country,
+    });
     const lead = await prisma.lead.create({
-      data: validated.data,
+      data: {
+        ...validated.data,
+        publicToken: generatePublicToken(),
+        publicEnabled: true,
+        gpa: parseNumericGpa(null, validated.data.assessAcademicResults),
+        degree: validated.data.assessAcademicLevel || null,
+        assignedTo: autoAssigned.assignedTo,
+        assignedEmployeeId: autoAssigned.assignedEmployeeId,
+      },
+    });
+    void logActivityEvent({
+      type: 'lead_created',
+      actorName: decoded.email,
+      actorUserId: decoded.userId,
+      employeeId: autoAssigned.assignedEmployeeId,
+      leadId: lead.id,
+      leadName: lead.name,
+      toValue: autoAssigned.assignedTo || lead.assignedTeam,
+      details: `Created in Admin (${lead.country})`,
     });
 
     return NextResponse.json(lead, { status: 201 });

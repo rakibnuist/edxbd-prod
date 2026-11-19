@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   Images,
   ExternalLink,
+  Activity,
 } from 'lucide-react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
@@ -27,6 +28,7 @@ import LogoutButton from '@/components/LogoutButton';
 const NAV = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
   { name: 'Leads', href: '/admin/leads', icon: Users2, badge: 'Active' },
+  { name: 'KPI & Workflow', href: '/admin/kpi', icon: Activity, badge: 'Live' },
   { name: 'Content', href: '/admin/content', icon: FileText },
   { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote },
   { name: 'Universities', href: '/admin/universities', icon: GraduationCap },

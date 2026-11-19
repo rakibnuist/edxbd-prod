@@ -1,0 +1,86 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { logActivityEvent } from '@/lib/crm-operations';
+import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
+import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
+import { toSafeExternalUrl } from '@/lib/safe-url';
+import prisma from '@/lib/prisma';
+
+const TOKEN_REGEX = /^[a-zA-Z0-9_-]{8,80}$/;
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ token: string; docId: string }> },
+) {
+  const rateLimit = await checkRateLimit(request, {
+    name: 'public-track-doc-upload',
+    maxRequests: 30,
+    windowMs: 15 * 60 * 1000,
+    persistent: true,
+  });
+  if (!rateLimit.allowed) return rateLimitExceeded(rateLimit);
+
+  try {
+    const { token, docId } = await params;
+    const cleanToken = (token || '').trim();
+    if (!TOKEN_REGEX.test(cleanToken) || !docId) {
+      return NextResponse.json({ error: 'Invalid tracking request.' }, { status: 400 });
+    }
+
+    const lead = await prisma.lead.findFirst({
+      where: { publicToken: cleanToken, publicEnabled: true },
+      select: { id: true, name: true, assignedEmployeeId: true },
+    });
+    if (!lead) return NextResponse.json({ error: 'Portal not found.' }, { status: 404 });
+
+    const doc = await prisma.leadDocument.findFirst({
+      where: { id: docId, leadId: lead.id },
+    });
+    if (!doc) return NextResponse.json({ error: 'Document item not found.' }, { status: 404 });
+
+    const body = await readLimitedJson(request, 8 * 1024);
+    const safeUrl = toSafeExternalUrl(body.url, 1000);
+    if (!safeUrl) {
+      return NextResponse.json(
+        { error: 'Please paste a valid Google Drive, OneDrive, or https:// share URL.' },
+        { status: 400 },
+      );
+    }
+
+    const nextStatus = doc.status === 'verified' ? 'verified' : 'received';
+    const updated = await prisma.leadDocument.update({
+      where: { id: doc.id },
+      data: {
+        studentUploadedUrl: safeUrl,
+        studentUploadedAt: new Date(),
+        requestedByStudent: true,
+        status: nextStatus,
+        updatedBy: `Student (${lead.name})`,
+      },
+      select: {
+        id: true,
+        docType: true,
+        status: true,
+        notes: true,
+        studentUploadedUrl: true,
+        studentUploadedAt: true,
+        updatedAt: true,
+      },
+    });
+
+    void logActivityEvent({
+      type: 'student_doc_upload',
+      actorName: lead.name,
+      employeeId: lead.assignedEmployeeId,
+      leadId: lead.id,
+      leadName: lead.name,
+      toValue: doc.docType,
+      details: safeUrl,
+    });
+
+    return NextResponse.json(updated, { headers: { 'Cache-Control': 'no-store' } });
+  } catch (err) {
+    const bodyError = jsonBodyErrorResponse(err);
+    if (bodyError) return bodyError;
+    return NextResponse.json({ error: 'Failed to save document link.' }, { status: 500 });
+  }
+}

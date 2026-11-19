@@ -5,7 +5,7 @@ import { MetadataRoute } from 'next';
 // - AI/LLM crawlers explicitly allowed so ChatGPT, Claude, Perplexity,
 //   Gemini etc. can read and cite the site
 export default function robots(): MetadataRoute.Robots {
-  const privatePaths = ['/admin/', '/dashboard/', '/login', '/api/', '/sitemap-submission'];
+  const privatePaths = ['/admin/', '/dashboard/', '/login', '/api/', '/sitemap-submission', '/track/', '/s/'];
   return {
     rules: [
       {

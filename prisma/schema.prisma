@@ -284,8 +284,30 @@ model Lead {
   metaFbc           String?
   metaFbp           String?
 
+  // Native CRM pipeline & Student Live Tracking Portal fields
+  publicToken        String?   @unique
+  publicEnabled      Boolean   @default(true)
+  applicationStage   String    @default("documents")
+  university         String?
+  degree             String?
+  gpa                Float?
+  visaDeadline       String?
+  departureDate      String?
+  nextFollowup       String?
+  driveLink          String?
+  assignedEmployeeId String?
+  assignedEmployee   Employee? @relation("EmployeeLeads", fields: [assignedEmployeeId], references: [id], onDelete: SetNull)
+
+  universityApps LeadUniversityApp[]
+  documents      LeadDocument[]
+  activities     ActivityEvent[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([assignedEmployeeId])
+  @@index([nextFollowup])
 }
 
 model Content {
@@ -471,4 +493,165 @@ model RateLimitBucket {
 
   @@index([policy, resetAtMs])
   @@index([resetAtMs])
+}
+
+model Employee {
+  id             String   @id @default(cuid())
+  empId          String   @unique
+  name           String
+  role           String   @default("Counselor")
+  email          String?
+  phone          String?
+  team           String   @default("china")
+  specialization String?
+  active         Boolean  @default(true)
+  joinDate       String?
+  userId         String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  leads       Lead[]          @relation("EmployeeLeads")
+  attendances Attendance[]
+  dailyLogs   DailyLog[]
+  kpiTargets  KpiTarget[]
+  tasks       TaskDirective[]
+  activities  ActivityEvent[]
+
+  @@index([active])
+  @@index([team])
+}
+
+model Attendance {
+  id          String   @id @default(cuid())
+  employeeId  String
+  employee    Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  empId       String
+  name        String
+  date        String
+  checkIn     String?
+  checkOut    String?
+  hoursWorked Float    @default(0)
+  status      String   @default("Present")
+  source      String   @default("manual")
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([empId, date])
+  @@index([date])
+  @@index([employeeId, date])
+}
+
+model DailyLog {
+  id              String   @id @default(cuid())
+  employeeId      String
+  employee        Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  empId           String
+  date            String
+  accomplishments String?
+  challenges      String?
+  tomorrowPlan    String?
+  metricsJson     String?
+  submittedAt     DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([empId, date])
+  @@index([date])
+}
+
+model KpiTarget {
+  id                 String    @id @default(cuid())
+  employeeId         String?
+  employee           Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  consultant         String
+  month              String
+  targetLeads        Int       @default(0)
+  targetEnrolled     Int       @default(0)
+  targetRevenue      Float     @default(0)
+  targetDailyActions Int       @default(12)
+  targetFollowups    Int       @default(0)
+  maxSlaHours        Int       @default(24)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@unique([consultant, month])
+  @@index([month])
+}
+
+model TaskDirective {
+  id          String    @id @default(cuid())
+  title       String
+  details     String?
+  assignedTo  String?
+  employeeId  String?
+  employee    Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  assignedBy  String?
+  dueDate     String?
+  priority    String    @default("normal")
+  status      String    @default("open")
+  category    String?
+  leadId      String?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([employeeId, status])
+  @@index([dueDate])
+}
+
+model LeadUniversityApp {
+  id            String   @id @default(cuid())
+  leadId        String
+  lead          Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  university    String
+  program       String?
+  status        String   @default("documents")
+  applicationId String?
+  submittedOn   String?
+  decisionOn    String?
+  notes         String?
+  updatedBy     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([leadId])
+}
+
+model LeadDocument {
+  id                 String    @id @default(cuid())
+  leadId             String
+  lead               Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  docType            String
+  status             String    @default("pending")
+  notes              String?
+  fileUrl            String?
+  studentUploadedUrl String?
+  studentUploadedAt  DateTime?
+  requestedByStudent Boolean   @default(false)
+  receivedOn         String?
+  updatedBy          String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([leadId])
+}
+
+model ActivityEvent {
+  id          String    @id @default(cuid())
+  type        String
+  actorName   String?
+  actorUserId String?
+  employeeId  String?
+  employee    Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  leadId      String?
+  lead        Lead?     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  leadName    String?
+  fromValue   String?
+  toValue     String?
+  details     String?
+  createdAt   DateTime  @default(now())
+
+  @@index([leadId, createdAt])
+  @@index([employeeId, createdAt])
+  @@index([createdAt])
 }

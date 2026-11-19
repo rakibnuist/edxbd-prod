@@ -12,6 +12,11 @@ export type LeadRecord = {
   id: string; name: string; email: string; phone?: string | null; country: string;
   program?: string | null; message?: string | null; status: string; source: string;
   notes?: string | null; assignedTeam?: string | null; assignedTo?: string | null;
+  assignedEmployeeId?: string | null;
+  publicToken?: string | null; publicEnabled?: boolean;
+  applicationStage?: string | null; university?: string | null; degree?: string | null;
+  gpa?: number | null; visaDeadline?: string | null; departureDate?: string | null;
+  nextFollowup?: string | null; driveLink?: string | null;
   leadType?: string; riskFlag?: boolean; medicalProgram?: boolean;
   assessAcademicLevel?: string | null; assessAcademicResults?: string | null;
   assessSubject?: string | null; assessBudget?: string | null; assessIntake?: string | null;
@@ -37,25 +42,132 @@ export function leadCounts(leads: LeadRecord[]) {
   for (const lead of leads) counts[leadQueue(lead.status)]++;
   return counts;
 }
+function extractLeadGpaNumber(lead: Pick<LeadRecord, 'gpa' | 'assessAcademicResults'>): number | null {
+  if (typeof lead.gpa === 'number' && Number.isFinite(lead.gpa) && lead.gpa > 0) return lead.gpa;
+  const raw = (lead.assessAcademicResults || '').trim();
+  if (!raw) return null;
+  const m = raw.match(/([0-5](?:\.[0-9]{1,2})?)/);
+  if (!m) return null;
+  const parsed = Number.parseFloat(m[1]);
+  return Number.isFinite(parsed) && parsed > 0 && parsed <= 5.5 ? parsed : null;
+}
+
+export type LeadQuickPreset = 'all' | 'china_hot' | 'sla_risk' | 'followup_due';
+
 export function filterLeads(leads: LeadRecord[], filters: {
-  search: string; queue: LeadQueue; status: string; country: string; source: string; sort: string;
+  search: string;
+  queue: LeadQueue;
+  status: string;
+  country: string;
+  source: string;
+  sort: string;
+  gpaMin?: number | null;
+  assignedTo?: string;
+  quickPreset?: LeadQuickPreset;
 }) {
   const query = filters.search.trim().toLocaleLowerCase();
-  return leads.filter(lead => (!query || [lead.name, lead.email, lead.phone, lead.country, lead.program, lead.source]
-    .some(value => value?.toLocaleLowerCase().includes(query)))
-    && (filters.queue === 'all' || leadQueue(lead.status) === filters.queue)
-    && (filters.status === 'all' || lead.status === filters.status)
-    && (filters.country === 'all' || lead.country === filters.country)
-    && (filters.source === 'all' || lead.source === filters.source))
-    .sort((a, b) => filters.sort === 'oldest' ? Date.parse(a.createdAt) - Date.parse(b.createdAt)
-      : filters.sort === 'updated' ? Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
-      : Date.parse(b.createdAt) - Date.parse(a.createdAt));
+  const gpaMin = typeof filters.gpaMin === 'number' && Number.isFinite(filters.gpaMin) ? filters.gpaMin : null;
+  const assignedFilter = filters.assignedTo && filters.assignedTo !== 'all' ? filters.assignedTo : null;
+  const quick = filters.quickPreset || 'all';
+  const todayDhaka = new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 10);
+  const twoHoursAgoMs = Date.now() - 2 * 3600 * 1000;
+
+  return leads.filter(lead => {
+    if (query && ![
+      lead.name, lead.email, lead.phone, lead.country, lead.program,
+      lead.source, lead.university, lead.assignedTo, lead.assessAcademicResults,
+    ].some(value => value?.toLocaleLowerCase().includes(query))) {
+      return false;
+    }
+    if (filters.queue !== 'all' && leadQueue(lead.status) !== filters.queue) return false;
+    if (filters.status !== 'all' && lead.status !== filters.status) return false;
+    if (filters.country !== 'all' && lead.country !== filters.country) return false;
+    if (filters.source !== 'all' && lead.source !== filters.source) return false;
+    if (assignedFilter) {
+      if (assignedFilter === '__unassigned__' && lead.assignedTo) return false;
+      if (assignedFilter !== '__unassigned__' && lead.assignedTo !== assignedFilter) return false;
+    }
+    if (gpaMin !== null) {
+      const g = extractLeadGpaNumber(lead);
+      if (g === null || g < gpaMin) return false;
+    }
+    if (quick === 'china_hot') {
+      const isChina = (lead.country || '').toLowerCase().includes('china') || (lead.destinationInterest || '').toLowerCase().includes('china');
+      const g = extractLeadGpaNumber(lead);
+      if (!isChina || (g !== null && g < 3.5)) return false;
+      if (g === null && !lead.assessAcademicResults) return false;
+    } else if (quick === 'sla_risk') {
+      const createdMs = Date.parse(lead.createdAt);
+      if (lead.status !== 'new' || Number.isNaN(createdMs) || createdMs > twoHoursAgoMs) return false;
+    } else if (quick === 'followup_due') {
+      if (!lead.nextFollowup || lead.nextFollowup > todayDhaka || closed.has(lead.status)) return false;
+    }
+    return true;
+  }).sort((a, b) => filters.sort === 'oldest' ? Date.parse(a.createdAt) - Date.parse(b.createdAt)
+    : filters.sort === 'updated' ? Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
+    : filters.sort === 'gpa_desc' ? (extractLeadGpaNumber(b) ?? -1) - (extractLeadGpaNumber(a) ?? -1)
+    : Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
-export function validateLeadUpdate(value: unknown): { data?: { status?: LeadStatus; notes?: string }; error?: string } {
+
+export type LeadUpdateData = {
+  status?: LeadStatus;
+  notes?: string;
+  assignedTo?: string | null;
+  assignedEmployeeId?: string | null;
+  applicationStage?: string;
+  university?: string | null;
+  degree?: string | null;
+  gpa?: number | null;
+  nextFollowup?: string | null;
+  visaDeadline?: string | null;
+  departureDate?: string | null;
+  driveLink?: string | null;
+  publicEnabled?: boolean;
+  assessAcademicLevel?: string | null;
+  assessAcademicResults?: string | null;
+  assessLanguage?: string | null;
+};
+
+const ALLOWED_APPLICATION_STAGES = new Set<string>([
+  'documents', 'submitted', 'review', 'interview', 'admitted', 'jw202', 'visa', 'enrolled', 'fly',
+]);
+
+function normalizeBoundedHttpUrl(raw: unknown, maxLen = 1000): string | null {
+  if (typeof raw !== 'string') return null;
+  const trimmed = raw.trim();
+  if (!trimmed || trimmed.length > maxLen || /[\u0000-\u001f\u007f]/.test(trimmed)) return null;
+  try {
+    const parsed = new URL(trimmed);
+    if ((parsed.protocol !== 'http:' && parsed.protocol !== 'https:') || !parsed.hostname || parsed.username || parsed.password) {
+      return null;
+    }
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+}
+
+const ALLOWED_LEAD_UPDATE_KEYS = new Set<string>([
+  'status', 'notes', 'assignedTo', 'assignedEmployeeId', 'applicationStage',
+  'university', 'degree', 'gpa', 'nextFollowup', 'visaDeadline', 'departureDate',
+  'driveLink', 'publicEnabled', 'assessAcademicLevel', 'assessAcademicResults', 'assessLanguage',
+]);
+
+function normalizeOptionalShortText(raw: unknown, field: string, maxLen = 200): { ok: true; value: string | null } | { ok: false; error: string } {
+  if (raw === null) return { ok: true, value: null };
+  if (typeof raw !== 'string') return { ok: false, error: `${field} must be text.` };
+  if (raw.length > maxLen) return { ok: false, error: `${field} must be at most ${maxLen} characters.` };
+  const trimmed = raw.trim();
+  return { ok: true, value: trimmed || null };
+}
+
+export function validateLeadUpdate(value: unknown): { data?: LeadUpdateData; error?: string } {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return { error: 'Provide a lead update.' };
   const body = value as Record<string, unknown>;
-  if (Object.keys(body).some(key => !['status', 'notes'].includes(key))) return { error: 'Only status and counselor notes can be updated here.' };
-  const data: { status?: LeadStatus; notes?: string } = {};
+  if (Object.keys(body).some(key => !ALLOWED_LEAD_UPDATE_KEYS.has(key))) {
+    return { error: 'Only supported lead workflow fields can be updated here.' };
+  }
+  const data: LeadUpdateData = {};
   if ('status' in body) {
     if (!isLeadStatus(body.status)) return { error: 'Choose a supported lead status.' };
     data.status = body.status;
@@ -64,7 +176,52 @@ export function validateLeadUpdate(value: unknown): { data?: { status?: LeadStat
     if (typeof body.notes !== 'string' || body.notes.length > 12000) return { error: 'Counselor notes must be text of at most 12,000 characters.' };
     data.notes = body.notes.trim();
   }
-  return Object.keys(data).length ? { data } : { error: 'Choose a status or update the counselor notes.' };
+  if ('applicationStage' in body) {
+    if (typeof body.applicationStage !== 'string' || !ALLOWED_APPLICATION_STAGES.has(body.applicationStage)) {
+      return { error: 'Choose a supported application milestone stage.' };
+    }
+    data.applicationStage = body.applicationStage;
+  }
+  if ('publicEnabled' in body) {
+    if (typeof body.publicEnabled !== 'boolean') return { error: 'publicEnabled must be true or false.' };
+    data.publicEnabled = body.publicEnabled;
+  }
+  if ('gpa' in body) {
+    if (body.gpa === null || body.gpa === '') {
+      data.gpa = null;
+    } else {
+      const n = typeof body.gpa === 'number' ? body.gpa : Number(body.gpa);
+      if (!Number.isFinite(n) || n < 0 || n > 5.5) return { error: 'GPA must be between 0 and 5.5.' };
+      data.gpa = Number(n.toFixed(2));
+    }
+  }
+  if ('driveLink' in body) {
+    if (body.driveLink === null || body.driveLink === '') {
+      data.driveLink = null;
+    } else {
+      const safe = normalizeBoundedHttpUrl(body.driveLink, 1000);
+      if (!safe) return { error: 'Drive link must be a valid http(s) URL.' };
+      data.driveLink = safe;
+    }
+  }
+  for (const field of ['assignedTo', 'assignedEmployeeId', 'university', 'degree', 'assessAcademicLevel', 'assessAcademicResults', 'assessLanguage'] as const) {
+    if (field in body) {
+      const res = normalizeOptionalShortText(body[field], field, 200);
+      if (!res.ok) return { error: res.error };
+      data[field] = res.value;
+    }
+  }
+  for (const dateField of ['nextFollowup', 'visaDeadline', 'departureDate'] as const) {
+    if (dateField in body) {
+      const res = normalizeOptionalShortText(body[dateField], dateField, 32);
+      if (!res.ok) return { error: res.error };
+      if (res.value && !/^\d{4}-\d{2}-\d{2}$/.test(res.value)) {
+        return { error: `${dateField} must be YYYY-MM-DD.` };
+      }
+      data[dateField] = res.value;
+    }
+  }
+  return Object.keys(data).length ? { data } : { error: 'Choose a field to update.' };
 }
 export function leadContactLinks(lead: Pick<LeadRecord, 'phone' | 'email' | 'name'>) {
   const rawDigits = (lead.phone || '').replace(/[^0-9]/g, '');

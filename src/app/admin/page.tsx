@@ -344,13 +344,20 @@ export default function AdminDashboardPage() {
       {/* Quick Command Hub */}
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-500">Quick Operations Hub</h2>
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
           <Link
             href="/admin/leads"
             className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-900"
           >
             <Users2 size={16} className="text-blue-700" />
             Admissions
+          </Link>
+          <Link
+            href="/admin/kpi"
+            className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-900"
+          >
+            <TrendingUp size={16} className="text-cyan-700" />
+            KPI &amp; Workflow
           </Link>
           <Link
             href="/admin/universities"

@@ -2,6 +2,8 @@ import 'server-only';
 import { META_API_VERSION } from '@/lib/meta-api';
 import { sendCrmStage, type CrmLead } from '@/lib/meta-crm-events';
 import { mapMetaGraphLeadToImportPayload, type MetaGraphLeadInput } from '@/lib/lead-workflow';
+import { generatePublicToken, logActivityEvent, resolveAutoAssignment } from '@/lib/crm-operations';
+import { parseNumericGpa } from '@/lib/wa-templates';
 import prisma from '@/lib/prisma';
 import { decryptSecret } from '@/lib/secret-box';
 import { getAllSettings } from '@/lib/settings';
@@ -279,6 +281,12 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
         ? createdAt
         : new Date();
 
+      const autoAssigned = await resolveAutoAssignment({
+        assignedTeam: item.assignedTeam,
+        country: item.country,
+      });
+      const parsedGpa = parseNumericGpa(null, item.assessAcademicResults);
+
       const createdLead = await prisma.lead.create({
         data: {
           name: item.name,
@@ -291,6 +299,12 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
           source: item.source,
           leadType: item.leadType,
           assignedTeam: item.assignedTeam,
+          assignedTo: autoAssigned.assignedTo,
+          assignedEmployeeId: autoAssigned.assignedEmployeeId,
+          publicToken: generatePublicToken(),
+          publicEnabled: true,
+          gpa: parsedGpa,
+          degree: item.assessAcademicLevel || null,
           destinationInterest: item.destinationInterest,
           landingPage: item.landingPage,
           ...(item.assessAcademicLevel ? { assessAcademicLevel: item.assessAcademicLevel } : {}),
@@ -301,6 +315,16 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
           consentPolicyVersion: item.consentPolicyVersion,
           createdAt: validCreatedAt,
         },
+      });
+
+      void logActivityEvent({
+        type: 'lead_created',
+        actorName: 'Meta Graph Sync',
+        employeeId: autoAssigned.assignedEmployeeId,
+        leadId: createdLead.id,
+        leadName: createdLead.name,
+        toValue: autoAssigned.assignedTo || item.assignedTeam,
+        details: `${item.country} · ${item.source}`,
       });
 
       if (options?.onLeadCreated) {
