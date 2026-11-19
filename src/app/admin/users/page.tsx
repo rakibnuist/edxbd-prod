@@ -8,6 +8,7 @@ interface LinkedEmployee {
   empId: string;
   name: string;
   team: string;
+  role?: string;
   email?: string | null;
   phone?: string | null;
   userId?: string | null;
@@ -208,6 +209,22 @@ export default function UsersPage() {
     setShowEditModal(true);
   };
 
+  const linkedEmpIds = new Set(users.map((u) => u.employee?.id).filter(Boolean));
+  const unlinkedEmployees = employees.filter((emp) => !emp.userId && !linkedEmpIds.has(emp.id));
+
+  const openQuickCreateForEmployee = (emp: LinkedEmployee) => {
+    const looksAdmin = Boolean(emp.role && /\b(admin|director|investor|head|ceo)\b/i.test(emp.role));
+    setFormData({
+      name: emp.name,
+      email: emp.email || '',
+      password: '',
+      role: isSuperAdmin && looksAdmin ? 'admin' : 'counselor',
+      employeeId: emp.id,
+    });
+    setError('');
+    setShowCreateModal(true);
+  };
+
   const closeModals = () => {
     setShowCreateModal(false);
     setShowEditModal(false);
@@ -305,6 +322,45 @@ export default function UsersPage() {
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
               {error}
+            </div>
+          )}
+
+          {unlinkedEmployees.length > 0 && (
+            <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50/70 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div>
+                  <h2 className="text-sm font-bold text-slate-900">
+                    Pending Staff Login Accounts ({unlinkedEmployees.length})
+                  </h2>
+                  <p className="text-xs text-slate-600">
+                    Click <strong>Create Login</strong> to pre-fill and link an active counselor/staff profile.
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {unlinkedEmployees.map((emp) => (
+                  <div
+                    key={emp.id}
+                    className="flex items-center justify-between gap-3 rounded-md border border-blue-100 bg-white px-3 py-2.5 shadow-2xs"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate text-xs font-bold text-slate-900">
+                        {emp.empId} · {emp.name}
+                      </p>
+                      <p className="truncate text-[11px] text-slate-500">
+                        {emp.team} {emp.email ? `· ${emp.email}` : '· Enter work email'}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => openQuickCreateForEmployee(emp)}
+                      className="shrink-0 rounded-md bg-blue-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-blue-700"
+                    >
+                      Create Login
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

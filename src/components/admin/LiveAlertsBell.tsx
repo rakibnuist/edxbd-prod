@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Bell, CheckCheck, Clock, ExternalLink, FileUp, Flame, MessageSquare } from 'lucide-react';
+import { Bell, CheckCheck, Clock, ExternalLink, FileUp, Flame, GraduationCap, MessageSquare } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import type { NotificationItem } from '@/app/api/admin/notifications/route';
 
@@ -104,18 +104,22 @@ export default function LiveAlertsBell() {
                       ? FileUp
                       : item.kind === 'student_message'
                         ? MessageSquare
-                        : Clock;
+                        : item.kind === 'scholarship_notice'
+                          ? GraduationCap
+                          : Clock;
                 const tone =
                   item.kind === 'hot_lead'
                     ? 'bg-amber-50 text-amber-700'
                     : item.kind === 'student_doc_upload' || item.kind === 'student_message'
                       ? 'bg-blue-50 text-blue-700'
-                      : 'bg-slate-100 text-slate-600';
+                      : item.kind === 'scholarship_notice'
+                        ? 'bg-emerald-50 text-emerald-700'
+                        : 'bg-slate-100 text-slate-600';
 
                 return (
                   <Link
                     key={item.id}
-                    href={item.leadId ? `/admin/leads?lead=${encodeURIComponent(item.leadId)}` : '/admin/leads'}
+                    href={item.href || (item.leadId ? `/admin/leads?lead=${encodeURIComponent(item.leadId)}` : '/admin/leads')}
                     onClick={() => setOpen(false)}
                     className={`flex items-start gap-3 px-4 py-3 transition hover:bg-slate-50 ${
                       isNew ? 'bg-blue-50/30' : ''

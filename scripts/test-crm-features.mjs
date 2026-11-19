@@ -32,6 +32,10 @@ const {
 } = await import('../src/lib/lead-workflow.ts');
 
 const {
+  parseScholarshipNoticePayload,
+} = await import('../src/lib/scholarship-notice.ts');
+
+const {
   computeEmployeeKpiReport,
   dhakaTodayIso,
   shiftIsoDays,
@@ -213,4 +217,42 @@ test('Counselor role permits staff tokens while strictly blocking admin-only JWT
     if (prevSecret === undefined) delete process.env.JWT_SECRET;
     else process.env.JWT_SECRET = prevSecret;
   }
+});
+
+test('Scholarship notice parser sanitizes HTML, validates source URL, and drafts unpublished updates', () => {
+  const skipped = parseScholarshipNoticePayload({ error: 'Upstream timeout' });
+  assert.equal(skipped.ok, false);
+  if (!skipped.ok) assert.equal(skipped.skipped, true);
+
+  const badUrl = parseScholarshipNoticePayload({
+    university_name: 'Zhejiang University',
+    source_url: 'javascript:alert(1)',
+  });
+  assert.equal(badUrl.ok, false);
+
+  const parsed = parseScholarshipNoticePayload(
+    {
+      university_name: 'Zhejiang University',
+      scholarship_types: ['CSC Type B', 'ZJU Graduate Scholarship'],
+      target_degrees: ['Master', 'PhD'],
+      application_deadline: '2027-03-31',
+      stipend_coverage: 'Full tuition + 3,000 CNY/month stipend',
+      language_requirements: 'IELTS 6.0 or HSK 5',
+      summary: 'ZJU 2027 graduate scholarship <script>alert(1)</script> intake open.',
+      source_url: 'https://iczu.zju.edu.cn/',
+    },
+    new Date('2026-11-20T00:00:00Z'),
+  );
+  assert.equal(parsed.ok, true);
+  if (parsed.ok) {
+    assert.equal(parsed.data.slug, 'china-notice-zhejiang-university-2027');
+    assert.equal(parsed.data.deadlineAt?.toISOString().slice(0, 10), '2027-03-31');
+    assert.doesNotMatch(parsed.data.htmlContent, /<script/i);
+    assert.match(parsed.data.htmlContent, /https:\/\/iczu\.zju\.edu\.cn\//);
+  }
+
+  const webhookSrc = fs.readFileSync('src/app/api/webhooks/scholarship-notice/route.ts', 'utf8');
+  assert.match(webhookSrc, /timingSafeEqual/);
+  assert.match(webhookSrc, /isPublished:\s*false/);
+  assert.doesNotMatch(webhookSrc, /revalidatePath|announcePublishedUpdate/);
 });

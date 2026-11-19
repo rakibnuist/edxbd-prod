@@ -10,11 +10,12 @@ const MASK = '••••••••';
 
 export interface NotificationItem {
   id: string;
-  kind: 'hot_lead' | 'sla_untouched' | 'student_doc_upload' | 'student_message' | 'new_lead';
+  kind: 'hot_lead' | 'sla_untouched' | 'student_doc_upload' | 'student_message' | 'new_lead' | 'scholarship_notice';
   title: string;
   subtitle: string;
   leadId: string | null;
   leadName: string | null;
+  href?: string;
   createdAt: string;
   urgent: boolean;
 }
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
     const twoHoursAgo = new Date(Date.now() - 2 * 3600 * 1000);
     const threeDaysAgo = new Date(Date.now() - 72 * 3600 * 1000);
 
-    const [freshNewLeads, portalEvents] = await Promise.all([
+    const [freshNewLeads, portalEvents, scholarshipEvents] = await Promise.all([
       prisma.lead.findMany({
         where: {
           AND: [
@@ -82,9 +83,39 @@ export async function GET(request: NextRequest) {
           createdAt: true,
         },
       }),
+      isAdmin
+        ? prisma.activityEvent.findMany({
+            where: {
+              type: 'scholarship_notice_synced',
+              createdAt: { gte: threeDaysAgo },
+            },
+            orderBy: { createdAt: 'desc' },
+            take: 8,
+            select: {
+              id: true,
+              toValue: true,
+              details: true,
+              createdAt: true,
+            },
+          })
+        : Promise.resolve([]),
     ]);
 
     const items: NotificationItem[] = [];
+
+    for (const ev of scholarshipEvents) {
+      items.push({
+        id: `sch-${ev.id}`,
+        kind: 'scholarship_notice',
+        title: `Scholarship Draft: ${ev.toValue || 'China University'}`,
+        subtitle: ev.details || 'Review automated China Scholarship Monitor draft in Content Desk',
+        leadId: null,
+        leadName: null,
+        href: '/admin/content',
+        createdAt: ev.createdAt.toISOString(),
+        urgent: false,
+      });
+    }
 
     for (const ev of portalEvents) {
       items.push({

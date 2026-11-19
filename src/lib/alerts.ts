@@ -122,3 +122,31 @@ export async function notifyPortalActivityAlert(input: {
 
   await sendTelegramBotMessage(cfg.telegramBotToken, cfg.telegramChatId, lines.join('\n')).catch(() => {});
 }
+
+export async function notifyScholarshipNoticeAlert(input: {
+  universityName: string;
+  deadline: string;
+  sourceUrl?: string | null;
+  action: 'created_draft' | 'updated_draft' | 'created_refresh_draft';
+}): Promise<void> {
+  const cfg = await getAlertConfig({ includeSecret: true });
+  if (!cfg.preferences.enabled) return;
+  if (!cfg.telegramBotToken || !cfg.telegramChatId) return;
+
+  const badge =
+    input.action === 'created_refresh_draft'
+      ? '🔄 <b>China Scholarship Refresh Draft</b>'
+      : input.action === 'updated_draft'
+        ? '📝 <b>China Scholarship Draft Updated</b>'
+        : '🎓 <b>New China Scholarship Draft</b>';
+
+  const lines = [
+    badge,
+    `<b>University:</b> ${escapeTelegramHtml(input.universityName)}`,
+    `<b>Deadline:</b> ${escapeTelegramHtml(input.deadline)}`,
+    input.sourceUrl ? `<b>Official URL:</b> ${escapeTelegramHtml(input.sourceUrl)}` : '',
+    `🔗 <a href="https://eduexpressint.com/admin/content">Review Draft in Content Desk</a>`,
+  ].filter(Boolean);
+
+  await sendTelegramBotMessage(cfg.telegramBotToken, cfg.telegramChatId, lines.join('\n')).catch(() => {});
+}
