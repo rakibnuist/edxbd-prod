@@ -432,6 +432,13 @@ test('Step 16 built HTML checks — bn visa SERP bounds, homepage WebPage schema
       homeHtml.includes('2026-11-15'),
     'index.html must include WebPage node with mainEntityOfPage and dateModified',
   );
+  assert.ok(
+    homeHtml.includes('id="b2b-partner-desk"') &&
+      homeHtml.includes('href="/b2b"') &&
+      homeHtml.includes('href="/b2b#b2b-inquiry"') &&
+      homeHtml.includes('href="/partnership#china-partner-terms"'),
+    'index.html must include the B2B Partner Desk banner linking to /b2b and /partnership',
+  );
 
   const dhakaHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'education-consultant-dhaka.html'), 'utf8');
   assert.ok(

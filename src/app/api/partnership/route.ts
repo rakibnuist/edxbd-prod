@@ -223,6 +223,7 @@ export async function POST(request: NextRequest) {
           phone,
           company: companyName,
           message: motivation,
+          eventId: getOptionalString(body, 'eventId', 120),
           fbc: serverMetaParams.fbc,
           fbp: serverMetaParams.fbp,
           externalId: serverMetaParams.externalId,

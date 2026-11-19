@@ -9,10 +9,18 @@ import {
   AlertCircle,
   ArrowRight,
   ArrowLeft,
-  Handshake
+  Handshake,
+  MessageCircle,
+  ShieldCheck,
 } from 'lucide-react';
 import { trackFormSubmission, getUserDevice } from '@/lib/vercel-analytics';
-import { analyticsAllowed } from '@/lib/conversion-events';
+import { config } from '@/lib/config';
+import {
+  analyticsAllowed,
+  createConversionEventId,
+  trackB2BInquirySubmit,
+  trackWhatsAppClick,
+} from '@/lib/conversion-events';
 import { getConsentedSubmissionMetaParams } from '@/lib/meta-param-builder-client';
 import Link from 'next/link';
 
@@ -37,18 +45,41 @@ const initialFormData: PartnershipFormData = {
   email: '',
   phone: '',
   city: '',
-  country: '',
+  country: 'Bangladesh',
   partnershipType: '',
   motivation: '',
   privacyConsent: false
 };
 
 const partnershipTypes = [
-  { value: 'individual_agent', label: 'Individual Agent', description: 'Perfect for individual consultants and freelancers' },
-  { value: 'company', label: 'Company', description: 'Ideal for education consultancies and agencies' }
+  {
+    value: 'b2b_china_desk',
+    label: 'China Strategic Partner',
+    description: 'Type-A ($800), Type-B ($600), Type-C ($500) & Airport Pickup ($150) schedule',
+  },
+  {
+    value: 'company',
+    label: 'Education Consultancy',
+    description: 'Established agency seeking written MOU & co-placement across 12 destinations',
+  },
+  {
+    value: 'individual_agent',
+    label: 'Sub-Agent / Advisor',
+    description: 'Independent counsellor or freelance admissions advisor referring student files',
+  },
+  {
+    value: 'b2b_multi_destination',
+    label: 'Regional / Referral Desk',
+    description: 'Regional office, institutional desk, or student referral partner',
+  },
 ];
 
-const PartnershipForm = () => {
+const PartnershipForm = ({ whatsappHref }: { whatsappHref?: string }) => {
+  const resolvedWhatsappHref =
+    whatsappHref ||
+    `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(
+      "Hello, I've submitted a B2B partnership application and would like to speak with the partner desk.",
+    )}`;
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<PartnershipFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -122,6 +153,7 @@ const PartnershipForm = () => {
     setSubmitStatus('idle');
 
     try {
+      const eventId = createConversionEventId('partner');
       const metaParams = await getConsentedSubmissionMetaParams();
       const response = await fetch('/api/partnership', {
         method: 'POST',
@@ -130,8 +162,9 @@ const PartnershipForm = () => {
         },
         body: JSON.stringify({
           ...metaParams,
+          eventId,
           // Essential fields from form
-          companyName: formData.companyName || `${formData.contactPerson} - ${formData.partnershipType === 'individual_agent' ? 'Individual Agent' : 'Company'}`,
+          companyName: formData.companyName || `${formData.contactPerson} - ${formData.partnershipType === 'individual_agent' ? 'Individual Agent' : 'Agency Partner'}`,
           contactPerson: formData.contactPerson,
           email: formData.email,
           phone: formData.phone,
@@ -180,6 +213,14 @@ const PartnershipForm = () => {
       });
 
       if (response.ok) {
+        trackB2BInquirySubmit({
+          eventId,
+          destination: formData.partnershipType === 'b2b_china_desk' ? 'china' : 'general',
+          label: 'partnership_form',
+          partnership_type: formData.partnershipType,
+          country: formData.country,
+          value: 0,
+        });
         // Track successful partnership form submission
         trackFormSubmission('partnership', {
           page: 'partnership_form',
@@ -455,36 +496,55 @@ const PartnershipForm = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="rounded-3xl bg-white px-6 py-12 text-center sm:px-10"
+        className="rounded-3xl border border-petrol-800/15 bg-white px-6 py-10 text-center shadow-sm sm:px-10"
         role="status"
       >
-        <span className="mx-auto mb-6 grid size-16 place-items-center rounded-full bg-lime text-petrol-800">
+        <span className="mx-auto mb-5 grid size-16 place-items-center rounded-full bg-lime text-petrol-800">
           <CheckCircle className="size-8" aria-hidden="true" />
         </span>
-        <h3 className="font-display text-[30px] font-black leading-none text-petrol-800">Application Submitted Successfully!</h3>
+        <h3 className="font-display text-[30px] font-black leading-none text-petrol-800">Application Received!</h3>
         <p className="mx-auto mt-4 max-w-md text-[16px] leading-7 text-ink-soft">
-          Thank you for your interest in partnering with EduExpress International.
-          We have received your application and will review it carefully.
-          Our team will contact you within 2-3 business days.
+          Thank you for applying to the EduExpress Partner Desk. Our B2B coordinator will contact you within 24–48 business hours with your draft MOU and China USD fee sheet.
         </p>
-        <button
-          onClick={() => {
-            setSubmitStatus('idle');
-            setFormData(initialFormData);
-            setCurrentStep(1);
-          }}
-          className="ed-btn ed-btn-outline mt-8 min-h-[48px] px-6"
-        >
-          Submit Another Application
-        </button>
+        <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+          <a
+            href={resolvedWhatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-tracking-type="whatsapp"
+            onClick={() => trackWhatsAppClick({ destination: 'china', label: 'partnership_form_success_whatsapp' })}
+            className="ed-btn ed-btn-signal min-h-[50px] px-6"
+          >
+            <MessageCircle className="size-4" aria-hidden="true" />
+            <span>Message Desk on WhatsApp</span>
+          </a>
+          <button
+            type="button"
+            onClick={() => {
+              setSubmitStatus('idle');
+              setFormData(initialFormData);
+              setCurrentStep(1);
+            }}
+            className="ed-btn ed-btn-outline min-h-[50px] px-6"
+          >
+            Submit Another
+          </button>
+        </div>
       </motion.div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-3xl bg-white">
+    <div className="overflow-hidden rounded-3xl border border-petrol-800/15 bg-white shadow-[0_24px_60px_rgba(15,58,92,0.08)]">
       {/* Progress */}
-      <div className="border-b border-canvas-soft px-6 py-5 sm:px-8">
+      <div className="border-b border-canvas-soft bg-white px-6 py-5 sm:px-8">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-lime-pale px-3.5 py-2 text-[13px] font-semibold text-petrol-800">
+          <span className="inline-flex items-center gap-1.5">
+            <ShieldCheck size={15} className="shrink-0 text-lime-deep" aria-hidden="true" />
+            Free onboarding · Takes ~60 seconds
+          </span>
+          <span className="text-lime-deep font-bold">Non-poaching MOU</span>
+        </div>
         <div className="mb-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="grid size-9 place-items-center rounded-full bg-petrol-800 text-[15px] font-bold text-lime">{currentStep}</span>

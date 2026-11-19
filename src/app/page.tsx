@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 
 import MobileLeadBar from '@/components/home/MobileLeadBar';
+import B2BHomeBanner from '@/components/home/B2BHomeBanner';
 import { Stars, type StoryCardData } from '@/components/stories/StoryCard';
 import StoryMarquee from '@/components/stories/StoryMarquee';
 import HomeLeadForm from '@/components/lead/HomeLeadForm';
@@ -712,6 +713,9 @@ export default async function Home() {
           </div>
         </section>
       )}
+
+      {/* 5B. B2B Partner Desk Banner */}
+      <B2BHomeBanner containerClassName={wrap} />
 
       {/* 6. How it works — a boarding pass from Dhaka to campus */}
       <section className="bg-canvas-soft py-20 lg:py-24">

@@ -975,6 +975,7 @@ export const trackPartnershipInquiry = async (
     phone?: string;
     company?: string;
     message?: string;
+    eventId?: string;
     fbc?: string;
     fbp?: string;
     externalId?: string;
@@ -989,7 +990,7 @@ export const trackPartnershipInquiry = async (
   fbp?: string;
   error?: string;
 }> => {
-  const eventId = generateEventId();
+  const eventId = userData.eventId?.trim() || generateEventId();
   const [firstName, ...lastNameParts] = userData.name.split(' ');
   const lastName = lastNameParts.join(' ') || '';
 
