@@ -1,33 +1,19 @@
 import 'server-only';
 import prisma from '@/lib/prisma';
 import { decryptSecret, encryptSecret } from '@/lib/secret-box';
+import {
+  ALERT_KEY_BOT_TOKEN,
+  ALERT_KEY_CHAT_ID,
+  ALERT_KEY_PREFS,
+  type AlertPreferences,
+  buildNewLeadTelegramHtml,
+  DEFAULT_ALERT_PREFS,
+  escapeTelegramHtml,
+  resolveAlertConfigFromRows,
+  sendTelegramBotMessage,
+} from '@/lib/telegram';
 
-const KEY_BOT_TOKEN = 'alert_telegram_bot_token';
-const KEY_CHAT_ID = 'alert_telegram_chat_id';
-const KEY_PREFS = 'alert_preferences_json';
-
-export interface AlertPreferences {
-  enabled: boolean;
-  alertOnNewLead: boolean;
-  alertOnHighGpaOnly: boolean;
-  minGpaThreshold: number;
-  alertOnPortalActivity: boolean;
-}
-
-export const DEFAULT_ALERT_PREFS: AlertPreferences = {
-  enabled: true,
-  alertOnNewLead: true,
-  alertOnHighGpaOnly: false,
-  minGpaThreshold: 3.5,
-  alertOnPortalActivity: true,
-};
-
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
+export { DEFAULT_ALERT_PREFS, type AlertPreferences };
 
 export async function getAlertConfig(options?: { includeSecret?: boolean }): Promise<{
   telegramBotToken: string;
@@ -36,41 +22,10 @@ export async function getAlertConfig(options?: { includeSecret?: boolean }): Pro
   preferences: AlertPreferences;
 }> {
   const rows = await prisma.setting.findMany({
-    where: { key: { in: [KEY_BOT_TOKEN, KEY_CHAT_ID, KEY_PREFS] } },
+    where: { key: { in: [ALERT_KEY_BOT_TOKEN, ALERT_KEY_CHAT_ID, ALERT_KEY_PREFS] } },
   }).catch(() => []);
 
-  const map = new Map(rows.map((r) => [r.key, r.value]));
-  const storedToken = map.get(KEY_BOT_TOKEN);
-  const decrypted = storedToken ? decryptSecret(storedToken) : '';
-  const botToken = decrypted || (process.env.TELEGRAM_BOT_TOKEN || '').trim();
-  const chatId = (map.get(KEY_CHAT_ID) || process.env.TELEGRAM_CHAT_ID || '').trim();
-
-  let preferences = { ...DEFAULT_ALERT_PREFS };
-  const rawPrefs = map.get(KEY_PREFS);
-  if (rawPrefs) {
-    try {
-      const parsed = JSON.parse(rawPrefs) as Partial<AlertPreferences>;
-      preferences = {
-        enabled: typeof parsed.enabled === 'boolean' ? parsed.enabled : DEFAULT_ALERT_PREFS.enabled,
-        alertOnNewLead: typeof parsed.alertOnNewLead === 'boolean' ? parsed.alertOnNewLead : DEFAULT_ALERT_PREFS.alertOnNewLead,
-        alertOnHighGpaOnly: typeof parsed.alertOnHighGpaOnly === 'boolean' ? parsed.alertOnHighGpaOnly : DEFAULT_ALERT_PREFS.alertOnHighGpaOnly,
-        minGpaThreshold:
-          typeof parsed.minGpaThreshold === 'number' && Number.isFinite(parsed.minGpaThreshold)
-            ? Math.min(5.5, Math.max(0, Number(parsed.minGpaThreshold.toFixed(2))))
-            : DEFAULT_ALERT_PREFS.minGpaThreshold,
-        alertOnPortalActivity: typeof parsed.alertOnPortalActivity === 'boolean' ? parsed.alertOnPortalActivity : DEFAULT_ALERT_PREFS.alertOnPortalActivity,
-      };
-    } catch {
-      // keep defaults
-    }
-  }
-
-  return {
-    telegramBotToken: options?.includeSecret ? botToken : '',
-    telegramBotTokenSet: Boolean(botToken),
-    telegramChatId: chatId,
-    preferences,
-  };
+  return resolveAlertConfigFromRows(rows, decryptSecret, options);
 }
 
 export async function saveAlertConfig(input: {
@@ -82,18 +37,18 @@ export async function saveAlertConfig(input: {
     const clean = input.telegramBotToken.trim();
     const sealed = clean ? encryptSecret(clean) : '';
     await prisma.setting.upsert({
-      where: { key: KEY_BOT_TOKEN },
+      where: { key: ALERT_KEY_BOT_TOKEN },
       update: { value: sealed },
-      create: { key: KEY_BOT_TOKEN, value: sealed },
+      create: { key: ALERT_KEY_BOT_TOKEN, value: sealed },
     });
   }
 
   if (typeof input.telegramChatId === 'string') {
     const cleanChat = input.telegramChatId.trim().slice(0, 80);
     await prisma.setting.upsert({
-      where: { key: KEY_CHAT_ID },
+      where: { key: ALERT_KEY_CHAT_ID },
       update: { value: cleanChat },
-      create: { key: KEY_CHAT_ID, value: cleanChat },
+      create: { key: ALERT_KEY_CHAT_ID, value: cleanChat },
     });
   }
 
@@ -110,40 +65,16 @@ export async function saveAlertConfig(input: {
       alertOnPortalActivity: typeof input.preferences.alertOnPortalActivity === 'boolean' ? input.preferences.alertOnPortalActivity : current.preferences.alertOnPortalActivity,
     };
     await prisma.setting.upsert({
-      where: { key: KEY_PREFS },
+      where: { key: ALERT_KEY_PREFS },
       update: { value: JSON.stringify(nextPrefs) },
-      create: { key: KEY_PREFS, value: JSON.stringify(nextPrefs) },
+      create: { key: ALERT_KEY_PREFS, value: JSON.stringify(nextPrefs) },
     });
   }
 }
 
 export async function sendTelegramAlert(htmlMessage: string): Promise<{ ok: boolean; error?: string }> {
   const cfg = await getAlertConfig({ includeSecret: true });
-  if (!cfg.telegramBotToken || !cfg.telegramChatId) {
-    return { ok: false, error: 'Telegram Bot Token or Chat ID is not configured.' };
-  }
-
-  try {
-    const url = `https://api.telegram.org/bot${cfg.telegramBotToken}/sendMessage`;
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: cfg.telegramChatId,
-        text: htmlMessage,
-        parse_mode: 'HTML',
-        disable_web_page_preview: true,
-      }),
-      signal: AbortSignal.timeout(6000),
-    });
-    const json = (await res.json().catch(() => ({}))) as { ok?: boolean; description?: string };
-    if (!res.ok || !json.ok) {
-      return { ok: false, error: json.description || `Telegram HTTP ${res.status}` };
-    }
-    return { ok: true };
-  } catch (err) {
-    return { ok: false, error: err instanceof Error ? err.message : 'Telegram request failed' };
-  }
+  return sendTelegramBotMessage(cfg.telegramBotToken, cfg.telegramChatId, htmlMessage);
 }
 
 export async function notifyNewLeadAlert(lead: {
@@ -159,31 +90,10 @@ export async function notifyNewLeadAlert(lead: {
   assignedTo?: string | null;
 }): Promise<void> {
   const cfg = await getAlertConfig({ includeSecret: true });
-  if (!cfg.preferences.enabled || !cfg.preferences.alertOnNewLead) return;
   if (!cfg.telegramBotToken || !cfg.telegramChatId) return;
-
-  const gpa = lead.gpa ?? (lead.assessAcademicResults ? Number.parseFloat(lead.assessAcademicResults) || null : null);
-  const isHot = gpa !== null && gpa >= cfg.preferences.minGpaThreshold;
-  if (cfg.preferences.alertOnHighGpaOnly && !isHot) return;
-
-  const header = isHot
-    ? `🔥 <b>HOT LEAD (GPA ${gpa!.toFixed(2)})</b>`
-    : `📩 <b>New Student Lead</b>`;
-
-  const lines = [
-    header,
-    `<b>Name:</b> ${escapeHtml(lead.name)}`,
-    `<b>Phone:</b> <code>${escapeHtml(lead.phone)}</code>`,
-    `<b>Destination:</b> ${escapeHtml(lead.country)}${lead.program ? ` · ${escapeHtml(lead.program)}` : ''}`,
-    lead.assessAcademicLevel || lead.assessAcademicResults || gpa
-      ? `<b>Academics:</b> ${escapeHtml([lead.assessAcademicLevel, gpa ? `GPA ${gpa.toFixed(2)}` : lead.assessAcademicResults].filter(Boolean).join(' · '))}`
-      : '',
-    `<b>Source:</b> ${escapeHtml(lead.source)}`,
-    `<b>Assigned:</b> ${escapeHtml(lead.assignedTo || 'Unassigned')}`,
-    `🔗 <a href="https://eduexpressint.com/admin/leads?lead=${encodeURIComponent(lead.id)}">Open in Leads Desk</a>`,
-  ].filter(Boolean);
-
-  await sendTelegramAlert(lines.join('\n')).catch(() => {});
+  const html = buildNewLeadTelegramHtml(lead, cfg.preferences);
+  if (!html) return;
+  await sendTelegramBotMessage(cfg.telegramBotToken, cfg.telegramChatId, html).catch(() => {});
 }
 
 export async function notifyPortalActivityAlert(input: {
@@ -204,11 +114,11 @@ export async function notifyPortalActivityAlert(input: {
 
   const lines = [
     title,
-    `<b>Student:</b> ${escapeHtml(input.leadName)}${input.country ? ` (${escapeHtml(input.country)})` : ''}`,
-    `<b>Counselor:</b> ${escapeHtml(input.assignedTo || 'Admissions Desk')}`,
-    `<b>Detail:</b> ${escapeHtml(input.detail.slice(0, 350))}`,
+    `<b>Student:</b> ${escapeTelegramHtml(input.leadName)}${input.country ? ` (${escapeTelegramHtml(input.country)})` : ''}`,
+    `<b>Counselor:</b> ${escapeTelegramHtml(input.assignedTo || 'Admissions Desk')}`,
+    `<b>Detail:</b> ${escapeTelegramHtml(input.detail.slice(0, 350))}`,
     `🔗 <a href="https://eduexpressint.com/admin/leads?lead=${encodeURIComponent(input.leadId)}">Review in Admin Portal</a>`,
   ];
 
-  await sendTelegramAlert(lines.join('\n')).catch(() => {});
+  await sendTelegramBotMessage(cfg.telegramBotToken, cfg.telegramChatId, lines.join('\n')).catch(() => {});
 }

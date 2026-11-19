@@ -2,7 +2,8 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { NextRequest, NextResponse, after } from 'next/server';
 import { META_API_VERSION } from '@/lib/meta-api';
 import { sendCrmStage } from '@/lib/meta-crm-events';
-import { syncLeadToCrm } from '@/lib/crm-sync';
+import { generatePublicToken, recordNewLeadEffects, resolveAutoAssignment } from '@/lib/crm-operations';
+import { parseNumericGpa } from '@/lib/wa-templates';
 import {
   buildMetaInstantFormMessage,
   extractMetaFormFields,
@@ -194,6 +195,11 @@ async function persistNormalizedWebhookLead(
       ? input.rawEmail
       : `no-email+${digits}@leads.eduexpressint.com`;
   const createdAt = parseWebhookTimestamp(input.createdRaw);
+  const autoAssigned = await resolveAutoAssignment({
+    assignedTeam: 'china',
+    country: 'China',
+  });
+  const parsedGpa = parseNumericGpa(null, input.gpa);
 
   const createdLead = await prisma.lead.create({
     data: {
@@ -217,6 +223,12 @@ async function persistNormalizedWebhookLead(
       source: 'meta_china_march_2027',
       leadType: 'assessment',
       assignedTeam: 'china',
+      assignedTo: autoAssigned.assignedTo,
+      assignedEmployeeId: autoAssigned.assignedEmployeeId,
+      publicToken: generatePublicToken(),
+      publicEnabled: true,
+      gpa: parsedGpa,
+      degree: input.lastDegree ? input.lastDegree.slice(0, 120) : null,
       destinationInterest: 'china',
       landingPage: '/china-march-2027-intake',
       ...(input.lastDegree ? { assessAcademicLevel: input.lastDegree.slice(0, 120) } : {}),
@@ -230,21 +242,12 @@ async function persistNormalizedWebhookLead(
   });
 
   after(() => sendCrmStage(createdLead, 'new'));
-  after(() => {
-    syncLeadToCrm({
-      name: createdLead.name,
-      phone: createdLead.phone,
-      email: createdLead.email,
-      destination: createdLead.country,
-      program: createdLead.program,
-      source: createdLead.source,
-      page_url: createdLead.landingPage || undefined,
-      last_education: createdLead.assessAcademicLevel,
-      gpa: createdLead.assessAcademicResults ? Number(createdLead.assessAcademicResults) || null : null,
-      english_score: createdLead.assessLanguage,
-      notes: `Meta Lead Form: ${input.formName || 'instant_form'} | Campaign: ${input.campaignName || ''}`,
-    }).catch((err) => console.error('[meta-leads] CRM sync error:', err));
-  });
+  after(() => recordNewLeadEffects({
+    lead: createdLead,
+    actorName: 'Meta Webhook',
+    toValue: autoAssigned.assignedTo || 'china',
+    details: `China · ${input.formName || 'instant_form'}`,
+  }));
   if (key10) existingPhones.add(key10);
   return 'stored';
 }

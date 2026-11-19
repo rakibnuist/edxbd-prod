@@ -97,8 +97,7 @@ const nextConfig: NextConfig = {
       ...securityHeaders,
       // Tell browsers to always use HTTPS for this host for a year, so a
       // visitor who typed/bookmarked http:// never hits the insecure page
-      // again. No includeSubDomains: crm/portal/study run on a separate
-      // server and may not have their own certificate.
+      // again. No includeSubDomains: legacy/other subdomains may run separately.
       {
         source: '/(.*)',
         headers: [

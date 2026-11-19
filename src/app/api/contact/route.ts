@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { sendCrmStage } from '@/lib/meta-crm-events';
-import { syncLeadToCrm } from '@/lib/crm-sync';
+import { generatePublicToken, recordNewLeadEffects, resolveAutoAssignment } from '@/lib/crm-operations';
 import prisma from '@/lib/prisma';
 import { trackStudyAbroadLead } from '@/lib/meta-conversion-api';
 import {
@@ -132,6 +132,11 @@ export async function POST(request: NextRequest) {
     const metaFbc = serverMetaParams?.fbc ?? null;
     const metaFbp = serverMetaParams?.fbp ?? null;
 
+    const autoAssigned = await resolveAutoAssignment({
+      assignedTeam: routing.assignedTeam,
+      country,
+    });
+
     // Create new lead from contact form using Prisma
     const lead = await prisma.lead.create({
       data: {
@@ -144,6 +149,10 @@ export async function POST(request: NextRequest) {
         source,
         status: 'new',
         assignedTeam: routing.assignedTeam,
+        assignedTo: autoAssigned.assignedTo,
+        assignedEmployeeId: autoAssigned.assignedEmployeeId,
+        publicToken: generatePublicToken(),
+        publicEnabled: true,
         riskFlag: routing.riskFlag,
         medicalProgram: routing.medicalProgram,
         notes: routing.routingNote,
@@ -156,24 +165,14 @@ export async function POST(request: NextRequest) {
         metaFbp,
       }
     });
+    after(() => recordNewLeadEffects({
+      lead,
+      actorName: 'Website Contact',
+      toValue: autoAssigned.assignedTo || routing.assignedTeam,
+      details: `${country}${program ? ` · ${program}` : ''}`,
+    }));
     // First CRM stage for Meta's CRM integration, after the response is sent.
     if (adTrackingConsent) after(() => sendCrmStage(lead, 'new'));
-
-    // Instant Lead Ingestion into live EduExpress CRM
-    after(() => {
-      syncLeadToCrm({
-        name: fullName,
-        phone,
-        email: normalizedEmail,
-        destination: country,
-        program,
-        source,
-        referrer: request.headers.get('referer'),
-        message: message || `Consultation request for ${country}`,
-        notes: routing.routingNote,
-        page_url: landingPage || undefined,
-      }).catch((err) => console.error('[contact] CRM sync error:', err));
-    });
 
     // Server-side CAPI lead tracking runs when adTrackingConsent is enabled (explicit cookie consent or consented Meta ad lead).
     if (adTrackingConsent) {

@@ -1,6 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import prisma from '@/lib/prisma';
-import { syncLeadToCrm } from '@/lib/crm-sync';
+import { generatePublicToken, recordNewLeadEffects, resolveAutoAssignment } from '@/lib/crm-operations';
+import { routeLead } from '@/lib/lead-routing';
+import { parseNumericGpa } from '@/lib/wa-templates';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import { readLimitedJson } from '@/lib/request-body';
 import { normalizeRoadmapRequest } from '@/lib/roadmap-generator';
@@ -34,8 +36,19 @@ export async function POST(request: NextRequest) {
         const isMed =
           roadmapReq.targetDegree === 'MBBS' ||
           /mbbs|medicine|clinical/i.test(roadmapReq.intendedMajor);
+        const routing = routeLead({
+          country: roadmapReq.targetCountry,
+          program: `${roadmapReq.targetDegree} in ${roadmapReq.intendedMajor}`,
+          subject: roadmapReq.intendedMajor,
+          source: 'roadmap_pdf_download',
+        });
+        const autoAssigned = await resolveAutoAssignment({
+          assignedTeam: routing.assignedTeam,
+          country: roadmapReq.targetCountry,
+        });
+        const parsedGpa = parseNumericGpa(null, roadmapReq.gpa);
 
-        await prisma.lead.create({
+        const createdLead = await prisma.lead.create({
           data: {
             name: roadmapReq.studentName,
             email: safeEmail,
@@ -45,7 +58,15 @@ export async function POST(request: NextRequest) {
             source: 'roadmap_pdf_download',
             leadType: 'pdf_roadmap',
             status: 'new',
-            medicalProgram: isMed,
+            assignedTeam: routing.assignedTeam,
+            assignedTo: autoAssigned.assignedTo,
+            assignedEmployeeId: autoAssigned.assignedEmployeeId,
+            publicToken: generatePublicToken(),
+            publicEnabled: true,
+            gpa: parsedGpa,
+            degree: roadmapReq.targetDegree || null,
+            riskFlag: routing.riskFlag,
+            medicalProgram: isMed || routing.medicalProgram,
             assessAcademicLevel: roadmapReq.targetDegree,
             assessAcademicResults: roadmapReq.gpa,
             assessSubject: roadmapReq.intendedMajor,
@@ -56,20 +77,12 @@ export async function POST(request: NextRequest) {
           },
         });
 
-        // Sync to live CRM non-blocking
-        syncLeadToCrm({
-          name: roadmapReq.studentName,
-          phone: cleanPhone,
-          email: safeEmail,
-          destination: roadmapReq.targetCountry,
-          program: `${roadmapReq.targetDegree} in ${roadmapReq.intendedMajor}`,
-          major: roadmapReq.intendedMajor,
-          source: 'roadmap_pdf_download',
-          last_education: roadmapReq.targetDegree,
-          gpa: roadmapReq.gpa ? Number(roadmapReq.gpa) || null : null,
-          intake_term: roadmapReq.targetIntake,
-          notes: `Official Study Abroad Roadmap PDF generated for ${roadmapReq.targetCountry}`,
-        }).catch((crmErr) => console.warn('[RoadmapLeadCapture] CRM sync failed:', crmErr));
+        after(() => recordNewLeadEffects({
+          lead: createdLead,
+          actorName: 'Roadmap PDF',
+          toValue: autoAssigned.assignedTo || routing.assignedTeam,
+          details: `${roadmapReq.targetCountry} · ${roadmapReq.targetDegree} in ${roadmapReq.intendedMajor}`,
+        }));
       } catch (leadErr) {
         console.warn('[RoadmapLeadCapture] Non-blocking lead save failed:', leadErr);
       }

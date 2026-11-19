@@ -1,6 +1,8 @@
 import 'server-only';
 import crypto from 'node:crypto';
 import prisma from '@/lib/prisma';
+import { notifyNewLeadAlert } from '@/lib/alerts';
+import { selectCounselorFromPool, type PoolEmployee } from '@/lib/lead-workflow';
 
 export function generatePublicToken(): string {
   return crypto.randomBytes(12).toString('hex');
@@ -22,49 +24,7 @@ export async function ensureLeadPublicToken(leadId: string): Promise<string | nu
   return token;
 }
 
-type PoolEmployee = {
-  id: string;
-  empId: string;
-  name: string;
-  team: string;
-  role: string;
-  activeCount: number;
-};
-
 const NON_COUNSELING_ROLE_RE = /\b(investor|managing)\b/i;
-
-function selectCounselorFromPool(
-  activeEmployees: PoolEmployee[],
-  input: { assignedTeam?: string | null; country?: string | null },
-): PoolEmployee | null {
-  if (!activeEmployees.length) return null;
-
-  const counselingStaff = activeEmployees.filter((emp) => !NON_COUNSELING_ROLE_RE.test(emp.role));
-  const candidatePool = counselingStaff.length ? counselingStaff : activeEmployees;
-
-  const teamKey = (input.assignedTeam || '').trim().toLowerCase();
-  const countryKey = (input.country || '').trim().toLowerCase();
-  const isChina = teamKey === 'china' || countryKey === 'china';
-
-  let pool = candidatePool.filter((emp) => {
-    const empTeam = emp.team.toLowerCase();
-    if (isChina) return empTeam === 'china';
-    if (teamKey === 'active_country_owner' || (!isChina && countryKey)) {
-      return empTeam === 'europe' || empTeam === 'malaysia' || empTeam === 'global';
-    }
-    if (teamKey === 'senior_review') return /senior|head|manager|lead|ceo/i.test(emp.role);
-    return true;
-  });
-
-  if (!pool.length) {
-    pool = candidatePool.filter((emp) => emp.team.toLowerCase() === 'china' || emp.team.toLowerCase() === 'europe');
-  }
-  if (!pool.length) {
-    pool = candidatePool;
-  }
-
-  return [...pool].sort((a, b) => a.activeCount - b.activeCount || a.empId.localeCompare(b.empId))[0] || null;
-}
 
 /**
  * Resolves an automatic counselor assignment based on destination team / specialization
@@ -299,4 +259,36 @@ export async function logActivityEvent(input: {
   } catch {
     // Logging should never block primary mutation flow
   }
+}
+
+export async function recordNewLeadEffects(input: {
+  lead: {
+    id: string;
+    name: string;
+    phone: string;
+    country: string;
+    program?: string | null;
+    source: string;
+    gpa?: number | null;
+    assessAcademicResults?: string | null;
+    assessAcademicLevel?: string | null;
+    assignedTo?: string | null;
+    assignedEmployeeId?: string | null;
+  };
+  actorName: string;
+  toValue?: string | null;
+  details?: string | null;
+}): Promise<void> {
+  await Promise.allSettled([
+    logActivityEvent({
+      type: 'lead_created',
+      actorName: input.actorName,
+      employeeId: input.lead.assignedEmployeeId ?? null,
+      leadId: input.lead.id,
+      leadName: input.lead.name,
+      toValue: input.toValue ?? input.lead.assignedTo ?? null,
+      details: input.details ?? `${input.lead.country}${input.lead.program ? ` · ${input.lead.program}` : ''}`,
+    }),
+    notifyNewLeadAlert(input.lead),
+  ]);
 }

@@ -437,6 +437,46 @@ test('M-1: proxy redirect never reflects untrusted Host headers or allows open r
     assert.equal(target, 'https://eduexpressint.com/study-in-china-from-bangladesh?intake=september');
   }
 
+  // Legacy standalone CRM subdomain retirement redirects
+  for (const crmHost of ['crm.eduexpressint.com', 'www.crm.eduexpressint.com']) {
+    assert.equal(
+      resolveProxyRedirect({
+        hostHeader: crmHost,
+        forwardedProtoHeader: 'https',
+        pathname: '/',
+        search: '',
+      }),
+      'https://eduexpressint.com/admin/leads',
+    );
+    assert.equal(
+      resolveProxyRedirect({
+        hostHeader: crmHost,
+        forwardedProtoHeader: 'https',
+        pathname: '/leads/42',
+        search: '?evil=1',
+      }),
+      'https://eduexpressint.com/admin/leads',
+    );
+    assert.equal(
+      resolveProxyRedirect({
+        hostHeader: crmHost,
+        forwardedProtoHeader: 'http',
+        pathname: '/s/abc123token',
+        search: '',
+      }),
+      'https://eduexpressint.com/track/abc123token',
+    );
+    assert.equal(
+      resolveProxyRedirect({
+        hostHeader: crmHost,
+        forwardedProtoHeader: 'https',
+        pathname: '/s/%E0%A4%A',
+        search: '',
+      }),
+      'https://eduexpressint.com/track/%25E0%25A4%25A',
+    );
+  }
+
   assert.equal(
     resolveProxyRedirect({
       hostHeader: 'eduexpressint.com',

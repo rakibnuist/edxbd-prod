@@ -7,6 +7,10 @@ const REDIRECT_TO_CANONICAL_HOSTS = new Set([
   'eduexpress.info',
   'www.eduexpress.info',
 ]);
+const CRM_LEGACY_HOSTS = new Set([
+  'crm.eduexpressint.com',
+  'www.crm.eduexpressint.com',
+]);
 
 export interface ProxyRedirectInput {
   hostHeader: string | null | undefined;
@@ -63,6 +67,21 @@ function buildCanonicalTargetUrl(pathname: string, search: string): string {
   return target.toString();
 }
 
+function buildLegacyCrmTargetUrl(pathname: string): string {
+  const cleanPath = pathname.replace(/^[\\/]+/, '');
+  const trackMatch = cleanPath.match(/^(?:s|track)\/([^/?#]+)/i);
+  if (trackMatch?.[1]) {
+    let decoded = trackMatch[1];
+    try {
+      decoded = decodeURIComponent(trackMatch[1]);
+    } catch {
+      // Keep raw token segment on malformed percent encoding
+    }
+    return `${CANONICAL_ORIGIN}/track/${encodeURIComponent(decoded)}`;
+  }
+  return `${CANONICAL_ORIGIN}/admin/leads`;
+}
+
 /**
  * Compute an immutable-origin canonical redirect URL when HTTP upgrade or legacy/staging
  * host consolidation applies. Never interpolates request `Host` or `X-Forwarded-Host` into Location.
@@ -71,6 +90,10 @@ export function resolveProxyRedirect(input: ProxyRedirectInput): string | null {
   const normalizedHost = normalizeHostHeader(input.hostHeader);
   const local = isLocalHostname(normalizedHost);
   const forwardedProto = (input.forwardedProtoHeader || '').split(',')[0].trim().toLowerCase();
+
+  if (normalizedHost && CRM_LEGACY_HOSTS.has(normalizedHost)) {
+    return buildLegacyCrmTargetUrl(input.pathname);
+  }
 
   const needsHttpsUpgrade = !local && forwardedProto === 'http';
   const isSecondaryOrPreviewHost =

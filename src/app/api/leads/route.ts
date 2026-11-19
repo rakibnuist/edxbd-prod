@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { sendCrmStage } from '@/lib/meta-crm-events';
-import { syncLeadToCrm } from '@/lib/crm-sync';
-import { generatePublicToken, logActivityEvent, resolveAutoAssignment } from '@/lib/crm-operations';
-import { notifyNewLeadAlert } from '@/lib/alerts';
+import { generatePublicToken, recordNewLeadEffects, resolveAutoAssignment } from '@/lib/crm-operations';
 import { parseNumericGpa } from '@/lib/wa-templates';
 import prisma from '@/lib/prisma';
 import { routeLead } from '@/lib/lead-routing';
@@ -181,40 +179,15 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    after(() => logActivityEvent({
-      type: 'lead_created',
+    after(() => recordNewLeadEffects({
+      lead,
       actorName: 'Website Form',
-      employeeId: autoAssigned.assignedEmployeeId,
-      leadId: lead.id,
-      leadName: lead.name,
       toValue: autoAssigned.assignedTo || routing.assignedTeam,
       details: `${country}${program ? ` · ${program}` : ''}`,
     }));
-    after(() => notifyNewLeadAlert(lead));
 
     // First CRM stage for Meta's CRM integration, after the response is sent.
     if (adTrackingConsent) after(() => sendCrmStage(lead, 'new'));
-
-    // Instant Lead Ingestion into live EduExpress CRM
-    after(() => {
-      syncLeadToCrm({
-        name,
-        phone,
-        email: normalizedEmail,
-        destination: country,
-        program,
-        major: assessmentCheck.assessment.subject,
-        source: resolvedSource,
-        referrer: request.headers.get('referer'),
-        message,
-        notes: routing.routingNote,
-        page_url: landingPage || undefined,
-        last_education: assessmentCheck.assessment.academicLevel,
-        gpa: assessmentCheck.assessment.academicResults ? Number(assessmentCheck.assessment.academicResults) || null : null,
-        english_score: assessmentCheck.assessment.language,
-        intake_term: assessmentCheck.assessment.intake,
-      }).catch((err) => console.error('[leads] CRM sync error:', err));
-    });
 
     // Server-side CAPI lead tracking runs asynchronously after the response when adTrackingConsent is enabled.
     if (adTrackingConsent) {

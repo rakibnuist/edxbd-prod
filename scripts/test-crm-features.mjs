@@ -195,6 +195,20 @@ test('Counselor role permits staff tokens while strictly blocking admin-only JWT
     assert.match(alertsSrc, /decryptSecret/);
     const notifyRoute = fs.readFileSync('src/app/api/admin/notifications/route.ts', 'utf8');
     assert.match(notifyRoute, /isAdminRole/);
+
+    // Verify all lead intake paths no longer forward to legacy external CRM and use native portal/auto-assign
+    assert.equal(fs.existsSync('src/lib/crm-sync.ts'), false);
+    for (const intakeFile of [
+      'src/app/api/leads/route.ts',
+      'src/app/api/contact/route.ts',
+      'src/app/api/ai/roadmap-pdf/route.ts',
+      'src/app/api/webhooks/meta-leads/route.ts',
+    ]) {
+      const src = fs.readFileSync(intakeFile, 'utf8');
+      assert.doesNotMatch(src, /syncLeadToCrm/, `${intakeFile} must not reference retired crm-sync`);
+      assert.match(src, /resolveAutoAssignment/, `${intakeFile} must auto-assign leads natively`);
+      assert.match(src, /recordNewLeadEffects/, `${intakeFile} must trigger activity log & Telegram alert`);
+    }
   } finally {
     if (prevSecret === undefined) delete process.env.JWT_SECRET;
     else process.env.JWT_SECRET = prevSecret;
