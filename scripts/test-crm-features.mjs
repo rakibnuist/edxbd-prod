@@ -189,6 +189,12 @@ test('Counselor role permits staff tokens while strictly blocking admin-only JWT
       const src = fs.readFileSync(adminOnlyPath, 'utf8');
       assert.doesNotMatch(src, /verifyLiveStaffUser/, `${adminOnlyPath} must remain strictly admin-only`);
     }
+
+    const alertsSrc = fs.readFileSync('src/lib/alerts.ts', 'utf8');
+    assert.match(alertsSrc, /encryptSecret/);
+    assert.match(alertsSrc, /decryptSecret/);
+    const notifyRoute = fs.readFileSync('src/app/api/admin/notifications/route.ts', 'utf8');
+    assert.match(notifyRoute, /isAdminRole/);
   } finally {
     if (prevSecret === undefined) delete process.env.JWT_SECRET;
     else process.env.JWT_SECRET = prevSecret;

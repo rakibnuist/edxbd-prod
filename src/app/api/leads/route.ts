@@ -2,6 +2,7 @@ import { NextRequest, NextResponse, after } from 'next/server';
 import { sendCrmStage } from '@/lib/meta-crm-events';
 import { syncLeadToCrm } from '@/lib/crm-sync';
 import { generatePublicToken, logActivityEvent, resolveAutoAssignment } from '@/lib/crm-operations';
+import { notifyNewLeadAlert } from '@/lib/alerts';
 import { parseNumericGpa } from '@/lib/wa-templates';
 import prisma from '@/lib/prisma';
 import { routeLead } from '@/lib/lead-routing';
@@ -189,6 +190,7 @@ export async function POST(request: NextRequest) {
       toValue: autoAssigned.assignedTo || routing.assignedTeam,
       details: `${country}${program ? ` · ${program}` : ''}`,
     }));
+    after(() => notifyNewLeadAlert(lead));
 
     // First CRM stage for Meta's CRM integration, after the response is sent.
     if (adTrackingConsent) after(() => sendCrmStage(lead, 'new'));

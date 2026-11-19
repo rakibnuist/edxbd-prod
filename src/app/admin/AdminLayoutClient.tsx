@@ -24,6 +24,7 @@ import {
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import LogoutButton from '@/components/LogoutButton';
+import LiveAlertsBell from '@/components/admin/LiveAlertsBell';
 
 const NAV = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
@@ -75,6 +76,9 @@ function AdminHeader({ activeName }: { activeName: string }) {
             Meta Leads: Live (2m)
           </div>
         )}
+
+        {/* Live Hot-Lead & Portal Alerts Bell */}
+        <LiveAlertsBell />
 
         {/* User Role Tag */}
         <div className="hidden md:flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs">

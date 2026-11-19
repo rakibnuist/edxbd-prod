@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
+import { notifyPortalActivityAlert } from '@/lib/alerts';
 import { logActivityEvent } from '@/lib/crm-operations';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
@@ -27,7 +28,7 @@ export async function POST(
 
     const lead = await prisma.lead.findFirst({
       where: { publicToken: cleanToken, publicEnabled: true },
-      select: { id: true, name: true, assignedEmployeeId: true },
+      select: { id: true, name: true, country: true, assignedTo: true, assignedEmployeeId: true },
     });
     if (!lead) return NextResponse.json({ error: 'Portal not found.' }, { status: 404 });
 
@@ -45,6 +46,14 @@ export async function POST(
       leadName: lead.name,
       details: message,
     });
+    after(() => notifyPortalActivityAlert({
+      kind: 'student_message',
+      leadId: lead.id,
+      leadName: lead.name,
+      country: lead.country,
+      assignedTo: lead.assignedTo,
+      detail: message,
+    }));
 
     return NextResponse.json({ ok: true }, { status: 201, headers: { 'Cache-Control': 'no-store' } });
   } catch (err) {

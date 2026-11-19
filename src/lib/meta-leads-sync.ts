@@ -3,6 +3,7 @@ import { META_API_VERSION } from '@/lib/meta-api';
 import { sendCrmStage, type CrmLead } from '@/lib/meta-crm-events';
 import { mapMetaGraphLeadToImportPayload, type MetaGraphLeadInput } from '@/lib/lead-workflow';
 import { generatePublicToken, logActivityEvent, resolveAutoAssignment } from '@/lib/crm-operations';
+import { notifyNewLeadAlert } from '@/lib/alerts';
 import { parseNumericGpa } from '@/lib/wa-templates';
 import prisma from '@/lib/prisma';
 import { decryptSecret } from '@/lib/secret-box';
@@ -326,6 +327,7 @@ async function runSync(options?: SyncOptions): Promise<MetaLeadsSyncResult> {
         toValue: autoAssigned.assignedTo || item.assignedTeam,
         details: `${item.country} · ${item.source}`,
       });
+      void notifyNewLeadAlert(createdLead);
 
       if (options?.onLeadCreated) {
         options.onLeadCreated(createdLead);

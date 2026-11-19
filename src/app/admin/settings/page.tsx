@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import MetaConnectionPanel from '@/components/admin/MetaConnectionPanel';
+import TelegramAlertsSettingsPanel from '@/components/admin/TelegramAlertsSettingsPanel';
 
 interface SettingsState {
   siteName: string;
@@ -296,6 +297,8 @@ export default function SettingsPage() {
           </button>
         </div>
       </form>
+
+      <TelegramAlertsSettingsPanel />
     </div>
   );
 }
