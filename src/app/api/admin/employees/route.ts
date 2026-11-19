@@ -1,14 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
+    }
+
+    if (!isAdminRole(actor.role)) {
+      const employees = await prisma.employee.findMany({
+        where: { active: true },
+        orderBy: [{ empId: 'asc' }],
+        select: { id: true, empId: true, name: true, role: true, team: true, active: true },
+      });
+      return NextResponse.json({ employees }, { headers: { 'Cache-Control': 'no-store, private' } });
     }
 
     const employees = await prisma.employee.findMany({

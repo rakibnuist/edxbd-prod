@@ -1,14 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { isAdminRole } from '@/lib/auth';
+import { buildCounselorLeadWhere, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { logAndFormatServerError } from '@/lib/api-error';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
+
+    const isAdmin = isAdminRole(actor.role);
+    const scopeWhere = isAdmin ? {} : buildCounselorLeadWhere(staff?.employee || null);
 
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
@@ -33,23 +39,24 @@ export async function GET(request: NextRequest) {
       recentLeads,
       recentPartnerships,
     ] = await Promise.all([
-      prisma.lead.count(),
-      prisma.lead.count({ where: { status: 'new' } }),
-      prisma.lead.count({ where: { status: { in: ['contacted', 'in_progress', 'qualified'] } } }),
-      prisma.lead.count({ where: { status: 'no_response' } }),
-      prisma.lead.count({ where: { status: { in: ['closed', 'completed', 'enrolled', 'converted', 'not_interested'] } } }),
-      prisma.lead.count({ where: { source: { contains: 'meta' } } }),
-      prisma.lead.count({ where: { NOT: { source: { contains: 'meta' } } } }),
-      prisma.lead.count({ where: { createdAt: { gte: startOfToday } } }),
-      prisma.lead.count({ where: { country: 'China' } }),
+      prisma.lead.count({ where: scopeWhere }),
+      prisma.lead.count({ where: { AND: [scopeWhere, { status: 'new' }] } }),
+      prisma.lead.count({ where: { AND: [scopeWhere, { status: { in: ['contacted', 'in_progress', 'qualified'] } }] } }),
+      prisma.lead.count({ where: { AND: [scopeWhere, { status: 'no_response' }] } }),
+      prisma.lead.count({ where: { AND: [scopeWhere, { status: { in: ['closed', 'completed', 'enrolled', 'converted', 'not_interested'] } }] } }),
+      prisma.lead.count({ where: { AND: [scopeWhere, { source: { contains: 'meta' } }] } }),
+      prisma.lead.count({ where: { AND: [scopeWhere, { NOT: { source: { contains: 'meta' } } }] } }),
+      prisma.lead.count({ where: { AND: [scopeWhere, { createdAt: { gte: startOfToday } }] } }),
+      prisma.lead.count({ where: { AND: [scopeWhere, { country: 'China' }] } }),
       prisma.university.count({ where: { isActive: true } }),
-      prisma.teamMember.count(),
-      prisma.teamMember.count({ where: { isPublished: true } }),
-      prisma.testimonial.count({ where: { isPublished: true } }),
+      isAdmin ? prisma.teamMember.count() : Promise.resolve(0),
+      isAdmin ? prisma.teamMember.count({ where: { isPublished: true } }) : Promise.resolve(0),
+      isAdmin ? prisma.testimonial.count({ where: { isPublished: true } }) : Promise.resolve(0),
       prisma.country.count({ where: { isActive: true } }),
-      prisma.partnership.count(),
-      prisma.partnership.count({ where: { status: 'pending' } }),
+      isAdmin ? prisma.partnership.count() : Promise.resolve(0),
+      isAdmin ? prisma.partnership.count({ where: { status: 'pending' } }) : Promise.resolve(0),
       prisma.lead.findMany({
+        where: scopeWhere,
         orderBy: { createdAt: 'desc' },
         take: 8,
         select: {
@@ -67,20 +74,22 @@ export async function GET(request: NextRequest) {
           createdAt: true,
         },
       }),
-      prisma.partnership.findMany({
-        orderBy: { createdAt: 'desc' },
-        take: 5,
-        select: {
-          id: true,
-          companyName: true,
-          contactPerson: true,
-          email: true,
-          country: true,
-          partnershipType: true,
-          status: true,
-          createdAt: true,
-        },
-      }),
+      isAdmin
+        ? prisma.partnership.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: 5,
+            select: {
+              id: true,
+              companyName: true,
+              contactPerson: true,
+              email: true,
+              country: true,
+              partnershipType: true,
+              status: true,
+              createdAt: true,
+            },
+          })
+        : Promise.resolve([]),
     ]);
 
     return NextResponse.json({

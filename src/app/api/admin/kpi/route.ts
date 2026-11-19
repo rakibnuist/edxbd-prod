@@ -1,16 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { computeEmployeeKpiReport, normalizeMonthParam, shiftIsoDays } from '@/lib/kpi-workflow';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
+
+    const isAdmin = isAdminRole(actor.role);
+    const selfEmpId = staff?.employee?.id || '__none__';
 
     const { searchParams } = new URL(request.url);
     const month = normalizeMonthParam(searchParams.get('month'));
@@ -23,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     const [employees, attendances, dailyLogs, targets, tasks, leads, activities] = await Promise.all([
       prisma.employee.findMany({
-        where: { active: true },
+        where: isAdmin ? { active: true } : { active: true, id: selfEmpId },
         orderBy: { empId: 'asc' },
         select: {
           id: true, empId: true, name: true, role: true, email: true,
@@ -31,26 +36,35 @@ export async function GET(request: NextRequest) {
         },
       }),
       prisma.attendance.findMany({
-        where: { date: { gte: start, lte: end } },
+        where: isAdmin
+          ? { date: { gte: start, lte: end } }
+          : { employeeId: selfEmpId, date: { gte: start, lte: end } },
         select: { id: true, employeeId: true, empId: true, date: true, checkIn: true, checkOut: true, hoursWorked: true, status: true },
       }),
       prisma.dailyLog.findMany({
-        where: { date: { gte: start, lte: end } },
+        where: isAdmin
+          ? { date: { gte: start, lte: end } }
+          : { employeeId: selfEmpId, date: { gte: start, lte: end } },
         select: { id: true, employeeId: true, empId: true, date: true, accomplishments: true, challenges: true, tomorrowPlan: true, metricsJson: true, submittedAt: true },
       }),
       prisma.kpiTarget.findMany({
-        where: { month },
+        where: isAdmin ? { month } : { month, employeeId: selfEmpId },
         select: { employeeId: true, consultant: true, month: true, targetLeads: true, targetEnrolled: true, targetRevenue: true, targetDailyActions: true, targetFollowups: true, maxSlaHours: true },
       }),
       prisma.taskDirective.findMany({
-        where: { status: { not: 'cancelled' } },
+        where: isAdmin
+          ? { status: { not: 'cancelled' } }
+          : { status: { not: 'cancelled' }, employeeId: selfEmpId },
         select: { id: true, title: true, details: true, assignedTo: true, employeeId: true, assignedBy: true, dueDate: true, priority: true, status: true, category: true, leadId: true, completedAt: true, createdAt: true, updatedAt: true },
       }),
       prisma.lead.findMany({
+        where: isAdmin ? undefined : { assignedEmployeeId: selfEmpId },
         select: { id: true, name: true, phone: true, country: true, status: true, applicationStage: true, assignedTo: true, assignedEmployeeId: true, nextFollowup: true, gpa: true, assessAcademicResults: true, createdAt: true, updatedAt: true },
       }),
       prisma.activityEvent.findMany({
-        where: { createdAt: { gte: winStartDate, lte: winEndDate } },
+        where: isAdmin
+          ? { createdAt: { gte: winStartDate, lte: winEndDate } }
+          : { employeeId: selfEmpId, createdAt: { gte: winStartDate, lte: winEndDate } },
         orderBy: { createdAt: 'desc' },
         select: { id: true, type: true, actorName: true, actorUserId: true, employeeId: true, leadId: true, leadName: true, fromValue: true, toValue: true, details: true, createdAt: true },
       }),

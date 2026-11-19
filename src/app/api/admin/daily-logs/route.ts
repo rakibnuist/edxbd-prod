@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { logActivityEvent } from '@/lib/crm-operations';
 import { dhakaTodayIso } from '@/lib/kpi-workflow';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
@@ -8,13 +8,16 @@ import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
-    const employeeId = searchParams.get('employeeId');
+    const isAdmin = isAdminRole(actor.role);
+    const employeeId = isAdmin ? searchParams.get('employeeId') : (staff?.employee?.id || '__none__');
     const date = searchParams.get('date');
 
     const logs = await prisma.dailyLog.findMany({
@@ -37,13 +40,27 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const decoded = admin || staff;
+    if (!decoded) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
 
+    const isAdmin = isAdminRole(decoded.role);
     const body = await readLimitedJson(request, 32 * 1024);
-    const employeeId = typeof body.employeeId === 'string' ? body.employeeId.trim() : '';
+    const requestedEmployeeId = typeof body.employeeId === 'string' ? body.employeeId.trim() : '';
+
+    if (!isAdmin) {
+      if (!staff?.employee) {
+        return NextResponse.json({ error: 'Your user login is not linked to an employee profile.' }, { status: 403 });
+      }
+      if (requestedEmployeeId && requestedEmployeeId !== staff.employee.id && requestedEmployeeId !== staff.employee.empId) {
+        return NextResponse.json({ error: 'Unauthorized - You can only submit your own daily log.' }, { status: 403 });
+      }
+    }
+
+    const employeeId = isAdmin ? requestedEmployeeId : (staff?.employee?.id || '');
     const employee = employeeId
       ? await prisma.employee.findFirst({ where: { OR: [{ id: employeeId }, { empId: employeeId }] } })
       : null;

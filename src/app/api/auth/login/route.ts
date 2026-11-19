@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
-import { generateToken, isAdminRole } from '@/lib/auth';
+import { generateToken, isStaffRole } from '@/lib/auth';
 import { checkRateLimit, rateLimitExceeded } from '@/lib/rate-limit';
 import { getRequiredString, jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 
@@ -46,9 +46,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!isAdminRole(user.role)) {
+    if (!isStaffRole(user.role)) {
       return NextResponse.json(
-        { error: 'This account does not have administrator access' },
+        { error: 'This account does not have staff portal access' },
         { status: 403 }
       );
     }

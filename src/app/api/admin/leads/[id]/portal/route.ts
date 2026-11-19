@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { canAccessLeadScope, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { generatePublicToken, logActivityEvent } from '@/lib/crm-operations';
 import { DEFAULT_CHINA_DOCUMENTS } from '@/lib/student-portal';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
@@ -15,9 +14,11 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
     const { id } = await params;
     const lead = await prisma.lead.findUnique({
@@ -40,6 +41,9 @@ export async function GET(
       },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+    if (!canAccessLeadScope({ role: actor.role, employee: staff?.employee }, lead)) {
+      return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
+    }
 
     const [universityApps, documents, activities] = await Promise.all([
       prisma.leadUniversityApp.findMany({ where: { leadId: id }, orderBy: { createdAt: 'desc' } }),
@@ -65,16 +69,21 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const decoded = admin || staff;
+    if (!decoded) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
     const { id } = await params;
     const lead = await prisma.lead.findUnique({
       where: { id },
-      select: { id: true, name: true, publicToken: true, assignedEmployeeId: true },
+      select: { id: true, name: true, publicToken: true, assignedTo: true, assignedEmployeeId: true },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+    if (!canAccessLeadScope({ role: decoded.role, employee: staff?.employee }, lead)) {
+      return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
+    }
 
     const body = await readLimitedJson(request, 32 * 1024);
     const action = typeof body.action === 'string' ? body.action.trim() : '';
@@ -197,16 +206,21 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const decoded = admin || staff;
+    if (!decoded) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
     const { id } = await params;
     const lead = await prisma.lead.findUnique({
       where: { id },
-      select: { id: true, name: true, assignedEmployeeId: true },
+      select: { id: true, name: true, assignedTo: true, assignedEmployeeId: true },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+    if (!canAccessLeadScope({ role: decoded.role, employee: staff?.employee }, lead)) {
+      return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
+    }
 
     const body = await readLimitedJson(request, 32 * 1024);
     const kind = typeof body.kind === 'string' ? body.kind : '';

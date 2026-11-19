@@ -4,11 +4,11 @@ import { isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 
-const ALLOWED_ROLES = ['user', 'admin', 'super_admin'] as const;
+const ALLOWED_ROLES = ['user', 'counselor', 'admin', 'super_admin'] as const;
 const MIN_PASSWORD_LENGTH = 12;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-// GET - Fetch all users (Admin only)
+// GET - Fetch all users + employee link roster (Admin only)
 export async function GET(request: NextRequest) {
   try {
     const decoded = await verifyLiveAdminUser(request);
@@ -17,19 +17,50 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
     }
 
-    const users = await prisma.user.findMany({
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true
-      }
+    const [users, employees] = await Promise.all([
+      prisma.user.findMany({
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      }),
+      prisma.employee.findMany({
+        where: { active: true },
+        orderBy: { empId: 'asc' },
+        select: {
+          id: true,
+          empId: true,
+          name: true,
+          email: true,
+          phone: true,
+          team: true,
+          role: true,
+          userId: true,
+        },
+      }),
+    ]);
+
+    const empByUserId = new Map(employees.filter((e) => e.userId).map((e) => [e.userId!, e]));
+    const empByEmail = new Map(
+      employees.filter((e) => e.email).map((e) => [e.email!.trim().toLowerCase(), e]),
+    );
+
+    const enrichedUsers = users.map((u) => {
+      const emp = empByUserId.get(u.id) || empByEmail.get(u.email.trim().toLowerCase()) || null;
+      return {
+        ...u,
+        employee: emp
+          ? { id: emp.id, empId: emp.empId, name: emp.name, team: emp.team, phone: emp.phone }
+          : null,
+      };
     });
 
-    return NextResponse.json({ users });
+    return NextResponse.json({ users: enrichedUsers, employees }, { headers: { 'Cache-Control': 'no-store, private' } });
   } catch (error) {
     console.error('Fetch users error:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
@@ -46,7 +77,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, email, password, role = 'user' } = body ?? {};
+    const { name, email, password, role = 'counselor', employeeId } = body ?? {};
 
     // Validate required fields and primitive types
     if (
@@ -64,9 +95,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Invalid user role' }, { status: 400 });
     }
 
-    if (role !== 'user' && decoded.role !== 'super_admin') {
+    if (isAdminRole(role) && decoded.role !== 'super_admin') {
       return NextResponse.json(
-        { message: 'Only a super admin can create privileged accounts' },
+        { message: 'Only a super admin can create administrator accounts' },
         { status: 403 }
       );
     }
@@ -111,12 +142,40 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Link employee profile if provided explicitly or matched by email
+    let linkedEmployee: { id: string; empId: string; name: string; team: string; phone: string | null } | null = null;
+    if (typeof employeeId === 'string' && employeeId.trim()) {
+      const targetEmp = await prisma.employee.findUnique({ where: { id: employeeId.trim() } });
+      if (targetEmp) {
+        linkedEmployee = await prisma.employee.update({
+          where: { id: targetEmp.id },
+          data: {
+            userId: user.id,
+            ...(!targetEmp.email ? { email: normalizedEmail } : {}),
+          },
+          select: { id: true, empId: true, name: true, team: true, phone: true },
+        });
+      }
+    } else {
+      const matchedEmp = await prisma.employee.findFirst({
+        where: { email: normalizedEmail, userId: null },
+      });
+      if (matchedEmp) {
+        linkedEmployee = await prisma.employee.update({
+          where: { id: matchedEmp.id },
+          data: { userId: user.id },
+          select: { id: true, empId: true, name: true, team: true, phone: true },
+        });
+      }
+    }
+
     // Return user without password
     const userResponse = {
       id: user.id,
       name: user.name,
       email: user.email,
       role: user.role,
+      employee: linkedEmployee,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
     };

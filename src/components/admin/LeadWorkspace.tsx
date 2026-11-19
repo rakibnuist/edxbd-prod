@@ -31,7 +31,8 @@ type Props = {
   onRefresh: () => void;
   onSyncMeta?: () => Promise<void>;
   onUpdate: (id: string, data: Record<string, unknown>) => Promise<boolean>;
-  onDelete: (id: string) => Promise<boolean>;
+  onDelete?: (id: string) => Promise<boolean>;
+  isCounselor?: boolean;
   onEnsureToken?: (id: string) => Promise<string | null>;
   onTokenChanged?: (id: string, token: string) => void;
   onCopilot?: (id: string, options: { language: FitResponseLanguage; focus?: string }) => Promise<{ data?: LeadCopilotResult; error?: string }>;
@@ -157,7 +158,7 @@ function Detail({
   saving: boolean;
   onClose: () => void;
   onUpdate: Props['onUpdate'];
-  onDelete: Props['onDelete'];
+  onDelete?: Props['onDelete'];
   onEnsureToken?: Props['onEnsureToken'];
   onTokenChanged?: Props['onTokenChanged'];
   onCopilot?: Props['onCopilot'];
@@ -337,34 +338,36 @@ function Detail({
           )}
         </section>
 
-        <section className="border-t border-gray-200 pt-5">
-          {!confirmDelete ? (
-            <button onClick={() => setConfirmDelete(true)} className="min-h-10 text-sm text-red-800 hover:underline">
-              Delete this lead
-            </button>
-          ) : (
-            <div className="rounded-lg bg-red-50 p-4">
-              <h3 className="text-sm font-semibold text-red-900">Delete {lead.name}?</h3>
-              <p className="mt-1 text-sm text-red-900">This permanently removes this lead and its notes.</p>
-              <div className="mt-3 flex gap-3">
-                <button onClick={() => setConfirmDelete(false)} disabled={deleting} className={quietButton}>
-                  Cancel
-                </button>
-                <button
-                  disabled={deleting}
-                  className="min-h-10 rounded-lg bg-red-800 px-4 text-sm text-white"
-                  onClick={async () => {
-                    setDeleting(true);
-                    if (await onDelete(lead.id)) onClose();
-                    else setDeleting(false);
-                  }}
-                >
-                  {deleting ? 'Deleting…' : 'Permanently delete'}
-                </button>
+        {onDelete && (
+          <section className="border-t border-gray-200 pt-5">
+            {!confirmDelete ? (
+              <button onClick={() => setConfirmDelete(true)} className="min-h-10 text-sm text-red-800 hover:underline">
+                Delete this lead
+              </button>
+            ) : (
+              <div className="rounded-lg bg-red-50 p-4">
+                <h3 className="text-sm font-semibold text-red-900">Delete {lead.name}?</h3>
+                <p className="mt-1 text-sm text-red-900">This permanently removes this lead and its notes.</p>
+                <div className="mt-3 flex gap-3">
+                  <button onClick={() => setConfirmDelete(false)} disabled={deleting} className={quietButton}>
+                    Cancel
+                  </button>
+                  <button
+                    disabled={deleting}
+                    className="min-h-10 rounded-lg bg-red-800 px-4 text-sm text-white"
+                    onClick={async () => {
+                      setDeleting(true);
+                      if (await onDelete(lead.id)) onClose();
+                      else setDeleting(false);
+                    }}
+                  >
+                    {deleting ? 'Deleting…' : 'Permanently delete'}
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
-        </section>
+            )}
+          </section>
+        )}
       </div>
     </dialog>
   );
@@ -388,6 +391,7 @@ export default function LeadWorkspace({
   onTokenChanged,
   onCopilot,
   onImportCsv,
+  isCounselor = false,
 }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [viewMode, setViewMode] = useState<'table' | 'kanban'>('table');
@@ -500,7 +504,14 @@ export default function LeadWorkspace({
     <div data-ui className="space-y-6 text-gray-900">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Leads & Admissions Pipeline</h1>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">Leads & Admissions Pipeline</h1>
+            {isCounselor && (
+              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
+                My Assigned + Unassigned Queue
+              </span>
+            )}
+          </div>
           <p className="mt-1 text-sm text-slate-500">
             GPA/degree qualification, 1-click Bengali WhatsApp outreach, Kanban stage control, and Live Tracking Portals.
           </p>

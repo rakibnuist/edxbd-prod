@@ -10,7 +10,8 @@ import { parseMetaLeadsCsv, type LeadRecord } from '@/lib/lead-workflow';
 function LeadsPageContent() {
   const searchParams = useSearchParams();
   const initialLeadId = searchParams.get('lead');
-  const { isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
+  const { isAuthenticated, loading: authLoading, authenticatedFetch, user } = useAuth();
+  const isCounselor = user?.role === 'counselor';
   const [leads, setLeads] = useState<LeadRecord[]>([]);
   const [employees, setEmployees] = useState<EmployeeOption[]>([]);
   const [loading, setLoading] = useState(true);
@@ -215,13 +216,14 @@ function LeadsPageContent() {
         setError(null);
         setRefresh((value) => value + 1);
       }}
-      onSyncMeta={syncMeta}
+      isCounselor={isCounselor}
+      onSyncMeta={isCounselor ? undefined : syncMeta}
       onUpdate={update}
-      onDelete={remove}
+      onDelete={isCounselor ? undefined : remove}
       onEnsureToken={ensureToken}
       onTokenChanged={handleTokenChanged}
       onCopilot={copilot}
-      onImportCsv={importCsv}
+      onImportCsv={isCounselor ? undefined : importCsv}
     />
   );
 }

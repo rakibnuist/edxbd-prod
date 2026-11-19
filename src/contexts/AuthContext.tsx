@@ -8,6 +8,10 @@ interface User {
   email: string;
   name: string;
   role: string;
+  employeeId?: string | null;
+  employeeEmpId?: string | null;
+  employeeName?: string | null;
+  employeeTeam?: string | null;
 }
 
 interface AuthContextType {

@@ -20,7 +20,7 @@ function LoginForm() {
     const result = await login(email, password);
     
     if (result.success && result.user) {
-      router.push('/admin');
+      router.push(result.user.role === 'counselor' ? '/admin/leads' : '/admin');
     } else {
       setError('Invalid credentials. Please try again.');
     }

@@ -10,8 +10,8 @@ function getJwtSecret(): string {
   );
 }
 
-
 export type AdminRole = 'admin' | 'super_admin';
+export type StaffRole = 'counselor' | AdminRole;
 
 export interface AuthUser {
   userId: string;
@@ -20,8 +20,19 @@ export interface AuthUser {
   tokenVersion: number;
 }
 
+export interface StaffAuthUser {
+  userId: string;
+  email: string;
+  role: StaffRole;
+  tokenVersion: number;
+}
+
 export function isAdminRole(role: unknown): role is AdminRole {
   return role === 'admin' || role === 'super_admin';
+}
+
+export function isStaffRole(role: unknown): role is StaffRole {
+  return role === 'counselor' || role === 'admin' || role === 'super_admin';
 }
 
 export function verifyToken(token: string): AuthUser | null {
@@ -51,6 +62,33 @@ export function verifyToken(token: string): AuthUser | null {
   }
 }
 
+export function verifyStaffToken(token: string): StaffAuthUser | null {
+  try {
+    const decoded = jwt.verify(token, getJwtSecret(), { algorithms: ['HS256'] }) as jwt.JwtPayload;
+    if (
+      typeof decoded.userId !== 'string' ||
+      !decoded.userId ||
+      typeof decoded.email !== 'string' ||
+      !decoded.email ||
+      !isStaffRole(decoded.role) ||
+      typeof decoded.tokenVersion !== 'number' ||
+      !Number.isInteger(decoded.tokenVersion) ||
+      decoded.tokenVersion < 1
+    ) {
+      return null;
+    }
+
+    return {
+      userId: decoded.userId,
+      email: decoded.email,
+      role: decoded.role,
+      tokenVersion: decoded.tokenVersion,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export function verifyTokenFromRequest(request: Request): AuthUser | null {
   const token = getTokenFromRequest(request);
   if (!token) {
@@ -59,12 +97,20 @@ export function verifyTokenFromRequest(request: Request): AuthUser | null {
   return verifyToken(token);
 }
 
+export function verifyStaffTokenFromRequest(request: Request): StaffAuthUser | null {
+  const token = getTokenFromRequest(request);
+  if (!token) {
+    return null;
+  }
+  return verifyStaffToken(token);
+}
+
 export function isAdminRequest(request: Request): boolean {
   return Boolean(verifyTokenFromRequest(request));
 }
 
-export function generateToken(user: Omit<AuthUser, 'tokenVersion'> & { tokenVersion?: number }): string {
-  const payload: AuthUser = {
+export function generateToken(user: Omit<StaffAuthUser, 'tokenVersion'> & { tokenVersion?: number }): string {
+  const payload: StaffAuthUser = {
     userId: user.userId,
     email: user.email,
     role: user.role,

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { logActivityEvent } from '@/lib/crm-operations';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
@@ -10,13 +10,16 @@ const ALLOWED_PRIORITIES = new Set(['low', 'normal', 'high', 'urgent']);
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
-    const employeeId = searchParams.get('employeeId');
+    const isAdmin = isAdminRole(actor.role);
+    const employeeId = isAdmin ? searchParams.get('employeeId') : (staff?.employee?.id || '__none__');
     const status = searchParams.get('status');
 
     const tasks = await prisma.taskDirective.findMany({
@@ -81,17 +84,26 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const decoded = admin || staff;
+    if (!decoded) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
 
+    const isAdmin = isAdminRole(decoded.role);
     const body = await readLimitedJson(request, 16 * 1024);
     const id = typeof body.id === 'string' ? body.id.trim() : '';
     if (!id) return NextResponse.json({ error: 'Task id is required.' }, { status: 400 });
 
     const before = await prisma.taskDirective.findUnique({ where: { id } });
     if (!before) return NextResponse.json({ error: 'Task not found.' }, { status: 404 });
+
+    if (!isAdmin) {
+      if (!staff?.employee || before.employeeId !== staff.employee.id) {
+        return NextResponse.json({ error: 'Unauthorized - Task assigned to another team member.' }, { status: 403 });
+      }
+    }
 
     const data: Record<string, unknown> = {};
     if (typeof body.status === 'string' && ALLOWED_STATUSES.has(body.status)) {
@@ -102,13 +114,15 @@ export async function PATCH(request: NextRequest) {
         data.completedAt = null;
       }
     }
-    if (typeof body.priority === 'string' && ALLOWED_PRIORITIES.has(body.priority)) {
-      data.priority = body.priority;
-    }
-    if (typeof body.title === 'string' && body.title.trim()) data.title = body.title.trim().slice(0, 200);
-    if (typeof body.details === 'string') data.details = body.details.trim().slice(0, 2000) || null;
-    if (typeof body.dueDate === 'string') {
-      data.dueDate = /^\d{4}-\d{2}-\d{2}$/.test(body.dueDate) ? body.dueDate : null;
+    if (isAdmin) {
+      if (typeof body.priority === 'string' && ALLOWED_PRIORITIES.has(body.priority)) {
+        data.priority = body.priority;
+      }
+      if (typeof body.title === 'string' && body.title.trim()) data.title = body.title.trim().slice(0, 200);
+      if (typeof body.details === 'string') data.details = body.details.trim().slice(0, 2000) || null;
+      if (typeof body.dueDate === 'string') {
+        data.dueDate = /^\d{4}-\d{2}-\d{2}$/.test(body.dueDate) ? body.dueDate : null;
+      }
     }
 
     const updated = await prisma.taskDirective.update({ where: { id }, data });

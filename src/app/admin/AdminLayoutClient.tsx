@@ -41,32 +41,52 @@ const NAV = [
   { name: 'Settings', href: '/admin/settings', icon: SettingsIcon },
 ];
 
+const COUNSELOR_ALLOWED_PREFIXES = ['/admin', '/admin/leads', '/admin/kpi'];
+
+function isCounselorRouteAllowed(pathname: string): boolean {
+  if (pathname === '/admin') return true;
+  return COUNSELOR_ALLOWED_PREFIXES.some(
+    (p) => p !== '/admin' && (pathname === p || pathname.startsWith(`${p}/`)),
+  );
+}
+
 function AdminHeader({ activeName }: { activeName: string }) {
   const { user } = useAuth();
+  const isCounselor = user?.role === 'counselor';
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 py-3 backdrop-blur lg:px-6">
       <div className="flex items-center gap-3">
-        <span className="text-xs font-semibold text-slate-400">EduExpress Admin</span>
+        <span className="text-xs font-semibold text-slate-400">
+          {isCounselor ? 'EduExpress Counselor Desk' : 'EduExpress Admin'}
+        </span>
         <span className="text-slate-300">/</span>
         <span className="text-sm font-bold text-slate-900">{activeName}</span>
       </div>
 
       <div className="flex items-center gap-3">
         {/* Meta Sync Health Pill */}
-        <div className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-800">
-          <span className="relative flex size-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-          </span>
-          Meta Leads: Live (2m)
-        </div>
+        {!isCounselor && (
+          <div className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-800">
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+            </span>
+            Meta Leads: Live (2m)
+          </div>
+        )}
 
         {/* User Role Tag */}
         <div className="hidden md:flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs">
-          <span className="size-2 rounded-full bg-blue-600" />
+          <span className={`size-2 rounded-full ${isCounselor ? 'bg-emerald-600' : 'bg-blue-600'}`} />
           <span className="font-semibold text-slate-700">{user?.email || 'admin@eduexpressint.com'}</span>
-          <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-extrabold text-blue-800">ADMIN</span>
+          <span
+            className={`rounded px-1.5 py-0.5 text-[10px] font-extrabold ${
+              isCounselor ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'
+            }`}
+          >
+            {isCounselor ? 'COUNSELOR' : user?.role === 'super_admin' ? 'SUPER ADMIN' : 'ADMIN'}
+          </span>
         </div>
 
         {/* View Public Website Link */}
@@ -84,19 +104,25 @@ function AdminHeader({ activeName }: { activeName: string }) {
   );
 }
 
-/** Interactive sidebar layout shell for authenticated admin routes. */
-export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
+function AdminShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const { user } = useAuth();
+  const isCounselor = user?.role === 'counselor';
+
+  const visibleNav = isCounselor
+    ? NAV.filter((item) => item.href === '/admin' || item.href === '/admin/leads' || item.href === '/admin/kpi')
+    : NAV;
 
   const isActive = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname === href || pathname.startsWith(href + '/');
 
-  const activeItem = NAV.find((n) => isActive(n.href, n.exact));
+  const activeItem = visibleNav.find((n) => isActive(n.href, n.exact));
+  const routeAllowed = !isCounselor || isCounselorRouteAllowed(pathname);
 
   const navLinks = (
     <nav className="flex-1 space-y-1 px-3 py-2">
-      {NAV.map((item) => {
+      {visibleNav.map((item) => {
         const active = isActive(item.href, item.exact);
         const Icon = item.icon;
         return (
@@ -133,8 +159,6 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
   );
 
   return (
-    <AuthProvider>
-      <ProtectedRoute>
         <div className="min-h-screen bg-slate-100/70 text-slate-900">
           <div className="flex h-[100dvh]">
             {sidebarOpen && (
@@ -219,11 +243,43 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
               <AdminHeader activeName={activeItem?.name ?? 'Admin'} />
 
               <main className="min-w-0 flex-1 overflow-auto bg-slate-50/70 p-4 sm:p-6 lg:p-8">
-                {children}
+                {routeAllowed ? (
+                  children
+                ) : (
+                  <div className="mx-auto mt-12 max-w-lg rounded-2xl border border-amber-200 bg-white p-8 text-center shadow-sm">
+                    <h2 className="text-lg font-bold text-slate-900">Counselor Access Scope</h2>
+                    <p className="mt-2 text-sm text-slate-600">
+                      Your counselor account has access to the Leads Workspace and KPI &amp; Daily Check-In console. Administrator settings and site content pages are restricted.
+                    </p>
+                    <div className="mt-5 flex justify-center gap-3">
+                      <Link
+                        href="/admin/leads"
+                        className="rounded-xl bg-[#0f3a5c] px-4 py-2 text-xs font-bold text-white hover:bg-[#12436b]"
+                      >
+                        Go to Leads
+                      </Link>
+                      <Link
+                        href="/admin/kpi"
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-800 hover:bg-slate-100"
+                      >
+                        Go to KPI &amp; Check-In
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </main>
             </div>
           </div>
         </div>
+  );
+}
+
+/** Interactive sidebar layout shell for authenticated admin and counselor routes. */
+export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthProvider>
+      <ProtectedRoute>
+        <AdminShell>{children}</AdminShell>
       </ProtectedRoute>
     </AuthProvider>
   );

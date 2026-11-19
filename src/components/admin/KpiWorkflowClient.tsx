@@ -97,7 +97,9 @@ function currentMonthIso(): string {
 
 export default function KpiWorkflowClient() {
   const { user, authenticatedFetch } = useAuth();
+  const isCounselor = user?.role === 'counselor';
   const [tab, setTab] = useState<'overview' | 'workspace' | 'manage'>('overview');
+  const effectiveTab = isCounselor && tab === 'manage' ? 'workspace' : tab;
   const [month, setMonth] = useState<string>(currentMonthIso);
   const [report, setReport] = useState<ApiKpiPayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -430,12 +432,12 @@ export default function KpiWorkflowClient() {
       {/* Mode Tabs */}
       <div className="flex gap-2 overflow-x-auto border-b border-slate-200 pb-px">
         {[
-          { id: 'overview' as const, label: 'Team KPI & Live Workflow', icon: Award },
+          { id: 'overview' as const, label: isCounselor ? 'My KPI & SLA Overview' : 'Team KPI & Live Workflow', icon: Award },
           { id: 'workspace' as const, label: 'My Check-In & Daily Logs', icon: Flame },
-          { id: 'manage' as const, label: 'Tasks, SLA Targets & Roster', icon: ListChecks },
+          ...(!isCounselor ? [{ id: 'manage' as const, label: 'Tasks, SLA Targets & Roster', icon: ListChecks }] : []),
         ].map((t) => {
           const Icon = t.icon;
-          const active = tab === t.id;
+          const active = effectiveTab === t.id;
           return (
             <button
               key={t.id}
@@ -453,6 +455,12 @@ export default function KpiWorkflowClient() {
           );
         })}
       </div>
+
+      {isCounselor && !loading && report && report.employees.length === 0 && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-900">
+          Your account is not linked to an active Employee profile yet. Please ask an administrator to link your user account to your Employee record under User Management.
+        </div>
+      )}
 
       {notice && (
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900">
@@ -484,7 +492,7 @@ export default function KpiWorkflowClient() {
         </div>
       )}
 
-      {tab === 'overview' && report && (
+      {effectiveTab === 'overview' && report && (
         <div className="space-y-6">
           {/* Team Daily Output Chart */}
           <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
@@ -694,7 +702,7 @@ export default function KpiWorkflowClient() {
         </div>
       )}
 
-      {tab === 'workspace' && report && (
+      {effectiveTab === 'workspace' && report && (
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Check-in + Reflection Form */}
           <div className="space-y-5 lg:col-span-2">
@@ -705,9 +713,10 @@ export default function KpiWorkflowClient() {
                   <p className="text-xs text-slate-500">Dhaka Time (GMT+6) · Date: {report.today}</p>
                 </div>
                 <select
-                  value={activeKpi?.employee.id || ''}
+                  value={activeEmpId || activeKpi?.employee.id || ''}
+                  disabled={isCounselor}
                   onChange={(e) => setActiveEmpId(e.target.value)}
-                  className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-900"
+                  className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-900 disabled:bg-slate-100 disabled:cursor-not-allowed"
                 >
                   {report.employees.map((e) => (
                     <option key={e.employee.id} value={e.employee.id}>
@@ -864,7 +873,7 @@ export default function KpiWorkflowClient() {
         </div>
       )}
 
-      {tab === 'manage' && report && (
+      {effectiveTab === 'manage' && !isCounselor && report && (
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Task Directives Manager */}
           <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm space-y-4">

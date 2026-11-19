@@ -3,11 +3,22 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
+interface LinkedEmployee {
+  id: string;
+  empId: string;
+  name: string;
+  team: string;
+  email?: string | null;
+  phone?: string | null;
+  userId?: string | null;
+}
+
 interface User {
   id: string;
   name: string;
   email: string;
-  role: 'super_admin' | 'admin' | 'user';
+  role: 'super_admin' | 'admin' | 'counselor' | 'user';
+  employee?: LinkedEmployee | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -24,6 +35,7 @@ interface SentMessage {
 export default function UsersPage() {
   const { user: currentUser, authenticatedFetch } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
+  const [employees, setEmployees] = useState<LinkedEmployee[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -33,7 +45,8 @@ export default function UsersPage() {
     name: '',
     email: '',
     password: '',
-    role: 'user' as 'super_admin' | 'admin' | 'user'
+    role: 'counselor' as 'super_admin' | 'admin' | 'counselor' | 'user',
+    employeeId: '',
   });
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messagingUser, setMessagingUser] = useState<User | null>(null);
@@ -71,7 +84,8 @@ export default function UsersPage() {
       const response = await authenticatedFetch('/api/admin/users');
       if (response.ok) {
         const data = await response.json();
-        setUsers(data.users);
+        setUsers(data.users || []);
+        setEmployees(Array.isArray(data.employees) ? data.employees : []);
       } else {
         setError('Failed to fetch users');
       }
@@ -118,16 +132,15 @@ export default function UsersPage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setUsers([data.user, ...users]);
+        await fetchUsers();
         setShowCreateModal(false);
-        setFormData({ name: '', email: '', password: '', role: 'user' });
+        setFormData({ name: '', email: '', password: '', role: 'counselor', employeeId: '' });
         setError('');
       } else {
         const data = await response.json();
         setError(data.message || 'Failed to create user');
       }
-    } catch (error) {
+    } catch {
       setError('Failed to create user');
     }
   };
@@ -146,17 +159,16 @@ export default function UsersPage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setUsers(users.map(user => user.id === editingUser.id ? data.user : user));
+        await fetchUsers();
         setShowEditModal(false);
         setEditingUser(null);
-        setFormData({ name: '', email: '', password: '', role: 'user' });
+        setFormData({ name: '', email: '', password: '', role: 'counselor', employeeId: '' });
         setError('');
       } else {
         const data = await response.json();
         setError(data.message || 'Failed to update user');
       }
-    } catch (error) {
+    } catch {
       setError('Failed to update user');
     }
   };
@@ -190,7 +202,8 @@ export default function UsersPage() {
       name: user.name,
       email: user.email,
       password: '',
-      role: user.role
+      role: user.role,
+      employeeId: user.employee?.id || '',
     });
     setShowEditModal(true);
   };
@@ -202,7 +215,7 @@ export default function UsersPage() {
     setShowSentMessagesModal(false);
     setEditingUser(null);
     setMessagingUser(null);
-    setFormData({ name: '', email: '', password: '', role: 'user' });
+    setFormData({ name: '', email: '', password: '', role: 'counselor', employeeId: '' });
     setMessageForm({ subject: '', body: '' });
     setError('');
     setMessageSuccess('');
@@ -309,7 +322,14 @@ export default function UsersPage() {
                         </div>
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-medium text-gray-900">{user.name}</span>
+                          {user.employee && (
+                            <span className="rounded bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-700">
+                              {user.employee.empId} · {user.employee.team}
+                            </span>
+                          )}
+                        </div>
                         <div className="text-sm text-gray-500">{user.email}</div>
                       </div>
                     </div>
@@ -319,9 +339,11 @@ export default function UsersPage() {
                           ? 'bg-purple-100 text-purple-800'
                           : user.role === 'admin'
                           ? 'bg-red-100 text-red-800'
-                          : 'bg-green-100 text-green-800'
+                          : user.role === 'counselor'
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-gray-100 text-gray-800'
                       }`}>
-                        {user.role === 'super_admin' ? 'Super Admin' : user.role}
+                        {user.role === 'super_admin' ? 'Super Admin' : user.role === 'counselor' ? 'Counselor (Scoped)' : user.role}
                       </span>
                       <div className="flex space-x-2">
                         {canMessage && user.id !== currentUser?.id && (
@@ -407,13 +429,37 @@ export default function UsersPage() {
                   />
                 </div>
                 <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Link Employee Profile (for KPI &amp; Leads)</label>
+                  <select
+                    value={formData.employeeId}
+                    onChange={(e) => {
+                      const emp = employees.find((item) => item.id === e.target.value);
+                      setFormData({
+                        ...formData,
+                        employeeId: e.target.value,
+                        name: !formData.name && emp ? emp.name : formData.name,
+                        email: !formData.email && emp?.email ? emp.email : formData.email,
+                      });
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">-- Optional: Select employee --</option>
+                    {employees.map((emp) => (
+                      <option key={emp.id} value={emp.id}>
+                        {emp.empId} — {emp.name} ({emp.team}){emp.userId ? ' [Linked]' : ''}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                   <select
                     value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'super_admin' | 'admin' | 'user' })}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'super_admin' | 'admin' | 'counselor' | 'user' })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="user">User</option>
+                    <option value="counselor">Counselor (Scoped: Leads + KPI Desk)</option>
+                    <option value="user">User (Public only)</option>
                     {isSuperAdmin && <option value="admin">Admin</option>}
                     {isSuperAdmin && <option value="super_admin">Super Admin</option>}
                   </select>
@@ -574,15 +620,31 @@ export default function UsersPage() {
                   />
                 </div>
                 <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Linked Employee Profile</label>
+                  <select
+                    value={formData.employeeId}
+                    onChange={(e) => setFormData({ ...formData, employeeId: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">-- Unlinked --</option>
+                    {employees.map((emp) => (
+                      <option key={emp.id} value={emp.id}>
+                        {emp.empId} — {emp.name} ({emp.team})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                   <select
                     value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'super_admin' | 'admin' | 'user' })}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'super_admin' | 'admin' | 'counselor' | 'user' })}
                     disabled={editingUser.id === currentUser?.id}
                     aria-describedby={editingUser.id === currentUser?.id ? 'own-role-help' : undefined}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                   >
-                    <option value="user">User</option>
+                    <option value="counselor">Counselor (Scoped: Leads + KPI Desk)</option>
+                    <option value="user">User (Public only)</option>
                     {(isSuperAdmin || formData.role === 'admin') && <option value="admin">Admin</option>}
                     {isSuperAdmin && <option value="super_admin">Super Admin</option>}
                   </select>

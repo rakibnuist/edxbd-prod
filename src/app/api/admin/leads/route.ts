@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { buildCounselorLeadWhere, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { isLeadStatus } from '@/lib/lead-workflow';
 import { sendCrmStage } from '@/lib/meta-crm-events';
 import { syncMetaInstantFormLeads } from '@/lib/meta-leads-sync';
@@ -12,37 +12,40 @@ import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
 
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
 
+    const isAdmin = isAdminRole(actor.role);
     const { searchParams } = new URL(request.url);
-    await syncMetaInstantFormLeads({
-      force: searchParams.get('sync') === '1',
-      onLeadCreated: (lead) => {
-        after(() => sendCrmStage(lead, 'new'));
-      },
-    }).catch(() => {});
+    if (isAdmin) {
+      await syncMetaInstantFormLeads({
+        force: searchParams.get('sync') === '1',
+        onLeadCreated: (lead) => {
+          after(() => sendCrmStage(lead, 'new'));
+        },
+      }).catch(() => {});
+    }
 
     const status = searchParams.get('status');
     const source = searchParams.get('source');
     const country = searchParams.get('country');
 
-    let query = {};
-    if (status && status !== 'all') {
-      query = { ...query, status };
-    }
-    if (source && source !== 'all') {
-      query = { ...query, source };
-    }
-    if (country && country !== 'all') {
-      query = { ...query, country };
-    }
+    const filterWhere: Record<string, unknown> = {};
+    if (status && status !== 'all') filterWhere.status = status;
+    if (source && source !== 'all') filterWhere.source = source;
+    if (country && country !== 'all') filterWhere.country = country;
+
+    const where = isAdmin
+      ? filterWhere
+      : { AND: [buildCounselorLeadWhere(staff?.employee || null), filterWhere] };
 
     const leads = await prisma.lead.findMany({
-      where: query,
+      where,
       orderBy: { createdAt: 'desc' }
     });
 

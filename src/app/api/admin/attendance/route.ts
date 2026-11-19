@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { logActivityEvent } from '@/lib/crm-operations';
 import { computeHoursWorked, dhakaTimeNow, dhakaTodayIso } from '@/lib/kpi-workflow';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
@@ -8,15 +8,19 @@ import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
     const date = searchParams.get('date') || dhakaTodayIso();
     const records = await prisma.attendance.findMany({
-      where: { date },
+      where: isAdminRole(actor.role)
+        ? { date }
+        : { date, employeeId: staff?.employee?.id || '__none__' },
       orderBy: { empId: 'asc' },
     });
     return NextResponse.json({ date, records }, { headers: { 'Cache-Control': 'no-store, private' } });
@@ -27,13 +31,27 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const decoded = admin || staff;
+    if (!decoded) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
 
+    const isAdmin = isAdminRole(decoded.role);
     const body = await readLimitedJson(request, 16 * 1024);
-    const employeeId = typeof body.employeeId === 'string' ? body.employeeId.trim() : '';
+    const requestedEmployeeId = typeof body.employeeId === 'string' ? body.employeeId.trim() : '';
+
+    if (!isAdmin) {
+      if (!staff?.employee) {
+        return NextResponse.json({ error: 'Your user login is not linked to an employee profile.' }, { status: 403 });
+      }
+      if (requestedEmployeeId && requestedEmployeeId !== staff.employee.id && requestedEmployeeId !== staff.employee.empId) {
+        return NextResponse.json({ error: 'Unauthorized - You can only record your own attendance.' }, { status: 403 });
+      }
+    }
+
+    const employeeId = isAdmin ? requestedEmployeeId : (staff?.employee?.id || '');
     const employee = employeeId
       ? await prisma.employee.findFirst({ where: { OR: [{ id: employeeId }, { empId: employeeId }] } })
       : null;
@@ -41,7 +59,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Valid employee is required.' }, { status: 400 });
     }
 
-    const date = typeof body.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.date)
+    const date = isAdmin && typeof body.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.date)
       ? body.date
       : dhakaTodayIso();
     const mode = typeof body.mode === 'string' ? body.mode : 'checkin';
@@ -50,9 +68,9 @@ export async function POST(request: NextRequest) {
     });
 
     const nowTime = dhakaTimeNow();
-    let checkIn = typeof body.checkIn === 'string' ? body.checkIn.trim().slice(0, 10) : existing?.checkIn || null;
-    let checkOut = typeof body.checkOut === 'string' ? body.checkOut.trim().slice(0, 10) : existing?.checkOut || null;
-    let status = typeof body.status === 'string' ? body.status.trim().slice(0, 30) : existing?.status || 'Present';
+    let checkIn = isAdmin && typeof body.checkIn === 'string' ? body.checkIn.trim().slice(0, 10) : existing?.checkIn || null;
+    let checkOut = isAdmin && typeof body.checkOut === 'string' ? body.checkOut.trim().slice(0, 10) : existing?.checkOut || null;
+    let status = isAdmin && typeof body.status === 'string' ? body.status.trim().slice(0, 30) : existing?.status || 'Present';
 
     if (mode === 'checkin' && !checkIn) {
       checkIn = nowTime;

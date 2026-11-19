@@ -119,7 +119,8 @@ function cleanDigits(phone: string): string {
 }
 
 export default function AdminDashboardPage() {
-  const { isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
+  const { user, isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
+  const isCounselor = user?.role === 'counselor';
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
@@ -214,22 +215,26 @@ export default function AdminDashboardPage() {
               Meta Leads Engine Active · Auto-Delivering (2m sync)
             </div>
             <h1 className="font-heading text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-              Admissions Command Center
+              {isCounselor ? 'Counselor Admissions Desk' : 'Admissions Command Center'}
             </h1>
             <p className="text-sm leading-relaxed text-slate-200 sm:text-base">
-              Real-time monitoring for student enquiries, Meta China March 2027 campaigns, admissions pipelines, and verified institutional catalog.
+              {isCounselor
+                ? 'Manage your assigned student pipeline, update tracking stages, log daily KPI reflections, and contact high-GPA prospects.'
+                : 'Real-time monitoring for student enquiries, Meta China March 2027 campaigns, admissions pipelines, and verified institutional catalog.'}
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={handleSyncMetaLeads}
-              disabled={syncing}
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 text-xs font-bold text-white backdrop-blur transition hover:bg-white/20 disabled:cursor-wait"
-            >
-              <RefreshCw size={14} className={syncing ? 'animate-spin' : ''} />
-              {syncing ? 'Syncing Graph API...' : 'Sync Meta Leads Now'}
-            </button>
+            {!isCounselor && (
+              <button
+                onClick={handleSyncMetaLeads}
+                disabled={syncing}
+                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 text-xs font-bold text-white backdrop-blur transition hover:bg-white/20 disabled:cursor-wait"
+              >
+                <RefreshCw size={14} className={syncing ? 'animate-spin' : ''} />
+                {syncing ? 'Syncing Graph API...' : 'Sync Meta Leads Now'}
+              </button>
+            )}
             <Link
               href="/admin/leads"
               className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-amber-400 px-5 py-2.5 text-xs font-bold text-slate-950 shadow-sm transition hover:bg-amber-300"
@@ -359,41 +364,45 @@ export default function AdminDashboardPage() {
             <TrendingUp size={16} className="text-cyan-700" />
             KPI &amp; Workflow
           </Link>
-          <Link
-            href="/admin/universities"
-            className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-900"
-          >
-            <GraduationCap size={16} className="text-emerald-700" />
-            Universities
-          </Link>
-          <Link
-            href="/admin/teams"
-            className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-900"
-          >
-            <ContactRound size={16} className="text-indigo-700" />
-            Team ({stats.totalTeam})
-          </Link>
-          <Link
-            href="/admin/trust"
-            className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-amber-300 hover:bg-amber-50 hover:text-amber-900"
-          >
-            <ShieldCheck size={16} className="text-amber-700" />
-            Company Trust
-          </Link>
-          <Link
-            href="/admin/testimonials"
-            className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-purple-300 hover:bg-purple-50 hover:text-purple-900"
-          >
-            <MessageSquareQuote size={16} className="text-purple-700" />
-            Testimonials
-          </Link>
-          <Link
-            href="/admin/settings"
-            className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-slate-400 hover:bg-slate-100 hover:text-slate-950"
-          >
-            <Settings size={16} className="text-slate-700" />
-            Settings &amp; CAPI
-          </Link>
+          {!isCounselor && (
+            <>
+              <Link
+                href="/admin/universities"
+                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-900"
+              >
+                <GraduationCap size={16} className="text-emerald-700" />
+                Universities
+              </Link>
+              <Link
+                href="/admin/teams"
+                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-900"
+              >
+                <ContactRound size={16} className="text-indigo-700" />
+                Team ({stats.totalTeam})
+              </Link>
+              <Link
+                href="/admin/trust"
+                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-amber-300 hover:bg-amber-50 hover:text-amber-900"
+              >
+                <ShieldCheck size={16} className="text-amber-700" />
+                Company Trust
+              </Link>
+              <Link
+                href="/admin/testimonials"
+                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-purple-300 hover:bg-purple-50 hover:text-purple-900"
+              >
+                <MessageSquareQuote size={16} className="text-purple-700" />
+                Testimonials
+              </Link>
+              <Link
+                href="/admin/settings"
+                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-slate-400 hover:bg-slate-100 hover:text-slate-950"
+              >
+                <Settings size={16} className="text-slate-700" />
+                Settings &amp; CAPI
+              </Link>
+            </>
+          )}
         </div>
       </section>
 
@@ -498,6 +507,7 @@ export default function AdminDashboardPage() {
         </section>
 
         {/* Right Sidebar: Meta Connection & Institutional Records */}
+        {!isCounselor && (
         <section className="space-y-6">
           <MetaConnectionPanel />
 
@@ -561,6 +571,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         </section>
+        )}
       </div>
 
       {/* Live Incoming Student Enquiries Feed */}

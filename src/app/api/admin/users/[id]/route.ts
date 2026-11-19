@@ -5,7 +5,7 @@ import { isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 
-const ALLOWED_ROLES = ['user', 'admin', 'super_admin'] as const;
+const ALLOWED_ROLES = ['user', 'counselor', 'admin', 'super_admin'] as const;
 const MIN_PASSWORD_LENGTH = 12;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -51,7 +51,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { name, email, role, password } = body ?? {};
+    const { name, email, role, password, employeeId } = body ?? {};
     const { id } = await params;
 
     const user = await prisma.user.findUnique({ where: { id } });
@@ -60,9 +60,9 @@ export async function PUT(
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    if (user.id !== decoded.userId && user.role !== 'user' && decoded.role !== 'super_admin') {
+    if (user.id !== decoded.userId && isAdminRole(user.role) && decoded.role !== 'super_admin') {
       return NextResponse.json(
-        { message: 'Only a super admin can update another privileged account' },
+        { message: 'Only a super admin can update another administrator account' },
         { status: 403 }
       );
     }
@@ -71,9 +71,9 @@ export async function PUT(
       return NextResponse.json({ message: 'Invalid user role' }, { status: 400 });
     }
 
-    if (role && role !== 'user' && role !== user.role && decoded.role !== 'super_admin') {
+    if (role && isAdminRole(role) && role !== user.role && decoded.role !== 'super_admin') {
       return NextResponse.json(
-        { message: 'Only a super admin can grant a privileged role' },
+        { message: 'Only a super admin can grant an administrator role' },
         { status: 403 }
       );
     }
@@ -138,6 +138,16 @@ export async function PUT(
       select: { id: true, name: true, email: true, role: true, createdAt: true, updatedAt: true }
     });
 
+    if (employeeId !== undefined) {
+      await prisma.employee.updateMany({ where: { userId: id }, data: { userId: null } });
+      if (typeof employeeId === 'string' && employeeId.trim()) {
+        await prisma.employee.update({
+          where: { id: employeeId.trim() },
+          data: { userId: id },
+        }).catch(() => {});
+      }
+    }
+
     return NextResponse.json({
       message: 'User updated successfully',
       user: updatedUser
@@ -167,9 +177,9 @@ export async function DELETE(
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    if (user.role !== 'user' && decoded.role !== 'super_admin') {
+    if (isAdminRole(user.role) && decoded.role !== 'super_admin') {
       return NextResponse.json(
-        { message: 'Only a super admin can delete a privileged account' },
+        { message: 'Only a super admin can delete an administrator account' },
         { status: 403 }
       );
     }
@@ -182,6 +192,7 @@ export async function DELETE(
       );
     }
 
+    await prisma.employee.updateMany({ where: { userId: id }, data: { userId: null } });
     await prisma.user.delete({ where: { id } });
 
     return NextResponse.json({ message: 'User deleted successfully' });

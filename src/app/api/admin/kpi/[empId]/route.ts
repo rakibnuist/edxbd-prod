@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { computeEmployeeKpiReport, normalizeMonthParam, shiftIsoDays } from '@/lib/kpi-workflow';
 import prisma from '@/lib/prisma';
 
@@ -9,11 +9,20 @@ export async function GET(
   { params }: { params: Promise<{ empId: string }> },
 ) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
     const { empId } = await params;
+
+    if (!isAdminRole(actor.role)) {
+      const ownEmp = staff?.employee;
+      if (!ownEmp || (ownEmp.id !== empId && ownEmp.empId !== empId)) {
+        return NextResponse.json({ message: 'Unauthorized - Cannot view another employee workflow' }, { status: 403 });
+      }
+    }
     const { searchParams } = new URL(request.url);
     const month = normalizeMonthParam(searchParams.get('month'));
     const [y, m] = month.split('-').map(Number);

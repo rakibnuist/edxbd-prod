@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { canAccessLeadScope, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { cleanText, type FitResponseLanguage } from '@/lib/fit-matcher';
 import { generateLeadCopilotForLead } from '@/lib/gemini-lead-copilot';
 import prisma from '@/lib/prisma';
@@ -12,10 +11,12 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    if (!decoded || !isAdminRole(decoded.role)) {
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const decoded = admin || staff;
+    if (!decoded) {
       return NextResponse.json(
-        { message: 'Unauthorized - Admin access required' },
+        { message: 'Unauthorized - Staff access required' },
         { status: 403, headers: { 'Cache-Control': 'no-store, private' } },
       );
     }
@@ -49,6 +50,12 @@ export async function POST(
       return NextResponse.json(
         { error: 'Lead not found' },
         { status: 404, headers: { 'Cache-Control': 'no-store, private' } },
+      );
+    }
+    if (!canAccessLeadScope({ role: decoded.role, employee: staff?.employee }, lead)) {
+      return NextResponse.json(
+        { message: 'Unauthorized - Lead is assigned to another counselor' },
+        { status: 403, headers: { 'Cache-Control': 'no-store, private' } },
       );
     }
 

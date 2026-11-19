@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const liveUser = await verifyLiveAdminUser(request);
+    const liveAdmin = await verifyLiveAdminUser(request);
+    const liveStaff = await verifyLiveStaffUser(request);
+    const liveUser = liveStaff || liveAdmin;
 
     if (!liveUser) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -16,21 +18,33 @@ export async function GET(request: NextRequest) {
         id: true,
         name: true,
         email: true,
-        role: true
-      }
+        role: true,
+      },
     });
-    
+
     if (!user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
+
+    const employee = liveStaff?.employee || (await prisma.employee.findFirst({
+      where: {
+        active: true,
+        OR: [{ userId: user.id }, { email: user.email.toLowerCase() }],
+      },
+      select: { id: true, empId: true, name: true, team: true },
+    }));
 
     const response = NextResponse.json({
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role
-      }
+        role: user.role,
+        employeeId: employee?.id || null,
+        employeeEmpId: employee?.empId || null,
+        employeeName: employee?.name || null,
+        employeeTeam: employee?.team || null,
+      },
     });
     response.headers.set('Cache-Control', 'no-store');
     return response;

@@ -13,6 +13,14 @@ const {
 } = await import('../src/lib/wa-templates.ts');
 
 const {
+  generateToken,
+  isAdminRole,
+  isStaffRole,
+  verifyStaffToken,
+  verifyToken,
+} = await import('../src/lib/auth.ts');
+
+const {
   FLAGSHIP_MILESTONES,
   portalProgressPct,
   resolvePortalMilestoneStep,
@@ -148,4 +156,41 @@ test('Public tracking API routes enforce token check, safe URL validation, and n
 
   const robots = fs.readFileSync('src/app/robots.ts', 'utf8');
   assert.match(robots, /'\/track\/'/);
+});
+
+test('Counselor role permits staff tokens while strictly blocking admin-only JWT verification & routes', () => {
+  const prevSecret = process.env.JWT_SECRET;
+  try {
+    process.env.JWT_SECRET = 'D'.repeat(48);
+    assert.equal(isAdminRole('counselor'), false);
+    assert.equal(isStaffRole('counselor'), true);
+    assert.equal(isStaffRole('user'), false);
+
+    const counselorToken = generateToken({
+      userId: 'c1',
+      email: 'afsana@eduexpressint.com',
+      role: 'counselor',
+      tokenVersion: 1,
+    });
+
+    // Strict admin verifyToken rejects counselor tokens!
+    assert.equal(verifyToken(counselorToken), null);
+    // Staff verification accepts counselor tokens cleanly
+    assert.equal(verifyStaffToken(counselorToken)?.role, 'counselor');
+
+    // Admin-only routes keep strictly verifyLiveAdminUser without verifyLiveStaffUser fallback
+    for (const adminOnlyPath of [
+      'src/app/api/admin/users/route.ts',
+      'src/app/api/admin/users/[id]/route.ts',
+      'src/app/api/admin/settings/route.ts',
+      'src/app/api/admin/trust/route.ts',
+      'src/app/api/upload/route.ts',
+    ]) {
+      const src = fs.readFileSync(adminOnlyPath, 'utf8');
+      assert.doesNotMatch(src, /verifyLiveStaffUser/, `${adminOnlyPath} must remain strictly admin-only`);
+    }
+  } finally {
+    if (prevSecret === undefined) delete process.env.JWT_SECRET;
+    else process.env.JWT_SECRET = prevSecret;
+  }
 });

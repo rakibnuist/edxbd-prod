@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { sendCrmStage } from '@/lib/meta-crm-events';
 import { isAdminRole } from '@/lib/auth';
-import { verifyLiveAdminUser } from '@/lib/auth-user';
+import { canAccessLeadScope, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { logActivityEvent } from '@/lib/crm-operations';
 import { parseNumericGpa } from '@/lib/wa-templates';
 import prisma from '@/lib/prisma';
@@ -13,10 +13,12 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
 
     const { id } = await params;
@@ -27,6 +29,10 @@ export async function GET(
         { error: 'Lead not found' },
         { status: 404 }
       );
+    }
+
+    if (!canAccessLeadScope({ role: actor.role, employee: staff?.employee }, lead)) {
+      return NextResponse.json({ message: 'Unauthorized - Lead is assigned to another counselor' }, { status: 403 });
     }
 
     return NextResponse.json(lead, { headers: { 'Cache-Control': 'no-store, private' } });
@@ -42,8 +48,8 @@ export async function GET(
 async function applyLeadUpdateAndLog(
   id: string,
   validatedData: NonNullable<ReturnType<typeof validateLeadUpdate>['data']>,
-  actor: { userId: string; email: string },
-) {
+  actor: { userId: string; email: string; role: string; employee?: { id: string; empId: string; name: string; team: string; email: string | null } | null },
+): Promise<{ status: 'not_found' } | { status: 'forbidden' } | { status: 'ok'; lead: NonNullable<Awaited<ReturnType<typeof prisma.lead.update>>> }> {
   const before = await prisma.lead.findUnique({
     where: { id },
     select: {
@@ -56,10 +62,25 @@ async function applyLeadUpdateAndLog(
       notes: true,
     },
   });
-  if (!before) return null;
+  if (!before) return { status: 'not_found' };
+
+  if (!canAccessLeadScope(actor, before)) {
+    return { status: 'forbidden' };
+  }
 
   const updatePayload = { ...validatedData };
-  if (updatePayload.assignedEmployeeId && !('assignedTo' in updatePayload)) {
+  // Counselors cannot transfer leads to other counselors (they can only claim unassigned leads for themselves)
+  if (!isAdminRole(actor.role)) {
+    if ('assignedEmployeeId' in updatePayload || 'assignedTo' in updatePayload) {
+      if (actor.employee) {
+        updatePayload.assignedEmployeeId = actor.employee.id;
+        updatePayload.assignedTo = actor.employee.name;
+      } else {
+        delete updatePayload.assignedEmployeeId;
+        delete updatePayload.assignedTo;
+      }
+    }
+  } else if (updatePayload.assignedEmployeeId && !('assignedTo' in updatePayload)) {
     const emp = await prisma.employee.findUnique({
       where: { id: updatePayload.assignedEmployeeId },
       select: { name: true },
@@ -75,15 +96,17 @@ async function applyLeadUpdateAndLog(
     where: { id },
     data: updatePayload,
   }).catch(() => null);
-  if (!lead) return null;
+  if (!lead) return { status: 'not_found' };
+
+  const actorDisplay = actor.employee?.name || actor.email;
 
   if (lead.status !== before.status) {
     after(() => sendCrmStage(lead, lead.status));
     after(() => logActivityEvent({
       type: 'lead_status_changed',
-      actorName: actor.email,
+      actorName: actorDisplay,
       actorUserId: actor.userId,
-      employeeId: lead.assignedEmployeeId,
+      employeeId: actor.employee?.id || lead.assignedEmployeeId,
       leadId: lead.id,
       leadName: lead.name,
       fromValue: before.status,
@@ -93,9 +116,9 @@ async function applyLeadUpdateAndLog(
   if (lead.applicationStage !== before.applicationStage) {
     after(() => logActivityEvent({
       type: 'application_stage_changed',
-      actorName: actor.email,
+      actorName: actorDisplay,
       actorUserId: actor.userId,
-      employeeId: lead.assignedEmployeeId,
+      employeeId: actor.employee?.id || lead.assignedEmployeeId,
       leadId: lead.id,
       leadName: lead.name,
       fromValue: before.applicationStage,
@@ -105,9 +128,9 @@ async function applyLeadUpdateAndLog(
   if (lead.assignedTo !== before.assignedTo || lead.assignedEmployeeId !== before.assignedEmployeeId) {
     after(() => logActivityEvent({
       type: 'lead_assigned',
-      actorName: actor.email,
+      actorName: actorDisplay,
       actorUserId: actor.userId,
-      employeeId: lead.assignedEmployeeId,
+      employeeId: actor.employee?.id || lead.assignedEmployeeId,
       leadId: lead.id,
       leadName: lead.name,
       fromValue: before.assignedTo || 'Unassigned',
@@ -117,16 +140,16 @@ async function applyLeadUpdateAndLog(
   if ('notes' in updatePayload && updatePayload.notes !== before.notes) {
     after(() => logActivityEvent({
       type: 'note',
-      actorName: actor.email,
+      actorName: actorDisplay,
       actorUserId: actor.userId,
-      employeeId: lead.assignedEmployeeId,
+      employeeId: actor.employee?.id || lead.assignedEmployeeId,
       leadId: lead.id,
       leadName: lead.name,
       details: updatePayload.notes?.slice(0, 300) || null,
     }));
   }
 
-  return lead;
+  return { status: 'ok', lead };
 }
 
 export async function PUT(
@@ -134,10 +157,12 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
 
     const { id } = await params;
@@ -146,12 +171,18 @@ export async function PUT(
     const validated = validateLeadUpdate(body);
     if (!validated.data) return NextResponse.json({ error: validated.error }, { status: 400 });
 
-    const lead = await applyLeadUpdateAndLog(id, validated.data, decoded);
-    if (!lead) {
+    const res = await applyLeadUpdateAndLog(id, validated.data, {
+      ...actor,
+      employee: staff?.employee,
+    });
+    if (res.status === 'forbidden') {
+      return NextResponse.json({ message: 'Unauthorized - Lead is assigned to another counselor' }, { status: 403 });
+    }
+    if (res.status === 'not_found') {
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
     }
 
-    return NextResponse.json(lead, { headers: { 'Cache-Control': 'no-store, private' } });
+    return NextResponse.json(res.lead, { headers: { 'Cache-Control': 'no-store, private' } });
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);
     if (bodyError) return bodyError;
@@ -168,10 +199,12 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const decoded = await verifyLiveAdminUser(request);
-    
-    if (!decoded || !isAdminRole(decoded.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const actor = admin || staff;
+
+    if (!actor) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
     }
 
     const { id } = await params;
@@ -180,12 +213,18 @@ export async function PATCH(
     const validated = validateLeadUpdate(body);
     if (!validated.data) return NextResponse.json({ error: validated.error }, { status: 400 });
 
-    const lead = await applyLeadUpdateAndLog(id, validated.data, decoded);
-    if (!lead) {
+    const res = await applyLeadUpdateAndLog(id, validated.data, {
+      ...actor,
+      employee: staff?.employee,
+    });
+    if (res.status === 'forbidden') {
+      return NextResponse.json({ message: 'Unauthorized - Lead is assigned to another counselor' }, { status: 403 });
+    }
+    if (res.status === 'not_found') {
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
     }
 
-    return NextResponse.json(lead, { headers: { 'Cache-Control': 'no-store, private' } });
+    return NextResponse.json(res.lead, { headers: { 'Cache-Control': 'no-store, private' } });
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);
     if (bodyError) return bodyError;
