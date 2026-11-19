@@ -19,6 +19,7 @@ import {
 import { Partnership } from '@/lib/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { toSafeExternalUrl } from '@/lib/safe-url';
+import { formatPartnershipTypeLabel } from '@/lib/b2b-catalog';
 
 const AdminPartnershipsPage = () => {
   const { authenticatedFetch } = useAuth();
@@ -102,7 +103,9 @@ const AdminPartnershipsPage = () => {
     pending: 'bg-yellow-100 text-yellow-800',
     under_review: 'bg-blue-100 text-blue-800',
     approved: 'bg-green-100 text-green-800',
+    active: 'bg-emerald-100 text-emerald-800',
     rejected: 'bg-red-100 text-red-800',
+    suspended: 'bg-slate-200 text-slate-700',
     on_hold: 'bg-gray-100 text-gray-800'
   };
 
@@ -110,11 +113,6 @@ const AdminPartnershipsPage = () => {
     low: 'bg-gray-100 text-gray-800',
     medium: 'bg-yellow-100 text-yellow-800',
     high: 'bg-red-100 text-red-800'
-  };
-
-  const partnershipTypeLabels = {
-    individual_agent: 'Individual Agent',
-    company: 'Company'
   };
 
   const fetchPartnerships = useCallback(async () => {
@@ -427,7 +425,9 @@ const AdminPartnershipsPage = () => {
             <option value="pending">Pending</option>
             <option value="under_review">Under Review</option>
             <option value="approved">Approved</option>
+            <option value="active">Active</option>
             <option value="rejected">Rejected</option>
+            <option value="suspended">Suspended</option>
             <option value="on_hold">On Hold</option>
           </select>
 
@@ -437,6 +437,10 @@ const AdminPartnershipsPage = () => {
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">All Types</option>
+            <option value="b2b_china_desk">B2B · China Admissions Desk</option>
+            <option value="b2b_malaysia_desk">B2B · Malaysia EMGS Desk</option>
+            <option value="b2b_multi_destination">B2B · Multi-Destination Desk</option>
+            <option value="b2b_institutional">B2B · Institutional / School</option>
             <option value="individual_agent">Individual Agent</option>
             <option value="company">Company</option>
           </select>
@@ -545,19 +549,21 @@ const AdminPartnershipsPage = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="text-sm text-gray-900">
-                        {partnershipTypeLabels[partnership.partnershipType as keyof typeof partnershipTypeLabels]}
+                        {formatPartnershipTypeLabel(partnership.partnershipType)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <select
                         value={partnership.status}
                         onChange={(e) => handleStatusUpdate(partnership.id, e.target.value)}
-                        className={`text-xs font-medium px-2 py-1 rounded-full border-0 ${statusColors[partnership.status as keyof typeof statusColors]}`}
+                        className={`text-xs font-medium px-2 py-1 rounded-full border-0 ${statusColors[partnership.status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800'}`}
                       >
                         <option value="pending">Pending</option>
                         <option value="under_review">Under Review</option>
                         <option value="approved">Approved</option>
+                        <option value="active">Active</option>
                         <option value="rejected">Rejected</option>
+                        <option value="suspended">Suspended</option>
                         <option value="on_hold">On Hold</option>
                       </select>
                     </td>
@@ -735,8 +741,16 @@ const AdminPartnershipsPage = () => {
                   <div className="space-y-2">
                     <div>
                       <span className="font-medium">Partnership Type:</span>
-                      <span className="ml-1">{partnershipTypeLabels[selectedPartnership.partnershipType as keyof typeof partnershipTypeLabels]}</span>
+                      <span className="ml-1">{formatPartnershipTypeLabel(selectedPartnership.partnershipType)}</span>
                     </div>
+                    <div>
+                      <span className="font-medium">Source:</span> {selectedPartnership.source}
+                    </div>
+                    {selectedPartnership.businessRegistrationNumber && (
+                      <div>
+                        <span className="font-medium">Reg / License No:</span> {selectedPartnership.businessRegistrationNumber}
+                      </div>
+                    )}
                     <div>
                       <span className="font-medium">Current Clients:</span> {selectedPartnership.currentClients}
                     </div>
@@ -906,6 +920,10 @@ const AdminPartnershipsPage = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     >
+                      <option value="b2b_china_desk">B2B · China Admissions Desk</option>
+                      <option value="b2b_malaysia_desk">B2B · Malaysia EMGS Desk</option>
+                      <option value="b2b_multi_destination">B2B · Multi-Destination Desk</option>
+                      <option value="b2b_institutional">B2B · Institutional / School</option>
                       <option value="individual_agent">Individual Agent</option>
                       <option value="company">Company</option>
                     </select>
@@ -1069,7 +1087,9 @@ const AdminPartnershipsPage = () => {
                       <option value="pending">Pending</option>
                       <option value="under_review">Under Review</option>
                       <option value="approved">Approved</option>
+                      <option value="active">Active</option>
                       <option value="rejected">Rejected</option>
+                      <option value="suspended">Suspended</option>
                       <option value="on_hold">On Hold</option>
                     </select>
                   </div>
@@ -1254,6 +1274,10 @@ const AdminPartnershipsPage = () => {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       required
                     >
+                      <option value="b2b_china_desk">B2B · China Admissions Desk</option>
+                      <option value="b2b_malaysia_desk">B2B · Malaysia EMGS Desk</option>
+                      <option value="b2b_multi_destination">B2B · Multi-Destination Desk</option>
+                      <option value="b2b_institutional">B2B · Institutional / School</option>
                       <option value="individual_agent">Individual Agent</option>
                       <option value="company">Company</option>
                     </select>
@@ -1417,7 +1441,9 @@ const AdminPartnershipsPage = () => {
                       <option value="pending">Pending</option>
                       <option value="under_review">Under Review</option>
                       <option value="approved">Approved</option>
+                      <option value="active">Active</option>
                       <option value="rejected">Rejected</option>
+                      <option value="suspended">Suspended</option>
                       <option value="on_hold">On Hold</option>
                     </select>
                   </div>

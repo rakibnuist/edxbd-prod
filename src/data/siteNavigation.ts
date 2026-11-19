@@ -56,6 +56,7 @@ export const serviceNavigation: SiteLink[] = [
   { name: 'Visa readiness', href: '/your-study-journey#visa-to-registration', note: 'A checklist, not a visa guarantee' },
   { name: 'Parents and families', href: '/for-parents', note: 'Costs, safety and responsibilities explained' },
   { name: 'Education consultant in Dhaka', href: '/education-consultant-dhaka', note: 'Visit the Dhanmondi office or call the team' },
+  { name: 'B2B Partner Desk', href: '/b2b', note: 'Agency & sub-agent admissions processing under written MOU' },
   { name: 'Visit or contact us', href: '/contact', note: 'Dhanmondi office, phone and WhatsApp' },
 ];
 
@@ -86,6 +87,7 @@ export const resourceNavigation: SiteLink[] = [
   { name: 'Study in China guides', href: '/study-in-china-from-bangladesh', note: 'Costs, visas, intakes and student life' },
   { name: 'For parents', href: '/for-parents', note: 'A family view of the complete journey' },
   { name: 'About EduExpress', href: '/about', note: 'Our company and working method' },
+  { name: 'B2B Partner Desk', href: '/b2b', note: 'Agency & sub-agent file processing under written MOU' },
   { name: 'Partner with us', href: '/partnership', note: 'Institutional and referral cooperation' },
   { name: 'Contact the decision desk', href: '/contact', note: 'Dhanmondi office, phone and hours' },
 ];
@@ -118,6 +120,8 @@ export const aboutNavigation: SiteLink[] = [
   { name: 'Student success stories', href: '/success-stories', note: 'Stories from our students' },
   { name: 'Proof library', href: '/proof-library', note: 'Redacted evidence and company records' },
   { name: 'For parents', href: '/for-parents', note: 'Costs, safety and responsibilities' },
+  { name: 'B2B Partner Desk', href: '/b2b', note: 'Agency admissions processing & bilateral MOU terms' },
+  { name: 'Partner with us', href: '/partnership', note: 'Global Partner Programme & regional cooperation' },
   { name: 'বাংলা গাইড (Study in China)', href: '/bn/study-in-china', note: 'চীন পড়াশোনা, খরচ ও ভিসা গাইড (বাংলায়)' },
   { name: 'Contact and visit us', href: '/contact', note: 'Phone, WhatsApp and office hours' },
 ];

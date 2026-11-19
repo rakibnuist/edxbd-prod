@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Bell, CheckCheck, Clock, ExternalLink, FileUp, Flame, GraduationCap, MessageSquare } from 'lucide-react';
+import { Bell, CheckCheck, Clock, ExternalLink, FileUp, Flame, GraduationCap, Handshake, MessageSquare } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import type { NotificationItem } from '@/app/api/admin/notifications/route';
 
@@ -106,7 +106,9 @@ export default function LiveAlertsBell() {
                         ? MessageSquare
                         : item.kind === 'scholarship_notice'
                           ? GraduationCap
-                          : Clock;
+                          : item.kind === 'b2b_inquiry'
+                            ? Handshake
+                            : Clock;
                 const tone =
                   item.kind === 'hot_lead'
                     ? 'bg-amber-50 text-amber-700'
@@ -114,7 +116,9 @@ export default function LiveAlertsBell() {
                       ? 'bg-blue-50 text-blue-700'
                       : item.kind === 'scholarship_notice'
                         ? 'bg-emerald-50 text-emerald-700'
-                        : 'bg-slate-100 text-slate-600';
+                        : item.kind === 'b2b_inquiry'
+                          ? 'bg-indigo-50 text-indigo-700'
+                          : 'bg-slate-100 text-slate-600';
 
                 return (
                   <Link

@@ -57,6 +57,7 @@ const companyLinks = [
   ['For Parents & Families', '/for-parents'],
   ['Fee Policy & Transparency', '/fees-and-transparency'],
   ['Education Updates', '/updates'],
+  ['B2B Partner Desk', '/b2b'],
   ['Partner With Us', '/partnership'],
 ];
 

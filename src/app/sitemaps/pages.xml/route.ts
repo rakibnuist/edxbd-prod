@@ -25,7 +25,6 @@ const pages: { path: string; lastmod: string }[] = [
     '/your-study-journey',
     '/services',
     '/updates',
-    '/partnership',
     '/education-fit-assessment',
     '/for-parents',
     '/proof-library',
@@ -33,6 +32,8 @@ const pages: { path: string; lastmod: string }[] = [
     '/contact',
     '/fees-and-transparency',
   ].map(path => ({ path, lastmod: '2026-11-15' })),
+  { path: '/b2b', lastmod: '2026-11-20' },
+  { path: '/partnership', lastmod: '2026-11-20' },
   ...evidenceSlugs.map(slug => ({
     path: `/${slug}`,
     lastmod: evidencePages[slug]?.reviewedAt ?? '2026-11-15',

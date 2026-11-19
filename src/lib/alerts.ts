@@ -6,6 +6,7 @@ import {
   ALERT_KEY_CHAT_ID,
   ALERT_KEY_PREFS,
   type AlertPreferences,
+  buildB2BPartnerTelegramHtml,
   buildNewLeadTelegramHtml,
   DEFAULT_ALERT_PREFS,
   escapeTelegramHtml,
@@ -149,4 +150,25 @@ export async function notifyScholarshipNoticeAlert(input: {
   ].filter(Boolean);
 
   await sendTelegramBotMessage(cfg.telegramBotToken, cfg.telegramChatId, lines.join('\n')).catch(() => {});
+}
+
+export async function notifyB2BPartnerAlert(partner: {
+  id: string;
+  companyName: string;
+  contactPerson: string;
+  phone: string;
+  email: string;
+  city?: string | null;
+  country?: string | null;
+  serviceTrackLabel: string;
+  targetCountries: string[];
+  monthlyTarget: number;
+  priority: string;
+}): Promise<void> {
+  const cfg = await getAlertConfig({ includeSecret: true });
+  if (!cfg.preferences.enabled) return;
+  if (!cfg.telegramBotToken || !cfg.telegramChatId) return;
+
+  const html = buildB2BPartnerTelegramHtml(partner);
+  await sendTelegramBotMessage(cfg.telegramBotToken, cfg.telegramChatId, html).catch(() => {});
 }

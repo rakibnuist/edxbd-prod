@@ -148,7 +148,32 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   assert.ok(dhakaHtml.includes('EduExpress Ltd.') && dhakaHtml.includes('FAQPage'));
 
   const partnershipHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'partnership.html'), 'utf8');
-  assert.ok(partnershipHtml.includes('institutional-cooperation') && partnershipHtml.includes('/china-study-report-bangladesh'));
+  assert.ok(
+    partnershipHtml.includes('institutional-cooperation') &&
+      partnershipHtml.includes('/china-study-report-bangladesh') &&
+      partnershipHtml.includes('$800') &&
+      partnershipHtml.includes('$600') &&
+      partnershipHtml.includes('$500') &&
+      partnershipHtml.includes('$150') &&
+      !partnershipHtml.includes('$450') &&
+      !partnershipHtml.includes('$300') &&
+      !partnershipHtml.includes('Type-D') &&
+      partnershipHtml.includes('FAQPage') &&
+      partnershipHtml.includes('"@type":"Service"'),
+    'partnership.html must emit updated China USD tiers ($800/$600/$500/$150), Service & FAQPage schema, and institutional cooperation links',
+  );
+
+  const b2bHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'b2b.html'), 'utf8');
+  assert.ok(
+    b2bHtml.includes('b2b-services') &&
+      b2bHtml.includes('b2b-sop') &&
+      b2bHtml.includes('b2b-inquiry') &&
+      b2bHtml.includes('FAQPage') &&
+      b2bHtml.includes('mainEntityOfPage') &&
+      b2bHtml.includes('/partnership') &&
+      !/\$500|\$450|\$400|\$300/.test(b2bHtml),
+    'b2b.html must include B2B sections, FAQPage schema, mainEntityOfPage, /partnership cross-link, and no public USD rate table',
+  );
 
   const aboutHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'about.html'), 'utf8');
   assert.ok(aboutHtml.includes('Abdullah Al Rakib') && aboutHtml.includes('EduExpress Ltd.'));

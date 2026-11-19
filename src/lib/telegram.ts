@@ -109,6 +109,39 @@ export function buildNewLeadTelegramHtml(
   return lines.join('\n');
 }
 
+export function buildB2BPartnerTelegramHtml(partner: {
+  id: string;
+  companyName: string;
+  contactPerson: string;
+  phone: string;
+  email: string;
+  city?: string | null;
+  country?: string | null;
+  serviceTrackLabel: string;
+  targetCountries: string[];
+  monthlyTarget: number;
+  priority: string;
+}): string {
+  const priorityBadge = partner.priority === 'high' ? '🚨 HIGH PRIORITY' : partner.priority.toUpperCase();
+  const location = [partner.city, partner.country].filter(Boolean).join(', ');
+  const lines = [
+    `🤝 <b>New B2B Partner Inquiry (${escapeTelegramHtml(priorityBadge)})</b>`,
+    `<b>Agency / Org:</b> ${escapeTelegramHtml(partner.companyName)}`,
+    `<b>Contact:</b> ${escapeTelegramHtml(partner.contactPerson)}`,
+    `<b>Phone / WA:</b> <code>${escapeTelegramHtml(partner.phone)}</code>`,
+    `<b>Email:</b> ${escapeTelegramHtml(partner.email)}`,
+    location ? `<b>Location:</b> ${escapeTelegramHtml(location)}` : '',
+    `<b>Service Track:</b> ${escapeTelegramHtml(partner.serviceTrackLabel)}`,
+    partner.targetCountries.length
+      ? `<b>Destinations:</b> ${escapeTelegramHtml(partner.targetCountries.join(', '))}`
+      : '',
+    `<b>Est. Monthly Files:</b> ${partner.monthlyTarget}+ / month`,
+    `🔗 <a href="https://eduexpressint.com/admin/partnerships">Open B2B Partnerships Queue</a>`,
+  ].filter(Boolean);
+
+  return lines.join('\n');
+}
+
 export async function sendTelegramBotMessage(
   botToken: string,
   chatId: string,

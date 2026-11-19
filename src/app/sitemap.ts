@@ -52,6 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/universities',
     '/apply',
     '/services',
+    '/b2b',
     '/updates',
     '/partnership',
     '/contact',
@@ -87,6 +88,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '',
     '/about',
     '/apply',
+    '/b2b',
     '/compare-costs',
     '/contact',
     '/education-fit-assessment',
@@ -131,9 +133,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           : undefined
         : slug in chinaGuidePages
           ? undefined
-          : novemberMidPaths.has(route)
-            ? NOVEMBER_MID_UPDATED
-            : STATIC_CONTENT_UPDATED;
+          : route === '/b2b' || route === '/partnership'
+            ? new Date('2026-11-20')
+            : novemberMidPaths.has(route)
+              ? NOVEMBER_MID_UPDATED
+              : STATIC_CONTENT_UPDATED;
     return {
       url: `${baseUrl}${route}`,
       ...(lastModified ? { lastModified } : {}),

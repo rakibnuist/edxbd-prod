@@ -19,7 +19,7 @@ export default function MobileLeadBar() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     // Do not cover the lead form or the footer links.
-    const targets = ['assessment', 'china-fit-form', 'china-fit-form-bottom', 'march-2027-assessment', 'site-footer']
+    const targets = ['assessment', 'china-fit-form', 'china-fit-form-bottom', 'march-2027-assessment', 'b2b-inquiry', 'partnership-form', 'site-footer']
       .map(id => document.getElementById(id))
       .filter((element): element is HTMLElement => Boolean(element));
     const intersecting = new Map<Element, boolean>();
@@ -50,11 +50,14 @@ export default function MobileLeadBar() {
 
   const isChinaHub = pathname === '/study-in-china-from-bangladesh';
   const isMarchCampaign = pathname === '/china-march-2027-intake';
+  const isB2B = pathname === '/b2b';
   const assessmentHref = isChinaHub
     ? '#china-fit-form'
     : isMarchCampaign
       ? '#march-2027-assessment'
-      : '/education-fit-assessment';
+      : isB2B
+        ? '#b2b-inquiry'
+        : '/education-fit-assessment';
   const whatsappHref =
     `https://wa.me/${PHONE.replace(/\D/g, '')}?text=` +
     encodeURIComponent(
@@ -62,7 +65,9 @@ export default function MobileLeadBar() {
         ? 'Assalamu alaikum. I would like a free Study in China plan from EduExpress International.'
         : isMarchCampaign
           ? 'Assalamu alaikum. I would like a study plan for China March 2027 intake.'
-          : 'Assalamu alaikum. I would like counselling for studying abroad.',
+          : isB2B
+            ? 'Hello EduExpress B2B Desk, I would like to discuss agency/sub-agent onboarding and written MOU terms.'
+            : 'Assalamu alaikum. I would like counselling for studying abroad.',
     );
   const visible = scrolled && !blocked;
 
@@ -97,10 +102,10 @@ export default function MobileLeadBar() {
           {assessmentHref.startsWith('#') ? (
             <a
               href={assessmentHref}
-              onClick={() => trackAssessmentStart({ destination: 'china', label: 'mobile_bar_china_assess' })}
+              onClick={() => trackAssessmentStart({ destination: isB2B ? 'b2b' : 'china', label: isB2B ? 'mobile_bar_b2b' : 'mobile_bar_china_assess' })}
               className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-lime px-2 text-[14px] font-bold text-petrol-800 transition-colors hover:bg-lime-hover"
             >
-              Free Plan
+              {isB2B ? 'B2B Desk' : 'Free Plan'}
               <ArrowRight size={14} aria-hidden="true" />
             </a>
           ) : (

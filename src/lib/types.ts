@@ -186,7 +186,7 @@ export interface Partnership {
   postalCode: string;
   
   // Business Details
-  partnershipType: 'individual_agent' | 'company';
+  partnershipType: string;
   targetCountries: string[];
   currentClients: number;
   monthlyTarget: number;
@@ -225,7 +225,7 @@ export interface Partnership {
   additionalInfo?: string;
   
   // Status & Management
-  status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'on_hold';
+  status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'active' | 'suspended' | 'on_hold';
   priority: 'low' | 'medium' | 'high';
   assignedTo?: string;
   reviewNotes?: string;

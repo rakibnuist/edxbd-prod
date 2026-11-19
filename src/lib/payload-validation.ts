@@ -12,6 +12,7 @@ export const PARTNERSHIP_STATUSES = [
   'rejected',
   'active',
   'suspended',
+  'on_hold',
 ] as const;
 
 export const PARTNERSHIP_PRIORITIES = ['low', 'medium', 'high', 'urgent'] as const;

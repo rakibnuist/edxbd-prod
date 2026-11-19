@@ -24,6 +24,7 @@ export type ConversionEvent =
   | 'assessment_start'
   | 'assessment_step_completed'
   | 'assessment_submit'
+  | 'b2b_inquiry_submit'
   | 'whatsapp_click'
   | 'phone_click'
   | 'appointment_booked'
@@ -53,6 +54,7 @@ const UTM_STORAGE_KEY = 'ee_utm';
 const META_EVENT_MAP: Partial<Record<ConversionEvent, string>> = {
   assessment_start: 'InitiateCheckout',
   assessment_submit: 'Lead',
+  b2b_inquiry_submit: 'Lead',
   whatsapp_click: 'Contact',
   phone_click: 'Contact',
   appointment_booked: 'Schedule',
@@ -214,6 +216,7 @@ export function trackConversion(event: ConversionEvent, context: ConversionConte
 
 export const trackAssessmentStart = (ctx?: ConversionContext) => trackConversion('assessment_start', ctx);
 export const trackAssessmentSubmit = (ctx?: ConversionContext) => trackConversion('assessment_submit', ctx);
+export const trackB2BInquirySubmit = (ctx?: ConversionContext) => trackConversion('b2b_inquiry_submit', ctx);
 export const trackWhatsAppClick = (ctx?: ConversionContext) => trackConversion('whatsapp_click', ctx);
 export const trackPhoneClick = (ctx?: ConversionContext) => trackConversion('phone_click', ctx);
 export const trackAppointmentBooked = (ctx?: ConversionContext) => trackConversion('appointment_booked', ctx);

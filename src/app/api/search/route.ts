@@ -27,6 +27,7 @@ const PAGE_INDEX: SearchHit[] = [
   { kind: 'page', title: 'Proof library', href: '/proof-library', context: 'Redacted evidence and company records' },
   { kind: 'page', title: 'Fees and transparency', href: '/fees-and-transparency', context: 'Who receives each payment' },
   { kind: 'page', title: 'For parents and sponsors', href: '/for-parents', context: 'Costs, safety and responsibilities' },
+  { kind: 'page', title: 'B2B Partner Desk', href: '/b2b', context: 'Agency & sub-agent file processing, written SOP and custom MOU terms' },
   { kind: 'page', title: 'Contact the Dhanmondi office', href: '/contact', context: 'Address, hours, phone and WhatsApp' },
 ];
 

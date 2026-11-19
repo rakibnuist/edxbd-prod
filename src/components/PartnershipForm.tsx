@@ -150,7 +150,7 @@ const PartnershipForm = () => {
           address: `${formData.city}, ${formData.country}`,
           state: formData.country, // Use country as state if not provided
           postalCode: '00000', // Default postal code
-          targetCountries: ['United Kingdom', 'Australia', 'Canada'],
+          targetCountries: ['China', 'Malaysia', 'United Kingdom'],
           currentClients: 0,
           monthlyTarget: formData.partnershipType === 'individual_agent' ? 3 : 10,
           experience: formData.partnershipType === 'individual_agent' ? 'Individual education consultancy experience' : 'Company education consultancy experience',
@@ -298,7 +298,7 @@ const PartnershipForm = () => {
                   autoComplete="tel"
                   aria-invalid={Boolean(errors.phone)}
                   aria-describedby={describedBy('phone')}
-                  placeholder="+1 (555) 123-4567"
+                  placeholder="+880 1XXX-XXXXXX"
                 />
                 {errorText('phone')}
               </div>

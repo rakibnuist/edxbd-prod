@@ -10,7 +10,7 @@ const MASK = '••••••••';
 
 export interface NotificationItem {
   id: string;
-  kind: 'hot_lead' | 'sla_untouched' | 'student_doc_upload' | 'student_message' | 'new_lead' | 'scholarship_notice';
+  kind: 'hot_lead' | 'sla_untouched' | 'student_doc_upload' | 'student_message' | 'new_lead' | 'scholarship_notice' | 'b2b_inquiry';
   title: string;
   subtitle: string;
   leadId: string | null;
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     const twoHoursAgo = new Date(Date.now() - 2 * 3600 * 1000);
     const threeDaysAgo = new Date(Date.now() - 72 * 3600 * 1000);
 
-    const [freshNewLeads, portalEvents, scholarshipEvents] = await Promise.all([
+    const [freshNewLeads, portalEvents, scholarshipEvents, pendingB2B] = await Promise.all([
       prisma.lead.findMany({
         where: {
           AND: [
@@ -99,9 +99,42 @@ export async function GET(request: NextRequest) {
             },
           })
         : Promise.resolve([]),
+      isAdmin
+        ? prisma.partnership.findMany({
+            where: {
+              status: 'pending',
+              createdAt: { gte: threeDaysAgo },
+            },
+            orderBy: { createdAt: 'desc' },
+            take: 8,
+            select: {
+              id: true,
+              companyName: true,
+              contactPerson: true,
+              partnershipType: true,
+              monthlyTarget: true,
+              priority: true,
+              createdAt: true,
+            },
+          })
+        : Promise.resolve([]),
     ]);
 
     const items: NotificationItem[] = [];
+
+    for (const partner of pendingB2B) {
+      items.push({
+        id: `b2b-${partner.id}`,
+        kind: 'b2b_inquiry',
+        title: `B2B Inquiry: ${partner.companyName || partner.contactPerson}`,
+        subtitle: `${partner.contactPerson} · ${partner.partnershipType.replace(/_/g, ' ')} · ~${partner.monthlyTarget}/mo`,
+        leadId: null,
+        leadName: null,
+        href: '/admin/partnerships',
+        createdAt: partner.createdAt.toISOString(),
+        urgent: partner.priority === 'high',
+      });
+    }
 
     for (const ev of scholarshipEvents) {
       items.push({

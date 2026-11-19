@@ -240,6 +240,15 @@ export default async function ServicesPage() {
             ))}
           </ol>
         </div>
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 rounded-3xl bg-white p-6 sm:px-8">
+          <div>
+            <p className="text-[17px] font-bold text-petrol-800">Representing an education agency, sub-agent desk, or institution?</p>
+            <p className="mt-1 text-[15px] text-ink-soft">Explore our dedicated B2B admissions desk for China, Malaysia, and active routes under written MOU &amp; non-poaching terms.</p>
+          </div>
+          <Link href="/b2b" className="ed-btn ed-btn-outline min-h-[48px] px-6">
+            Explore B2B Partner Desk <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+        </div>
       </Section>
 
       <CtaBand title="Start with stage one." text="The free fit assessment is the first step. Share your results, budget and preferred country, and a counsellor explains realistic options, the complete cost and the documents to prepare." />

@@ -1,4 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
+import { notifyB2BPartnerAlert } from '@/lib/alerts';
+import { formatPartnershipTypeLabel } from '@/lib/b2b-catalog';
 import prisma from '@/lib/prisma';
 import { trackPartnershipInquiry } from '@/lib/meta-conversion-api';
 import {
@@ -190,6 +192,22 @@ export async function POST(request: NextRequest) {
         consentPolicyVersion
       }
     });
+
+    after(() =>
+      notifyB2BPartnerAlert({
+        id: partnership.id,
+        companyName: companyName || contactPerson,
+        contactPerson,
+        phone,
+        email,
+        city,
+        country,
+        serviceTrackLabel: formatPartnershipTypeLabel(partnershipType),
+        targetCountries: targetCountriesRes.list || [],
+        monthlyTarget,
+        priority: 'medium',
+      }),
+    );
 
     // Track partnership inquiry with Meta Conversion API only after explicit tracking consent
     const serverMetaParams =

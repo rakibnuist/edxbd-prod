@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
 
-const PAGES_WITH_OWN_FORM = new Set(['/', '/education-fit-assessment', '/apply', '/contact']);
+const PAGES_WITH_OWN_FORM = new Set(['/', '/education-fit-assessment', '/apply', '/contact', '/b2b', '/partnership']);
 
 /**
  * Site-wide assessment prompt at the top of the footer.
