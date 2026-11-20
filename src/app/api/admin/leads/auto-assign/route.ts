@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
-import { distributeUnassignedLeads } from '@/lib/crm-operations';
+import { distributeUnassignedLeads, type DistributeLeadsScope } from '@/lib/crm-operations';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
+
+const ALLOWED_SCOPES = new Set<DistributeLeadsScope>([
+  'new',
+  'untouched_pool',
+  'untouched_rebalance',
+  'all_active',
+]);
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,7 +19,10 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await readLimitedJson(request, 8 * 1024).catch(() => ({} as Record<string, unknown>));
-    const scope = body.scope === 'all_active' ? 'all_active' : 'new';
+    const rawScope = typeof body.scope === 'string' ? body.scope : 'new';
+    const scope: DistributeLeadsScope = ALLOWED_SCOPES.has(rawScope as DistributeLeadsScope)
+      ? (rawScope as DistributeLeadsScope)
+      : 'new';
 
     const result = await distributeUnassignedLeads({
       scope,

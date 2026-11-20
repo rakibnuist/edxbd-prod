@@ -2,7 +2,17 @@ import 'server-only';
 import crypto from 'node:crypto';
 import prisma from '@/lib/prisma';
 import { notifyNewLeadAlert } from '@/lib/alerts';
-import { selectCounselorFromPool, type PoolEmployee } from '@/lib/lead-workflow';
+import { dhakaTodayIso } from '@/lib/kpi-workflow';
+import {
+  NON_COUNSELING_ROLE_RE,
+  parseLeadFlowConfig,
+  resolveEmployeeFlowRule,
+  selectCounselorByFlowConfig,
+  sortLeadsForBalancedDistribution,
+  type LeadFlowCandidate,
+  type LeadFlowSettingsConfig,
+} from '@/lib/lead-flow';
+import { getAllSettings } from '@/lib/settings';
 
 export function generatePublicToken(): string {
   return crypto.randomBytes(12).toString('hex');
@@ -24,18 +34,28 @@ export async function ensureLeadPublicToken(leadId: string): Promise<string | nu
   return token;
 }
 
-const NON_COUNSELING_ROLE_RE = /\b(investor|managing)\b/i;
+const CLOSED_LEAD_STATUSES = ['closed', 'not_interested', 'enrolled', 'converted'];
 
-/**
- * Resolves an automatic counselor assignment based on destination team / specialization
- * and balances active lead count among matching active counselors.
- */
-export async function resolveAutoAssignment(input: {
-  assignedTeam?: string | null;
-  country?: string | null;
-}): Promise<{ assignedTo: string | null; assignedEmployeeId: string | null }> {
-  try {
-    const activeEmployees = await prisma.employee.findMany({
+function dhakaStartUtc(todayIso: string): Date {
+  return new Date(new Date(`${todayIso}T00:00:00.000Z`).getTime() - 6 * 3600 * 1000);
+}
+
+async function loadLeadFlowPool(options?: {
+  excludeNewFromActiveCount?: boolean;
+}): Promise<{
+  config: LeadFlowSettingsConfig;
+  pool: LeadFlowCandidate[];
+  eligibleIds: Set<string>;
+}> {
+  const todayIso = dhakaTodayIso();
+  const dayStart = dhakaStartUtc(todayIso);
+  const excludedStatuses = options?.excludeNewFromActiveCount
+    ? ['new', ...CLOSED_LEAD_STATUSES]
+    : CLOSED_LEAD_STATUSES;
+
+  const [settings, activeEmployees, todayAttendances, todayLeads] = await Promise.all([
+    getAllSettings(),
+    prisma.employee.findMany({
       where: { active: true },
       orderBy: { empId: 'asc' },
       select: {
@@ -47,25 +67,72 @@ export async function resolveAutoAssignment(input: {
         _count: {
           select: {
             leads: {
-              where: {
-                status: { notIn: ['closed', 'not_interested', 'enrolled', 'converted'] },
-              },
+              where: { status: { notIn: excludedStatuses } },
             },
           },
         },
       },
-    });
-    const chosen = selectCounselorFromPool(
-      activeEmployees.map((e) => ({
-        id: e.id,
-        empId: e.empId,
-        name: e.name,
-        team: e.team,
-        role: e.role,
-        activeCount: e._count.leads,
-      })),
-      input,
-    );
+    }),
+    prisma.attendance.findMany({
+      where: { date: todayIso },
+      select: { employeeId: true, checkIn: true },
+    }),
+    prisma.lead.findMany({
+      where: {
+        assignedEmployeeId: { not: null },
+        updatedAt: { gte: dayStart },
+      },
+      select: { assignedEmployeeId: true, updatedAt: true },
+    }),
+  ]);
+
+  const config = parseLeadFlowConfig(settings);
+  const checkedInSet = new Set(
+    todayAttendances.filter((a) => Boolean(a.checkIn)).map((a) => a.employeeId),
+  );
+  const todayCountMap = new Map<string, number>();
+  const lastAssignedMap = new Map<string, number>();
+  for (const row of todayLeads) {
+    if (!row.assignedEmployeeId) continue;
+    todayCountMap.set(row.assignedEmployeeId, (todayCountMap.get(row.assignedEmployeeId) || 0) + 1);
+    const ms = row.updatedAt.getTime();
+    if (ms > (lastAssignedMap.get(row.assignedEmployeeId) || 0)) {
+      lastAssignedMap.set(row.assignedEmployeeId, ms);
+    }
+  }
+
+  const eligibleIds = new Set<string>();
+  const pool: LeadFlowCandidate[] = activeEmployees.map((e) => {
+    const rule = resolveEmployeeFlowRule(e, config.rulesByEmpId);
+    if (rule.eligible) eligibleIds.add(e.id);
+    return {
+      id: e.id,
+      empId: e.empId,
+      name: e.name,
+      team: e.team,
+      role: e.role,
+      activeCount: e._count.leads,
+      todayAssignedCount: options?.excludeNewFromActiveCount ? 0 : todayCountMap.get(e.id) || 0,
+      checkedInToday: checkedInSet.has(e.id),
+      lastAssignedAtMs: options?.excludeNewFromActiveCount ? 0 : lastAssignedMap.get(e.id) || 0,
+    };
+  });
+
+  return { config, pool, eligibleIds };
+}
+
+/**
+ * Resolves an automatic counselor assignment based on Admin Lead Flow Settings,
+ * destination scope (e.g. All Countries vs China Only), check-in status, and caseload/round-robin mode.
+ */
+export async function resolveAutoAssignment(input: {
+  assignedTeam?: string | null;
+  country?: string | null;
+  destinationInterest?: string | null;
+}): Promise<{ assignedTo: string | null; assignedEmployeeId: string | null }> {
+  try {
+    const { config, pool } = await loadLeadFlowPool();
+    const { chosen } = selectCounselorByFlowConfig(pool, input, config);
     return chosen
       ? { assignedTo: chosen.name, assignedEmployeeId: chosen.id }
       : { assignedTo: null, assignedEmployeeId: null };
@@ -115,91 +182,115 @@ export async function seedDefaultMonthlyTargets(rawMonth?: string): Promise<{ mo
   return { month, createdCount };
 }
 
+export type DistributeLeadsScope =
+  | 'new'
+  | 'untouched_pool'
+  | 'untouched_rebalance'
+  | 'all_active';
+
 export async function distributeUnassignedLeads(options: {
-  scope: 'new' | 'all_active';
+  scope: DistributeLeadsScope;
   actorName?: string | null;
   actorUserId?: string | null;
 }): Promise<{ assignedCount: number; breakdown: Record<string, number> }> {
-  const activeEmployees = await prisma.employee.findMany({
-    where: { active: true },
-    orderBy: { empId: 'asc' },
-    select: {
-      id: true,
-      empId: true,
-      name: true,
-      team: true,
-      role: true,
-      _count: {
-        select: {
-          leads: {
-            where: {
-              status: { notIn: ['closed', 'not_interested', 'enrolled', 'converted'] },
-            },
-          },
-        },
-      },
-    },
+  const isRebalance = options.scope === 'untouched_rebalance';
+  const { config, pool, eligibleIds } = await loadLeadFlowPool({
+    excludeNewFromActiveCount: isRebalance,
   });
+  if (!pool.length || eligibleIds.size === 0) {
+    return { assignedCount: 0, breakdown: {} };
+  }
 
-  const pool: PoolEmployee[] = activeEmployees.map((e) => ({
-    id: e.id,
-    empId: e.empId,
-    name: e.name,
-    team: e.team,
-    role: e.role,
-    activeCount: e._count.leads,
-  }));
-  if (!pool.length) return { assignedCount: 0, breakdown: {} };
+  const eligibleIdList = Array.from(eligibleIds);
+  const whereClause =
+    options.scope === 'untouched_rebalance'
+      ? { status: 'new' }
+      : options.scope === 'untouched_pool'
+        ? {
+            status: 'new',
+            OR: [
+              { assignedEmployeeId: null, assignedTo: null },
+              { assignedEmployeeId: { notIn: eligibleIdList } },
+            ],
+          }
+        : options.scope === 'all_active'
+          ? {
+              assignedEmployeeId: null,
+              assignedTo: null,
+              status: { notIn: CLOSED_LEAD_STATUSES },
+            }
+          : {
+              assignedEmployeeId: null,
+              assignedTo: null,
+              status: 'new',
+            };
 
-  const statusFilter = options.scope === 'new'
-    ? { status: 'new' }
-    : { status: { notIn: ['closed', 'not_interested', 'enrolled', 'converted'] } };
-
-  const unassignedLeads = await prisma.lead.findMany({
-    where: {
-      assignedEmployeeId: null,
-      assignedTo: null,
-      ...statusFilter,
-    },
+  const targetLeads = await prisma.lead.findMany({
+    where: whereClause,
     orderBy: { createdAt: 'desc' },
     select: {
       id: true,
       name: true,
       country: true,
+      destinationInterest: true,
       assignedTeam: true,
+      assignedEmployeeId: true,
+      assignedTo: true,
       publicToken: true,
     },
   });
 
+  // Assign non-China leads before China leads so counselors covering All Countries
+  // absorb non-China volume first before China-only counselors share China volume equally.
+  const orderedLeads = sortLeadsForBalancedDistribution(targetLeads);
   const breakdown: Record<string, number> = {};
   let assignedCount = 0;
+  let seqMs = Date.now();
 
-  for (const lead of unassignedLeads) {
-    const chosen = selectCounselorFromPool(pool, {
-      assignedTeam: lead.assignedTeam,
-      country: lead.country,
-    });
+  for (const lead of orderedLeads) {
+    const { chosen } = selectCounselorByFlowConfig(
+      pool,
+      {
+        assignedTeam: lead.assignedTeam,
+        country: lead.country,
+        destinationInterest: lead.destinationInterest,
+      },
+      config,
+      { ignoreManualMode: true },
+    );
     if (!chosen) continue;
 
-    await prisma.lead.update({
-      where: { id: lead.id },
-      data: {
-        assignedTo: chosen.name,
-        assignedEmployeeId: chosen.id,
-        ...(!lead.publicToken ? { publicToken: generatePublicToken(), publicEnabled: true } : {}),
-      },
-    });
+    if (lead.assignedEmployeeId !== chosen.id || lead.assignedTo !== chosen.name) {
+      await prisma.lead.update({
+        where: { id: lead.id },
+        data: {
+          assignedTo: chosen.name,
+          assignedEmployeeId: chosen.id,
+          ...(!lead.publicToken ? { publicToken: generatePublicToken(), publicEnabled: true } : {}),
+        },
+      });
+      assignedCount++;
+    }
     chosen.activeCount++;
+    chosen.todayAssignedCount = (chosen.todayAssignedCount || 0) + 1;
+    chosen.lastAssignedAtMs = seqMs++;
     breakdown[chosen.name] = (breakdown[chosen.name] || 0) + 1;
-    assignedCount++;
   }
 
   if (assignedCount > 0) {
+    const scopeLabel =
+      options.scope === 'untouched_rebalance'
+        ? 'untouched leads rebalanced'
+        : options.scope === 'untouched_pool'
+          ? 'untouched pool leads distributed'
+          : options.scope === 'all_active'
+            ? 'active unassigned leads distributed'
+            : 'untouched new leads distributed';
     await logActivityEvent({
       type: 'lead_assigned',
       actorName: options.actorName || 'Auto-Assign Engine',
       actorUserId: options.actorUserId || null,
-      toValue: `${assignedCount} ${options.scope === 'new' ? 'new' : 'active'} leads distributed`,
+      toValue: `${assignedCount} ${scopeLabel}`,
       details: Object.entries(breakdown)
         .map(([k, v]) => `${k}: ${v}`)
         .join(', '),

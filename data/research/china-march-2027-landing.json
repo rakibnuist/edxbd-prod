@@ -275,6 +275,1760 @@
   ],
   "universities": [
     {
+      "id": "shanghai-jiao-tong-university",
+      "name": "Shanghai Jiao Tong University",
+      "acronym": "SJTU",
+      "city": "Shanghai",
+      "logo": "/images/campaigns/march-2027/shanghai-jiao-tong-university.png",
+      "ranking": {
+        "value": "World #27",
+        "scope": "World",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Academic Ranking of World Universities",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/shanghai-jiao-tong-university"
+      },
+      "programmes": [
+        {
+          "id": "shanghai-jiao-tong-university-language",
+          "route": "language",
+          "name": "Chinese Language · School of Humanities",
+          "tuition": "CNY 10,500",
+          "period": "semester",
+          "feeBasis": "Published tuition schedule",
+          "extra": "Application CNY 450, non-refundable. Accommodation, insurance and living costs additional.",
+          "awardTitle": "Self-funded language route",
+          "scholarship": "No scholarship reduction is included in this language-course example. A later degree application is separate.",
+          "majors": [
+            "Comprehensive Chinese",
+            "Chinese Speaking",
+            "Listening",
+            "Reading",
+            "Writing"
+          ],
+          "eligibility": "Full-time non-degree language study. Spring semester runs February–June.",
+          "duration": "1 semester / 1 year",
+          "entry": "Spring: February–June",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "Chinese",
+          "costItems": [],
+          "scholarshipTiers": [],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Award selection and written university terms apply.",
+          "professionalNote": "",
+          "csca": "",
+          "majorGroups": [],
+          "fundingStage": "Language study",
+          "fundingHighlight": "Self-funded language programme"
+        }
+      ]
+    },
+    {
+      "id": "huazhong-university-of-science-and-technology",
+      "name": "Huazhong University of Science and Technology",
+      "acronym": "HUST",
+      "city": "Wuhan",
+      "logo": "/images/campaigns/march-2027/huazhong-university-of-science-and-technology.png",
+      "ranking": {
+        "value": "World #72",
+        "scope": "World",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Academic Ranking of World Universities",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/huazhong-university-of-science-and-technology"
+      },
+      "programmes": [
+        {
+          "id": "huazhong-university-of-science-and-technology-language",
+          "route": "language",
+          "name": "Chinese Language",
+          "tuition": "CNY 8,000",
+          "period": "semester",
+          "feeBasis": "Published tuition schedule",
+          "extra": "Application CNY 800; insurance CNY 500/semester; hostel CNY 700–1,400/month/person.",
+          "awardTitle": "Chinese Language Teachers Scholarship",
+          "scholarship": "Eligible applicants may apply separately for the International Chinese Language Teachers Scholarship. No award is deducted from the displayed tuition.",
+          "majors": [
+            "Chinese Language",
+            "Chinese Culture",
+            "Listening",
+            "Speaking",
+            "Reading",
+            "Writing"
+          ],
+          "eligibility": "High-school qualification or expected graduation; age 16–35 under the programme’s eligibility rules.",
+          "duration": "1 semester / 1 year",
+          "entry": "Spring preparation / language route",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "Chinese",
+          "costItems": [],
+          "scholarshipTiers": [],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Award selection and written university terms apply.",
+          "professionalNote": "",
+          "csca": "",
+          "majorGroups": [],
+          "fundingStage": "Language scholarship",
+          "fundingHighlight": "Chinese Language Teachers Scholarship"
+        },
+        {
+          "id": "hust-foundation",
+          "route": "foundation",
+          "name": "English-medium Foundation",
+          "tuition": "CNY 18,000",
+          "period": "17-week course",
+          "feeBasis": "Published tuition schedule",
+          "extra": "Application CNY 800; insurance CNY 500; hostel CNY 700–1,200/month.",
+          "awardTitle": "Degree scholarship assessment",
+          "scholarship": "Foundation tuition and any subsequent degree scholarship are assessed separately.",
+          "majors": [
+            "Academic English",
+            "Mathematics",
+            "Physics",
+            "Chemistry",
+            "Biology"
+          ],
+          "eligibility": "High-school graduate or expected graduate. Satisfactory foundation results are required for progression.",
+          "duration": "17 weeks",
+          "entry": "March foundation route",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "English",
+          "costItems": [],
+          "scholarshipTiers": [],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Award selection and written university terms apply.",
+          "professionalNote": "",
+          "csca": "",
+          "majorGroups": [],
+          "fundingStage": "Degree funding",
+          "fundingHighlight": "Degree scholarship assessment"
+        }
+      ]
+    },
+    {
+      "id": "harbin-institute-of-technology",
+      "name": "Harbin Institute of Technology",
+      "acronym": "HIT",
+      "city": "Harbin",
+      "logo": "/images/campaigns/march-2027/harbin-institute-of-technology.png",
+      "ranking": {
+        "value": "World #97",
+        "scope": "World",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Academic Ranking of World Universities",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/harbin-institute-of-technology"
+      },
+      "programmes": [
+        {
+          "id": "hit-language-preparation",
+          "route": "foundation",
+          "name": "Chinese-language preparation → Bachelor",
+          "tuition": "CNY 7,300",
+          "period": "preparation term",
+          "feeBasis": "Campaign planning estimate",
+          "extra": "Degree tuition reference CNY 26,000/year; hostel CNY 800/month. The campaign records a CNY 13,000 university deposit for JW202 issuance.",
+          "awardTitle": "Degree tuition awards",
+          "scholarship": "The campaign lists degree tuition-support tiers of 100%, 50%, 30% and 20%; foundation tuition is separate.",
+          "majors": [
+            "Automation",
+            "Integrated Circuit Design and Integrated System",
+            "Electrical Engineering and Automation",
+            "Computer Science and Technology",
+            "Artificial Intelligence",
+            "Robot Engineering",
+            "Civil Engineering",
+            "Chemical Engineering and Technology",
+            "Biological Engineering",
+            "Digital Media Art",
+            "Architecture",
+            "Big Data Management and Application",
+            "Business Management"
+          ],
+          "eligibility": "High-school qualification; campaign degree age range 18–25. Chinese preparation and subsequent English-medium bachelor admission have separate language requirements.",
+          "duration": "0.5-year preparation + 4-year bachelor",
+          "entry": "Spring preparation; degree progression assessed separately",
+          "tuitionLabel": "Language preparation",
+          "teachingLanguage": "Chinese preparation; English degree majors",
+          "costItems": [
+            {
+              "item": "Chinese preparation",
+              "amount": "CNY 7,300 / term",
+              "note": ""
+            },
+            {
+              "item": "Degree tuition before award",
+              "amount": "CNY 26,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Degree application",
+              "amount": "CNY 600",
+              "note": "Non-refundable."
+            },
+            {
+              "item": "Hostel",
+              "amount": "CNY 800 / month",
+              "note": ""
+            },
+            {
+              "item": "Insurance",
+              "amount": "CNY 800 / year",
+              "note": ""
+            },
+            {
+              "item": "Medical examination",
+              "amount": "CNY 300–400",
+              "note": "First year."
+            },
+            {
+              "item": "Residence permit",
+              "amount": "CNY 400 / year",
+              "note": ""
+            },
+            {
+              "item": "University deposit",
+              "amount": "CNY 13,000",
+              "note": "Required for JW202 under the selected route; record any credit in the written cost plan."
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Elite Class",
+              "coverage": "100% degree tuition waiver."
+            },
+            {
+              "name": "First Class",
+              "coverage": "50% tuition waiver; payable degree tuition CNY 13,000/year."
+            },
+            {
+              "name": "Second Class",
+              "coverage": "30% tuition waiver; payable degree tuition CNY 18,200/year."
+            },
+            {
+              "name": "Third Class",
+              "coverage": "20% tuition waiver; payable degree tuition CNY 20,800/year."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Award selection and written university terms apply.",
+          "professionalNote": "",
+          "csca": "",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "Up to 100% tuition waiver"
+        }
+      ]
+    },
+    {
+      "id": "nanjing-university-of-aeronautics-and-astronautics",
+      "name": "Nanjing University of Aeronautics and Astronautics",
+      "acronym": "NUAA",
+      "city": "Nanjing",
+      "logo": "/images/campaigns/march-2027/nanjing-university-of-aeronautics-and-astronautics.jpg",
+      "ranking": {
+        "value": "World #201–300",
+        "scope": "World",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Academic Ranking of World Universities",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-university-of-aeronautics-and-astronautics"
+      },
+      "programmes": [
+        {
+          "id": "nanjing-university-of-aeronautics-and-astronautics-foundation",
+          "route": "foundation",
+          "name": "Pre-Engineering / Pre-Business Foundation",
+          "tuition": "CNY 8,400",
+          "period": "foundation semester",
+          "feeBasis": "Published tuition schedule",
+          "extra": "Dormitory from CNY 2,000/semester. Engineering bachelor tuition CNY 23,900/year; business CNY 22,900/year.",
+          "awardTitle": "CNY 10,000 degree award",
+          "scholarship": "NUAA Freshman or Nanjing Government award: one-off CNY 10,000 for the bachelor offer. Awards cannot be combined.",
+          "majors": [
+            "Aeronautical Engineering",
+            "Mechanical Engineering",
+            "Civil Engineering",
+            "Electrical and Electronic Engineering",
+            "Artificial Intelligence",
+            "International Business and Trade"
+          ],
+          "eligibility": "High school completed before entry. No CSCA score needed to enter foundation; degree progression requires satisfactory foundation and CSCA results.",
+          "duration": "1 preparation semester + degree",
+          "entry": "Spring preparation / language route",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "Foundation tuition",
+              "amount": "CNY 8,400 / semester",
+              "note": "Current programme FAQ; insurance included."
+            },
+            {
+              "item": "Foundation hostel",
+              "amount": "From CNY 2,000 / semester",
+              "note": ""
+            },
+            {
+              "item": "Engineering bachelor tuition",
+              "amount": "CNY 23,900 / year",
+              "note": "Before any degree scholarship."
+            },
+            {
+              "item": "Business bachelor tuition",
+              "amount": "CNY 22,900 / year",
+              "note": "Before any degree scholarship."
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "NUAA Freshman / Nanjing Government award",
+              "coverage": "One-off CNY 10,000 on the eligible bachelor offer; the two awards cannot be combined."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Foundation entry and degree progression are separate. The degree award follows the bachelor offer and CSCA results.",
+          "professionalNote": "",
+          "csca": "No CSCA score required for foundation entry. Satisfactory CSCA results are required for degree progression.",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "CNY 10,000 freshman award"
+        }
+      ]
+    },
+    {
+      "id": "chongqing-medical-university",
+      "name": "Chongqing Medical University",
+      "acronym": "CQMU",
+      "city": "Chongqing",
+      "logo": "/images/campaigns/march-2027/chongqing-medical-university.png",
+      "ranking": {
+        "value": "World #301–400",
+        "scope": "World",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Academic Ranking of World Universities",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/chongqing-medical-university"
+      },
+      "programmes": [
+        {
+          "tuitionLabel": "Medical preparation tuition",
+          "teachingLanguage": "English (MBBS)",
+          "costItems": [
+            {
+              "item": "Medical preparation tuition",
+              "amount": "CNY 10,000 / semester",
+              "note": ""
+            },
+            {
+              "item": "Preparation hostel",
+              "amount": "CNY 2,400 / semester",
+              "note": ""
+            },
+            {
+              "item": "MBBS degree tuition",
+              "amount": "CNY 30,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Degree twin room",
+              "amount": "CNY 4,800 / year",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Bachelor freshman scholarship",
+              "coverage": "CNY 15,000 once, for approximately 30% of self-funded international undergraduate entrants."
+            }
+          ],
+          "documentChecklist": [
+            "Passport and recent photograph",
+            "Notarised high-school certificate, transcripts and good-conduct certificate",
+            "Accepted English evidence or eligible school medium-of-instruction documents",
+            "Valid CSCA result for the teaching language",
+            "Physical examination and police clearance",
+            "Bank statement covering first-year study costs",
+            "Scholarship application and supporting achievements"
+          ],
+          "scholarshipConditions": "Selection considers academic results, achievements and overall qualifications. The freshman award applies once at bachelor entry; approximately 30% of new students are selected.",
+          "professionalNote": "",
+          "csca": "For English-medium bachelor entry: Mathematics in English. Chinese-medium degree routes require Mathematics in Chinese and STEM Chinese.",
+          "id": "cqmu-medical-preparation",
+          "route": "foundation",
+          "name": "Medical preparation → MBBS",
+          "tuition": "CNY 10,000",
+          "period": "preparation semester",
+          "feeBasis": "Owner-supplied preparation offer; university degree fee reference",
+          "duration": "Preparation semester + 6-year MBBS",
+          "entry": "Spring preparation → autumn MBBS application",
+          "extra": "Preparation hostel CNY 2,400. Degree hostel CNY 4,800/year. Off-campus accommodation can be arranged under university rules.",
+          "awardTitle": "CNY 15,000 freshman scholarship",
+          "scholarship": "A one-time CNY 15,000 award for selected self-funded international bachelor freshmen, covering approximately 30% of new students through university selection.",
+          "majors": [
+            "Clinical Medicine (MBBS)"
+          ],
+          "eligibility": "High-school science qualification including Biology, Chemistry and Physics; generally age 18–25. English-medium applicants need an average of at least 70% in the high-school exit examination, accepted English evidence, CSCA Mathematics in English and an admission interview.",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "CNY 15,000 freshman award"
+        },
+        {
+          "tuitionLabel": "MBBS tuition before award",
+          "teachingLanguage": "English (MBBS)",
+          "costItems": [
+            {
+              "item": "MBBS tuition before award",
+              "amount": "CNY 30,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Twin room",
+              "amount": "CNY 4,800 / year",
+              "note": ""
+            },
+            {
+              "item": "Single room",
+              "amount": "CNY 9,600 / year",
+              "note": "Alternative to the twin room."
+            },
+            {
+              "item": "Application",
+              "amount": "CNY 450",
+              "note": "Non-refundable."
+            },
+            {
+              "item": "Insurance",
+              "amount": "CNY 800 / year",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Bachelor freshman scholarship",
+              "coverage": "CNY 15,000 once, for approximately 30% of self-funded international undergraduate entrants."
+            }
+          ],
+          "documentChecklist": [
+            "Passport and recent photograph",
+            "Notarised high-school certificate, transcripts and good-conduct certificate",
+            "Accepted English evidence or eligible school medium-of-instruction documents",
+            "Valid CSCA result for the teaching language",
+            "Physical examination and police clearance",
+            "Bank statement covering first-year study costs",
+            "Scholarship application and supporting achievements"
+          ],
+          "scholarshipConditions": "Selection considers academic results, achievements and overall qualifications. The freshman award applies once at bachelor entry; approximately 30% of new students are selected.",
+          "professionalNote": "",
+          "csca": "For English-medium bachelor entry: Mathematics in English. Chinese-medium degree routes require Mathematics in Chinese and STEM Chinese.",
+          "id": "cqmu-mbbs",
+          "route": "bachelor",
+          "name": "Clinical Medicine (MBBS)",
+          "tuition": "CNY 30,000",
+          "period": "year",
+          "feeBasis": "University bachelor fee reference",
+          "duration": "6-year bachelor",
+          "entry": "Autumn bachelor entry",
+          "extra": "Twin room CNY 4,800/year; single room CNY 9,600/year. Insurance CNY 800/year.",
+          "awardTitle": "CNY 15,000 freshman scholarship",
+          "scholarship": "A one-time CNY 15,000 award for selected self-funded international bachelor freshmen, covering approximately 30% of new students through university selection.",
+          "majors": [
+            "Clinical Medicine (MBBS)"
+          ],
+          "eligibility": "High-school science qualification including Biology, Chemistry and Physics; generally age 18–25. English-medium applicants need an average of at least 70% in the high-school exit examination, accepted English evidence, CSCA Mathematics in English and an admission interview.",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "CNY 15,000 freshman award"
+        }
+      ]
+    },
+    {
+      "id": "wenzhou-medical-university",
+      "name": "Wenzhou Medical University",
+      "acronym": "WMU",
+      "city": "Wenzhou",
+      "logo": "/images/campaigns/march-2027/wenzhou-medical-university.png",
+      "ranking": {
+        "value": "World #301–400",
+        "scope": "World",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Academic Ranking of World Universities",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/wenzhou-medical-university"
+      },
+      "programmes": [
+        {
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "Preparation tuition",
+              "amount": "CNY 10,000 / term",
+              "note": "Campaign estimate."
+            },
+            {
+              "item": "Preparation hostel",
+              "amount": "CNY 2,400 / term",
+              "note": "Campaign estimate."
+            },
+            {
+              "item": "MBBS / BDS degree tuition",
+              "amount": "CNY 33,000 / year",
+              "note": "Published fee; paid in full before freshman award assessment."
+            },
+            {
+              "item": "Degree hostel",
+              "amount": "CNY 4,400 / year",
+              "note": "Double-room accommodation."
+            },
+            {
+              "item": "Degree registration",
+              "amount": "CNY 600",
+              "note": "First year only."
+            },
+            {
+              "item": "Degree insurance",
+              "amount": "CNY 800 / year",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Freshman Type A",
+              "coverage": "CNY 20,000 award; published allocation 25%."
+            },
+            {
+              "name": "Freshman Type B",
+              "coverage": "CNY 10,000 award; published allocation 25%."
+            },
+            {
+              "name": "Freshman Type C",
+              "coverage": "CNY 5,000 award; published allocation 50%."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Freshman award ranking uses the entrance assessment / CSCA. Full tuition and registration are paid first; later-year academic awards are assessed separately.",
+          "professionalNote": "",
+          "csca": "For degree entry, the published guide requires CSCA English Mathematics and English Chemistry.",
+          "id": "wmu-medical-preparation",
+          "route": "foundation",
+          "name": "Medical preparation → MBBS / BDS",
+          "tuition": "CNY 10,000",
+          "period": "preparation term",
+          "feeBasis": "Campaign preparation estimate; published degree fee reference",
+          "duration": "0.5-year preparation; MBBS 6 years / BDS 5 years",
+          "entry": "Spring preparation; medical degree entry assessed separately",
+          "extra": "Preparation hostel CNY 2,400. Published degree tuition CNY 33,000/year. Current degree hostel reference CNY 4,400/year.",
+          "awardTitle": "Degree awards CNY 5,000–20,000",
+          "scholarship": "Published freshman awards for MBBS/BDS are CNY 20,000, CNY 10,000 or CNY 5,000, assessed after full tuition payment and registration.",
+          "majors": [
+            "Clinical Medicine (MBBS)",
+            "Dentistry (BDS)"
+          ],
+          "eligibility": "High-school science subjects including Physics, Chemistry and Biology; degree age range generally 18–30. Accepted English evidence and the degree CSCA subjects apply.",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "Freshman awards up to CNY 20,000"
+        }
+      ]
+    },
+    {
+      "id": "nantong-university",
+      "slug": "ntu",
+      "name": "Nantong University",
+      "acronym": "NTU",
+      "city": "Nantong",
+      "logo": "/images/campaigns/march-2027/nantong-university.png",
+      "ranking": {
+        "value": "World #401–500",
+        "scope": "World",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Academic Ranking of World Universities",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/nantong-university"
+      },
+      "programmes": [
+        {
+          "id": "nantong-university-foundation",
+          "route": "foundation",
+          "name": "Foundation → Bachelor",
+          "tuition": "CNY 6,000",
+          "period": "foundation semester",
+          "feeBasis": "Official SIE 2027 circular",
+          "extra": "CNY 1,500 quad dormitory per semester. Direct degree progression with priority freshmen scholarship award.",
+          "awardTitle": "Up to 100% Tuition Waiver",
+          "scholarship": "Award coverage is matched to the selected bachelor programme; foundation and living costs are budgeted separately.",
+          "majors": [
+            "Clinical Medicine (MBBS - 6 Years)",
+            "Dental Surgery (BDS - 5 Years)",
+            "Medical Imaging (4 Years)",
+            "Computer Science and Technology (4 Years)",
+            "Robotics Engineering (4 Years)",
+            "International Economics and Trade (4 Years)",
+            "Pre-Master Track (Medicine, AI & MBA)"
+          ],
+          "eligibility": "High-school qualification; age 18–25. Selected degree and teaching-language requirements apply.",
+          "duration": "1 preparation semester + degree",
+          "entry": "Spring preparation / language route",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "Foundation tuition",
+              "amount": "CNY 6,000 / semester",
+              "note": ""
+            },
+            {
+              "item": "Foundation quad hostel",
+              "amount": "CNY 1,500 / semester",
+              "note": ""
+            },
+            {
+              "item": "Degree MBBS / BDS tuition before award",
+              "amount": "CNY 26,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Degree CST / Robotics / Econ tuition before award",
+              "amount": "CNY 16,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Degree hostel by room",
+              "amount": "CNY 3,000 (Quad) / CNY 5,000 (Double) per year",
+              "note": ""
+            },
+            {
+              "item": "Application & registration fee",
+              "amount": "CNY 600",
+              "note": "Non-refundable."
+            },
+            {
+              "item": "Insurance",
+              "amount": "CNY 400 / semester (CNY 800 / year)",
+              "note": ""
+            },
+            {
+              "item": "Medical examination",
+              "amount": "CNY 400–500",
+              "note": "First year."
+            },
+            {
+              "item": "Residence permit",
+              "amount": "CNY 400 / year",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "First Class",
+              "coverage": "100% full degree tuition waiver."
+            },
+            {
+              "name": "Second Class",
+              "coverage": "CNY 9,000/yr degree tuition waiver (MBBS at CNY 17k/yr; CST at CNY 7k/yr)."
+            },
+            {
+              "name": "Third Class",
+              "coverage": "CNY 6,000/yr degree tuition waiver (MBBS at CNY 20k/yr; CST at CNY 10k/yr)."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "1st Class: 100% tuition waiver; 2nd Class: CNY 9,000/yr waiver (reduces MBBS to CNY 17k/yr, STEM to CNY 7k/yr); 3rd Class: CNY 6,000/yr waiver. Spring Foundation graduates receive priority award.",
+          "professionalNote": "Nantong University is ranked ARWU #401–500 globally. Clinical Medicine is in top 0.3% of ESI globally and recognized by WHO (WDOMS), BMDC, GMC, ECFMG.",
+          "csca": "Mandatory for Bachelor: CSCA Mathematics (English Medium).",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "Up to 100% Tuition Waiver"
+        }
+      ]
+    },
+    {
+      "id": "hangzhou-dianzi-university",
+      "name": "Hangzhou Dianzi University",
+      "acronym": "HDU",
+      "city": "Hangzhou",
+      "logo": "/images/campaigns/march-2027/hangzhou-dianzi-university.png",
+      "ranking": {
+        "value": "World #501–600",
+        "scope": "World",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Academic Ranking of World Universities",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/hangzhou-dianzi-university"
+      },
+      "programmes": [
+        {
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "Preparation tuition",
+              "amount": "CNY 6,000 / 6 months",
+              "note": ""
+            },
+            {
+              "item": "Preparation hostel",
+              "amount": "CNY 2,700 / term",
+              "note": ""
+            },
+            {
+              "item": "Application",
+              "amount": "CNY 500",
+              "note": ""
+            },
+            {
+              "item": "Degree tuition before award",
+              "amount": "CNY 18,000–20,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Degree hostel",
+              "amount": "CNY 5,400 / year",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Type 1",
+              "coverage": "Degree award CNY 20,000."
+            },
+            {
+              "name": "Type 2",
+              "coverage": "Degree award CNY 15,000."
+            },
+            {
+              "name": "Type 3",
+              "coverage": "Degree award CNY 10,000."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Award level depends on academic performance. No award is deducted from preparation tuition.",
+          "professionalNote": "",
+          "csca": "",
+          "id": "hdu-foundation",
+          "route": "foundation",
+          "name": "Preparation → Bachelor",
+          "tuition": "CNY 6,000",
+          "period": "6-month preparation term",
+          "feeBasis": "Campaign planning estimate",
+          "duration": "0.5-year preparation + 4-year bachelor",
+          "entry": "Spring preparation; degree progression assessed separately",
+          "extra": "Preparation hostel CNY 2,700. Subsequent degree tuition CNY 18,000–20,000/year; hostel CNY 5,400/year.",
+          "awardTitle": "Degree awards up to CNY 20,000",
+          "scholarship": "Campaign degree award values are CNY 20,000, CNY 15,000 and CNY 10,000, determined by academic results.",
+          "majors": [
+            "Computer Science and Technology",
+            "Software Engineering",
+            "Electronic and Information Engineering",
+            "Telecommunication Engineering",
+            "Intelligent Manufacturing Engineering",
+            "Mechanical Design and Manufacturing",
+            "Medical Information Engineering",
+            "Biomedical Engineering",
+            "International Economics and Trade",
+            "Business Management and Administration"
+          ],
+          "eligibility": "High-school qualification; selected academic subjects and language evidence required. Degree progression and award level depend on academic results.",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "Awards up to CNY 20,000"
+        }
+      ]
+    },
+    {
+      "id": "shandong-university-of-technology",
+      "name": "Shandong University of Technology",
+      "acronym": "SDUT",
+      "city": "Zibo, Shandong",
+      "logo": "/images/universities/logos/shandong-university-of-technology.webp",
+      "ranking": {
+        "value": "World #801–900",
+        "scope": "World",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Academic Ranking of World Universities",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/shandong-university-of-technology"
+      },
+      "programmes": [
+        {
+          "tuitionLabel": "Chinese language tuition",
+          "teachingLanguage": "English-taught bachelor (with Chinese language semester)",
+          "costItems": [
+            {
+              "item": "Chinese language tuition",
+              "amount": "CNY 5,000 / semester",
+              "note": "March–July 2027"
+            },
+            {
+              "item": "English-taught bachelor tuition",
+              "amount": "CNY 12,000 / year",
+              "note": "From September 2027, 4 years"
+            },
+            {
+              "item": "Four-person (quad) dormitory",
+              "amount": "Free",
+              "note": ""
+            },
+            {
+              "item": "Double room (optional)",
+              "amount": "CNY 5,200 / year",
+              "note": ""
+            },
+            {
+              "item": "Single room (optional)",
+              "amount": "CNY 10,400 / year",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Shared accommodation",
+              "coverage": "Free four-person dormitory."
+            },
+            {
+              "name": "Bachelor transfer tuition credit",
+              "coverage": "Spring language tuition may be deducted from first-year undergraduate tuition following an approved transfer."
+            }
+          ],
+          "documentChecklist": [
+            "Valid passport and recent photograph",
+            "Secondary school certificate and transcripts (English translation)",
+            "CSCA score report (before June 2027 for bachelor entry)",
+            "Police clearance / evidence of good conduct",
+            "Foreigner Physical Examination Form"
+          ],
+          "scholarshipConditions": "Free quad-room accommodation. Bachelor progression requires a valid CSCA result submitted before June 2027. Eligible regions: Asia and North Africa. Age 18–25.",
+          "professionalNote": "",
+          "csca": "CSCA score required before June 2027 for bachelor entry.",
+          "id": "sdut-language-bachelor-pathway",
+          "route": "foundation",
+          "name": "Chinese Language → English-taught Bachelor (4.5 Years)",
+          "tuition": "CNY 5,000",
+          "period": "semester",
+          "feeBasis": "Owner-supplied 2027 pathway offer",
+          "duration": "0.5-year language + 4-year bachelor",
+          "entry": "March 2027 language semester → September 2027 bachelor",
+          "extra": "Free four-person (quad) dormitory. Language CNY 5,000/semester; bachelor CNY 12,000/year. Deadline 30 December 2026.",
+          "awardTitle": "Free shared dormitory + tuition credit",
+          "scholarship": "The pathway includes a free four-person dormitory. Spring language tuition may be credited towards first-year bachelor tuition after an eligible transfer.",
+          "majors": [
+            "Mechanical Design, Manufacturing and Automation",
+            "Computer Science and Technology",
+            "International Economics and Trade",
+            "Civil Engineering",
+            "Electrical Engineering and Automation",
+            "Energy and Power Engineering — Vehicle Engine Specialization",
+            "Business English",
+            "Resource Exploration Engineering"
+          ],
+          "eligibility": "Secondary school completion; age 18–25; no entrance exam or interview; open to applicants from Asia and North Africa. A valid CSCA score is required before June 2027 to start the bachelor.",
+          "majorGroups": [
+            {
+              "label": "English-taught bachelor’s majors",
+              "majors": [
+                "Mechanical Design, Manufacturing and Automation",
+                "Computer Science and Technology",
+                "International Economics and Trade",
+                "Civil Engineering",
+                "Electrical Engineering and Automation",
+                "Energy and Power Engineering — Vehicle Engine Specialization",
+                "Business English",
+                "Resource Exploration Engineering"
+              ]
+            }
+          ],
+          "fundingStage": "Bachelor pathway benefits",
+          "fundingHighlight": "Free quad room · bachelor CNY 12,000/yr"
+        }
+      ]
+    },
+    {
+      "id": "guizhou-university",
+      "name": "Guizhou University",
+      "acronym": "GZU",
+      "city": "Guiyang",
+      "logo": "/images/universities/logos/gzu.webp",
+      "ranking": {
+        "value": "National #124",
+        "scope": "National",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/institution/guizhou-university"
+      },
+      "programmes": [
+        {
+          "id": "guizhou-university-language-spring",
+          "route": "language",
+          "name": "Spring 2027 Non-Degree Chinese Language Program",
+          "tuition": "CNY 6,000",
+          "period": "semester",
+          "feeBasis": "Published tuition schedule",
+          "extra": "Registration CNY 500, Insurance CNY 400/semester. On-campus dorm CNY 1,500–3,000/semester.",
+          "awardTitle": "Provincial & CSC Degree Progression Eligibility",
+          "scholarship": "Self-funded language semester with progression pathway to Guizhou Provincial and CSC Scholarships for degree programs.",
+          "majors": [
+            "Comprehensive Chinese",
+            "Spoken Communication",
+            "Listening & Speaking",
+            "Reading & Writing",
+            "HSK 3–5 Preparation"
+          ],
+          "eligibility": "High school diploma or above, aged 16–35, non-Chinese citizen in good health with clean criminal record.",
+          "duration": "1 semester (March–July 2027)",
+          "entry": "Spring language route",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "Chinese",
+          "costItems": [
+            {
+              "item": "Tuition",
+              "amount": "CNY 6,000 / semester",
+              "note": "Spring 2027 intake"
+            },
+            {
+              "item": "Registration Fee",
+              "amount": "CNY 500",
+              "note": "One-time application fee"
+            },
+            {
+              "item": "Insurance",
+              "amount": "CNY 400 / semester",
+              "note": "Comprehensive medical insurance"
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Progression Degree Awards",
+              "coverage": "Guizhou Provincial Government Scholarship (CNY 10,000–20,000/year) and CSC Scholarships available upon degree matriculation."
+            }
+          ],
+          "documentChecklist": [
+            "Valid passport photo page",
+            "High school diploma or enrollment proof",
+            "Academic transcripts",
+            "Foreigner Physical Examination Record",
+            "Non-Criminal Record Report (Police Clearance)",
+            "Bank statement showing minimum RMB 20,000 equivalent"
+          ],
+          "scholarshipConditions": "Degree scholarship competition upon reaching HSK 4/5.",
+          "professionalNote": "",
+          "csca": "No CSCA required for language program. CSCA required for subsequent undergraduate degree applications.",
+          "majorGroups": [],
+          "fundingStage": "Language study",
+          "fundingHighlight": "Affordable CNY 6,000/semester tuition"
+        }
+      ]
+    },
+    {
+      "id": "chongqing-jiaotong-university",
+      "name": "Chongqing Jiaotong University",
+      "acronym": "CQJTU",
+      "city": "Chongqing",
+      "logo": "/images/campaigns/march-2027/chongqing-jiaotong-university.png",
+      "ranking": {
+        "value": "China #191",
+        "scope": "China",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/chongqing-jiaotong-university"
+      },
+      "programmes": [
+        {
+          "id": "chongqing-jiaotong-university-foundation",
+          "route": "foundation",
+          "name": "Foundation → Bachelor",
+          "tuition": "CNY 6,000",
+          "period": "foundation semester",
+          "feeBasis": "Campaign planning estimate",
+          "extra": "Foundation tuition and hostel are included in the CNY 6,000 semester estimate. Bachelor hostel: CNY 2,500/year.",
+          "awardTitle": "Degree tuition support",
+          "scholarship": "Three degree award tiers combine tuition support with a CNY 2,500 annual hostel charge; Type A includes a CNY 1,000 monthly stipend.",
+          "majors": [
+            "International Economics and Trade",
+            "Mechanical Engineering",
+            "Tourism Management",
+            "Network and New Media",
+            "Computer Science and Technology",
+            "Civil Engineering"
+          ],
+          "eligibility": "High-school qualification; age 18–25. Degree progression requires the selected major’s academic and language requirements.",
+          "duration": "0.5-year foundation + 4-year bachelor",
+          "entry": "Spring preparation / language route",
+          "tuitionLabel": "Foundation tuition + hostel",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "Foundation tuition + hostel",
+              "amount": "CNY 6,000 / semester",
+              "note": "Combined amount; hostel is not added a second time."
+            },
+            {
+              "item": "Degree application",
+              "amount": "CNY 800",
+              "note": "Non-refundable."
+            },
+            {
+              "item": "Insurance",
+              "amount": "CNY 800 / year",
+              "note": ""
+            },
+            {
+              "item": "Medical examination",
+              "amount": "CNY 100–600",
+              "note": "First year."
+            },
+            {
+              "item": "Residence permit",
+              "amount": "CNY 400 / year",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Type A",
+              "coverage": "Tuition waived; hostel CNY 2,500/year; stipend CNY 1,000/month."
+            },
+            {
+              "name": "Type B",
+              "coverage": "Tuition waived; hostel CNY 2,500/year."
+            },
+            {
+              "name": "Type C",
+              "coverage": "Tuition CNY 5,000/year; hostel CNY 2,500/year."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Annual academic review applies; the award level can change with academic performance. Foundation and degree costs are separate stages.",
+          "professionalNote": "",
+          "csca": "",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "100% tuition + CNY 1,000/month"
+        }
+      ]
+    },
+    {
+      "id": "xian-shiyou-university",
+      "name": "Xi’an Shiyou University",
+      "acronym": "XSYU",
+      "city": "Xi’an",
+      "logo": "/images/campaigns/march-2027/xian-shiyou-university.jpg",
+      "ranking": {
+        "value": "China #230",
+        "scope": "China",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/xian-shiyou-university"
+      },
+      "programmes": [
+        {
+          "id": "xian-shiyou-university-foundation",
+          "route": "foundation",
+          "name": "Foundation → Bachelor",
+          "tuition": "CNY 3,000",
+          "period": "foundation semester",
+          "feeBasis": "Campaign planning estimate",
+          "extra": "CNY 1,500 foundation hostel estimate. Degree tuition and other costs are separate.",
+          "awardTitle": "Tuition awards + CNY 1,500/month",
+          "scholarship": "Campaign degree tiers combine tuition support, accommodation and possible stipend. Coverage depends on the written award.",
+          "majors": [
+            "Civil Engineering",
+            "Computer Science and Technology",
+            "Artificial Intelligence",
+            "Petroleum Engineering",
+            "Geology",
+            "Offshore Oil and Gas Engineering",
+            "Resource Exploration Engineering"
+          ],
+          "eligibility": "High-school qualification; academic subjects and teaching-language requirements depend on the degree. Campaign age range: 18–25.",
+          "duration": "1 preparation semester + degree",
+          "entry": "Spring preparation / language route",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "Foundation tuition",
+              "amount": "CNY 3,000 / semester",
+              "note": ""
+            },
+            {
+              "item": "Foundation hostel",
+              "amount": "CNY 1,500 / semester",
+              "note": ""
+            },
+            {
+              "item": "Degree tuition before award",
+              "amount": "CNY 18,500 / year",
+              "note": ""
+            },
+            {
+              "item": "Degree hostel before award",
+              "amount": "CNY 7,500 / year",
+              "note": ""
+            },
+            {
+              "item": "Application",
+              "amount": "CNY 600",
+              "note": "Non-refundable."
+            },
+            {
+              "item": "Insurance",
+              "amount": "CNY 800 / year",
+              "note": ""
+            },
+            {
+              "item": "Medical examination",
+              "amount": "CNY 100–500",
+              "note": "First year."
+            },
+            {
+              "item": "Residence permit",
+              "amount": "CNY 800 / year",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Type 1",
+              "coverage": "Full degree tuition and accommodation; stipend CNY 1,500/month."
+            },
+            {
+              "name": "Type 2",
+              "coverage": "Full degree tuition; stipend CNY 1,500/month. Accommodation separate."
+            },
+            {
+              "name": "Type 3",
+              "coverage": "50% tuition and accommodation waiver; payable tuition CNY 9,250/year; stipend CNY 1,500/month."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Annual academic review applies. The level may change with performance; preparation costs are separate.",
+          "professionalNote": "",
+          "csca": "",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "Full tuition + hostel + CNY 1,500/month"
+        }
+      ]
+    },
+    {
+      "id": "nanjing-institute-of-technology",
+      "name": "Nanjing Institute of Technology",
+      "acronym": "NJIT",
+      "city": "Nanjing",
+      "logo": "/images/campaigns/march-2027/nanjing-institute-of-technology.png",
+      "ranking": {
+        "value": "China #273",
+        "scope": "China",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-institute-of-technology"
+      },
+      "programmes": [
+        {
+          "id": "nanjing-institute-of-technology-masters",
+          "route": "masters",
+          "name": "Master’s route assessment",
+          "tuition": "CNY 24,000",
+          "period": "year before scholarship",
+          "feeBasis": "Campaign planning estimate",
+          "extra": "The campaign award plan lists tuition, accommodation and insurance coverage by tier.",
+          "awardTitle": "Tuition + hostel + insurance",
+          "scholarship": "Campaign scholarship tiers list tuition, accommodation and insurance plus a monthly stipend of CNY 300, CNY 500 or CNY 1,000. Final coverage follows the award letter.",
+          "majors": [
+            "Mechanical Engineering",
+            "Materials and Chemical Engineering",
+            "Electrical Engineering",
+            "Power Engineering",
+            "Control Engineering",
+            "Electronic Information",
+            "Computer Technology",
+            "Civil and Hydraulic Engineering",
+            "Transportation Engineering",
+            "Resources and Environment",
+            "Accounting",
+            "Library and Information Science",
+            "Social Work",
+            "Design"
+          ],
+          "eligibility": "Relevant bachelor degree; maximum age 35. Academic records, English evidence, study plan and recommendation letters are assessed for the selected master’s programme.",
+          "duration": "3 years",
+          "entry": "Degree entry term matched to your programme",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "English",
+          "costItems": [],
+          "scholarshipTiers": [
+            {
+              "name": "Type A",
+              "coverage": "Full tuition, accommodation and insurance; CNY 1,000 monthly stipend."
+            },
+            {
+              "name": "Type B",
+              "coverage": "Full tuition, accommodation and insurance; CNY 500 monthly stipend."
+            },
+            {
+              "name": "Type C",
+              "coverage": "Full tuition, accommodation and insurance; CNY 300 monthly stipend."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme",
+            "Postgraduate study plan and recommendation letters"
+          ],
+          "scholarshipConditions": "Award selection and written university terms apply.",
+          "professionalNote": "",
+          "csca": "",
+          "majorGroups": [],
+          "fundingStage": "Master’s scholarship",
+          "fundingHighlight": "Tuition + hostel + CNY 1,000/month"
+        }
+      ]
+    },
+    {
+      "id": "civil-aviation-university-of-china",
+      "name": "Civil Aviation University of China",
+      "acronym": "CAUC",
+      "city": "Tianjin",
+      "logo": "/images/universities/logos/civil-aviation-university-of-china.webp",
+      "ranking": {
+        "value": "China #295",
+        "scope": "China",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/civil-aviation-university-of-china"
+      },
+      "programmes": [
+        {
+          "id": "cauc-foundation-bachelor",
+          "route": "foundation",
+          "name": "Half-Year Foundation → English-taught Bachelor (0.5 + 4 Years)",
+          "tuition": "CNY 7,500",
+          "period": "semester",
+          "feeBasis": "University March 2027 foundation offer",
+          "extra": "Double room CNY 3,000/semester during foundation; application fee CNY 400. Direct entry to English-taught bachelor after foundation.",
+          "awardTitle": "1st / 2nd-class scholarship eligibility",
+          "scholarship": "After completing the foundation, students become eligible for the university first- or second-class bachelor scholarship.",
+          "majors": [
+            "English-taught bachelor programmes (aviation, engineering and management tracks)"
+          ],
+          "eligibility": "Age 17–24; minimum 60% in secondary school; IELTS 5.5 / TOEFL 70 / Duolingo 85; no exam or interview; no country restriction.",
+          "duration": "0.5-year foundation + 4-year bachelor",
+          "entry": "March 2027 foundation → September 2027 bachelor",
+          "tuitionLabel": "Foundation tuition",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "Foundation tuition",
+              "amount": "CNY 7,500 / semester",
+              "note": ""
+            },
+            {
+              "item": "Foundation accommodation (double room)",
+              "amount": "CNY 3,000 / semester",
+              "note": ""
+            },
+            {
+              "item": "Application fee",
+              "amount": "CNY 400",
+              "note": "One-off"
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "First-class scholarship",
+              "coverage": "Available to eligible students after the foundation (subject to university assessment)."
+            },
+            {
+              "name": "Second-class scholarship",
+              "coverage": "Available to eligible students after the foundation (subject to university assessment)."
+            }
+          ],
+          "documentChecklist": [
+            "Valid passport and photograph",
+            "Secondary school certificate and transcripts (English translation)",
+            "Foreigner Physical Examination Form",
+            "Police clearance certificate",
+            "English proficiency certificate (IELTS 5.5 / TOEFL 70 / Duolingo 85)"
+          ],
+          "scholarshipConditions": "Scholarship class is determined after the foundation based on academic results.",
+          "professionalNote": "",
+          "csca": "Not required for foundation entry",
+          "majorGroups": [],
+          "fundingStage": "Foundation → bachelor",
+          "fundingHighlight": "Scholarship eligible after foundation"
+        }
+      ]
+    },
+    {
+      "id": "linyi-university",
+      "name": "Linyi University",
+      "acronym": "LYU",
+      "city": "Linyi",
+      "logo": "/images/campaigns/march-2027/linyi-university.png",
+      "ranking": {
+        "value": "China #299",
+        "scope": "China",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/linyi-university"
+      },
+      "programmes": [
+        {
+          "id": "linyi-university-foundation",
+          "route": "foundation",
+          "name": "Foundation → Bachelor",
+          "tuition": "CNY 4,000",
+          "period": "foundation semester",
+          "feeBasis": "Campaign planning estimate",
+          "extra": "CNY 2,000 foundation hostel estimate. Degree tuition is billed separately.",
+          "awardTitle": "Degree tuition from CNY 0",
+          "scholarship": "Campaign degree award tiers list annual payable tuition of CNY 0, CNY 4,000 or CNY 7,000; award conditions and annual review apply.",
+          "majors": [
+            "E-commerce",
+            "Civil Engineering",
+            "Computer Science and Technology",
+            "International Business and Trade",
+            "Visual Communication Design",
+            "Media Communication Design"
+          ],
+          "eligibility": "High-school qualification; age 18–25. Degree progression depends on the selected programme requirements.",
+          "duration": "1 preparation semester + degree",
+          "entry": "Spring preparation / language route",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "Foundation tuition",
+              "amount": "CNY 4,000 / semester",
+              "note": ""
+            },
+            {
+              "item": "Foundation hostel",
+              "amount": "CNY 2,000 / semester",
+              "note": ""
+            },
+            {
+              "item": "Degree tuition before award",
+              "amount": "CNY 12,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Degree hostel",
+              "amount": "CNY 2,400–2,880 / year",
+              "note": ""
+            },
+            {
+              "item": "Application",
+              "amount": "CNY 400",
+              "note": "Non-refundable."
+            },
+            {
+              "item": "Insurance",
+              "amount": "CNY 800 / year",
+              "note": ""
+            },
+            {
+              "item": "Medical examination",
+              "amount": "CNY 320",
+              "note": "First year."
+            },
+            {
+              "item": "Residence permit",
+              "amount": "CNY 400 / year",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "First Class",
+              "coverage": "100% degree tuition waiver."
+            },
+            {
+              "name": "Second Class",
+              "coverage": "Payable degree tuition CNY 4,000/year."
+            },
+            {
+              "name": "Third Class",
+              "coverage": "Payable degree tuition CNY 7,000/year."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Award selection and written university terms apply.",
+          "professionalNote": "",
+          "csca": "",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "Up to 100% tuition waiver"
+        }
+      ]
+    },
+    {
+      "id": "panzhihua-university",
+      "name": "Panzhihua University",
+      "acronym": "PZHU",
+      "city": "Panzhihua",
+      "logo": "/images/campaigns/march-2027/panzhihua-university.png",
+      "ranking": {
+        "value": "China #394",
+        "scope": "China",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/panzhihua-university"
+      },
+      "programmes": [
+        {
+          "id": "panzhihua-university-bachelor",
+          "route": "bachelor",
+          "name": "Bachelor route assessment",
+          "tuition": "CNY 6,000",
+          "period": "first-year tuition after award",
+          "feeBasis": "Published fee reference; request your intake quote",
+          "extra": "Published schedule: CNY 9,000 annual tuition less CNY 3,000 President Scholarship. Hostel CNY 3,000/year; application CNY 500.",
+          "awardTitle": "CNY 3,000 President Scholarship",
+          "scholarship": "Published award offsets first-year tuition for Computer Science and International Economics and Trade. Subsequent awards depend on the university rules.",
+          "majors": [
+            "Computer Science and Technology",
+            "International Economics and Trade"
+          ],
+          "eligibility": "High-school qualification. Teaching language, academic and language criteria apply to the selected degree. Campaign age range: 18–25.",
+          "duration": "4 years",
+          "entry": "Degree entry term matched to your programme",
+          "tuitionLabel": "Tuition",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "Tuition before President Scholarship",
+              "amount": "CNY 9,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Tuition after listed President Scholarship",
+              "amount": "CNY 6,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Hostel",
+              "amount": "CNY 3,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Registration",
+              "amount": "CNY 500 / year",
+              "note": ""
+            },
+            {
+              "item": "Insurance",
+              "amount": "CNY 1,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Medical examination",
+              "amount": "CNY 100–500",
+              "note": "First year."
+            },
+            {
+              "item": "Residence permit",
+              "amount": "CNY 400 / year",
+              "note": ""
+            },
+            {
+              "item": "University deposit",
+              "amount": "CNY 9,500",
+              "note": "Payable after JW202. Credit and scope recorded in the written quote."
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "President Scholarship",
+              "coverage": "CNY 3,000 tuition reduction: CNY 9,000 becomes CNY 6,000/year."
+            },
+            {
+              "name": "Academic-performance award",
+              "coverage": "Project sheet lists an additional CNY 1,000–5,000/year for excellent results; not deducted automatically."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Award selection and written university terms apply.",
+          "professionalNote": "",
+          "csca": "",
+          "majorGroups": [],
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "Merit awards up to CNY 5,000/year"
+        }
+      ]
+    },
+    {
+      "id": "wuzhou-university",
+      "name": "Wuzhou University",
+      "acronym": "WZU",
+      "city": "Wuzhou",
+      "logo": "/images/universities/logos/wuzhou-university.webp",
+      "ranking": {
+        "value": "China #500+",
+        "scope": "China",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/wuzhou-university"
+      },
+      "programmes": [
+        {
+          "id": "wuzhou-university-bachelor",
+          "route": "bachelor",
+          "name": "Direct Major Bachelor Degree (4-Year Scholarship)",
+          "tuition": "CNY 9,000",
+          "period": "year (tuition + room)",
+          "feeBasis": "University March 2027 scholarship package",
+          "extra": "Near Guangzhou & Shenzhen. Tuition and twin-share room combined: Business English CNY 9,000; International Economics & Trade CNY 9,300; Computer Science & AI CNY 9,900 per year. 35 seats per major.",
+          "awardTitle": "4-year unconditional scholarship",
+          "scholarship": "Unconditional scholarship on admission for the full 4-year degree; annual payable amount includes twin-share accommodation.",
+          "majors": [
+            "International Economics and Trade",
+            "Business English",
+            "Computer Science and Technology",
+            "Artificial Intelligence"
+          ],
+          "eligibility": "Secondary school completion with minimum 60% marks; age 18–23; open to all nationalities; no CSCA exam.",
+          "duration": "4 years",
+          "entry": "March 2027 (direct major, no foundation year)",
+          "tuitionLabel": "Tuition + twin-share room after scholarship",
+          "teachingLanguage": "English",
+          "costItems": [
+            {
+              "item": "International Economics and Trade",
+              "amount": "CNY 9,300 / year",
+              "note": "Tuition + twin-share room"
+            },
+            {
+              "item": "Business English",
+              "amount": "CNY 9,000 / year",
+              "note": "Tuition + twin-share room"
+            },
+            {
+              "item": "Computer Science and Technology",
+              "amount": "CNY 9,900 / year",
+              "note": "Tuition + twin-share room"
+            },
+            {
+              "item": "Artificial Intelligence",
+              "amount": "CNY 9,900 / year",
+              "note": "Tuition + twin-share room"
+            },
+            {
+              "item": "Proof of funds",
+              "amount": "USD 3,000",
+              "note": "Bank statement at application; not a fee."
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "International Economics and Trade",
+              "coverage": "Total payable CNY 9,300/year for 4 years (room included). 35 seats."
+            },
+            {
+              "name": "Business English",
+              "coverage": "Total payable CNY 9,000/year for 4 years (room included). 35 seats."
+            },
+            {
+              "name": "Computer Science and Technology",
+              "coverage": "Total payable CNY 9,900/year for 4 years (room included). 35 seats."
+            },
+            {
+              "name": "Artificial Intelligence",
+              "coverage": "Total payable CNY 9,900/year for 4 years (room included). 35 seats."
+            }
+          ],
+          "documentChecklist": [
+            "Valid ordinary passport",
+            "Photograph with white background",
+            "Academic certificates and transcripts with English translation",
+            "Bank statement (minimum USD 3,000)",
+            "Police clearance (valid 6 months)",
+            "Physical examination (valid 6 months)",
+            "2-minute English self-introduction video"
+          ],
+          "scholarshipConditions": "Unconditional for 4 years subject to normal enrolment, attendance and conduct. Mandatory 2-minute English introduction video.",
+          "professionalNote": "",
+          "csca": "Not required",
+          "majorGroups": [],
+          "fundingStage": "Bachelor funding",
+          "fundingHighlight": "4-year scholarship · from CNY 9,000/yr incl. room"
+        }
+      ]
+    },
+    {
+      "id": "hechi-university",
+      "name": "Hechi University",
+      "acronym": "HCU",
+      "city": "Hechi, Guangxi",
+      "logo": "/images/universities/logos/hechi-university.webp",
+      "ranking": {
+        "value": "China #510",
+        "scope": "China",
+        "publisher": "ShanghaiRanking",
+        "rankingName": "Best Chinese Universities Ranking",
+        "year": 2026,
+        "sourceUrl": "https://www.shanghairanking.com/universities/hechi-university"
+      },
+      "programmes": [
+        {
+          "id": "hechi-chinese-language-1-5yr",
+          "route": "language",
+          "name": "Intensive Chinese Language (1.5 Years or 0.5 Year)",
+          "tuition": "CNY 9,000",
+          "period": "full 1.5 years",
+          "feeBasis": "University March 2027 language offer",
+          "extra": "March 2027 – June 2028, targets HSK 5, beginners accepted. Quad room CNY 3,000 for the full 1.5 years. 0.5-year option: CNY 3,000 tuition + CNY 1,500 room.",
+          "awardTitle": "Merit scholarship",
+          "scholarship": "CNY 1,000 / year after the first semester for students scoring above 80%.",
+          "majors": [
+            "Chinese Language (Beginner → HSK 5)"
+          ],
+          "eligibility": "Age 18–25; secondary school completion; beginners accepted; open to all nationalities.",
+          "duration": "1.5 years (or 0.5 year)",
+          "entry": "March 2027",
+          "tuitionLabel": "Tuition (full 1.5 years)",
+          "teachingLanguage": "Chinese",
+          "costItems": [
+            {
+              "item": "1.5-year tuition",
+              "amount": "CNY 9,000 total",
+              "note": "March 2027 – June 2028"
+            },
+            {
+              "item": "1.5-year accommodation (quad room)",
+              "amount": "CNY 3,000 total",
+              "note": ""
+            },
+            {
+              "item": "0.5-year tuition",
+              "amount": "CNY 3,000 total",
+              "note": ""
+            },
+            {
+              "item": "0.5-year accommodation (quad room)",
+              "amount": "CNY 1,500 total",
+              "note": ""
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Merit scholarship",
+              "coverage": "CNY 1,000 / year from the second semester if score > 80%."
+            }
+          ],
+          "documentChecklist": [
+            "Valid passport and photograph",
+            "Secondary school certificate and transcripts (English translation)",
+            "Foreigner Physical Examination Form",
+            "Police clearance certificate"
+          ],
+          "scholarshipConditions": "Score above 80% in the first semester.",
+          "professionalNote": "",
+          "csca": "Not required",
+          "majorGroups": [],
+          "fundingStage": "Language funding",
+          "fundingHighlight": "1.5 yrs CNY 12,000 total incl. room"
+        }
+      ]
+    },
+    {
       "id": "shenyang-city-university",
       "name": "Shenyang City University",
       "acronym": "SYCU",
@@ -523,648 +2277,6 @@
       ]
     },
     {
-      "id": "chongqing-jiaotong-university",
-      "name": "Chongqing Jiaotong University",
-      "acronym": "CQJTU",
-      "city": "Chongqing",
-      "logo": "/images/campaigns/march-2027/chongqing-jiaotong-university.png",
-      "ranking": {
-        "value": "China #191",
-        "scope": "China",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Best Chinese Universities Ranking",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/chongqing-jiaotong-university"
-      },
-      "programmes": [
-        {
-          "id": "chongqing-jiaotong-university-foundation",
-          "route": "foundation",
-          "name": "Foundation → Bachelor",
-          "tuition": "CNY 6,000",
-          "period": "foundation semester",
-          "feeBasis": "Campaign planning estimate",
-          "extra": "Foundation tuition and hostel are included in the CNY 6,000 semester estimate. Bachelor hostel: CNY 2,500/year.",
-          "awardTitle": "Degree tuition support",
-          "scholarship": "Three degree award tiers combine tuition support with a CNY 2,500 annual hostel charge; Type A includes a CNY 1,000 monthly stipend.",
-          "majors": [
-            "International Economics and Trade",
-            "Mechanical Engineering",
-            "Tourism Management",
-            "Network and New Media",
-            "Computer Science and Technology",
-            "Civil Engineering"
-          ],
-          "eligibility": "High-school qualification; age 18–25. Degree progression requires the selected major’s academic and language requirements.",
-          "duration": "0.5-year foundation + 4-year bachelor",
-          "entry": "Spring preparation / language route",
-          "tuitionLabel": "Foundation tuition + hostel",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "Foundation tuition + hostel",
-              "amount": "CNY 6,000 / semester",
-              "note": "Combined amount; hostel is not added a second time."
-            },
-            {
-              "item": "Degree application",
-              "amount": "CNY 800",
-              "note": "Non-refundable."
-            },
-            {
-              "item": "Insurance",
-              "amount": "CNY 800 / year",
-              "note": ""
-            },
-            {
-              "item": "Medical examination",
-              "amount": "CNY 100–600",
-              "note": "First year."
-            },
-            {
-              "item": "Residence permit",
-              "amount": "CNY 400 / year",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Type A",
-              "coverage": "Tuition waived; hostel CNY 2,500/year; stipend CNY 1,000/month."
-            },
-            {
-              "name": "Type B",
-              "coverage": "Tuition waived; hostel CNY 2,500/year."
-            },
-            {
-              "name": "Type C",
-              "coverage": "Tuition CNY 5,000/year; hostel CNY 2,500/year."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Annual academic review applies; the award level can change with academic performance. Foundation and degree costs are separate stages.",
-          "professionalNote": "",
-          "csca": "",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "100% tuition + CNY 1,000/month"
-        }
-      ]
-    },
-    {
-      "id": "harbin-institute-of-technology",
-      "name": "Harbin Institute of Technology",
-      "acronym": "HIT",
-      "city": "Harbin",
-      "logo": "/images/campaigns/march-2027/harbin-institute-of-technology.png",
-      "ranking": {
-        "value": "World #97",
-        "scope": "World",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Academic Ranking of World Universities",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/harbin-institute-of-technology"
-      },
-      "programmes": [
-        {
-          "id": "hit-language-preparation",
-          "route": "foundation",
-          "name": "Chinese-language preparation → Bachelor",
-          "tuition": "CNY 7,300",
-          "period": "preparation term",
-          "feeBasis": "Campaign planning estimate",
-          "extra": "Degree tuition reference CNY 26,000/year; hostel CNY 800/month. The campaign records a CNY 13,000 university deposit for JW202 issuance.",
-          "awardTitle": "Degree tuition awards",
-          "scholarship": "The campaign lists degree tuition-support tiers of 100%, 50%, 30% and 20%; foundation tuition is separate.",
-          "majors": [
-            "Automation",
-            "Integrated Circuit Design and Integrated System",
-            "Electrical Engineering and Automation",
-            "Computer Science and Technology",
-            "Artificial Intelligence",
-            "Robot Engineering",
-            "Civil Engineering",
-            "Chemical Engineering and Technology",
-            "Biological Engineering",
-            "Digital Media Art",
-            "Architecture",
-            "Big Data Management and Application",
-            "Business Management"
-          ],
-          "eligibility": "High-school qualification; campaign degree age range 18–25. Chinese preparation and subsequent English-medium bachelor admission have separate language requirements.",
-          "duration": "0.5-year preparation + 4-year bachelor",
-          "entry": "Spring preparation; degree progression assessed separately",
-          "tuitionLabel": "Language preparation",
-          "teachingLanguage": "Chinese preparation; English degree majors",
-          "costItems": [
-            {
-              "item": "Chinese preparation",
-              "amount": "CNY 7,300 / term",
-              "note": ""
-            },
-            {
-              "item": "Degree tuition before award",
-              "amount": "CNY 26,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Degree application",
-              "amount": "CNY 600",
-              "note": "Non-refundable."
-            },
-            {
-              "item": "Hostel",
-              "amount": "CNY 800 / month",
-              "note": ""
-            },
-            {
-              "item": "Insurance",
-              "amount": "CNY 800 / year",
-              "note": ""
-            },
-            {
-              "item": "Medical examination",
-              "amount": "CNY 300–400",
-              "note": "First year."
-            },
-            {
-              "item": "Residence permit",
-              "amount": "CNY 400 / year",
-              "note": ""
-            },
-            {
-              "item": "University deposit",
-              "amount": "CNY 13,000",
-              "note": "Required for JW202 under the selected route; record any credit in the written cost plan."
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Elite Class",
-              "coverage": "100% degree tuition waiver."
-            },
-            {
-              "name": "First Class",
-              "coverage": "50% tuition waiver; payable degree tuition CNY 13,000/year."
-            },
-            {
-              "name": "Second Class",
-              "coverage": "30% tuition waiver; payable degree tuition CNY 18,200/year."
-            },
-            {
-              "name": "Third Class",
-              "coverage": "20% tuition waiver; payable degree tuition CNY 20,800/year."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Award selection and written university terms apply.",
-          "professionalNote": "",
-          "csca": "",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "Up to 100% tuition waiver"
-        }
-      ]
-    },
-    {
-      "id": "nanjing-university-of-aeronautics-and-astronautics",
-      "name": "Nanjing University of Aeronautics and Astronautics",
-      "acronym": "NUAA",
-      "city": "Nanjing",
-      "logo": "/images/campaigns/march-2027/nanjing-university-of-aeronautics-and-astronautics.jpg",
-      "ranking": {
-        "value": "World #201–300",
-        "scope": "World",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Academic Ranking of World Universities",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-university-of-aeronautics-and-astronautics"
-      },
-      "programmes": [
-        {
-          "id": "nanjing-university-of-aeronautics-and-astronautics-foundation",
-          "route": "foundation",
-          "name": "Pre-Engineering / Pre-Business Foundation",
-          "tuition": "CNY 8,400",
-          "period": "foundation semester",
-          "feeBasis": "Published tuition schedule",
-          "extra": "Dormitory from CNY 2,000/semester. Engineering bachelor tuition CNY 23,900/year; business CNY 22,900/year.",
-          "awardTitle": "CNY 10,000 degree award",
-          "scholarship": "NUAA Freshman or Nanjing Government award: one-off CNY 10,000 for the bachelor offer. Awards cannot be combined.",
-          "majors": [
-            "Aeronautical Engineering",
-            "Mechanical Engineering",
-            "Civil Engineering",
-            "Electrical and Electronic Engineering",
-            "Artificial Intelligence",
-            "International Business and Trade"
-          ],
-          "eligibility": "High school completed before entry. No CSCA score needed to enter foundation; degree progression requires satisfactory foundation and CSCA results.",
-          "duration": "1 preparation semester + degree",
-          "entry": "Spring preparation / language route",
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "Foundation tuition",
-              "amount": "CNY 8,400 / semester",
-              "note": "Current programme FAQ; insurance included."
-            },
-            {
-              "item": "Foundation hostel",
-              "amount": "From CNY 2,000 / semester",
-              "note": ""
-            },
-            {
-              "item": "Engineering bachelor tuition",
-              "amount": "CNY 23,900 / year",
-              "note": "Before any degree scholarship."
-            },
-            {
-              "item": "Business bachelor tuition",
-              "amount": "CNY 22,900 / year",
-              "note": "Before any degree scholarship."
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "NUAA Freshman / Nanjing Government award",
-              "coverage": "One-off CNY 10,000 on the eligible bachelor offer; the two awards cannot be combined."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Foundation entry and degree progression are separate. The degree award follows the bachelor offer and CSCA results.",
-          "professionalNote": "",
-          "csca": "No CSCA score required for foundation entry. Satisfactory CSCA results are required for degree progression.",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "CNY 10,000 freshman award"
-        }
-      ]
-    },
-    {
-      "id": "nantong-university",
-      "slug": "ntu",
-      "name": "Nantong University",
-      "acronym": "NTU",
-      "city": "Nantong",
-      "logo": "/images/campaigns/march-2027/nantong-university.png",
-      "ranking": {
-        "value": "World #401–500",
-        "scope": "World",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Academic Ranking of World Universities",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/nantong-university"
-      },
-      "programmes": [
-        {
-          "id": "nantong-university-foundation",
-          "route": "foundation",
-          "name": "Foundation → Bachelor",
-          "tuition": "CNY 6,000",
-          "period": "foundation semester",
-          "feeBasis": "Official SIE 2027 circular",
-          "extra": "CNY 1,500 quad dormitory per semester. Direct degree progression with priority freshmen scholarship award.",
-          "awardTitle": "Up to 100% Tuition Waiver",
-          "scholarship": "Award coverage is matched to the selected bachelor programme; foundation and living costs are budgeted separately.",
-          "majors": [
-            "Clinical Medicine (MBBS - 6 Years)",
-            "Dental Surgery (BDS - 5 Years)",
-            "Medical Imaging (4 Years)",
-            "Computer Science and Technology (4 Years)",
-            "Robotics Engineering (4 Years)",
-            "International Economics and Trade (4 Years)",
-            "Pre-Master Track (Medicine, AI & MBA)"
-          ],
-          "eligibility": "High-school qualification; age 18–25. Selected degree and teaching-language requirements apply.",
-          "duration": "1 preparation semester + degree",
-          "entry": "Spring preparation / language route",
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "Foundation tuition",
-              "amount": "CNY 6,000 / semester",
-              "note": ""
-            },
-            {
-              "item": "Foundation quad hostel",
-              "amount": "CNY 1,500 / semester",
-              "note": ""
-            },
-            {
-              "item": "Degree MBBS / BDS tuition before award",
-              "amount": "CNY 26,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Degree CST / Robotics / Econ tuition before award",
-              "amount": "CNY 16,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Degree hostel by room",
-              "amount": "CNY 3,000 (Quad) / CNY 5,000 (Double) per year",
-              "note": ""
-            },
-            {
-              "item": "Application & registration fee",
-              "amount": "CNY 600",
-              "note": "Non-refundable."
-            },
-            {
-              "item": "Insurance",
-              "amount": "CNY 400 / semester (CNY 800 / year)",
-              "note": ""
-            },
-            {
-              "item": "Medical examination",
-              "amount": "CNY 400–500",
-              "note": "First year."
-            },
-            {
-              "item": "Residence permit",
-              "amount": "CNY 400 / year",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "First Class",
-              "coverage": "100% full degree tuition waiver."
-            },
-            {
-              "name": "Second Class",
-              "coverage": "CNY 9,000/yr degree tuition waiver (MBBS at CNY 17k/yr; CST at CNY 7k/yr)."
-            },
-            {
-              "name": "Third Class",
-              "coverage": "CNY 6,000/yr degree tuition waiver (MBBS at CNY 20k/yr; CST at CNY 10k/yr)."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "1st Class: 100% tuition waiver; 2nd Class: CNY 9,000/yr waiver (reduces MBBS to CNY 17k/yr, STEM to CNY 7k/yr); 3rd Class: CNY 6,000/yr waiver. Spring Foundation graduates receive priority award.",
-          "professionalNote": "Nantong University is ranked ARWU #401–500 globally. Clinical Medicine is in top 0.3% of ESI globally and recognized by WHO (WDOMS), BMDC, GMC, ECFMG.",
-          "csca": "Mandatory for Bachelor: CSCA Mathematics (English Medium).",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "Up to 100% Tuition Waiver"
-        }
-      ]
-    },
-    {
-      "id": "linyi-university",
-      "name": "Linyi University",
-      "acronym": "LYU",
-      "city": "Linyi",
-      "logo": "/images/campaigns/march-2027/linyi-university.png",
-      "ranking": {
-        "value": "China #299",
-        "scope": "China",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Best Chinese Universities Ranking",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/linyi-university"
-      },
-      "programmes": [
-        {
-          "id": "linyi-university-foundation",
-          "route": "foundation",
-          "name": "Foundation → Bachelor",
-          "tuition": "CNY 4,000",
-          "period": "foundation semester",
-          "feeBasis": "Campaign planning estimate",
-          "extra": "CNY 2,000 foundation hostel estimate. Degree tuition is billed separately.",
-          "awardTitle": "Degree tuition from CNY 0",
-          "scholarship": "Campaign degree award tiers list annual payable tuition of CNY 0, CNY 4,000 or CNY 7,000; award conditions and annual review apply.",
-          "majors": [
-            "E-commerce",
-            "Civil Engineering",
-            "Computer Science and Technology",
-            "International Business and Trade",
-            "Visual Communication Design",
-            "Media Communication Design"
-          ],
-          "eligibility": "High-school qualification; age 18–25. Degree progression depends on the selected programme requirements.",
-          "duration": "1 preparation semester + degree",
-          "entry": "Spring preparation / language route",
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "Foundation tuition",
-              "amount": "CNY 4,000 / semester",
-              "note": ""
-            },
-            {
-              "item": "Foundation hostel",
-              "amount": "CNY 2,000 / semester",
-              "note": ""
-            },
-            {
-              "item": "Degree tuition before award",
-              "amount": "CNY 12,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Degree hostel",
-              "amount": "CNY 2,400–2,880 / year",
-              "note": ""
-            },
-            {
-              "item": "Application",
-              "amount": "CNY 400",
-              "note": "Non-refundable."
-            },
-            {
-              "item": "Insurance",
-              "amount": "CNY 800 / year",
-              "note": ""
-            },
-            {
-              "item": "Medical examination",
-              "amount": "CNY 320",
-              "note": "First year."
-            },
-            {
-              "item": "Residence permit",
-              "amount": "CNY 400 / year",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "First Class",
-              "coverage": "100% degree tuition waiver."
-            },
-            {
-              "name": "Second Class",
-              "coverage": "Payable degree tuition CNY 4,000/year."
-            },
-            {
-              "name": "Third Class",
-              "coverage": "Payable degree tuition CNY 7,000/year."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Award selection and written university terms apply.",
-          "professionalNote": "",
-          "csca": "",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "Up to 100% tuition waiver"
-        }
-      ]
-    },
-    {
-      "id": "xian-shiyou-university",
-      "name": "Xi’an Shiyou University",
-      "acronym": "XSYU",
-      "city": "Xi’an",
-      "logo": "/images/campaigns/march-2027/xian-shiyou-university.jpg",
-      "ranking": {
-        "value": "China #230",
-        "scope": "China",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Best Chinese Universities Ranking",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/xian-shiyou-university"
-      },
-      "programmes": [
-        {
-          "id": "xian-shiyou-university-foundation",
-          "route": "foundation",
-          "name": "Foundation → Bachelor",
-          "tuition": "CNY 3,000",
-          "period": "foundation semester",
-          "feeBasis": "Campaign planning estimate",
-          "extra": "CNY 1,500 foundation hostel estimate. Degree tuition and other costs are separate.",
-          "awardTitle": "Tuition awards + CNY 1,500/month",
-          "scholarship": "Campaign degree tiers combine tuition support, accommodation and possible stipend. Coverage depends on the written award.",
-          "majors": [
-            "Civil Engineering",
-            "Computer Science and Technology",
-            "Artificial Intelligence",
-            "Petroleum Engineering",
-            "Geology",
-            "Offshore Oil and Gas Engineering",
-            "Resource Exploration Engineering"
-          ],
-          "eligibility": "High-school qualification; academic subjects and teaching-language requirements depend on the degree. Campaign age range: 18–25.",
-          "duration": "1 preparation semester + degree",
-          "entry": "Spring preparation / language route",
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "Foundation tuition",
-              "amount": "CNY 3,000 / semester",
-              "note": ""
-            },
-            {
-              "item": "Foundation hostel",
-              "amount": "CNY 1,500 / semester",
-              "note": ""
-            },
-            {
-              "item": "Degree tuition before award",
-              "amount": "CNY 18,500 / year",
-              "note": ""
-            },
-            {
-              "item": "Degree hostel before award",
-              "amount": "CNY 7,500 / year",
-              "note": ""
-            },
-            {
-              "item": "Application",
-              "amount": "CNY 600",
-              "note": "Non-refundable."
-            },
-            {
-              "item": "Insurance",
-              "amount": "CNY 800 / year",
-              "note": ""
-            },
-            {
-              "item": "Medical examination",
-              "amount": "CNY 100–500",
-              "note": "First year."
-            },
-            {
-              "item": "Residence permit",
-              "amount": "CNY 800 / year",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Type 1",
-              "coverage": "Full degree tuition and accommodation; stipend CNY 1,500/month."
-            },
-            {
-              "name": "Type 2",
-              "coverage": "Full degree tuition; stipend CNY 1,500/month. Accommodation separate."
-            },
-            {
-              "name": "Type 3",
-              "coverage": "50% tuition and accommodation waiver; payable tuition CNY 9,250/year; stipend CNY 1,500/month."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Annual academic review applies. The level may change with performance; preparation costs are separate.",
-          "professionalNote": "",
-          "csca": "",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "Full tuition + hostel + CNY 1,500/month"
-        }
-      ]
-    },
-    {
       "id": "changchun-sci-tech-university",
       "name": "Changchun Sci-Tech University",
       "acronym": "CSTU",
@@ -1237,955 +2349,6 @@
           "majorGroups": [],
           "fundingStage": "Bachelor funding",
           "fundingHighlight": "Tuition + hostel: CNY 10,000/year"
-        }
-      ]
-    },
-    {
-      "id": "wuzhou-university",
-      "name": "Wuzhou University",
-      "acronym": "WZU",
-      "city": "Wuzhou",
-      "logo": "/images/universities/logos/wuzhou-university.webp",
-      "ranking": {
-        "value": "China #500+",
-        "scope": "China",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Best Chinese Universities Ranking",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/wuzhou-university"
-      },
-      "programmes": [
-        {
-          "id": "wuzhou-university-bachelor",
-          "route": "bachelor",
-          "name": "Direct Major Bachelor Degree (4-Year Scholarship)",
-          "tuition": "CNY 9,000",
-          "period": "year (tuition + room)",
-          "feeBasis": "University March 2027 scholarship package",
-          "extra": "Near Guangzhou & Shenzhen. Tuition and twin-share room combined: Business English CNY 9,000; International Economics & Trade CNY 9,300; Computer Science & AI CNY 9,900 per year. 35 seats per major.",
-          "awardTitle": "4-year unconditional scholarship",
-          "scholarship": "Unconditional scholarship on admission for the full 4-year degree; annual payable amount includes twin-share accommodation.",
-          "majors": [
-            "International Economics and Trade",
-            "Business English",
-            "Computer Science and Technology",
-            "Artificial Intelligence"
-          ],
-          "eligibility": "Secondary school completion with minimum 60% marks; age 18–23; open to all nationalities; no CSCA exam.",
-          "duration": "4 years",
-          "entry": "March 2027 (direct major, no foundation year)",
-          "tuitionLabel": "Tuition + twin-share room after scholarship",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "International Economics and Trade",
-              "amount": "CNY 9,300 / year",
-              "note": "Tuition + twin-share room"
-            },
-            {
-              "item": "Business English",
-              "amount": "CNY 9,000 / year",
-              "note": "Tuition + twin-share room"
-            },
-            {
-              "item": "Computer Science and Technology",
-              "amount": "CNY 9,900 / year",
-              "note": "Tuition + twin-share room"
-            },
-            {
-              "item": "Artificial Intelligence",
-              "amount": "CNY 9,900 / year",
-              "note": "Tuition + twin-share room"
-            },
-            {
-              "item": "Proof of funds",
-              "amount": "USD 3,000",
-              "note": "Bank statement at application; not a fee."
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "International Economics and Trade",
-              "coverage": "Total payable CNY 9,300/year for 4 years (room included). 35 seats."
-            },
-            {
-              "name": "Business English",
-              "coverage": "Total payable CNY 9,000/year for 4 years (room included). 35 seats."
-            },
-            {
-              "name": "Computer Science and Technology",
-              "coverage": "Total payable CNY 9,900/year for 4 years (room included). 35 seats."
-            },
-            {
-              "name": "Artificial Intelligence",
-              "coverage": "Total payable CNY 9,900/year for 4 years (room included). 35 seats."
-            }
-          ],
-          "documentChecklist": [
-            "Valid ordinary passport",
-            "Photograph with white background",
-            "Academic certificates and transcripts with English translation",
-            "Bank statement (minimum USD 3,000)",
-            "Police clearance (valid 6 months)",
-            "Physical examination (valid 6 months)",
-            "2-minute English self-introduction video"
-          ],
-          "scholarshipConditions": "Unconditional for 4 years subject to normal enrolment, attendance and conduct. Mandatory 2-minute English introduction video.",
-          "professionalNote": "",
-          "csca": "Not required",
-          "majorGroups": [],
-          "fundingStage": "Bachelor funding",
-          "fundingHighlight": "4-year scholarship · from CNY 9,000/yr incl. room"
-        }
-      ]
-    },
-    {
-      "id": "panzhihua-university",
-      "name": "Panzhihua University",
-      "acronym": "PZHU",
-      "city": "Panzhihua",
-      "logo": "/images/campaigns/march-2027/panzhihua-university.png",
-      "ranking": {
-        "value": "China #394",
-        "scope": "China",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Best Chinese Universities Ranking",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/panzhihua-university"
-      },
-      "programmes": [
-        {
-          "id": "panzhihua-university-bachelor",
-          "route": "bachelor",
-          "name": "Bachelor route assessment",
-          "tuition": "CNY 6,000",
-          "period": "first-year tuition after award",
-          "feeBasis": "Published fee reference; request your intake quote",
-          "extra": "Published schedule: CNY 9,000 annual tuition less CNY 3,000 President Scholarship. Hostel CNY 3,000/year; application CNY 500.",
-          "awardTitle": "CNY 3,000 President Scholarship",
-          "scholarship": "Published award offsets first-year tuition for Computer Science and International Economics and Trade. Subsequent awards depend on the university rules.",
-          "majors": [
-            "Computer Science and Technology",
-            "International Economics and Trade"
-          ],
-          "eligibility": "High-school qualification. Teaching language, academic and language criteria apply to the selected degree. Campaign age range: 18–25.",
-          "duration": "4 years",
-          "entry": "Degree entry term matched to your programme",
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "Tuition before President Scholarship",
-              "amount": "CNY 9,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Tuition after listed President Scholarship",
-              "amount": "CNY 6,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Hostel",
-              "amount": "CNY 3,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Registration",
-              "amount": "CNY 500 / year",
-              "note": ""
-            },
-            {
-              "item": "Insurance",
-              "amount": "CNY 1,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Medical examination",
-              "amount": "CNY 100–500",
-              "note": "First year."
-            },
-            {
-              "item": "Residence permit",
-              "amount": "CNY 400 / year",
-              "note": ""
-            },
-            {
-              "item": "University deposit",
-              "amount": "CNY 9,500",
-              "note": "Payable after JW202. Credit and scope recorded in the written quote."
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "President Scholarship",
-              "coverage": "CNY 3,000 tuition reduction: CNY 9,000 becomes CNY 6,000/year."
-            },
-            {
-              "name": "Academic-performance award",
-              "coverage": "Project sheet lists an additional CNY 1,000–5,000/year for excellent results; not deducted automatically."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Award selection and written university terms apply.",
-          "professionalNote": "",
-          "csca": "",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "Merit awards up to CNY 5,000/year"
-        }
-      ]
-    },
-    {
-      "id": "shanghai-jiao-tong-university",
-      "name": "Shanghai Jiao Tong University",
-      "acronym": "SJTU",
-      "city": "Shanghai",
-      "logo": "/images/campaigns/march-2027/shanghai-jiao-tong-university.png",
-      "ranking": {
-        "value": "World #27",
-        "scope": "World",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Academic Ranking of World Universities",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/shanghai-jiao-tong-university"
-      },
-      "programmes": [
-        {
-          "id": "shanghai-jiao-tong-university-language",
-          "route": "language",
-          "name": "Chinese Language · School of Humanities",
-          "tuition": "CNY 10,500",
-          "period": "semester",
-          "feeBasis": "Published tuition schedule",
-          "extra": "Application CNY 450, non-refundable. Accommodation, insurance and living costs additional.",
-          "awardTitle": "Self-funded language route",
-          "scholarship": "No scholarship reduction is included in this language-course example. A later degree application is separate.",
-          "majors": [
-            "Comprehensive Chinese",
-            "Chinese Speaking",
-            "Listening",
-            "Reading",
-            "Writing"
-          ],
-          "eligibility": "Full-time non-degree language study. Spring semester runs February–June.",
-          "duration": "1 semester / 1 year",
-          "entry": "Spring: February–June",
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "Chinese",
-          "costItems": [],
-          "scholarshipTiers": [],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Award selection and written university terms apply.",
-          "professionalNote": "",
-          "csca": "",
-          "majorGroups": [],
-          "fundingStage": "Language study",
-          "fundingHighlight": "Self-funded language programme"
-        }
-      ]
-    },
-    {
-      "id": "huazhong-university-of-science-and-technology",
-      "name": "Huazhong University of Science and Technology",
-      "acronym": "HUST",
-      "city": "Wuhan",
-      "logo": "/images/campaigns/march-2027/huazhong-university-of-science-and-technology.png",
-      "ranking": {
-        "value": "World #72",
-        "scope": "World",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Academic Ranking of World Universities",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/huazhong-university-of-science-and-technology"
-      },
-      "programmes": [
-        {
-          "id": "huazhong-university-of-science-and-technology-language",
-          "route": "language",
-          "name": "Chinese Language",
-          "tuition": "CNY 8,000",
-          "period": "semester",
-          "feeBasis": "Published tuition schedule",
-          "extra": "Application CNY 800; insurance CNY 500/semester; hostel CNY 700–1,400/month/person.",
-          "awardTitle": "Chinese Language Teachers Scholarship",
-          "scholarship": "Eligible applicants may apply separately for the International Chinese Language Teachers Scholarship. No award is deducted from the displayed tuition.",
-          "majors": [
-            "Chinese Language",
-            "Chinese Culture",
-            "Listening",
-            "Speaking",
-            "Reading",
-            "Writing"
-          ],
-          "eligibility": "High-school qualification or expected graduation; age 16–35 under the programme’s eligibility rules.",
-          "duration": "1 semester / 1 year",
-          "entry": "Spring preparation / language route",
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "Chinese",
-          "costItems": [],
-          "scholarshipTiers": [],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Award selection and written university terms apply.",
-          "professionalNote": "",
-          "csca": "",
-          "majorGroups": [],
-          "fundingStage": "Language scholarship",
-          "fundingHighlight": "Chinese Language Teachers Scholarship"
-        },
-        {
-          "id": "hust-foundation",
-          "route": "foundation",
-          "name": "English-medium Foundation",
-          "tuition": "CNY 18,000",
-          "period": "17-week course",
-          "feeBasis": "Published tuition schedule",
-          "extra": "Application CNY 800; insurance CNY 500; hostel CNY 700–1,200/month.",
-          "awardTitle": "Degree scholarship assessment",
-          "scholarship": "Foundation tuition and any subsequent degree scholarship are assessed separately.",
-          "majors": [
-            "Academic English",
-            "Mathematics",
-            "Physics",
-            "Chemistry",
-            "Biology"
-          ],
-          "eligibility": "High-school graduate or expected graduate. Satisfactory foundation results are required for progression.",
-          "duration": "17 weeks",
-          "entry": "March foundation route",
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "English",
-          "costItems": [],
-          "scholarshipTiers": [],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Award selection and written university terms apply.",
-          "professionalNote": "",
-          "csca": "",
-          "majorGroups": [],
-          "fundingStage": "Degree funding",
-          "fundingHighlight": "Degree scholarship assessment"
-        }
-      ]
-    },
-    {
-      "id": "nanjing-institute-of-technology",
-      "name": "Nanjing Institute of Technology",
-      "acronym": "NJIT",
-      "city": "Nanjing",
-      "logo": "/images/campaigns/march-2027/nanjing-institute-of-technology.png",
-      "ranking": {
-        "value": "China #273",
-        "scope": "China",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Best Chinese Universities Ranking",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/nanjing-institute-of-technology"
-      },
-      "programmes": [
-        {
-          "id": "nanjing-institute-of-technology-masters",
-          "route": "masters",
-          "name": "Master’s route assessment",
-          "tuition": "CNY 24,000",
-          "period": "year before scholarship",
-          "feeBasis": "Campaign planning estimate",
-          "extra": "The campaign award plan lists tuition, accommodation and insurance coverage by tier.",
-          "awardTitle": "Tuition + hostel + insurance",
-          "scholarship": "Campaign scholarship tiers list tuition, accommodation and insurance plus a monthly stipend of CNY 300, CNY 500 or CNY 1,000. Final coverage follows the award letter.",
-          "majors": [
-            "Mechanical Engineering",
-            "Materials and Chemical Engineering",
-            "Electrical Engineering",
-            "Power Engineering",
-            "Control Engineering",
-            "Electronic Information",
-            "Computer Technology",
-            "Civil and Hydraulic Engineering",
-            "Transportation Engineering",
-            "Resources and Environment",
-            "Accounting",
-            "Library and Information Science",
-            "Social Work",
-            "Design"
-          ],
-          "eligibility": "Relevant bachelor degree; maximum age 35. Academic records, English evidence, study plan and recommendation letters are assessed for the selected master’s programme.",
-          "duration": "3 years",
-          "entry": "Degree entry term matched to your programme",
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "English",
-          "costItems": [],
-          "scholarshipTiers": [
-            {
-              "name": "Type A",
-              "coverage": "Full tuition, accommodation and insurance; CNY 1,000 monthly stipend."
-            },
-            {
-              "name": "Type B",
-              "coverage": "Full tuition, accommodation and insurance; CNY 500 monthly stipend."
-            },
-            {
-              "name": "Type C",
-              "coverage": "Full tuition, accommodation and insurance; CNY 300 monthly stipend."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme",
-            "Postgraduate study plan and recommendation letters"
-          ],
-          "scholarshipConditions": "Award selection and written university terms apply.",
-          "professionalNote": "",
-          "csca": "",
-          "majorGroups": [],
-          "fundingStage": "Master’s scholarship",
-          "fundingHighlight": "Tuition + hostel + CNY 1,000/month"
-        }
-      ]
-    },
-    {
-      "id": "hangzhou-dianzi-university",
-      "name": "Hangzhou Dianzi University",
-      "acronym": "HDU",
-      "city": "Hangzhou",
-      "logo": "/images/campaigns/march-2027/hangzhou-dianzi-university.png",
-      "ranking": {
-        "value": "World #501–600",
-        "scope": "World",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Academic Ranking of World Universities",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/hangzhou-dianzi-university"
-      },
-      "programmes": [
-        {
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "Preparation tuition",
-              "amount": "CNY 6,000 / 6 months",
-              "note": ""
-            },
-            {
-              "item": "Preparation hostel",
-              "amount": "CNY 2,700 / term",
-              "note": ""
-            },
-            {
-              "item": "Application",
-              "amount": "CNY 500",
-              "note": ""
-            },
-            {
-              "item": "Degree tuition before award",
-              "amount": "CNY 18,000–20,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Degree hostel",
-              "amount": "CNY 5,400 / year",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Type 1",
-              "coverage": "Degree award CNY 20,000."
-            },
-            {
-              "name": "Type 2",
-              "coverage": "Degree award CNY 15,000."
-            },
-            {
-              "name": "Type 3",
-              "coverage": "Degree award CNY 10,000."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Award level depends on academic performance. No award is deducted from preparation tuition.",
-          "professionalNote": "",
-          "csca": "",
-          "id": "hdu-foundation",
-          "route": "foundation",
-          "name": "Preparation → Bachelor",
-          "tuition": "CNY 6,000",
-          "period": "6-month preparation term",
-          "feeBasis": "Campaign planning estimate",
-          "duration": "0.5-year preparation + 4-year bachelor",
-          "entry": "Spring preparation; degree progression assessed separately",
-          "extra": "Preparation hostel CNY 2,700. Subsequent degree tuition CNY 18,000–20,000/year; hostel CNY 5,400/year.",
-          "awardTitle": "Degree awards up to CNY 20,000",
-          "scholarship": "Campaign degree award values are CNY 20,000, CNY 15,000 and CNY 10,000, determined by academic results.",
-          "majors": [
-            "Computer Science and Technology",
-            "Software Engineering",
-            "Electronic and Information Engineering",
-            "Telecommunication Engineering",
-            "Intelligent Manufacturing Engineering",
-            "Mechanical Design and Manufacturing",
-            "Medical Information Engineering",
-            "Biomedical Engineering",
-            "International Economics and Trade",
-            "Business Management and Administration"
-          ],
-          "eligibility": "High-school qualification; selected academic subjects and language evidence required. Degree progression and award level depend on academic results.",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "Awards up to CNY 20,000"
-        }
-      ]
-    },
-    {
-      "id": "wenzhou-medical-university",
-      "name": "Wenzhou Medical University",
-      "acronym": "WMU",
-      "city": "Wenzhou",
-      "logo": "/images/campaigns/march-2027/wenzhou-medical-university.png",
-      "ranking": {
-        "value": "World #301–400",
-        "scope": "World",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Academic Ranking of World Universities",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/wenzhou-medical-university"
-      },
-      "programmes": [
-        {
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "Preparation tuition",
-              "amount": "CNY 10,000 / term",
-              "note": "Campaign estimate."
-            },
-            {
-              "item": "Preparation hostel",
-              "amount": "CNY 2,400 / term",
-              "note": "Campaign estimate."
-            },
-            {
-              "item": "MBBS / BDS degree tuition",
-              "amount": "CNY 33,000 / year",
-              "note": "Published fee; paid in full before freshman award assessment."
-            },
-            {
-              "item": "Degree hostel",
-              "amount": "CNY 4,400 / year",
-              "note": "Double-room accommodation."
-            },
-            {
-              "item": "Degree registration",
-              "amount": "CNY 600",
-              "note": "First year only."
-            },
-            {
-              "item": "Degree insurance",
-              "amount": "CNY 800 / year",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Freshman Type A",
-              "coverage": "CNY 20,000 award; published allocation 25%."
-            },
-            {
-              "name": "Freshman Type B",
-              "coverage": "CNY 10,000 award; published allocation 25%."
-            },
-            {
-              "name": "Freshman Type C",
-              "coverage": "CNY 5,000 award; published allocation 50%."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Freshman award ranking uses the entrance assessment / CSCA. Full tuition and registration are paid first; later-year academic awards are assessed separately.",
-          "professionalNote": "",
-          "csca": "For degree entry, the published guide requires CSCA English Mathematics and English Chemistry.",
-          "id": "wmu-medical-preparation",
-          "route": "foundation",
-          "name": "Medical preparation → MBBS / BDS",
-          "tuition": "CNY 10,000",
-          "period": "preparation term",
-          "feeBasis": "Campaign preparation estimate; published degree fee reference",
-          "duration": "0.5-year preparation; MBBS 6 years / BDS 5 years",
-          "entry": "Spring preparation; medical degree entry assessed separately",
-          "extra": "Preparation hostel CNY 2,400. Published degree tuition CNY 33,000/year. Current degree hostel reference CNY 4,400/year.",
-          "awardTitle": "Degree awards CNY 5,000–20,000",
-          "scholarship": "Published freshman awards for MBBS/BDS are CNY 20,000, CNY 10,000 or CNY 5,000, assessed after full tuition payment and registration.",
-          "majors": [
-            "Clinical Medicine (MBBS)",
-            "Dentistry (BDS)"
-          ],
-          "eligibility": "High-school science subjects including Physics, Chemistry and Biology; degree age range generally 18–30. Accepted English evidence and the degree CSCA subjects apply.",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "Freshman awards up to CNY 20,000"
-        }
-      ]
-    },
-    {
-      "id": "hebei-academy-of-fine-arts",
-      "name": "Hebei Academy of Fine Arts",
-      "acronym": "HBAFA",
-      "city": "Shijiazhuang",
-      "logo": "/images/campaigns/march-2027/hebei-academy-of-fine-arts.png",
-      "ranking": null,
-      "programmes": [
-        {
-          "tuitionLabel": "Tuition after listed award",
-          "teachingLanguage": "Chinese / English by programme",
-          "costItems": [
-            {
-              "item": "Tuition after listed award",
-              "amount": "CNY 6,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Accommodation",
-              "amount": "CNY 2,000–3,000 / year",
-              "note": "Summer and winter holiday accommodation excluded."
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Bachelor tuition award",
-              "coverage": "80% tuition support; payable tuition in the campaign offer CNY 6,000/year."
-            }
-          ],
-          "documentChecklist": [
-            "Application form",
-            "Valid passport and photograph",
-            "Academic certificates and transcripts",
-            "Physical examination when required",
-            "Police clearance when required",
-            "Language evidence for the selected programme"
-          ],
-          "scholarshipConditions": "Bachelor awards apply to selected degree offers. Summer and winter holiday accommodation is additional.",
-          "professionalNote": "",
-          "csca": "",
-          "id": "hbafa-bachelor",
-          "route": "bachelor",
-          "name": "Art & Design Bachelor",
-          "tuition": "CNY 6,000",
-          "period": "year",
-          "feeBasis": "Campaign planning estimate",
-          "duration": "4 years",
-          "entry": "March degree route in the project plan",
-          "extra": "Accommodation CNY 2,000–3,000/year; summer and winter holiday accommodation is excluded.",
-          "awardTitle": "80% tuition scholarship",
-          "scholarship": "The campaign plan lists an 80% bachelor tuition scholarship and CNY 6,000 annual payable tuition for the selected offer.",
-          "majors": [
-            "Architecture",
-            "Apparel and Accessories Design",
-            "Product Design",
-            "Art Education",
-            "Animation",
-            "Film and TV Photography and Production"
-          ],
-          "eligibility": "High-school qualification; age 18–25. Teaching language is Chinese or English according to the selected programme; academic and portfolio requirements are assessed for that route.",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "80% tuition scholarship"
-        }
-      ]
-    },
-    {
-      "id": "shandong-university-of-technology",
-      "name": "Shandong University of Technology",
-      "acronym": "SDUT",
-      "city": "Zibo, Shandong",
-      "logo": "/images/universities/logos/shandong-university-of-technology.webp",
-      "ranking": {
-        "value": "World #801–900",
-        "scope": "World",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Academic Ranking of World Universities",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/shandong-university-of-technology"
-      },
-      "programmes": [
-        {
-          "tuitionLabel": "Chinese language tuition",
-          "teachingLanguage": "English-taught bachelor (with Chinese language semester)",
-          "costItems": [
-            {
-              "item": "Chinese language tuition",
-              "amount": "CNY 5,000 / semester",
-              "note": "March–July 2027"
-            },
-            {
-              "item": "English-taught bachelor tuition",
-              "amount": "CNY 12,000 / year",
-              "note": "From September 2027, 4 years"
-            },
-            {
-              "item": "Four-person (quad) dormitory",
-              "amount": "Free",
-              "note": ""
-            },
-            {
-              "item": "Double room (optional)",
-              "amount": "CNY 5,200 / year",
-              "note": ""
-            },
-            {
-              "item": "Single room (optional)",
-              "amount": "CNY 10,400 / year",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Shared accommodation",
-              "coverage": "Free four-person dormitory."
-            },
-            {
-              "name": "Bachelor transfer tuition credit",
-              "coverage": "Spring language tuition may be deducted from first-year undergraduate tuition following an approved transfer."
-            }
-          ],
-          "documentChecklist": [
-            "Valid passport and recent photograph",
-            "Secondary school certificate and transcripts (English translation)",
-            "CSCA score report (before June 2027 for bachelor entry)",
-            "Police clearance / evidence of good conduct",
-            "Foreigner Physical Examination Form"
-          ],
-          "scholarshipConditions": "Free quad-room accommodation. Bachelor progression requires a valid CSCA result submitted before June 2027. Eligible regions: Asia and North Africa. Age 18–25.",
-          "professionalNote": "",
-          "csca": "CSCA score required before June 2027 for bachelor entry.",
-          "id": "sdut-language-bachelor-pathway",
-          "route": "foundation",
-          "name": "Chinese Language → English-taught Bachelor (4.5 Years)",
-          "tuition": "CNY 5,000",
-          "period": "semester",
-          "feeBasis": "Owner-supplied 2027 pathway offer",
-          "duration": "0.5-year language + 4-year bachelor",
-          "entry": "March 2027 language semester → September 2027 bachelor",
-          "extra": "Free four-person (quad) dormitory. Language CNY 5,000/semester; bachelor CNY 12,000/year. Deadline 30 December 2026.",
-          "awardTitle": "Free shared dormitory + tuition credit",
-          "scholarship": "The pathway includes a free four-person dormitory. Spring language tuition may be credited towards first-year bachelor tuition after an eligible transfer.",
-          "majors": [
-            "Mechanical Design, Manufacturing and Automation",
-            "Computer Science and Technology",
-            "International Economics and Trade",
-            "Civil Engineering",
-            "Electrical Engineering and Automation",
-            "Energy and Power Engineering — Vehicle Engine Specialization",
-            "Business English",
-            "Resource Exploration Engineering"
-          ],
-          "eligibility": "Secondary school completion; age 18–25; no entrance exam or interview; open to applicants from Asia and North Africa. A valid CSCA score is required before June 2027 to start the bachelor.",
-          "majorGroups": [
-            {
-              "label": "English-taught bachelor’s majors",
-              "majors": [
-                "Mechanical Design, Manufacturing and Automation",
-                "Computer Science and Technology",
-                "International Economics and Trade",
-                "Civil Engineering",
-                "Electrical Engineering and Automation",
-                "Energy and Power Engineering — Vehicle Engine Specialization",
-                "Business English",
-                "Resource Exploration Engineering"
-              ]
-            }
-          ],
-          "fundingStage": "Bachelor pathway benefits",
-          "fundingHighlight": "Free quad room · bachelor CNY 12,000/yr"
-        }
-      ]
-    },
-    {
-      "id": "chongqing-medical-university",
-      "name": "Chongqing Medical University",
-      "acronym": "CQMU",
-      "city": "Chongqing",
-      "logo": "/images/campaigns/march-2027/chongqing-medical-university.png",
-      "ranking": {
-        "value": "World #301–400",
-        "scope": "World",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Academic Ranking of World Universities",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/chongqing-medical-university"
-      },
-      "programmes": [
-        {
-          "tuitionLabel": "Medical preparation tuition",
-          "teachingLanguage": "English (MBBS)",
-          "costItems": [
-            {
-              "item": "Medical preparation tuition",
-              "amount": "CNY 10,000 / semester",
-              "note": ""
-            },
-            {
-              "item": "Preparation hostel",
-              "amount": "CNY 2,400 / semester",
-              "note": ""
-            },
-            {
-              "item": "MBBS degree tuition",
-              "amount": "CNY 30,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Degree twin room",
-              "amount": "CNY 4,800 / year",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Bachelor freshman scholarship",
-              "coverage": "CNY 15,000 once, for approximately 30% of self-funded international undergraduate entrants."
-            }
-          ],
-          "documentChecklist": [
-            "Passport and recent photograph",
-            "Notarised high-school certificate, transcripts and good-conduct certificate",
-            "Accepted English evidence or eligible school medium-of-instruction documents",
-            "Valid CSCA result for the teaching language",
-            "Physical examination and police clearance",
-            "Bank statement covering first-year study costs",
-            "Scholarship application and supporting achievements"
-          ],
-          "scholarshipConditions": "Selection considers academic results, achievements and overall qualifications. The freshman award applies once at bachelor entry; approximately 30% of new students are selected.",
-          "professionalNote": "",
-          "csca": "For English-medium bachelor entry: Mathematics in English. Chinese-medium degree routes require Mathematics in Chinese and STEM Chinese.",
-          "id": "cqmu-medical-preparation",
-          "route": "foundation",
-          "name": "Medical preparation → MBBS",
-          "tuition": "CNY 10,000",
-          "period": "preparation semester",
-          "feeBasis": "Owner-supplied preparation offer; university degree fee reference",
-          "duration": "Preparation semester + 6-year MBBS",
-          "entry": "Spring preparation → autumn MBBS application",
-          "extra": "Preparation hostel CNY 2,400. Degree hostel CNY 4,800/year. Off-campus accommodation can be arranged under university rules.",
-          "awardTitle": "CNY 15,000 freshman scholarship",
-          "scholarship": "A one-time CNY 15,000 award for selected self-funded international bachelor freshmen, covering approximately 30% of new students through university selection.",
-          "majors": [
-            "Clinical Medicine (MBBS)"
-          ],
-          "eligibility": "High-school science qualification including Biology, Chemistry and Physics; generally age 18–25. English-medium applicants need an average of at least 70% in the high-school exit examination, accepted English evidence, CSCA Mathematics in English and an admission interview.",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "CNY 15,000 freshman award"
-        },
-        {
-          "tuitionLabel": "MBBS tuition before award",
-          "teachingLanguage": "English (MBBS)",
-          "costItems": [
-            {
-              "item": "MBBS tuition before award",
-              "amount": "CNY 30,000 / year",
-              "note": ""
-            },
-            {
-              "item": "Twin room",
-              "amount": "CNY 4,800 / year",
-              "note": ""
-            },
-            {
-              "item": "Single room",
-              "amount": "CNY 9,600 / year",
-              "note": "Alternative to the twin room."
-            },
-            {
-              "item": "Application",
-              "amount": "CNY 450",
-              "note": "Non-refundable."
-            },
-            {
-              "item": "Insurance",
-              "amount": "CNY 800 / year",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Bachelor freshman scholarship",
-              "coverage": "CNY 15,000 once, for approximately 30% of self-funded international undergraduate entrants."
-            }
-          ],
-          "documentChecklist": [
-            "Passport and recent photograph",
-            "Notarised high-school certificate, transcripts and good-conduct certificate",
-            "Accepted English evidence or eligible school medium-of-instruction documents",
-            "Valid CSCA result for the teaching language",
-            "Physical examination and police clearance",
-            "Bank statement covering first-year study costs",
-            "Scholarship application and supporting achievements"
-          ],
-          "scholarshipConditions": "Selection considers academic results, achievements and overall qualifications. The freshman award applies once at bachelor entry; approximately 30% of new students are selected.",
-          "professionalNote": "",
-          "csca": "For English-medium bachelor entry: Mathematics in English. Chinese-medium degree routes require Mathematics in Chinese and STEM Chinese.",
-          "id": "cqmu-mbbs",
-          "route": "bachelor",
-          "name": "Clinical Medicine (MBBS)",
-          "tuition": "CNY 30,000",
-          "period": "year",
-          "feeBasis": "University bachelor fee reference",
-          "duration": "6-year bachelor",
-          "entry": "Autumn bachelor entry",
-          "extra": "Twin room CNY 4,800/year; single room CNY 9,600/year. Insurance CNY 800/year.",
-          "awardTitle": "CNY 15,000 freshman scholarship",
-          "scholarship": "A one-time CNY 15,000 award for selected self-funded international bachelor freshmen, covering approximately 30% of new students through university selection.",
-          "majors": [
-            "Clinical Medicine (MBBS)"
-          ],
-          "eligibility": "High-school science qualification including Biology, Chemistry and Physics; generally age 18–25. English-medium applicants need an average of at least 70% in the high-school exit examination, accepted English evidence, CSCA Mathematics in English and an admission interview.",
-          "majorGroups": [],
-          "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "CNY 15,000 freshman award"
         }
       ]
     },
@@ -2346,231 +2509,68 @@
       ]
     },
     {
-      "id": "guizhou-university",
-      "name": "Guizhou University",
-      "acronym": "GZU",
-      "city": "Guiyang",
-      "logo": "/images/universities/logos/gzu.webp",
-      "ranking": {
-        "value": "National #124",
-        "scope": "National",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Best Chinese Universities Ranking",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/institution/guizhou-university"
-      },
+      "id": "hebei-academy-of-fine-arts",
+      "name": "Hebei Academy of Fine Arts",
+      "acronym": "HBAFA",
+      "city": "Shijiazhuang",
+      "logo": "/images/campaigns/march-2027/hebei-academy-of-fine-arts.png",
+      "ranking": null,
       "programmes": [
         {
-          "id": "guizhou-university-language-spring",
-          "route": "language",
-          "name": "Spring 2027 Non-Degree Chinese Language Program",
+          "tuitionLabel": "Tuition after listed award",
+          "teachingLanguage": "Chinese / English by programme",
+          "costItems": [
+            {
+              "item": "Tuition after listed award",
+              "amount": "CNY 6,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Accommodation",
+              "amount": "CNY 2,000–3,000 / year",
+              "note": "Summer and winter holiday accommodation excluded."
+            }
+          ],
+          "scholarshipTiers": [
+            {
+              "name": "Bachelor tuition award",
+              "coverage": "80% tuition support; payable tuition in the campaign offer CNY 6,000/year."
+            }
+          ],
+          "documentChecklist": [
+            "Application form",
+            "Valid passport and photograph",
+            "Academic certificates and transcripts",
+            "Physical examination when required",
+            "Police clearance when required",
+            "Language evidence for the selected programme"
+          ],
+          "scholarshipConditions": "Bachelor awards apply to selected degree offers. Summer and winter holiday accommodation is additional.",
+          "professionalNote": "",
+          "csca": "",
+          "id": "hbafa-bachelor",
+          "route": "bachelor",
+          "name": "Art & Design Bachelor",
           "tuition": "CNY 6,000",
-          "period": "semester",
-          "feeBasis": "Published tuition schedule",
-          "extra": "Registration CNY 500, Insurance CNY 400/semester. On-campus dorm CNY 1,500–3,000/semester.",
-          "awardTitle": "Provincial & CSC Degree Progression Eligibility",
-          "scholarship": "Self-funded language semester with progression pathway to Guizhou Provincial and CSC Scholarships for degree programs.",
+          "period": "year",
+          "feeBasis": "Campaign planning estimate",
+          "duration": "4 years",
+          "entry": "March degree route in the project plan",
+          "extra": "Accommodation CNY 2,000–3,000/year; summer and winter holiday accommodation is excluded.",
+          "awardTitle": "80% tuition scholarship",
+          "scholarship": "The campaign plan lists an 80% bachelor tuition scholarship and CNY 6,000 annual payable tuition for the selected offer.",
           "majors": [
-            "Comprehensive Chinese",
-            "Spoken Communication",
-            "Listening & Speaking",
-            "Reading & Writing",
-            "HSK 3–5 Preparation"
+            "Architecture",
+            "Apparel and Accessories Design",
+            "Product Design",
+            "Art Education",
+            "Animation",
+            "Film and TV Photography and Production"
           ],
-          "eligibility": "High school diploma or above, aged 16–35, non-Chinese citizen in good health with clean criminal record.",
-          "duration": "1 semester (March–July 2027)",
-          "entry": "Spring language route",
-          "tuitionLabel": "Tuition",
-          "teachingLanguage": "Chinese",
-          "costItems": [
-            {
-              "item": "Tuition",
-              "amount": "CNY 6,000 / semester",
-              "note": "Spring 2027 intake"
-            },
-            {
-              "item": "Registration Fee",
-              "amount": "CNY 500",
-              "note": "One-time application fee"
-            },
-            {
-              "item": "Insurance",
-              "amount": "CNY 400 / semester",
-              "note": "Comprehensive medical insurance"
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Progression Degree Awards",
-              "coverage": "Guizhou Provincial Government Scholarship (CNY 10,000–20,000/year) and CSC Scholarships available upon degree matriculation."
-            }
-          ],
-          "documentChecklist": [
-            "Valid passport photo page",
-            "High school diploma or enrollment proof",
-            "Academic transcripts",
-            "Foreigner Physical Examination Record",
-            "Non-Criminal Record Report (Police Clearance)",
-            "Bank statement showing minimum RMB 20,000 equivalent"
-          ],
-          "scholarshipConditions": "Degree scholarship competition upon reaching HSK 4/5.",
-          "professionalNote": "",
-          "csca": "No CSCA required for language program. CSCA required for subsequent undergraduate degree applications.",
+          "eligibility": "High-school qualification; age 18–25. Teaching language is Chinese or English according to the selected programme; academic and portfolio requirements are assessed for that route.",
           "majorGroups": [],
-          "fundingStage": "Language study",
-          "fundingHighlight": "Affordable CNY 6,000/semester tuition"
-        }
-      ]
-    },
-    {
-      "id": "civil-aviation-university-of-china",
-      "name": "Civil Aviation University of China",
-      "acronym": "CAUC",
-      "city": "Tianjin",
-      "logo": "/images/universities/logos/civil-aviation-university-of-china.webp",
-      "ranking": {
-        "value": "China #295",
-        "scope": "China",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Best Chinese Universities Ranking",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/civil-aviation-university-of-china"
-      },
-      "programmes": [
-        {
-          "id": "cauc-foundation-bachelor",
-          "route": "foundation",
-          "name": "Half-Year Foundation → English-taught Bachelor (0.5 + 4 Years)",
-          "tuition": "CNY 7,500",
-          "period": "semester",
-          "feeBasis": "University March 2027 foundation offer",
-          "extra": "Double room CNY 3,000/semester during foundation; application fee CNY 400. Direct entry to English-taught bachelor after foundation.",
-          "awardTitle": "1st / 2nd-class scholarship eligibility",
-          "scholarship": "After completing the foundation, students become eligible for the university first- or second-class bachelor scholarship.",
-          "majors": [
-            "English-taught bachelor programmes (aviation, engineering and management tracks)"
-          ],
-          "eligibility": "Age 17–24; minimum 60% in secondary school; IELTS 5.5 / TOEFL 70 / Duolingo 85; no exam or interview; no country restriction.",
-          "duration": "0.5-year foundation + 4-year bachelor",
-          "entry": "March 2027 foundation → September 2027 bachelor",
-          "tuitionLabel": "Foundation tuition",
-          "teachingLanguage": "English",
-          "costItems": [
-            {
-              "item": "Foundation tuition",
-              "amount": "CNY 7,500 / semester",
-              "note": ""
-            },
-            {
-              "item": "Foundation accommodation (double room)",
-              "amount": "CNY 3,000 / semester",
-              "note": ""
-            },
-            {
-              "item": "Application fee",
-              "amount": "CNY 400",
-              "note": "One-off"
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "First-class scholarship",
-              "coverage": "Available to eligible students after the foundation (subject to university assessment)."
-            },
-            {
-              "name": "Second-class scholarship",
-              "coverage": "Available to eligible students after the foundation (subject to university assessment)."
-            }
-          ],
-          "documentChecklist": [
-            "Valid passport and photograph",
-            "Secondary school certificate and transcripts (English translation)",
-            "Foreigner Physical Examination Form",
-            "Police clearance certificate",
-            "English proficiency certificate (IELTS 5.5 / TOEFL 70 / Duolingo 85)"
-          ],
-          "scholarshipConditions": "Scholarship class is determined after the foundation based on academic results.",
-          "professionalNote": "",
-          "csca": "Not required for foundation entry",
-          "majorGroups": [],
-          "fundingStage": "Foundation → bachelor",
-          "fundingHighlight": "Scholarship eligible after foundation"
-        }
-      ]
-    },
-    {
-      "id": "hechi-university",
-      "name": "Hechi University",
-      "acronym": "HCU",
-      "city": "Hechi, Guangxi",
-      "logo": "/images/universities/logos/hechi-university.webp",
-      "ranking": {
-        "value": "China #510",
-        "scope": "China",
-        "publisher": "ShanghaiRanking",
-        "rankingName": "Best Chinese Universities Ranking",
-        "year": 2026,
-        "sourceUrl": "https://www.shanghairanking.com/universities/hechi-university"
-      },
-      "programmes": [
-        {
-          "id": "hechi-chinese-language-1-5yr",
-          "route": "language",
-          "name": "Intensive Chinese Language (1.5 Years or 0.5 Year)",
-          "tuition": "CNY 9,000",
-          "period": "full 1.5 years",
-          "feeBasis": "University March 2027 language offer",
-          "extra": "March 2027 – June 2028, targets HSK 5, beginners accepted. Quad room CNY 3,000 for the full 1.5 years. 0.5-year option: CNY 3,000 tuition + CNY 1,500 room.",
-          "awardTitle": "Merit scholarship",
-          "scholarship": "CNY 1,000 / year after the first semester for students scoring above 80%.",
-          "majors": [
-            "Chinese Language (Beginner → HSK 5)"
-          ],
-          "eligibility": "Age 18–25; secondary school completion; beginners accepted; open to all nationalities.",
-          "duration": "1.5 years (or 0.5 year)",
-          "entry": "March 2027",
-          "tuitionLabel": "Tuition (full 1.5 years)",
-          "teachingLanguage": "Chinese",
-          "costItems": [
-            {
-              "item": "1.5-year tuition",
-              "amount": "CNY 9,000 total",
-              "note": "March 2027 – June 2028"
-            },
-            {
-              "item": "1.5-year accommodation (quad room)",
-              "amount": "CNY 3,000 total",
-              "note": ""
-            },
-            {
-              "item": "0.5-year tuition",
-              "amount": "CNY 3,000 total",
-              "note": ""
-            },
-            {
-              "item": "0.5-year accommodation (quad room)",
-              "amount": "CNY 1,500 total",
-              "note": ""
-            }
-          ],
-          "scholarshipTiers": [
-            {
-              "name": "Merit scholarship",
-              "coverage": "CNY 1,000 / year from the second semester if score > 80%."
-            }
-          ],
-          "documentChecklist": [
-            "Valid passport and photograph",
-            "Secondary school certificate and transcripts (English translation)",
-            "Foreigner Physical Examination Form",
-            "Police clearance certificate"
-          ],
-          "scholarshipConditions": "Score above 80% in the first semester.",
-          "professionalNote": "",
-          "csca": "Not required",
-          "majorGroups": [],
-          "fundingStage": "Language funding",
-          "fundingHighlight": "1.5 yrs CNY 12,000 total incl. room"
+          "fundingStage": "Bachelor scholarship",
+          "fundingHighlight": "80% tuition scholarship"
         }
       ]
     }

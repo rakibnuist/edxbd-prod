@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowDownUp, ChevronLeft, ChevronRight, Columns3, Download, ExternalLink,
@@ -542,16 +543,25 @@ export default function LeadWorkspace({
           </div>
 
           {onAutoAssign && (
-            <button
-              type="button"
-              className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 hover:bg-indigo-100 disabled:opacity-60 transition"
-              onClick={() => onAutoAssign('all_active')}
-              disabled={loading || syncingMeta || importing}
-              title="Balance unassigned active leads evenly by counselor specialization"
-            >
-              <UserCheck size={14} />
-              <span>Auto-Assign Backlog</span>
-            </button>
+            <>
+              <button
+                type="button"
+                className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 hover:bg-indigo-100 disabled:opacity-60 transition"
+                onClick={() => onAutoAssign('new')}
+                disabled={loading || syncingMeta || importing}
+                title="Distribute unassigned untouched (new) leads across active counselors by country scope"
+              >
+                <UserCheck size={14} />
+                <span>Distribute Untouched Leads</span>
+              </button>
+              <Link
+                href="/admin/settings#lead-flow"
+                className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
+                title="Control who receives leads, All Countries vs China Only, and intake flow mode"
+              >
+                Flow Rules
+              </Link>
+            </>
           )}
           {onSyncMeta && (
             <button

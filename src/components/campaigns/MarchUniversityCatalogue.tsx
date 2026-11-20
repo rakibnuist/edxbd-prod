@@ -132,12 +132,12 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
                 onChange={event => setSort(event.target.value as MarchCatalogueSort)}
                 className="ed-select h-12 min-h-12 flex-1 rounded-xl border border-slate-300 bg-white px-3.5 text-xs font-bold text-[#12436b] outline-none transition focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/15"
               >
-                <option value="recommended">Recommended</option>
-                <option value="world-ranking">World ranking: highest first</option>
-                <option value="china-ranking">China ranking: highest first</option>
+                <option value="recommended">Ranking: highest first</option>
                 <option value="fees-low">Starting fee: low to high</option>
                 <option value="fees-high">Starting fee: high to low</option>
                 <option value="name">University name: A–Z</option>
+                <option value="world-ranking">World ranking only</option>
+                <option value="china-ranking">China ranking only</option>
               </select>
             </div>
           </div>

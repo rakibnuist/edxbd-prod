@@ -1330,6 +1330,7 @@ export default function KpiWorkflowClient() {
                           }
                           className="sm:col-span-2 rounded border border-slate-300 bg-white px-2 py-1.5 text-xs font-semibold"
                         >
+                          <option value="all">all (All Countries)</option>
                           <option value="china">china</option>
                           <option value="europe">europe</option>
                           <option value="malaysia">malaysia</option>
@@ -1383,6 +1384,7 @@ export default function KpiWorkflowClient() {
                   onChange={(e) => setEmpTeam(e.target.value)}
                   className="rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-semibold"
                 >
+                  <option value="all">All Countries (China + Global)</option>
                   <option value="china">China Desk (Flagship)</option>
                   <option value="europe">Europe / UK</option>
                   <option value="malaysia">Malaysia / Asia</option>

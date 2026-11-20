@@ -56,6 +56,13 @@ const {
   validateRadiusMetersInput,
 } = await import('../src/lib/office-location.ts');
 
+const {
+  parseLeadFlowConfig,
+  selectCounselorByFlowConfig,
+  sortLeadsForBalancedDistribution,
+  validateLeadFlowRulesJson,
+} = await import('../src/lib/lead-flow.ts');
+
 test('WhatsApp templates format BD phones cleanly and generate all 4 Bengali templates', () => {
   assert.equal(normalizeWhatsappDigits('01712345678'), '8801712345678');
   assert.equal(normalizeWhatsappDigits('+88001639659911'), '8801639659911');
@@ -400,4 +407,93 @@ test('KPI report includes todayLocationType, todayLocationLabel, todayDistanceMe
   assert.equal(tanvir.attendance.todayLocationLabel, 'Remote (8.84km away)');
   assert.equal(tanvir.attendance.todayDistanceMeters, 8840);
   assert.equal(tanvir.attendance.todayMapsUrl, 'https://www.google.com/maps?q=23.81030,90.41250');
+});
+
+test('Lead flow rules route All Countries to Mukta, China Only to Afsana & Mim, exclude directors, and respect mode/attendance filters', () => {
+  const rulesJson = JSON.stringify({
+    'E-01': { eligible: false, countryScope: 'all', dailyCap: 0 },
+    'E-07': { eligible: true, countryScope: 'all', dailyCap: 0 },
+    'E-04': { eligible: true, countryScope: 'china_only', dailyCap: 0 },
+    'E-08': { eligible: true, countryScope: 'china_only', dailyCap: 0 },
+  });
+  const validated = validateLeadFlowRulesJson(rulesJson);
+  assert.ok(validated.normalized);
+  assert.match(validateLeadFlowRulesJson('{bad json').error || '', /valid JSON/i);
+
+  const pool = [
+    { id: 'emp_rakib', empId: 'E-01', name: 'Abdullah Al Rakib', team: 'general', role: 'CEO & Super Admin', activeCount: 0, todayAssignedCount: 0, checkedInToday: true },
+    { id: 'emp_mukta', empId: 'E-07', name: 'Mukta Rahaman', team: 'all', role: 'Senior Counselor', activeCount: 0, todayAssignedCount: 0, checkedInToday: true },
+    { id: 'emp_afsana', empId: 'E-04', name: 'Afsana Meme', team: 'china', role: 'Senior Counselor', activeCount: 0, todayAssignedCount: 0, checkedInToday: false },
+    { id: 'emp_mim', empId: 'E-08', name: 'Mim', team: 'china', role: 'Counselor', activeCount: 0, todayAssignedCount: 0, checkedInToday: true },
+  ];
+
+  // Simulate distributing 24 China leads + 6 non-China (UK/Hungary/Malaysia/Finland) leads
+  const batchLeads = [
+    ...Array.from({ length: 24 }, (_, idx) => ({ id: `c${idx}`, country: 'China', assignedTeam: 'china', destinationInterest: 'china' })),
+    { id: 'o1', country: 'UK', assignedTeam: 'active_country_owner', destinationInterest: 'uk' },
+    { id: 'o2', country: 'Hungary', assignedTeam: 'active_country_owner', destinationInterest: 'hungary' },
+    { id: 'o3', country: 'Malaysia', assignedTeam: 'active_country_owner', destinationInterest: 'malaysia' },
+    { id: 'o4', country: 'Finland', assignedTeam: 'active_country_owner', destinationInterest: 'finland' },
+    { id: 'o5', country: 'South Korea', assignedTeam: 'active_country_owner', destinationInterest: 'south-korea' },
+    { id: 'o6', country: 'Cyprus', assignedTeam: 'active_country_owner', destinationInterest: 'cyprus' },
+  ];
+
+  const ordered = sortLeadsForBalancedDistribution(batchLeads);
+  const config = parseLeadFlowConfig({
+    leadFlowMode: 'auto_balanced',
+    leadFlowAttendanceFilter: 'all_eligible',
+    leadFlowRulesJson: validated.normalized,
+  });
+
+  const counts = new Map();
+  let chinaCountMukta = 0;
+  let nonChinaToOthers = 0;
+
+  for (const lead of ordered) {
+    const { chosen } = selectCounselorByFlowConfig(pool, lead, config);
+    assert.ok(chosen);
+    assert.notEqual(chosen.empId, 'E-01');
+    if (lead.country !== 'China' && chosen.empId !== 'E-07') {
+      nonChinaToOthers++;
+    }
+    if (lead.country === 'China' && chosen.empId === 'E-07') {
+      chinaCountMukta++;
+    }
+    chosen.activeCount++;
+    chosen.todayAssignedCount++;
+    counts.set(chosen.name, (counts.get(chosen.name) || 0) + 1);
+  }
+
+  assert.equal(nonChinaToOthers, 0, 'Non-China leads must never leak to China-only counselors');
+  assert.equal(counts.get('Mukta Rahaman'), 10);
+  assert.equal(counts.get('Afsana Meme'), 10);
+  assert.equal(counts.get('Mim'), 10);
+  assert.equal(chinaCountMukta, 4);
+
+  // Manual queue holds leads unassigned on automatic intake
+  const manualCfg = parseLeadFlowConfig({ leadFlowMode: 'manual_queue', leadFlowRulesJson: validated.normalized });
+  assert.equal(selectCounselorByFlowConfig(pool, { country: 'China' }, manualCfg).chosen, null);
+
+  // Strict checked-in excludes Afsana (checkedInToday: false), even if she has lowest load
+  pool[1].activeCount = 20;
+  pool[3].activeCount = 20;
+  pool[2].activeCount = 0;
+  const strictCfg = parseLeadFlowConfig({
+    leadFlowMode: 'auto_balanced',
+    leadFlowAttendanceFilter: 'strict_checked_in',
+    leadFlowRulesJson: validated.normalized,
+  });
+  const strictPick = selectCounselorByFlowConfig(pool, { country: 'China' }, strictCfg).chosen;
+  assert.ok(strictPick && strictPick.empId !== 'E-04');
+
+  // If Mukta (all countries) is temporarily paused/disabled, non-China MUST remain unassigned rather than leaking to China-only staff
+  const pausedMuktaCfg = parseLeadFlowConfig({
+    leadFlowMode: 'auto_balanced',
+    leadFlowRulesJson: JSON.stringify({
+      'E-07': { eligible: false, countryScope: 'all', dailyCap: 0 },
+      'E-04': { eligible: true, countryScope: 'china_only', dailyCap: 0 },
+      'E-08': { eligible: true, countryScope: 'china_only', dailyCap: 0 },
+    }),
+  });
+  assert.equal(selectCounselorByFlowConfig(pool, { country: 'UK' }, pausedMuktaCfg).chosen, null);
 });

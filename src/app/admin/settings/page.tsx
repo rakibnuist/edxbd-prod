@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import LeadFlowSettingsPanel from '@/components/admin/LeadFlowSettingsPanel';
 import MetaConnectionPanel from '@/components/admin/MetaConnectionPanel';
 import TelegramAlertsSettingsPanel from '@/components/admin/TelegramAlertsSettingsPanel';
 import {
@@ -148,9 +149,19 @@ export default function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#0f3a5c] sm:text-3xl">Settings</h1>
-        <p className="mt-1 text-sm text-gray-500">Manage site details and marketing integrations.</p>
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-[#0f3a5c] sm:text-3xl">Settings</h1>
+          <p className="mt-1 text-sm text-gray-500">Manage site details, GPS attendance verification, lead flow routing, and marketing integrations.</p>
+        </div>
+        <div className="flex flex-wrap gap-2 text-xs font-bold">
+          <a href="#office-location" className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[#0f3a5c] hover:bg-slate-50">
+            GPS Office Location
+          </a>
+          <a href="#lead-flow" className="rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-indigo-800 hover:bg-indigo-100">
+            Lead Flow Control ↓
+          </a>
+        </div>
       </div>
 
       {message && (
@@ -436,6 +447,8 @@ export default function SettingsPage() {
           </button>
         </div>
       </form>
+
+      <LeadFlowSettingsPanel />
 
       <TelegramAlertsSettingsPanel />
     </div>

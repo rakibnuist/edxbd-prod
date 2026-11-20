@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { validateLeadFlowRulesJson } from '@/lib/lead-flow';
 import { validateCoordinateInput, validateRadiusMetersInput } from '@/lib/office-location';
 import { decryptSecret, encryptSecret } from '@/lib/secret-box';
 
@@ -45,6 +46,10 @@ export const SETTING_KEYS = [
   'officeLongitude',
   'officeRadiusMeters',
   'officeLocationStrict',
+  'leadFlowMode',
+  'leadFlowAttendanceFilter',
+  'leadFlowOnlyUntouched',
+  'leadFlowRulesJson',
 ] as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[number];
@@ -55,6 +60,7 @@ const MAX_LENGTHS: Record<SettingKey, number> = {
   instagramUrl: 500, youtubeUrl: 500, introVideoTitle: 160, introVideoUrl: 500,
   introVideoPoster: 500, metaPixelId: 32, metaAccessToken: 4096, gtmId: 32, ga4Id: 32,
   officeLatitude: 32, officeLongitude: 32, officeRadiusMeters: 10, officeLocationStrict: 10,
+  leadFlowMode: 24, leadFlowAttendanceFilter: 32, leadFlowOnlyUntouched: 10, leadFlowRulesJson: 4000,
 };
 
 const URL_KEYS = new Set<SettingKey>([
@@ -114,6 +120,33 @@ export function validateSettings(values: unknown): {
         return { error: 'officeLocationStrict must be true or false.' };
       }
       cleanValues[key] = value === 'true' ? 'true' : 'false';
+      continue;
+    }
+    if (key === 'leadFlowMode') {
+      if (value && !['auto_balanced', 'round_robin', 'manual_queue'].includes(value)) {
+        return { error: 'leadFlowMode must be auto_balanced, round_robin, or manual_queue.' };
+      }
+      cleanValues[key] = value || 'auto_balanced';
+      continue;
+    }
+    if (key === 'leadFlowAttendanceFilter') {
+      if (value && !['all_eligible', 'prefer_checked_in', 'strict_checked_in'].includes(value)) {
+        return { error: 'leadFlowAttendanceFilter is invalid.' };
+      }
+      cleanValues[key] = value || 'all_eligible';
+      continue;
+    }
+    if (key === 'leadFlowOnlyUntouched') {
+      if (value && value !== 'true' && value !== 'false') {
+        return { error: 'leadFlowOnlyUntouched must be true or false.' };
+      }
+      cleanValues[key] = value === 'false' ? 'false' : 'true';
+      continue;
+    }
+    if (key === 'leadFlowRulesJson') {
+      const checked = validateLeadFlowRulesJson(value);
+      if (checked.error) return { error: checked.error };
+      cleanValues[key] = checked.normalized ?? '';
       continue;
     }
     cleanValues[key] = key === 'gtmId' || key === 'ga4Id' ? value.toUpperCase() : value;
