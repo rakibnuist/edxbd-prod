@@ -111,7 +111,7 @@ async function loadLeadFlowPool(options?: {
       name: e.name,
       team: e.team,
       role: e.role,
-      activeCount: e._count.leads,
+      activeCount: options?.excludeNewFromActiveCount ? 0 : e._count.leads,
       todayAssignedCount: options?.excludeNewFromActiveCount ? 0 : todayCountMap.get(e.id) || 0,
       checkedInToday: checkedInSet.has(e.id),
       lastAssignedAtMs: options?.excludeNewFromActiveCount ? 0 : lastAssignedMap.get(e.id) || 0,
@@ -209,7 +209,7 @@ export async function distributeUnassignedLeads(options: {
         ? {
             status: 'new',
             OR: [
-              { assignedEmployeeId: null, assignedTo: null },
+              { assignedEmployeeId: null },
               { assignedEmployeeId: { notIn: eligibleIdList } },
             ],
           }

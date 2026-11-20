@@ -31,7 +31,7 @@ type Props = {
   savingId: string | null;
   onRefresh: () => void;
   onSyncMeta?: () => Promise<void>;
-  onAutoAssign?: (scope: 'new' | 'all_active') => Promise<void>;
+  onAutoAssign?: (scope: 'new' | 'untouched_pool' | 'untouched_rebalance' | 'all_active') => Promise<void>;
   onUpdate: (id: string, data: Record<string, unknown>) => Promise<boolean>;
   onDelete?: (id: string) => Promise<boolean>;
   isCounselor?: boolean;
@@ -547,9 +547,9 @@ export default function LeadWorkspace({
               <button
                 type="button"
                 className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-800 hover:bg-indigo-100 disabled:opacity-60 transition"
-                onClick={() => onAutoAssign('new')}
+                onClick={() => onAutoAssign('untouched_pool')}
                 disabled={loading || syncingMeta || importing}
-                title="Distribute unassigned untouched (new) leads across active counselors by country scope"
+                title="Pull unassigned or non-counselor untouched (new) leads and distribute across active counselors by country scope"
               >
                 <UserCheck size={14} />
                 <span>Distribute Untouched Leads</span>
