@@ -1,6 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { Suspense, useState, useEffect, useCallback } from 'react';
+import PublicAboutTeamPanel from '@/components/admin/PublicAboutTeamPanel';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface LinkedEmployee {
@@ -11,6 +14,7 @@ interface LinkedEmployee {
   role?: string;
   email?: string | null;
   phone?: string | null;
+  active?: boolean;
   userId?: string | null;
 }
 
@@ -33,8 +37,11 @@ interface SentMessage {
   createdAt: string;
 }
 
-export default function UsersPage() {
+function UsersPageContent() {
   const { user: currentUser, authenticatedFetch } = useAuth();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const activeTab = searchParams.get('tab') === 'public' ? 'public' : 'office';
   const [users, setUsers] = useState<User[]>([]);
   const [employees, setEmployees] = useState<LinkedEmployee[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,6 +64,20 @@ export default function UsersPage() {
   const [showSentMessagesModal, setShowSentMessagesModal] = useState(false);
   const [sentMessages, setSentMessages] = useState<SentMessage[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
+  const [staffNotice, setStaffNotice] = useState('');
+  const [staffBusy, setStaffBusy] = useState(false);
+  const [showAddStaffModal, setShowAddStaffModal] = useState(false);
+  const [newStaffForm, setNewStaffForm] = useState({
+    name: '',
+    empId: '',
+    role: 'Counselor',
+    team: 'china',
+    phone: '',
+    email: '',
+  });
+  const [staffDrafts, setStaffDrafts] = useState<
+    Record<string, { role?: string; team?: string; phone?: string; email?: string; active?: boolean }>
+  >({});
 
   const isSuperAdmin = currentUser?.role === 'super_admin';
   const isAdmin = currentUser?.role === 'admin';
@@ -79,7 +100,7 @@ export default function UsersPage() {
     }
   };
 
-  async function fetchUsers() {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const response = await authenticatedFetch('/api/admin/users');
@@ -95,14 +116,14 @@ export default function UsersPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [authenticatedFetch]);
 
   useEffect(() => {
     if (currentUser?.role === 'admin' || currentUser?.role === 'super_admin') {
       const timeoutId = window.setTimeout(() => void fetchUsers(), 0);
       return () => window.clearTimeout(timeoutId);
     }
-  }, [currentUser?.role]);
+  }, [currentUser?.role, fetchUsers]);
 
   // Check if current user is admin or super_admin
   if (currentUser?.role !== 'admin' && currentUser?.role !== 'super_admin') {
@@ -192,8 +213,97 @@ export default function UsersPage() {
         const data = await response.json();
         setError(data.message || 'Failed to delete user');
       }
-    } catch (error) {
+    } catch {
       setError('Failed to delete user');
+    }
+  };
+
+  const handleSaveStaffMember = async (emp: LinkedEmployee) => {
+    const draft = staffDrafts[emp.id] || {};
+    setStaffBusy(true);
+    setError('');
+    setStaffNotice('');
+    try {
+      const res = await authenticatedFetch('/api/admin/employees', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: emp.id,
+          role: draft.role ?? emp.role ?? 'Counselor',
+          team: draft.team ?? emp.team,
+          phone: draft.phone ?? emp.phone ?? '',
+          email: draft.email ?? emp.email ?? '',
+          active: draft.active ?? (emp.active !== false),
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Could not update staff member');
+      setStaffNotice(`Saved profile for ${emp.name} (${emp.empId}).`);
+      setStaffDrafts((prev) => {
+        const copy = { ...prev };
+        delete copy[emp.id];
+        return copy;
+      });
+      await fetchUsers();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update staff member');
+    } finally {
+      setStaffBusy(false);
+    }
+  };
+
+  const handleCreateStaffMember = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newStaffForm.name.trim()) return;
+    setStaffBusy(true);
+    setError('');
+    setStaffNotice('');
+    try {
+      const res = await authenticatedFetch('/api/admin/employees', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newStaffForm.name.trim(),
+          empId: newStaffForm.empId.trim() || undefined,
+          role: newStaffForm.role.trim() || 'Counselor',
+          team: newStaffForm.team,
+          phone: newStaffForm.phone.trim() || undefined,
+          email: newStaffForm.email.trim() || undefined,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Could not add staff member');
+      setShowAddStaffModal(false);
+      setNewStaffForm({ name: '', empId: '', role: 'Counselor', team: 'china', phone: '', email: '' });
+      setStaffNotice(`Added ${data.name} (${data.empId}) to Office Staff Roster.`);
+      await fetchUsers();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create staff member');
+    } finally {
+      setStaffBusy(false);
+    }
+  };
+
+  const handleApplyThreeCounselorPreset = async () => {
+    setStaffBusy(true);
+    setError('');
+    setStaffNotice('');
+    try {
+      const res = await authenticatedFetch('/api/admin/lead-flow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'apply_3_counselors_preset' }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Could not apply counselor preset');
+      setStaffNotice(
+        '3-Counselor office preset applied: Mukta Rahaman (All Countries), Afsana Meme (China Only), Mim (China Only). Create a login below for anyone missing one.',
+      );
+      await fetchUsers();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to apply preset');
+    } finally {
+      setStaffBusy(false);
     }
   };
 
@@ -286,86 +396,389 @@ export default function UsersPage() {
     );
   }
 
+  const officeCounselorTargets = [
+    { key: 'mukta', label: 'Mukta Rahaman', scope: 'All Countries', match: /\bmukta\b/i },
+    { key: 'afsana', label: 'Afsana Meme', scope: 'China Only', match: /\bafsana\b/i },
+    { key: 'mim', label: 'Mim', scope: 'China Only', match: /\bmim\b/i },
+  ].map((target) => {
+    const emp = employees.find((e) => target.match.test(e.name) && e.active !== false) || null;
+    const linked = emp
+      ? users.find((u) => u.employee?.id === emp.id || (emp.userId && u.id === emp.userId)) || null
+      : null;
+    return { ...target, emp, linked };
+  });
+
+  const anyCounselorMissing = officeCounselorTargets.some((c) => !c.emp);
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
-            <div className="flex space-x-3">
+    <div className="min-h-screen bg-slate-50/50">
+      <div className="mx-auto max-w-7xl space-y-6 py-4">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-[#0f3a5c] sm:text-3xl">
+              Team &amp; Users
+            </h1>
+            <p className="mt-1 text-xs text-slate-600">
+              Single place for office counselors, WhatsApp portals, CRM logins, and public website bios.{' '}
+              <Link href="/admin/settings#lead-flow" className="font-bold text-[#0f3a5c] hover:underline">
+                Lead Flow Control →
+              </Link>
+            </p>
+          </div>
+          {activeTab === 'office' && (
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                disabled={staffBusy}
+                onClick={handleApplyThreeCounselorPreset}
+                className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-100 disabled:opacity-50"
+              >
+                {anyCounselorMissing ? 'Add Missing Counselors & Apply Preset' : 'Apply 3-Counselor Preset'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowAddStaffModal(true)}
+                className="rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-700"
+              >
+                + Add Staff / Counselor
+              </button>
               {canMessage && (
                 <button
                   onClick={() => {
                     fetchSentMessages();
                     setShowSentMessagesModal(true);
                   }}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center transition-colors shadow-sm"
+                  className="flex items-center rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  View Sent Messages
+                  Sent Messages
                 </button>
               )}
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
+                className="flex items-center rounded-lg bg-[#0f3a5c] px-3.5 py-2 text-xs font-bold text-white hover:bg-[#124b7a]"
               >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                Create User
+                + Create Login
               </button>
             </div>
-          </div>
-
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
-            </div>
           )}
+        </div>
 
-          {unlinkedEmployees.length > 0 && (
-            <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50/70 p-4">
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+        {/* Unified Single-Point Tabs */}
+        <div className="flex gap-2 border-b border-slate-200">
+          <button
+            type="button"
+            onClick={() => router.push('/admin/users')}
+            className={`border-b-2 px-4 py-2.5 text-xs font-bold transition ${
+              activeTab === 'office'
+                ? 'border-[#0f3a5c] text-[#0f3a5c]'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            Office Counselors &amp; CRM Logins ({employees.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push('/admin/users?tab=public')}
+            className={`border-b-2 px-4 py-2.5 text-xs font-bold transition ${
+              activeTab === 'public'
+                ? 'border-[#0f3a5c] text-[#0f3a5c]'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            Public About Page Bios (/about)
+          </button>
+        </div>
+
+        {activeTab === 'public' ? (
+          <PublicAboutTeamPanel />
+        ) : (
+          <>
+            {/* 3-Counselor Office Verification Strip */}
+            <div
+              className={`rounded-2xl border p-4 ${
+                anyCounselorMissing
+                  ? 'border-amber-200 bg-amber-50/80'
+                  : 'border-emerald-200 bg-emerald-50/60'
+              }`}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h2 className="text-sm font-bold text-slate-900">
-                    Pending Staff Login Accounts ({unlinkedEmployees.length})
-                  </h2>
-                  <p className="text-xs text-slate-600">
-                    Click <strong>Create Login</strong> to pre-fill and link an active counselor/staff profile.
+                  <p className="text-xs font-bold text-slate-900">
+                    Active Office Counselors Roster Check (3-Counselor Setup)
+                  </p>
+                  <p className="text-[11px] text-slate-600">
+                    {anyCounselorMissing
+                      ? 'One or more office counselors (such as Mim) are not in the roster yet. Click Apply Preset to create missing counselor profiles and route untouched leads cleanly.'
+                      : 'All 3 office counselors are active in the CRM roster.'}
                   </p>
                 </div>
+                <button
+                  type="button"
+                  disabled={staffBusy}
+                  onClick={handleApplyThreeCounselorPreset}
+                  className="rounded-lg bg-[#0f3a5c] px-3.5 py-2 text-xs font-bold text-white hover:bg-[#124b7a] disabled:opacity-50"
+                >
+                  {staffBusy ? 'Applying...' : 'Sync 3 Counselors (Mukta · Afsana · Mim)'}
+                </button>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                {unlinkedEmployees.map((emp) => (
+              <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                {officeCounselorTargets.map((item) => (
                   <div
-                    key={emp.id}
-                    className="flex items-center justify-between gap-3 rounded-md border border-blue-100 bg-white px-3 py-2.5 shadow-2xs"
+                    key={item.key}
+                    className="flex items-center justify-between gap-2 rounded-xl border border-slate-200/80 bg-white px-3 py-2 text-xs"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-xs font-bold text-slate-900">
-                        {emp.empId} · {emp.name}
-                      </p>
-                      <p className="truncate text-[11px] text-slate-500">
-                        {emp.team} {emp.email ? `· ${emp.email}` : '· Enter work email'}
+                      <p className="truncate font-bold text-slate-900">{item.label}</p>
+                      <p className="text-[11px] text-slate-500">
+                        {item.scope}
+                        {item.emp ? ` · ${item.emp.empId}` : ''}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => openQuickCreateForEmployee(emp)}
-                      className="shrink-0 rounded-md bg-blue-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-blue-700"
-                    >
-                      Create Login
-                    </button>
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      {!item.emp ? (
+                        <span className="rounded-full bg-rose-100 px-2 py-0.5 text-[10px] font-bold text-rose-800">
+                          Missing
+                        </span>
+                      ) : !item.linked ? (
+                        <button
+                          type="button"
+                          onClick={() => openQuickCreateForEmployee(item.emp!)}
+                          className="rounded-md bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-blue-700"
+                        >
+                          + Login
+                        </button>
+                      ) : (
+                        <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                          Ready
+                        </span>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
-          )}
 
-          <div className="bg-white shadow overflow-hidden sm:rounded-md">
-            <ul className="divide-y divide-gray-200">
+            {staffNotice && (
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs font-semibold text-emerald-900">
+                {staffNotice}
+              </div>
+            )}
+
+            {error && (
+              <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-semibold text-rose-900">
+                {error}
+              </div>
+            )}
+
+            {/* Section 1: Unified Office Staff & Counselors Roster */}
+        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 px-5 py-4">
+            <div>
+              <h2 className="text-base font-bold text-slate-900">
+                1. Office Staff &amp; Counselors Roster ({employees.length})
+              </h2>
+              <p className="text-xs text-slate-500">
+                Edit counselor roles, destination teams, WhatsApp numbers, active status, or create linked CRM login accounts.
+              </p>
+            </div>
+            <Link
+              href="/admin/settings#lead-flow"
+              className="rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-800 hover:bg-indigo-100"
+            >
+              Control Lead Flow &amp; Untouched Distribution →
+            </Link>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200 text-left text-xs">
+              <thead className="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th className="px-4 py-3">Staff / ID</th>
+                  <th className="px-4 py-3">Role</th>
+                  <th className="px-4 py-3">Destination Team</th>
+                  <th className="px-4 py-3">WhatsApp Phone</th>
+                  <th className="px-4 py-3">Work Email</th>
+                  <th className="px-4 py-3">Login Account</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3 text-right">Save</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 bg-white">
+                {employees.map((emp) => {
+                  const draft = staffDrafts[emp.id] || {};
+                  const roleVal = draft.role ?? emp.role ?? 'Counselor';
+                  const teamVal = draft.team ?? emp.team;
+                  const phoneVal = draft.phone ?? emp.phone ?? '';
+                  const emailVal = draft.email ?? emp.email ?? '';
+                  const activeVal = draft.active ?? (emp.active !== false);
+                  const linkedUser = users.find(
+                    (u) => u.employee?.id === emp.id || (emp.userId && u.id === emp.userId),
+                  );
+                  return (
+                    <tr key={emp.id} className={!activeVal ? 'bg-slate-50/80 opacity-65' : ''}>
+                      <td className="px-4 py-2.5">
+                        <p className="font-bold text-slate-900">{emp.name}</p>
+                        <p className="font-mono text-[11px] text-slate-500">{emp.empId}</p>
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <input
+                          type="text"
+                          value={roleVal}
+                          onChange={(e) =>
+                            setStaffDrafts((prev) => ({
+                              ...prev,
+                              [emp.id]: { ...prev[emp.id], role: e.target.value },
+                            }))
+                          }
+                          className="w-40 rounded border border-slate-300 px-2 py-1 text-xs"
+                        />
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <select
+                          value={teamVal}
+                          onChange={(e) =>
+                            setStaffDrafts((prev) => ({
+                              ...prev,
+                              [emp.id]: { ...prev[emp.id], team: e.target.value },
+                            }))
+                          }
+                          className="rounded border border-slate-300 bg-white px-2 py-1 text-xs font-semibold"
+                        >
+                          <option value="all">all (All Countries)</option>
+                          <option value="china">china</option>
+                          <option value="europe">europe</option>
+                          <option value="malaysia">malaysia</option>
+                          <option value="general">general</option>
+                        </select>
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <input
+                          type="text"
+                          value={phoneVal}
+                          placeholder="+8801..."
+                          onChange={(e) =>
+                            setStaffDrafts((prev) => ({
+                              ...prev,
+                              [emp.id]: { ...prev[emp.id], phone: e.target.value },
+                            }))
+                          }
+                          className="w-36 rounded border border-slate-300 px-2 py-1 text-xs"
+                        />
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <input
+                          type="email"
+                          value={emailVal}
+                          placeholder="name@eduexpressint.com"
+                          onChange={(e) =>
+                            setStaffDrafts((prev) => ({
+                              ...prev,
+                              [emp.id]: { ...prev[emp.id], email: e.target.value },
+                            }))
+                          }
+                          className="w-44 rounded border border-slate-300 px-2 py-1 text-xs"
+                        />
+                      </td>
+                      <td className="px-4 py-2.5">
+                        {linkedUser ? (
+                          <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800 ring-1 ring-emerald-200">
+                            {linkedUser.email}
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => openQuickCreateForEmployee(emp)}
+                            className="rounded-md bg-blue-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-blue-700"
+                          >
+                            + Create Login
+                          </button>
+                        )}
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <label className="inline-flex cursor-pointer items-center gap-1.5 font-semibold">
+                          <input
+                            type="checkbox"
+                            checked={activeVal}
+                            onChange={(e) =>
+                              setStaffDrafts((prev) => ({
+                                ...prev,
+                                [emp.id]: { ...prev[emp.id], active: e.target.checked },
+                              }))
+                            }
+                            className="size-4 rounded border-slate-300 text-[#0f3a5c]"
+                          />
+                          <span>{activeVal ? 'Active' : 'Inactive'}</span>
+                        </label>
+                      </td>
+                      <td className="px-4 py-2.5 text-right">
+                        <button
+                          type="button"
+                          disabled={staffBusy}
+                          onClick={() => void handleSaveStaffMember(emp)}
+                          className="rounded-lg bg-[#0f3a5c] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#124b7a] disabled:opacity-50"
+                        >
+                          Save
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+                {employees.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="px-4 py-6 text-center text-xs text-slate-500">
+                      No staff members added yet. Click &ldquo;Apply 3-Counselor Preset&rdquo; or &ldquo;+ Add Staff / Counselor&rdquo; above.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {unlinkedEmployees.length > 0 && (
+          <div className="rounded-xl border border-blue-200 bg-blue-50/70 p-4">
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 className="text-xs font-bold text-slate-900">
+                  Active Staff Without a Login Password ({unlinkedEmployees.length})
+                </h3>
+                <p className="text-[11px] text-slate-600">
+                  Click <strong>Create Login</strong> to give a counselor desk sign-in credentials.
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {unlinkedEmployees.map((emp) => (
+                <div
+                  key={emp.id}
+                  className="flex items-center justify-between gap-3 rounded-lg border border-blue-100 bg-white px-3 py-2"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-xs font-bold text-slate-900">
+                      {emp.empId} · {emp.name}
+                    </p>
+                    <p className="truncate text-[11px] text-slate-500">
+                      {emp.team} {emp.email ? `· ${emp.email}` : '· Enter work email'}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => openQuickCreateForEmployee(emp)}
+                    className="shrink-0 rounded-md bg-blue-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-blue-700"
+                  >
+                    Create Login
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="border-b border-slate-100 px-5 py-3.5">
+            <h2 className="text-base font-bold text-slate-900">2. CRM Login Accounts ({users.length})</h2>
+            <p className="text-xs text-slate-500">Password credentials, permission roles, and employee profile links.</p>
+          </div>
+          <ul className="divide-y divide-gray-200">
               {users.map((user, index) => (
                 <li key={user.id || `user-${index}`} className="px-6 py-4">
                   <div className="flex items-center justify-between">
@@ -442,8 +855,103 @@ export default function UsersPage() {
               ))}
             </ul>
           </div>
-        </div>
+          </>
+        )}
       </div>
+
+      {/* Add Staff / Counselor Modal */}
+      {showAddStaffModal && (
+        <div className="fixed inset-0 z-50 h-full w-full overflow-y-auto bg-slate-900/50">
+          <div className="relative top-20 mx-auto w-96 rounded-xl border bg-white p-5 shadow-lg">
+            <h3 className="mb-4 text-lg font-bold text-slate-900">Add Staff / Counselor</h3>
+            <form onSubmit={handleCreateStaffMember} className="space-y-3">
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-slate-700">Full Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={newStaffForm.name}
+                  onChange={(e) => setNewStaffForm({ ...newStaffForm, name: e.target.value })}
+                  placeholder="e.g. Mim"
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-slate-700">Staff ID (optional)</label>
+                  <input
+                    type="text"
+                    value={newStaffForm.empId}
+                    onChange={(e) => setNewStaffForm({ ...newStaffForm, empId: e.target.value })}
+                    placeholder="Auto (E-08)"
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-slate-700">Role</label>
+                  <input
+                    type="text"
+                    value={newStaffForm.role}
+                    onChange={(e) => setNewStaffForm({ ...newStaffForm, role: e.target.value })}
+                    placeholder="Counselor"
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-slate-700">Destination Team Scope</label>
+                <select
+                  value={newStaffForm.team}
+                  onChange={(e) => setNewStaffForm({ ...newStaffForm, team: e.target.value })}
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold"
+                >
+                  <option value="china">China Only (china)</option>
+                  <option value="all">All Countries (all)</option>
+                  <option value="europe">Europe / Non-China (europe)</option>
+                  <option value="malaysia">Malaysia / Non-China (malaysia)</option>
+                  <option value="general">General / Operations (general)</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-slate-700">WhatsApp Phone</label>
+                <input
+                  type="text"
+                  value={newStaffForm.phone}
+                  onChange={(e) => setNewStaffForm({ ...newStaffForm, phone: e.target.value })}
+                  placeholder="+8801..."
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-slate-700">Work Email</label>
+                <input
+                  type="email"
+                  value={newStaffForm.email}
+                  onChange={(e) => setNewStaffForm({ ...newStaffForm, email: e.target.value })}
+                  placeholder="counselor@eduexpressint.com"
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddStaffModal(false)}
+                  className="rounded-lg bg-slate-200 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={staffBusy || !newStaffForm.name.trim()}
+                  className="rounded-lg bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50"
+                >
+                  {staffBusy ? 'Adding...' : 'Add Staff'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Create User Modal */}
       {showCreateModal && (
@@ -792,5 +1300,13 @@ export default function UsersPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function UsersPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-sm text-slate-500">Loading Team &amp; Users…</div>}>
+      <UsersPageContent />
+    </Suspense>
   );
 }

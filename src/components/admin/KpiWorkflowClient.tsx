@@ -165,17 +165,6 @@ export default function KpiWorkflowClient() {
   const [targetEnrolled, setTargetEnrolled] = useState('5');
   const [maxSlaHours, setMaxSlaHours] = useState('24');
 
-  // New employee form state
-  const [empName, setEmpName] = useState('');
-  const [empCode, setEmpCode] = useState('');
-  const [empRole, setEmpRole] = useState('Admissions Counselor');
-  const [empTeam, setEmpTeam] = useState('china');
-  const [empPhone, setEmpPhone] = useState('');
-  const [empEmail, setEmpEmail] = useState('');
-  const [rosterDrafts, setRosterDrafts] = useState<
-    Record<string, { phone?: string; email?: string; team?: string; role?: string }>
-  >({});
-
   // Trace drawer
   const [traceEmpId, setTraceEmpId] = useState<string | null>(null);
   const [traceData, setTraceData] = useState<TraceDetailPayload | null>(null);
@@ -406,68 +395,6 @@ export default function KpiWorkflowClient() {
     }
   };
 
-  const handleCreateEmployee = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!empName.trim()) return;
-    setBusy(true);
-    setNotice(null);
-    setError(null);
-    try {
-      const res = await authenticatedFetch('/api/admin/employees', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: empName.trim(),
-          empId: empCode.trim() || undefined,
-          role: empRole.trim(),
-          team: empTeam,
-          phone: empPhone.trim() || undefined,
-          email: empEmail.trim() || undefined,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Could not add employee');
-      setEmpName('');
-      setEmpCode('');
-      setEmpPhone('');
-      setEmpEmail('');
-      setNotice(`Added ${data.name} (${data.empId}) to active team roster.`);
-      await loadReport();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add employee');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleSaveEmployeeRow = async (emp: ComputedEmployeeKpi['employee']) => {
-    const draft = rosterDrafts[emp.id] || {};
-    setBusy(true);
-    setNotice(null);
-    setError(null);
-    try {
-      const res = await authenticatedFetch('/api/admin/employees', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: emp.id,
-          phone: draft.phone ?? emp.phone ?? '',
-          email: draft.email ?? emp.email ?? '',
-          team: draft.team ?? emp.team,
-          role: draft.role ?? emp.role,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Could not update employee');
-      setNotice(`Saved roster details for ${emp.name} (${emp.empId}).`);
-      await loadReport();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save employee');
-    } finally {
-      setBusy(false);
-    }
-  };
-
   const handleSeedDefaultTargets = async () => {
     setBusy(true);
     setNotice(null);
@@ -553,7 +480,7 @@ export default function KpiWorkflowClient() {
         {[
           { id: 'overview' as const, label: isCounselor ? 'My KPI & SLA Overview' : 'Team KPI & Live Workflow', icon: Award },
           { id: 'workspace' as const, label: 'My Check-In & Daily Logs', icon: Flame },
-          ...(!isCounselor ? [{ id: 'manage' as const, label: 'Tasks, SLA Targets & Roster', icon: ListChecks }] : []),
+          ...(!isCounselor ? [{ id: 'manage' as const, label: 'Tasks & KPI Targets', icon: ListChecks }] : []),
         ].map((t) => {
           const Icon = t.icon;
           const active = effectiveTab === t.id;
@@ -577,7 +504,7 @@ export default function KpiWorkflowClient() {
 
       {isCounselor && !loading && report && report.employees.length === 0 && (
         <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-900">
-          Your account is not linked to an active Employee profile yet. Please ask an administrator to link your user account to your Employee record under User Management.
+          Your account is not linked to an active Employee profile yet. Please ask an administrator to link your user account under Staff &amp; Access.
         </div>
       )}
 
@@ -1259,159 +1186,55 @@ export default function KpiWorkflowClient() {
               )}
             </div>
 
-            {/* Editable Team Roster & Missing WhatsApp Numbers */}
+            {/* Unified Office Staff & Lead Flow Links */}
             <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
                   <Users size={16} className="text-blue-600" />
-                  Counselor Contact &amp; WhatsApp Roster ({report.employees.length})
+                  Office Counselors &amp; Lead Flow ({report.employees.length} active)
                 </h2>
-                <span className="text-[11px] font-medium text-slate-500">
-                  Direct WhatsApp shown on Student Tracking Portals
-                </span>
+                <Link
+                  href="/admin/users"
+                  className="rounded-lg bg-[#0f3a5c] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#12436b]"
+                >
+                  Manage Staff, WhatsApp &amp; Logins →
+                </Link>
               </div>
-              <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-                {report.employees.map(({ employee }) => {
-                  const draft = rosterDrafts[employee.id] || {};
-                  const phoneVal = draft.phone ?? employee.phone ?? '';
-                  const emailVal = draft.email ?? employee.email ?? '';
-                  const teamVal = draft.team ?? employee.team;
-                  const missingPhone = !phoneVal.trim();
-                  return (
-                    <div
-                      key={employee.id}
-                      className={`rounded-lg border p-3 text-xs ${
-                        missingPhone ? 'border-amber-200 bg-amber-50/40' : 'border-slate-200 bg-slate-50/50'
+              <p className="text-xs text-slate-600">
+                All staff edits, counselor additions, WhatsApp numbers, and login accounts are organized under{' '}
+                <Link href="/admin/users" className="font-bold text-[#0f3a5c] hover:underline">
+                  Staff &amp; Access (/admin/users)
+                </Link>
+                , and country assignment rules live in{' '}
+                <Link href="/admin/settings#lead-flow" className="font-bold text-[#0f3a5c] hover:underline">
+                  Lead Flow Control
+                </Link>
+                .
+              </p>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {report.employees.map(({ employee }) => (
+                  <div
+                    key={employee.id}
+                    className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate font-bold text-slate-900">
+                        {employee.name} <span className="text-[11px] font-normal text-slate-500">({employee.empId})</span>
+                      </p>
+                      <p className="truncate text-[11px] text-slate-500">
+                        {employee.role} · Scope: {employee.team}
+                      </p>
+                    </div>
+                    <span
+                      className={`shrink-0 rounded px-2 py-0.5 text-[10px] font-bold ${
+                        employee.phone ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
                       }`}
                     >
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                        <div>
-                          <span className="font-bold text-slate-900">{employee.name}</span>{' '}
-                          <span className="text-[11px] text-slate-500">({employee.empId} · {employee.role})</span>
-                        </div>
-                        {missingPhone && (
-                          <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
-                            WhatsApp Phone Needed
-                          </span>
-                        )}
-                      </div>
-                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-12">
-                        <input
-                          type="text"
-                          value={phoneVal}
-                          onChange={(e) =>
-                            setRosterDrafts((prev) => ({
-                              ...prev,
-                              [employee.id]: { ...prev[employee.id], phone: e.target.value },
-                            }))
-                          }
-                          placeholder="+8801..."
-                          className="sm:col-span-4 rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs"
-                        />
-                        <input
-                          type="email"
-                          value={emailVal}
-                          onChange={(e) =>
-                            setRosterDrafts((prev) => ({
-                              ...prev,
-                              [employee.id]: { ...prev[employee.id], email: e.target.value },
-                            }))
-                          }
-                          placeholder="Email"
-                          className="sm:col-span-4 rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs"
-                        />
-                        <select
-                          value={teamVal}
-                          onChange={(e) =>
-                            setRosterDrafts((prev) => ({
-                              ...prev,
-                              [employee.id]: { ...prev[employee.id], team: e.target.value },
-                            }))
-                          }
-                          className="sm:col-span-2 rounded border border-slate-300 bg-white px-2 py-1.5 text-xs font-semibold"
-                        >
-                          <option value="all">all (All Countries)</option>
-                          <option value="china">china</option>
-                          <option value="europe">europe</option>
-                          <option value="malaysia">malaysia</option>
-                          <option value="general">general</option>
-                        </select>
-                        <button
-                          type="button"
-                          disabled={busy}
-                          onClick={() => handleSaveEmployeeRow(employee)}
-                          className="sm:col-span-2 rounded bg-[#0f3a5c] px-2.5 py-1.5 text-xs font-bold text-white hover:bg-[#12436b] disabled:opacity-50"
-                        >
-                          Save
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
+                      {employee.phone ? 'WA Ready' : 'No WA Phone'}
+                    </span>
+                  </div>
+                ))}
               </div>
-            </div>
-
-            <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm space-y-3">
-              <h2 className="flex items-center gap-1.5 text-sm font-bold text-slate-900">
-                <Users size={16} className="text-emerald-600" />
-                Add Counselor / Staff to Auto-Assignment Roster
-              </h2>
-              <form onSubmit={handleCreateEmployee} className="grid grid-cols-2 gap-2.5">
-                <input
-                  type="text"
-                  required
-                  value={empName}
-                  onChange={(e) => setEmpName(e.target.value)}
-                  placeholder="Full Name *"
-                  className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
-                />
-                <input
-                  type="text"
-                  value={empCode}
-                  onChange={(e) => setEmpCode(e.target.value)}
-                  placeholder="ID (e.g. E-08)"
-                  className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
-                />
-                <input
-                  type="text"
-                  value={empRole}
-                  onChange={(e) => setEmpRole(e.target.value)}
-                  placeholder="Role"
-                  className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
-                />
-                <select
-                  value={empTeam}
-                  onChange={(e) => setEmpTeam(e.target.value)}
-                  className="rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-semibold"
-                >
-                  <option value="all">All Countries (China + Global)</option>
-                  <option value="china">China Desk (Flagship)</option>
-                  <option value="europe">Europe / UK</option>
-                  <option value="malaysia">Malaysia / Asia</option>
-                  <option value="general">General / Operations</option>
-                </select>
-                <input
-                  type="text"
-                  value={empPhone}
-                  onChange={(e) => setEmpPhone(e.target.value)}
-                  placeholder="WhatsApp Phone (+8801...)"
-                  className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
-                />
-                <input
-                  type="email"
-                  value={empEmail}
-                  onChange={(e) => setEmpEmail(e.target.value)}
-                  placeholder="Email (optional)"
-                  className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
-                />
-                <button
-                  type="submit"
-                  disabled={busy || !empName.trim()}
-                  className="col-span-2 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50"
-                >
-                  + Add Team Member
-                </button>
-              </form>
             </div>
           </div>
         </div>

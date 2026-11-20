@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { CheckCircle2, Globe2, RefreshCw, Shuffle, UserCheck, UserPlus, Users2 } from 'lucide-react';
+import { CheckCircle2, Globe2, RefreshCw, Shuffle, UserCheck, Users2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import type {
   CounselorCountryScope,
@@ -59,13 +59,6 @@ export default function LeadFlowSettingsPanel() {
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [confirmRebalance, setConfirmRebalance] = useState(false);
-
-  // Quick-add counselor inline state
-  const [showAdd, setShowAdd] = useState(false);
-  const [newName, setNewName] = useState('');
-  const [newRole, setNewRole] = useState('Counselor');
-  const [newScope, setNewScope] = useState<CounselorCountryScope>('china_only');
-  const [newEmail, setNewEmail] = useState('');
 
   const applySnapshot = useCallback((data: LeadFlowSnapshot) => {
     setSnapshot(data);
@@ -178,49 +171,6 @@ export default function LeadFlowSettingsPanel() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to distribute leads.');
     } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleQuickAddCounselor = async () => {
-    if (!newName.trim()) return;
-    setBusy(true);
-    setNotice(null);
-    setError(null);
-    try {
-      const res = await authenticatedFetch('/api/admin/employees', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: newName.trim(),
-          role: newRole.trim() || 'Counselor',
-          team: newScope === 'all' ? 'all' : newScope === 'non_china_only' ? 'europe' : 'china',
-          email: newEmail.trim() || undefined,
-          active: true,
-        }),
-      });
-      const created = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(created.error || 'Could not add counselor.');
-
-      const nextRules = {
-        ...rulesByEmpId,
-        [String(created.empId).toUpperCase()]: {
-          eligible: true,
-          countryScope: newScope,
-          dailyCap: 0,
-        },
-      };
-      setNewName('');
-      setNewEmail('');
-      setShowAdd(false);
-      await persistFlowSettings(
-        mode,
-        attendanceFilter,
-        nextRules,
-        `Added ${created.name} (${created.empId}) and updated lead flow rules.`,
-      );
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add counselor.');
       setBusy(false);
     }
   };
@@ -423,58 +373,13 @@ export default function LeadFlowSettingsPanel() {
               </Link>
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => setShowAdd((v) => !v)}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-800 hover:bg-slate-50"
+          <Link
+            href="/admin/users"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-[#0f3a5c] hover:bg-slate-50"
           >
-            <UserPlus size={14} />
-            + Add Counselor
-          </button>
+            Manage Staff, Phones &amp; Logins →
+          </Link>
         </div>
-
-        {showAdd && (
-          <div className="grid grid-cols-1 gap-2 rounded-xl border border-indigo-200 bg-indigo-50/50 p-4 sm:grid-cols-12">
-            <input
-              type="text"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              placeholder="Counselor Name (e.g. Mim)"
-              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs sm:col-span-3"
-            />
-            <input
-              type="text"
-              value={newRole}
-              onChange={(e) => setNewRole(e.target.value)}
-              placeholder="Role (e.g. Counselor)"
-              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs sm:col-span-3"
-            />
-            <select
-              value={newScope}
-              onChange={(e) => setNewScope(e.target.value as CounselorCountryScope)}
-              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold sm:col-span-3"
-            >
-              <option value="china_only">China Only</option>
-              <option value="all">All Countries (China + Global)</option>
-              <option value="non_china_only">Non-China Only</option>
-            </select>
-            <input
-              type="email"
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-              placeholder="Email (optional)"
-              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs sm:col-span-2"
-            />
-            <button
-              type="button"
-              disabled={busy || !newName.trim()}
-              onClick={handleQuickAddCounselor}
-              className="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50 sm:col-span-1"
-            >
-              Add
-            </button>
-          </div>
-        )}
 
         <div className="overflow-x-auto rounded-xl border border-slate-200">
           <table className="min-w-full divide-y divide-slate-200 text-left text-xs">

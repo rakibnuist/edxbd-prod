@@ -9,7 +9,6 @@ import {
   MessageSquareQuote,
   Users2,
   Handshake,
-  ContactRound,
   GraduationCap,
   Globe2,
   UserCog,
@@ -26,21 +25,35 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import LogoutButton from '@/components/LogoutButton';
 import LiveAlertsBell from '@/components/admin/LiveAlertsBell';
 
-const NAV = [
-  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
-  { name: 'Leads', href: '/admin/leads', icon: Users2, badge: 'Active' },
-  { name: 'KPI & Workflow', href: '/admin/kpi', icon: Activity, badge: 'Live' },
-  { name: 'Content', href: '/admin/content', icon: FileText },
-  { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote },
-  { name: 'Universities', href: '/admin/universities', icon: GraduationCap },
-  { name: 'Evidence Library', href: '/admin/evidence', icon: Images },
-  { name: 'Team', href: '/admin/teams', icon: ContactRound },
-  { name: 'Company Records', href: '/admin/trust', icon: ShieldCheck },
-  { name: 'Partnerships', href: '/admin/partnerships', icon: Handshake },
-  { name: 'Countries', href: '/admin/countries', icon: Globe2 },
-  { name: 'Users', href: '/admin/users', icon: UserCog },
-  { name: 'Settings', href: '/admin/settings', icon: SettingsIcon },
+type NavGroup = 'operations' | 'team_controls' | 'website_cms';
+
+const NAV: Array<{
+  name: string;
+  href: string;
+  icon: typeof LayoutDashboard;
+  group: NavGroup;
+  exact?: boolean;
+  badge?: string;
+}> = [
+  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, group: 'operations', exact: true },
+  { name: 'Student Leads', href: '/admin/leads', icon: Users2, group: 'operations', badge: 'Active' },
+  { name: 'KPI & Attendance', href: '/admin/kpi', icon: Activity, group: 'operations', badge: 'Live' },
+  { name: 'B2B Partners', href: '/admin/partnerships', icon: Handshake, group: 'operations' },
+  { name: 'Team & Users', href: '/admin/users', icon: UserCog, group: 'team_controls' },
+  { name: 'Settings & Flow', href: '/admin/settings', icon: SettingsIcon, group: 'team_controls' },
+  { name: 'Universities', href: '/admin/universities', icon: GraduationCap, group: 'website_cms' },
+  { name: 'Countries', href: '/admin/countries', icon: Globe2, group: 'website_cms' },
+  { name: 'Content & Guides', href: '/admin/content', icon: FileText, group: 'website_cms' },
+  { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote, group: 'website_cms' },
+  { name: 'Evidence Library', href: '/admin/evidence', icon: Images, group: 'website_cms' },
+  { name: 'Company Records', href: '/admin/trust', icon: ShieldCheck, group: 'website_cms' },
 ];
+
+const GROUP_LABELS: Record<NavGroup, string> = {
+  operations: 'CRM & Operations',
+  team_controls: 'Team & Office Controls',
+  website_cms: 'Website Catalog & Trust',
+};
 
 const COUNSELOR_ALLOWED_PREFIXES = ['/admin', '/admin/leads', '/admin/kpi'];
 
@@ -66,15 +79,18 @@ function AdminHeader({ activeName }: { activeName: string }) {
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Meta Sync Health Pill */}
+        {/* Dhaka Desk Live Indicator */}
         {!isCounselor && (
-          <div className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-800">
+          <Link
+            href="/admin/settings#lead-flow"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-800 hover:bg-emerald-100"
+          >
             <span className="relative flex size-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
             </span>
-            Meta Leads: Live (2m)
-          </div>
+            Dhaka GMT+6 · Flow Control
+          </Link>
         )}
 
         {/* Live Hot-Lead & Portal Alerts Bell */}
@@ -124,39 +140,54 @@ function AdminShell({ children }: { children: React.ReactNode }) {
   const activeItem = visibleNav.find((n) => isActive(n.href, n.exact));
   const routeAllowed = !isCounselor || isCounselorRouteAllowed(pathname);
 
+  const navSections: NavGroup[] = isCounselor
+    ? ['operations']
+    : ['operations', 'team_controls', 'website_cms'];
+
   const navLinks = (
-    <nav className="flex-1 space-y-1 px-3 py-2">
-      {visibleNav.map((item) => {
-        const active = isActive(item.href, item.exact);
-        const Icon = item.icon;
+    <nav className="flex-1 space-y-4 px-3 py-2">
+      {navSections.map((group) => {
+        const items = visibleNav.filter((item) => item.group === group);
+        if (!items.length) return null;
         return (
-          <Link
-            key={item.name}
-            href={item.href}
-            onClick={() => setSidebarOpen(false)}
-            className={`group relative flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-bold transition-all ${
-              active
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                : 'text-slate-300 hover:bg-white/5 hover:text-white'
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <Icon
-                size={17}
-                className={active ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}
-              />
-              <span>{item.name}</span>
-            </div>
-            {item.badge && (
-              <span
-                className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold ${
-                  active ? 'bg-white/20 text-white' : 'bg-amber-400/20 text-amber-300'
-                }`}
-              >
-                {item.badge}
-              </span>
-            )}
-          </Link>
+          <div key={group} className="space-y-1">
+            <p className="px-2 pb-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+              {GROUP_LABELS[group]}
+            </p>
+            {items.map((item) => {
+              const active = isActive(item.href, item.exact);
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setSidebarOpen(false)}
+                  className={`group relative flex items-center justify-between rounded-xl px-3 py-2 text-xs font-bold transition-all ${
+                    active
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
+                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon
+                      size={17}
+                      className={active ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}
+                    />
+                    <span>{item.name}</span>
+                  </div>
+                  {item.badge && (
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold ${
+                        active ? 'bg-white/20 text-white' : 'bg-amber-400/20 text-amber-300'
+                      }`}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
         );
       })}
     </nav>
@@ -200,9 +231,6 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 
               {/* Navigation Links */}
               <div className="flex-1 overflow-y-auto py-2">
-                <p className="px-5 py-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
-                  Management
-                </p>
                 {navLinks}
               </div>
 
@@ -225,16 +253,16 @@ function AdminShell({ children }: { children: React.ReactNode }) {
               ) : (
                 <div className="mx-3 mb-2 rounded-xl border border-white/10 bg-white/5 p-3">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="font-semibold text-slate-300">System Engine</span>
+                    <span className="font-semibold text-slate-300">Office Controls</span>
                     <span className="inline-flex items-center gap-1 font-bold text-emerald-400">
                       <span className="size-1.5 rounded-full bg-emerald-400" />
-                      Operational
+                      Active
                     </span>
                   </div>
                   <div className="mt-2 text-[10px] text-slate-400">
-                    Meta Graph Sync: 2m interval
+                    Dhaka Time: GMT+6
                     <br />
-                    Lead Webhook: Active
+                    GPS Check-In &amp; Lead Flow
                   </div>
                 </div>
               )}

@@ -63,6 +63,12 @@ const {
   validateLeadFlowRulesJson,
 } = await import('../src/lib/lead-flow.ts');
 
+const {
+  aggregateCountryDemand,
+  buildUrgentDeadlines,
+  computePipelineSummary,
+} = await import('../src/lib/consultancy-analytics.ts');
+
 test('WhatsApp templates format BD phones cleanly and generate all 4 Bengali templates', () => {
   assert.equal(normalizeWhatsappDigits('01712345678'), '8801712345678');
   assert.equal(normalizeWhatsappDigits('+88001639659911'), '8801639659911');
@@ -496,4 +502,110 @@ test('Lead flow rules route All Countries to Mukta, China Only to Afsana & Mim, 
     }),
   });
   assert.equal(selectCounselorByFlowConfig(pool, { country: 'UK' }, pausedMuktaCfg).chosen, null);
+});
+
+test('Consultancy analytics and student dossier validation support pipeline funnel, country demand, deadlines, and counselor unassign', () => {
+  // Unassign & consultancy boolean flags validation
+  const updated = validateLeadUpdate({
+    assignedEmployeeId: null,
+    assignedTo: null,
+    departureDate: '2027-02-20',
+    riskFlag: true,
+    medicalProgram: true,
+  });
+  assert.ok(updated.data);
+  assert.equal(updated.data.assignedEmployeeId, null);
+  assert.equal(updated.data.assignedTo, null);
+  assert.equal(updated.data.departureDate, '2027-02-20');
+  assert.equal(updated.data.riskFlag, true);
+  assert.equal(updated.data.medicalProgram, true);
+  assert.ok(validateLeadUpdate({ riskFlag: 'yes' }).error);
+
+  // 6-Stage Admissions Pipeline Funnel
+  const funnel = computePipelineSummary([
+    { status: 'new', count: 10 },
+    { status: 'qualified', count: 8 },
+    { status: 'application_submitted', count: 5 },
+    { status: 'admission_received', count: 3 },
+    { status: 'visa_applied', count: 2 },
+    { status: 'enrolled', count: 5 },
+    { status: 'no_response', count: 4 },
+    { status: 'closed', count: 3 },
+  ]);
+  assert.equal(funnel.newLeads, 10);
+  assert.equal(funnel.counselingQualified, 8);
+  assert.equal(funnel.universityApplied, 5);
+  assert.equal(funnel.offerAdmitted, 3);
+  assert.equal(funnel.visaStage, 2);
+  assert.equal(funnel.enrolledConverted, 5);
+  assert.equal(funnel.activeTotal, 32);
+  assert.equal(funnel.totalLeads, 40);
+  assert.equal(funnel.offerRatePercent, 67);
+  assert.equal(funnel.enrollmentRatePercent, 22);
+
+  // Destination country demand grouping
+  const demand = aggregateCountryDemand([
+    { country: 'china', status: 'new' },
+    { country: 'China', destinationInterest: 'China MBBS', status: 'enrolled' },
+    { country: 'United Kingdom', status: 'application_submitted' },
+    { country: 'Hungary', status: 'qualified' },
+  ]);
+  assert.equal(demand[0]?.country, 'China');
+  assert.equal(demand[0]?.total, 2);
+  assert.equal(demand[0]?.active, 1);
+  assert.equal(demand[0]?.progressed, 1);
+  assert.equal(demand.find((d) => d.country === 'UK')?.total, 1);
+
+  // Urgent deadline prioritization (overdue & nearest deadlines first; ignores enrolled/closed/far future)
+  const deadlines = buildUrgentDeadlines(
+    [
+      {
+        id: 'lead-1',
+        name: 'Ayesha',
+        country: 'China',
+        university: 'ZJU',
+        assignedTo: 'Afsana Meme',
+        visaDeadline: '2026-11-25',
+        departureDate: '2026-12-10',
+        status: 'admission_received',
+      },
+      {
+        id: 'lead-2',
+        name: 'Rafiq',
+        country: 'UK',
+        university: 'Leeds',
+        assignedTo: 'Mukta Rahaman',
+        visaDeadline: '2026-11-18',
+        departureDate: null,
+        status: 'visa_applied',
+      },
+      {
+        id: 'lead-enrolled',
+        name: 'Already Enrolled',
+        country: 'China',
+        university: 'NUAA',
+        assignedTo: 'Mim',
+        visaDeadline: '2026-11-19',
+        departureDate: null,
+        status: 'enrolled',
+      },
+      {
+        id: 'lead-far',
+        name: 'Far Intake',
+        country: 'Malaysia',
+        university: null,
+        assignedTo: 'Mukta Rahaman',
+        visaDeadline: '2027-09-01',
+        departureDate: null,
+        status: 'qualified',
+      },
+    ],
+    '2026-11-20',
+  );
+  assert.equal(deadlines.length, 2);
+  assert.equal(deadlines[0]?.id, 'lead-2');
+  assert.equal(deadlines[0]?.daysUntil, -2);
+  assert.equal(deadlines[1]?.id, 'lead-1');
+  assert.equal(deadlines[1]?.deadlineType, 'visa');
+  assert.equal(deadlines[1]?.daysUntil, 5);
 });

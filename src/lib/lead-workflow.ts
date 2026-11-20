@@ -125,6 +125,8 @@ export type LeadUpdateData = {
   departureDate?: string | null;
   driveLink?: string | null;
   publicEnabled?: boolean;
+  riskFlag?: boolean;
+  medicalProgram?: boolean;
   assessAcademicLevel?: string | null;
   assessAcademicResults?: string | null;
   assessLanguage?: string | null;
@@ -152,7 +154,8 @@ function normalizeBoundedHttpUrl(raw: unknown, maxLen = 1000): string | null {
 const ALLOWED_LEAD_UPDATE_KEYS = new Set<string>([
   'status', 'notes', 'assignedTo', 'assignedEmployeeId', 'applicationStage',
   'university', 'degree', 'gpa', 'nextFollowup', 'visaDeadline', 'departureDate',
-  'driveLink', 'publicEnabled', 'assessAcademicLevel', 'assessAcademicResults', 'assessLanguage',
+  'driveLink', 'publicEnabled', 'riskFlag', 'medicalProgram',
+  'assessAcademicLevel', 'assessAcademicResults', 'assessLanguage',
 ]);
 
 function normalizeOptionalShortText(raw: unknown, field: string, maxLen = 200): { ok: true; value: string | null } | { ok: false; error: string } {
@@ -187,6 +190,14 @@ export function validateLeadUpdate(value: unknown): { data?: LeadUpdateData; err
   if ('publicEnabled' in body) {
     if (typeof body.publicEnabled !== 'boolean') return { error: 'publicEnabled must be true or false.' };
     data.publicEnabled = body.publicEnabled;
+  }
+  if ('riskFlag' in body) {
+    if (typeof body.riskFlag !== 'boolean') return { error: 'riskFlag must be true or false.' };
+    data.riskFlag = body.riskFlag;
+  }
+  if ('medicalProgram' in body) {
+    if (typeof body.medicalProgram !== 'boolean') return { error: 'medicalProgram must be true or false.' };
+    data.medicalProgram = body.medicalProgram;
   }
   if ('gpa' in body) {
     if (body.gpa === null || body.gpa === '') {

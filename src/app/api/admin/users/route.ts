@@ -30,8 +30,7 @@ export async function GET(request: NextRequest) {
         },
       }),
       prisma.employee.findMany({
-        where: { active: true },
-        orderBy: { empId: 'asc' },
+        orderBy: [{ active: 'desc' }, { empId: 'asc' }],
         select: {
           id: true,
           empId: true,
@@ -40,6 +39,7 @@ export async function GET(request: NextRequest) {
           phone: true,
           team: true,
           role: true,
+          active: true,
           userId: true,
         },
       }),

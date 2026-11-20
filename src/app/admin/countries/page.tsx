@@ -107,8 +107,16 @@ export default function CountriesPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Country Management</h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm">
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            Study Corridors
+          </p>
+          <h1 className="font-heading text-2xl font-bold text-slate-900">Study Destinations</h1>
+          <p className="mt-0.5 text-xs text-slate-500">
+            Configure active study abroad destinations, featured corridors, and counselor visibility
+          </p>
+        </div>
         <button
           onClick={() => {
             setShowForm(true);
@@ -122,9 +130,9 @@ export default function CountriesPage() {
               featured: false
             });
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="rounded-xl bg-[#0f3a5c] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0c2e49]"
         >
-          Add New Country
+          + Add Destination
         </button>
       </div>
 

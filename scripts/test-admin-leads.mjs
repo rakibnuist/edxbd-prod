@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { register } from 'node:module';
-import {
+
+register(new URL('./lib/typescript-source-resolver.mjs', import.meta.url));
+const {
   LEAD_STATUSES,
   leadCounts,
   filterLeads,
@@ -10,9 +12,7 @@ import {
   parseMetaLeadsCsv,
   extractMetaFormFields,
   mapMetaGraphLeadToImportPayload,
-} from '../src/lib/lead-workflow.ts';
-
-register(new URL('./lib/typescript-source-resolver.mjs', import.meta.url));
+} = await import('../src/lib/lead-workflow.ts');
 const { validateAdminLeadCreate } = await import('../src/lib/payload-validation.ts');
 const rows = [
   { id: 'a', name: 'Sample inquiry A', email: 'a@example.test', phone: '01712345678', country: 'China', program: 'Computer Science', status: 'new', source: 'website', createdAt: '2026-01-01', updatedAt: '2026-01-06' },

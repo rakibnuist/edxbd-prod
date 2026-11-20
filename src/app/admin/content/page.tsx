@@ -166,7 +166,7 @@ export default function ContentPage() {
         });
         alert('Failed to upload image');
       }
-    } catch (error) {
+    } catch (_error) {
       trackContentManagement('image_upload', {
         success: false,
         error: 'network_error'
@@ -355,7 +355,7 @@ export default function ContentPage() {
             error: 'api_error'
           });
         }
-      } catch (error) {
+      } catch (_error) {
         trackContentManagement('delete', {
           content_id: id,
           success: false,
@@ -393,8 +393,16 @@ export default function ContentPage() {
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 lg:mb-8 gap-3 sm:gap-0">
-        <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">Content Management</h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm">
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            Editorial &amp; Admission Guides
+          </p>
+          <h1 className="font-heading text-2xl font-bold text-slate-900">Content &amp; SEO Briefs</h1>
+          <p className="mt-0.5 text-xs text-slate-500">
+            Publish verified country guides, scholarship updates, and E-E-A-T reviewed student articles
+          </p>
+        </div>
         <button
           onClick={() => {
             setShowForm(true);
@@ -423,9 +431,9 @@ export default function ContentPage() {
               seoApprovedAt: '',
             });
           }}
-          className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 text-xs sm:text-sm font-medium touch-manipulation"
+          className="rounded-xl bg-[#0f3a5c] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0c2e49] touch-manipulation"
         >
-          Add New Content
+          + Add Content / Guide
         </button>
       </div>
 

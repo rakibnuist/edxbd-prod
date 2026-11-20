@@ -205,17 +205,25 @@ export default function TestimonialsPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Testimonial Management</h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm">
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            Verified Student Proof
+          </p>
+          <h1 className="font-heading text-2xl font-bold text-slate-900">Student Testimonials</h1>
+          <p className="mt-0.5 text-xs text-slate-500">
+            Publish verified admission offers, visa successes, and university reviews
+          </p>
+        </div>
         <button
           onClick={() => {
             setShowForm(true);
             setEditingTestimonial(null);
             setFormData({ ...emptyTestimonialForm });
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="rounded-xl bg-[#0f3a5c] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0c2e49]"
         >
-          Add New Testimonial
+          + Add Testimonial
         </button>
       </div>
 

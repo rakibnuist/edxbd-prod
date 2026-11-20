@@ -354,25 +354,30 @@ const AdminPartnershipsPage = () => {
       )}
 
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Partnership Management</h1>
-          <p className="text-gray-600">Manage partnership applications</p>
+          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            B2B &amp; Institutional Relations
+          </p>
+          <h1 className="font-heading text-2xl font-bold text-slate-900">University &amp; Agent Partnerships</h1>
+          <p className="mt-0.5 text-xs text-slate-500">
+            Review institutional partner requests, commission tiers, and B2B intake agreements
+          </p>
         </div>
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={fetchPartnerships}
             disabled={loading}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
           </button>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 hover:from-blue-700 hover:via-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-full font-semibold shadow-2xl hover:shadow-3xl transition-all duration-300 flex items-center space-x-2"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[#0f3a5c] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#0c2e49]"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="h-4 w-4" />
             <span>Add Partnership</span>
           </button>
         </div>

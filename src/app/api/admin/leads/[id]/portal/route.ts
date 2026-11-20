@@ -38,6 +38,10 @@ export async function GET(
         driveLink: true,
         assignedTo: true,
         assignedEmployeeId: true,
+        riskFlag: true,
+        medicalProgram: true,
+        assessIntake: true,
+        assessBudget: true,
       },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });

@@ -75,9 +75,14 @@ export default function LeadPortalDrawerSection({
   const [stage, setStage] = useState(lead.applicationStage || 'documents');
   const [assignedEmployeeId, setAssignedEmployeeId] = useState(lead.assignedEmployeeId || '');
   const [university, setUniversity] = useState(lead.university || '');
+  const [degree, setDegree] = useState(lead.degree || '');
   const [gpa, setGpa] = useState(lead.gpa != null ? String(lead.gpa) : (lead.assessAcademicResults || ''));
   const [nextFollowup, setNextFollowup] = useState(lead.nextFollowup || '');
   const [visaDeadline, setVisaDeadline] = useState(lead.visaDeadline || '');
+  const [departureDate, setDepartureDate] = useState(lead.departureDate || '');
+  const [driveLink, setDriveLink] = useState(lead.driveLink || '');
+  const [riskFlag, setRiskFlag] = useState(Boolean(lead.riskFlag));
+  const [medicalProgram, setMedicalProgram] = useState(Boolean(lead.medicalProgram));
 
   // Quick-add university & message reply
   const [newUniName, setNewUniName] = useState('');
@@ -107,6 +112,18 @@ export default function LeadPortalDrawerSection({
         if (!data || controller.signal.aborted) return;
         setToken(data.lead?.publicToken || null);
         setPublicEnabled(data.lead?.publicEnabled ?? true);
+        if (data.lead) {
+          setStage(data.lead.applicationStage || 'documents');
+          setAssignedEmployeeId(data.lead.assignedEmployeeId || '');
+          setUniversity(data.lead.university || '');
+          setDegree(data.lead.degree || '');
+          setNextFollowup(data.lead.nextFollowup || '');
+          setVisaDeadline(data.lead.visaDeadline || '');
+          setDepartureDate(data.lead.departureDate || '');
+          setDriveLink(data.lead.driveLink || '');
+          setRiskFlag(Boolean(data.lead.riskFlag));
+          setMedicalProgram(Boolean(data.lead.medicalProgram));
+        }
         setUniApps(Array.isArray(data.universityApps) ? data.universityApps : []);
         setDocs(Array.isArray(data.documents) ? data.documents : []);
         setActivities(Array.isArray(data.activities) ? data.activities : []);
@@ -146,17 +163,22 @@ export default function LeadPortalDrawerSection({
     const payload: Record<string, unknown> = {
       applicationStage: stage,
       assignedEmployeeId: assignedEmployeeId || null,
-      assignedTo: chosenEmp ? chosenEmp.name : (lead.assignedTo || null),
+      assignedTo: chosenEmp ? chosenEmp.name : null,
       university: university.trim() || null,
+      degree: degree.trim() || null,
       gpa: Number.isFinite(numericGpa) && numericGpa > 0 && numericGpa <= 5.5 ? numericGpa : null,
       nextFollowup: nextFollowup || null,
       visaDeadline: visaDeadline || null,
+      departureDate: departureDate || null,
+      driveLink: driveLink.trim() || null,
+      riskFlag,
+      medicalProgram,
       publicEnabled,
     };
     const ok = await onUpdateLead(lead.id, payload);
     setBusyAction(null);
     if (ok) {
-      setFeedback('Pipeline stage, GPA & counselor assignment saved.');
+      setFeedback('Pipeline stage, dossier dates & counselor assignment saved.');
       void loadPortalDetails();
     }
   };
@@ -335,6 +357,32 @@ export default function LeadPortalDrawerSection({
         </div>
       )}
 
+      {/* Student consultancy qualification tags */}
+      {(lead.assessIntake || lead.assessBudget || medicalProgram || riskFlag) && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          {lead.assessIntake && (
+            <span className="inline-flex items-center rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700">
+              Intake: {lead.assessIntake}
+            </span>
+          )}
+          {lead.assessBudget && (
+            <span className="inline-flex items-center rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-700">
+              Budget: {lead.assessBudget}
+            </span>
+          )}
+          {medicalProgram && (
+            <span className="inline-flex items-center rounded-md border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-800">
+              MBBS / Clinical Track
+            </span>
+          )}
+          {riskFlag && (
+            <span className="inline-flex items-center rounded-md border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-bold text-amber-900">
+              Senior Escalation Flagged
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Counselor assignment + 6-stage milestone + follow-up editor */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <label className="text-xs font-semibold text-slate-700">
@@ -357,7 +405,7 @@ export default function LeadPortalDrawerSection({
             onChange={(e) => setAssignedEmployeeId(e.target.value)}
             className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-medium text-slate-900"
           >
-            <option value="">-- Select counselor --</option>
+            <option value="">-- Unassigned --</option>
             {employees.map((emp) => (
               <option key={emp.id} value={emp.id}>
                 {emp.name} ({emp.empId} · {emp.team})
@@ -379,6 +427,16 @@ export default function LeadPortalDrawerSection({
 
         <div className="grid grid-cols-2 gap-2">
           <label className="text-xs font-semibold text-slate-700">
+            Degree Level
+            <input
+              type="text"
+              value={degree}
+              onChange={(e) => setDegree(e.target.value)}
+              placeholder="Bachelor's / MBBS / Master's"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs text-slate-900"
+            />
+          </label>
+          <label className="text-xs font-semibold text-slate-700">
             GPA
             <input
               type="text"
@@ -388,6 +446,9 @@ export default function LeadPortalDrawerSection({
               className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs text-slate-900"
             />
           </label>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
           <label className="text-xs font-semibold text-slate-700">
             Next Follow-up
             <input
@@ -397,28 +458,83 @@ export default function LeadPortalDrawerSection({
               className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs text-slate-900"
             />
           </label>
+          <label className="text-xs font-semibold text-slate-700">
+            Visa Deadline
+            <input
+              type="date"
+              value={visaDeadline}
+              onChange={(e) => setVisaDeadline(e.target.value)}
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs text-slate-900"
+            />
+          </label>
         </div>
 
         <label className="text-xs font-semibold text-slate-700">
-          Visa Deadline
+          Target Departure / Flight Date
           <input
             type="date"
-            value={visaDeadline}
-            onChange={(e) => setVisaDeadline(e.target.value)}
+            value={departureDate}
+            onChange={(e) => setDepartureDate(e.target.value)}
             className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs text-slate-900"
           />
         </label>
 
-        <div className="flex items-end justify-between gap-2">
-          <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 pb-2">
-            <input
-              type="checkbox"
-              checked={publicEnabled}
-              onChange={(e) => setPublicEnabled(e.target.checked)}
-              className="size-4 rounded border-slate-300 text-blue-600"
-            />
-            Portal Visible
-          </label>
+        <div className="sm:col-span-2">
+          <div className="flex items-center justify-between gap-2">
+            <label htmlFor={`drive-${lead.id}`} className="text-xs font-semibold text-slate-700">
+              Google Drive / Case Dossier Folder URL
+            </label>
+            {toSafeExternalUrl(driveLink) && (
+              <a
+                href={toSafeExternalUrl(driveLink)!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 hover:text-blue-900"
+              >
+                Open Folder <ExternalLink size={11} />
+              </a>
+            )}
+          </div>
+          <input
+            id={`drive-${lead.id}`}
+            type="url"
+            value={driveLink}
+            onChange={(e) => setDriveLink(e.target.value)}
+            placeholder="https://drive.google.com/drive/folders/..."
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs text-slate-900"
+          />
+        </div>
+
+        <div className="sm:col-span-2 flex flex-wrap items-center justify-between gap-3 pt-1">
+          <div className="flex flex-wrap items-center gap-4">
+            <label className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700">
+              <input
+                type="checkbox"
+                checked={publicEnabled}
+                onChange={(e) => setPublicEnabled(e.target.checked)}
+                className="size-4 rounded border-slate-300 text-blue-600"
+              />
+              Portal Visible
+            </label>
+            <label className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800">
+              <input
+                type="checkbox"
+                checked={medicalProgram}
+                onChange={(e) => setMedicalProgram(e.target.checked)}
+                className="size-4 rounded border-slate-300 text-emerald-600"
+              />
+              MBBS / Medical Track
+            </label>
+            <label className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-800">
+              <input
+                type="checkbox"
+                checked={riskFlag}
+                onChange={(e) => setRiskFlag(e.target.checked)}
+                className="size-4 rounded border-slate-300 text-amber-600"
+              />
+              Senior Review Flag
+            </label>
+          </div>
           <button
             type="button"
             disabled={saving || busyAction === 'meta'}
