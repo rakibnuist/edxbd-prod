@@ -3,7 +3,14 @@ import { isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { logActivityEvent } from '@/lib/crm-operations';
 import { computeHoursWorked, dhakaTimeNow, dhakaTodayIso } from '@/lib/kpi-workflow';
+import {
+  appendCheckInLocationNote,
+  classifyCheckInLocation,
+  resolveAttendanceLocationStatus,
+  resolveOfficeGeofenceConfig,
+} from '@/lib/office-location';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
+import { getAllSettings } from '@/lib/settings';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
@@ -17,13 +24,29 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const date = searchParams.get('date') || dhakaTodayIso();
-    const records = await prisma.attendance.findMany({
-      where: isAdminRole(actor.role)
-        ? { date }
-        : { date, employeeId: staff?.employee?.id || '__none__' },
-      orderBy: { empId: 'asc' },
-    });
-    return NextResponse.json({ date, records }, { headers: { 'Cache-Control': 'no-store, private' } });
+    const [records, settings] = await Promise.all([
+      prisma.attendance.findMany({
+        where: isAdminRole(actor.role)
+          ? { date }
+          : { date, employeeId: staff?.employee?.id || '__none__' },
+        orderBy: { empId: 'asc' },
+      }),
+      getAllSettings(),
+    ]);
+
+    const geofence = resolveOfficeGeofenceConfig(settings);
+
+    return NextResponse.json(
+      {
+        date,
+        records: records.map((r) => ({
+          ...r,
+          locationStatus: resolveAttendanceLocationStatus(r.source, r.notes),
+        })),
+        geofence,
+      },
+      { headers: { 'Cache-Control': 'no-store, private' } },
+    );
   } catch {
     return NextResponse.json({ error: 'Failed to load attendance' }, { status: 500 });
   }
@@ -80,7 +103,38 @@ export async function POST(request: NextRequest) {
       checkOut = nowTime;
     }
 
+    const settings = mode === 'manual' ? null : await getAllSettings();
+    const geofence = resolveOfficeGeofenceConfig(settings || {});
+    const location = classifyCheckInLocation(
+      {
+        latitude: body.latitude,
+        longitude: body.longitude,
+        accuracyMeters: body.accuracyMeters,
+        locationError: body.locationError,
+      },
+      geofence,
+    );
+
+    if (mode === 'checkin' && !existing?.checkIn && geofence.strictLocation && location.latitude === null) {
+      return NextResponse.json(
+        {
+          error:
+            'GPS location permission is required to check in. Allow Location access in your browser and try again.',
+          locationRequired: true,
+        },
+        { status: 400 },
+      );
+    }
+
+    const nextSource = mode === 'manual' ? 'manual' : location.locationType;
+    const rawUserNote = typeof body.notes === 'string' ? body.notes.trim().slice(0, 220) : undefined;
+    const computedNotes =
+      mode === 'manual'
+        ? rawUserNote ?? existing?.notes ?? null
+        : appendCheckInLocationNote(rawUserNote ?? existing?.notes, location);
+
     const hoursWorked = computeHoursWorked(checkIn, checkOut);
+    const preserveCheckInLocationOnCheckout = mode === 'checkout' && Boolean(existing?.checkIn);
     const saved = await prisma.attendance.upsert({
       where: { empId_date: { empId: employee.empId, date } },
       update: {
@@ -90,7 +144,13 @@ export async function POST(request: NextRequest) {
         checkOut,
         hoursWorked,
         status,
-        notes: typeof body.notes === 'string' ? body.notes.trim().slice(0, 300) || null : existing?.notes || null,
+        ...(mode === 'checkin' && !existing?.checkIn
+          ? { source: nextSource, notes: computedNotes }
+          : mode === 'manual'
+            ? { source: 'manual', notes: computedNotes }
+            : preserveCheckInLocationOnCheckout
+              ? {}
+              : { source: nextSource, notes: computedNotes }),
       },
       create: {
         employeeId: employee.id,
@@ -101,8 +161,8 @@ export async function POST(request: NextRequest) {
         checkOut,
         hoursWorked,
         status,
-        source: mode === 'manual' ? 'manual' : 'workspace',
-        notes: typeof body.notes === 'string' ? body.notes.trim().slice(0, 300) || null : null,
+        source: nextSource,
+        notes: computedNotes,
       },
     });
 
@@ -113,10 +173,20 @@ export async function POST(request: NextRequest) {
         actorUserId: decoded.userId,
         employeeId: employee.id,
         toValue: `${status} (${checkIn || date})`,
+        details:
+          location.latitude !== null && location.longitude !== null
+            ? `${location.locationLabel} (${location.latitude}, ${location.longitude})`
+            : location.locationLabel,
       });
     }
 
-    return NextResponse.json(saved, { headers: { 'Cache-Control': 'no-store, private' } });
+    return NextResponse.json(
+      {
+        ...saved,
+        locationStatus: resolveAttendanceLocationStatus(saved.source, saved.notes),
+      },
+      { headers: { 'Cache-Control': 'no-store, private' } },
+    );
   } catch (err) {
     const bodyError = jsonBodyErrorResponse(err);
     if (bodyError) return bodyError;

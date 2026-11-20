@@ -1,4 +1,5 @@
 // Pure Asia/Dhaka (GMT+6) date helpers & 4-pillar Employee KPI + Workflow computation
+import { resolveAttendanceLocationStatus, type OfficeLocationStatus } from './office-location';
 
 export const KPI_ACT_WEIGHTS: Record<string, number> = {
   lead_created: 3,
@@ -103,6 +104,8 @@ export interface KpiAttendanceRow {
   checkOut: string | null;
   hoursWorked: number;
   status: string;
+  source?: string | null;
+  notes?: string | null;
 }
 
 export interface KpiDailyLogRow {
@@ -204,6 +207,10 @@ export interface ComputedEmployeeKpi {
     todayCheckIn: string | null;
     todayCheckOut: string | null;
     todayStatus: string | null;
+    todayLocationType?: OfficeLocationStatus;
+    todayLocationLabel?: string | null;
+    todayDistanceMeters?: number | null;
+    todayMapsUrl?: string | null;
   };
   discipline: {
     logsSubmitted: number;
@@ -383,6 +390,7 @@ export function computeEmployeeKpiReport(input: {
     const hours = Number(attLogs.reduce((sum, a) => sum + (Number(a.hoursWorked) || 0), 0).toFixed(1));
     const attendancePct = effWorking > 0 ? Math.min(100, Math.round(((present + late) / effWorking) * 100)) : 0;
     const todayAtt = attLogs.find((a) => a.date === today) || null;
+    const todayLocation = todayAtt?.checkIn ? resolveAttendanceLocationStatus(todayAtt.source, todayAtt.notes) : null;
     const attDates = new Set(attLogs.map((a) => a.date));
 
     // Daily logs
@@ -614,6 +622,14 @@ export function computeEmployeeKpiReport(input: {
         todayCheckIn: todayAtt?.checkIn || null,
         todayCheckOut: todayAtt?.checkOut || null,
         todayStatus: todayAtt?.status || null,
+        ...(todayLocation
+          ? {
+              todayLocationType: todayLocation.locationType,
+              todayLocationLabel: todayLocation.locationLabel,
+              todayDistanceMeters: todayLocation.distanceMeters,
+              todayMapsUrl: todayLocation.mapsUrl,
+            }
+          : {}),
       },
       discipline: {
         logsSubmitted,

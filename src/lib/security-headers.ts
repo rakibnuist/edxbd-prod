@@ -12,6 +12,9 @@ export const IMAGE_REMOTE_PATTERNS = [
 export const PERMISSIONS_POLICY =
   'camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()';
 
+export const ADMIN_PERMISSIONS_POLICY =
+  'camera=(), microphone=(), geolocation=(self), payment=(), usb=(), browsing-topics=()';
+
 export function buildContentSecurityPolicy(options: { isProduction: boolean }): string {
   const scriptSrc = [
     "'self'",
@@ -48,5 +51,12 @@ export function buildGlobalSecurityHeaders(options: { isProduction: boolean }) {
     { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
     { key: 'Permissions-Policy', value: PERMISSIONS_POLICY },
     { key: 'Content-Security-Policy', value: buildContentSecurityPolicy(options) },
+  ];
+}
+
+export function buildAdminSecurityHeaders() {
+  return [
+    { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+    { key: 'Permissions-Policy', value: ADMIN_PERMISSIONS_POLICY },
   ];
 }

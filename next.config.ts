@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { buildGlobalSecurityHeaders, IMAGE_REMOTE_PATTERNS } from "./src/lib/security-headers";
+import { buildAdminSecurityHeaders, buildGlobalSecurityHeaders, IMAGE_REMOTE_PATTERNS } from "./src/lib/security-headers";
 
 const nextConfig: NextConfig = {
   // Keep the live development compiler isolated from `next build`. Without
@@ -49,8 +49,12 @@ const nextConfig: NextConfig = {
         }),
       },
       {
+        source: '/admin',
+        headers: buildAdminSecurityHeaders(),
+      },
+      {
         source: '/admin/:path*',
-        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }],
+        headers: buildAdminSecurityHeaders(),
       },
       {
         source: '/dashboard/:path*',

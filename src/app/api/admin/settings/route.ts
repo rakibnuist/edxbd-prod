@@ -62,7 +62,10 @@ export async function PUT(request: NextRequest) {
     console.info(`Settings saved: ${Object.keys(validated.values).join(', ') || 'no changes'}${'metaAccessToken' in validated.values ? ' (new Meta token)' : ''}`);
     revalidatePath('/');
     const settings = await getAllSettings();
-    return NextResponse.json({ ok: true, settings: presentForClient(settings, await tokenSavedAt()) });
+    return NextResponse.json({
+      ok: true,
+      settings: presentForClient(settings, await tokenSavedAt()),
+    });
   } catch (error) {
     console.error('Save settings error:', error);
     return NextResponse.json({ error: 'Failed to save settings' }, { status: 500 });

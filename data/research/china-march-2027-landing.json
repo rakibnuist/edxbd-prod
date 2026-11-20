@@ -825,6 +825,7 @@
     },
     {
       "id": "nantong-university",
+      "slug": "ntu",
       "name": "Nantong University",
       "acronym": "NTU",
       "city": "Nantong",
@@ -842,21 +843,20 @@
           "id": "nantong-university-foundation",
           "route": "foundation",
           "name": "Foundation → Bachelor",
-          "tuition": "CNY 8,000",
+          "tuition": "CNY 6,000",
           "period": "foundation semester",
-          "feeBasis": "Campaign planning estimate",
-          "extra": "CNY 1,800 foundation hostel estimate; subsequent degree fees are separate.",
-          "awardTitle": "Up to full tuition + accommodation",
+          "feeBasis": "Official SIE 2027 circular",
+          "extra": "CNY 1,500 quad dormitory per semester. Direct degree progression with priority freshmen scholarship award.",
+          "awardTitle": "Up to 100% Tuition Waiver",
           "scholarship": "Award coverage is matched to the selected bachelor programme; foundation and living costs are budgeted separately.",
           "majors": [
-            "Computer Science and Technology",
-            "Business Administration",
-            "Pharmacy",
-            "Electrical Engineering and Automation",
-            "Civil Engineering",
-            "Automation",
-            "Mechanical Design, Manufacturing and Automation",
-            "Nursing"
+            "Clinical Medicine (MBBS - 6 Years)",
+            "Dental Surgery (BDS - 5 Years)",
+            "Medical Imaging (4 Years)",
+            "Computer Science and Technology (4 Years)",
+            "Robotics Engineering (4 Years)",
+            "International Economics and Trade (4 Years)",
+            "Pre-Master Track (Medicine, AI & MBA)"
           ],
           "eligibility": "High-school qualification; age 18–25. Selected degree and teaching-language requirements apply.",
           "duration": "1 preparation semester + degree",
@@ -866,37 +866,42 @@
           "costItems": [
             {
               "item": "Foundation tuition",
-              "amount": "CNY 8,000 / semester",
+              "amount": "CNY 6,000 / semester",
               "note": ""
             },
             {
-              "item": "Foundation hostel",
-              "amount": "CNY 1,800 / semester",
+              "item": "Foundation quad hostel",
+              "amount": "CNY 1,500 / semester",
               "note": ""
             },
             {
-              "item": "Degree tuition before award",
+              "item": "Degree MBBS / BDS tuition before award",
+              "amount": "CNY 26,000 / year",
+              "note": ""
+            },
+            {
+              "item": "Degree CST / Robotics / Econ tuition before award",
               "amount": "CNY 16,000 / year",
               "note": ""
             },
             {
               "item": "Degree hostel by room",
-              "amount": "CNY 1,800 / 3,600 / 4,800 per year",
+              "amount": "CNY 3,000 (Quad) / CNY 5,000 (Double) per year",
               "note": ""
             },
             {
-              "item": "Application",
-              "amount": "CNY 500",
+              "item": "Application & registration fee",
+              "amount": "CNY 600",
               "note": "Non-refundable."
             },
             {
               "item": "Insurance",
-              "amount": "CNY 800 / year",
+              "amount": "CNY 400 / semester (CNY 800 / year)",
               "note": ""
             },
             {
               "item": "Medical examination",
-              "amount": "CNY 100–500",
+              "amount": "CNY 400–500",
               "note": "First year."
             },
             {
@@ -908,11 +913,15 @@
           "scholarshipTiers": [
             {
               "name": "First Class",
-              "coverage": "Full degree tuition and accommodation waiver."
+              "coverage": "100% full degree tuition waiver."
             },
             {
-              "name": "Second / Third Class",
-              "coverage": "50% degree tuition waiver as listed in the campaign sheet."
+              "name": "Second Class",
+              "coverage": "CNY 9,000/yr degree tuition waiver (MBBS at CNY 17k/yr; CST at CNY 7k/yr)."
+            },
+            {
+              "name": "Third Class",
+              "coverage": "CNY 6,000/yr degree tuition waiver (MBBS at CNY 20k/yr; CST at CNY 10k/yr)."
             }
           ],
           "documentChecklist": [
@@ -923,12 +932,12 @@
             "Police clearance when required",
             "Language evidence for the selected programme"
           ],
-          "scholarshipConditions": "Award selection and written university terms apply.",
-          "professionalNote": "",
-          "csca": "",
+          "scholarshipConditions": "1st Class: 100% tuition waiver; 2nd Class: CNY 9,000/yr waiver (reduces MBBS to CNY 17k/yr, STEM to CNY 7k/yr); 3rd Class: CNY 6,000/yr waiver. Spring Foundation graduates receive priority award.",
+          "professionalNote": "Nantong University is ranked ARWU #401–500 globally. Clinical Medicine is in top 0.3% of ESI globally and recognized by WHO (WDOMS), BMDC, GMC, ECFMG.",
+          "csca": "Mandatory for Bachelor: CSCA Mathematics (English Medium).",
           "majorGroups": [],
           "fundingStage": "Bachelor scholarship",
-          "fundingHighlight": "100% tuition + accommodation"
+          "fundingHighlight": "Up to 100% Tuition Waiver"
         }
       ]
     },

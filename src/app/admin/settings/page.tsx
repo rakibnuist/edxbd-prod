@@ -5,6 +5,13 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import MetaConnectionPanel from '@/components/admin/MetaConnectionPanel';
 import TelegramAlertsSettingsPanel from '@/components/admin/TelegramAlertsSettingsPanel';
+import {
+  buildGoogleMapsUrl,
+  DEFAULT_OFFICE_LABEL,
+  DEFAULT_OFFICE_LATITUDE,
+  DEFAULT_OFFICE_LONGITUDE,
+  DEFAULT_OFFICE_RADIUS_METERS,
+} from '@/lib/office-location';
 
 interface SettingsState {
   siteName: string;
@@ -20,6 +27,10 @@ interface SettingsState {
   metaAccessToken: string;
   gtmId: string;
   ga4Id: string;
+  officeLatitude: string;
+  officeLongitude: string;
+  officeRadiusMeters: string;
+  officeLocationStrict: string;
 }
 
 const DEFAULTS: SettingsState = {
@@ -36,6 +47,10 @@ const DEFAULTS: SettingsState = {
   metaAccessToken: '',
   gtmId: '',
   ga4Id: '',
+  officeLatitude: '',
+  officeLongitude: '',
+  officeRadiusMeters: '',
+  officeLocationStrict: 'false',
 };
 
 export default function SettingsPage() {
@@ -207,6 +222,130 @@ export default function SettingsPage() {
         </section>
 
         <MetaConnectionPanel refreshKey={trackingRefresh} pendingChanges={Boolean(settings.metaAccessToken)} />
+
+        {/* Office Location & GPS Attendance Verification */}
+        <section id="office-location" className="scroll-mt-6 rounded-2xl bg-white shadow ring-1 ring-gray-100">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-6 py-4">
+            <div>
+              <h2 className="text-lg font-semibold text-[#0f3a5c]">Office Location &amp; GPS Attendance Verification</h2>
+              <p className="text-xs text-gray-500">
+                Verify employee check-ins by GPS coordinates and geofence radius — works independently of office Wi-Fi or your current travel location.
+              </p>
+            </div>
+            <Link href="/admin" className="text-xs font-bold text-[#0f3a5c] hover:underline">
+              Open Remote Office Pulse →
+            </Link>
+          </div>
+          <div className="space-y-4 p-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50/70 px-4 py-3 text-xs text-emerald-950">
+              <div>
+                <p className="font-bold">Built-in Office Pin Active: {DEFAULT_OFFICE_LABEL}</p>
+                <p className="mt-0.5 text-emerald-800">
+                  Leave Latitude / Longitude blank to automatically use verified coordinates ({DEFAULT_OFFICE_LATITUDE}, {DEFAULT_OFFICE_LONGITUDE}) and a {DEFAULT_OFFICE_RADIUS_METERS}m radius.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                {(() => {
+                  const previewUrl = buildGoogleMapsUrl(
+                    settings.officeLatitude.trim() || DEFAULT_OFFICE_LATITUDE,
+                    settings.officeLongitude.trim() || DEFAULT_OFFICE_LONGITUDE,
+                  );
+                  return previewUrl ? (
+                    <a
+                      href={previewUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-lg border border-emerald-300 bg-white px-3 py-1.5 font-bold text-emerald-800 hover:bg-emerald-100"
+                    >
+                      Open Pin in Google Maps ↗
+                    </a>
+                  ) : null;
+                })()}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSettings((prev) => ({
+                      ...prev,
+                      officeLatitude: '',
+                      officeLongitude: '',
+                      officeRadiusMeters: '',
+                    }))
+                  }
+                  className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50"
+                >
+                  Use Default Pin
+                </button>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <label className={label} htmlFor="officeLatitude">
+                  Office Latitude
+                </label>
+                <input
+                  id="officeLatitude"
+                  name="officeLatitude"
+                  value={settings.officeLatitude}
+                  onChange={handleChange}
+                  placeholder={String(DEFAULT_OFFICE_LATITUDE)}
+                  maxLength={32}
+                  className={field}
+                />
+              </div>
+              <div>
+                <label className={label} htmlFor="officeLongitude">
+                  Office Longitude
+                </label>
+                <input
+                  id="officeLongitude"
+                  name="officeLongitude"
+                  value={settings.officeLongitude}
+                  onChange={handleChange}
+                  placeholder={String(DEFAULT_OFFICE_LONGITUDE)}
+                  maxLength={32}
+                  className={field}
+                />
+              </div>
+              <div>
+                <label className={label} htmlFor="officeRadiusMeters">
+                  Geofence Radius (meters)
+                </label>
+                <input
+                  id="officeRadiusMeters"
+                  name="officeRadiusMeters"
+                  type="number"
+                  min={50}
+                  max={10000}
+                  value={settings.officeRadiusMeters}
+                  onChange={handleChange}
+                  placeholder={String(DEFAULT_OFFICE_RADIUS_METERS)}
+                  className={field}
+                />
+              </div>
+            </div>
+
+            <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-xs text-slate-700">
+              <input
+                type="checkbox"
+                checked={settings.officeLocationStrict === 'true'}
+                onChange={(e) =>
+                  setSettings((prev) => ({
+                    ...prev,
+                    officeLocationStrict: e.target.checked ? 'true' : 'false',
+                  }))
+                }
+                className="mt-0.5 size-4 rounded border-slate-300 text-[#0f3a5c]"
+              />
+              <span>
+                <strong className="block font-bold text-slate-900">
+                  Require GPS permission to allow employee check-in
+                </strong>
+                When checked, counselors who block browser Location access cannot clock in until GPS is enabled. When unchecked (recommended), check-ins still save and any missing or remote GPS is flagged on Remote Office Pulse with exact Google Maps distance.
+              </span>
+            </label>
+          </div>
+        </section>
 
         {/* Analytics & Tags */}
         <section className="rounded-2xl bg-white shadow ring-1 ring-gray-100">

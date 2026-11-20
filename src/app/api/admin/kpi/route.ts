@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
         where: isAdmin
           ? { date: { gte: start, lte: end } }
           : { employeeId: selfEmpId, date: { gte: start, lte: end } },
-        select: { id: true, employeeId: true, empId: true, date: true, checkIn: true, checkOut: true, hoursWorked: true, status: true },
+        select: { id: true, employeeId: true, empId: true, date: true, checkIn: true, checkOut: true, hoursWorked: true, status: true, source: true, notes: true },
       }),
       prisma.dailyLog.findMany({
         where: isAdmin

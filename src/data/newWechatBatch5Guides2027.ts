@@ -1880,6 +1880,482 @@ export const WECHAT_BATCH5_7_GUIDES_DATA: Record<string, GuideData> = {
 </article>
 `,
   },
+
+  // 10. Nantong University Admissions, Spring Foundation & Scholarships Guide 2027
+  'nantong-university-admissions-scholarships-foundation-guide-2027': {
+    id: 'nantong-university-admissions-scholarships-foundation-guide-2027',
+    title: 'Nantong University 2027 Admissions Guide: Spring Foundation, MBBS, CSCA Rules & Full Scholarships',
+    slug: 'nantong-university-admissions-scholarships-foundation-guide-2027',
+    type: 'update',
+    category: 'admissions',
+    categories: JSON.stringify(['Admissions', 'Scholarships', 'China', 'Medical']),
+    tags: JSON.stringify([
+      'Nantong University',
+      'NTU China',
+      'Spring 2027 Intake',
+      'March 2027',
+      'Foundation Program',
+      'MBBS in China',
+      'Dental Surgery BDS',
+      'CSCA Exam',
+      'Nantong University Scholarship',
+      'Jiangsu Jasmine Scholarship',
+    ]),
+    excerpt:
+      'Complete 2027 admissions circular guide for Nantong University: Spring 2027 Foundation program (CNY 8,500 total package), English-taught MBBS & BDS, CSCA Mathematics test requirements, tuition fees, and up to 100% university & Jiangsu Jasmine scholarships.',
+    metaTitle: 'Nantong University Admissions 2027: Foundation, MBBS & Scholarships',
+    metaDescription:
+      'Complete 2027 Nantong University guide: Spring Foundation (CNY 8,500 total package), English MBBS & BDS, CSCA exam requirements, and 100% freshmen scholarships.',
+    author: 'EduExpress China Admissions Team',
+    reviewer: 'Academic Verification Board',
+    featuredImage: '/updates/covers/nantong-university-admissions-scholarships-foundation-guide-2027.jpg',
+    sourceUrls: JSON.stringify([
+      'https://sie.ntu.edu.cn/uploads/20261118/b3e8ac39eecc995ffa5e4a02453a134a.pdf',
+      'https://sie.ntu.edu.cn/uploads/20261118/608918af09c2a0ae6242ebad15c81941.pdf',
+      'https://sie.ntu.edu.cn/uploads/20261118/56d9cb6171e97b42779cf1192f47edb0.pdf',
+      'https://sie.ntu.edu.cn',
+      'https://ntu.17gz.org',
+    ]),
+    isPublished: true,
+    isFeatured: true,
+    views: 0,
+    createdAt: new Date('2026-11-20T00:00:00.000Z'),
+    updatedAt: new Date('2026-11-20T00:00:00.000Z'),
+    publishedAt: new Date('2026-11-20T00:00:00.000Z'),
+    lastVerifiedAt: new Date('2026-11-20T00:00:00.000Z'),
+    nextReviewAt: new Date('2027-06-30T23:59:59.000Z'),
+    deadlineAt: new Date('2027-06-30T23:59:59.000Z'),
+    complianceApprovedAt: new Date('2026-11-20T00:00:00.000Z'),
+    seoApprovedAt: new Date('2026-11-20T00:00:00.000Z'),
+    archivedAt: null,
+    expiresAt: null,
+    content: `
+<article class="space-y-8 text-slate-800">
+  <div class="rounded-2xl border border-sky-100 bg-sky-50/60 p-6">
+    <div class="flex items-center gap-2 text-sky-900 font-bold text-lg mb-3">
+      <span>🏛️</span>
+      <span>Official 2027 Admissions Notice · Nantong University (NTU)</span>
+    </div>
+    <p class="text-sm text-slate-700 leading-relaxed mb-4">
+      On 18 November 2026, the School of International Education at <strong>Nantong University (南通大学)</strong> released its three official international admissions circulars for the 2027 academic year. These include the <strong>Spring 2027 International Foundation Program</strong> (March intake entry leading to guaranteed degree progression), the <strong>Spring 2027 Chinese Language Program</strong>, and the <strong>2027 Degree Admissions Guide</strong> covering English-taught Clinical Medicine (MBBS), Dental Surgery (BDS), Computer Science &amp; Technology, Robotics Engineering, and postgraduate disciplines under official Nantong University and Jiangsu Jasmine Scholarships.
+    </p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-medium">
+      <div class="rounded-lg bg-white p-3 border border-sky-100">
+        <span class="text-slate-500 block">Spring Foundation</span>
+        <span class="text-slate-900 font-bold text-sm">CNY 6,000 / Sem</span>
+      </div>
+      <div class="rounded-lg bg-white p-3 border border-sky-100">
+        <span class="text-slate-500 block">Dormitory Fee</span>
+        <span class="text-slate-900 font-bold text-sm">CNY 1,500 / Sem</span>
+      </div>
+      <div class="rounded-lg bg-white p-3 border border-sky-100">
+        <span class="text-slate-500 block">CSCA Exam</span>
+        <span class="text-slate-900 font-bold text-sm">Mandatory (Math)</span>
+      </div>
+      <div class="rounded-lg bg-white p-3 border border-sky-100">
+        <span class="text-slate-500 block">Spring Deadline</span>
+        <span class="text-rose-700 font-bold text-sm">20 December 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">1. Institutional Standing &amp; Medical Authority</h2>
+    <p class="text-slate-700 leading-relaxed">
+      Founded in 1912 by modern Chinese industrialist, educator, and statesman <strong>Zhang Jian</strong>, <strong>Nantong University (NTU)</strong> is a comprehensive public university co-constructed by the People's Government of Jiangsu Province and the Ministry of Transport of the People's Republic of China. Celebrating over 114 years of educational heritage, NTU is one of the birthplace institutions of modern higher medical education and industrial engineering in China.
+    </p>
+    <ul class="list-disc pl-6 space-y-2 text-slate-700">
+      <li><strong>Global Standing:</strong> Ranked <strong>#401–500 Globally</strong> in the Academic Ranking of World Universities (ARWU / ShanghaiRanking) and consistently among China's top 130–150 national universities.</li>
+      <li><strong>Discipline Excellence:</strong> Clinical Medicine, Pharmacology &amp; Toxicology, Neuroscience &amp; Behavior, and Engineering rank within the <strong>Top 1% of Essential Science Indicators (ESI)</strong> globally, with Clinical Medicine in the top 0.3%.</li>
+      <li><strong>International Medical Accreditations:</strong> Fully listed in the World Directory of Medical Schools (<strong>WDOMS</strong>), approved by the Ministry of Education of the PRC for English-taught MBBS, and recognized by international medical licensing boards including the Bangladesh Medical and Dental Council (<strong>BMDC</strong>), General Medical Council (<strong>GMC</strong>, UK), ECFMG (United States), AMC (Australia), and the Medical Council of India (NMC).</li>
+      <li><strong>Strategic Geographic Advantage:</strong> Located in <strong>Nantong City, Jiangsu Province</strong>, known historically as the "First Modern City of China." Situated within the Greater Shanghai Metropolitan Economic Circle along the Yangtze River Delta, Nantong is connected to Shanghai Hongqiao International Airport in just <strong>60 minutes via high-speed railway</strong>, offering international students premier clinical healthcare infrastructure at a fraction of coastal tier-1 living costs.</li>
+    </ul>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">2. Spring 2027 Intake: Foundation &amp; Chinese Language Programs</h2>
+    <p class="text-slate-700 leading-relaxed">
+      For international students planning to commence studies in early 2027 without waiting until September, Nantong University offers two streamlined spring routes starting on <strong>22 February 2027</strong>:
+    </p>
+
+    <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+      <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Program Track</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Duration</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Tuition Fee</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Accommodation</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Progression Pathway</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Application Deadline</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-slate-700">
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">International Foundation Program (Medical Track)</td>
+            <td class="px-4 py-3">0.5 Year (Spring 2027)</td>
+            <td class="px-4 py-3 font-medium">CNY 6,000 / semester</td>
+            <td class="px-4 py-3">CNY 1,500 / sem (Quad)</td>
+            <td class="px-4 py-3">Direct entry into English MBBS (6 yrs) &amp; BDS (5 yrs) in Sept 2027</td>
+            <td class="px-4 py-3 text-rose-700 font-semibold">20 December 2026</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">International Foundation Program (STEM &amp; Tech Track)</td>
+            <td class="px-4 py-3">0.5 Year (Spring 2027)</td>
+            <td class="px-4 py-3 font-medium">CNY 6,000 / semester</td>
+            <td class="px-4 py-3">CNY 1,500 / sem (Quad)</td>
+            <td class="px-4 py-3">Direct entry to Computer Science, Robotics, Mechanical Eng in Sept 2027</td>
+            <td class="px-4 py-3 text-rose-700 font-semibold">20 December 2026</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">International Foundation Program (Economics &amp; Trade)</td>
+            <td class="px-4 py-3">0.5 Year (Spring 2027)</td>
+            <td class="px-4 py-3 font-medium">CNY 6,000 / semester</td>
+            <td class="px-4 py-3">CNY 1,500 / sem (Quad)</td>
+            <td class="px-4 py-3">Direct entry to International Economics &amp; Trade, Business Admin</td>
+            <td class="px-4 py-3 text-rose-700 font-semibold">20 December 2026</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Postgraduate Pre-Master Track</td>
+            <td class="px-4 py-3">0.5 Year (Spring 2027)</td>
+            <td class="px-4 py-3 font-medium">CNY 6,000 / semester</td>
+            <td class="px-4 py-3">CNY 1,500 / sem (Quad)</td>
+            <td class="px-4 py-3">Guaranteed progression to Master in AI, Clinical Medicine, Surgery, MBA</td>
+            <td class="px-4 py-3 text-rose-700 font-semibold">20 December 2026</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Chinese Language Program (Intensive)</td>
+            <td class="px-4 py-3">0.5 to 1 Year</td>
+            <td class="px-4 py-3 font-medium">CNY 6,000 / semester (CNY 12,000 / yr)</td>
+            <td class="px-4 py-3">CNY 1,500 / sem (Quad)</td>
+            <td class="px-4 py-3">HSK 3–5 proficiency certificate; entry to degree programs</td>
+            <td class="px-4 py-3 text-rose-700 font-semibold">20 December 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="rounded-xl border border-emerald-100 bg-emerald-50/70 p-4">
+      <h3 class="font-bold text-emerald-950 text-base mb-1">⭐ Strategic Foundation Program Advantages</h3>
+      <p class="text-sm text-emerald-900 leading-relaxed">
+        Completing the Spring 2027 Foundation program grants students an official internal bridge into degree majors without re-taking separate competitive admissions screenings. Furthermore, students achieving outstanding academic performance in the foundation semester receive <strong>priority nomination for the Nantong University First Class (100% Tuition Waiver) and Second Class Freshmen Scholarships</strong> upon entering their September degree studies.
+      </p>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">3. 2027 Degree Programs &amp; English Medium Majors</h2>
+    <p class="text-slate-700 leading-relaxed">
+      Nantong University provides an extensive array of English-taught and Chinese-taught undergraduate, master, and doctoral degree programs for international applicants:
+    </p>
+
+    <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+      <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Major / Discipline</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Level</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Duration</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Language</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Annual Tuition</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">CSCA Requirement</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-slate-700">
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Clinical Medicine (MBBS)</td>
+            <td class="px-4 py-3">Bachelor</td>
+            <td class="px-4 py-3">6 Years (5+1)</td>
+            <td class="px-4 py-3"><span class="rounded bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-800">English</span></td>
+            <td class="px-4 py-3 font-semibold">CNY 26,000 / year</td>
+            <td class="px-4 py-3 font-medium">CSCA Math (English)</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Dental Surgery (BDS)</td>
+            <td class="px-4 py-3">Bachelor</td>
+            <td class="px-4 py-3">5 Years</td>
+            <td class="px-4 py-3"><span class="rounded bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-800">English</span></td>
+            <td class="px-4 py-3 font-semibold">CNY 26,000 / year</td>
+            <td class="px-4 py-3 font-medium">CSCA Math (English)</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Medical Imaging</td>
+            <td class="px-4 py-3">Bachelor</td>
+            <td class="px-4 py-3">4 Years</td>
+            <td class="px-4 py-3"><span class="rounded bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-800">English</span></td>
+            <td class="px-4 py-3 font-semibold">CNY 26,000 / year</td>
+            <td class="px-4 py-3 font-medium">CSCA Math (English)</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Computer Science &amp; Technology</td>
+            <td class="px-4 py-3">Bachelor</td>
+            <td class="px-4 py-3">4 Years</td>
+            <td class="px-4 py-3"><span class="rounded bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-800">English</span></td>
+            <td class="px-4 py-3 font-semibold">CNY 16,000 / year</td>
+            <td class="px-4 py-3 font-medium">CSCA Math (English)</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Robotics Engineering</td>
+            <td class="px-4 py-3">Bachelor</td>
+            <td class="px-4 py-3">4 Years</td>
+            <td class="px-4 py-3"><span class="rounded bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-800">English</span></td>
+            <td class="px-4 py-3 font-semibold">CNY 16,000 / year</td>
+            <td class="px-4 py-3 font-medium">CSCA Math (English)</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">International Economics &amp; Trade</td>
+            <td class="px-4 py-3">Bachelor</td>
+            <td class="px-4 py-3">4 Years</td>
+            <td class="px-4 py-3"><span class="rounded bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-800">English</span></td>
+            <td class="px-4 py-3 font-semibold">CNY 16,000 / year</td>
+            <td class="px-4 py-3 font-medium">CSCA Math (English)</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Postgraduate Master Programs (Medical, Engineering, MBA)</td>
+            <td class="px-4 py-3">Master</td>
+            <td class="px-4 py-3">2 to 3 Years</td>
+            <td class="px-4 py-3"><span class="rounded bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-800">English / Chinese</span></td>
+            <td class="px-4 py-3 font-semibold">CNY 20,000 / yr (Eng) / CNY 18,000 / yr (Chn)</td>
+            <td class="px-4 py-3 text-slate-500">Not Applicable</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Doctoral Degree Programs (PhD)</td>
+            <td class="px-4 py-3">PhD</td>
+            <td class="px-4 py-3">4 Years</td>
+            <td class="px-4 py-3"><span class="rounded bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-800">English / Chinese</span></td>
+            <td class="px-4 py-3 font-semibold">CNY 24,000 / year</td>
+            <td class="px-4 py-3 text-slate-500">Not Applicable</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">4. CSCA Examination Mandate &amp; Subject Rules</h2>
+    <p class="text-slate-700 leading-relaxed">
+      In alignment with the standardized national admissions framework established by the Ministry of Education of the PRC and CEAIE, Nantong University has made the <strong>China Scholastic Competence Assessment (CSCA)</strong> a <strong>compulsory admission criterion</strong> for all 2027 undergraduate applicants.
+    </p>
+
+    <div class="rounded-xl border border-amber-200 bg-amber-50/70 p-5 space-y-3">
+      <h3 class="font-bold text-amber-950 text-base">📋 2027 Nantong University CSCA Subject Mapping</h3>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-amber-900">
+        <li><strong>English-Taught Bachelor Programs (MBBS, BDS, CST, Robotics, Int Trade):</strong> Applicants must register for and submit scores in <strong>CSCA Mathematics (English Medium)</strong>. Scores in CSCA Physics or Chemistry are supplementary and enhance competitive scholarship ranking.</li>
+        <li><strong>Chinese-Taught Bachelor Programs:</strong> Applicants must take <strong>CSCA Mathematics (Chinese Medium)</strong> and <strong>CSCA Professional Chinese</strong>.</li>
+        <li><strong>Postgraduate (Master/PhD) &amp; Language/Foundation Applicants:</strong> Exempt from the CSCA requirement. Foundation students prepare directly for undergraduate transition during their semester course.</li>
+        <li><strong>Testing Schedule:</strong> Official CSCA examinations are administered online and in overseas centers starting December 2026 through May 2027 via <a href="https://www.csca.cn" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">csca.cn</a>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">5. 2027 Scholarships &amp; Financial Support Packages</h2>
+    <p class="text-slate-700 leading-relaxed">
+      Nantong University provides generous merit-based scholarship packages funded by the university endowment and the Jiangsu Provincial Government:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-2">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">Freshmen First Class</span>
+        <h3 class="text-lg font-bold text-slate-900">100% Tuition Waiver</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Awarded to top-tier undergraduate applicants based on secondary diploma GPA (85%+ or CGPA 3.5/4.0), CSCA Math score, and entrance interview performance.
+        </p>
+        <p class="text-xs font-semibold text-slate-800 pt-1">Effective Cost: CNY 0 Tuition</p>
+      </div>
+
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-2">
+        <span class="inline-block rounded-full bg-sky-100 px-3 py-1 text-xs font-bold text-sky-800">Freshmen Second Class</span>
+        <h3 class="text-lg font-bold text-slate-900">CNY 9,000 / Year Waiver</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Substantially reduces tuition expenses. Leaves MBBS/BDS at <strong>CNY 17,000 / year</strong> and STEM/Business majors at only <strong>CNY 7,000 / year</strong>.
+        </p>
+        <p class="text-xs font-semibold text-slate-800 pt-1">Effective MBBS: CNY 17,000 / yr</p>
+      </div>
+
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-2">
+        <span class="inline-block rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">Freshmen Third Class</span>
+        <h3 class="text-lg font-bold text-slate-900">CNY 6,000 / Year Waiver</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Awarded to qualified students meeting basic threshold requirements. Leaves MBBS/BDS at <strong>CNY 20,000 / year</strong> and STEM majors at <strong>CNY 10,000 / year</strong>.
+        </p>
+        <p class="text-xs font-semibold text-slate-800 pt-1">Effective MBBS: CNY 20,000 / yr</p>
+      </div>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-5 space-y-3 mt-4">
+      <h3 class="font-bold text-slate-900">🎓 Postgraduate &amp; Provincial Government Awards</h3>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-slate-700">
+        <li><strong>Nantong University Master First Class Scholarship:</strong> 100% Full Tuition Waiver + Free On-Campus Accommodation + <strong>CNY 5,000 / year</strong> living stipend.</li>
+        <li><strong>Nantong University Doctoral Research Scholarship (PhD First Class):</strong> 100% Full Tuition Waiver + Free On-Campus Accommodation + <strong>CNY 18,000 / year (CNY 1,500 / month)</strong> living stipend.</li>
+        <li><strong>Jiangsu Provincial Jasmine Scholarship:</strong> Full scholarship provides tuition waiver, accommodation allowance, comprehensive medical insurance, and <strong>CNY 1,500 / month</strong> living allowance for the normal duration of study.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">6. Itemized Fee Schedule &amp; Living Costs in Nantong</h2>
+    <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+      <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Expense Category</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Cost (CNY)</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Frequency / Term</th>
+            <th class="px-4 py-3 text-left font-bold text-slate-900">Official Specification</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-slate-700">
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Application &amp; Registration Fee</td>
+            <td class="px-4 py-3 font-medium">CNY 600</td>
+            <td class="px-4 py-3">One-time</td>
+            <td class="px-4 py-3">Non-refundable upon application processing</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Quad Dormitory (4-Person Room)</td>
+            <td class="px-4 py-3 font-semibold text-emerald-700">CNY 3,000 / year (CNY 1,500 / sem)</td>
+            <td class="px-4 py-3">Annual / Per Semester</td>
+            <td class="px-4 py-3">Air conditioning, private bathroom, 24/7 hot water, broadband internet</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Double Dormitory (Twin Room)</td>
+            <td class="px-4 py-3 font-medium">CNY 5,000 / year (CNY 2,500 / sem)</td>
+            <td class="px-4 py-3">Annual / Per Semester</td>
+            <td class="px-4 py-3">Twin sharing room with private bathroom and furnished study area</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Comprehensive Medical Insurance</td>
+            <td class="px-4 py-3 font-medium">CNY 400 / semester (CNY 800 / yr)</td>
+            <td class="px-4 py-3">Annual / Per Semester</td>
+            <td class="px-4 py-3">Mandatory Ping An international student comprehensive health cover</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Residence Permit (Study Visa Extension)</td>
+            <td class="px-4 py-3 font-medium">CNY 400 / year</td>
+            <td class="px-4 py-3">Annual</td>
+            <td class="px-4 py-3">Payable to Nantong Public Security Bureau Exit-Entry Administration</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Physical Examination Verification</td>
+            <td class="px-4 py-3 font-medium">approx. CNY 400–500</td>
+            <td class="px-4 py-3">One-time (First year)</td>
+            <td class="px-4 py-3">Jiangsu International Travel Healthcare Center (Nantong branch)</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold text-slate-900">Estimated Living &amp; Food Expenses</td>
+            <td class="px-4 py-3 font-medium">CNY 1,000–1,500 / month</td>
+            <td class="px-4 py-3">Monthly</td>
+            <td class="px-4 py-3">Campus canteens provide healthy meals at approx CNY 30–45 per day</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">7. Universal Global Eligibility &amp; Required Documents</h2>
+    <p class="text-slate-700 leading-relaxed">
+      Admissions at Nantong University are open to qualified candidates of all nationalities meeting the standard international criteria:
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-2">
+        <h3 class="font-bold text-slate-900 text-base">🎓 Academic &amp; Age Eligibility</h3>
+        <ul class="list-disc pl-5 space-y-1.5 text-sm text-slate-700">
+          <li><strong>Undergraduate &amp; Foundation:</strong> High school graduation certificate or secondary school leaving diploma with a minimum 70–75% grade average or 3.0/4.0 CGPA. Age: 18 to 25.</li>
+          <li><strong>Medical Prerequisites (MBBS &amp; BDS):</strong> Strong secondary science foundation in Biology, Chemistry, and Mathematics is mandatory.</li>
+          <li><strong>Master Degree:</strong> Recognized Bachelor degree in related field; age under 35.</li>
+          <li><strong>Doctoral Degree (PhD):</strong> Recognized Master degree with demonstrated research competence; age under 40.</li>
+          <li><strong>English Proficiency:</strong> IELTS 6.0, TOEFL 80, Duolingo 95+, or official English Medium of Instruction (MOI) certificate from secondary school or previous university.</li>
+        </ul>
+      </div>
+
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-2">
+        <h3 class="font-bold text-slate-900 text-base">📑 Required Application Dossier</h3>
+        <ul class="list-disc pl-5 space-y-1.5 text-sm text-slate-700">
+          <li>Valid International Passport (minimum 12 months remaining validity).</li>
+          <li>Certified Highest Diploma &amp; Transcripts (notarized in English or Chinese).</li>
+          <li>CSCA Examination Score Report (for Bachelor degree applicants).</li>
+          <li>Foreigner Physical Examination Form (with complete lab, ECG &amp; chest X-ray reports).</li>
+          <li>Certificate of Non-Criminal Record (Police Clearance Certificate, notarized).</li>
+          <li>Bank Statement showing at least USD 3,000 equivalent balance.</li>
+          <li>Personal Statement or Study Plan (800+ words for Bachelor; 1,000+ words for Master/PhD).</li>
+          <li>Two Academic Recommendation Letters (for Master and PhD applicants).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">8. Frequently Asked Questions (FAQ)</h2>
+    <div class="space-y-3">
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          Can I apply for the Spring 2027 Foundation program without taking the CSCA test first?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          Yes! The Spring 2027 Foundation Program does not require a prior CSCA score for admission. During the 1-semester foundation course at Nantong University, students undergo intensive Chinese and preparatory mathematics, qualifying them for direct progression into degree majors upon passing the internal evaluation.
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          Where do MBBS and BDS students complete their clinical hospital rotations?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          Nantong University operates the <strong>Affiliated Hospital of Nantong University</strong>, a prestigious Grade 3A (highest tier in China) comprehensive hospital with over 3,000 beds, as well as multiple specialized clinical medical teaching hospitals across Jiangsu Province, ensuring clinical rotation training adhering to international licensing guidelines.
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          What is the cost of living in Nantong compared to Shanghai?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          Living expenses in Nantong are approximately 50% lower than in downtown Shanghai. With on-campus quad accommodation costing just CNY 3,000 per year (CNY 1,500/semester) and cafeteria meals averaging CNY 30–45 daily, students comfortably budget CNY 1,200 to CNY 1,800 monthly for overall living costs while remaining only 1 hour by train from Shanghai.
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          Are Nantong University Freshmen Scholarships renewable for subsequent years?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          Yes. While initially awarded for the first academic year, scholarship holders are evaluated annually through the university's academic review process. Students maintaining satisfactory academic standing (GPA 75%+) and good campus conduct retain their tuition reduction or fee waiver for the subsequent academic years.
+        </p>
+      </details>
+      <details class="group rounded-xl border border-slate-200 bg-white p-4">
+        <summary class="flex cursor-pointer items-center justify-between font-semibold text-slate-900">
+          What are the application deadlines for 2027 intakes?
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+          The application deadline for the <strong>Spring 2027 Intake (Foundation &amp; Language)</strong> is <strong>20 December 2026</strong>. For the <strong>Autumn 2027 Intake (Bachelor, Master &amp; PhD Degree programs)</strong>, applications close on <strong>30 June 2027</strong>, though early application by 30 May 2027 is strongly advised to secure scholarship quotas.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-2xl font-bold text-slate-900">9. Official Institutional Portals &amp; Contacts</h2>
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 class="font-bold text-slate-900">School of International Education, Nantong University</h3>
+      <p class="mt-2 text-sm text-slate-700 leading-relaxed">
+        <strong>Campus Address:</strong> No. 9 Seyuan Road, Chongchuan District, Nantong City, Jiangsu Province, P.R. China (Postal Code: 226019)<br />
+        <strong>Contact Office:</strong> International Students Admissions Office, SIE, Nantong University<br />
+        <strong>Telephone:</strong> +86-513-85012800 / +86-513-85012808<br />
+        <strong>Email:</strong> <code>sie@ntu.edu.cn</code><br />
+        <strong>Online Admissions Portal:</strong> <a href="https://ntu.17gz.org" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">ntu.17gz.org</a><br />
+        <strong>University Websites:</strong> <a href="https://sie.ntu.edu.cn" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">sie.ntu.edu.cn</a> · <a href="https://www.ntu.edu.cn" target="_blank" rel="noopener noreferrer" class="text-sky-700 font-semibold underline">www.ntu.edu.cn</a>
+      </p>
+    </div>
+  </section>
+</article>
+`,
+  },
 };
+
 
 

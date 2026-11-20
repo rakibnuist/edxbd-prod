@@ -41,6 +41,21 @@ const {
   shiftIsoDays,
 } = await import('../src/lib/kpi-workflow.ts');
 
+const {
+  appendCheckInLocationNote,
+  buildGoogleMapsUrl,
+  calculateDistanceMeters,
+  classifyCheckInLocation,
+  DEFAULT_OFFICE_LATITUDE,
+  DEFAULT_OFFICE_LONGITUDE,
+  DEFAULT_OFFICE_RADIUS_METERS,
+  parseCheckInLocationFromNotes,
+  resolveAttendanceLocationStatus,
+  resolveOfficeGeofenceConfig,
+  validateCoordinateInput,
+  validateRadiusMetersInput,
+} = await import('../src/lib/office-location.ts');
+
 test('WhatsApp templates format BD phones cleanly and generate all 4 Bengali templates', () => {
   assert.equal(normalizeWhatsappDigits('01712345678'), '8801712345678');
   assert.equal(normalizeWhatsappDigits('+88001639659911'), '8801639659911');
@@ -255,4 +270,134 @@ test('Scholarship notice parser sanitizes HTML, validates source URL, and drafts
   assert.match(webhookSrc, /timingSafeEqual/);
   assert.match(webhookSrc, /isPublished:\s*false/);
   assert.doesNotMatch(webhookSrc, /revalidatePath|announcePublishedUpdate/);
+});
+
+test('Office GPS geofencing validates config defaults, classifies office vs remote check-ins, and builds Google Maps links', () => {
+  const defaultGeofence = resolveOfficeGeofenceConfig({});
+  assert.equal(defaultGeofence.latitude, DEFAULT_OFFICE_LATITUDE);
+  assert.equal(defaultGeofence.longitude, DEFAULT_OFFICE_LONGITUDE);
+  assert.equal(defaultGeofence.radiusMeters, DEFAULT_OFFICE_RADIUS_METERS);
+  assert.equal(defaultGeofence.strictLocation, false);
+
+  assert.equal(validateCoordinateInput('23.7401435', 'lat').normalized, '23.7401435');
+  assert.match(validateCoordinateInput('120', 'lat').error || '', /latitude/i);
+  assert.match(validateRadiusMetersInput('10').error || '', /between 50 and 10,000/i);
+
+  const distZero = calculateDistanceMeters(
+    DEFAULT_OFFICE_LATITUDE,
+    DEFAULT_OFFICE_LONGITUDE,
+    DEFAULT_OFFICE_LATITUDE,
+    DEFAULT_OFFICE_LONGITUDE,
+  );
+  assert.equal(distZero, 0);
+
+  const inside = classifyCheckInLocation(
+    { latitude: 23.7406, longitude: 90.3716, accuracyMeters: 18 },
+    defaultGeofence,
+  );
+  assert.equal(inside.locationType, 'office_location');
+  assert.match(inside.locationLabel, /^Office Zone \(\d+m\)$/);
+  assert.ok(inside.distanceMeters !== null && inside.distanceMeters < 250);
+  assert.equal(inside.mapsUrl, buildGoogleMapsUrl(23.7406, 90.3716));
+
+  const remote = classifyCheckInLocation(
+    { latitude: 23.8103, longitude: 90.4125, accuracyMeters: 30 },
+    defaultGeofence,
+  );
+  assert.equal(remote.locationType, 'remote_location');
+  assert.match(remote.locationLabel, /^Remote \([\d.]+km away\)$/);
+
+  const denied = classifyCheckInLocation({ locationError: 'denied' }, defaultGeofence);
+  assert.equal(denied.locationType, 'location_denied');
+  assert.equal(denied.locationLabel, 'GPS Permission Denied');
+
+  const note = appendCheckInLocationNote('Morning shift [IP: 1.2.3.4] · Office Zone (50m)', inside);
+  assert.ok(note && note.includes('[LOC:'));
+  const parsedCoords = parseCheckInLocationFromNotes(note);
+  assert.equal(parsedCoords.accuracyMeters, 18);
+  assert.equal(parsedCoords.distanceMeters, inside.distanceMeters);
+
+  const resolved = resolveAttendanceLocationStatus('office_location', note);
+  assert.equal(resolved.locationType, 'office_location');
+  assert.equal(resolved.locationLabel, inside.locationLabel);
+  assert.equal(resolved.mapsUrl, inside.mapsUrl);
+});
+
+test('KPI report includes todayLocationType, todayLocationLabel, todayDistanceMeters, and todayMapsUrl from Attendance source & notes', () => {
+  const fixedNowMs = Date.parse('2026-11-18T06:00:00Z');
+  const today = dhakaTodayIso(fixedNowMs);
+  const report = computeEmployeeKpiReport({
+    month: today.slice(0, 7),
+    nowMs: fixedNowMs,
+    employees: [
+      {
+        id: 'emp_1',
+        empId: 'EMP-001',
+        name: 'Ayesha Rahman',
+        role: 'Senior Counselor',
+        email: 'ayesha@eduexpressint.com',
+        phone: '01700000001',
+        team: 'China Desk',
+        specialization: 'China',
+        active: true,
+        userId: 'usr_1',
+      },
+      {
+        id: 'emp_2',
+        empId: 'EMP-002',
+        name: 'Tanvir Hasan',
+        role: 'Counselor',
+        email: 'tanvir@eduexpressint.com',
+        phone: '01700000002',
+        team: 'Europe Desk',
+        specialization: 'Europe',
+        active: true,
+        userId: 'usr_2',
+      },
+    ],
+    attendances: [
+      {
+        id: 'att_1',
+        employeeId: 'emp_1',
+        empId: 'EMP-001',
+        date: today,
+        checkIn: '10:05',
+        checkOut: null,
+        hoursWorked: 0,
+        status: 'present',
+        source: 'office_location',
+        notes: '[LOC: 23.74020,90.37140 ±20m | 12m] · Office Zone (12m)',
+      },
+      {
+        id: 'att_2',
+        employeeId: 'emp_2',
+        empId: 'EMP-002',
+        date: today,
+        checkIn: '10:40',
+        checkOut: null,
+        hoursWorked: 0,
+        status: 'late',
+        source: 'remote_location',
+        notes: '[LOC: 23.81030,90.41250 ±35m | 8840m] · Remote (8.84km away)',
+      },
+    ],
+    dailyLogs: [],
+    targets: [],
+    tasks: [],
+    leads: [],
+    activities: [],
+  });
+
+  const ayesha = report.employees.find((e) => e.employee.empId === 'EMP-001');
+  const tanvir = report.employees.find((e) => e.employee.empId === 'EMP-002');
+  assert.ok(ayesha);
+  assert.ok(tanvir);
+  assert.equal(ayesha.attendance.todayLocationType, 'office_location');
+  assert.equal(ayesha.attendance.todayLocationLabel, 'Office Zone (12m)');
+  assert.equal(ayesha.attendance.todayDistanceMeters, 12);
+  assert.equal(ayesha.attendance.todayMapsUrl, 'https://www.google.com/maps?q=23.74020,90.37140');
+  assert.equal(tanvir.attendance.todayLocationType, 'remote_location');
+  assert.equal(tanvir.attendance.todayLocationLabel, 'Remote (8.84km away)');
+  assert.equal(tanvir.attendance.todayDistanceMeters, 8840);
+  assert.equal(tanvir.attendance.todayMapsUrl, 'https://www.google.com/maps?q=23.81030,90.41250');
 });

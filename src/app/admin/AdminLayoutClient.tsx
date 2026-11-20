@@ -207,20 +207,37 @@ function AdminShell({ children }: { children: React.ReactNode }) {
               </div>
 
               {/* System Health Status Card in Sidebar */}
-              <div className="mx-3 mb-2 rounded-xl border border-white/10 bg-white/5 p-3">
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="font-semibold text-slate-300">System Engine</span>
-                  <span className="inline-flex items-center gap-1 font-bold text-emerald-400">
-                    <span className="size-1.5 rounded-full bg-emerald-400" />
-                    Operational
-                  </span>
+              {isCounselor ? (
+                <div className="mx-3 mb-2 rounded-xl border border-white/10 bg-white/5 p-3">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="font-semibold text-slate-300">Counselor Workspace</span>
+                    <span className="inline-flex items-center gap-1 font-bold text-emerald-400">
+                      <span className="size-1.5 rounded-full bg-emerald-400" />
+                      Active
+                    </span>
+                  </div>
+                  <div className="mt-2 text-[10px] text-slate-400">
+                    Dhaka Desk: GMT+6
+                    <br />
+                    Scope: Assigned Leads &amp; KPI
+                  </div>
                 </div>
-                <div className="mt-2 text-[10px] text-slate-400">
-                  Meta Graph Sync: 2m interval
-                  <br />
-                  Lead Webhook: Active
+              ) : (
+                <div className="mx-3 mb-2 rounded-xl border border-white/10 bg-white/5 p-3">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="font-semibold text-slate-300">System Engine</span>
+                    <span className="inline-flex items-center gap-1 font-bold text-emerald-400">
+                      <span className="size-1.5 rounded-full bg-emerald-400" />
+                      Operational
+                    </span>
+                  </div>
+                  <div className="mt-2 text-[10px] text-slate-400">
+                    Meta Graph Sync: 2m interval
+                    <br />
+                    Lead Webhook: Active
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* User / Logout */}
               <div className="border-t border-white/10 p-3">

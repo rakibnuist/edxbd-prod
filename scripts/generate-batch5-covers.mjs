@@ -78,6 +78,30 @@ const posters = [
     info: 'Top 985 / Double First-Class · Type A Bilateral & Type B High-Level · Changsha',
     deadline: 'Deadlines: 15 Feb (Type B) · 29 Mar (Youth)',
   },
+  {
+    filename: 'zhengzhou-university-postgraduate-scholarships-guide-2027.jpg',
+    category: 'SCHOLARSHIPS',
+    title: 'Zhengzhou University (ZZU)',
+    subtitle: '2027 Master & PhD Admissions & Presidential Scholarship',
+    info: 'Full Tuition Waiver + Free Campus Twin Dorm + Monthly Stipend up to 3,500 RMB',
+    deadline: 'Application Window: 1 Nov 2026 – 15 May 2027',
+  },
+  {
+    filename: 'btbu-international-undergraduate-admissions-guide-2027.jpg',
+    category: 'ADMISSIONS',
+    title: 'Beijing Tech & Business Univ',
+    subtitle: '2027 Undergraduate Admissions & Beijing Scholarships',
+    info: 'English-Taught Bachelor · CSCA Exam Rules · Full Beijing Government Scholarships',
+    deadline: 'Application Deadline: 1 June 2027',
+  },
+  {
+    filename: 'nantong-university-admissions-scholarships-foundation-guide-2027.jpg',
+    category: 'ADMISSIONS',
+    title: 'Nantong University',
+    subtitle: '2027 Foundation, MBBS & Scholarship Guide',
+    info: 'Spring Foundation (March) · English MBBS & BDS · CSCA Math · Full Scholarships',
+    deadline: 'Spring: 20 Dec 2026 · Degree: 30 June 2027',
+  },
 ];
 
 function buildSvg(item) {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
 import { buildCounselorLeadWhere, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { logAndFormatServerError } from '@/lib/api-error';
+import { buildCounselorDeskSummary, buildOwnerOfficePulse } from '@/lib/office-pulse';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
@@ -92,6 +93,11 @@ export async function GET(request: NextRequest) {
         : Promise.resolve([]),
     ]);
 
+    const [officePulse, counselorDesk] = await Promise.all([
+      isAdmin ? buildOwnerOfficePulse().catch(() => null) : Promise.resolve(null),
+      !isAdmin ? buildCounselorDeskSummary(staff?.employee || null).catch(() => null) : Promise.resolve(null),
+    ]);
+
     return NextResponse.json({
       totalLeads,
       newLeads,
@@ -111,6 +117,8 @@ export async function GET(request: NextRequest) {
       newPartnerships,
       recentLeads,
       recentPartnerships,
+      ...(officePulse ? { officePulse } : {}),
+      ...(counselorDesk ? { counselorDesk } : {}),
       metaSync: {
         active: true,
         pollInterval: '2m',

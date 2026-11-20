@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { validateCoordinateInput, validateRadiusMetersInput } from '@/lib/office-location';
 import { decryptSecret, encryptSecret } from '@/lib/secret-box';
 
 // Meta dataset created for the EduExpress website in Events Manager.
@@ -40,6 +41,10 @@ export const SETTING_KEYS = [
   'metaAccessToken',
   'gtmId',
   'ga4Id',
+  'officeLatitude',
+  'officeLongitude',
+  'officeRadiusMeters',
+  'officeLocationStrict',
 ] as const;
 
 export type SettingKey = (typeof SETTING_KEYS)[number];
@@ -49,6 +54,7 @@ const MAX_LENGTHS: Record<SettingKey, number> = {
   whatsappNumber: 40, address: 500, facebookUrl: 500, linkedinUrl: 500,
   instagramUrl: 500, youtubeUrl: 500, introVideoTitle: 160, introVideoUrl: 500,
   introVideoPoster: 500, metaPixelId: 32, metaAccessToken: 4096, gtmId: 32, ga4Id: 32,
+  officeLatitude: 32, officeLongitude: 32, officeRadiusMeters: 10, officeLocationStrict: 10,
 };
 
 const URL_KEYS = new Set<SettingKey>([
@@ -85,6 +91,31 @@ export function validateSettings(values: unknown): {
     if (key === 'metaPixelId' && value && !/^\d{10,32}$/.test(value)) return { error: 'Meta Pixel ID must contain 10–32 digits.' };
     if (key === 'gtmId' && value && !/^GTM-[A-Z0-9]+$/i.test(value)) return { error: 'Google Tag Manager ID must use the format GTM-XXXXXXX.' };
     if (key === 'ga4Id' && value && !/^G-[A-Z0-9]+$/i.test(value)) return { error: 'GA4 Measurement ID must use the format G-XXXXXXXXXX.' };
+    if (key === 'officeLatitude') {
+      const parsed = validateCoordinateInput(value, 'lat');
+      if (parsed.error) return { error: parsed.error };
+      cleanValues[key] = parsed.normalized ?? '';
+      continue;
+    }
+    if (key === 'officeLongitude') {
+      const parsed = validateCoordinateInput(value, 'lng');
+      if (parsed.error) return { error: parsed.error };
+      cleanValues[key] = parsed.normalized ?? '';
+      continue;
+    }
+    if (key === 'officeRadiusMeters') {
+      const parsed = validateRadiusMetersInput(value);
+      if (parsed.error) return { error: parsed.error };
+      cleanValues[key] = parsed.normalized ?? '';
+      continue;
+    }
+    if (key === 'officeLocationStrict') {
+      if (value && value !== 'true' && value !== 'false') {
+        return { error: 'officeLocationStrict must be true or false.' };
+      }
+      cleanValues[key] = value === 'true' ? 'true' : 'false';
+      continue;
+    }
     cleanValues[key] = key === 'gtmId' || key === 'ga4Id' ? value.toUpperCase() : value;
   }
   return { values: cleanValues };

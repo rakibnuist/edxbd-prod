@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   Activity, AlertTriangle, Award, Calendar, CheckCircle2, Clock,
   ExternalLink, FileText, Flame, ListChecks, LogIn, LogOut,
-  Plus, RefreshCw, Target, Trash2, Users, X,
+  MapPin, Plus, RefreshCw, Target, Trash2, Users, X,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import type {
@@ -104,6 +104,34 @@ function currentMonthIso(): string {
   return new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 7);
 }
 
+function captureBrowserLocation(): Promise<{
+  latitude?: number;
+  longitude?: number;
+  accuracyMeters?: number;
+  locationError?: 'denied' | 'timeout' | 'unavailable' | 'unsupported';
+}> {
+  if (typeof window === 'undefined' || !('geolocation' in navigator)) {
+    return Promise.resolve({ locationError: 'unsupported' });
+  }
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        resolve({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+          accuracyMeters: Math.round(pos.coords.accuracy || 0),
+        });
+      },
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) resolve({ locationError: 'denied' });
+        else if (err.code === err.TIMEOUT) resolve({ locationError: 'timeout' });
+        else resolve({ locationError: 'unavailable' });
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
+    );
+  });
+}
+
 export default function KpiWorkflowClient() {
   const { user, authenticatedFetch } = useAuth();
   const isCounselor = user?.role === 'counselor';
@@ -113,6 +141,7 @@ export default function KpiWorkflowClient() {
   const [report, setReport] = useState<ApiKpiPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  const [locating, setLocating] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -234,22 +263,30 @@ export default function KpiWorkflowClient() {
     setNotice(null);
     setError(null);
     try {
+      let locationPayload: Record<string, unknown> = {};
+      if (mode === 'checkin') {
+        setLocating(true);
+        locationPayload = await captureBrowserLocation();
+        setLocating(false);
+      }
       const res = await authenticatedFetch('/api/admin/attendance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ employeeId: activeKpi.employee.id, mode }),
+        body: JSON.stringify({ employeeId: activeKpi.employee.id, mode, ...locationPayload }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Attendance update failed');
+      const locLabel = data.locationStatus?.locationLabel ? ` · ${data.locationStatus.locationLabel}` : '';
       setNotice(
         mode === 'checkin'
-          ? `${activeKpi.employee.name} checked in at ${data.checkIn} (${data.status}).`
+          ? `${activeKpi.employee.name} checked in at ${data.checkIn} (${data.status})${locLabel}.`
           : `${activeKpi.employee.name} checked out at ${data.checkOut} (${data.hoursWorked}h logged).`,
       );
       await loadReport();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Attendance error');
     } finally {
+      setLocating(false);
       setBusy(false);
     }
   };
@@ -647,8 +684,34 @@ export default function KpiWorkflowClient() {
                           <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-bold ${wf.cls}`}>
                             {wf.label}
                           </span>
-                          <div className="mt-1 text-[10px] text-slate-500">
-                            {row.attendance.todayCheckIn ? `In: ${row.attendance.todayCheckIn}` : 'No check-in'}
+                          <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[10px] text-slate-500">
+                            <span>{row.attendance.todayCheckIn ? `In: ${row.attendance.todayCheckIn}` : 'No check-in'}</span>
+                            {row.attendance.todayLocationType === 'office_location' && (
+                              <span className="rounded bg-emerald-50 px-1.5 py-0.5 font-bold text-emerald-700 ring-1 ring-emerald-200">
+                                {row.attendance.todayLocationLabel || 'Office Zone'}
+                              </span>
+                            )}
+                            {row.attendance.todayLocationType === 'remote_location' && (
+                              <span className="rounded bg-amber-50 px-1.5 py-0.5 font-bold text-amber-800 ring-1 ring-amber-200">
+                                {row.attendance.todayLocationLabel || 'Remote'}
+                              </span>
+                            )}
+                            {(row.attendance.todayLocationType === 'location_denied' ||
+                              row.attendance.todayLocationType === 'location_unavailable') && (
+                              <span className="rounded bg-rose-50 px-1.5 py-0.5 font-bold text-rose-700 ring-1 ring-rose-200">
+                                {row.attendance.todayLocationLabel}
+                              </span>
+                            )}
+                            {row.attendance.todayMapsUrl && (
+                              <a
+                                href={row.attendance.todayMapsUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-0.5 font-bold text-[#0f3a5c] hover:underline"
+                              >
+                                <MapPin size={10} /> Map
+                              </a>
+                            )}
                           </div>
                         </td>
                         <td className="px-3 py-3">
@@ -813,11 +876,40 @@ export default function KpiWorkflowClient() {
                   <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl bg-slate-50 p-4 border border-slate-200/80">
                     <div>
                       <p className="text-xs font-semibold text-slate-500">Today&apos;s Attendance Status</p>
-                      <p className="mt-1 text-base font-bold text-slate-900">
-                        {activeKpi.attendance.todayCheckIn
-                          ? `Checked in at ${activeKpi.attendance.todayCheckIn} (${activeKpi.attendance.todayStatus})`
-                          : 'Not checked in yet today'}
-                        {activeKpi.attendance.todayCheckOut ? ` · Out: ${activeKpi.attendance.todayCheckOut}` : ''}
+                      <p className="mt-1 flex flex-wrap items-center gap-2 text-base font-bold text-slate-900">
+                        <span>
+                          {activeKpi.attendance.todayCheckIn
+                            ? `Checked in at ${activeKpi.attendance.todayCheckIn} (${activeKpi.attendance.todayStatus})`
+                            : 'Not checked in yet today'}
+                          {activeKpi.attendance.todayCheckOut ? ` · Out: ${activeKpi.attendance.todayCheckOut}` : ''}
+                        </span>
+                        {activeKpi.attendance.todayLocationLabel && activeKpi.attendance.todayCheckIn && (
+                          <span
+                            className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
+                              activeKpi.attendance.todayLocationType === 'office_location'
+                                ? 'bg-emerald-100 text-emerald-800'
+                                : activeKpi.attendance.todayLocationType === 'remote_location'
+                                  ? 'bg-amber-100 text-amber-800'
+                                  : activeKpi.attendance.todayLocationType === 'location_denied' ||
+                                      activeKpi.attendance.todayLocationType === 'location_unavailable'
+                                    ? 'bg-rose-100 text-rose-800'
+                                    : 'bg-slate-200 text-slate-700'
+                            }`}
+                          >
+                            <MapPin size={11} />
+                            {activeKpi.attendance.todayLocationLabel}
+                          </span>
+                        )}
+                        {activeKpi.attendance.todayMapsUrl && activeKpi.attendance.todayCheckIn && (
+                          <a
+                            href={activeKpi.attendance.todayMapsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-xs font-bold text-[#0f3a5c] hover:underline"
+                          >
+                            View Map ↗
+                          </a>
+                        )}
                       </p>
                       <p className="mt-0.5 text-xs text-slate-500">
                         Monthly Attendance: {activeKpi.attendance.pct}% · EOD Streak: {activeKpi.discipline.streak} days · Score: {activeKpi.score}/100
@@ -830,7 +922,7 @@ export default function KpiWorkflowClient() {
                         onClick={() => handleAttendanceAction('checkin')}
                         className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50"
                       >
-                        <LogIn size={14} /> Check In
+                        <LogIn size={14} /> {locating ? 'Capturing GPS...' : 'Check In'}
                       </button>
                       <button
                         type="button"
