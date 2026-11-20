@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, Search, ShieldCheck } from 'lucide-react';
 import UpdateCard, { updateCategory, type UpdateCardData } from '@/components/updates/UpdateCard';
 import { daysLeft } from '@/lib/update-deadlines';
-import { categoryHref } from '@/lib/update-categories';
+import { categoryHref, formatUpdateCategoryLabel } from '@/lib/update-categories';
 
 export type LibraryItem = UpdateCardData & { id: string; search: string };
 
@@ -27,12 +27,18 @@ export default function UpdatesClient({ items, now }: { items: LibraryItem[]; no
   const categories = useMemo(() => {
     const counts = new Map<string, { label: string; count: number }>();
     items.forEach(item => {
-      new Set([item.category, ...(item.categories || [])].filter((v): v is string => Boolean(v?.trim())).map(v => v.trim())).forEach(label => {
-        const key = normal(label);
-        const entry = counts.get(key) || { label: key === 'announcement' ? 'Announcement' : label, count: 0 };
-        entry.count += 1;
-        counts.set(key, entry);
-      });
+      const seenKeys = new Set<string>();
+      [item.category, ...(item.categories || [])]
+        .filter((v): v is string => Boolean(v?.trim()))
+        .forEach(raw => {
+          const key = normal(raw);
+          if (seenKeys.has(key)) return;
+          seenKeys.add(key);
+          const displayLabel = formatUpdateCategoryLabel(raw);
+          const entry = counts.get(key) || { label: displayLabel, count: 0 };
+          entry.count += 1;
+          counts.set(key, entry);
+        });
     });
     return [...counts.values()].sort((a, b) => b.count - a.count).slice(0, 8);
   }, [items]);
@@ -88,7 +94,7 @@ export default function UpdatesClient({ items, now }: { items: LibraryItem[]; no
             className="ed-field ed-field-icon min-h-[52px] rounded-full pl-11"
           />
         </label>
-        <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 no-scrollbar lg:mx-0 lg:px-0" role="group" aria-label="Filter by category">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
           {[{ label: 'All', count: items.length }, ...categories].map(item => (
             <button
               key={item.label}

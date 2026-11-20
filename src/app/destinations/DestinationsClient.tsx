@@ -105,6 +105,31 @@ export default function DestinationsClient() {
               </Link>
             </li>
           ))}
+          {others.length % 3 === 2 && (
+            <li className="md:col-span-2 xl:col-span-1">
+              <div className="flex h-full flex-col justify-between rounded-3xl bg-petrol-800 p-6 text-white sm:p-7">
+                <div>
+                  <span className="inline-flex rounded-full bg-lime px-3 py-1 text-[13px] font-bold text-petrol-800">
+                    Side-by-side comparison
+                  </span>
+                  <h3 className="mt-5 font-display text-[26px] font-black leading-[1.05] text-white sm:text-[30px]">
+                    Not sure which country matches your budget?
+                  </h3>
+                  <p className="mt-3 text-[15.5px] leading-6 text-white/80">
+                    Compare tuition ranges, living costs, solvency rules, and scholarship odds across all {others.length + 1} destinations before applying.
+                  </p>
+                </div>
+                <div className="mt-6 flex flex-col gap-2.5">
+                  <Link href="/education-fit-assessment" className="ed-btn ed-btn-signal min-h-[48px] px-5 text-[15px]">
+                    Start free fit assessment <ArrowRight size={16} aria-hidden="true" />
+                  </Link>
+                  <Link href="/compare-study-destinations" className="ed-btn ed-btn-on-dark min-h-[46px] px-5 text-[14.5px]">
+                    Compare routes side by side
+                  </Link>
+                </div>
+              </div>
+            </li>
+          )}
         </ul>
       </Section>
     </>

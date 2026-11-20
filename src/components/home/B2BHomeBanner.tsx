@@ -15,8 +15,8 @@ export default function B2BHomeBanner({
     <section id="b2b-partner-desk" aria-labelledby="b2b-home-heading" className="pb-20 lg:pb-24">
       <div className={containerClassName}>
         <div className="overflow-hidden rounded-3xl bg-petrol-800 p-6 text-white shadow-[0_24px_60px_rgba(15,58,92,0.16)] sm:p-10 lg:p-12">
-          <div className="grid gap-10 lg:grid-cols-[1.06fr_.94fr] lg:items-center">
-            <div>
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.06fr_.94fr] lg:items-center">
+            <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="inline-flex items-center gap-2 rounded-full bg-lime px-3.5 py-1 text-[13px] font-extrabold text-petrol-800">
                   <Building2 size={14} aria-hidden="true" />
@@ -68,9 +68,9 @@ export default function B2BHomeBanner({
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white p-6 text-petrol-800 sm:p-7">
-              <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
-                <div>
+            <div className="min-w-0 rounded-3xl bg-white p-6 text-petrol-800 sm:p-7">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div className="min-w-0">
                   <p className="text-xs font-bold uppercase tracking-wider text-[#2c6a97]">Dedicated Agency Channels</p>
                   <h3 className="mt-0.5 text-[20px] font-bold leading-snug text-petrol-800">
                     Four structured B2B desks
@@ -81,19 +81,19 @@ export default function B2BHomeBanner({
                 </span>
               </div>
 
-              <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+              <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                 {B2B_SERVICE_TRACKS.map(track => (
                   <Link
                     key={track.id}
                     href="/b2b#b2b-tracks"
-                    className="group flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-canvas-soft/60 p-3.5 transition hover:-translate-y-0.5 hover:border-petrol-800 hover:bg-white hover:shadow-sm"
+                    className="group flex min-w-0 flex-col justify-between rounded-2xl border border-slate-200/90 bg-canvas-soft/60 p-3.5 transition hover:-translate-y-0.5 hover:border-petrol-800 hover:bg-white hover:shadow-sm"
                   >
-                    <div>
-                      <div className="flex items-center justify-between gap-1.5">
-                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#2c6a97]">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center justify-between gap-1.5">
+                        <span className="shrink-0 text-[11px] font-extrabold uppercase tracking-wider text-[#2c6a97]">
                           Track {track.number}
                         </span>
-                        <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[11px] font-bold text-petrol-800 ring-1 ring-slate-200">
+                        <span className="max-w-full rounded-full bg-white px-2.5 py-0.5 text-[11px] font-bold leading-tight text-petrol-800 ring-1 ring-slate-200">
                           {track.turnaround}
                         </span>
                       </div>

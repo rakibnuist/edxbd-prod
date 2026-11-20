@@ -347,7 +347,7 @@ export default function UniversitiesClient({ directory }: Props) {
   return (
     <section aria-label="University finder" className="bg-[#f8fafc] pb-20 pt-2">
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
           {/* Facet rail */}
           <form
             role="search"
@@ -355,7 +355,7 @@ export default function UniversitiesClient({ directory }: Props) {
             action="/universities"
             method="get"
             onSubmit={submitSearch}
-            className="lg:sticky lg:top-[124px] lg:self-start lg:max-h-[calc(100dvh-144px)] lg:overflow-y-auto rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-sm"
+            className="min-w-0 lg:sticky lg:top-[124px] lg:self-start lg:max-h-[calc(100dvh-144px)] lg:overflow-y-auto rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-sm"
           >
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <span className="text-[14px] font-bold uppercase tracking-wider text-slate-800">Filters</span>
@@ -580,15 +580,15 @@ export default function UniversitiesClient({ directory }: Props) {
           </form>
 
           {/* Results Area */}
-          <div>
-            <div id="university-results" className="mb-5 flex scroll-mt-[84px] flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200/90 bg-white px-5 py-3.5 shadow-sm sm:scroll-mt-[92px] lg:scroll-mt-[126px]">
-              <div className="flex items-center gap-2.5">
+          <div className="min-w-0">
+            <div id="university-results" className="mb-5 flex scroll-mt-[84px] flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200/90 bg-white px-4 py-3.5 shadow-sm sm:scroll-mt-[92px] sm:px-5 lg:scroll-mt-[126px]">
+              <div className="min-w-0 flex items-center gap-2.5">
                 <span className="text-sm font-semibold text-slate-600">
                   Showing <strong className="font-extrabold text-slate-900">{filtered.length}</strong> {filtered.length === 1 ? 'University' : 'Universities'}
                   {filters.country && <span> in <strong className="text-emerald-700">{filters.country}</strong></span>}
                 </span>
               </div>
-              <div className="flex w-full items-center justify-between gap-2 text-xs font-bold text-slate-600 sm:w-auto sm:justify-start">
+              <div className="flex w-full min-w-0 items-center justify-between gap-2 text-xs font-bold text-slate-600 sm:w-auto sm:justify-start">
                 <label htmlFor="university-sort" className="shrink-0">Sort:</label>
                 <select
                   id="university-sort"
@@ -596,9 +596,9 @@ export default function UniversitiesClient({ directory }: Props) {
                   onChange={event =>
                     setFilters({ sort: ['name', 'city', 'fee', 'ranking', 'scholarship'].includes(event.target.value) ? (event.target.value as DirectoryFilters['sort']) : 'recommended' })
                   }
-                  className="ed-select h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[13.5px] font-bold text-slate-800 outline-none focus:border-petrol-800 sm:w-auto sm:text-xs"
+                  className="ed-select h-10 min-w-0 max-w-full flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-[13px] font-bold leading-snug text-slate-800 outline-none focus:border-petrol-800 sm:h-9 sm:w-auto sm:flex-none sm:text-xs"
                 >
-                  <option value="recommended">Recommended (Top Ranked & Funding)</option>
+                  <option value="recommended">Recommended (Top &amp; Funded)</option>
                   <option value="ranking">Highest World Ranking</option>
                   <option value="scholarship">Active Scholarships First</option>
                   <option value="fee">Lowest Indicative Tuition</option>
@@ -629,7 +629,7 @@ export default function UniversitiesClient({ directory }: Props) {
               </div>
             ) : (
               <>
-                <ul className="grid gap-5 md:grid-cols-2">
+                <ul className="grid grid-cols-1 gap-5 md:grid-cols-2">
                   {visibleRows.map((row, index) => {
                     const { university } = row;
                     const selected = compare.includes(university.slug);
@@ -640,23 +640,23 @@ export default function UniversitiesClient({ directory }: Props) {
                     }).toString()}`;
                     return (
                       <Fragment key={university.id}>
-                        <li>
+                        <li className="min-w-0">
                           <article
                             aria-label={university.name}
-                            className="group relative flex h-full flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-lg"
+                            className="group relative flex h-full min-w-0 flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-lg sm:p-5"
                           >
-                            <div>
+                            <div className="min-w-0">
                               {/* Header: Logo, Location & Status Badge */}
-                              <div className="flex items-center justify-between gap-3">
-                                <div className="flex items-center gap-2.5 min-w-0">
+                              <div className="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap sm:gap-3">
+                                <div className="flex min-w-0 items-center gap-2.5">
                                   <UniversityMark university={university} size={42} />
-                                  <span className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 truncate">
-                                    <span className="text-sm">{flagFor(university.country)}</span>
-                                    <span>{[university.city, university.country].filter(Boolean).join(', ')}</span>
+                                  <span className="flex min-w-0 items-center gap-1.5 text-xs font-semibold text-slate-500">
+                                    <span className="shrink-0 text-sm">{flagFor(university.country)}</span>
+                                    <span className="truncate">{[university.city, university.country].filter(Boolean).join(', ')}</span>
                                   </span>
                                 </div>
 
-                                <div className="shrink-0">
+                                <div className="max-w-full shrink-0">
                                   {row.ranking ? (
                                     <span className="inline-flex items-center gap-1 rounded-md bg-petrol-800 px-2 py-0.5 text-[11px] font-bold text-white shadow-sm">
                                       <Trophy size={11} className="text-lime" aria-hidden="true" />
@@ -740,19 +740,19 @@ export default function UniversitiesClient({ directory }: Props) {
                               )}
 
                               {/* Agency Fee Trust Line */}
-                              <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] font-medium text-slate-500">
                                 {university.country.toLowerCase() === 'malaysia' ? (
-                                  <span className="font-bold text-emerald-700 flex items-center gap-1">
-                                    <Check size={13} className="text-emerald-600" /> BDT 0 EduExpress Service Fee
+                                  <span className="flex items-center gap-1 font-bold text-emerald-700">
+                                    <Check size={13} className="shrink-0 text-emerald-600" /> BDT 0 EduExpress Service Fee
                                   </span>
                                 ) : (
-                                  <span className="text-slate-600 flex items-center gap-1">
-                                    <Check size={13} className="text-emerald-600" /> Visa-First Pledge (BDT 0 Pre-Visa)
+                                  <span className="flex items-center gap-1 text-slate-600">
+                                    <Check size={13} className="shrink-0 text-emerald-600" /> Visa-First Pledge (BDT 0 Pre-Visa)
                                   </span>
                                 )}
                                 <Link
                                   href={`/universities/${university.slug}#fees`}
-                                  className="font-bold text-petrol-800 hover:text-emerald-700 hover:underline"
+                                  className="shrink-0 font-bold text-petrol-800 hover:text-emerald-700 hover:underline"
                                 >
                                   Fee Schedule →
                                 </Link>
@@ -760,7 +760,7 @@ export default function UniversitiesClient({ directory }: Props) {
                             </div>
 
                             {/* Action Row */}
-                            <div className="mt-4 flex items-center gap-2 border-t border-slate-100 pt-3.5">
+                            <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3.5 sm:flex-nowrap">
                               <button
                                 type="button"
                                 onClick={() => toggleCompare(university.slug)}
@@ -776,7 +776,7 @@ export default function UniversitiesClient({ directory }: Props) {
                               <Link
                                 href={`/universities/${university.slug}`}
                                 onClick={() => recordClick('university_programs_click', university)}
-                                className="inline-flex min-h-[42px] flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-3 text-center text-xs font-bold text-slate-800 transition-colors hover:bg-slate-50 hover:border-slate-400"
+                                className="inline-flex min-h-[42px] flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-2.5 text-center text-xs font-bold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50 sm:px-3"
                                 aria-label={`View ${university.name} details`}
                               >
                                 View Details
@@ -784,7 +784,7 @@ export default function UniversitiesClient({ directory }: Props) {
                               <Link
                                 href={applicationHref}
                                 onClick={() => recordClick('university_apply_click', university)}
-                                className="ed-btn ed-btn-signal min-h-[42px] flex-[1.2] whitespace-nowrap px-3 text-xs font-bold"
+                                className="ed-btn ed-btn-signal min-h-[42px] flex-[1.2] px-2.5 text-xs font-bold sm:whitespace-nowrap sm:px-3"
                                 aria-label={`Check eligibility for ${university.name}`}
                               >
                                 Check Eligibility

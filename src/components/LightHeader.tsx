@@ -27,7 +27,7 @@ type HeaderMenu = {
 };
 
 const menus: HeaderMenu[] = [
-  { label: 'Study in China', href: '/study-in-china-from-bangladesh', links: chinaNavigation },
+  { label: 'Study in China', href: '/study-in-china-from-bangladesh', links: chinaNavigation, wide: true },
   { label: 'Destinations', href: '/destinations', links: destinationLinks, wide: true },
   { label: 'Universities', href: '/universities', links: [] },
   { label: 'Scholarships & costs', href: '/scholarships', links: costNavigation },
@@ -207,6 +207,7 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
                             <Link
                               href={link.href}
                               aria-current={isCurrent(pathname, link.href) ? 'page' : undefined}
+                              onClick={() => setOpenMenu(null)}
                               className="flex flex-col rounded-lg px-3 py-2.5 hover:bg-chalk-100"
                             >
                               <span className="text-[15px] font-semibold leading-6 text-ink">{link.name}</span>

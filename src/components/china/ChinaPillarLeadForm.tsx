@@ -501,7 +501,7 @@ export default function ChinaPillarLeadForm({
                 </div>
 
                 <div className="grid gap-3.5 sm:grid-cols-2">
-                  <div>
+                  <div className="min-w-0">
                     <label htmlFor={`${uid}-result`} className="block text-sm font-bold text-[#0b2b45]">
                       Latest GPA / CGPA <span aria-hidden="true" className="text-red-600">*</span>
                     </label>
@@ -520,7 +520,7 @@ export default function ChinaPillarLeadForm({
                     {errorFor('result')}
                   </div>
 
-                  <div>
+                  <div className="min-w-0">
                     <label htmlFor={`${uid}-intake`} className="block text-sm font-bold text-[#0b2b45]">
                       Target intake
                     </label>

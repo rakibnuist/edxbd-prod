@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Award,
   CheckCircle2,
-  ChevronRight,
   Clock3,
   FileCheck2,
   GraduationCap,
@@ -20,12 +19,12 @@ import {
 } from 'lucide-react';
 import PartnershipForm from '@/components/PartnershipForm';
 import PartnershipContactLink from '@/components/partnership/PartnershipContactLink';
-import PartnershipMobileBar from '@/components/partnership/PartnershipMobileBar';
+import DarkCrumbs from '@/components/page/DarkCrumbs';
 import { FaqBlock, JsonLd, Section, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
 import { formatBangladeshPhone } from '@/lib/contact-format';
 import { countries } from '@/lib/countries';
-import { breadcrumbJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
+import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { getUniversityRecords } from '@/lib/university-records';
 
@@ -302,42 +301,16 @@ export default async function PartnershipPage() {
   return (
     <>
       <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbJsonLd(trail, PATH)} />
 
       {/* Meta Ads High-Conversion Split Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#061c2e] via-petrol-800 to-[#11426a] pb-14 pt-[96px] text-white sm:pt-[112px] lg:pb-20 lg:pt-[136px]">
+      <section className="relative overflow-x-clip bg-gradient-to-br from-[#061c2e] via-petrol-800 to-[#11426a] pb-14 pt-[96px] text-white sm:pt-[112px] lg:pb-20 lg:pt-[136px]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -right-24 -top-24 size-[420px] rounded-full bg-lime/10 blur-3xl"
         />
-        <div className={`${kit.wrap} relative grid gap-10 lg:grid-cols-[1.12fr_.88fr] lg:items-center lg:gap-12`}>
-          <div>
-            <nav aria-label="Breadcrumb">
-              <ol className="flex flex-wrap items-center gap-1.5 text-[14px] font-semibold text-white/70">
-                <li>
-                  <Link href="/" className="hover:text-lime hover:underline">
-                    Home
-                  </Link>
-                </li>
-                {trail.map((item, index) => {
-                  const last = index === trail.length - 1;
-                  return (
-                    <li key={`${item.name}-${index}`} className="flex items-center gap-1.5">
-                      <ChevronRight size={14} className="text-white/40" aria-hidden="true" />
-                      {item.path && !last ? (
-                        <Link href={item.path} className="hover:text-lime hover:underline">
-                          {item.name}
-                        </Link>
-                      ) : (
-                        <span aria-current={last ? 'page' : undefined} className="text-white">
-                          {item.name}
-                        </span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ol>
-            </nav>
+        <div className={`${kit.wrap} relative grid grid-cols-1 gap-10 lg:grid-cols-[1.12fr_.88fr] lg:items-center lg:gap-12`}>
+          <div className="min-w-0">
+            <DarkCrumbs trail={trail} path={PATH} />
 
             <div className="mt-6 flex flex-wrap items-center gap-2.5">
               <span className="inline-flex items-center gap-2 rounded-full bg-lime px-3.5 py-1.5 text-[13px] font-extrabold text-petrol-800">
@@ -350,12 +323,12 @@ export default async function PartnershipPage() {
               </span>
             </div>
 
-            <h1 className="mt-5 font-display text-[40px] font-black leading-[0.95] tracking-[-0.02em] text-white sm:text-[58px] lg:text-[66px]">
+            <h1 className="mt-5 font-display text-[34px] font-black leading-[0.98] tracking-[-0.02em] text-white sm:text-[56px] lg:text-[66px]">
               Scale your agency with{' '}
               <span className="text-lime">clear China USD partner terms.</span>
             </h1>
 
-            <p className="mt-5 max-w-xl text-[17.5px] leading-[1.6] text-white/85">
+            <p className="mt-5 max-w-xl text-[17px] leading-[1.6] text-white/85 sm:text-[17.5px]">
               Process China scholarship tiers and co-placements across {destinationCount} active destinations through our
               Dhanmondi partner desk—with zero setup fee, 24–48h file audits, and timestamped portal tracking.
             </p>
@@ -389,34 +362,34 @@ export default async function PartnershipPage() {
               </PartnershipContactLink>
             </div>
 
-            <dl className="mt-7 grid grid-cols-3 gap-3 rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/15 sm:max-w-lg sm:gap-4">
-              <div>
-                <dt className="text-[11px] font-semibold uppercase tracking-wider text-white/70 sm:text-xs">
+            <dl className="mt-7 grid grid-cols-3 gap-2 rounded-2xl bg-white/[0.07] p-3.5 ring-1 ring-white/15 sm:max-w-lg sm:gap-4 sm:p-4">
+              <div className="min-w-0">
+                <dt className="text-[10px] font-semibold uppercase tracking-normal text-white/70 sm:text-xs sm:tracking-wider">
                   China Records
                 </dt>
-                <dd className="mt-1 font-display text-[22px] font-black leading-none text-lime sm:text-[26px]">
+                <dd className="mt-1 font-display text-[20px] font-black leading-none text-lime sm:text-[26px]">
                   {chinaUniCount > 0 ? chinaUniCount : '115+'}
                 </dd>
               </div>
-              <div>
-                <dt className="text-[11px] font-semibold uppercase tracking-wider text-white/70 sm:text-xs">
+              <div className="min-w-0">
+                <dt className="text-[10px] font-semibold uppercase tracking-normal text-white/70 sm:text-xs sm:tracking-wider">
                   Setup Fee
                 </dt>
-                <dd className="mt-1 font-display text-[22px] font-black leading-none text-white sm:text-[26px]">$0</dd>
+                <dd className="mt-1 font-display text-[20px] font-black leading-none text-white sm:text-[26px]">$0</dd>
               </div>
-              <div>
-                <dt className="text-[11px] font-semibold uppercase tracking-wider text-white/70 sm:text-xs">
+              <div className="min-w-0">
+                <dt className="text-[10px] font-semibold uppercase tracking-normal text-white/70 sm:text-xs sm:tracking-wider">
                   File Audit
                 </dt>
-                <dd className="mt-1 font-display text-[22px] font-black leading-none text-white sm:text-[26px]">
+                <dd className="mt-1 font-display text-[20px] font-black leading-none text-white sm:text-[26px]">
                   24–48h
                 </dd>
               </div>
             </dl>
 
-            <p className="mt-5 inline-flex items-center gap-2 text-[13.5px] text-white/70">
+            <p className="mt-5 flex flex-wrap items-center gap-2 text-[13.5px] text-white/70">
               <ShieldCheck size={16} className="shrink-0 text-lime" aria-hidden="true" />
-              Last updated November 2026 ·{' '}
+              <span>Last updated November 2026 ·</span>
               <Link href="/b2b" className="font-semibold text-white/90 underline underline-offset-4 hover:text-lime">
                 Explore B2B Desk &amp; SOP
               </Link>
@@ -424,17 +397,17 @@ export default async function PartnershipPage() {
           </div>
 
           {/* Right Above-the-Fold Offer Rate Card */}
-          <div className="rounded-3xl bg-white p-5 text-petrol-800 shadow-[0_28px_70px_rgba(0,0,0,0.32)] sm:p-7">
+          <div className="min-w-0 rounded-3xl bg-white p-4 text-petrol-800 shadow-[0_28px_70px_rgba(0,0,0,0.32)] sm:p-7">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#2c6a97]">
                   Published USD Partner Schedule
                 </p>
-                <p className="mt-0.5 font-display text-[22px] font-black leading-tight text-petrol-800">
+                <p className="mt-0.5 font-display text-[20px] font-black leading-tight text-petrol-800 sm:text-[22px]">
                   China Scholarship &amp; Service Tiers
                 </p>
               </div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-lime-pale px-3 py-1 text-xs font-bold text-lime-deep">
+              <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-lime-pale px-3 py-1 text-xs font-bold text-lime-deep">
                 <span className="size-2 rounded-full bg-[#2ead4b]" aria-hidden="true" />
                 Open Now
               </span>
@@ -451,7 +424,7 @@ export default async function PartnershipPage() {
                       : 'border-slate-200/90 bg-canvas-soft/50 hover:border-petrol-800/40 hover:bg-white'
                   }`}
                 >
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-1.5">
                       <span className="rounded-full bg-petrol-800 px-2.5 py-0.5 text-[11px] font-bold text-lime">
                         {row.type}
@@ -462,10 +435,10 @@ export default async function PartnershipPage() {
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 truncate text-[15px] font-bold text-petrol-800">{row.coverage}</p>
+                    <p className="mt-1 text-[14.5px] font-bold leading-snug text-petrol-800 sm:text-[15px]">{row.coverage}</p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <span className="block font-display text-[26px] font-black leading-none text-petrol-800">
+                    <span className="block font-display text-[24px] font-black leading-none text-petrol-800 sm:text-[26px]">
                       {row.price}
                     </span>
                     <span className="text-[11px] font-semibold text-ink-soft">per student</span>
@@ -474,7 +447,7 @@ export default async function PartnershipPage() {
               ))}
             </div>
 
-            <div className="mt-4 flex items-center gap-3.5 rounded-2xl bg-canvas-soft p-3">
+            <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl bg-canvas-soft p-3 sm:flex-nowrap">
               <div className="relative size-12 shrink-0 overflow-hidden rounded-xl">
                 <Image
                   src="/images/home/education-partners-meeting.webp"
@@ -486,8 +459,8 @@ export default async function PartnershipPage() {
                 />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[13.5px] font-bold text-petrol-800">Dhanmondi Partner Desk, Dhaka</p>
-                <p className="truncate text-[12px] text-ink-soft">Custom MOUs also open for Malaysia &amp; UK</p>
+                <p className="text-[13.5px] font-bold leading-snug text-petrol-800">Dhanmondi Partner Desk, Dhaka</p>
+                <p className="text-[12px] leading-snug text-ink-soft">Custom MOUs also open for Malaysia &amp; UK</p>
               </div>
               <a
                 href="#partnership-form"
@@ -834,8 +807,6 @@ export default async function PartnershipPage() {
           </div>
         </div>
       </section>
-
-      <PartnershipMobileBar whatsappHref={whatsapp} phoneHref={phoneHref} />
     </>
   );
 }

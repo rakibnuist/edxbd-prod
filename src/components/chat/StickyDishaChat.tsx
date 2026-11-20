@@ -154,9 +154,19 @@ export default function StickyDishaChat({
     pathname === '/china-march-2027-intake' ||
     pathname === '/study-in-china-from-bangladesh';
 
-  // Teaser bubble timer (skip on campaign landing pages so the floating bubble never overlaps form CTAs)
+  const suppressAutoTeaser =
+    isCampaignLanding ||
+    pathname === '/education-fit-assessment' ||
+    pathname === '/apply' ||
+    pathname === '/contact' ||
+    pathname === '/partnership' ||
+    pathname === '/b2b' ||
+    pathname === '/updates' ||
+    pathname === '/universities';
+
+  // Teaser bubble timer (skip on conversion forms/directories/updates so the floating bubble never obscures controls)
   useEffect(() => {
-    if (isExcluded || isCampaignLanding) return;
+    if (isExcluded || suppressAutoTeaser) return;
 
     const timer = setTimeout(() => {
       try {
@@ -167,10 +177,10 @@ export default function StickyDishaChat({
       } catch {
         // ignore
       }
-    }, 3500);
+    }, 5500);
 
     return () => clearTimeout(timer);
-  }, [isExcluded, isOpen]);
+  }, [isExcluded, suppressAutoTeaser, isOpen]);
 
   // Auto-scroll on new messages
   useEffect(() => {
@@ -504,8 +514,8 @@ export default function StickyDishaChat({
     <>
       {/* 1. MINIMALIST STICKY LAUNCHER DOCK */}
       <div className="sticky-disha-dock fixed bottom-4 right-4 z-40 flex flex-col items-end gap-2.5 transition-[bottom,opacity,transform] duration-300 lg:bottom-6 lg:right-6">
-        {/* Subtle Teaser Speech Bubble (hidden on compact phones so hero CTAs stay unobstructed) */}
-        {showTeaser && !isOpen && (
+        {/* Subtle Teaser Speech Bubble (hidden on compact phones and form/directory routes so hero & form CTAs stay unobstructed) */}
+        {showTeaser && !suppressAutoTeaser && !isOpen && (
           <div
             role="status"
             className="ed-pop-in relative hidden max-w-[270px] items-start gap-2.5 rounded-2xl border border-petrol-700/10 bg-white p-3 shadow-[0_10px_28px_rgba(15,53,87,0.18)] sm:flex sm:max-w-[300px]"
@@ -546,6 +556,7 @@ export default function StickyDishaChat({
         <div className="flex items-center gap-2">
           {/* Quick Direct WhatsApp Button */}
           <button
+            data-disha-wa="1"
             onClick={() => openWhatsAppDirect()}
             className="group relative flex size-11 items-center justify-center rounded-full border border-emerald-400/35 bg-white shadow-[0_6px_20px_rgba(16,185,129,0.2)] transition hover:scale-105 hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 sm:size-12"
             title="Chat directly on WhatsApp"

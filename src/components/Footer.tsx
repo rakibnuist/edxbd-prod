@@ -254,7 +254,7 @@ export default async function Footer() {
             </Link>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.05fr_.9fr_.85fr_1.2fr] lg:gap-4">
             {/* Address */}
             <div className="flex gap-3.5 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
               <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-lime text-petrol-800">
@@ -322,11 +322,11 @@ export default async function Footer() {
             </div>
 
             {/* WhatsApp & Email */}
-            <div className="flex gap-3.5 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-lime text-petrol-800">
+            <div className="flex gap-3 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
+              <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-lime text-petrol-800 sm:size-10">
                 <MessageCircle size={18} aria-hidden="true" />
               </span>
-              <div className="min-w-0 text-sm leading-6">
+              <div className="min-w-0 flex-1 text-sm leading-6">
                 <p className="font-bold text-white">WhatsApp &amp; Email</p>
                 {whatsapp && (
                   <a
@@ -342,9 +342,10 @@ export default async function Footer() {
                 {office?.email && (
                   <a
                     href={`mailto:${office.email}`}
-                    className="mt-1 flex items-center gap-1.5 text-[13px] text-white/75 [overflow-wrap:anywhere] hover:text-white"
+                    className="mt-1 flex items-center gap-1.5 whitespace-nowrap text-[12.5px] text-white/80 hover:text-white"
                   >
-                    <Mail size={13} className="shrink-0 text-lime" aria-hidden="true" /> {office.email}
+                    <Mail size={13} className="shrink-0 text-lime" aria-hidden="true" />
+                    <span>{office.email}</span>
                   </a>
                 )}
               </div>

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, CalendarClock, GraduationCap } from 'lucide-react';
 import { deadlineBadge, fmtDay } from '@/lib/update-deadlines';
+import { formatUpdateCategoryLabel } from '@/lib/update-categories';
 
 export type UpdateCardData = {
   slug: string;
@@ -23,7 +24,8 @@ const toneClass = {
   closed: 'bg-canvas-soft text-ink-soft',
 } as const;
 
-export const updateCategory = (update: UpdateCardData) => update.category || update.categories?.[0] || 'Update';
+export const updateCategory = (update: UpdateCardData) =>
+  formatUpdateCategoryLabel(update.category || update.categories?.[0] || 'Update');
 
 function Cover({ update, sizes, priority }: { update: UpdateCardData; sizes: string; priority?: boolean }) {
   if (update.featuredImage) {

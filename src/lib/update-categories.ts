@@ -32,11 +32,38 @@ export const categoryLabelList = (value: unknown): string[] => {
   return [];
 };
 
+const UPPERCASE_CATEGORY_TOKENS = new Set(['csc', 'csca', 'mbbs', 'stem', 'emgs', 'hsk', 'ielts', 'uk', 'phd', 'b2b']);
+
+export const formatUpdateCategoryLabel = (raw?: string | null): string => {
+  const cleaned = String(raw || '').trim();
+  if (!cleaned) return 'Update';
+  const slug = cleaned.toLowerCase();
+  if (slug === 'announcements' || slug === 'announcement') return 'Announcement';
+  if (UPPERCASE_CATEGORY_TOKENS.has(slug)) return slug.toUpperCase();
+  return cleaned
+    .split(/\s+/)
+    .map((word) => {
+      const lower = word.toLowerCase();
+      if (UPPERCASE_CATEGORY_TOKENS.has(lower)) return lower.toUpperCase();
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+};
+
 export const categoriesFromUpdate = (
   update: { category?: string | null; categories?: unknown },
-): string[] => [
-  update.category,
-  ...categoryLabelList(update.categories),
-].filter((value): value is string => Boolean(value?.trim()));
+): string[] => {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of [update.category, ...categoryLabelList(update.categories)]) {
+    if (!raw?.trim()) continue;
+    const label = formatUpdateCategoryLabel(raw);
+    const key = categorySlug(label);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(label);
+  }
+  return out;
+};
 
 export const categoryHref = (label: string) => `/updates/category/${categorySlug(label)}`;

@@ -31,7 +31,7 @@ import { destinationPath } from '@/lib/site-urls';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 import { getUniversityRecords } from '@/lib/university-records';
 import type { Update } from '@/lib/types';
-import { categoriesFromUpdate, categoryHref } from '@/lib/update-categories';
+import { categoriesFromUpdate, categoryHref, formatUpdateCategoryLabel } from '@/lib/update-categories';
 import { RSS_FEED } from '@/lib/seo';
 
 export const revalidate = 3600;
@@ -284,7 +284,7 @@ export default async function Home() {
         href: `/updates/${post.slug}`,
         date: fmtGuideDate(post.publishedAt ?? post.createdAt),
         dateTime: post.publishedAt ?? post.createdAt ?? '',
-        category: post.category ?? 'Update',
+        category: formatUpdateCategoryLabel(post.category ?? 'Update'),
         image: post.featuredImage || updateImages[index % updateImages.length],
       }))
     : [
@@ -517,7 +517,7 @@ export default async function Home() {
                   Don&apos;t lose a full academic year waiting for September. Compare 20 verified Chinese universities offering Foundation → Bachelor, Direct Bachelor, Master&apos;s, and Language routes with up to 100% tuition scholarships.
                 </p>
 
-                <dl className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/10 sm:gap-4 sm:p-5">
+                <dl className="mt-6 grid grid-cols-1 gap-3.5 rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/10 sm:grid-cols-3 sm:gap-4 sm:p-5">
                   <div>
                     <dt className="text-xs font-semibold uppercase tracking-wider text-white/70">Universities</dt>
                     <dd className="mt-1 font-display text-[26px] font-black leading-none text-white sm:text-[32px]">20</dd>
@@ -888,12 +888,14 @@ export default async function Home() {
               <Link href={guideRows[0].href} aria-label={`Read update: ${guideRows[0].title}`} className="group flex flex-col rounded-3xl bg-canvas-soft p-3 transition hover:-translate-y-1">
                 <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
                   <Image src={guideRows[0].image} alt={guideRows[0].title} fill sizes="(max-width:1024px) 100vw, 640px" className="object-cover transition duration-700 group-hover:scale-[1.03]" />
-                  {guides.length > 0 && <span className="absolute left-4 top-4 rounded-full bg-lime px-3 py-1 text-[14px] font-semibold text-petrol-800">Latest</span>}
                 </div>
                 <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
-                  <span className="text-[14px] font-semibold text-ink-soft">
-                    {guideRows[0].category}
-                    {guideRows[0].date && <> · <time dateTime={guideRows[0].dateTime}>{guideRows[0].date}</time></>}
+                  <span className="flex flex-wrap items-center gap-2 text-[14px] font-semibold text-ink-soft">
+                    {guides.length > 0 && <span className="rounded-full bg-lime px-2.5 py-0.5 text-[12px] font-bold text-petrol-800">Latest</span>}
+                    <span>
+                      {guideRows[0].category}
+                      {guideRows[0].date && <> · <time dateTime={guideRows[0].dateTime}>{guideRows[0].date}</time></>}
+                    </span>
                   </span>
                   <h3 className="mt-2 font-display text-[28px] font-black leading-[1.05] text-petrol-800 sm:text-[32px]">{guideRows[0].title}</h3>
                   {guideRows[0].excerpt && <p className="mt-3 line-clamp-3 text-[16px] leading-7 text-ink-soft">{guideRows[0].excerpt}</p>}
@@ -906,9 +908,9 @@ export default async function Home() {
             <ul className="grid content-start gap-3">
               {guideRows.slice(1, 5).map(row => (
                 <li key={row.key}>
-                  <Link href={row.href} aria-label={`Read update: ${row.title}`} className="group flex gap-4 rounded-3xl bg-canvas-soft p-3 transition hover:bg-lime-pale">
-                    <span className="relative size-24 shrink-0 overflow-hidden rounded-2xl sm:size-28">
-                      <Image src={row.image} alt={row.title} fill sizes="112px" className="object-cover" />
+                  <Link href={row.href} aria-label={`Read update: ${row.title}`} className="group flex items-center gap-4 rounded-3xl bg-canvas-soft p-3 transition hover:bg-lime-pale">
+                    <span className="relative aspect-[16/10] w-28 shrink-0 overflow-hidden rounded-2xl bg-petrol-800 sm:w-36">
+                      <Image src={row.image} alt={row.title} fill sizes="144px" className="object-cover transition duration-300 group-hover:scale-[1.03]" />
                     </span>
                     <span className="flex min-w-0 flex-col justify-center py-1 pr-2">
                       <span className="text-[14px] font-semibold text-ink-soft">
