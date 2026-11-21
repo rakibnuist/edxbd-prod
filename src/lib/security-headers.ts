@@ -15,7 +15,10 @@ export const PERMISSIONS_POLICY =
 export const ADMIN_PERMISSIONS_POLICY =
   'camera=(), microphone=(), geolocation=(self), payment=(), usb=(), browsing-topics=()';
 
-export function buildContentSecurityPolicy(options: { isProduction: boolean }): string {
+export function buildContentSecurityPolicy(options: {
+  isProduction: boolean;
+  frameAncestors?: string;
+}): string {
   const scriptSrc = [
     "'self'",
     "'unsafe-inline'",
@@ -37,7 +40,7 @@ export function buildContentSecurityPolicy(options: { isProduction: boolean }): 
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self' https://www.facebook.com",
-    "frame-ancestors 'none'",
+    `frame-ancestors ${options.frameAncestors ?? "'none'"}`,
     ...(options.isProduction ? ['upgrade-insecure-requests'] : []),
   ];
 
@@ -51,6 +54,19 @@ export function buildGlobalSecurityHeaders(options: { isProduction: boolean }) {
     { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
     { key: 'Permissions-Policy', value: PERMISSIONS_POLICY },
     { key: 'Content-Security-Policy', value: buildContentSecurityPolicy(options) },
+  ];
+}
+
+export function buildEmbedSecurityHeaders(options: { isProduction: boolean }) {
+  return [
+    { key: 'X-Content-Type-Options', value: 'nosniff' },
+    { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+    { key: 'Permissions-Policy', value: PERMISSIONS_POLICY },
+    { key: 'X-Robots-Tag', value: 'noindex, follow' },
+    {
+      key: 'Content-Security-Policy',
+      value: buildContentSecurityPolicy({ ...options, frameAncestors: '*' }),
+    },
   ];
 }
 

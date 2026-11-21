@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { getPublishedStories } from '@/app/success-stories/stories';
 import ReportCitationActions from '@/components/china/ReportCitationActions';
+import EmbedCodeSnippet from '@/components/embed/EmbedCodeSnippet';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import PressBriefCopyActions from '@/components/press/PressBriefCopyActions';
 import {
@@ -511,6 +512,11 @@ export default async function PressRoomPage() {
               analyticsLabel="press_china_report_json"
             />
           </div>
+        </div>
+
+        {/* Free Embeddable Study Abroad Cost Calculator Widget */}
+        <div id="embed-widget" className="mt-8 scroll-mt-24">
+          <EmbedCodeSnippet />
         </div>
       </Section>
 

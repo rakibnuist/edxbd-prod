@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
 import CostCompare from '@/components/finders/CostCompare';
-import { CtaBand, FaqBlock, JsonLd, PageHero } from '@/components/page/PageKit';
+import EmbedCodeSnippet from '@/components/embed/EmbedCodeSnippet';
+import { CtaBand, FaqBlock, JsonLd, PageHero, Section } from '@/components/page/PageKit';
 import { toFeeRows, toProgramRows, type FeeRow } from '@/lib/catalog-views';
 import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { SITE_URL, ogImage, pageMetadata } from '@/lib/seo';
@@ -78,6 +79,14 @@ export default async function CompareCostsPage() {
       <Suspense fallback={<div className="bg-canvas-soft py-20 text-center text-[15px] text-ink-soft">Loading cost comparison…</div>}>
         <CostCompare programs={programs} fees={fees} />
       </Suspense>
+      <Section
+        id="embed-widget"
+        tone="sage"
+        title="Embed this calculator on your school, club, or blog."
+        intro="Free for Dhaka schools, university career portals, YouTube educators, and newsrooms under CC BY 4.0."
+      >
+        <EmbedCodeSnippet compact />
+      </Section>
       <FaqBlock items={faqs} title="About this comparison" tone="white" />
       <CtaBand title="Want the full cost in writing?" text="Send us the programs you are comparing. A counsellor confirms the current fees with each university and gives you a written breakdown before you pay anything." />
     </>

@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
-import { buildAdminSecurityHeaders, buildGlobalSecurityHeaders, IMAGE_REMOTE_PATTERNS } from "./src/lib/security-headers";
+import {
+  buildAdminSecurityHeaders,
+  buildEmbedSecurityHeaders,
+  buildGlobalSecurityHeaders,
+  IMAGE_REMOTE_PATTERNS,
+} from "./src/lib/security-headers";
 
 const nextConfig: NextConfig = {
   // Keep the live development compiler isolated from `next build`. Without
@@ -43,8 +48,14 @@ const nextConfig: NextConfig = {
   async headers() {
     const securityHeaders = [
       {
-        source: '/(.*)',
+        source: '/((?!embed(?:/|$)).*)',
         headers: buildGlobalSecurityHeaders({
+          isProduction: process.env.NODE_ENV === 'production',
+        }),
+      },
+      {
+        source: '/embed/:path*',
+        headers: buildEmbedSecurityHeaders({
           isProduction: process.env.NODE_ENV === 'production',
         }),
       },

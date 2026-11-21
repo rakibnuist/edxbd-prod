@@ -14,8 +14,8 @@ export { CONSENT_STORAGE_KEY };
 export const CONSENT_CHANGE_EVENT = 'eduexpress:consent-change';
 const OPEN_SETTINGS_EVENT = 'eduexpress:open-cookie-settings';
 
-// Internal tools set no marketing cookies; the banner only gets in the way there.
-const HIDDEN_ROUTE = /^\/(admin|dashboard|login)(\/|$)/;
+// Internal tools and embeddable widgets set no marketing cookies; the banner only gets in the way there.
+const HIDDEN_ROUTE = /^\/(admin|dashboard|login|embed)(\/|$)/;
 
 /** Footer link that reopens the banner so a visitor can change an earlier choice. */
 export function CookieSettingsButton({ className = '' }: { className?: string }) {
