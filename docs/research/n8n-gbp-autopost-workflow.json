@@ -8,16 +8,16 @@
             {
               "field": "hours",
               "hoursInterval": 24,
-              "triggerAtHour": 9
+              "triggerAtHour": 11
             }
           ]
         }
       },
       "id": "trigger-daily-check",
-      "name": "Daily Schedule Check (09:00 UTC / 15:00 BST)",
+      "name": "Daily Schedule Check (11:00 AM Asia/Dhaka)",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [200, 320]
+      "position": [180, 320]
     },
     {
       "parameters": {
@@ -38,7 +38,7 @@
       "name": "Fetch Next Due Post (GBP + LinkedIn)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [440, 320]
+      "position": [420, 320]
     },
     {
       "parameters": {
@@ -68,24 +68,39 @@
       "name": "Is 7/15-Day Post Due?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [680, 320]
+      "position": [660, 320]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://mybusinessaccountmanagement.googleapis.com/v1/accounts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "options": {}
+      },
+      "id": "discover-gbp-account",
+      "name": "Discover GBP Account ID",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 320],
+      "continueOnFail": true
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://mybusiness.googleapis.com/v4/accounts/REPLACE_WITH_ACCOUNT_ID/locations/16688138993497254676/localPosts",
+        "url": "={{ 'https://mybusiness.googleapis.com/v4/' + ($json.accounts?.[0]?.name || 'accounts/REPLACE_WITH_ACCOUNT_ID') + '/locations/16688138993497254676/localPosts' }}",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "googleOAuth2Api",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify($json.googleLocalPostPayload) }}",
+        "jsonBody": "={{ JSON.stringify($('Fetch Next Due Post (GBP + LinkedIn)').item.json.googleLocalPostPayload) }}",
         "options": {}
       },
       "id": "publish-gbp",
       "name": "Publish to Google Business Profile",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [960, 200],
+      "position": [1140, 320],
       "continueOnFail": true
     },
     {
@@ -110,14 +125,30 @@
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={{ JSON.stringify($('Fetch Next Due Post (GBP + LinkedIn)').item.json.linkedinPostPayload) }}",
-        "options": {}
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
       },
       "id": "publish-linkedin",
       "name": "Publish to LinkedIn Company Page (Org 30919158)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [960, 440],
+      "position": [1380, 320],
       "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const due = $('Fetch Next Due Post (GBP + LinkedIn)').first().json;\nconst gbpOut = $('Publish to Google Business Profile').first()?.json || {};\nconst liOut = $('Publish to LinkedIn Company Page (Org 30919158)').first()?.json || {};\nconst gbpId = typeof gbpOut.name === 'string' && gbpOut.name.includes('localPosts') ? gbpOut.name : null;\nconst liHeaders = liOut.headers || {};\nconst linkedinId = liHeaders['x-restli-id'] || liHeaders['X-RestLi-Id'] || liOut.body?.id || liOut.id || null;\nconst okGbp = Boolean(gbpId);\nconst okLi = Boolean(linkedinId);\nif (!okGbp && !okLi) {\n  return [];\n}\nconst channel = okGbp && okLi ? 'both' : okGbp ? 'gbp' : 'linkedin';\nreturn [{ json: { postId: due.nextPost.id, channel, externalPostId: gbpId, linkedinExternalPostId: linkedinId } }];"
+      },
+      "id": "summarize-channels",
+      "name": "Check Channel Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1620, 320]
     },
     {
       "parameters": {
@@ -134,18 +165,18 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ action: 'ack', channel: 'both', postId: $('Fetch Next Due Post (GBP + LinkedIn)').item.json.nextPost.id, externalPostId: $('Publish to Google Business Profile').item.json.name || null, linkedinExternalPostId: $('Publish to LinkedIn Company Page (Org 30919158)').item.json.id || null, source: 'n8n_dual_workflow' }) }}",
+        "jsonBody": "={{ JSON.stringify({ action: 'ack', channel: $json.channel, postId: $json.postId, externalPostId: $json.externalPostId, linkedinExternalPostId: $json.linkedinExternalPostId, source: 'n8n_dual_workflow' }) }}",
         "options": {}
       },
       "id": "ack-eduexpress",
       "name": "Acknowledge GBP & LinkedIn Rotation in Admin",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1260, 320]
+      "position": [1860, 320]
     }
   ],
   "connections": {
-    "Daily Schedule Check (09:00 UTC / 15:00 BST)": {
+    "Daily Schedule Check (11:00 AM Asia/Dhaka)": {
       "main": [
         [
           {
@@ -171,12 +202,18 @@
       "main": [
         [
           {
-            "node": "Publish to Google Business Profile",
+            "node": "Discover GBP Account ID",
             "type": "main",
             "index": 0
-          },
+          }
+        ]
+      ]
+    },
+    "Discover GBP Account ID": {
+      "main": [
+        [
           {
-            "node": "Publish to LinkedIn Company Page (Org 30919158)",
+            "node": "Publish to Google Business Profile",
             "type": "main",
             "index": 0
           }
@@ -187,7 +224,7 @@
       "main": [
         [
           {
-            "node": "Acknowledge GBP & LinkedIn Rotation in Admin",
+            "node": "Publish to LinkedIn Company Page (Org 30919158)",
             "type": "main",
             "index": 0
           }
@@ -195,6 +232,17 @@
       ]
     },
     "Publish to LinkedIn Company Page (Org 30919158)": {
+      "main": [
+        [
+          {
+            "node": "Check Channel Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Channel Results": {
       "main": [
         [
           {
