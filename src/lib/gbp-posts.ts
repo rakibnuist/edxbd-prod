@@ -6,6 +6,16 @@ export type GbpCadenceDays = (typeof GBP_CADENCE_OPTIONS)[number];
 export const GBP_PUBLISH_MODES = ['google_api', 'webhook'] as const;
 export type GbpPublishMode = (typeof GBP_PUBLISH_MODES)[number];
 
+export const LINKEDIN_PUBLISH_MODES = ['linkedin_api', 'webhook'] as const;
+export type LinkedInPublishMode = (typeof LINKEDIN_PUBLISH_MODES)[number];
+
+export const POST_TARGET_CHANNELS = ['both', 'gbp', 'linkedin'] as const;
+export type PostTargetChannels = (typeof POST_TARGET_CHANNELS)[number];
+
+export const DEFAULT_LINKEDIN_ORGANIZATION_ID = '30919158';
+export const DEFAULT_LINKEDIN_API_VERSION = '202610';
+export const LINKEDIN_COMPANY_URL = 'https://www.linkedin.com/company/eduexpressint';
+
 export const GBP_TOPIC_TYPES = ['STANDARD', 'OFFER', 'EVENT'] as const;
 export type GbpTopicType = (typeof GBP_TOPIC_TYPES)[number];
 
@@ -34,12 +44,24 @@ export const GBP_SETTING_KEYS = {
   lastStatus: 'gbp_last_status',
   lastError: 'gbp_last_error',
   lastPostId: 'gbp_last_post_id',
+  // LinkedIn Company Page weekly auto-poster (aligned with GBP cadence & queue)
+  linkedinEnabled: 'linkedin_autopost_enabled',
+  linkedinMode: 'linkedin_autopost_mode',
+  linkedinOrganizationId: 'linkedin_organization_id',
+  linkedinAccessToken: 'linkedin_access_token',
+  linkedinApiVersion: 'linkedin_api_version',
+  linkedinWebhookUrl: 'linkedin_webhook_url',
+  linkedinWebhookSecret: 'linkedin_webhook_secret',
+  linkedinLastRunAt: 'linkedin_last_run_at',
+  linkedinLastStatus: 'linkedin_last_status',
+  linkedinLastError: 'linkedin_last_error',
 } as const;
 
 export const SITE_ORIGIN = 'https://eduexpressint.com';
 
 const CADENCE_GRACE_MS = 2 * 60 * 60 * 1000; // 2h grace so a daily cron fires cleanly on day 7 / day 15 without drift
 const MAX_SUMMARY_CHARS = 1500;
+const MAX_LINKEDIN_COPY_CHARS = 2900;
 const MAX_OFFER_TITLE_CHARS = 58;
 const MAX_STANDARD_TITLE_CHARS = 120;
 
@@ -79,6 +101,8 @@ export interface GbpPostInput {
   endDate?: string | Date | null;
   language?: string;
   category?: string;
+  targetChannels?: string;
+  linkedinCopy?: string | null;
   sortOrder?: number;
   status?: string;
   isRecurring?: boolean;
@@ -99,6 +123,8 @@ export interface ValidatedGbpPostInput {
   endDate: Date | null;
   language: GbpLanguage;
   category: string;
+  targetChannels: PostTargetChannels;
+  linkedinCopy: string | null;
   sortOrder: number;
   status: GbpPostStatus;
   isRecurring: boolean;
@@ -120,11 +146,16 @@ export interface GbpPostCandidate {
   endDate: Date | null;
   language: string;
   category: string;
+  targetChannels?: string;
+  linkedinCopy?: string | null;
   sortOrder: number;
   status: string;
   isRecurring: boolean;
   publishedCount: number;
   lastPublishedAt: Date | null;
+  lastLinkedinPublishedAt?: Date | null;
+  lastLinkedinExternalId?: string | null;
+  lastLinkedinError?: string | null;
   createdAt: Date;
 }
 
@@ -143,6 +174,18 @@ export function normalizeCadenceDays(value: unknown): GbpCadenceDays {
 
 export function normalizePublishMode(value: unknown): GbpPublishMode {
   return value === 'webhook' ? 'webhook' : 'google_api';
+}
+
+export function normalizeLinkedInPublishMode(value: unknown): LinkedInPublishMode {
+  return value === 'webhook' ? 'webhook' : 'linkedin_api';
+}
+
+export function normalizeTargetChannels(value: unknown): PostTargetChannels {
+  const normalized = typeof value === 'string' ? value.trim().toLowerCase() : '';
+  if (normalized === 'gbp' || normalized === 'linkedin' || normalized === 'both') {
+    return normalized;
+  }
+  return 'both';
 }
 
 export function normalizeSlug(raw: string): string {
@@ -261,6 +304,19 @@ export function validateGbpPostInput(
       ? raw.category.trim().toLowerCase().slice(0, 40)
       : 'general';
 
+  const targetChannels = normalizeTargetChannels(raw.targetChannels);
+  let linkedinCopy: string | null = null;
+  if (typeof raw.linkedinCopy === 'string' && raw.linkedinCopy.trim()) {
+    const trimmedLi = raw.linkedinCopy.trim();
+    if (trimmedLi.length > MAX_LINKEDIN_COPY_CHARS) {
+      return { error: `Custom LinkedIn copy cannot exceed ${MAX_LINKEDIN_COPY_CHARS} characters.` };
+    }
+    if (containsBannedGuarantee(trimmedLi)) {
+      return { error: 'LinkedIn copy violates EduExpress honesty standards (no 100% visa or admission guarantees).' };
+    }
+    linkedinCopy = trimmedLi;
+  }
+
   const sortOrder =
     typeof raw.sortOrder === 'number' && Number.isFinite(raw.sortOrder)
       ? Math.min(9999, Math.max(0, Math.round(raw.sortOrder)))
@@ -282,6 +338,8 @@ export function validateGbpPostInput(
       endDate: endParsed.date,
       language,
       category,
+      targetChannels,
+      linkedinCopy,
       sortOrder,
       status,
       isRecurring: typeof raw.isRecurring === 'boolean' ? raw.isRecurring : true,
@@ -433,19 +491,123 @@ export function buildGoogleLocalPostPayload(
   return payload;
 }
 
+const LINKEDIN_CATEGORY_HASHTAGS: Record<string, string[]> = {
+  china: ['#StudyInChina', '#CSCScholarship', '#ChinaUniversities', '#StudyAbroadBangladesh', '#EduExpressInternational'],
+  malaysia: ['#StudyInMalaysia', '#EMGS', '#StudyAbroadBangladesh', '#HigherEducation', '#EduExpressInternational'],
+  'bangladesh-market': ['#StudyAbroadBangladesh', '#HigherEducation', '#BangladeshStudents', '#OpenData', '#EduExpressInternational'],
+  'o-level': ['#OLevelBangladesh', '#StudyAbroadAfterOLevel', '#StudyInMalaysia', '#StudyInChina', '#EduExpressInternational'],
+  offer: ['#StudyAbroadBangladesh', '#Dhaka', '#HigherEducation', '#EducationCounseling', '#EduExpressInternational'],
+  research: ['#OpenData', '#HigherEducation', '#StudyAbroadBangladesh', '#Zenodo', '#EduExpressInternational'],
+};
+
+export function buildLinkedInCtaUrl(rawUrl: string, category: string = 'general'): string {
+  const safe = toSafeExternalUrl(rawUrl, 500);
+  if (!safe) return `${SITE_ORIGIN}/education-consultant-dhaka?utm_source=linkedin&utm_medium=organic_social&utm_campaign=linkedin_weekly`;
+  try {
+    const parsed = new URL(safe);
+    const campaignSlug = normalizeSlug(category || 'general').replace(/-/g, '_') || 'general';
+    parsed.searchParams.set('utm_source', 'linkedin');
+    parsed.searchParams.set('utm_medium', 'organic_social');
+    parsed.searchParams.set('utm_campaign', `linkedin_post_${campaignSlug}`);
+    return parsed.toString();
+  } catch {
+    return safe;
+  }
+}
+
+export function buildLinkedInCommentary(
+  post: Pick<GbpPostCandidate, 'title' | 'summary' | 'ctaUrl' | 'category' | 'language' | 'linkedinCopy'>,
+): string {
+  if (post.linkedinCopy && post.linkedinCopy.trim()) {
+    return post.linkedinCopy.trim().slice(0, MAX_LINKEDIN_COPY_CHARS);
+  }
+
+  const liUrl = buildLinkedInCtaUrl(post.ctaUrl, post.category);
+  const hashtags = (
+    LINKEDIN_CATEGORY_HASHTAGS[post.category?.toLowerCase() || ''] || [
+      '#StudyAbroadBangladesh',
+      '#HigherEducation',
+      '#Dhaka',
+      '#EduExpressInternational',
+    ]
+  ).join(' ');
+
+  const parts: string[] = [];
+  if (post.title?.trim()) {
+    parts.push(post.title.trim());
+  }
+  parts.push(post.summary.trim());
+  const ctaLine =
+    post.language === 'bn'
+      ? `বিস্তারিত ও ভেরিফায়েড তথ্য দেখুন: ${liUrl}`
+      : `Read the verified guide & written cost breakdown: ${liUrl}`;
+  parts.push(ctaLine);
+  parts.push(hashtags);
+
+  return parts.join('\n\n').slice(0, MAX_LINKEDIN_COPY_CHARS);
+}
+
+export function buildLinkedInRestPostPayload(
+  post: Pick<GbpPostCandidate, 'title' | 'summary' | 'ctaUrl' | 'category' | 'language' | 'linkedinCopy'>,
+  options?: { organizationId?: string },
+): Record<string, unknown> {
+  const orgId = (options?.organizationId || DEFAULT_LINKEDIN_ORGANIZATION_ID)
+    .trim()
+    .replace(/^urn:li:organization:/i, '') || DEFAULT_LINKEDIN_ORGANIZATION_ID;
+  const liUrl = buildLinkedInCtaUrl(post.ctaUrl, post.category);
+  const commentary = buildLinkedInCommentary(post);
+
+  return {
+    author: `urn:li:organization:${orgId}`,
+    commentary,
+    visibility: 'PUBLIC',
+    distribution: {
+      feedDistribution: 'MAIN_FEED',
+      targetEntities: [],
+      thirdPartyDistributionChannels: [],
+    },
+    content: {
+      article: {
+        source: liUrl,
+        title: (post.title || 'EduExpress International — Verified Study Abroad Guide').slice(0, 200),
+        description: post.summary.slice(0, 250),
+      },
+    },
+    lifecycleState: 'PUBLISHED',
+    isReshareDisabledByAuthor: false,
+  };
+}
+
 export function buildGbpWebhookPayload(
   post: GbpPostCandidate,
-  options: { cadenceDays: GbpCadenceDays; accountId: string; locationId: string; now?: Date },
+  options: {
+    cadenceDays: GbpCadenceDays;
+    accountId: string;
+    locationId: string;
+    linkedinOrganizationId?: string;
+    now?: Date;
+  },
 ): Record<string, unknown> {
   const now = options.now ?? new Date();
+  const orgId = (options.linkedinOrganizationId || DEFAULT_LINKEDIN_ORGANIZATION_ID)
+    .trim()
+    .replace(/^urn:li:organization:/i, '') || DEFAULT_LINKEDIN_ORGANIZATION_ID;
+
   return {
     event: 'gbp.post.due',
     source: 'eduexpress-autopost',
     triggeredAt: now.toISOString(),
     cadenceDays: options.cadenceDays,
+    targetChannels: normalizeTargetChannels(post.targetChannels),
     gbp: {
       accountId: options.accountId || null,
       locationId: options.locationId || null,
+    },
+    linkedin: {
+      organizationId: orgId,
+      organizationUrn: `urn:li:organization:${orgId}`,
+      pageUrl: LINKEDIN_COMPANY_URL,
+      ctaUrl: buildLinkedInCtaUrl(post.ctaUrl, post.category),
     },
     post: {
       id: post.id,
@@ -458,7 +620,10 @@ export function buildGbpWebhookPayload(
       mediaUrl: resolveAbsoluteMediaUrl(post.mediaUrl),
       language: post.language,
       category: post.category,
+      targetChannels: normalizeTargetChannels(post.targetChannels),
     },
     googleLocalPostPayload: buildGoogleLocalPostPayload(post, now),
+    linkedinCommentary: buildLinkedInCommentary(post),
+    linkedinPostPayload: buildLinkedInRestPostPayload(post, { organizationId: orgId }),
   };
 }

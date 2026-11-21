@@ -48,7 +48,7 @@ const NAV: Array<{
   { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote, group: 'website_cms' },
   { name: 'Evidence Library', href: '/admin/evidence', icon: Images, group: 'website_cms' },
   { name: 'Company Records', href: '/admin/trust', icon: ShieldCheck, group: 'website_cms' },
-  { name: 'GBP Auto-Posts', href: '/admin/gbp-posts', icon: CalendarClock, group: 'website_cms' },
+  { name: 'GBP & LinkedIn Posts', href: '/admin/gbp-posts', icon: CalendarClock, group: 'website_cms' },
 ];
 
 const GROUP_LABELS: Record<NavGroup, string> = {

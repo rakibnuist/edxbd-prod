@@ -1,5 +1,5 @@
 {
-  "name": "EduExpress GBP Auto-Poster (Weekly / 15-Day)",
+  "name": "EduExpress GBP & LinkedIn Auto-Poster (Weekly / 15-Day)",
   "nodes": [
     {
       "parameters": {
@@ -17,7 +17,7 @@
       "name": "Daily Schedule Check (09:00 UTC / 15:00 BST)",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [220, 300]
+      "position": [200, 320]
     },
     {
       "parameters": {
@@ -35,10 +35,10 @@
         "options": {}
       },
       "id": "fetch-due-post",
-      "name": "Fetch Next Due Post",
+      "name": "Fetch Next Due Post (GBP + LinkedIn)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [460, 300]
+      "position": [440, 320]
     },
     {
       "parameters": {
@@ -51,7 +51,7 @@
           "conditions": [
             {
               "id": "cond-enabled-due",
-              "leftValue": "={{$json.enabled === true && $json.isDue === true && Boolean($json.nextPost)}}",
+              "leftValue": "={{($json.enabled === true || $json.linkedinEnabled === true) && $json.isDue === true && Boolean($json.nextPost)}}",
               "rightValue": true,
               "operator": {
                 "type": "boolean",
@@ -68,7 +68,7 @@
       "name": "Is 7/15-Day Post Due?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [700, 300]
+      "position": [680, 320]
     },
     {
       "parameters": {
@@ -85,7 +85,39 @@
       "name": "Publish to Google Business Profile",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [960, 220]
+      "position": [960, 200],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.linkedin.com/rest/posts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "linkedInOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Restli-Protocol-Version",
+              "value": "2.0.0"
+            },
+            {
+              "name": "Linkedin-Version",
+              "value": "202610"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Fetch Next Due Post (GBP + LinkedIn)').item.json.linkedinPostPayload) }}",
+        "options": {}
+      },
+      "id": "publish-linkedin",
+      "name": "Publish to LinkedIn Company Page (Org 30919158)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [960, 440],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -102,14 +134,14 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ action: 'ack', postId: $('Fetch Next Due Post').item.json.nextPost.id, externalPostId: $json.name || null, source: 'n8n_workflow' }) }}",
+        "jsonBody": "={{ JSON.stringify({ action: 'ack', channel: 'both', postId: $('Fetch Next Due Post (GBP + LinkedIn)').item.json.nextPost.id, externalPostId: $('Publish to Google Business Profile').item.json.name || null, linkedinExternalPostId: $('Publish to LinkedIn Company Page (Org 30919158)').item.json.id || null, source: 'n8n_dual_workflow' }) }}",
         "options": {}
       },
       "id": "ack-eduexpress",
-      "name": "Acknowledge Rotation in EduExpress",
+      "name": "Acknowledge GBP & LinkedIn Rotation in Admin",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1220, 220]
+      "position": [1260, 320]
     }
   ],
   "connections": {
@@ -117,14 +149,14 @@
       "main": [
         [
           {
-            "node": "Fetch Next Due Post",
+            "node": "Fetch Next Due Post (GBP + LinkedIn)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Fetch Next Due Post": {
+    "Fetch Next Due Post (GBP + LinkedIn)": {
       "main": [
         [
           {
@@ -142,6 +174,11 @@
             "node": "Publish to Google Business Profile",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Publish to LinkedIn Company Page (Org 30919158)",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -150,7 +187,18 @@
       "main": [
         [
           {
-            "node": "Acknowledge Rotation in EduExpress",
+            "node": "Acknowledge GBP & LinkedIn Rotation in Admin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish to LinkedIn Company Page (Org 30919158)": {
+      "main": [
+        [
+          {
+            "node": "Acknowledge GBP & LinkedIn Rotation in Admin",
             "type": "main",
             "index": 0
           }

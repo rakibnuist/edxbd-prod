@@ -8,9 +8,11 @@
  *   --force    Publish next queued post immediately (bypass 7/15-day timer)
  *   --dry-run  Return next due payload without publishing
  */
-const args = new Set(process.argv.slice(2));
-const force = args.has('--force');
-const dryRun = args.has('--dry-run');
+const args = process.argv.slice(2);
+const argSet = new Set(args);
+const force = argSet.has('--force');
+const dryRun = argSet.has('--dry-run');
+const channelArg = args.find((a) => a.startsWith('--channel='))?.split('=')[1] || 'both';
 
 const baseUrl = (process.env.GBP_CRON_BASE_URL || 'http://127.0.0.1:3000').replace(/\/+$/, '');
 const secret = (
@@ -34,6 +36,7 @@ const response = await fetch(`${baseUrl}/api/cron/gbp-posts`, {
   body: JSON.stringify({
     force,
     dryRun,
+    channel: channelArg,
     source: 'vps_cron',
   }),
   signal: AbortSignal.timeout(25_000),
@@ -61,6 +64,8 @@ console.log(
     transport: data.transport || null,
     postSlug: data.post?.slug || null,
     externalPostId: data.externalPostId || null,
+    linkedinExternalPostId: data.linkedinExternalPostId || null,
+    channels: data.channels || null,
     cadenceDays: data.schedule?.cadenceDays || null,
     nextDueAt: data.schedule?.nextDueAt || null,
     error: data.error || null,

@@ -1,5 +1,6 @@
 import { timingSafeEqual } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
+import { normalizeTargetChannels } from '@/lib/gbp-posts';
 import {
   acknowledgeExternalGbpPublish,
   getGbpAutomationConfig,
@@ -82,13 +83,19 @@ export async function GET(request: NextRequest) {
       {
         ok: true,
         enabled: config.enabled,
+        linkedinEnabled: config.linkedinEnabled,
         mode: config.mode,
+        linkedinMode: config.linkedinMode,
         cadenceDays: config.cadenceDays,
         isReadyToPublish: config.isReadyToPublish,
-        isDue: config.enabled && config.schedule.isDue,
+        linkedinReadyToPublish: config.linkedinReadyToPublish,
+        anyChannelReady: config.anyChannelReady,
+        isDue: (config.enabled || config.linkedinEnabled) && config.schedule.isDue,
         schedule: config.schedule,
         nextPost: preview.post || null,
         googleLocalPostPayload: preview.payload || null,
+        linkedinPostPayload: preview.linkedinPayload || null,
+        linkedinCommentary: preview.linkedinCommentary || null,
         webhookPayload: preview.webhookPayload || null,
       },
       { headers: JSON_HEADERS },
@@ -119,7 +126,10 @@ export async function POST(request: NextRequest) {
     if (body.action === 'ack' && typeof body.postId === 'string' && body.postId.trim()) {
       const ackResult = await acknowledgeExternalGbpPublish({
         postId: body.postId.trim(),
+        channel: typeof body.channel === 'string' ? normalizeTargetChannels(body.channel) : 'both',
         externalPostId: typeof body.externalPostId === 'string' ? body.externalPostId.trim() : null,
+        linkedinExternalPostId:
+          typeof body.linkedinExternalPostId === 'string' ? body.linkedinExternalPostId.trim() : null,
         triggerSource: typeof body.source === 'string' ? body.source.trim().slice(0, 40) : 'n8n_workflow',
       });
       return NextResponse.json({ ok: ackResult.executed, ...ackResult }, { headers: JSON_HEADERS });
@@ -129,6 +139,7 @@ export async function POST(request: NextRequest) {
       force: body.force === true,
       dryRun: body.dryRun === true,
       postId: typeof body.postId === 'string' ? body.postId : undefined,
+      channel: typeof body.channel === 'string' ? normalizeTargetChannels(body.channel) : 'both',
       triggerSource: typeof body.source === 'string' ? body.source.trim().slice(0, 40) : 'vps_cron',
     });
 

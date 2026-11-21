@@ -7,6 +7,9 @@ register(new URL('../../scripts/lib/typescript-source-resolver.mjs', import.meta
 const {
   buildGbpWebhookPayload,
   buildGoogleLocalPostPayload,
+  buildLinkedInCommentary,
+  buildLinkedInCtaUrl,
+  buildLinkedInRestPostPayload,
   computeGbpScheduleState,
   selectNextGbpPost,
   validateGbpPostInput,
@@ -161,10 +164,62 @@ test('buildGoogleLocalPostPayload and buildGbpWebhookPayload produce valid GBP v
 
   const webhook = buildGbpWebhookPayload(candidate, {
     cadenceDays: 15,
-    accountId: '16688138993497254676',
-    locationId: '123456789',
+    accountId: '101234567890123456789',
+    locationId: '16688138993497254676',
+    linkedinOrganizationId: '30919158',
     now,
   });
   assert.equal(webhook.cadenceDays, 15);
   assert.equal(webhook.post.slug, 'free-assessment-offer');
+  assert.equal(webhook.linkedin.organizationUrn, 'urn:li:organization:30919158');
+  assert.equal(webhook.linkedinPostPayload.author, 'urn:li:organization:30919158');
+});
+
+test('LinkedIn payload builders rewrite UTM params, enforce organization URN, and reject guarantee claims', () => {
+  const liUrl = buildLinkedInCtaUrl(
+    'https://eduexpressint.com/study-in-china-from-bangladesh?utm_source=google&utm_medium=organic&utm_campaign=gbp_post',
+    'china',
+  );
+  assert.ok(liUrl.includes('utm_source=linkedin'));
+  assert.ok(liUrl.includes('utm_medium=organic_social'));
+  assert.ok(liUrl.includes('utm_campaign=linkedin_post_china'));
+
+  const commentary = buildLinkedInCommentary({
+    title: 'China March 2027 Intake',
+    summary: 'Explore 150 verified Chinese universities with separated CNY tuition and living budgets.',
+    ctaUrl: 'https://eduexpressint.com/china-march-2027-intake',
+    category: 'china',
+    language: 'en',
+    linkedinCopy: null,
+  });
+  assert.ok(commentary.includes('China March 2027 Intake'));
+  assert.ok(commentary.includes('#StudyInChina'));
+  assert.ok(commentary.includes('utm_source=linkedin'));
+
+  const restPayload = buildLinkedInRestPostPayload(
+    {
+      title: 'China March 2027 Intake',
+      summary: 'Explore 150 verified Chinese universities with separated CNY tuition and living budgets.',
+      ctaUrl: 'https://eduexpressint.com/china-march-2027-intake',
+      category: 'china',
+      language: 'en',
+      linkedinCopy: null,
+    },
+    { organizationId: '30919158' },
+  );
+  assert.equal(restPayload.author, 'urn:li:organization:30919158');
+  assert.equal(restPayload.visibility, 'PUBLIC');
+  assert.equal(restPayload.lifecycleState, 'PUBLISHED');
+  assert.ok(restPayload.content.article.source.includes('utm_source=linkedin'));
+
+  const badLinkedIn = validateGbpPostInput({
+    slug: 'bad-li-copy',
+    topicType: 'STANDARD',
+    summary: 'Valid summary for GBP with transparent verification rules for Bangladeshi students.',
+    ctaUrl: 'https://eduexpressint.com/china',
+    targetChannels: 'both',
+    linkedinCopy: 'Apply now for 100% visa guarantee to China!',
+  });
+  assert.ok(badLinkedIn.error);
+  assert.match(badLinkedIn.error, /honesty standards/i);
 });

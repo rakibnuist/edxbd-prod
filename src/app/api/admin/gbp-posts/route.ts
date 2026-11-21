@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
-import { validateGbpPostInput } from '@/lib/gbp-posts';
+import { normalizeTargetChannels, validateGbpPostInput } from '@/lib/gbp-posts';
 import {
+  acknowledgeExternalGbpPublish,
   getGbpAutomationConfig,
   runDueGbpAutoPost,
   saveGbpAutomationConfig,
@@ -67,7 +68,24 @@ export async function POST(request: NextRequest) {
         force: true,
         dryRun: Boolean(body.dryRun),
         postId: typeof body.postId === 'string' ? body.postId : undefined,
+        channel: typeof body.channel === 'string' ? normalizeTargetChannels(body.channel) : 'both',
         triggerSource: decoded.email || 'admin_manual',
+      });
+      const config = await getGbpAutomationConfig();
+      const posts = await prisma.gbpScheduledPost.findMany({
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+      });
+      return NextResponse.json({ result, config, posts }, { headers: JSON_HEADERS });
+    }
+
+    if (body.action === 'ack_manual' && typeof body.postId === 'string' && body.postId.trim()) {
+      const result = await acknowledgeExternalGbpPublish({
+        postId: body.postId.trim(),
+        channel: typeof body.channel === 'string' ? normalizeTargetChannels(body.channel) : 'both',
+        externalPostId: typeof body.externalPostId === 'string' ? body.externalPostId.trim() : null,
+        linkedinExternalPostId:
+          typeof body.linkedinExternalPostId === 'string' ? body.linkedinExternalPostId.trim() : null,
+        triggerSource: decoded.email || 'admin_manual_ack',
       });
       const config = await getGbpAutomationConfig();
       const posts = await prisma.gbpScheduledPost.findMany({
@@ -91,6 +109,8 @@ export async function POST(request: NextRequest) {
       endDate: typeof body.endDate === 'string' ? body.endDate : null,
       language: typeof body.language === 'string' ? body.language : undefined,
       category: typeof body.category === 'string' ? body.category : undefined,
+      targetChannels: typeof body.targetChannels === 'string' ? body.targetChannels : 'both',
+      linkedinCopy: typeof body.linkedinCopy === 'string' ? body.linkedinCopy : null,
       sortOrder: typeof body.sortOrder === 'number' ? body.sortOrder : Number(body.sortOrder ?? 100),
       status: typeof body.status === 'string' ? body.status : 'queued',
       isRecurring: typeof body.isRecurring === 'boolean' ? body.isRecurring : true,
@@ -155,6 +175,15 @@ export async function PATCH(request: NextRequest) {
         webhookSecret: typeof cfg.webhookSecret === 'string' ? cfg.webhookSecret : undefined,
         telegramNotify: typeof cfg.telegramNotify === 'boolean' ? cfg.telegramNotify : undefined,
         clearSecrets: cfg.clearSecrets === true,
+        linkedinEnabled: typeof cfg.linkedinEnabled === 'boolean' ? cfg.linkedinEnabled : undefined,
+        linkedinMode: typeof cfg.linkedinMode === 'string' ? cfg.linkedinMode : undefined,
+        linkedinOrganizationId:
+          typeof cfg.linkedinOrganizationId === 'string' ? cfg.linkedinOrganizationId : undefined,
+        linkedinApiVersion: typeof cfg.linkedinApiVersion === 'string' ? cfg.linkedinApiVersion : undefined,
+        linkedinAccessToken: typeof cfg.linkedinAccessToken === 'string' ? cfg.linkedinAccessToken : undefined,
+        linkedinWebhookUrl: typeof cfg.linkedinWebhookUrl === 'string' ? cfg.linkedinWebhookUrl : undefined,
+        linkedinWebhookSecret:
+          typeof cfg.linkedinWebhookSecret === 'string' ? cfg.linkedinWebhookSecret : undefined,
       });
       return NextResponse.json({ ok: true, config: updated }, { headers: JSON_HEADERS });
     }
@@ -219,6 +248,14 @@ export async function PATCH(request: NextRequest) {
       endDate: body.endDate !== undefined ? body.endDate : existing.endDate,
       language: typeof body.language === 'string' ? body.language : existing.language,
       category: typeof body.category === 'string' ? body.category : existing.category,
+      targetChannels:
+        typeof body.targetChannels === 'string' ? body.targetChannels : existing.targetChannels,
+      linkedinCopy:
+        body.linkedinCopy !== undefined
+          ? typeof body.linkedinCopy === 'string'
+            ? body.linkedinCopy
+            : null
+          : existing.linkedinCopy,
       sortOrder: body.sortOrder !== undefined ? Number(body.sortOrder) : existing.sortOrder,
       status: typeof body.status === 'string' ? body.status : existing.status,
       isRecurring: typeof body.isRecurring === 'boolean' ? body.isRecurring : existing.isRecurring,

@@ -42,9 +42,9 @@ const DEFAULT_GBP_POSTS = [
     topicType: 'STANDARD',
     title: 'Study in Malaysia with BDT 0 Service Fee',
     summary:
-      'Explore direct admissions at 9 verified Malaysian partner universities including Taylor’s, Sunway, APU, and UCSI. Students pay official tuition and EMGS fees directly to the university while receiving BDT 0 consultancy service support from our Dhanmondi counseling team.',
+      'Explore direct admissions at 9 verified Malaysian universities including Taylor’s, Sunway, APU, and UCSI. Students pay official tuition and EMGS fees directly to the university while receiving BDT 0 consultancy service support from our Dhanmondi Road 4/A counseling team.',
     callToAction: 'LEARN_MORE',
-    ctaUrl: 'https://eduexpressint.com/malaysia?utm_source=google&utm_medium=organic&utm_campaign=gbp_post_malaysia',
+    ctaUrl: 'https://eduexpressint.com/study-in-malaysia-from-bangladesh?utm_source=google&utm_medium=organic&utm_campaign=gbp_post_malaysia',
     mediaUrl: '/images/gbp/counselor-office.jpg',
     language: 'en',
     category: 'malaysia',
@@ -98,7 +98,7 @@ const DEFAULT_GBP_POSTS = [
     topicType: 'STANDARD',
     title: 'চীন ভর্তিতে ভিসা-ফার্স্ট নীতি ও ফ্রি মূল্যায়ন',
     summary:
-      'চীন পড়াশোনায় অ্যাডমিশন বা ফাইল প্রসেসিংয়ের আগে ভিসা-ফার্স্ট নীতিতে স্বচ্ছ খরচ জানুন। ভিসা হওয়ার আগে কোনো সার্ভিস চার্জ নেই। ধানমন্ডি সাতমসজিদ রোড অফিসে সরাসরি এসে কিংবা অনলাইনে ফ্রি প্রোফাইল মূল্যায়ন বুক করুন।',
+      'চীন পড়াশোনায় অ্যাডমিশন বা ফাইল প্রসেসিংয়ের আগে ভিসা-ফার্স্ট নীতিতে স্বচ্ছ খরচ জানুন। ভিসা হওয়ার আগে কোনো সার্ভিস চার্জ নেই। ধানমন্ডি রোড ৪/এ (এভারগ্রিন লতিফ, বাড়ি ১২/১) অফিসে সরাসরি এসে কিংবা অনলাইনে ফ্রি প্রোফাইল মূল্যায়ন বুক করুন।',
     callToAction: 'BOOK',
     ctaUrl: 'https://eduexpressint.com/bn/study-in-china?utm_source=google&utm_medium=organic&utm_campaign=gbp_post_china_bn',
     mediaUrl: '/images/gbp/dhanmondi-desk.jpg',
@@ -112,7 +112,7 @@ const DEFAULT_GBP_POSTS = [
     topicType: 'OFFER',
     title: 'Free Study Abroad File Review (BDT 0 Check)',
     summary:
-      'Book a free 1-on-1 Education Fit & Scholarship Assessment at our Dhanmondi Satmasjid Road office or online. Compare China, Malaysia, and European tuition plans with a clear written cost breakdown before spending on applications.',
+      'Book a free 1-on-1 Education Fit & Scholarship Assessment at our Dhanmondi Road 4/A office (Evergreen Latif, House 12/1) or online. Compare China, Malaysia, and European tuition plans with a clear written cost breakdown before spending on applications.',
     callToAction: 'BOOK',
     ctaUrl: 'https://eduexpressint.com/education-fit-assessment?utm_source=google&utm_medium=organic&utm_campaign=gbp_post_offer',
     mediaUrl: '/images/gbp/counselor-office.jpg',
@@ -123,13 +123,32 @@ const DEFAULT_GBP_POSTS = [
     sortOrder: 80,
     isRecurring: true,
   },
+  {
+    slug: 'open-data-159-universities-zenodo-2027',
+    topicType: 'STANDARD',
+    title: 'Open 159-University Study Cost Dataset (CC BY 4.0)',
+    summary:
+      'Explore our CERN-archived open dataset (Zenodo DOI: 10.5281/zenodo.24423801) analyzing 159 verified universities across China (150) and Malaysia (9), 898 programs, 888 itemized non-tuition fees, and 276 scholarships. Built for Bangladeshi families, school counselors, and journalists.',
+    callToAction: 'LEARN_MORE',
+    ctaUrl: 'https://eduexpressint.com/press?utm_source=google&utm_medium=organic&utm_campaign=gbp_post_open_data',
+    mediaUrl: '/images/gbp/dhanmondi-brandwall.jpg',
+    language: 'en',
+    category: 'research',
+    sortOrder: 15,
+    isRecurring: true,
+  },
 ];
 
 const DEFAULT_SETTINGS = [
   ['gbp_autopost_enabled', 'true'],
   ['gbp_autopost_cadence_days', '7'],
   ['gbp_autopost_mode', 'google_api'],
+  ['gbp_location_id', '16688138993497254676'],
   ['gbp_telegram_notify', 'true'],
+  ['linkedin_autopost_enabled', 'true'],
+  ['linkedin_autopost_mode', 'linkedin_api'],
+  ['linkedin_organization_id', '30919158'],
+  ['linkedin_api_version', '202610'],
 ];
 
 async function main() {
