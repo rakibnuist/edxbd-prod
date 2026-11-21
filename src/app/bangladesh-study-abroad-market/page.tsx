@@ -34,6 +34,12 @@ import { getChinaIntakes } from '@/lib/china-intakes';
 import { config } from '@/lib/config';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
+import {
+  OPEN_DATA_CSV_DOWNLOADS,
+  OPEN_DATA_IDENTIFIERS,
+  OPEN_DATA_REPOSITORIES,
+  OPEN_DATA_SAME_AS,
+} from '@/lib/open-data';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { getUniversityRecords } from '@/lib/university-records';
@@ -182,6 +188,9 @@ export default async function BangladeshStudyAbroadMarketPage() {
         name: 'EduExpress Bangladesh Study Abroad Market & 12-Destination Cost Benchmark Dataset',
         description: `Live catalogue metrics (${snapshot.liveCatalog.activeUniversities} active universities, ${snapshot.liveCatalog.programsCount} programs, ${snapshot.liveCatalog.itemizedFeeRowsCount} itemized fees, ${snapshot.liveCatalog.scholarshipsCount} scholarships) and 12-destination Bangladesh outbound study matrix.`,
         url: canonical,
+        identifier: [...OPEN_DATA_IDENTIFIERS],
+        sameAs: [...OPEN_DATA_SAME_AS],
+        version: OPEN_DATA_REPOSITORIES.version,
         isAccessibleForFree: true,
         license: 'https://creativecommons.org/licenses/by/4.0/',
         dateModified: `${BANGLADESH_MARKET_LAST_VERIFIED_ISO}T00:00:00Z`,
@@ -194,9 +203,13 @@ export default async function BangladeshStudyAbroadMarketPage() {
         distribution: [
           {
             '@type': 'DataDownload',
+            name: 'Bangladesh Study Abroad Market 2027 Benchmark (JSON)',
             encodingFormat: 'application/json',
             contentUrl: `${SITE}/bangladesh-study-abroad-market.json`,
           },
+          OPEN_DATA_CSV_DOWNLOADS.destinationsMatrix,
+          OPEN_DATA_CSV_DOWNLOADS.universities,
+          OPEN_DATA_CSV_DOWNLOADS.programs,
         ],
         variableMeasured: [
           'Active university & scholarship coverage by country',

@@ -25,6 +25,12 @@ import {
 import { config } from '@/lib/config';
 import { citationJsonLd } from '@/lib/json-ld';
 import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
+import {
+  OPEN_DATA_CSV_DOWNLOADS,
+  OPEN_DATA_IDENTIFIERS,
+  OPEN_DATA_REPOSITORIES,
+  OPEN_DATA_SAME_AS,
+} from '@/lib/open-data';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { getUniversityRecords } from '@/lib/university-records';
@@ -164,6 +170,9 @@ export default async function ChinaStudyReportPage() {
         name: 'EduExpress Bangladesh-to-China University Tuition, Fee & Scholarship Dataset',
         description: `Structured database counts and explicit annual CNY tuition distributions across ${report.universityCount} active Chinese universities in ${report.cityCount} cities tracked for Bangladeshi students.`,
         url,
+        identifier: [...OPEN_DATA_IDENTIFIERS],
+        sameAs: [...OPEN_DATA_SAME_AS],
+        version: OPEN_DATA_REPOSITORIES.version,
         isAccessibleForFree: true,
         license: 'https://creativecommons.org/licenses/by/4.0/',
         ...(report.latestVerifiedIso ? { dateModified: `${report.latestVerifiedIso}T00:00:00Z` } : {}),
@@ -176,9 +185,14 @@ export default async function ChinaStudyReportPage() {
         distribution: [
           {
             '@type': 'DataDownload',
+            name: 'Bangladesh-to-China Live Benchmark Report (JSON)',
             encodingFormat: 'application/json',
             contentUrl: `${SITE}/china-study-report.json`,
           },
+          OPEN_DATA_CSV_DOWNLOADS.universities,
+          OPEN_DATA_CSV_DOWNLOADS.programs,
+          OPEN_DATA_CSV_DOWNLOADS.scholarships,
+          OPEN_DATA_CSV_DOWNLOADS.fees,
         ],
         variableMeasured: [
           'Annual programme tuition in CNY',

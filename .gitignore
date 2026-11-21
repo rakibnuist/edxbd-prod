@@ -142,3 +142,6 @@ prisma/*.db
 prisma/data/*.db*
 prisma/data/backups/
 data/*.db*
+
+# Generated standalone open-data export & archives (built by scripts/export-open-datasets.mjs)
+/open-data/

@@ -181,7 +181,7 @@ function malaysiaAndKeyRoutesBlock() {
     `- [China March 2027 intake](${url('/china-march-2027-intake')}): open Spring 2027 programmes, deadlines and Visa-First study plan`,
     `- [China city university guides](${url('/china-universities')}): compare recorded universities, tuition and scholarships by Chinese city`,
     `- [Bangladesh to China Study Data & Cost Report](${url('/china-study-report-bangladesh')}): live CNY tuition quartiles, first-year fee distributions, scholarship counts and verification transparency across Chinese universities ([JSON dataset](${url('/china-study-report.json')}))`,
-    `- [Media, Data & Research Press Room](${url('/press')}): open CC BY 4.0 datasets, bilingual press briefs, spokesperson bios and journalist verification desk`,
+    `- [Media, Data & Research Press Room](${url('/press')}): open CC BY 4.0 datasets, bilingual press briefs, spokesperson bios and journalist verification desk (Zenodo DOI: https://doi.org/10.5281/zenodo.24423801 · GitHub: https://github.com/rakibnuist/bangladesh-study-abroad-dataset · Kaggle: https://www.kaggle.com/datasets/abdullahalrakibww/bangladesh-study-abroad-china-cost-benchmark-2027)`,
     `- [Program and tuition finder](${url('/programs')}) · [Compare first-year costs](${url('/compare-costs')})`,
     '',
   ].join('\n') + '\n';

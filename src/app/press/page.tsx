@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import {
   ArrowRight,
+  Award,
   BarChart3,
   Building2,
+  Database,
+  ExternalLink,
   FileText,
+  GitBranch,
   Landmark,
   Mail,
   MessageSquareQuote,
@@ -29,6 +33,12 @@ import { getChinaIntakes } from '@/lib/china-intakes';
 import { config } from '@/lib/config';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
+import {
+  OPEN_DATA_CSV_DOWNLOADS,
+  OPEN_DATA_IDENTIFIERS,
+  OPEN_DATA_REPOSITORIES,
+  OPEN_DATA_SAME_AS,
+} from '@/lib/open-data';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { getUniversityRecords } from '@/lib/university-records';
 
@@ -52,7 +62,7 @@ const MEDIA_FAQS = [
   {
     question: 'Under what license may journalists and researchers republish EduExpress data?',
     answer:
-      'Both open datasets (/china-study-report.json and /bangladesh-study-abroad-market.json) and our benchmark reports are released under Creative Commons Attribution 4.0 International (CC BY 4.0). Journalists, researchers, and career counselors may quote figures freely with attribution and a link to the cited report page.',
+      'Both live JSON endpoints (/china-study-report.json and /bangladesh-study-abroad-market.json) and our archived open-data mirrors on Zenodo (DOI 10.5281/zenodo.24423801), GitHub, and Kaggle are released under Creative Commons Attribution 4.0 International (CC BY 4.0). Journalists, researchers, and career counselors may quote figures freely with attribution and a link to the cited report or DOI.',
   },
   {
     question: 'How does EduExpress calculate China tuition quartiles without guessing?',
@@ -165,7 +175,7 @@ export default async function PressRoomPage() {
         name: 'Media, Data & Research Press Room — EduExpress International',
         headline: 'Media, Data & Research Press Room | EduExpress International',
         description:
-          'Open CC BY 4.0 Bangladesh study abroad datasets, CNY/BDT tuition benchmarks, bilingual press briefs, spokesperson bios, and verification contacts.',
+          'Open CC BY 4.0 Bangladesh study abroad datasets (Zenodo DOI 10.5281/zenodo.24423801, GitHub, Kaggle), CNY/BDT tuition benchmarks, bilingual press briefs, spokesperson bios, and verification contacts.',
         image: `${SITE}/og/china.jpg`,
         primaryImageOfPage: primaryImageOfPageSchema('/og/china.jpg'),
         inLanguage: 'en-BD',
@@ -176,10 +186,80 @@ export default async function PressRoomPage() {
         publisher: { '@id': `${SITE}/#organization` },
         isPartOf: { '@id': `${SITE}/#website` },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
+        mainEntity: { '@id': `${canonical}#dataset` },
+        sameAs: [...OPEN_DATA_SAME_AS],
         ...citationJsonLd([
           ...CHINA_REPORT_OFFICIAL_AUTHORITIES,
           ...BANGLADESH_MARKET_SOURCES.slice(0, 4),
         ]),
+      },
+      {
+        '@type': 'Dataset',
+        '@id': `${canonical}#dataset`,
+        name: 'Bangladesh Study Abroad & China University Cost Benchmark Dataset (2027)',
+        alternateName: 'EduExpress International Bangladesh Study Abroad Open Dataset',
+        description: `Open CC BY 4.0 dataset covering ${marketSnapshot.liveCatalog.activeUniversities} verified active universities (${chinaReport.universityCount} in China across ${chinaReport.cityCount} cities and ${marketSnapshot.liveCatalog.activeUniversities - chinaReport.universityCount} in Malaysia), ${marketSnapshot.liveCatalog.programsCount} structured degree and language programs, ${marketSnapshot.liveCatalog.itemizedFeeRowsCount} itemized non-tuition fee rows, ${marketSnapshot.liveCatalog.scholarshipsCount} scholarship tracks, and a ${marketSnapshot.activeDestinationCount}-destination Bangladesh outbound cost and Student File matrix.`,
+        url: canonical,
+        identifier: [...OPEN_DATA_IDENTIFIERS],
+        sameAs: [...OPEN_DATA_SAME_AS],
+        version: OPEN_DATA_REPOSITORIES.version,
+        isAccessibleForFree: true,
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        datePublished: OPEN_DATA_REPOSITORIES.releaseDateIso,
+        dateModified: OPEN_DATA_REPOSITORIES.releaseDateIso,
+        inLanguage: ['en-BD', 'bn-BD'],
+        measurementTechnique:
+          'Direct aggregation of verified active university catalogue profiles, official ministry and immigration sources, explicit single-year CNY tuition rows, and separated non-tuition arrival fees without synthetic currency conversion.',
+        creator: [
+          {
+            '@type': 'Person',
+            name: 'Abdullah Al Rakib',
+            jobTitle: 'Founder & CEO',
+            affiliation: { '@id': `${SITE}/#organization` },
+          },
+          { '@id': `${SITE}/#organization` },
+        ],
+        publisher: { '@id': `${SITE}/#organization` },
+        spatialCoverage: [
+          { '@type': 'Country', name: 'Bangladesh' },
+          { '@type': 'Country', name: 'China' },
+          { '@type': 'Country', name: 'Malaysia' },
+        ],
+        temporalCoverage: '2026/2027',
+        distribution: [
+          {
+            '@type': 'DataDownload',
+            name: 'Bangladesh Study Abroad Market 2027 Benchmark (Live JSON)',
+            encodingFormat: 'application/json',
+            contentUrl: `${SITE}/bangladesh-study-abroad-market.json`,
+          },
+          {
+            '@type': 'DataDownload',
+            name: 'Bangladesh-to-China Study Cost Benchmark (Live JSON)',
+            encodingFormat: 'application/json',
+            contentUrl: `${SITE}/china-study-report.json`,
+          },
+          OPEN_DATA_CSV_DOWNLOADS.universities,
+          OPEN_DATA_CSV_DOWNLOADS.programs,
+          OPEN_DATA_CSV_DOWNLOADS.scholarships,
+          OPEN_DATA_CSV_DOWNLOADS.fees,
+          OPEN_DATA_CSV_DOWNLOADS.destinationsMatrix,
+        ],
+        variableMeasured: [
+          'Annual university tuition in explicit CNY and MYR',
+          'Itemized non-tuition arrival, dormitory, insurance, residence permit, and EMGS fees',
+          'Scholarship tracks by awarding body (CSC, provincial, university)',
+          '12-destination Bangladesh outbound study cost and Bangladesh Bank Student File matrix',
+        ],
+        keywords: [
+          'Bangladesh study abroad dataset',
+          'Study in China tuition benchmark',
+          'CSC scholarship Bangladesh',
+          'Bangladesh Bank Student File',
+          'Study in Malaysia cost benchmark',
+          'Higher education open data',
+          'Zenodo DOI 10.5281/zenodo.24423801',
+        ],
       },
     ],
   };
@@ -247,8 +327,111 @@ export default async function PressRoomPage() {
         id="open-datasets"
         tone="white"
         title="Open datasets & live citation tools."
-        intro="All live metrics compute directly from the EduExpress database without synthetic currency estimates. Copy APA citations, clean HTML attribution backlinks, or download the machine-readable JSON datasets."
+        intro="All live metrics compute directly from the EduExpress database without synthetic currency estimates. Inspect our permanently archived open-data mirrors (Zenodo DOI, GitHub, and Kaggle), copy APA citations or clean HTML attribution backlinks, or download the live JSON endpoints."
       >
+        {/* Archived Open-Data Mirrors & Academic DOI Badges */}
+        <div className="mb-8 rounded-3xl border border-petrol-800/15 bg-canvas-soft p-5 sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-petrol-800 px-3 py-1 text-[12.5px] font-bold text-lime">
+                <Award size={14} aria-hidden="true" />
+                Zenodo DOI {OPEN_DATA_REPOSITORIES.zenodoDoi}
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-petrol-800/15 bg-white px-3 py-1 text-[12.5px] font-semibold text-petrol-800">
+                Release v{OPEN_DATA_REPOSITORIES.version} · CC BY 4.0
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-petrol-800/15 bg-white px-3 py-1 text-[12.5px] font-semibold text-petrol-800">
+                {marketSnapshot.liveCatalog.activeUniversities} Verified Universities · 5 CSVs + 2 JSONs
+              </span>
+            </div>
+            <a
+              href={OPEN_DATA_REPOSITORIES.zenodoDoiUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[13.5px] font-bold text-petrol-800 underline decoration-lime-deep/50 underline-offset-4 hover:text-lime-deep"
+            >
+              Verify permanent DOI <ExternalLink size={14} aria-hidden="true" />
+            </a>
+          </div>
+
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            <a
+              href={OPEN_DATA_REPOSITORIES.zenodoRecordUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-col justify-between rounded-2xl border border-petrol-800/15 bg-white p-4 transition hover:border-petrol-800/40 hover:shadow-sm"
+            >
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#0d6efd]/10 px-2.5 py-1 text-[12px] font-extrabold uppercase tracking-[0.06em] text-[#0b5ed7]">
+                    <Award size={13} aria-hidden="true" /> Zenodo · CERN
+                  </span>
+                  <ExternalLink size={15} className="text-ink-soft transition group-hover:text-petrol-800" aria-hidden="true" />
+                </div>
+                <h3 className="mt-3 text-[16.5px] font-bold text-petrol-800 group-hover:underline">
+                  DOI: {OPEN_DATA_REPOSITORIES.zenodoDoi}
+                </h3>
+                <p className="mt-1 text-[13.5px] leading-5 text-ink-soft">
+                  Permanent academic open-access archive with immutable versioned release metadata and DataCite DOI resolution.
+                </p>
+              </div>
+              <span className="mt-3 text-[12.5px] font-semibold text-lime-deep">
+                Open Zenodo record →
+              </span>
+            </a>
+
+            <a
+              href={OPEN_DATA_REPOSITORIES.githubRepoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-col justify-between rounded-2xl border border-petrol-800/15 bg-white p-4 transition hover:border-petrol-800/40 hover:shadow-sm"
+            >
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-petrol-800/10 px-2.5 py-1 text-[12px] font-extrabold uppercase tracking-[0.06em] text-petrol-800">
+                    <GitBranch size={13} aria-hidden="true" /> GitHub Open Data
+                  </span>
+                  <ExternalLink size={15} className="text-ink-soft transition group-hover:text-petrol-800" aria-hidden="true" />
+                </div>
+                <h3 className="mt-3 text-[16.5px] font-bold text-petrol-800 group-hover:underline">
+                  bangladesh-study-abroad-dataset
+                </h3>
+                <p className="mt-1 text-[13.5px] leading-5 text-ink-soft">
+                  Direct raw CSV/JSON downloads, Frictionless <code>datapackage.json</code>, <code>CITATION.cff</code>, and Python/JS examples.
+                </p>
+              </div>
+              <span className="mt-3 text-[12.5px] font-semibold text-lime-deep">
+                Browse GitHub repo →
+              </span>
+            </a>
+
+            <a
+              href={OPEN_DATA_REPOSITORIES.kaggleUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-col justify-between rounded-2xl border border-petrol-800/15 bg-white p-4 transition hover:border-petrol-800/40 hover:shadow-sm"
+            >
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#20beff]/15 px-2.5 py-1 text-[12px] font-extrabold uppercase tracking-[0.06em] text-[#0369a1]">
+                    <Database size={13} aria-hidden="true" /> Kaggle Public
+                  </span>
+                  <ExternalLink size={15} className="text-ink-soft transition group-hover:text-petrol-800" aria-hidden="true" />
+                </div>
+                <h3 className="mt-3 text-[16.5px] font-bold text-petrol-800 group-hover:underline">
+                  Bangladesh Study Abroad Benchmark
+                </h3>
+                <p className="mt-1 text-[13.5px] leading-5 text-ink-soft">
+                  Interactive tabular explorer across all 7 files ({marketSnapshot.liveCatalog.activeUniversities} universities, {marketSnapshot.liveCatalog.programsCount} programs, {marketSnapshot.liveCatalog.itemizedFeeRowsCount} fee rows).
+                </p>
+              </div>
+              <span className="mt-3 text-[12.5px] font-semibold text-lime-deep">
+                Explore on Kaggle →
+              </span>
+            </a>
+          </div>
+        </div>
+
         <div className="grid gap-6 lg:grid-cols-2">
           <div className={kit.cardDark}>
             <div className="flex items-center justify-between gap-3">
@@ -279,7 +462,7 @@ export default async function PressRoomPage() {
               </Link>
             </div>
             <ReportCitationActions
-              citationText={`EduExpress International (${year}). Bangladesh Study Abroad Market 2027 Report & 12-Destination Benchmark. Retrieved from ${SITE}/bangladesh-study-abroad-market`}
+              citationText={`EduExpress International (${year}). Bangladesh Study Abroad Market 2027 Report & 12-Destination Benchmark. ${OPEN_DATA_REPOSITORIES.zenodoDoiUrl} (Report: ${SITE}/bangladesh-study-abroad-market)`}
               reportUrl={`${SITE}/bangladesh-study-abroad-market`}
               reportTitle="Bangladesh Study Abroad Market 2027 Report & 12-Destination Cost Benchmark (EduExpress International)"
               datasetUrl={`${SITE}/bangladesh-study-abroad-market.json`}
@@ -318,7 +501,7 @@ export default async function PressRoomPage() {
               </Link>
             </div>
             <ReportCitationActions
-              citationText={`EduExpress International (${year}). Bangladesh to China Study Data & Cost Benchmark Report. Retrieved from ${SITE}/china-study-report-bangladesh`}
+              citationText={`EduExpress International (${year}). Bangladesh to China Study Data & Cost Benchmark Report. ${OPEN_DATA_REPOSITORIES.zenodoDoiUrl} (Report: ${SITE}/china-study-report-bangladesh)`}
               reportUrl={`${SITE}/china-study-report-bangladesh`}
               reportTitle="Bangladesh to China Study Data & Cost Benchmark Report (EduExpress International)"
               datasetUrl={`${SITE}/china-study-report.json`}

@@ -75,6 +75,7 @@ Key facts:
 
 - [About EduExpress](https://eduexpressint.com/about): history, team and office
 - [Media, Data & Research Press Room](https://eduexpressint.com/press): open CC BY 4.0 datasets, 4 bilingual press briefs, spokesperson bios and journalist verification desk
+- [Zenodo Academic Dataset Archive (CERN DOI 10.5281/zenodo.24423801)](https://doi.org/10.5281/zenodo.24423801): permanent open-access CC BY 4.0 archive of the 159-university, 898-program, 888-fee, 276-scholarship and 12-destination Bangladesh benchmark ([Zenodo Record](https://zenodo.org/records/24423801) · [GitHub Repo](https://github.com/rakibnuist/bangladesh-study-abroad-dataset) · [Kaggle Dataset](https://www.kaggle.com/datasets/abdullahalrakibww/bangladesh-study-abroad-china-cost-benchmark-2027))
 - [How we verify universities](https://eduexpressint.com/how-we-verify-universities): sources and review dates behind every listed fact
 - [Better Education Standard](https://eduexpressint.com/better-education-standard): how options are compared before recommending
 - [Proof library](https://eduexpressint.com/proof-library): published company and office records
