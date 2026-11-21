@@ -446,8 +446,18 @@ test('Step 16 built HTML checks — bn visa SERP bounds, homepage WebPage schema
       dhakaHtml.includes('1983-333566') &&
       dhakaHtml.includes('1329-663505') &&
       dhakaHtml.includes('href="/china-study-report-bangladesh"') &&
-      dhakaHtml.includes('href="/fees-and-transparency"'),
-    'education-consultant-dhaka.html must contain full NAP, mainEntityOfPage, and trust/benchmark links',
+      dhakaHtml.includes('href="/fees-and-transparency"') &&
+      dhakaHtml.includes('maps.google.com/maps') &&
+      dhakaHtml.includes('id="book-consultation"') &&
+      dhakaHtml.includes('id="dhanmondi-team"') &&
+      dhakaHtml.includes('"hasMap"'),
+    'education-consultant-dhaka.html must contain full NAP, mainEntityOfPage, embedded map, team, booking form, hasMap schema, and trust/benchmark links',
+  );
+
+  const contactHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'contact.html'), 'utf8');
+  assert.ok(
+    contactHtml.includes('maps.google.com/maps') && contactHtml.includes('id="office-map"'),
+    'contact.html must include embedded Dhanmondi Google Map section',
   );
 
   for (const slug of [
@@ -666,4 +676,53 @@ test('Step 26 built HTML check: all 20 Step 26 routes emit primaryImageOfPage Im
       `Missing primaryImageOfPage ImageObject in ${rel}`
     );
   }
+});
+
+test('Bangladesh Study Abroad Market SEO Hub, Bengali Twin, and CC BY 4.0 JSON Dataset', () => {
+  const marketJson = JSON.parse(
+    fs.readFileSync(path.join(BUILD_APP_DIR, 'bangladesh-study-abroad-market.json.body'), 'utf8'),
+  );
+  assert.equal(marketJson.license, 'https://creativecommons.org/licenses/by/4.0/');
+  assert.equal(marketJson.snapshot.activeDestinationCount, 12);
+  assert.ok(marketJson.snapshot.liveCatalog.activeUniversities >= 100);
+  assert.ok(marketJson.officialSources.some((s) => s.href.includes('bb.org.bd')));
+  assert.equal(
+    marketJson.publisher.address,
+    'Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209',
+  );
+
+  const marketHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'bangladesh-study-abroad-market.html'), 'utf8');
+  assert.ok(
+    marketHtml.includes('https://eduexpressint.com/bangladesh-study-abroad-market.json') &&
+      marketHtml.includes('DataDownload') &&
+      marketHtml.includes('FAQPage') &&
+      marketHtml.includes('href="/bn/bangladesh-study-abroad-market"') &&
+      marketHtml.includes('href="/b2b"') &&
+      marketHtml.includes('href="/china-study-report-bangladesh"') &&
+      /hreflang="bn-bd"/i.test(marketHtml),
+    'bangladesh-study-abroad-market.html must emit Dataset, DataDownload, FAQPage, hreflang, and key cross-links',
+  );
+
+  const bnMarketHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'bn', 'bangladesh-study-abroad-market.html'), 'utf8');
+  assert.ok(
+    bnMarketHtml.includes('FAQPage') &&
+      bnMarketHtml.includes('href="/bangladesh-study-abroad-market"') &&
+      /hreflang="en-bd"/i.test(bnMarketHtml) &&
+      bnMarketHtml.includes('https://eduexpressint.com/bn/bangladesh-study-abroad-market#breadcrumb'),
+    'bn/bangladesh-study-abroad-market.html must emit FAQPage, English twin hreflang, and Bangla breadcrumb',
+  );
+
+  const llmsFullBody = fs.readFileSync(path.join(BUILD_APP_DIR, 'llms-full.txt.body'), 'utf8');
+  assert.ok(
+    llmsFullBody.includes('https://eduexpressint.com/bangladesh-study-abroad-market.json') &&
+      llmsFullBody.includes('https://eduexpressint.com/bn/bangladesh-study-abroad-market'),
+    'llms-full.txt must reference Bangladesh Study Abroad Market EN, BN, and JSON URLs',
+  );
+
+  const sitemapBody = fs.readFileSync(path.join(BUILD_APP_DIR, 'sitemap.xml.body'), 'utf8');
+  assert.ok(
+    sitemapBody.includes('https://eduexpressint.com/bangladesh-study-abroad-market') &&
+      sitemapBody.includes('https://eduexpressint.com/bn/bangladesh-study-abroad-market'),
+    'sitemap.xml must include English and Bengali Bangladesh Study Abroad Market URLs',
+  );
 });

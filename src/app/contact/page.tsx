@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { ArrowRight, CheckCircle2, Clock, FileText, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import EnhancedContactForm from '@/components/EnhancedContactForm';
+import DhanmondiMapCard from '@/components/office/DhanmondiMapCard';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { config } from '@/lib/config';
 import { formatBangladeshPhone } from '@/lib/contact-format';
@@ -183,6 +184,15 @@ export default async function ContactPage() {
       </Section>
 
       <PaymentRules />
+
+      <Section
+        id="office-map"
+        tone="sage"
+        title="Visit our Dhanmondi, Dhaka office."
+        intro="Walk in Saturday to Thursday from 11:00 AM to 6:00 PM at Evergreen Latif, House 12/1, Road 4/A, Dhanmondi, Dhaka 1209."
+      >
+        <DhanmondiMapCard office={office} />
+      </Section>
 
       <CtaBand
         title="Not ready to contact us?"

@@ -500,6 +500,14 @@ export default async function StudyInMalaysiaPage() {
               <li>• <strong>Foundation Year:</strong> Available for students with SSC or O-Level passes to bridge into undergraduate programs.</li>
               <li>• <strong>English:</strong> IELTS 5.5–6.0 or Medium of Instruction (MOI) verification.</li>
             </ul>
+            <div className="mt-4 border-t border-rule pt-3">
+              <Link
+                href="/study-in-malaysia-after-o-level"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-petrol-800 hover:underline"
+              >
+                O-Level Foundation &amp; Diploma Guide (Skip 2-Yr A-Levels) <ArrowRight size={13} aria-hidden="true" />
+              </Link>
+            </div>
           </div>
 
           <div className="rounded-3xl bg-white p-7 shadow-sm">

@@ -29,6 +29,7 @@ const PAGE_IMAGES: Record<string, string[]> = {
   '/china-universities': ['/images/students/campus-nuist.webp'],
   '/study-in-china-from-bangladesh': ['/images/real/china_campus/cie_campus_visit.webp'],
   '/china-march-2027-intake': ['/images/home/consultation-family.webp'],
+  '/bangladesh-study-abroad-market': ['/images/home/consultation-family.webp'],
 };
 
 // PHASE 0 FIX:
@@ -62,14 +63,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/proof-library',
     '/csc-scholarship-bangladesh',
     '/china-study-report-bangladesh',
+    '/bangladesh-study-abroad-market',
+    '/bn/bangladesh-study-abroad-market',
     '/bn/study-in-china',
     '/bn/china-student-visa-bangladesh',
     '/bn/study-in-china-cost-bangladesh',
     '/bn/csc-scholarship-bangladesh',
     '/bn/mbbs-in-china-bangladesh',
     '/bn/csca-exam-bangladesh',
+    '/bn/study-in-china-after-ssc-dakhil',
     '/malaysia-study-cost-bangladesh',
     '/malaysia-student-visa-bangladesh',
+    '/study-in-malaysia-after-o-level',
+    '/study-in-china-after-o-level-ssc',
+    '/compare-bachelor-china-abroad-bangladesh',
+    '/bangladesh-vs-china-bachelor-study',
+    '/bangladesh-vs-study-abroad-countries',
     '/programs',
     ...programSegments.map((segment) => `/programs/${segment.slug}`),
     '/compare-costs',
@@ -116,6 +125,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/study-in-malaysia-from-bangladesh',
     '/malaysia-study-cost-bangladesh',
     '/malaysia-student-visa-bangladesh',
+    '/study-in-malaysia-after-o-level',
+    '/study-in-china-after-o-level-ssc',
+    '/compare-bachelor-china-abroad-bangladesh',
+    '/bangladesh-vs-china-bachelor-study',
+    '/bangladesh-vs-study-abroad-countries',
     '/programs',
     ...programSegments.map((segment) => `/programs/${segment.slug}`),
     '/china-universities',
@@ -133,11 +147,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           : undefined
         : slug in chinaGuidePages
           ? undefined
-          : route === '/b2b' || route === '/partnership'
-            ? new Date('2026-11-20')
-            : novemberMidPaths.has(route)
-              ? NOVEMBER_MID_UPDATED
-              : STATIC_CONTENT_UPDATED;
+          : route === '/study-in-malaysia-after-o-level' ||
+              route === '/study-in-china-after-o-level-ssc' ||
+              route === '/compare-bachelor-china-abroad-bangladesh' ||
+              route === '/bangladesh-vs-china-bachelor-study' ||
+              route === '/bangladesh-vs-study-abroad-countries' ||
+              route === '/bn/study-in-china-after-ssc-dakhil' ||
+              route === '/bangladesh-study-abroad-market' ||
+              route === '/bn/bangladesh-study-abroad-market'
+            ? new Date('2026-11-21')
+            : route === '/b2b' || route === '/partnership'
+              ? new Date('2026-11-20')
+              : novemberMidPaths.has(route)
+                ? NOVEMBER_MID_UPDATED
+                : STATIC_CONTENT_UPDATED;
     return {
       url: `${baseUrl}${route}`,
       ...(lastModified ? { lastModified } : {}),

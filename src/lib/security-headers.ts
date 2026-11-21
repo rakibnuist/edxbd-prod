@@ -33,7 +33,7 @@ export function buildContentSecurityPolicy(options: { isProduction: boolean }): 
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
     "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com https://connect.facebook.net https://*.conversionsapigateway.com https://*.run.app https://vitals.vercel-insights.com https://va.vercel-scripts.com",
-    'frame-src https://www.googletagmanager.com https://www.facebook.com',
+    'frame-src https://www.googletagmanager.com https://www.facebook.com https://www.google.com https://maps.google.com',
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self' https://www.facebook.com",

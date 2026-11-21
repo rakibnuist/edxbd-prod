@@ -62,6 +62,7 @@ const guides = [
   { label: 'চায়না স্টুডেন্ট ভিসা (X1/X2)', href: '/bn/china-student-visa-bangladesh' },
   { label: 'চীনে MBBS ভর্তি ও BMDC গাইড (বাংলা)', href: '/bn/mbbs-in-china-bangladesh' },
   { label: 'CSCA ভর্তি পরীক্ষার গাইড (বাংলা)', href: '/bn/csca-exam-bangladesh' },
+  { label: 'SSC ও দাখিলের পর চীনে ৩+২ ডিপ্লোমা (বাংলা)', href: '/bn/study-in-china-after-ssc-dakhil' },
   { label: 'ইনটেক ও Application Deadlines', href: '/china-intakes-deadlines' },
   { label: 'বাংলাদেশ-চীন ডেটা ও খরচ রিপোর্ট', href: '/china-study-report-bangladesh' },
   { label: 'চীনের শীর্ষ বিশ্ববিদ্যালয় তালিকা', href: '/china-universities' },

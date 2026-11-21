@@ -502,8 +502,14 @@ export default async function MalaysiaStudyCostPage() {
               <Link href="/study-in-malaysia-from-bangladesh" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
                 Study in Malaysia Hub <ArrowRight size={14} aria-hidden="true" />
               </Link>
+              <Link href="/study-in-malaysia-after-o-level" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
+                Study in Malaysia After O-Level (Foundation &amp; Diploma) <ArrowRight size={14} aria-hidden="true" />
+              </Link>
               <Link href="/malaysia-student-visa-bangladesh" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
                 Malaysia Student Visa & EMGS eVAL Guide <ArrowRight size={14} aria-hidden="true" />
+              </Link>
+              <Link href="/compare-bachelor-china-abroad-bangladesh" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
+                Compare China, Malaysia, UK, USA, Australia &amp; Dhaka Costs <ArrowRight size={14} aria-hidden="true" />
               </Link>
               <Link href="/compare-costs" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
                 Compare Study Costs Across Destinations <ArrowRight size={14} aria-hidden="true" />

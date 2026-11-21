@@ -45,15 +45,23 @@ Key facts:
 - [CSC স্কলারশিপ গাইড (বাংলা)](https://eduexpressint.com/bn/csc-scholarship-bangladesh): বাংলাদেশি শিক্ষার্থীদের জন্য CSC Type A ও Type B নিয়ম
 - [চীনে MBBS গাইড (বাংলা)](https://eduexpressint.com/bn/mbbs-in-china-bangladesh): MoE স্বীকৃতি, টিউশন ও BMDC নিবন্ধন প্রক্রিয়া
 - [CSCA ভর্তি পরীক্ষার গাইড (বাংলা)](https://eduexpressint.com/bn/csca-exam-bangladesh): চীনে আন্ডারগ্র্যাজুয়েট ভর্তি পরীক্ষা CSCA-এর সিলেবাস, ঢাকা সময়সূচি (UTC+6), ফি পেমেন্ট ও ফ্রি CSCA Master Pro প্রস্তুতি
+- [SSC ও দাখিলের পর চীনে ৩+২ ডিপ্লোমা ও ব্যাচেলর (বাংলা)](https://eduexpressint.com/bn/study-in-china-after-ssc-dakhil): SSC, দাখিল ও O-Level পাসের পর ৫ বছরে ব্যাচেলর রুট, ৩টি স্কলারশিপ স্তর (থাকা-খাওয়া আলাদা) ও অনূর্ধ্ব-১৮ গার্ডিয়ান নিয়ম
 
 ## Study in Malaysia (zero EduExpress service fee)
 
 - [Study in Malaysia from Bangladesh](https://eduexpressint.com/study-in-malaysia-from-bangladesh): public, private & UK/AU branch campuses, RM/BDT costs and BDT 0 service fee terms
 - [Malaysia study costs & Bangladesh Bank Student File](https://eduexpressint.com/malaysia-study-cost-bangladesh): tuition, EMGS fees, Student File remittance and living budget in MYR and BDT
 - [Malaysia student visa (EMGS & VAL)](https://eduexpressint.com/malaysia-student-visa-bangladesh): eVAL approval stages, SEV at Malaysian High Commission and e-Visa steps
+- [Study in Malaysia after O-Level](https://eduexpressint.com/study-in-malaysia-after-o-level): 1-year Foundation (5 O-Level credits) and 2-year Diploma (3 credits) routes to skip 2 years of A-Levels, with tuition kept separate from living costs
 
 ## Plan and compare
 
+- [Bangladesh Study Abroad Market 2027 Report](https://eduexpressint.com/bangladesh-study-abroad-market): outbound mobility trends, all 12 active destinations, separated BDT/local tuition vs. living budgets, Bangladesh Bank Student File vs. China payment rules, SSC/O-Level to PhD pathways, and B2B desk overview ([JSON dataset](https://eduexpressint.com/bangladesh-study-abroad-market.json))
+- [বাংলাদেশ থেকে বিদেশে উচ্চশিক্ষা ও মার্কেট গাইড ২০২৭ (বাংলা)](https://eduexpressint.com/bn/bangladesh-study-abroad-market): ১২টি দেশের টিউশন ও থাকা-খাওয়ার আলাদা হিসাব, বাংলাদেশ ব্যাংক স্টুডেন্ট ফাইল নিয়ম, SSC/HSC ও O/A-Level রুট এবং অভিভাবক সতর্কতা
+- [Study in China after O-Level or SSC (3+2 Diploma to Bachelor)](https://eduexpressint.com/study-in-china-after-o-level-ssc): 3-year Higher Vocational Diploma + 2-year Top-Up Bachelor (5 years total) with 3 tuition/hostel scholarship tiers (living costs separated) and under-18 guardian verification
+- [China Bachelor vs. UK, USA, Australia, New Zealand & Dhaka Private Universities](https://eduexpressint.com/compare-bachelor-china-abroad-bangladesh): top-ranked Chinese universities with University/Provincial scholarships compared by rankings, facilities and separated tuition against NSU/EWU/AIUB and Western benchmarks
+- [Study in Bangladesh vs. China (1-on-1 Bachelor Comparison)](https://eduexpressint.com/bangladesh-vs-china-bachelor-study): NSU, EWU, and AIUB 4-year fees compared directly against top-ranked Chinese universities, residential labs, university scholarships, and global Master's mobility (living costs separated)
+- [Study in Bangladesh vs. Study Abroad Countries](https://eduexpressint.com/bangladesh-vs-study-abroad-countries): staying in Bangladesh (A-Levels & local private universities) compared against Malaysia, China, UK, Europe, USA, Australia, and New Zealand (living costs separated)
 - [University and programme finder](https://eduexpressint.com/universities): search universities by subject, level, intake and scholarship
 - [China program and tuition finder](https://eduexpressint.com/programs): every recorded China programme filtered by yearly tuition, language, city and deadline
 - [Compare first-year costs](https://eduexpressint.com/compare-costs): up to three China programmes side by side, fee by fee

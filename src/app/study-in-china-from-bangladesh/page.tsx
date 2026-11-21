@@ -786,6 +786,12 @@ export default async function StudyInChinaFromBangladeshPage() {
               <Link href="/study-in-china-without-ielts" className={kit.link}>
                 English &amp; MOI options <ArrowRight size={15} aria-hidden="true" />
               </Link>
+              <Link href="/study-in-china-after-o-level-ssc" className={kit.link}>
+                After O-Level / SSC (3+2 Diploma) <ArrowRight size={15} aria-hidden="true" />
+              </Link>
+              <Link href="/compare-bachelor-china-abroad-bangladesh" className={kit.link}>
+                Compare China vs. UK/USA/AU/Dhaka <ArrowRight size={15} aria-hidden="true" />
+              </Link>
             </div>
           </div>
           <div id="china-preparation" className={`scroll-mt-28 ${kit.cardSage}`}>

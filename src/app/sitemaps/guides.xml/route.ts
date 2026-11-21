@@ -17,11 +17,18 @@ const handbuiltStaticGuides = new Set([
   'china-march-2027-intake',
   'malaysia-study-cost-bangladesh',
   'malaysia-student-visa-bangladesh',
+  'study-in-malaysia-after-o-level',
+  'study-in-china-after-o-level-ssc',
+  'compare-bachelor-china-abroad-bangladesh',
+  'bangladesh-vs-china-bachelor-study',
+  'bangladesh-vs-study-abroad-countries',
   'bn/china-student-visa-bangladesh',
   'bn/study-in-china-cost-bangladesh',
   'bn/csc-scholarship-bangladesh',
   'bn/mbbs-in-china-bangladesh',
   'bn/csca-exam-bangladesh',
+  'bn/study-in-china-after-ssc-dakhil',
+  'bn/bangladesh-study-abroad-market',
 ]);
 
 const handbuiltLastmod: Record<string, string> = {
@@ -29,11 +36,18 @@ const handbuiltLastmod: Record<string, string> = {
   'china-march-2027-intake': '2026-11-15',
   'malaysia-study-cost-bangladesh': '2026-11-15',
   'malaysia-student-visa-bangladesh': '2026-11-15',
+  'study-in-malaysia-after-o-level': '2026-11-21',
+  'study-in-china-after-o-level-ssc': '2026-11-21',
+  'compare-bachelor-china-abroad-bangladesh': '2026-11-21',
+  'bangladesh-vs-china-bachelor-study': '2026-11-21',
+  'bangladesh-vs-study-abroad-countries': '2026-11-21',
   'bn/china-student-visa-bangladesh': '2026-11-15',
   'bn/study-in-china-cost-bangladesh': '2026-11-15',
   'bn/csc-scholarship-bangladesh': '2026-11-15',
   'bn/mbbs-in-china-bangladesh': '2026-11-15',
   'bn/csca-exam-bangladesh': '2026-11-15',
+  'bn/study-in-china-after-ssc-dakhil': '2026-11-21',
+  'bn/bangladesh-study-abroad-market': '2026-11-21',
 };
 
 const guideSlugs = [
@@ -51,11 +65,18 @@ const guideSlugs = [
   'china-march-2027-intake',
   'malaysia-study-cost-bangladesh',
   'malaysia-student-visa-bangladesh',
+  'study-in-malaysia-after-o-level',
+  'study-in-china-after-o-level-ssc',
+  'compare-bachelor-china-abroad-bangladesh',
+  'bangladesh-vs-china-bachelor-study',
+  'bangladesh-vs-study-abroad-countries',
   'bn/china-student-visa-bangladesh',
   'bn/study-in-china-cost-bangladesh',
   'bn/csc-scholarship-bangladesh',
   'bn/mbbs-in-china-bangladesh',
   'bn/csca-exam-bangladesh',
+  'bn/study-in-china-after-ssc-dakhil',
+  'bn/bangladesh-study-abroad-market',
 ];
 
 export async function GET() {

@@ -28,6 +28,7 @@ const mosaic = [
 ].filter(item => DESTINATION_PHOTOS[item.slug] && activeCountries.some(country => country.slug === item.slug));
 
 const researchLinks = [
+  { label: 'Bangladesh Study Abroad Market 2027 Report', text: 'Outbound trends, 12 destinations & Student File rules', href: '/bangladesh-study-abroad-market' },
   { label: 'Compare destinations side by side', text: 'Cost and entry side by side', href: '/compare-study-destinations' },
   { label: 'Research universities and scholarships', text: 'Programs, tuition and intakes by destination', href: '/find-education' },
   { label: 'Fees and transparency', text: 'What you pay us, when, and what is refundable', href: '/fees-and-transparency' },

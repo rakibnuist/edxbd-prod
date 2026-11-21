@@ -7,10 +7,21 @@ import { trackCostSheetDownloaded } from '@/lib/conversion-events';
 type Props = {
   citationText: string;
   datasetUrl: string;
+  downloadPath?: string;
+  downloadFilename?: string;
+  analyticsDestination?: string;
+  analyticsLabel?: string;
 };
 
 /** Copyable media/academic citation and tracked JSON dataset download actions. */
-export default function ReportCitationActions({ citationText, datasetUrl }: Props) {
+export default function ReportCitationActions({
+  citationText,
+  datasetUrl,
+  downloadPath = '/china-study-report.json',
+  downloadFilename = 'eduexpress-china-study-report.json',
+  analyticsDestination = 'china',
+  analyticsLabel = 'china_study_report_json',
+}: Props) {
   const [copied, setCopied] = useState<'citation' | 'url' | null>(null);
 
   const copyText = async (text: string, kind: 'citation' | 'url') => {
@@ -62,12 +73,12 @@ export default function ReportCitationActions({ citationText, datasetUrl }: Prop
       </button>
 
       <a
-        href="/china-study-report.json"
-        download="eduexpress-china-study-report.json"
+        href={downloadPath}
+        download={downloadFilename}
         onClick={() =>
           trackCostSheetDownloaded({
-            destination: 'china',
-            label: 'china_study_report_json',
+            destination: analyticsDestination,
+            label: analyticsLabel,
           })
         }
         className="inline-flex min-h-[42px] items-center gap-2 rounded-full bg-lime px-4 py-2 text-[14px] font-bold text-petrol-800 transition hover:bg-lime/90"

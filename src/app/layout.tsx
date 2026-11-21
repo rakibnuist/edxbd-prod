@@ -162,9 +162,15 @@ export default async function RootLayout({
     "foundingDate": "2018-03-08",
     "founder": { "@type": "Person", "name": "Abdullah Al Rakib", "jobTitle": "Founder and CEO" },
     "slogan": "Better Education. Clear Costs. Written Proof.",
+    "hasMap": office?.mapUrl || "https://www.google.com/maps/search/?api=1&query=EduExpress+International+Dhanmondi+Dhaka",
+    "knowsLanguage": ["English", "Bengali"],
+    "currenciesAccepted": "BDT",
     "publishingPrinciples": "https://eduexpressint.com/how-we-verify-universities",
     "actionableFeedbackPolicy": "https://eduexpressint.com/complaints-and-resolution",
-    "areaServed": { "@type": "Country", "name": "Bangladesh" },
+    "areaServed": [
+      { "@type": "City", "name": "Dhaka" },
+      { "@type": "Country", "name": "Bangladesh" }
+    ],
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
@@ -241,6 +247,24 @@ export default async function RootLayout({
             "@type": "Service",
             "name": "University Application Support",
             "description": "Complete university application assistance"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Malaysia University Application & EMGS Support",
+            "description": "Malaysia university admissions, EMGS Student Pass guidance, and Bangladesh Bank Student File documentation support with BDT 0 EduExpress service fee."
+          },
+          "price": "0",
+          "priceCurrency": "BDT"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "B2B Agency & Sub-Agent Admissions Desk",
+            "description": "Structured B2B student file processing under written non-poaching bilateral MOU terms."
           }
         }
       ]

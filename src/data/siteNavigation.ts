@@ -37,6 +37,12 @@ export const findEducationNavigation: SiteLink[] = [
   { name: 'Compare costs', href: '/compare-costs', note: 'First-year costs for up to 3 programs' },
   { name: 'Scholarship database', href: '/scholarships', note: 'Search recorded coverage and deadlines' },
   { name: 'Compare destinations', href: '/compare-study-destinations', note: 'Compare recognition, cost and readiness' },
+  { name: 'Bangladesh Study Abroad Market', href: '/bangladesh-study-abroad-market', note: '2027 trends, 12 destinations, Student File & BDT data' },
+  { name: 'China vs. UK/USA/AU & Dhaka', href: '/compare-bachelor-china-abroad-bangladesh', note: 'Rankings, university scholarships & separated tuition' },
+  { name: 'Bangladesh vs. China', href: '/bangladesh-vs-china-bachelor-study', note: 'NSU/EWU/AIUB vs. top-ranked China universities' },
+  { name: 'Bangladesh vs. Abroad', href: '/bangladesh-vs-study-abroad-countries', note: 'Local study vs. Malaysia, UK, Europe & Western routes' },
+  { name: 'Malaysia after O-Level', href: '/study-in-malaysia-after-o-level', note: '1-year Foundation & 2-year Diploma routes' },
+  { name: 'China after O-Level / SSC', href: '/study-in-china-after-o-level-ssc', note: '3-year Diploma + 2-year top-up Bachelor' },
   { name: 'Free Education Fit Assessment', href: '/education-fit-assessment', note: 'Turn your profile into a practical shortlist' },
 ];
 
@@ -84,6 +90,7 @@ export const proofNavigation: SiteLink[] = [
 
 export const resourceNavigation: SiteLink[] = [
   { name: 'Education updates', href: '/updates', note: 'New universities, scholarships, programs and tips' },
+  { name: 'Bangladesh study abroad report', href: '/bangladesh-study-abroad-market', note: 'Market trends, 12 destinations & Student File rules' },
   { name: 'Study in China guides', href: '/study-in-china-from-bangladesh', note: 'Costs, visas, intakes and student life' },
   { name: 'For parents', href: '/for-parents', note: 'A family view of the complete journey' },
   { name: 'About EduExpress', href: '/about', note: 'Our company and working method' },
