@@ -655,3 +655,33 @@ model ActivityEvent {
   @@index([employeeId, createdAt])
   @@index([createdAt])
 }
+
+model GbpScheduledPost {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  topicType       String    @default("STANDARD") // STANDARD | OFFER | EVENT
+  title           String?
+  summary         String
+  callToAction    String    @default("LEARN_MORE") // LEARN_MORE | BOOK | SIGN_UP | ORDER | SHOP
+  ctaUrl          String
+  mediaUrl        String?
+  offerCouponCode String?
+  offerRedeemUrl  String?
+  offerTerms      String?
+  startDate       DateTime?
+  endDate         DateTime?
+  language        String    @default("en") // en | bn | bilingual
+  category        String    @default("general")
+  sortOrder       Int       @default(100)
+  status          String    @default("queued") // queued | paused | published | failed
+  isRecurring     Boolean   @default(true)
+  publishedCount  Int       @default(0)
+  lastPublishedAt DateTime?
+  lastExternalId  String?
+  lastError       String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status, sortOrder])
+  @@index([lastPublishedAt])
+}

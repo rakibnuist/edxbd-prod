@@ -1,0 +1,165 @@
+{
+  "name": "EduExpress GBP Auto-Poster (Weekly / 15-Day)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24,
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "trigger-daily-check",
+      "name": "Daily Schedule Check (09:00 UTC / 15:00 BST)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://eduexpressint.com/api/cron/gbp-posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-cron-secret",
+              "value": "={{$env.EDUEXPRESS_CRON_SECRET}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fetch-due-post",
+      "name": "Fetch Next Due Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-enabled-due",
+              "leftValue": "={{$json.enabled === true && $json.isDue === true && Boolean($json.nextPost)}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-due",
+      "name": "Is 7/15-Day Post Due?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mybusiness.googleapis.com/v4/accounts/16688138993497254676/locations/REPLACE_WITH_LOCATION_ID/localPosts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.googleLocalPostPayload) }}",
+        "options": {}
+      },
+      "id": "publish-gbp",
+      "name": "Publish to Google Business Profile",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [960, 220]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://eduexpressint.com/api/cron/gbp-posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-cron-secret",
+              "value": "={{$env.EDUEXPRESS_CRON_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'ack', postId: $('Fetch Next Due Post').item.json.nextPost.id, externalPostId: $json.name || null, source: 'n8n_workflow' }) }}",
+        "options": {}
+      },
+      "id": "ack-eduexpress",
+      "name": "Acknowledge Rotation in EduExpress",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1220, 220]
+    }
+  ],
+  "connections": {
+    "Daily Schedule Check (09:00 UTC / 15:00 BST)": {
+      "main": [
+        [
+          {
+            "node": "Fetch Next Due Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Next Due Post": {
+      "main": [
+        [
+          {
+            "node": "Is 7/15-Day Post Due?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is 7/15-Day Post Due?": {
+      "main": [
+        [
+          {
+            "node": "Publish to Google Business Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish to Google Business Profile": {
+      "main": [
+        [
+          {
+            "node": "Acknowledge Rotation in EduExpress",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Dhaka"
+  }
+}

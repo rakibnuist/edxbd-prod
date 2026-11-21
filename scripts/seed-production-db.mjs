@@ -61,6 +61,9 @@ try {
   console.log('Running seed-meta-weblead-campaign.mjs...');
   execSync('node scripts/seed-meta-weblead-campaign.mjs', { stdio: 'inherit' });
 
+  console.log('Running seed-gbp-posts.mjs...');
+  execSync('node scripts/seed-gbp-posts.mjs', { stdio: 'inherit' });
+
   console.log('--- PRODUCTION DATABASE SYNC COMPLETED SUCCESSFULLY ---');
 } catch (err) {
   console.error('Error during production database sync:', err);
