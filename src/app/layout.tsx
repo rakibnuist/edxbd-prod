@@ -202,7 +202,7 @@ export default async function RootLayout({
     "email": office?.email,
     "sameAs": [
       "https://www.facebook.com/eduexpressint",
-      "https://www.linkedin.com/company/eduexpress",
+      "https://www.linkedin.com/company/eduexpressint",
       "https://www.instagram.com/eduexpressint/",
       "https://www.youtube.com/@EduExpressInt",
       "https://twitter.com/eduexpressint"

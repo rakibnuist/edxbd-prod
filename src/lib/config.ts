@@ -40,7 +40,7 @@ export const config = {
   // Social Media
   social: {
     facebook: 'https://www.facebook.com/eduexpressint',
-    linkedin: 'https://www.linkedin.com/company/eduexpress',
+    linkedin: 'https://www.linkedin.com/company/eduexpressint',
     instagram: 'https://www.instagram.com/eduexpressint/',
     youtube: 'https://www.youtube.com/@EduExpressInt',
     twitter: 'https://twitter.com/eduexpressint',

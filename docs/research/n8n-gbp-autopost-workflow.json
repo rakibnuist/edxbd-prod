@@ -73,7 +73,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://mybusiness.googleapis.com/v4/accounts/16688138993497254676/locations/REPLACE_WITH_LOCATION_ID/localPosts",
+        "url": "https://mybusiness.googleapis.com/v4/accounts/REPLACE_WITH_ACCOUNT_ID/locations/16688138993497254676/localPosts",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "googleOAuth2Api",
         "sendBody": true,

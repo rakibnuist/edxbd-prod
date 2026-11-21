@@ -576,7 +576,7 @@ export default function AdminGbpPostsPage() {
                 type="text"
                 value={accountIdInput}
                 onChange={(e) => setAccountIdInput(e.target.value)}
-                placeholder="e.g. 16688138993497254676"
+                placeholder="Numeric Account ID (from accounts API)"
                 className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
               />
             </label>
@@ -586,7 +586,7 @@ export default function AdminGbpPostsPage() {
                 type="text"
                 value={locationIdInput}
                 onChange={(e) => setLocationIdInput(e.target.value)}
-                placeholder="Numeric Google Location ID"
+                placeholder="e.g. 16688138993497254676"
                 className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
               />
             </label>

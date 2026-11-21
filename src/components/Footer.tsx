@@ -73,7 +73,7 @@ const legalLinks = [
 
 const socialLinks = [
   { name: 'Facebook', href: 'https://www.facebook.com/eduexpressint', icon: Facebook },
-  { name: 'LinkedIn', href: 'https://www.linkedin.com/company/eduexpress', icon: Linkedin },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/company/eduexpressint', icon: Linkedin },
   { name: 'Instagram', href: 'https://www.instagram.com/eduexpressint/', icon: Instagram },
   { name: 'YouTube', href: 'https://www.youtube.com/@EduExpressInt', icon: Youtube },
 ];
@@ -343,7 +343,7 @@ export default async function Footer() {
                 {office?.email && (
                   <a
                     href={`mailto:${office.email}`}
-                    className="mt-1 flex items-center gap-1.5 whitespace-nowrap text-[12.5px] text-white/80 hover:text-white"
+                    className="mt-1 flex items-center gap-1.5 break-all text-[12.5px] text-white/80 hover:text-white"
                   >
                     <Mail size={13} className="shrink-0 text-lime" aria-hidden="true" />
                     <span>{office.email}</span>

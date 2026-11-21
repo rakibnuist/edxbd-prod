@@ -38,7 +38,7 @@ const DEFAULTS: SettingsState = {
   siteName: 'EduExpress International',
   siteDescription: "Bangladesh's Evidence-First Education Consultancy",
   facebookUrl: 'https://www.facebook.com/eduexpressint',
-  linkedinUrl: 'https://www.linkedin.com/company/eduexpress',
+  linkedinUrl: 'https://www.linkedin.com/company/eduexpressint',
   instagramUrl: 'https://www.instagram.com/eduexpressint/',
   youtubeUrl: 'https://www.youtube.com/@EduExpressInt',
   introVideoTitle: 'Meet EduExpress before you visit',

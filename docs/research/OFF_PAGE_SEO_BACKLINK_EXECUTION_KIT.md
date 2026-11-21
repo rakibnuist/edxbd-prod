@@ -28,7 +28,7 @@ Use this character-for-character across Google Business Profile, LinkedIn, Faceb
 | **Office Hours** | `Saturday to Thursday, 11:00 AM to 6:00 PM` *(Friday closed)* |
 | **Website** | `https://eduexpressint.com` |
 | **Local Dhaka Landing Page** | `https://eduexpressint.com/education-consultant-dhaka` |
-| **Official Social Profiles (`sameAs`)** | Facebook: `https://www.facebook.com/eduexpressint` · LinkedIn: `https://www.linkedin.com/company/eduexpress` · Instagram: `https://www.instagram.com/eduexpressint/` · YouTube: `https://www.youtube.com/@EduExpressInt` · X: `https://twitter.com/eduexpressint` |
+| **Official Social Profiles (`sameAs`)** | Facebook: `https://www.facebook.com/eduexpressint` · LinkedIn: `https://www.linkedin.com/company/eduexpressint` · Instagram: `https://www.instagram.com/eduexpressint/` · YouTube: `https://www.youtube.com/@EduExpressInt` · X: `https://twitter.com/eduexpressint` |
 
 ---
 
@@ -253,7 +253,7 @@ Use this **strictly as an accuracy verification & transparency outreach** (never
 
 ## 5. Priority 5 & 6 — Local Citations, Social Entity Cleanup & `eduexpress.info` Consolidation
 
-### 5.1 LinkedIn Company Page Immediate Fix Checklist (`linkedin.com/company/eduexpress`)
+### 5.1 LinkedIn Company Page Immediate Fix Checklist (`linkedin.com/company/eduexpressint`)
 1. **Industry:** Change from `Staffing and Recruiting` → **`Education Management`** or **`Higher Education`**.
 2. **Headquarters:** Change from `Wuxi, China` → **`Dhaka, Dhaka Division, Bangladesh`** with exact street address: `Evergreen Latif, House: 12/1, Road: 4/A, Ground Floor, Dhanmondi, Dhaka 1209`.
 3. **Website URL:** Set strictly to `https://eduexpressint.com`.
@@ -268,7 +268,7 @@ Use this **strictly as an accuracy verification & transparency outreach** (never
 | Platform | Target URL / Handle | Exact Action Required | Status |
 |---|---|---|---|
 | **Google Business Profile** | Search `EduExpress International` Dhanmondi | Apply all fields in `GOOGLE_BUSINESS_PROFILE_ENHANCEMENT_KIT.md`; UTM-tag website link to `/education-consultant-dhaka`; post 2x/week; collect non-incentivized reviews | `[ ]` |
-| **LinkedIn Company** | `https://www.linkedin.com/company/eduexpress` | Fix industry, HQ (Dhaka, BD), HTTPS URL, and copy above | `[ ]` |
+| **LinkedIn Company** | `https://www.linkedin.com/company/eduexpressint` | Fix industry, HQ (Dhaka, BD), HTTPS URL, and copy above | `[ ]` |
 | **Facebook Page** | `https://www.facebook.com/eduexpressint` | Verify NAP matches character-for-character, category `Educational Consultant`, founded `March 8, 2018`, zero "100% visa" posts | `[ ]` |
 | **Bing Places for Business** | `https://www.bingplaces.com/` | Import or claim listing using exact Dhanmondi NAP (`+880 1983-333566`, `https://eduexpressint.com/education-consultant-dhaka`) — feeds ChatGPT Search / Bing Maps | `[ ]` |
 | **Apple Business Connect** | `https://businessconnect.apple.com/` | Claim Dhanmondi office pin (`23.7401435, 90.3713009`), category `Educational Consultant`, exact hours | `[ ]` |

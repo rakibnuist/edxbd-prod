@@ -23,7 +23,7 @@
 | **Regular Hours** | `Saturday–Thursday: 11:00 AM – 6:00 PM` · `Friday: Closed` | Matches opening hours schema (`11:00–18:00`) |
 | **Primary Website URL (UTM-tagged)** | `https://eduexpressint.com/education-consultant-dhaka?utm_source=google&utm_medium=organic&utm_campaign=gbp_profile` | Routes Local Pack clicks directly to the Dhanmondi office landing page with GA4/CRM attribution |
 | **Appointment Link (UTM-tagged)** | `https://eduexpressint.com/education-consultant-dhaka?utm_source=google&utm_medium=organic&utm_campaign=gbp_appointment#book-consultation` | Lands directly on the embedded Dhanmondi consultation & assessment form |
-| **Short Name / Social Links** | Facebook (`facebook.com/eduexpressint`), LinkedIn (`linkedin.com/company/eduexpress`), YouTube (`youtube.com/@EduExpressInt`), Instagram (`instagram.com/eduexpressint/`) | Match `sameAs` in `src/app/layout.tsx` |
+| **Short Name / Social Links** | Facebook (`facebook.com/eduexpressint`), LinkedIn (`linkedin.com/company/eduexpressint`), YouTube (`youtube.com/@EduExpressInt`), Instagram (`instagram.com/eduexpressint/`) | Match `sameAs` in `src/app/layout.tsx` |
 
 ### 1.1 Business Description (706 / 750 Characters — Copy-Paste Ready)
 
