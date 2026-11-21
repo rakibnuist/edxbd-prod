@@ -588,6 +588,8 @@ export default async function BangladeshStudyAbroadMarketPage() {
             </blockquote>
             <ReportCitationActions
               citationText={`EduExpress International (${now.getUTCFullYear()}). Bangladesh Study Abroad Market 2027 Report & 12-Destination Benchmark. Retrieved from ${canonical}`}
+              reportUrl={canonical}
+              reportTitle="Bangladesh Study Abroad Market 2027 Report & 12-Destination Cost Benchmark (EduExpress International)"
               datasetUrl={`${SITE}/bangladesh-study-abroad-market.json`}
               downloadPath="/bangladesh-study-abroad-market.json"
               downloadFilename="eduexpress-bangladesh-study-abroad-market.json"

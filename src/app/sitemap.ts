@@ -46,6 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPaths = Array.from(new Set([
     '',
     '/about',
+    '/press',
     '/destinations',
     '/find-education',
     '/your-study-journey',
@@ -154,7 +155,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
               route === '/bangladesh-vs-study-abroad-countries' ||
               route === '/bn/study-in-china-after-ssc-dakhil' ||
               route === '/bangladesh-study-abroad-market' ||
-              route === '/bn/bangladesh-study-abroad-market'
+              route === '/bn/bangladesh-study-abroad-market' ||
+              route === '/press'
             ? new Date('2026-11-21')
             : route === '/b2b' || route === '/partnership'
               ? new Date('2026-11-20')

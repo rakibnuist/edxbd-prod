@@ -40,9 +40,6 @@ try {
   console.log('Running seed-march-2027-new-universities.mjs...');
   execSync('node scripts/seed-march-2027-new-universities.mjs', { stdio: 'inherit' });
 
-  console.log('Running complete-all-universities-data.mjs...');
-  execSync('node scripts/complete-all-universities-data.mjs', { stdio: 'inherit' });
-
   console.log('Running complete-student-testimonials.mjs...');
   execSync('node scripts/complete-student-testimonials.mjs', { stdio: 'inherit' });
 
@@ -57,6 +54,9 @@ try {
 
   console.log('Running sync-seo-content-hygiene.mjs...');
   execSync('node scripts/sync-seo-content-hygiene.mjs', { stdio: 'inherit' });
+
+  console.log('Running complete-all-universities-data.mjs...');
+  execSync('node scripts/complete-all-universities-data.mjs', { stdio: 'inherit' });
 
   console.log('Running seed-meta-weblead-campaign.mjs...');
   execSync('node scripts/seed-meta-weblead-campaign.mjs', { stdio: 'inherit' });

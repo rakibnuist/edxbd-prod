@@ -496,6 +496,8 @@ export default async function ChinaStudyReportPage() {
             </p>
             <ReportCitationActions
               citationText={`EduExpress International (${now.getUTCFullYear()}). Bangladesh to China Study Data & Cost Benchmark Report. Retrieved from ${url}`}
+              reportUrl={url}
+              reportTitle="Bangladesh to China Study Data & Cost Benchmark Report (EduExpress International)"
               datasetUrl={`${SITE}/china-study-report.json`}
             />
             <dl className="mt-5 space-y-2 text-[15px] text-white/80">

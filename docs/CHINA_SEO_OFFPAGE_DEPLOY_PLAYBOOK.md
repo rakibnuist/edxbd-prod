@@ -41,12 +41,13 @@ Once deployed on `https://eduexpressint.com`, verify live `200` responses (and s
    - `/sitemaps/guides.xml` (18 English + Bengali China/Malaysia topic guides)
    - `/sitemaps/universities.xml`
    - `/sitemaps/success-stories.xml`
-3. AI & data endpoints: `/llms.txt`, `/llms-full.txt`, `/pricing.md`, `/china-study-report.json`, and `/9303d37873c94ab5a25637e6d1ad9ece.txt` (IndexNow verification key).
+3. AI & data endpoints: `/llms.txt`, `/llms-full.txt`, `/pricing.md`, `/china-study-report.json`, `/bangladesh-study-abroad-market.json`, and `/9303d37873c94ab5a25637e6d1ad9ece.txt` (IndexNow verification key).
 
 ### Search Console, Bing Webmaster & IndexNow Ping
 - **Google Search Console (`https://eduexpressint.com`):** Submit `sitemap.xml` plus all 5 sub-sitemaps (`/sitemaps/*.xml`). Request indexing directly on priority English & Bengali URLs:
   - `/study-in-china-from-bangladesh` & `/bn/study-in-china`
   - `/china-study-report-bangladesh`
+  - `/bangladesh-study-abroad-market` & `/bn/bangladesh-study-abroad-market`
   - `/education-consultant-dhaka`
   - `/csc-scholarship-bangladesh` & `/bn/csc-scholarship-bangladesh`
   - `/china-student-visa-bangladesh` & `/bn/china-student-visa-bangladesh`
@@ -86,7 +87,9 @@ Use this character-for-character NAP across Google Business Profile, LinkedIn, F
 
 ## 4. Off-Page Backlinks & Digital PR Outreach Templates
 
-Always pull live counts (`universityCount`, `programCounts`, tuition quartiles) from `https://eduexpressint.com/china-study-report.json` at the time of outreach rather than quoting static numbers from memory.
+For pre-filled partner university targets (APU, Taylor's, GZCCC, AHUT, NUIST, XJTU, etc.), English + Bengali Bangladesh press pitches, Dhaka college seminar templates, LinkedIn/NAP cleanup copy, `eduexpress.info` `301` redirect rules, and the monthly outreach tracker, see **[docs/research/OFF_PAGE_SEO_BACKLINK_EXECUTION_KIT.md](./research/OFF_PAGE_SEO_BACKLINK_EXECUTION_KIT.md)**.
+
+Always pull live counts (`universityCount`, `programCounts`, tuition quartiles) from `https://eduexpressint.com/china-study-report.json` and `https://eduexpressint.com/bangladesh-study-abroad-market.json` at the time of outreach rather than quoting static numbers from memory.
 
 ### Template A — Chinese University International Admissions Offices (Backlink Priority 1)
 *Use ONLY for verified partner/authorized universities or when requesting official record verification.*

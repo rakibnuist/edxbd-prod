@@ -186,6 +186,27 @@
       ]
     },
     {
+      "slug": "beijing-technology-and-business-university",
+      "rankings": [
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking 2026",
+          "year": 2026,
+          "rank": "178",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/beijing-technology-and-business-university"
+        },
+        {
+          "publisher": "ESI",
+          "rankingName": "Essential Science Indicators (ESI) Top 1%",
+          "year": 2026,
+          "rank": "9DisciplinesinGlobalTop1%",
+          "scope": "subject",
+          "sourceUrl": "https://clarivate.com/products/scientific-and-academic-research/research-discovery-and-workflow-solutions/essential-science-indicators/"
+        }
+      ]
+    },
+    {
       "slug": "capital-medical-university",
       "rankings": [
         {
@@ -317,6 +338,23 @@
           "rank": "350+",
           "scope": "national",
           "sourceUrl": "https://www.shanghairanking.com/institution/central-china-normal-university"
+        }
+      ]
+    },
+    {
+      "slug": "central-south-university",
+      "rankings": [
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "National",
+          "rank": "13"
+        },
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "World",
+          "rank": "101-150"
         }
       ]
     },
@@ -563,6 +601,14 @@
           "year": 2026,
           "scope": "National",
           "rank": "295"
+        },
+        {
+          "publisher": "ShanghaiRanking",
+          "rankingName": "Best Chinese Universities Ranking",
+          "year": 2026,
+          "rank": "295",
+          "scope": "national",
+          "sourceUrl": "https://www.shanghairanking.com/institution/civil-aviation-university-of-china"
         }
       ]
     },
@@ -1793,6 +1839,23 @@
           "scope": "subject",
           "subject": "Biomedical Engineering",
           "sourceUrl": "https://www.shanghairanking.com/rankings/gras/2026/AS0208"
+        }
+      ]
+    },
+    {
+      "slug": "kunming-university-of-science-and-technology",
+      "rankings": [
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "National",
+          "rank": "138"
+        },
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "World",
+          "rank": "601-700"
         }
       ]
     },
@@ -3222,6 +3285,23 @@
       ]
     },
     {
+      "slug": "southwest-jiaotong-university",
+      "rankings": [
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "National",
+          "rank": "53"
+        },
+        {
+          "source": "ShanghaiRanking",
+          "year": 2026,
+          "scope": "World",
+          "rank": "501-600"
+        }
+      ]
+    },
+    {
       "slug": "southwest-medical-university",
       "rankings": [
         {
@@ -4403,27 +4483,6 @@
       ]
     },
     {
-      "slug": "beijing-technology-and-business-university",
-      "rankings": [
-        {
-          "publisher": "ShanghaiRanking",
-          "rankingName": "Best Chinese Universities Ranking 2026",
-          "year": 2026,
-          "rank": "178",
-          "scope": "national",
-          "sourceUrl": "https://www.shanghairanking.com/institution/beijing-technology-and-business-university"
-        },
-        {
-          "publisher": "ESI",
-          "rankingName": "Essential Science Indicators (ESI) Top 1%",
-          "year": 2026,
-          "rank": "9 Disciplines in Global Top 1%",
-          "scope": "subject",
-          "sourceUrl": "https://clarivate.com/products/scientific-and-academic-research/research-discovery-and-workflow-solutions/essential-science-indicators/"
-        }
-      ]
-    },
-    {
       "slug": "asia-pacific-university",
       "rankings": [
         {
@@ -4609,57 +4668,6 @@
           "rank": "3",
           "scope": "national",
           "sourceUrl": "https://www.topuniversities.com/universities/university-nottingham"
-        }
-      ]
-    },
-    {
-      "slug": "kunming-university-of-science-and-technology",
-      "rankings": [
-        {
-          "source": "ShanghaiRanking",
-          "year": 2026,
-          "scope": "National",
-          "rank": "138"
-        },
-        {
-          "source": "ShanghaiRanking",
-          "year": 2026,
-          "scope": "World",
-          "rank": "601-700"
-        }
-      ]
-    },
-    {
-      "slug": "southwest-jiaotong-university",
-      "rankings": [
-        {
-          "source": "ShanghaiRanking",
-          "year": 2026,
-          "scope": "National",
-          "rank": "53"
-        },
-        {
-          "source": "ShanghaiRanking",
-          "year": 2026,
-          "scope": "World",
-          "rank": "501-600"
-        }
-      ]
-    },
-    {
-      "slug": "central-south-university",
-      "rankings": [
-        {
-          "source": "ShanghaiRanking",
-          "year": 2026,
-          "scope": "National",
-          "rank": "13"
-        },
-        {
-          "source": "ShanghaiRanking",
-          "year": 2026,
-          "scope": "World",
-          "rank": "101-150"
         }
       ]
     }

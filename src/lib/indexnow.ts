@@ -207,6 +207,7 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/updates/complete-csc-universities-list-2027',
     '/updates/how-to-apply-csc-type-a-scholarship-complete-guide',
     '/about',
+    '/press',
     '/for-parents',
     '/partnership',
     '/contact',

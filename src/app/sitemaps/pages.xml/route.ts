@@ -40,6 +40,7 @@ const pages: { path: string; lastmod: string }[] = [
   })),
   { path: '/china-study-report-bangladesh', lastmod: '2026-11-15' },
   { path: '/bangladesh-study-abroad-market', lastmod: '2026-11-21' },
+  { path: '/press', lastmod: '2026-11-21' },
   { path: '/education-consultant-dhaka', lastmod: '2026-11-15' },
 ];
 

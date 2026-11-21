@@ -28,7 +28,7 @@ const malaysiaUniversities = [
     sourceUrls: JSON.stringify(['https://isc.um.edu.my', 'https://educationmalaysia.gov.my']),
     aliases: JSON.stringify(['UM', 'University of Malaya']),
     legacySlugs: JSON.stringify([]),
-    relationshipType: 'direct_application',
+    relationshipType: 'public_direct_application',
     verificationStatus: 'verified',
     programs: [
       {
@@ -110,7 +110,7 @@ const malaysiaUniversities = [
     sourceUrls: JSON.stringify(['https://admission.utm.my']),
     aliases: JSON.stringify(['UTM']),
     legacySlugs: JSON.stringify([]),
-    relationshipType: 'direct_application',
+    relationshipType: 'public_direct_application',
     verificationStatus: 'verified',
     programs: [
       {
@@ -180,7 +180,7 @@ const malaysiaUniversities = [
     sourceUrls: JSON.stringify(['https://www.apu.edu.my/fees']),
     aliases: JSON.stringify(['APU', 'APIIT']),
     legacySlugs: JSON.stringify([]),
-    relationshipType: 'partner_institution',
+    relationshipType: 'public_direct_application',
     verificationStatus: 'verified',
     programs: [
       {
@@ -261,7 +261,7 @@ const malaysiaUniversities = [
     sourceUrls: JSON.stringify(['https://university.taylors.edu.my/en/study/undergraduate.html']),
     aliases: JSON.stringify(['Taylor\'s', 'Taylors University']),
     legacySlugs: JSON.stringify([]),
-    relationshipType: 'partner_institution',
+    relationshipType: 'public_direct_application',
     verificationStatus: 'verified',
     programs: [
       {
@@ -330,7 +330,7 @@ const malaysiaUniversities = [
     sourceUrls: JSON.stringify(['https://www.monash.edu.my/study/courses']),
     aliases: JSON.stringify(['Monash Malaysia', 'Monash Sunway']),
     legacySlugs: JSON.stringify([]),
-    relationshipType: 'direct_application',
+    relationshipType: 'public_direct_application',
     verificationStatus: 'verified',
     programs: [
       {
@@ -400,7 +400,7 @@ const malaysiaUniversities = [
     sourceUrls: JSON.stringify(['https://www.nottingham.edu.my/study']),
     aliases: JSON.stringify(['UNM', 'Nottingham Malaysia']),
     legacySlugs: JSON.stringify([]),
-    relationshipType: 'direct_application',
+    relationshipType: 'public_direct_application',
     verificationStatus: 'verified',
     programs: [
       {
@@ -469,7 +469,7 @@ const malaysiaUniversities = [
     sourceUrls: JSON.stringify(['https://sunwayuniversity.edu.my/international', 'https://educationmalaysia.gov.my']),
     aliases: JSON.stringify(['Sunway', 'Sunway College']),
     legacySlugs: JSON.stringify([]),
-    relationshipType: 'direct_application',
+    relationshipType: 'public_direct_application',
     verificationStatus: 'verified',
     programs: [
       {
@@ -551,7 +551,7 @@ const malaysiaUniversities = [
     sourceUrls: JSON.stringify(['https://www.ucsiuniversity.edu.my/international-students', 'https://educationmalaysia.gov.my']),
     aliases: JSON.stringify(['UCSI', 'UCSI KL']),
     legacySlugs: JSON.stringify([]),
-    relationshipType: 'direct_application',
+    relationshipType: 'public_direct_application',
     verificationStatus: 'verified',
     programs: [
       {
@@ -633,7 +633,7 @@ const malaysiaUniversities = [
     sourceUrls: JSON.stringify(['https://www.hw.ac.uk/malaysia/study.htm', 'https://educationmalaysia.gov.my']),
     aliases: JSON.stringify(['Heriot-Watt Malaysia', 'HWUM']),
     legacySlugs: JSON.stringify([]),
-    relationshipType: 'direct_application',
+    relationshipType: 'public_direct_application',
     verificationStatus: 'verified',
     programs: [
       {

@@ -50,6 +50,7 @@ const planLinks = [
 
 const companyLinks = [
   ['About EduExpress', '/about'],
+  ['Media & Press Room', '/press'],
   ['Education Consultant Dhaka', '/education-consultant-dhaka'],
   ['How It Works', '/your-study-journey'],
   ['What We Do', '/services'],

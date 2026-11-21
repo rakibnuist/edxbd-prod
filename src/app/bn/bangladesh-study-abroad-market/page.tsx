@@ -16,6 +16,7 @@ import {
   Wallet,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import ReportCitationActions from '@/components/china/ReportCitationActions';
 import BnChinaRelatedGuides from '@/components/page/BnChinaRelatedGuides';
 import { CtaBand, FaqBlock, JsonLd, Section, kit } from '@/components/page/PageKit';
 import {
@@ -149,11 +150,12 @@ const faqsBn = [
 ];
 
 export default async function BengaliBangladeshStudyAbroadMarketPage() {
+  const now = new Date();
   const [universities, stories] = await Promise.all([
     getUniversityRecords(),
     getPublishedStories().catch(() => []),
   ]);
-  const snapshot = buildBangladeshMarketBenchmark(universities, stories.length);
+  const snapshot = buildBangladeshMarketBenchmark(universities, stories.length, now);
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -413,6 +415,25 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
               ) : null;
             })}
           </div>
+        </div>
+
+        <div className="mt-6 rounded-3xl bg-petrol-800 p-6 text-white sm:p-7">
+          <h3 className="flex items-center gap-2 text-[20px] font-semibold text-lime">
+            <ShieldAlert size={20} aria-hidden="true" /> মিডিয়া, গবেষক ও শিক্ষা পোর্টালের জন্য ওপেন ডেটাসেট ও সাইটেশন (CC BY 4.0)
+          </h3>
+          <blockquote className="mt-4 rounded-2xl border border-white/15 bg-black/20 p-4 text-[14px] leading-6 text-white/90">
+            EduExpress International ({now.getUTCFullYear()}). <em>বাংলাদেশ থেকে বিদেশে উচ্চশিক্ষা মার্কেট রিপোর্ট ২০২৭ (Bangladesh Study Abroad Market 2027 Report)</em>. Retrieved from {canonical}
+          </blockquote>
+          <ReportCitationActions
+            citationText={`EduExpress International (${now.getUTCFullYear()}). বাংলাদেশ থেকে বিদেশে উচ্চশিক্ষা মার্কেট রিপোর্ট ২০২৭ (Bangladesh Study Abroad Market 2027 Report). Retrieved from ${canonical}`}
+            reportUrl={canonical}
+            reportTitle="বাংলাদেশ থেকে বিদেশে উচ্চশিক্ষা মার্কেট রিপোর্ট ২০২৭ — EduExpress International"
+            datasetUrl={`${SITE}/bangladesh-study-abroad-market.json`}
+            downloadPath="/bangladesh-study-abroad-market.json"
+            downloadFilename="eduexpress-bangladesh-study-abroad-market.json"
+            analyticsDestination="bangladesh_market_bn"
+            analyticsLabel="bangladesh_market_report_json_bn"
+          />
         </div>
       </Section>
 

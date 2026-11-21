@@ -38,7 +38,7 @@ Key facts:
 - [China K-Visa for STEM graduates](https://eduexpressint.com/updates/china-k-visa): eligibility, documents and application steps for qualified Bangladeshi STEM graduates
 - [China universities](https://eduexpressint.com/china-universities): profiles with programmes, fees, city guides and scholarships
 - [China student success stories](https://eduexpressint.com/china-success-stories): consented student admission cases with privacy-safe records
-- [Bangladesh to China Study Data & Cost Report](https://eduexpressint.com/china-study-report-bangladesh): live catalogue benchmark across 111 Chinese universities, explicit CNY tuition quartiles, non-tuition charges, scholarships and verification counts ([JSON dataset](https://eduexpressint.com/china-study-report.json))
+- [Bangladesh to China Study Data & Cost Report](https://eduexpressint.com/china-study-report-bangladesh): live catalogue benchmark across 150 Chinese universities, explicit CNY tuition quartiles, non-tuition charges, scholarships and verification counts ([JSON dataset](https://eduexpressint.com/china-study-report.json))
 - [বাংলা গাইড (Study in China in Bengali)](https://eduexpressint.com/bn/study-in-china): চীন পড়াশোনা, খরচ ও ভিসার সম্পূর্ণ বাংলা গাইড
 - [চায়না স্টুডেন্ট ভিসা গাইড (বাংলা)](https://eduexpressint.com/bn/china-student-visa-bangladesh): X1/X2 ভিসা ও JW202 ধাপসমূহ
 - [চীনে পড়াশোনার খরচ (বাংলা)](https://eduexpressint.com/bn/study-in-china-cost-bangladesh): টিউশন, হোস্টেল ও বাজেট হিসাব
@@ -74,6 +74,7 @@ Key facts:
 ## Trust and policy
 
 - [About EduExpress](https://eduexpressint.com/about): history, team and office
+- [Media, Data & Research Press Room](https://eduexpressint.com/press): open CC BY 4.0 datasets, 4 bilingual press briefs, spokesperson bios and journalist verification desk
 - [How we verify universities](https://eduexpressint.com/how-we-verify-universities): sources and review dates behind every listed fact
 - [Better Education Standard](https://eduexpressint.com/better-education-standard): how options are compared before recommending
 - [Proof library](https://eduexpressint.com/proof-library): published company and office records
