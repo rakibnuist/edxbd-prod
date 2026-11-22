@@ -139,7 +139,7 @@ export default async function Footer() {
             </div>
 
             {/* Social Links & Trust Line */}
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <div className="mt-6 flex flex-wrap items-center gap-3 text-xs">
               <div className="flex items-center gap-2">
                 {socialLinks.map(({ name, href, icon: Icon }) => (
                   <a
@@ -154,8 +154,8 @@ export default async function Footer() {
                   </a>
                 ))}
               </div>
-              <span className="text-xs text-white/40">|</span>
-              <span className="text-xs font-medium text-white/60">BDT 0 service fee before visa</span>
+              <span className="hidden text-white/30 sm:inline" aria-hidden="true">·</span>
+              <span className="font-medium text-white/60">BDT 0 service fee before visa</span>
             </div>
           </div>
 
@@ -323,13 +323,13 @@ export default async function Footer() {
           </div>
         </section>
 
-        {/* Clean Bottom Legal & Language Bar (Right-padded to prevent widget overlap) */}
-        <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between lg:pr-24">
-          <p>
+        {/* Clean Bottom Legal & Language Bar */}
+        <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-white/60 md:flex-row md:items-center md:justify-between">
+          <p className="whitespace-nowrap">
             © {new Date().getFullYear()} EduExpress International. All rights reserved.
           </p>
 
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 lg:pr-28">
             {legalLinks.map(([name, href]) => (
               <Link key={href} href={href} className="transition hover:text-white">
                 {name}
