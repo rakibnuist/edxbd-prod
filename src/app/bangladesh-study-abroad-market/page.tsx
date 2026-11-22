@@ -312,7 +312,7 @@ export default async function BangladeshStudyAbroadMarketPage() {
         title="Five structural forces shaping Bangladeshi student & parent decisions"
         intro="Verified macro signals driving destination selection, agency vetting, and AI-assisted research across Dhaka and regional cities."
       >
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div data-anim="stagger" className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {BANGLADESH_MACRO_INDICATORS.map((item) => (
             <div key={item.indicator} className={kit.card}>
               <span className={kit.badge}>
@@ -324,7 +324,7 @@ export default async function BangladeshStudyAbroadMarketPage() {
               <p className="mt-3 text-[13px] font-medium text-ink-mute">Source context: {item.sourceNote}</p>
             </div>
           ))}
-          <figure className="overflow-hidden rounded-3xl bg-white shadow-sm">
+          <figure className="overflow-hidden rounded-3xl bg-white">
             <div className="relative aspect-[4/3] w-full">
               <Image
                 src="/images/home/consultation-family.webp"
@@ -347,7 +347,7 @@ export default async function BangladeshStudyAbroadMarketPage() {
         title="All 12 active destinations: separated tuition, living & Student File status"
         intro="Built directly from EduExpress’s active country data. China serves as the flagship proof hub; every destination carries distinct service terms, financial rules, and compliance guardrails."
       >
-        <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white">
           <table className="w-full min-w-[980px] text-left text-[14px] leading-6">
             <caption className="sr-only">
               12 active study abroad destinations from Bangladesh with separated tuition, living costs, and Student File rules
@@ -364,16 +364,16 @@ export default async function BangladeshStudyAbroadMarketPage() {
             </thead>
             <tbody className="divide-y divide-canvas-soft text-ink-soft">
               {snapshot.destinations.map((dest) => (
-                <tr key={dest.slug} className={dest.slug === 'china' || dest.slug === 'malaysia' ? 'bg-lime-pale/25' : undefined}>
+                <tr key={dest.slug} className={dest.slug === 'china' || dest.slug === 'malaysia' ? 'bg-lime-pale/30' : undefined}>
                   <th scope="row" className="p-4 align-top font-bold text-petrol-800">
                     <Link href={dest.href} className="underline decoration-petrol-800/30 underline-offset-4 hover:text-lime-deep">
                       {dest.name}
                     </Link>
-                    <span className="mt-1 block text-[12px] font-semibold text-emerald-900">{dest.tier}</span>
+                    <span className="mt-1 block text-[12px] font-semibold text-lime-deep">{dest.tier}</span>
                   </th>
                   <td className="p-4 align-top font-medium text-petrol-800">{dest.intakes}</td>
                   <td className="p-4 align-top font-semibold text-petrol-800">{dest.indicativeTuition}</td>
-                  <td className="p-4 align-top text-amber-900">{dest.indicativeLiving}</td>
+                  <td className="p-4 align-top font-medium text-clay">{dest.indicativeLiving}</td>
                   <td className="p-4 align-top">
                     <span className="block font-semibold text-petrol-800">{dest.studentFileRule}</span>
                     <span className="mt-1 block text-[13px] text-ink-soft">{dest.eduExpressFeeModel}</span>
@@ -404,9 +404,9 @@ export default async function BangladeshStudyAbroadMarketPage() {
         title="Bangladesh qualification bridges: SSC / O-Level to PhD"
         intro="Route planning starts from the student’s current academic certificate—SSC, Dakhil, O-Level, HSC, Alim, A-Level, or Bachelor’s—rather than generic destination hype."
       >
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div data-anim="stagger" className="grid gap-6 lg:grid-cols-3">
           {QUALIFICATION_TRACKS.map((track) => (
-            <div key={track.stage} className="flex flex-col justify-between rounded-3xl bg-white p-6 shadow-sm sm:p-7">
+            <div key={track.stage} className={`${kit.card} flex flex-col justify-between sm:p-7`}>
               <div>
                 <div className="flex items-center gap-3">
                   <span className={kit.iconLime}>
@@ -440,7 +440,7 @@ export default async function BangladeshStudyAbroadMarketPage() {
         title="Bangladesh Bank Student File rules vs. China payment simplicity"
         intro="Cross-border tuition remittance is one of the biggest operational bottlenecks for Bangladeshi guardians. Understanding where a central-bank Student File applies prevents missed deposit deadlines."
       >
-        <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white">
           <table className="w-full min-w-[760px] text-left text-[15px] leading-7">
             <caption className="sr-only">
               Bangladesh Bank AD bank Student File remittance rules compared against China scholarship and on-campus fee tracks
@@ -488,10 +488,10 @@ export default async function BangladeshStudyAbroadMarketPage() {
         title="B2C family protection & the Bangladesh B2B consultancy ecosystem"
         intro="Whether advising a family in Dhanmondi or processing files for a partner agency nationwide, written accountability replaces verbal assurances."
       >
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-3xl border border-emerald-200 bg-white p-6 shadow-sm sm:p-8">
+        <div data-anim="stagger" className="grid gap-6 lg:grid-cols-2">
+          <div className={`${kit.cardLime} sm:p-8`}>
             <div className="flex items-center gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-emerald-100 text-emerald-800">
+              <span className={kit.iconLime}>
                 <CheckCircle2 size={20} aria-hidden="true" />
               </span>
               <h3 className={kit.h3}>B2C Trust Assets (For Students &amp; Parents)</h3>
@@ -523,27 +523,35 @@ export default async function BangladeshStudyAbroadMarketPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-petrol-800/15 bg-white p-6 shadow-sm sm:p-8">
+          <div className={`${kit.card} sm:p-8`}>
             <div className="flex items-center gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-lime text-petrol-800">
+              <span className={kit.iconLime}>
                 <Briefcase size={20} aria-hidden="true" />
               </span>
               <h3 className={kit.h3}>B2B Partner &amp; Sub-Agent Processing Desk</h3>
             </div>
             <p className={`mt-4 ${kit.body}`}>
-              Across Bangladesh’s ~429 education agencies, stricter international compliance (UK sponsor rules, Malaysia EMGS/MYCAS, China CSCA &amp; institutional audits) has raised the cost of manual processing errors. EduExpress operates a dedicated B2B admissions desk built on:
+              Across Bangladesh’s ~429 education agencies, stricter international compliance (UK sponsor rules, Malaysia EMGS/MYCAS, China CSCA &amp; institutional audits) has raised the cost of manual processing errors. As Founding Member (#08) of{' '}
+              <a href="https://cbcabd.org/" target="_blank" rel="noopener noreferrer" className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-lime-deep">
+                CBCA
+              </a>{' '}
+              and Active Member (ID: FCM-452) of{' '}
+              <a href="https://www.facdcab.org/members/directory/2264" target="_blank" rel="noopener noreferrer" className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-lime-deep">
+                FACD-CAB / FACECAB (#2264)
+              </a>
+              , EduExpress operates a dedicated B2B admissions desk built on:
             </p>
             <ul className="mt-4 space-y-2.5 text-[15px] leading-6 text-ink-soft">
               <li className="flex items-start gap-2.5">
-                <Landmark size={17} className="mt-1 shrink-0 text-emerald-700" aria-hidden="true" />
+                <Landmark size={17} className="mt-1 shrink-0 text-lime-deep" aria-hidden="true" />
                 <span>24–48 hour eligibility &amp; document audits across China, Malaysia, and 10 active destinations</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <ShieldCheck size={17} className="mt-1 shrink-0 text-emerald-700" aria-hidden="true" />
+                <ShieldCheck size={17} className="mt-1 shrink-0 text-lime-deep" aria-hidden="true" />
                 <span>Written non-poaching protection and client attribution locked before file submission</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <FileCheck2 size={17} className="mt-1 shrink-0 text-emerald-700" aria-hidden="true" />
+                <FileCheck2 size={17} className="mt-1 shrink-0 text-lime-deep" aria-hidden="true" />
                 <span>Bilateral written MOU with clear payout milestones (plus published China partner rates on /partnership)</span>
               </li>
             </ul>
@@ -566,8 +574,8 @@ export default async function BangladeshStudyAbroadMarketPage() {
         title="Open market dataset, verification rules & media citation"
         intro="Researchers, school career counselors, journalists, and AI engines can inspect or cite the live JSON dataset behind this report under CC BY 4.0."
       >
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-3xl border border-white/20 p-6 sm:p-7">
+        <div data-anim="stagger" className="grid gap-6 lg:grid-cols-2">
+          <div className={kit.cardDark}>
             <h3 className="flex items-center gap-2 text-[20px] font-semibold text-lime">
               <Globe2 size={20} aria-hidden="true" /> Live Verification &amp; Legal Identity
             </h3>
@@ -576,7 +584,15 @@ export default async function BangladeshStudyAbroadMarketPage() {
                 <strong className="text-white">Active catalog records:</strong> {snapshot.liveCatalog.activeUniversities} active institutions ({snapshot.liveCatalog.verifiedUniversitiesCount} currently cycle-verified; remaining records transparently flagged for fresh intake check prior to payment).
               </li>
               <li>
-                <strong className="text-white">Independent Bangladeshi entity:</strong> EduExpress International (founded 8 March 2018 in Dhaka by Abdullah Al Rakib) is unaffiliated with unrelated companies sharing a similar name outside Bangladesh.
+                <strong className="text-white">Independent Bangladeshi entity:</strong> EduExpress International (founded 8 March 2018 in Dhaka by Abdullah Al Rakib) is Founding Member (#08) of{' '}
+                <a href="https://cbcabd.org/" target="_blank" rel="noopener noreferrer" className="font-semibold text-lime underline underline-offset-4 hover:text-white">
+                  CBCA
+                </a>{' '}
+                and Active Member (ID: FCM-452) of{' '}
+                <a href="https://www.facdcab.org/members/directory/2264" target="_blank" rel="noopener noreferrer" className="font-semibold text-lime underline underline-offset-4 hover:text-white">
+                  FACD-CAB / FACECAB
+                </a>
+                , and is unaffiliated with unrelated companies sharing a similar name outside Bangladesh.
               </li>
               <li>
                 <strong className="text-white">Service policy:</strong> No file opening charge and no EduExpress service fee before China visa approval; BDT 0 EduExpress service fee for Malaysia admissions &amp; EMGS support.
@@ -712,7 +728,7 @@ export default async function BangladeshStudyAbroadMarketPage() {
         title="Get an Education Fit Assessment tailored to your budget"
         intro="Share your academic level, GPA/grades, subject preference, and realistic BDT budget. A counselor prepares a written shortlist across matching countries within one working day."
       >
-        <div className="mx-auto max-w-3xl rounded-3xl border border-petrol-800/10 bg-canvas-soft p-6 shadow-sm sm:p-10">
+        <div className="mx-auto max-w-3xl">
           <EducationFitAssessment />
         </div>
       </Section>

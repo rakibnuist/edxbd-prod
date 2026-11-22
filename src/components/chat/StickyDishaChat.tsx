@@ -209,12 +209,19 @@ export default function StickyDishaChat({
   };
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      document.body.removeAttribute('data-disha-open');
+      return;
+    }
+    document.body.setAttribute('data-disha-open', 'true');
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') setIsOpen(false);
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      document.body.removeAttribute('data-disha-open');
+      window.removeEventListener('keydown', onKey);
+    };
   }, [isOpen]);
 
   const openWhatsAppDirect = (customText?: string) => {
@@ -821,7 +828,7 @@ export default function StickyDishaChat({
                 onKeyDown={handleKeyDown}
                 placeholder={getInputPlaceholder()}
                 disabled={isStreaming}
-                className="flex-1 rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2 text-[15px] text-ink placeholder:text-slate-400 focus:border-petrol-600 focus:bg-white focus:outline-none sm:text-[13.5px]"
+                className="flex-1 rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2 text-base text-ink placeholder:text-slate-400 focus:border-petrol-600 focus:bg-white focus:outline-none sm:text-[13.5px]"
               />
               <button
                 type="submit"

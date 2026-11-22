@@ -101,18 +101,23 @@ export default async function CompareBachelorChinaAbroadPage() {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'WebPage',
+        '@type': ['WebPage', 'Article'],
         '@id': `${canonical}#page`,
         url: canonical,
         mainEntityOfPage: canonical,
-        dateModified: PATHWAY_LAST_UPDATED_ISO,
+        headline: 'Compare China Bachelor Degrees vs UK, USA, Australia & Dhaka Private Universities',
         name: 'China Top-Ranked Bachelor vs UK, USA, Australia, New Zealand & Dhaka Private Universities',
         description:
           'Side-by-side comparison of education quality, rankings, campus facilities, and university-scholarship tuition in China versus Western destinations and Bangladesh Category-A private universities.',
+        image: `${SITE}/og/china.jpg`,
+        primaryImageOfPage: primaryImageOfPageSchema('/og/china.jpg'),
+        datePublished: `${PATHWAY_LAST_UPDATED_ISO}T00:00:00Z`,
+        dateModified: `${PATHWAY_LAST_UPDATED_ISO}T00:00:00Z`,
         inLanguage: 'en-BD',
+        author: { '@type': 'Person', name: 'Afsana Meme', jobTitle: 'Senior Consultant — China Admissions & Scholarships' },
+        reviewedBy: { '@type': 'Person', name: 'Abdullah Al Rakib', jobTitle: 'Founder and CEO' },
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
-        primaryImageOfPage: primaryImageOfPageSchema('/og/china.jpg'),
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
         ...citationJsonLd(COMPARISON_HUB_SOURCES),
       },
@@ -145,9 +150,9 @@ export default async function CompareBachelorChinaAbroadPage() {
           { name: 'Find Education', path: '/find-education' },
           { name: 'Compare Bachelor Pathways' },
         ]}
-        eyebrow="Post-A-Level & O-Level Decision Hub · Quality, Rankings & University Scholarships"
+        eyebrow="Post-A-Level, HSC, Alim & O-Level Decision Hub · Quality, Rankings & University Scholarships"
         title="Compare top-ranked China Bachelors vs. UK, USA, Australia & Dhaka."
-        lead="For Bangladeshi A-Level and HSC graduates comparing direct Western tuition, local Category-A private universities, and globally ranked Chinese campuses with university scholarships—evaluated by education quality, facilities, and separated costs."
+        lead="For Bangladeshi A-Level, HSC, and Alim graduates comparing direct Western tuition, local Category-A private universities, and globally ranked Chinese campuses with university scholarships—evaluated by education quality, facilities, and separated costs."
         reviewed={PATHWAY_LAST_UPDATED_LABEL}
         actions={
           <>
@@ -160,19 +165,17 @@ export default async function CompareBachelorChinaAbroadPage() {
           </>
         }
         aside={
-          <figure className="overflow-hidden rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
-            <div className="relative aspect-[4/3] w-full">
-              <Image
-                src="/images/destinations/china-hero.webp"
-                alt="Top-ranked Chinese university research campus for Bangladeshi Bachelor applicants"
-                fill
-                priority
-                sizes="(max-width:1024px) 100vw, 480px"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="flex flex-wrap items-center justify-between gap-2 p-4 text-[13px] font-semibold text-petrol-800">
-              <span>Live Rankings &amp; University Scholarships Dataset</span>
+          <figure className="anim-rise relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-petrol-800">
+            <Image
+              src="/images/destinations/china-hero.webp"
+              alt="Top-ranked Chinese university research campus for Bangladeshi Bachelor applicants"
+              fill
+              priority
+              sizes="(max-width:1024px) 100vw, 480px"
+              className="object-cover"
+            />
+            <figcaption className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white/95 px-4 py-2.5 text-[13px] font-semibold text-petrol-800 backdrop-blur-sm">
+              <span>Live Rankings &amp; University Scholarships</span>
               <span className="rounded-full bg-lime-pale px-2.5 py-0.5 text-[12px] text-lime-deep">
                 Living costs separated
               </span>
@@ -191,13 +194,13 @@ export default async function CompareBachelorChinaAbroadPage() {
       <Section
         id="why-you-win"
         title="The Verdict: Why Students Win With Top-Ranked China & Malaysia Pathways"
-        intro="Bangladeshi A-Level and HSC graduates often feel forced to choose between paying BDT 54 lakh–3.2+ crore in Western tuition (UK, USA, Australia, New Zealand) or paying BDT 9.17–14.30 lakh at a local Dhaka private commuter campus. Comparing global rankings, campus facilities, separated academic tuition, and post-Bachelor Master’s mobility side by side proves how students win in both education quality and capital preserved."
+        intro="Bangladeshi A-Level, HSC, and Alim graduates often feel forced to choose between paying BDT 54 lakh–3.2+ crore in Western tuition (UK, USA, Australia, New Zealand) or paying BDT 9.17–14.30 lakh at a local Dhaka private commuter campus. Comparing global rankings, campus facilities, separated academic tuition, and post-Bachelor Master’s mobility side by side proves how students win in both education quality and capital preserved."
       >
         <LivingCostSeparationNotice
           summary="Every comparison table on this page keeps Tuition & Institutional Fees strictly separated from Personal Living Expenses (food, transit, personal spending). Chinese university fees remain in CNY/RMB without assuming a fixed BDT exchange rate."
         />
 
-        <div className="mt-8 overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="mt-8 overflow-x-auto rounded-3xl border border-canvas-soft bg-white">
           <table className="w-full min-w-[920px] text-left text-[13.5px] leading-6">
             <caption className="sr-only">
               Four-way comparison proving how China and Malaysia outperform Dhaka private universities and expensive Western tuition
@@ -216,7 +219,7 @@ export default async function CompareBachelorChinaAbroadPage() {
               {UNIFIED_BACHELOR_WIN_MATRIX.map(row => (
                 <tr key={row.factor}>
                   <th scope="row" className="p-4 align-top font-bold text-petrol-800">{row.factor}</th>
-                  <td className="bg-lime-pale/30 p-4 align-top font-semibold text-emerald-950">{row.chinaTrack}</td>
+                  <td className="bg-lime-pale/30 p-4 align-top font-semibold text-lime-deep">{row.chinaTrack}</td>
                   <td className="p-4 align-top">{row.malaysiaTrack}</td>
                   <td className="p-4 align-top">{row.dhakaPrivateTrack}</td>
                   <td className="p-4 align-top">{row.westernTrack}</td>
@@ -235,11 +238,11 @@ export default async function CompareBachelorChinaAbroadPage() {
         title="Priority #1: University Rankings, Campus Facilities & Post-Bachelor Strategy"
         intro="Before looking at discounts, families should verify institutional ranking, laboratory quality, residential life, and where the Bachelor degree can take a graduate next."
       >
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div data-anim="stagger" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {CHINA_ADVANTAGES.map(card => (
             <div key={card.title} className={kit.card}>
-              <span className="grid size-12 shrink-0 place-items-center rounded-full bg-canvas-soft text-petrol-800">
-                <card.icon size={22} className="text-petrol-800" aria-hidden="true" />
+              <span className={kit.icon}>
+                <card.icon size={22} aria-hidden="true" />
               </span>
               <h3 className={`mt-4 ${kit.h3}`}>{card.title}</h3>
               <p className={`mt-2 ${kit.body}`}>{card.body}</p>
@@ -247,22 +250,22 @@ export default async function CompareBachelorChinaAbroadPage() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          <div className="rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+        <div data-anim="stagger" className="mt-8 grid gap-6 md:grid-cols-3">
+          <div className={kit.card}>
             <span className={kit.badge}>Win Proof #1 · Campus Scale</span>
             <h3 className="mt-3 text-[18px] font-bold text-petrol-800">Research Town vs. Commuter Building</h3>
             <p className="mt-2 text-[14.5px] leading-6 text-ink-soft">
               National Project 985, Project 211, and Double First-Class campuses provide dedicated robotics/AI/engineering labs, libraries, sports facilities, and gated international dorms (CNY 1,300–11,000/yr)—facilities urban Dhaka private campuses cannot match at comparable tuition.
             </p>
           </div>
-          <div className="rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+          <div className={kit.card}>
             <span className={kit.badge}>Win Proof #2 · Direct University Awards</span>
             <h3 className="mt-3 text-[18px] font-bold text-petrol-800">University Scholarships Without CSC Type A Bottlenecks</h3>
             <p className="mt-2 text-[14.5px] leading-6 text-ink-soft">
               Instead of relying on scarce CSC Type A bilateral quotas for English-taught Bachelors, applicants use Entrance, Presidential, Belt &amp; Road, and Provincial university scholarships directly—lowering annual tuition to CNY 0–25,000/yr where awarded.
             </p>
           </div>
-          <div className="rounded-3xl border border-emerald-700/20 bg-petrol-800 p-6 text-white shadow-sm">
+          <div className={kit.cardDark}>
             <span className="inline-flex items-center rounded-full bg-lime px-3 py-1 text-[12px] font-bold text-petrol-800">
               Win Proof #3 · 2-Step Global Masterplan
             </span>
@@ -287,7 +290,7 @@ export default async function CompareBachelorChinaAbroadPage() {
         }
       >
         {topChinaUniversities.length > 0 ? (
-          <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+          <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white">
             <table className="w-full min-w-[820px] text-left text-[14px] leading-6">
               <caption className="sr-only">
                 Top-ranked Chinese universities with English-taught Bachelor programs and university scholarships
@@ -311,7 +314,7 @@ export default async function CompareBachelorChinaAbroadPage() {
                       </Link>
                       <span className="mt-0.5 block text-[12.5px] font-medium text-ink-soft">{uni.city}, China</span>
                     </th>
-                    <td className="p-4 align-top font-semibold text-emerald-900">
+                    <td className="p-4 align-top font-semibold text-lime-deep">
                       {uni.worldRankLabel && <span className="block">{uni.worldRankLabel}</span>}
                       {uni.nationalRankLabel && (
                         <span className="block text-[12.5px] text-petrol-800">{uni.nationalRankLabel}</span>
@@ -327,7 +330,7 @@ export default async function CompareBachelorChinaAbroadPage() {
             </table>
           </div>
         ) : (
-          <div className={kit.card}>
+          <div className={kit.cardSage}>
             <p className={kit.body}>
               Explore our complete verified Chinese university directory and university-level scholarship catalog on{' '}
               <Link href="/china-universities" className={kit.link}>
@@ -347,14 +350,14 @@ export default async function CompareBachelorChinaAbroadPage() {
         id="dhaka-private-comparison"
         tone="sage"
         title="China Top-Ranked Universities vs. Bangladesh Category-A Private Universities"
-        intro="Many Bangladeshi A-Level graduates remain in Dhaka and enroll in Category-A private universities. Here is how 4-year academic tuition compares—keeping living expenses outside the total."
+        intro="Many Bangladeshi A-Level, HSC, and Alim graduates remain in Dhaka and enroll in Category-A private universities. Here is how 4-year academic tuition compares—keeping living expenses outside the total."
       >
-        <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl bg-white">
           <table className="w-full min-w-[760px] text-left text-[14.5px] leading-6">
             <caption className="sr-only">
               Four-year tuition and institutional cost comparison for Bangladesh Category-A private universities
             </caption>
-            <thead className="border-b border-canvas-soft bg-canvas-soft text-petrol-800">
+            <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
               <tr>
                 <th scope="col" className="p-4 font-bold">Dhaka Category-A Private University</th>
                 <th scope="col" className="p-4 font-bold">4-Year BBA Academic Total (No Living)</th>
@@ -380,11 +383,11 @@ export default async function CompareBachelorChinaAbroadPage() {
               <tr className="bg-lime-pale/45">
                 <th scope="row" className="p-4 align-top font-bold text-petrol-800">
                   China Ranked University (University Scholarship Track)
-                  <span className="mt-0.5 block text-[12.5px] font-medium text-emerald-900">
+                  <span className="mt-0.5 block text-[12.5px] font-medium text-lime-deep">
                     e.g. Sichuan, HIT, SCUT, Xidian, JUST, HBUT
                   </span>
                 </th>
-                <td colSpan={2} className="p-4 align-top font-semibold text-emerald-900">
+                <td colSpan={2} className="p-4 align-top font-semibold text-lime-deep">
                   Tuition ranges from CNY 0 (100% entrance/merit waiver where awarded) to CNY 4,250 – 25,000/yr before or after partial university awards; hostel typically CNY 1,300 – 11,000/yr (separate from food/living).
                 </td>
                 <td className="p-4 align-top">
@@ -403,7 +406,7 @@ export default async function CompareBachelorChinaAbroadPage() {
         title="China & Malaysia vs. Direct UK, USA, Australia & New Zealand"
         intro="Compare direct annual tuition against separated annual living budgets across popular post-A-Level destinations. Note which destinations EduExpress actively services vs. benchmarks."
       >
-        <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white">
           <table className="w-full min-w-[820px] text-left text-[14px] leading-6">
             <caption className="sr-only">
               Annual undergraduate tuition separated from living costs across UK, USA, Australia, and New Zealand
@@ -430,7 +433,7 @@ export default async function CompareBachelorChinaAbroadPage() {
                   <td className="p-4 align-top">{row.degreeDuration}</td>
                   <td className="p-4 align-top font-semibold text-petrol-800">{row.annualTuitionOnly}</td>
                   <td className="p-4 align-top">{row.fourOrThreeYearTuition}</td>
-                  <td className="p-4 align-top font-medium text-amber-900">{row.annualLivingSeparated}</td>
+                  <td className="p-4 align-top font-medium text-clay">{row.annualLivingSeparated}</td>
                   <td className="p-4 align-top">{row.entryNote}</td>
                 </tr>
               ))}
@@ -438,11 +441,11 @@ export default async function CompareBachelorChinaAbroadPage() {
           </table>
         </div>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          <div className="rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+        <div data-anim="stagger" className="mt-8 grid gap-6 md:grid-cols-2">
+          <div className={kit.cardSage}>
             <h3 className={kit.h3}>Malaysia Branch Campus &amp; Transfer Alternative</h3>
             <p className={`mt-2 ${kit.body}`}>
-              Students wanting a UK or Australian degree after O-Level or A-Level can study at Monash University Malaysia, University of Nottingham Malaysia, or Heriot-Watt University Malaysia—or take a UK dual degree at Sunway, Taylor’s, or APU—at roughly one-third of Western tuition (with BDT 0 EduExpress fee).
+              Students wanting a UK or Australian degree after O-Level, SSC, Dakhil, or A-Level can study at Monash University Malaysia, University of Nottingham Malaysia, or Heriot-Watt University Malaysia—or take a UK dual degree at Sunway, Taylor’s, or APU—at roughly one-third of Western tuition (with BDT 0 EduExpress fee).
             </p>
             <div className="mt-4 flex flex-wrap gap-4">
               <Link href="/study-in-malaysia-from-bangladesh" className={kit.link}>
@@ -454,7 +457,7 @@ export default async function CompareBachelorChinaAbroadPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+          <div className={kit.cardSage}>
             <h3 className={kit.h3}>Bachelor in China → Master’s Anywhere</h3>
             <p className={`mt-2 ${kit.body}`}>
               Completing a top-ranked English-taught Bachelor’s degree in China preserves family capital during undergraduate study, positioning graduates to pursue competitive Master’s or PhD scholarships in the UK, USA, Australia, New Zealand, or Europe—or STEM careers under schemes like China’s K-Visa.
@@ -479,10 +482,11 @@ export default async function CompareBachelorChinaAbroadPage() {
         intro="Use verified academic fit, institutional facilities, and separated cost schedules rather than hearsay."
       >
         <FitVsReconsiderGrid
+          tone="sage"
           fitTitle="When a Top-Ranked China Bachelor Fits Best"
           fitItems={[
             {
-              label: 'A-Level / HSC students seeking global top-500 STEM or Business education',
+              label: 'A-Level, HSC & Alim students seeking global top-500 STEM or Business education',
               detail: 'Strong fit when you want global rankings, major engineering labs, and international campus life without BDT 1.2–3.0 crore Western tuition bills.',
             },
             {
@@ -505,8 +509,8 @@ export default async function CompareBachelorChinaAbroadPage() {
               detail: 'China and Malaysia both restrict student term-time employment; tuition and separated living costs must be budgeted realistically in advance.',
             },
             {
-              label: 'O-Level graduates skipping A-Levels',
-              detail: 'Start with our O-Level pathway pages for Malaysia (1-yr Foundation / 2-yr Diploma) or China (3+2 Diploma-to-Bachelor) rather than direct 4-year Bachelor admission.',
+              label: 'SSC, Dakhil or O-Level graduates skipping HSC / A-Levels',
+              detail: 'Start with our O-Level & SSC/Dakhil pathway pages for Malaysia (1-yr Foundation / 2-yr Diploma) or China (3+2 Diploma-to-Bachelor) rather than direct 4-year Bachelor admission.',
             },
           ]}
         />
@@ -552,9 +556,9 @@ export default async function CompareBachelorChinaAbroadPage() {
         id="compare-assessment"
         tone="sage"
         title="Get a Personalized China vs. Malaysia vs. UK Written Comparison"
-        intro="Share your A-Level, HSC, or O-Level results and preferred major. An EduExpress counselor prepares an itemized EduFit comparison and ClearCost Sheet within one working day."
+        intro="Share your A-Level, HSC, Alim, SSC, Dakhil, or O-Level results and preferred major. An EduExpress counselor prepares an itemized EduFit comparison and ClearCost Sheet within one working day."
       >
-        <div className="mx-auto max-w-3xl rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm sm:p-10">
+        <div className="mx-auto max-w-3xl">
           <EducationFitAssessment />
         </div>
       </Section>

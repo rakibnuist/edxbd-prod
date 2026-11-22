@@ -628,7 +628,7 @@ export default function UniversityProfileClient({
           </div>
           <a
             href={assessmentHref}
-            className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full bg-lime px-4 text-[13px] font-bold text-petrol-800 hover:brightness-105"
+            className="hidden sm:inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full bg-lime px-4 text-[13px] font-bold text-petrol-800 hover:brightness-105"
           >
             Check Eligibility <ArrowRight size={14} />
           </a>
@@ -1240,7 +1240,7 @@ export default function UniversityProfileClient({
           <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
             <div>
               {rankings.length > 0 ? (
-                <div className="overflow-hidden rounded-2xl border border-slate-200/90">
+                <div className="overflow-x-auto rounded-2xl border border-slate-200/90">
                   <table className="w-full text-left text-sm">
                     <thead>
                       <tr className="border-b border-slate-200 bg-slate-50/90 text-[11px] font-bold text-slate-500 uppercase tracking-wider">

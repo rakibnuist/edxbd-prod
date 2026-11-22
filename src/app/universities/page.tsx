@@ -215,7 +215,7 @@ export default async function UniversitiesPage({ searchParams }: Props) {
                     type="search"
                     defaultValue={params.get('search') || ''}
                     placeholder="Search by university name, city, or major (e.g. Computer Science, Sunway)..."
-                    className="h-[52px] w-full rounded-full bg-transparent pl-12 pr-4 text-[15px] font-medium text-slate-800 outline-none placeholder:text-slate-400"
+                    className="h-[52px] w-full rounded-full bg-transparent pl-12 pr-4 text-base sm:text-[15px] font-medium text-slate-800 outline-none placeholder:text-slate-400"
                   />
                 </div>
                 <button type="submit" className="ed-btn ed-btn-signal min-h-[52px] px-8 text-sm">

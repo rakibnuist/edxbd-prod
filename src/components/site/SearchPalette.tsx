@@ -140,7 +140,7 @@ export default function SearchPalette() {
                 aria-label="Search universities, programmes and guides"
                 aria-autocomplete="list"
                 aria-controls="search-results"
-                className="h-14 w-full bg-transparent text-[15px] text-ink outline-none placeholder:text-ink-mute"
+                className="h-14 w-full bg-transparent text-base text-ink outline-none placeholder:text-ink-mute"
                 autoComplete="off"
               />
               <button type="button" onClick={close} className="grid size-8 shrink-0 place-items-center rounded-full text-ink-mute hover:bg-chalk-100 hover:text-ink" aria-label="Close search">

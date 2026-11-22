@@ -21,7 +21,7 @@ export default function UniversityPrograms({ name, programs, level, query, selec
   const media = programFilterChoices(programs.flatMap(program => program.languages));
   const visibleCount = filterProgramRows(levelRows, { major, medium, query }).length;
   const hasFilters = Boolean(major || medium || query.trim());
-  const controlClass = 'min-h-11 w-full min-w-0 rounded-md border border-slate-300 bg-white px-3 text-sm font-normal text-slate-800 outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/15';
+  const controlClass = 'min-h-11 w-full min-w-0 rounded-md border border-slate-300 bg-white px-3 text-base sm:text-sm font-normal text-slate-800 outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/15';
   const chooseLevel = (next: ProgramLevel) => {
     setMajorChoice({ level: next, value: '' });
     onLevel(next);

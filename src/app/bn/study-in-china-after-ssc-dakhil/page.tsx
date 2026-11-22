@@ -3,22 +3,25 @@ import Link from 'next/link';
 import {
   ArrowRight,
   Award,
+  BadgeCheck,
   Building2,
+  CalendarCheck,
   CheckCircle2,
   ChevronRight,
   Clock,
   ExternalLink,
   FileCheck2,
   Globe2,
+  MapPin,
   ShieldAlert,
   ShieldCheck,
   Trophy,
+  Wallet,
   Wrench,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import BnChinaRelatedGuides from '@/components/page/BnChinaRelatedGuides';
 import { CtaBand, FaqBlock, JsonLd, Section, kit } from '@/components/page/PageKit';
-import { config } from '@/lib/config';
 import { breadcrumbJsonLd, citationJsonLd, primaryImageOfPageSchema, type Crumb } from '@/lib/json-ld';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import { ogImage, pageMetadata } from '@/lib/seo';
@@ -47,6 +50,13 @@ export const metadata = pageMetadata({
     'x-default': EN_PATH,
   },
 });
+
+const trustItemsBn = [
+  { icon: CalendarCheck, title: '২০১৮ সাল থেকে', text: 'ধানমন্ডি, ঢাকা থেকে অভিভাবক ও শিক্ষার্থীদের কাউন্সেলিং' },
+  { icon: MapPin, title: 'সরাসরি অফিস ভিজিট', text: 'শনিবার–বৃহস্পতিবার, সকাল ১১টা থেকে সন্ধ্যা ৬টা' },
+  { icon: Wallet, title: 'ভিসার আগে ০ সার্ভিস ফি', text: 'চায়না ভিসা অনুমোদনের আগে কোনো সার্ভিস চার্জ নেই' },
+  { icon: BadgeCheck, title: 'টিউশন ও থাকা-খাওয়া আলাদা', text: 'প্রতিটি খরচ লিখিত শিডিউলে উল্লেখ থাকে' },
+] as const;
 
 const visaFirstTermsBn =
   'কোনো ফাইল ওপেনিং চার্জ নেই। চায়না ভিসা অনুমোদনের আগে এডুএক্সপ্রেসের কোনো সার্ভিস ফি নেই। এর আগে বিশ্ববিদ্যালয়, এম্বাসি, মেডিকেল, অনুবাদ, কুরিয়ার, ডিপোজিট বা অন্য কোনো থার্ড-পার্টি ফি প্রয়োজন হলে শিক্ষার্থী এগোনোর আগেই তা লিখিতভাবে তালিকাভুক্ত করা হয়।';
@@ -170,6 +180,8 @@ const officialSourcesBn = [
   { label: 'Campus China — অফিশিয়াল স্টাডি ইন চায়না পোর্টাল', href: 'https://www.campuschina.org/' },
   { label: 'MoE Order No. 42 — আন্তর্জাতিক শিক্ষার্থী ও অপ্রাপ্তবয়স্ক অভিভাবক নীতি', href: 'https://www.campuschina.org/content/details3_74776.html' },
   { label: 'ঢাকাস্থ গণপ্রজাতন্ত্রী চীনের দূতাবাস', href: 'https://bd.china-embassy.gov.cn/eng/' },
+  { label: 'CBCA — China Bangladesh Consultancy Alliance (#08)', href: 'https://cbcabd.org/' },
+  { label: 'FACD-CAB (FACECAB) অফিশিয়াল ডিরেক্টরি (ID: FCM-452)', href: 'https://www.facdcab.org/members/directory/2264' },
 ];
 
 const faqsBn = [
@@ -206,7 +218,6 @@ const faqsBn = [
 ];
 
 export default function BengaliStudyInChinaAfterSscDakhilPage() {
-  const whatsapp = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent('আসসালামু আলাইকুম। SSC / দাখিল / O-Level পাসের পর চীনে ৩+২ ডিপ্লোমা ও স্কলারশিপ সম্পর্কে জানতে চাই।')}`;
   const url = `${SITE}${PATH}`;
 
   const schema = {
@@ -224,8 +235,8 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
     primaryImageOfPage: primaryImageOfPageSchema('/og/china-guide.jpg'),
     datePublished: '2026-11-21T00:00:00Z',
     dateModified: '2026-11-21T00:00:00Z',
-    author: { '@id': `${SITE}/#organization` },
-    reviewedBy: { '@id': `${SITE}/#organization` },
+    author: { '@type': 'Person', name: 'Afsana Meme', jobTitle: 'Senior Consultant — China Admissions & Scholarships' },
+    reviewedBy: { '@type': 'Person', name: 'Abdullah Al Rakib', jobTitle: 'Founder and CEO' },
     publisher: { '@id': `${SITE}/#organization` },
     isPartOf: { '@id': `${SITE}/#website` },
     breadcrumb: { '@id': `${url}#breadcrumb` },
@@ -257,7 +268,7 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
             <p className={`anim-rise mt-6 ${kit.badge}`}>
               <Award size={15} aria-hidden="true" /> SSC, দাখিল ও O-Level সমমান · ৫ বছরে ব্যাচেলর · ভিসার আগে ০ সার্ভিস ফি
             </p>
-            <h1 className="anim-lift mt-5 font-display text-[36px] font-bold leading-[1.08] text-petrol-800 sm:text-[48px] lg:text-[54px]">
+            <h1 className="anim-lift mt-5 font-display text-[26px] xs:text-[30px] font-bold leading-[1.25] text-petrol-800 sm:text-[44px] lg:text-[54px] sm:leading-[1.18]">
               SSC বা দাখিলের পর চীনে ৩+২ ডিপ্লোমা ও ব্যাচেলর পড়াশোনা।
             </h1>
             <p className={`anim-rise mt-6 max-w-2xl ${kit.lead}`}>
@@ -273,34 +284,50 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
             </div>
           </div>
 
-          <figure className="anim-rise relative overflow-hidden rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
-            <div className="relative aspect-[4/3]">
-              <Image
-                src="/images/destinations/china-study-guide.webp"
-                alt="SSC এবং দাখিল পাসের পর চীনের টেকনিক্যাল ও ব্যাচেলর ক্যাম্পাস"
-                fill
-                priority
-                sizes="(max-width:1024px) 100vw, 480px"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="flex flex-wrap items-center justify-between gap-2 p-4 text-[13px] font-semibold text-petrol-800">
+          <figure className="anim-rise relative aspect-[4/3] overflow-hidden rounded-3xl bg-petrol-800">
+            <Image
+              src="/images/destinations/china-study-guide.webp"
+              alt="SSC এবং দাখিল পাসের পর চীনের টেকনিক্যাল ও ব্যাচেলর ক্যাম্পাস"
+              fill
+              priority
+              sizes="(max-width:1024px) 100vw, 480px"
+              className="object-cover"
+            />
+            <figcaption className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white/95 px-4 py-2.5 text-[13px] font-semibold text-petrol-800 backdrop-blur-sm">
               <span>৩ বছর ডিপ্লোমা + ২ বছর ব্যাচেলর (মোট ৫ বছর)</span>
               <span className="rounded-full bg-lime-pale px-2.5 py-0.5 text-[12px] text-lime-deep">
-                থাকা-খাওয়া খরচ আলাদা রাখা হয়েছে
+                থাকা-খাওয়া খরচ আলাদা
               </span>
             </figcaption>
           </figure>
         </div>
       </section>
 
+      {/* Bangla Trust Bar */}
+      <section aria-label="কেন পরিবারগুলো এডুএক্সপ্রেসের ওপর আস্থা রাখে" className="border-b border-canvas-soft bg-white py-8">
+        <ul data-anim="stagger" className={`${kit.wrap} grid gap-6 sm:grid-cols-2 lg:grid-cols-4`}>
+          {trustItemsBn.map(item => (
+            <li key={item.title} className="flex items-start gap-3.5">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-lime text-petrol-800">
+                <item.icon size={20} aria-hidden="true" />
+              </span>
+              <span>
+                <span className="block text-[17px] font-bold text-petrol-800">{item.title}</span>
+                <span className="block text-[15px] leading-6 text-ink-soft">{item.text}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       {/* Direct Answer & Timeline */}
       <Section
+        lang="bn"
         id="pathway-timeline"
         title="SSC, দাখিল ও O-Level পাসের পর কীভাবে ৫ বছরে ব্যাচেলর সম্পন্ন হয়?"
         intro="সাধারণভাবে বাংলাদেশের SSC বা মাদ্রাসা বোর্ডের দাখিল (Dakhil) পাসের পর ২ বছর HSC/আলিম এবং ৪ বছর ব্যাচেলর ডিগ্রি করতে মোট ৬ বছর সময় লেগে যায়। চীনের কারিগরি ও উচ্চশিক্ষা কাঠামোতে যোগ্য শিক্ষার্থীরা ১০ম শ্রেণি সমমান (SSC / দাখিল / O-Level) পাসের পর সরাসরি ৩ বছরের হায়ার ভোকেশনাল ডিপ্লোমা প্রোগ্রামে ভর্তি হয়ে পরে ২ বছরের টপ-আপ ব্যাচেলরে (৩+২ রুট) উন্নীত হতে পারে। এতে সময় বাঁচে পুরো ১ বছর এবং প্রাতিষ্ঠানিক স্কলারশিপে প্রথম ৩ বছরের টিউশন ও ডরমিটরি খরচ অতি স্বল্প বা শূন্য রাখা যায়।"
       >
-        <div className="grid gap-6 md:grid-cols-3">
+        <div data-anim="stagger" className="grid gap-6 md:grid-cols-3">
           {timelineStepsBn.map(item => (
             <div key={item.step} className={kit.cardSage}>
               <span className={kit.badge}>
@@ -316,23 +343,24 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
 
       {/* Why Students Win Scorecard */}
       <Section
+        lang="bn"
         id="why-students-win"
         tone="sage"
         title="SSC ও দাখিল শিক্ষার্থীরা যে ৩টি ক্ষেত্রে সরাসরি জিতছে"
         intro="শুধু তুলনা নয়—সময়, খরচ এবং প্র্যাকটিক্যাল দক্ষতার হিসেবে কেন এই পথটি বাংলাদেশের শিক্ষার্থীদের এগিয়ে রাখছে তা দেখুন।"
       >
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div data-anim="stagger" className="grid gap-6 lg:grid-cols-3">
           {winCardsBn.map(card => (
             <div
               key={card.title}
-              className="flex flex-col justify-between rounded-3xl border border-emerald-700/15 bg-white p-6 shadow-sm sm:p-7"
+              className={`${kit.card} flex flex-col justify-between`}
             >
               <div>
                 <span className={kit.badge}>
                   <Trophy size={13} aria-hidden="true" />
                   {card.badge}
                 </span>
-                <p className="mt-4 font-display text-[26px] font-black leading-tight text-emerald-800 sm:text-[28px]">
+                <p className="mt-4 font-display text-[26px] font-black leading-tight text-petrol-800 sm:text-[28px]">
                   {card.metric}
                 </p>
                 <h3 className={`mt-2 ${kit.h3}`}>{card.title}</h3>
@@ -345,11 +373,12 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
 
       {/* 5-Year vs 6-Year Direct Proof Table */}
       <Section
+        lang="bn"
         id="five-year-proof"
         title="প্রমাণ ছক: বাংলাদেশের ৬ বছরের সাধারণ পথ বনাম চীনের ৫ বছরের ৩+২ পথ"
         intro="প্রতিটি খরচের হিসাবেই মাসিক থাকা-খাওয়া (খাবার ও ব্যক্তিগত খরচ) টিউশন ও হোস্টেল ফি থেকে সম্পূর্ণ আলাদা রাখা হয়েছে।"
       >
-        <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white">
           <table className="w-full min-w-[760px] text-left text-[15px] leading-6">
             <caption className="sr-only">বাংলাদেশের ৬ বছরের রুট বনাম চীনের ৫ বছরের ৩+২ ডিপ্লোমা থেকে ব্যাচেলর প্রমাণের তুলনা</caption>
             <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
@@ -365,7 +394,7 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
                 <tr key={row.criterion}>
                   <th scope="row" className="p-4 align-top font-bold text-petrol-800">{row.criterion}</th>
                   <td className="p-4 align-top">{row.local6Yr}</td>
-                  <td className="p-4 align-top font-semibold text-emerald-900">{row.china5Yr}</td>
+                  <td className="bg-lime-pale/30 p-4 align-top font-semibold text-lime-deep">{row.china5Yr}</td>
                   <td className="p-4 align-top font-semibold text-petrol-800">{row.winNote}</td>
                 </tr>
               ))}
@@ -376,12 +405,13 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
 
       {/* 3 Scholarship Tiers + Separated Living Cost */}
       <Section
+        lang="bn"
         id="scholarship-tiers"
         tone="sage"
         title="চীনা ডিপ্লোমার ৩টি স্কলারশিপ স্তর ও পৃথক থাকা-খাওয়ার বাজেট"
         intro="অংশগ্রহণকারী চীনা পলিটেকনিক ও ভোকেশনাল কলেজগুলোতে টিউশন ও হোস্টেল ফি মূলত এই ৩টি প্রাতিষ্ঠানিক স্তরে নির্ধারিত হয়।"
       >
-        <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl bg-white">
           <table className="w-full min-w-[740px] text-left text-[15px] leading-6">
             <caption className="sr-only">চীনের ৩ বছরের ডিপ্লোমা প্রোগ্রামের ৩টি স্কলারশিপ স্তর</caption>
             <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
@@ -389,7 +419,7 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
                 <th scope="col" className="p-4 font-bold">স্কলারশিপ স্তর</th>
                 <th scope="col" className="p-4 font-bold">বাৎসরিক টিউশন ফি</th>
                 <th scope="col" className="p-4 font-bold">বাৎসরিক হোস্টেল ফি</th>
-                <th scope="col" className="p-4 font-bold">প্রাতিষ্ঠানিক মোট (থাকা-খাওয়া ছাড়া)</th>
+                <th scope="col" className="p-4 font-bold text-lime">প্রাতিষ্ঠানিক মোট (থাকা-খাওয়া ছাড়া)</th>
                 <th scope="col" className="p-4 font-bold">শর্ত ও নবায়ন নিয়ম</th>
               </tr>
             </thead>
@@ -397,9 +427,9 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
               {diplomaScholarshipTiersBn.map(row => (
                 <tr key={row.tier}>
                   <th scope="row" className="p-4 align-top font-bold text-petrol-800">{row.tier}</th>
-                  <td className="p-4 align-top font-semibold text-emerald-800">{row.tuition}</td>
+                  <td className="p-4 align-top font-semibold text-lime-deep">{row.tuition}</td>
                   <td className="p-4 align-top font-semibold text-petrol-800">{row.hostel}</td>
-                  <td className="p-4 align-top font-bold text-petrol-800">{row.total}</td>
+                  <td className="bg-lime-pale/30 p-4 align-top font-bold text-petrol-800">{row.total}</td>
                   <td className="p-4 align-top">{row.note}</td>
                 </tr>
               ))}
@@ -407,8 +437,8 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
           </table>
         </div>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          <div className="rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+        <div data-anim="stagger" className="mt-8 grid gap-6 md:grid-cols-2">
+          <div className={kit.card}>
             <h3 className={kit.h3}>মাসিক থাকা-খাওয়া ও থার্ড-পার্টি খরচ (আলাদা হিসাব)</h3>
             <ul className="mt-4 space-y-2.5 text-[15px] leading-6 text-ink-soft">
               <li>• <strong className="text-petrol-800">খাবার ও ব্যক্তিগত মাসিক খরচ (আলাদা):</strong> সাধারণত মাসে CNY ৮০০ থেকে CNY ১,৪০০ (ক্যাম্পাস ক্যান্টিন ও শহরভেদে ভিন্ন; এটি টিউশন মোটের ভেতরে নয়)।</li>
@@ -417,7 +447,7 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
             </ul>
           </div>
 
-          <div className="rounded-3xl border border-petrol-800/10 bg-petrol-800 p-6 text-white shadow-sm">
+          <div className={kit.cardDark}>
             <h3 className="text-[20px] font-bold text-lime">ভিসা-ফার্স্ট পেমেন্ট নীতি</h3>
             <p className="mt-3 flex items-start gap-2.5 text-[15px] leading-7 text-white/90">
               <ShieldCheck size={20} className="mt-1 shrink-0 text-lime" aria-hidden="true" />
@@ -434,16 +464,17 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
 
       {/* Curriculum Tracks */}
       <Section
+        lang="bn"
         id="curriculum-fields"
         title="জনপ্রিয় ৩ বছরের ডিপ্লোমা কারিকুলাম ও বিষয়সমূহ"
         intro="চীনের হায়ার ভোকেশনাল কলেজগুলো বাস্তব শিল্প-কারখানা ও আধুনিক প্রযুক্তিনির্ভর দক্ষতা তৈরিতে অগ্রাধিকার দেয়।"
       >
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div data-anim="stagger" className="grid gap-6 lg:grid-cols-3">
           {curriculumTracksBn.map(track => (
-            <div key={track.title} className="flex flex-col justify-between rounded-3xl border border-petrol-800/10 bg-canvas-soft p-6 shadow-sm">
+            <div key={track.title} className={`${kit.cardSage} flex flex-col justify-between`}>
               <div>
                 <span className={kit.icon}>
-                  <track.icon size={22} className="text-petrol-800" aria-hidden="true" />
+                  <track.icon size={22} aria-hidden="true" />
                 </span>
                 <h3 className={`mt-4 ${kit.h3}`}>{track.title}</h3>
                 <p className={`mt-2 ${kit.body}`}>{track.curriculum}</p>
@@ -460,15 +491,16 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
 
       {/* Under-18 Legal Guardian & Suitability Caveats */}
       <Section
+        lang="bn"
         id="safeguards"
         tone="sage"
         title="SSC ও দাখিল শিক্ষার্থীদের জন্য বয়স, গার্ডিয়ান ও উপযোগিতা যাচাই"
-        intro="ভুল বা অসম্পূর্ণ তথ্যে আবেদন করলে ভিসা বা ভর্তি জটিলতা হতে পারে—তাই এই ৪টি বিষয় আবেদনের আগেই যাচাই করা জরুরি।"
+        intro="ভুল বা অসম্পূর্ণ তথ্যে আবেদন করলে ভিসা বা ভর্তি জটিলতা হতে পারে—তাই এই বিষয়গুলো আবেদনের আগেই যাচাই করা জরুরি।"
       >
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-3xl border border-amber-200 bg-white p-6 shadow-sm sm:p-7">
+        <div data-anim="stagger" className="grid gap-6 md:grid-cols-2">
+          <div className={kit.card}>
             <div className="flex items-center gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-amber-100 text-amber-900">
+              <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-clay/10 text-clay">
                 <ShieldAlert size={20} aria-hidden="true" />
               </span>
               <h3 className={kit.h3}>১৮ বছরের কম বয়সীদের আইনি অভিভাবক শর্ত (MoE Order 42)</h3>
@@ -478,17 +510,17 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
             </p>
           </div>
 
-          <div className="rounded-3xl border border-emerald-200 bg-white p-6 shadow-sm sm:p-7">
+          <div className={kit.cardLime}>
             <div className="flex items-center gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-emerald-100 text-emerald-800">
+              <span className={kit.iconLime}>
                 <CheckCircle2 size={20} aria-hidden="true" />
               </span>
               <h3 className={kit.h3}>কাদের জন্য উপযোগী — এবং কাদের জন্য নয়</h3>
             </div>
             <p className={`mt-3 ${kit.body}`}>
-              <strong>উপযোগী:</strong> SSC, দাখিল বা O-Level পাস শিক্ষার্থী যারা ইঞ্জিনিয়ারিং, রোবোটিক্স, আইটি বা ব্যবসায় হাতে-কলমে দক্ষ হয়ে ৫ বছরেই ব্যাচেলর শেষ করতে চায় এবং চাইনিজ ভাষা (HSK) শিখতে প্রস্তুত।
+              <strong className="text-petrol-800">উপযোগী:</strong> SSC, দাখিল বা O-Level পাস শিক্ষার্থী যারা ইঞ্জিনিয়ারিং, রোবোটিক্স, আইটি বা ব্যবসায় হাতে-কলমে দক্ষ হয়ে ৫ বছরেই ব্যাচেলর শেষ করতে চায় এবং চাইনিজ ভাষা (HSK) শিখতে প্রস্তুত।
               <br />
-              <strong>উপযোগী নয়:</strong> যারা MBBS ডাক্তারি পড়তে চায় (BMDC-র জন্য HSC বিজ্ঞান বা A-Level বায়োলজি আবশ্যক), অথবা যারা চাইনিজ ভাষা ছাড়া ইংরেজি মাধ্যমে শুরু করতে চায় (তারা O-Level-এর পর{' '}
+              <strong className="text-petrol-800">উপযোগী নয়:</strong> যারা MBBS ডাক্তারি পড়তে চায় (BMDC-র জন্য HSC বিজ্ঞান বা A-Level বায়োলজি আবশ্যক), অথবা যারা চাইনিজ ভাষা ছাড়া ইংরেজি মাধ্যমে শুরু করতে চায় (তারা O-Level-এর পর{' '}
               <Link href="/study-in-malaysia-after-o-level" hrefLang="en" className="font-semibold text-petrol-800 underline underline-offset-4">
                 মালয়েশিয়া ফাউন্ডেশন রুট
               </Link>{' '}
@@ -497,10 +529,10 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
           </div>
         </div>
 
-        <div className="mt-8 rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+        <div className={`mt-8 ${kit.card}`}>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="text-[14px] leading-6 text-ink-soft">
-              <strong className="text-petrol-800">প্রস্তুতকারী ও পর্যালোচনা:</strong> মো. তৌহিদুল ইসলাম নূর (Country Manager, China) · পর্যালোচনা: আব্দুল্লাহ আল রাকিব (Founder &amp; CEO) · সর্বশেষ যাচাই: ২১ নভেম্বর ২০২৬ · পরবর্তী রিভিউ: ২১ ফেব্রুয়ারি ২০২৭
+              <strong className="text-petrol-800">প্রস্তুতকারী ও পর্যালোচনা:</strong> আফসানা মিমি (Senior Consultant — China Admissions &amp; Scholarships) · পর্যালোচনা: আব্দুল্লাহ আল রাকিব (Founder &amp; CEO) · অ্যাসোসিয়েশন: CBCA ফাউন্ডিং মেম্বার (#08) ও FACD-CAB / FACECAB (ID: FCM-452) · সর্বশেষ যাচাই: ২১ নভেম্বর ২০২৬ · পরবর্তী রিভিউ: ২১ ফেব্রুয়ারি ২০২৭
             </div>
             <div className="flex flex-wrap gap-3 text-[13.5px]">
               {officialSourcesBn.map(src => {
@@ -513,7 +545,7 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 font-semibold text-petrol-800 underline underline-offset-4"
                   >
-                    {src.label} <ExternalLink size={12} aria-hidden="true" />
+                    {src.label} <ExternalLink size={12} className="text-lime-deep" aria-hidden="true" />
                   </a>
                 ) : null;
               })}
@@ -524,7 +556,7 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
 
       {/* FAQs */}
       <div id="bn-ssc-faq" className="scroll-mt-28">
-        <FaqBlock items={faqsBn} title="SSC ও দাখিলের পর চীনে পড়াশোনা: সাধারণ প্রশ্নোত্তর" tone="white" />
+        <FaqBlock lang="bn" items={faqsBn} title="SSC ও দাখিলের পর চীনে পড়াশোনা: সাধারণ প্রশ্নোত্তর" tone="white" />
       </div>
 
       {/* Shared Bengali China Cross-Links */}
@@ -536,25 +568,25 @@ export default function BengaliStudyInChinaAfterSscDakhilPage() {
 
       {/* Embedded Bengali Assessment */}
       <Section
+        lang="bn"
         id="bn-ssc-assessment"
         title="SSC / দাখিল / O-Level প্রোফাইল যাচাই করুন"
         intro="আপনার বোর্ড, প্রাপ্ত নম্বর/GPA, বয়স এবং পছন্দের বিষয় জানান। এডুএক্সপ্রেসের চীনা ভর্তি ডেস্ক এক কার্যদিবসের মধ্যে উপযুক্ত কলেজ, স্কলারশিপ স্তর এবং গার্ডিয়ান নিয়মসহ লিখিত পরিকল্পনা দেবে।"
       >
-        <div className="mx-auto max-w-3xl rounded-3xl border border-petrol-800/10 bg-canvas-soft p-6 shadow-sm sm:p-10">
+        <div className="mx-auto max-w-3xl">
           <EducationFitAssessment initialContext={{ country: 'china', language: 'bn' }} />
         </div>
       </Section>
 
       <CtaBand
+        lang="bn"
         title="সঠিক তথ্যে ৫ বছরের ব্যাচেলর যাত্রা শুরু করুন"
         text="কোনো ফাইল ওপেনিং চার্জ নেই এবং চায়না ভিসা অনুমোদনের আগে এডুএক্সপ্রেসের কোনো সার্ভিস ফি নেই। ধানমন্ডি অফিসে আসুন অথবা WhatsApp-এ ফ্রি অ্যাসেসমেন্ট নিন।"
         assessmentHref="#bn-ssc-assessment"
+        assessmentLabel="ফ্রি অ্যাসেসমেন্ট নিন"
+        whatsappLabel="WhatsApp-এ কাউন্সেলরের সাথে কথা বলুন"
+        whatsappMessage="আসসালামু আলাইকুম। SSC / দাখিল / O-Level পাসের পর চীনে ৩+২ ডিপ্লোমা ও স্কলারশিপ সম্পর্কে জানতে চাই।"
       />
-
-      {/* Quick WhatsApp floating anchor helper */}
-      <div className="sr-only">
-        <a href={whatsapp}>WhatsApp-এ যোগাযোগ করুন</a>
-      </div>
     </div>
   );
 }

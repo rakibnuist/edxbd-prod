@@ -7,7 +7,7 @@ import { SCHOLARSHIP_CATEGORIES, type ScholarshipRow } from '@/lib/catalog-views
 import { toSafeExternalUrl } from '@/lib/safe-url';
 
 const PAGE = 18;
-const fieldClass = 'mt-1.5 h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-[15px] font-semibold text-petrol-800 outline-none focus:border-petrol-800 focus:ring-4 focus:ring-lime/50';
+const fieldClass = 'mt-1.5 h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-base sm:text-[15px] font-semibold text-petrol-800 outline-none focus:border-petrol-800 focus:ring-4 focus:ring-lime/50';
 const distinct = (values: string[]) => Array.from(new Set(values.filter(Boolean))).sort((a, b) => a.localeCompare(b));
 
 export default function ScholarshipFinder({ rows }: { rows: ScholarshipRow[] }) {

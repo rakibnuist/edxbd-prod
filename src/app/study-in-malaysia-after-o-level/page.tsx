@@ -111,27 +111,38 @@ const faqs = [
 
 export default async function StudyInMalaysiaAfterOLevelPage() {
   const malaysiaRecords = await getMalaysiaPathwayRecords();
+  const hasMalaysiaRecords = malaysiaRecords.length > 0;
+  const fitsTone = hasMalaysiaRecords ? 'white' : 'sage';
+  const faqTone = hasMalaysiaRecords ? 'sage' : 'white';
+  const crossLinksTone = hasMalaysiaRecords ? 'white' : 'sage';
+  const governanceTone = hasMalaysiaRecords ? 'sage' : 'white';
+  const assessmentTone = hasMalaysiaRecords ? 'white' : 'sage';
 
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'WebPage',
+        '@type': ['WebPage', 'Article'],
         '@id': `${canonical}#page`,
         url: canonical,
         mainEntityOfPage: canonical,
-        dateModified: PATHWAY_LAST_UPDATED_ISO,
+        headline: 'Study in Malaysia After O-Level from Bangladesh: 1-Year Foundation & 2-Year Diploma Guide',
         name: 'Study in Malaysia After O-Level from Bangladesh: Foundation & Diploma Guide',
         description:
           'How Bangladeshi O-Level graduates start a 1-year Foundation or 2-year Diploma in Malaysia instead of spending 2 years on A-Levels.',
+        image: `${SITE}/og/malaysia.jpg`,
+        primaryImageOfPage: primaryImageOfPageSchema('/og/malaysia.jpg'),
+        datePublished: `${PATHWAY_LAST_UPDATED_ISO}T00:00:00Z`,
+        dateModified: `${PATHWAY_LAST_UPDATED_ISO}T00:00:00Z`,
         inLanguage: 'en-BD',
+        author: { '@type': 'Person', name: 'Mukta Rahaman', jobTitle: 'Senior Counselor — Malaysia & Global Admissions' },
+        reviewedBy: { '@type': 'Person', name: 'Abdullah Al Rakib', jobTitle: 'Founder and CEO' },
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
-        primaryImageOfPage: primaryImageOfPageSchema('/og/malaysia.jpg'),
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
         ...citationJsonLd(MALAYSIA_O_LEVEL_SOURCES),
       },
-      ...(malaysiaRecords.length
+      ...(hasMalaysiaRecords
         ? [
             {
               '@type': 'ItemList',
@@ -176,21 +187,19 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
           </>
         }
         aside={
-          <figure className="overflow-hidden rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
-            <div className="relative aspect-[4/3] w-full">
-              <Image
-                src="/images/destinations/malaysia-hero.webp"
-                alt="University campus skyline in Kuala Lumpur, Malaysia for Bangladeshi O-Level pathway students"
-                fill
-                priority
-                sizes="(max-width:1024px) 100vw, 480px"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="flex flex-wrap items-center justify-between gap-2 p-4 text-[13px] font-semibold text-petrol-800">
+          <figure className="anim-rise relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-petrol-800">
+            <Image
+              src="/images/destinations/malaysia-hero.webp"
+              alt="University campus skyline in Kuala Lumpur, Malaysia for Bangladeshi O-Level pathway students"
+              fill
+              priority
+              sizes="(max-width:1024px) 100vw, 480px"
+              className="object-cover"
+            />
+            <figcaption className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white/95 px-4 py-2.5 text-[13px] font-semibold text-petrol-800 backdrop-blur-sm">
               <span>Direct MQA Foundation (5 Credits) &amp; Diploma (3 Credits)</span>
               <span className="rounded-full bg-lime-pale px-2.5 py-0.5 text-[12px] text-lime-deep">
-                Planning assumption: 1 MYR ≈ 27 BDT
+                1 MYR ≈ 27 BDT assumption
               </span>
             </figcaption>
           </figure>
@@ -228,14 +237,14 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
         title="Direct Proof: Staying for A-Levels vs. Starting Malaysia After O-Level"
         intro="Every row below compares educational time, pre-university academic spend (excluding living costs), and the resulting university milestone."
       >
-        <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white">
           <table className="w-full min-w-[760px] text-left text-[14.5px] leading-6">
             <caption className="sr-only">Side-by-side proof showing how O-Level students win in Malaysia compared with A-Levels</caption>
             <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
               <tr>
                 <th scope="col" className="p-4 font-bold">Comparison Factor</th>
                 <th scope="col" className="p-4 font-bold">Stay in Bangladesh for A-Levels</th>
-                <th scope="col" className="p-4 font-bold">Start Malaysia After O-Level</th>
+                <th scope="col" className="p-4 font-bold text-lime">Start Malaysia After O-Level</th>
                 <th scope="col" className="p-4 font-bold">How the Student Wins</th>
               </tr>
             </thead>
@@ -244,7 +253,7 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
                 <tr key={row.criterion}>
                   <th scope="row" className="p-4 align-top font-bold text-petrol-800">{row.criterion}</th>
                   <td className="p-4 align-top">{row.stayForALevel}</td>
-                  <td className="p-4 align-top font-semibold text-emerald-900">{row.malaysiaPath}</td>
+                  <td className="bg-lime-pale/30 p-4 align-top font-semibold text-lime-deep">{row.malaysiaPath}</td>
                   <td className="p-4 align-top font-semibold text-petrol-800">{row.studentWin}</td>
                 </tr>
               ))}
@@ -261,16 +270,16 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
         intro="Inspect the underlying Bangladesh A-Level coaching, school, and British Council fees alongside Malaysia Foundation and Diploma tuition (living costs kept separate)."
       >
         <div className="space-y-8">
-          <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+          <div className="overflow-x-auto rounded-3xl bg-white">
             <table className="w-full min-w-[720px] text-left text-[14.5px] leading-6">
               <caption className="sr-only">Two-year A-Level academic and exam cost in Bangladesh</caption>
-              <thead className="border-b border-canvas-soft bg-canvas-soft text-petrol-800">
+              <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
                 <tr>
                   <th scope="col" className="p-4 font-bold">Bangladesh A-Level Route (2 Years)</th>
                   <th scope="col" className="p-4 font-bold">Tuition / Coaching Fees</th>
                   <th scope="col" className="p-4 font-bold">Labs, Books &amp; Mocks</th>
                   <th scope="col" className="p-4 font-bold">British Council Exam Fees</th>
-                  <th scope="col" className="p-4 font-bold">2-Year Academic Total (No Living)</th>
+                  <th scope="col" className="p-4 font-bold text-lime">2-Year Academic Total (No Living)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-canvas-soft text-ink-soft">
@@ -278,7 +287,7 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
                   <tr key={row.route}>
                     <th scope="row" className="p-4 align-top font-bold text-petrol-800">
                       {row.route}
-                      <span className="mt-1 block text-[12.5px] font-medium text-emerald-800">
+                      <span className="mt-1 block text-[12.5px] font-medium text-clay">
                         <Clock size={12} className="mr-1 inline" aria-hidden="true" />
                         {row.timeBeforeBachelor}
                       </span>
@@ -293,14 +302,14 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
             </table>
           </div>
 
-          <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+          <div className="overflow-x-auto rounded-3xl bg-white">
             <table className="w-full min-w-[720px] text-left text-[14.5px] leading-6">
               <caption className="sr-only">Malaysia Foundation and Diploma entry and tuition after O-Level</caption>
               <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
                 <tr>
                   <th scope="col" className="p-4 font-bold">Malaysia Post-O-Level Program</th>
                   <th scope="col" className="p-4 font-bold">Minimum O-Level Entry</th>
-                  <th scope="col" className="p-4 font-bold">Standard Private Tuition (No Living)</th>
+                  <th scope="col" className="p-4 font-bold text-lime">Standard Private Tuition (No Living)</th>
                   <th scope="col" className="p-4 font-bold">Top Private / Branch Tuition (No Living)</th>
                   <th scope="col" className="p-4 font-bold">Next Degree Step</th>
                 </tr>
@@ -313,7 +322,7 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
                       <span className="mt-1 block text-[12.5px] font-normal text-ink-soft">{row.subjectRules}</span>
                     </th>
                     <td className="p-4 align-top font-semibold text-petrol-800">{row.oLevelRequirement}</td>
-                    <td className="p-4 align-top font-semibold text-emerald-800">{row.tuitionStandard}</td>
+                    <td className="bg-lime-pale/30 p-4 align-top font-semibold text-lime-deep">{row.tuitionStandard}</td>
                     <td className="p-4 align-top">{row.tuitionBranch}</td>
                     <td className="p-4 align-top">{row.progression}</td>
                   </tr>
@@ -323,8 +332,8 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
           </div>
 
           {/* Separate Living & Official Third-Party Costs Block */}
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+          <div data-anim="stagger" className="grid gap-6 md:grid-cols-2">
+            <div className={kit.card}>
               <h3 className={kit.h3}>Separated Monthly Living Budget in Malaysia</h3>
               <p className={`mt-2 ${kit.body}`}>
                 Living expenses are kept completely outside tuition totals so families can plan realistically by campus city and housing type:
@@ -336,7 +345,7 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+            <div className={kit.card}>
               <h3 className={kit.h3}>Official Pre-Departure &amp; Visa Charges (Separate)</h3>
               <p className={`mt-2 ${kit.body}`}>
                 All third-party fees are paid directly to the university, EMGS, or embassy; EduExpress charges <strong className="text-petrol-800">BDT 0 service fee</strong>:
@@ -357,11 +366,11 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
         title="Where an O-Level Malaysian Pathway Leads Next"
         intro="Starting Foundation or Diploma in Malaysia does not lock a student out of Western degrees—it often lowers the total multi-year cost of reaching them."
       >
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div data-anim="stagger" className="grid gap-6 lg:grid-cols-3">
           {GLOBAL_PROGRESSION_ROUTES.map(card => (
             <div key={card.title} className={kit.cardSage}>
               <span className={kit.icon}>
-                <card.icon size={22} className="text-emerald-800" aria-hidden="true" />
+                <card.icon size={22} aria-hidden="true" />
               </span>
               <h3 className={`mt-4 ${kit.h3}`}>{card.title}</h3>
               <p className={`mt-2 ${kit.body}`}>{card.body}</p>
@@ -371,7 +380,7 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
       </Section>
 
       {/* Module 3: Live Verified Malaysian Universities in Catalog */}
-      {malaysiaRecords.length > 0 && (
+      {hasMalaysiaRecords && (
         <Section
           id="verified-universities"
           tone="sage"
@@ -383,24 +392,24 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
             </Link>
           }
         >
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div data-anim="stagger" className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {malaysiaRecords.map(uni => {
               const firstAward = uni.scholarships[0];
               return (
-                <div key={uni.slug} className="flex flex-col justify-between rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+                <div key={uni.slug} className={`${kit.card} flex flex-col justify-between`}>
                   <div>
                     <div className="flex items-center justify-between gap-2">
                       <span className="rounded-full bg-lime-pale px-3 py-1 text-[12px] font-bold text-lime-deep">
                         {uni.city}
                       </span>
-                      <span className="text-[12px] font-semibold text-emerald-800">BDT 0 EduExpress Fee</span>
+                      <span className="text-[12px] font-semibold text-lime-deep">BDT 0 EduExpress Fee</span>
                     </div>
                     <h3 className="mt-3 text-[18px] font-bold text-petrol-800">{uni.name}</h3>
                     <p className="mt-2 text-[14px] leading-6 text-ink-soft">
                       <strong className="text-petrol-800">Recorded tuition:</strong> {uni.details.tuition}
                     </p>
                     {firstAward && (
-                      <p className="mt-1.5 text-[13.5px] leading-5 text-emerald-900">
+                      <p className="mt-1.5 text-[13.5px] leading-5 text-lime-deep">
                         <strong>Merit option:</strong> {firstAward.title}
                         {firstAward.amount ? ` (${firstAward.amount})` : ''}
                       </p>
@@ -424,10 +433,12 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
       {/* Module 4: Fit vs. Reconsider + Under-18 & Work Rules */}
       <Section
         id="who-it-fits"
+        tone={fitsTone}
         title="Who This Pathway Fits — And Who Should Reconsider"
         intro="An evidence-first recommendation states clear eligibility boundaries, age policies, and financial realities upfront."
       >
         <FitVsReconsiderGrid
+          tone={fitsTone}
           fitTitle="Ideal Fit After O-Levels"
           fitItems={[
             {
@@ -463,13 +474,13 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
 
       {/* FAQs */}
       <div id="faq" className="scroll-mt-24">
-        <FaqBlock items={faqs} tone="sage" title="Frequently Asked Questions: Malaysia After O-Level" />
+        <FaqBlock items={faqs} tone={faqTone} title="Frequently Asked Questions: Malaysia After O-Level" />
       </div>
 
       {/* Cross Links */}
       <PathwayCrossLinks
         currentPath={PATH}
-        tone="white"
+        tone={crossLinksTone}
         extraLinks={[
           { label: 'Study in Malaysia Hub', href: '/study-in-malaysia-from-bangladesh' },
           { label: 'Malaysia Study Costs & Student File', href: '/malaysia-study-cost-bangladesh' },
@@ -479,7 +490,7 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
 
       {/* Governance & Official Sources */}
       <PathwayGovernanceSection
-        tone="sage"
+        tone={governanceTone}
         authorName="Mukta Rahaman"
         authorRole="Senior Consultant (Education Fit & Cost Planning)"
         lastVerified="21 November 2026"
@@ -496,10 +507,11 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
       {/* Embedded Free Assessment */}
       <Section
         id="o-level-assessment"
+        tone={assessmentTone}
         title="Check Your O-Level to Malaysia Eligibility"
         intro="Share your O-Level / IGCSE subjects, grades, and preferred field. An EduExpress counselor prepares a written shortlist and separate tuition/living sheet within one working day—at BDT 0 service fee."
       >
-        <div className="mx-auto max-w-3xl rounded-3xl border border-petrol-800/10 bg-canvas-soft p-6 shadow-sm sm:p-10">
+        <div className="mx-auto max-w-3xl">
           <EducationFitAssessment initialContext={{ country: 'malaysia' }} />
         </div>
       </Section>

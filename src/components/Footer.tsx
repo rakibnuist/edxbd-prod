@@ -26,6 +26,8 @@ import { getPublicTrustRecords } from '@/lib/trust-records';
 const chinaFlagshipLinks = [
   { name: 'China March 2027 Intake', href: '/china-march-2027-intake', badge: 'Open' },
   { name: 'Study in China Guide', href: '/study-in-china-from-bangladesh' },
+  { name: 'China After O-Level / SSC / Dakhil', href: '/study-in-china-after-o-level-ssc' },
+  { name: 'Bangladesh vs China Bachelor', href: '/bangladesh-vs-china-bachelor-study' },
   { name: 'China Scholarships', href: '/china-scholarships-bangladesh' },
   { name: 'Cost of Studying in China', href: '/study-in-china-cost-bangladesh' },
   { name: 'MBBS in China', href: '/mbbs-in-china-bangladesh' },
@@ -34,12 +36,18 @@ const chinaFlagshipLinks = [
   { name: 'China Cost Benchmark Report', href: '/china-study-report-bangladesh' },
   { name: 'Visa-First Policy (BDT 0)', href: '/china-visa-first-policy' },
   { name: 'বাংলা গাইড (Study in China)', href: '/bn/study-in-china' },
+  { name: 'SSC ও দাখিলের পর চীন (বাংলা)', href: '/bn/study-in-china-after-ssc-dakhil' },
 ];
 
 const planLinks = [
   ['University Directory', '/universities'],
   ['Programs by Budget', '/programs'],
   ['Compare Study Costs', '/compare-costs'],
+  ['Malaysia After O-Level', '/study-in-malaysia-after-o-level'],
+  ['China vs UK, USA & Dhaka Bachelor', '/compare-bachelor-china-abroad-bangladesh'],
+  ['Bangladesh vs Abroad Matrix', '/bangladesh-vs-study-abroad-countries'],
+  ['Bangladesh Study Abroad Market 2027', '/bangladesh-study-abroad-market'],
+  ['বিদেশে উচ্চশিক্ষা ২০২৭ গাইড (বাংলা)', '/bn/bangladesh-study-abroad-market'],
   ['Scholarship Database', '/scholarships#scholarship-database'],
   ['Malaysia Study Costs (RM/BDT)', '/malaysia-study-cost-bangladesh'],
   ['Malaysia Student Visa (EMGS)', '/malaysia-student-visa-bangladesh'],
@@ -133,6 +141,7 @@ export default async function Footer() {
                 'BDT 0 service fee before China visa approval',
                 'Written cost breakdown before you commit',
                 'In-person family counselling in Dhanmondi, Dhaka',
+                'CBCA Founding Member (#08) & FACD-CAB (FCM-452)',
               ].map(item => (
                 <li key={item} className="flex items-center gap-2">
                   <CheckCircle2 size={16} className="shrink-0 text-lime" aria-hidden="true" />
@@ -362,6 +371,26 @@ export default async function Footer() {
             </p>
             <p className="mt-0.5 text-xs text-white/55">
               University fees remain in official destination currency; service terms and third-party charges are itemised in writing before commitment.
+            </p>
+            <p className="mt-1 text-xs text-white/70">
+              Industry Associations: Founding Member (#08) of{' '}
+              <a
+                href="https://cbcabd.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-lime underline underline-offset-4 hover:text-white"
+              >
+                CBCA
+              </a>{' '}
+              · Active Member (ID: FCM-452) of{' '}
+              <a
+                href="https://www.facdcab.org/members/directory/2264"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-lime underline underline-offset-4 hover:text-white"
+              >
+                FACD-CAB / FACECAB Directory (#2264)
+              </a>
             </p>
           </div>
 

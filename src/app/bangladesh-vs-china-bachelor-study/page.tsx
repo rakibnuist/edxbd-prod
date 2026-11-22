@@ -105,18 +105,23 @@ export default async function BangladeshVsChinaBachelorPage() {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'WebPage',
+        '@type': ['WebPage', 'Article'],
         '@id': `${canonical}#page`,
         url: canonical,
         mainEntityOfPage: canonical,
-        dateModified: PATHWAY_LAST_UPDATED_ISO,
+        headline: 'Bangladesh vs China Bachelor Study 2027: Dhaka Private Universities vs Ranked China',
         name: 'Study in Bangladesh vs China: Rankings, Campus Facilities & University Scholarships',
         description:
           'One-to-one comparison of Dhaka Category-A private universities (NSU, EWU, AIUB) against top-ranked Chinese universities with University Scholarships.',
+        image: `${SITE}/og/china.jpg`,
+        primaryImageOfPage: primaryImageOfPageSchema('/og/china.jpg'),
+        datePublished: `${PATHWAY_LAST_UPDATED_ISO}T00:00:00Z`,
+        dateModified: `${PATHWAY_LAST_UPDATED_ISO}T00:00:00Z`,
         inLanguage: 'en-BD',
+        author: { '@type': 'Person', name: 'Afsana Meme', jobTitle: 'Senior Consultant — China Admissions & Scholarships' },
+        reviewedBy: { '@type': 'Person', name: 'Abdullah Al Rakib', jobTitle: 'Founder and CEO' },
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
-        primaryImageOfPage: primaryImageOfPageSchema('/og/china.jpg'),
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
         ...citationJsonLd(COMPARISON_HUB_SOURCES),
       },
@@ -151,7 +156,7 @@ export default async function BangladeshVsChinaBachelorPage() {
         ]}
         eyebrow="1-on-1 Comparison · Dhaka Private vs. China Top-Ranked · Visa-First Policy"
         title="Bangladesh vs. China for a Bachelor’s degree."
-        lead="Why settle for a local commuter degree when the same or lower academic tuition can earn a Bachelor’s degree at a globally ranked Chinese research university—with university scholarships, residential labs, and global Master’s mobility."
+        lead="For HSC, Alim, and A-Level graduates: why settle for a local commuter degree when the same or lower academic tuition can earn a Bachelor’s degree at a globally ranked Chinese research university—with university scholarships, residential labs, and global Master’s mobility."
         reviewed={PATHWAY_LAST_UPDATED_LABEL}
         actions={
           <>
@@ -164,19 +169,17 @@ export default async function BangladeshVsChinaBachelorPage() {
           </>
         }
         aside={
-          <figure className="overflow-hidden rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
-            <div className="relative aspect-[4/3] w-full">
-              <Image
-                src="/images/destinations/china-hero.webp"
-                alt="Top-ranked Chinese university campus for Bangladeshi Bachelor applicants comparing Dhaka vs China"
-                fill
-                priority
-                sizes="(max-width:1024px) 100vw, 480px"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="flex flex-wrap items-center justify-between gap-2 p-4 text-[13px] font-semibold text-petrol-800">
-              <span>NSU / EWU / AIUB vs. Top-Ranked China Universities</span>
+          <figure className="anim-rise relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-petrol-800">
+            <Image
+              src="/images/destinations/china-hero.webp"
+              alt="Top-ranked Chinese university campus for Bangladeshi Bachelor applicants comparing Dhaka vs China"
+              fill
+              priority
+              sizes="(max-width:1024px) 100vw, 480px"
+              className="object-cover"
+            />
+            <figcaption className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white/95 px-4 py-2.5 text-[13px] font-semibold text-petrol-800 backdrop-blur-sm">
+              <span>NSU / EWU / AIUB vs. Top-Ranked China</span>
               <span className="rounded-full bg-lime-pale px-2.5 py-0.5 text-[12px] text-lime-deep">
                 Living costs separated
               </span>
@@ -195,7 +198,7 @@ export default async function BangladeshVsChinaBachelorPage() {
       <Section
         id="direct-answer"
         title="How Bangladeshi students win by choosing China over a Dhaka private university"
-        intro="For an A-Level or HSC graduate in Bangladesh, four years of BBA or CSE tuition and institutional fees at Category-A private universities like NSU, EWU, or AIUB already cost BDT 9.17 lakh to BDT 14.30 lakh—without international campus housing or global top-500 rankings. Through University, Entrance, Belt & Road, and Provincial scholarships at Chinese public research universities, qualified students gain global top-100 to top-650 rankings, modern residential engineering and AI labs, and equal or lower tuition—while keeping Western Master’s doors wide open."
+        intro="For an A-Level, HSC, or Alim graduate in Bangladesh, four years of BBA or CSE tuition and institutional fees at Category-A private universities like NSU, EWU, or AIUB already cost BDT 9.17 lakh to BDT 14.30 lakh—without international campus housing or global top-500 rankings. Through University, Entrance, Belt & Road, and Provincial scholarships at Chinese public research universities, qualified students gain global top-100 to top-650 rankings, modern residential engineering and AI labs, and equal or lower tuition—while keeping Western Master’s doors wide open."
       >
         <LivingCostSeparationNotice
           summary="All comparisons below strictly separate Academic Tuition & Institutional Fees from Personal Living Expenses (meals, local transit, personal allowance). Chinese fees are kept in CNY/RMB so families convert at live bank TT rates."
@@ -217,7 +220,7 @@ export default async function BangladeshVsChinaBachelorPage() {
         title="Head-to-Head Proof: Bangladesh Category-A Private vs. Ranked China"
         intro="Direct point-by-point evidence showing where the educational and financial advantages lie."
       >
-        <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white">
           <table className="w-full min-w-[780px] text-left text-[14.5px] leading-6">
             <caption className="sr-only">One-to-one comparison between Dhaka Category-A private universities and China ranked universities</caption>
             <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
@@ -233,7 +236,7 @@ export default async function BangladeshVsChinaBachelorPage() {
                 <tr key={row.criterion}>
                   <th scope="row" className="p-4 align-top font-bold text-petrol-800">{row.criterion}</th>
                   <td className="p-4 align-top">{row.bangladeshPrivate}</td>
-                  <td className="bg-lime-pale/25 p-4 align-top font-semibold text-emerald-950">{row.chinaRanked}</td>
+                  <td className="bg-lime-pale/30 p-4 align-top font-semibold text-lime-deep">{row.chinaRanked}</td>
                   <td className="p-4 align-top font-semibold text-petrol-800">{row.winReason}</td>
                 </tr>
               ))}
@@ -241,11 +244,11 @@ export default async function BangladeshVsChinaBachelorPage() {
           </table>
         </div>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div data-anim="stagger" className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {CHINA_CAMPUS_PILLARS.map(card => (
             <div key={card.title} className={kit.cardSage}>
               <span className={kit.icon}>
-                <card.icon size={22} className="text-petrol-800" aria-hidden="true" />
+                <card.icon size={22} aria-hidden="true" />
               </span>
               <h3 className={`mt-4 ${kit.h3}`}>{card.title}</h3>
               <p className={`mt-2 ${kit.body}`}>{card.body}</p>
@@ -262,10 +265,10 @@ export default async function BangladeshVsChinaBachelorPage() {
         intro="Inspect verified 4-year Dhaka private university fee schedules alongside live Chinese university rankings and non-CSC university scholarships from our catalog."
       >
         <div className="space-y-8">
-          <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+          <div className="overflow-x-auto rounded-3xl bg-white">
             <table className="w-full min-w-[740px] text-left text-[14.5px] leading-6">
               <caption className="sr-only">Dhaka Category-A private university four-year tuition and fee totals</caption>
-              <thead className="border-b border-canvas-soft bg-canvas-soft text-petrol-800">
+              <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
                 <tr>
                   <th scope="col" className="p-4 font-bold">Dhaka Private University</th>
                   <th scope="col" className="p-4 font-bold">4-Year BBA Academic Total (No Living)</th>
@@ -290,7 +293,7 @@ export default async function BangladeshVsChinaBachelorPage() {
           </div>
 
           {topChinaUniversities.length > 0 && (
-            <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+            <div className="overflow-x-auto rounded-3xl bg-white">
               <table className="w-full min-w-[820px] text-left text-[14px] leading-6">
                 <caption className="sr-only">Top-ranked Chinese universities with University Scholarships from EduExpress catalog</caption>
                 <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
@@ -299,7 +302,7 @@ export default async function BangladeshVsChinaBachelorPage() {
                     <th scope="col" className="p-4 font-bold">Verified Global / National Rank</th>
                     <th scope="col" className="p-4 font-bold">English Bachelor Majors</th>
                     <th scope="col" className="p-4 font-bold">Recorded Tuition (CNY)</th>
-                    <th scope="col" className="p-4 font-bold">University / Regional Scholarship</th>
+                    <th scope="col" className="p-4 font-bold text-lime">University / Regional Scholarship</th>
                     <th scope="col" className="p-4 font-bold">Campus Hostel (No Living)</th>
                   </tr>
                 </thead>
@@ -312,7 +315,7 @@ export default async function BangladeshVsChinaBachelorPage() {
                         </Link>
                         <span className="mt-0.5 block text-[12.5px] font-medium text-ink-soft">{uni.city}, China</span>
                       </th>
-                      <td className="p-4 align-top font-semibold text-emerald-900">
+                      <td className="p-4 align-top font-semibold text-lime-deep">
                         {uni.worldRankLabel && <span className="block">{uni.worldRankLabel}</span>}
                         {uni.nationalRankLabel && (
                           <span className="block text-[12.5px] text-petrol-800">{uni.nationalRankLabel}</span>
@@ -320,7 +323,7 @@ export default async function BangladeshVsChinaBachelorPage() {
                       </td>
                       <td className="p-4 align-top">{uni.englishPrograms.join(' · ')}</td>
                       <td className="p-4 align-top font-semibold text-petrol-800">{uni.bachelorTuition}</td>
-                      <td className="p-4 align-top">{uni.universityScholarship}</td>
+                      <td className="bg-lime-pale/30 p-4 align-top">{uni.universityScholarship}</td>
                       <td className="p-4 align-top">{uni.hostelFee}</td>
                     </tr>
                   ))}
@@ -330,7 +333,7 @@ export default async function BangladeshVsChinaBachelorPage() {
           )}
         </div>
 
-        <div className="mt-8 rounded-3xl bg-petrol-800 p-6 text-white shadow-sm sm:p-8">
+        <div className={`mt-8 ${kit.cardDark} sm:p-8`}>
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div className="max-w-3xl">
               <p className="flex items-start gap-2.5 text-[15.5px] leading-7 text-white/95">
@@ -355,7 +358,7 @@ export default async function BangladeshVsChinaBachelorPage() {
           fitTitle="Ideal Fit for a Ranked Chinese Bachelor"
           fitItems={[
             {
-              label: 'A-Level / HSC students comparing BDT 9–14L+ Dhaka fees',
+              label: 'A-Level, HSC & Alim students comparing BDT 9–14L+ Dhaka fees',
               detail: 'Strong fit when you want global top-100–650 rankings, residential engineering labs, and international campus life instead of commuting in Dhaka.',
             },
             {
@@ -378,7 +381,7 @@ export default async function BangladeshVsChinaBachelorPage() {
               detail: 'Chinese X1 student visas restrict term-time paid employment; separated living budgets (~CNY 800–1,400+/month depending on city) must be planned ahead.',
             },
             {
-              label: 'Students who have only finished SSC or O-Level',
+              label: 'Students who have only finished SSC, Dakhil, or O-Level',
               detail: 'Start with our China 3+2 Diploma-to-Bachelor pathway (/study-in-china-after-o-level-ssc) rather than direct 4-year Bachelor admission.',
             },
           ]}
@@ -422,9 +425,9 @@ export default async function BangladeshVsChinaBachelorPage() {
       <Section
         id="bd-china-assessment"
         title="Compare Your Dhaka Options Against Ranked Chinese Universities"
-        intro="Share your A-Level, HSC, or O-Level results and intended major. Our counselors return an itemized shortlist of ranked Chinese universities and available University Scholarships within one working day."
+        intro="Share your A-Level, HSC, Alim, SSC, Dakhil, or O-Level results and intended major. Our counselors return an itemized shortlist of ranked Chinese universities and available University Scholarships within one working day."
       >
-        <div className="mx-auto max-w-3xl rounded-3xl border border-petrol-800/10 bg-canvas-soft p-6 shadow-sm sm:p-10">
+        <div className="mx-auto max-w-3xl">
           <EducationFitAssessment initialContext={{ country: 'china' }} />
         </div>
       </Section>

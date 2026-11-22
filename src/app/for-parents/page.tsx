@@ -99,7 +99,7 @@ export default async function ParentsPage() {
       <PageHero
         path={PATH}
         trail={[{ name: 'For parents' }]}
-        eyebrow="A parent-friendly decision guide"
+        eyebrow="Parent Decision Guide · CBCA Founding Member (#08) & FACD-CAB (FCM-452)"
         title="Help your child choose with facts, not pressure."
         lead="Check recognition, complete cost and responsibility before your family commits. Parents can speak directly with our counselling desk in Dhanmondi."
         actions={

@@ -178,7 +178,7 @@ export default async function BengaliMbbsInChinaPage() {
               </ol>
             </nav>
             <p className={`anim-rise mt-6 ${kit.badge}`}><Stethoscope size={15} aria-hidden="true" /> MoE ও BMDC-সচেতন মেডিকেল গাইড ২০২৭</p>
-            <h1 className="anim-lift mt-5 font-display text-[36px] font-bold leading-[1.08] text-petrol-800 sm:text-[48px] lg:text-[56px]">
+            <h1 className="anim-lift mt-5 font-display text-[26px] xs:text-[30px] font-bold leading-[1.25] text-petrol-800 sm:text-[44px] lg:text-[54px] sm:leading-[1.18]">
               বাংলাদেশ থেকে চীনে MBBS: স্বীকৃতি, খরচ ও BMDC নিয়ম
             </h1>
             <p className={`anim-rise mt-6 max-w-2xl ${kit.lead}`}>

@@ -206,7 +206,7 @@ export default function VisaInterviewSimulator() {
                   type="text"
                   value={universityName}
                   onChange={e => setUniversityName(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-[14px] text-stone-800 focus:border-petrol-800 focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-base sm:text-[14px] text-stone-800 focus:border-petrol-800 focus:outline-none"
                 />
               </div>
               <div>
@@ -217,7 +217,7 @@ export default function VisaInterviewSimulator() {
                   type="text"
                   value={programName}
                   onChange={e => setProgramName(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-[14px] text-stone-800 focus:border-petrol-800 focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-base sm:text-[14px] text-stone-800 focus:border-petrol-800 focus:outline-none"
                 />
               </div>
             </div>
@@ -280,7 +280,7 @@ export default function VisaInterviewSimulator() {
                       ? 'আত্মবিশ্বাসের সাথে ২-৩ বাক্যে আপনার উত্তর লিখুন…'
                       : 'Provide a concise, confident 2-3 sentence answer as you would speak at the embassy counter…'
                   }
-                  className="mt-2 w-full rounded-xl border border-stone-300 bg-white p-3.5 text-[14px] leading-relaxed text-stone-900 placeholder:text-stone-400 focus:border-petrol-800 focus:outline-none focus:ring-2 focus:ring-petrol-800/10"
+                  className="mt-2 w-full rounded-xl border border-stone-300 bg-white p-3.5 text-base sm:text-[14px] leading-relaxed text-stone-900 placeholder:text-stone-400 focus:border-petrol-800 focus:outline-none focus:ring-2 focus:ring-petrol-800/10"
                 />
               </div>
 

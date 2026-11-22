@@ -66,6 +66,16 @@ export const BANGLADESH_MARKET_SOURCES: MarketAuthoritySource[] = [
     href: 'https://www.britishcouncil.org.bd/en/exam/school',
     note: 'CAIE / Edexcel O-Level & A-Level exam registration framework and IELTS testing in Bangladesh',
   },
+  {
+    label: 'China Bangladesh Consultancy Alliance (CBCA) — Founding Member #08',
+    href: 'https://cbcabd.org/',
+    note: 'Bilateral China–Bangladesh education consultancy alliance and ethical admissions framework',
+  },
+  {
+    label: 'FACD-CAB (FACECAB) Official Member Directory — EduExpress International (ID: FCM-452)',
+    href: 'https://www.facdcab.org/members/directory/2264',
+    note: 'Foreign Admission & Career Development Consultants Association of Bangladesh verified member record',
+  },
 ];
 
 export const BANGLADESH_MACRO_INDICATORS = [

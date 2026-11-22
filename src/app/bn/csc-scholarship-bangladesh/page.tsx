@@ -195,7 +195,7 @@ export default function BengaliCscScholarshipPage() {
               </ol>
             </nav>
             <p className={`anim-rise mt-6 ${kit.badge}`}><Award size={15} aria-hidden="true" /> চায়না সরকারি স্কলারশিপ ২০২৭ (Type A ও B)</p>
-            <h1 className="anim-lift mt-5 font-display text-[36px] font-bold leading-[1.08] text-petrol-800 sm:text-[48px] lg:text-[56px]">
+            <h1 className="anim-lift mt-5 font-display text-[26px] xs:text-[30px] font-bold leading-[1.25] text-petrol-800 sm:text-[44px] lg:text-[54px] sm:leading-[1.18]">
               বাংলাদেশি শিক্ষার্থীদের জন্য CSC স্কলারশিপ সম্পূর্ণ গাইড
             </h1>
             <p className={`anim-rise mt-6 max-w-2xl ${kit.lead}`}>

@@ -14,7 +14,7 @@ type Props = {
   onProgram: (id: string) => void;
   scholarship?: string;
 };
-const controlClass = 'mt-1.5 h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-[#0f3a5c] outline-none transition focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/15';
+const controlClass = 'mt-1.5 h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-base sm:text-sm text-[#0f3a5c] outline-none transition focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/15';
 const emptyFields: UniversityEnquiryFields = { name: '', phone: '', email: '', consent: false };
 
 export default function UniversityEnquiryForm({ university, programs, selectedProgramId, onProgram, scholarship }: Props) {

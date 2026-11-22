@@ -108,8 +108,8 @@ export default function BengaliStudyInChinaPage() {
                 </li>
               </ol>
             </nav>
-            <p className={`anim-rise mt-6 ${kit.badge}`}><Globe2 size={15} aria-hidden="true" /> ফ্ল্যাগশিপ চায়না উচ্চশিক্ষা পোর্টাল</p>
-            <h1 className="anim-lift mt-5 font-display text-[38px] font-bold text-petrol-800 sm:text-[50px] lg:text-[58px]">
+            <p className={`anim-rise mt-6 ${kit.badge}`}><Globe2 size={15} aria-hidden="true" /> ফ্ল্যাগশিপ চায়না উচ্চশিক্ষা পোর্টাল · CBCA ফাউন্ডিং মেম্বার (#08) ও FACD-CAB (FCM-452)</p>
+            <h1 className="anim-lift mt-5 font-display text-[28px] xs:text-[32px] font-bold leading-[1.25] text-petrol-800 sm:text-[48px] lg:text-[56px] sm:leading-[1.18]">
               বাংলাদেশী শিক্ষার্থীদের জন্য চীনে উচ্চশিক্ষা ২০২৭
             </h1>
             <p className={`anim-rise mt-6 max-w-2xl ${kit.lead}`}>
@@ -190,7 +190,7 @@ export default function BengaliStudyInChinaPage() {
       <section className="bg-petrol-800 py-16 text-white lg:py-20">
         <div className={`${kit.wrap} flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between`}>
           <div className="max-w-2xl">
-            <h2 data-anim="pop" className="font-display text-[36px] font-bold text-lime sm:text-[48px]">কোথা থেকে শুরু করবেন বুঝতে পারছেন না?</h2>
+            <h2 data-anim="pop" className="font-display text-[26px] xs:text-[30px] font-bold leading-[1.25] text-lime sm:text-[44px]">কোথা থেকে শুরু করবেন বুঝতে পারছেন না?</h2>
             <p className="mt-5 text-[18px] leading-[1.7] text-white/85">আপনার ফলাফল, বাজেট ও পছন্দের বিষয় জানান। আমরা বাস্তবসম্মত বিকল্প, খরচ এবং প্রয়োজনীয় কাগজপত্রের তালিকা লিখিতভাবে জানাব।</p>
           </div>
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row">

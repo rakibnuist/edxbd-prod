@@ -71,11 +71,14 @@ export const chinaNavigation: SiteLink[] = [
   { name: 'China universities', href: '/china-universities', note: 'Compare university and program records' },
   { name: 'Programs by budget', href: '/programs', note: 'Find programs within your yearly tuition' },
   { name: 'China scholarships', href: '/china-scholarships-bangladesh', note: 'Explore documented scholarship routes' },
+  { name: 'After O-Level, SSC & Dakhil (3+2)', href: '/study-in-china-after-o-level-ssc', note: '5-year Diploma-to-Bachelor pathway' },
+  { name: 'Bangladesh vs China Bachelor', href: '/bangladesh-vs-china-bachelor-study', note: 'Compare Dhaka private uni vs China 4-year costs' },
   { name: 'Student visa guide', href: '/china-student-visa-bangladesh', note: 'Prepare for the X1 or X2 route' },
   { name: 'Cost planner', href: '/study-in-china-cost-bangladesh', note: 'Plan tuition and living costs' },
   { name: 'Intakes and deadlines', href: '/china-intakes-deadlines', note: 'Review the application cycle' },
   { name: 'China cost & data report', href: '/china-study-report-bangladesh', note: 'Live CNY tuition quartiles and scholarship counts' },
   { name: 'বাংলা চায়না গাইড', href: '/bn/study-in-china', note: 'বাংলাদেশি শিক্ষার্থীদের জন্য সম্পূর্ণ বাংলা গাইড' },
+  { name: 'SSC ও দাখিলের পর চীন (৩+২)', href: '/bn/study-in-china-after-ssc-dakhil', note: '৫ বছরে ডিপ্লোমা ও ব্যাচেলর বাংলা গাইড' },
 ];
 
 export const proofNavigation: SiteLink[] = [
@@ -115,6 +118,10 @@ export const costNavigation: SiteLink[] = [
   { name: 'China scholarships', href: '/china-scholarships-bangladesh', note: 'CSC, provincial and university awards' },
   { name: 'Cost of studying in China', href: '/study-in-china-cost-bangladesh', note: 'Tuition, hostel, insurance, visa and travel' },
   { name: 'Cost of studying in Malaysia', href: '/malaysia-study-cost-bangladesh', note: 'RM/BDT tuition, EMGS, Student File and BDT 0 service fee' },
+  { name: 'Malaysia after O-Level', href: '/study-in-malaysia-after-o-level', note: '1-year Foundation or 2-year Diploma routes' },
+  { name: 'China vs UK, USA, Australia & Dhaka', href: '/compare-bachelor-china-abroad-bangladesh', note: '4-year bachelor tuition & scholarship matrix' },
+  { name: 'Bangladesh vs Abroad matrix', href: '/bangladesh-vs-study-abroad-countries', note: 'Compare 7 bachelor routes side by side' },
+  { name: 'Bangladesh Study Abroad Market 2027', href: '/bangladesh-study-abroad-market', note: '12-country tuition, living & Student File report' },
   { name: 'Our fees, in writing', href: '/fees-and-transparency', note: 'What you pay us, when, and what is refundable' },
   { name: 'Compare destinations', href: '/compare-study-destinations', note: 'Cost and entry side by side' },
 ];
@@ -130,5 +137,6 @@ export const aboutNavigation: SiteLink[] = [
   { name: 'B2B Partner Desk', href: '/b2b', note: 'Agency admissions processing & bilateral MOU terms' },
   { name: 'Partner with us', href: '/partnership', note: 'Global Partner Programme & regional cooperation' },
   { name: 'বাংলা গাইড (Study in China)', href: '/bn/study-in-china', note: 'চীন পড়াশোনা, খরচ ও ভিসা গাইড (বাংলায়)' },
+  { name: 'বিদেশে উচ্চশিক্ষা ২০২৭ মার্কেট গাইড', href: '/bn/bangladesh-study-abroad-market', note: '১২টি দেশের টিউশন ও স্টুডেন্ট ফাইল বাংলা গাইড' },
   { name: 'Contact and visit us', href: '/contact', note: 'Phone, WhatsApp and office hours' },
 ];

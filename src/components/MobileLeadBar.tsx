@@ -8,6 +8,18 @@ import { trackAssessmentStart, trackPhoneClick, trackWhatsAppClick } from '@/lib
 
 const PHONE = '+8801983333566';
 
+const EMBEDDED_FIT_FORM_PATHS = new Set([
+  '/study-in-china-after-o-level-ssc',
+  '/bn/study-in-china-after-ssc-dakhil',
+  '/study-in-malaysia-after-o-level',
+  '/compare-bachelor-china-abroad-bangladesh',
+  '/bangladesh-vs-china-bachelor-study',
+  '/bangladesh-vs-study-abroad-countries',
+  '/bangladesh-study-abroad-market',
+  '/bn/bangladesh-study-abroad-market',
+  '/education-fit-assessment',
+]);
+
 export default function MobileLeadBar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -19,7 +31,20 @@ export default function MobileLeadBar() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     // Do not cover the lead form or the footer links.
-    const targets = ['assessment', 'china-fit-form', 'china-fit-form-bottom', 'march-2027-assessment', 'b2b-inquiry', 'partnership-form', 'site-footer']
+    const targets = [
+      'assessment',
+      'fit-assessment-form',
+      'china-fit-form',
+      'china-fit-form-bottom',
+      'march-2027-assessment',
+      'b2b-inquiry',
+      'partnership-form',
+      'application-form',
+      'contact-form',
+      'university-enquiry',
+      'bn-assessment',
+      'site-footer',
+    ]
       .map(id => document.getElementById(id))
       .filter((element): element is HTMLElement => Boolean(element));
     const intersecting = new Map<Element, boolean>();
@@ -53,6 +78,7 @@ export default function MobileLeadBar() {
   const isB2B = pathname === '/b2b';
   const isPartnership = pathname === '/partnership';
   const isPartnerDesk = isB2B || isPartnership;
+  const hasEmbeddedFitForm = pathname ? EMBEDDED_FIT_FORM_PATHS.has(pathname) : false;
   const assessmentHref = isChinaHub
     ? '#china-fit-form'
     : isMarchCampaign
@@ -61,7 +87,9 @@ export default function MobileLeadBar() {
         ? '#b2b-inquiry'
         : isPartnership
           ? '#partnership-form'
-          : '/education-fit-assessment';
+          : hasEmbeddedFitForm
+            ? '#fit-assessment-form'
+            : '/education-fit-assessment';
   const whatsappHref =
     `https://wa.me/${PHONE.replace(/\D/g, '')}?text=` +
     encodeURIComponent(
@@ -110,13 +138,25 @@ export default function MobileLeadBar() {
               href={assessmentHref}
               onClick={() =>
                 trackAssessmentStart({
-                  destination: isPartnerDesk ? 'b2b' : 'china',
-                  label: isPartnership ? 'partnership_mobile_apply' : isB2B ? 'mobile_bar_b2b' : 'mobile_bar_china_assess',
+                  destination: isPartnerDesk
+                    ? 'b2b'
+                    : pathname?.includes('malaysia')
+                      ? 'malaysia'
+                      : pathname?.includes('china')
+                        ? 'china'
+                        : 'general',
+                  label: isPartnership
+                    ? 'partnership_mobile_apply'
+                    : isB2B
+                      ? 'mobile_bar_b2b'
+                      : hasEmbeddedFitForm
+                        ? 'mobile_bar_fit_form'
+                        : 'mobile_bar_china_assess',
                 })
               }
               className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-lime px-2 text-[14px] font-bold text-petrol-800 transition-colors hover:bg-lime-hover"
             >
-              {isPartnership ? 'Apply' : isB2B ? 'B2B Desk' : 'Free Plan'}
+              {isPartnership ? 'Apply' : isB2B ? 'B2B Desk' : hasEmbeddedFitForm ? 'Assess' : 'Free Plan'}
               <ArrowRight size={14} aria-hidden="true" />
             </a>
           ) : (

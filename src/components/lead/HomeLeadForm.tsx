@@ -18,7 +18,7 @@ import { persistTrackingLeadId } from '@/lib/tracking-consent';
 
 const PRIVACY_VERSION = '2026-07-19';
 
-const LEVELS = ["HSC / A Level", "Bachelor's", "Master's", 'PhD', 'MBBS', 'Other'];
+const LEVELS = ['SSC / Dakhil / O Level', 'HSC / Alim / A Level', "Bachelor's", "Master's", 'PhD', 'MBBS', 'Other'];
 
 const DESTINATIONS = [
   'China',

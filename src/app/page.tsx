@@ -351,7 +351,7 @@ export default async function Home() {
             <p className={`${badge} anim-rise`}>
               <span className="size-2 rounded-full bg-[#2ead4b]" aria-hidden="true" /> {intakeBadge}
             </p>
-            <h1 style={delay(60)} className="anim-lift mt-6 font-display text-[50px] font-black leading-[0.95] tracking-[-0.02em] text-petrol-800 sm:text-[80px] lg:text-[96px]">
+            <h1 style={delay(60)} className="anim-lift mt-6 font-display text-[34px] xs:text-[40px] font-black leading-[0.98] tracking-[-0.02em] text-petrol-800 sm:text-[64px] md:text-[80px] lg:text-[96px] sm:leading-[0.95]">
               <span className="sr-only">Study abroad from Bangladesh in China, Malaysia, the UK, Korea and Hungary. Every cost in writing.</span>
               <span aria-hidden="true">
                 Study in{' '}
@@ -379,7 +379,7 @@ export default async function Home() {
               </a>
             </div>
             <ul style={delay(320)} className="anim-rise mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[15px] font-semibold text-petrol-800">
-              {['Free, no obligation', 'Parents welcome', 'Reply within one working day'].map(item => (
+              {['Free, no obligation', 'Parents welcome', 'Reply within one working day', 'CBCA (#08) & FACD-CAB (FCM-452) Member'].map(item => (
                 <li key={item} className="flex items-center gap-2">
                   <CheckCircle2 size={18} className="text-[#2ead4b]" aria-hidden="true" /> {item}
                 </li>
@@ -544,7 +544,7 @@ export default async function Home() {
 
               {/* Right Column: 4 Pathways Card */}
               <div className="rounded-3xl bg-white p-6 text-petrol-800 sm:p-7">
-                <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
                   <div>
                     <p className="text-xs font-bold uppercase tracking-wider text-[#2c6a97]">March 2027 Study Routes</p>
                     <h3 className="mt-0.5 text-[20px] font-bold leading-snug text-petrol-800">Choose your entry pathway</h3>
@@ -646,7 +646,7 @@ export default async function Home() {
       <section id="package" className="bg-petrol-800 py-20 text-white lg:py-24">
         <div className={`${wrap} grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center`}>
           <div>
-            <h2 data-anim="pop" className="font-display text-[56px] font-black leading-[0.9] tracking-[-0.02em] text-lime sm:text-[88px]">BDT 0 before your visa.</h2>
+            <h2 data-anim="pop" className="font-display text-[36px] font-black leading-[0.96] tracking-[-0.02em] text-lime sm:text-[56px] lg:text-[88px] sm:leading-[0.9]">BDT 0 before your visa.</h2>
             <p className="mt-6 max-w-xl text-[20px] leading-[1.55] text-white/85">
               For China, the EduExpress package is {packagePrice}, paid after your visa is approved. University deposits, personal
               spending and some document fees are paid separately, and listed for you before you commit.
@@ -709,6 +709,30 @@ export default async function Home() {
                   </div>
                 </Link>
               ))}
+            </div>
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-3xl bg-canvas-soft p-6">
+              <div>
+                <p className="text-[13px] font-bold uppercase tracking-[0.1em] text-lime-deep">
+                  O-Level, SSC, Dakhil, Alim &amp; A-Level decision guides
+                </p>
+                <p className="mt-1 text-[16px] text-ink-soft">
+                  Compare 5-year post-SSC/Dakhil routes in China, post-O-Level Malaysia Foundation, and our 2027 Market Benchmark.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2.5">
+                <Link href="/study-in-china-after-o-level-ssc" className="inline-flex min-h-[42px] items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[14px] font-semibold text-petrol-800 transition-colors hover:bg-lime">
+                  China after SSC / Dakhil / O-Level <ArrowRight size={14} aria-hidden="true" />
+                </Link>
+                <Link href="/study-in-malaysia-after-o-level" className="inline-flex min-h-[42px] items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[14px] font-semibold text-petrol-800 transition-colors hover:bg-lime">
+                  Malaysia after O-Level <ArrowRight size={14} aria-hidden="true" />
+                </Link>
+                <Link href="/bangladesh-vs-study-abroad-countries" className="inline-flex min-h-[42px] items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[14px] font-semibold text-petrol-800 transition-colors hover:bg-lime">
+                  Bangladesh vs Abroad matrix <ArrowRight size={14} aria-hidden="true" />
+                </Link>
+                <Link href="/bangladesh-study-abroad-market" className="inline-flex min-h-[42px] items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[14px] font-semibold text-petrol-800 transition-colors hover:bg-lime">
+                  2027 Market Benchmark <ArrowRight size={14} aria-hidden="true" />
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -785,7 +809,7 @@ export default async function Home() {
         <div className={wrap}>
           <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
             <div>
-              <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[14px] font-semibold text-lime">Since 2018 · Dhanmondi, Dhaka</p>
+              <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[14px] font-semibold text-lime">Since 2018 · CBCA Founding Member (#08) &amp; FACD-CAB (FCM-452) · Dhanmondi, Dhaka</p>
               <h2 data-anim="up" className="mt-6 font-display text-[38px] font-black leading-[0.95] tracking-[-0.01em] text-lime sm:text-[52px]">
                 Real students. Real departures.
               </h2>
@@ -969,7 +993,7 @@ export default async function Home() {
       <section id="assessment" className="scroll-mt-24 bg-petrol-800 py-20 text-white lg:py-24">
         <div className={`${wrap} grid gap-12 lg:grid-cols-[1fr_minmax(0,460px)] lg:items-center`}>
           <div>
-            <h2 data-anim="pop" className="font-display text-[48px] font-black leading-[0.92] tracking-[-0.02em] text-lime sm:text-[72px]">Not sure where to start?</h2>
+            <h2 data-anim="pop" className="font-display text-[34px] font-black leading-[0.96] tracking-[-0.02em] text-lime sm:text-[48px] lg:text-[72px] sm:leading-[0.92]">Not sure where to start?</h2>
             <p className="mt-6 max-w-xl text-[20px] leading-[1.55] text-white/85">
               Tell us your results, budget and preferred country. A counsellor calls you within one working day with realistic options,
               the costs and the documents to prepare.

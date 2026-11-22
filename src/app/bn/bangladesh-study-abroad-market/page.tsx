@@ -211,7 +211,7 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
             <p className={`anim-rise mt-6 ${kit.badge}`}>
               <Globe2 size={15} aria-hidden="true" /> বাংলাদেশ স্টাডি অ্যাব্রোড মার্কেট গাইড ২০২৭
             </p>
-            <h1 className="anim-lift mt-5 font-display text-[36px] font-bold leading-[1.08] text-petrol-800 sm:text-[48px] lg:text-[54px]">
+            <h1 className="anim-lift mt-5 font-display text-[26px] xs:text-[30px] font-bold leading-[1.25] text-petrol-800 sm:text-[44px] lg:text-[54px] sm:leading-[1.18]">
               বাংলাদেশ থেকে বিদেশে উচ্চশিক্ষা ২০২৭: দেশ, খরচ ও স্টুডেন্ট ফাইল গাইড
             </h1>
             <p className={`anim-rise mt-6 max-w-2xl ${kit.lead}`}>
@@ -227,18 +227,16 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
             </div>
           </div>
 
-          <figure className="anim-rise relative overflow-hidden rounded-3xl bg-white shadow-sm">
-            <div className="relative aspect-[4/3]">
-              <Image
-                src="/images/home/parent-counselling.webp"
-                alt="ঢাকার ধানমন্ডি অফিসে শিক্ষার্থী ও অভিভাবককে বিদেশে উচ্চশিক্ষার লিখিত খরচ বুঝিয়ে দিচ্ছেন এডুএক্সপ্রেস কাউন্সেলর"
-                fill
-                priority
-                sizes="(max-width:1024px) 100vw, 480px"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="p-4 text-[14px] font-semibold text-petrol-800">
+          <figure className="anim-rise relative aspect-[4/3] overflow-hidden rounded-3xl bg-petrol-800">
+            <Image
+              src="/images/home/parent-counselling.webp"
+              alt="ঢাকার ধানমন্ডি অফিসে শিক্ষার্থী ও অভিভাবককে বিদেশে উচ্চশিক্ষার লিখিত খরচ বুঝিয়ে দিচ্ছেন এডুএক্সপ্রেস কাউন্সেলর"
+              fill
+              priority
+              sizes="(max-width:1024px) 100vw, 480px"
+              className="object-cover"
+            />
+            <figcaption className="absolute bottom-4 left-4 right-4 rounded-2xl bg-white/95 px-4 py-2.5 text-[13.5px] font-semibold text-petrol-800 backdrop-blur-sm">
               সক্রিয় ক্যাটালগ: {snapshot.liveCatalog.activeUniversities}টি বিশ্ববিদ্যালয় · {snapshot.liveCatalog.programsCount}টি প্রোগ্রাম · {snapshot.liveCatalog.scholarshipsCount}টি স্কলারশিপ রেকর্ড
             </figcaption>
           </figure>
@@ -264,10 +262,11 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
 
       {/* Macro Market Trends in Bangla */}
       <Section
+        lang="bn"
         title="২০২৬–২০২৭ সালে বাংলাদেশের বিদেশে পড়াশোনার বাজারে বড় ৩টি পরিবর্তন"
         intro="মুদ্রাস্ফীতি, টাকার বিনিময় হার এবং পশ্চিমা ভিসা নীতির পরিবর্তনের কারণে অভিভাবকেরা এখন গন্তব্য বাছাইয়ে বেশি হিসাবি হচ্ছেন।"
       >
-        <div className="grid gap-6 md:grid-cols-3">
+        <div data-anim="stagger" className="grid gap-6 md:grid-cols-3">
           {macroDriversBn.map((item) => (
             <div key={item.title} className={kit.cardSage}>
               <span className={kit.badge}>
@@ -282,11 +281,12 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
 
       {/* 12 Destinations Table in Bangla */}
       <Section
+        lang="bn"
         tone="sage"
         title="১২টি সক্রিয় গন্তব্য: টিউশন, থাকা-খাওয়া ও স্টুডেন্ট ফাইল তুলনা"
         intro="প্রতিটি দেশের টিউশন ফি ও মাসিক থাকা-খাওয়ার খরচ আলাদা কলামে দেখানো হয়েছে, যাতে পরিবার বাস্তব বাজেট বুঝতে পারেন।"
       >
-        <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl bg-white">
           <table className="w-full min-w-[880px] text-left text-[14px] leading-6">
             <caption className="sr-only">১২টি দেশে উচ্চশিক্ষার টিউশন, থাকা-খাওয়া ও স্টুডেন্ট ফাইল তথ্য</caption>
             <thead className="bg-petrol-800 text-white">
@@ -300,18 +300,18 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
             </thead>
             <tbody className="divide-y divide-canvas-soft text-ink-soft">
               {snapshot.destinations.map((dest) => (
-                <tr key={dest.slug} className={dest.slug === 'china' || dest.slug === 'malaysia' ? 'bg-lime-pale/25' : undefined}>
+                <tr key={dest.slug} className={dest.slug === 'china' || dest.slug === 'malaysia' ? 'bg-lime-pale/30' : undefined}>
                   <th scope="row" className="p-4 align-top font-bold text-petrol-800">
                     <Link href={dest.href} hrefLang="en" className="underline decoration-petrol-800/30 underline-offset-4 hover:text-lime-deep">
                       {dest.name}
                     </Link>
-                    <span className="mt-1 block text-[12px] font-semibold text-emerald-900">
+                    <span className="mt-1 block text-[12px] font-semibold text-lime-deep">
                       {bnDestinationTierLabels[dest.tier] ?? dest.tier}
                     </span>
                   </th>
                   <td className="p-4 align-top font-medium text-petrol-800">{dest.intakes}</td>
                   <td className="p-4 align-top font-semibold text-petrol-800">{dest.indicativeTuition}</td>
-                  <td className="p-4 align-top text-amber-900">{dest.indicativeLiving}</td>
+                  <td className="p-4 align-top font-medium text-clay">{dest.indicativeLiving}</td>
                   <td className="p-4 align-top">
                     <span className="block font-semibold text-petrol-800">{dest.studentFileRule}</span>
                     <span className="mt-1 block text-[13px]">{dest.eduExpressFeeModel}</span>
@@ -324,15 +324,15 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
       </Section>
 
       {/* Academic Pathways in Bangla */}
-      <Section title="শিক্ষাগত যোগ্যতা অনুযায়ী সঠিক বিদেশি রুট নির্বাচন">
-        <div className="grid gap-6 lg:grid-cols-3">
+      <Section lang="bn" title="শিক্ষাগত যোগ্যতা অনুযায়ী সঠিক বিদেশি রুট নির্বাচন">
+        <div data-anim="stagger" className="grid gap-6 lg:grid-cols-3">
           {entryPathwaysBn.map((track) => (
-            <div key={track.title} className="flex flex-col justify-between rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm sm:p-7">
+            <div key={track.title} className={`${kit.cardSage} flex flex-col justify-between`}>
               <div>
                 <h3 className={kit.h3}>{track.title}</h3>
                 <p className={`mt-3 ${kit.body}`}>{track.detail}</p>
               </div>
-              <div className="mt-5 flex flex-col gap-2 border-t border-canvas-soft pt-4">
+              <div className="mt-5 flex flex-col gap-2 border-t border-petrol-800/10 pt-4">
                 {track.links.map((item) => (
                   <Link
                     key={item.href}
@@ -350,9 +350,9 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
       </Section>
 
       {/* Student File vs China + Parent Red Flags */}
-      <Section tone="navy" title="বাংলাদেশ ব্যাংক স্টুডেন্ট ফাইল বনাম চায়না পেমেন্ট সুবিধা">
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-3xl border border-white/20 p-6 sm:p-7">
+      <Section lang="bn" tone="navy" title="বাংলাদেশ ব্যাংক স্টুডেন্ট ফাইল বনাম চায়না পেমেন্ট সুবিধা">
+        <div data-anim="stagger" className="grid gap-6 lg:grid-cols-2">
+          <div className={kit.cardDark}>
             <h3 className="flex items-center gap-2 text-[20px] font-semibold text-lime">
               <ShieldCheck size={20} aria-hidden="true" /> চীন বনাম অন্যান্য দেশে টিউশন পাঠানোর নিয়ম
             </h3>
@@ -366,7 +366,7 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
             </ul>
           </div>
 
-          <div className="rounded-3xl border border-white/20 bg-white/5 p-6 sm:p-7">
+          <div className={kit.cardDark}>
             <h3 className="flex items-center gap-2 text-[20px] font-semibold text-lime">
               <ShieldAlert size={20} aria-hidden="true" /> অভিভাবকদের জন্য ৪টি জরুরি সতর্কতা
             </h3>
@@ -391,16 +391,26 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
       </Section>
 
       {/* Sources & Verification Stamp */}
-      <Section tone="sage" title="তথ্যের উৎস ও যাচাই রেকর্ড">
-        <div className="rounded-3xl bg-white p-6 shadow-sm sm:p-8">
+      <Section lang="bn" tone="sage" title="তথ্যের উৎস ও যাচাই রেকর্ড">
+        <div className={`${kit.card} sm:p-8`}>
           <p className="text-[15px] leading-7 text-ink-soft">
             <strong className="text-petrol-800">প্রস্তুতকারী:</strong> মুক্তা রহমান (Senior Counselor) ·{' '}
             <strong className="text-petrol-800">পর্যালোচনা:</strong> আব্দুল্লাহ আল রাকিব (Founder &amp; CEO) ·{' '}
             <strong className="text-petrol-800">সর্বশেষ যাচাই:</strong> ২১ নভেম্বর ২০২৬ ·{' '}
             <strong className="text-petrol-800">পরবর্তী রিভিউ:</strong> ২১ ফেব্রুয়ারি ২০২৭
           </p>
+          <p className="mt-2 text-[14.5px] leading-6 text-ink-soft">
+            <strong className="text-petrol-800">অ্যাসোসিয়েশন সদস্যপদ:</strong>{' '}
+            <a href="https://cbcabd.org/" target="_blank" rel="noopener noreferrer" className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-lime-deep">
+              CBCA ফাউন্ডিং মেম্বার (#08)
+            </a>{' '}
+            ও{' '}
+            <a href="https://www.facdcab.org/members/directory/2264" target="_blank" rel="noopener noreferrer" className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-lime-deep">
+              FACD-CAB / FACECAB অ্যাক্টিভ মেম্বার (ID: FCM-452)
+            </a>
+          </p>
           <div className="mt-5 flex flex-wrap gap-3 text-[14px]">
-            {BANGLADESH_MARKET_SOURCES.slice(0, 6).map((src) => {
+            {[...BANGLADESH_MARKET_SOURCES.slice(0, 6), ...BANGLADESH_MARKET_SOURCES.slice(-2)].map((src) => {
               const safeHref = toSafeExternalUrl(src.href);
               return safeHref ? (
                 <a
@@ -408,16 +418,16 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
                   href={safeHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full bg-canvas-soft px-4 py-2 font-semibold text-petrol-800 hover:bg-lime-pale"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-canvas-soft px-4 py-2 font-semibold text-petrol-800 transition hover:bg-lime-pale"
                 >
-                  {src.label} <ExternalLink size={13} aria-hidden="true" />
+                  {src.label} <ExternalLink size={13} className="text-lime-deep" aria-hidden="true" />
                 </a>
               ) : null;
             })}
           </div>
         </div>
 
-        <div className="mt-6 rounded-3xl bg-petrol-800 p-6 text-white sm:p-7">
+        <div className={`mt-6 ${kit.cardDark}`}>
           <h3 className="flex items-center gap-2 text-[20px] font-semibold text-lime">
             <ShieldAlert size={20} aria-hidden="true" /> মিডিয়া, গবেষক ও শিক্ষা পোর্টালের জন্য ওপেন ডেটাসেট ও সাইটেশন (CC BY 4.0)
           </h3>
@@ -439,7 +449,7 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
 
       {/* FAQs in Bangla */}
       <div id="bn-market-faq" className="scroll-mt-24">
-        <FaqBlock items={faqsBn} title="বিদেশে উচ্চশিক্ষা ও বাংলাদেশ মার্কেট: সাধারণ প্রশ্নোত্তর" tone="white" />
+        <FaqBlock lang="bn" items={faqsBn} title="বিদেশে উচ্চশিক্ষা ও বাংলাদেশ মার্কেট: সাধারণ প্রশ্নোত্তর" tone="white" />
       </div>
 
       {/* Related Guides Grid */}
@@ -451,19 +461,24 @@ export default async function BengaliBangladeshStudyAbroadMarketPage() {
 
       {/* Embedded Assessment */}
       <Section
+        lang="bn"
         id="bn-market-assessment"
         title="আপনার বাজেট ও রেজাল্ট অনুযায়ী ফ্রি প্রোফাইল যাচাই করুন"
         intro="SSC, HSC, O/A-Level বা ব্যাচেলর ফলাফল ও বাজেট জানান—এক কার্যদিবসের মধ্যে উপযুক্ত দেশ ও লিখিত খরচের তালিকা পান।"
       >
-        <div className="mx-auto max-w-3xl rounded-3xl border border-petrol-800/10 bg-canvas-soft p-6 shadow-sm sm:p-10">
+        <div className="mx-auto max-w-3xl">
           <EducationFitAssessment initialContext={{ language: 'bn' }} />
         </div>
       </Section>
 
       <CtaBand
+        lang="bn"
         title="সঠিক তথ্যে বিদেশে উচ্চশিক্ষার সিদ্ধান্ত নিন"
         text="ধানমন্ডি অফিসে আসুন অথবা অনলাইনে ফ্রি অ্যাসেসমেন্ট নিন—কোনো অপ্রকাশিত চার্জ বা ভুয়া প্রতিশ্রুতি ছাড়াই।"
         assessmentHref="#bn-market-assessment"
+        assessmentLabel="ফ্রি অ্যাসেসমেন্ট নিন"
+        whatsappLabel="WhatsApp-এ কাউন্সেলরের সাথে কথা বলুন"
+        whatsappMessage="আসসালামু আলাইকুম। বাংলাদেশ স্টাডি অ্যাব্রোড ২০২৭ গাইড সম্পর্কে ফ্রি অ্যাসেসমেন্ট ও খরচের হিসাব জানতে চাই।"
       />
     </div>
   );

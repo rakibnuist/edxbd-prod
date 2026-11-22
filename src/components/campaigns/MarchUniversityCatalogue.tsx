@@ -426,8 +426,8 @@ export default function MarchUniversityCatalogue({ universities, onChoose }: Pro
                         {programme.costItems.length > 0 && (
                           <div>
                             <h4 className="mb-3 text-sm font-bold text-[#0b2b45]">Itemised university costs</h4>
-                            <div className="overflow-hidden rounded-xl border border-slate-200">
-                              <table className="w-full table-fixed text-left text-xs">
+                            <div className="overflow-x-auto rounded-xl border border-slate-200">
+                              <table className="w-full min-w-[300px] table-fixed text-left text-xs">
                                 <thead className="bg-[#e3f0f9] text-[#12436b]">
                                   <tr>
                                     <th className="w-[58%] px-4 py-3 font-bold">Cost item</th>

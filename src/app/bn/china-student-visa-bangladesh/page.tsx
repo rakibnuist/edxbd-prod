@@ -260,7 +260,7 @@ export default function BengaliChinaVisaPage() {
             <ShieldCheck size={16} className="text-petrol-800" /> ঢাকা চাইনিজ এম্বাসি স্ট্যান্ডার্ড গাইডলাইন
           </span>
 
-          <h1 className="mt-4 font-display text-[32px] font-black leading-tight sm:text-[44px] lg:text-[52px]">
+          <h1 className="mt-4 font-display text-[26px] xs:text-[30px] font-black leading-[1.25] sm:text-[44px] lg:text-[52px] sm:leading-tight">
             চায়না স্টুডেন্ট ভিসা (X1 ও X2) সম্পূর্ণ গাইডলাইন
           </h1>
 

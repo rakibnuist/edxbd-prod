@@ -23,26 +23,44 @@ export function WinningAdvantageGrid({
   intro: string;
   cards: readonly WinProofCard[];
 }) {
+  const cardSurface =
+    tone === 'navy' ? kit.cardDark : tone === 'sage' ? kit.card : kit.cardSage;
+  const isNavy = tone === 'navy';
+
   return (
     <Section tone={tone} id={id} title={title} intro={intro}>
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div data-anim="stagger" className="grid gap-6 lg:grid-cols-3">
         {cards.map(card => (
           <div
             key={card.title}
-            className="flex flex-col justify-between rounded-3xl border border-emerald-700/15 bg-white p-6 shadow-sm sm:p-7"
+            className={`${cardSurface} flex flex-col justify-between`}
           >
             <div>
               <div className="flex items-center justify-between gap-2">
-                <span className={kit.badge}>
+                <span
+                  className={
+                    isNavy
+                      ? 'inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[12px] font-bold uppercase tracking-wider text-lime'
+                      : kit.badge
+                  }
+                >
                   <Trophy size={13} aria-hidden="true" />
                   {card.badge}
                 </span>
               </div>
-              <p className="mt-4 font-display text-[26px] font-black leading-tight text-emerald-800 sm:text-[30px]">
+              <p
+                className={`mt-4 font-display text-[26px] font-black leading-tight sm:text-[30px] ${
+                  isNavy ? 'text-lime' : 'text-petrol-800'
+                }`}
+              >
                 {card.metric}
               </p>
-              <h3 className={`mt-2 ${kit.h3}`}>{card.title}</h3>
-              <p className={`mt-2 ${kit.body}`}>{card.detail}</p>
+              <h3 className={`mt-2 ${isNavy ? 'font-display text-[20px] font-bold leading-snug tracking-[-0.015em] text-white sm:text-[22px]' : kit.h3}`}>
+                {card.title}
+              </h3>
+              <p className={`mt-2 ${isNavy ? 'text-[15.5px] leading-[1.68] text-white/75' : kit.body}`}>
+                {card.detail}
+              </p>
             </div>
           </div>
         ))}
@@ -61,13 +79,9 @@ export function LivingCostSeparationNotice({
   summary: string;
 }) {
   return (
-    <div
-      className={`rounded-3xl border border-petrol-800/15 p-5 sm:p-6 ${
-        tone === 'sage' ? 'bg-canvas-soft' : 'bg-white'
-      }`}
-    >
+    <div className={`${tone === 'sage' ? kit.cardSage : kit.card} p-5 sm:p-6`}>
       <div className="flex items-start gap-3.5">
-        <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-lime text-petrol-800">
+        <span className={kit.iconLime}>
           <Info size={20} aria-hidden="true" />
         </span>
         <div>
@@ -80,21 +94,24 @@ export function LivingCostSeparationNotice({
 }
 
 export function FitVsReconsiderGrid({
+  tone = 'white',
   fitTitle,
   fitItems,
   reconsiderTitle,
   reconsiderItems,
 }: {
+  tone?: 'white' | 'sage';
   fitTitle: string;
   fitItems: { label: string; detail: string }[];
   reconsiderTitle: string;
   reconsiderItems: { label: string; detail: string }[];
 }) {
+  const reconsiderCard = tone === 'sage' ? kit.card : kit.cardSage;
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      <div className="rounded-3xl border border-emerald-200 bg-white p-6 shadow-sm sm:p-8">
+    <div data-anim="stagger" className="grid gap-6 lg:grid-cols-2">
+      <div className={kit.cardLime}>
         <div className="flex items-center gap-3">
-          <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-emerald-100 text-emerald-800">
+          <span className={kit.iconLime}>
             <CheckCircle2 size={20} aria-hidden="true" />
           </span>
           <h3 className={kit.h3}>{fitTitle}</h3>
@@ -102,7 +119,7 @@ export function FitVsReconsiderGrid({
         <ul className="mt-5 space-y-3.5 text-[15px] leading-6 text-ink-soft">
           {fitItems.map(item => (
             <li key={item.label} className="flex items-start gap-3">
-              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-emerald-700" aria-hidden="true" />
+              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-lime-deep" aria-hidden="true" />
               <span>
                 <strong className="text-petrol-800">{item.label}: </strong>
                 {item.detail}
@@ -112,9 +129,9 @@ export function FitVsReconsiderGrid({
         </ul>
       </div>
 
-      <div className="rounded-3xl border border-amber-200 bg-white p-6 shadow-sm sm:p-8">
+      <div className={reconsiderCard}>
         <div className="flex items-center gap-3">
-          <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-amber-100 text-amber-900">
+          <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-clay/10 text-clay">
             <ShieldAlert size={20} aria-hidden="true" />
           </span>
           <h3 className={kit.h3}>{reconsiderTitle}</h3>
@@ -122,7 +139,7 @@ export function FitVsReconsiderGrid({
         <ul className="mt-5 space-y-3.5 text-[15px] leading-6 text-ink-soft">
           {reconsiderItems.map(item => (
             <li key={item.label} className="flex items-start gap-3">
-              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-amber-600" aria-hidden="true" />
+              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-clay" aria-hidden="true" />
               <span>
                 <strong className="text-petrol-800">{item.label}: </strong>
                 {item.detail}
@@ -144,8 +161,8 @@ const RELATED_PATHWAYS = [
   },
   {
     href: '/study-in-china-after-o-level-ssc',
-    badge: 'After O-Level / SSC',
-    title: 'Study in China After O-Level or SSC',
+    badge: 'After O-Level / SSC / Dakhil',
+    title: 'Study in China After O-Level, SSC or Dakhil',
     desc: 'Complete a 3-year Diploma + 2-year Top-Up Bachelor in 5 years total.',
   },
   {
@@ -153,6 +170,24 @@ const RELATED_PATHWAYS = [
     badge: 'After A-Level / Comparison',
     title: 'China Bachelor vs UK, USA, Australia & Dhaka',
     desc: 'Compare top-ranked Chinese universities & university scholarships side by side.',
+  },
+  {
+    href: '/bangladesh-vs-china-bachelor-study',
+    badge: 'Cost & Ranking',
+    title: 'Bangladesh Private University vs China Bachelor',
+    desc: 'Side-by-side 4-year tuition, hostel costs, BDT separation & BDT 0 pre-visa policy.',
+  },
+  {
+    href: '/bangladesh-vs-study-abroad-countries',
+    badge: 'Decision Matrix',
+    title: 'Bangladesh vs China, Malaysia, UK, USA & Australia',
+    desc: 'Filter 7 bachelor pathways by SSC/O-Level or HSC/Alim/A-Level budget and rank.',
+  },
+  {
+    href: '/bangladesh-study-abroad-market',
+    badge: '2027 Benchmark',
+    title: 'Bangladesh Study Abroad Market & Cost Benchmark 2027',
+    desc: 'Verified UNESCO/UGC flows, BDT cost floors & scholarship data across 6 destinations.',
   },
 ] as const;
 
@@ -166,18 +201,19 @@ export function PathwayCrossLinks({
   tone?: 'white' | 'sage';
 }) {
   const siblingCards = RELATED_PATHWAYS.filter(item => item.href !== currentPath);
+  const cardSurface = tone === 'sage' ? kit.card : kit.cardSage;
   return (
     <Section
       tone={tone}
-      title="Compare Related O-Level & A-Level Pathways"
+      title="Compare Related O-Level, SSC, Dakhil & A-Level Pathways"
       intro="Explore the connected EduExpress guides before selecting a study route."
     >
-      <div className="grid gap-6 md:grid-cols-2">
+      <div data-anim="stagger" className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {siblingCards.map(card => (
           <Link
             key={card.href}
             href={card.href}
-            className="group flex flex-col justify-between rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-7"
+            className={`${cardSurface} group flex flex-col justify-between transition hover:-translate-y-0.5`}
           >
             <div>
               <span className={kit.badge}>{card.badge}</span>
@@ -197,7 +233,7 @@ export function PathwayCrossLinks({
             <Link
               key={link.href}
               href={link.href}
-              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-petrol-800/15 bg-white px-4 py-2 text-[14px] font-semibold text-petrol-800 hover:bg-lime-pale"
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-petrol-800/15 bg-white px-4 py-2 text-[14px] font-semibold text-petrol-800 transition hover:bg-lime-pale"
             >
               {link.label} <ArrowRight size={14} aria-hidden="true" />
             </Link>
@@ -229,16 +265,17 @@ export function PathwayGovernanceSection({
   whatMayChange: string[];
   sources: OfficialSource[];
 }) {
+  const cardSurface = tone === 'sage' ? kit.card : kit.cardSage;
   return (
     <Section
       tone={tone}
       title="Verification, Editorial Review & What May Change"
       intro="Every figure on this page separates tuition from living expenses and cites its primary authority or institution schedule."
     >
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+      <div data-anim="stagger" className="grid gap-6 lg:grid-cols-3">
+        <div className={cardSurface}>
           <div className="flex items-center gap-2.5 text-petrol-800">
-            <ShieldCheck size={20} className="text-emerald-700" aria-hidden="true" />
+            <ShieldCheck size={20} className="text-lime-deep" aria-hidden="true" />
             <h3 className="text-[17px] font-bold">Editorial &amp; Review Record</h3>
           </div>
           <dl className="mt-4 space-y-2.5 text-[14px] leading-6 text-ink-soft">
@@ -254,10 +291,33 @@ export function PathwayGovernanceSection({
               <dt className="font-semibold text-petrol-800">Last verified / Next review</dt>
               <dd>{lastVerified} · Next scheduled review: {nextReview}</dd>
             </div>
+            <div>
+              <dt className="font-semibold text-petrol-800">Industry associations</dt>
+              <dd>
+                Founding Member (#08),{' '}
+                <a
+                  href="https://cbcabd.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-lime-deep"
+                >
+                  CBCA
+                </a>{' '}
+                · Active Member (ID: FCM-452),{' '}
+                <a
+                  href="https://www.facdcab.org/members/directory/2264"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-lime-deep"
+                >
+                  FACD-CAB (FACECAB #2264)
+                </a>
+              </dd>
+            </div>
           </dl>
         </div>
 
-        <div className="rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+        <div className={cardSurface}>
           <h3 className="text-[17px] font-bold text-petrol-800">What May Change Before You Apply</h3>
           <ul className="mt-4 space-y-2 text-[14px] leading-6 text-ink-soft">
             {whatMayChange.map(note => (
@@ -269,7 +329,7 @@ export function PathwayGovernanceSection({
           </ul>
         </div>
 
-        <div className="rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+        <div className={cardSurface}>
           <h3 className="text-[17px] font-bold text-petrol-800">Primary Official Sources</h3>
           <ul className="mt-4 space-y-2.5 text-[14px] leading-6">
             {sources.map(source => (
@@ -280,7 +340,7 @@ export function PathwayGovernanceSection({
                   rel="noopener noreferrer"
                   className="inline-flex items-start gap-1.5 font-semibold text-petrol-800 underline-offset-4 hover:underline"
                 >
-                  <ExternalLink size={14} className="mt-1 shrink-0 text-emerald-700" aria-hidden="true" />
+                  <ExternalLink size={14} className="mt-1 shrink-0 text-lime-deep" aria-hidden="true" />
                   <span>{source.label}</span>
                 </a>
               </li>

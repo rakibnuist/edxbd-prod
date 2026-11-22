@@ -158,7 +158,7 @@ export default function DownloadRoadmapModal({
                   value={studentName}
                   onChange={e => setStudentName(e.target.value)}
                   placeholder="e.g. Md. Tanvir Ahmed"
-                  className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3.5 py-2.5 text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3.5 py-2.5 text-base sm:text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
                 />
               </div>
 
@@ -173,7 +173,7 @@ export default function DownloadRoadmapModal({
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
                     placeholder="01XXXXXXXXX"
-                    className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3.5 py-2.5 text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3.5 py-2.5 text-base sm:text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
                   />
                   <span className="mt-1 block text-[11px] text-ink-soft">
                     Used to send your PDF and admission deadline alerts.
@@ -189,7 +189,7 @@ export default function DownloadRoadmapModal({
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="tanvir@example.com"
-                    className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3.5 py-2.5 text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3.5 py-2.5 text-base sm:text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
                   />
                   <span className="mt-1 block text-[11px] text-ink-soft">
                     Receive copy in your inbox.
@@ -205,7 +205,7 @@ export default function DownloadRoadmapModal({
                   <select
                     value={country}
                     onChange={e => setCountry(e.target.value as RoadmapTargetCountry)}
-                    className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3 py-2 text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3 py-2 text-base sm:text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
                   >
                     <option value="China">China (CSC & University Awards)</option>
                     <option value="Malaysia">Malaysia (EMGS & Universities)</option>
@@ -220,7 +220,7 @@ export default function DownloadRoadmapModal({
                   <select
                     value={degree}
                     onChange={e => setDegree(e.target.value as RoadmapTargetDegree)}
-                    className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3 py-2 text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-canvas-soft bg-canvas-subtle px-3 py-2 text-base sm:text-sm font-semibold text-petrol-900 focus:border-petrol-800 focus:outline-none"
                   >
                     <option value="Bachelor">Bachelor’s Degree</option>
                     <option value="Master">Master’s Degree</option>

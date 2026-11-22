@@ -233,6 +233,9 @@ export default async function StudyInMalaysiaPage() {
             <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Explore 9 Verified Universities
             </a>
+            <Link href="/study-in-malaysia-after-o-level" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              After O-Level Pathway
+            </Link>
           </>
         }
         aside={

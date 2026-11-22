@@ -402,7 +402,7 @@ export default function UniversitiesClient({ directory }: Props) {
                   }}
                   placeholder="Name, city, major..."
                   autoComplete="off"
-                  className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-9 pr-3 text-[15px] font-medium text-slate-800 placeholder:text-slate-400 outline-none focus:border-petrol-800 focus:bg-white sm:text-xs"
+                  className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-9 pr-3 text-base font-medium text-slate-800 placeholder:text-slate-400 outline-none focus:border-petrol-800 focus:bg-white sm:text-xs"
                 />
               </div>
             </div>
@@ -417,7 +417,7 @@ export default function UniversitiesClient({ directory }: Props) {
                 </label>
                 <select
                   id="filter-country"
-                  className="ed-select mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-[15px] font-semibold text-slate-800 outline-none focus:border-petrol-800 focus:bg-white sm:text-xs"
+                  className="ed-select mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-base font-semibold text-slate-800 outline-none focus:border-petrol-800 focus:bg-white sm:text-xs"
                   value={filters.country}
                   onChange={event => setFilters({ country: event.target.value, city: '', subject: '', cscaFree: false })}
                 >
@@ -436,7 +436,7 @@ export default function UniversitiesClient({ directory }: Props) {
                 </label>
                 <select
                   id="filter-level"
-                  className="ed-select mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-[15px] font-semibold text-slate-800 outline-none focus:border-petrol-800 focus:bg-white sm:text-xs"
+                  className="ed-select mt-1.5 h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 px-3 text-base font-semibold text-slate-800 outline-none focus:border-petrol-800 focus:bg-white sm:text-xs"
                   value={filters.level}
                   onChange={event => setFilters({ level: event.target.value })}
                 >
@@ -476,7 +476,7 @@ export default function UniversitiesClient({ directory }: Props) {
                   </label>
                   <select
                     id="filter-subject"
-                    className="ed-select mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[15px] font-semibold text-slate-800 outline-none focus:border-petrol-800 sm:text-xs"
+                    className="ed-select mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base font-semibold text-slate-800 outline-none focus:border-petrol-800 sm:text-xs"
                     value={filters.subject}
                     onChange={event => setFilters({ subject: event.target.value })}
                   >
@@ -495,7 +495,7 @@ export default function UniversitiesClient({ directory }: Props) {
                   </label>
                   <select
                     id="filter-city"
-                    className="ed-select mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[15px] font-semibold text-slate-800 outline-none focus:border-petrol-800 sm:text-xs"
+                    className="ed-select mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base font-semibold text-slate-800 outline-none focus:border-petrol-800 sm:text-xs"
                     value={filters.city}
                     onChange={event => setFilters({ city: event.target.value })}
                   >
@@ -514,7 +514,7 @@ export default function UniversitiesClient({ directory }: Props) {
                   </label>
                   <select
                     id="filter-intake"
-                    className="ed-select mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[15px] font-semibold text-slate-800 outline-none focus:border-petrol-800 sm:text-xs"
+                    className="ed-select mt-1 h-9 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-base font-semibold text-slate-800 outline-none focus:border-petrol-800 sm:text-xs"
                     value={filters.intake}
                     onChange={event => setFilters({ intake: event.target.value })}
                   >

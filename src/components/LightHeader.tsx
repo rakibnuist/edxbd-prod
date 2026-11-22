@@ -238,9 +238,9 @@ export default function LightHeader({ office }: { office?: LightHeaderOffice }) 
             <Link
               href={assessmentHref}
               onClick={() => trackAssessmentStart({ label: 'header_free_assessment_btn' })}
-              className="ed-btn ed-btn-signal min-h-9 whitespace-nowrap px-3 text-[13px] sm:min-h-10 sm:px-4 sm:text-[15px]"
+              className="ed-btn ed-btn-signal min-h-9 whitespace-nowrap px-2.5 text-[12px] sm:min-h-10 sm:px-4 sm:text-[15px]"
             >
-              Free assessment
+              <span className="hidden xs:inline">Free </span>assessment
             </Link>
             <button
               type="button"

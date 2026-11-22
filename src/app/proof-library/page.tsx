@@ -57,7 +57,7 @@ export default async function ProofLibraryPage() {
       <PageHero
         path={PATH}
         trail={[{ name: 'Proof library' }]}
-        eyebrow="Public evidence register"
+        eyebrow="Public Evidence Register · CBCA (#08) & FACD-CAB (FCM-452)"
         title="Trust should be inspectable."
         lead="Company records, approved evidence and real student feedback are managed in the central database. Private identifiers never belong on a public page."
         actions={

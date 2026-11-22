@@ -24,11 +24,60 @@ const PAGE_INDEX: SearchHit[] = [
   { kind: 'page', title: 'Intakes and deadlines', href: '/china-intakes-deadlines', context: 'When each cycle opens and closes' },
   { kind: 'page', title: 'MBBS in China', href: '/mbbs-in-china-bangladesh', context: 'Medical programme routes and costs' },
   { kind: 'page', title: 'Destinations', href: '/destinations', context: 'Compare all active destination services' },
-  { kind: 'page', title: 'Proof library', href: '/proof-library', context: 'Redacted evidence and company records' },
+  { kind: 'page', title: 'Proof library', href: '/proof-library', context: 'Redacted evidence, company records, CBCA Founding Member #08, FACD-CAB FACECAB FCM-452' },
   { kind: 'page', title: 'Fees and transparency', href: '/fees-and-transparency', context: 'Who receives each payment' },
   { kind: 'page', title: 'For parents and sponsors', href: '/for-parents', context: 'Costs, safety and responsibilities' },
-  { kind: 'page', title: 'B2B Partner Desk', href: '/b2b', context: 'Agency & sub-agent file processing, written SOP and custom MOU terms' },
+  { kind: 'page', title: 'Education Consultant in Dhaka (CBCA & FACD-CAB Member)', href: '/education-consultant-dhaka', context: 'Dhanmondi head office, CBCA Founding Member #08, FACD-CAB FACECAB Member ID FCM-452' },
+  { kind: 'page', title: 'B2B Partner Desk', href: '/b2b', context: 'Agency & sub-agent file processing, written SOP, CBCA Founding Member #08, FACD-CAB FACECAB FCM-452' },
   { kind: 'page', title: 'Contact the Dhanmondi office', href: '/contact', context: 'Address, hours, phone and WhatsApp' },
+  {
+    kind: 'page',
+    title: 'Study in China after O-Level, SSC or Dakhil',
+    href: '/study-in-china-after-o-level-ssc',
+    context: '3+2 Diploma to Bachelor in 5 years after SSC, Dakhil or O-Level with Chinese scholarship tiers and guardian rules',
+  },
+  {
+    kind: 'page',
+    title: 'SSC ও দাখিলের পর চীনে ৩+২ ডিপ্লোমা (বাংলা)',
+    href: '/bn/study-in-china-after-ssc-dakhil',
+    context: 'ssc dakhil o level পর চীনে ৩+২ ডিপ্লোমা ও ব্যাচেলর ৫ বছরে স্কলারশিপ বাংলা গাইড',
+  },
+  {
+    kind: 'page',
+    title: 'Study in Malaysia after O-Level',
+    href: '/study-in-malaysia-after-o-level',
+    context: 'Skip 2 years of A-Level coaching with 1-year Foundation or 2-year Diploma in Malaysia at BDT 0 service fee',
+  },
+  {
+    kind: 'page',
+    title: 'China Bachelor vs UK, USA, Australia & Dhaka',
+    href: '/compare-bachelor-china-abroad-bangladesh',
+    context: 'A-Level HSC Alim post-school bachelor tuition scholarships vs NSU EWU AIUB and Western countries',
+  },
+  {
+    kind: 'page',
+    title: 'Bangladesh vs China Bachelor study',
+    href: '/bangladesh-vs-china-bachelor-study',
+    context: 'Head-to-head comparison of NSU EWU AIUB Dhaka private university fees vs ranked Chinese universities',
+  },
+  {
+    kind: 'page',
+    title: 'Study in Bangladesh vs Abroad',
+    href: '/bangladesh-vs-study-abroad-countries',
+    context: 'Compare 7 bachelor routes across Bangladesh, China, Malaysia, UK, Europe, USA, Australia and New Zealand',
+  },
+  {
+    kind: 'page',
+    title: 'Bangladesh Study Abroad Market 2027 Report',
+    href: '/bangladesh-study-abroad-market',
+    context: '12 active destinations, separated tuition and living costs, Student File rules, O-Level A-Level SSC HSC Alim pathways',
+  },
+  {
+    kind: 'page',
+    title: 'বিদেশে উচ্চশিক্ষা ২০২৭: বাংলাদেশ মার্কেট গাইড',
+    href: '/bn/bangladesh-study-abroad-market',
+    context: 'bangladesh study abroad market 2027 ১২টি দেশের খরচ স্টুডেন্ট ফাইল বাংলা গাইড',
+  },
 ];
 
 const normalize = (value: string) => value.trim().toLowerCase();

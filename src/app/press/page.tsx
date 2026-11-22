@@ -135,7 +135,7 @@ export default async function PressRoomPage() {
       id: 'anti-fraud-visa-first-policy',
       beat: 'Consumer Protection & Transparency',
       targetOutlets: 'Samakal · Dhaka Tribune · Dhaka Post · JagoNews24',
-      enTitle: 'Spotting Fake "100% Visa Guarantees" & Hidden Consultancy Charges in Bangladesh',
+      enTitle: 'Spotting Fake Visa Guarantee Claims & Hidden Consultancy Charges in Bangladesh',
       enSummary:
         'Only embassies and immigration authorities grant visas, yet unauthorized marketing claims often bundle opaque fees upfront. Under EduExpress International’s Visa-First Policy for China, there is BDT 0 file-opening charge and no EduExpress service fee before China student visa approval (and BDT 0 service fee for Malaysia admissions).',
       enQuote:

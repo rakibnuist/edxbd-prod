@@ -95,7 +95,7 @@ export default async function B2BPage() {
       <PageHero
         path={PATH}
         trail={[{ name: 'Services', path: '/services' }, { name: 'B2B Partner Desk' }]}
-        eyebrow="B2B Partner Services · Dhanmondi, Dhaka"
+        eyebrow="B2B Partner Services · CBCA Founding Member (#08) & FACD-CAB (FCM-452) · Dhaka"
         title="A B2B admissions desk built on written terms."
         lead={`Dedicated student file processing for education agencies, sub-agents, and institutional partners across China, Malaysia, and ${catalog.activeDestinationCount - 2} other active destinations — backed by 24–48h file audits, non-poaching protection, and custom bilateral MOU terms.`}
         reviewed="November 2026"

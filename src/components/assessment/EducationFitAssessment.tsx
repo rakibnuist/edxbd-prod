@@ -35,6 +35,10 @@ import DownloadRoadmapModal from '@/components/assessment/DownloadRoadmapModal';
 const PRIVACY_VERSION = '2026-07-19';
 
 const ACADEMIC_LEVELS = ['SSC / O Level', 'HSC / A Level', "Bachelor's", "Master's", 'Diploma', 'Other'];
+const ACADEMIC_LEVEL_LABELS: Record<string, string> = {
+  'SSC / O Level': 'SSC / Dakhil / O Level',
+  'HSC / A Level': 'HSC / Alim / A Level',
+};
 const INTAKES = ['Spring 2027', 'Autumn 2027', 'Spring 2028', 'Not sure yet'];
 const APPLICATION_INTAKES = ['Next available intake', 'Spring intake', 'Autumn intake', 'Flexible / discuss with counselor'];
 const LANGUAGES = ['IELTS / TOEFL ready', 'English — no test yet', 'Willing to learn another language', 'Not sure yet'];
@@ -500,7 +504,11 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
   }
 
   return (
-    <form onSubmit={handleSubmit} className="overflow-hidden rounded-3xl bg-white shadow-[0_24px_60px_-36px_rgba(11,43,69,.35)] ring-1 ring-petrol-800/10">
+    <form
+      id={isApplication ? 'application-form' : 'fit-assessment-form'}
+      onSubmit={handleSubmit}
+      className="overflow-hidden rounded-3xl bg-white shadow-[0_24px_60px_-36px_rgba(11,43,69,.35)] ring-1 ring-petrol-800/10"
+    >
       <div className="bg-petrol-800 p-6 text-white sm:p-7">
         <div className="flex items-start justify-between gap-4">
           <div className="flex gap-3.5">
@@ -563,7 +571,11 @@ export default function EducationFitAssessment({ initialContext }: { initialCont
               <Field label="Current level" required>
                 <select value={form.academicLevel} onChange={event => update({ academicLevel: event.target.value })} className={`ed-select appearance-none ${inputClass}`}>
                   <option value="">Choose your level</option>
-                  {ACADEMIC_LEVELS.map(level => <option key={level} value={level}>{level}</option>)}
+                  {ACADEMIC_LEVELS.map(level => (
+                    <option key={level} value={level}>
+                      {ACADEMIC_LEVEL_LABELS[level] ?? level}
+                    </option>
+                  ))}
                 </select>
               </Field>
               <Field label="Latest result">

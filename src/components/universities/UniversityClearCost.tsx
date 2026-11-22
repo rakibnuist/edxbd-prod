@@ -34,7 +34,7 @@ type Props = {
 const formatAmount = (amount: number, currency: string) => `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(amount)} ${currency}`;
 const formatTotals = (totals: CostCurrencyTotals) => Object.entries(totals).map(([currency, amount]) => formatAmount(amount!, currency)).join(' + ');
 const periodLabel = (period?: string) => ({ programme: 'for the programme', semester: 'per semester', year: 'per year', monthly: 'per month', month: 'per month', day: 'per day', oneoff: 'one-time' })[period || ''] || '';
-const inputClass = 'mt-2 min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/10';
+const inputClass = 'mt-2 min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-base sm:text-sm text-slate-900 outline-none focus:border-[#12436b] focus:ring-2 focus:ring-[#12436b]/10';
 
 export default function UniversityClearCost(props: Props) {
   return <UniversityCostPicker key={props.university.slug} {...props} />;

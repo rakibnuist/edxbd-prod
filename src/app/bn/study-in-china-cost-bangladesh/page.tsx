@@ -236,7 +236,7 @@ export default function BengaliChinaCostPage() {
             <Sparkles size={15} className="text-petrol-800" /> ভিসার আগে কোনো সার্ভিস চার্জ নেই (BDT 0 Before Visa)
           </span>
 
-          <h1 className="mt-4 font-display text-[32px] font-black leading-tight sm:text-[44px] lg:text-[52px]">
+          <h1 className="mt-4 font-display text-[26px] xs:text-[30px] font-black leading-[1.25] sm:text-[44px] lg:text-[52px] sm:leading-tight">
             চীনে পড়াশোনার মোট খরচ ও স্কলারশিপ গাইড
           </h1>
 

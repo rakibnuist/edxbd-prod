@@ -98,8 +98,8 @@
   "qualifications": [
     {
       "level": "Bachelor’s",
-      "qualification": "HSC, A levels or an accepted equivalent",
-      "prepare": "SSC and HSC records, required subjects, language evidence and programme-specific CSCA results."
+      "qualification": "HSC, Alim, A levels, or SSC / Dakhil / O-Level (via 3+2 Diploma-to-Bachelor)",
+      "prepare": "SSC / Dakhil / O-Level or HSC / Alim / A-Level records, required subjects, language evidence and programme-specific CSCA results."
     },
     {
       "level": "Master’s",
@@ -233,6 +233,16 @@
       "title": "China K Visa for STEM talent",
       "href": "/updates/china-k-visa",
       "summary": "Eligibility, required documents and mobility rules under China's K-visa talent framework."
+    },
+    {
+      "title": "After O-Level, SSC or Dakhil (3+2 Route)",
+      "href": "/study-in-china-after-o-level-ssc",
+      "summary": "Finish a 3-year Diploma + 2-year Top-Up Bachelor in 5 years total with scholarship tiers and guardian rules."
+    },
+    {
+      "title": "Bangladesh Private Uni vs China Bachelor",
+      "href": "/bangladesh-vs-china-bachelor-study",
+      "summary": "Compare 4-year Dhaka Category-A tuition against globally ranked Chinese universities and scholarships."
     }
   ],
   "faqs": [

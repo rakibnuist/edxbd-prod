@@ -114,7 +114,7 @@ const FAQS = [
   {
     question: 'How do I choose a reliable study in China agency in Bangladesh?',
     answer:
-      'Verify five things before paying any agency: (1) a permanent physical office where parents can meet counsellors in person, (2) a written cost breakdown separating official university fees from consultancy charges, (3) zero "100% visa" or "guaranteed CSC scholarship" promises, (4) explicit MoE/BMDC recognition checks for MBBS, and (5) transparent proof of official university portal submissions and JW201/JW202 forms.',
+      'Verify five things before paying any agency: (1) a permanent physical office where parents can meet counsellors in person, (2) a written cost breakdown separating official university fees from consultancy charges, (3) zero fake visa-guarantee or scholarship-guarantee promises, (4) explicit MoE/BMDC recognition checks for MBBS, and (5) transparent proof of official university portal submissions and JW201/JW202 forms.',
   },
   {
     question: 'Does any consultancy in Bangladesh have exclusive authority from the Chinese Embassy or CSC?',

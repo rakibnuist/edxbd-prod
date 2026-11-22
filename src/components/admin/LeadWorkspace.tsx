@@ -935,7 +935,7 @@ export default function LeadWorkspace({
           </div>
         ) : (
           /* Table View */
-          <div aria-busy={loading} className="rounded-xl border border-slate-200/80 bg-white px-4 shadow-sm">
+          <div aria-busy={loading} className="overflow-x-auto rounded-xl border border-slate-200/80 bg-white px-4 shadow-sm">
             <table className="w-full table-fixed border-collapse text-left text-sm">
               <thead className="hidden md:table-header-group">
                 <tr className="text-xs font-normal text-gray-500">

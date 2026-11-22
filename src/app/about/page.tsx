@@ -99,7 +99,7 @@ export default async function About() {
       <PageHero
         path={PATH}
         trail={[{ name: 'About us' }]}
-        eyebrow="Since 2018 · Dhanmondi, Dhaka"
+        eyebrow="Since 2018 · CBCA Founding Member (#08) & FACD-CAB (FCM-452) · Dhanmondi, Dhaka"
         title="About EduExpress International."
         lead="Bangladesh's evidence-first study abroad consultancy. We compare education quality, cost, recognition and career fit before recommending any route, and we put every cost in writing."
         actions={
@@ -147,6 +147,27 @@ export default async function About() {
               Bangladesh operation in 2023 and now works from Dhanmondi 4/A, Dhaka, serving students and education agency partners
               under strict transparency standards. EduExpress International (Bangladesh) is an independent consultancy based in Dhaka
               and is unaffiliated with unrelated companies bearing similar names (such as UK-registered EduExpress Ltd.).
+            </p>
+            <p>
+              EduExpress International is Founding Member (#08) of the{' '}
+              <a
+                href="https://cbcabd.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-lime-deep"
+              >
+                China Bangladesh Consultancy Alliance (CBCA)
+              </a>{' '}
+              and a verified Active Member (ID: FCM-452) of the{' '}
+              <a
+                href="https://www.facdcab.org/members/directory/2264"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-lime-deep"
+              >
+                Foreign Admission &amp; Career Development Consultants Association of Bangladesh (FACD-CAB / FACECAB)
+              </a>
+              .
             </p>
             <div className="flex flex-wrap gap-5 pt-1">
               <Link href="/proof-library" className={kit.link}>See our published records <ArrowRight size={16} aria-hidden="true" /></Link>

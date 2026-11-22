@@ -220,10 +220,10 @@ export default async function RootLayout({
       {
         "@type": "Organization",
         "name": "Foreign Admission & Career Development Consultants Association of Bangladesh (FACD-CAB)",
-        "alternateName": "FACD-CAB",
+        "alternateName": ["FACD-CAB", "FACECAB"],
         "url": "https://www.facdcab.org/members/directory/2264",
         "identifier": "FCM-452",
-        "description": "Active FACD-CAB Member (Member ID: FCM-452, since 2026)"
+        "description": "Active FACD-CAB (FACECAB) Member (Member ID: FCM-452, since 2026)"
       }
     ],
     "serviceArea": {

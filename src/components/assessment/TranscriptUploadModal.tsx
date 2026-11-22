@@ -208,16 +208,16 @@ export default function TranscriptUploadModal({
               </div>
 
               {previewUrl && (
-                <div className="mt-4 flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5">
-                  <div className="flex items-center gap-2 text-[13px] font-medium text-petrol-800">
-                    <FileText size={16} aria-hidden="true" />
-                    <span className="truncate max-w-[280px]">{selectedFile?.name}</span>
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-stone-200 bg-stone-50 p-3 sm:px-4 sm:py-2.5">
+                  <div className="flex min-w-0 max-w-full items-center gap-2 text-[13px] font-medium text-petrol-800">
+                    <FileText size={16} className="shrink-0" aria-hidden="true" />
+                    <span className="truncate">{selectedFile?.name}</span>
                   </div>
                   <button
                     type="button"
                     onClick={handleEvaluate}
                     disabled={loading}
-                    className="ed-btn ed-btn-signal min-h-[38px] px-4 text-[13px]"
+                    className="ed-btn ed-btn-signal min-h-[38px] w-full sm:w-auto px-4 text-[13px]"
                   >
                     {loading ? (
                       <>

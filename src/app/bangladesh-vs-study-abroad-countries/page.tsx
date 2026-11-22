@@ -104,18 +104,23 @@ export default function BangladeshVsStudyAbroadPage() {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'WebPage',
+        '@type': ['WebPage', 'Article'],
         '@id': `${canonical}#page`,
         url: canonical,
         mainEntityOfPage: canonical,
-        dateModified: PATHWAY_LAST_UPDATED_ISO,
+        headline: 'Study in Bangladesh vs Abroad 2027: Malaysia, UK, China, Europe & Western Benchmarks',
         name: 'Study in Bangladesh vs Abroad 2027: Malaysia, UK, China, Europe & Western Benchmarks',
         description:
           'Compare staying in Bangladesh for A-Levels and Dhaka private universities against studying abroad across Malaysia, UK, China, Europe, USA, Australia, and New Zealand.',
+        image: `${SITE}/og/destinations.jpg`,
+        primaryImageOfPage: primaryImageOfPageSchema('/og/destinations.jpg'),
+        datePublished: `${PATHWAY_LAST_UPDATED_ISO}T00:00:00Z`,
+        dateModified: `${PATHWAY_LAST_UPDATED_ISO}T00:00:00Z`,
         inLanguage: 'en-BD',
+        author: { '@type': 'Person', name: 'Mukta Rahaman', jobTitle: 'Senior Counselor — Education Fit & Cost Planning' },
+        reviewedBy: { '@type': 'Person', name: 'Abdullah Al Rakib', jobTitle: 'Founder and CEO' },
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
-        primaryImageOfPage: primaryImageOfPageSchema('/og/destinations.jpg'),
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
         ...citationJsonLd(COMPARISON_HUB_SOURCES),
       },
@@ -134,7 +139,7 @@ export default function BangladeshVsStudyAbroadPage() {
         ]}
         eyebrow="Bangladesh vs. Global Destinations · Time, Tuition & Credential ROI"
         title="Studying in Bangladesh vs. studying abroad."
-        lead="Compare staying in Bangladesh for A-Levels and Category-A private universities against global study pathways in Malaysia, China, the UK, Europe, and Western benchmarks—proving where students win on time, rankings, and separated tuition."
+        lead="Compare staying in Bangladesh for HSC, Alim, A-Levels, and Category-A private universities against global study pathways in Malaysia, China, the UK, Europe, and Western benchmarks—proving where students win on time, rankings, and separated tuition."
         reviewed={PATHWAY_LAST_UPDATED_LABEL}
         actions={
           <>
@@ -147,19 +152,17 @@ export default function BangladeshVsStudyAbroadPage() {
           </>
         }
         aside={
-          <figure className="overflow-hidden rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
-            <div className="relative aspect-[4/3] w-full">
-              <Image
-                src="/images/destinations/united-kingdom-hero.webp"
-                alt="International university campus comparison for Bangladeshi students evaluating study abroad vs staying local"
-                fill
-                priority
-                sizes="(max-width:1024px) 100vw, 480px"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="flex flex-wrap items-center justify-between gap-2 p-4 text-[13px] font-semibold text-petrol-800">
-              <span>Local Dhaka Track vs. 12+ Global Study Routes</span>
+          <figure className="anim-rise relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-petrol-800">
+            <Image
+              src="/images/destinations/united-kingdom-hero.webp"
+              alt="International university campus comparison for Bangladeshi students evaluating study abroad vs staying local"
+              fill
+              priority
+              sizes="(max-width:1024px) 100vw, 480px"
+              className="object-cover"
+            />
+            <figcaption className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white/95 px-4 py-2.5 text-[13px] font-semibold text-petrol-800 backdrop-blur-sm">
+              <span>Local Dhaka Track vs. 12+ Global Routes</span>
               <span className="rounded-full bg-lime-pale px-2.5 py-0.5 text-[12px] text-lime-deep">
                 Living costs separated
               </span>
@@ -186,7 +189,7 @@ export default function BangladeshVsStudyAbroadPage() {
         id="why-students-win"
         tone="sage"
         title="Three Strategic Ways Students Win Abroad vs. Staying Local"
-        intro="Match your academic stage (O-Level/SSC or A-Level/HSC) and budget to the route with the strongest educational return."
+        intro="Match your academic stage (SSC, Dakhil, O-Level or HSC, Alim, A-Level) and budget to the route with the strongest educational return."
         cards={BD_VS_ABROAD_WIN_CARDS}
       />
 
@@ -196,7 +199,7 @@ export default function BangladeshVsStudyAbroadPage() {
         title="Bangladesh vs. Abroad Destinations: Tuition, Living & Strategic Verdict"
         intro="Compare every major pathway side by side with living budgets shown in their own column."
       >
-        <div className="overflow-x-auto rounded-3xl border border-petrol-800/10 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white">
           <table className="w-full min-w-[920px] text-left text-[14px] leading-6">
             <caption className="sr-only">Study in Bangladesh compared against abroad study destinations</caption>
             <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
@@ -210,14 +213,14 @@ export default function BangladeshVsStudyAbroadPage() {
             </thead>
             <tbody className="divide-y divide-canvas-soft text-ink-soft">
               {BD_VS_ABROAD_DESTINATION_ROWS.map((row, index) => (
-                <tr key={row.destination} className={index === 1 || index === 2 ? 'bg-lime-pale/25' : undefined}>
+                <tr key={row.destination} className={index === 1 || index === 2 ? 'bg-lime-pale/30' : undefined}>
                   <th scope="row" className="p-4 align-top font-bold text-petrol-800">
                     {row.destination}
-                    <span className="mt-1 block text-[12px] font-medium text-emerald-900">{row.serviceNote}</span>
+                    <span className="mt-1 block text-[12px] font-medium text-lime-deep">{row.serviceNote}</span>
                   </th>
                   <td className="p-4 align-top font-medium text-petrol-800">{row.duration}</td>
                   <td className="p-4 align-top font-semibold text-petrol-800">{row.tuitionOnly}</td>
-                  <td className="p-4 align-top text-amber-900">{row.livingSeparated}</td>
+                  <td className="p-4 align-top font-medium text-clay">{row.livingSeparated}</td>
                   <td className="p-4 align-top font-medium text-petrol-800">{row.winOrTradeoff}</td>
                 </tr>
               ))}
@@ -233,9 +236,9 @@ export default function BangladeshVsStudyAbroadPage() {
         title="Choosing the Right Abroad Tier for Maximum Advantage"
         intro="Do not compare abroad destinations as one flat price—use smart pathways to secure top degrees without overspending."
       >
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div data-anim="stagger" className="grid gap-6 lg:grid-cols-3">
           {WINNING_STRATEGIES.map(card => (
-            <div key={card.title} className="flex flex-col justify-between rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm sm:p-7">
+            <div key={card.title} className={`${kit.card} flex flex-col justify-between`}>
               <div>
                 <span className={kit.iconLime}>
                   <card.icon size={22} aria-hidden="true" />
@@ -252,9 +255,9 @@ export default function BangladeshVsStudyAbroadPage() {
           ))}
         </div>
 
-        <div className="mt-8 rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-sm">
+        <div className={`mt-8 ${kit.card}`}>
           <div className="flex items-center gap-2.5 text-petrol-800">
-            <ShieldCheck size={20} className="text-emerald-700" aria-hidden="true" />
+            <ShieldCheck size={20} className="text-lime-deep" aria-hidden="true" />
             <h3 className="text-[17px] font-bold">Explore Active EduExpress Destination Hubs</h3>
           </div>
           <div className="mt-4 flex flex-wrap gap-2.5">
@@ -262,7 +265,7 @@ export default function BangladeshVsStudyAbroadPage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full bg-canvas-soft px-4 py-1.5 text-[13.5px] font-semibold text-petrol-800 hover:bg-lime-pale"
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full bg-canvas-soft px-4 py-1.5 text-[13.5px] font-semibold text-petrol-800 transition hover:bg-lime-pale"
               >
                 {item.label} <ArrowRight size={13} aria-hidden="true" />
               </Link>
@@ -281,11 +284,11 @@ export default function BangladeshVsStudyAbroadPage() {
           fitTitle="When Studying Abroad Clearly Wins"
           fitItems={[
             {
-              label: 'O-Level / SSC students wanting to save 1–2 academic years',
+              label: 'SSC, Dakhil & O-Level students wanting to save 1–2 academic years',
               detail: 'Start Foundation/Diploma in Malaysia (BDT 0 service fee) or China’s 3+2 track instead of repeating two pre-university years at home.',
             },
             {
-              label: 'A-Level / HSC students seeking global top-500 STEM or Business degrees',
+              label: 'HSC, Alim & A-Level students seeking global top-500 STEM or Business degrees',
               detail: 'Ranked Chinese universities, Malaysian UK/AU branch campuses, and European public universities offer superior international lab scale and degree portability.',
             },
             {
@@ -348,9 +351,9 @@ export default function BangladeshVsStudyAbroadPage() {
       <Section
         id="bd-abroad-assessment"
         title="Get Your Personalized Bangladesh vs. Abroad Recommendation"
-        intro="Share your current academic results, target field, and comfortable budget. An EduExpress counselor prepares an itemized EduFit comparison across your best-fit destinations within one working day."
+        intro="Share your SSC, Dakhil, O-Level, HSC, Alim, or A-Level results, target field, and comfortable budget. An EduExpress counselor prepares an itemized EduFit comparison across your best-fit destinations within one working day."
       >
-        <div className="mx-auto max-w-3xl rounded-3xl border border-petrol-800/10 bg-canvas-soft p-6 shadow-sm sm:p-10">
+        <div className="mx-auto max-w-3xl">
           <EducationFitAssessment />
         </div>
       </Section>

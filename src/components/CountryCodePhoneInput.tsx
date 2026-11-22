@@ -199,7 +199,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
 
           {/* Dropdown */}
           {isOpen && (
-            <div className="ed-pop-in absolute top-[140%] left-0 z-50 w-72 max-h-64 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+            <div className="ed-pop-in absolute top-[140%] left-0 z-50 w-72 max-w-[calc(100vw-2.5rem)] max-h-64 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
               {/* Search Input */}
               <div className="p-2 border-b border-slate-100 bg-slate-50">
                 <input
@@ -207,7 +207,7 @@ const CountryCodePhoneInput: React.FC<CountryCodePhoneInputProps> = ({
                   placeholder="Search country..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm bg-white"
+                  className="w-full px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-base sm:text-sm bg-white"
                   autoFocus
                 />
               </div>

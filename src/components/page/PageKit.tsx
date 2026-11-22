@@ -14,6 +14,8 @@ export const kit = {
   wrap: 'mx-auto max-w-[1200px] px-5 lg:px-8',
   h2: 'font-display text-[34px] font-black leading-[0.98] tracking-[-0.01em] text-petrol-800 sm:text-[46px]',
   h2OnDark: 'font-display text-[34px] font-black leading-[0.98] tracking-[-0.01em] text-lime sm:text-[46px]',
+  h2Bn: 'font-bengali-display text-[28px] font-bold leading-[1.26] tracking-normal text-petrol-800 sm:text-[38px] sm:leading-[1.2]',
+  h2OnDarkBn: 'font-bengali-display text-[28px] font-bold leading-[1.26] tracking-normal text-lime sm:text-[38px] sm:leading-[1.2]',
   h3: 'text-[21px] font-semibold leading-[1.3] tracking-[-0.02em] text-petrol-800',
   lead: 'text-[18px] leading-[1.6] text-ink-soft sm:text-[19px]',
   body: 'text-[16px] leading-7 text-ink-soft',
@@ -83,7 +85,7 @@ export function PageHero({ path, trail, eyebrow, title, lead, actions, aside, re
         <div className={aside ? '' : 'max-w-4xl'}>
           <div className="anim-rise"><PageCrumbs trail={trail} path={path} /></div>
           {eyebrow && <p style={delay(40)} className={`anim-rise mt-6 ${kit.badge}`}>{eyebrow}</p>}
-          <h1 style={delay(80)} className="anim-lift mt-5 font-display text-[44px] font-black leading-[0.95] tracking-[-0.02em] text-petrol-800 sm:text-[64px] lg:text-[76px]">
+          <h1 style={delay(80)} className="anim-lift mt-5 font-display text-[32px] xs:text-[38px] font-black leading-[1.02] tracking-[-0.02em] text-petrol-800 sm:text-[64px] lg:text-[76px] sm:leading-[0.95]">
             {title}
           </h1>
           {lead && <p style={delay(160)} className={`anim-rise mt-6 max-w-2xl ${kit.lead}`}>{lead}</p>}
@@ -115,6 +117,7 @@ export function Section({
   title,
   intro,
   action,
+  lang,
   children,
   className = '',
 }: {
@@ -123,16 +126,21 @@ export function Section({
   title?: ReactNode;
   intro?: ReactNode;
   action?: ReactNode;
+  lang?: 'en' | 'bn';
   children?: ReactNode;
   className?: string;
 }) {
+  const h2Class =
+    lang === 'bn'
+      ? (tone === 'navy' ? kit.h2OnDarkBn : kit.h2Bn)
+      : (tone === 'navy' ? kit.h2OnDark : kit.h2);
   return (
     <section id={id} className={`${toneClass[tone]} scroll-mt-28 py-16 lg:py-20 ${className}`}>
       <div className={kit.wrap}>
         {(title || intro || action) && (
           <div className="mb-10 flex flex-wrap items-end justify-between gap-5 lg:mb-12">
             <div className="max-w-3xl">
-              {title && <h2 data-anim="up" className={tone === 'navy' ? kit.h2OnDark : kit.h2}>{title}</h2>}
+              {title && <h2 data-anim="up" className={h2Class}>{title}</h2>}
               {intro && <p className={`mt-4 ${tone === 'navy' ? 'text-[18px] leading-[1.6] text-white/85' : kit.lead}`}>{intro}</p>}
             </div>
             {action}
@@ -179,14 +187,16 @@ export function FaqBlock({
   items,
   title = 'Frequently asked questions',
   tone = 'sage',
+  lang,
 }: {
   items: { question: string; answer: string }[];
   title?: string;
   tone?: 'white' | 'sage';
+  lang?: 'en' | 'bn';
 }) {
   if (!items.length) return null;
   return (
-    <Section tone={tone} title={title}>
+    <Section tone={tone} title={title} lang={lang}>
       <JsonLd data={faqJsonLd(items)} />
       <div data-anim="stagger" className="grid max-w-4xl gap-3">
         {items.map(item => (
@@ -208,31 +218,56 @@ export function CtaBand({
   title = 'Not sure where to start?',
   text = 'Tell us your results, budget and preferred country. A counsellor calls you within one working day with realistic options, the costs and the documents to prepare.',
   assessmentHref = '/education-fit-assessment',
+  assessmentLabel,
+  whatsappLabel,
+  whatsappMessage,
+  lang,
 }: {
   title?: string;
   text?: string;
   assessmentHref?: string;
+  assessmentLabel?: string;
+  whatsappLabel?: string;
+  whatsappMessage?: string;
+  lang?: 'en' | 'bn';
 }) {
-  const whatsapp = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent('Assalamu alaikum. I would like counselling for studying abroad.')}`;
+  const isBn = lang === 'bn';
+  const ctaLabel = assessmentLabel ?? (isBn ? 'ফ্রি অ্যাসেসমেন্ট শুরু করুন' : 'Get my free assessment');
+  const waLabel = whatsappLabel ?? (isBn ? 'হোয়াটসঅ্যাপে কথা বলুন' : 'WhatsApp a counsellor');
+  const waMessage =
+    whatsappMessage ??
+    (isBn
+      ? 'আসসালামু আলাইকুম। বিদেশে উচ্চশিক্ষার বিষয়ে কাউন্সেলিং চাই।'
+      : 'Assalamu alaikum. I would like counselling for studying abroad.');
+  const whatsapp = `https://wa.me/${config.contact.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(waMessage)}`;
   return (
     <section data-cta-band className="bg-petrol-800 py-16 text-white lg:py-20">
       <div className={`${kit.wrap} flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between`}>
         <div className="max-w-2xl">
-          <h2 data-anim="pop" className="font-display text-[40px] font-black leading-[0.95] tracking-[-0.02em] text-lime sm:text-[56px]">{title}</h2>
+          <h2
+            data-anim="pop"
+            className={
+              isBn
+                ? 'font-bengali-display text-[28px] font-bold leading-[1.25] tracking-normal text-lime sm:text-[42px] sm:leading-[1.18]'
+                : 'font-display text-[34px] font-black leading-[0.98] tracking-[-0.02em] text-lime sm:text-[56px] sm:leading-[0.95]'
+            }
+          >
+            {title}
+          </h2>
           <p className="mt-5 text-[18px] leading-[1.6] text-white/85">{text}</p>
         </div>
         <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
           {assessmentHref.startsWith('#') ? (
             <a href={assessmentHref} className="ed-btn ed-btn-signal min-h-[54px] px-7">
-              Get my free assessment <ArrowRight size={18} aria-hidden="true" />
+              {ctaLabel} <ArrowRight size={18} aria-hidden="true" />
             </a>
           ) : (
             <Link href={assessmentHref} className="ed-btn ed-btn-signal min-h-[54px] px-7">
-              Get my free assessment <ArrowRight size={18} aria-hidden="true" />
+              {ctaLabel} <ArrowRight size={18} aria-hidden="true" />
             </Link>
           )}
           <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-on-dark min-h-[54px] px-7">
-            <MessageCircle size={18} aria-hidden="true" /> WhatsApp a counsellor
+            <MessageCircle size={18} aria-hidden="true" /> {waLabel}
           </a>
         </div>
       </div>
