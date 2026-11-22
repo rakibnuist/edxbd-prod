@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { GraduationCap, Save, Search, Trash2, X } from 'lucide-react';
+import { GraduationCap, Printer, Save, Search, Trash2, X } from 'lucide-react';
 import {
   DEFAULT_EXPENSE_CATEGORIES,
   DEFAULT_INCOME_CATEGORIES,
@@ -9,8 +9,10 @@ import {
   STUDENT_FINANCE_KEYWORDS,
   dhakaCurrentDate,
   formatBdt,
+  formatMonthLabel,
   type FinanceExpenseDto,
   type FinanceIncomeDto,
+  type PayrollRecordDto,
 } from '@/lib/finance-logic';
 
 export interface FinanceEmployeeOption {
@@ -658,12 +660,120 @@ export function InvestmentEntryModal({
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-violet-600 px-5 py-2 text-xs font-bold text-white hover:bg-violet-700 disabled:opacity-60"
+              className="rounded-xl bg-[#0f3a5c] px-5 py-2 text-xs font-bold text-white hover:bg-[#124b7a] disabled:opacity-60"
             >
               {saving ? 'Recording...' : 'Record Investment'}
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  );
+}
+
+export function PayslipModal({
+  record,
+  onClose,
+}: {
+  record: PayrollRecordDto;
+  onClose: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white shadow-2xl">
+        <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-6 py-4 rounded-t-2xl print:hidden">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-600">Salary Statement Preview</span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#0f3a5c] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#12436b]"
+            >
+              <Printer size={13} /> Print / PDF
+            </button>
+            <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-200/70">
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-5 p-6">
+          <div className="flex items-start justify-between border-b border-slate-200 pb-4">
+            <div>
+              <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#0f3a5c]">
+                EduExpress International
+              </p>
+              <h3 className="mt-0.5 font-heading text-xl font-bold text-slate-900">Employee Salary Slip</h3>
+              <p className="mt-0.5 text-xs text-slate-500">
+                House 12/1, Road 4/A, Dhanmondi, Dhaka 1209
+              </p>
+            </div>
+            <div className="text-right">
+              <span
+                className={`inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-extrabold uppercase ${
+                  record.status === 'paid'
+                    ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                    : 'border-amber-200 bg-amber-50 text-amber-800'
+                }`}
+              >
+                {record.status}
+              </span>
+              <p className="mt-1.5 text-xs font-bold text-slate-900">{formatMonthLabel(record.month)}</p>
+              {record.paidOn && <p className="text-[11px] text-slate-500">Paid: {record.paidOn}</p>}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 text-xs">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Employee Name</p>
+              <p className="mt-0.5 font-bold text-slate-900">{record.name}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Employee ID</p>
+              <p className="mt-0.5 font-mono font-bold text-slate-900">{record.empId}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Pay Period</p>
+              <p className="mt-0.5 font-semibold text-slate-700">{record.month}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Attendance Recorded</p>
+              <p className="mt-0.5 font-semibold tabular-nums text-slate-700">
+                {record.daysWorked} / {record.workingDays} working days
+              </p>
+            </div>
+          </div>
+
+          <div className="divide-y divide-slate-100 rounded-xl border border-slate-200 text-xs">
+            <div className="flex items-center justify-between px-4 py-2.5">
+              <span className="text-slate-600">Base Monthly Salary</span>
+              <span className="font-semibold tabular-nums text-slate-900">{formatBdt(record.baseSalary)}</span>
+            </div>
+            <div className="flex items-center justify-between px-4 py-2.5">
+              <span className="text-slate-600">Performance Bonus / Allowance</span>
+              <span className="font-semibold tabular-nums text-emerald-700">+{formatBdt(record.bonus)}</span>
+            </div>
+            <div className="flex items-center justify-between px-4 py-2.5">
+              <span className="text-slate-600">Deductions / Adjustments</span>
+              <span className="font-semibold tabular-nums text-rose-700">-{formatBdt(record.deductions)}</span>
+            </div>
+            <div className="flex items-center justify-between bg-[#071c2e] px-4 py-3 text-white rounded-b-xl">
+              <span className="font-bold uppercase tracking-wider text-[11px]">Net Payable (BDT)</span>
+              <span className="font-heading text-lg font-bold tabular-nums">{formatBdt(record.netPay)}</span>
+            </div>
+          </div>
+
+          {record.notes && (
+            <div className="rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs text-slate-600">
+              <span className="font-bold text-slate-800">Remarks:</span> {record.notes}
+            </div>
+          )}
+
+          <div className="flex items-center justify-between border-t border-slate-100 pt-3 text-[10px] text-slate-400">
+            <span>Generated via EduExpress Treasury Console</span>
+            <span>Currency: Bangladeshi Taka (BDT)</span>
+          </div>
+        </div>
       </div>
     </div>
   );

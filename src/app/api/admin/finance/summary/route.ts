@@ -48,6 +48,8 @@ export async function GET(request: NextRequest) {
       students,
       allTimeCashIn,
       allTimeOut,
+      investorAgg,
+      pendingPayrollAgg,
     ] = await Promise.all([
       prisma.financeIncome.findMany({
         where: incomeWhere,
@@ -75,6 +77,16 @@ export async function GET(request: NextRequest) {
       }),
       prisma.financeExpense.aggregate({
         _sum: { amount: true },
+      }),
+      prisma.financeIncome.aggregate({
+        where: { category: 'Investment' },
+        _sum: { amount: true },
+        _count: { id: true },
+      }),
+      prisma.payrollRecord.aggregate({
+        where: { status: 'pending', netPay: { gt: 0 } },
+        _sum: { netPay: true },
+        _count: { id: true },
       }),
     ]);
 
@@ -120,6 +132,10 @@ export async function GET(request: NextRequest) {
     const prevMonthKey = shiftMonth(activeCashflowMonth, -1);
     const prevRow = pnl.find((r) => r.month === prevMonthKey);
     const curRow = pnl.find((r) => r.month === activeCashflowMonth);
+    const latestEntryDate = [mappedIncome[0]?.date, mappedExpenses[0]?.date]
+      .filter((d): d is string => Boolean(d))
+      .sort()
+      .pop() || null;
 
     return NextResponse.json(
       {
@@ -127,6 +143,13 @@ export async function GET(request: NextRequest) {
         activeCashflowMonth,
         cashInitial,
         liveBalance,
+        allTimeCashIncome: allTimeCashIn._sum.amount || 0,
+        allTimeExpenses: allTimeOut._sum.amount || 0,
+        investorTotal: investorAgg._sum.amount || 0,
+        investorCount: investorAgg._count.id,
+        payrollPendingCount: pendingPayrollAgg._count.id,
+        payrollPendingAmount: pendingPayrollAgg._sum.netPay || 0,
+        latestEntryDate,
         cashflowClosing: cashflow.totals.closing,
         income: { rows: mappedIncome, total: mappedIncome.length, sum: incomeSum },
         expenses: { rows: mappedExpenses, total: mappedExpenses.length, sum: expenseSum },

@@ -73,7 +73,7 @@ function AdminHeader({ activeName }: { activeName: string }) {
   const isCounselor = user?.role === 'counselor';
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 py-3 backdrop-blur lg:px-6">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 py-3 backdrop-blur lg:px-6 print:hidden">
       <div className="flex items-center gap-3">
         <span className="text-xs font-semibold text-slate-400">
           {isCounselor ? 'EduExpress Counselor Desk' : 'EduExpress Admin'}
@@ -198,8 +198,8 @@ function AdminShell({ children }: { children: React.ReactNode }) {
   );
 
   return (
-        <div className="min-h-screen bg-slate-100/70 text-slate-900">
-          <div className="flex h-[100dvh]">
+        <div className="min-h-screen bg-slate-100/70 text-slate-900 print:bg-white">
+          <div className="flex h-[100dvh] print:block print:h-auto">
             {sidebarOpen && (
               <div
                 className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm lg:hidden"
@@ -209,7 +209,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 
             {/* Sidebar */}
             <aside
-              className={`fixed inset-y-0 left-0 z-50 flex w-60 flex-col bg-[#081c2e] text-white shadow-xl transition-transform duration-300 lg:static lg:translate-x-0 ${
+              className={`fixed inset-y-0 left-0 z-50 flex w-60 flex-col bg-[#081c2e] text-white shadow-xl transition-transform duration-300 lg:static lg:translate-x-0 print:hidden ${
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full'
               }`}
             >
@@ -278,8 +278,8 @@ function AdminShell({ children }: { children: React.ReactNode }) {
             </aside>
 
             {/* Main Area */}
-            <div className="flex flex-1 flex-col overflow-hidden">
-              <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-2.5 lg:hidden">
+            <div className="flex flex-1 flex-col overflow-hidden print:block print:overflow-visible">
+              <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-2.5 lg:hidden print:hidden">
                 <button
                   onClick={() => setSidebarOpen(true)}
                   className="rounded-lg p-2 text-slate-600 hover:bg-slate-100"
@@ -295,7 +295,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 
               <AdminHeader activeName={activeItem?.name ?? 'Admin'} />
 
-              <main className="min-w-0 flex-1 overflow-auto bg-slate-50/70 p-4 sm:p-6 lg:p-8">
+              <main className="min-w-0 flex-1 overflow-auto bg-slate-50/70 p-4 sm:p-6 lg:p-8 print:overflow-visible print:bg-white print:p-0">
                 {routeAllowed ? (
                   children
                 ) : (

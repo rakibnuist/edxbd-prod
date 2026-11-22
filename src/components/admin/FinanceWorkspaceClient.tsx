@@ -3,26 +3,31 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Activity,
-  ArrowDownCircle,
-  ArrowUpCircle,
+  ArrowDownLeft,
+  ArrowUpRight,
   Banknote,
-  BarChart3,
+  Building2,
   Calendar,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  Columns2,
   Download,
+  FileSpreadsheet,
   GraduationCap,
   Landmark,
   LayoutDashboard,
+  ListOrdered,
   Pencil,
   PiggyBank,
   Plus,
+  Printer,
   Receipt,
   RefreshCw,
   Save,
   Search,
   Settings,
+  SlidersHorizontal,
   Trash2,
   TrendingDown,
   TrendingUp,
@@ -34,6 +39,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import {
   PROFIT_SHARES,
   buildCategoryBreakdown,
+  dhakaCurrentDate,
   dhakaCurrentMonth,
   formatBdt,
   formatMonthLabel,
@@ -46,15 +52,18 @@ import {
   type YearMonthRow,
 } from '@/lib/finance-logic';
 import {
-  CategoryBreakdownCard,
   CumulativeProfitChart,
+  DonutBreakdownCard,
+  HorizontalShareCard,
   MonthlyIncomeExpenseChart,
+  MonthlyNetDivergingChart,
   YearCashTrendChart,
 } from '@/components/admin/FinanceCharts';
 import {
   FinanceEntryModal,
   InvestmentEntryModal,
   OpeningCashModal,
+  PayslipModal,
   type FinanceEmployeeOption,
   type FinanceStudentOption,
 } from '@/components/admin/FinanceEntryModal';
@@ -69,11 +78,20 @@ type FinanceTab =
   | 'investors'
   | 'payroll';
 
+type SortOption = 'date_desc' | 'date_asc' | 'amount_desc' | 'amount_asc';
+
 interface SummaryResponse {
   month: string;
   activeCashflowMonth: string;
   cashInitial: number;
   liveBalance: number;
+  allTimeCashIncome?: number;
+  allTimeExpenses?: number;
+  investorTotal?: number;
+  investorCount?: number;
+  payrollPendingCount?: number;
+  payrollPendingAmount?: number;
+  latestEntryDate?: string | null;
   cashflowClosing: number;
   income: { rows: FinanceIncomeDto[]; total: number; sum: number };
   expenses: { rows: FinanceExpenseDto[]; total: number; sum: number };
@@ -159,11 +177,49 @@ function downloadCsv(filename: string, headers: string[], rows: Array<Array<unkn
   URL.revokeObjectURL(url);
 }
 
+function categoryBadgeTone(category: string | null | undefined, kind: 'income' | 'expense'): string {
+  const c = (category || '').toLowerCase();
+  if (kind === 'income') {
+    if (c.includes('invest')) return 'border-violet-200 bg-violet-50 text-violet-800';
+    if (c.includes('service')) return 'border-emerald-200 bg-emerald-50 text-emerald-800';
+    if (c.includes('deposit') || c.includes('file')) return 'border-sky-200 bg-sky-50 text-sky-800';
+    return 'border-slate-200 bg-slate-50 text-slate-700';
+  }
+  if (c.includes('salary')) return 'border-blue-200 bg-blue-50 text-blue-800';
+  if (c.includes('ticket') || c.includes('pickup') || c.includes('pick up')) return 'border-amber-200 bg-amber-50 text-amber-800';
+  if (c.includes('rent') || c.includes('utilit')) return 'border-slate-300 bg-slate-100 text-slate-700';
+  if (c.includes('visa') || c.includes('app fee') || c.includes('medical')) return 'border-indigo-200 bg-indigo-50 text-indigo-800';
+  if (c.includes('market') || c.includes('referral')) return 'border-purple-200 bg-purple-50 text-purple-800';
+  if (c.includes('refund')) return 'border-rose-200 bg-rose-50 text-rose-800';
+  return 'border-slate-200 bg-slate-50 text-slate-700';
+}
+
+function initialsOf(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'EE';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+}
+
+function sortLedgerRows<T extends { date: string; amount: number }>(rows: T[], sort: SortOption): T[] {
+  const copy = [...rows];
+  switch (sort) {
+    case 'date_asc':
+      return copy.sort((a, b) => a.date.localeCompare(b.date));
+    case 'amount_desc':
+      return copy.sort((a, b) => b.amount - a.amount || b.date.localeCompare(a.date));
+    case 'amount_asc':
+      return copy.sort((a, b) => a.amount - b.amount || b.date.localeCompare(a.date));
+    case 'date_desc':
+    default:
+      return copy.sort((a, b) => b.date.localeCompare(a.date));
+  }
+}
+
 export default function FinanceWorkspaceClient() {
   const { user, isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
   const [tab, setTab] = useState<FinanceTab>('overview');
 
-  // Empty string means All Time (shows all recovered historical records immediately)
   const [monthFilter, setMonthFilter] = useState<string>('');
   const [includeExcluded, setIncludeExcluded] = useState<boolean>(false);
 
@@ -173,35 +229,42 @@ export default function FinanceWorkspaceClient() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<{ tone: 'ok' | 'err'; text: string } | null>(null);
 
-  // Sub-tab states
+  // Cashflow sub-tab
   const [cashflowMonth, setCashflowMonth] = useState<string>(() => dhakaCurrentMonth());
+  const [cashflowView, setCashflowView] = useState<'statement' | 'split'>('statement');
   const [cashflowData, setCashflowData] = useState<CashflowResponse | null>(null);
-  const [cashflowLoading, setCashflowLoading] = useState(false);
 
+  // Year sub-tab
   const [yearVal, setYearVal] = useState<number>(() => Number(dhakaCurrentMonth().slice(0, 4)));
   const [yearData, setYearData] = useState<YearResponse | null>(null);
-  const [yearLoading, setYearLoading] = useState(false);
 
+  // Investors sub-tab
   const [investorsData, setInvestorsData] = useState<InvestorsResponse | null>(null);
-  const [investorsLoading, setInvestorsLoading] = useState(false);
 
+  // Student lookup sub-tab
   const [studentQuery, setStudentQuery] = useState('');
   const [studentResult, setStudentResult] = useState<StudentTxResponse | null>(null);
   const [studentLoading, setStudentLoading] = useState(false);
 
+  // Payroll sub-tab
   const [payrollMonth, setPayrollMonth] = useState<string>(() => dhakaCurrentMonth());
   const [payrollData, setPayrollData] = useState<PayrollResponse | null>(null);
-  const [payrollLoading, setPayrollLoading] = useState(false);
   const [payrollEdits, setPayrollEdits] = useState<
     Record<string, { baseSalary?: string; bonus?: string; deductions?: string; notes?: string }>
   >({});
   const [payrollBusyId, setPayrollBusyId] = useState<string | null>(null);
+  const [payslipRecord, setPayslipRecord] = useState<PayrollRecordDto | null>(null);
 
-  // Filters inside Income & Expense tabs
+  // Ledger filters, sort, & display density
   const [incomeSearch, setIncomeSearch] = useState('');
   const [incomeCatFilter, setIncomeCatFilter] = useState('');
+  const [incomeSort, setIncomeSort] = useState<SortOption>('date_desc');
+  const [incomeLimit, setIncomeLimit] = useState<number>(30);
+
   const [expenseSearch, setExpenseSearch] = useState('');
   const [expenseCatFilter, setExpenseCatFilter] = useState('');
+  const [expenseSort, setExpenseSort] = useState<SortOption>('date_desc');
+  const [expenseLimit, setExpenseLimit] = useState<number>(30);
 
   // Modals
   const [entryModal, setEntryModal] = useState<{
@@ -233,8 +296,7 @@ export default function FinanceWorkspaceClient() {
           const errData = await res.json().catch(() => ({}));
           throw new Error(errData.message || errData.error || `Request failed (${res.status})`);
         }
-        const data: SummaryResponse = await res.json();
-        setSummary(data);
+        setSummary(await res.json());
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unable to load financial data.');
       } finally {
@@ -247,57 +309,35 @@ export default function FinanceWorkspaceClient() {
 
   const loadCashflow = useCallback(
     async (targetMonth = cashflowMonth) => {
-      setCashflowLoading(true);
-      try {
-        const res = await authenticatedFetch(
-          `/api/admin/finance/cashflow?month=${encodeURIComponent(targetMonth)}`,
-        );
-        if (res.ok) {
-          setCashflowData(await res.json());
-        }
-      } finally {
-        setCashflowLoading(false);
-      }
+      const res = await authenticatedFetch(
+        `/api/admin/finance/cashflow?month=${encodeURIComponent(targetMonth)}`,
+      );
+      if (res.ok) setCashflowData(await res.json());
     },
     [authenticatedFetch, cashflowMonth],
   );
 
   const loadYear = useCallback(
     async (targetYear = yearVal) => {
-      setYearLoading(true);
-      try {
-        const res = await authenticatedFetch(`/api/admin/finance/year?year=${targetYear}`);
-        if (res.ok) setYearData(await res.json());
-      } finally {
-        setYearLoading(false);
-      }
+      const res = await authenticatedFetch(`/api/admin/finance/year?year=${targetYear}`);
+      if (res.ok) setYearData(await res.json());
     },
     [authenticatedFetch, yearVal],
   );
 
   const loadInvestors = useCallback(async () => {
-    setInvestorsLoading(true);
-    try {
-      const res = await authenticatedFetch('/api/admin/finance/investors');
-      if (res.ok) setInvestorsData(await res.json());
-    } finally {
-      setInvestorsLoading(false);
-    }
+    const res = await authenticatedFetch('/api/admin/finance/investors');
+    if (res.ok) setInvestorsData(await res.json());
   }, [authenticatedFetch]);
 
   const loadPayroll = useCallback(
     async (targetMonth = payrollMonth) => {
-      setPayrollLoading(true);
-      try {
-        const res = await authenticatedFetch(
-          `/api/admin/payroll?month=${encodeURIComponent(targetMonth)}`,
-        );
-        if (res.ok) {
-          setPayrollData(await res.json());
-          setPayrollEdits({});
-        }
-      } finally {
-        setPayrollLoading(false);
+      const res = await authenticatedFetch(
+        `/api/admin/payroll?month=${encodeURIComponent(targetMonth)}`,
+      );
+      if (res.ok) {
+        setPayrollData(await res.json());
+        setPayrollEdits({});
       }
     },
     [authenticatedFetch, payrollMonth],
@@ -315,9 +355,7 @@ export default function FinanceWorkspaceClient() {
         const res = await authenticatedFetch(
           `/api/admin/finance/student-transactions?q=${encodeURIComponent(q)}`,
         );
-        if (res.ok) {
-          setStudentResult(await res.json());
-        }
+        if (res.ok) setStudentResult(await res.json());
       } finally {
         setStudentLoading(false);
       }
@@ -423,7 +461,7 @@ export default function FinanceWorkspaceClient() {
       throw new Error(err.error || err.message || 'Could not save entry.');
     }
     setEntryModal(null);
-    showNotice('ok', id ? 'Financial entry updated.' : `${entryModal.kind === 'income' ? 'Income' : 'Expense'} recorded.`);
+    showNotice('ok', id ? 'Ledger entry updated.' : `${entryModal.kind === 'income' ? 'Income' : 'Expense'} recorded.`);
     await refreshActiveViews();
   };
 
@@ -435,7 +473,7 @@ export default function FinanceWorkspaceClient() {
       throw new Error(err.error || 'Could not delete entry.');
     }
     setEntryModal(null);
-    showNotice('ok', 'Financial entry deleted.');
+    showNotice('ok', 'Ledger entry deleted.');
     await refreshActiveViews();
   };
 
@@ -489,7 +527,7 @@ export default function FinanceWorkspaceClient() {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error || 'Failed to save payroll');
       }
-      showNotice('ok', `Saved payroll for ${row.name}.`);
+      showNotice('ok', `Payroll updated for ${row.name}.`);
       await loadPayroll();
       await loadSummary(true);
     } catch (err) {
@@ -503,8 +541,8 @@ export default function FinanceWorkspaceClient() {
     const nextStatus = row.status === 'paid' ? 'pending' : 'paid';
     const confirmMsg =
       nextStatus === 'paid'
-        ? `Mark ${row.name}'s ${row.month} salary (${formatBdt(row.netPay)}) as PAID? This will automatically record a Salary expense in Finance.`
-        : `Revert ${row.name}'s ${row.month} salary to PENDING and remove the linked Salary expense?`;
+        ? `Mark ${row.name}'s ${formatMonthLabel(row.month)} salary (${formatBdt(row.netPay)}) as PAID? This automatically logs a Salary expense in the ledger.`
+        : `Revert ${row.name}'s ${formatMonthLabel(row.month)} salary to PENDING and remove the linked Salary expense?`;
     if (!window.confirm(confirmMsg)) return;
 
     setPayrollBusyId(row.id);
@@ -546,8 +584,8 @@ export default function FinanceWorkspaceClient() {
 
   const filteredIncome = useMemo(() => {
     const q = incomeSearch.trim().toLowerCase();
-    return incomeRows.filter((r) => {
-      if (incomeCatFilter && (r.category || '') !== incomeCatFilter) return false;
+    const list = incomeRows.filter((r) => {
+      if (incomeCatFilter && (r.category || 'Uncategorised') !== incomeCatFilter) return false;
       if (!q) return true;
       return [r.date, r.category, r.clientName, r.studentName, r.leadRef, r.reference, r.employeeName, r.notes]
         .filter(Boolean)
@@ -555,12 +593,13 @@ export default function FinanceWorkspaceClient() {
         .toLowerCase()
         .includes(q);
     });
-  }, [incomeRows, incomeSearch, incomeCatFilter]);
+    return sortLedgerRows(list, incomeSort);
+  }, [incomeRows, incomeSearch, incomeCatFilter, incomeSort]);
 
   const filteredExpenses = useMemo(() => {
     const q = expenseSearch.trim().toLowerCase();
-    return expenseRows.filter((r) => {
-      if (expenseCatFilter && (r.category || '') !== expenseCatFilter) return false;
+    const list = expenseRows.filter((r) => {
+      if (expenseCatFilter && (r.category || 'Uncategorised') !== expenseCatFilter) return false;
       if (!q) return true;
       return [r.date, r.category, r.paidTo, r.studentName, r.leadRef, r.reference, r.employeeName, r.notes]
         .filter(Boolean)
@@ -568,12 +607,71 @@ export default function FinanceWorkspaceClient() {
         .toLowerCase()
         .includes(q);
     });
-  }, [expenseRows, expenseSearch, expenseCatFilter]);
+    return sortLedgerRows(list, expenseSort);
+  }, [expenseRows, expenseSearch, expenseCatFilter, expenseSort]);
+
+  const unifiedStatementRows = useMemo(() => {
+    if (!cashflowData) return [];
+    type StmtRow = {
+      key: string;
+      kind: 'income' | 'expense';
+      date: string;
+      category: string | null;
+      party: string | null;
+      studentName: string | null;
+      leadRef: string | null;
+      reference: string | null;
+      employeeName: string | null;
+      notes: string | null;
+      credit: number;
+      debit: number;
+      running: number;
+      sortKey: string;
+      raw: FinanceIncomeDto | FinanceExpenseDto;
+    };
+    const rows: StmtRow[] = [
+      ...cashflowData.income.map((r) => ({
+        key: `in-${r.id}`,
+        kind: 'income' as const,
+        date: r.date,
+        category: r.category,
+        party: r.clientName || r.studentName,
+        studentName: r.studentName,
+        leadRef: r.leadRef,
+        reference: r.reference,
+        employeeName: r.employeeName ?? null,
+        notes: r.notes,
+        credit: r.amount,
+        debit: 0,
+        running: r.running ?? cashflowData.opening,
+        sortKey: `${r.date}-0-${String(r.legacyCrmId ?? 999999999).padStart(9, '0')}-${r.id}`,
+        raw: r,
+      })),
+      ...cashflowData.expense.map((r) => ({
+        key: `out-${r.id}`,
+        kind: 'expense' as const,
+        date: r.date,
+        category: r.category,
+        party: r.paidTo || r.studentName,
+        studentName: r.studentName,
+        leadRef: r.leadRef,
+        reference: r.reference,
+        employeeName: r.employeeName ?? null,
+        notes: r.notes,
+        credit: 0,
+        debit: r.amount,
+        running: r.running ?? cashflowData.opening,
+        sortKey: `${r.date}-1-${String(r.legacyCrmId ?? 999999999).padStart(9, '0')}-${r.id}`,
+        raw: r,
+      })),
+    ];
+    return rows.sort((a, b) => a.sortKey.localeCompare(b.sortKey));
+  }, [cashflowData]);
 
   const quickStudents = useMemo(() => {
     const all = summary?.students ?? [];
     const q = studentQuery.trim().toLowerCase();
-    if (!q) return all.slice(0, 12);
+    if (!q) return all.slice(0, 10);
     return all
       .filter(
         (s) =>
@@ -582,123 +680,165 @@ export default function FinanceWorkspaceClient() {
           s.phone.toLowerCase().includes(q) ||
           s.country.toLowerCase().includes(q),
       )
-      .slice(0, 12);
+      .slice(0, 10);
   }, [summary?.students, studentQuery]);
 
-  const handleExportLedgerCsv = () => {
+  const handleExportCsv = (mode: 'all' | 'income' | 'expense' = 'all') => {
     if (!summary) return;
+    if (mode === 'income') {
+      downloadCsv(
+        `eduexpress-income-${monthFilter || 'all-time'}.csv`,
+        ['Date', 'Month', 'Category', 'Client', 'Student', 'Lead Ref', 'Reference', 'Handled By', 'Amount (BDT)', 'Cash Status', 'Notes'],
+        filteredIncome.map((r) => [
+          r.date, r.month, r.category || '', r.clientName || '', r.studentName || '', r.leadRef || '',
+          r.reference || '', r.employeeName || '', r.amount, r.excludeFromCash ? 'Pre-Data Capital' : 'Cash', r.notes || '',
+        ]),
+      );
+      return;
+    }
+    if (mode === 'expense') {
+      downloadCsv(
+        `eduexpress-expenses-${monthFilter || 'all-time'}.csv`,
+        ['Date', 'Month', 'Category', 'Paid To', 'Student', 'Lead Ref', 'Reference', 'Handled By', 'Amount (BDT)', 'Notes'],
+        filteredExpenses.map((r) => [
+          r.date, r.month, r.category || '', r.paidTo || '', r.studentName || '', r.leadRef || '',
+          r.reference || '', r.employeeName || '', r.amount, r.notes || '',
+        ]),
+      );
+      return;
+    }
     const rows: Array<Array<unknown>> = [
       ...incomeRows.map((r) => [
-        'INCOME',
-        r.date,
-        r.month,
-        r.category || '',
-        r.clientName || '',
-        r.studentName || '',
-        r.leadRef || '',
-        r.reference || '',
-        r.employeeName || '',
-        r.amount,
-        r.excludeFromCash ? 'Excluded (Pre-Data)' : 'Cash',
-        r.notes || '',
+        'CREDIT', r.date, r.month, r.category || '', r.clientName || '', r.studentName || '',
+        r.leadRef || '', r.reference || '', r.employeeName || '', r.amount, r.excludeFromCash ? 'Pre-Data' : 'Cash', r.notes || '',
       ]),
       ...expenseRows.map((r) => [
-        'EXPENSE',
-        r.date,
-        r.month,
-        r.category || '',
-        r.paidTo || '',
-        r.studentName || '',
-        r.leadRef || '',
-        r.reference || '',
-        r.employeeName || '',
-        -r.amount,
-        'Cash',
-        r.notes || '',
+        'DEBIT', r.date, r.month, r.category || '', r.paidTo || '', r.studentName || '',
+        r.leadRef || '', r.reference || '', r.employeeName || '', -r.amount, 'Cash', r.notes || '',
       ]),
     ].sort((a, b) => String(b[1]).localeCompare(String(a[1])));
 
     downloadCsv(
-      `eduexpress-finance-${monthFilter || 'all-time'}.csv`,
-      ['Type', 'Date', 'Month', 'Category', 'Client / Paid To', 'Student', 'Lead Ref', 'Reference', 'Handled By', 'Amount (BDT)', 'Cash Status', 'Notes'],
+      `eduexpress-ledger-${monthFilter || 'all-time'}.csv`,
+      ['Type', 'Date', 'Month', 'Category', 'Counterparty', 'Student', 'Lead Ref', 'Reference', 'Handled By', 'Amount (BDT)', 'Book', 'Notes'],
       rows,
     );
   };
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-center">
-          <RefreshCw className="size-8 animate-spin text-[#0f3a5c]" />
-          <p className="text-sm font-medium text-slate-600">Loading Financial Control Center...</p>
+      <div className="mx-auto max-w-7xl space-y-6 pb-16">
+        <div className="h-28 animate-pulse rounded-2xl border border-slate-200 bg-white" />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((k) => (
+            <div key={k} className="h-36 animate-pulse rounded-2xl border border-slate-200 bg-white" />
+          ))}
         </div>
+        <div className="h-80 animate-pulse rounded-2xl border border-slate-200 bg-white" />
       </div>
     );
   }
 
   if (error || !summary) {
     return (
-      <div className="mx-auto max-w-xl rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center text-rose-900">
-        <h2 className="text-lg font-bold">Finance Ledger Unavailable</h2>
-        <p className="mt-2 text-sm">{error || 'Unable to load financial data.'}</p>
+      <div className="mx-auto max-w-xl rounded-2xl border border-rose-200 bg-white p-8 text-center shadow-sm">
+        <div className="mx-auto mb-3 grid size-11 place-items-center rounded-xl bg-rose-50 text-rose-600">
+          <Landmark size={22} />
+        </div>
+        <h2 className="font-heading text-lg font-bold text-slate-900">Unable to load Treasury Ledger</h2>
+        <p className="mt-1.5 text-sm text-slate-500">{error || 'Financial service did not respond.'}</p>
         <button
           onClick={() => loadSummary()}
-          className="mt-4 rounded-xl bg-rose-600 px-4 py-2 text-xs font-bold text-white hover:bg-rose-700"
+          className="mt-5 rounded-xl bg-[#0f3a5c] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#12436b]"
         >
-          Retry
+          Retry Connection
         </button>
       </div>
     );
   }
 
   const netProfit = summary.income.sum - summary.expenses.sum;
-  const profitMargin = summary.income.sum > 0 ? ((netProfit / summary.income.sum) * 100).toFixed(1) : '0.0';
+  const profitMarginNum = summary.income.sum > 0 ? (netProfit / summary.income.sum) * 100 : 0;
+  const expenseRatioNum = summary.income.sum > 0 ? (summary.expenses.sum / summary.income.sum) * 100 : 0;
   const periodLabel = monthFilter ? formatMonthLabel(monthFilter) : 'All Time';
+  const activeMonths = Math.max(pnlRows.length, 1);
+  const avgMonthlyIn = (summary.allTimeCashIncome ?? summary.income.sum) / activeMonths;
+  const avgMonthlyOut = (summary.allTimeExpenses ?? summary.expenses.sum) / activeMonths;
 
-  const TABS: Array<{ id: FinanceTab; label: string; icon: typeof LayoutDashboard }> = [
+  const pnlTotalIn = pnlRows.reduce((s, r) => s + r.income, 0);
+  const pnlTotalOut = pnlRows.reduce((s, r) => s + r.expense, 0);
+  const pnlTotalNet = pnlTotalIn - pnlTotalOut;
+  const pnlOverallMargin = pnlTotalIn > 0 ? ((pnlTotalNet / pnlTotalIn) * 100).toFixed(1) : '0.0';
+
+  const TABS: Array<{ id: FinanceTab; label: string; count?: number; icon: typeof LayoutDashboard }> = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'cashflow', label: 'Cashflow', icon: Receipt },
-    { id: 'income', label: `Income (${summary.income.total})`, icon: ArrowDownCircle },
-    { id: 'expenses', label: `Expenses (${summary.expenses.total})`, icon: ArrowUpCircle },
+    { id: 'cashflow', label: 'Cashflow Statement', icon: Receipt },
+    { id: 'income', label: 'Income Ledger', count: summary.income.total, icon: ArrowDownLeft },
+    { id: 'expenses', label: 'Expense Ledger', count: summary.expenses.total, icon: ArrowUpRight },
     { id: 'student', label: 'Student Ledger', icon: GraduationCap },
-    { id: 'year', label: 'Year View', icon: Calendar },
-    { id: 'investors', label: 'Investors', icon: PiggyBank },
-    { id: 'payroll', label: 'Payroll', icon: Banknote },
+    { id: 'year', label: 'Annual View', icon: Calendar },
+    { id: 'investors', label: 'Investors & Equity', count: summary.investorCount, icon: PiggyBank },
+    { id: 'payroll', label: 'Payroll', count: summary.payrollPendingCount || undefined, icon: Banknote },
   ];
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 pb-16">
-      {/* Strategic Dark Header */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#081c2e] via-[#0f3a5c] to-[#0b2f45] p-6 text-white shadow-lg sm:p-7">
-        <div className="pointer-events-none absolute right-0 top-0 -mr-16 -mt-16 size-72 rounded-full bg-emerald-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 left-0 -mb-16 -ml-16 size-64 rounded-full bg-blue-400/10 blur-3xl" />
+      {/* Print-Only Institutional Letterhead */}
+      <div className="hidden border-b-2 border-[#0f3a5c] pb-4 print:block">
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-[#0f3a5c]">EduExpress International</p>
+            <h1 className="font-heading text-2xl font-bold text-slate-900">Financial Control &amp; Ledger Statement</h1>
+            <p className="text-xs text-slate-600">Dhanmondi HQ, Dhaka 1209 · Reporting Scope: {periodLabel}</p>
+          </div>
+          <div className="text-right text-xs text-slate-600">
+            <p className="font-bold text-slate-900">Generated: {dhakaCurrentDate()}</p>
+            <p>Currency: Bangladeshi Taka (BDT ৳)</p>
+          </div>
+        </div>
+      </div>
 
-        <div className="relative z-10 space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3.5">
-              <div className="grid size-11 place-items-center rounded-2xl border border-white/15 bg-white/10">
-                <Landmark size={22} className="text-emerald-300" />
-              </div>
-              <div>
-                <h1 className="font-heading text-2xl font-bold tracking-tight sm:text-3xl">
-                  Financial Control Center
-                </h1>
-                <p className="mt-0.5 text-xs text-slate-300 sm:text-sm">
-                  {summary.income.total} income entries · {summary.expenses.total} expense entries · Scope:{' '}
-                  <strong className="text-white">{periodLabel}</strong>
-                </p>
-              </div>
+      {/* ────────────────── EXECUTIVE HEADER BAR ────────────────── */}
+      <section className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] print:hidden">
+        <div className="h-1 w-full bg-gradient-to-r from-[#071c2e] via-[#0f3a5c] to-[#0b7a53]" />
+        <div className="flex flex-col gap-5 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-start gap-3.5">
+            <div className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#071c2e] text-white shadow-sm">
+              <Landmark size={20} />
             </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#0f3a5c]">
+                  Treasury &amp; Accounting · Dhaka HQ
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                  <span className="size-1.5 rounded-full bg-[#0b7a53]" />
+                  Reconciled · BDT (৳)
+                </span>
+              </div>
+              <h1 className="mt-1 font-heading text-2xl font-bold tracking-tight text-slate-900">
+                Financial Control Center
+              </h1>
+              <p className="mt-0.5 text-xs text-slate-500">
+                Scope: <strong className="text-slate-700">{periodLabel}</strong>
+                {' · '}
+                {summary.income.total} cash receipts &amp; {summary.expenses.total} disbursements
+                {summary.latestEntryDate ? ` · Latest entry ${summary.latestEntryDate}` : ''}
+              </p>
+            </div>
+          </div>
 
-            {/* Period Controls */}
-            <div className="flex flex-wrap items-center gap-2">
+          {/* Right Controls: Period + Clean Actions */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Segmented Period Control */}
+            <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50/80 p-1">
               <button
                 type="button"
                 onClick={() => setMonthFilter('')}
-                className={`rounded-xl px-3 py-1.5 text-xs font-bold transition ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
                   monthFilter === ''
-                    ? 'bg-emerald-400 text-slate-950 shadow-sm'
-                    : 'border border-white/15 bg-white/10 text-slate-200 hover:bg-white/20'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
                 All Time
@@ -706,515 +846,859 @@ export default function FinanceWorkspaceClient() {
               <button
                 type="button"
                 onClick={() => setMonthFilter(dhakaCurrentMonth())}
-                className={`rounded-xl px-3 py-1.5 text-xs font-bold transition ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
                   monthFilter === dhakaCurrentMonth()
-                    ? 'bg-emerald-400 text-slate-950 shadow-sm'
-                    : 'border border-white/15 bg-white/10 text-slate-200 hover:bg-white/20'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
                 This Month
               </button>
-
-              <div className="flex items-center gap-1 rounded-xl border border-white/15 bg-white/10 p-1">
-                <button
-                  type="button"
-                  onClick={() => setMonthFilter(shiftMonth(monthFilter || dhakaCurrentMonth(), -1))}
-                  className="rounded-lg p-1 text-slate-300 hover:bg-white/10 hover:text-white"
-                  aria-label="Previous month"
-                >
-                  <ChevronLeft size={15} />
-                </button>
-                <input
-                  type="month"
-                  value={monthFilter}
-                  onChange={(e) => setMonthFilter(e.target.value)}
-                  className="cursor-pointer bg-transparent px-1.5 py-0.5 text-xs font-bold text-white outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => setMonthFilter(shiftMonth(monthFilter || dhakaCurrentMonth(), 1))}
-                  className="rounded-lg p-1 text-slate-300 hover:bg-white/10 hover:text-white"
-                  aria-label="Next month"
-                >
-                  <ChevronRight size={15} />
-                </button>
-              </div>
-
+              <div className="mx-1 h-4 w-px bg-slate-200" />
               <button
                 type="button"
-                onClick={() => refreshActiveViews()}
-                disabled={refreshing}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/20 disabled:opacity-60"
+                onClick={() => setMonthFilter(shiftMonth(monthFilter || dhakaCurrentMonth(), -1))}
+                className="rounded-md p-1 text-slate-500 hover:bg-white hover:text-slate-900"
+                aria-label="Previous month"
               >
-                <RefreshCw size={13} className={refreshing ? 'animate-spin' : ''} />
-                Refresh
+                <ChevronLeft size={14} />
+              </button>
+              <input
+                type="month"
+                value={monthFilter}
+                onChange={(e) => setMonthFilter(e.target.value)}
+                aria-label="Filter by month"
+                className="w-[116px] cursor-pointer bg-transparent px-1 py-0.5 text-xs font-bold text-slate-800 outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setMonthFilter(shiftMonth(monthFilter || dhakaCurrentMonth(), 1))}
+                className="rounded-md p-1 text-slate-500 hover:bg-white hover:text-slate-900"
+                aria-label="Next month"
+              >
+                <ChevronRight size={14} />
               </button>
             </div>
-          </div>
 
-          {/* Header 4-KPI Strip */}
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
-              <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-300">
-                <ArrowDownCircle size={13} className="text-emerald-400" />
-                Total Income ({periodLabel})
-              </div>
-              <p className="mt-1.5 font-heading text-2xl font-bold tabular-nums">{formatBdt(summary.income.sum)}</p>
-              <p className="mt-0.5 text-[11px] text-slate-300">{summary.income.total} cash entries</p>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
-              <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-300">
-                <ArrowUpCircle size={13} className="text-rose-400" />
-                Total Expenses ({periodLabel})
-              </div>
-              <p className="mt-1.5 font-heading text-2xl font-bold tabular-nums">{formatBdt(summary.expenses.sum)}</p>
-              <p className="mt-0.5 text-[11px] text-slate-300">{summary.expenses.total} expense entries</p>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
-              <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-300">
-                <TrendingUp size={13} className="text-cyan-300" />
-                Net Profit ({periodLabel})
-              </div>
-              <p
-                className={`mt-1.5 font-heading text-2xl font-bold tabular-nums ${
-                  netProfit >= 0 ? 'text-emerald-300' : 'text-rose-300'
-                }`}
-              >
-                {netProfit >= 0 ? '+' : ''}
-                {formatBdt(netProfit)}
-              </p>
-              <p className="mt-0.5 text-[11px] text-slate-300">Operating margin {profitMargin}%</p>
-            </div>
-
-            <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/15 p-4 backdrop-blur-sm">
-              <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-200">
-                <Wallet size={13} className="text-amber-300" />
-                Live Cash Position
-              </div>
-              <p className="mt-1.5 font-heading text-2xl font-bold tabular-nums text-white">
-                {formatBdt(summary.liveBalance)}
-              </p>
-              <p className="mt-0.5 text-[11px] text-emerald-200">
-                Baseline opening: {formatBdt(summary.cashInitial)} · {summary.liveBalance >= 0 ? 'Healthy' : 'Deficit'}
-              </p>
-            </div>
-          </div>
-
-          {/* Action Bar */}
-          <div className="flex flex-wrap items-center gap-2 pt-1">
+            {/* Primary Actions */}
             <button
               type="button"
               onClick={() => setEntryModal({ kind: 'income' })}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-xs font-bold text-slate-950 shadow-sm transition hover:bg-emerald-400"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#0b7a53] px-3.5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#096845]"
             >
               <Plus size={14} /> Add Income
             </button>
             <button
               type="button"
               onClick={() => setEntryModal({ kind: 'expense' })}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-rose-500 px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-rose-400"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50/70 px-3.5 py-2 text-xs font-bold text-rose-800 transition hover:bg-rose-100/80"
             >
               <Plus size={14} /> Add Expense
             </button>
-            <button
-              type="button"
-              onClick={() => setOpeningModalOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/10 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-white/20"
-            >
-              <Settings size={14} /> Set Opening Cash
-            </button>
-            <button
-              type="button"
-              onClick={handleExportLedgerCsv}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/10 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-white/20"
-            >
-              <Download size={14} /> Export CSV
-            </button>
+
+            {/* Utility Controls */}
+            <div className="inline-flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setOpeningModalOpen(true)}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+                title="Set baseline opening cash"
+              >
+                <Settings size={13} />
+                <span className="hidden xl:inline">Opening Cash</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleExportCsv('all')}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+                title="Export CSV"
+              >
+                <Download size={13} />
+                <span className="hidden xl:inline">CSV</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+                title="Print or save PDF statement"
+              >
+                <Printer size={13} />
+                <span className="hidden xl:inline">Print</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => refreshActiveViews()}
+                disabled={refreshing}
+                className="rounded-xl border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
+                title="Refresh data"
+                aria-label="Refresh financial data"
+              >
+                <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Toast Notice */}
+      {/* Toast Notification */}
       {notice && (
         <div
-          className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-xs font-bold shadow-sm ${
+          className={`flex items-center justify-between rounded-xl border px-4 py-3 text-xs font-bold shadow-sm print:hidden ${
             notice.tone === 'ok'
               ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
               : 'border-rose-200 bg-rose-50 text-rose-900'
           }`}
         >
-          <span>{notice.text}</span>
+          <span className="flex items-center gap-2">
+            <CheckCircle2 size={15} />
+            {notice.text}
+          </span>
           <button type="button" onClick={() => setNotice(null)} className="rounded p-0.5 hover:bg-black/5">
             <X size={14} />
           </button>
         </div>
       )}
 
-      {/* Navigation Tabs */}
-      <div className="flex gap-1 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm">
-        {TABS.map((item) => {
-          const Icon = item.icon;
-          const active = tab === item.id;
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setTab(item.id)}
-              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-xl px-3.5 py-2 text-xs font-bold transition ${
-                active
-                  ? 'bg-[#0f3a5c] text-white shadow-sm'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+      {/* ────────────────── 4 EXECUTIVE KPI CARDS ────────────────── */}
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* 1. Live Cash Position */}
+        <div className="relative overflow-hidden rounded-2xl border border-[#0f3a5c]/20 bg-white p-5 shadow-[0_1px_3px_rgba(15,23,42,0.05)]">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Live Cash Position</span>
+            <span
+              className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                summary.liveBalance >= 0
+                  ? 'bg-emerald-50 text-emerald-800'
+                  : 'bg-rose-50 text-rose-800'
               }`}
             >
-              <Icon size={14} />
-              {item.label}
+              <span className={`size-1.5 rounded-full ${summary.liveBalance >= 0 ? 'bg-[#0b7a53]' : 'bg-rose-600'}`} />
+              {summary.liveBalance >= 0 ? 'Surplus' : 'Deficit'}
+            </span>
+          </div>
+          <p className="mt-2.5 font-heading text-[28px] font-bold leading-none tracking-tight tabular-nums text-[#071c2e]">
+            {formatBdt(summary.liveBalance)}
+          </p>
+          <p className="mt-3 text-[11px] text-slate-500 tabular-nums">
+            Baseline {formatBdt(summary.cashInitial)} · All-time cashbook balance
+          </p>
+          <div className="mt-2.5 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[11px]">
+            <span className="text-slate-400">Net of 6 pre-data capital entries</span>
+            <button
+              type="button"
+              onClick={() => setOpeningModalOpen(true)}
+              className="font-bold text-[#0f3a5c] hover:underline print:hidden"
+            >
+              Adjust
             </button>
-          );
-        })}
+          </div>
+        </div>
+
+        {/* 2. Total Cash Inflow */}
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              Cash Inflow · {periodLabel}
+            </span>
+            <span className="grid size-7 place-items-center rounded-lg bg-emerald-50 text-[#0b7a53]">
+              <ArrowDownLeft size={15} />
+            </span>
+          </div>
+          <p className="mt-2.5 font-heading text-[28px] font-bold leading-none tracking-tight tabular-nums text-slate-900">
+            {formatBdt(summary.income.sum)}
+          </p>
+          <p className="mt-3 text-[11px] text-slate-500 tabular-nums">
+            {summary.income.total} entries · Avg{' '}
+            <strong className="text-slate-700">
+              {formatBdt(summary.income.total > 0 ? summary.income.sum / summary.income.total : 0)}
+            </strong>{' '}
+            / receipt
+          </p>
+          <div className="mt-2.5 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[11px]">
+            <span className="text-slate-500">Top: {incomeByCategory[0]?.name || '—'}</span>
+            <button
+              type="button"
+              onClick={() => setTab('income')}
+              className="font-bold text-[#0b7a53] hover:underline print:hidden"
+            >
+              Ledger →
+            </button>
+          </div>
+        </div>
+
+        {/* 3. Total Disbursements */}
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              Disbursements · {periodLabel}
+            </span>
+            <span className="grid size-7 place-items-center rounded-lg bg-rose-50 text-rose-600">
+              <ArrowUpRight size={15} />
+            </span>
+          </div>
+          <p className="mt-2.5 font-heading text-[28px] font-bold leading-none tracking-tight tabular-nums text-slate-900">
+            {formatBdt(summary.expenses.sum)}
+          </p>
+          <p className="mt-3 text-[11px] text-slate-500 tabular-nums">
+            {summary.expenses.total} entries ·{' '}
+            <strong className="text-slate-700">{expenseRatioNum.toFixed(1)}%</strong> of inflow
+          </p>
+          <div className="mt-2.5 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[11px]">
+            <span className="text-slate-500">Top: {expenseByCategory[0]?.name || '—'}</span>
+            <button
+              type="button"
+              onClick={() => setTab('expenses')}
+              className="font-bold text-rose-700 hover:underline print:hidden"
+            >
+              Ledger →
+            </button>
+          </div>
+        </div>
+
+        {/* 4. Net Operating Surplus */}
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              Net Surplus · {periodLabel}
+            </span>
+            <span
+              className={`rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums ${
+                profitMarginNum >= 0
+                  ? 'bg-emerald-50 text-emerald-800'
+                  : 'bg-rose-50 text-rose-800'
+              }`}
+            >
+              {profitMarginNum.toFixed(1)}% margin
+            </span>
+          </div>
+          <p
+            className={`mt-2.5 font-heading text-[28px] font-bold leading-none tracking-tight tabular-nums ${
+              netProfit >= 0 ? 'text-[#0b7a53]' : 'text-rose-700'
+            }`}
+          >
+            {netProfit >= 0 ? '+' : ''}
+            {formatBdt(netProfit)}
+          </p>
+          <p className="mt-3 text-[11px] text-slate-500 tabular-nums">
+            Avg monthly run-rate: <strong className="text-slate-700">{formatBdt(avgMonthlyIn)}</strong> in /{' '}
+            <strong className="text-slate-700">{formatBdt(avgMonthlyOut)}</strong> out
+          </p>
+          <div className="mt-2.5 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[11px]">
+            <span className="text-slate-500">Investor pool: {formatBdt(summary.investorTotal ?? 0)}</span>
+            <button
+              type="button"
+              onClick={() => setTab('investors')}
+              className="font-bold text-[#0f3a5c] hover:underline print:hidden"
+            >
+              Equity →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ────────────────── COMPACT HEALTH & OPERATIONS STRIP ────────────────── */}
+      <section className="grid grid-cols-2 gap-3 rounded-2xl border border-slate-200/90 bg-white px-5 py-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.03)] lg:grid-cols-4 print:hidden">
+        <div className="flex items-center gap-3">
+          <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-600">
+            <TrendingUp size={15} />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Operating Margin</p>
+            <p className="text-sm font-bold tabular-nums text-slate-900">{profitMarginNum.toFixed(1)}%</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-600">
+            <Building2 size={15} />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Active Months Tracked</p>
+            <p className="text-sm font-bold tabular-nums text-slate-900">{pnlRows.length} months</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => setTab('investors')}
+          className="flex items-center gap-3 rounded-xl px-1.5 py-0.5 text-left transition hover:bg-slate-50"
+        >
+          <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-violet-50 text-violet-700">
+            <PiggyBank size={15} />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Partner Capital Pool</p>
+            <p className="text-sm font-bold tabular-nums text-slate-900">
+              {formatBdt(summary.investorTotal ?? 0)}{' '}
+              <span className="text-[11px] font-medium text-slate-400">({summary.investorCount ?? 0} entries)</span>
+            </p>
+          </div>
+        </button>
+        <button
+          type="button"
+          onClick={() => setTab('payroll')}
+          className="flex items-center gap-3 rounded-xl px-1.5 py-0.5 text-left transition hover:bg-slate-50"
+        >
+          <div
+            className={`grid size-8 shrink-0 place-items-center rounded-lg ${
+              (summary.payrollPendingCount ?? 0) > 0
+                ? 'bg-amber-50 text-amber-700'
+                : 'bg-emerald-50 text-[#0b7a53]'
+            }`}
+          >
+            <Banknote size={15} />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Payroll Status</p>
+            <p className="truncate text-sm font-bold tabular-nums text-slate-900">
+              {(summary.payrollPendingCount ?? 0) > 0
+                ? `${summary.payrollPendingCount} pending · ${formatBdt(summary.payrollPendingAmount)}`
+                : 'All settled'}
+            </p>
+          </div>
+        </button>
+      </section>
+
+      {/* ────────────────── INSTITUTIONAL UNDERLINE TAB BAR ────────────────── */}
+      <div className="border-b border-slate-200 print:hidden">
+        <nav className="-mb-px flex gap-1 overflow-x-auto" aria-label="Finance sections">
+          {TABS.map((item) => {
+            const Icon = item.icon;
+            const active = tab === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setTab(item.id)}
+                className={`group inline-flex items-center gap-2 whitespace-nowrap border-b-2 px-3.5 py-3 text-xs font-bold transition ${
+                  active
+                    ? 'border-[#0f3a5c] text-[#0f3a5c]'
+                    : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800'
+                }`}
+              >
+                <Icon size={14} className={active ? 'text-[#0f3a5c]' : 'text-slate-400 group-hover:text-slate-600'} />
+                <span>{item.label}</span>
+                {item.count !== undefined && (
+                  <span
+                    className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums ${
+                      active ? 'bg-[#0f3a5c]/10 text-[#0f3a5c]' : 'bg-slate-100 text-slate-500'
+                    }`}
+                  >
+                    {item.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </nav>
       </div>
 
-      {/* ────────────────── OVERVIEW TAB ────────────────── */}
+      {/* ══════════════════ 1. OVERVIEW TAB ══════════════════ */}
       {tab === 'overview' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">
-                Monthly Income vs Expenses
-              </h2>
-              <MonthlyIncomeExpenseChart rows={pnlRows} />
+            <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+              <div className="mb-3 flex items-center justify-between">
+                <div>
+                  <h2 className="text-sm font-bold text-slate-900">Monthly Cash Inflow vs. Outflow</h2>
+                  <p className="text-xs text-slate-500">Click any month column to drill into its statement</p>
+                </div>
+              </div>
+              <MonthlyIncomeExpenseChart
+                rows={pnlRows}
+                onSelectMonth={(m) => {
+                  setCashflowMonth(m);
+                  setTab('cashflow');
+                }}
+              />
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">
-                Cumulative Net &amp; Monthly Profit
-              </h2>
+
+            <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+              <div className="mb-3">
+                <h2 className="text-sm font-bold text-slate-900">Cumulative Cash Reserve Trajectory</h2>
+                <p className="text-xs text-slate-500">Rolling cumulative surplus alongside monthly net result</p>
+              </div>
               <CumulativeProfitChart rows={pnlRows} />
             </div>
           </div>
 
+          {/* Diverging Net Variance */}
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <MonthlyNetDivergingChart rows={pnlRows.map((r) => ({ month: r.month, net: r.profit }))} />
+          </div>
+
+          {/* Interactive Donut Breakdowns */}
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            <CategoryBreakdownCard
-              title={`Income Categories (${periodLabel})`}
+            <DonutBreakdownCard
+              title="Revenue Mix by Category"
+              subtitle={`Breakdown for ${periodLabel}`}
               total={summary.income.sum}
               rows={incomeByCategory}
               tone="emerald"
             />
-            <CategoryBreakdownCard
-              title={`Expense Categories (${periodLabel})`}
+            <DonutBreakdownCard
+              title="Expense Allocation by Category"
+              subtitle={`Breakdown for ${periodLabel}`}
               total={summary.expenses.sum}
               rows={expenseByCategory}
               tone="rose"
             />
           </div>
 
-          {/* Monthly P&L Table */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-slate-100 px-5 py-3.5">
+          {/* Audited Monthly P&L Statement */}
+          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 px-5 py-4">
               <div>
-                <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">Monthly P&amp;L Statement</h2>
-                <p className="text-[11px] text-slate-400">Cash-basis income vs operating expenses by month</p>
+                <h2 className="text-sm font-bold text-slate-900">Monthly Profit &amp; Loss Statement</h2>
+                <p className="text-xs text-slate-500">
+                  Cash-basis operating income vs. expenditure across {sortedPnlDesc.length} accounting periods
+                </p>
               </div>
-              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-slate-600">
-                {sortedPnlDesc.length} months
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-bold text-slate-600 tabular-nums">
+                Overall Margin: {pnlOverallMargin}%
               </span>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="border-b border-slate-100 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              <table className="w-full text-xs">
+                <thead className="border-b border-slate-200 bg-slate-50/90 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                   <tr>
-                    <th className="px-4 py-3 text-left">Month</th>
-                    <th className="px-4 py-3 text-right">Income</th>
-                    <th className="px-4 py-3 text-right">Expense</th>
-                    <th className="px-4 py-3 text-right">Net Balance</th>
+                    <th className="px-5 py-3 text-left">Accounting Period</th>
+                    <th className="px-4 py-3 text-right">Cash Inflow</th>
+                    <th className="px-4 py-3 text-right">Disbursements</th>
+                    <th className="px-4 py-3 text-right">Net Surplus / Deficit</th>
                     <th className="px-4 py-3 text-right">Margin</th>
-                    <th className="px-4 py-3 text-right">Cumulative</th>
-                    <th className="px-4 py-3 text-right">Inspect</th>
+                    <th className="px-4 py-3 text-right">Cumulative Reserve</th>
+                    <th className="px-5 py-3 text-right print:hidden">Statement</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {sortedPnlDesc.map((r) => (
-                    <tr key={r.month} className="hover:bg-slate-50/70">
-                      <td className="px-4 py-2.5 font-semibold text-slate-900">
-                        {formatMonthLabel(r.month)}{' '}
-                        <span className="text-[11px] font-normal text-slate-400">({r.month})</span>
+                    <tr key={r.month} className="transition hover:bg-slate-50/80">
+                      <td className="px-5 py-3 font-semibold text-slate-900">
+                        {formatMonthLabel(r.month)}
+                        <span className="ml-2 font-mono text-[10px] font-normal text-slate-400">{r.month}</span>
                       </td>
-                      <td className="px-4 py-2.5 text-right font-semibold tabular-nums text-emerald-700">
+                      <td className="px-4 py-3 text-right font-semibold tabular-nums text-[#0b7a53]">
                         {formatBdt(r.income)}
                       </td>
-                      <td className="px-4 py-2.5 text-right font-semibold tabular-nums text-rose-600">
+                      <td className="px-4 py-3 text-right font-semibold tabular-nums text-rose-700">
                         {formatBdt(r.expense)}
                       </td>
                       <td
-                        className={`px-4 py-2.5 text-right font-bold tabular-nums ${
-                          r.profit >= 0 ? 'text-blue-700' : 'text-rose-700'
+                        className={`px-4 py-3 text-right font-bold tabular-nums ${
+                          r.profit >= 0 ? 'text-[#0f3a5c]' : 'text-rose-700'
                         }`}
                       >
                         {r.profit >= 0 ? '+' : ''}
                         {formatBdt(r.profit)}
                       </td>
-                      <td className="px-4 py-2.5 text-right text-xs font-semibold text-slate-500 tabular-nums">
-                        {r.margin}%
+                      <td className="px-4 py-3 text-right tabular-nums">
+                        <span
+                          className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                            r.margin >= 20
+                              ? 'bg-emerald-50 text-emerald-800'
+                              : r.margin >= 0
+                                ? 'bg-slate-100 text-slate-700'
+                                : 'bg-rose-50 text-rose-800'
+                          }`}
+                        >
+                          {r.margin}%
+                        </span>
                       </td>
-                      <td className="px-4 py-2.5 text-right font-bold tabular-nums text-indigo-700">
+                      <td className="px-4 py-3 text-right font-bold tabular-nums text-slate-900">
                         {formatBdt(r.cumulative)}
                       </td>
-                      <td className="px-4 py-2.5 text-right">
+                      <td className="px-5 py-3 text-right print:hidden">
                         <button
                           type="button"
                           onClick={() => {
                             setCashflowMonth(r.month);
                             setTab('cashflow');
                           }}
-                          className="rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-bold text-[#0f3a5c] hover:bg-blue-50"
+                          className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-[#0f3a5c] transition hover:border-[#0f3a5c]/30 hover:bg-blue-50"
                         >
-                          Cashflow →
+                          Inspect →
                         </button>
                       </td>
                     </tr>
                   ))}
-                  {sortedPnlDesc.length === 0 && (
-                    <tr>
-                      <td colSpan={7} className="py-12 text-center text-slate-400">
-                        No P&amp;L entries yet.
-                      </td>
-                    </tr>
-                  )}
                 </tbody>
+                {sortedPnlDesc.length > 0 && (
+                  <tfoot className="border-t-2 border-slate-200 bg-slate-50 font-bold text-slate-900">
+                    <tr>
+                      <td className="px-5 py-3.5 text-[11px] uppercase tracking-wider text-slate-600">
+                        All-Time Total ({sortedPnlDesc.length} months)
+                      </td>
+                      <td className="px-4 py-3.5 text-right tabular-nums text-[#0b7a53]">{formatBdt(pnlTotalIn)}</td>
+                      <td className="px-4 py-3.5 text-right tabular-nums text-rose-700">{formatBdt(pnlTotalOut)}</td>
+                      <td
+                        className={`px-4 py-3.5 text-right tabular-nums ${
+                          pnlTotalNet >= 0 ? 'text-[#0f3a5c]' : 'text-rose-700'
+                        }`}
+                      >
+                        {pnlTotalNet >= 0 ? '+' : ''}
+                        {formatBdt(pnlTotalNet)}
+                      </td>
+                      <td className="px-4 py-3.5 text-right tabular-nums text-slate-700">{pnlOverallMargin}%</td>
+                      <td className="px-4 py-3.5 text-right tabular-nums text-slate-900">
+                        {formatBdt(summary.liveBalance)}
+                      </td>
+                      <td className="print:hidden" />
+                    </tr>
+                  </tfoot>
+                )}
               </table>
             </div>
           </div>
         </div>
       )}
 
-      {/* ────────────────── CASHFLOW TAB ────────────────── */}
+      {/* ══════════════════ 2. CASHFLOW STATEMENT TAB ══════════════════ */}
       {tab === 'cashflow' && (
         <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+            <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
               <button
                 type="button"
                 onClick={() => setCashflowMonth((m) => shiftMonth(m, -1))}
                 className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-900"
               >
-                <ChevronLeft size={16} />
+                <ChevronLeft size={15} />
               </button>
               <input
                 type="month"
                 value={cashflowMonth}
                 onChange={(e) => e.target.value && setCashflowMonth(e.target.value)}
-                className="cursor-pointer bg-transparent px-2 py-1 text-sm font-bold text-slate-800 outline-none"
+                className="cursor-pointer bg-transparent px-2 py-1 text-xs font-bold text-slate-900 outline-none"
               />
               <button
                 type="button"
                 onClick={() => setCashflowMonth((m) => shiftMonth(m, 1))}
                 className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-900"
               >
-                <ChevronRight size={16} />
+                <ChevronRight size={15} />
               </button>
-              <span className="px-2 text-xs font-semibold text-slate-500">{formatMonthLabel(cashflowMonth)}</span>
+              <span className="border-l border-slate-200 pl-2.5 pr-2 text-xs font-semibold text-slate-600">
+                {formatMonthLabel(cashflowMonth)}
+              </span>
             </div>
-            <button
-              type="button"
-              onClick={() => setOpeningModalOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50"
-            >
-              <Settings size={14} /> Set Opening Cash
-            </button>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex rounded-xl border border-slate-200 bg-slate-100/80 p-1">
+                <button
+                  type="button"
+                  onClick={() => setCashflowView('statement')}
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
+                    cashflowView === 'statement' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <ListOrdered size={13} /> Bank Statement
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCashflowView('split')}
+                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
+                    cashflowView === 'split' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <Columns2 size={13} /> Side-by-Side
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEntryModal({ kind: 'income', defaultDate: `${cashflowMonth}-01` })}
+                className="inline-flex items-center gap-1 rounded-xl bg-[#0b7a53] px-3 py-2 text-xs font-bold text-white hover:bg-[#096845]"
+              >
+                <Plus size={13} /> Credit
+              </button>
+              <button
+                type="button"
+                onClick={() => setEntryModal({ kind: 'expense', defaultDate: `${cashflowMonth}-01` })}
+                className="inline-flex items-center gap-1 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-bold text-rose-800 hover:bg-rose-100"
+              >
+                <Plus size={13} /> Debit
+              </button>
+            </div>
           </div>
 
-          {cashflowLoading || !cashflowData ? (
-            <div className="py-16 text-center text-sm text-slate-400">Loading monthly cashflow...</div>
+          {!cashflowData ? (
+            <div className="rounded-2xl border border-slate-200 bg-white py-16 text-center text-sm text-slate-400">
+              Loading cashflow statement...
+            </div>
           ) : (
             <>
               <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
-                <MiniKpi icon={<Wallet size={16} />} label="Opening Cash" value={formatBdt(cashflowData.opening)} tone="slate" />
-                <MiniKpi
-                  icon={<ArrowDownCircle size={16} />}
-                  label="Money In"
+                <StatCard icon={<Wallet size={15} />} label="Opening Balance" value={formatBdt(cashflowData.opening)} tone="slate" />
+                <StatCard
+                  icon={<ArrowDownLeft size={15} />}
+                  label="Total Credits (In)"
                   value={formatBdt(cashflowData.totals.in)}
-                  sub={`${cashflowData.income.length} entries`}
+                  sub={`${cashflowData.income.length} receipts`}
                   tone="emerald"
                 />
-                <MiniKpi
-                  icon={<ArrowUpCircle size={16} />}
-                  label="Money Out"
+                <StatCard
+                  icon={<ArrowUpRight size={15} />}
+                  label="Total Debits (Out)"
                   value={formatBdt(cashflowData.totals.out)}
-                  sub={`${cashflowData.expense.length} entries`}
+                  sub={`${cashflowData.expense.length} payouts`}
                   tone="rose"
                 />
-                <MiniKpi
-                  icon={<Activity size={16} />}
-                  label="Net for Month"
-                  value={formatBdt(cashflowData.totals.net)}
-                  tone={cashflowData.totals.net >= 0 ? 'blue' : 'rose'}
+                <StatCard
+                  icon={<Activity size={15} />}
+                  label="Net Movement"
+                  value={`${cashflowData.totals.net >= 0 ? '+' : ''}${formatBdt(cashflowData.totals.net)}`}
+                  tone={cashflowData.totals.net >= 0 ? 'navy' : 'rose'}
                 />
-                <MiniKpi
-                  icon={<PiggyBank size={16} />}
-                  label="Closing Cash"
+                <StatCard
+                  icon={<PiggyBank size={15} />}
+                  label="Closing Balance"
                   value={formatBdt(cashflowData.totals.closing)}
                   tone={cashflowData.totals.closing >= 0 ? 'emerald' : 'rose'}
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
-                {/* Side-by-side Income */}
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                  <div className="flex items-center justify-between border-b border-emerald-100 bg-emerald-50/80 px-4 py-3 text-emerald-900">
-                    <div className="flex items-center gap-2 text-sm font-bold">
-                      <ArrowDownCircle size={16} /> Income · {cashflowData.income.length} entries
+              {cashflowView === 'statement' ? (
+                <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+                  <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50/70 px-5 py-3.5">
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-900">
+                        Cashbook Statement — {formatMonthLabel(cashflowData.month)}
+                      </h3>
+                      <p className="text-xs text-slate-500">
+                        Chronological bank-style statement · Click any transaction row to edit
+                      </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setEntryModal({ kind: 'income', defaultDate: `${cashflowMonth}-01` })}
-                      className="inline-flex items-center gap-1 rounded-lg border border-emerald-300 bg-white px-2.5 py-1 text-xs font-bold text-emerald-800 hover:bg-emerald-50"
-                    >
-                      <Plus size={12} /> Add
-                    </button>
+                    <span className="font-mono text-xs font-bold text-slate-700">
+                      {unifiedStatementRows.length} transactions
+                    </span>
                   </div>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs">
-                      <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                        <tr>
-                          <th className="px-3 py-2 text-left">Date</th>
-                          <th className="px-3 py-2 text-left">Category</th>
-                          <th className="px-3 py-2 text-left">Client</th>
-                          <th className="px-3 py-2 text-left">Ref</th>
-                          <th className="px-3 py-2 text-right">Amount</th>
-                          <th className="px-3 py-2 text-right">Balance</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {cashflowData.income.length === 0 ? (
-                          <tr>
-                            <td colSpan={6} className="py-10 text-center italic text-slate-400">
-                              No income entries in {formatMonthLabel(cashflowMonth)}
-                            </td>
-                          </tr>
-                        ) : (
-                          cashflowData.income.map((r) => (
-                            <tr
-                              key={r.id}
-                              onClick={() => setEntryModal({ kind: 'income', record: r })}
-                              className="cursor-pointer transition hover:bg-slate-50"
-                            >
-                              <td className="whitespace-nowrap px-3 py-2 text-slate-500">{r.date}</td>
-                              <td className="px-3 py-2 font-semibold text-slate-800">{r.category || '—'}</td>
-                              <td className="max-w-[140px] truncate px-3 py-2 text-slate-700">{r.clientName || '—'}</td>
-                              <td className="max-w-[100px] truncate px-3 py-2 text-slate-500">{r.reference || '—'}</td>
-                              <td className="px-3 py-2 text-right font-bold tabular-nums text-emerald-700">
-                                {formatBdt(r.amount)}
-                              </td>
-                              <td className="px-3 py-2 text-right tabular-nums text-slate-500">
-                                {formatBdt(r.running)}
-                              </td>
-                            </tr>
-                          ))
-                        )}
-                      </tbody>
-                      <tfoot className="bg-slate-50 font-bold">
-                        <tr>
-                          <td colSpan={4} className="px-3 py-2.5 text-right text-[11px] uppercase text-slate-500">
-                            Total In
-                          </td>
-                          <td className="px-3 py-2.5 text-right tabular-nums text-emerald-700">
-                            {formatBdt(cashflowData.totals.in)}
-                          </td>
-                          <td />
-                        </tr>
-                      </tfoot>
-                    </table>
-                  </div>
-                </div>
 
-                {/* Side-by-side Spend */}
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                  <div className="flex items-center justify-between border-b border-rose-100 bg-rose-50/80 px-4 py-3 text-rose-900">
-                    <div className="flex items-center gap-2 text-sm font-bold">
-                      <ArrowUpCircle size={16} /> Spend · {cashflowData.expense.length} entries
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setEntryModal({ kind: 'expense', defaultDate: `${cashflowMonth}-01` })}
-                      className="inline-flex items-center gap-1 rounded-lg border border-rose-300 bg-white px-2.5 py-1 text-xs font-bold text-rose-800 hover:bg-rose-50"
-                    >
-                      <Plus size={12} /> Add
-                    </button>
-                  </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-xs">
-                      <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                         <tr>
-                          <th className="px-3 py-2 text-left">Date</th>
-                          <th className="px-3 py-2 text-left">Category</th>
-                          <th className="px-3 py-2 text-left">Paid To</th>
-                          <th className="px-3 py-2 text-left">Ref</th>
-                          <th className="px-3 py-2 text-right">Amount</th>
-                          <th className="px-3 py-2 text-right">Balance</th>
+                          <th className="px-4 py-3 text-left">Date</th>
+                          <th className="px-3 py-3 text-left">Category</th>
+                          <th className="px-3 py-3 text-left">Particulars / Counterparty</th>
+                          <th className="px-3 py-3 text-left">Reference</th>
+                          <th className="px-3 py-3 text-right">Debit (Out)</th>
+                          <th className="px-3 py-3 text-right">Credit (In)</th>
+                          <th className="px-4 py-3 text-right">Running Balance</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {cashflowData.expense.length === 0 ? (
+                        {/* Opening Balance Row */}
+                        <tr className="bg-slate-50/70 font-semibold text-slate-600">
+                          <td className="px-4 py-2.5 font-mono text-[11px]">{cashflowData.month}-01</td>
+                          <td className="px-3 py-2.5">
+                            <span className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-bold text-slate-600">
+                              Opening B/F
+                            </span>
+                          </td>
+                          <td className="px-3 py-2.5 italic">Balance brought forward from prior periods</td>
+                          <td className="px-3 py-2.5">—</td>
+                          <td className="px-3 py-2.5 text-right">—</td>
+                          <td className="px-3 py-2.5 text-right">—</td>
+                          <td className="px-4 py-2.5 text-right font-bold tabular-nums text-slate-900">
+                            {formatBdt(cashflowData.opening)}
+                          </td>
+                        </tr>
+
+                        {unifiedStatementRows.length === 0 ? (
                           <tr>
-                            <td colSpan={6} className="py-10 text-center italic text-slate-400">
-                              No expenses in {formatMonthLabel(cashflowMonth)}
+                            <td colSpan={7} className="py-12 text-center text-slate-400">
+                              No cashbook movements recorded in {formatMonthLabel(cashflowData.month)}.
                             </td>
                           </tr>
                         ) : (
-                          cashflowData.expense.map((r) => (
+                          unifiedStatementRows.map((row) => (
                             <tr
-                              key={r.id}
-                              onClick={() => setEntryModal({ kind: 'expense', record: r })}
-                              className="cursor-pointer transition hover:bg-slate-50"
+                              key={row.key}
+                              onClick={() => setEntryModal({ kind: row.kind, record: row.raw })}
+                              className="cursor-pointer transition hover:bg-blue-50/40"
                             >
-                              <td className="whitespace-nowrap px-3 py-2 text-slate-500">{r.date}</td>
-                              <td className="px-3 py-2 font-semibold text-slate-800">{r.category || '—'}</td>
-                              <td className="max-w-[140px] truncate px-3 py-2 text-slate-700">{r.paidTo || '—'}</td>
-                              <td className="max-w-[100px] truncate px-3 py-2 text-slate-500">{r.reference || '—'}</td>
-                              <td className="px-3 py-2 text-right font-bold tabular-nums text-rose-700">
-                                {formatBdt(r.amount)}
+                              <td className="whitespace-nowrap px-4 py-2.5 font-mono text-[11px] text-slate-500">
+                                {row.date}
                               </td>
-                              <td className="px-3 py-2 text-right tabular-nums text-slate-500">
-                                {formatBdt(r.running)}
+                              <td className="px-3 py-2.5">
+                                <span
+                                  className={`inline-flex rounded-md border px-2 py-0.5 text-[10px] font-bold ${categoryBadgeTone(
+                                    row.category,
+                                    row.kind,
+                                  )}`}
+                                >
+                                  {row.category || 'Uncategorised'}
+                                </span>
+                              </td>
+                              <td className="px-3 py-2.5">
+                                <div className="font-semibold text-slate-900">{row.party || '—'}</div>
+                                {(row.studentName || row.leadRef || row.notes) && (
+                                  <div className="mt-0.5 max-w-[300px] truncate text-[11px] text-slate-500">
+                                    {row.studentName ? `${row.studentName}` : ''}
+                                    {row.leadRef ? ` (${row.leadRef})` : ''}
+                                    {row.notes ? ` · ${row.notes}` : ''}
+                                  </div>
+                                )}
+                              </td>
+                              <td className="max-w-[130px] truncate px-3 py-2.5 text-slate-500">
+                                {row.reference || row.employeeName || '—'}
+                              </td>
+                              <td className="px-3 py-2.5 text-right font-bold tabular-nums text-rose-700">
+                                {row.debit > 0 ? formatBdt(row.debit) : <span className="font-normal text-slate-300">—</span>}
+                              </td>
+                              <td className="px-3 py-2.5 text-right font-bold tabular-nums text-[#0b7a53]">
+                                {row.credit > 0 ? formatBdt(row.credit) : <span className="font-normal text-slate-300">—</span>}
+                              </td>
+                              <td className="px-4 py-2.5 text-right font-bold tabular-nums text-slate-900">
+                                {formatBdt(row.running)}
                               </td>
                             </tr>
                           ))
                         )}
                       </tbody>
-                      <tfoot className="bg-slate-50 font-bold">
+                      <tfoot className="border-t-2 border-slate-200 bg-slate-50 font-bold">
                         <tr>
-                          <td colSpan={4} className="px-3 py-2.5 text-right text-[11px] uppercase text-slate-500">
-                            Total Out
+                          <td colSpan={4} className="px-4 py-3 text-right text-[11px] uppercase tracking-wider text-slate-600">
+                            Closing Balance ({formatMonthLabel(cashflowData.month)})
                           </td>
-                          <td className="px-3 py-2.5 text-right tabular-nums text-rose-700">
+                          <td className="px-3 py-3 text-right tabular-nums text-rose-700">
                             {formatBdt(cashflowData.totals.out)}
                           </td>
-                          <td />
+                          <td className="px-3 py-3 text-right tabular-nums text-[#0b7a53]">
+                            {formatBdt(cashflowData.totals.in)}
+                          </td>
+                          <td className="px-4 py-3 text-right tabular-nums text-[#071c2e]">
+                            {formatBdt(cashflowData.totals.closing)}
+                          </td>
                         </tr>
                       </tfoot>
                     </table>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+                  {/* Side-by-side Credit Card */}
+                  <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
+                    <div className="flex items-center justify-between border-b border-emerald-100 bg-emerald-50/70 px-4 py-3">
+                      <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-900">
+                        <ArrowDownLeft size={15} /> Cash Inflow · {cashflowData.income.length}
+                      </span>
+                      <span className="font-heading text-sm font-bold tabular-nums text-[#0b7a53]">
+                        {formatBdt(cashflowData.totals.in)}
+                      </span>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs">
+                        <thead className="bg-slate-50 text-[10px] font-bold uppercase text-slate-400">
+                          <tr>
+                            <th className="px-3 py-2.5 text-left">Date</th>
+                            <th className="px-3 py-2.5 text-left">Category</th>
+                            <th className="px-3 py-2.5 text-left">Client</th>
+                            <th className="px-3 py-2.5 text-right">Amount</th>
+                            <th className="px-3 py-2.5 text-right">Balance</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {cashflowData.income.length === 0 ? (
+                            <tr>
+                              <td colSpan={5} className="py-10 text-center italic text-slate-400">
+                                No inflow entries
+                              </td>
+                            </tr>
+                          ) : (
+                            cashflowData.income.map((r) => (
+                              <tr
+                                key={r.id}
+                                onClick={() => setEntryModal({ kind: 'income', record: r })}
+                                className="cursor-pointer hover:bg-slate-50"
+                              >
+                                <td className="whitespace-nowrap px-3 py-2 font-mono text-[11px] text-slate-500">{r.date}</td>
+                                <td className="px-3 py-2 font-semibold text-slate-800">{r.category || '—'}</td>
+                                <td className="max-w-[140px] truncate px-3 py-2 text-slate-600">{r.clientName || '—'}</td>
+                                <td className="px-3 py-2 text-right font-bold tabular-nums text-[#0b7a53]">
+                                  {formatBdt(r.amount)}
+                                </td>
+                                <td className="px-3 py-2 text-right tabular-nums text-slate-500">
+                                  {formatBdt(r.running)}
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Side-by-side Debit Card */}
+                  <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
+                    <div className="flex items-center justify-between border-b border-rose-100 bg-rose-50/70 px-4 py-3">
+                      <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-rose-900">
+                        <ArrowUpRight size={15} /> Disbursements · {cashflowData.expense.length}
+                      </span>
+                      <span className="font-heading text-sm font-bold tabular-nums text-rose-700">
+                        {formatBdt(cashflowData.totals.out)}
+                      </span>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs">
+                        <thead className="bg-slate-50 text-[10px] font-bold uppercase text-slate-400">
+                          <tr>
+                            <th className="px-3 py-2.5 text-left">Date</th>
+                            <th className="px-3 py-2.5 text-left">Category</th>
+                            <th className="px-3 py-2.5 text-left">Paid To</th>
+                            <th className="px-3 py-2.5 text-right">Amount</th>
+                            <th className="px-3 py-2.5 text-right">Balance</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {cashflowData.expense.length === 0 ? (
+                            <tr>
+                              <td colSpan={5} className="py-10 text-center italic text-slate-400">
+                                No disbursements
+                              </td>
+                            </tr>
+                          ) : (
+                            cashflowData.expense.map((r) => (
+                              <tr
+                                key={r.id}
+                                onClick={() => setEntryModal({ kind: 'expense', record: r })}
+                                className="cursor-pointer hover:bg-slate-50"
+                              >
+                                <td className="whitespace-nowrap px-3 py-2 font-mono text-[11px] text-slate-500">{r.date}</td>
+                                <td className="px-3 py-2 font-semibold text-slate-800">{r.category || '—'}</td>
+                                <td className="max-w-[140px] truncate px-3 py-2 text-slate-600">{r.paidTo || '—'}</td>
+                                <td className="px-3 py-2 text-right font-bold tabular-nums text-rose-700">
+                                  {formatBdt(r.amount)}
+                                </td>
+                                <td className="px-3 py-2 text-right tabular-nums text-slate-500">
+                                  {formatBdt(r.running)}
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-                <CategoryBreakdownCard
-                  title="Income Breakdown"
+                <DonutBreakdownCard
+                  title="Inflow Breakdown"
                   total={cashflowData.totals.in}
                   rows={cashflowData.byCategory.income}
                   tone="emerald"
                 />
-                <CategoryBreakdownCard
-                  title="Expense Breakdown"
+                <DonutBreakdownCard
+                  title="Spend Breakdown"
                   total={cashflowData.totals.out}
                   rows={cashflowData.byCategory.expense}
                   tone="rose"
                 />
-                <CategoryBreakdownCard
-                  title="Income by Reference"
+                <HorizontalShareCard
+                  title="Inflow by Reference"
                   total={cashflowData.totals.in}
                   rows={cashflowData.incomeByReference}
-                  tone="blue"
+                  tone="navy"
                 />
               </div>
             </>
@@ -1222,38 +1706,22 @@ export default function FinanceWorkspaceClient() {
         </div>
       )}
 
-      {/* ────────────────── INCOME LEDGER TAB ────────────────── */}
+      {/* ══════════════════ 3. INCOME LEDGER TAB ══════════════════ */}
       {tab === 'income' && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <MiniKpi icon={<ArrowDownCircle size={16} />} label="Total Income" value={formatBdt(summary.income.sum)} tone="emerald" />
-            <MiniKpi icon={<Receipt size={16} />} label="Records" value={String(summary.income.total)} sub={periodLabel} tone="slate" />
-            <MiniKpi
-              icon={<BarChart3 size={16} />}
-              label="Avg per Entry"
-              value={formatBdt(summary.income.total > 0 ? summary.income.sum / summary.income.total : 0)}
-              tone="blue"
-            />
-            <MiniKpi
-              icon={<TrendingUp size={16} />}
-              label="Top Category"
-              value={incomeByCategory[0]?.name || '—'}
-              tone="indigo"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
-            <div className="xl:col-span-1">
-              <CategoryBreakdownCard
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
+            <div className="xl:col-span-4">
+              <DonutBreakdownCard
                 title="Income by Category"
+                subtitle={`${periodLabel} · ${summary.income.total} receipts`}
                 total={summary.income.sum}
                 rows={incomeByCategory}
                 tone="emerald"
               />
             </div>
 
-            <div className="space-y-3 xl:col-span-2">
-              <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="space-y-3 xl:col-span-8">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-200/90 bg-white p-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="relative">
                     <Search size={14} className="pointer-events-none absolute left-3 top-2.5 text-slate-400" />
@@ -1262,22 +1730,35 @@ export default function FinanceWorkspaceClient() {
                       value={incomeSearch}
                       onChange={(e) => setIncomeSearch(e.target.value)}
                       placeholder="Search client, student, ref..."
-                      className="w-56 rounded-xl border border-slate-200 bg-white py-2 pl-8 pr-3 text-xs font-medium outline-none focus:border-blue-500"
+                      className="w-52 rounded-xl border border-slate-200 bg-slate-50 py-1.5 pl-8 pr-3 text-xs font-medium outline-none focus:border-[#0f3a5c] focus:bg-white"
                     />
                   </div>
                   <select
                     value={incomeCatFilter}
                     onChange={(e) => setIncomeCatFilter(e.target.value)}
-                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium outline-none focus:border-blue-500"
+                    className="rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none focus:border-[#0f3a5c] focus:bg-white"
                   >
                     <option value="">All Categories</option>
                     {incomeByCategory.map((c) => (
                       <option key={c.name} value={c.name}>
-                        {c.name}
+                        {c.name} ({c.count})
                       </option>
                     ))}
                   </select>
-                  <label className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600">
+                  <div className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-2 py-1.5 text-xs">
+                    <SlidersHorizontal size={12} className="text-slate-400" />
+                    <select
+                      value={incomeSort}
+                      onChange={(e) => setIncomeSort(e.target.value as SortOption)}
+                      className="bg-transparent font-semibold text-slate-700 outline-none"
+                    >
+                      <option value="date_desc">Date: Newest</option>
+                      <option value="date_asc">Date: Oldest</option>
+                      <option value="amount_desc">Amount: High → Low</option>
+                      <option value="amount_asc">Amount: Low → High</option>
+                    </select>
+                  </div>
+                  <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[11px] font-semibold text-slate-600">
                     <input
                       type="checkbox"
                       checked={includeExcluded}
@@ -1287,61 +1768,82 @@ export default function FinanceWorkspaceClient() {
                     Include pre-data capital
                   </label>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setEntryModal({ kind: 'income' })}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-emerald-700"
-                >
-                  <Plus size={14} /> Add Income
-                </button>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => handleExportCsv('income')}
+                    className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
+                  >
+                    <FileSpreadsheet size={13} /> CSV
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEntryModal({ kind: 'income' })}
+                    className="inline-flex items-center gap-1 rounded-xl bg-[#0b7a53] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#096845]"
+                  >
+                    <Plus size={13} /> Add Income
+                  </button>
+                </div>
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
-                    <thead className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <thead className="border-b border-slate-200 bg-slate-50/90 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
-                        <th className="px-3 py-3 text-left">Date</th>
+                        <th className="px-4 py-3 text-left">Date</th>
                         <th className="px-3 py-3 text-left">Category</th>
                         <th className="px-3 py-3 text-left">Client / Student</th>
-                        <th className="px-3 py-3 text-left">Ref</th>
-                        <th className="px-3 py-3 text-left">Handled By</th>
+                        <th className="px-3 py-3 text-left">Reference</th>
                         <th className="px-3 py-3 text-right">Amount</th>
-                        <th className="px-3 py-3 text-right">Actions</th>
+                        <th className="px-4 py-3 text-right print:hidden">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {filteredIncome.map((r) => (
-                        <tr key={r.id} className="hover:bg-slate-50/70">
-                          <td className="whitespace-nowrap px-3 py-2.5 text-slate-600">{r.date}</td>
-                          <td className="px-3 py-2.5 font-semibold text-slate-800">
-                            {r.category || '—'}
+                      {filteredIncome.slice(0, incomeLimit).map((r) => (
+                        <tr key={r.id} className="transition hover:bg-slate-50/80">
+                          <td className="whitespace-nowrap px-4 py-3 font-mono text-[11px] text-slate-500">{r.date}</td>
+                          <td className="px-3 py-3">
+                            <span
+                              className={`inline-flex rounded-md border px-2 py-0.5 text-[10px] font-bold ${categoryBadgeTone(
+                                r.category,
+                                'income',
+                              )}`}
+                            >
+                              {r.category || 'Uncategorised'}
+                            </span>
                             {r.excludeFromCash && (
-                              <span className="ml-1.5 rounded bg-violet-100 px-1.5 py-0.5 text-[9px] font-bold text-violet-700">
+                              <span className="ml-1 rounded bg-slate-200 px-1.5 py-0.5 text-[9px] font-bold text-slate-700">
                                 PRE-DATA
                               </span>
                             )}
                           </td>
-                          <td className="px-3 py-2.5 text-slate-700">
-                            <div className="font-medium">{r.clientName || '—'}</div>
+                          <td className="px-3 py-3">
+                            <div className="font-semibold text-slate-900">{r.clientName || '—'}</div>
                             {(r.studentName || r.leadRef) && (
-                              <div className="mt-0.5 text-[10px] text-blue-700">
-                                {r.studentName} {r.leadRef ? `(${r.leadRef})` : ''}
+                              <div className="mt-0.5 flex items-center gap-1 text-[10px] font-medium text-[#0f3a5c]">
+                                <GraduationCap size={11} />
+                                {r.studentName}
+                                {r.leadRef ? ` · ${r.leadRef}` : ''}
                               </div>
                             )}
+                            {r.notes && <p className="mt-0.5 max-w-[240px] truncate text-[10px] text-slate-400">{r.notes}</p>}
                           </td>
-                          <td className="max-w-[120px] truncate px-3 py-2.5 text-slate-500">{r.reference || '—'}</td>
-                          <td className="px-3 py-2.5 text-slate-600">{r.employeeName || '—'}</td>
-                          <td className="px-3 py-2.5 text-right font-bold tabular-nums text-emerald-700">
+                          <td className="px-3 py-3 text-slate-600">
+                            <div className="max-w-[130px] truncate">{r.reference || '—'}</div>
+                            {r.employeeName && <div className="text-[10px] text-slate-400">{r.employeeName}</div>}
+                          </td>
+                          <td className="px-3 py-3 text-right font-bold tabular-nums text-[#0b7a53]">
                             {formatBdt(r.amount)}
                           </td>
-                          <td className="px-3 py-2.5 text-right">
+                          <td className="px-4 py-3 text-right print:hidden">
                             <div className="inline-flex items-center gap-1">
                               <button
                                 type="button"
                                 onClick={() => setEntryModal({ kind: 'income', record: r })}
-                                className="rounded-lg p-1.5 text-slate-400 hover:bg-blue-50 hover:text-blue-600"
-                                title="Edit"
+                                className="rounded-lg border border-transparent p-1.5 text-slate-400 transition hover:border-slate-200 hover:bg-white hover:text-[#0f3a5c]"
+                                title="Edit entry"
                               >
                                 <Pencil size={13} />
                               </button>
@@ -1352,8 +1854,8 @@ export default function FinanceWorkspaceClient() {
                                     void handleDeleteEntry('income', r.id);
                                   }
                                 }}
-                                className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
-                                title="Delete"
+                                className="rounded-lg border border-transparent p-1.5 text-slate-400 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"
+                                title="Delete entry"
                               >
                                 <Trash2 size={13} />
                               </button>
@@ -1363,63 +1865,62 @@ export default function FinanceWorkspaceClient() {
                       ))}
                       {filteredIncome.length === 0 && (
                         <tr>
-                          <td colSpan={7} className="py-12 text-center text-slate-400">
-                            No matching income records.
+                          <td colSpan={6} className="py-12 text-center text-slate-400">
+                            No income entries match your current filter.
                           </td>
                         </tr>
                       )}
                     </tbody>
-                    <tfoot className="border-t border-slate-100 bg-slate-50 font-bold">
+                    <tfoot className="border-t-2 border-slate-200 bg-slate-50 font-bold">
                       <tr>
-                        <td colSpan={5} className="px-3 py-3 text-right text-[11px] uppercase text-slate-500">
-                          Filtered Total ({filteredIncome.length})
+                        <td colSpan={4} className="px-4 py-3 text-right text-[11px] uppercase tracking-wider text-slate-600">
+                          Total ({filteredIncome.length} matching entries)
                         </td>
-                        <td className="px-3 py-3 text-right tabular-nums text-emerald-700">
+                        <td className="px-3 py-3 text-right tabular-nums text-[#0b7a53]">
                           {formatBdt(filteredIncome.reduce((s, r) => s + (r.amount || 0), 0))}
                         </td>
-                        <td />
+                        <td className="print:hidden" />
                       </tr>
                     </tfoot>
                   </table>
                 </div>
+
+                {filteredIncome.length > incomeLimit && (
+                  <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50/50 px-4 py-2.5 text-xs print:hidden">
+                    <span className="text-slate-500">
+                      Showing {incomeLimit} of {filteredIncome.length} entries
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setIncomeLimit(filteredIncome.length)}
+                      className="font-bold text-[#0f3a5c] hover:underline"
+                    >
+                      Show all {filteredIncome.length} entries
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* ────────────────── EXPENSE LEDGER TAB ────────────────── */}
+      {/* ══════════════════ 4. EXPENSE LEDGER TAB ══════════════════ */}
       {tab === 'expenses' && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <MiniKpi icon={<ArrowUpCircle size={16} />} label="Total Expenses" value={formatBdt(summary.expenses.sum)} tone="rose" />
-            <MiniKpi icon={<Receipt size={16} />} label="Records" value={String(summary.expenses.total)} sub={periodLabel} tone="slate" />
-            <MiniKpi
-              icon={<BarChart3 size={16} />}
-              label="Avg per Entry"
-              value={formatBdt(summary.expenses.total > 0 ? summary.expenses.sum / summary.expenses.total : 0)}
-              tone="blue"
-            />
-            <MiniKpi
-              icon={<TrendingDown size={16} />}
-              label="Top Category"
-              value={expenseByCategory[0]?.name || '—'}
-              tone="indigo"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
-            <div className="xl:col-span-1">
-              <CategoryBreakdownCard
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
+            <div className="xl:col-span-4">
+              <DonutBreakdownCard
                 title="Expenses by Category"
+                subtitle={`${periodLabel} · ${summary.expenses.total} disbursements`}
                 total={summary.expenses.sum}
                 rows={expenseByCategory}
                 tone="rose"
               />
             </div>
 
-            <div className="space-y-3 xl:col-span-2">
-              <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="space-y-3 xl:col-span-8">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-200/90 bg-white p-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="relative">
                     <Search size={14} className="pointer-events-none absolute left-3 top-2.5 text-slate-400" />
@@ -1427,72 +1928,107 @@ export default function FinanceWorkspaceClient() {
                       type="text"
                       value={expenseSearch}
                       onChange={(e) => setExpenseSearch(e.target.value)}
-                      placeholder="Search paid to, student, ref..."
-                      className="w-56 rounded-xl border border-slate-200 bg-white py-2 pl-8 pr-3 text-xs font-medium outline-none focus:border-rose-500"
+                      placeholder="Search payee, student, ref..."
+                      className="w-52 rounded-xl border border-slate-200 bg-slate-50 py-1.5 pl-8 pr-3 text-xs font-medium outline-none focus:border-[#0f3a5c] focus:bg-white"
                     />
                   </div>
                   <select
                     value={expenseCatFilter}
                     onChange={(e) => setExpenseCatFilter(e.target.value)}
-                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium outline-none focus:border-rose-500"
+                    className="rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none focus:border-[#0f3a5c] focus:bg-white"
                   >
                     <option value="">All Categories</option>
                     {expenseByCategory.map((c) => (
                       <option key={c.name} value={c.name}>
-                        {c.name}
+                        {c.name} ({c.count})
                       </option>
                     ))}
                   </select>
+                  <div className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-2 py-1.5 text-xs">
+                    <SlidersHorizontal size={12} className="text-slate-400" />
+                    <select
+                      value={expenseSort}
+                      onChange={(e) => setExpenseSort(e.target.value as SortOption)}
+                      className="bg-transparent font-semibold text-slate-700 outline-none"
+                    >
+                      <option value="date_desc">Date: Newest</option>
+                      <option value="date_asc">Date: Oldest</option>
+                      <option value="amount_desc">Amount: High → Low</option>
+                      <option value="amount_asc">Amount: Low → High</option>
+                    </select>
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setEntryModal({ kind: 'expense' })}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-rose-700"
-                >
-                  <Plus size={14} /> Add Expense
-                </button>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => handleExportCsv('expense')}
+                    className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
+                  >
+                    <FileSpreadsheet size={13} /> CSV
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEntryModal({ kind: 'expense' })}
+                    className="inline-flex items-center gap-1 rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-800 hover:bg-rose-100"
+                  >
+                    <Plus size={13} /> Add Expense
+                  </button>
+                </div>
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
-                    <thead className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <thead className="border-b border-slate-200 bg-slate-50/90 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
-                        <th className="px-3 py-3 text-left">Date</th>
+                        <th className="px-4 py-3 text-left">Date</th>
                         <th className="px-3 py-3 text-left">Category</th>
-                        <th className="px-3 py-3 text-left">Paid To / Student</th>
-                        <th className="px-3 py-3 text-left">Ref</th>
-                        <th className="px-3 py-3 text-left">Handled By</th>
+                        <th className="px-3 py-3 text-left">Payee / Student</th>
+                        <th className="px-3 py-3 text-left">Reference</th>
                         <th className="px-3 py-3 text-right">Amount</th>
-                        <th className="px-3 py-3 text-right">Actions</th>
+                        <th className="px-4 py-3 text-right print:hidden">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {filteredExpenses.map((r) => (
-                        <tr key={r.id} className="hover:bg-slate-50/70">
-                          <td className="whitespace-nowrap px-3 py-2.5 text-slate-600">{r.date}</td>
-                          <td className="px-3 py-2.5 font-semibold text-slate-800">{r.category || 'Uncategorised'}</td>
-                          <td className="px-3 py-2.5 text-slate-700">
-                            <div className="font-medium">{r.paidTo || '—'}</div>
+                      {filteredExpenses.slice(0, expenseLimit).map((r) => (
+                        <tr key={r.id} className="transition hover:bg-slate-50/80">
+                          <td className="whitespace-nowrap px-4 py-3 font-mono text-[11px] text-slate-500">{r.date}</td>
+                          <td className="px-3 py-3">
+                            <span
+                              className={`inline-flex rounded-md border px-2 py-0.5 text-[10px] font-bold ${categoryBadgeTone(
+                                r.category,
+                                'expense',
+                              )}`}
+                            >
+                              {r.category || 'Uncategorised'}
+                            </span>
+                          </td>
+                          <td className="px-3 py-3">
+                            <div className="font-semibold text-slate-900">{r.paidTo || '—'}</div>
                             {r.studentName && (
-                              <span className="mt-0.5 inline-flex items-center gap-1 rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700">
+                              <span className="mt-0.5 inline-flex items-center gap-1 rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-[#0f3a5c]">
                                 <GraduationCap size={10} />
-                                {r.studentName} {r.leadRef ? `(${r.leadRef})` : ''}
+                                {r.studentName}
+                                {r.leadRef ? ` · ${r.leadRef}` : ''}
                               </span>
                             )}
+                            {r.notes && <p className="mt-0.5 max-w-[240px] truncate text-[10px] text-slate-400">{r.notes}</p>}
                           </td>
-                          <td className="max-w-[120px] truncate px-3 py-2.5 text-slate-500">{r.reference || '—'}</td>
-                          <td className="px-3 py-2.5 text-slate-600">{r.employeeName || '—'}</td>
-                          <td className="px-3 py-2.5 text-right font-bold tabular-nums text-rose-700">
+                          <td className="px-3 py-3 text-slate-600">
+                            <div className="max-w-[130px] truncate">{r.reference || '—'}</div>
+                            {r.employeeName && <div className="text-[10px] text-slate-400">{r.employeeName}</div>}
+                          </td>
+                          <td className="px-3 py-3 text-right font-bold tabular-nums text-rose-700">
                             {formatBdt(r.amount)}
                           </td>
-                          <td className="px-3 py-2.5 text-right">
+                          <td className="px-4 py-3 text-right print:hidden">
                             <div className="inline-flex items-center gap-1">
                               <button
                                 type="button"
                                 onClick={() => setEntryModal({ kind: 'expense', record: r })}
-                                className="rounded-lg p-1.5 text-slate-400 hover:bg-blue-50 hover:text-blue-600"
-                                title="Edit"
+                                className="rounded-lg border border-transparent p-1.5 text-slate-400 transition hover:border-slate-200 hover:bg-white hover:text-[#0f3a5c]"
+                                title="Edit entry"
                               >
                                 <Pencil size={13} />
                               </button>
@@ -1503,8 +2039,8 @@ export default function FinanceWorkspaceClient() {
                                     void handleDeleteEntry('expense', r.id);
                                   }
                                 }}
-                                className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
-                                title="Delete"
+                                className="rounded-lg border border-transparent p-1.5 text-slate-400 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"
+                                title="Delete entry"
                               >
                                 <Trash2 size={13} />
                               </button>
@@ -1514,49 +2050,73 @@ export default function FinanceWorkspaceClient() {
                       ))}
                       {filteredExpenses.length === 0 && (
                         <tr>
-                          <td colSpan={7} className="py-12 text-center text-slate-400">
-                            No matching expense records.
+                          <td colSpan={6} className="py-12 text-center text-slate-400">
+                            No expense entries match your current filter.
                           </td>
                         </tr>
                       )}
                     </tbody>
-                    <tfoot className="border-t border-slate-100 bg-slate-50 font-bold">
+                    <tfoot className="border-t-2 border-slate-200 bg-slate-50 font-bold">
                       <tr>
-                        <td colSpan={5} className="px-3 py-3 text-right text-[11px] uppercase text-slate-500">
-                          Filtered Total ({filteredExpenses.length})
+                        <td colSpan={4} className="px-4 py-3 text-right text-[11px] uppercase tracking-wider text-slate-600">
+                          Total ({filteredExpenses.length} matching entries)
                         </td>
                         <td className="px-3 py-3 text-right tabular-nums text-rose-700">
                           {formatBdt(filteredExpenses.reduce((s, r) => s + (r.amount || 0), 0))}
                         </td>
-                        <td />
+                        <td className="print:hidden" />
                       </tr>
                     </tfoot>
                   </table>
                 </div>
+
+                {filteredExpenses.length > expenseLimit && (
+                  <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50/50 px-4 py-2.5 text-xs print:hidden">
+                    <span className="text-slate-500">
+                      Showing {expenseLimit} of {filteredExpenses.length} disbursements
+                    </span>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setExpenseLimit((n) => n + 50)}
+                        className="font-semibold text-slate-600 hover:text-slate-900"
+                      >
+                        Load +50
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setExpenseLimit(filteredExpenses.length)}
+                        className="font-bold text-[#0f3a5c] hover:underline"
+                      >
+                        Show all {filteredExpenses.length}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* ────────────────── STUDENT LEDGER TAB ────────────────── */}
+      {/* ══════════════════ 5. STUDENT FINANCIAL LEDGER TAB ══════════════════ */}
       {tab === 'student' && (
-        <div className="space-y-4">
-          <div className="rounded-2xl bg-slate-900 p-6 text-white shadow-md">
+        <div className="space-y-5">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
             <div className="flex items-center gap-3">
-              <div className="grid size-10 place-items-center rounded-xl bg-blue-500/20 text-blue-300">
+              <div className="grid size-10 place-items-center rounded-xl bg-blue-50 text-[#0f3a5c]">
                 <GraduationCap size={20} />
               </div>
               <div>
-                <h2 className="font-heading text-lg font-bold">Student Financial Ledger Lookup</h2>
-                <p className="text-xs text-slate-400">
-                  Search all fee receipts, deposits, air tickets, visa fees, and referral payouts for any student
+                <h2 className="font-heading text-base font-bold text-slate-900">Student Account &amp; File Ledger</h2>
+                <p className="text-xs text-slate-500">
+                  Audit every service charge, file opening fee, air ticket, visa fee, and referral payout per student
                 </p>
               </div>
             </div>
 
             <div className="relative mt-4 max-w-2xl">
-              <Search size={16} className="pointer-events-none absolute left-3.5 top-3 text-slate-400" />
+              <Search size={15} className="pointer-events-none absolute left-3.5 top-3 text-slate-400" />
               <input
                 type="text"
                 value={studentQuery}
@@ -1564,8 +2124,8 @@ export default function FinanceWorkspaceClient() {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') void searchStudentLedger();
                 }}
-                placeholder="Search student name, Lead Ref (e.g. L-00075, LEAD-0417), or phone..."
-                className="w-full rounded-xl bg-white py-2.5 pl-10 pr-28 text-sm font-medium text-slate-900 outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="Search by student name, Lead ID (e.g. L-00075, LEAD-0417), or phone..."
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-28 text-sm font-medium text-slate-900 outline-none focus:border-[#0f3a5c] focus:bg-white focus:ring-2 focus:ring-blue-100"
               />
               {studentQuery && (
                 <button
@@ -1583,14 +2143,14 @@ export default function FinanceWorkspaceClient() {
                 type="button"
                 onClick={() => searchStudentLedger()}
                 disabled={studentLoading}
-                className="absolute right-1.5 top-1.5 rounded-lg bg-blue-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-blue-700"
+                className="absolute right-1.5 top-1.5 rounded-lg bg-[#0f3a5c] px-4 py-1.5 text-xs font-bold text-white hover:bg-[#12436b]"
               >
-                {studentLoading ? 'Searching...' : 'Search'}
+                {studentLoading ? 'Searching...' : 'Lookup'}
               </button>
             </div>
 
-            <div className="mt-3 flex flex-wrap items-center gap-1.5">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Quick Select:</span>
+            <div className="mt-3.5 flex flex-wrap items-center gap-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Recent Files:</span>
               {quickStudents.map((s) => (
                 <button
                   key={s.id}
@@ -1599,9 +2159,10 @@ export default function FinanceWorkspaceClient() {
                     setStudentQuery(s.name);
                     void searchStudentLedger(s.name);
                   }}
-                  className="rounded-lg border border-white/10 bg-white/10 px-2.5 py-1 text-[11px] font-medium text-slate-200 hover:bg-white/20"
+                  className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-700 transition hover:border-[#0f3a5c]/30 hover:bg-blue-50 hover:text-[#0f3a5c]"
                 >
-                  {s.name} {s.leadRef ? `(${s.leadRef})` : ''}
+                  {s.name}
+                  {s.leadRef ? ` · ${s.leadRef}` : ''}
                 </button>
               ))}
             </div>
@@ -1610,90 +2171,87 @@ export default function FinanceWorkspaceClient() {
           {studentResult ? (
             <div className="space-y-4">
               {studentResult.student && (
-                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <div>
-                    <h3 className="font-heading text-base font-bold text-slate-900">{studentResult.student.name}</h3>
-                    <p className="text-xs text-slate-500">
-                      {studentResult.student.country}
-                      {studentResult.student.university ? ` · ${studentResult.student.university}` : ''}
-                      {studentResult.student.phone ? ` · ${studentResult.student.phone}` : ''}
-                    </p>
+                <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                  <div className="flex items-center gap-3.5">
+                    <div className="grid size-11 place-items-center rounded-xl bg-[#071c2e] font-heading text-sm font-bold text-white">
+                      {initialsOf(studentResult.student.name)}
+                    </div>
+                    <div>
+                      <h3 className="font-heading text-base font-bold text-slate-900">{studentResult.student.name}</h3>
+                      <p className="text-xs text-slate-500">
+                        {studentResult.student.country}
+                        {studentResult.student.university ? ` · ${studentResult.student.university}` : ''}
+                        {studentResult.student.phone ? ` · ${studentResult.student.phone}` : ''}
+                      </p>
+                    </div>
                   </div>
-                  <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold uppercase text-blue-800">
-                    Stage: {studentResult.student.applicationStage}
+                  <span className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold capitalize text-[#0f3a5c]">
+                    Stage: {studentResult.student.applicationStage.replace(/_/g, ' ')}
                   </span>
                 </div>
               )}
 
               <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-                <MiniKpi icon={<ArrowDownCircle size={16} />} label="Total Received" value={formatBdt(studentResult.totals.income)} tone="emerald" />
-                <MiniKpi icon={<ArrowUpCircle size={16} />} label="Total Spent" value={formatBdt(studentResult.totals.expense)} tone="rose" />
-                <MiniKpi
-                  icon={<Activity size={16} />}
-                  label="Net Balance"
-                  value={formatBdt(studentResult.totals.net)}
-                  tone={studentResult.totals.net >= 0 ? 'blue' : 'rose'}
+                <StatCard icon={<ArrowDownLeft size={15} />} label="Total Received" value={formatBdt(studentResult.totals.income)} tone="emerald" />
+                <StatCard icon={<ArrowUpRight size={15} />} label="Total Disbursed" value={formatBdt(studentResult.totals.expense)} tone="rose" />
+                <StatCard
+                  icon={<Activity size={15} />}
+                  label="Net File Margin"
+                  value={`${studentResult.totals.net >= 0 ? '+' : ''}${formatBdt(studentResult.totals.net)}`}
+                  tone={studentResult.totals.net >= 0 ? 'navy' : 'rose'}
                 />
-                <MiniKpi icon={<Receipt size={16} />} label="Transactions" value={String(studentResult.totals.count)} tone="slate" />
+                <StatCard icon={<Receipt size={15} />} label="Ledger Entries" value={String(studentResult.totals.count)} tone="slate" />
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
-                    <thead className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
-                        <th className="px-3 py-3 text-left">Date</th>
-                        <th className="px-3 py-3 text-left">Kind</th>
+                        <th className="px-4 py-3 text-left">Date</th>
+                        <th className="px-3 py-3 text-left">Type</th>
                         <th className="px-3 py-3 text-left">Category</th>
-                        <th className="px-3 py-3 text-left">Client / Paid To</th>
+                        <th className="px-3 py-3 text-left">Counterparty</th>
                         <th className="px-3 py-3 text-left">Ref / Lead ID</th>
                         <th className="px-3 py-3 text-left">Handled By</th>
                         <th className="px-3 py-3 text-right">Amount</th>
-                        <th className="px-3 py-3 text-right">Edit</th>
+                        <th className="px-4 py-3 text-right">Edit</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {studentResult.transactions.map((t) => (
-                        <tr key={`${t.kind}-${t.id}`} className="hover:bg-slate-50">
-                          <td className="whitespace-nowrap px-3 py-2.5 text-slate-600">{t.date}</td>
+                        <tr key={`${t.kind}-${t.id}`} className="hover:bg-slate-50/80">
+                          <td className="whitespace-nowrap px-4 py-2.5 font-mono text-[11px] text-slate-500">{t.date}</td>
                           <td className="px-3 py-2.5">
                             <span
-                              className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold ${
+                              className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-bold ${
                                 t.kind === 'income'
-                                  ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                                  : 'border-rose-200 bg-rose-50 text-rose-700'
+                                  ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                                  : 'border-rose-200 bg-rose-50 text-rose-800'
                               }`}
                             >
-                              {t.kind === 'income' ? 'INCOME' : 'EXPENSE'}
+                              {t.kind === 'income' ? 'CREDIT' : 'DEBIT'}
                             </span>
                           </td>
                           <td className="px-3 py-2.5 font-semibold text-slate-800">{t.category || '—'}</td>
                           <td className="px-3 py-2.5 text-slate-700">
                             {t.kind === 'income' ? t.clientName || '—' : t.paidTo || '—'}
                           </td>
-                          <td className="px-3 py-2.5 text-slate-500">{t.leadRef || t.reference || '—'}</td>
-                          <td className="px-3 py-2.5 text-slate-600">
-                            {t.employeeName ? (
-                              <span className="inline-flex items-center gap-1 rounded bg-blue-50 px-1.5 py-0.5 text-[11px] font-medium text-blue-700">
-                                <Users size={10} /> {t.employeeName}
-                              </span>
-                            ) : (
-                              '—'
-                            )}
-                          </td>
+                          <td className="px-3 py-2.5 font-mono text-[11px] text-slate-500">{t.leadRef || t.reference || '—'}</td>
+                          <td className="px-3 py-2.5 text-slate-600">{t.employeeName || '—'}</td>
                           <td
                             className={`px-3 py-2.5 text-right font-bold tabular-nums ${
-                              t.kind === 'income' ? 'text-emerald-700' : 'text-rose-700'
+                              t.kind === 'income' ? 'text-[#0b7a53]' : 'text-rose-700'
                             }`}
                           >
                             {t.kind === 'income' ? '+' : '-'}
                             {formatBdt(t.amount)}
                           </td>
-                          <td className="px-3 py-2.5 text-right">
+                          <td className="px-4 py-2.5 text-right">
                             <button
                               type="button"
                               onClick={() => setEntryModal({ kind: t.kind, record: t })}
-                              className="rounded-lg p-1.5 text-slate-400 hover:bg-blue-50 hover:text-blue-600"
+                              className="rounded-lg p-1.5 text-slate-400 hover:bg-blue-50 hover:text-[#0f3a5c]"
                             >
                               <Pencil size={13} />
                             </button>
@@ -1702,8 +2260,8 @@ export default function FinanceWorkspaceClient() {
                       ))}
                       {studentResult.transactions.length === 0 && (
                         <tr>
-                          <td colSpan={8} className="py-10 text-center text-slate-400">
-                            No transactions matched &quot;{studentQuery}&quot;.
+                          <td colSpan={8} className="py-12 text-center text-slate-400">
+                            No financial transactions matched &quot;{studentQuery}&quot;.
                           </td>
                         </tr>
                       )}
@@ -1713,21 +2271,21 @@ export default function FinanceWorkspaceClient() {
               </div>
             </div>
           ) : (
-            <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
-              <Search size={32} className="mx-auto mb-2 text-slate-300" />
-              <p className="text-sm font-bold text-slate-700">Search Student Financial History</p>
-              <p className="mx-auto mt-1 max-w-sm text-xs text-slate-400">
-                Enter any student name or CRM Lead ID (such as L-00075 or LEAD-0417) to inspect every payment and expense linked to that file.
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
+              <Search size={28} className="mx-auto mb-2 text-slate-300" />
+              <p className="text-sm font-bold text-slate-700">Enter a student name or Lead ID to audit their ledger</p>
+              <p className="mx-auto mt-1 max-w-md text-xs text-slate-400">
+                Try searching by legacy CRM Lead Ref (e.g. L-00075, LEAD-0417) or pick any recent student above.
               </p>
             </div>
           )}
         </div>
       )}
 
-      {/* ────────────────── YEAR VIEW TAB ────────────────── */}
+      {/* ══════════════════ 6. ANNUAL VIEW TAB ══════════════════ */}
       {tab === 'year' && (
         <div className="space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
               <button
                 type="button"
@@ -1736,7 +2294,7 @@ export default function FinanceWorkspaceClient() {
               >
                 <ChevronLeft size={16} />
               </button>
-              <span className="px-4 py-1 text-sm font-bold text-slate-900">{yearVal}</span>
+              <span className="px-4 py-1 font-heading text-sm font-bold text-slate-900">{yearVal} Fiscal Calendar</span>
               <button
                 type="button"
                 onClick={() => setYearVal((y) => y + 1)}
@@ -1747,51 +2305,64 @@ export default function FinanceWorkspaceClient() {
             </div>
           </div>
 
-          {yearLoading || !yearData ? (
-            <div className="py-16 text-center text-sm text-slate-400">Loading yearly ledger...</div>
+          {!yearData ? (
+            <div className="rounded-2xl border border-slate-200 bg-white py-16 text-center text-sm text-slate-400">
+              Loading {yearVal} annual statement...
+            </div>
           ) : (
             <>
               <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-                <MiniKpi icon={<Wallet size={16} />} label="Year Opening" value={formatBdt(yearData.opening)} tone="slate" />
-                <MiniKpi
-                  icon={<ArrowDownCircle size={16} />}
-                  label="Year Income"
+                <StatCard icon={<Wallet size={15} />} label="Opening Liquidity" value={formatBdt(yearData.opening)} tone="slate" />
+                <StatCard
+                  icon={<ArrowDownLeft size={15} />}
+                  label={`${yearData.year} Cash In`}
                   value={formatBdt(yearData.rows.reduce((s, r) => s + r.income, 0))}
                   tone="emerald"
                 />
-                <MiniKpi
-                  icon={<ArrowUpCircle size={16} />}
-                  label="Year Expenses"
+                <StatCard
+                  icon={<ArrowUpRight size={15} />}
+                  label={`${yearData.year} Cash Out`}
                   value={formatBdt(yearData.rows.reduce((s, r) => s + r.expense, 0))}
                   tone="rose"
                 />
-                <MiniKpi
-                  icon={<PiggyBank size={16} />}
-                  label="Year Closing"
+                <StatCard
+                  icon={<PiggyBank size={15} />}
+                  label="Year-End Closing"
                   value={formatBdt(yearData.closing)}
                   tone={yearData.closing >= yearData.opening ? 'emerald' : 'amber'}
                 />
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm">
+                <YearCashTrendChart rows={yearData.rows} />
+              </div>
+
+              <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
-                    <thead className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
-                        <th className="px-4 py-3 text-left">Month</th>
+                        <th className="px-5 py-3 text-left">Month</th>
                         <th className="px-4 py-3 text-right">Opening</th>
-                        <th className="px-4 py-3 text-right">In</th>
-                        <th className="px-4 py-3 text-right">Out</th>
-                        <th className="px-4 py-3 text-right">Net</th>
-                        <th className="px-4 py-3 text-right">Closing</th>
+                        <th className="px-4 py-3 text-right">Cash In</th>
+                        <th className="px-4 py-3 text-right">Cash Out</th>
+                        <th className="px-4 py-3 text-right">Net Movement</th>
+                        <th className="px-5 py-3 text-right">Closing Balance</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {yearData.rows.map((r) => (
-                        <tr key={r.month} className="hover:bg-slate-50/70">
-                          <td className="px-4 py-2.5 font-semibold text-slate-800">{formatMonthLabel(r.month)}</td>
+                        <tr
+                          key={r.month}
+                          onClick={() => {
+                            setCashflowMonth(r.month);
+                            setTab('cashflow');
+                          }}
+                          className="cursor-pointer transition hover:bg-slate-50/80"
+                        >
+                          <td className="px-5 py-2.5 font-semibold text-slate-900">{formatMonthLabel(r.month)}</td>
                           <td className="px-4 py-2.5 text-right tabular-nums text-slate-500">{formatBdt(r.opening)}</td>
-                          <td className="px-4 py-2.5 text-right font-semibold tabular-nums text-emerald-700">
+                          <td className="px-4 py-2.5 text-right font-semibold tabular-nums text-[#0b7a53]">
                             {r.income ? formatBdt(r.income) : <span className="text-slate-300">—</span>}
                           </td>
                           <td className="px-4 py-2.5 text-right font-semibold tabular-nums text-rose-700">
@@ -1799,171 +2370,211 @@ export default function FinanceWorkspaceClient() {
                           </td>
                           <td
                             className={`px-4 py-2.5 text-right font-bold tabular-nums ${
-                              r.net >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                              r.net > 0 ? 'text-[#0b7a53]' : r.net < 0 ? 'text-rose-700' : 'text-slate-400'
                             }`}
                           >
-                            {r.net >= 0 ? '+' : ''}
-                            {formatBdt(r.net)}
+                            {r.net !== 0 ? `${r.net > 0 ? '+' : ''}${formatBdt(r.net)}` : '—'}
                           </td>
-                          <td className="px-4 py-2.5 text-right font-bold tabular-nums text-slate-900">
+                          <td className="px-5 py-2.5 text-right font-bold tabular-nums text-slate-900">
                             {formatBdt(r.closing)}
                           </td>
                         </tr>
                       ))}
                     </tbody>
+                    <tfoot className="border-t-2 border-slate-200 bg-slate-50 font-bold">
+                      <tr>
+                        <td className="px-5 py-3 text-[11px] uppercase tracking-wider text-slate-600">
+                          {yearData.year} Totals
+                        </td>
+                        <td className="px-4 py-3 text-right tabular-nums text-slate-600">{formatBdt(yearData.opening)}</td>
+                        <td className="px-4 py-3 text-right tabular-nums text-[#0b7a53]">
+                          {formatBdt(yearData.rows.reduce((s, r) => s + r.income, 0))}
+                        </td>
+                        <td className="px-4 py-3 text-right tabular-nums text-rose-700">
+                          {formatBdt(yearData.rows.reduce((s, r) => s + r.expense, 0))}
+                        </td>
+                        <td className="px-4 py-3 text-right tabular-nums text-[#0f3a5c]">
+                          {formatBdt(yearData.closing - yearData.opening)}
+                        </td>
+                        <td className="px-5 py-3 text-right tabular-nums text-[#071c2e]">{formatBdt(yearData.closing)}</td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
-              </div>
-
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <YearCashTrendChart rows={yearData.rows} />
               </div>
             </>
           )}
         </div>
       )}
 
-      {/* ────────────────── INVESTORS TAB ────────────────── */}
+      {/* ══════════════════ 7. INVESTORS & EQUITY TAB ══════════════════ */}
       {tab === 'investors' && (
         <div className="space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-slate-900 p-6 text-white shadow-md">
-            <div className="flex items-center gap-3">
-              <div className="grid size-10 place-items-center rounded-xl bg-violet-500/20 text-violet-300">
-                <PiggyBank size={20} />
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm">
+            <div className="flex items-center gap-3.5">
+              <div className="grid size-11 place-items-center rounded-xl bg-violet-50 text-violet-700">
+                <PiggyBank size={22} />
               </div>
               <div>
-                <h2 className="font-heading text-lg font-bold">Investor Capital &amp; Profit Sharing</h2>
-                <p className="text-xs text-slate-400">
-                  Partner capital injections (including historical pre-ledger injections) &amp; annual equity splits
+                <h2 className="font-heading text-lg font-bold text-slate-900">Partner Equity &amp; Capital Ledger</h2>
+                <p className="text-xs text-slate-500">
+                  Total contributed capital, historical pre-ledger injections, and annual September profit distribution split
                 </p>
               </div>
             </div>
             <button
               type="button"
               onClick={() => setInvestmentModalOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-violet-600 px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-violet-500"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#0f3a5c] px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#12436b]"
             >
-              <Plus size={14} /> Add Investment
+              <Plus size={14} /> Record Investment
             </button>
           </div>
 
-          {investorsLoading || !investorsData ? (
-            <div className="py-16 text-center text-sm text-slate-400">Loading investor ledger...</div>
+          {!investorsData ? (
+            <div className="rounded-2xl border border-slate-200 bg-white py-16 text-center text-sm text-slate-400">
+              Loading partner capital ledger...
+            </div>
           ) : (
             <>
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Capital Injected</p>
-                <p className="mt-1 font-heading text-3xl font-bold tabular-nums text-slate-900">
-                  {formatBdt(investorsData.total)}
-                </p>
-                <p className="mt-0.5 text-xs text-slate-500">
-                  Across {investorsData.byPerson.length} partners · {investorsData.contributions.length} contributions
-                </p>
-              </div>
+              {/* Partner Equity Cards with Live Surplus Share Projection */}
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                {PROFIT_SHARES.map((partner) => {
+                  const personRow = investorsData.byPerson.find(
+                    (p) => p.name.toLowerCase() === partner.name.toLowerCase(),
+                  );
+                  const contributed = personRow?.amount ?? 0;
+                  const shareOfCapital = investorsData.total > 0 ? (contributed / investorsData.total) * 100 : 0;
+                  const projectedShare = Math.max(0, summary.liveBalance) * (partner.pct / 100);
+                  const accentBar =
+                    partner.tone === 'blue'
+                      ? 'bg-[#0f3a5c]'
+                      : partner.tone === 'violet'
+                        ? 'bg-violet-600'
+                        : 'bg-amber-500';
+                  const pillCls =
+                    partner.tone === 'blue'
+                      ? 'bg-blue-50 text-[#0f3a5c] border-blue-200'
+                      : partner.tone === 'violet'
+                        ? 'bg-violet-50 text-violet-800 border-violet-200'
+                        : 'bg-amber-50 text-amber-800 border-amber-200';
 
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <h3 className="mb-3 text-sm font-bold text-slate-800">Capital Contributions by Partner</h3>
-                  <div className="space-y-3.5">
-                    {investorsData.byPerson.map((p) => {
-                      const maxAmt = Math.max(...investorsData.byPerson.map((x) => x.amount), 1);
-                      const shareCfg = PROFIT_SHARES.find((s) => s.name.toLowerCase() === p.name.toLowerCase());
-                      const barCls =
-                        shareCfg?.tone === 'blue'
-                          ? 'bg-blue-500'
-                          : shareCfg?.tone === 'violet'
-                            ? 'bg-violet-500'
-                            : shareCfg?.tone === 'amber'
-                              ? 'bg-amber-500'
-                              : 'bg-slate-400';
-                      return (
-                        <div key={p.name}>
-                          <div className="mb-1 flex items-center justify-between text-xs">
-                            <span className="flex items-center gap-1.5 font-semibold text-slate-800">
-                              {p.name}
-                              {p.pctShare !== null && (
-                                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
-                                  {p.pctShare}% Share
-                                </span>
-                              )}
-                            </span>
-                            <span className="font-bold tabular-nums text-slate-900">{formatBdt(p.amount)}</span>
-                          </div>
-                          <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-                            <div className={`h-full rounded-full ${barCls}`} style={{ width: `${(p.amount / maxAmt) * 100}%` }} />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <h3 className="text-sm font-bold text-slate-800">Partnership Profit Sharing</h3>
-                  <p className="mb-3 mt-0.5 text-xs text-slate-500">
-                    Official distribution schedule computed annually on net cash balances.
-                  </p>
-                  <div className="space-y-2.5">
-                    {PROFIT_SHARES.map((p) => {
-                      const dotCls =
-                        p.tone === 'blue' ? 'bg-blue-500' : p.tone === 'violet' ? 'bg-violet-500' : 'bg-amber-500';
-                      return (
-                        <div
-                          key={p.name}
-                          className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-3.5 py-2.5"
-                        >
+                  return (
+                    <div
+                      key={partner.name}
+                      className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+                    >
+                      <div className={`h-1 w-full ${accentBar}`} />
+                      <div className="p-5">
+                        <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2.5">
-                            <span className={`size-2.5 rounded-full ${dotCls}`} />
-                            <span className="text-xs font-bold text-slate-800">{p.name}</span>
+                            <div className="grid size-9 place-items-center rounded-xl bg-slate-100 text-xs font-bold text-slate-800">
+                              {initialsOf(partner.name)}
+                            </div>
+                            <div>
+                              <h3 className="text-sm font-bold text-slate-900">{partner.name}</h3>
+                              <p className="text-[11px] text-slate-500">
+                                {personRow?.count ?? 0} capital entries
+                              </p>
+                            </div>
                           </div>
-                          <span className="text-sm font-extrabold text-slate-900">{p.pct}%</span>
+                          <span className={`rounded-full border px-2.5 py-0.5 text-[11px] font-extrabold ${pillCls}`}>
+                            {partner.pct}% Equity
+                          </span>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
+
+                        <div className="mt-4 grid grid-cols-2 gap-3 rounded-xl border border-slate-100 bg-slate-50/70 p-3">
+                          <div>
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Capital In</p>
+                            <p className="mt-0.5 font-heading text-base font-bold tabular-nums text-slate-900">
+                              {formatBdt(contributed)}
+                            </p>
+                            <p className="text-[10px] text-slate-500">{shareOfCapital.toFixed(1)}% of pool</p>
+                          </div>
+                          <div>
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Cash Surplus Share</p>
+                            <p className="mt-0.5 font-heading text-base font-bold tabular-nums text-[#0b7a53]">
+                              {formatBdt(projectedShare)}
+                            </p>
+                            <p className="text-[10px] text-slate-500">At current cash book</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <div className="border-b border-slate-100 bg-slate-50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-slate-500">
-                  All Capital Contributions
+              <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-slate-50/70 px-5 py-3.5">
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900">Capital Contribution Register</h3>
+                    <p className="text-xs text-slate-500">
+                      Combined partner equity injected: <strong className="text-slate-900">{formatBdt(investorsData.total)}</strong>
+                    </p>
+                  </div>
+                  <span className="text-xs font-semibold text-slate-500">
+                    {investorsData.contributions.length} verified entries
+                  </span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
-                    <thead className="border-b border-slate-100 bg-slate-50/50 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
-                        <th className="px-4 py-2.5 text-left">Date</th>
-                        <th className="px-4 py-2.5 text-left">Investor</th>
-                        <th className="px-4 py-2.5 text-left">Reference</th>
-                        <th className="px-4 py-2.5 text-left">Type</th>
-                        <th className="px-4 py-2.5 text-right">Amount</th>
-                        <th className="px-4 py-2.5 text-left">Notes</th>
+                        <th className="px-5 py-3 text-left">Date</th>
+                        <th className="px-3 py-3 text-left">Partner / Investor</th>
+                        <th className="px-3 py-3 text-left">Reference</th>
+                        <th className="px-3 py-3 text-left">Accounting Book</th>
+                        <th className="px-3 py-3 text-right">Amount</th>
+                        <th className="px-3 py-3 text-left">Notes</th>
+                        <th className="px-5 py-3 text-right print:hidden">Edit</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {investorsData.contributions.map((c) => (
-                        <tr key={c.id} className="hover:bg-slate-50/70">
-                          <td className="px-4 py-2.5 text-slate-500">{c.date}</td>
-                          <td className="px-4 py-2.5 font-semibold text-slate-900">{c.clientName || '—'}</td>
-                          <td className="px-4 py-2.5 text-slate-600">{c.reference || '—'}</td>
-                          <td className="px-4 py-2.5">
+                        <tr key={c.id} className="hover:bg-slate-50/80">
+                          <td className="whitespace-nowrap px-5 py-3 font-mono text-[11px] text-slate-500">{c.date}</td>
+                          <td className="px-3 py-3 font-semibold text-slate-900">{c.clientName || '—'}</td>
+                          <td className="px-3 py-3 text-slate-600">{c.reference || '—'}</td>
+                          <td className="px-3 py-3">
                             {c.excludeFromCash ? (
-                              <span className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
-                                Pre-Data Capital
+                              <span className="rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
+                                Pre-Ledger Historical
                               </span>
                             ) : (
-                              <span className="rounded bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
-                                Cashbook Injected
+                              <span className="rounded-md border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                                Active Cashbook
                               </span>
                             )}
                           </td>
-                          <td className="px-4 py-2.5 text-right font-bold tabular-nums text-violet-700">
+                          <td className="px-3 py-3 text-right font-bold tabular-nums text-violet-700">
                             {formatBdt(c.amount)}
                           </td>
-                          <td className="max-w-[260px] truncate px-4 py-2.5 text-slate-500">{c.notes || '—'}</td>
+                          <td className="max-w-[240px] truncate px-3 py-3 text-slate-500">{c.notes || '—'}</td>
+                          <td className="px-5 py-3 text-right print:hidden">
+                            <button
+                              type="button"
+                              onClick={() => setEntryModal({ kind: 'income', record: c })}
+                              className="rounded-lg p-1.5 text-slate-400 hover:bg-blue-50 hover:text-[#0f3a5c]"
+                              title="Edit contribution"
+                            >
+                              <Pencil size={13} />
+                            </button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
+                    <tfoot className="border-t-2 border-slate-200 bg-slate-50 font-bold">
+                      <tr>
+                        <td colSpan={4} className="px-5 py-3 text-right text-[11px] uppercase tracking-wider text-slate-600">
+                          Total Capital Pool
+                        </td>
+                        <td className="px-3 py-3 text-right tabular-nums text-violet-800">
+                          {formatBdt(investorsData.total)}
+                        </td>
+                        <td colSpan={2} />
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>
@@ -1972,11 +2583,11 @@ export default function FinanceWorkspaceClient() {
         </div>
       )}
 
-      {/* ────────────────── PAYROLL TAB ────────────────── */}
+      {/* ══════════════════ 8. PAYROLL TAB ══════════════════ */}
       {tab === 'payroll' && (
         <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+            <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
               <button
                 type="button"
                 onClick={() => setPayrollMonth((m) => shiftMonth(m, -1))}
@@ -1988,7 +2599,7 @@ export default function FinanceWorkspaceClient() {
                 type="month"
                 value={payrollMonth}
                 onChange={(e) => e.target.value && setPayrollMonth(e.target.value)}
-                className="cursor-pointer bg-transparent px-2 py-1 text-sm font-bold text-slate-800 outline-none"
+                className="cursor-pointer bg-transparent px-2 py-1 text-xs font-bold text-slate-900 outline-none"
               />
               <button
                 type="button"
@@ -1997,39 +2608,52 @@ export default function FinanceWorkspaceClient() {
               >
                 <ChevronRight size={16} />
               </button>
-              <span className="px-2 text-xs font-semibold text-slate-500">{formatMonthLabel(payrollMonth)}</span>
+              <span className="border-l border-slate-200 pl-2.5 pr-2 text-xs font-semibold text-slate-600">
+                {formatMonthLabel(payrollMonth)}
+              </span>
             </div>
+
             {payrollData && (
-              <span className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600">
-                Working days: <strong className="text-slate-900">{payrollData.workingDays}</strong>
+              <span className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-600">
+                Standard working days: <strong className="text-slate-900">{payrollData.workingDays} days</strong>
               </span>
             )}
           </div>
 
-          {payrollLoading || !payrollData ? (
-            <div className="py-16 text-center text-sm text-slate-400">Loading monthly payroll...</div>
+          {!payrollData ? (
+            <div className="rounded-2xl border border-slate-200 bg-white py-16 text-center text-sm text-slate-400">
+              Loading monthly payroll register...
+            </div>
           ) : (
             <>
               <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-                <MiniKpi icon={<Users size={16} />} label="Base Salaries" value={formatBdt(payrollData.totals.base)} tone="slate" />
-                <MiniKpi icon={<Banknote size={16} />} label="Net Payroll" value={formatBdt(payrollData.totals.net)} tone="blue" />
-                <MiniKpi icon={<CheckCircle2 size={16} />} label="Paid" value={formatBdt(payrollData.totals.paid)} tone="emerald" />
-                <MiniKpi icon={<Wallet size={16} />} label="Pending" value={formatBdt(payrollData.totals.pending)} tone="amber" />
+                <StatCard icon={<Users size={15} />} label="Base Salaries" value={formatBdt(payrollData.totals.base)} tone="slate" />
+                <StatCard icon={<Banknote size={15} />} label="Total Net Payable" value={formatBdt(payrollData.totals.net)} tone="navy" />
+                <StatCard icon={<CheckCircle2 size={15} />} label="Disbursed (Paid)" value={formatBdt(payrollData.totals.paid)} tone="emerald" />
+                <StatCard icon={<TrendingDown size={15} />} label="Remaining Pending" value={formatBdt(payrollData.totals.pending)} tone="amber" />
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
+                <div className="border-b border-slate-200 bg-slate-50/70 px-5 py-3.5">
+                  <h3 className="text-sm font-bold text-slate-900">
+                    Payroll Register — {formatMonthLabel(payrollData.month)}
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Marking an employee as Paid automatically synchronizes a Salary disbursement into the Expense Ledger.
+                  </p>
+                </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
-                    <thead className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
-                        <th className="px-3 py-3 text-left">Employee</th>
+                        <th className="px-4 py-3 text-left">Employee</th>
                         <th className="px-3 py-3 text-center">Attendance</th>
                         <th className="px-3 py-3 text-right">Base Salary</th>
                         <th className="px-3 py-3 text-right">Bonus</th>
                         <th className="px-3 py-3 text-right">Deductions</th>
-                        <th className="px-3 py-3 text-right">Net Pay</th>
+                        <th className="px-3 py-3 text-right">Net Payable</th>
                         <th className="px-3 py-3 text-center">Status</th>
-                        <th className="px-3 py-3 text-right">Actions</th>
+                        <th className="px-4 py-3 text-right print:hidden">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
@@ -2046,15 +2670,24 @@ export default function FinanceWorkspaceClient() {
                         const busy = payrollBusyId === row.id;
 
                         return (
-                          <tr key={row.id} className="hover:bg-slate-50/70">
-                            <td className="px-3 py-2.5">
-                              <div className="font-bold text-slate-900">{row.name}</div>
-                              <div className="text-[10px] text-slate-400">{row.empId}</div>
+                          <tr key={row.id} className="hover:bg-slate-50/80">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-2.5">
+                                <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-slate-100 text-[11px] font-bold text-slate-700">
+                                  {initialsOf(row.name)}
+                                </div>
+                                <div>
+                                  <div className="font-bold text-slate-900">{row.name}</div>
+                                  <div className="font-mono text-[10px] text-slate-400">{row.empId}</div>
+                                </div>
+                              </div>
                             </td>
-                            <td className="px-3 py-2.5 text-center font-semibold text-slate-600 tabular-nums">
-                              {row.daysWorked} / {row.workingDays}d
+                            <td className="px-3 py-3 text-center">
+                              <span className="inline-flex rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 font-mono text-[11px] font-semibold text-slate-700">
+                                {row.daysWorked}/{row.workingDays}d
+                              </span>
                             </td>
-                            <td className="px-3 py-2.5 text-right">
+                            <td className="px-3 py-3 text-right">
                               <input
                                 type="number"
                                 min="0"
@@ -2065,10 +2698,10 @@ export default function FinanceWorkspaceClient() {
                                     [row.id]: { ...prev[row.id], baseSalary: e.target.value },
                                   }))
                                 }
-                                className="w-24 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-right font-semibold tabular-nums outline-none focus:border-blue-500 focus:bg-white"
+                                className="w-24 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-right font-semibold tabular-nums outline-none focus:border-[#0f3a5c] focus:bg-white"
                               />
                             </td>
-                            <td className="px-3 py-2.5 text-right">
+                            <td className="px-3 py-3 text-right">
                               <input
                                 type="number"
                                 min="0"
@@ -2079,10 +2712,10 @@ export default function FinanceWorkspaceClient() {
                                     [row.id]: { ...prev[row.id], bonus: e.target.value },
                                   }))
                                 }
-                                className="w-20 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-right font-semibold tabular-nums outline-none focus:border-blue-500 focus:bg-white"
+                                className="w-20 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-right font-semibold tabular-nums outline-none focus:border-[#0f3a5c] focus:bg-white"
                               />
                             </td>
-                            <td className="px-3 py-2.5 text-right">
+                            <td className="px-3 py-3 text-right">
                               <input
                                 type="number"
                                 min="0"
@@ -2093,32 +2726,32 @@ export default function FinanceWorkspaceClient() {
                                     [row.id]: { ...prev[row.id], deductions: e.target.value },
                                   }))
                                 }
-                                className="w-20 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-right font-semibold tabular-nums outline-none focus:border-blue-500 focus:bg-white"
+                                className="w-20 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-right font-semibold tabular-nums outline-none focus:border-[#0f3a5c] focus:bg-white"
                               />
                             </td>
-                            <td className="px-3 py-2.5 text-right font-bold tabular-nums text-slate-900">
+                            <td className="px-3 py-3 text-right font-bold tabular-nums text-slate-900">
                               {formatBdt(computedNet)}
                             </td>
-                            <td className="px-3 py-2.5 text-center">
+                            <td className="px-3 py-3 text-center">
                               <span
-                                className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase ${
+                                className={`inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase ${
                                   row.status === 'paid'
-                                    ? 'bg-emerald-100 text-emerald-800'
-                                    : 'bg-amber-100 text-amber-800'
+                                    ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                                    : 'border-amber-200 bg-amber-50 text-amber-800'
                                 }`}
                               >
                                 {row.status}
                               </span>
-                              {row.paidOn && <div className="mt-0.5 text-[10px] text-slate-400">{row.paidOn}</div>}
+                              {row.paidOn && <div className="mt-0.5 font-mono text-[10px] text-slate-400">{row.paidOn}</div>}
                             </td>
-                            <td className="px-3 py-2.5 text-right">
+                            <td className="px-4 py-3 text-right print:hidden">
                               <div className="inline-flex items-center gap-1.5">
                                 {isDirty && (
                                   <button
                                     type="button"
                                     disabled={busy}
                                     onClick={() => handleSavePayrollRow(row)}
-                                    className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+                                    className="inline-flex items-center gap-1 rounded-lg bg-[#0f3a5c] px-2.5 py-1 text-[11px] font-bold text-white hover:bg-[#12436b] disabled:opacity-50"
                                   >
                                     <Save size={11} /> Save
                                   </button>
@@ -2130,10 +2763,18 @@ export default function FinanceWorkspaceClient() {
                                   className={`rounded-lg px-2.5 py-1 text-[11px] font-bold transition disabled:opacity-50 ${
                                     row.status === 'paid'
                                       ? 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
-                                      : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                                      : 'bg-[#0b7a53] text-white hover:bg-[#096845]'
                                   }`}
                                 >
-                                  {row.status === 'paid' ? 'Unmark' : 'Mark Paid'}
+                                  {row.status === 'paid' ? 'Revert' : 'Mark Paid'}
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setPayslipRecord(row)}
+                                  className="rounded-lg border border-slate-200 bg-white p-1.5 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                                  title="View printable payslip"
+                                >
+                                  <Printer size={12} />
                                 </button>
                               </div>
                             </td>
@@ -2179,11 +2820,13 @@ export default function FinanceWorkspaceClient() {
           onSave={handleSaveInvestment}
         />
       )}
+
+      {payslipRecord && <PayslipModal record={payslipRecord} onClose={() => setPayslipRecord(null)} />}
     </div>
   );
 }
 
-function MiniKpi({
+function StatCard({
   icon,
   label,
   value,
@@ -2194,23 +2837,22 @@ function MiniKpi({
   label: string;
   value: string;
   sub?: string;
-  tone: 'slate' | 'emerald' | 'rose' | 'amber' | 'blue' | 'indigo';
+  tone: 'slate' | 'emerald' | 'rose' | 'amber' | 'navy';
 }) {
-  const toneCls = {
-    slate: 'bg-slate-100 text-slate-700',
-    emerald: 'bg-emerald-50 text-emerald-700',
+  const iconCls = {
+    slate: 'bg-slate-100 text-slate-600',
+    emerald: 'bg-emerald-50 text-[#0b7a53]',
     rose: 'bg-rose-50 text-rose-700',
     amber: 'bg-amber-50 text-amber-700',
-    blue: 'bg-blue-50 text-blue-700',
-    indigo: 'bg-indigo-50 text-indigo-700',
+    navy: 'bg-blue-50 text-[#0f3a5c]',
   }[tone];
 
   return (
-    <div className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className={`rounded-xl p-2 ${toneCls}`}>{icon}</div>
+    <div className="flex items-start gap-3 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div className={`grid size-9 shrink-0 place-items-center rounded-xl ${iconCls}`}>{icon}</div>
       <div className="min-w-0">
         <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{label}</p>
-        <p className="truncate font-heading text-lg font-bold tabular-nums text-slate-900">{value}</p>
+        <p className="mt-0.5 truncate font-heading text-lg font-bold tabular-nums text-slate-900">{value}</p>
         {sub && <p className="text-[11px] text-slate-400">{sub}</p>}
       </div>
     </div>
