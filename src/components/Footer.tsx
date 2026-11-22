@@ -5,7 +5,6 @@ import FooterCta from '@/components/FooterCta';
 import { CookieSettingsButton } from '@/components/CookieConsent';
 import {
   ArrowUpRight,
-  CheckCircle2,
   Clock3,
   Facebook,
   Instagram,
@@ -23,51 +22,40 @@ import { DEFAULT_OFFICE_RECORD } from '@/lib/office-record';
 import { toSafeSitePathOrUrl } from '@/lib/safe-url';
 import { getPublicTrustRecords } from '@/lib/trust-records';
 
+// Curated 8 flagship China links (high intent & pathways)
 const chinaFlagshipLinks = [
   { name: 'China March 2027 Intake', href: '/china-march-2027-intake', badge: 'Open' },
-  { name: 'Study in China Guide', href: '/study-in-china-from-bangladesh' },
+  { name: 'Study in China Complete Guide', href: '/study-in-china-from-bangladesh' },
+  { name: 'China Scholarships (CSC/Provincial)', href: '/china-scholarships-bangladesh' },
+  { name: 'Study Cost & Living Expenses', href: '/study-in-china-cost-bangladesh' },
   { name: 'China After O-Level / SSC / Dakhil', href: '/study-in-china-after-o-level-ssc' },
-  { name: 'Bangladesh vs China Bachelor', href: '/bangladesh-vs-china-bachelor-study' },
-  { name: 'China Scholarships', href: '/china-scholarships-bangladesh' },
-  { name: 'Cost of Studying in China', href: '/study-in-china-cost-bangladesh' },
-  { name: 'MBBS in China', href: '/mbbs-in-china-bangladesh' },
-  { name: 'China Student Visa Guide', href: '/china-student-visa-bangladesh' },
-  { name: 'Intakes & Deadlines', href: '/china-intakes-deadlines' },
-  { name: 'China Cost Benchmark Report', href: '/china-study-report-bangladesh' },
-  { name: 'Visa-First Policy (BDT 0)', href: '/china-visa-first-policy' },
-  { name: 'বাংলা গাইড (Study in China)', href: '/bn/study-in-china' },
-  { name: 'SSC ও দাখিলের পর চীন (বাংলা)', href: '/bn/study-in-china-after-ssc-dakhil' },
+  { name: 'MBBS in China (MOE Listed)', href: '/mbbs-in-china-bangladesh' },
+  { name: 'Student Visa (X1/X2 Guide)', href: '/china-student-visa-bangladesh' },
+  { name: 'Intakes & Application Deadlines', href: '/china-intakes-deadlines' },
 ];
 
+// Curated 8 planning, comparison & verification tools
 const planLinks = [
   ['University Directory', '/universities'],
   ['Programs by Budget', '/programs'],
   ['Compare Study Costs', '/compare-costs'],
-  ['Malaysia After O-Level', '/study-in-malaysia-after-o-level'],
-  ['China vs UK, USA & Dhaka Bachelor', '/compare-bachelor-china-abroad-bangladesh'],
-  ['Bangladesh vs Abroad Matrix', '/bangladesh-vs-study-abroad-countries'],
-  ['Bangladesh Study Abroad Market 2027', '/bangladesh-study-abroad-market'],
-  ['বিদেশে উচ্চশিক্ষা ২০২৭ গাইড (বাংলা)', '/bn/bangladesh-study-abroad-market'],
-  ['Scholarship Database', '/scholarships#scholarship-database'],
-  ['Malaysia Study Costs (RM/BDT)', '/malaysia-study-cost-bangladesh'],
-  ['Malaysia Student Visa (EMGS)', '/malaysia-student-visa-bangladesh'],
-  ['Proof Library', '/proof-library'],
-  ['How We Verify Universities', '/how-we-verify-universities'],
-  ['Free Fit Assessment', '/education-fit-assessment'],
+  ['Bangladesh vs China Bachelor', '/bangladesh-vs-china-bachelor-study'],
+  ['China vs UK, USA & Private Uni', '/compare-bachelor-china-abroad-bangladesh'],
+  ['Malaysia After O-Level / SPM', '/study-in-malaysia-after-o-level'],
+  ['Proof Library & Documents', '/proof-library'],
+  ['Free Education Fit Assessment', '/education-fit-assessment'],
 ];
 
+// Curated 7 company & transparency links
 const companyLinks = [
   ['About EduExpress', '/about'],
-  ['Media & Press Room', '/press'],
-  ['Education Consultant Dhaka', '/education-consultant-dhaka'],
-  ['How It Works', '/your-study-journey'],
-  ['What We Do', '/services'],
-  ['Student Success Stories', '/success-stories'],
+  ['Dhaka Head Office (Dhanmondi)', '/education-consultant-dhaka'],
+  ['How It Works (Journey)', '/your-study-journey'],
   ['For Parents & Families', '/for-parents'],
+  ['Student Success Stories', '/success-stories'],
   ['Fee Policy & Transparency', '/fees-and-transparency'],
-  ['Education Updates', '/updates'],
+  ['Media & Press Room', '/press'],
   ['B2B Partner Desk', '/b2b'],
-  ['Partner With Us', '/partnership'],
 ];
 
 const legalLinks = [
@@ -76,7 +64,6 @@ const legalLinks = [
   ['Fee Policy', '/fees-and-transparency'],
   ['Student Data Privacy', '/student-data-privacy'],
   ['Complaints & Resolution', '/complaints-and-resolution'],
-  ['Country Status', '/country-status'],
 ];
 
 const socialLinks = [
@@ -86,15 +73,15 @@ const socialLinks = [
   { name: 'YouTube', href: 'https://www.youtube.com/@EduExpressInt', icon: Youtube },
 ];
 
-const linkClass = 'text-[14.5px] leading-6 text-white/75 transition-colors hover:text-lime';
+const linkClass = 'text-[14px] leading-relaxed text-white/75 transition-colors hover:text-lime';
 
-function Group({ title, children, className = '' }: { title: string; children: React.ReactNode; className?: string }) {
+function NavColumn({ title, children, className = '' }: { title: string; children: React.ReactNode; className?: string }) {
   return (
     <nav aria-label={title} className={className}>
-      <h2 className="border-b border-white/10 pb-2.5 text-xs font-extrabold uppercase tracking-[0.14em] text-lime">
+      <h2 className="border-b border-white/10 pb-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-lime">
         {title}
       </h2>
-      <div className="mt-4">{children}</div>
+      <div className="mt-3.5">{children}</div>
     </nav>
   );
 }
@@ -107,7 +94,7 @@ export default async function Footer() {
         'Assalamu alaikum. I would like counselling for studying abroad.'
       )}`
     : null;
-  const featuredDestinations = destinationLinks.filter(item => item.href !== '/study-in-china-from-bangladesh').slice(0, 7);
+  const featuredDestinations = destinationLinks.filter(item => item.href !== '/study-in-china-from-bangladesh').slice(0, 6);
 
   return (
     <footer
@@ -116,42 +103,72 @@ export default async function Footer() {
     >
       <FooterCta />
 
-      <div className="mx-auto max-w-[1200px] px-5 pb-32 pt-14 lg:px-8 lg:pb-24 lg:pt-16">
-        {/* Top Institutional Navigation Grid */}
-        <div data-anim="stagger" className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
-          {/* Col 1–4: Brand Identity & Written Governance */}
-          <div className="sm:col-span-2 lg:col-span-4 lg:pr-4">
+      <div className="mx-auto max-w-[1200px] px-5 pb-28 pt-12 lg:px-8 lg:pb-20 lg:pt-14">
+        {/* Institutional Navigation Grid */}
+        <div data-anim="stagger" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+          {/* Col 1–4: Brand Identity & Verified Accreditations */}
+          <div className="sm:col-span-2 lg:col-span-4 lg:pr-6">
             <Link href="/" aria-label="EduExpress International home" className="inline-block">
               <Image
                 src="/white-logo.png"
                 alt="EduExpress International"
-                width={210}
-                height={59}
-                className="h-auto w-44 sm:w-48"
+                width={200}
+                height={56}
+                className="h-auto w-44"
               />
             </Link>
 
-            <p className="mt-4 max-w-sm text-[15px] leading-[1.65] text-white/80">
+            <p className="mt-4 text-[14px] leading-relaxed text-white/80">
               Bangladesh&apos;s evidence-first study abroad consultancy since 2018. Compare verified universities, realistic scholarship tiers, and your complete written cost schedule from our Dhanmondi head office.
             </p>
 
-            {/* Governance Pillars */}
-            <ul className="mt-5 space-y-2 text-[13.5px] font-semibold text-white/90">
-              {[
-                'BDT 0 service fee before China visa approval',
-                'Written cost breakdown before you commit',
-                'In-person family counselling in Dhanmondi, Dhaka',
-                'CBCA Founding Member (#08) & FACD-CAB (FCM-452)',
-              ].map(item => (
-                <li key={item} className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="shrink-0 text-lime" aria-hidden="true" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            {/* Official Association Accreditation Badges */}
+            <div className="mt-5 space-y-2">
+              <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-white/85">
+                <ShieldCheck size={16} className="shrink-0 text-lime" aria-hidden="true" />
+                <span>
+                  Founding Member (#08) of{' '}
+                  <a
+                    href="https://cbcabd.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-lime hover:underline"
+                  >
+                    CBCA
+                  </a>
+                </span>
+              </div>
+              <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-white/85">
+                <ShieldCheck size={16} className="shrink-0 text-lime" aria-hidden="true" />
+                <span>
+                  Active Member (FCM-452) of{' '}
+                  <a
+                    href="https://www.facdcab.org/members/directory/2264"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-lime hover:underline"
+                  >
+                    FACD-CAB
+                  </a>
+                </span>
+              </div>
+            </div>
+
+            {/* Key Commitment Pills */}
+            <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold text-white/70">
+              <span className="rounded-md border border-white/10 bg-white/[0.03] px-2.5 py-1">
+                BDT 0 fee before visa
+              </span>
+              <span className="rounded-md border border-white/10 bg-white/[0.03] px-2.5 py-1">
+                Written cost schedule
+              </span>
+              <span className="rounded-md border border-white/10 bg-white/[0.03] px-2.5 py-1">
+                In-person counselling
+              </span>
+            </div>
 
             {/* Social Media Channels */}
-            <div className="mt-6 flex items-center gap-2.5">
+            <div className="mt-5 flex items-center gap-2">
               {socialLinks.map(({ name, href, icon: Icon }) => (
                 <a
                   key={name}
@@ -159,39 +176,48 @@ export default async function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`EduExpress on ${name}`}
-                  className="grid size-10 place-items-center rounded-xl border border-white/15 bg-white/[0.06] text-white/85 transition hover:border-lime hover:bg-lime hover:text-petrol-800"
+                  className="grid size-9 place-items-center rounded-lg border border-white/15 bg-white/[0.05] text-white/80 transition hover:border-lime hover:bg-lime hover:text-petrol-800"
                 >
-                  <Icon size={17} aria-hidden="true" />
+                  <Icon size={16} aria-hidden="true" />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Col 5–6: China Flagship & March 2027 Desk */}
-          <Group title="Study in China" className="lg:col-span-2">
-            <ul className="grid gap-2.5">
+          {/* Col 5–6: China Flagship */}
+          <NavColumn title="Study in China" className="lg:col-span-2">
+            <ul className="grid gap-2">
               {chinaFlagshipLinks.map(link => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className={`${linkClass} inline-flex items-center gap-2`}
-                    style={link.href.startsWith('/bn/') ? { fontFamily: 'system-ui, -apple-system, sans-serif' } : undefined}
+                    className={`${linkClass} inline-flex items-center gap-1.5`}
                   >
                     <span>{link.name}</span>
                     {link.badge && (
-                      <span className="rounded-full bg-lime px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-petrol-800">
+                      <span className="rounded-full bg-lime px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-petrol-800">
                         {link.badge}
                       </span>
                     )}
                   </Link>
                 </li>
               ))}
+              <li className="pt-1">
+                <Link
+                  href="/bn/study-in-china"
+                  lang="bn"
+                  className="inline-flex items-center gap-1 text-[13px] font-semibold text-lime/90 hover:text-lime"
+                  style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+                >
+                  বাংলা গাইড (Study in China) →
+                </Link>
+              </li>
             </ul>
-          </Group>
+          </NavColumn>
 
           {/* Col 7–8: Global Destinations */}
-          <Group title="Destinations" className="lg:col-span-2">
-            <ul className="grid gap-2.5">
+          <NavColumn title="Destinations" className="lg:col-span-2">
+            <ul className="grid gap-2">
               {featuredDestinations.map(link => (
                 <li key={link.href}>
                   <Link href={link.href} className={linkClass}>
@@ -202,16 +228,16 @@ export default async function Footer() {
             </ul>
             <Link
               href="/destinations"
-              className="mt-3.5 inline-flex items-center gap-1 text-[13.5px] font-bold text-lime hover:underline"
+              className="mt-3.5 inline-flex items-center gap-1 text-[13px] font-bold text-lime hover:underline"
             >
               All 12 destinations
-              <ArrowUpRight size={14} aria-hidden="true" />
+              <ArrowUpRight size={13} aria-hidden="true" />
             </Link>
-          </Group>
+          </NavColumn>
 
-          {/* Col 9–10: Directory & Planning Tools */}
-          <Group title="Plan & Verify" className="lg:col-span-2">
-            <ul className="grid gap-2.5">
+          {/* Col 9–10: Plan & Verify Tools */}
+          <NavColumn title="Plan & Verify" className="lg:col-span-2">
+            <ul className="grid gap-2">
               {planLinks.map(([name, href]) => (
                 <li key={href}>
                   <Link href={href} className={linkClass}>
@@ -220,11 +246,11 @@ export default async function Footer() {
                 </li>
               ))}
             </ul>
-          </Group>
+          </NavColumn>
 
           {/* Col 11–12: Company & Governance */}
-          <Group title="Company" className="lg:col-span-2">
-            <ul className="grid gap-2.5">
+          <NavColumn title="Company" className="lg:col-span-2">
+            <ul className="grid gap-2">
               {companyLinks.map(([name, href]) => (
                 <li key={href}>
                   <Link href={href} className={linkClass}>
@@ -233,46 +259,23 @@ export default async function Footer() {
                 </li>
               ))}
             </ul>
-          </Group>
+          </NavColumn>
         </div>
 
-        {/* Executive Dhaka Head Office & Admissions Desk Strip */}
+        {/* Streamlined Dhanmondi Head Office & Contact Bar */}
         <section
           aria-label="Visit or contact our office"
-          className="mt-12 rounded-3xl border border-white/12 bg-white/[0.04] p-5 sm:p-7"
+          className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
         >
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-            <div className="flex items-center gap-2.5">
-              <span className="grid size-8 place-items-center rounded-lg bg-lime/15 text-lime">
-                <ShieldCheck size={17} aria-hidden="true" />
-              </span>
-              <div>
-                <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-lime">
-                  Dhaka Head Office &amp; Admissions Desk
-                </p>
-                <p className="text-xs text-white/70">
-                  Walk-in student &amp; parent consultations · Verified university dossiers
-                </p>
-              </div>
-            </div>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/[0.06] px-3.5 py-2 text-xs font-bold text-white transition hover:border-lime hover:bg-lime hover:text-petrol-800"
-            >
-              Book office visit
-              <ArrowUpRight size={14} aria-hidden="true" />
-            </Link>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.05fr_.9fr_.85fr_1.2fr] lg:gap-4">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-white/10">
             {/* Address */}
-            <div className="flex gap-3.5 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-lime text-petrol-800">
-                <MapPin size={18} aria-hidden="true" />
+            <div className="flex gap-3">
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-lime/15 text-lime">
+                <MapPin size={17} aria-hidden="true" />
               </span>
-              <div className="text-sm leading-6">
-                <p className="font-bold text-white">Dhanmondi Office</p>
-                <p className="mt-0.5 text-[13.5px] leading-5 text-white/75">
+              <div className="min-w-0 text-xs leading-relaxed">
+                <p className="font-bold text-white">Dhanmondi Head Office</p>
+                <p className="mt-0.5 text-white/70">
                   {office?.address ?? DEFAULT_OFFICE_RECORD.address}
                 </p>
                 {(() => {
@@ -282,49 +285,49 @@ export default async function Footer() {
                       href={safeMapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-lime hover:underline"
+                      className="mt-1.5 inline-flex items-center gap-1 font-semibold text-lime hover:underline"
                     >
-                      <Navigation size={12} aria-hidden="true" /> Get directions on Maps
+                      <Navigation size={11} aria-hidden="true" /> Directions on Google Maps
                     </a>
                   ) : null;
                 })()}
               </div>
             </div>
 
-            {/* Opening Hours */}
-            <div className="flex gap-3.5 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-lime text-petrol-800">
-                <Clock3 size={18} aria-hidden="true" />
+            {/* Counselling Hours */}
+            <div className="flex gap-3 lg:pl-5">
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-lime/15 text-lime">
+                <Clock3 size={17} aria-hidden="true" />
               </span>
-              <div className="text-sm leading-6">
+              <div className="min-w-0 text-xs leading-relaxed">
                 <p className="font-bold text-white">Counselling Hours</p>
-                <p className="mt-0.5 text-[13.5px] leading-5 text-white/75">
+                <p className="mt-0.5 text-white/70">
                   {office?.hours ?? DEFAULT_OFFICE_RECORD.hours}
                 </p>
-                <p className="mt-1.5 text-xs font-semibold text-lime">Parents welcome at every session</p>
+                <p className="mt-1 font-semibold text-lime">Parents welcome at every session</p>
               </div>
             </div>
 
             {/* Direct Phone */}
-            <div className="flex gap-3.5 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-lime text-petrol-800">
-                <Phone size={18} aria-hidden="true" />
+            <div className="flex gap-3 lg:pl-5">
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-lime/15 text-lime">
+                <Phone size={17} aria-hidden="true" />
               </span>
-              <div className="text-sm leading-6">
-                <p className="font-bold text-white">Admissions Hotline</p>
+              <div className="min-w-0 text-xs leading-relaxed">
+                <p className="font-bold text-white">Admissions Desk</p>
                 {office?.phonePrimary ? (
-                  <div className="mt-0.5 space-y-0.5 text-[13.5px]">
+                  <div className="mt-0.5 space-y-0.5">
                     <a href={`tel:${office.phonePrimary}`} data-tracking-type="phone" className="block font-semibold text-white/90 hover:text-lime">
                       {formatBangladeshPhone(office.phonePrimary)}
                     </a>
                     {office.phoneSecondary && (
-                      <a href={`tel:${office.phoneSecondary}`} data-tracking-type="phone" className="block text-white/75 hover:text-lime">
+                      <a href={`tel:${office.phoneSecondary}`} data-tracking-type="phone" className="block text-white/70 hover:text-lime">
                         {formatBangladeshPhone(office.phoneSecondary)}
                       </a>
                     )}
                   </div>
                 ) : (
-                  <Link href="/contact" className="mt-1 block text-white/85 hover:text-lime">
+                  <Link href="/contact" className="mt-1 block text-white/80 hover:text-lime">
                     Contact details
                   </Link>
                 )}
@@ -332,19 +335,19 @@ export default async function Footer() {
             </div>
 
             {/* WhatsApp & Email */}
-            <div className="flex gap-3 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-lime text-petrol-800 sm:size-10">
-                <MessageCircle size={18} aria-hidden="true" />
+            <div className="flex gap-3 lg:pl-5">
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-lime/15 text-lime">
+                <MessageCircle size={17} aria-hidden="true" />
               </span>
-              <div className="min-w-0 flex-1 text-sm leading-6">
-                <p className="font-bold text-white">WhatsApp &amp; Email</p>
+              <div className="min-w-0 flex-1 text-xs leading-relaxed">
+                <p className="font-bold text-white">Instant Support</p>
                 {whatsapp && (
                   <a
                     href={whatsapp}
                     target="_blank"
                     rel="noopener noreferrer"
                     data-tracking-type="whatsapp"
-                    className="mt-0.5 block text-[13.5px] font-semibold text-lime hover:underline"
+                    className="mt-0.5 block font-semibold text-lime hover:underline"
                   >
                     Chat on WhatsApp →
                   </a>
@@ -352,10 +355,10 @@ export default async function Footer() {
                 {office?.email && (
                   <a
                     href={`mailto:${office.email}`}
-                    className="mt-1 flex items-center gap-1.5 break-all text-[12.5px] text-white/80 hover:text-white"
+                    className="mt-1 flex items-center gap-1 truncate text-white/75 hover:text-white"
                   >
-                    <Mail size={13} className="shrink-0 text-lime" aria-hidden="true" />
-                    <span>{office.email}</span>
+                    <Mail size={12} className="shrink-0 text-lime" aria-hidden="true" />
+                    <span className="truncate">{office.email}</span>
                   </a>
                 )}
               </div>
@@ -363,60 +366,29 @@ export default async function Footer() {
           </div>
         </section>
 
-        {/* Bottom Legal, Governance & Language Bar */}
-        <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 text-[13px] text-white/65 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="font-semibold text-white/80">
-              © {new Date().getFullYear()} EduExpress International. All rights reserved.
-            </p>
-            <p className="mt-0.5 text-xs text-white/55">
-              University fees remain in official destination currency; service terms and third-party charges are itemised in writing before commitment.
-            </p>
-            <p className="mt-1 text-xs text-white/70">
-              Industry Associations: Founding Member (#08) of{' '}
-              <a
-                href="https://cbcabd.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-lime underline underline-offset-4 hover:text-white"
-              >
-                CBCA
-              </a>{' '}
-              · Active Member (ID: FCM-452) of{' '}
-              <a
-                href="https://www.facdcab.org/members/directory/2264"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-lime underline underline-offset-4 hover:text-white"
-              >
-                FACD-CAB / FACECAB Directory (#2264)
-              </a>
-            </p>
-          </div>
+        {/* Clean Bottom Legal & Language Bar */}
+        <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {new Date().getFullYear()} EduExpress International. All rights reserved.
+          </p>
 
-          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             {legalLinks.map(([name, href]) => (
-              <li key={href}>
-                <Link href={href} className="transition hover:text-white">
-                  {name}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <CookieSettingsButton className="transition hover:text-white" />
-            </li>
-            <li>
-              <Link
-                href="/bn/study-in-china"
-                lang="bn"
-                hrefLang="bn-BD"
-                style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
-                className="rounded-lg border border-white/15 bg-white/[0.06] px-2.5 py-1 font-bold text-lime transition hover:bg-lime hover:text-petrol-800"
-              >
-                বাংলা
+              <Link key={href} href={href} className="transition hover:text-white">
+                {name}
               </Link>
-            </li>
-          </ul>
+            ))}
+            <CookieSettingsButton className="transition hover:text-white" />
+            <Link
+              href="/bn/study-in-china"
+              lang="bn"
+              hrefLang="bn-BD"
+              style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+              className="rounded-md border border-white/15 bg-white/[0.06] px-2 py-0.5 font-bold text-lime transition hover:bg-lime hover:text-petrol-800"
+            >
+              বাংলা
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
