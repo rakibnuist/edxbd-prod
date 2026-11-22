@@ -206,7 +206,8 @@ export default async function RootLayout({
       "https://www.instagram.com/eduexpressint/",
       "https://www.youtube.com/@EduExpressInt",
       "https://twitter.com/eduexpressint",
-      "https://www.facdcab.org/members/directory/2264"
+      "https://www.facdcab.org/members/directory/2264",
+      "https://www.uniagents.com/en/consultants/eduexpress-international.htm"
     ],
     "memberOf": [
       {
