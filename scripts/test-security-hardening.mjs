@@ -377,6 +377,17 @@ test('H-4: session revocation and live DB tokenVersion checks are enforced acros
     'src/app/api/admin/testimonials/[id]/route.ts',
     'src/app/api/admin/users/route.ts',
     'src/app/api/admin/users/[id]/route.ts',
+    'src/app/api/admin/finance/summary/route.ts',
+    'src/app/api/admin/finance/income/route.ts',
+    'src/app/api/admin/finance/income/[id]/route.ts',
+    'src/app/api/admin/finance/expenses/route.ts',
+    'src/app/api/admin/finance/expenses/[id]/route.ts',
+    'src/app/api/admin/finance/cashflow/route.ts',
+    'src/app/api/admin/finance/year/route.ts',
+    'src/app/api/admin/finance/investors/route.ts',
+    'src/app/api/admin/finance/student-transactions/route.ts',
+    'src/app/api/admin/payroll/route.ts',
+    'src/app/api/admin/payroll/[id]/route.ts',
   ];
 
   for (const routePath of guardedRoutes) {

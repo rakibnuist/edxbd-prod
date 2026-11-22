@@ -298,9 +298,11 @@ model Lead {
   assignedEmployeeId String?
   assignedEmployee   Employee? @relation("EmployeeLeads", fields: [assignedEmployeeId], references: [id], onDelete: SetNull)
 
-  universityApps LeadUniversityApp[]
-  documents      LeadDocument[]
-  activities     ActivityEvent[]
+  universityApps  LeadUniversityApp[]
+  documents       LeadDocument[]
+  activities      ActivityEvent[]
+  financeIncomes  FinanceIncome[]
+  financeExpenses FinanceExpense[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -504,18 +506,22 @@ model Employee {
   phone          String?
   team           String   @default("china")
   specialization String?
+  salary         Float    @default(0)
   active         Boolean  @default(true)
   joinDate       String?
   userId         String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  leads       Lead[]          @relation("EmployeeLeads")
-  attendances Attendance[]
-  dailyLogs   DailyLog[]
-  kpiTargets  KpiTarget[]
-  tasks       TaskDirective[]
-  activities  ActivityEvent[]
+  leads           Lead[]           @relation("EmployeeLeads")
+  attendances     Attendance[]
+  dailyLogs       DailyLog[]
+  kpiTargets      KpiTarget[]
+  tasks           TaskDirective[]
+  activities      ActivityEvent[]
+  financeIncomes  FinanceIncome[]
+  financeExpenses FinanceExpense[]
+  payrolls        PayrollRecord[]
 
   @@index([active])
   @@index([team])
@@ -689,4 +695,82 @@ model GbpScheduledPost {
 
   @@index([status, sortOrder])
   @@index([lastPublishedAt])
+}
+
+model FinanceIncome {
+  id              String    @id @default(cuid())
+  legacyCrmId     Int?      @unique
+  date            String
+  month           String
+  category        String?
+  leadRef         String?
+  leadId          String?
+  lead            Lead?     @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  clientName      String?
+  studentName     String?
+  reference       String?
+  amount          Float     @default(0)
+  notes           String?
+  excludeFromCash Boolean   @default(false)
+  employeeId      String?
+  employee        Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([month])
+  @@index([date])
+  @@index([category])
+  @@index([employeeId])
+  @@index([leadId])
+}
+
+model FinanceExpense {
+  id          String    @id @default(cuid())
+  legacyCrmId Int?      @unique
+  date        String
+  month       String
+  category    String?
+  paidTo      String?
+  leadRef     String?
+  leadId      String?
+  lead        Lead?     @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  studentName String?
+  reference   String?
+  amount      Float     @default(0)
+  notes       String?
+  employeeId  String?
+  employee    Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([month])
+  @@index([date])
+  @@index([category])
+  @@index([employeeId])
+  @@index([leadId])
+}
+
+model PayrollRecord {
+  id          String    @id @default(cuid())
+  legacyCrmId Int?      @unique
+  month       String
+  empId       String
+  employeeId  String?
+  employee    Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  name        String
+  baseSalary  Float     @default(0)
+  daysWorked  Int       @default(0)
+  workingDays Int       @default(0)
+  bonus       Float     @default(0)
+  deductions  Float     @default(0)
+  netPay      Float     @default(0)
+  paidOn      String?
+  status      String    @default("pending")
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([month, empId, name])
+  @@index([month])
+  @@index([employeeId])
 }

@@ -15,11 +15,13 @@ import {
   Globe2,
   GraduationCap,
   Handshake,
+  Landmark,
   Layers,
   MapPin,
   MessageCircle,
   MessageSquareQuote,
   Phone,
+  PiggyBank,
   RefreshCw,
   Settings,
   ShieldCheck,
@@ -27,11 +29,13 @@ import {
   UserCheck,
   UserCog,
   Users2,
+  Wallet,
   Zap,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import MetaConnectionPanel from '@/components/admin/MetaConnectionPanel';
 import type { ConsultancyExecutiveSnapshot } from '@/lib/consultancy-analytics';
+import { formatBdt, type FinanceDashboardSnapshot } from '@/lib/finance-logic';
 import type {
   CounselorDeskSummary,
   OfficePulseActivityItem,
@@ -93,6 +97,7 @@ interface DashboardStats {
   officePulse?: OwnerOfficePulsePayload | null;
   counselorDesk?: CounselorDeskSummary | null;
   consultancy?: ConsultancyExecutiveSnapshot | null;
+  financeSnapshot?: FinanceDashboardSnapshot | null;
 }
 
 const statusTones: Record<string, { bg: string; text: string; label: string }> = {
@@ -407,6 +412,13 @@ export default function AdminDashboardPage() {
           {!isCounselor && (
             <>
               <Link
+                href="/admin/finance"
+                className="flex items-center gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50/70 px-3.5 py-2.5 text-xs font-bold text-emerald-950 transition hover:border-emerald-300 hover:bg-emerald-100"
+              >
+                <Landmark size={16} className="text-emerald-700" />
+                Finance &amp; Ledger
+              </Link>
+              <Link
                 href="/admin/users"
                 className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-900"
               >
@@ -452,6 +464,83 @@ export default function AdminDashboardPage() {
           )}
         </div>
       </section>
+
+      {/* Owner Finance & Cashflow Snapshot (Admin Only) */}
+      {!isCounselor && stats.financeSnapshot && (
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div className="flex items-center gap-3">
+              <span className="grid size-10 place-items-center rounded-xl bg-emerald-100 text-emerald-700">
+                <Landmark size={20} />
+              </span>
+              <div>
+                <h2 className="font-heading text-lg font-bold text-slate-900">Financial Control Snapshot</h2>
+                <p className="text-xs text-slate-500">
+                  Live cash ledger migrated from CRM · {stats.financeSnapshot.incomeEntryCount} cash income &amp; {stats.financeSnapshot.expenseEntryCount} expense entries
+                  {stats.financeSnapshot.latestEntryDate ? ` · Last entry ${stats.financeSnapshot.latestEntryDate}` : ''}
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/admin/finance"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#0f3a5c] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#124b7a]"
+            >
+              Open Finance Console
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-4">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Cash Position</span>
+                <Wallet size={16} className="text-emerald-700" />
+              </div>
+              <p className="mt-2 font-heading text-2xl font-bold tabular-nums text-emerald-950">
+                {formatBdt(stats.financeSnapshot.cashPosition)}
+              </p>
+              <p className="mt-1 text-[11px] text-emerald-800">
+                All-time net: {formatBdt(stats.financeSnapshot.allTimeNetProfit)}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">All-Time Cash In</span>
+              <p className="mt-2 font-heading text-2xl font-bold tabular-nums text-slate-900">
+                {formatBdt(stats.financeSnapshot.allTimeIncome)}
+              </p>
+              <p className="mt-1 text-[11px] text-slate-600">
+                {stats.financeSnapshot.currentMonth}: {formatBdt(stats.financeSnapshot.monthIncome)}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">All-Time Expenses</span>
+              <p className="mt-2 font-heading text-2xl font-bold tabular-nums text-rose-700">
+                {formatBdt(stats.financeSnapshot.allTimeExpenses)}
+              </p>
+              <p className="mt-1 text-[11px] text-slate-600">
+                {stats.financeSnapshot.currentMonth}: {formatBdt(stats.financeSnapshot.monthExpenses)}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-violet-200 bg-violet-50/50 p-4">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-violet-800">Investor Capital</span>
+                <PiggyBank size={16} className="text-violet-700" />
+              </div>
+              <p className="mt-2 font-heading text-2xl font-bold tabular-nums text-violet-950">
+                {formatBdt(stats.financeSnapshot.totalInvestorCapital)}
+              </p>
+              <p className="mt-1 text-[11px] text-violet-800">
+                {stats.financeSnapshot.payrollPendingCount > 0
+                  ? `${stats.financeSnapshot.payrollPendingCount} pending payroll (${formatBdt(stats.financeSnapshot.payrollPendingAmount)})`
+                  : 'All payroll up to date'}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Owner Remote Office Pulse / Counselor Today Desk */}
       {!isCounselor && stats.officePulse && (

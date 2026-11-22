@@ -20,6 +20,7 @@ import {
   ExternalLink,
   Activity,
   CalendarClock,
+  Landmark,
 } from 'lucide-react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
@@ -39,6 +40,7 @@ const NAV: Array<{
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, group: 'operations', exact: true },
   { name: 'Student Leads', href: '/admin/leads', icon: Users2, group: 'operations', badge: 'Active' },
   { name: 'KPI & Attendance', href: '/admin/kpi', icon: Activity, group: 'operations', badge: 'Live' },
+  { name: 'Finance & Ledger', href: '/admin/finance', icon: Landmark, group: 'operations', badge: 'Ledger' },
   { name: 'B2B Partners', href: '/admin/partnerships', icon: Handshake, group: 'operations' },
   { name: 'Team & Users', href: '/admin/users', icon: UserCog, group: 'team_controls' },
   { name: 'Settings & Flow', href: '/admin/settings', icon: SettingsIcon, group: 'team_controls' },

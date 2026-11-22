@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
         phone: typeof body.phone === 'string' && body.phone.trim() ? body.phone.trim().slice(0, 40) : null,
         team: typeof body.team === 'string' && body.team.trim() ? body.team.trim().toLowerCase().slice(0, 40) : 'china',
         specialization: typeof body.specialization === 'string' ? body.specialization.trim().slice(0, 160) || null : null,
+        salary: typeof body.salary === 'number' && Number.isFinite(body.salary) && body.salary >= 0 ? body.salary : 0,
         active: typeof body.active === 'boolean' ? body.active : true,
         joinDate: typeof body.joinDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.joinDate) ? body.joinDate : null,
       },
@@ -102,6 +103,12 @@ export async function PATCH(request: NextRequest) {
     if (typeof body.phone === 'string') data.phone = body.phone.trim().slice(0, 40) || null;
     if (typeof body.email === 'string') data.email = body.email.trim().toLowerCase().slice(0, 200) || null;
     if (typeof body.specialization === 'string') data.specialization = body.specialization.trim().slice(0, 160) || null;
+    if (body.salary !== undefined && body.salary !== null) {
+      const parsedSalary = Number(body.salary);
+      if (Number.isFinite(parsedSalary) && parsedSalary >= 0 && parsedSalary <= 100000000) {
+        data.salary = parsedSalary;
+      }
+    }
     if (typeof body.active === 'boolean') data.active = body.active;
 
     const updated = await prisma.employee.update({ where: { id }, data }).catch(() => null);

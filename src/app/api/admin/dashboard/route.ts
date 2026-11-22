@@ -3,6 +3,7 @@ import { isAdminRole } from '@/lib/auth';
 import { buildCounselorLeadWhere, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { logAndFormatServerError } from '@/lib/api-error';
 import { buildConsultancyExecutiveSnapshot } from '@/lib/consultancy-analytics';
+import { getFinanceDashboardSnapshot } from '@/lib/finance-service';
 import { dhakaTodayIso } from '@/lib/kpi-workflow';
 import { buildCounselorDeskSummary, buildOwnerOfficePulse } from '@/lib/office-pulse';
 import { getAllSettings, resolveMetaConfig } from '@/lib/settings';
@@ -122,10 +123,11 @@ export async function GET(request: NextRequest) {
       isAdmin ? getAllSettings() : Promise.resolve({} as Record<string, string>),
     ]);
 
-    const [officePulse, counselorDesk, consultancy] = await Promise.all([
+    const [officePulse, counselorDesk, consultancy, financeSnapshot] = await Promise.all([
       isAdmin ? buildOwnerOfficePulse().catch(() => null) : Promise.resolve(null),
       !isAdmin ? buildCounselorDeskSummary(staff?.employee || null).catch(() => null) : Promise.resolve(null),
       buildConsultancyExecutiveSnapshot(prisma, scopeWhere, todayIso).catch(() => null),
+      isAdmin ? getFinanceDashboardSnapshot().catch(() => null) : Promise.resolve(null),
     ]);
 
     const resolvedMeta = isAdmin ? resolveMetaConfig(settings) : null;
@@ -154,6 +156,7 @@ export async function GET(request: NextRequest) {
       ...(officePulse ? { officePulse } : {}),
       ...(counselorDesk ? { counselorDesk } : {}),
       ...(consultancy ? { consultancy } : {}),
+      ...(isAdmin && financeSnapshot ? { financeSnapshot } : {}),
       ...(isAdmin && resolvedMeta
         ? {
             metaSync: {
