@@ -192,7 +192,11 @@ async function removeObsoleteE03IfSafe() {
     emp._count.activities;
 
   if (busyCount > 0) {
-    console.warn(`Skipping removal of E-03 (${emp.name}) because ${busyCount} linked operational records exist.`);
+    await prisma.employee.update({
+      where: { id: emp.id },
+      data: { active: false },
+    });
+    console.warn(`Marked non-canonical E-03 (${emp.name}) inactive (preserved ${busyCount} historical records).`);
     return;
   }
 
