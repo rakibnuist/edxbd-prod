@@ -20,6 +20,7 @@ import {
   ExternalLink,
   Activity,
   CalendarClock,
+  FolderKanban,
   Landmark,
 } from 'lucide-react';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -39,6 +40,7 @@ const NAV: Array<{
 }> = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, group: 'operations', exact: true },
   { name: 'Student Leads', href: '/admin/leads', icon: Users2, group: 'operations', badge: 'Active' },
+  { name: 'Application Tracker', href: '/admin/applications', icon: FolderKanban, group: 'operations', badge: 'Tracker' },
   { name: 'KPI & Attendance', href: '/admin/kpi', icon: Activity, group: 'operations', badge: 'Live' },
   { name: 'Finance & Ledger', href: '/admin/finance', icon: Landmark, group: 'operations', badge: 'Ledger' },
   { name: 'B2B Partners', href: '/admin/partnerships', icon: Handshake, group: 'operations' },
@@ -59,7 +61,7 @@ const GROUP_LABELS: Record<NavGroup, string> = {
   website_cms: 'Website Catalog & Trust',
 };
 
-const COUNSELOR_ALLOWED_PREFIXES = ['/admin', '/admin/leads', '/admin/kpi'];
+const COUNSELOR_ALLOWED_PREFIXES = ['/admin', '/admin/leads', '/admin/applications', '/admin/kpi'];
 
 function isCounselorRouteAllowed(pathname: string): boolean {
   if (pathname === '/admin') return true;
@@ -135,7 +137,13 @@ function AdminShell({ children }: { children: React.ReactNode }) {
   const isCounselor = user?.role === 'counselor';
 
   const visibleNav = isCounselor
-    ? NAV.filter((item) => item.href === '/admin' || item.href === '/admin/leads' || item.href === '/admin/kpi')
+    ? NAV.filter(
+        (item) =>
+          item.href === '/admin' ||
+          item.href === '/admin/leads' ||
+          item.href === '/admin/applications' ||
+          item.href === '/admin/kpi',
+      )
     : NAV;
 
   const isActive = (href: string, exact?: boolean) =>
@@ -251,7 +259,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
                   <div className="mt-2 text-[10px] text-slate-400">
                     Dhaka Desk: GMT+6
                     <br />
-                    Scope: Assigned Leads &amp; KPI
+                    Scope: Leads, Tracker &amp; KPI
                   </div>
                 </div>
               ) : (
@@ -302,7 +310,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
                   <div className="mx-auto mt-12 max-w-lg rounded-2xl border border-amber-200 bg-white p-8 text-center shadow-sm">
                     <h2 className="text-lg font-bold text-slate-900">Counselor Access Scope</h2>
                     <p className="mt-2 text-sm text-slate-600">
-                      Your counselor account has access to the Leads Workspace and KPI &amp; Daily Check-In console. Administrator settings and site content pages are restricted.
+                      Your counselor account has access to the Leads Workspace, Application Tracker, and KPI &amp; Daily Check-In console. Administrator settings and site content pages are restricted.
                     </p>
                     <div className="mt-5 flex justify-center gap-3">
                       <Link

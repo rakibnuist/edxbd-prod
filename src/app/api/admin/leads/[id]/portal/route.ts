@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { canAccessLeadScope, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { generatePublicToken, logActivityEvent } from '@/lib/crm-operations';
-import { DEFAULT_CHINA_DOCUMENTS } from '@/lib/student-portal';
+import { getDocsTemplateForDestination } from '@/lib/application-tracker';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import prisma from '@/lib/prisma';
 
-const ALLOWED_UNI_STATUSES = new Set(['documents', 'ready', 'submitted', 'admitted', 'returned', 'rejected']);
+const ALLOWED_UNI_STATUSES = new Set([
+  'documents', 'ready', 'submitted', 'pending', 'processing',
+  'initial_review_pass', 'interview', 'pre_admission', 'admitted', 'returned', 'rejected',
+]);
 const ALLOWED_DOC_STATUSES = new Set(['pending', 'received', 'verified', 'rejected', 'not_required']);
 
 export async function GET(
@@ -26,6 +29,8 @@ export async function GET(
       select: {
         id: true,
         name: true,
+        country: true,
+        leadMarket: true,
         publicToken: true,
         publicEnabled: true,
         applicationStage: true,
@@ -45,6 +50,9 @@ export async function GET(
       },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+    if (!admin && lead.leadMarket === 'China') {
+      return NextResponse.json({ message: 'Unauthorized - China market data is restricted' }, { status: 403 });
+    }
     if (!canAccessLeadScope({ role: actor.role, employee: staff?.employee }, lead)) {
       return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
     }
@@ -82,9 +90,20 @@ export async function POST(
     const { id } = await params;
     const lead = await prisma.lead.findUnique({
       where: { id },
-      select: { id: true, name: true, publicToken: true, assignedTo: true, assignedEmployeeId: true },
+      select: {
+        id: true,
+        name: true,
+        country: true,
+        leadMarket: true,
+        publicToken: true,
+        assignedTo: true,
+        assignedEmployeeId: true,
+      },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+    if (!admin && lead.leadMarket === 'China') {
+      return NextResponse.json({ message: 'Unauthorized - China market data is restricted' }, { status: 403 });
+    }
     if (!canAccessLeadScope({ role: decoded.role, employee: staff?.employee }, lead)) {
       return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
     }
@@ -102,8 +121,9 @@ export async function POST(
       });
       const existingDocsCount = await prisma.leadDocument.count({ where: { leadId: id } });
       if (existingDocsCount === 0) {
+        const templateDocs = getDocsTemplateForDestination(lead.country);
         await prisma.leadDocument.createMany({
-          data: DEFAULT_CHINA_DOCUMENTS.map((docType) => ({
+          data: templateDocs.map((docType) => ({
             leadId: id,
             docType,
             status: 'pending',
@@ -123,7 +143,8 @@ export async function POST(
         select: { docType: true },
       });
       const existingSet = new Set(existingDocs.map((d) => d.docType.toLowerCase()));
-      const missing = DEFAULT_CHINA_DOCUMENTS.filter((doc) => !existingSet.has(doc.toLowerCase()));
+      const templateDocs = getDocsTemplateForDestination(lead.country);
+      const missing = templateDocs.filter((doc) => !existingSet.has(doc.toLowerCase()));
       if (missing.length) {
         await prisma.leadDocument.createMany({
           data: missing.map((docType) => ({
@@ -182,11 +203,11 @@ export async function POST(
       return NextResponse.json(created, { status: 201, headers: { 'Cache-Control': 'no-store, private' } });
     }
 
-    if (action === 'reply_student') {
+    if (action === 'reply_student' || action === 'add_note') {
       const message = typeof body.message === 'string' ? body.message.trim().slice(0, 1500) : '';
       if (!message) return NextResponse.json({ error: 'Message text is required.' }, { status: 400 });
       await logActivityEvent({
-        type: 'reply_to_student',
+        type: action === 'add_note' ? 'note' : 'reply_to_student',
         actorName: decoded.email,
         actorUserId: decoded.userId,
         employeeId: lead.assignedEmployeeId,
@@ -219,9 +240,12 @@ export async function PATCH(
     const { id } = await params;
     const lead = await prisma.lead.findUnique({
       where: { id },
-      select: { id: true, name: true, assignedTo: true, assignedEmployeeId: true },
+      select: { id: true, name: true, leadMarket: true, assignedTo: true, assignedEmployeeId: true },
     });
     if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+    if (!admin && lead.leadMarket === 'China') {
+      return NextResponse.json({ message: 'Unauthorized - China market data is restricted' }, { status: 403 });
+    }
     if (!canAccessLeadScope({ role: decoded.role, employee: staff?.employee }, lead)) {
       return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
     }
@@ -302,5 +326,66 @@ export async function PATCH(
     const bodyError = jsonBodyErrorResponse(error);
     if (bodyError) return bodyError;
     return NextResponse.json({ error: 'Failed to update record' }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const admin = await verifyLiveAdminUser(request);
+    const staff = admin ? null : await verifyLiveStaffUser(request);
+    const decoded = admin || staff;
+    if (!decoded) {
+      return NextResponse.json({ message: 'Unauthorized - Staff access required' }, { status: 403 });
+    }
+
+    const { id } = await params;
+    const lead = await prisma.lead.findUnique({
+      where: { id },
+      select: { id: true, name: true, leadMarket: true, assignedTo: true, assignedEmployeeId: true },
+    });
+    if (!lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+    if (!admin && lead.leadMarket === 'China') {
+      return NextResponse.json({ message: 'Unauthorized - China market data is restricted' }, { status: 403 });
+    }
+    if (!canAccessLeadScope({ role: decoded.role, employee: staff?.employee }, lead)) {
+      return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
+    }
+
+    const url = new URL(request.url);
+    const kind = url.searchParams.get('kind') || '';
+    const itemId = url.searchParams.get('itemId') || '';
+    if (!itemId) {
+      return NextResponse.json({ error: 'itemId query parameter is required.' }, { status: 400 });
+    }
+
+    if (kind === 'university') {
+      const existing = await prisma.leadUniversityApp.findFirst({ where: { id: itemId, leadId: id } });
+      if (!existing) return NextResponse.json({ error: 'University application not found.' }, { status: 404 });
+      await prisma.leadUniversityApp.delete({ where: { id: itemId } });
+      void logActivityEvent({
+        type: 'uni_app_removed',
+        actorName: decoded.email,
+        actorUserId: decoded.userId,
+        employeeId: lead.assignedEmployeeId,
+        leadId: id,
+        leadName: lead.name,
+        fromValue: existing.university,
+      });
+      return NextResponse.json({ deleted: true, id: itemId }, { headers: { 'Cache-Control': 'no-store, private' } });
+    }
+
+    if (kind === 'document') {
+      const existing = await prisma.leadDocument.findFirst({ where: { id: itemId, leadId: id } });
+      if (!existing) return NextResponse.json({ error: 'Document item not found.' }, { status: 404 });
+      await prisma.leadDocument.delete({ where: { id: itemId } });
+      return NextResponse.json({ deleted: true, id: itemId }, { headers: { 'Cache-Control': 'no-store, private' } });
+    }
+
+    return NextResponse.json({ error: 'Invalid kind. Must be university or document.' }, { status: 400 });
+  } catch {
+    return NextResponse.json({ error: 'Failed to delete portal record' }, { status: 500 });
   }
 }

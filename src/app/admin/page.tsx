@@ -12,6 +12,7 @@ import {
   ExternalLink,
   FileCheck2,
   Flame,
+  FolderKanban,
   Globe2,
   GraduationCap,
   Handshake,
@@ -401,6 +402,13 @@ export default function AdminDashboardPage() {
           >
             <Users2 size={16} className="text-blue-700" />
             Student Leads
+          </Link>
+          <Link
+            href="/admin/applications"
+            className="flex items-center gap-2.5 rounded-xl border border-sky-200 bg-sky-50/70 px-3.5 py-2.5 text-xs font-bold text-[#071c2e] transition hover:border-sky-300 hover:bg-sky-100"
+          >
+            <FolderKanban size={16} className="text-[#0f3a5c]" />
+            Application Tracker
           </Link>
           <Link
             href="/admin/kpi"

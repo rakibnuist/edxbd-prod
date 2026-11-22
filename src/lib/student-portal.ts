@@ -107,15 +107,25 @@ export const APPLICATION_STAGE_OPTIONS = [
 
 export const ALLOWED_APPLICATION_STAGES = new Set<string>([
   'documents',
+  'ready',
   'submitted',
   'review',
   'interview',
+  'pre_admission',
+  'deposit',
   'admitted',
   'jw202',
   'visa',
+  'visa_applied',
+  'visa_approved',
+  'partial_payment',
   'air_ticket',
+  'complete_payment',
+  'pre_departure',
   'enrolled',
   'fly',
+  'documents_withdraw',
+  'application_withdraw',
 ]);
 
 export const DEFAULT_CHINA_DOCUMENTS = [
@@ -140,13 +150,23 @@ export function resolvePortalMilestoneStep(
   if (stage === 'enrolled' || stage === 'fly' || status === 'enrolled' || status === 'converted') {
     return 6;
   }
-  if (stage === 'visa' || stage === 'air_ticket' || status === 'visa_approved' || status === 'visa_applied') {
+  if (
+    stage === 'visa' ||
+    stage === 'visa_applied' ||
+    stage === 'visa_approved' ||
+    stage === 'partial_payment' ||
+    stage === 'air_ticket' ||
+    stage === 'complete_payment' ||
+    stage === 'pre_departure' ||
+    status === 'visa_approved' ||
+    status === 'visa_applied'
+  ) {
     return 5;
   }
   if (stage === 'jw202' || stage === 'dq' || stage === 'jw202_issued') {
     return 4;
   }
-  if (stage === 'admitted' || stage === 'admission' || status === 'admission_received') {
+  if (stage === 'admitted' || stage === 'admission' || stage === 'pre_admission' || stage === 'deposit' || status === 'admission_received') {
     return 3;
   }
   if (universityApps?.some((u) => u.status.toLowerCase() === 'admitted')) {

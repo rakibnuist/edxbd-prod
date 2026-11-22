@@ -284,7 +284,26 @@ model Lead {
   metaFbc           String?
   metaFbp           String?
 
-  // Native CRM pipeline & Student Live Tracking Portal fields
+  // Native CRM pipeline, Application Tracker & Student Live Tracking Portal fields
+  legacyCrmId        Int?      @unique
+  leadRef            String?
+  isApplication      Boolean   @default(false)
+  leadMarket         String    @default("Bangladesh")
+  channelType        String    @default("B2C")
+  nationality        String?
+  passport           String?
+  referrer           String?
+  serviceFee         Float     @default(0)
+  paidAmount         Float     @default(0)
+  deposit            Float     @default(0)
+  applicationNotes   String?
+  bloodGroup         String?
+  dateOfBirth        String?
+  emergencyContact   String?
+  medicalNotes       String?
+  hardcopyStatus     String?
+  embassyStatus      String?
+  embassyDate        String?
   publicToken        String?   @unique
   publicEnabled      Boolean   @default(true)
   applicationStage   String    @default("documents")
@@ -310,6 +329,9 @@ model Lead {
   @@index([status])
   @@index([assignedEmployeeId])
   @@index([nextFollowup])
+  @@index([isApplication, applicationStage])
+  @@index([leadMarket])
+  @@index([leadRef])
 }
 
 model Content {
