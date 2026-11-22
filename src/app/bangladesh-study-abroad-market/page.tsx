@@ -174,7 +174,7 @@ export default async function BangladeshStudyAbroadMarketPage() {
         isAccessibleForFree: true,
         datePublished: `${BANGLADESH_MARKET_LAST_VERIFIED_ISO}T00:00:00Z`,
         dateModified: `${BANGLADESH_MARKET_LAST_VERIFIED_ISO}T00:00:00Z`,
-        author: { '@type': 'Person', name: 'Mukta Rahaman', jobTitle: 'Senior Counselor' },
+        author: { '@type': 'Person', name: 'Mukta Rahaman', jobTitle: 'Senior Consultant' },
         reviewedBy: { '@id': `${SITE}/#organization` },
         publisher: { '@id': `${SITE}/#organization` },
         isPartOf: { '@id': `${SITE}/#website` },
@@ -668,7 +668,7 @@ export default async function BangladeshStudyAbroadMarketPage() {
       <PathwayGovernanceSection
         tone="sage"
         authorName="Mukta Rahaman"
-        authorRole="Senior Counselor (Education Fit & Cost Planning)"
+        authorRole="Senior Consultant (Education Fit & Cost Planning)"
         reviewerName="Abdullah Al Rakib"
         reviewerRole="Founder and CEO (Chinese & International Higher Education since 2018)"
         lastVerified={BANGLADESH_MARKET_LAST_VERIFIED_LABEL}

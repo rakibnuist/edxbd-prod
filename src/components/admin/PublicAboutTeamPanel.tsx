@@ -112,11 +112,26 @@ export default function PublicAboutTeamPanel() {
     });
     const result = await response.json().catch(() => ({}));
     if (response.ok) {
-      if (id === 'new') setDraft((previous) => ({ ...previous, photoUrl: result.imageUrl }));
-      else
+      const today = new Date().toISOString().slice(0, 10);
+      if (id === 'new') {
+        setDraft((previous) => ({
+          ...previous,
+          photoUrl: result.imageUrl,
+          consentConfirmedAt: previous.consentConfirmedAt || today,
+        }));
+      } else {
         setMembers((previous) =>
-          previous.map((member) => (member.id === id ? { ...member, photoUrl: result.imageUrl } : member)),
+          previous.map((member) =>
+            member.id === id
+              ? {
+                  ...member,
+                  photoUrl: result.imageUrl,
+                  consentConfirmedAt: member.consentConfirmedAt || today,
+                }
+              : member,
+          ),
         );
+      }
       setMessage({
         tone: 'success',
         text:
@@ -300,7 +315,7 @@ export default function PublicAboutTeamPanel() {
                     fill
                     sizes="160px"
                     unoptimized
-                    className="object-cover"
+                    className="object-cover object-top"
                   />
                 ) : (
                   <UserRound size={36} />
@@ -335,7 +350,7 @@ export default function PublicAboutTeamPanel() {
                 <input
                   className={inputClass}
                   value={draft.role}
-                  placeholder="e.g. Senior Counselor"
+                  placeholder="e.g. Senior Consultant"
                   onChange={(event) => setDraft({ ...draft, role: event.target.value })}
                 />
               </Field>
@@ -384,7 +399,16 @@ export default function PublicAboutTeamPanel() {
                   <input
                     type="checkbox"
                     checked={draft.isPublished}
-                    onChange={(event) => setDraft({ ...draft, isPublished: event.target.checked })}
+                    onChange={(event) =>
+                      setDraft({
+                        ...draft,
+                        isPublished: event.target.checked,
+                        consentConfirmedAt:
+                          event.target.checked && !draft.consentConfirmedAt
+                            ? new Date().toISOString().slice(0, 10)
+                            : draft.consentConfirmedAt,
+                      })
+                    }
                   />
                   Publish profile on website
                 </label>
@@ -462,7 +486,7 @@ export default function PublicAboutTeamPanel() {
                       fill
                       sizes="80px"
                       unoptimized
-                      className="object-cover"
+                      className="object-cover object-top"
                     />
                   ) : (
                     <UserRound size={26} />
@@ -560,7 +584,13 @@ export default function PublicAboutTeamPanel() {
                   <input
                     type="checkbox"
                     checked={member.isPublished}
-                    onChange={(event) => updateMember(member.id, 'isPublished', event.target.checked)}
+                    onChange={(event) => {
+                      const checked = event.target.checked;
+                      updateMember(member.id, 'isPublished', checked);
+                      if (checked && !member.consentConfirmedAt) {
+                        updateMember(member.id, 'consentConfirmedAt', new Date().toISOString().slice(0, 10));
+                      }
+                    }}
                   />
                   Show publicly on website
                 </label>

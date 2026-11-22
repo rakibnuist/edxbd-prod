@@ -303,6 +303,20 @@ function buildAliases(emp: KpiEmployeeRow): Set<string> {
     aliases.add(name);
     const firstWord = name.split(/\s+/)[0];
     if (firstWord && firstWord.length >= 4) aliases.add(firstWord);
+    if (name.includes('shamoyla')) aliases.add('mim');
+    if (name.includes('taj')) {
+      aliases.add('taj');
+      aliases.add('taj ahmed');
+      aliases.add('md taj ahmed');
+      aliases.add('taj ahmmed');
+    }
+    if (name.includes('tamal')) aliases.add('tamal');
+    if (name.includes('manjurul')) aliases.add('manjurul');
+    if (name.includes('rakib')) aliases.add('rakib');
+    if (name.includes('jubaer') || name.includes('sakib')) {
+      aliases.add('jubaer');
+      aliases.add('sakib');
+    }
   }
   aliases.add(emp.empId.trim().toLowerCase());
   if (emp.email) aliases.add(emp.email.trim().toLowerCase());

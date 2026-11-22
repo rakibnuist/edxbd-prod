@@ -1,10 +1,12 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Suspense, useState, useEffect, useCallback } from 'react';
 import PublicAboutTeamPanel from '@/components/admin/PublicAboutTeamPanel';
 import { useAuth } from '@/contexts/AuthContext';
+import { teamMembers as canonicalTeamDefaults } from '@/data/teamMembers';
 
 interface LinkedEmployee {
   id: string;
@@ -76,7 +78,7 @@ function UsersPageContent() {
     email: '',
   });
   const [staffDrafts, setStaffDrafts] = useState<
-    Record<string, { role?: string; team?: string; phone?: string; email?: string; active?: boolean }>
+    Record<string, { name?: string; role?: string; team?: string; phone?: string; email?: string; active?: boolean }>
   >({});
 
   const isSuperAdmin = currentUser?.role === 'super_admin';
@@ -229,6 +231,7 @@ function UsersPageContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: emp.id,
+          name: draft.name ?? emp.name,
           role: draft.role ?? emp.role ?? 'Counselor',
           team: draft.team ?? emp.team,
           phone: draft.phone ?? emp.phone ?? '',
@@ -284,6 +287,32 @@ function UsersPageContent() {
     }
   };
 
+  const handleDeleteStaffMember = async (emp: LinkedEmployee) => {
+    if (emp.userId && emp.userId === currentUser?.id) {
+      setError('Cannot delete your own staff profile.');
+      return;
+    }
+    if (!window.confirm(`Remove ${emp.name} (${emp.empId}) from the Office Staff Roster? Historical leads and finance rows stay intact.`)) {
+      return;
+    }
+    setStaffBusy(true);
+    setError('');
+    setStaffNotice('');
+    try {
+      const res = await authenticatedFetch(`/api/admin/employees?id=${encodeURIComponent(emp.id)}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Could not remove staff member');
+      setStaffNotice(`Removed ${emp.name} (${emp.empId}) from Office Staff Roster.`);
+      await fetchUsers();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to remove staff member');
+    } finally {
+      setStaffBusy(false);
+    }
+  };
+
   const handleApplyThreeCounselorPreset = async () => {
     setStaffBusy(true);
     setError('');
@@ -297,7 +326,7 @@ function UsersPageContent() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Could not apply counselor preset');
       setStaffNotice(
-        '3-Counselor office preset applied: Mukta Rahaman (All Countries), Afsana Meme (China Only), Mim (China Only). Create a login below for anyone missing one.',
+        '3-Counselor office preset applied: Mukta Rahaman (All Countries), Afsana Meme (China Only), Shamoyla Narmin (China Only). Create a login below for anyone missing one.',
       );
       await fetchUsers();
     } catch (err) {
@@ -397,9 +426,9 @@ function UsersPageContent() {
   }
 
   const officeCounselorTargets = [
-    { key: 'mukta', label: 'Mukta Rahaman', scope: 'All Countries', match: /\bmukta\b/i },
-    { key: 'afsana', label: 'Afsana Meme', scope: 'China Only', match: /\bafsana\b/i },
-    { key: 'mim', label: 'Mim', scope: 'China Only', match: /\bmim\b/i },
+    { key: 'mukta', label: 'Mukta Rahaman', scope: 'All Countries · Senior Consultant', match: /\bmukta\b/i },
+    { key: 'afsana', label: 'Afsana Meme', scope: 'China Only · Senior Consultant', match: /\bafsana\b/i },
+    { key: 'shamoyla', label: 'Shamoyla Narmin', scope: 'China Only · Consultant', match: /\b(shamoyla|mim)\b/i },
   ].map((target) => {
     const emp = employees.find((e) => target.match.test(e.name) && e.active !== false) || null;
     const linked = emp
@@ -508,7 +537,7 @@ function UsersPageContent() {
                   </p>
                   <p className="text-[11px] text-slate-600">
                     {anyCounselorMissing
-                      ? 'One or more office counselors (such as Mim) are not in the roster yet. Click Apply Preset to create missing counselor profiles and route untouched leads cleanly.'
+                      ? 'One or more office counselors (Mukta, Afsana, Shamoyla) are not in the roster yet. Click Apply Preset to create missing counselor profiles and route untouched leads cleanly.'
                       : 'All 3 office counselors are active in the CRM roster.'}
                   </p>
                 </div>
@@ -518,7 +547,7 @@ function UsersPageContent() {
                   onClick={handleApplyThreeCounselorPreset}
                   className="rounded-lg bg-[#0f3a5c] px-3.5 py-2 text-xs font-bold text-white hover:bg-[#124b7a] disabled:opacity-50"
                 >
-                  {staffBusy ? 'Applying...' : 'Sync 3 Counselors (Mukta · Afsana · Mim)'}
+                  {staffBusy ? 'Applying...' : 'Sync 3 Counselors (Mukta · Afsana · Shamoyla)'}
                 </button>
               </div>
               <div className="mt-3 grid gap-2 sm:grid-cols-3">
@@ -605,7 +634,8 @@ function UsersPageContent() {
               <tbody className="divide-y divide-slate-100 bg-white">
                 {employees.map((emp) => {
                   const draft = staffDrafts[emp.id] || {};
-                  const roleVal = draft.role ?? emp.role ?? 'Counselor';
+                  const nameVal = draft.name ?? emp.name;
+                  const roleVal = draft.role ?? emp.role ?? 'Consultant';
                   const teamVal = draft.team ?? emp.team;
                   const phoneVal = draft.phone ?? emp.phone ?? '';
                   const emailVal = draft.email ?? emp.email ?? '';
@@ -613,11 +643,44 @@ function UsersPageContent() {
                   const linkedUser = users.find(
                     (u) => u.employee?.id === emp.id || (emp.userId && u.id === emp.userId),
                   );
+                  const portraitMatch = canonicalTeamDefaults.find(
+                    (item) => item.name.toLowerCase() === emp.name.trim().toLowerCase() || (emp.email && item.email.toLowerCase() === emp.email.trim().toLowerCase()),
+                  );
+                  const isSelfEmp = Boolean(emp.userId && emp.userId === currentUser?.id);
                   return (
                     <tr key={emp.id} className={!activeVal ? 'bg-slate-50/80 opacity-65' : ''}>
                       <td className="px-4 py-2.5">
-                        <p className="font-bold text-slate-900">{emp.name}</p>
-                        <p className="font-mono text-[11px] text-slate-500">{emp.empId}</p>
+                        <div className="flex items-center gap-2.5">
+                          <div className="relative size-9 shrink-0 overflow-hidden rounded-lg bg-[#0f3a5c]">
+                            {portraitMatch?.image ? (
+                              <Image
+                                src={portraitMatch.image}
+                                alt={emp.name}
+                                fill
+                                className="object-cover object-top"
+                                sizes="36px"
+                              />
+                            ) : (
+                              <span className="flex size-full items-center justify-center text-[11px] font-bold text-[#a9d6ee]">
+                                {emp.name.slice(0, 2).toUpperCase()}
+                              </span>
+                            )}
+                          </div>
+                          <div>
+                            <input
+                              type="text"
+                              value={nameVal}
+                              onChange={(e) =>
+                                setStaffDrafts((prev) => ({
+                                  ...prev,
+                                  [emp.id]: { ...prev[emp.id], name: e.target.value },
+                                }))
+                              }
+                              className="w-44 rounded border border-slate-300 px-2 py-1 text-xs font-bold text-slate-900"
+                            />
+                            <p className="mt-0.5 font-mono text-[10px] text-slate-500">{emp.empId}</p>
+                          </div>
+                        </div>
                       </td>
                       <td className="px-4 py-2.5">
                         <input
@@ -710,14 +773,26 @@ function UsersPageContent() {
                         </label>
                       </td>
                       <td className="px-4 py-2.5 text-right">
-                        <button
-                          type="button"
-                          disabled={staffBusy}
-                          onClick={() => void handleSaveStaffMember(emp)}
-                          className="rounded-lg bg-[#0f3a5c] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#124b7a] disabled:opacity-50"
-                        >
-                          Save
-                        </button>
+                        <div className="inline-flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            disabled={staffBusy}
+                            onClick={() => void handleSaveStaffMember(emp)}
+                            className="rounded-lg bg-[#0f3a5c] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#124b7a] disabled:opacity-50"
+                          >
+                            Save
+                          </button>
+                          {!isSelfEmp && (
+                            <button
+                              type="button"
+                              disabled={staffBusy}
+                              onClick={() => void handleDeleteStaffMember(emp)}
+                              className="rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-xs font-bold text-rose-700 hover:bg-rose-100 disabled:opacity-50"
+                            >
+                              Delete
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -872,7 +947,7 @@ function UsersPageContent() {
                   required
                   value={newStaffForm.name}
                   onChange={(e) => setNewStaffForm({ ...newStaffForm, name: e.target.value })}
-                  placeholder="e.g. Mim"
+                  placeholder="e.g. Shamoyla Narmin"
                   className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs"
                 />
               </div>
@@ -883,7 +958,7 @@ function UsersPageContent() {
                     type="text"
                     value={newStaffForm.empId}
                     onChange={(e) => setNewStaffForm({ ...newStaffForm, empId: e.target.value })}
-                    placeholder="Auto (E-08)"
+                    placeholder="Auto (E-10)"
                     className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs"
                   />
                 </div>
@@ -1052,7 +1127,7 @@ function UsersPageContent() {
       {/* Send Message Modal - Admin & Super Admin */}
       {showMessageModal && messagingUser && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-[480px] shadow-lg rounded-md bg-white">
+          <div className="relative top-20 mx-auto p-5 border w-[480px] max-w-[calc(100vw-2rem)] shadow-lg rounded-md bg-white">
             <div className="mt-3">
               <div className="flex items-center mb-4">
                 <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
@@ -1240,7 +1315,7 @@ function UsersPageContent() {
       {/* Sent Messages History Modal */}
       {showSentMessagesModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-[600px] shadow-lg rounded-md bg-white">
+          <div className="relative top-20 mx-auto p-5 border w-[600px] max-w-[calc(100vw-2rem)] shadow-lg rounded-md bg-white">
             <div className="mt-3">
               <div className="flex justify-between items-center mb-4 pb-2 border-b">
                 <h3 className="text-xl font-bold text-gray-900 flex items-center">

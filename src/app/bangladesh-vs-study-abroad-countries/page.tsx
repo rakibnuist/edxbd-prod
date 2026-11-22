@@ -332,7 +332,7 @@ export default function BangladeshVsStudyAbroadPage() {
       <PathwayGovernanceSection
         tone="sage"
         authorName="Mukta Rahaman"
-        authorRole="Senior Counselor (Education Fit & Cost Planning)"
+        authorRole="Senior Consultant (Education Fit & Cost Planning)"
         lastVerified="21 November 2026"
         nextReview="21 February 2027"
         whatMayChange={[

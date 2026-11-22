@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, FileCheck2, GraduationCap, ShieldCheck, Wallet } from 'lucide-react';
 import TeamSection from '@/components/about/TeamSection';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
+import { teamMembers } from '@/data/teamMembers';
 import { countries } from '@/lib/countries';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { getPublicTrustRecords } from '@/lib/trust-records';
@@ -59,11 +60,41 @@ const structuredData = {
 
 export default async function About() {
   const { team } = await getPublicTrustRecords();
+  const displayTeam = team.length > 0
+    ? team
+    : teamMembers.map((m) => ({
+        id: m.slug,
+        name: m.name,
+        role: m.role,
+        shortRole: m.shortRole,
+        bio: m.bio,
+        photoUrl: m.image,
+        specialties: m.specialties,
+      }));
+  const teamSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'EduExpress International Leadership & Counseling Team',
+    itemListElement: displayTeam.map((member, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      item: {
+        '@type': 'Person',
+        name: member.name,
+        jobTitle: member.role,
+        ...(member.photoUrl
+          ? { image: member.photoUrl.startsWith('http') ? member.photoUrl : `https://eduexpressint.com${member.photoUrl}` }
+          : {}),
+        worksFor: { '@id': 'https://eduexpressint.com/#organization' },
+      },
+    })),
+  };
   const destinationCount = countries.filter(country => country.isActive).length;
 
   return (
     <>
       <JsonLd data={structuredData} />
+      <JsonLd data={teamSchema} />
 
       <PageHero
         path={PATH}
@@ -152,7 +183,7 @@ export default async function About() {
         </div>
       </Section>
 
-      <TeamSection team={team} />
+      <TeamSection team={displayTeam} />
 
       <Section tone="sage" title="What we do for every student.">
         <div data-anim="stagger" className="grid gap-5 sm:grid-cols-2">

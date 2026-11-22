@@ -53,8 +53,13 @@ export async function POST(request: NextRequest) {
 
     let empId = typeof body.empId === 'string' ? body.empId.trim().toUpperCase().slice(0, 24) : '';
     if (!empId) {
-      const count = await prisma.employee.count();
-      empId = `E-${String(count + 1).padStart(2, '0')}`;
+      const existingIds = await prisma.employee.findMany({ select: { empId: true } });
+      let maxNum = 0;
+      for (const row of existingIds) {
+        const m = /^E-(\d+)$/i.exec(row.empId.trim());
+        if (m) maxNum = Math.max(maxNum, Number(m[1]));
+      }
+      empId = `E-${String(Math.max(maxNum, existingIds.length) + 1).padStart(2, '0')}`;
     }
 
     const existing = await prisma.employee.findUnique({ where: { empId } });
@@ -96,7 +101,23 @@ export async function PATCH(request: NextRequest) {
     const id = typeof body.id === 'string' ? body.id.trim() : '';
     if (!id) return NextResponse.json({ error: 'Employee id is required.' }, { status: 400 });
 
+    const existing = await prisma.employee.findUnique({
+      where: { id },
+      select: { id: true, empId: true, userId: true },
+    });
+    if (!existing) return NextResponse.json({ error: 'Employee not found.' }, { status: 404 });
+
     const data: Record<string, unknown> = {};
+    if (typeof body.empId === 'string' && body.empId.trim()) {
+      const nextEmpId = body.empId.trim().toUpperCase().slice(0, 24);
+      if (nextEmpId !== existing.empId) {
+        const conflict = await prisma.employee.findUnique({ where: { empId: nextEmpId }, select: { id: true } });
+        if (conflict) {
+          return NextResponse.json({ error: `Employee ID ${nextEmpId} already exists.` }, { status: 409 });
+        }
+        data.empId = nextEmpId;
+      }
+    }
     if (typeof body.name === 'string' && body.name.trim()) data.name = body.name.trim().slice(0, 120);
     if (typeof body.role === 'string' && body.role.trim()) data.role = body.role.trim().slice(0, 80);
     if (typeof body.team === 'string' && body.team.trim()) data.team = body.team.trim().toLowerCase().slice(0, 40);
@@ -114,10 +135,52 @@ export async function PATCH(request: NextRequest) {
     const updated = await prisma.employee.update({ where: { id }, data }).catch(() => null);
     if (!updated) return NextResponse.json({ error: 'Employee not found.' }, { status: 404 });
 
+    if (typeof data.name === 'string' && existing.userId) {
+      await prisma.user
+        .update({ where: { id: existing.userId }, data: { name: data.name } })
+        .catch(() => null);
+    }
+
     return NextResponse.json(updated, { headers: { 'Cache-Control': 'no-store, private' } });
   } catch (err) {
     const bodyError = jsonBodyErrorResponse(err);
     if (bodyError) return bodyError;
     return NextResponse.json({ error: 'Failed to update employee' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const decoded = await verifyLiveAdminUser(request);
+    if (!decoded || !isAdminRole(decoded.role)) {
+      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403 });
+    }
+
+    let id = request.nextUrl.searchParams.get('id')?.trim() || '';
+    if (!id) {
+      const body = await readLimitedJson(request, 8 * 1024).catch(() => ({} as Record<string, unknown>));
+      id = typeof body.id === 'string' ? body.id.trim() : '';
+    }
+    if (!id) {
+      return NextResponse.json({ error: 'Employee id is required.' }, { status: 400 });
+    }
+
+    const existing = await prisma.employee.findUnique({
+      where: { id },
+      select: { id: true, empId: true, name: true, userId: true },
+    });
+    if (!existing) {
+      return NextResponse.json({ error: 'Employee not found.' }, { status: 404 });
+    }
+    if (existing.userId && existing.userId === decoded.userId) {
+      return NextResponse.json({ error: 'Cannot delete your own staff profile.' }, { status: 400 });
+    }
+
+    await prisma.employee.delete({ where: { id } });
+    return NextResponse.json({ deleted: true, id: existing.id, empId: existing.empId }, { headers: { 'Cache-Control': 'no-store, private' } });
+  } catch (err) {
+    const bodyError = jsonBodyErrorResponse(err);
+    if (bodyError) return bodyError;
+    return NextResponse.json({ error: 'Failed to delete employee' }, { status: 500 });
   }
 }

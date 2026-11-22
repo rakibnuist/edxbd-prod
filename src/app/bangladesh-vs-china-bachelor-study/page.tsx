@@ -405,8 +405,8 @@ export default async function BangladeshVsChinaBachelorPage() {
       {/* Governance */}
       <PathwayGovernanceSection
         tone="sage"
-        authorName="Md Tauhidul Islam Nur"
-        authorRole="Country Manager, China (University Programs & Rankings)"
+        authorName="Afsana Meme"
+        authorRole="Senior Consultant (China Admissions & Scholarships)"
         lastVerified="21 November 2026"
         nextReview="21 February 2027"
         whatMayChange={[

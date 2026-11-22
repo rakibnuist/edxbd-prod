@@ -111,7 +111,36 @@ const dhakaOfficeFaqs = [
 ];
 
 export default async function EducationConsultantDhakaPage() {
-  const { offices, metrics } = await getPublicTrustRecords();
+  const { team, offices, metrics } = await getPublicTrustRecords();
+  const displayTeam = team.length > 0
+    ? team
+    : teamMembers.map((m) => ({
+        id: m.slug,
+        name: m.name,
+        role: m.role,
+        shortRole: m.shortRole,
+        bio: m.bio,
+        photoUrl: m.image,
+        specialties: m.specialties,
+      }));
+  const teamSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'EduExpress International Dhanmondi Counseling & Processing Team',
+    itemListElement: displayTeam.map((member, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      item: {
+        '@type': 'Person',
+        name: member.name,
+        jobTitle: member.role,
+        ...(member.photoUrl
+          ? { image: member.photoUrl.startsWith('http') ? member.photoUrl : `https://eduexpressint.com${member.photoUrl}` }
+          : {}),
+        worksFor: ORG,
+      },
+    })),
+  };
   const office = offices[0];
   const phone = office?.phonePrimary ?? config.contact.phone;
   const whatsappDigits = (office?.phonePrimary ?? config.contact.whatsapp).replace(/\D/g, '');
@@ -123,6 +152,7 @@ export default async function EducationConsultantDhakaPage() {
   return (
     <>
       <JsonLd data={structuredData} />
+      <JsonLd data={teamSchema} />
 
       <PageHero
         path={PATH}
@@ -240,22 +270,34 @@ export default async function EducationConsultantDhakaPage() {
         title="Meet your Dhanmondi counselling & processing team."
         intro="Every student file has a named counselor and application processing specialist—you always know who handles your university applications and proof records."
       >
-        <div data-anim="stagger" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {teamMembers.map((member) => (
-            <article key={member.name} className={kit.cardSage}>
+        <div data-anim="stagger" className={`grid gap-5 sm:grid-cols-2 ${displayTeam.length >= 7 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
+          {displayTeam.map((member) => (
+            <article key={member.id || member.name} className={`flex flex-col ${kit.cardSage}`}>
               <div className="flex items-center gap-3.5">
-                <span className="grid size-12 shrink-0 place-items-center rounded-full bg-petrol-800 font-display text-[17px] font-black text-lime">
-                  {initials(member.name)}
-                </span>
-                <div>
-                  <h3 className="text-[18px] font-semibold leading-snug text-petrol-800">{member.name}</h3>
-                  <p className="text-[14px] font-medium text-lime-deep">{member.role}</p>
+                {member.photoUrl ? (
+                  <div className="relative size-16 shrink-0 overflow-hidden rounded-2xl bg-petrol-800 ring-2 ring-white shadow-sm">
+                    <Image
+                      src={member.photoUrl}
+                      alt={`${member.name} — ${member.role} at EduExpress International, Dhaka`}
+                      fill
+                      className="object-cover object-top"
+                      sizes="64px"
+                    />
+                  </div>
+                ) : (
+                  <span className="grid size-16 shrink-0 place-items-center rounded-2xl bg-petrol-800 font-display text-[17px] font-black text-lime">
+                    {initials(member.name)}
+                  </span>
+                )}
+                <div className="min-w-0">
+                  <h3 className="text-[17px] font-semibold leading-snug text-petrol-800">{member.name}</h3>
+                  <p className="text-[13px] font-medium text-lime-deep">{member.role}</p>
                 </div>
               </div>
-              <p className="mt-4 text-[15px] leading-6 text-ink-soft">{member.bio}</p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {member.specialties.map((item) => (
-                  <span key={item} className="rounded-full bg-white px-3 py-1 text-[12.5px] font-semibold text-petrol-800">
+              {member.bio ? <p className="mt-4 flex-1 text-[14.5px] leading-6 text-ink-soft">{member.bio}</p> : null}
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {member.specialties.slice(0, 3).map((item) => (
+                  <span key={item} className="rounded-full bg-white px-2.5 py-0.5 text-[12px] font-semibold text-petrol-800">
                     {item}
                   </span>
                 ))}

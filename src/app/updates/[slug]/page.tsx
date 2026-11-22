@@ -81,6 +81,7 @@ const teamPersonSchema = (name: string | null | undefined) => {
     '@type': 'Person',
     name: member.name,
     jobTitle: member.role,
+    ...(member.image ? { image: `https://eduexpressint.com${member.image}` } : {}),
     worksFor: { '@type': 'Organization', '@id': 'https://eduexpressint.com/#organization' },
   };
 };

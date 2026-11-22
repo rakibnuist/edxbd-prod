@@ -122,7 +122,7 @@ export default async function PressRoomPage() {
       enTitle: 'Bangladesh Bank Student File Rules vs. China On-Campus & CSC Payment Pathways',
       enSummary: `Covering ${marketSnapshot.activeDestinationCount} active study destinations and ${marketSnapshot.liveCatalog.activeUniversities} university records (${chinaReport.universityCount} in China), the 2027 benchmark clarifies where Authorized Dealer (AD) bank Student Files are mandatory (Malaysia, UK, Finland) versus CSC and on-campus China registration payments.`,
       enQuote:
-        '"Understanding Bangladesh Bank GFET Student File rules early prevents last-minute offer expiry and helps families plan official foreign-exchange disbursements cleanly." — Mukta Rahaman, Senior Counselor',
+        '"Understanding Bangladesh Bank GFET Student File rules early prevents last-minute offer expiry and helps families plan official foreign-exchange disbursements cleanly." — Mukta Rahaman, Senior Consultant',
       bnTitle: 'বাংলাদেশ ব্যাংক স্টুডেন্ট ফাইল নিয়ম বনাম চীনে স্কলারশিপ ও অন-ক্যাম্পাস পেমেন্ট সুবিধা',
       bnSummary:
         'মালয়েশিয়া, যুক্তরাজ্য বা ফিনল্যান্ডে অগ্রিম টিউশন পাঠাতে বাংলাদেশ ব্যাংকের নীতিমালা অনুযায়ী AD বাণিজ্যিক ব্যাংকে স্টুডেন্ট ফাইল খুলতে হয়। অন্যদিকে চীনে পূর্ণ CSC স্কলারশিপ বা অন-ক্যাম্পাস রেজিস্ট্রেশন পেমেন্ট রুটে কীভাবে পাসপোর্ট এনডোর্সমেন্ট ও ডুয়াল-কারেন্সি কার্ডে প্রক্রিয়া সম্পন্ন হয়, তা ১২ দেশের মার্কেট রিপোর্টে বিশ্লেষণ করা হয়েছে।',
@@ -155,7 +155,7 @@ export default async function PressRoomPage() {
       enTitle: `China MBBS & STEM 2027: BMDC Recognition, CSCA Exam & Live Tuition Data (${chinaReport.universityCount} Universities)`,
       enSummary: `Across ${chinaReport.universityCount} active Chinese universities (${chinaReport.programCounts.total} recorded programmes, ${chinaReport.scholarshipTotal} scholarships), explicit median English-taught Bachelor tuition sits at ${bachelorMedian ? `CNY ${bachelorMedian.toLocaleString('en-US')}/yr` : 'published CNY schedules'} and Master's at ${masterMedian ? `CNY ${masterMedian.toLocaleString('en-US')}/yr` : 'published CNY schedules'}. Medical applicants must confirm China MoE English authorization, WDOMS listing, and Bangladesh BMDC RQE rules before paying deposits.`,
       enQuote:
-        '"For medical and undergraduate STEM applicants, verifying MoE authorization, BMDC eligibility, and CSCA test readiness upfront matters far more than chasing unverified tuition discounts." — Mukta Rahaman, Senior Counselor',
+        '"For medical and undergraduate STEM applicants, verifying MoE authorization, BMDC eligibility, and CSCA test readiness upfront matters far more than chasing unverified tuition discounts." — Mukta Rahaman, Senior Consultant',
       bnTitle: 'চীনে MBBS ও ইঞ্জিনিয়ারিং ২০২৭: BMDC স্বীকৃতি, WDOMS যাচাই ও নতুন CSCA পরীক্ষার প্রস্তুতি',
       bnSummary: `চীনের ${chinaReport.universityCount}টি সক্রিয় বিশ্ববিদ্যালয়ের (${chinaReport.programCounts.total}টি প্রোগ্রাম ও ${chinaReport.scholarshipTotal}টি স্কলারশিপ রেকর্ড) ডেটা অনুযায়ী MBBS শিক্ষার্থীর জন্য China MoE অনুমোদন, WDOMS তালিকাভুক্তি এবং বাংলাদেশে ফিরে BMDC রেজিস্ট্রেশন কোয়ালিফাইং পরীক্ষার (RQE) নিয়ম যাচাই বাধ্যতামূলক; পাশাপাশি আন্ডারগ্র্যাজুয়েট ভর্তিতে CSCA পরীক্ষার প্রস্তুতিও এখন গুরুত্বপূর্ণ।`,
       bnQuote:
@@ -619,7 +619,7 @@ export default async function PressRoomPage() {
               </span>
               <div>
                 <h3 className={kit.h3}>Mukta Rahaman</h3>
-                <p className="text-[14px] font-semibold text-lime-deep">Senior Counselor · All Active Destinations</p>
+                <p className="text-[14px] font-semibold text-lime-deep">Senior Consultant · All Active Destinations</p>
               </div>
             </div>
             <p className={`mt-4 ${kit.body}`}>

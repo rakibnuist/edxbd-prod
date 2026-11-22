@@ -150,21 +150,144 @@ async function main() {
     });
   }
 
-  const team = [
-    ['abdullah-al-rakib', 'Abdullah Al Rakib', 'Founder and China Strategy Lead', 'China and strategy', 'Guides education fit, China route strategy and institutional decisions.', ['China strategy', 'Education fit'], 1],
-    ['mukta-rahaman', 'Mukta Rahaman', 'Student Counselor', 'Student counseling', 'Helps students and parents understand study options, timelines and next steps.', ['Student counseling', 'Parent conversations'], 2],
-    ['jannatun-ema', 'Jannatun Ema', 'Student Guidance Executive', 'Student guidance', 'Supports document readiness and keeps applicants clear about what happens next.', ['Document readiness', 'Student support'], 3],
-    ['md-tauhidul-islam-nur', 'Md Tauhidul Islam Nur', 'China Admissions Counselor', 'China admissions', 'Supports China program matching, application preparation and intake planning.', ['China admissions', 'Program matching'], 4],
-    ['md-taj-ahmed', 'Md Taj Ahmed', 'Application Support Executive', 'Application support', 'Coordinates application records and helps students follow required steps.', ['Application records', 'Process support'], 5],
-    ['md-abdullah-al-razib', 'Md Abdullah Al Razib', 'Student Services Executive', 'Student services', 'Assists students with service questions and pre-departure preparation.', ['Student services', 'Pre-departure'], 6],
+  const legacyTeamSlugs = [
+    'jannatun-ema',
+    'md-tauhidul-islam-nur',
+    'md-abdullah-al-razib',
+    'md-taj-ahmed',
+    'mim',
   ];
 
-  for (const [slug, name, role, shortRole, bio, specialties, displayOrder] of team) {
-    await prisma.teamMember.upsert({
-      where: { slug },
-      update: { name, role, shortRole, bio, specialties: JSON.stringify(specialties), displayOrder, isPublished: true },
-      create: { slug, name, role, shortRole, bio, specialties: JSON.stringify(specialties), displayOrder, isPublished: true },
-    });
+  const hadLegacyTeam =
+    (await prisma.teamMember.count({ where: { slug: { in: legacyTeamSlugs } } })) > 0;
+  const unmigratedStubCount = await prisma.teamMember.count({
+    where: {
+      slug: { in: ['abdullah-al-rakib', 'mukta-rahaman'] },
+      photoUrl: null,
+      consentConfirmedAt: null,
+    },
+  });
+
+  if (hadLegacyTeam) {
+    await prisma.teamMember.deleteMany({ where: { slug: { in: legacyTeamSlugs } } });
+  }
+
+  const remainingTeamCount = await prisma.teamMember.count();
+  const shouldSeedTeam = remainingTeamCount === 0 || hadLegacyTeam || unmigratedStubCount > 0;
+
+  const team = [
+    [
+      'abdullah-al-rakib',
+      'Abdullah Al Rakib',
+      'Founder & CEO',
+      'Executive Strategy & China Partnerships',
+      'Founded EduExpress in 2018 with hands-on experience in Chinese higher education, university partner governance, and visa-first admissions transparency across Bangladesh and international corridors.',
+      ['China Strategy', 'Institutional Partnerships', 'Cost Governance'],
+      '/images/team/abdullah-al-rakib.webp',
+      1,
+    ],
+    [
+      'sakib-al-jubaer',
+      'Sakib Al Jubaer',
+      'Managing Director',
+      'Operations & Partner Relations',
+      'Oversees Dhaka HQ operations, compliance standards, and B2B partner coordination so every student application progresses through verified milestones cleanly and on schedule.',
+      ['Operations Leadership', 'B2B Partner Desk', 'Quality Assurance'],
+      '/images/team/sakib-al-jubaer.webp',
+      2,
+    ],
+    [
+      'mahmudul-hasan-tamal',
+      'Mahmudul Hasan Tamal',
+      'Business Development Manager',
+      'University Outreach & Partnerships',
+      'Leads university relations, institutional outreach, and partner network expansion while guiding applicants on international scholarships and program pathways.',
+      ['Business Development', 'Agency Partnerships', 'University Relations'],
+      '/images/team/mahmudul-hasan-tamal.webp',
+      3,
+    ],
+    [
+      'mukta-rahaman',
+      'Mukta Rahaman',
+      'Senior Consultant',
+      'All Destinations & ClearCost Planning',
+      'Leads academic fit reviews, parent consultations, and multi-destination cost schedules across China, Malaysia, Europe, and the UK with written cost transparency.',
+      ['Senior Consultation', 'Multi-Destination Fit', 'ClearCost Schedules'],
+      '/images/team/mukta-rahaman.webp',
+      4,
+    ],
+    [
+      'afsana-meme',
+      'Afsana Meme',
+      'Senior Consultant',
+      'China Admissions & Scholarships',
+      'Specializes in Chinese university admissions, CSC and provincial scholarship guidance, and document readiness for Bachelor, MBBS, and graduate applicants.',
+      ['China Admissions', 'CSC Scholarships', 'MBBS Guidance'],
+      '/images/team/afsana-meme.webp',
+      5,
+    ],
+    [
+      'shamoyla-narmin',
+      'Shamoyla Narmin',
+      'Consultant',
+      'Admissions Counseling',
+      'Supports prospective students from initial academic screening through university shortlisting, scholarship matching, and ongoing applicant follow-up.',
+      ['Student Counseling', 'University Shortlisting', 'Applicant Follow-Up'],
+      '/images/team/shamoyla-narmin.webp',
+      6,
+    ],
+    [
+      'md-taj-ahmmed',
+      'Md Taj Ahmmed',
+      'Files & Visa Processing Executive',
+      'Application & Visa Filing',
+      'Manages portal submissions, document verification, JW202/DQ tracking, and embassy visa file preparation so every deadline and proof record stays accurate.',
+      ['Application Filing', 'JW202 & Embassy Docs', 'Deadline Compliance'],
+      '/images/team/md-taj-ahmmed.webp',
+      7,
+    ],
+    [
+      'md-manjurul-islam',
+      'Md Manjurul Islam',
+      'Creative Designer & Video Editor',
+      'Brand Design & Video Media',
+      'Produces official educational explainers, student testimonial stories, campus guides, and institutional visual assets across EduExpress public channels.',
+      ['Video Production', 'Visual Design', 'Educational Media'],
+      '/images/team/md-manjurul-islam.webp',
+      8,
+    ],
+  ];
+
+  if (shouldSeedTeam) {
+    const defaultConsentDate = new Date('2026-11-22T00:00:00.000Z');
+    for (const [slug, name, role, shortRole, bio, specialties, photoUrl, displayOrder] of team) {
+      await prisma.teamMember.upsert({
+        where: { slug },
+        update: {
+          name,
+          role,
+          shortRole,
+          bio,
+          specialties: JSON.stringify(specialties),
+          photoUrl,
+          consentConfirmedAt: defaultConsentDate,
+          displayOrder,
+          isPublished: true,
+        },
+        create: {
+          slug,
+          name,
+          role,
+          shortRole,
+          bio,
+          specialties: JSON.stringify(specialties),
+          photoUrl,
+          consentConfirmedAt: defaultConsentDate,
+          displayOrder,
+          isPublished: true,
+        },
+      });
+    }
   }
 
   console.log('Synced canonical Dhanmondi office, trust metrics, service packages, and team members.');

@@ -37,7 +37,7 @@ export interface LeadRoutingMatchInput {
 }
 
 export const NON_COUNSELING_ROLE_RE =
-  /\b(investor|managing|director|ceo|super\s*admin|founder|founder_ceo|b2b|accountant)\b/i;
+  /\b(investor|managing|director|ceo|super\s*admin|founder|founder_ceo|b2b|accountant|business\s+development|creative|designer|video\s+editor|files?\s*(?:&|and)?\s*visa\s+processing|processing\s+executive)\b/i;
 
 const VALID_MODES = new Set<LeadFlowMode>(['auto_balanced', 'round_robin', 'manual_queue']);
 const VALID_ATTENDANCE = new Set<LeadFlowAttendanceFilter>([
@@ -246,21 +246,21 @@ export const THREE_OFFICE_COUNSELORS_PRESET = [
   {
     match: /\bmukta\b/i,
     canonicalName: 'Mukta Rahaman',
-    role: 'Senior Counselor',
+    role: 'Senior Consultant',
     team: 'all',
     countryScope: 'all' as CounselorCountryScope,
   },
   {
     match: /\bafsana\b/i,
     canonicalName: 'Afsana Meme',
-    role: 'Senior Counselor',
+    role: 'Senior Consultant',
     team: 'china',
     countryScope: 'china_only' as CounselorCountryScope,
   },
   {
-    match: /\bmim\b/i,
-    canonicalName: 'Mim',
-    role: 'Counselor',
+    match: /\b(shamoyla|mim)\b/i,
+    canonicalName: 'Shamoyla Narmin',
+    role: 'Consultant',
     team: 'china',
     countryScope: 'china_only' as CounselorCountryScope,
   },

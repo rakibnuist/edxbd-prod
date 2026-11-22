@@ -34,6 +34,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import AdminTeamManagerPanel from '@/components/admin/AdminTeamManagerPanel';
 import MetaConnectionPanel from '@/components/admin/MetaConnectionPanel';
 import type { ConsultancyExecutiveSnapshot } from '@/lib/consultancy-analytics';
 import { formatBdt, type FinanceDashboardSnapshot } from '@/lib/finance-logic';
@@ -999,6 +1000,9 @@ export default function AdminDashboardPage() {
         </section>
         )}
       </div>
+
+      {/* Unified Team Directory (Add, Edit Portraits, Sync CRM & Public Website) */}
+      {!isCounselor && <AdminTeamManagerPanel compact onChanged={() => void fetchDashboard()} />}
 
       {/* Live Incoming Student Enquiries Feed */}
       <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
