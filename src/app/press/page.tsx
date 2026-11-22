@@ -666,6 +666,19 @@ export default async function PressRoomPage() {
                 <dd className="inline">{DEFAULT_OFFICE_RECORD.email}</dd>
               </div>
               <div>
+                <dt className="inline font-semibold text-white">Industry Associations: </dt>
+                <dd className="inline">
+                  Founding Member (#08),{' '}
+                  <a href="https://cbcabd.org/" target="_blank" rel="noopener noreferrer" className="text-lime underline underline-offset-4 hover:text-white">
+                    China Bangladesh Consultancy Alliance (CBCA)
+                  </a>{' '}
+                  · Active Member,{' '}
+                  <a href="https://facdcab.org/" target="_blank" rel="noopener noreferrer" className="text-lime underline underline-offset-4 hover:text-white">
+                    Foreign Admission &amp; Career Development Consultants Association of Bangladesh (FACD-CAB)
+                  </a>
+                </dd>
+              </div>
+              <div>
                 <dt className="inline font-semibold text-white">Disambiguation: </dt>
                 <dd className="inline">
                   Unaffiliated with UK-registered EduExpress Ltd. or similarly named foreign companies outside Bangladesh.

@@ -70,10 +70,10 @@ const AGENCY_CHECKLIST = [
       'Honest eligibility review against official 2026/27 CSC Type A/B, provincial, and university rules — clearly distinguishing full stipends from partial tuition waivers and annual GPA renewal conditions.',
   },
   {
-    criterion: 'Physical Office & Legal Entity',
-    redFlag: 'Social-media-only operators without a verifiable Dhaka office, written refund policy, or transparent complaints desk.',
+    criterion: 'Physical Office, Associations & Legal Entity',
+    redFlag: 'Social-media-only operators without a verifiable Dhaka office, recognized industry association membership, or written complaints policy.',
     eduExpressStandard:
-      'Permanent ground-floor office since 2018 at Evergreen Latif, House 12/1, Road 4/A, Dhanmondi, Dhaka 1209 (parents welcome Sat–Thu, 11 AM–6 PM), published fee & complaints policies, and CERN-archived open data.',
+      'Founding Member (#08) of CBCA (cbcabd.org) and Active Member of FACD-CAB (facdcab.org); permanent ground-floor office since 2018 at Evergreen Latif, House 12/1, Road 4/A, Dhanmondi, Dhaka 1209 (parents welcome Sat–Thu, 11 AM–6 PM) with CERN-archived open data.',
   },
 ] as const;
 
@@ -211,9 +211,9 @@ export default async function StudyInChinaAgencyBangladeshPage() {
           { name: 'Study in China', path: '/study-in-china-from-bangladesh' },
           { name: 'Study in China Agency in Bangladesh' },
         ]}
-        eyebrow="Since 2018 · Dhanmondi, Dhaka · Visa-First Policy"
+        eyebrow="Since 2018 · CBCA Founding Member & FACD-CAB Member · Dhanmondi, Dhaka"
         title="Study in China agency in Bangladesh — verify costs & visas before you pay."
-        lead="EduExpress International is a Dhaka-based, evidence-first China education consultancy. Compare 150 verified Chinese universities with written first-year cost sheets and BDT 0 EduExpress service fee before China visa approval."
+        lead="EduExpress International is a Dhaka-based, evidence-first China education consultancy — Founding Member (#08) of the China Bangladesh Consultancy Alliance (CBCA) and Active Member of FACD-CAB. Compare 150 verified Chinese universities with written first-year cost sheets and BDT 0 EduExpress service fee before China visa approval."
         reviewed="November 2026"
         actions={
           <>

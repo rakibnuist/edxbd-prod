@@ -207,6 +207,20 @@ export default async function RootLayout({
       "https://www.youtube.com/@EduExpressInt",
       "https://twitter.com/eduexpressint"
     ],
+    "memberOf": [
+      {
+        "@type": "Organization",
+        "name": "China Bangladesh Consultancy Alliance (CBCA)",
+        "alternateName": "CBCA",
+        "url": "https://cbcabd.org/"
+      },
+      {
+        "@type": "Organization",
+        "name": "Foreign Admission & Career Development Consultants Association of Bangladesh (FACD-CAB)",
+        "alternateName": "FACD-CAB",
+        "url": "https://facdcab.org/"
+      }
+    ],
     "serviceArea": {
       "@type": "Country",
       "name": "Bangladesh"
