@@ -243,6 +243,80 @@ export default function ApplicationDetailDrawer({
     };
   }, [applicationId, reloadTick, authenticatedFetch]);
 
+  const matchedUniForOverview = useMemo(() => {
+    const q = (form.university || '').trim().toLowerCase();
+    if (!q || !Array.isArray(catalogUniversities)) return null;
+    return (
+      catalogUniversities.find(
+        (u) =>
+          typeof u?.name === 'string' &&
+          (u.name.toLowerCase() === q ||
+            u.name.toLowerCase().startsWith(q) ||
+            u.name.toLowerCase().includes(q)),
+      ) || null
+    );
+  }, [form.university, catalogUniversities]);
+
+  const uniMatchesForOverview = useMemo(() => {
+    const q = (form.university || '').trim().toLowerCase();
+    if (q.length < 2 || !Array.isArray(catalogUniversities)) return [];
+    const exact = catalogUniversities.some(
+      (u) => typeof u?.name === 'string' && u.name.toLowerCase() === q,
+    );
+    if (exact) return [];
+    return catalogUniversities
+      .filter((u) => typeof u?.name === 'string' && u.name.toLowerCase().includes(q))
+      .slice(0, 10);
+  }, [form.university, catalogUniversities]);
+
+  const overviewSuggestedMajors = useMemo(() => {
+    const basePrograms = Array.isArray(programs) ? programs : [];
+    const uniMajors = Array.isArray(matchedUniForOverview?.majors)
+      ? matchedUniForOverview.majors
+      : [];
+    if (uniMajors.length > 0) {
+      return Array.from(new Set([...uniMajors, ...basePrograms]));
+    }
+    return basePrograms;
+  }, [matchedUniForOverview, programs]);
+
+  const matchedUniForAdd = useMemo(() => {
+    const q = newUniName.trim().toLowerCase();
+    if (!q || !Array.isArray(catalogUniversities)) return null;
+    return (
+      catalogUniversities.find(
+        (u) =>
+          typeof u?.name === 'string' &&
+          (u.name.toLowerCase() === q ||
+            u.name.toLowerCase().startsWith(q) ||
+            u.name.toLowerCase().includes(q)),
+      ) || null
+    );
+  }, [newUniName, catalogUniversities]);
+
+  const uniMatchesForAdd = useMemo(() => {
+    const q = newUniName.trim().toLowerCase();
+    if (q.length < 2 || !Array.isArray(catalogUniversities)) return [];
+    const exact = catalogUniversities.some(
+      (u) => typeof u?.name === 'string' && u.name.toLowerCase() === q,
+    );
+    if (exact) return [];
+    return catalogUniversities
+      .filter((u) => typeof u?.name === 'string' && u.name.toLowerCase().includes(q))
+      .slice(0, 10);
+  }, [newUniName, catalogUniversities]);
+
+  const addUniSuggestedMajors = useMemo(() => {
+    const basePrograms = Array.isArray(programs) ? programs : [];
+    const uniMajors = Array.isArray(matchedUniForAdd?.majors)
+      ? matchedUniForAdd.majors
+      : [];
+    if (uniMajors.length > 0) {
+      return Array.from(new Set([...uniMajors, ...basePrograms]));
+    }
+    return basePrograms;
+  }, [matchedUniForAdd, programs]);
+
   if (!applicationId) return null;
 
   const loading = !detail || detail.application.id !== applicationId;
@@ -266,46 +340,6 @@ export default function ApplicationDetailDrawer({
       : null;
 
   const safeDriveHref = toSafeExternalUrl(form.driveLink);
-
-  const matchedUniForOverview = useMemo(() => {
-    const q = form.university?.trim().toLowerCase();
-    if (!q) return null;
-    return (
-      catalogUniversities.find(
-        (u) =>
-          u.name.toLowerCase() === q ||
-          u.name.toLowerCase().startsWith(q) ||
-          u.name.toLowerCase().includes(q),
-      ) || null
-    );
-  }, [form.university, catalogUniversities]);
-
-  const overviewSuggestedMajors = useMemo(() => {
-    if (matchedUniForOverview && matchedUniForOverview.majors.length > 0) {
-      return Array.from(new Set([...matchedUniForOverview.majors, ...programs]));
-    }
-    return programs;
-  }, [matchedUniForOverview, programs]);
-
-  const matchedUniForAdd = useMemo(() => {
-    const q = newUniName.trim().toLowerCase();
-    if (!q) return null;
-    return (
-      catalogUniversities.find(
-        (u) =>
-          u.name.toLowerCase() === q ||
-          u.name.toLowerCase().startsWith(q) ||
-          u.name.toLowerCase().includes(q),
-      ) || null
-    );
-  }, [newUniName, catalogUniversities]);
-
-  const addUniSuggestedMajors = useMemo(() => {
-    if (matchedUniForAdd && matchedUniForAdd.majors.length > 0) {
-      return Array.from(new Set([...matchedUniForAdd.majors, ...programs]));
-    }
-    return programs;
-  }, [matchedUniForAdd, programs]);
 
   const handleStageChange = async (stageKey: string) => {
     if (!app) return;
@@ -695,12 +729,12 @@ export default function ApplicationDetailDrawer({
         <div className="flex items-center gap-1 overflow-x-auto border-b border-slate-200 bg-slate-50 px-5 pt-2.5">
           {[
             { id: 'overview' as const, label: 'Excel File & Visa', icon: FileText },
-            { id: 'universities' as const, label: `Universities (${detail?.universityApps.length ?? 0})`, icon: Building2 },
+            { id: 'universities' as const, label: `Universities (${detail?.universityApps?.length ?? 0})`, icon: Building2 },
             { id: 'documents' as const, label: `Documents (${app?.docsReceived ?? 0}/${app?.docsTotal ?? 0})`, icon: ClipboardCheck },
             ...(isAdmin
               ? [{ id: 'finance' as const, label: 'Finance Ledger', icon: Landmark }]
               : []),
-            { id: 'timeline' as const, label: `Timeline (${detail?.activities.length ?? 0})`, icon: MessageSquare },
+            { id: 'timeline' as const, label: `Timeline (${detail?.activities?.length ?? 0})`, icon: MessageSquare },
           ].map((item) => {
             const Icon = item.icon;
             const active = tab === item.id;
@@ -977,7 +1011,23 @@ export default function ApplicationDetailDrawer({
                         />
                       </div>
 
-                      {matchedUniForOverview && matchedUniForOverview.majors.length > 0 && (
+                      {uniMatchesForOverview.length > 0 && (
+                        <div className="sm:col-span-3 flex flex-wrap items-center gap-1.5 rounded-lg border border-sky-200 bg-sky-50/70 p-2 text-[11px] text-[#071c2e]">
+                          <span className="font-bold">Select Database University:</span>
+                          {uniMatchesForOverview.map((u) => (
+                            <button
+                              key={u.name}
+                              type="button"
+                              onClick={() => setForm({ ...form, university: u.name })}
+                              className="rounded border border-sky-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-[#0f3a5c] transition hover:bg-sky-100"
+                            >
+                              {u.name} ({u.country})
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {matchedUniForOverview && Array.isArray(matchedUniForOverview.majors) && matchedUniForOverview.majors.length > 0 && (
                         <div className="sm:col-span-3 flex flex-wrap items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50/70 p-2 text-[11px] text-emerald-950">
                           <span className="font-bold flex items-center gap-1">
                             <Sparkles size={12} className="text-[#0b7a53]" /> Database Majors for {matchedUniForOverview.name}:
@@ -1236,7 +1286,23 @@ export default function ApplicationDetailDrawer({
                       />
                     </div>
 
-                    {matchedUniForAdd && matchedUniForAdd.majors.length > 0 && (
+                    {uniMatchesForAdd.length > 0 && (
+                      <div className="sm:col-span-6 flex flex-wrap items-center gap-1.5 rounded-lg border border-sky-200 bg-sky-50/70 p-2.5 text-[11px] text-[#071c2e]">
+                        <span className="font-bold">Select Database University:</span>
+                        {uniMatchesForAdd.map((u) => (
+                          <button
+                            key={u.name}
+                            type="button"
+                            onClick={() => setNewUniName(u.name)}
+                            className="rounded border border-sky-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-[#0f3a5c] transition hover:bg-sky-100"
+                          >
+                            {u.name} ({u.country})
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {matchedUniForAdd && Array.isArray(matchedUniForAdd.majors) && matchedUniForAdd.majors.length > 0 && (
                       <div className="sm:col-span-6 flex flex-wrap items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50/70 p-2.5 text-[11px] text-emerald-950">
                         <span className="font-bold flex items-center gap-1">
                           <Sparkles size={12} className="text-[#0b7a53]" /> Database Majors for {matchedUniForAdd.name}:
@@ -1284,13 +1350,13 @@ export default function ApplicationDetailDrawer({
                     </div>
                   </form>
 
-                  {detail?.universityApps.length === 0 ? (
+                  {(detail?.universityApps?.length ?? 0) === 0 ? (
                     <div className="rounded-xl border border-dashed border-slate-300 p-8 text-center text-xs text-slate-500">
                       No per-university submissions recorded yet. Add one above to track individual offers, returns, or rejections.
                     </div>
                   ) : (
                     <div className="space-y-2.5">
-                      {detail?.universityApps.map((u) => (
+                      {(detail?.universityApps ?? []).map((u) => (
                         <div
                           key={u.id}
                           className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3.5"
@@ -1375,12 +1441,12 @@ export default function ApplicationDetailDrawer({
                   </form>
 
                   <div className="divide-y divide-slate-100 rounded-xl border border-slate-200 bg-white">
-                    {detail?.documents.length === 0 ? (
+                    {(detail?.documents?.length ?? 0) === 0 ? (
                       <p className="p-6 text-center text-xs text-slate-500">
                         No documents listed. Click &ldquo;Seed {app.country} Checklist&rdquo; above.
                       </p>
                     ) : (
-                      detail?.documents.map((doc) => {
+                      (detail?.documents ?? []).map((doc) => {
                         const safeUpload = toSafeExternalUrl(doc.studentUploadedUrl || doc.fileUrl);
                         return (
                           <div key={doc.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5">
@@ -1583,10 +1649,10 @@ export default function ApplicationDetailDrawer({
                   </form>
 
                   <div className="space-y-2">
-                    {detail?.activities.length === 0 ? (
+                    {(detail?.activities?.length ?? 0) === 0 ? (
                       <p className="py-6 text-center text-xs text-slate-500">No activity events recorded yet.</p>
                     ) : (
-                      detail?.activities.map((ev) => (
+                      (detail?.activities ?? []).map((ev) => (
                         <div key={ev.id} className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs">
                           <div className="flex items-center justify-between gap-2">
                             <span className="font-bold capitalize text-slate-900">

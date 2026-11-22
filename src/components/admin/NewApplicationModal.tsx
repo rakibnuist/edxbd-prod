@@ -127,22 +127,37 @@ export default function NewApplicationModal({
 
   const matchedUni = useMemo(() => {
     const q = university.trim().toLowerCase();
-    if (!q) return null;
+    if (!q || !Array.isArray(catalogUniversities)) return null;
     return (
       catalogUniversities.find(
         (u) =>
-          u.name.toLowerCase() === q ||
-          u.name.toLowerCase().startsWith(q) ||
-          u.name.toLowerCase().includes(q),
+          typeof u?.name === 'string' &&
+          (u.name.toLowerCase() === q ||
+            u.name.toLowerCase().startsWith(q) ||
+            u.name.toLowerCase().includes(q)),
       ) || null
     );
   }, [university, catalogUniversities]);
 
+  const uniMatches = useMemo(() => {
+    const q = university.trim().toLowerCase();
+    if (q.length < 2 || !Array.isArray(catalogUniversities)) return [];
+    const exact = catalogUniversities.some(
+      (u) => typeof u?.name === 'string' && u.name.toLowerCase() === q,
+    );
+    if (exact) return [];
+    return catalogUniversities
+      .filter((u) => typeof u?.name === 'string' && u.name.toLowerCase().includes(q))
+      .slice(0, 10);
+  }, [university, catalogUniversities]);
+
   const suggestedMajors = useMemo(() => {
-    if (matchedUni && matchedUni.majors.length > 0) {
-      return Array.from(new Set([...matchedUni.majors, ...programs]));
+    const basePrograms = Array.isArray(programs) ? programs : [];
+    const uniMajors = Array.isArray(matchedUni?.majors) ? matchedUni.majors : [];
+    if (uniMajors.length > 0) {
+      return Array.from(new Set([...uniMajors, ...basePrograms]));
     }
-    return programs;
+    return basePrograms;
   }, [matchedUni, programs]);
 
   if (!open) return null;
@@ -522,7 +537,23 @@ export default function NewApplicationModal({
               </datalist>
             </div>
 
-            {matchedUni && matchedUni.majors.length > 0 && (
+            {uniMatches.length > 0 && (
+              <div className="sm:col-span-3 flex flex-wrap items-center gap-1.5 rounded-lg border border-sky-200 bg-sky-50/70 p-2.5 text-[11px] text-[#071c2e]">
+                <span className="font-bold">Select Database University:</span>
+                {uniMatches.map((u) => (
+                  <button
+                    key={u.name}
+                    type="button"
+                    onClick={() => setUniversity(u.name)}
+                    className="rounded border border-sky-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-[#0f3a5c] transition hover:bg-sky-100"
+                  >
+                    {u.name} ({u.country})
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {matchedUni && Array.isArray(matchedUni.majors) && matchedUni.majors.length > 0 && (
               <div className="sm:col-span-3 flex flex-wrap items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50/70 p-2.5 text-[11px] text-emerald-950">
                 <span className="font-bold">
                   Database Majors for {matchedUni.name}:

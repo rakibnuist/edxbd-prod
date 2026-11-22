@@ -203,8 +203,11 @@ export default function ApplicationTrackerClient() {
     };
   }, [isAuthenticated, authLoading, authenticatedFetch]);
 
-  const allRows = useMemo(() => data?.rows ?? [], [data]);
-  const employees = useMemo(() => data?.meta.employees ?? [], [data]);
+  const allRows = useMemo(() => (Array.isArray(data?.rows) ? data.rows : []), [data]);
+  const employees = useMemo(
+    () => (Array.isArray(data?.meta?.employees) ? data.meta.employees : []),
+    [data],
+  );
 
   // 1. Academic Year counts across all records
   const yearBreakdown = useMemo(() => {
@@ -285,9 +288,7 @@ export default function ApplicationTrackerClient() {
         b2c += 1;
       }
     }
-    const topPartners = Array.from(partnerMap.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 6);
+    const topPartners = Array.from(partnerMap.entries()).sort((a, b) => b[1] - a[1]);
     return { total: timeScopedRows.length, b2c, b2b, topPartners };
   }, [timeScopedRows]);
 
@@ -888,7 +889,7 @@ export default function ApplicationTrackerClient() {
               <select
                 value={sessionFilter}
                 onChange={(e) => {
-                  setSessionFilter(e.target.value as any);
+                  setSessionFilter(e.target.value as 'all' | IntakeSessionKey);
                   setExactIntakeFilter('all');
                   setPage(1);
                 }}
@@ -911,8 +912,9 @@ export default function ApplicationTrackerClient() {
               <select
                 value={channelFilter}
                 onChange={(e) => {
-                  setChannelFilter(e.target.value as any);
-                  if (e.target.value === 'b2c') setReferrerFilter('all');
+                  const nextChannel = e.target.value as 'all' | 'b2c' | 'b2b';
+                  setChannelFilter(nextChannel);
+                  if (nextChannel === 'b2c') setReferrerFilter('all');
                   setPage(1);
                 }}
                 className={`w-full rounded-xl border px-3 py-2 text-xs font-semibold transition focus:border-[#0f3a5c] focus:outline-none ${
@@ -1831,13 +1833,22 @@ export default function ApplicationTrackerClient() {
                               <div className="font-bold text-[#0b7a53]">
                                 {formatBdt(row.financeReceivedTotal)}
                               </div>
-                            ) : row.deposit > 0 ? (
+                            ) : Number(row.paidAmount || 0) > 0 ? (
+                              <div className="font-bold text-[#0b7a53]">
+                                {formatBdt(Number(row.paidAmount))}
+                              </div>
+                            ) : Number(row.deposit || 0) > 0 ? (
                               <div className="font-semibold text-slate-700">
-                                {formatBdt(row.deposit)}
+                                {formatBdt(Number(row.deposit))}
                                 <span className="block text-[10px] font-normal text-slate-400">Deposit</span>
                               </div>
                             ) : (
                               <span className="text-slate-300">—</span>
+                            )}
+                            {Number(row.serviceFee || 0) > 0 && (
+                              <div className="mt-0.5 text-[10px] text-slate-500">
+                                Fee: {formatBdt(Number(row.serviceFee))}
+                              </div>
                             )}
                           </td>
                         )}
