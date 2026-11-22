@@ -127,7 +127,7 @@ export default async function EducationConsultantDhakaPage() {
       <PageHero
         path={PATH}
         trail={[{ name: 'Education consultant in Dhaka' }]}
-        eyebrow="Since 2018 · CBCA Founding Member & FACD-CAB Member · Dhanmondi, Dhaka"
+        eyebrow="Since 2018 · CBCA Founding Member (#08) & FACD-CAB (FCM-452) · Dhanmondi, Dhaka"
         title="Education consultant in Dhanmondi, Dhaka."
         lead="Compare overseas education options, recognition, scholarship conditions and complete costs with a counsellor at our Dhanmondi office."
         reviewed="November 2026"

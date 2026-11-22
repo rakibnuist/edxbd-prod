@@ -205,20 +205,24 @@ export default async function RootLayout({
       "https://www.linkedin.com/company/eduexpressint",
       "https://www.instagram.com/eduexpressint/",
       "https://www.youtube.com/@EduExpressInt",
-      "https://twitter.com/eduexpressint"
+      "https://twitter.com/eduexpressint",
+      "https://www.facdcab.org/members/directory/2264"
     ],
     "memberOf": [
       {
         "@type": "Organization",
         "name": "China Bangladesh Consultancy Alliance (CBCA)",
         "alternateName": "CBCA",
-        "url": "https://cbcabd.org/"
+        "url": "https://cbcabd.org/",
+        "description": "Founding Member (#08) of the China Bangladesh Consultancy Alliance"
       },
       {
         "@type": "Organization",
         "name": "Foreign Admission & Career Development Consultants Association of Bangladesh (FACD-CAB)",
         "alternateName": "FACD-CAB",
-        "url": "https://facdcab.org/"
+        "url": "https://www.facdcab.org/members/directory/2264",
+        "identifier": "FCM-452",
+        "description": "Active FACD-CAB Member (Member ID: FCM-452, since 2026)"
       }
     ],
     "serviceArea": {

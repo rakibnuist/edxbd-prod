@@ -672,9 +672,9 @@ export default async function PressRoomPage() {
                   <a href="https://cbcabd.org/" target="_blank" rel="noopener noreferrer" className="text-lime underline underline-offset-4 hover:text-white">
                     China Bangladesh Consultancy Alliance (CBCA)
                   </a>{' '}
-                  · Active Member,{' '}
-                  <a href="https://facdcab.org/" target="_blank" rel="noopener noreferrer" className="text-lime underline underline-offset-4 hover:text-white">
-                    Foreign Admission &amp; Career Development Consultants Association of Bangladesh (FACD-CAB)
+                  · Active Member (ID: FCM-452),{' '}
+                  <a href="https://www.facdcab.org/members/directory/2264" target="_blank" rel="noopener noreferrer" className="text-lime underline underline-offset-4 hover:text-white">
+                    FACD-CAB Official Directory (#2264)
                   </a>
                 </dd>
               </div>
