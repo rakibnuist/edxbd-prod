@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight,
   Building2,
@@ -111,10 +111,19 @@ interface DetailResponse {
 
 type DrawerTab = 'overview' | 'universities' | 'documents' | 'finance' | 'timeline';
 
+export interface CatalogUniversityOption {
+  name: string;
+  country: string;
+  majors: string[];
+}
+
 interface ApplicationDetailDrawerProps {
   applicationId: string | null;
   isAdmin: boolean;
   employees: TrackerEmployeeOption[];
+  universities?: string[];
+  programs?: string[];
+  catalogUniversities?: CatalogUniversityOption[];
   onClose: () => void;
   onMutated: () => void;
 }
@@ -138,6 +147,9 @@ export default function ApplicationDetailDrawer({
   applicationId,
   isAdmin,
   employees,
+  universities = [],
+  programs = [],
+  catalogUniversities = [],
   onClose,
   onMutated,
 }: ApplicationDetailDrawerProps) {
@@ -254,6 +266,46 @@ export default function ApplicationDetailDrawer({
       : null;
 
   const safeDriveHref = toSafeExternalUrl(form.driveLink);
+
+  const matchedUniForOverview = useMemo(() => {
+    const q = form.university?.trim().toLowerCase();
+    if (!q) return null;
+    return (
+      catalogUniversities.find(
+        (u) =>
+          u.name.toLowerCase() === q ||
+          u.name.toLowerCase().startsWith(q) ||
+          u.name.toLowerCase().includes(q),
+      ) || null
+    );
+  }, [form.university, catalogUniversities]);
+
+  const overviewSuggestedMajors = useMemo(() => {
+    if (matchedUniForOverview && matchedUniForOverview.majors.length > 0) {
+      return Array.from(new Set([...matchedUniForOverview.majors, ...programs]));
+    }
+    return programs;
+  }, [matchedUniForOverview, programs]);
+
+  const matchedUniForAdd = useMemo(() => {
+    const q = newUniName.trim().toLowerCase();
+    if (!q) return null;
+    return (
+      catalogUniversities.find(
+        (u) =>
+          u.name.toLowerCase() === q ||
+          u.name.toLowerCase().startsWith(q) ||
+          u.name.toLowerCase().includes(q),
+      ) || null
+    );
+  }, [newUniName, catalogUniversities]);
+
+  const addUniSuggestedMajors = useMemo(() => {
+    if (matchedUniForAdd && matchedUniForAdd.majors.length > 0) {
+      return Array.from(new Set([...matchedUniForAdd.majors, ...programs]));
+    }
+    return programs;
+  }, [matchedUniForAdd, programs]);
 
   const handleStageChange = async (stageKey: string) => {
     if (!app) return;
@@ -908,6 +960,7 @@ export default function ApplicationDetailDrawer({
                         <label className="mb-1 block text-[11px] font-semibold text-slate-600">Primary University</label>
                         <input
                           type="text"
+                          list="drawer-uni-list"
                           value={form.university || ''}
                           onChange={(e) => setForm({ ...form, university: e.target.value })}
                           className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
@@ -917,11 +970,30 @@ export default function ApplicationDetailDrawer({
                         <label className="mb-1 block text-[11px] font-semibold text-slate-600">Major / Program</label>
                         <input
                           type="text"
+                          list="drawer-overview-program-list"
                           value={form.program || ''}
                           onChange={(e) => setForm({ ...form, program: e.target.value })}
                           className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
                         />
                       </div>
+
+                      {matchedUniForOverview && matchedUniForOverview.majors.length > 0 && (
+                        <div className="sm:col-span-3 flex flex-wrap items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50/70 p-2 text-[11px] text-emerald-950">
+                          <span className="font-bold flex items-center gap-1">
+                            <Sparkles size={12} className="text-[#0b7a53]" /> Database Majors for {matchedUniForOverview.name}:
+                          </span>
+                          {matchedUniForOverview.majors.map((m: string) => (
+                            <button
+                              key={m}
+                              type="button"
+                              onClick={() => setForm({ ...form, program: m })}
+                              className="rounded border border-emerald-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-emerald-900 transition hover:bg-emerald-100"
+                            >
+                              + {m}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                       <div>
                         <label className="mb-1 block text-[11px] font-semibold text-slate-600">Last Education</label>
                         <input
@@ -1146,6 +1218,7 @@ export default function ApplicationDetailDrawer({
                       <input
                         type="text"
                         required
+                        list="drawer-uni-list"
                         value={newUniName}
                         onChange={(e) => setNewUniName(e.target.value)}
                         placeholder="University Name *"
@@ -1155,12 +1228,31 @@ export default function ApplicationDetailDrawer({
                     <div className="sm:col-span-3">
                       <input
                         type="text"
+                        list="drawer-add-program-list"
                         value={newUniProgram}
                         onChange={(e) => setNewUniProgram(e.target.value)}
                         placeholder="Program / Major"
                         className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
                       />
                     </div>
+
+                    {matchedUniForAdd && matchedUniForAdd.majors.length > 0 && (
+                      <div className="sm:col-span-6 flex flex-wrap items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50/70 p-2.5 text-[11px] text-emerald-950">
+                        <span className="font-bold flex items-center gap-1">
+                          <Sparkles size={12} className="text-[#0b7a53]" /> Database Majors for {matchedUniForAdd.name}:
+                        </span>
+                        {matchedUniForAdd.majors.map((m: string) => (
+                          <button
+                            key={m}
+                            type="button"
+                            onClick={() => setNewUniProgram(m)}
+                            className="rounded border border-emerald-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-emerald-900 transition hover:bg-emerald-100"
+                          >
+                            + {m}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                     <div className="sm:col-span-2">
                       <input
                         type="text"
@@ -1522,6 +1614,22 @@ export default function ApplicationDetailDrawer({
           )}
         </div>
       </div>
+
+      <datalist id="drawer-uni-list">
+        {universities.map((u: string) => (
+          <option key={u} value={u} />
+        ))}
+      </datalist>
+      <datalist id="drawer-overview-program-list">
+        {overviewSuggestedMajors.map((p: string) => (
+          <option key={p} value={p} />
+        ))}
+      </datalist>
+      <datalist id="drawer-add-program-list">
+        {addUniSuggestedMajors.map((p: string) => (
+          <option key={p} value={p} />
+        ))}
+      </datalist>
     </div>
   );
 }

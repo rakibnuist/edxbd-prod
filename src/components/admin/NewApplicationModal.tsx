@@ -21,6 +21,12 @@ import {
   extractIntakeYear,
 } from '@/lib/application-tracker';
 
+export interface CatalogUniversityOption {
+  name: string;
+  country: string;
+  majors: string[];
+}
+
 export interface TrackerEmployeeOption {
   id: string;
   empId: string;
@@ -51,6 +57,8 @@ interface NewApplicationModalProps {
   intakes: string[];
   destinations: string[];
   universities: string[];
+  programs?: string[];
+  catalogUniversities?: CatalogUniversityOption[];
   referrers: string[];
   promotableLeads: PromotableLeadOption[];
   onClose: () => void;
@@ -63,6 +71,8 @@ export default function NewApplicationModal({
   employees,
   destinations,
   universities,
+  programs = [],
+  catalogUniversities = [],
   referrers,
   promotableLeads,
   onClose,
@@ -114,6 +124,26 @@ export default function NewApplicationModal({
     () => promotableLeads.find((l) => l.id === selectedLeadId) || null,
     [promotableLeads, selectedLeadId],
   );
+
+  const matchedUni = useMemo(() => {
+    const q = university.trim().toLowerCase();
+    if (!q) return null;
+    return (
+      catalogUniversities.find(
+        (u) =>
+          u.name.toLowerCase() === q ||
+          u.name.toLowerCase().startsWith(q) ||
+          u.name.toLowerCase().includes(q),
+      ) || null
+    );
+  }, [university, catalogUniversities]);
+
+  const suggestedMajors = useMemo(() => {
+    if (matchedUni && matchedUni.majors.length > 0) {
+      return Array.from(new Set([...matchedUni.majors, ...programs]));
+    }
+    return programs;
+  }, [matchedUni, programs]);
 
   if (!open) return null;
 
@@ -460,12 +490,18 @@ export default function NewApplicationModal({
                 Major / Program
               </label>
               <input
+                list="tracker-program-list"
                 type="text"
                 value={program}
                 onChange={(e) => setProgram(e.target.value)}
-                placeholder="Computer Science / Accounting & Finance / MBBS"
+                placeholder="Computer Science / MBBS / Civil Engineering"
                 className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
               />
+              <datalist id="tracker-program-list">
+                {suggestedMajors.map((p) => (
+                  <option key={p} value={p} />
+                ))}
+              </datalist>
             </div>
 
             <div className="sm:col-span-3">
@@ -485,6 +521,24 @@ export default function NewApplicationModal({
                 ))}
               </datalist>
             </div>
+
+            {matchedUni && matchedUni.majors.length > 0 && (
+              <div className="sm:col-span-3 flex flex-wrap items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50/70 p-2.5 text-[11px] text-emerald-950">
+                <span className="font-bold">
+                  Database Majors for {matchedUni.name}:
+                </span>
+                {matchedUni.majors.map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => setProgram(m)}
+                    className="rounded border border-emerald-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-emerald-900 transition hover:bg-emerald-100"
+                  >
+                    + {m}
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div>
               <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">

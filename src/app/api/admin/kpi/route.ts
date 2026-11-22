@@ -60,7 +60,23 @@ export async function GET(request: NextRequest) {
       }),
       prisma.lead.findMany({
         where: isAdmin ? undefined : { assignedEmployeeId: selfEmpId },
-        select: { id: true, name: true, phone: true, country: true, status: true, applicationStage: true, assignedTo: true, assignedEmployeeId: true, nextFollowup: true, gpa: true, assessAcademicResults: true, createdAt: true, updatedAt: true },
+        select: {
+          id: true,
+          name: true,
+          phone: true,
+          country: true,
+          status: true,
+          isApplication: true,
+          referrer: true,
+          applicationStage: true,
+          assignedTo: true,
+          assignedEmployeeId: true,
+          nextFollowup: true,
+          gpa: true,
+          assessAcademicResults: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       }),
       prisma.activityEvent.findMany({
         where: isAdmin

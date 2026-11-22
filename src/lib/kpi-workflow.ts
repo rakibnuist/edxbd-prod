@@ -7,7 +7,9 @@ export const KPI_ACT_WEIGHTS: Record<string, number> = {
   lead_assigned: 1,
   lead_updated_via_app: 2,
   payment_recorded: 3,
+  application_opened: 3,
   application_stage_changed: 3,
+  embassy_status_changed: 2,
   uni_app_status: 3,
   document_updated: 2,
   reply_to_student: 2,
@@ -20,7 +22,7 @@ export const KPI_ACT_WEIGHTS: Record<string, number> = {
 
 export const KPI_ACT_GROUPS: Record<string, string[]> = {
   lead_work: ['lead_created', 'lead_status_changed', 'lead_assigned', 'lead_updated_via_app', 'payment_recorded'],
-  application: ['application_stage_changed', 'uni_app_status', 'document_updated'],
+  application: ['application_opened', 'application_stage_changed', 'embassy_status_changed', 'uni_app_status', 'document_updated'],
   communication: ['reply_to_student', 'note'],
   tasks: ['task_completed', 'daily_log_submitted', 'daily_log_updated', 'attendance_in'],
 };
@@ -155,6 +157,8 @@ export interface KpiLeadRow {
   phone: string;
   country: string;
   status: string;
+  isApplication?: boolean;
+  referrer?: string | null;
   applicationStage: string;
   assignedTo: string | null;
   assignedEmployeeId: string | null;
@@ -471,20 +475,47 @@ export function computeEmployeeKpiReport(input: {
       }
     }
 
-    // Assigned leads & SLA check
+    // Assigned leads & SLA check (including Application Tracker files assigned or referred to this counselor)
     const empLeads = input.leads.filter(
-      (l) => l.assignedEmployeeId === emp.id || matchesEmployeeName(l.assignedTo, aliases),
+      (l) =>
+        l.assignedEmployeeId === emp.id ||
+        matchesEmployeeName(l.assignedTo, aliases) ||
+        (l.isApplication && !l.assignedEmployeeId && matchesEmployeeName(l.referrer, aliases)),
     );
     const activeLeads = empLeads.filter((l) => !CLOSED_LEAD_STATUSES.has(l.status));
     const newThisMonth = empLeads.filter((l) => toDhakaDate(l.createdAt)?.slice(0, 7) === month).length;
     const qualifiedCount = empLeads.filter((l) => l.status === 'qualified').length;
-    const applicationStartedCount = empLeads.filter((l) =>
-      ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(l.status),
+    const applicationStartedCount = empLeads.filter(
+      (l) =>
+        (l.isApplication &&
+          !['documents_withdraw', 'application_withdraw'].includes(l.applicationStage)) ||
+        ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(
+          l.status,
+        ),
     ).length;
     const admittedCount = empLeads.filter(
-      (l) => l.status === 'admission_received' || ['admitted', 'jw202', 'visa'].includes(l.applicationStage),
+      (l) =>
+        l.status === 'admission_received' ||
+        [
+          'pre_admission',
+          'admitted',
+          'jw202',
+          'visa',
+          'visa_applied',
+          'visa_approved',
+          'partial_payment',
+          'air_ticket',
+          'complete_payment',
+          'pre_departure',
+        ].includes(l.applicationStage),
     ).length;
-    const enrolledCount = empLeads.filter((l) => l.status === 'enrolled' || l.status === 'converted' || l.applicationStage === 'enrolled').length;
+    const enrolledCount = empLeads.filter(
+      (l) =>
+        l.status === 'enrolled' ||
+        l.status === 'converted' ||
+        l.applicationStage === 'enrolled' ||
+        l.applicationStage === 'fly',
+    ).length;
 
     let uncontactedOverdue = 0;
     let followupsDueToday = 0;

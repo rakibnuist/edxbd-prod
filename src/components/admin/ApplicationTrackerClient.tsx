@@ -65,6 +65,8 @@ interface ApplicationsApiResponse {
     destinations: string[];
     intakes: string[];
     universities: string[];
+    programs?: string[];
+    catalogUniversities?: Array<{ name: string; country: string; majors: string[] }>;
     referrers: string[];
     degrees: string[];
     promotableLeads: PromotableLeadOption[];
@@ -108,10 +110,10 @@ export default function ApplicationTrackerClient() {
 
   // Executive view controls
   const [viewMode, setViewMode] = useState<'table' | 'board'>('table');
-  const [showAnalytics, setShowAnalytics] = useState(true);
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   // Primary Multi-Dimensional Filters: Year, Intake Session, Channel (B2C/B2B), Counselor, Destination
-  const [yearFilter, setYearFilter] = useState<string>('all');
+  const [yearFilter, setYearFilter] = useState<string>('2027');
   const [sessionFilter, setSessionFilter] = useState<'all' | IntakeSessionKey>('all');
   const [exactIntakeFilter, setExactIntakeFilter] = useState<string>('all');
   const [channelFilter, setChannelFilter] = useState<'all' | 'b2c' | 'b2b'>('all');
@@ -453,7 +455,7 @@ export default function ApplicationTrackerClient() {
   }, [filteredRows, pageSize, safePage]);
 
   const hasActiveFilters =
-    yearFilter !== 'all' ||
+    yearFilter !== '2027' ||
     sessionFilter !== 'all' ||
     exactIntakeFilter !== 'all' ||
     channelFilter !== 'all' ||
@@ -468,7 +470,7 @@ export default function ApplicationTrackerClient() {
     hideWithdrawn;
 
   const resetFilters = () => {
-    setYearFilter('all');
+    setYearFilter('2027');
     setSessionFilter('all');
     setExactIntakeFilter('all');
     setChannelFilter('all');
@@ -838,264 +840,179 @@ export default function ApplicationTrackerClient() {
           </div>
         </div>
 
-        {/* TIER 1: SEPARATE ACADEMIC YEAR & INTAKE SESSION BAR */}
-        <div className="mt-4 grid grid-cols-1 gap-3 border-t border-slate-100 pt-4 lg:grid-cols-12">
-          {/* Academic Year Selector */}
-          <div className="flex flex-wrap items-center gap-2 lg:col-span-5">
-            <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
-              <Calendar size={12} className="text-[#0f3a5c]" />
-              Year:
-            </span>
-            <div className="inline-flex flex-wrap items-center rounded-xl border border-slate-200 bg-slate-50 p-0.5 text-xs">
-              <button
-                type="button"
-                onClick={() => {
-                  setYearFilter('all');
+        {/* EXECUTIVE DROPDOWN MENU SYSTEM */}
+        <div className="mt-4 border-t border-slate-100 pt-4">
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+            {/* 1. Academic Cohort Dropdown */}
+            <div>
+              <label className="mb-1 flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+                <Calendar size={11} className="text-[#0f3a5c]" /> Cohort / Year
+              </label>
+              <select
+                value={yearFilter}
+                onChange={(e) => {
+                  setYearFilter(e.target.value);
                   setExactIntakeFilter('all');
                   setPage(1);
                 }}
-                className={`rounded-lg px-3 py-1.5 font-bold transition ${
-                  yearFilter === 'all'
-                    ? 'bg-[#071c2e] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                className={`w-full rounded-xl border px-3 py-2 text-xs font-bold transition focus:border-[#0f3a5c] focus:outline-none ${
+                  yearFilter === '2027'
+                    ? 'border-emerald-300 bg-emerald-50/70 text-emerald-950 font-extrabold'
+                    : yearFilter === '2026'
+                      ? 'border-sky-300 bg-sky-50/70 text-[#0f3a5c]'
+                      : 'border-slate-200 bg-white text-slate-800'
                 }`}
               >
-                All Years <span className="ml-0.5 tabular-nums opacity-75">({allRows.length})</span>
-              </button>
-              {yearBreakdown.map(([yr, count]) => (
-                <button
-                  key={yr}
-                  type="button"
-                  onClick={() => {
-                    setYearFilter(yr);
-                    setExactIntakeFilter('all');
-                    setPage(1);
-                  }}
-                  className={`rounded-lg px-3 py-1.5 font-bold transition ${
-                    yearFilter === yr
-                      ? yr === '2027'
-                        ? 'bg-[#0b7a53] text-white shadow-xs'
-                        : 'bg-[#0f3a5c] text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {yr} <span className="ml-0.5 tabular-nums opacity-80">({count})</span>
-                </button>
-              ))}
+                <option value="2027">
+                  2027 Admissions (Active Cohort · {yearBreakdown.find(([y]) => y === '2027')?.[1] || 0})
+                </option>
+                <option value="2026">
+                  2026 Admissions (Historical Archive · {yearBreakdown.find(([y]) => y === '2026')?.[1] || 0})
+                </option>
+                <option value="all">All Admissions (Full History · {allRows.length})</option>
+                {yearBreakdown
+                  .filter(([y]) => y !== '2027' && y !== '2026' && y !== 'Unscheduled')
+                  .map(([yr, count]) => (
+                    <option key={yr} value={yr}>
+                      {yr} Admissions ({count})
+                    </option>
+                  ))}
+              </select>
             </div>
-          </div>
 
-          {/* Intake Session Selector */}
-          <div className="flex flex-wrap items-center gap-2 lg:col-span-7 lg:justify-end">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
-              Intake Session:
-            </span>
-            <div className="inline-flex flex-wrap items-center rounded-xl border border-slate-200 bg-slate-50 p-0.5 text-xs">
-              <button
-                type="button"
-                onClick={() => {
-                  setSessionFilter('all');
+            {/* 2. Intake Session Dropdown */}
+            <div>
+              <label className="mb-1 flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+                Intake Session
+              </label>
+              <select
+                value={sessionFilter}
+                onChange={(e) => {
+                  setSessionFilter(e.target.value as any);
                   setExactIntakeFilter('all');
                   setPage(1);
                 }}
-                className={`rounded-lg px-3 py-1.5 font-bold transition ${
-                  sessionFilter === 'all'
-                    ? 'bg-[#071c2e] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 focus:border-[#0f3a5c] focus:outline-none"
               >
-                All Intakes
-              </button>
-              {INTAKE_SESSION_OPTIONS.map((opt) => {
-                const count = sessionCounts[opt.key] || 0;
-                const active = sessionFilter === opt.key;
-                return (
-                  <button
-                    key={opt.key}
-                    type="button"
-                    onClick={() => {
-                      setSessionFilter(active ? 'all' : opt.key);
-                      setExactIntakeFilter('all');
-                      setPage(1);
-                    }}
-                    className={`rounded-lg px-3 py-1.5 font-bold transition ${
-                      active
-                        ? 'bg-[#0f3a5c] text-white shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    {opt.label} <span className="ml-0.5 tabular-nums opacity-75">({count})</span>
-                  </button>
-                );
-              })}
+                <option value="all">All {yearFilter === 'all' ? '' : yearFilter + ' '}Intakes (General View)</option>
+                {INTAKE_SESSION_OPTIONS.map((opt) => (
+                  <option key={opt.key} value={opt.key}>
+                    {opt.label} ({sessionCounts[opt.key] || 0})
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
-        </div>
 
-        {/* TIER 2: CHANNEL (B2C DIRECT vs B2B PARTNER) & COUNSELOR DESK BAR */}
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3">
-          {/* B2C vs B2B Segmented Control */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
-              <Handshake size={12} className="text-[#0b7a53]" />
-              Channel:
-            </span>
-            <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-0.5 text-xs">
-              <button
-                type="button"
-                onClick={() => {
-                  setChannelFilter('all');
-                  setReferrerFilter('all');
+            {/* 3. Channel (B2C Direct vs B2B Partner) */}
+            <div>
+              <label className="mb-1 flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+                <Handshake size={11} className="text-[#0b7a53]" /> Channel
+              </label>
+              <select
+                value={channelFilter}
+                onChange={(e) => {
+                  setChannelFilter(e.target.value as any);
+                  if (e.target.value === 'b2c') setReferrerFilter('all');
                   setPage(1);
                 }}
-                className={`rounded-lg px-3 py-1.5 font-bold transition ${
-                  channelFilter === 'all'
-                    ? 'bg-[#071c2e] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                All Channels <span className="tabular-nums opacity-75">({channelCounts.total})</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setChannelFilter('b2c');
-                  setReferrerFilter('all');
-                  setPage(1);
-                }}
-                className={`rounded-lg px-3 py-1.5 font-bold transition ${
+                className={`w-full rounded-xl border px-3 py-2 text-xs font-semibold transition focus:border-[#0f3a5c] focus:outline-none ${
                   channelFilter === 'b2c'
-                    ? 'bg-[#0b7a53] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'border-emerald-300 bg-emerald-50/70 text-emerald-950 font-bold'
+                    : channelFilter === 'b2b'
+                      ? 'border-indigo-300 bg-indigo-50/70 text-indigo-950 font-bold'
+                      : 'border-slate-200 bg-white text-slate-800'
                 }`}
               >
-                EduExpress Direct · B2C <span className="tabular-nums opacity-80">({channelCounts.b2c})</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setChannelFilter('b2b');
+                <option value="all">All Channels ({channelCounts.total})</option>
+                <option value="b2c">EduExpress Direct · B2C ({channelCounts.b2c})</option>
+                <option value="b2b">Partner Network · B2B ({channelCounts.b2b})</option>
+              </select>
+            </div>
+
+            {/* 4. B2B Partner Agent (Sub-Filter) */}
+            <div>
+              <label className="mb-1 flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+                <Building2 size={11} className="text-indigo-600" /> B2B Partner Agent
+              </label>
+              <select
+                value={referrerFilter}
+                onChange={(e) => {
+                  setReferrerFilter(e.target.value);
+                  if (e.target.value !== 'all') setChannelFilter('b2b');
                   setPage(1);
                 }}
-                className={`rounded-lg px-3 py-1.5 font-bold transition ${
-                  channelFilter === 'b2b'
-                    ? 'bg-indigo-700 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                className={`w-full rounded-xl border px-3 py-2 text-xs font-semibold focus:border-[#0f3a5c] focus:outline-none ${
+                  referrerFilter !== 'all'
+                    ? 'border-indigo-400 bg-indigo-50 font-bold text-indigo-950'
+                    : 'border-slate-200 bg-white text-slate-800'
                 }`}
               >
-                Partner Agent · B2B <span className="tabular-nums opacity-80">({channelCounts.b2b})</span>
-              </button>
+                <option value="all">All Partner Agents ({channelCounts.topPartners.length})</option>
+                {channelCounts.topPartners.map(([partner, count]) => (
+                  <option key={partner} value={partner}>
+                    {partner} ({count} files)
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* 5. Counselor Desk */}
+            <div>
+              <label className="mb-1 flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+                <UserCheck size={11} className="text-[#0f3a5c]" /> Counselor Desk
+              </label>
+              <select
+                value={counselorFilter}
+                onChange={(e) => {
+                  setCounselorFilter(e.target.value);
+                  setPage(1);
+                }}
+                className={`w-full rounded-xl border px-3 py-2 text-xs font-semibold focus:border-[#0f3a5c] focus:outline-none ${
+                  counselorFilter !== 'all'
+                    ? 'border-[#0f3a5c] bg-[#0f3a5c]/8 font-bold text-[#071c2e]'
+                    : 'border-slate-200 bg-white text-slate-800'
+                }`}
+              >
+                <option value="all">All Counselors ({counselorBreakdown.list.length})</option>
+                {counselorBreakdown.list.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name} ({c.total} files · {c.active} active)
+                  </option>
+                ))}
+                {counselorBreakdown.unassignedTotal > 0 && (
+                  <option value="__unassigned__">
+                    Partner / Unassigned Desk ({counselorBreakdown.unassignedTotal})
+                  </option>
+                )}
+              </select>
+            </div>
+
+            {/* 6. Destination Corridor */}
+            <div>
+              <label className="mb-1 flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+                <Globe2 size={11} className="text-[#0b7a53]" /> Destination Corridor
+              </label>
+              <select
+                value={destinationFilter}
+                onChange={(e) => {
+                  setDestinationFilter(e.target.value);
+                  setPage(1);
+                }}
+                className={`w-full rounded-xl border px-3 py-2 text-xs font-semibold focus:border-[#0f3a5c] focus:outline-none ${
+                  destinationFilter !== 'all'
+                    ? 'border-[#0b7a53] bg-emerald-50 font-bold text-emerald-950'
+                    : 'border-slate-200 bg-white text-slate-800'
+                }`}
+              >
+                <option value="all">All Destinations ({destinationCounts.length})</option>
+                {destinationCounts.map(([dest, count]) => (
+                  <option key={dest} value={dest}>
+                    {dest} ({count} files)
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-
-          {/* Counselor Desk Pills */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
-              <UserCheck size={12} className="text-[#0f3a5c]" />
-              Counselor:
-            </span>
-            <button
-              type="button"
-              onClick={() => {
-                setCounselorFilter('all');
-                setPage(1);
-              }}
-              className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
-                counselorFilter === 'all'
-                  ? 'border-[#071c2e] bg-[#071c2e] text-white'
-                  : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-              }`}
-            >
-              All Counselors
-            </button>
-            {counselorBreakdown.list.map((c) => {
-              const active = counselorFilter === c.id;
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => {
-                    setCounselorFilter(active ? 'all' : c.id);
-                    setPage(1);
-                  }}
-                  className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
-                    active
-                      ? 'border-[#0f3a5c] bg-[#0f3a5c] text-white shadow-2xs'
-                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
-                  }`}
-                >
-                  {c.name.split(' ')[0]} <span className="tabular-nums opacity-75">({c.total})</span>
-                </button>
-              );
-            })}
-            {counselorBreakdown.unassignedTotal > 0 && (
-              <button
-                type="button"
-                onClick={() => {
-                  setCounselorFilter(counselorFilter === '__unassigned__' ? 'all' : '__unassigned__');
-                  setPage(1);
-                }}
-                className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
-                  counselorFilter === '__unassigned__'
-                    ? 'border-amber-600 bg-amber-600 text-white'
-                    : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
-                }`}
-              >
-                Partner / Unassigned <span className="tabular-nums opacity-75">({counselorBreakdown.unassignedTotal})</span>
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* TIER 3: DESTINATION CORRIDOR CHIPS */}
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="mr-1 inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
-              <Globe2 size={12} className="text-[#0b7a53]" />
-              Corridor:
-            </span>
-            <button
-              type="button"
-              onClick={() => {
-                setDestinationFilter('all');
-                setPage(1);
-              }}
-              className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
-                destinationFilter === 'all'
-                  ? 'border-[#0f3a5c] bg-[#0f3a5c] text-white'
-                  : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-              }`}
-            >
-              All Destinations
-            </button>
-            {destinationCounts.map(([dest, count]) => (
-              <button
-                key={dest}
-                type="button"
-                onClick={() => {
-                  setDestinationFilter(destinationFilter === dest ? 'all' : dest);
-                  setPage(1);
-                }}
-                className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
-                  destinationFilter === dest
-                    ? 'border-[#0b7a53] bg-[#0b7a53] text-white'
-                    : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-                }`}
-              >
-                {dest} <span className="tabular-nums opacity-75">({count})</span>
-              </button>
-            ))}
-          </div>
-
-          {referrerFilter !== 'all' && (
-            <button
-              type="button"
-              onClick={() => setReferrerFilter('all')}
-              className="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-2.5 py-1 text-[11px] font-bold text-indigo-900"
-            >
-              Partner: {referrerFilter} ×
-            </button>
-          )}
         </div>
       </section>
 
@@ -1115,6 +1032,7 @@ export default function ApplicationTrackerClient() {
             </div>
             <div className="mt-3 space-y-2">
               {cohortBreakdown.map((c) => {
+                if (c.total <= 0) return null;
                 const isSelected =
                   exactIntakeFilter === c.term ||
                   (yearFilter === c.year && sessionFilter === c.session && c.session !== 'Other');
@@ -1783,19 +1701,24 @@ export default function ApplicationTrackerClient() {
                         <td className="px-3 py-3 align-top">
                           <div className="flex flex-wrap items-center gap-1.5">
                             <span
-                              className={`rounded px-1.5 py-0.5 text-[10px] font-extrabold uppercase ${
+                              className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-extrabold uppercase ${
                                 b2b
                                   ? 'border border-indigo-200 bg-indigo-50 text-indigo-800'
                                   : 'border border-emerald-200 bg-emerald-50 text-[#0b7a53]'
                               }`}
                             >
-                              {b2b ? 'B2B Partner' : 'B2C Direct'}
+                              {b2b ? (
+                                <>
+                                  <Handshake size={10} />
+                                  <span>{row.referrer ? `B2B · ${row.referrer}` : 'B2B Partner'}</span>
+                                </>
+                              ) : (
+                                <>
+                                  <UserCheck size={10} />
+                                  <span>EduExpress Direct</span>
+                                </>
+                              )}
                             </span>
-                            {row.referrer && (
-                              <span className="truncate max-w-[110px] text-[10px] font-semibold text-slate-500" title={row.referrer}>
-                                · {row.referrer}
-                              </span>
-                            )}
                           </div>
                           <div className="mt-1.5">
                             {isAdmin ? (
@@ -2092,6 +2015,8 @@ export default function ApplicationTrackerClient() {
         intakes={data?.meta.intakes ?? []}
         destinations={data?.meta.destinations ?? []}
         universities={data?.meta.universities ?? []}
+        programs={data?.meta.programs ?? []}
+        catalogUniversities={data?.meta.catalogUniversities ?? []}
         referrers={data?.meta.referrers ?? []}
         promotableLeads={data?.meta.promotableLeads ?? []}
         onClose={() => setNewModalOpen(false)}
@@ -2107,6 +2032,9 @@ export default function ApplicationTrackerClient() {
         applicationId={activeDrawerId}
         isAdmin={isAdmin}
         employees={employees}
+        universities={data?.meta.universities ?? []}
+        programs={data?.meta.programs ?? []}
+        catalogUniversities={data?.meta.catalogUniversities ?? []}
         onClose={() => setActiveDrawerId(null)}
         onMutated={() => void loadApplications(true)}
       />

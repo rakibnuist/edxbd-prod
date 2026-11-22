@@ -21,26 +21,10 @@ import {
 } from '@/lib/application-tracker';
 import prisma from '@/lib/prisma';
 
-const ACTIVE_APP_STATUSES = [
-  'application_started',
-  'application_submitted',
-  'admission_received',
-  'visa_applied',
-  'visa_approved',
-  'enrolled',
-  'converted',
-];
-
 const NO_STORE_HEADERS = { 'Cache-Control': 'no-store, private' };
 
 function isApplicationLeadWhere(): Prisma.LeadWhereInput {
-  return {
-    OR: [
-      { isApplication: true },
-      { applicationStage: { notIn: ['documents', ''] } },
-      { status: { in: ACTIVE_APP_STATUSES } },
-    ],
-  };
+  return { isApplication: true };
 }
 
 function generateNextLeadRef(existingRefs: Array<string | null>): string {
@@ -132,7 +116,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const [leads, employees, promotableRaw] = await Promise.all([
+    const [leads, employees, promotableRaw, catalogUniversities, catalogPrograms] = await Promise.all([
       prisma.lead.findMany({
         where: { AND: andFilters },
         include: {
@@ -174,6 +158,16 @@ export async function GET(request: NextRequest) {
         },
         orderBy: { createdAt: 'desc' },
         take: 100,
+      }),
+      prisma.university.findMany({
+        select: { id: true, name: true, country: true, majors: true },
+        orderBy: { name: 'asc' },
+      }),
+      prisma.program.findMany({
+        select: { name: true, subject: true, level: true },
+        distinct: ['name'],
+        orderBy: { name: 'asc' },
+        take: 300,
       }),
     ]);
 
@@ -332,13 +326,30 @@ export async function GET(request: NextRequest) {
     const destinationSet = new Set<string>([...DESTINATION_OPTIONS]);
     const intakeSet = new Set<string>(['March 2027', 'September 2026', 'March 2026', 'September 2027']);
     const universitySet = new Set<string>();
+    const programSet = new Set<string>();
     const referrerSet = new Set<string>();
     const degreeSet = new Set<string>([...DEGREE_OPTIONS]);
+
+    for (const u of catalogUniversities) {
+      if (u.name) universitySet.add(u.name.trim());
+      if (u.country) destinationSet.add(u.country.trim());
+      if (u.majors) {
+        for (const m of u.majors.split(',')) {
+          const trimmed = m.trim();
+          if (trimmed.length > 2) programSet.add(trimmed);
+        }
+      }
+    }
+
+    for (const p of catalogPrograms) {
+      if (p.name) programSet.add(p.name.trim());
+    }
 
     for (const r of rows) {
       if (r.country) destinationSet.add(r.country);
       if (r.assessIntake) intakeSet.add(r.assessIntake);
       if (r.university) universitySet.add(r.university);
+      if (r.program) programSet.add(r.program);
       if (r.referrer) referrerSet.add(r.referrer);
       if (r.degree) degreeSet.add(r.degree);
     }
@@ -355,6 +366,17 @@ export async function GET(request: NextRequest) {
           destinations: Array.from(destinationSet).sort(),
           intakes: sortedIntakes,
           universities: Array.from(universitySet).sort(),
+          programs: Array.from(programSet).sort(),
+          catalogUniversities: catalogUniversities.map((u) => ({
+            name: u.name,
+            country: u.country,
+            majors: u.majors
+              ? u.majors
+                  .split(',')
+                  .map((m: string) => m.trim())
+                  .filter(Boolean)
+              : [],
+          })),
           referrers: Array.from(referrerSet).sort(),
           degrees: Array.from(degreeSet),
           promotableLeads: promotableRaw,

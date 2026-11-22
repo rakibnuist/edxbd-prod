@@ -61,9 +61,31 @@ export async function GET(
         orderBy: [{ status: 'asc' }, { dueDate: 'asc' }],
       }),
       prisma.lead.findMany({
-        where: { OR: [{ assignedEmployeeId: employee.id }, { assignedTo: employee.name }] },
+        where: {
+          OR: [
+            { assignedEmployeeId: employee.id },
+            { assignedTo: employee.name },
+            { AND: [{ isApplication: true }, { referrer: { contains: employee.name } }] },
+          ],
+        },
         orderBy: { updatedAt: 'desc' },
-        select: { id: true, name: true, phone: true, country: true, status: true, applicationStage: true, assignedTo: true, assignedEmployeeId: true, nextFollowup: true, gpa: true, assessAcademicResults: true, createdAt: true, updatedAt: true },
+        select: {
+          id: true,
+          name: true,
+          phone: true,
+          country: true,
+          status: true,
+          isApplication: true,
+          referrer: true,
+          applicationStage: true,
+          assignedTo: true,
+          assignedEmployeeId: true,
+          nextFollowup: true,
+          gpa: true,
+          assessAcademicResults: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       }),
       prisma.activityEvent.findMany({
         where: {
