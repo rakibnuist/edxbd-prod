@@ -310,8 +310,9 @@ export default async function EducationConsultantDhakaPage() {
               </Link>
               ।
             </div>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/contact?audience=parent" className="ed-btn ed-btn-signal min-h-[52px] px-7">Book a conversation <ArrowRight size={18} aria-hidden="true" /></Link>
+              <Link href="/study-in-china-agency-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">China agency checklist</Link>
               <Link href="/for-parents" className="ed-btn ed-btn-outline min-h-[52px] px-7">Guide for parents</Link>
             </div>
           </div>
