@@ -184,12 +184,26 @@ async function main() {
         rawLeadType === 'B2B' || rawSource === 'B2B' || rawSource === 'Agent' ? 'B2B' : 'B2C';
       const program = cleanText(row.major, 160) || cleanText(row.program, 160);
 
-      // Resolve counselor
+      // Resolve counselor (including Office (M) / Office (R) / Office (T) / Afsana / Mukta / Sakib referrer shorthand)
       let matchedEmp = row.assigned_employee_id
         ? crmEmpIdToPrisma.get(Number(row.assigned_employee_id)) || null
         : null;
       if (!matchedEmp && row.assigned_consultant) {
         matchedEmp = prismaEmpByName.get(normalizeNameKey(row.assigned_consultant)) || null;
+      }
+      if (!matchedEmp && row.referrer) {
+        const refNorm = normalizeNameKey(row.referrer);
+        if (refNorm === 'office (m)' || refNorm === 'office(m)' || refNorm === 'mukta' || refNorm === 'mukta rahaman') {
+          matchedEmp = prismaEmployees.find((e) => e.name.toLowerCase().includes('mukta')) || null;
+        } else if (refNorm === 'afsana' || refNorm === 'afsana meme') {
+          matchedEmp = prismaEmployees.find((e) => e.name.toLowerCase().includes('afsana')) || null;
+        } else if (refNorm === 'office (r)' || refNorm === 'office(r)') {
+          matchedEmp = prismaEmployees.find((e) => e.name.toLowerCase().includes('rakib')) || null;
+        } else if (refNorm === 'office (t)' || refNorm === 'office(t)') {
+          matchedEmp = prismaEmployees.find((e) => e.name.toLowerCase().includes('tamal')) || null;
+        } else if (refNorm === 'sakib' || refNorm === 'sakib al jubaer') {
+          matchedEmp = prismaEmployees.find((e) => e.name.toLowerCase().includes('sakib')) || null;
+        }
       }
       const assignedEmployeeId = matchedEmp?.id || null;
       const assignedTo = matchedEmp?.name || cleanText(row.assigned_consultant, 120) || null;

@@ -14,6 +14,11 @@ import {
   DEGREE_OPTIONS,
   DESTINATION_OPTIONS,
   EMBASSY_STATUSES,
+  INTAKE_SESSION_OPTIONS,
+  INTAKE_YEAR_OPTIONS,
+  composeIntakeTerm,
+  extractIntakeSession,
+  extractIntakeYear,
 } from '@/lib/application-tracker';
 
 export interface TrackerEmployeeOption {
@@ -56,7 +61,6 @@ export default function NewApplicationModal({
   open,
   isAdmin,
   employees,
-  intakes,
   destinations,
   universities,
   referrers,
@@ -80,13 +84,13 @@ export default function NewApplicationModal({
   const [nationality, setNationality] = useState('Bangladesh');
   const [passport, setPassport] = useState('');
   const [country, setCountry] = useState('China');
-  const [assessIntake, setAssessIntake] = useState('March 2027');
+  const [intakeSession, setIntakeSession] = useState<string>('March');
+  const [intakeYear, setIntakeYear] = useState<string>('2027');
   const [degree, setDegree] = useState('Bachelor');
   const [program, setProgram] = useState('');
   const [university, setUniversity] = useState('');
   const [applicationStage, setApplicationStage] = useState('documents');
   const [embassyStatus, setEmbassyStatus] = useState('Pending');
-  const [leadMarket, setLeadMarket] = useState('Bangladesh');
   const [channelType, setChannelType] = useState('B2C');
   const [referrer, setReferrer] = useState('');
   const [assignedEmployeeId, setAssignedEmployeeId] = useState('');
@@ -114,12 +118,16 @@ export default function NewApplicationModal({
   if (!open) return null;
 
   const destinationList = Array.from(new Set([...DESTINATION_OPTIONS, ...destinations]));
-  const intakeList = Array.from(new Set(['March 2027', 'September 2026', 'March 2026', 'September 2027', ...intakes]));
 
   const handleSelectLead = (lead: PromotableLeadOption) => {
     setSelectedLeadId(lead.id);
     if (lead.country) setCountry(lead.country);
-    if (lead.assessIntake) setAssessIntake(lead.assessIntake);
+    if (lead.assessIntake) {
+      const parsedYear = extractIntakeYear(lead.assessIntake);
+      const parsedSession = extractIntakeSession(lead.assessIntake);
+      if (parsedYear !== 'Unscheduled') setIntakeYear(parsedYear);
+      if (parsedSession !== 'Other') setIntakeSession(parsedSession);
+    }
     if (lead.degree) setDegree(lead.degree);
     if (lead.program) setProgram(lead.program);
     if (lead.university) setUniversity(lead.university);
@@ -138,6 +146,8 @@ export default function NewApplicationModal({
       return;
     }
 
+    const composedIntake = composeIntakeTerm(intakeSession, intakeYear);
+
     try {
       setSubmitting(true);
       const payload: Record<string, unknown> =
@@ -145,7 +155,7 @@ export default function NewApplicationModal({
           ? {
               existingLeadId: selectedLeadId,
               country,
-              assessIntake: assessIntake.trim() || null,
+              assessIntake: composedIntake,
               degree: degree.trim() || null,
               program: program.trim() || null,
               university: university.trim() || null,
@@ -158,7 +168,6 @@ export default function NewApplicationModal({
               deposit: deposit ? Number(deposit) : 0,
               driveLink: driveLink.trim() || null,
               applicationNotes: applicationNotes.trim() || null,
-              ...(isAdmin ? { leadMarket } : {}),
               ...(isAdmin && assignedEmployeeId ? { assignedEmployeeId } : {}),
             }
           : {
@@ -168,13 +177,13 @@ export default function NewApplicationModal({
               nationality: nationality.trim() || 'Bangladesh',
               passport: passport.trim() || null,
               country,
-              assessIntake: assessIntake.trim() || null,
+              assessIntake: composedIntake,
               degree: degree.trim() || null,
               program: program.trim() || null,
               university: university.trim() || null,
               applicationStage,
               embassyStatus,
-              leadMarket: isAdmin ? leadMarket : 'Bangladesh',
+              leadMarket: 'Bangladesh',
               channelType,
               source: channelType === 'B2B' ? 'B2B' : 'In-House',
               referrer: referrer.trim() || null,
@@ -214,9 +223,9 @@ export default function NewApplicationModal({
               <FilePlus2 size={18} />
             </span>
             <div>
-              <h2 className="font-heading text-base font-bold tracking-tight">Open Application File</h2>
+              <h2 className="font-heading text-base font-bold tracking-tight">Open Student Application File</h2>
               <p className="text-[11px] text-slate-300">
-                Create a new student file or promote an existing CRM lead into the Application Tracker
+                Register a direct (B2C) or partner agent (B2B) application file with separate Intake &amp; Year tracking
               </p>
             </div>
           </div>
@@ -317,7 +326,7 @@ export default function NewApplicationModal({
               </div>
               {selectedLead && (
                 <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-[11px] font-semibold text-emerald-900">
-                  Selected: <strong>{selectedLead.name}</strong> ({selectedLead.phone}) — confirm intake, destination &amp; initial stage below.
+                  Selected: <strong>{selectedLead.name}</strong> ({selectedLead.phone}) — confirm intake session, year, channel &amp; counselor below.
                 </div>
               )}
             </div>
@@ -387,7 +396,7 @@ export default function NewApplicationModal({
             </div>
           )}
 
-          {/* Academic & Pipeline Details */}
+          {/* Academic & Pipeline Details (Separate Intake Session + Intake Year!) */}
           <div className="grid grid-cols-1 gap-3.5 border-t border-slate-100 pt-4 sm:grid-cols-3">
             <div>
               <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
@@ -405,21 +414,33 @@ export default function NewApplicationModal({
             </div>
             <div>
               <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                Intake Semester
+                Intake Session *
               </label>
-              <input
-                list="tracker-intake-list"
-                value={assessIntake}
-                onChange={(e) => setAssessIntake(e.target.value)}
-                placeholder="March 2027"
-                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
-              />
-              <datalist id="tracker-intake-list">
-                {intakeList.map((i) => (
-                  <option key={i} value={i} />
+              <select
+                value={intakeSession}
+                onChange={(e) => setIntakeSession(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+              >
+                {INTAKE_SESSION_OPTIONS.map((opt) => (
+                  <option key={opt.key} value={opt.key}>{opt.label}</option>
                 ))}
-              </datalist>
+              </select>
             </div>
+            <div>
+              <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                Intake Year *
+              </label>
+              <select
+                value={intakeYear}
+                onChange={(e) => setIntakeYear(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold tabular-nums text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+              >
+                {INTAKE_YEAR_OPTIONS.map((yr) => (
+                  <option key={yr} value={yr}>{yr}</option>
+                ))}
+              </select>
+            </div>
+
             <div>
               <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Degree Level
@@ -434,8 +455,20 @@ export default function NewApplicationModal({
                 ))}
               </select>
             </div>
-
             <div className="sm:col-span-2">
+              <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                Major / Program
+              </label>
+              <input
+                type="text"
+                value={program}
+                onChange={(e) => setProgram(e.target.value)}
+                placeholder="Computer Science / Accounting & Finance / MBBS"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+              />
+            </div>
+
+            <div className="sm:col-span-3">
               <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Primary University
               </label>
@@ -443,7 +476,7 @@ export default function NewApplicationModal({
                 list="tracker-uni-list"
                 value={university}
                 onChange={(e) => setUniversity(e.target.value)}
-                placeholder="e.g. Nanjing University of Information Science & Technology"
+                placeholder="e.g. NJIT / HIT / Changchun University of Science and Technology"
                 className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
               />
               <datalist id="tracker-uni-list">
@@ -452,22 +485,62 @@ export default function NewApplicationModal({
                 ))}
               </datalist>
             </div>
+
             <div>
               <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                Major / Program
+                Channel (B2C / B2B) *
+              </label>
+              <select
+                value={channelType}
+                onChange={(e) => setChannelType(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+              >
+                <option value="B2C">EduExpress Direct (B2C)</option>
+                <option value="B2B">Partner Agent (B2B)</option>
+              </select>
+            </div>
+
+            {isAdmin && (
+              <div>
+                <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  Assigned Counselor
+                </label>
+                <select
+                  value={assignedEmployeeId}
+                  onChange={(e) => setAssignedEmployeeId(e.target.value)}
+                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+                >
+                  <option value="">Unassigned</option>
+                  {employees.map((emp) => (
+                    <option key={emp.id} value={emp.id}>
+                      {emp.name} ({emp.empId})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            <div>
+              <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                Partner Agency / Reference
               </label>
               <input
-                type="text"
-                value={program}
-                onChange={(e) => setProgram(e.target.value)}
-                placeholder="Computer Science / MBBS"
+                list="tracker-referrer-list"
+                value={referrer}
+                onChange={(e) => setReferrer(e.target.value)}
+                placeholder="BheUni / Taufiq / Direct"
                 className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
               />
+              <datalist id="tracker-referrer-list">
+                {referrers.map((r) => (
+                  <option key={r} value={r} />
+                ))}
+              </datalist>
             </div>
 
             <div>
               <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                Initial Stage
+                Initial Pipeline Stage
               </label>
               <select
                 value={applicationStage}
@@ -495,74 +568,6 @@ export default function NewApplicationModal({
             </div>
             <div>
               <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                Channel (B2C / B2B)
-              </label>
-              <select
-                value={channelType}
-                onChange={(e) => setChannelType(e.target.value)}
-                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
-              >
-                <option value="B2C">Office (B2C Direct)</option>
-                <option value="B2B">B2B / Partner Agent</option>
-              </select>
-            </div>
-
-            {isAdmin && (
-              <div>
-                <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                  Source Market
-                </label>
-                <select
-                  value={leadMarket}
-                  onChange={(e) => setLeadMarket(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
-                >
-                  <option value="Bangladesh">Bangladesh</option>
-                  <option value="China">China (Admin Only)</option>
-                </select>
-              </div>
-            )}
-
-            <div>
-              <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                Referrer / Sub-Agent
-              </label>
-              <input
-                list="tracker-referrer-list"
-                value={referrer}
-                onChange={(e) => setReferrer(e.target.value)}
-                placeholder="Office / Agent name"
-                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
-              />
-              <datalist id="tracker-referrer-list">
-                {referrers.map((r) => (
-                  <option key={r} value={r} />
-                ))}
-              </datalist>
-            </div>
-
-            {isAdmin && (
-              <div>
-                <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                  Assigned Counselor
-                </label>
-                <select
-                  value={assignedEmployeeId}
-                  onChange={(e) => setAssignedEmployeeId(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
-                >
-                  <option value="">Unassigned</option>
-                  {employees.map((emp) => (
-                    <option key={emp.id} value={emp.id}>
-                      {emp.name} ({emp.empId})
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-
-            <div>
-              <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Deposit (৳ BDT)
               </label>
               <input
@@ -576,7 +581,7 @@ export default function NewApplicationModal({
               />
             </div>
 
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-3">
               <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Google Drive Folder Link
               </label>
@@ -597,7 +602,7 @@ export default function NewApplicationModal({
                 rows={2}
                 value={applicationNotes}
                 onChange={(e) => setApplicationNotes(e.target.value)}
-                placeholder="Scholarship target, missing documents, embassy instructions..."
+                placeholder="Scholarship target, pending documents, embassy instructions..."
                 className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
               />
             </div>

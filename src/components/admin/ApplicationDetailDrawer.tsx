@@ -32,8 +32,13 @@ import {
   DEGREE_OPTIONS,
   DESTINATION_OPTIONS,
   EMBASSY_STATUSES,
+  INTAKE_SESSION_OPTIONS,
+  INTAKE_YEAR_OPTIONS,
   TRACKER_DOC_STATUSES,
   TRACKER_UNI_STATUSES,
+  composeIntakeTerm,
+  extractIntakeSession,
+  extractIntakeYear,
   getStageDef,
   type ApplicationRowDto,
 } from '@/lib/application-tracker';
@@ -189,6 +194,8 @@ export default function ApplicationDetailDrawer({
           emergencyContact: a.emergencyContact || '',
           country: a.country || 'China',
           assessIntake: a.assessIntake || '',
+          intakeSession: extractIntakeSession(a.assessIntake) !== 'Other' ? extractIntakeSession(a.assessIntake) : 'March',
+          intakeYear: extractIntakeYear(a.assessIntake) !== 'Unscheduled' ? extractIntakeYear(a.assessIntake) : '2027',
           degree: a.degree || '',
           program: a.program || '',
           university: a.university || '',
@@ -518,12 +525,20 @@ export default function ApplicationDetailDrawer({
                     {app.leadRef}
                   </span>
                 )}
-                <span className="rounded-md bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-200">
-                  {app?.leadMarket || 'Bangladesh'}
+                <span
+                  className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                    app?.channelType === 'B2B'
+                      ? 'bg-indigo-500/25 text-indigo-200'
+                      : 'bg-emerald-500/20 text-emerald-200'
+                  }`}
+                >
+                  {app?.channelType === 'B2B' ? 'Partner Agent · B2B' : 'EduExpress Direct · B2C'}
                 </span>
-                <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase text-slate-200">
-                  {app?.channelType === 'B2B' ? 'B2B / Agent' : 'Office B2C'}
-                </span>
+                {app?.employeeName && (
+                  <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-bold text-slate-200">
+                    Counselor: {app.employeeName}
+                  </span>
+                )}
                 <span className="rounded-md bg-amber-400/20 px-2 py-0.5 text-[10px] font-bold text-amber-200">
                   {currentStageDef.label}
                 </span>
@@ -845,14 +860,36 @@ export default function ApplicationDetailDrawer({
                         </select>
                       </div>
                       <div>
-                        <label className="mb-1 block text-[11px] font-semibold text-slate-600">Intake Semester</label>
-                        <input
-                          type="text"
-                          value={form.assessIntake || ''}
-                          onChange={(e) => setForm({ ...form, assessIntake: e.target.value })}
-                          placeholder="September 2026 / March 2027"
-                          className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
-                        />
+                        <label className="mb-1 block text-[11px] font-semibold text-slate-600">Intake Session</label>
+                        <select
+                          value={form.intakeSession || 'March'}
+                          onChange={(e) => {
+                            const nextSession = e.target.value;
+                            const nextTerm = composeIntakeTerm(nextSession, form.intakeYear || '2027') || '';
+                            setForm({ ...form, intakeSession: nextSession, assessIntake: nextTerm });
+                          }}
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+                        >
+                          {INTAKE_SESSION_OPTIONS.map((opt) => (
+                            <option key={opt.key} value={opt.key}>{opt.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-[11px] font-semibold text-slate-600">Intake Year</label>
+                        <select
+                          value={form.intakeYear || '2027'}
+                          onChange={(e) => {
+                            const nextYear = e.target.value;
+                            const nextTerm = composeIntakeTerm(form.intakeSession || 'March', nextYear) || '';
+                            setForm({ ...form, intakeYear: nextYear, assessIntake: nextTerm });
+                          }}
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold tabular-nums text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+                        >
+                          {INTAKE_YEAR_OPTIONS.map((yr) => (
+                            <option key={yr} value={yr}>{yr}</option>
+                          ))}
+                        </select>
                       </div>
                       <div>
                         <label className="mb-1 block text-[11px] font-semibold text-slate-600">Degree</label>
@@ -1002,41 +1039,19 @@ export default function ApplicationDetailDrawer({
                   {/* Section D: Operations, Commercial & Notes */}
                   <section className="rounded-xl border border-slate-200 bg-white p-4">
                     <h3 className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
-                      Channel, Assignment &amp; Processing Notes
+                      Channel (B2C / B2B), Counselor Assignment &amp; Processing Notes
                     </h3>
                     <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                      {isAdmin && (
-                        <div>
-                          <label className="mb-1 block text-[11px] font-semibold text-slate-600">Source Market</label>
-                          <select
-                            value={form.leadMarket || 'Bangladesh'}
-                            onChange={(e) => setForm({ ...form, leadMarket: e.target.value })}
-                            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
-                          >
-                            <option value="Bangladesh">Bangladesh</option>
-                            <option value="China">China</option>
-                          </select>
-                        </div>
-                      )}
                       <div>
-                        <label className="mb-1 block text-[11px] font-semibold text-slate-600">Channel</label>
+                        <label className="mb-1 block text-[11px] font-semibold text-slate-600">Channel (B2C / B2B)</label>
                         <select
                           value={form.channelType || 'B2C'}
                           onChange={(e) => setForm({ ...form, channelType: e.target.value })}
-                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
                         >
-                          <option value="B2C">Office (B2C)</option>
-                          <option value="B2B">B2B / Partner Agent</option>
+                          <option value="B2C">EduExpress Direct (B2C)</option>
+                          <option value="B2B">Partner Agent (B2B)</option>
                         </select>
-                      </div>
-                      <div>
-                        <label className="mb-1 block text-[11px] font-semibold text-slate-600">Referrer / Partner</label>
-                        <input
-                          type="text"
-                          value={form.referrer || ''}
-                          onChange={(e) => setForm({ ...form, referrer: e.target.value })}
-                          className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
-                        />
                       </div>
                       {isAdmin && (
                         <div>
@@ -1055,6 +1070,15 @@ export default function ApplicationDetailDrawer({
                           </select>
                         </div>
                       )}
+                      <div>
+                        <label className="mb-1 block text-[11px] font-semibold text-slate-600">Partner Agency / Reference</label>
+                        <input
+                          type="text"
+                          value={form.referrer || ''}
+                          onChange={(e) => setForm({ ...form, referrer: e.target.value })}
+                          className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+                        />
+                      </div>
                       <div>
                         <label className="mb-1 block text-[11px] font-semibold text-slate-600">Deposit (৳)</label>
                         <input

@@ -9,7 +9,10 @@ const {
   APPLICATION_TRACKER_STAGES,
   ALLOWED_TRACKER_STAGE_KEYS,
   TRACKER_UNI_STATUSES,
+  composeIntakeTerm,
   deriveLeadStatusFromStage,
+  extractIntakeSession,
+  extractIntakeYear,
   getDocsTemplateForDestination,
   getIntakeSortValue,
   getStageBucket,
@@ -48,13 +51,27 @@ test('Application Tracker defines all 17 stages, 11 university statuses, and acc
   assert.equal(getStageDef('air_ticket').shortLabel, 'Air Ticket');
 });
 
-test('getIntakeSortValue orders academic intakes chronologically', () => {
+test('getIntakeSortValue, extractIntakeYear, extractIntakeSession, and composeIntakeTerm work accurately', () => {
   assert.ok(getIntakeSortValue('September 2027') > getIntakeSortValue('March 2027'));
   assert.ok(getIntakeSortValue('March 2027') > getIntakeSortValue('September 2026'));
   assert.ok(getIntakeSortValue('September 2026') > getIntakeSortValue('March 2026'));
   assert.ok(getIntakeSortValue('Fall 2026') > getIntakeSortValue('Spring 2026'));
   assert.equal(getIntakeSortValue(''), 0);
   assert.equal(getIntakeSortValue(null), 0);
+
+  assert.equal(extractIntakeYear('March 2027'), '2027');
+  assert.equal(extractIntakeYear('September 2026'), '2026');
+  assert.equal(extractIntakeYear('January 2027'), '2027');
+  assert.equal(extractIntakeYear(null), 'Unscheduled');
+
+  assert.equal(extractIntakeSession('March 2027'), 'March');
+  assert.equal(extractIntakeSession('Spring 2027'), 'March');
+  assert.equal(extractIntakeSession('September 2026'), 'September');
+  assert.equal(extractIntakeSession('January 2027'), 'January');
+  assert.equal(extractIntakeSession(null), 'Other');
+
+  assert.equal(composeIntakeTerm('March', '2027'), 'March 2027');
+  assert.equal(composeIntakeTerm('September', '2026'), 'September 2026');
 });
 
 test('deriveLeadStatusFromStage and resolvePortalMilestoneStep handle all granular stages', () => {

@@ -74,9 +74,44 @@ export const DEGREE_OPTIONS = [
   'L+Diploma',
   'Masters',
   'PhD',
+  'Foundation',
   'Language',
   'MBBS',
 ] as const;
+
+export const INTAKE_YEAR_OPTIONS = ['2027', '2026', '2028'] as const;
+
+export const INTAKE_SESSION_OPTIONS = [
+  { key: 'March', label: 'March / Spring' },
+  { key: 'September', label: 'September / Fall' },
+  { key: 'January', label: 'January / Winter' },
+] as const;
+
+export type IntakeSessionKey = 'March' | 'September' | 'January' | 'Other';
+
+export function extractIntakeYear(term?: string | null): string {
+  if (!term) return 'Unscheduled';
+  const match = String(term).match(/\b(202\d)\b/);
+  return match ? match[1] : 'Unscheduled';
+}
+
+export function extractIntakeSession(term?: string | null): IntakeSessionKey {
+  if (!term) return 'Other';
+  const s = String(term).toLowerCase();
+  if (s.includes('mar') || s.includes('spring')) return 'March';
+  if (s.includes('sep') || s.includes('fall') || s.includes('autumn')) return 'September';
+  if (s.includes('jan') || s.includes('dec') || s.includes('winter')) return 'January';
+  return 'Other';
+}
+
+export function composeIntakeTerm(session?: string | null, year?: string | null): string | null {
+  const cleanSession = (session || '').trim();
+  const cleanYear = (year || '').trim();
+  if (!cleanSession && !cleanYear) return null;
+  if (!cleanSession) return cleanYear;
+  if (!cleanYear || cleanYear === 'Unscheduled') return cleanSession;
+  return `${cleanSession} ${cleanYear}`;
+}
 
 export const DESTINATION_OPTIONS = [
   'China',

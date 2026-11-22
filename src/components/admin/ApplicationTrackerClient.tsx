@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight,
+  BarChart3,
   Building2,
+  Calendar,
   Check,
   CheckCircle2,
   ChevronLeft,
@@ -17,6 +19,7 @@ import {
   FolderKanban,
   FolderOpen,
   Globe2,
+  Handshake,
   Kanban,
   Landmark,
   Loader2,
@@ -28,6 +31,7 @@ import {
   ShieldCheck,
   Table2,
   Trash2,
+  UserCheck,
   Users2,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -36,10 +40,15 @@ import { toSafeExternalUrl } from '@/lib/safe-url';
 import {
   APPLICATION_TRACKER_STAGES,
   EMBASSY_STATUSES,
+  INTAKE_SESSION_OPTIONS,
+  extractIntakeSession,
+  extractIntakeYear,
+  getIntakeSortValue,
   getStageBucket,
   getStageDef,
   type ApplicationRowDto,
   type ApplicationStageDef,
+  type IntakeSessionKey,
 } from '@/lib/application-tracker';
 import NewApplicationModal, {
   type PromotableLeadOption,
@@ -80,10 +89,13 @@ const STAGE_BADGE_CLASSES: Record<ApplicationStageDef['tone'], string> = {
 
 function csvEscapeCell(val: unknown): string {
   const s = val === null || val === undefined ? '' : String(val);
-  // Neutralize Excel formula injection
   const safe = /^[=+\-@\t\r]/.test(s) ? `'${s}` : s;
   if (/[",\n\r]/.test(safe)) return `"${safe.replace(/"/g, '""')}"`;
   return safe;
+}
+
+function isB2BRow(row: ApplicationRowDto): boolean {
+  return row.channelType === 'B2B' || row.source === 'B2B' || row.source === 'Agent';
 }
 
 export default function ApplicationTrackerClient() {
@@ -94,17 +106,24 @@ export default function ApplicationTrackerClient() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<{ tone: 'ok' | 'err'; text: string } | null>(null);
 
-  // View & filters
+  // Executive view controls
   const [viewMode, setViewMode] = useState<'table' | 'board'>('table');
-  const [marketFilter, setMarketFilter] = useState<'all' | 'bangladesh' | 'china'>('all');
-  const [channelFilter, setChannelFilter] = useState<'all' | 'office' | 'b2b'>('all');
+  const [showAnalytics, setShowAnalytics] = useState(true);
+
+  // Primary Multi-Dimensional Filters: Year, Intake Session, Channel (B2C/B2B), Counselor, Destination
+  const [yearFilter, setYearFilter] = useState<string>('all');
+  const [sessionFilter, setSessionFilter] = useState<'all' | IntakeSessionKey>('all');
+  const [exactIntakeFilter, setExactIntakeFilter] = useState<string>('all');
+  const [channelFilter, setChannelFilter] = useState<'all' | 'b2c' | 'b2b'>('all');
+  const [counselorFilter, setCounselorFilter] = useState<string>('all');
+  const [referrerFilter, setReferrerFilter] = useState<string>('all');
   const [destinationFilter, setDestinationFilter] = useState<string>('all');
+
+  // Pipeline & Secondary Filters
   const [bucketFilter, setBucketFilter] = useState<BucketFilter>('all');
   const [stageFilter, setStageFilter] = useState<string>('all');
-  const [intakeFilter, setIntakeFilter] = useState<string>('all');
   const [embassyFilter, setEmbassyFilter] = useState<string>('all');
   const [degreeFilter, setDegreeFilter] = useState<string>('all');
-  const [consultantFilter, setConsultantFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [hideWithdrawn, setHideWithdrawn] = useState(false);
 
@@ -183,40 +202,185 @@ export default function ApplicationTrackerClient() {
   }, [isAuthenticated, authLoading, authenticatedFetch]);
 
   const allRows = useMemo(() => data?.rows ?? [], [data]);
+  const employees = useMemo(() => data?.meta.employees ?? [], [data]);
 
-  // Step 1 filter: Market + Channel + Destination (used to drive KPI bucket counts accurately)
+  // 1. Academic Year counts across all records
+  const yearBreakdown = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const r of allRows) {
+      const yr = extractIntakeYear(r.assessIntake);
+      map.set(yr, (map.get(yr) || 0) + 1);
+    }
+    const order = ['2027', '2026', '2028', 'Unscheduled'];
+    return Array.from(map.entries()).sort((a, b) => {
+      const ia = order.indexOf(a[0]);
+      const ib = order.indexOf(b[0]);
+      return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+    });
+  }, [allRows]);
+
+  // 2. Intake Session counts (within active Year filter)
+  const sessionCounts = useMemo(() => {
+    const counts: Record<IntakeSessionKey, number> = {
+      March: 0,
+      September: 0,
+      January: 0,
+      Other: 0,
+    };
+    for (const r of allRows) {
+      if (yearFilter !== 'all' && extractIntakeYear(r.assessIntake) !== yearFilter) continue;
+      const sess = extractIntakeSession(r.assessIntake);
+      counts[sess] = (counts[sess] || 0) + 1;
+    }
+    return counts;
+  }, [allRows, yearFilter]);
+
+  // 3. Exact Year+Session Cohort pills (sorted chronologically descending)
+  const cohortBreakdown = useMemo(() => {
+    const map = new Map<
+      string,
+      { term: string; year: string; session: IntakeSessionKey; total: number; active: number; withdrawn: number }
+    >();
+    for (const r of allRows) {
+      const term = r.assessIntake || 'Unscheduled';
+      const cur = map.get(term) || {
+        term,
+        year: extractIntakeYear(r.assessIntake),
+        session: extractIntakeSession(r.assessIntake),
+        total: 0,
+        active: 0,
+        withdrawn: 0,
+      };
+      cur.total += 1;
+      if (getStageBucket(r.applicationStage) === 'withdrawn') cur.withdrawn += 1;
+      else cur.active += 1;
+      map.set(term, cur);
+    }
+    return Array.from(map.values()).sort((a, b) => getIntakeSortValue(b.term) - getIntakeSortValue(a.term));
+  }, [allRows]);
+
+  // 4. Rows scoped by Year + Session + Exact Intake (used to compute Channel & Counselor counts)
+  const timeScopedRows = useMemo(() => {
+    return allRows.filter((r) => {
+      if (yearFilter !== 'all' && extractIntakeYear(r.assessIntake) !== yearFilter) return false;
+      if (sessionFilter !== 'all' && extractIntakeSession(r.assessIntake) !== sessionFilter) return false;
+      if (exactIntakeFilter !== 'all' && (r.assessIntake || 'Unscheduled') !== exactIntakeFilter) return false;
+      return true;
+    });
+  }, [allRows, yearFilter, sessionFilter, exactIntakeFilter]);
+
+  // 5. Channel (B2C Direct vs B2B Partner) breakdown within active time scope
+  const channelCounts = useMemo(() => {
+    let b2c = 0;
+    let b2b = 0;
+    const partnerMap = new Map<string, number>();
+    for (const r of timeScopedRows) {
+      if (isB2BRow(r)) {
+        b2b += 1;
+        const pName = (r.referrer || 'Partner Agent').trim();
+        partnerMap.set(pName, (partnerMap.get(pName) || 0) + 1);
+      } else {
+        b2c += 1;
+      }
+    }
+    const topPartners = Array.from(partnerMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6);
+    return { total: timeScopedRows.length, b2c, b2b, topPartners };
+  }, [timeScopedRows]);
+
+  // 6. Counselor Desk breakdown within active Year/Intake + Channel scope
+  const counselorBreakdown = useMemo(() => {
+    const byId = new Map<
+      string,
+      {
+        id: string;
+        name: string;
+        total: number;
+        active: number;
+        submittedOrAdmitted: number;
+        flown: number;
+      }
+    >();
+
+    for (const emp of employees) {
+      byId.set(emp.id, {
+        id: emp.id,
+        name: emp.name,
+        total: 0,
+        active: 0,
+        submittedOrAdmitted: 0,
+        flown: 0,
+      });
+    }
+
+    let unassignedTotal = 0;
+    let unassignedActive = 0;
+
+    for (const r of timeScopedRows) {
+      if (channelFilter === 'b2c' && isB2BRow(r)) continue;
+      if (channelFilter === 'b2b' && !isB2BRow(r)) continue;
+
+      const bucket = getStageBucket(r.applicationStage);
+      const isWithdrawn = bucket === 'withdrawn';
+      const isOfferOrSub = bucket === 'submitted' || bucket === 'admitted' || bucket === 'visa';
+      const isFlown = bucket === 'flight';
+
+      const entry = r.assignedEmployeeId ? byId.get(r.assignedEmployeeId) : null;
+      if (entry) {
+        entry.total += 1;
+        if (!isWithdrawn) entry.active += 1;
+        if (isOfferOrSub) entry.submittedOrAdmitted += 1;
+        if (isFlown) entry.flown += 1;
+      } else {
+        unassignedTotal += 1;
+        if (!isWithdrawn) unassignedActive += 1;
+      }
+    }
+
+    const list = Array.from(byId.values())
+      .filter((c) => c.total > 0)
+      .sort((a, b) => b.total - a.total);
+
+    return { list, unassignedTotal, unassignedActive };
+  }, [timeScopedRows, employees, channelFilter]);
+
+  // 7. Scoped rows (Year + Session + Exact Intake + Channel + Counselor + Referrer + Destination) -> drives 6 Stage KPI buckets
   const scopedRows = useMemo(() => {
-    return allRows.filter((row) => {
-      if (marketFilter === 'china' && row.leadMarket !== 'China') return false;
-      if (marketFilter === 'bangladesh' && row.leadMarket === 'China') return false;
-      if (channelFilter === 'office' && (row.channelType === 'B2B' || row.source === 'B2B' || row.source === 'Agent')) {
-        return false;
+    return timeScopedRows.filter((row) => {
+      if (channelFilter === 'b2c' && isB2BRow(row)) return false;
+      if (channelFilter === 'b2b' && !isB2BRow(row)) return false;
+      if (counselorFilter !== 'all') {
+        if (counselorFilter === '__unassigned__') {
+          if (row.assignedEmployeeId || row.employeeName) return false;
+        } else if (row.assignedEmployeeId !== counselorFilter && row.employeeName !== counselorFilter) {
+          return false;
+        }
       }
-      if (channelFilter === 'b2b' && row.channelType !== 'B2B' && row.source !== 'B2B' && row.source !== 'Agent') {
-        return false;
-      }
+      if (referrerFilter !== 'all' && (row.referrer || '') !== referrerFilter) return false;
       if (destinationFilter !== 'all' && row.country !== destinationFilter) return false;
       return true;
     });
-  }, [allRows, marketFilter, channelFilter, destinationFilter]);
+  }, [timeScopedRows, channelFilter, counselorFilter, referrerFilter, destinationFilter]);
 
-  // Destination chip counts (within active market + channel)
+  // Destination chip counts (within active Year/Intake + Channel + Counselor)
   const destinationCounts = useMemo(() => {
     const map = new Map<string, number>();
-    for (const row of allRows) {
-      if (marketFilter === 'china' && row.leadMarket !== 'China') continue;
-      if (marketFilter === 'bangladesh' && row.leadMarket === 'China') continue;
-      if (channelFilter === 'office' && (row.channelType === 'B2B' || row.source === 'B2B' || row.source === 'Agent')) {
-        continue;
-      }
-      if (channelFilter === 'b2b' && row.channelType !== 'B2B' && row.source !== 'B2B' && row.source !== 'Agent') {
-        continue;
+    for (const row of timeScopedRows) {
+      if (channelFilter === 'b2c' && isB2BRow(row)) continue;
+      if (channelFilter === 'b2b' && !isB2BRow(row)) continue;
+      if (counselorFilter !== 'all') {
+        if (counselorFilter === '__unassigned__') {
+          if (row.assignedEmployeeId || row.employeeName) continue;
+        } else if (row.assignedEmployeeId !== counselorFilter && row.employeeName !== counselorFilter) {
+          continue;
+        }
       }
       const key = row.country || 'Unknown';
       map.set(key, (map.get(key) || 0) + 1);
     }
     return Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
-  }, [allRows, marketFilter, channelFilter]);
+  }, [timeScopedRows, channelFilter, counselorFilter]);
 
   // Pipeline bucket KPI counts
   const bucketCounts = useMemo(() => {
@@ -240,7 +404,7 @@ export default function ApplicationTrackerClient() {
     return counts;
   }, [scopedRows]);
 
-  // Full filtered rows
+  // Full filtered rows for Table & Kanban Board
   const filteredRows = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return scopedRows.filter((row) => {
@@ -248,17 +412,8 @@ export default function ApplicationTrackerClient() {
       if (hideWithdrawn && bucket === 'withdrawn' && bucketFilter !== 'withdrawn') return false;
       if (bucketFilter !== 'all' && bucket !== bucketFilter) return false;
       if (stageFilter !== 'all' && row.applicationStage !== stageFilter) return false;
-      if (intakeFilter !== 'all' && (row.assessIntake || 'Unset') !== intakeFilter) return false;
       if (embassyFilter !== 'all' && (row.embassyStatus || 'Pending') !== embassyFilter) return false;
       if (degreeFilter !== 'all' && (row.degree || '') !== degreeFilter) return false;
-      if (consultantFilter !== 'all') {
-        const matchesEmp = row.assignedEmployeeId === consultantFilter || row.employeeName === consultantFilter;
-        if (consultantFilter === '__unassigned__') {
-          if (row.assignedEmployeeId || row.employeeName) return false;
-        } else if (!matchesEmp) {
-          return false;
-        }
-      }
       if (q) {
         const hit = [
           row.name,
@@ -284,10 +439,8 @@ export default function ApplicationTrackerClient() {
     hideWithdrawn,
     bucketFilter,
     stageFilter,
-    intakeFilter,
     embassyFilter,
     degreeFilter,
-    consultantFilter,
     searchQuery,
   ]);
 
@@ -300,28 +453,32 @@ export default function ApplicationTrackerClient() {
   }, [filteredRows, pageSize, safePage]);
 
   const hasActiveFilters =
-    marketFilter !== 'all' ||
+    yearFilter !== 'all' ||
+    sessionFilter !== 'all' ||
+    exactIntakeFilter !== 'all' ||
     channelFilter !== 'all' ||
+    counselorFilter !== 'all' ||
+    referrerFilter !== 'all' ||
     destinationFilter !== 'all' ||
     bucketFilter !== 'all' ||
     stageFilter !== 'all' ||
-    intakeFilter !== 'all' ||
     embassyFilter !== 'all' ||
     degreeFilter !== 'all' ||
-    consultantFilter !== 'all' ||
     searchQuery.trim().length > 0 ||
     hideWithdrawn;
 
   const resetFilters = () => {
-    setMarketFilter('all');
+    setYearFilter('all');
+    setSessionFilter('all');
+    setExactIntakeFilter('all');
     setChannelFilter('all');
+    setCounselorFilter('all');
+    setReferrerFilter('all');
     setDestinationFilter('all');
     setBucketFilter('all');
     setStageFilter('all');
-    setIntakeFilter('all');
     setEmbassyFilter('all');
     setDegreeFilter('all');
-    setConsultantFilter('all');
     setSearchQuery('');
     setHideWithdrawn(false);
     setPage(1);
@@ -329,16 +486,34 @@ export default function ApplicationTrackerClient() {
 
   const handleInlinePatch = async (
     rowId: string,
-    patch: { applicationStage?: string; embassyStatus?: string },
+    patch: { applicationStage?: string; embassyStatus?: string; assignedEmployeeId?: string | null; channelType?: string },
     label: string,
   ) => {
     setInlineBusyId(rowId);
-    // Optimistic update
+    const matchedEmp =
+      patch.assignedEmployeeId !== undefined
+        ? employees.find((e) => e.id === patch.assignedEmployeeId) || null
+        : undefined;
+
     setData((prev) => {
       if (!prev) return prev;
       return {
         ...prev,
-        rows: prev.rows.map((r) => (r.id === rowId ? { ...r, ...patch } : r)),
+        rows: prev.rows.map((r) =>
+          r.id === rowId
+            ? {
+                ...r,
+                ...patch,
+                ...(matchedEmp !== undefined
+                  ? {
+                      assignedEmployeeId: matchedEmp?.id || null,
+                      assignedTo: matchedEmp?.name || null,
+                      employeeName: matchedEmp?.name || null,
+                    }
+                  : {}),
+              }
+            : r,
+        ),
       };
     });
 
@@ -401,15 +576,18 @@ export default function ApplicationTrackerClient() {
     const headers = [
       'Ref ID',
       'Student Name',
-      'Market',
-      'Channel',
+      'Intake Year',
+      'Intake Session',
+      'Full Intake',
+      'Channel (B2C/B2B)',
+      'Counselor',
+      'Partner / Reference',
       'Destination',
-      'Intake',
       'Degree',
       'Major / Program',
       'Primary University',
       'All Universities',
-      'Stage',
+      'Pipeline Stage',
       'Embassy Status',
       'Hardcopy Status',
       'Passport',
@@ -418,8 +596,6 @@ export default function ApplicationTrackerClient() {
       'Nationality',
       'Docs Received',
       'Docs Total',
-      'Consultant',
-      'Referrer',
       'Visa Deadline',
       'Departure Date',
       ...(isAdmin ? ['Deposit (BDT)', 'Finance Paid (BDT)'] : []),
@@ -432,10 +608,13 @@ export default function ApplicationTrackerClient() {
       const cols = [
         r.leadRef || '',
         r.name,
-        r.leadMarket,
-        r.channelType,
-        r.country,
+        extractIntakeYear(r.assessIntake),
+        extractIntakeSession(r.assessIntake),
         r.assessIntake || '',
+        isB2BRow(r) ? 'B2B Partner' : 'B2C Direct',
+        r.employeeName || 'Unassigned',
+        r.referrer || '',
+        r.country,
         r.degree || '',
         r.program || '',
         r.university || '',
@@ -449,8 +628,6 @@ export default function ApplicationTrackerClient() {
         r.nationality || '',
         r.docsReceived,
         r.docsTotal,
-        r.employeeName || '',
-        r.referrer || '',
         r.visaDeadline || '',
         r.departureDate || '',
         ...(isAdmin ? [r.deposit || 0, r.financeReceivedTotal || 0] : []),
@@ -505,7 +682,7 @@ export default function ApplicationTrackerClient() {
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="flex flex-col items-center gap-3 text-center">
           <Loader2 className="size-8 animate-spin text-[#0f3a5c]" />
-          <p className="text-sm font-semibold text-slate-600">Loading Application Tracker...</p>
+          <p className="text-sm font-semibold text-slate-600">Loading EduExpress Application Tracker...</p>
         </div>
       </div>
     );
@@ -541,48 +718,62 @@ export default function ApplicationTrackerClient() {
     { key: 'withdrawn', title: 'Withdrawn', subtitle: 'Docs / App withdraw', accent: 'border-t-rose-500' },
   ];
 
-  const uniqueIntakesInScope = Array.from(
-    new Set(allRows.map((r) => r.assessIntake || 'Unset')),
-  ).sort();
+  const b2cPct = channelCounts.total > 0 ? Math.round((channelCounts.b2c / channelCounts.total) * 100) : 0;
+  const b2bPct = channelCounts.total > 0 ? 100 - b2cPct : 0;
 
   return (
     <div className="mx-auto max-w-[1440px] space-y-5 pb-16">
-      {/* Print-Only Header */}
+      {/* Print-Only Institutional Header */}
       <div className="hidden border-b border-slate-300 pb-3 print:block">
         <div className="flex items-baseline justify-between">
           <div>
-            <h1 className="text-lg font-bold text-slate-900">EduExpress International — Application Tracker Roster</h1>
+            <h1 className="text-lg font-bold text-slate-900">EduExpress International — Admissions &amp; Visa Register</h1>
             <p className="text-xs text-slate-600">
               Printed {new Date().toISOString().slice(0, 10)} · {filteredRows.length} student file(s)
-              {intakeFilter !== 'all' ? ` · Intake: ${intakeFilter}` : ''}
-              {marketFilter !== 'all' ? ` · Market: ${marketFilter}` : ''}
+              {yearFilter !== 'all' ? ` · Year: ${yearFilter}` : ''}
+              {sessionFilter !== 'all' ? ` · Intake: ${sessionFilter}` : ''}
+              {channelFilter !== 'all' ? ` · Channel: ${channelFilter.toUpperCase()}` : ''}
             </p>
           </div>
           <span className="text-xs font-semibold text-slate-500">eduexpressint.com/admin/applications</span>
         </div>
       </div>
 
-      {/* Executive Institutional Header */}
+      {/* Executive Institutional Command Bar */}
       <section className="rounded-2xl border border-slate-200/90 bg-white px-5 py-5 shadow-xs print:hidden">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#0f3a5c]">
               <FolderKanban size={13} className="text-[#0b7a53]" />
-              <span>Admissions &amp; Visa Operations · Dhaka HQ</span>
+              <span>EduExpress International · Dhaka HQ Operations</span>
               <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold tracking-normal text-emerald-800">
-                {isAdmin ? 'Full Admin Access' : 'Counselor Scope (Bangladesh)'}
+                {allRows.length} Active Files · 2026–2027 Cohorts
               </span>
             </div>
             <h1 className="font-heading text-2xl font-bold tracking-tight text-[#071c2e] sm:text-[26px]">
-              Application Tracker
+              Application &amp; Visa Tracker
             </h1>
             <p className="text-xs text-slate-500">
-              Excel-grade student admissions register, 17-stage visa pipeline, document checklists &amp; live{' '}
-              <span className="font-mono text-slate-700">/track</span> portal sync — replacing external spreadsheets.
+              Segmented by <strong>Academic Year</strong>, <strong>Intake Session</strong>,{' '}
+              <strong>Channel (B2C Direct vs B2B Partner)</strong> &amp; <strong>Counselor Desk</strong> — synced with live{' '}
+              <span className="font-mono text-slate-700">/track</span> student portals.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowAnalytics((v) => !v)}
+              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-bold transition ${
+                showAnalytics
+                  ? 'border-[#0f3a5c]/30 bg-[#0f3a5c]/8 text-[#071c2e]'
+                  : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              <BarChart3 size={14} className="text-[#0f3a5c]" />
+              {showAnalytics ? 'Hide Insights' : 'Cohort Insights'}
+            </button>
+
             {/* View Toggle */}
             <div className="inline-flex rounded-xl border border-slate-200 bg-slate-100 p-0.5">
               <button
@@ -595,7 +786,7 @@ export default function ApplicationTrackerClient() {
                 }`}
               >
                 <Table2 size={13} />
-                Excel Table
+                Excel Register
               </button>
               <button
                 type="button"
@@ -647,112 +838,521 @@ export default function ApplicationTrackerClient() {
           </div>
         </div>
 
-        {/* Source Market, Channel & Destination Bar */}
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Market Switcher (China strictly admin-only) */}
-            <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-0.5 text-xs">
+        {/* TIER 1: SEPARATE ACADEMIC YEAR & INTAKE SESSION BAR */}
+        <div className="mt-4 grid grid-cols-1 gap-3 border-t border-slate-100 pt-4 lg:grid-cols-12">
+          {/* Academic Year Selector */}
+          <div className="flex flex-wrap items-center gap-2 lg:col-span-5">
+            <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+              <Calendar size={12} className="text-[#0f3a5c]" />
+              Year:
+            </span>
+            <div className="inline-flex flex-wrap items-center rounded-xl border border-slate-200 bg-slate-50 p-0.5 text-xs">
               <button
                 type="button"
                 onClick={() => {
-                  setMarketFilter('all');
+                  setYearFilter('all');
+                  setExactIntakeFilter('all');
                   setPage(1);
                 }}
-                className={`rounded-lg px-3 py-1 font-bold transition ${
-                  marketFilter === 'all' ? 'bg-[#071c2e] text-white' : 'text-slate-600 hover:text-slate-900'
+                className={`rounded-lg px-3 py-1.5 font-bold transition ${
+                  yearFilter === 'all'
+                    ? 'bg-[#071c2e] text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                All Markets
+                All Years <span className="ml-0.5 tabular-nums opacity-75">({allRows.length})</span>
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMarketFilter('bangladesh');
-                  setPage(1);
-                }}
-                className={`rounded-lg px-3 py-1 font-bold transition ${
-                  marketFilter === 'bangladesh' ? 'bg-[#0b7a53] text-white' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Bangladesh
-              </button>
-              {isAdmin && (
+              {yearBreakdown.map(([yr, count]) => (
                 <button
+                  key={yr}
                   type="button"
                   onClick={() => {
-                    setMarketFilter('china');
+                    setYearFilter(yr);
+                    setExactIntakeFilter('all');
                     setPage(1);
                   }}
-                  className={`rounded-lg px-3 py-1 font-bold transition ${
-                    marketFilter === 'china' ? 'bg-amber-600 text-white' : 'text-slate-600 hover:text-slate-900'
+                  className={`rounded-lg px-3 py-1.5 font-bold transition ${
+                    yearFilter === yr
+                      ? yr === '2027'
+                        ? 'bg-[#0b7a53] text-white shadow-xs'
+                        : 'bg-[#0f3a5c] text-white shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  China (Admin)
-                </button>
-              )}
-            </div>
-
-            {/* Channel Switcher */}
-            <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-0.5 text-xs">
-              {[
-                { key: 'all' as const, label: 'All Channels' },
-                { key: 'office' as const, label: 'Office (B2C)' },
-                { key: 'b2b' as const, label: 'B2B / Agent' },
-              ].map((ch) => (
-                <button
-                  key={ch.key}
-                  type="button"
-                  onClick={() => {
-                    setChannelFilter(ch.key);
-                    setPage(1);
-                  }}
-                  className={`rounded-lg px-2.5 py-1 font-bold transition ${
-                    channelFilter === ch.key ? 'bg-white text-[#071c2e] shadow-xs' : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {ch.label}
+                  {yr} <span className="ml-0.5 tabular-nums opacity-80">({count})</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Destination Chips */}
+          {/* Intake Session Selector */}
+          <div className="flex flex-wrap items-center gap-2 lg:col-span-7 lg:justify-end">
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+              Intake Session:
+            </span>
+            <div className="inline-flex flex-wrap items-center rounded-xl border border-slate-200 bg-slate-50 p-0.5 text-xs">
+              <button
+                type="button"
+                onClick={() => {
+                  setSessionFilter('all');
+                  setExactIntakeFilter('all');
+                  setPage(1);
+                }}
+                className={`rounded-lg px-3 py-1.5 font-bold transition ${
+                  sessionFilter === 'all'
+                    ? 'bg-[#071c2e] text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                All Intakes
+              </button>
+              {INTAKE_SESSION_OPTIONS.map((opt) => {
+                const count = sessionCounts[opt.key] || 0;
+                const active = sessionFilter === opt.key;
+                return (
+                  <button
+                    key={opt.key}
+                    type="button"
+                    onClick={() => {
+                      setSessionFilter(active ? 'all' : opt.key);
+                      setExactIntakeFilter('all');
+                      setPage(1);
+                    }}
+                    className={`rounded-lg px-3 py-1.5 font-bold transition ${
+                      active
+                        ? 'bg-[#0f3a5c] text-white shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {opt.label} <span className="ml-0.5 tabular-nums opacity-75">({count})</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* TIER 2: CHANNEL (B2C DIRECT vs B2B PARTNER) & COUNSELOR DESK BAR */}
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3">
+          {/* B2C vs B2B Segmented Control */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+              <Handshake size={12} className="text-[#0b7a53]" />
+              Channel:
+            </span>
+            <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-0.5 text-xs">
+              <button
+                type="button"
+                onClick={() => {
+                  setChannelFilter('all');
+                  setReferrerFilter('all');
+                  setPage(1);
+                }}
+                className={`rounded-lg px-3 py-1.5 font-bold transition ${
+                  channelFilter === 'all'
+                    ? 'bg-[#071c2e] text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                All Channels <span className="tabular-nums opacity-75">({channelCounts.total})</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setChannelFilter('b2c');
+                  setReferrerFilter('all');
+                  setPage(1);
+                }}
+                className={`rounded-lg px-3 py-1.5 font-bold transition ${
+                  channelFilter === 'b2c'
+                    ? 'bg-[#0b7a53] text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                EduExpress Direct · B2C <span className="tabular-nums opacity-80">({channelCounts.b2c})</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setChannelFilter('b2b');
+                  setPage(1);
+                }}
+                className={`rounded-lg px-3 py-1.5 font-bold transition ${
+                  channelFilter === 'b2b'
+                    ? 'bg-indigo-700 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Partner Agent · B2B <span className="tabular-nums opacity-80">({channelCounts.b2b})</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Counselor Desk Pills */}
           <div className="flex flex-wrap items-center gap-1.5">
+            <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+              <UserCheck size={12} className="text-[#0f3a5c]" />
+              Counselor:
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setCounselorFilter('all');
+                setPage(1);
+              }}
+              className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
+                counselorFilter === 'all'
+                  ? 'border-[#071c2e] bg-[#071c2e] text-white'
+                  : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              All Counselors
+            </button>
+            {counselorBreakdown.list.map((c) => {
+              const active = counselorFilter === c.id;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => {
+                    setCounselorFilter(active ? 'all' : c.id);
+                    setPage(1);
+                  }}
+                  className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
+                    active
+                      ? 'border-[#0f3a5c] bg-[#0f3a5c] text-white shadow-2xs'
+                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                  }`}
+                >
+                  {c.name.split(' ')[0]} <span className="tabular-nums opacity-75">({c.total})</span>
+                </button>
+              );
+            })}
+            {counselorBreakdown.unassignedTotal > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setCounselorFilter(counselorFilter === '__unassigned__' ? 'all' : '__unassigned__');
+                  setPage(1);
+                }}
+                className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
+                  counselorFilter === '__unassigned__'
+                    ? 'border-amber-600 bg-amber-600 text-white'
+                    : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Partner / Unassigned <span className="tabular-nums opacity-75">({counselorBreakdown.unassignedTotal})</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* TIER 3: DESTINATION CORRIDOR CHIPS */}
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="mr-1 inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+              <Globe2 size={12} className="text-[#0b7a53]" />
+              Corridor:
+            </span>
             <button
               type="button"
               onClick={() => {
                 setDestinationFilter('all');
                 setPage(1);
               }}
-              className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
+              className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
                 destinationFilter === 'all'
                   ? 'border-[#0f3a5c] bg-[#0f3a5c] text-white'
                   : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
               }`}
             >
-              <Globe2 size={11} />
-              All Dest. ({allRows.length})
+              All Destinations
             </button>
-            {destinationCounts.slice(0, 6).map(([dest, count]) => (
+            {destinationCounts.map(([dest, count]) => (
               <button
                 key={dest}
                 type="button"
                 onClick={() => {
-                  setDestinationFilter(dest);
+                  setDestinationFilter(destinationFilter === dest ? 'all' : dest);
                   setPage(1);
                 }}
                 className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
                   destinationFilter === dest
-                    ? 'border-[#0f3a5c] bg-[#0f3a5c]/10 text-[#071c2e]'
-                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+                    ? 'border-[#0b7a53] bg-[#0b7a53] text-white'
+                    : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                {dest} <span className="tabular-nums opacity-70">({count})</span>
+                {dest} <span className="tabular-nums opacity-75">({count})</span>
               </button>
             ))}
           </div>
+
+          {referrerFilter !== 'all' && (
+            <button
+              type="button"
+              onClick={() => setReferrerFilter('all')}
+              className="inline-flex items-center gap-1 rounded-full border border-indigo-200 bg-indigo-50 px-2.5 py-1 text-[11px] font-bold text-indigo-900"
+            >
+              Partner: {referrerFilter} ×
+            </button>
+          )}
         </div>
       </section>
+
+      {/* EXECUTIVE COHORT, CHANNEL & COUNSELOR INTELLIGENCE BOARD */}
+      {showAnalytics && (
+        <section className="grid grid-cols-1 gap-4 lg:grid-cols-3 print:hidden">
+          {/* Card 1: Intake & Year Cohort Matrix */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+              <div>
+                <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#071c2e]">
+                  Intake &amp; Year Cohorts
+                </h2>
+                <p className="text-[11px] text-slate-500">Click any semester cohort to isolate roster</p>
+              </div>
+              <Calendar size={15} className="text-[#0f3a5c]" />
+            </div>
+            <div className="mt-3 space-y-2">
+              {cohortBreakdown.map((c) => {
+                const isSelected =
+                  exactIntakeFilter === c.term ||
+                  (yearFilter === c.year && sessionFilter === c.session && c.session !== 'Other');
+                const pct = allRows.length > 0 ? Math.round((c.total / allRows.length) * 100) : 0;
+                return (
+                  <button
+                    key={c.term}
+                    type="button"
+                    onClick={() => {
+                      if (isSelected) {
+                        setExactIntakeFilter('all');
+                        setYearFilter('all');
+                        setSessionFilter('all');
+                      } else {
+                        setExactIntakeFilter(c.term);
+                        setYearFilter(c.year);
+                        setSessionFilter(c.session !== 'Other' ? c.session : 'all');
+                      }
+                      setPage(1);
+                    }}
+                    className={`w-full rounded-xl border p-2.5 text-left transition ${
+                      isSelected
+                        ? 'border-[#0f3a5c] bg-[#0f3a5c]/5 ring-1 ring-[#0f3a5c]'
+                        : 'border-slate-100 bg-slate-50/70 hover:border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-extrabold ${
+                            c.year === '2027'
+                              ? 'bg-emerald-100 text-emerald-900'
+                              : c.year === '2026'
+                                ? 'bg-sky-100 text-[#0f3a5c]'
+                                : 'bg-slate-200 text-slate-700'
+                          }`}
+                        >
+                          {c.year}
+                        </span>
+                        <span className="font-bold text-slate-900">{c.term}</span>
+                      </div>
+                      <span className="font-bold tabular-nums text-slate-800">
+                        {c.total} <span className="text-[10px] font-normal text-slate-500">({c.active} active)</span>
+                      </span>
+                    </div>
+                    <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
+                      <div
+                        className={`h-full rounded-full ${c.year === '2027' ? 'bg-[#0b7a53]' : 'bg-[#0f3a5c]'}`}
+                        style={{ width: `${Math.max(6, pct)}%` }}
+                      />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Card 2: B2C Direct vs B2B Partner Network */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+              <div>
+                <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#071c2e]">
+                  B2C Direct vs B2B Partner Split
+                </h2>
+                <p className="text-[11px] text-slate-500">
+                  In-house Dhaka desk vs external sub-agent network
+                </p>
+              </div>
+              <Handshake size={15} className="text-[#0b7a53]" />
+            </div>
+
+            <div className="mt-3 grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setChannelFilter(channelFilter === 'b2c' ? 'all' : 'b2c');
+                  setPage(1);
+                }}
+                className={`rounded-xl border p-3 text-left transition ${
+                  channelFilter === 'b2c'
+                    ? 'border-[#0b7a53] bg-emerald-50/80 ring-1 ring-[#0b7a53]'
+                    : 'border-slate-200 bg-slate-50/60 hover:border-emerald-300'
+                }`}
+              >
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#0b7a53]">
+                  EduExpress Direct (B2C)
+                </span>
+                <div className="mt-1 flex items-baseline justify-between">
+                  <span className="font-heading text-xl font-bold tabular-nums text-slate-900">
+                    {channelCounts.b2c}
+                  </span>
+                  <span className="text-xs font-bold tabular-nums text-[#0b7a53]">{b2cPct}%</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setChannelFilter(channelFilter === 'b2b' ? 'all' : 'b2b');
+                  setPage(1);
+                }}
+                className={`rounded-xl border p-3 text-left transition ${
+                  channelFilter === 'b2b'
+                    ? 'border-indigo-600 bg-indigo-50/80 ring-1 ring-indigo-600'
+                    : 'border-slate-200 bg-slate-50/60 hover:border-indigo-300'
+                }`}
+              >
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700">
+                  Partner Agents (B2B)
+                </span>
+                <div className="mt-1 flex items-baseline justify-between">
+                  <span className="font-heading text-xl font-bold tabular-nums text-slate-900">
+                    {channelCounts.b2b}
+                  </span>
+                  <span className="text-xs font-bold tabular-nums text-indigo-700">{b2bPct}%</span>
+                </div>
+              </button>
+            </div>
+
+            {/* Split Bar */}
+            <div className="mt-3 flex h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
+              <div className="bg-[#0b7a53] transition-all" style={{ width: `${b2cPct}%` }} />
+              <div className="bg-indigo-600 transition-all" style={{ width: `${b2bPct}%` }} />
+            </div>
+
+            {/* Top B2B Partners */}
+            <div className="mt-3.5">
+              <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                Active B2B Partners &amp; Referrers (Click to Filter)
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {channelCounts.topPartners.length === 0 ? (
+                  <span className="text-[11px] text-slate-400">No B2B partners in current scope</span>
+                ) : (
+                  channelCounts.topPartners.map(([partner, count]) => {
+                    const active = referrerFilter === partner;
+                    return (
+                      <button
+                        key={partner}
+                        type="button"
+                        onClick={() => {
+                          setReferrerFilter(active ? 'all' : partner);
+                          setChannelFilter(active ? 'all' : 'b2b');
+                          setPage(1);
+                        }}
+                        className={`rounded-lg border px-2.5 py-1 text-[11px] font-bold transition ${
+                          active
+                            ? 'border-indigo-600 bg-indigo-600 text-white'
+                            : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-indigo-300 hover:bg-indigo-50'
+                        }`}
+                      >
+                        {partner} <span className="tabular-nums opacity-75">({count})</span>
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3: Counselor Desk Workload & Conversion */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+              <div>
+                <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#071c2e]">
+                  Counselor Desk Caseload
+                </h2>
+                <p className="text-[11px] text-slate-500">
+                  Click any counselor to inspect their assigned student files
+                </p>
+              </div>
+              <UserCheck size={15} className="text-[#0f3a5c]" />
+            </div>
+
+            <div className="mt-3 space-y-2">
+              {counselorBreakdown.list.map((c) => {
+                const active = counselorFilter === c.id;
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => {
+                      setCounselorFilter(active ? 'all' : c.id);
+                      setPage(1);
+                    }}
+                    className={`w-full rounded-xl border px-3 py-2 text-left transition ${
+                      active
+                        ? 'border-[#0f3a5c] bg-[#0f3a5c]/5 ring-1 ring-[#0f3a5c]'
+                        : 'border-slate-100 bg-slate-50/70 hover:border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-bold text-slate-900">{c.name}</span>
+                      <span className="font-bold tabular-nums text-[#0f3a5c]">{c.total} files</span>
+                    </div>
+                    <div className="mt-1 flex items-center gap-3 text-[10px] font-semibold text-slate-500">
+                      <span className="text-emerald-700">{c.active} active</span>
+                      <span>·</span>
+                      <span className="text-violet-700">{c.submittedOrAdmitted} applied/offer</span>
+                      {c.flown > 0 && (
+                        <>
+                          <span>·</span>
+                          <span className="text-[#0b7a53]">{c.flown} flown/ticket</span>
+                        </>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+
+              {counselorBreakdown.unassignedTotal > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCounselorFilter(counselorFilter === '__unassigned__' ? 'all' : '__unassigned__');
+                    setPage(1);
+                  }}
+                  className={`w-full rounded-xl border px-3 py-2 text-left transition ${
+                    counselorFilter === '__unassigned__'
+                      ? 'border-amber-600 bg-amber-50/80 ring-1 ring-amber-600'
+                      : 'border-dashed border-slate-200 bg-white hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-slate-700">B2B Partner / Unassigned Desk</span>
+                    <span className="font-bold tabular-nums text-amber-800">
+                      {counselorBreakdown.unassignedTotal} files
+                    </span>
+                  </div>
+                  <p className="mt-0.5 text-[10px] text-slate-500">
+                    {counselorBreakdown.unassignedActive} active files — assign a counselor inline in the table below
+                  </p>
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Toast Notification */}
       {notice && (
@@ -778,7 +1378,7 @@ export default function ApplicationTrackerClient() {
         {[
           {
             key: 'all' as const,
-            label: 'Total Files',
+            label: 'Total in Scope',
             value: bucketCounts.total,
             sub: `${bucketCounts.active} active · ${bucketCounts.withdrawn} withdrawn`,
             icon: FileSpreadsheet,
@@ -863,7 +1463,7 @@ export default function ApplicationTrackerClient() {
         })}
       </section>
 
-      {/* Filter Toolbar */}
+      {/* Search & Granular Filter Toolbar */}
       <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs print:hidden">
         <div className="grid grid-cols-1 gap-2.5 md:grid-cols-12">
           {/* Search */}
@@ -876,30 +1476,13 @@ export default function ApplicationTrackerClient() {
                 setSearchQuery(e.target.value);
                 setPage(1);
               }}
-              placeholder="Search student, Ref ID, passport, phone, university..."
+              placeholder="Search student, Ref ID, passport, university, partner..."
               className="w-full rounded-xl border border-slate-200 bg-slate-50/70 py-2 pl-9 pr-3 text-xs font-medium text-slate-900 focus:border-[#0f3a5c] focus:bg-white focus:outline-none"
             />
           </div>
 
-          {/* Intake Filter */}
-          <div className="md:col-span-2">
-            <select
-              value={intakeFilter}
-              onChange={(e) => {
-                setIntakeFilter(e.target.value);
-                setPage(1);
-              }}
-              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 focus:border-[#0f3a5c] focus:outline-none"
-            >
-              <option value="all">All Intakes</option>
-              {uniqueIntakesInScope.map((intake) => (
-                <option key={intake} value={intake}>{intake}</option>
-              ))}
-            </select>
-          </div>
-
           {/* Exact Stage Filter */}
-          <div className="md:col-span-2">
+          <div className="md:col-span-3">
             <select
               value={stageFilter}
               onChange={(e) => {
@@ -909,7 +1492,7 @@ export default function ApplicationTrackerClient() {
               }}
               className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 focus:border-[#0f3a5c] focus:outline-none"
             >
-              <option value="all">All 17 Stages</option>
+              <option value="all">Stage: All 17 Milestones</option>
               {APPLICATION_TRACKER_STAGES.map((st) => (
                 <option key={st.key} value={st.key}>{st.label}</option>
               ))}
@@ -933,38 +1516,21 @@ export default function ApplicationTrackerClient() {
             </select>
           </div>
 
-          {/* Degree / Consultant */}
-          <div className="md:col-span-2">
-            {isAdmin ? (
-              <select
-                value={consultantFilter}
-                onChange={(e) => {
-                  setConsultantFilter(e.target.value);
-                  setPage(1);
-                }}
-                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 focus:border-[#0f3a5c] focus:outline-none"
-              >
-                <option value="all">All Counselors</option>
-                <option value="__unassigned__">Unassigned</option>
-                {(data?.meta.employees ?? []).map((emp) => (
-                  <option key={emp.id} value={emp.id}>{emp.name}</option>
-                ))}
-              </select>
-            ) : (
-              <select
-                value={degreeFilter}
-                onChange={(e) => {
-                  setDegreeFilter(e.target.value);
-                  setPage(1);
-                }}
-                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 focus:border-[#0f3a5c] focus:outline-none"
-              >
-                <option value="all">All Degrees</option>
-                {(data?.meta.degrees ?? []).map((deg) => (
-                  <option key={deg} value={deg}>{deg}</option>
-                ))}
-              </select>
-            )}
+          {/* Degree */}
+          <div className="md:col-span-3">
+            <select
+              value={degreeFilter}
+              onChange={(e) => {
+                setDegreeFilter(e.target.value);
+                setPage(1);
+              }}
+              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 focus:border-[#0f3a5c] focus:outline-none"
+            >
+              <option value="all">Degree Level: All</option>
+              {(data?.meta.degrees ?? []).map((deg) => (
+                <option key={deg} value={deg}>{deg}</option>
+              ))}
+            </select>
           </div>
         </div>
 
@@ -1000,22 +1566,6 @@ export default function ApplicationTrackerClient() {
             >
               Withdrawn Only ({bucketCounts.withdrawn})
             </button>
-
-            {isAdmin && (
-              <select
-                value={degreeFilter}
-                onChange={(e) => {
-                  setDegreeFilter(e.target.value);
-                  setPage(1);
-                }}
-                className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-700 focus:outline-none"
-              >
-                <option value="all">Degree: All</option>
-                {(data?.meta.degrees ?? []).map((deg) => (
-                  <option key={deg} value={deg}>{deg}</option>
-                ))}
-              </select>
-            )}
           </div>
 
           <div className="flex items-center gap-3">
@@ -1034,7 +1584,7 @@ export default function ApplicationTrackerClient() {
                 onClick={resetFilters}
                 className="inline-flex items-center gap-1 font-bold text-rose-700 hover:underline"
               >
-                <FilterX size={13} /> Reset
+                <FilterX size={13} /> Reset All Filters
               </button>
             )}
           </div>
@@ -1091,7 +1641,7 @@ export default function ApplicationTrackerClient() {
       {viewMode === 'table' ? (
         <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1060px] border-collapse text-left text-xs">
+            <table className="w-full min-w-[1120px] border-collapse text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50/90 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
                   {isAdmin && (
@@ -1108,15 +1658,15 @@ export default function ApplicationTrackerClient() {
                       />
                     </th>
                   )}
-                  <th className="px-3 py-3">Ref / Student</th>
-                  <th className="px-3 py-3">Intake &amp; Dest.</th>
+                  <th className="px-3 py-3">Ref / Student &amp; Passport</th>
+                  <th className="px-3 py-3">Year · Intake &amp; Corridor</th>
                   <th className="px-3 py-3">University &amp; Program</th>
+                  <th className="px-3 py-3">Channel &amp; Counselor</th>
                   <th className="px-3 py-3">Pipeline Stage</th>
                   <th className="px-3 py-3">Embassy / Visa</th>
                   <th className="px-3 py-3">Docs</th>
-                  <th className="px-3 py-3">Counselor / Ref.</th>
                   {isAdmin && <th className="px-3 py-3 text-right">Paid (৳)</th>}
-                  <th className="px-3 py-3 text-right print:hidden">File</th>
+                  <th className="px-3 py-3 text-right print:hidden">Dossier</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -1125,7 +1675,7 @@ export default function ApplicationTrackerClient() {
                     <td colSpan={isAdmin ? 10 : 8} className="px-6 py-14 text-center text-slate-500">
                       <p className="font-bold text-slate-700">No application files match the current filters.</p>
                       <p className="mt-1 text-xs">
-                        Adjust your search or click <strong>+ New Application</strong> to open a student file.
+                        Reset filters or click <strong>+ New Application</strong> to open a student file.
                       </p>
                     </td>
                   </tr>
@@ -1136,6 +1686,9 @@ export default function ApplicationTrackerClient() {
                     const docsPct = row.docsTotal > 0 ? Math.round((row.docsReceived / row.docsTotal) * 100) : 0;
                     const safeDrive = toSafeExternalUrl(row.driveLink);
                     const isBusy = inlineBusyId === row.id;
+                    const rowYear = extractIntakeYear(row.assessIntake);
+                    const rowSession = extractIntakeSession(row.assessIntake);
+                    const b2b = isB2BRow(row);
 
                     return (
                       <tr
@@ -1154,7 +1707,7 @@ export default function ApplicationTrackerClient() {
                           </td>
                         )}
 
-                        {/* Ref / Student */}
+                        {/* Ref / Student & Passport */}
                         <td className="px-3 py-3 align-top">
                           <button
                             type="button"
@@ -1167,60 +1720,110 @@ export default function ApplicationTrackerClient() {
                                   {row.leadRef}
                                 </span>
                               )}
-                              {row.leadMarket === 'China' && (
-                                <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-extrabold uppercase text-amber-900">
-                                  CN
-                                </span>
-                              )}
-                              {row.channelType === 'B2B' && (
-                                <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[9px] font-extrabold uppercase text-indigo-800">
-                                  B2B
+                              {row.passport && (
+                                <span className="rounded border border-slate-200 bg-white px-1.5 py-0.5 font-mono text-[10px] font-semibold text-slate-700">
+                                  PP: {row.passport}
                                 </span>
                               )}
                             </div>
                             <div className="mt-1 font-bold text-slate-900 group-hover:text-[#0f3a5c] group-hover:underline">
                               {row.name}
                             </div>
-                            <div className="mt-0.5 text-[11px] text-slate-500">
-                              {row.phone}
-                              {row.passport ? ` · PP ${row.passport}` : ''}
-                            </div>
+                            {row.phone && row.phone !== '—' && (
+                              <div className="mt-0.5 text-[11px] text-slate-500">{row.phone}</div>
+                            )}
                           </button>
                         </td>
 
-                        {/* Intake & Destination */}
+                        {/* Year · Intake & Corridor */}
                         <td className="px-3 py-3 align-top">
-                          <div className="font-bold text-slate-900">{row.country}</div>
-                          <div className="mt-0.5 inline-block rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-bold text-[#0f3a5c]">
-                            {row.assessIntake || 'Intake TBD'}
+                          <div className="flex flex-wrap items-center gap-1">
+                            <span
+                              className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-extrabold ${
+                                rowYear === '2027'
+                                  ? 'bg-emerald-100 text-emerald-900'
+                                  : rowYear === '2026'
+                                    ? 'bg-sky-100 text-[#0f3a5c]'
+                                    : 'bg-slate-100 text-slate-600'
+                              }`}
+                            >
+                              {rowYear}
+                            </span>
+                            <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-800">
+                              {rowSession !== 'Other' ? rowSession : row.assessIntake || 'TBD'}
+                            </span>
                           </div>
+                          <div className="mt-1 font-bold text-slate-900">{row.country}</div>
                           {row.degree && (
-                            <div className="mt-0.5 text-[11px] text-slate-500">{row.degree}</div>
+                            <div className="mt-0.5 text-[11px] font-medium text-slate-500">{row.degree}</div>
                           )}
                         </td>
 
                         {/* University & Program */}
                         <td className="max-w-[230px] px-3 py-3 align-top">
                           <div className="truncate font-semibold text-slate-800" title={row.university || row.uniList || ''}>
-                            {row.university || row.uniList || <span className="text-slate-400">Not assigned</span>}
+                            {row.university || row.uniList || <span className="text-slate-400">University TBD</span>}
                           </div>
                           {row.program && (
                             <div className="mt-0.5 truncate text-[11px] text-slate-500" title={row.program}>
                               {row.program}
                             </div>
                           )}
-                          {row.uniTotal > 0 && (
-                            <div className="mt-1 flex items-center gap-1.5 text-[10px]">
-                              <span className="rounded bg-slate-100 px-1.5 py-0.5 font-bold text-slate-600">
-                                {row.uniTotal} uni{row.uniTotal > 1 ? 's' : ''}
-                              </span>
-                              {row.uniAdmitted > 0 && (
-                                <span className="rounded bg-emerald-50 px-1.5 py-0.5 font-bold text-emerald-800">
-                                  {row.uniAdmitted} admitted
-                                </span>
-                              )}
+                          {row.applicationNotes && (
+                            <div
+                              className="mt-0.5 truncate text-[10px] text-slate-400"
+                              title={row.applicationNotes}
+                            >
+                              {row.applicationNotes}
                             </div>
                           )}
+                        </td>
+
+                        {/* Channel (B2C / B2B) & Inline Counselor Assignment */}
+                        <td className="px-3 py-3 align-top">
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span
+                              className={`rounded px-1.5 py-0.5 text-[10px] font-extrabold uppercase ${
+                                b2b
+                                  ? 'border border-indigo-200 bg-indigo-50 text-indigo-800'
+                                  : 'border border-emerald-200 bg-emerald-50 text-[#0b7a53]'
+                              }`}
+                            >
+                              {b2b ? 'B2B Partner' : 'B2C Direct'}
+                            </span>
+                            {row.referrer && (
+                              <span className="truncate max-w-[110px] text-[10px] font-semibold text-slate-500" title={row.referrer}>
+                                · {row.referrer}
+                              </span>
+                            )}
+                          </div>
+                          <div className="mt-1.5">
+                            {isAdmin ? (
+                              <select
+                                disabled={isBusy}
+                                value={row.assignedEmployeeId || ''}
+                                onChange={(e) =>
+                                  handleInlinePatch(
+                                    row.id,
+                                    { assignedEmployeeId: e.target.value || null },
+                                    `${row.name} counselor updated`,
+                                  )
+                                }
+                                className="w-full max-w-[155px] rounded-lg border border-slate-200 bg-slate-50/80 px-2 py-1 text-[11px] font-semibold text-slate-800 focus:border-[#0f3a5c] focus:bg-white focus:outline-none"
+                              >
+                                <option value="">Unassigned Desk</option>
+                                {employees.map((emp) => (
+                                  <option key={emp.id} value={emp.id}>
+                                    {emp.name}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <span className="text-[11px] font-semibold text-slate-800">
+                                {row.employeeName || 'Unassigned'}
+                              </span>
+                            )}
+                          </div>
                         </td>
 
                         {/* Inline Stage Dropdown */}
@@ -1235,7 +1838,7 @@ export default function ApplicationTrackerClient() {
                                 `${row.name} moved to ${getStageDef(e.target.value).label}`,
                               )
                             }
-                            className={`w-full max-w-[170px] rounded-lg border px-2 py-1 text-[11px] font-bold focus:outline-none print:border-0 print:bg-transparent ${badgeCls}`}
+                            className={`w-full max-w-[165px] rounded-lg border px-2 py-1 text-[11px] font-bold focus:outline-none print:border-0 print:bg-transparent ${badgeCls}`}
                           >
                             {APPLICATION_TRACKER_STAGES.map((st) => (
                               <option key={st.key} value={st.key} className="bg-white text-slate-900">
@@ -1298,16 +1901,6 @@ export default function ApplicationTrackerClient() {
                           </div>
                         </td>
 
-                        {/* Consultant / Referrer */}
-                        <td className="px-3 py-3 align-top">
-                          <div className="font-semibold text-slate-800">
-                            {row.employeeName || <span className="text-slate-400">Unassigned</span>}
-                          </div>
-                          {row.referrer && (
-                            <div className="mt-0.5 text-[11px] text-slate-500">Ref: {row.referrer}</div>
-                          )}
-                        </td>
-
                         {/* Admin-Only Finance Column */}
                         {isAdmin && (
                           <td className="px-3 py-3 text-right align-top tabular-nums">
@@ -1334,8 +1927,8 @@ export default function ApplicationTrackerClient() {
                                 href={safeDrive}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="rounded-lg border border-slate-200 bg-white p-1.5 text-emerald-700 hover:bg-emerald-50"
-                                title="Open Google Drive folder"
+                                className="rounded-lg border border-emerald-200 bg-emerald-50/70 p-1.5 text-emerald-700 hover:bg-emerald-100"
+                                title="Open Google Drive Student Folder"
                               >
                                 <ExternalLink size={13} />
                               </a>
@@ -1423,7 +2016,7 @@ export default function ApplicationTrackerClient() {
                 key={col.key}
                 className={`flex w-72 shrink-0 flex-col rounded-2xl border border-slate-200 border-t-4 bg-slate-50/70 ${col.accent}`}
               >
-                <div className="flex items-center justify-between border-b border-slate-200 bg-white px-3.5 py-3 rounded-t-xl">
+                <div className="flex items-center justify-between rounded-t-xl border-b border-slate-200 bg-white px-3.5 py-3">
                   <div>
                     <h3 className="text-xs font-extrabold text-[#071c2e]">{col.title}</h3>
                     <p className="text-[10px] text-slate-500">{col.subtitle}</p>
@@ -1433,13 +2026,14 @@ export default function ApplicationTrackerClient() {
                   </span>
                 </div>
 
-                <div className="flex-1 space-y-2.5 p-2.5 max-h-[68vh] overflow-y-auto">
+                <div className="max-h-[68vh] flex-1 space-y-2.5 overflow-y-auto p-2.5">
                   {items.length === 0 ? (
                     <p className="py-8 text-center text-[11px] text-slate-400">No files</p>
                   ) : (
                     items.map((row) => {
                       const stageDef = getStageDef(row.applicationStage);
                       const badgeCls = STAGE_BADGE_CLASSES[stageDef.tone];
+                      const b2b = isB2BRow(row);
                       return (
                         <button
                           key={row.id}
@@ -1448,9 +2042,18 @@ export default function ApplicationTrackerClient() {
                           className="w-full rounded-xl border border-slate-200 bg-white p-3 text-left shadow-2xs transition hover:border-[#0f3a5c]/50 hover:shadow-sm"
                         >
                           <div className="flex items-center justify-between gap-1">
-                            <span className="font-mono text-[10px] font-bold text-[#0f3a5c]">
-                              {row.leadRef || 'FILE'}
-                            </span>
+                            <div className="flex items-center gap-1">
+                              <span className="font-mono text-[10px] font-bold text-[#0f3a5c]">
+                                {row.leadRef || 'FILE'}
+                              </span>
+                              <span
+                                className={`rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase ${
+                                  b2b ? 'bg-indigo-50 text-indigo-800' : 'bg-emerald-50 text-[#0b7a53]'
+                                }`}
+                              >
+                                {b2b ? 'B2B' : 'B2C'}
+                              </span>
+                            </div>
                             <span className={`rounded border px-1.5 py-0.5 text-[9px] font-bold ${badgeCls}`}>
                               {stageDef.shortLabel}
                             </span>
@@ -1465,10 +2068,10 @@ export default function ApplicationTrackerClient() {
                             </div>
                           )}
                           <div className="mt-2.5 flex items-center justify-between border-t border-slate-100 pt-2 text-[10px] text-slate-500">
-                            <span className="tabular-nums font-semibold">
+                            <span className="font-semibold tabular-nums">
                               Docs {row.docsReceived}/{row.docsTotal}
                             </span>
-                            <span>{row.employeeName || 'Unassigned'}</span>
+                            <span>{row.employeeName || row.referrer || 'Unassigned'}</span>
                           </div>
                         </button>
                       );
@@ -1485,7 +2088,7 @@ export default function ApplicationTrackerClient() {
       <NewApplicationModal
         open={newModalOpen}
         isAdmin={isAdmin}
-        employees={data?.meta.employees ?? []}
+        employees={employees}
         intakes={data?.meta.intakes ?? []}
         destinations={data?.meta.destinations ?? []}
         universities={data?.meta.universities ?? []}
@@ -1503,7 +2106,7 @@ export default function ApplicationTrackerClient() {
       <ApplicationDetailDrawer
         applicationId={activeDrawerId}
         isAdmin={isAdmin}
-        employees={data?.meta.employees ?? []}
+        employees={employees}
         onClose={() => setActiveDrawerId(null)}
         onMutated={() => void loadApplications(true)}
       />
