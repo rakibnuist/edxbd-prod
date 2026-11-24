@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   ArrowRight,
   Award,
+  BadgeCheck,
   BookOpen,
   CheckCircle2,
   ClipboardCheck,
@@ -25,7 +26,6 @@ import {
   PageHero,
   Section,
   TrustBar,
-  VerifiedFactsBlock,
   kit,
 } from '@/components/page/PageKit';
 import {
@@ -730,36 +730,63 @@ export default function BangladeshVsChinaMbbsPage() {
       {/* Section 11: Verified Facts & China Visa-First Policy */}
       <Section id="verified-facts" title="Verified Policy Benchmarks & China Visa-First Terms">
         <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
-          <VerifiedFactsBlock
-            verifiedDate={MBBS_COMPARISON_LAST_UPDATED_LABEL}
-            reviewer="EduExpress Medical Advisory & Compliance Desk"
-            facts={[
-              {
-                claim:
-                  'Bangladesh MOHFW gazettes cap local private medical college admission at BDT 19,44,000 + BDT 1,80,000 internship (60% = BDT 12,74,400 due at admission) plus BDT 10,000/month tuition (60 months = BDT 6,00,000), totaling BDT 27,24,000 before exams, hostel, and meals.',
-                source: 'Ministry of Health & Family Welfare (MOHFW / DGME) Bangladesh',
-                sourceUrl: 'https://dgme.gov.bd',
-              },
-              {
-                claim:
-                  'Under the BMDC Act, 2010, all foreign MBBS/BDS graduates must pass the biannual BMDC Registration Qualifying Examination (RQE) and complete mandatory internship before obtaining Permanent BMDC Registration in Bangladesh.',
-                source: 'Bangladesh Medical & Dental Council (BMDC) RQE Official Dossier',
-                sourceUrl: 'https://www.bmdc.org.bd/upl/doc/form/QSPRfvjJ5NtF.pdf',
-              },
-              {
-                claim:
-                  'Chinese Ministry of Education Article 30 requires programme-specific authorisation for English-medium undergraduate Clinical Medicine (MBBS); general university recognition alone is not sufficient.',
-                source: 'Ministry of Education of China (MOE) Regulations',
-                sourceUrl: 'https://en.moe.gov.cn/documents/laws_policies/201506/t20150626_191405.html',
-              },
-              {
-                claim:
-                  '2026 official university tuition checks confirm CQMU CNY 30,000/yr (CNY 15,000 freshman award), WMU CNY 33,000/yr (up to CNY 20,000 freshman award), JSU CNY 34,000/yr, XJTU CNY 40,000/yr, and China Three Gorges starting from CNY 24,000/yr—all with BDT 0 capitation fee.',
-                source: 'Published 2026 University Undergraduate Guides (CQMU / WMU / JSU / XJTU)',
-                sourceUrl: 'https://english.cqmu.edu.cn/info/1148/3038.htm',
-              },
-            ]}
-          />
+          <aside
+            className="rounded-3xl border border-petrol-800/10 bg-canvas-soft p-6 sm:p-7"
+            aria-label="Verified policy benchmarks and official sources"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-petrol-800/10 pb-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-lime-pale px-3 py-1 text-xs font-bold text-lime-deep">
+                <BadgeCheck size={14} className="text-[#2ead4b]" aria-hidden="true" />
+                Verified Facts as of {MBBS_COMPARISON_LAST_UPDATED_LABEL}
+              </span>
+              <span className="text-xs font-medium text-ink-mute">
+                Reviewer: EduExpress Medical Advisory &amp; Compliance Desk
+              </span>
+            </div>
+            <ul className="mt-4 divide-y divide-petrol-800/5">
+              {[
+                {
+                  claim:
+                    'Bangladesh MOHFW gazettes cap local private medical college admission at BDT 19,44,000 + BDT 1,80,000 internship (60% = BDT 12,74,400 due at admission) plus BDT 10,000/month tuition (60 months = BDT 6,00,000), totaling BDT 27,24,000 before exams, hostel, and meals.',
+                  source: 'Ministry of Health & Family Welfare (MOHFW / DGME) Bangladesh',
+                  sourceUrl: 'https://dgme.gov.bd',
+                },
+                {
+                  claim:
+                    'Under the BMDC Act, 2010, all foreign MBBS/BDS graduates must pass the biannual BMDC Registration Qualifying Examination (RQE) and complete mandatory internship before obtaining Permanent BMDC Registration in Bangladesh.',
+                  source: 'Bangladesh Medical & Dental Council (BMDC) RQE Official Dossier',
+                  sourceUrl: 'https://www.bmdc.org.bd/upl/doc/form/QSPRfvjJ5NtF.pdf',
+                },
+                {
+                  claim:
+                    'Chinese Ministry of Education Article 30 requires programme-specific authorisation for English-medium undergraduate Clinical Medicine (MBBS); general university recognition alone is not sufficient.',
+                  source: 'Ministry of Education of China (MOE) Regulations',
+                  sourceUrl: 'https://en.moe.gov.cn/documents/laws_policies/201506/t20150626_191405.html',
+                },
+                {
+                  claim:
+                    '2026 official university tuition checks confirm CQMU CNY 30,000/yr (CNY 15,000 freshman award), WMU CNY 33,000/yr (up to CNY 20,000 freshman award), JSU CNY 34,000/yr, XJTU CNY 40,000/yr, and China Three Gorges starting from CNY 24,000/yr—all with BDT 0 capitation fee.',
+                  source: 'Published 2026 University Undergraduate Guides (CQMU / WMU / JSU / XJTU)',
+                  sourceUrl: 'https://english.cqmu.edu.cn/info/1148/3038.htm',
+                },
+              ].map((fact) => (
+                <li key={fact.claim} className="py-3 first:pt-0 last:pb-0">
+                  <p className="text-[14.5px] font-semibold leading-6 text-petrol-800">{fact.claim}</p>
+                  <p className="mt-1 text-xs text-ink-soft">
+                    Source:{' '}
+                    <a
+                      href={fact.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium underline underline-offset-2 hover:text-petrol-800"
+                    >
+                      {fact.source}
+                    </a>
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </aside>
 
           <div className={`${kit.cardDark} flex flex-col justify-between`}>
             <div>
