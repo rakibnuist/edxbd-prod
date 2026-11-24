@@ -73,6 +73,7 @@ export const chinaNavigation: SiteLink[] = [
   { name: 'China scholarships', href: '/china-scholarships-bangladesh', note: 'Explore documented scholarship routes' },
   { name: 'After O-Level, SSC & Dakhil (3+2)', href: '/study-in-china-after-o-level-ssc', note: '5-year Diploma-to-Bachelor pathway' },
   { name: 'Bangladesh vs China Bachelor', href: '/bangladesh-vs-china-bachelor-study', note: 'Compare Dhaka private uni vs China 4-year costs' },
+  { name: 'Bangladesh vs China MBBS', href: '/bangladesh-vs-china-mbbs', note: 'Private medical in BD vs China MOE MBBS comparison' },
   { name: 'Student visa guide', href: '/china-student-visa-bangladesh', note: 'Prepare for the X1 or X2 route' },
   { name: 'Cost planner', href: '/study-in-china-cost-bangladesh', note: 'Plan tuition and living costs' },
   { name: 'Intakes and deadlines', href: '/china-intakes-deadlines', note: 'Review the application cycle' },
