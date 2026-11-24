@@ -1,21 +1,65 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import {
-  AlertCircle,
+  AlertTriangle,
   ArrowRight,
+  Award,
+  BookOpen,
   CheckCircle2,
+  ClipboardCheck,
+  FileWarning,
   Globe2,
   Hospital,
-  Microscope,
-  TrendingDown,
+  Landmark,
+  Scale,
+  ShieldAlert,
+  ShieldCheck,
+  Stethoscope,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
-import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar } from '@/components/page/PageKit';
+import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
+import {
+  CtaBand,
+  FaqBlock,
+  JsonLd,
+  PageHero,
+  Section,
+  TrustBar,
+  VerifiedFactsBlock,
+  kit,
+} from '@/components/page/PageKit';
+import {
+  MbbsCostCalculator,
+  MoeMbbsDirectoryExplorer,
+} from '@/components/pathways/MbbsComparisonWorkbench';
 import {
   FitVsReconsiderGrid,
+  LivingCostSeparationNotice,
   PathwayCrossLinks,
   PathwayGovernanceSection,
+  WinningAdvantageGrid,
 } from '@/components/pathways/PathwaySharedBlocks';
+import {
+  ALLIED_HEALTH_ALTERNATIVES,
+  BANGLADESH_PRIVATE_FEE_BREAKDOWN,
+  BMDC_ELIGIBILITY_FACT_CHECK,
+  BMDC_RQE_CHECKLIST_DOSSIER,
+  BMDC_RQE_SPECIFICATIONS,
+  CHINA_MEDICAL_SCHOLARSHIP_MATRIX,
+  CHINA_MOE_PROVINCIAL_DISTRIBUTION,
+  CHINA_VISA_FIRST_TERMS,
+  MBBS_COMPARISON_FAQS,
+  MBBS_COMPARISON_LAST_UPDATED_ISO,
+  MBBS_COMPARISON_LAST_UPDATED_LABEL,
+  MBBS_COMPARISON_NEXT_REVIEW_LABEL,
+  MBBS_HEAD_TO_HEAD_ROWS,
+  MBBS_OFFICIAL_SOURCES,
+  MBBS_WIN_CARDS,
+  MOE_MBBS_UNIVERSITIES,
+  PRE_MED_FOUNDATION_TRACKS,
+} from '@/data/bangladeshVsChinaMbbs';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
+import { mbbsApplyHref } from '@/lib/mbbs-enquiry';
 import { ogImage, pageMetadata } from '@/lib/seo';
 
 const SITE = 'https://eduexpressint.com';
@@ -23,189 +67,67 @@ const PATH = '/bangladesh-vs-china-mbbs';
 const canonical = `${SITE}${PATH}`;
 export const revalidate = 3600;
 
+const ON_PAGE_NAV = [
+  ['Cost Calculator', 'cost-calculator'],
+  ['MOHFW vs China Fees', 'head-to-head'],
+  ['BMDC & Practice Law', 'bmdc-regulations'],
+  ['BMDC RQE & Dossier', 'bmdc-rqe'],
+  ['45 MOE Schools', 'moe-directory'],
+  ['Scholarships', 'scholarships'],
+  ['March Pre-Med', 'pre-med'],
+  ['Pharmacy & Biotech', 'allied-health'],
+  ['FAQs', 'faq'],
+] as const;
+
+const fmtNum = (n: number) => new Intl.NumberFormat('en-US').format(Math.round(n));
+
 export async function generateMetadata() {
   return pageMetadata({
-    title: 'MBBS in Bangladesh vs China 2027: Fees, Hospitals & BMDC Rules | EduExpress',
+    title: 'MBBS in Bangladesh Private Medical vs China 2027: Costs, BMDC & RQE Rules | EduExpress',
     description:
-      'Authentic comparison: Private medical colleges in Bangladesh vs MOE-accredited Chinese medical universities. Total cost comparison, 3,000+ bed teaching hospitals, BMDC/WDOMS eligibility, and USMLE/PLAB pathways.',
+      'Authentic comparison of Bangladesh private medical colleges (MOHFW gazetted fees) vs 45 Chinese MOE public medical universities. Includes BMDC Eligibility Certificate fact-check, RQE licensing law, hospital scale, scholarships, and March Pre-Med pathways.',
     path: PATH,
     type: 'article',
     locale: 'en_BD',
-    image: ogImage('china', 'MBBS in Bangladesh vs China: Authentic Cost, Hospital & BMDC Comparison — EduExpress'),
+    image: ogImage('china-guide', 'MBBS in Bangladesh Private Medical vs China: Verified Costs & BMDC Practice Regulations — EduExpress'),
   });
 }
-
-const COMPARISON_METRICS = [
-  {
-    parameter: 'Total Course Duration',
-    bdPrivate: '5 Years Academic + 1 Year Mandatory Internship in Bangladesh',
-    chinaMoe: '5 Years Academic + 1 Year Clinical Internship (Can be done in China tertiary hospitals or approved BD teaching hospitals)',
-    advantage: 'China',
-    notes: 'Same 6-year global standard curriculum aligned with WHO & WFME guidelines.',
-  },
-  {
-    parameter: 'Government-Regulated Base Admission Fee',
-    bdPrivate: 'BDT 19,44,000 (Ministry of Health & Family Welfare gazetted admission fee ceiling)',
-    chinaMoe: 'BDT 0 (No capitation, admission donation, or development fee)',
-    advantage: 'China',
-    notes: 'China charges only official application fee (~CNY 400–800) and direct tuition.',
-  },
-  {
-    parameter: 'Total 5/6-Year Cost (Tuition + Accommodation)',
-    bdPrivate: 'BDT 42,00,000 – 55,00,000+ (Admission fee + monthly tuition + clinical sessionals + hostel + mess charges)',
-    chinaMoe: 'BDT 26,00,000 – 35,00,000 (Total 6 years tuition CNY 30k–35k/year + on-campus dorm CNY 4k–5k/year)',
-    advantage: 'China',
-    notes: 'Families save BDT 15–20+ Lakhs in China, payable in manageable yearly installments directly to the university.',
-  },
-  {
-    parameter: 'Teaching Hospital Bed Capacity & Clinical Volume',
-    bdPrivate: '250 – 750 Beds (DGHS minimum mandate is 250 beds; patient flow is often localized)',
-    chinaMoe: '3,000 – 10,000+ Beds (Multi-campus provincial level-3 Grade-A tertiary hospital complexes)',
-    advantage: 'China',
-    notes: 'Unmatched practical patient exposure, robotic surgery, organ transplants, and advanced trauma centers.',
-  },
-  {
-    parameter: 'Scholarships for International Medical Students',
-    bdPrivate: 'Virtually None in Private Medical Colleges (Fixed full commercial rate applies)',
-    chinaMoe: 'Freshman Merit Scholarships (CNY 10,000 – 20,000) & Annual Academic Performance Awards',
-    advantage: 'China',
-    notes: 'E.g., Wenzhou Medical University (WMU) & Chongqing Medical University (CQMU) offer structured freshman awards.',
-  },
-  {
-    parameter: 'Global Professional Recognition',
-    bdPrivate: 'BMDC registered; local clinical practice focus. Variable USMLE/PLAB clinical match history.',
-    chinaMoe: 'WHO, WDOMS, ECFMG (USA), GMC (UK), AMC (Australia), and BMDC (Bangladesh) recognized.',
-    advantage: 'China',
-    notes: 'Graduates are eligible to sit for USMLE (USA), PLAB/UKMLA (UK), AMC (Australia), and BMDC Qualifying Exam.',
-  },
-  {
-    parameter: 'Eligibility & Entry Filter',
-    bdPrivate: 'Combined GPA 9.00 in SSC+HSC (Min 3.50 each), Biology GP ≥ 3.50 + DGHS National Medical Admission Test pass (Cut-off ≥ 40%)',
-    chinaMoe: 'Science stream (Physics, Chemistry, Biology) with min 70% in HSC, Biology GPA 3.50+ & CSCA / University entrance test',
-    advantage: 'Tie / Objective',
-    notes: 'Both demand strict academic science rigor; China eliminates national seat-allocation uncertainty.',
-  },
-];
-
-const PROOF_CARDS = [
-  {
-    icon: Hospital,
-    title: 'Clinical Exposure: 3,000–8,000 Bed Hospital Networks',
-    badge: 'Clinical Superiority',
-    description:
-      'In private medical colleges in Bangladesh, students often rotate in 250–500 bed hospitals where patient volume is shared across interns and private consultants. Top Chinese medical universities operate provincial Tier-3A (Grade A) affiliated hospital clusters with 3,000 to over 8,000 in-patient beds, treating tens of thousands of complex clinical cases daily.',
-  },
-  {
-    icon: TrendingDown,
-    title: 'Authentic Cost Savings: BDT 15 to 20 Lakhs Saved',
-    badge: 'Zero Capitation Fee',
-    description:
-      'Under Ministry of Health & Family Welfare gazetted rules, private medical college admission in Bangladesh requires BDT 19.44 Lakhs upfront on day one, reaching BDT 45–55 Lakhs overall. MOE-accredited Chinese medical universities require zero donation or capitation fees: tuition is paid annually (approx. CNY 30,000–35,000/year), bringing total 6-year education and housing to BDT 26–35 Lakhs.',
-  },
-  {
-    icon: Globe2,
-    title: 'Dual Qualification: BMDC + USMLE / PLAB Pathway',
-    badge: 'Worldwide Licensure',
-    description:
-      'Every MOE-authorized English-medium Chinese university is listed in the World Directory of Medical Schools (WDOMS) with valid ECFMG Sponsor Notes. Students can appear for USMLE (USA) and PLAB/UKMLA (UK) during or right after their degree, as well as the BMDC Qualifying Examination upon returning to Bangladesh.',
-  },
-  {
-    icon: Microscope,
-    title: 'World-Class Simulation & Anatomy Labs',
-    badge: 'Modern Technology',
-    description:
-      'Chinese state medical universities feature digital 3D virtual dissection tables, robotic surgical simulators, advanced histology/pathology imaging suites, and international research laboratories funded directly by provincial governments—facilities rarely accessible at domestic private colleges.',
-  },
-];
-
-const FAQS = [
-  {
-    question: 'Is MBBS in China recognized by the Bangladesh Medical and Dental Council (BMDC)?',
-    answer:
-      'Yes. Degrees from Chinese Ministry of Education (MOE) approved English-medium medical universities listed in the World Directory of Medical Schools (WDOMS) are recognized by the BMDC. Upon completion of the degree and required internship, graduates return to Bangladesh and appear for the BMDC Qualifying Examination to obtain their full practicing license.',
-  },
-  {
-    question: 'What are the exact BMDC minimum eligibility requirements for studying medicine abroad?',
-    answer:
-      'Under BMDC foreign medical education regulations, Bangladeshi candidates must have passed SSC and HSC in the Science stream with a combined minimum GPA of 9.00 (with no individual GPA below 3.50 in SSC or HSC), and a minimum Grade Point of 3.50 in Biology in HSC. Students must obtain a BMDC Eligibility Certificate before traveling abroad.',
-  },
-  {
-    question: 'Why is the total cost in China lower than private medical colleges in Bangladesh?',
-    answer:
-      'Public medical universities in China are heavily subsidized by the Chinese central and provincial governments. They do not charge private commercial profit margins, capital investment fees, or "donation" packages. International students pay strictly government-approved annual tuition (CNY 30,000–35,000/year) and subsidized university dorm fees (CNY 4,000–5,000/year).',
-  },
-  {
-    question: 'Is the medium of instruction entirely in English in China?',
-    answer:
-      'Yes. For the 45 universities authorized by the Chinese Ministry of Education to enroll international students in MBBS, the official instructional medium for all pre-clinical and clinical medical sciences is English. However, students study conversational Chinese (HSK-3/4 level) during pre-clinical years to interact smoothly with patients during hospital ward bedside rounds in the clinical phase.',
-  },
-  {
-    question: 'Can I complete my 1-year internship in Bangladesh or must I stay in China?',
-    answer:
-      'Students have two recognized options: (1) Complete the 1-year clinical rotation in China at the university’s affiliated Grade-3A hospital (recommended for advanced clinical technology), or (2) With university approval and BMDC NOC, complete the 12-month internship at an accredited medical college hospital in Bangladesh.',
-  },
-  {
-    question: 'What happens if a student fails the DGHS government medical admission test in Bangladesh?',
-    answer:
-      'If a student satisfies the BMDC minimum academic criteria (Combined GPA 9.00 and Bio GPA 3.50+), they can apply directly to accredited Chinese medical universities based on their HSC board marks and CSCA assessment, avoiding private tuition exploitation or career loss due to national test seat limits in Bangladesh.',
-  },
-];
-
-const OFFICIAL_SOURCES = [
-  {
-    label: 'Ministry of Health and Family Welfare (Bangladesh) — Private Medical College Fee Gazettes',
-    href: 'https://mefwd.gov.bd',
-    note: 'Regulatory gazette establishing the official admission fee cap (BDT 19.44 Lakh) and monthly tuition structures.',
-  },
-  {
-    label: 'Bangladesh Medical and Dental Council (BMDC)',
-    href: 'https://bmdc.org.bd',
-    note: 'Registration regulations, foreign medical degree evaluation guidelines, and HSC Biology minimum criteria.',
-  },
-  {
-    label: 'Ministry of Education of the People’s Republic of China (MOE)',
-    href: 'https://en.moe.gov.cn',
-    note: 'Official list of universities approved to offer English-medium clinical undergraduate programmes (MBBS) to international students.',
-  },
-  {
-    label: 'World Directory of Medical Schools (WDOMS) & ECFMG',
-    href: 'https://www.wdoms.org',
-    note: 'Confirmation of university listing and ECFMG Sponsor Note eligibility for international medical licensing examinations.',
-  },
-];
 
 export default function BangladeshVsChinaMbbsPage() {
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
-      primaryImageOfPageSchema('/og/china.jpg'),
       {
-        '@type': 'Article',
+        '@type': ['WebPage', 'Article'],
         '@id': `${canonical}#article`,
-        headline: 'MBBS in Bangladesh vs China: Authentic Cost, Hospital & BMDC Comparison',
+        url: canonical,
+        mainEntityOfPage: canonical,
+        headline: 'MBBS in Private Medical Colleges in Bangladesh vs. China (2027): Costs, Hospitals & BMDC Practice Regulations',
+        name: 'MBBS in Bangladesh Private Medical Colleges vs. China — Verified Comparison & BMDC Guide',
         description:
-          'Evidence-first comparison of private medical colleges in Bangladesh and MOE-accredited Chinese medical universities for Bangladeshi students.',
-        image: `${SITE}/og/china.jpg`,
-        primaryImageOfPage: primaryImageOfPageSchema('/og/china.jpg'),
-        datePublished: '2026-11-25T00:00:00Z',
-        dateModified: '2026-11-25T00:00:00Z',
+          'Evidence-first comparison of Bangladesh MOHFW-regulated private medical colleges against Chinese MOE-authorized English MBBS universities, complete with BMDC Act 2010 RQE & Eligibility Certificate regulations.',
+        image: `${SITE}/og/china-guide.jpg`,
+        primaryImageOfPage: primaryImageOfPageSchema('/og/china-guide.jpg'),
+        datePublished: `${MBBS_COMPARISON_LAST_UPDATED_ISO}T00:00:00Z`,
+        dateModified: `${MBBS_COMPARISON_LAST_UPDATED_ISO}T00:00:00Z`,
         inLanguage: 'en-BD',
         author: { '@type': 'Person', name: 'Afsana Meme', jobTitle: 'Senior Consultant — China Admissions & Scholarships' },
         reviewedBy: { '@type': 'Person', name: 'Abdullah Al Rakib', jobTitle: 'Founder and CEO' },
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
-        ...citationJsonLd(OFFICIAL_SOURCES),
+        ...citationJsonLd(MBBS_OFFICIAL_SOURCES),
       },
       {
-        '@type': 'FAQPage',
-        mainEntity: FAQS.map((faq) => ({
-          '@type': 'Question',
-          name: faq.question,
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: faq.answer,
-          },
+        '@type': 'ItemList',
+        '@id': `${canonical}#moe-mbbs-list`,
+        name: 'Chinese MOE-Authorized English-Medium MBBS Universities Reference List',
+        numberOfItems: MOE_MBBS_UNIVERSITIES.length,
+        itemListElement: MOE_MBBS_UNIVERSITIES.slice(0, 15).map((uni, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: uni.name,
+          url: `${SITE}/universities/${uni.slug}`,
         })),
       },
     ],
@@ -223,88 +145,182 @@ export default function BangladeshVsChinaMbbsPage() {
           { name: 'MBBS in China', path: '/mbbs-in-china-bangladesh' },
           { name: 'Bangladesh vs China MBBS' },
         ]}
-        eyebrow="Evidence-First Medical Study Comparison · 2027 Entry · BMDC & MOE Standards"
+        eyebrow="Verified 2026/2027 Medical Comparison · MOHFW Fees · BMDC Act 2010 & RQE Guide"
         title="MBBS in Private Medical Colleges in Bangladesh vs. China."
-        lead="An authentic, verified breakdown of tuition costs, admission fees, clinical hospital bed capacity, and BMDC & international licensing pathways. See why ranked Chinese public medical universities provide superior clinical training at BDT 15–20 Lakhs lower cost."
-        reviewed="25 November 2026"
+        lead="Before committing BDT 12.74 Lakh upfront at a local private medical college, compare statutory MOHFW fees, Grade-3A tertiary hospital scale, 45 Chinese MOE public medical universities, and the exact BMDC Registration Qualifying Examination (RQE) law required to practice as a doctor in Bangladesh."
+        reviewed={MBBS_COMPARISON_LAST_UPDATED_LABEL}
         actions={
           <>
-            <a href="#comparison-table" className="ed-btn ed-btn-signal min-h-[50px] px-7">
-              View Side-by-Side Comparison <ArrowRight size={17} className="ml-2 inline" />
+            <a href="#bmdc-regulations" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              BMDC &amp; Practice Law <ArrowRight size={18} aria-hidden="true" />
             </a>
-            <a href="#hospital-capacity" className="ed-btn ed-btn-outline min-h-[50px] px-6">
-              Compare Hospital Bed Capacities
+            <a href="#cost-calculator" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Compare 6-Year Costs
             </a>
-            <Link href="/mbbs-in-china-bangladesh" className="ed-btn ed-btn-outline min-h-[50px] px-6">
-              Explore Approved Universities
-            </Link>
+            <a href="#moe-directory" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Explore 45 MOE Schools
+            </a>
           </>
+        }
+        aside={
+          <figure className="overflow-hidden rounded-3xl bg-white shadow-sm">
+            <div className="relative aspect-[4/3]">
+              <Image
+                src="/images/real/china_campus/cie_campus_visit.webp"
+                alt="EduExpress campus verification visit at an international medical education college in China"
+                fill
+                priority
+                sizes="(max-width:1024px) 100vw, 480px"
+                className="object-cover object-[68%_43%]"
+              />
+              <figcaption className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white/95 px-4 py-2 text-[13px] font-semibold text-petrol-800 backdrop-blur-sm">
+                <span>MOHFW Private BD vs. China MOE</span>
+                <span className="rounded-full bg-lime-pale px-2.5 py-0.5 text-[12px] text-lime-deep">
+                  BMDC RQE Verified
+                </span>
+              </figcaption>
+            </div>
+            <dl className="grid grid-cols-3 divide-x divide-canvas-soft p-5 text-center">
+              {[
+                ['MOE Schools', '45'],
+                ['Annual Seats', '3,080'],
+                ['Capitation Fee', 'BDT 0'],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <dt className="text-[13.5px] text-ink-soft">{label}</dt>
+                  <dd className="mt-1 font-display text-[22px] font-black text-petrol-800">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </figure>
         }
       />
 
-      <TrustBar />
+      <TrustBar
+        destination="China"
+        universities={45}
+        feeNote="BDT 0 EduExpress service fee before China visa approval"
+      />
 
-      {/* Regulatory Context Notice */}
-      <section className="mx-auto max-w-6xl px-4 py-8">
-        <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-6 shadow-sm">
-          <div className="flex items-start gap-4">
-            <div className="rounded-xl bg-amber-100 p-2.5 text-amber-800">
-              <AlertCircle size={24} />
-            </div>
-            <div className="text-sm leading-relaxed text-slate-700">
-              <h3 className="text-base font-bold text-slate-900">
-                Authenticity & Strict Regulatory Hygiene Statement
-              </h3>
-              <p className="mt-1">
-                All data presented below is derived directly from the{' '}
-                <strong>Bangladesh Ministry of Health & Family Welfare (MOHFW)</strong> private medical college gazettes, the{' '}
-                <strong>Bangladesh Medical & Dental Council (BMDC)</strong> foreign medical eligibility criteria, and published tuition notices from{' '}
-                <strong>Chinese Ministry of Education (MOE)</strong> approved medical universities. EduExpress operates under a strict visa-first transparency policy: zero file charges and zero agency service fees prior to visa issuance.
-              </p>
-            </div>
-          </div>
+      {/* Quick In-Page Navigation + Recognition-First Lead */}
+      <section aria-label="Recognition and section navigation" className="border-b border-canvas-soft bg-white py-7">
+        <div className={`${kit.wrap} grid gap-6 lg:grid-cols-[1fr_1.25fr] lg:items-center lg:gap-10`}>
+          <p className="text-[15.5px] leading-7 text-ink-soft">
+            <strong className="text-petrol-800">Lead with recognition, not tuition alone.</strong> Choosing MBBS in China
+            gives Bangladeshi families stronger public hospital training and zero capitation shock—<em>only</em> when you
+            select a Chinese Ministry of Education (MOE) authorized English programme and follow BMDC eligibility and
+            RQE rules from day one.
+          </p>
+          <nav aria-label="On this page" className="flex flex-wrap gap-2">
+            {ON_PAGE_NAV.map(([label, id]) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                className="inline-flex min-h-[40px] items-center rounded-full bg-canvas-soft px-3.5 text-[14px] font-semibold text-petrol-800 transition-colors hover:bg-lime-pale"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
         </div>
       </section>
 
-      {/* Side-by-Side Comparison Table */}
+      {/* Section 1: Direct Answer + Interactive Cost Calculator */}
       <Section
-        id="comparison-table"
-        title="Side-by-Side Breakdown: Bangladesh Private Medical Colleges vs. China MOE Universities"
-        intro="Direct comparison across the 7 critical metrics every parent and medical aspirant in Bangladesh must evaluate before investing 5 to 6 years of tuition."
+        id="cost-calculator"
+        title="The real cost comparison: MOHFW private medical fees vs. China MOE universities."
+        intro="In Bangladesh, Ministry of Health & Family Welfare (MOHFW) gazettes cap local private MBBS admission at BDT 19,44,000 plus BDT 1,80,000 internship (requiring BDT 12,74,400 upfront on Day 1) and BDT 10,000/month tuition—making the statutory academic core BDT 27.24 Lakh before university exams, hostel, and meals (~BDT 36–45+ Lakh residential total). In China, state-subsidized MOE public medical universities charge BDT 0 capitation and annual tuition from CNY 24,000–34,000/yr, delivering 3,000–10,000+ bed Grade-3A tertiary hospital training and global WDOMS mobility."
       >
-        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <table className="w-full min-w-[760px] text-left text-sm">
-            <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wider text-slate-600">
+        <LivingCostSeparationNotice
+          summary="Every comparison on this page strictly separates Statutory Academic Tuition & On-Campus Dormitory Fees from Personal Living Costs (meals, local transport, winter clothing, flights, visa, and EduExpress’s visa-first service package). Chinese fees remain in CNY/RMB alongside editable BDT conversions so families verify against live bank TT rates."
+        />
+
+        <div className="mt-8">
+          <MbbsCostCalculator assessmentHref="#mbbs-assessment" />
+        </div>
+
+        {/* Bangladesh MOHFW Statutory Breakdown Table */}
+        <div className="mt-10">
+          <h3 className={kit.h3}>Verified Bangladesh Private Medical College Fee Structure (MOHFW / DGME Gazette)</h3>
+          <p className="mt-2 max-w-3xl text-[15.5px] leading-7 text-ink-soft">
+            Official government-regulated breakdown for Bangladeshi nationals enrolling in domestic private medical
+            colleges, showing mandatory payment milestones and separate living costs.
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-3xl border border-canvas-soft bg-white shadow-sm">
+            <table className="w-full min-w-[740px] text-left text-[14.5px] leading-6">
+              <caption className="sr-only">
+                Bangladesh private medical college official MOHFW and DGME gazetted fee schedule
+              </caption>
+              <thead className="border-b border-canvas-soft bg-canvas-soft text-petrol-800">
+                <tr>
+                  <th scope="col" className="p-4 font-bold">Fee Component (Bangladesh Private MBBS)</th>
+                  <th scope="col" className="p-4 font-bold">Official / Estimated Amount</th>
+                  <th scope="col" className="p-4 font-bold">Payment Schedule</th>
+                  <th scope="col" className="p-4 font-bold">Regulatory Note</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-canvas-soft text-ink-soft">
+                {BANGLADESH_PRIVATE_FEE_BREAKDOWN.map((row) => {
+                  const isSubtotal = row.item.startsWith('Statutory Core');
+                  return (
+                    <tr key={row.item} className={isSubtotal ? 'bg-lime-pale/35 font-semibold text-petrol-800' : ''}>
+                      <th scope="row" className="p-4 align-top font-bold text-petrol-800">
+                        {row.item}
+                      </th>
+                      <td className="p-4 align-top font-bold text-petrol-800">{row.statutoryAmount}</td>
+                      <td className="p-4 align-top">{row.paymentTiming}</td>
+                      <td className="p-4 align-top">{row.notes}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Section>
+
+      {/* Section 2: Three Core Wins */}
+      <WinningAdvantageGrid
+        id="why-china-wins"
+        tone="sage"
+        title="Why Ranked Chinese Public Medical Universities Outperform Local Private Colleges"
+        intro="Compare upfront cash-flow pressure, tertiary clinical hospital scale, and international licensure mobility side by side."
+        cards={MBBS_WIN_CARDS}
+      />
+
+      {/* Section 3: Head-to-Head 8-Point Proof Table */}
+      <Section
+        id="head-to-head"
+        title="Head-to-Head Comparison: Bangladesh Private Medical vs. China MOE Universities"
+        intro="Eight critical academic, financial, clinical, and regulatory benchmarks every medical aspirant and parent must verify before enrolling."
+      >
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white shadow-sm">
+          <table className="w-full min-w-[820px] text-left text-[14.5px] leading-6">
+            <caption className="sr-only">
+              Side-by-side comparison of Bangladesh private medical colleges and Chinese MOE English MBBS universities
+            </caption>
+            <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
               <tr>
-                <th className="py-4 px-6 font-semibold">Evaluation Metric</th>
-                <th className="py-4 px-6 font-semibold text-rose-900 bg-rose-50/50">Private Medical in Bangladesh</th>
-                <th className="py-4 px-6 font-semibold text-emerald-900 bg-emerald-50/50">MOE Medical Universities in China</th>
-                <th className="py-4 px-6 font-semibold text-center">Advantage</th>
+                <th scope="col" className="p-4 font-bold">Evaluation Dimension</th>
+                <th scope="col" className="p-4 font-bold">Bangladesh Private Medical College</th>
+                <th scope="col" className="p-4 font-bold text-lime">China MOE Public Medical University</th>
+                <th scope="col" className="p-4 font-bold">Key Takeaway</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
-              {COMPARISON_METRICS.map((row, idx) => (
-                <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
-                  <td className="py-4 px-6 align-top">
-                    <span className="font-semibold text-slate-900 block">{row.parameter}</span>
-                    <span className="text-xs text-slate-500 mt-0.5 block">{row.notes}</span>
-                  </td>
-                  <td className="py-4 px-6 align-top text-slate-700 bg-rose-50/20 leading-relaxed">
-                    {row.bdPrivate}
-                  </td>
-                  <td className="py-4 px-6 align-top text-slate-900 font-medium bg-emerald-50/20 leading-relaxed">
-                    {row.chinaMoe}
-                  </td>
-                  <td className="py-4 px-6 align-top text-center">
-                    {row.advantage === 'China' ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
-                        <CheckCircle2 size={13} /> China Wins
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
-                        Rigorous
-                      </span>
-                    )}
+            <tbody className="divide-y divide-canvas-soft text-ink-soft">
+              {MBBS_HEAD_TO_HEAD_ROWS.map((row) => (
+                <tr key={row.criterion} className="hover:bg-canvas-soft/40">
+                  <th scope="row" className="p-4 align-top font-bold text-petrol-800">
+                    <span className="block">{row.criterion}</span>
+                    <span className="mt-1 block text-[12.5px] font-normal text-ink-mute">{row.detailNote}</span>
+                  </th>
+                  <td className="p-4 align-top">{row.bdPrivate}</td>
+                  <td className="bg-lime-pale/25 p-4 align-top font-medium text-petrol-800">{row.chinaMoe}</td>
+                  <td className="p-4 align-top">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-lime-pale px-3 py-1 text-[12.5px] font-bold text-lime-deep">
+                      <CheckCircle2 size={13} aria-hidden="true" />
+                      {row.advantageLabel}
+                    </span>
                   </td>
                 </tr>
               ))}
@@ -313,219 +329,564 @@ export default function BangladeshVsChinaMbbsPage() {
         </div>
       </Section>
 
-      {/* Proof Pillars: Why China is Superior */}
+      {/* Section 4: BMDC & BANGLADESH PRACTICE REGULATIONS (NAVY FLAGSHIP BAND) */}
       <Section
-        id="hospital-capacity"
-        tone="sage"
-        title="Why Clinical Training in China Provides Superior Long-Term Value"
-        intro="Clinical competence depends on patient volume, diversity of pathology, and modern surgical facilities. Here is why studying MBBS in China excels over local private options."
+        id="bmdc-regulations"
+        tone="navy"
+        title="BMDC & Bangladesh Medical Practice Regulations (2026–2027)."
+        intro="Under the Bangladesh Medical and Dental Council Act, 2010 (Sections 5 & 12), no Bangladeshi national who graduates with a foreign MBBS or BDS degree receives automatic registration. Follow this exact statutory four-stage pathway from Day 1 so your Chinese medical degree translates smoothly into legal medical practice in Bangladesh."
       >
-        <div className="grid gap-6 md:grid-cols-2">
-          {PROOF_CARDS.map((card, i) => {
-            const Icon = card.icon;
-            return (
-              <div
-                key={i}
-                className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="rounded-xl bg-teal-100/70 p-3 text-teal-800">
-                    <Icon size={24} />
-                  </div>
-                  <span className="rounded-full bg-teal-50 border border-teal-200 px-3 py-0.5 text-xs font-semibold text-teal-800">
-                    {card.badge}
+        {/* 4-Step Legal Pathway */}
+        <ol data-anim="stagger" className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              step: 'Stage 01 · Pre-Departure',
+              title: 'MOE Authorisation & BMDC Eligibility Audit',
+              body: 'Confirm your university holds programme-specific Chinese MOE authorisation for English-taught MBBS (Article 30) and is listed in WDOMS. Verify your SSC/HSC Science GPA, HSC Biology ≥ 3.50, study gap, and current BMDC Eligibility Certificate circular at bmdc.org.bd BEFORE paying any deposit.',
+            },
+            {
+              step: 'Stage 02 · Years 1–5 in China',
+              title: 'In-Person Study, HSK-4 & Visa Trail',
+              body: 'Complete all pre-clinical and clinical coursework physically on campus—online medical degrees are rejected by BMDC. Pass HSK-4 for clinical ward communication and safeguard EVERY passport containing China X1 visas, Residence Permits, and immigration entry-exit stamps.',
+            },
+            {
+              step: 'Stage 03 · Graduation & Attestation',
+              title: 'Embassy + MoFA Legalization & BMDC RQE',
+              body: 'Legalize original Chinese & English degree certificates and transcripts via the Bangladesh Embassy in Beijing and MoFA in Dhaka. Submit the 13-point dossier at BMDC Bijoy Nagar and pass the biannual Registration Qualifying Examination (RQE).',
+            },
+            {
+              step: 'Stage 04 · Licensing in Bangladesh',
+              title: 'Provisional License → 1-Yr Internship → Full BMDC',
+              body: 'After passing RQE, BMDC grants Provisional (Temporary) Registration to complete a mandatory 12-month rotatory internship at a BMDC-approved hospital in Bangladesh (or assesses China internship logs for required local acclimatization), culminating in Permanent BMDC Registration.',
+            },
+          ].map((item) => (
+            <li key={item.step} className="rounded-3xl border border-white/15 bg-white/5 p-6">
+              <span className="inline-flex rounded-full bg-lime px-3 py-1 text-[12px] font-bold uppercase tracking-wider text-petrol-800">
+                {item.step}
+              </span>
+              <h3 className="mt-4 font-display text-[20px] font-bold leading-snug text-white">{item.title}</h3>
+              <p className="mt-2.5 text-[15px] leading-7 text-white/80">{item.body}</p>
+            </li>
+          ))}
+        </ol>
+
+        {/* Global Licensure Callout Strip */}
+        <div className="mt-8 rounded-3xl border border-lime/30 bg-white/10 p-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-start gap-4">
+              <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-lime text-petrol-800">
+                <Globe2 size={24} aria-hidden="true" />
+              </span>
+              <div>
+                <h3 className="text-[18px] font-bold text-lime">
+                  Permanent BMDC Registration Unlocks Full Career Rights — Plus Global WDOMS Mobility
+                </h3>
+                <p className="mt-1 text-[15px] leading-6 text-white/85">
+                  Once permanently registered with BMDC after RQE and internship, China MBBS graduates hold identical
+                  clinical practice rights in Bangladesh—eligible for private/hospital practice, <strong>BCS (Health)</strong>,{' '}
+                  <strong>FCPS</strong>, <strong>MD</strong>, and <strong>MS</strong> postgraduate residency. Simultaneously,
+                  MOE universities listed in WDOMS with valid ECFMG Sponsor Notes remain eligible for{' '}
+                  <strong>USMLE (USA)</strong>, <strong>UKMLA / PLAB (UK)</strong>, and <strong>AMC (Australia)</strong>{' '}
+                  subject to each host council’s active accreditation standards.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* Section 5: CRITICAL FACT-CHECK ON BMDC ELIGIBILITY CERTIFICATE RUMORS */}
+      <Section
+        id="bmdc-fact-check"
+        title="Critical Fact-Check: Separating Sub-Agent Rumors from Legal BMDC Reality"
+        intro="One of the costliest mistakes Bangladeshi families make is trusting unverified brokers who say 'BMDC Eligibility Certificate is no longer needed' just because China doesn't ask for it during visa processing. Read the exact legal distinction below."
+      >
+        <div className="mb-7 rounded-3xl border border-clay/30 bg-clay/5 p-6">
+          <div className="flex items-start gap-4">
+            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-clay text-white">
+              <ShieldAlert size={22} aria-hidden="true" />
+            </span>
+            <div>
+              <h3 className="text-[18px] font-bold text-petrol-800">
+                Warning: Never Confuse &ldquo;Not Needed for China X1 Visa&rdquo; with &ldquo;Not Needed for BMDC Doctor Registration&rdquo;
+              </h3>
+              <p className="mt-1.5 text-[15px] leading-7 text-ink-soft">
+                Chinese universities and the Chinese Embassy in Dhaka issue Offer Letters, JW202 forms, and X1 visas
+                without requesting a BMDC Eligibility Certificate. However, the official{' '}
+                <strong>BMDC RQE Application Form</strong> explicitly lists{' '}
+                <strong>Item 6 (&ldquo;Eligibility Certificate Sl. No. &amp; Date of Issue&rdquo;)</strong> and{' '}
+                <strong>Item 12(c) (&ldquo;Original Eligibility Certificate from BM&amp;DC with photocopy&rdquo;)</strong>.
+                Note that BMDC periodically issues cohort notices (including 2025/2026 administrative circulars on{' '}
+                <code>bmdc.org.bd</code>); always verify the exact active circular for your intake year—and remember
+                that BMDC <em>always</em> audits your original SSC/HSC Science GPA and Biology ≥ 3.50 threshold.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white shadow-sm">
+          <table className="w-full min-w-[820px] text-left text-[14.5px] leading-6">
+            <caption className="sr-only">
+              Fact check comparing sub-agent myths with actual BMDC legal regulations and EduExpress operational policy
+            </caption>
+            <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
+              <tr>
+                <th scope="col" className="p-4 font-bold">Regulatory Aspect</th>
+                <th scope="col" className="p-4 font-bold">What Sub-Agents Claim (Myth)</th>
+                <th scope="col" className="p-4 font-bold text-lime">Actual Legal Reality at BMDC (Dhaka)</th>
+                <th scope="col" className="p-4 font-bold">EduExpress Operational Policy</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-canvas-soft text-ink-soft">
+              {BMDC_ELIGIBILITY_FACT_CHECK.map((row) => (
+                <tr key={row.aspect}>
+                  <th scope="row" className="p-4 align-top font-bold text-petrol-800">
+                    {row.aspect}
+                  </th>
+                  <td className="bg-clay/5 p-4 align-top text-ink-soft">{row.agencyMyth}</td>
+                  <td className="bg-lime-pale/25 p-4 align-top font-medium text-petrol-800">{row.legalReality}</td>
+                  <td className="p-4 align-top font-semibold text-petrol-800">{row.eduExpressPolicy}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Section>
+
+      {/* Section 6: COMPLETE BMDC RQE GUIDE & 13-POINT MANDATORY DOSSIER */}
+      <Section
+        id="bmdc-rqe"
+        tone="sage"
+        title="Complete Guide to the BMDC Registration Qualifying Examination (RQE)"
+        intro="Exact operational details for returning China MBBS graduates—covering exam schedule, Bijoy Nagar verification venue, syllabus, retake policy, and the mandatory document & passport attestation dossier."
+      >
+        <div className="grid gap-8 lg:grid-cols-[1.15fr_.85fr]">
+          {/* Left: RQE Specification Table */}
+          <div className="space-y-4">
+            {BMDC_RQE_SPECIFICATIONS.map((spec) => (
+              <div key={spec.parameter} className={kit.card}>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-wider text-lime-deep">
+                    <Scale size={14} aria-hidden="true" />
+                    {spec.parameter}
                   </span>
                 </div>
-                <h3 className="mt-4 text-lg font-bold text-slate-900">{card.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{card.description}</p>
+                <h3 className="mt-1.5 text-[18px] font-bold text-petrol-800">{spec.officialRule}</h3>
+                <p className="mt-2 text-[15px] leading-7 text-ink-soft">{spec.practicalDetail}</p>
               </div>
-            );
-          })}
+            ))}
+          </div>
+
+          {/* Right: 13-Point Mandatory Document & Attestation Dossier */}
+          <aside className={`${kit.cardOutline} self-start`}>
+            <div className="flex items-center gap-3">
+              <span className={kit.iconLime}>
+                <ClipboardCheck size={22} aria-hidden="true" />
+              </span>
+              <div>
+                <p className="text-[12.5px] font-bold uppercase tracking-wider text-lime-deep">
+                  BMDC Bijoy Nagar Registrar Audit
+                </p>
+                <h3 className={kit.h3}>Mandatory RQE Document &amp; Attestation Dossier</h3>
+              </div>
+            </div>
+            <p className="mt-3 text-[14.5px] leading-6 text-ink-soft">
+              BMDC requires a strict 13-point physical document dossier verified at{' '}
+              <strong className="text-petrol-800">203 Shaheed Syed Nazrul Islam Sarani, Bijoy Nagar, Dhaka</strong>.
+              Start organizing these records from Year 1:
+            </p>
+            <ul className="mt-5 space-y-4">
+              {BMDC_RQE_CHECKLIST_DOSSIER.map((doc) => (
+                <li
+                  key={doc.title}
+                  className={`rounded-2xl p-4 ${
+                    doc.critical ? 'border border-clay/30 bg-clay/5' : 'bg-canvas-soft'
+                  }`}
+                >
+                  <div className="flex items-start gap-2.5">
+                    {doc.critical ? (
+                      <FileWarning size={18} className="mt-0.5 shrink-0 text-clay" aria-hidden="true" />
+                    ) : (
+                      <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-lime-deep" aria-hidden="true" />
+                    )}
+                    <div>
+                      <p className="text-[15px] font-bold text-petrol-800">{doc.title}</p>
+                      <p className="mt-1 text-[13.5px] leading-5 text-ink-soft">{doc.detail}</p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-5 rounded-2xl bg-petrol-800 p-4 text-[13.5px] leading-5 text-white/85">
+              <strong className="text-lime">O-Level / A-Level Students:</strong> Obtain an official{' '}
+              <strong>DGHS Equivalence Certificate</strong> for your Cambridge / Edexcel grades alongside your BMDC
+              eligibility file before departure.
+            </div>
+          </aside>
         </div>
       </Section>
 
-      {/* Concrete University Cost Examples */}
+      {/* Section 7: PROVINCIAL BENCHMARKS & COMPLETE 45 MOE UNIVERSITIES DIRECTORY */}
       <Section
-        id="university-examples"
-        title="Itemized China MBBS University Fee Examples (2027 Admissions)"
-        intro="Actual published tuition and hostel costs at premier MOE-approved universities. Compare these against Bangladesh's BDT 19.44 Lakh starting fee."
+        id="moe-directory"
+        title="45 Chinese MOE-Authorized English-MBBS Universities (2026/2027 Master Data)"
+        intro="Filter all 45 Chinese Ministry of Education reference English-MBBS institutions by province, tier (C9 / 985 / 211 / Double First-Class / Provincial), annual tuition (CNY 24,000–75,000), March Pre-Med availability, CSCA requirements, and internship flexibility. Fees checked against 2026 official university guides (CQMU, WMU, JSU, XJTU, Tongji, Fudan) are tagged directly."
       >
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <span className="text-xs font-bold uppercase tracking-wider text-teal-700">Chongqing, China</span>
-            <h3 className="text-xl font-bold text-slate-900 mt-1">Chongqing Medical University (CQMU)</h3>
-            <p className="text-xs text-slate-500 mt-1">Ranked global top 500 in Clinical Medicine · 6 Affiliated Hospitals with 10,000+ Beds</p>
-            <div className="mt-5 space-y-2.5 border-t border-slate-100 pt-4 text-sm text-slate-600">
-              <div className="flex justify-between">
-                <span>Annual Tuition:</span>
-                <span className="font-semibold text-slate-900">CNY 30,000 (~BDT 5.1L/yr)</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Hostel (Twin Room):</span>
-                <span className="font-semibold text-slate-900">CNY 4,800/year</span>
-              </div>
-              <div className="flex justify-between text-emerald-700 font-medium">
-                <span>Freshman Scholarship:</span>
-                <span>Up to CNY 15,000</span>
-              </div>
-              <div className="flex justify-between border-t border-slate-100 pt-2 font-bold text-slate-900">
-                <span>Est. 6-Year Academic + Dorm:</span>
-                <span>~BDT 30–33 Lakhs</span>
-              </div>
+        {/* Provincial Distribution Summary Cards */}
+        <div className="mb-8">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h3 className={kit.h3}>Provincial Distribution of Annual International MBBS Quotas</h3>
+              <p className="mt-1 text-[14.5px] text-ink-soft">
+                Total tracked across all 45 institutions: <strong className="text-petrol-800">3,080 annual seats</strong> ·
+                Average annual tuition: <strong className="text-petrol-800">CNY 38,280</strong> · Lowest annual tuition:{' '}
+                <strong className="text-petrol-800">CNY 24,000</strong> (China Three Gorges University).
+              </p>
             </div>
-            <Link
-              href="/universities/chongqing-medical-university"
-              className="mt-5 inline-flex items-center text-sm font-semibold text-teal-700 hover:text-teal-800"
-            >
-              View CQMU Profile <ArrowRight size={14} className="ml-1" />
+            <Link href="/mbbs-in-china-bangladesh" className={kit.link}>
+              Open full MBBS university profiles <ArrowRight size={15} aria-hidden="true" />
             </Link>
           </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <span className="text-xs font-bold uppercase tracking-wider text-teal-700">Wenzhou, Zhejiang</span>
-            <h3 className="text-xl font-bold text-slate-900 mt-1">Wenzhou Medical University (WMU)</h3>
-            <p className="text-xs text-slate-500 mt-1">Renowned Ophthalmology & Surgery · 5 Direct Affiliated Hospitals with 8,500+ Beds</p>
-            <div className="mt-5 space-y-2.5 border-t border-slate-100 pt-4 text-sm text-slate-600">
-              <div className="flex justify-between">
-                <span>Annual Tuition:</span>
-                <span className="font-semibold text-slate-900">CNY 33,000 (~BDT 5.6L/yr)</span>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {CHINA_MOE_PROVINCIAL_DISTRIBUTION.map((p) => (
+              <div key={p.province} className="rounded-2xl border border-canvas-soft bg-canvas-soft/70 p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-bold text-petrol-800">{p.province}</span>
+                  <span className="rounded-full bg-white px-2.5 py-0.5 text-[12px] font-bold text-lime-deep">
+                    {p.universities} unis
+                  </span>
+                </div>
+                <p className="mt-2 font-display text-[19px] font-black text-petrol-800">
+                  CNY {fmtNum(p.avgTuitionRmb)}
+                  <span className="ml-1 font-sans text-[12px] font-normal text-ink-soft">avg/yr</span>
+                </p>
+                <p className="mt-0.5 text-[12.5px] font-semibold text-ink-soft">{p.annualQuota} annual seats</p>
+                <p className="mt-1.5 text-[12px] leading-4 text-ink-mute">{p.flagshipExamples}</p>
               </div>
-              <div className="flex justify-between">
-                <span>Hostel (Twin Room):</span>
-                <span className="font-semibold text-slate-900">CNY 4,400/year</span>
-              </div>
-              <div className="flex justify-between text-emerald-700 font-medium">
-                <span>Freshman Scholarship:</span>
-                <span>Up to CNY 20,000</span>
-              </div>
-              <div className="flex justify-between border-t border-slate-100 pt-2 font-bold text-slate-900">
-                <span>Est. 6-Year Academic + Dorm:</span>
-                <span>~BDT 33–36 Lakhs</span>
-              </div>
-            </div>
-            <Link
-              href="/universities/wenzhou-medical-university"
-              className="mt-5 inline-flex items-center text-sm font-semibold text-teal-700 hover:text-teal-800"
-            >
-              View WMU Profile <ArrowRight size={14} className="ml-1" />
-            </Link>
+            ))}
           </div>
+        </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <span className="text-xs font-bold uppercase tracking-wider text-teal-700">Zhenjiang, Jiangsu</span>
-            <h3 className="text-xl font-bold text-slate-900 mt-1">Jiangsu University (JSU)</h3>
-            <p className="text-xs text-slate-500 mt-1">Top National Comprehensive University · Affiliated Teaching Hospital with 2,500+ Beds</p>
-            <div className="mt-5 space-y-2.5 border-t border-slate-100 pt-4 text-sm text-slate-600">
-              <div className="flex justify-between">
-                <span>Annual Tuition:</span>
-                <span className="font-semibold text-slate-900">CNY 34,000 (~BDT 5.8L/yr)</span>
+        {/* Full Searchable / Filterable 45-University Explorer */}
+        <MoeMbbsDirectoryExplorer universities={MOE_MBBS_UNIVERSITIES} />
+
+        <p className="mt-5 text-[13.5px] leading-6 text-ink-soft">
+          <AlertTriangle size={14} className="mr-1.5 inline text-clay" aria-hidden="true" />
+          <strong>Annual Quota Verification Notice:</strong> China’s Ministry of Education publishes annual updates to
+          programme-specific English-MBBS enrollment quotas before each academic cycle. EduExpress verifies the current
+          intake’s active authorization notice and exact fee schedule in writing before any student applies.
+        </p>
+      </Section>
+
+      {/* Section 8: 6-Month March Pre-Med Foundation + CSCA Preparation */}
+      <Section
+        id="pre-med"
+        tone="sage"
+        title="6-Month March Pre-Medical Foundation & CSCA Readiness."
+        intro="43 of the 45 MOE medical universities offer Spring (March) 6-month Pre-Medical or 1-year Preparatory tracks—helping Bangladeshi HSC students avoid losing an entire academic year while preparing for CSCA and HSK."
+      >
+        <div className="grid gap-6 lg:grid-cols-2">
+          {PRE_MED_FOUNDATION_TRACKS.map((track) => (
+            <div key={track.title} className={`${kit.card} flex flex-col justify-between`}>
+              <div>
+                <span className={kit.badge}>
+                  <BookOpen size={14} aria-hidden="true" />
+                  {track.durationAndIntake}
+                </span>
+                <h3 className={`mt-4 ${kit.h3}`}>{track.title}</h3>
+                <p className="mt-2 font-display text-[20px] font-black text-petrol-800">{track.typicalFee}</p>
+                <ul className="mt-4 space-y-2.5 text-[15px] leading-6 text-ink-soft">
+                  {track.whoNeedsIt.map((point) => (
+                    <li key={point} className="flex items-start gap-2.5">
+                      <span className="mt-2 size-1.5 shrink-0 rounded-full bg-lime-deep" aria-hidden="true" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="flex justify-between">
-                <span>Hostel (Double Room):</span>
-                <span className="font-semibold text-slate-900">CNY 4,900/year</span>
-              </div>
-              <div className="flex justify-between text-emerald-700 font-medium">
-                <span>Merit Awards:</span>
-                <span>Annual Academic Grants</span>
-              </div>
-              <div className="flex justify-between border-t border-slate-100 pt-2 font-bold text-slate-900">
-                <span>Est. 6-Year Academic + Dorm:</span>
-                <span>~BDT 34–37 Lakhs</span>
-              </div>
+              <p className="mt-5 rounded-2xl bg-canvas-soft p-4 text-[13.5px] leading-5 text-ink-soft">
+                <strong className="text-petrol-800">Progression &amp; Budgeting Rule:</strong> {track.progressionNote}
+              </p>
             </div>
-            <Link
-              href="/universities/jiangsu-university"
-              className="mt-5 inline-flex items-center text-sm font-semibold text-teal-700 hover:text-teal-800"
-            >
-              View JSU Profile <ArrowRight size={14} className="ml-1" />
+          ))}
+        </div>
+
+        <div className="mt-8">
+          <CscaMasterProOfferCard assessmentHref={mbbsApplyHref('MBBS Bangladesh vs China Comparison')} compact />
+        </div>
+      </Section>
+
+      {/* Section 9: HONEST CHINA MEDICAL, PHARMACY & BIOTECH SCHOLARSHIP MATRIX */}
+      <Section
+        id="scholarships"
+        title="China Medical & Allied Health Scholarship Matrix (Honest Reality)."
+        intro="Unlike local Bangladeshi private medical colleges—where commercial seats carry virtually zero tuition waivers—Chinese provincial governments and public universities award structured freshman and annual merit grants. Here is the realistic breakdown without exaggerated '100% free MBBS' promises."
+      >
+        <div className="mb-6 rounded-3xl bg-lime-pale p-6">
+          <div className="flex items-start gap-3.5">
+            <span className={kit.icon}>
+              <Award size={22} aria-hidden="true" />
+            </span>
+            <div className="text-[15px] leading-6 text-ink-soft">
+              <p className="font-bold text-petrol-800">Counselor Honesty Rule on MBBS Scholarships</p>
+              <p className="mt-1">
+                English-taught MBBS is rarely 100% tuition-free for all 6 years. Smart Bangladeshi families budget on
+                published base tuition first, apply before <strong>May 15</strong> to capture{' '}
+                <strong>Year-1 Freshman / Provincial grants (CNY 10,000–30,000)</strong>, and then maintain strong
+                grades for <strong>Years 2–5 Annual Academic Merit Awards (CNY 5,000–15,000/yr)</strong>. Families
+                needing a guaranteed 50%–100% tuition waiver across all years should compare the 4-year Pharmacy &amp;
+                Biotech routes below.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white shadow-sm">
+          <table className="w-full min-w-[860px] text-left text-[14px] leading-6">
+            <caption className="sr-only">
+              China medical, pharmacy and biotechnology scholarships available to Bangladeshi students
+            </caption>
+            <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
+              <tr>
+                <th scope="col" className="p-4 font-bold">Scholarship &amp; Authority</th>
+                <th scope="col" className="p-4 font-bold">Applicable Programs</th>
+                <th scope="col" className="p-4 font-bold text-lime">Coverage &amp; Value (CNY)</th>
+                <th scope="col" className="p-4 font-bold">Window &amp; Renewal</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-canvas-soft text-ink-soft">
+              {CHINA_MEDICAL_SCHOLARSHIP_MATRIX.map((item) => (
+                <tr key={item.name} className="hover:bg-canvas-soft/40">
+                  <th scope="row" className="p-4 align-top">
+                    <span className="block font-bold text-petrol-800">{item.name}</span>
+                    <span className="mt-0.5 block text-[12.5px] font-normal text-ink-mute">{item.authority}</span>
+                  </th>
+                  <td className="p-4 align-top">{item.eligiblePrograms}</td>
+                  <td className="bg-lime-pale/20 p-4 align-top font-semibold text-petrol-800">{item.coverageValue}</td>
+                  <td className="p-4 align-top">
+                    <span className="block font-semibold text-petrol-800">{item.window}</span>
+                    <span className="mt-1 block text-[13px]">{item.renewalRule}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Section>
+
+      {/* Section 10: HIGH-SCHOLARSHIP ALLIED HEALTH ALTERNATIVES (PHARMACY, BIOTECH, BDS, NURSING) */}
+      <Section
+        id="allied-health"
+        tone="sage"
+        title="High-Scholarship Alternatives: English Pharmacy, Biotechnology, BDS & Nursing."
+        intro="If your budget cannot stretch to 6-year MBBS tuition, you have a 2–3 year study gap, or your HSC Biology grade does not meet BMDC MBBS thresholds, these 4–5 year English-taught health science degrees offer 50% to 100% tuition waivers at top Chinese universities—with average net tuition around CNY 14,867/yr (and as low as CNY 0/yr)."
+      >
+        <div className="overflow-x-auto rounded-3xl border border-canvas-soft bg-white shadow-sm">
+          <table className="w-full min-w-[900px] text-left text-[14px] leading-5">
+            <caption className="sr-only">
+              English-taught Pharmacy, Biotechnology, BDS Dentistry and Nursing alternatives in China with scholarship details
+            </caption>
+            <thead className="border-b border-canvas-soft bg-petrol-800 text-white">
+              <tr>
+                <th scope="col" className="p-4 font-bold">University &amp; Tier</th>
+                <th scope="col" className="p-4 font-bold">English-Taught Major</th>
+                <th scope="col" className="p-4 font-bold text-lime">Gross vs. Net Tuition (CNY/yr)</th>
+                <th scope="col" className="p-4 font-bold">Scholarship Policy</th>
+                <th scope="col" className="p-4 font-bold">Council &amp; Career Route</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-canvas-soft text-ink-soft">
+              {ALLIED_HEALTH_ALTERNATIVES.map((alt) => (
+                <tr key={`${alt.university}-${alt.major}`} className="hover:bg-canvas-soft/45">
+                  <td className="p-4 align-top">
+                    {alt.slug ? (
+                      <Link href={`/universities/${alt.slug}`} className="font-bold text-petrol-800 hover:underline">
+                        {alt.university}
+                      </Link>
+                    ) : (
+                      <span className="font-bold text-petrol-800">{alt.university}</span>
+                    )}
+                    <p className="mt-0.5 text-[12.5px] text-ink-mute">{alt.city} · {alt.tier}</p>
+                  </td>
+                  <td className="p-4 align-top">
+                    <p className="font-semibold text-petrol-800">{alt.major}</p>
+                    <p className="mt-0.5 text-[12.5px]">{alt.duration} · Dorm ~CNY {fmtNum(alt.hostelRmb)}/yr</p>
+                  </td>
+                  <td className="bg-lime-pale/25 p-4 align-top">
+                    <p className="text-[12.5px] text-ink-mute line-through">Gross: CNY {fmtNum(alt.grossTuitionRmb)}/yr</p>
+                    <p className="font-display text-[17px] font-black text-lime-deep">
+                      Net: CNY {fmtNum(alt.netAfterScholarshipRmb)}/yr
+                    </p>
+                  </td>
+                  <td className="p-4 align-top">{alt.scholarshipSummary}</td>
+                  <td className="p-4 align-top">{alt.councilAndCareer}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Section>
+
+      {/* Section 11: Verified Facts & China Visa-First Policy */}
+      <Section id="verified-facts" title="Verified Policy Benchmarks & China Visa-First Terms">
+        <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
+          <VerifiedFactsBlock
+            verifiedDate={MBBS_COMPARISON_LAST_UPDATED_LABEL}
+            reviewer="EduExpress Medical Advisory & Compliance Desk"
+            facts={[
+              {
+                claim:
+                  'Bangladesh MOHFW gazettes cap local private medical college admission at BDT 19,44,000 + BDT 1,80,000 internship (60% = BDT 12,74,400 due at admission) plus BDT 10,000/month tuition (60 months = BDT 6,00,000), totaling BDT 27,24,000 before exams, hostel, and meals.',
+                source: 'Ministry of Health & Family Welfare (MOHFW / DGME) Bangladesh',
+                sourceUrl: 'https://dgme.gov.bd',
+              },
+              {
+                claim:
+                  'Under the BMDC Act, 2010, all foreign MBBS/BDS graduates must pass the biannual BMDC Registration Qualifying Examination (RQE) and complete mandatory internship before obtaining Permanent BMDC Registration in Bangladesh.',
+                source: 'Bangladesh Medical & Dental Council (BMDC) RQE Official Dossier',
+                sourceUrl: 'https://www.bmdc.org.bd/upl/doc/form/QSPRfvjJ5NtF.pdf',
+              },
+              {
+                claim:
+                  'Chinese Ministry of Education Article 30 requires programme-specific authorisation for English-medium undergraduate Clinical Medicine (MBBS); general university recognition alone is not sufficient.',
+                source: 'Ministry of Education of China (MOE) Regulations',
+                sourceUrl: 'https://en.moe.gov.cn/documents/laws_policies/201506/t20150626_191405.html',
+              },
+              {
+                claim:
+                  '2026 official university tuition checks confirm CQMU CNY 30,000/yr (CNY 15,000 freshman award), WMU CNY 33,000/yr (up to CNY 20,000 freshman award), JSU CNY 34,000/yr, XJTU CNY 40,000/yr, and China Three Gorges starting from CNY 24,000/yr—all with BDT 0 capitation fee.',
+                source: 'Published 2026 University Undergraduate Guides (CQMU / WMU / JSU / XJTU)',
+                sourceUrl: 'https://english.cqmu.edu.cn/info/1148/3038.htm',
+              },
+            ]}
+          />
+
+          <div className={`${kit.cardDark} flex flex-col justify-between`}>
+            <div>
+              <p className="flex items-center gap-2 text-[19px] font-bold text-lime">
+                <ShieldCheck size={22} aria-hidden="true" />
+                China Visa-First Payment Terms
+              </p>
+              <p className="mt-3 text-[15.5px] leading-7 text-white/85">{CHINA_VISA_FIRST_TERMS}</p>
+              <ul className="mt-5 space-y-2.5 border-t border-white/15 pt-5 text-[14.5px] text-white/80">
+                <li className="flex items-start gap-2.5">
+                  <Hospital size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" />
+                  <span>Written MOE English-MBBS authorisation &amp; WDOMS check before application</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <Landmark size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" />
+                  <span>Pre-departure BMDC GPA, Biology &amp; Eligibility Certificate audit</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <Stethoscope size={16} className="mt-1 shrink-0 text-lime" aria-hidden="true" />
+                  <span>Itemised ClearCost Sheet separating CNY university fees from BDT package fees</span>
+                </li>
+              </ul>
+            </div>
+            <Link href="/china-visa-first-policy" className="ed-btn ed-btn-on-dark mt-6 min-h-[48px] px-5">
+              Read full Visa-First Policy <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>
         </div>
       </Section>
 
-      {/* Decision Matrix */}
+      {/* Section 12: Decision Fit Matrix */}
       <Section
         id="decision-fit"
-        tone="navy"
-        title="Who Should Choose China vs. Staying in Bangladesh?"
-        intro="Honest counseling means matching student aspirations and family circumstances to the right country."
+        tone="sage"
+        title="Who Should Choose MBBS in China vs. Staying in Bangladesh?"
+        intro="Evidence-first counseling means stating honestly both when China is the clear winner and when staying in Bangladesh—or choosing Pharmacy/Biotech—makes better sense."
       >
         <FitVsReconsiderGrid
+          tone="sage"
           fitTitle="Choose MBBS in China if:"
           fitItems={[
             {
-              label: 'You want high clinical exposure in 3,000+ bed hospital networks',
-              detail: 'Experience massive pathology volume, advanced medical imaging, and robotic surgery firsthand during rotations.',
+              label: 'You want Grade-3A tertiary clinical training (3,000–10,000+ beds)',
+              detail:
+                'Gain massive clinical patient volume, modern 3D dissection suites, and robotic surgical exposure inside state-funded provincial medical university hospitals.',
             },
             {
-              label: 'Your family wants to avoid BDT 19–20 Lakh upfront admission donation fees',
-              detail: 'In China, you pay standard annual tuition directly to the university in manageable installments.',
+              label: 'Your family prefers annual tuition over BDT 12.74 Lakh Day-1 private admission shock',
+              detail:
+                'Pay BDT 0 capitation and spread tuition annually directly to the public university, reducing costs further with Year-1 Freshman/Provincial and Years 2–5 Merit scholarships.',
             },
             {
-              label: 'You plan to sit for USMLE (USA), PLAB (UK), or practice internationally',
-              detail: 'Chinese medical schools have strong international alumni networks actively practicing in the US, UK, and Australia.',
+              label: 'You meet BMDC science baselines and want dual BD + global (USMLE/UKMLA) options',
+              detail:
+                'Graduate with a globally ranked public university MBBS recognized for BMDC RQE in Bangladesh as well as WDOMS international licensing tracks.',
             },
             {
-              label: 'You have solid HSC Biology scores (GPA 3.50+) but narrowly missed public medical seats',
-              detail: 'Do not settle for sub-standard clinical training; enter world-ranked public medical schools in China.',
+              label: 'You missed public medical seats or September deadlines',
+              detail:
+                'Use a 6-month March Pre-Medical Foundation track to enter Year-1 MBBS in September without losing a full year at home.',
             },
           ]}
-          reconsiderTitle="Choose Private Medical in Bangladesh if:"
+          reconsiderTitle="Reconsider or Pivot if:"
           reconsiderItems={[
             {
-              label: 'You cannot spend 5 to 6 years residing outside Bangladesh',
-              detail: 'If immediate family responsibilities prevent international living, domestic private colleges offer physical proximity.',
+              label: 'Your HSC Biology GPA is below 3.50 or you have a multi-year study gap',
+              detail:
+                'Do not enroll in MBBS hoping to practice clinically in Bangladesh—BMDC audits original HSC marksheets at RQE. Pivot to 4-year B.Sc. Pharmacy or Biotechnology with up to 100% scholarships instead.',
             },
             {
-              label: 'You are unwilling to learn basic conversational Chinese',
-              detail: 'Although classes are in English, hospital ward patient communication requires basic everyday Chinese (HSK-3 level).',
+              label: 'You are unwilling to learn clinical Chinese (HSK-4)',
+              detail:
+                'Lectures are in English, but interviewing real patients during Years 4–6 hospital rotations and meeting graduation rules require HSK-4 Chinese.',
             },
             {
-              label: 'You cannot meet BMDC foreign study eligibility (GPA 9.00 combined)',
-              detail: 'BMDC enforces minimum combined GPA 9.00 for foreign medical degree registration; do not travel abroad without this verification.',
+              label: 'You cannot live abroad for 5–6 years or pass an independent licensing exam',
+              detail:
+                'Foreign medical graduates must pass the BMDC RQE upon return. If you require immediate family proximity in Dhaka and cleared the DGME test, a local college may fit better.',
             },
           ]}
         />
       </Section>
 
-      {/* FAQs */}
+      {/* Section 13: FAQs (Note: FaqBlock automatically emits FAQPage JSON-LD — no duplicate schema!) */}
       <div id="faq" className="scroll-mt-24">
-        <FaqBlock items={FAQS} tone="sage" title="Frequently Asked Questions: MBBS Bangladesh vs. China" />
+        <FaqBlock
+          items={MBBS_COMPARISON_FAQS}
+          tone="white"
+          title="Frequently Asked Questions: Bangladesh Private MBBS vs. China & BMDC Rules"
+        />
       </div>
 
       {/* Cross Links */}
       <PathwayCrossLinks
         currentPath={PATH}
-        tone="white"
+        tone="sage"
         extraLinks={[
           { label: 'Full Guide: MBBS in China for Bangladeshi Students', href: '/mbbs-in-china-bangladesh' },
-          { label: 'বাংলায় MBBS গাইড ও BMDC শর্তাবলী', href: '/bn/mbbs-in-china-bangladesh' },
-          { label: 'CSCA Medical Preparation & Requirements', href: '/bn/csca-exam-bangladesh' },
+          { label: 'বাংলায় চীনে MBBS গাইড ও BMDC শর্তাবলী', href: '/bn/mbbs-in-china-bangladesh' },
+          { label: 'China Admission Requirements & CSCA Guide', href: '/china-admission-requirements' },
+          { label: 'China Visa-First Fee Policy', href: '/china-visa-first-policy' },
           { label: 'Bangladesh vs. China Bachelor Degree (All Majors)', href: '/bangladesh-vs-china-bachelor-study' },
         ]}
       />
 
-      {/* Governance & Authenticity Guarantee */}
+      {/* Governance & Editorial Review */}
       <PathwayGovernanceSection
-        tone="sage"
-        authorName="EduExpress Medical Advisory Desk"
-        authorRole="Reviewed by Senior Medical Admissions Consultants"
-        lastVerified="25 November 2026"
-        nextReview="25 February 2027"
+        tone="white"
+        authorName="Afsana Meme"
+        authorRole="Senior Consultant (China Admissions, MBBS & Scholarships)"
+        lastVerified={MBBS_COMPARISON_LAST_UPDATED_LABEL}
+        nextReview={MBBS_COMPARISON_NEXT_REVIEW_LABEL}
         whatMayChange={[
-          'Bangladesh private medical college admission fee caps are set by the Ministry of Health and Family Welfare (MOHFW).',
-          'BMDC eligibility rules (Biology GPA ≥ 3.50, combined GPA ≥ 9.00) are statutory and strictly verified prior to departure.',
-          'Chinese MOE English-medium university lists and intake seat limits are confirmed annually.',
-          'RMB to BDT currency conversion fluctuates based on official commercial bank foreign exchange rates.',
+          'Bangladesh private medical college statutory fee ceilings, installment splits, and domestic GPA thresholds are updated periodically by MOHFW and DGME gazettes.',
+          'BMDC Eligibility Certificate administrative notices, RQE pass-mark circulars, negative-marking rules, and Pay Order fees are governed by active bmdc.org.bd circulars.',
+          'Chinese Ministry of Education (MOE) annual English-MBBS university quotas, tuition schedules, and CSCA subject matrices are confirmed before each September intake.',
+          'RMB-to-BDT conversion fluctuates daily with commercial bank foreign exchange TT selling rates.',
         ]}
-        sources={OFFICIAL_SOURCES}
+        sources={MBBS_OFFICIAL_SOURCES}
       />
 
-      {/* Assessment Funnel */}
+      {/* Embedded Assessment Funnel */}
       <Section
         id="mbbs-assessment"
-        title="Check Your MBBS Eligibility for China (BMDC & MOE Pre-Check)"
-        intro="Enter your SSC & HSC GPA, Biology grade, and study preferences. Our medical counselors will provide an itemized fee breakdown and list of approved universities within 24 hours."
+        tone="sage"
+        title="Get Your Free BMDC Pre-Check & China MBBS Shortlist"
+        intro="Share your SSC & HSC (or O/A-Level) GPA, Biology grade, budget, and intake target. Our senior counselors reply within one working day with a BMDC eligibility check, 3–5 MOE-authorized universities, and an itemized ClearCost Sheet in writing."
       >
         <div className="mx-auto max-w-3xl">
           <EducationFitAssessment initialContext={{ country: 'china' }} />
@@ -533,8 +894,8 @@ export default function BangladeshVsChinaMbbsPage() {
       </Section>
 
       <CtaBand
-        title="Compare authentic costs before paying BDT 20 Lakhs in local admission fees."
-        text="Visit our Dhanmondi desk or talk to our medical advisors for an authentic, transparent breakdown of BMDC-recognized Chinese universities."
+        title="Compare written proof before paying BDT 12.74 Lakh upfront."
+        text="Bring your SSC/HSC transcripts to our Dhanmondi desk or book online for a BMDC eligibility verification and side-by-side ClearCost Sheet of Chinese MOE medical universities."
         assessmentHref="#mbbs-assessment"
       />
     </article>
