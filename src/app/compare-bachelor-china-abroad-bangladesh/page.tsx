@@ -4,11 +4,13 @@ import { ArrowRight, Award, Building2, Cpu, Globe2 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import {
+  BookletDownloadBanner,
   FitVsReconsiderGrid,
   LivingCostSeparationNotice,
   PathwayCrossLinks,
   PathwayGovernanceSection,
 } from '@/components/pathways/PathwaySharedBlocks';
+import BachelorComparisonInteractiveWorkbench from '@/components/pathways/BachelorComparisonInteractiveWorkbench';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import {
   BANGLADESH_PRIVATE_UNIVERSITIES,
@@ -199,6 +201,17 @@ export default async function CompareBachelorChinaAbroadPage() {
         <LivingCostSeparationNotice
           summary="Every comparison table on this page keeps Tuition & Institutional Fees strictly separated from Personal Living Expenses (food, transit, personal spending). Chinese university fees remain in CNY/RMB without assuming a fixed BDT exchange rate."
         />
+
+        <div className="mt-8">
+          <BachelorComparisonInteractiveWorkbench mode="global-5way" assessmentHref="#compare-assessment" />
+        </div>
+
+        <div className="mt-6">
+          <BookletDownloadBanner
+            tone="white"
+            contextNote="Download the 10-page September 2027 Print Booklet comparing China, Malaysia, Dhaka Category-A Private, UK, USA & Australia—complete with QS World 2027 rankings and dual intake calendars."
+          />
+        </div>
 
         <div className="mt-8 overflow-x-auto rounded-3xl border border-canvas-soft bg-white">
           <table className="w-full min-w-[920px] text-left text-[13.5px] leading-6">
@@ -540,8 +553,8 @@ export default async function CompareBachelorChinaAbroadPage() {
         tone="white"
         authorName="Afsana Meme"
         authorRole="Senior Consultant (China Admissions & Scholarships)"
-        lastVerified="21 November 2026"
-        nextReview="21 February 2027"
+        lastVerified="25 November 2026"
+        nextReview="25 February 2027"
         whatMayChange={[
           'Chinese university scholarship quotas, freshman waiver cutoffs, and annual GPA renewal thresholds update each admission cycle.',
           'NSU, EWU, and AIUB per-credit tuition rates and semester activity fees are updated periodically by each university.',

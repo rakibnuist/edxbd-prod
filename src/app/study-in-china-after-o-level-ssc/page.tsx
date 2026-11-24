@@ -4,12 +4,14 @@ import { ArrowRight, Building2, Clock, FileCheck2, ShieldAlert, ShieldCheck, Wre
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import {
+  BookletDownloadBanner,
   FitVsReconsiderGrid,
   LivingCostSeparationNotice,
   PathwayCrossLinks,
   PathwayGovernanceSection,
   WinningAdvantageGrid,
 } from '@/components/pathways/PathwaySharedBlocks';
+import ChinaDiplomaInteractivePlanner from '@/components/pathways/ChinaDiplomaInteractivePlanner';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import {
   CHINA_3_PLUS_2_WIN_CARDS,
@@ -231,6 +233,15 @@ export default function StudyInChinaAfterOLevelSscPage() {
             summary="University Tuition and Hostel figures below are kept strictly separate from Monthly Living Expenses (food, local transit, SIM, personal spending) and third-party visa/travel charges. University figures remain in CNY/RMB so you can convert using your bank’s live rate."
           />
         </div>
+        <div className="mt-8">
+          <ChinaDiplomaInteractivePlanner />
+        </div>
+        <div className="mt-6">
+          <BookletDownloadBanner
+            tone="white"
+            contextNote="Download our printable 10-page September 2027 O-Level & A-Level Pathway Booklet comparing China 3+2 scholarship tiers side by side with Malaysia Foundation/Diploma routes."
+          />
+        </div>
       </Section>
 
       <WinningAdvantageGrid
@@ -445,8 +456,8 @@ export default function StudyInChinaAfterOLevelSscPage() {
         tone="white"
         authorName="Afsana Meme"
         authorRole="Senior Consultant (China Admissions & Programs)"
-        lastVerified="21 November 2026"
-        nextReview="21 February 2027"
+        lastVerified="25 November 2026"
+        nextReview="25 February 2027"
         whatMayChange={[
           'Diploma scholarship quotas across Tier 1, Class B, and Partial packages are set annually by each college and provincial authority.',
           'Under-18 age thresholds and guardianship acceptance vary strictly by college and local Entry-Exit Bureau.',

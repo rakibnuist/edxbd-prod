@@ -4,8 +4,20 @@ import { cache } from 'react';
 import { getUniversityRankings, type UniversityRanking } from '@/lib/university-rankings';
 import { getUniversityRecords, type CleanUniversityRecord } from '@/lib/university-records';
 
-export const PATHWAY_LAST_UPDATED_ISO = '2026-11-21';
+export const PATHWAY_LAST_UPDATED_ISO = '2026-11-25';
 export const PATHWAY_LAST_UPDATED_LABEL = 'November 2026';
+
+export const PATHWAY_FX_BASELINE = {
+  myrToBdt: 30.2,
+  cnyToBdt: 18.7,
+  checkedLabel: 'November 2026',
+} as const;
+
+export const PATHWAY_BOOKLET_PDF = {
+  href: '/EduExpress_OLevel_ALevel_Pathways_Malaysia_China_Sep2027.pdf',
+  title: 'O-Level & A-Level Pathway Guide: Malaysia & China (September 2027 Intake)',
+  pagesLabel: '10-Page Print-Ready A4 Booklet (PDF)',
+} as const;
 
 export type OfficialSource = {
   label: string;
@@ -161,7 +173,7 @@ export const MALAYSIA_O_LEVEL_WIN_CARDS = [
     metric: 'BDT 4.8L – 15L+ Redirected',
     title: 'Replace Sunk A-Level Fees With University Credit',
     detail:
-      'Redirect BDT 4.8–7.35 lakh (private/coaching + British Council fees) or BDT 7.5–15L+ (Dhaka schools) from a school-leaving exam straight into MQA-accredited university Foundation tuition (from ~BDT 4.05L–5.94L; living separate).',
+      'Redirect BDT 4.8–7.35 lakh (private/coaching + British Council fees) or BDT 7.5–15L+ (Dhaka schools) from a school-leaving exam straight into MQA-accredited university Foundation tuition (from RM 15k–22k / ~BDT 4.53L–6.64L at 30.20 BDT/MYR; living separate).',
   },
   {
     badge: 'Credential Outcome',
@@ -182,7 +194,7 @@ export const MALAYSIA_VS_A_LEVEL_WIN_ROWS = [
   {
     criterion: 'Pre-University Academic & Exam Spend (Living Separated)',
     stayForALevel: 'BDT 4.80L – 7.35L (coaching + British Council) or BDT 7.50L – 15.0L+ (Dhaka schools)',
-    malaysiaPath: 'RM 15,000 – 22,000 (~BDT 4.05L – 5.94L) standard Foundation; RM 25k–36k branch/top private',
+    malaysiaPath: 'RM 15,000 – 22,000 (~BDT 4.53L – 6.64L) standard Foundation; RM 25k–36k top private/branch',
     studentWin: 'Stop paying for two years of high-school exam prep and put that capital directly into university credits.',
   },
   {
@@ -246,18 +258,18 @@ export const CHINA_5_YEAR_WIN_ROWS = [
 
 export const UNIFIED_BACHELOR_WIN_MATRIX = [
   {
-    factor: 'Global University Ranking & Academic Standing',
-    chinaTrack: 'Top 100–650 Globally (e.g., Zhejiang THE =34, Sichuan ARWU 77, HIT QS 252, Tianjin QS 269, SCUT QS 377)',
-    malaysiaTrack: 'Global Top 40–650 via branch & dual-award campuses (Monash, Nottingham, Taylor’s, Sunway, APU)',
-    dhakaPrivateTrack: 'Local Category-A domestic accreditation (outside global top-800 research tiers)',
+    factor: 'Global University Ranking & Academic Standing (QS World 2027)',
+    chinaTrack: 'QS World 2027 Top 50–730 (e.g., Zhejiang #47, HIT #190, Tianjin #235, Sichuan #300, SCUT #=342, Dalian UT #463, Zhengzhou #=581)',
+    malaysiaTrack: 'QS World 2027 #31–#528 via public, branch & UK dual campuses (Monash #31*, UM #56, Nottingham #97*, UTM #158, Taylor’s #272, Sunway #354, APU #528)',
+    dhakaPrivateTrack: 'NSU QS #901–950, BRAC/DIU #1001–1200, AIUB #1401+; EWU & others outside QS World 2027',
     westernTrack: 'Global Top 50–600 options in UK, USA, Australia & NZ',
-    winnerVerdict: 'China & Malaysia deliver global top-100–650 credentials without Western price tags.',
+    winnerVerdict: 'China & Malaysia deliver QS World #31–#581 credentials without Western price tags.',
   },
   {
     factor: '4-Year / Full-Degree Tuition (Living Costs Separated)',
-    chinaTrack: 'CNY 0 (full university merit/entrance waivers where awarded) to CNY 17,000–100,000 total over 4 yrs',
-    malaysiaTrack: 'RM 42,000–174,000 (~BDT 11.3L–47L total 3-yr tuition before 15%–75% merit waivers)',
-    dhakaPrivateTrack: 'BDT 9.17 Lakh – 14.30 Lakh total tuition & institutional fees (NSU, EWU, AIUB)',
+    chinaTrack: 'CNY 0 (full university merit/entrance waivers where awarded) to CNY 17,000–100,000 total over 4 yrs (~BDT 0–18.7L)',
+    malaysiaTrack: 'RM 30,000–174,000 (~BDT 9.1L–52.5L total 3-yr tuition before 15%–75% merit waivers)',
+    dhakaPrivateTrack: 'BDT 9.17 Lakh – 14.30 Lakh total tuition & institutional fees (EWU, NSU, AIUB)',
     westernTrack: '~BDT 54 Lakh – 3.2+ Crore total tuition over 3–4 years (before rare scholarships)',
     winnerVerdict: 'China University Scholarships beat Western tuition by 80%–100% and rival or beat Dhaka Category-A fees.',
   },
@@ -313,9 +325,9 @@ export const BD_VS_CHINA_WIN_CARDS = [
 
 export const BD_VS_CHINA_PROOF_ROWS = [
   {
-    criterion: 'University Ranking & Research Reputation',
-    bangladeshPrivate: 'NSU, EWU & AIUB hold strong domestic Category-A private recognition inside Bangladesh (outside global top-800 research brackets).',
-    chinaRanked: 'Zhejiang (THE =34), Sichuan (ARWU 77), HIT (QS 252), Tianjin (QS 269), SCUT (QS 377), Dalian UT (QS 448), Xidian (QS 621–630).',
+    criterion: 'University Ranking & Research Reputation (QS World 2027)',
+    bangladeshPrivate: 'NSU (QS #901–950), BRAC (#1001–1200), AIUB (#1401+), and EWU (not listed in QS 2027) hold strong domestic private recognition in Bangladesh.',
+    chinaRanked: 'Zhejiang (QS #47), HIT (QS #190), Tianjin (QS #235), Sichuan (QS #300), SCUT (QS #=342), Dalian UT (QS #463), Zhengzhou (QS #=581), NUAA (QS #721–730).',
     winReason: 'Immediate jump into a globally ranked, state-backed Project 985 / 211 / Double First-Class university brand.',
   },
   {
@@ -381,9 +393,9 @@ export const BD_VS_ABROAD_DESTINATION_ROWS = [
     destination: 'Malaysia (Active EduExpress Service · BDT 0 Agency Fee)',
     serviceNote: 'O-Level Foundation/Diploma + UK/AU Branch & Dual Degrees',
     duration: '1-yr Foundation + 3-yr Bachelor (4 yrs after O-Level)',
-    tuitionOnly: 'Foundation: RM 15k–36k · Bachelor: RM 14k–58k/yr (15%–75% merit waivers available)',
-    livingSeparated: 'RM 1,200 – 2,000 / month (~BDT 32.4k–54k/mo)',
-    winOrTradeoff: 'WIN: Saves 2 years after O-Levels and awards identical Monash/Nottingham/Heriot-Watt or UK dual degrees at ~1/3 Western tuition.',
+    tuitionOnly: 'Foundation: RM 15k–36k · Bachelor: RM 10k–58k/yr (15%–75% merit waivers available)',
+    livingSeparated: 'RM 1,200 – 2,000 / month (~BDT 36.2k–60.4k/mo at 30.20 BDT/MYR)',
+    winOrTradeoff: 'WIN: Saves 2 years after O-Levels and awards identical Monash (#31*), Nottingham (#97*), Heriot-Watt (#325*) or UK dual degrees at ~1/3 Western tuition.',
   },
   {
     destination: 'China (Flagship EduExpress Service · Visa-First)',

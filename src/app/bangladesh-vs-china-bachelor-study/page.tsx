@@ -4,12 +4,14 @@ import { ArrowRight, Award, Building2, Cpu, Globe2, ShieldCheck } from 'lucide-r
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import {
+  BookletDownloadBanner,
   FitVsReconsiderGrid,
   LivingCostSeparationNotice,
   PathwayCrossLinks,
   PathwayGovernanceSection,
   WinningAdvantageGrid,
 } from '@/components/pathways/PathwaySharedBlocks';
+import BachelorComparisonInteractiveWorkbench from '@/components/pathways/BachelorComparisonInteractiveWorkbench';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import {
   BANGLADESH_PRIVATE_UNIVERSITIES,
@@ -203,6 +205,15 @@ export default async function BangladeshVsChinaBachelorPage() {
         <LivingCostSeparationNotice
           summary="All comparisons below strictly separate Academic Tuition & Institutional Fees from Personal Living Expenses (meals, local transit, personal allowance). Chinese fees are kept in CNY/RMB so families convert at live bank TT rates."
         />
+        <div className="mt-8">
+          <BachelorComparisonInteractiveWorkbench mode="bd-vs-china" assessmentHref="#bd-china-assessment" />
+        </div>
+        <div className="mt-6">
+          <BookletDownloadBanner
+            tone="white"
+            contextNote="Share a printable 10-page September 2027 Pathway Booklet with your family—comparing NSU/EWU/AIUB against QS World 2027 Chinese & Malaysian universities."
+          />
+        </div>
       </Section>
 
       {/* Win Scorecard */}
@@ -410,8 +421,8 @@ export default async function BangladeshVsChinaBachelorPage() {
         tone="sage"
         authorName="Afsana Meme"
         authorRole="Senior Consultant (China Admissions & Scholarships)"
-        lastVerified="21 November 2026"
-        nextReview="21 February 2027"
+        lastVerified="25 November 2026"
+        nextReview="25 February 2027"
         whatMayChange={[
           'Chinese university entrance and merit scholarship amounts depend on annual seat quotas and academic GPA renewal rules.',
           'NSU, EWU, and AIUB per-credit rates and semester fees are set independently by each university.',

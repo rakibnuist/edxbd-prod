@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { ArrowRight, CheckCircle2, ExternalLink, Info, ShieldAlert, ShieldCheck, Trophy } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Download, ExternalLink, FileText, Info, ShieldAlert, ShieldCheck, Trophy } from 'lucide-react';
 import { Section, kit } from '@/components/page/PageKit';
-import type { OfficialSource } from '@/lib/pathway-comparison';
+import { PATHWAY_BOOKLET_PDF, type OfficialSource } from '@/lib/pathway-comparison';
 
 export type WinProofCard = {
   readonly badge: string;
@@ -66,6 +66,47 @@ export function WinningAdvantageGrid({
         ))}
       </div>
     </Section>
+  );
+}
+
+export function BookletDownloadBanner({
+  tone = 'white',
+  contextNote = 'Compare O-Level & A-Level pathways across Malaysia and China for September 2027 in one printable 10-page A4 guide—verified against QS World Rankings 2027 and late-November 2026 FX baselines.',
+}: {
+  tone?: 'white' | 'sage';
+  contextNote?: string;
+}) {
+  return (
+    <div className={`${tone === 'sage' ? 'bg-white' : 'bg-canvas-soft'} rounded-3xl border border-petrol-800/12 p-5 sm:p-7`}>
+      <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
+        <div className="flex items-start gap-4">
+          <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-petrol-800 text-lime">
+            <FileText size={22} aria-hidden="true" />
+          </span>
+          <div>
+            <span className="inline-flex items-center rounded-full bg-lime-pale px-3 py-0.5 text-[12px] font-bold text-lime-deep">
+              {PATHWAY_BOOKLET_PDF.pagesLabel}
+            </span>
+            <h3 className="mt-2 font-display text-[20px] font-black leading-snug text-petrol-800 sm:text-[22px]">
+              Download the September 2027 Malaysia &amp; China Pathway Booklet
+            </h3>
+            <p className="mt-1.5 max-w-2xl text-[14.5px] leading-6 text-ink-soft">{contextNote}</p>
+          </div>
+        </div>
+        <div className="flex shrink-0 flex-wrap gap-3">
+          <a
+            href={PATHWAY_BOOKLET_PDF.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            download
+            className="ed-btn ed-btn-signal min-h-[48px] px-6"
+          >
+            <Download size={17} aria-hidden="true" />
+            Download 10-Page PDF
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }
 

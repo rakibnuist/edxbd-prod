@@ -4,12 +4,14 @@ import { ArrowRight, Compass, Globe2, GraduationCap, ShieldCheck } from 'lucide-
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import {
+  BookletDownloadBanner,
   FitVsReconsiderGrid,
   LivingCostSeparationNotice,
   PathwayCrossLinks,
   PathwayGovernanceSection,
   WinningAdvantageGrid,
 } from '@/components/pathways/PathwaySharedBlocks';
+import PathwayDecisionExplorer from '@/components/pathways/PathwayDecisionExplorer';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import {
   BD_VS_ABROAD_DESTINATION_ROWS,
@@ -90,7 +92,7 @@ const faqs = [
   {
     question: 'How does staying in Bangladesh compare financially with going abroad right after O-Levels?',
     answer:
-      'Staying for 2 years of A-Levels in Bangladesh costs roughly BDT 4.8–7.35 lakh (private/coaching + British Council exam fees) or BDT 7.5–15+ lakh (Dhaka English-medium schools), followed by BDT 9.17–14.30 lakh at Category-A private universities like EWU, NSU, or AIUB. Starting a 1-year Malaysian Foundation (~BDT 4.05–5.94 lakh standard tuition) or China’s 3+2 scholarship track lets students enter higher education immediately instead of paying for two pre-university years.',
+      'Staying for 2 years of A-Levels in Bangladesh costs roughly BDT 4.8–7.35 lakh (private/coaching + British Council exam fees) or BDT 7.5–15+ lakh (Dhaka English-medium schools), followed by BDT 9.17–14.30 lakh at Category-A private universities like EWU, NSU, or AIUB. Starting a 1-year Malaysian Foundation (RM 15k–22k / ~BDT 4.53–6.64 lakh standard tuition) or China’s 3+2 scholarship track lets students enter higher education immediately instead of paying for two pre-university years.',
   },
   {
     question: 'What if a student wants a Western degree (UK, USA, Australia, New Zealand) without paying full Western tuition?',
@@ -182,6 +184,15 @@ export default function BangladeshVsStudyAbroadPage() {
         <LivingCostSeparationNotice
           summary="All destination tables below separate Tuition & Institutional Fees cleanly from Monthly or Annual Living Expenses. EduExpress actively services China, Malaysia, the UK, and listed European/Asian destinations; USA, Australia, and New Zealand are displayed as transparent benchmarks and transfer/Master’s targets."
         />
+        <div className="mt-8">
+          <PathwayDecisionExplorer />
+        </div>
+        <div className="mt-6">
+          <BookletDownloadBanner
+            tone="white"
+            contextNote="Download the 10-page September 2027 Malaysia & China Pathway Booklet for offline parent discussions—complete with QS World 2027 rankings, timelines, and personal worksheet."
+          />
+        </div>
       </Section>
 
       {/* Win Scorecard */}
@@ -336,8 +347,8 @@ export default function BangladeshVsStudyAbroadPage() {
         tone="sage"
         authorName="Mukta Rahaman"
         authorRole="Senior Consultant (Education Fit & Cost Planning)"
-        lastVerified="21 November 2026"
-        nextReview="21 February 2027"
+        lastVerified="25 November 2026"
+        nextReview="25 February 2027"
         whatMayChange={[
           'Tuition ranges and scholarship quotas in China, Malaysia, Europe, and Western countries update each intake year.',
           'UK Graduate Route post-study rules (18 months for most non-PhD applicants from Jan 2027) and Finnish Migri living benchmarks (€800/mo) follow government notices.',

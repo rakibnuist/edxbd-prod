@@ -4,12 +4,14 @@ import { ArrowRight, Award, Clock, Globe2, GraduationCap } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import {
+  BookletDownloadBanner,
   FitVsReconsiderGrid,
   LivingCostSeparationNotice,
   PathwayCrossLinks,
   PathwayGovernanceSection,
   WinningAdvantageGrid,
 } from '@/components/pathways/PathwaySharedBlocks';
+import MalaysiaOLevelInteractivePlanner from '@/components/pathways/MalaysiaOLevelInteractivePlanner';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import {
   BANGLADESH_A_LEVEL_TRACKS,
@@ -44,16 +46,16 @@ const ENTRY_PATHS = [
     level: '1-Year Foundation Program',
     oLevelRequirement: 'Minimum 5 Credits (Grade C / 4 or above) in O-Level or IGCSE',
     subjectRules: 'Business/Arts require Math & English; Science/Engineering/Computing require Math, English & relevant Sciences',
-    tuitionStandard: 'RM 15,000 – RM 22,000 total (~BDT 4.05L – 5.94L)',
-    tuitionBranch: 'RM 25,000 – RM 36,000 total (~BDT 6.75L – 9.72L) at Sunway, Taylor’s, Monash, or Nottingham',
+    tuitionStandard: 'RM 15,000 – RM 22,000 total (~BDT 4.53L – 6.64L)',
+    tuitionBranch: 'RM 25,000 – RM 36,000 total (~BDT 7.55L – 10.87L) at Sunway (MUFY), Taylor’s, or Nottingham (NFP)',
     progression: 'Direct Year 1 Bachelor entry in Malaysia or progression into UK/Australian branch-campus degrees',
   },
   {
     level: '2 – 2.5 Year Diploma Program',
     oLevelRequirement: 'Minimum 3 Credits (Grade C / 4 or above) in O-Level or IGCSE',
     subjectRules: 'Includes Mathematics and relevant technical/commerce subjects depending on major',
-    tuitionStandard: 'RM 18,000 – RM 35,000 / year (~BDT 4.86L – 9.45L / yr)',
-    tuitionBranch: 'Total 2–2.5 yr Diploma tuition: ~RM 40,000 – RM 85,000 (~BDT 10.8L – 23.0L) depending on institution',
+    tuitionStandard: 'RM 18,000 – RM 35,000 / year (~BDT 5.44L – 10.57L / yr)',
+    tuitionBranch: 'Total 2–2.5 yr Diploma tuition: ~RM 40,000 – RM 85,000 (~BDT 12.08L – 25.67L) depending on institution',
     progression: 'Industry-ready qualification OR credit transfer directly into Year 2 of a related Bachelor’s degree',
   },
 ] as const;
@@ -90,7 +92,7 @@ const faqs = [
   {
     question: 'Are living costs included in the Malaysian Foundation and Diploma tuition figures?',
     answer:
-      'No. Tuition totals on this page show academic tuition only. Monthly living costs in Malaysia (shared student housing, halal meals, local rail/bus transit, and SIM) are budgeted separately at RM 1,200 to RM 2,000 per month (~BDT 32,400 to BDT 54,000/month at 1 MYR ≈ 27 BDT), alongside official EMGS visa, medical insurance, and airfare charges.',
+      'No. Tuition totals on this page show academic tuition only. Monthly living costs in Malaysia (shared student housing, halal meals, local rail/bus transit, and SIM) are budgeted separately at RM 1,200 to RM 2,000 per month (~BDT 36,200 to BDT 60,400/month at 1 MYR ≈ 30.20 BDT, Nov 2026 baseline), alongside official EMGS visa, medical insurance, and airfare charges.',
   },
   {
     question: 'What if a student is under 18 when arriving in Malaysia after O-Levels?',
@@ -199,7 +201,7 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
             <figcaption className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-white/95 px-4 py-2.5 text-[13px] font-semibold text-petrol-800 backdrop-blur-sm">
               <span>Direct MQA Foundation (5 Credits) &amp; Diploma (3 Credits)</span>
               <span className="rounded-full bg-lime-pale px-2.5 py-0.5 text-[12px] text-lime-deep">
-                1 MYR ≈ 27 BDT assumption
+                1 MYR ≈ 30.20 BDT (Nov 2026)
               </span>
             </figcaption>
           </figure>
@@ -221,6 +223,15 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
         <LivingCostSeparationNotice
           summary="All academic comparisons on this page keep Tuition & Exam Fees strictly separate from Monthly Living Expenses (housing, food, local transit). That lets parents compare real educational investment cleanly against Bangladesh A-Level school or coaching costs."
         />
+        <div className="mt-8">
+          <MalaysiaOLevelInteractivePlanner />
+        </div>
+        <div className="mt-6">
+          <BookletDownloadBanner
+            tone="white"
+            contextNote="Want a printed copy for your family? Download our 10-page September 2027 Malaysia & China O-Level/A-Level Pathway Booklet with QS World 2027 rankings and full EMGS/X1 timelines."
+          />
+        </div>
       </Section>
 
       <WinningAdvantageGrid
@@ -339,9 +350,9 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
                 Living expenses are kept completely outside tuition totals so families can plan realistically by campus city and housing type:
               </p>
               <ul className="mt-4 space-y-2 text-[14.5px] leading-6 text-ink-soft">
-                <li>• <strong className="text-petrol-800">Student Housing / Hostel:</strong> RM 500 – RM 900 / month (~BDT 13,500 – 24,300)</li>
-                <li>• <strong className="text-petrol-800">Halal Meals, Transit &amp; Personal:</strong> RM 700 – RM 1,100 / month (~BDT 18,900 – 29,700)</li>
-                <li>• <strong className="text-petrol-800">Combined Living Reference:</strong> RM 1,200 – RM 2,000 / month (~BDT 32,400 – 54,000/mo)</li>
+                <li>• <strong className="text-petrol-800">Student Housing / Hostel:</strong> RM 500 – RM 900 / month (~BDT 15,100 – 27,200)</li>
+                <li>• <strong className="text-petrol-800">Halal Meals, Transit &amp; Personal:</strong> RM 700 – RM 1,100 / month (~BDT 21,100 – 33,200)</li>
+                <li>• <strong className="text-petrol-800">Combined Living Reference:</strong> RM 1,200 – RM 2,000 / month (~BDT 36,200 – 60,400/mo)</li>
               </ul>
             </div>
 
@@ -493,12 +504,12 @@ export default async function StudyInMalaysiaAfterOLevelPage() {
         tone={governanceTone}
         authorName="Mukta Rahaman"
         authorRole="Senior Consultant (Education Fit & Cost Planning)"
-        lastVerified="21 November 2026"
-        nextReview="21 February 2027"
+        lastVerified="25 November 2026"
+        nextReview="25 February 2027"
         whatMayChange={[
           'British Council Bangladesh CAIE/Edexcel per-subject and per-unit exam fees adjust per exam series and VAT/FX updates.',
           'Malaysian university tuition schedules and entrance merit discounts update per intake (February, May/July, September).',
-          'MYR-to-BDT conversion fluctuates with Bangladesh Bank Authorised Dealer TT selling rates (1 MYR ≈ 27 BDT is an illustrative reference).',
+          'MYR-to-BDT conversion fluctuates with Bangladesh Bank Authorised Dealer TT selling rates (1 MYR ≈ 30.20 BDT is our Nov 2026 illustrative reference).',
           'EMGS visa processing fees and mandatory annual medical insurance rates are governed by Malaysian authorities.',
         ]}
         sources={MALAYSIA_O_LEVEL_SOURCES}
