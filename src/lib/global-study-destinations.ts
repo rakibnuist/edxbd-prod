@@ -363,7 +363,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     region: 'Europe',
     serviceStatus: 'Active',
     tier: 'Wave 2 Active',
-    href: '/destinations/cyprus',
+    href: '/study-in-cyprus-from-bangladesh',
     currency: 'EUR',
     intakes: 'February & September/October',
     indicativeTuition: 'EUR 5,000 – 10,000 / year (Republic of Cyprus EU-accredited degrees; Medicine higher)',

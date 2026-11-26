@@ -55,7 +55,7 @@ const routePaths: Record<string, string> = {
   finland: '/study-in-finland-from-bangladesh',
   malta: '/study-in-malta-from-bangladesh',
   uk: '/study-in-uk-from-bangladesh',
-  cyprus: '/destinations/cyprus',
+  cyprus: '/study-in-cyprus-from-bangladesh',
 };
 
 type Screen = 'priority' | 'profile' | 'limits' | 'signal' | 'contact' | 'done';

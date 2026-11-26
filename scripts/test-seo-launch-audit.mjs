@@ -491,7 +491,7 @@ test('Step 16 built HTML checks — bn visa SERP bounds, homepage WebPage schema
     'study-in-hungary-from-bangladesh',
     'study-in-finland-from-bangladesh',
     'study-in-malta-from-bangladesh',
-    'destinations/cyprus',
+    'study-in-cyprus-from-bangladesh',
     'destinations/croatia',
     'destinations/georgia',
     'destinations/greece',
