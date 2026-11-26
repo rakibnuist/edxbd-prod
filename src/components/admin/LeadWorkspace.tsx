@@ -674,7 +674,7 @@ export default function LeadWorkspace({
       </div>
 
       {/* Summary KPI Bar */}
-      <dl className="grid grid-cols-2 gap-y-5 rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm sm:grid-cols-5 sm:divide-x sm:divide-gray-200">
+      <dl className="grid grid-cols-2 gap-2.5 rounded-xl border border-slate-200/80 bg-white p-3.5 shadow-sm sm:grid-cols-5 sm:gap-y-5 sm:p-4 sm:divide-x sm:divide-gray-200">
         {[
           ['Total enquiries', counts.all],
           ['New enquiries', counts.new],
@@ -682,7 +682,7 @@ export default function LeadWorkspace({
           ['No Response', counts.no_response],
           ['In progress', counts.in_progress],
         ].map(([label, value], index) => (
-          <div key={label} className={index ? 'sm:px-5' : 'sm:pr-5'}>
+          <div key={label} className={`${index === 4 ? 'col-span-2 sm:col-span-1' : ''} ${index ? 'sm:px-5' : 'sm:pr-5'}`}>
             <dt className="text-xs font-medium text-gray-500">{label}</dt>
             <dd className={`mt-1 text-2xl font-bold tabular-nums ${label === 'Follow-ups' && value ? 'text-amber-700' : label === 'New enquiries' && value ? 'text-[#12436b]' : 'text-slate-900'}`}>
               {loading && !leads.length ? '—' : value}
@@ -693,12 +693,12 @@ export default function LeadWorkspace({
 
       <div>
         {/* Queue Tabs */}
-        <div aria-label="Lead queues" className="flex gap-6 overflow-x-auto border-b border-gray-200">
+        <div aria-label="Lead queues" className="-mx-3.5 flex gap-4 overflow-x-auto border-b border-gray-200 px-3.5 sm:mx-0 sm:gap-6 sm:px-0">
           {queues.map((item) => (
             <button
               key={item.id}
               aria-pressed={queue === item.id}
-              className={`flex min-h-11 shrink-0 items-center gap-2 border-b-2 px-0 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#12436b] ${
+              className={`flex min-h-11 shrink-0 items-center gap-2 border-b-2 px-1 text-xs sm:text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#12436b] ${
                 queue === item.id
                   ? 'border-[#12436b] font-semibold text-gray-900'
                   : 'border-transparent text-gray-600 hover:text-gray-900'
@@ -718,8 +718,8 @@ export default function LeadWorkspace({
         </div>
 
         {/* Quick Priority Filter Pills */}
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Quick focus:</span>
+        <div className="-mx-3.5 mt-3 flex items-center gap-1.5 overflow-x-auto px-3.5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0 sm:pb-0">
+          <span className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-slate-400">Quick focus:</span>
           {[
             { id: 'all' as LeadQuickPreset, label: 'All Enquiries', icon: null },
             { id: 'followup_due' as LeadQuickPreset, label: 'Follow-ups Due Today', icon: CalendarClock },
@@ -738,7 +738,7 @@ export default function LeadWorkspace({
                   setQuickPreset(preset.id);
                   setPage(1);
                 }}
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold transition ${
                   active
                     ? 'border-[#0f3a5c] bg-[#0f3a5c] text-white'
                     : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
@@ -1268,7 +1268,7 @@ export default function LeadWorkspace({
           open
           onCancel={() => setSchedulingLead(null)}
           aria-labelledby="quick-followup-modal-title"
-          className="fixed inset-0 z-50 m-auto max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl backdrop:bg-black/40"
+          className="fixed inset-0 z-50 m-auto max-h-[92vh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl backdrop:bg-black/50 sm:p-6"
         >
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2.5">

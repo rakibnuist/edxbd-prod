@@ -77,7 +77,13 @@ function isFinanceRoute(pathname: string): boolean {
   return pathname === '/admin/finance' || pathname.startsWith('/admin/finance/');
 }
 
-function AdminHeader({ activeName }: { activeName: string }) {
+function AdminHeader({
+  activeName,
+  onOpenSidebar,
+}: {
+  activeName: string;
+  onOpenSidebar: () => void;
+}) {
   const { user } = useAuth();
   const isCounselor = user?.role === 'counselor';
   const isOpsAdmin = user?.role === 'operations_admin';
@@ -100,37 +106,61 @@ function AdminHeader({ activeName }: { activeName: string }) {
       : 'bg-blue-100 text-blue-800';
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 py-3 backdrop-blur lg:px-6 print:hidden">
-      <div className="flex items-center gap-3">
-        <span className="text-xs font-semibold text-slate-400">
-          {isCounselor ? 'EduExpress Counselor Desk' : 'EduExpress Admin'}
-        </span>
-        <span className="text-slate-300">/</span>
-        <span className="text-sm font-bold text-slate-900">{activeName}</span>
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200/80 bg-white/95 px-3 py-2.5 sm:px-4 sm:py-3 backdrop-blur lg:px-6 print:hidden">
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Mobile Hamburger Drawer Trigger */}
+        <button
+          type="button"
+          onClick={onOpenSidebar}
+          aria-label="Open navigation drawer"
+          className="inline-flex size-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900 lg:hidden"
+        >
+          <Menu size={18} />
+        </button>
+
+        {/* Mobile Brand Mark */}
+        <Link href="/admin" className="flex items-center gap-1.5 lg:hidden">
+          <span className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-amber-400 to-amber-500 font-heading text-[11px] font-bold text-slate-950 shadow-xs">
+            EE
+          </span>
+        </Link>
+
+        {/* Breadcrumb / Current Route Title */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="hidden text-xs font-semibold text-slate-400 sm:inline">
+            {isCounselor ? 'Counselor Desk' : 'EduExpress Admin'}
+          </span>
+          <span className="hidden text-slate-300 sm:inline">/</span>
+          <h1 className="max-w-[130px] truncate text-sm font-bold text-slate-900 xs:max-w-[200px] sm:max-w-none sm:text-base">
+            {activeName}
+          </h1>
+        </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        {/* Dhaka Desk Live Indicator */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Dhaka Desk Live Indicator (Medium+ Screens) */}
         {!isCounselor && (
           <Link
             href="/admin/settings#lead-flow"
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-800 hover:bg-emerald-100"
+            className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-800 hover:bg-emerald-100"
           >
             <span className="relative flex size-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
             </span>
-            Dhaka GMT+6 · Flow Control
+            Dhaka GMT+6
           </Link>
         )}
 
-        {/* Live Hot-Lead & Portal Alerts Bell */}
+        {/* Live Alerts Bell */}
         <LiveAlertsBell />
 
-        {/* User Role Tag */}
-        <div className="hidden md:flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs">
+        {/* User Role Tag (Large Screens) */}
+        <div className="hidden lg:flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs">
           <span className={`size-2 rounded-full ${roleDotClass}`} />
-          <span className="font-semibold text-slate-700">{user?.email || 'admin@eduexpressint.com'}</span>
+          <span className="max-w-[150px] truncate font-semibold text-slate-700">
+            {user?.email || 'admin@eduexpressint.com'}
+          </span>
           <span className={`rounded px-1.5 py-0.5 text-[10px] font-extrabold ${rolePillClass}`}>
             {roleBadgeLabel}
           </span>
@@ -141,13 +171,94 @@ function AdminHeader({ activeName }: { activeName: string }) {
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-[#0f3a5c] shadow-sm transition hover:bg-slate-50"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-bold text-[#0f3a5c] shadow-xs transition hover:bg-slate-50"
+          title="Open live website in new tab"
         >
-          <span>View site</span>
+          <span className="hidden sm:inline">View site</span>
           <ExternalLink size={13} />
         </Link>
       </div>
     </header>
+  );
+}
+
+function MobileBottomNav({
+  isCounselor,
+  canSeeFinance,
+  pathname,
+  onOpenSidebar,
+}: {
+  isCounselor: boolean;
+  canSeeFinance: boolean;
+  pathname: string;
+  onOpenSidebar: () => void;
+}) {
+  const items = isCounselor
+    ? [
+        { label: 'Leads', href: '/admin/leads', icon: Users2 },
+        { label: 'Tracker', href: '/admin/applications', icon: FolderKanban },
+        { label: 'Attendance', href: '/admin/kpi', icon: Activity },
+        { label: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+      ]
+    : [
+        { label: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+        { label: 'Leads', href: '/admin/leads', icon: Users2 },
+        { label: 'Tracker', href: '/admin/applications', icon: FolderKanban },
+        canSeeFinance
+          ? { label: 'Finance', href: '/admin/finance', icon: Landmark }
+          : { label: 'Attendance', href: '/admin/kpi', icon: Activity },
+      ];
+
+  const isItemActive = (href: string, exact?: boolean) =>
+    exact ? pathname === href : pathname === href || pathname.startsWith(href + '/');
+
+  return (
+    <nav
+      aria-label="Mobile navigation"
+      className="fixed bottom-0 left-0 right-0 z-40 flex items-stretch justify-around border-t border-slate-200/90 bg-white/95 px-1 py-1 backdrop-blur-md shadow-[0_-4px_16px_rgba(0,0,0,0.06)] lg:hidden print:hidden"
+      style={{ paddingBottom: 'calc(0.35rem + env(safe-area-inset-bottom, 0px))' }}
+    >
+      {items.map((it) => {
+        const Icon = it.icon;
+        const active = isItemActive(it.href, it.exact);
+        return (
+          <Link
+            key={it.label}
+            href={it.href}
+            className={`flex flex-1 flex-col items-center justify-center py-1 transition-colors ${
+              active ? 'text-[#0f3a5c]' : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <div
+              className={`relative flex size-8 items-center justify-center rounded-xl transition ${
+                active ? 'bg-blue-50 text-[#0f3a5c]' : 'text-slate-500'
+              }`}
+            >
+              <Icon size={19} className={active ? 'stroke-[2.2]' : 'stroke-[1.8]'} />
+            </div>
+            <span
+              className={`text-[10px] tracking-tight ${
+                active ? 'font-bold text-[#0f3a5c]' : 'font-medium text-slate-500'
+              }`}
+            >
+              {it.label}
+            </span>
+          </Link>
+        );
+      })}
+
+      {/* Menu / Drawer button */}
+      <button
+        type="button"
+        onClick={onOpenSidebar}
+        className="flex flex-1 flex-col items-center justify-center py-1 text-slate-500 hover:text-slate-800 transition-colors"
+      >
+        <div className="flex size-8 items-center justify-center rounded-xl text-slate-500">
+          <Menu size={19} className="stroke-[1.8]" />
+        </div>
+        <span className="text-[10px] font-medium text-slate-500">More</span>
+      </button>
+    </nav>
   );
 }
 
@@ -242,13 +353,17 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 
             {/* Sidebar */}
             <aside
-              className={`fixed inset-y-0 left-0 z-50 flex w-60 flex-col bg-[#081c2e] text-white shadow-xl transition-transform duration-300 lg:static lg:translate-x-0 print:hidden ${
+              className={`fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-[#081c2e] text-white shadow-2xl transition-transform duration-300 lg:w-60 lg:static lg:translate-x-0 print:hidden ${
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full'
               }`}
             >
               {/* Brand Header */}
               <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-                <Link href="/admin" className="flex items-center gap-2.5">
+                <Link
+                  href="/admin"
+                  onClick={() => setSidebarOpen(false)}
+                  className="flex items-center gap-2.5"
+                >
                   <div className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 font-heading text-sm font-bold text-slate-950 shadow-sm">
                     EE
                   </div>
@@ -258,12 +373,30 @@ function AdminShell({ children }: { children: React.ReactNode }) {
                   </div>
                 </Link>
                 <button
-                  aria-label="Close menu"
+                  type="button"
+                  aria-label="Close navigation menu"
                   onClick={() => setSidebarOpen(false)}
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
+                  className="inline-flex size-9 items-center justify-center rounded-lg text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
                 >
-                  <X size={18} />
+                  <X size={20} />
                 </button>
+              </div>
+
+              {/* Mobile User Profile Header inside Drawer */}
+              <div className="mx-3 mt-3 rounded-xl border border-white/10 bg-white/5 p-3 lg:hidden">
+                <div className="flex items-center gap-2.5">
+                  <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-blue-600/30 text-xs font-bold text-blue-200">
+                    {user?.name ? user.name.slice(0, 2).toUpperCase() : 'EE'}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-xs font-bold text-white">
+                      {user?.name || user?.email || 'EduExpress Staff'}
+                    </p>
+                    <p className="truncate text-[10px] text-slate-400">
+                      {user?.role === 'counselor' ? 'Counselor Desk' : user?.role || 'Admin'}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Navigation Links */}
@@ -312,23 +445,12 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 
             {/* Main Area */}
             <div className="flex flex-1 flex-col overflow-hidden print:block print:overflow-visible">
-              <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-2.5 lg:hidden print:hidden">
-                <button
-                  onClick={() => setSidebarOpen(true)}
-                  className="rounded-lg p-2 text-slate-600 hover:bg-slate-100"
-                  aria-label="Open navigation menu"
-                >
-                  <Menu size={20} />
-                </button>
-                <span className="font-heading text-sm font-bold text-[#0f3a5c]">EduExpress Admin</span>
-                <Link href="/" className="text-xs font-semibold text-blue-700">
-                  Site ↗
-                </Link>
-              </div>
+              <AdminHeader
+                activeName={activeItem?.name ?? 'Admin'}
+                onOpenSidebar={() => setSidebarOpen(true)}
+              />
 
-              <AdminHeader activeName={activeItem?.name ?? 'Admin'} />
-
-              <main className="min-w-0 flex-1 overflow-auto bg-slate-50/70 p-4 sm:p-6 lg:p-8 print:overflow-visible print:bg-white print:p-0">
+              <main className="min-w-0 flex-1 overflow-auto bg-slate-50/70 p-3 pb-24 sm:p-6 sm:pb-6 lg:p-8 lg:pb-8 print:overflow-visible print:bg-white print:p-0">
                 {routeAllowed ? (
                   children
                 ) : blockedFinance && !isCounselor ? (
@@ -375,6 +497,14 @@ function AdminShell({ children }: { children: React.ReactNode }) {
                   </div>
                 )}
               </main>
+
+              {/* Mobile Bottom Navigation Dock */}
+              <MobileBottomNav
+                isCounselor={isCounselor}
+                canSeeFinance={canSeeFinance}
+                pathname={pathname}
+                onOpenSidebar={() => setSidebarOpen(true)}
+              />
             </div>
           </div>
         </div>

@@ -1391,7 +1391,7 @@ function RemoteOfficePulseSection({
         </div>
 
         <div className="overflow-x-auto rounded-2xl border border-slate-200">
-          <table className="min-w-full divide-y divide-slate-200 text-left text-xs">
+          <table className="w-full min-w-[640px] divide-y divide-slate-200 text-left text-xs">
             <thead className="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
               <tr>
                 <th className="px-4 py-3">Staff</th>

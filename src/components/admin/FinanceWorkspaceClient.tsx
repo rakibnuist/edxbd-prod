@@ -1193,7 +1193,7 @@ export default function FinanceWorkspaceClient() {
       </section>
 
       {/* ────────────────── INSTITUTIONAL UNDERLINE TAB BAR ────────────────── */}
-      <div className="border-b border-slate-200 print:hidden">
+      <div className="-mx-3.5 border-b border-slate-200 px-3.5 sm:mx-0 sm:px-0 print:hidden">
         <nav className="-mb-px flex gap-1 overflow-x-auto" aria-label="Finance sections">
           {TABS.map((item) => {
             const Icon = item.icon;
@@ -1824,7 +1824,7 @@ export default function FinanceWorkspaceClient() {
 
               <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
+                  <table className="w-full min-w-[720px] text-xs">
                     <thead className="border-b border-slate-200 bg-slate-50/90 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
                         <th className="px-4 py-3 text-left">Date</th>
@@ -2014,7 +2014,7 @@ export default function FinanceWorkspaceClient() {
 
               <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
+                  <table className="w-full min-w-[720px] text-xs">
                     <thead className="border-b border-slate-200 bg-slate-50/90 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
                         <th className="px-4 py-3 text-left">Date</th>
@@ -2240,7 +2240,7 @@ export default function FinanceWorkspaceClient() {
 
               <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
+                  <table className="w-full min-w-[720px] text-xs">
                     <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
                         <th className="px-4 py-3 text-left">Date</th>
@@ -2374,7 +2374,7 @@ export default function FinanceWorkspaceClient() {
 
               <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
+                  <table className="w-full min-w-[720px] text-xs">
                     <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
                         <th className="px-5 py-3 text-left">Month</th>
@@ -2553,7 +2553,7 @@ export default function FinanceWorkspaceClient() {
                   </span>
                 </div>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
+                  <table className="w-full min-w-[720px] text-xs">
                     <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
                         <th className="px-5 py-3 text-left">Date</th>
@@ -2690,7 +2690,7 @@ export default function FinanceWorkspaceClient() {
                   </button>
                 </div>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
+                  <table className="w-full min-w-[720px] text-xs">
                     <thead className="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       <tr>
                         <th className="px-4 py-3 text-left">Employee</th>

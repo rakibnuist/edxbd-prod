@@ -583,7 +583,7 @@ export default function KpiWorkflowClient() {
               <p className="text-xs text-slate-500">Click any row to open Deep Workflow Trace & Activity Timeline.</p>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+              <table className="w-full min-w-[700px] text-left text-xs">
                 <thead className="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
                   <tr>
                     <th className="px-4 py-3">Employee</th>
