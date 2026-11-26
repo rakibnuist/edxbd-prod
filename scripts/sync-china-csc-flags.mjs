@@ -12,24 +12,24 @@ import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-const AUDIT_PATH = path.join(process.cwd(), 'data/research/china-csc-306-gap-audit.json');
+const ROSTER_PATH = path.join(process.cwd(), 'data/research/china-csc-306-roster.json');
 
 async function main() {
-  if (!fs.existsSync(AUDIT_PATH)) {
-    console.warn(`CSC audit snapshot not found at ${AUDIT_PATH}; skipping CSC flag sync.`);
+  if (!fs.existsSync(ROSTER_PATH)) {
+    console.warn(`CSC 306 roster manifest not found at ${ROSTER_PATH}; skipping CSC flag sync.`);
     return;
   }
 
-  const audit = JSON.parse(fs.readFileSync(AUDIT_PATH, 'utf8'));
-  const matched = Array.isArray(audit.matched) ? audit.matched : [];
-  if (matched.length === 0) {
-    console.warn('CSC audit snapshot has no matched entries; skipping.');
+  const roster = JSON.parse(fs.readFileSync(ROSTER_PATH, 'utf8'));
+  const entries = Array.isArray(roster.universities) ? roster.universities : [];
+  if (entries.length === 0) {
+    console.warn('CSC 306 roster manifest has no entries; skipping.');
     return;
   }
 
   const existingChina = await prisma.university.findMany({
     where: { country: 'China' },
-    select: { id: true, slug: true, isCscDesignated: true, chineseName: true },
+    select: { id: true, slug: true, isCscDesignated: true, chineseName: true, cscAgencyNumber: true },
   });
   const bySlug = new Map(existingChina.map((u) => [u.slug, u]));
 
@@ -37,8 +37,8 @@ async function main() {
   let alreadySynced = 0;
   let missing = 0;
 
-  for (const row of matched) {
-    const slug = typeof row.matchedSlug === 'string' ? row.matchedSlug.trim() : '';
+  for (const row of entries) {
+    const slug = typeof row.slug === 'string' ? row.slug.trim() : '';
     if (!slug) continue;
     const uni = bySlug.get(slug);
     if (!uni) {
@@ -46,8 +46,12 @@ async function main() {
       continue;
     }
 
-    const nextChineseName = uni.chineseName || (typeof row.cscCnName === 'string' ? row.cscCnName.trim() : null);
-    const needsUpdate = !uni.isCscDesignated || (nextChineseName && nextChineseName !== uni.chineseName);
+    const nextChineseName = uni.chineseName || (typeof row.chineseName === 'string' ? row.chineseName.trim() : null);
+    const nextAgency = uni.cscAgencyNumber || (typeof row.cscAgencyNumber === 'string' ? row.cscAgencyNumber.trim() : null);
+    const needsUpdate =
+      !uni.isCscDesignated ||
+      (nextChineseName && nextChineseName !== uni.chineseName) ||
+      (nextAgency && nextAgency !== uni.cscAgencyNumber);
 
     if (!needsUpdate) {
       alreadySynced += 1;
@@ -59,6 +63,7 @@ async function main() {
       data: {
         isCscDesignated: true,
         ...(nextChineseName ? { chineseName: nextChineseName } : {}),
+        ...(nextAgency ? { cscAgencyNumber: nextAgency } : {}),
       },
     });
     updated += 1;

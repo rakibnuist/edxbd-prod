@@ -1,0 +1,1842 @@
+{
+  "generatedAtIso": "2026-11-26T00:34:58.548Z",
+  "count": 306,
+  "universities": [
+    {
+      "slug": "anhui-agricultural-university",
+      "name": "Anhui Agricultural University",
+      "chineseName": "安徽农业大学",
+      "cscAgencyNumber": "10364"
+    },
+    {
+      "slug": "anhui-medical-university",
+      "name": "Anhui Medical University",
+      "chineseName": "安徽医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "anhui-normal-university",
+      "name": "Anhui Normal University",
+      "chineseName": "安徽师范大学",
+      "cscAgencyNumber": "10370"
+    },
+    {
+      "slug": "anhui-university",
+      "name": "Anhui University",
+      "chineseName": "安徽大学",
+      "cscAgencyNumber": "10357"
+    },
+    {
+      "slug": "anshan-normal-university",
+      "name": "Anshan Normal University",
+      "chineseName": "鞍山师范学院",
+      "cscAgencyNumber": "10169"
+    },
+    {
+      "slug": "beihang-university",
+      "name": "Beihang University",
+      "chineseName": "北京航空航天大学",
+      "cscAgencyNumber": "10006"
+    },
+    {
+      "slug": "beihua-university",
+      "name": "Beihua University",
+      "chineseName": "北华大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "beijing-film-academy",
+      "name": "Beijing Film Academy",
+      "chineseName": "北京电影学院",
+      "cscAgencyNumber": "10050"
+    },
+    {
+      "slug": "beijing-foreign-studies-university",
+      "name": "Beijing Foreign Studies University",
+      "chineseName": "北京外国语大学",
+      "cscAgencyNumber": "10030"
+    },
+    {
+      "slug": "beijing-forestry-university",
+      "name": "Beijing Forestry University",
+      "chineseName": "北京林业大学",
+      "cscAgencyNumber": "10022"
+    },
+    {
+      "slug": "beijing-institute-of-technology",
+      "name": "Beijing Institute of Technology",
+      "chineseName": "北京理工大学",
+      "cscAgencyNumber": "10007"
+    },
+    {
+      "slug": "beijing-international-studies-university",
+      "name": "Beijing International Studies University",
+      "chineseName": "北京第二外国语学院",
+      "cscAgencyNumber": "10031"
+    },
+    {
+      "slug": "beijing-jiaotong-university",
+      "name": "Beijing Jiaotong University",
+      "chineseName": "北京交通大学",
+      "cscAgencyNumber": "10004"
+    },
+    {
+      "slug": "beijing-language-and-culture-university",
+      "name": "Beijing Language and Culture University",
+      "chineseName": "北京语言大学",
+      "cscAgencyNumber": "10032"
+    },
+    {
+      "slug": "beijing-normal-university",
+      "name": "Beijing Normal University",
+      "chineseName": "北京师范大学",
+      "cscAgencyNumber": "10027"
+    },
+    {
+      "slug": "beijing-sport-university",
+      "name": "Beijing Sport University",
+      "chineseName": "北京体育大学",
+      "cscAgencyNumber": "10043"
+    },
+    {
+      "slug": "beijing-technology-and-business-university",
+      "name": "Beijing Technology and Business University",
+      "chineseName": "北京工商大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "beijing-university-of-chemical-technology",
+      "name": "Beijing University of Chemical Technology",
+      "chineseName": "北京化工大学",
+      "cscAgencyNumber": "10010"
+    },
+    {
+      "slug": "beijing-university-of-chinese-medicine",
+      "name": "Beijing University of Chinese Medicine",
+      "chineseName": "北京中医药大学",
+      "cscAgencyNumber": "10026"
+    },
+    {
+      "slug": "beijing-university-of-posts-and-telecommunications",
+      "name": "Beijing University of Posts and Telecommunications",
+      "chineseName": "北京邮电大学",
+      "cscAgencyNumber": "10013"
+    },
+    {
+      "slug": "beijing-university-of-technology",
+      "name": "Beijing University of Technology",
+      "chineseName": "北京工业大学",
+      "cscAgencyNumber": "10005"
+    },
+    {
+      "slug": "bohai-university",
+      "name": "Bohai University",
+      "chineseName": "渤海大学",
+      "cscAgencyNumber": "10167"
+    },
+    {
+      "slug": "capital-medical-university",
+      "name": "Capital Medical University",
+      "chineseName": "首都医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "capital-normal-university",
+      "name": "Capital Normal University",
+      "chineseName": "首都师范大学",
+      "cscAgencyNumber": "10028"
+    },
+    {
+      "slug": "capital-university-of-economics-and-business",
+      "name": "Capital University of Economics and Business",
+      "chineseName": "首都经济贸易大学",
+      "cscAgencyNumber": "10038"
+    },
+    {
+      "slug": "capital-university-of-physical-education-and-sports",
+      "name": "Capital University of Physical Education and Sports",
+      "chineseName": "首都体育学院",
+      "cscAgencyNumber": "10029"
+    },
+    {
+      "slug": "central-academy-of-drama",
+      "name": "The Central Academy of Drama",
+      "chineseName": "中央戏剧学院",
+      "cscAgencyNumber": "10048"
+    },
+    {
+      "slug": "central-academy-of-fine-arts",
+      "name": "Central Academy of Fine Arts",
+      "chineseName": "中央美术学院",
+      "cscAgencyNumber": "10047"
+    },
+    {
+      "slug": "central-china-normal-university",
+      "name": "Central China Normal University",
+      "chineseName": "华中师范大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "central-conservatory-of-music",
+      "name": "Central Conservatory of Music",
+      "chineseName": "中央音乐学院",
+      "cscAgencyNumber": "10045"
+    },
+    {
+      "slug": "central-south-university",
+      "name": "Central South University",
+      "chineseName": "中南大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "central-university-of-finance-and-economics",
+      "name": "Central University of Finance and Economics",
+      "chineseName": "中央财经大学",
+      "cscAgencyNumber": "10034"
+    },
+    {
+      "slug": "chang-an-university",
+      "name": "Chang'an University",
+      "chineseName": "长安大学",
+      "cscAgencyNumber": "10710"
+    },
+    {
+      "slug": "changchun-university",
+      "name": "Changchun University",
+      "chineseName": "长春大学",
+      "cscAgencyNumber": "11726"
+    },
+    {
+      "slug": "changchun-university-of-chinese-medicine",
+      "name": "Changchun University of Chinese Medicine",
+      "chineseName": "长春中医药大学",
+      "cscAgencyNumber": "10199"
+    },
+    {
+      "slug": "changchun-university-of-science-and-technology",
+      "name": "Changchun University of Science and Technology",
+      "chineseName": "长春理工大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "changsha-university-of-science-and-technology",
+      "name": "Changsha University of Science and Technology",
+      "chineseName": "长沙理工大学",
+      "cscAgencyNumber": "10536"
+    },
+    {
+      "slug": "chengdu-university-of-technology",
+      "name": "Chengdu University of Technology",
+      "chineseName": "成都理工大学",
+      "cscAgencyNumber": "10616"
+    },
+    {
+      "slug": "chengdu-university-of-traditional-chinese-medicine",
+      "name": "Chengdu University of Traditional Chinese Medicine",
+      "chineseName": "成都中医药大学",
+      "cscAgencyNumber": "10633"
+    },
+    {
+      "slug": "china-academy-of-art",
+      "name": "China Academy of Art",
+      "chineseName": "中国美术学院",
+      "cscAgencyNumber": "10355"
+    },
+    {
+      "slug": "china-agricultural-university",
+      "name": "China Agricultural University",
+      "chineseName": "中国农业大学",
+      "cscAgencyNumber": "10019"
+    },
+    {
+      "slug": "china-conservatory-of-music",
+      "name": "China Conservatory of Music",
+      "chineseName": "中国音乐学院",
+      "cscAgencyNumber": "10046"
+    },
+    {
+      "slug": "china-foreign-affairs-university",
+      "name": "China Foreign Affairs University",
+      "chineseName": "外交学院",
+      "cscAgencyNumber": "10040"
+    },
+    {
+      "slug": "china-medical-university",
+      "name": "China Medical University",
+      "chineseName": "中国医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "china-university-of-geosciences",
+      "name": "China University of Geosciences",
+      "chineseName": "中国地质大学（武汉）",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "china-university-of-geosciences-beijing",
+      "name": "China University of Geosciences, Beijing",
+      "chineseName": "中国地质大学（北京）",
+      "cscAgencyNumber": "11415"
+    },
+    {
+      "slug": "china-university-of-mining-and-technology-beijing",
+      "name": "China University of Mining and Technology, Beijing",
+      "chineseName": "中国矿业大学（北京）",
+      "cscAgencyNumber": "11413"
+    },
+    {
+      "slug": "china-university-of-petroleum-east-china",
+      "name": "China University of Petroleum, East China",
+      "chineseName": "中国石油大学（华东）",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "china-university-of-political-science-and-law",
+      "name": "China University of Political Science and Law",
+      "chineseName": "中国政法大学",
+      "cscAgencyNumber": "10053"
+    },
+    {
+      "slug": "china-youth-university-of-political-studies",
+      "name": "China Youth University of Political Studies",
+      "chineseName": "中国青年政治学院",
+      "cscAgencyNumber": "11625"
+    },
+    {
+      "slug": "chongqing-jiaotong-university",
+      "name": "Chongqing Jiaotong University",
+      "chineseName": "重庆交通大学",
+      "cscAgencyNumber": "10618"
+    },
+    {
+      "slug": "chongqing-medical-university",
+      "name": "Chongqing Medical University",
+      "chineseName": "重庆医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "chongqing-normal-university",
+      "name": "Chongqing Normal University",
+      "chineseName": "重庆师范大学",
+      "cscAgencyNumber": "10637"
+    },
+    {
+      "slug": "chongqing-university",
+      "name": "Chongqing University",
+      "chineseName": "重庆大学",
+      "cscAgencyNumber": "10611"
+    },
+    {
+      "slug": "chongqing-university-of-posts-and-telecommunications",
+      "name": "Chongqing University of Posts and Telecommunications",
+      "chineseName": "重庆邮电大学",
+      "cscAgencyNumber": "10617"
+    },
+    {
+      "slug": "communication-university-of-china",
+      "name": "Communication University of China",
+      "chineseName": "中国传媒大学",
+      "cscAgencyNumber": "10033"
+    },
+    {
+      "slug": "cpu",
+      "name": "China Pharmaceutical University",
+      "chineseName": "中国药科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "ctgu",
+      "name": "China Three Gorges University",
+      "chineseName": "三峡大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "cumt",
+      "name": "China University of Mining and Technology",
+      "chineseName": "中国矿业大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "cupb",
+      "name": "China University of Petroleum, Beijing",
+      "chineseName": "中国石油大学（北京）",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "dali-university",
+      "name": "Dali University",
+      "chineseName": "大理大学",
+      "cscAgencyNumber": "10679"
+    },
+    {
+      "slug": "dalian-jiaotong-university",
+      "name": "Dalian Jiaotong University",
+      "chineseName": "大连交通大学",
+      "cscAgencyNumber": "10150"
+    },
+    {
+      "slug": "dalian-maritime-university",
+      "name": "Dalian Maritime University",
+      "chineseName": "大连海事大学",
+      "cscAgencyNumber": "10151"
+    },
+    {
+      "slug": "dalian-medical-university",
+      "name": "Dalian Medical University",
+      "chineseName": "大连医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "dalian-polytechnic-university",
+      "name": "Dalian Polytechnic University",
+      "chineseName": "大连工业大学",
+      "cscAgencyNumber": "10152"
+    },
+    {
+      "slug": "dalian-university-of-foreign-languages",
+      "name": "Dalian University of Foreign Languages",
+      "chineseName": "大连外国语大学",
+      "cscAgencyNumber": "10172"
+    },
+    {
+      "slug": "dalian-university-of-technology",
+      "name": "Dalian University of Technology",
+      "chineseName": "大连理工大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "dongbei-university-of-finance-and-economics",
+      "name": "Dongbei University of Finance and Economics",
+      "chineseName": "东北财经大学",
+      "cscAgencyNumber": "10173"
+    },
+    {
+      "slug": "donghua-university",
+      "name": "Donghua University",
+      "chineseName": "东华大学",
+      "cscAgencyNumber": "10255"
+    },
+    {
+      "slug": "east-china-normal-university",
+      "name": "East China Normal University",
+      "chineseName": "华东师范大学",
+      "cscAgencyNumber": "10269"
+    },
+    {
+      "slug": "east-china-university-of-political-science-and-law",
+      "name": "East China University of Political Science and Law",
+      "chineseName": "华东政法大学",
+      "cscAgencyNumber": "10276"
+    },
+    {
+      "slug": "east-china-university-of-science-and-technology",
+      "name": "East China University of Science and Technology",
+      "chineseName": "华东理工大学",
+      "cscAgencyNumber": "10251"
+    },
+    {
+      "slug": "fudan-university",
+      "name": "Fudan University",
+      "chineseName": "复旦大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "fujian-agriculture-and-forestry-university",
+      "name": "Fujian Agriculture and Forestry University",
+      "chineseName": "福建农林大学",
+      "cscAgencyNumber": "10389"
+    },
+    {
+      "slug": "fujian-medical-university",
+      "name": "Fujian Medical University",
+      "chineseName": "福建医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "fujian-normal-university",
+      "name": "Fujian Normal University",
+      "chineseName": "福建师范大学",
+      "cscAgencyNumber": "10394"
+    },
+    {
+      "slug": "fujian-police-college",
+      "name": "Fujian Police College",
+      "chineseName": "福建警察学院",
+      "cscAgencyNumber": "11495"
+    },
+    {
+      "slug": "fujian-university-of-technology",
+      "name": "Fujian University of Technology",
+      "chineseName": "福建理工大学",
+      "cscAgencyNumber": "10388"
+    },
+    {
+      "slug": "fuzhou-university",
+      "name": "Fuzhou University",
+      "chineseName": "福州大学",
+      "cscAgencyNumber": "10386"
+    },
+    {
+      "slug": "gannan-normal-university",
+      "name": "Gannan Normal University",
+      "chineseName": "赣南师范大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "gansu-university-of-chinese-medicine",
+      "name": "Gansu University of Chinese Medicine",
+      "chineseName": "甘肃中医药大学",
+      "cscAgencyNumber": "10735"
+    },
+    {
+      "slug": "graduate-school-of-chinese-academy-of-agricultural-sciences",
+      "name": "Graduate School of Chinese Academy of Agricultural Sciences",
+      "chineseName": "中国农业科学院研究生院",
+      "cscAgencyNumber": "82101"
+    },
+    {
+      "slug": "guangdong-university-of-foreign-studies",
+      "name": "Guangdong University of Foreign Studies",
+      "chineseName": "广东外语外贸大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "guangxi-medical-university",
+      "name": "Guangxi Medical University",
+      "chineseName": "广西医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "guangxi-minzu-university",
+      "name": "Guangxi Minzu University",
+      "chineseName": "广西民族大学",
+      "cscAgencyNumber": "10608"
+    },
+    {
+      "slug": "guangxi-normal-university",
+      "name": "Guangxi Normal University",
+      "chineseName": "广西师范大学",
+      "cscAgencyNumber": "10602"
+    },
+    {
+      "slug": "guangxi-university",
+      "name": "Guangxi University",
+      "chineseName": "广西大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "guangzhou-medical-university",
+      "name": "Guangzhou Medical University",
+      "chineseName": "广州医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "guangzhou-university-of-chinese-medicine",
+      "name": "Guangzhou University of Chinese Medicine",
+      "chineseName": "广州中医药大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "guilin-university-of-electronic-technology",
+      "name": "Guilin University of Electronic Technology",
+      "chineseName": "桂林电子科技大学",
+      "cscAgencyNumber": "10595"
+    },
+    {
+      "slug": "guizhou-minzu-university",
+      "name": "Guizhou Minzu University",
+      "chineseName": "贵州民族大学",
+      "cscAgencyNumber": "10672"
+    },
+    {
+      "slug": "guizhou-normal-university",
+      "name": "Guizhou Normal University",
+      "chineseName": "贵州师范大学",
+      "cscAgencyNumber": "10663"
+    },
+    {
+      "slug": "gzu",
+      "name": "Guizhou University",
+      "chineseName": "贵州大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "hainan-normal-university",
+      "name": "Hainan Normal University",
+      "chineseName": "海南师范大学",
+      "cscAgencyNumber": "11658"
+    },
+    {
+      "slug": "hainan-university",
+      "name": "Hainan University",
+      "chineseName": "海南大学",
+      "cscAgencyNumber": "10589"
+    },
+    {
+      "slug": "hangzhou-normal-university",
+      "name": "Hangzhou Normal University",
+      "chineseName": "杭州师范大学",
+      "cscAgencyNumber": "10346"
+    },
+    {
+      "slug": "harbin-engineering-university",
+      "name": "Harbin Engineering University",
+      "chineseName": "哈尔滨工程大学",
+      "cscAgencyNumber": "10217"
+    },
+    {
+      "slug": "harbin-medical-university",
+      "name": "Harbin Medical University",
+      "chineseName": "哈尔滨医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "harbin-normal-university",
+      "name": "Harbin Normal University",
+      "chineseName": "哈尔滨师范大学",
+      "cscAgencyNumber": "10231"
+    },
+    {
+      "slug": "harbin-university-of-science-and-technology",
+      "name": "Harbin University of Science and Technology",
+      "chineseName": "哈尔滨理工大学",
+      "cscAgencyNumber": "10214"
+    },
+    {
+      "slug": "hebei-medical-university",
+      "name": "Hebei Medical University",
+      "chineseName": "河北医科大学",
+      "cscAgencyNumber": "10089"
+    },
+    {
+      "slug": "hebei-normal-university",
+      "name": "Hebei Normal University",
+      "chineseName": "河北师范大学",
+      "cscAgencyNumber": "10094"
+    },
+    {
+      "slug": "hebei-university",
+      "name": "Hebei University",
+      "chineseName": "河北大学",
+      "cscAgencyNumber": "10075"
+    },
+    {
+      "slug": "hebei-university-of-economics-and-business",
+      "name": "Hebei University of Economics and Business",
+      "chineseName": "河北经贸大学",
+      "cscAgencyNumber": "11832"
+    },
+    {
+      "slug": "hebei-university-of-technology",
+      "name": "Hebei University of Technology",
+      "chineseName": "河北工业大学",
+      "cscAgencyNumber": "10080"
+    },
+    {
+      "slug": "hefei-university",
+      "name": "Hefei University",
+      "chineseName": "合肥大学",
+      "cscAgencyNumber": "11059"
+    },
+    {
+      "slug": "hefei-university-of-technology",
+      "name": "Hefei University of Technology",
+      "chineseName": "合肥工业大学",
+      "cscAgencyNumber": "10359"
+    },
+    {
+      "slug": "heihe-university",
+      "name": "Heihe University",
+      "chineseName": "黑河学院",
+      "cscAgencyNumber": "13744"
+    },
+    {
+      "slug": "heilongjiang-university",
+      "name": "Heilongjiang University",
+      "chineseName": "黑龙江大学",
+      "cscAgencyNumber": "10212"
+    },
+    {
+      "slug": "heilongjiang-university-of-chinese-medicine",
+      "name": "Heilongjiang University of Chinese Medicine",
+      "chineseName": "黑龙江中医药大学",
+      "cscAgencyNumber": "10228"
+    },
+    {
+      "slug": "henan-university",
+      "name": "Henan University",
+      "chineseName": "河南大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "henan-university-of-chinese-medicine",
+      "name": "Henan University of Chinese Medicine",
+      "chineseName": "河南中医药大学",
+      "cscAgencyNumber": "10471"
+    },
+    {
+      "slug": "henan-university-of-technology",
+      "name": "Henan University of Technology",
+      "chineseName": "河南工业大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "hit-harbin",
+      "name": "Harbin Institute of Technology",
+      "chineseName": "哈尔滨工业大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "hohai-university",
+      "name": "Hohai University",
+      "chineseName": "河海大学",
+      "cscAgencyNumber": "10294"
+    },
+    {
+      "slug": "hsu",
+      "name": "Huangshan University",
+      "chineseName": "黄山学院",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "huaqiao-university",
+      "name": "Huaqiao University",
+      "chineseName": "华侨大学",
+      "cscAgencyNumber": "10385"
+    },
+    {
+      "slug": "huazhong-agricultural-university",
+      "name": "Huazhong Agricultural University",
+      "chineseName": "华中农业大学",
+      "cscAgencyNumber": "10504"
+    },
+    {
+      "slug": "huazhong-university-of-science-and-technology",
+      "name": "Huazhong University of Science and Technology",
+      "chineseName": "华中科技大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "hubei-university",
+      "name": "Hubei University",
+      "chineseName": "湖北大学",
+      "cscAgencyNumber": "10512"
+    },
+    {
+      "slug": "hubei-university-of-chinese-medicine",
+      "name": "Hubei University of Chinese Medicine",
+      "chineseName": "湖北中医药大学",
+      "cscAgencyNumber": "10507"
+    },
+    {
+      "slug": "hunan-normal-university",
+      "name": "Hunan Normal University",
+      "chineseName": "湖南师范大学",
+      "cscAgencyNumber": "10542"
+    },
+    {
+      "slug": "hunan-university",
+      "name": "Hunan University",
+      "chineseName": "湖南大学",
+      "cscAgencyNumber": "10532"
+    },
+    {
+      "slug": "inner-mongolia-agricultural-university",
+      "name": "Inner Mongolia Agricultural University",
+      "chineseName": "内蒙古农业大学",
+      "cscAgencyNumber": "10129"
+    },
+    {
+      "slug": "inner-mongolia-minzu-university",
+      "name": "Inner Mongolia Minzu University",
+      "chineseName": "内蒙古民族大学",
+      "cscAgencyNumber": "10136"
+    },
+    {
+      "slug": "inner-mongolia-normal-university",
+      "name": "Inner Mongolia Normal University",
+      "chineseName": "内蒙古师范大学",
+      "cscAgencyNumber": "10135"
+    },
+    {
+      "slug": "inner-mongolia-university",
+      "name": "Inner Mongolia University",
+      "chineseName": "内蒙古大学",
+      "cscAgencyNumber": "10126"
+    },
+    {
+      "slug": "inner-mongolia-university-of-technology",
+      "name": "Inner Mongolia University of Technology",
+      "chineseName": "内蒙古工业大学",
+      "cscAgencyNumber": "10128"
+    },
+    {
+      "slug": "jiamusi-university",
+      "name": "Jiamusi University",
+      "chineseName": "佳木斯大学",
+      "cscAgencyNumber": "10222"
+    },
+    {
+      "slug": "jiangnan-university",
+      "name": "Jiangnan University",
+      "chineseName": "江南大学",
+      "cscAgencyNumber": "10295"
+    },
+    {
+      "slug": "jiangsu-police-institute",
+      "name": "Jiangsu Police Institute",
+      "chineseName": "江苏警官学院",
+      "cscAgencyNumber": "10329"
+    },
+    {
+      "slug": "jiangsu-university",
+      "name": "Jiangsu University",
+      "chineseName": "江苏大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "jiangxi-agricultural-university",
+      "name": "Jiangxi Agricultural University",
+      "chineseName": "江西农业大学",
+      "cscAgencyNumber": "10410"
+    },
+    {
+      "slug": "jiangxi-normal-university",
+      "name": "Jiangxi Normal University",
+      "chineseName": "江西师范大学",
+      "cscAgencyNumber": "10414"
+    },
+    {
+      "slug": "jiangxi-university-of-chinese-medicine",
+      "name": "Jiangxi University of Chinese Medicine",
+      "chineseName": "江西中医药大学",
+      "cscAgencyNumber": "10412"
+    },
+    {
+      "slug": "jiangxi-university-of-finance-and-economics",
+      "name": "Jiangxi University of Finance and Economics",
+      "chineseName": "江西财经大学",
+      "cscAgencyNumber": "10421"
+    },
+    {
+      "slug": "jilin-agricultural-university",
+      "name": "Jilin Agricultural University",
+      "chineseName": "吉林农业大学",
+      "cscAgencyNumber": "10193"
+    },
+    {
+      "slug": "jilin-international-studies-university",
+      "name": "Jilin International Studies University",
+      "chineseName": "吉林外国语大学",
+      "cscAgencyNumber": "10964"
+    },
+    {
+      "slug": "jilin-normal-university",
+      "name": "Jilin Normal University",
+      "chineseName": "吉林师范大学",
+      "cscAgencyNumber": "10203"
+    },
+    {
+      "slug": "jilin-university",
+      "name": "Jilin University",
+      "chineseName": "吉林大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "jinan-university",
+      "name": "Jinan University",
+      "chineseName": "暨南大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "jingdezhen-ceramic-university",
+      "name": "Jingdezhen Ceramic University",
+      "chineseName": "景德镇陶瓷大学",
+      "cscAgencyNumber": "10408"
+    },
+    {
+      "slug": "jinzhou-medical-university",
+      "name": "Jinzhou Medical University",
+      "chineseName": "锦州医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "jsnu",
+      "name": "Jiangsu Normal University",
+      "chineseName": "江苏师范大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "kunming-medical-university",
+      "name": "Kunming Medical University",
+      "chineseName": "昆明医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "kunming-university-of-science-and-technology",
+      "name": "Kunming University of Science and Technology",
+      "chineseName": "昆明理工大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "lanzhou-jiaotong-university",
+      "name": "Lanzhou Jiaotong University",
+      "chineseName": "兰州交通大学",
+      "cscAgencyNumber": "10732"
+    },
+    {
+      "slug": "lanzhou-university",
+      "name": "Lanzhou University",
+      "chineseName": "兰州大学",
+      "cscAgencyNumber": "10730"
+    },
+    {
+      "slug": "lanzhou-university-of-technology",
+      "name": "Lanzhou University of Technology",
+      "chineseName": "兰州理工大学",
+      "cscAgencyNumber": "10731"
+    },
+    {
+      "slug": "liaoning-normal-university",
+      "name": "Liaoning Normal University",
+      "chineseName": "辽宁师范大学",
+      "cscAgencyNumber": "10165"
+    },
+    {
+      "slug": "liaoning-petrochemical-university",
+      "name": "Liaoning Petrochemical University",
+      "chineseName": "辽宁石油化工大学",
+      "cscAgencyNumber": "10148"
+    },
+    {
+      "slug": "liaoning-technical-university",
+      "name": "Liaoning Technical University",
+      "chineseName": "辽宁工程技术大学",
+      "cscAgencyNumber": "10147"
+    },
+    {
+      "slug": "liaoning-university",
+      "name": "Liaoning University",
+      "chineseName": "辽宁大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "liaoning-university-of-technology",
+      "name": "Liaoning University of Technology",
+      "chineseName": "辽宁工业大学",
+      "cscAgencyNumber": "10154"
+    },
+    {
+      "slug": "liaoning-university-of-traditional-chinese-medicine",
+      "name": "Liaoning University of Traditional Chinese Medicine",
+      "chineseName": "辽宁中医药大学",
+      "cscAgencyNumber": "10162"
+    },
+    {
+      "slug": "ludong-university",
+      "name": "Ludong University",
+      "chineseName": "鲁东大学",
+      "cscAgencyNumber": "10451"
+    },
+    {
+      "slug": "minzu-university-of-china",
+      "name": "Minzu University of China",
+      "chineseName": "中央民族大学",
+      "cscAgencyNumber": "10052"
+    },
+    {
+      "slug": "mudanjiang-normal-university",
+      "name": "Mudanjiang Normal University",
+      "chineseName": "牡丹江师范学院",
+      "cscAgencyNumber": "10233"
+    },
+    {
+      "slug": "nanchang-hangkong-university",
+      "name": "Nanchang Hangkong University",
+      "chineseName": "南昌航空大学",
+      "cscAgencyNumber": "10406"
+    },
+    {
+      "slug": "nanchang-university",
+      "name": "Nanchang University",
+      "chineseName": "南昌大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "nanjing-agricultural-university",
+      "name": "Nanjing Agricultural University",
+      "chineseName": "南京农业大学",
+      "cscAgencyNumber": "10307"
+    },
+    {
+      "slug": "nanjing-audit-university",
+      "name": "Nanjing Audit University",
+      "chineseName": "南京审计大学",
+      "cscAgencyNumber": "11287"
+    },
+    {
+      "slug": "nanjing-forestry-university",
+      "name": "Nanjing Forestry University",
+      "chineseName": "南京林业大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "nanjing-medical-university",
+      "name": "Nanjing Medical University",
+      "chineseName": "南京医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "nanjing-normal-university",
+      "name": "Nanjing Normal University",
+      "chineseName": "南京师范大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "nanjing-university",
+      "name": "Nanjing University",
+      "chineseName": "南京大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "nanjing-university-of-chinese-medicine",
+      "name": "Nanjing University of Chinese Medicine",
+      "chineseName": "南京中医药大学",
+      "cscAgencyNumber": "10315"
+    },
+    {
+      "slug": "nanjing-university-of-science-and-technology",
+      "name": "Nanjing University of Science and Technology",
+      "chineseName": "南京理工大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "nanjing-university-of-the-arts",
+      "name": "Nanjing University of the Arts",
+      "chineseName": "南京艺术学院",
+      "cscAgencyNumber": "10331"
+    },
+    {
+      "slug": "nankai-university",
+      "name": "Nankai University",
+      "chineseName": "南开大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "nanning-normal-university",
+      "name": "Nanning Normal University",
+      "chineseName": "南宁师范大学",
+      "cscAgencyNumber": "10603"
+    },
+    {
+      "slug": "national-police-university-of-china",
+      "name": "National Police University of China",
+      "chineseName": "中国刑事警察学院",
+      "cscAgencyNumber": "10175"
+    },
+    {
+      "slug": "ncepu",
+      "name": "North China Electric Power University",
+      "chineseName": "华北电力大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "ningbo-university",
+      "name": "Ningbo University",
+      "chineseName": "宁波大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "ningbo-university-of-technology",
+      "name": "Ningbo University of Technology",
+      "chineseName": "宁波工程学院",
+      "cscAgencyNumber": "11058"
+    },
+    {
+      "slug": "ningxia-medical-university",
+      "name": "Ningxia Medical University",
+      "chineseName": "宁夏医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "ningxia-university",
+      "name": "Ningxia University",
+      "chineseName": "宁夏大学",
+      "cscAgencyNumber": "10749"
+    },
+    {
+      "slug": "njupt",
+      "name": "Nanjing University of Posts and Telecommunications",
+      "chineseName": "南京邮电大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "north-china-university-of-technology",
+      "name": "North China University of Technology",
+      "chineseName": "北方工业大学",
+      "cscAgencyNumber": "10009"
+    },
+    {
+      "slug": "northeast-agricultural-university",
+      "name": "Northeast Agricultural University",
+      "chineseName": "东北农业大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "northeast-electric-power-university",
+      "name": "Northeast Electric Power University",
+      "chineseName": "东北电力大学",
+      "cscAgencyNumber": "10188"
+    },
+    {
+      "slug": "northeast-forestry-university",
+      "name": "Northeast Forestry University",
+      "chineseName": "东北林业大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "northeast-normal-university",
+      "name": "Northeast Normal University",
+      "chineseName": "东北师范大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "northeastern-university",
+      "name": "Northeastern University",
+      "chineseName": "东北大学",
+      "cscAgencyNumber": "10145"
+    },
+    {
+      "slug": "northwest-a-and-f-university",
+      "name": "Northwest A&F University",
+      "chineseName": "西北农林科技大学",
+      "cscAgencyNumber": "10712"
+    },
+    {
+      "slug": "northwest-normal-university",
+      "name": "Northwest Normal University",
+      "chineseName": "西北师范大学",
+      "cscAgencyNumber": "10736"
+    },
+    {
+      "slug": "northwest-university",
+      "name": "Northwest University",
+      "chineseName": "西北大学",
+      "cscAgencyNumber": "10697"
+    },
+    {
+      "slug": "npu",
+      "name": "Northwestern Polytechnical University",
+      "chineseName": "西北工业大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "ntu",
+      "name": "Nantong University",
+      "chineseName": "南通大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "nuaa",
+      "name": "Nanjing University of Aeronautics and Astronautics",
+      "chineseName": "南京航空航天大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "nuist",
+      "name": "Nanjing University of Information Science and Technology",
+      "chineseName": "南京信息工程大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "ocean-university-of-china",
+      "name": "Ocean University of China",
+      "chineseName": "中国海洋大学",
+      "cscAgencyNumber": "10423"
+    },
+    {
+      "slug": "peking-union-medical-college",
+      "name": "Peking Union Medical College",
+      "chineseName": "北京协和医学院",
+      "cscAgencyNumber": "10023"
+    },
+    {
+      "slug": "peking-university",
+      "name": "Peking University",
+      "chineseName": "北京大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "peoples-public-security-university-of-china",
+      "name": "People's Public Security University of China",
+      "chineseName": "中国人民公安大学",
+      "cscAgencyNumber": "10041"
+    },
+    {
+      "slug": "qingdao-university",
+      "name": "Qingdao University",
+      "chineseName": "青岛大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "qingdao-university-of-science-and-technology",
+      "name": "Qingdao University of Science and Technology",
+      "chineseName": "青岛科技大学",
+      "cscAgencyNumber": "10426"
+    },
+    {
+      "slug": "qinghai-minzu-university",
+      "name": "Qinghai Minzu University",
+      "chineseName": "青海民族大学",
+      "cscAgencyNumber": "10748"
+    },
+    {
+      "slug": "qinghai-university",
+      "name": "Qinghai University",
+      "chineseName": "青海大学",
+      "cscAgencyNumber": "10743"
+    },
+    {
+      "slug": "qiqihar-university",
+      "name": "Qiqihar University",
+      "chineseName": "齐齐哈尔大学",
+      "cscAgencyNumber": "10232"
+    },
+    {
+      "slug": "renmin-university-of-china",
+      "name": "Renmin University of China",
+      "chineseName": "中国人民大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "scut",
+      "name": "South China University of Technology",
+      "chineseName": "华南理工大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "shaanxi-normal-university",
+      "name": "Shaanxi Normal University",
+      "chineseName": "陕西师范大学",
+      "cscAgencyNumber": "10718"
+    },
+    {
+      "slug": "shaanxi-university-of-chinese-medicine",
+      "name": "Shaanxi University of Chinese Medicine",
+      "chineseName": "陕西中医药大学",
+      "cscAgencyNumber": "10716"
+    },
+    {
+      "slug": "shandong-normal-university",
+      "name": "Shandong Normal University",
+      "chineseName": "山东师范大学",
+      "cscAgencyNumber": "10445"
+    },
+    {
+      "slug": "shandong-university",
+      "name": "Shandong University",
+      "chineseName": "山东大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "shandong-university-of-science-and-technology",
+      "name": "Shandong University of Science and Technology",
+      "chineseName": "山东科技大学",
+      "cscAgencyNumber": "10424"
+    },
+    {
+      "slug": "shandong-university-of-technology",
+      "name": "Shandong University of Technology",
+      "chineseName": "山东理工大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "shanghai-conservatory-of-music",
+      "name": "Shanghai Conservatory of Music",
+      "chineseName": "上海音乐学院",
+      "cscAgencyNumber": "10278"
+    },
+    {
+      "slug": "shanghai-international-studies-university",
+      "name": "Shanghai International Studies University",
+      "chineseName": "上海外国语大学",
+      "cscAgencyNumber": "10271"
+    },
+    {
+      "slug": "shanghai-jiao-tong-university",
+      "name": "Shanghai Jiao Tong University",
+      "chineseName": "上海交通大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "shanghai-maritime-university",
+      "name": "Shanghai Maritime University",
+      "chineseName": "上海海事大学",
+      "cscAgencyNumber": "10254"
+    },
+    {
+      "slug": "shanghai-normal-university",
+      "name": "Shanghai Normal University",
+      "chineseName": "上海师范大学",
+      "cscAgencyNumber": "10270"
+    },
+    {
+      "slug": "shanghai-ocean-university",
+      "name": "Shanghai Ocean University",
+      "chineseName": "上海海洋大学",
+      "cscAgencyNumber": "10264"
+    },
+    {
+      "slug": "shanghai-university",
+      "name": "Shanghai University",
+      "chineseName": "上海大学",
+      "cscAgencyNumber": "10280"
+    },
+    {
+      "slug": "shanghai-university-of-finance-and-economics",
+      "name": "Shanghai University of Finance and Economics",
+      "chineseName": "上海财经大学",
+      "cscAgencyNumber": "10272"
+    },
+    {
+      "slug": "shanghai-university-of-international-business-and-economics",
+      "name": "Shanghai University of International Business and Economics",
+      "chineseName": "上海对外经贸大学",
+      "cscAgencyNumber": "10273"
+    },
+    {
+      "slug": "shanghai-university-of-political-science-and-law",
+      "name": "Shanghai University of Political Science and Law",
+      "chineseName": "上海政法学院",
+      "cscAgencyNumber": "11835"
+    },
+    {
+      "slug": "shanghai-university-of-sport",
+      "name": "Shanghai University of Sport",
+      "chineseName": "上海体育大学",
+      "cscAgencyNumber": "10277"
+    },
+    {
+      "slug": "shanghai-university-of-traditional-chinese-medicine",
+      "name": "Shanghai University of Traditional Chinese Medicine",
+      "chineseName": "上海中医药大学",
+      "cscAgencyNumber": "10268"
+    },
+    {
+      "slug": "shanghaitech-university",
+      "name": "ShanghaiTech University",
+      "chineseName": "上海科技大学",
+      "cscAgencyNumber": "14423"
+    },
+    {
+      "slug": "shantou-university",
+      "name": "Shantou University",
+      "chineseName": "汕头大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "shanxi-university",
+      "name": "Shanxi University",
+      "chineseName": "山西大学",
+      "cscAgencyNumber": "10108"
+    },
+    {
+      "slug": "shanxi-university-of-chinese-medicine",
+      "name": "Shanxi University of Chinese Medicine",
+      "chineseName": "山西中医药大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "shenyang-aerospace-university",
+      "name": "Shenyang Aerospace University",
+      "chineseName": "沈阳航空航天大学",
+      "cscAgencyNumber": "10143"
+    },
+    {
+      "slug": "shenyang-jianzhu-university",
+      "name": "Shenyang Jianzhu University",
+      "chineseName": "沈阳建筑大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "shenyang-ligong-university",
+      "name": "Shenyang Ligong University",
+      "chineseName": "沈阳理工大学",
+      "cscAgencyNumber": "10144"
+    },
+    {
+      "slug": "shenyang-normal-university",
+      "name": "Shenyang Normal University",
+      "chineseName": "沈阳师范大学",
+      "cscAgencyNumber": "10166"
+    },
+    {
+      "slug": "shenyang-university-of-technology",
+      "name": "Shenyang University of Technology",
+      "chineseName": "沈阳工业大学",
+      "cscAgencyNumber": "10142"
+    },
+    {
+      "slug": "shihezi-university",
+      "name": "Shihezi University",
+      "chineseName": "石河子大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "sichuan-agricultural-university",
+      "name": "Sichuan Agricultural University",
+      "chineseName": "四川农业大学",
+      "cscAgencyNumber": "10626"
+    },
+    {
+      "slug": "sichuan-international-studies-university",
+      "name": "Sichuan International Studies University",
+      "chineseName": "四川外国语大学",
+      "cscAgencyNumber": "10650"
+    },
+    {
+      "slug": "sichuan-university",
+      "name": "Sichuan University",
+      "chineseName": "四川大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "soochow-university",
+      "name": "Soochow University",
+      "chineseName": "苏州大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "south-china-agricultural-university",
+      "name": "South China Agricultural University",
+      "chineseName": "华南农业大学",
+      "cscAgencyNumber": "10564"
+    },
+    {
+      "slug": "south-china-normal-university",
+      "name": "South China Normal University",
+      "chineseName": "华南师范大学",
+      "cscAgencyNumber": "10574"
+    },
+    {
+      "slug": "southeast-university",
+      "name": "Southeast University",
+      "chineseName": "东南大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "southern-medical-university",
+      "name": "Southern Medical University",
+      "chineseName": "南方医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "southern-university-of-science-and-technology",
+      "name": "Southern University of Science and Technology",
+      "chineseName": "南方科技大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "southwest-jiaotong-university",
+      "name": "Southwest Jiaotong University",
+      "chineseName": "西南交通大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "southwest-petroleum-university",
+      "name": "Southwest Petroleum University",
+      "chineseName": "西南石油大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "southwest-university",
+      "name": "Southwest University",
+      "chineseName": "西南大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "southwest-university-of-political-science-and-law",
+      "name": "Southwest University of Political Science and Law",
+      "chineseName": "西南政法大学",
+      "cscAgencyNumber": "10652"
+    },
+    {
+      "slug": "southwestern-university-of-finance-and-economics",
+      "name": "Southwestern University of Finance and Economics",
+      "chineseName": "西南财经大学",
+      "cscAgencyNumber": "10651"
+    },
+    {
+      "slug": "sun-yat-sen-university",
+      "name": "Sun Yat-sen University",
+      "chineseName": "中山大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "taiyuan-university-of-technology",
+      "name": "Taiyuan University of Technology",
+      "chineseName": "太原理工大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "tiangong-university",
+      "name": "Tiangong University",
+      "chineseName": "天津工业大学",
+      "cscAgencyNumber": "10058"
+    },
+    {
+      "slug": "tianjin-foreign-studies-university",
+      "name": "Tianjin Foreign Studies University",
+      "chineseName": "天津外国语大学",
+      "cscAgencyNumber": "10068"
+    },
+    {
+      "slug": "tianjin-medical-university",
+      "name": "Tianjin Medical University",
+      "chineseName": "天津医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "tianjin-normal-university",
+      "name": "Tianjin Normal University",
+      "chineseName": "天津师范大学",
+      "cscAgencyNumber": "10065"
+    },
+    {
+      "slug": "tianjin-university",
+      "name": "Tianjin University",
+      "chineseName": "天津大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "tianjin-university-of-finance-and-economics",
+      "name": "Tianjin University of Finance and Economics",
+      "chineseName": "天津财经大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "tianjin-university-of-science-and-technology",
+      "name": "Tianjin University of Science and Technology",
+      "chineseName": "天津科技大学",
+      "cscAgencyNumber": "10057"
+    },
+    {
+      "slug": "tianjin-university-of-technology",
+      "name": "Tianjin University of Technology",
+      "chineseName": "天津理工大学",
+      "cscAgencyNumber": "10060"
+    },
+    {
+      "slug": "tianjin-university-of-technology-and-education",
+      "name": "Tianjin University of Technology and Education",
+      "chineseName": "天津职业技术师范大学",
+      "cscAgencyNumber": "10066"
+    },
+    {
+      "slug": "tianjin-university-of-traditional-chinese-medicine",
+      "name": "Tianjin University of Traditional Chinese Medicine",
+      "chineseName": "天津中医药大学",
+      "cscAgencyNumber": "10063"
+    },
+    {
+      "slug": "tibet-university",
+      "name": "Tibet University",
+      "chineseName": "西藏大学",
+      "cscAgencyNumber": "10694"
+    },
+    {
+      "slug": "tongji-university",
+      "name": "Tongji University",
+      "chineseName": "同济大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "tsinghua-university",
+      "name": "Tsinghua University",
+      "chineseName": "清华大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "university-of-chinese-academy-of-sciences",
+      "name": "University of Chinese Academy of Sciences",
+      "chineseName": "中国科学院大学",
+      "cscAgencyNumber": "14430"
+    },
+    {
+      "slug": "university-of-electronic-science-and-technology-of-china",
+      "name": "University of Electronic Science and Technology of China",
+      "chineseName": "电子科技大学",
+      "cscAgencyNumber": "10614"
+    },
+    {
+      "slug": "university-of-international-business-and-economics",
+      "name": "University of International Business and Economics",
+      "chineseName": "对外经济贸易大学",
+      "cscAgencyNumber": "10036"
+    },
+    {
+      "slug": "university-of-jinan",
+      "name": "University of Jinan",
+      "chineseName": "济南大学",
+      "cscAgencyNumber": "10427"
+    },
+    {
+      "slug": "university-of-nottingham-ningbo-china",
+      "name": "The University of Nottingham Ningbo China",
+      "chineseName": "宁波诺丁汉大学",
+      "cscAgencyNumber": "16301"
+    },
+    {
+      "slug": "university-of-science-and-technology-beijing",
+      "name": "University of Science and Technology Beijing",
+      "chineseName": "北京科技大学",
+      "cscAgencyNumber": "10008"
+    },
+    {
+      "slug": "university-of-science-and-technology-liaoning",
+      "name": "University of Science and Technology Liaoning",
+      "chineseName": "辽宁科技大学",
+      "cscAgencyNumber": "10146"
+    },
+    {
+      "slug": "university-of-science-and-technology-of-china",
+      "name": "University of Science and Technology of China",
+      "chineseName": "中国科学技术大学",
+      "cscAgencyNumber": "10358"
+    },
+    {
+      "slug": "university-of-shanghai-for-science-and-technology",
+      "name": "University of Shanghai for Science and Technology",
+      "chineseName": "上海理工大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "wenzhou-medical-university",
+      "name": "Wenzhou Medical University",
+      "chineseName": "温州医科大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "westlake-university",
+      "name": "Westlake University",
+      "chineseName": "西湖大学",
+      "cscAgencyNumber": "14626"
+    },
+    {
+      "slug": "wuhan-sports-university",
+      "name": "Wuhan Sports University",
+      "chineseName": "武汉体育学院",
+      "cscAgencyNumber": "10522"
+    },
+    {
+      "slug": "wuhan-textile-university",
+      "name": "Wuhan Textile University",
+      "chineseName": "武汉纺织大学",
+      "cscAgencyNumber": "10495"
+    },
+    {
+      "slug": "wuhan-university",
+      "name": "Wuhan University",
+      "chineseName": "武汉大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "wuhan-university-of-technology",
+      "name": "Wuhan University of Technology",
+      "chineseName": "武汉理工大学",
+      "cscAgencyNumber": "10497"
+    },
+    {
+      "slug": "wuyi-university",
+      "name": "Wuyi University",
+      "chineseName": "武夷学院",
+      "cscAgencyNumber": "10397"
+    },
+    {
+      "slug": "wzu",
+      "name": "Wenzhou University",
+      "chineseName": "温州大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "xiamen-university",
+      "name": "Xiamen University",
+      "chineseName": "厦门大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "xiamen-university-of-technology",
+      "name": "Xiamen University of Technology",
+      "chineseName": "厦门理工学院",
+      "cscAgencyNumber": "11062"
+    },
+    {
+      "slug": "xian-international-studies-university",
+      "name": "Xi'an International Studies University",
+      "chineseName": "西安外国语大学",
+      "cscAgencyNumber": "10724"
+    },
+    {
+      "slug": "xian-jiaotong-university",
+      "name": "Xi'an Jiaotong University",
+      "chineseName": "西安交通大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "xiangtan-university",
+      "name": "Xiangtan University",
+      "chineseName": "湘潭大学",
+      "cscAgencyNumber": "10530"
+    },
+    {
+      "slug": "xidian-university",
+      "name": "Xidian University",
+      "chineseName": "西安电子科技大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "xinjiang-medical-university",
+      "name": "Xinjiang Medical University",
+      "chineseName": "新疆医科大学",
+      "cscAgencyNumber": "10760"
+    },
+    {
+      "slug": "xinjiang-normal-university",
+      "name": "Xinjiang Normal University",
+      "chineseName": "新疆师范大学",
+      "cscAgencyNumber": "10762"
+    },
+    {
+      "slug": "xinjiang-university",
+      "name": "Xinjiang University",
+      "chineseName": "新疆大学",
+      "cscAgencyNumber": "10755"
+    },
+    {
+      "slug": "xsyu",
+      "name": "Xi'an Shiyou University",
+      "chineseName": "西安石油大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "yanbian-university",
+      "name": "Yanbian University",
+      "chineseName": "延边大学",
+      "cscAgencyNumber": "10184"
+    },
+    {
+      "slug": "yangtze-university",
+      "name": "Yangtze University",
+      "chineseName": "长江大学",
+      "cscAgencyNumber": "10489"
+    },
+    {
+      "slug": "yangzhou-university",
+      "name": "Yangzhou University",
+      "chineseName": "扬州大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "yanshan-university",
+      "name": "Yanshan University",
+      "chineseName": "燕山大学",
+      "cscAgencyNumber": "10216"
+    },
+    {
+      "slug": "yantai-university",
+      "name": "Yantai University",
+      "chineseName": "烟台大学",
+      "cscAgencyNumber": "11066"
+    },
+    {
+      "slug": "yunnan-agricultural-university",
+      "name": "Yunnan Agricultural University",
+      "chineseName": "云南农业大学",
+      "cscAgencyNumber": "10676"
+    },
+    {
+      "slug": "yunnan-minzu-university",
+      "name": "Yunnan Minzu University",
+      "chineseName": "云南民族大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "yunnan-normal-university",
+      "name": "Yunnan Normal University",
+      "chineseName": "云南师范大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "yunnan-university",
+      "name": "Yunnan University",
+      "chineseName": "云南大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "yunnan-university-of-finance-and-economics",
+      "name": "Yunnan University of Finance and Economics",
+      "chineseName": "云南财经大学",
+      "cscAgencyNumber": "10689"
+    },
+    {
+      "slug": "zhejiang-gongshang-university",
+      "name": "Zhejiang Gongshang University",
+      "chineseName": "浙江工商大学",
+      "cscAgencyNumber": "10353"
+    },
+    {
+      "slug": "zhejiang-normal-university",
+      "name": "Zhejiang Normal University",
+      "chineseName": "浙江师范大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "zhejiang-ocean-university",
+      "name": "Zhejiang Ocean University",
+      "chineseName": "浙江海洋大学",
+      "cscAgencyNumber": "10340"
+    },
+    {
+      "slug": "zhejiang-police-college",
+      "name": "Zhejiang Police College",
+      "chineseName": "浙江警察学院",
+      "cscAgencyNumber": "11483"
+    },
+    {
+      "slug": "zhejiang-sci-tech-university",
+      "name": "Zhejiang Sci-Tech University",
+      "chineseName": "浙江理工大学",
+      "cscAgencyNumber": "10338"
+    },
+    {
+      "slug": "zhejiang-university",
+      "name": "Zhejiang University",
+      "chineseName": "浙江大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "zhejiang-university-of-science-and-technology",
+      "name": "Zhejiang University of Science and Technology",
+      "chineseName": "浙江科技大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "zhongnan-university-of-economics-and-law",
+      "name": "Zhongnan University of Economics and Law",
+      "chineseName": "中南财经政法大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "zjut",
+      "name": "Zhejiang University of Technology",
+      "chineseName": "浙江工业大学",
+      "cscAgencyNumber": null
+    },
+    {
+      "slug": "zzu",
+      "name": "Zhengzhou University",
+      "chineseName": "郑州大学",
+      "cscAgencyNumber": null
+    }
+  ]
+}
