@@ -390,10 +390,10 @@ function AdminShell({ children }: { children: React.ReactNode }) {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-xs font-bold text-white">
-                      {user?.name || user?.email || 'EduExpress Staff'}
+                      {user?.name || (isCounselor ? 'Counselor Desk' : 'EduExpress Admin')}
                     </p>
                     <p className="truncate text-[10px] text-slate-400">
-                      {user?.role === 'counselor' ? 'Counselor Desk' : user?.role || 'Admin'}
+                      {isCounselor ? 'Counselor Desk · Active' : 'Operations Console'}
                     </p>
                   </div>
                 </div>

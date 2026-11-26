@@ -719,7 +719,9 @@ export default function AdminDashboardPage() {
                             <Clock size={12} />
                             <span>{formatDhakaDate(lead.createdAt)}</span>
                           </div>
-                          <span className="text-[11px] text-slate-400">{lead.phone || lead.email}</span>
+                          <span className="text-[11px] text-slate-400">
+                            {lead.phone || <span className="hidden sm:inline">{lead.email}</span>}
+                          </span>
                         </div>
 
                         {waUrl && (

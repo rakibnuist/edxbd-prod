@@ -1078,7 +1078,7 @@ export default function LeadWorkspace({
                           </button>
                           <WaTemplateButton lead={lead} compact onEnsureToken={onEnsureToken} />
                         </div>
-                        <p className="mt-1 break-all text-xs leading-5 text-gray-500">
+                        <p className="hidden md:block mt-1 break-all text-xs leading-5 text-gray-500">
                           {lead.email || 'Email not provided'}
                         </p>
                         {links.call && (

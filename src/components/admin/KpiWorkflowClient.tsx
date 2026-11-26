@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
-  Activity, AlertTriangle, Award, Calendar, CheckCircle2, Clock,
-  ExternalLink, FileText, Flame, ListChecks, LogIn, LogOut,
-  MapPin, Plus, RefreshCw, Target, Trash2, Users, X,
+  Activity, AlertTriangle, Award, Calendar, CheckCircle2, ChevronDown, ChevronUp, Clock,
+  ExternalLink, FileText, Flame, HelpCircle, ListChecks, LogIn, LogOut,
+  MapPin, Navigation, Plus, RefreshCw, Smartphone, Target, Trash2, Users, X,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import type {
@@ -104,32 +104,71 @@ function currentMonthIso(): string {
   return new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 7);
 }
 
-function captureBrowserLocation(): Promise<{
+async function captureBrowserLocation(): Promise<{
   latitude?: number;
   longitude?: number;
   accuracyMeters?: number;
   locationError?: 'denied' | 'timeout' | 'unavailable' | 'unsupported';
+  sourceAccuracy?: 'high' | 'network';
 }> {
   if (typeof window === 'undefined' || !('geolocation' in navigator)) {
-    return Promise.resolve({ locationError: 'unsupported' });
+    return { locationError: 'unsupported' };
   }
-  return new Promise((resolve) => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        resolve({
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-          accuracyMeters: Math.round(pos.coords.accuracy || 0),
-        });
-      },
-      (err) => {
-        if (err.code === err.PERMISSION_DENIED) resolve({ locationError: 'denied' });
-        else if (err.code === err.TIMEOUT) resolve({ locationError: 'timeout' });
-        else resolve({ locationError: 'unavailable' });
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
-    );
-  });
+
+  // Strategy 1: Attempt High Accuracy (GPS hardware satellite lock, 7s timeout, allows 30s cached fix)
+  const tryHighAccuracy = (): Promise<GeolocationPosition> =>
+    new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 7000,
+        maximumAge: 30000,
+      });
+    });
+
+  // Strategy 2: Fallback to Low Accuracy (Wi-Fi access points + Cellular triangulation, 12s timeout, allows 3min cached fix)
+  // This works 100% reliably indoors and on phones where satellite lock is weak or slow.
+  const tryLowAccuracy = (): Promise<GeolocationPosition> =>
+    new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: false,
+        timeout: 12000,
+        maximumAge: 180000,
+      });
+    });
+
+  try {
+    let pos: GeolocationPosition;
+    let source: 'high' | 'network' = 'high';
+
+    try {
+      pos = await tryHighAccuracy();
+    } catch (err: unknown) {
+      const geoErr = err as GeolocationPositionError;
+      // If user explicitly denied permission, do not retry, return 'denied' immediately
+      if (geoErr && typeof geoErr.code === 'number' && geoErr.code === 1) {
+        return { locationError: 'denied' };
+      }
+      // If timed out (common indoors) or position unavailable, fall back to cellular/Wi-Fi triangulation
+      source = 'network';
+      pos = await tryLowAccuracy();
+    }
+
+    return {
+      latitude: pos.coords.latitude,
+      longitude: pos.coords.longitude,
+      accuracyMeters: Math.round(pos.coords.accuracy || 0),
+      sourceAccuracy: source,
+    };
+  } catch (err: unknown) {
+    const geoErr = err as GeolocationPositionError;
+    if (geoErr && typeof geoErr.code === 'number' && geoErr.code === 1) {
+      return { locationError: 'denied' };
+    }
+    if (geoErr && typeof geoErr.code === 'number' && geoErr.code === 3) {
+      return { locationError: 'timeout' };
+    }
+    return { locationError: 'unavailable' };
+  }
 }
 
 export default function KpiWorkflowClient() {
@@ -150,6 +189,15 @@ export default function KpiWorkflowClient() {
   const [accomplishments, setAccomplishments] = useState('');
   const [challenges, setChallenges] = useState('');
   const [tomorrowPlan, setTomorrowPlan] = useState('');
+
+  // GPS verification state
+  const [testingGps, setTestingGps] = useState(false);
+  const [gpsTroubleshootOpen, setGpsTroubleshootOpen] = useState(false);
+  const [gpsFeedback, setGpsFeedback] = useState<{
+    type: 'ok' | 'warn';
+    title: string;
+    message: string;
+  } | null>(null);
 
   // Task creation state
   const [taskTitle, setTaskTitle] = useState('');
@@ -257,6 +305,9 @@ export default function KpiWorkflowClient() {
         setLocating(true);
         locationPayload = await captureBrowserLocation();
         setLocating(false);
+        if (locationPayload.locationError === 'denied') {
+          setGpsTroubleshootOpen(true);
+        }
       }
       const res = await authenticatedFetch('/api/admin/attendance', {
         method: 'POST',
@@ -277,6 +328,48 @@ export default function KpiWorkflowClient() {
     } finally {
       setLocating(false);
       setBusy(false);
+    }
+  };
+
+  const handleTestGps = async () => {
+    setTestingGps(true);
+    setGpsFeedback(null);
+    try {
+      const loc = await captureBrowserLocation();
+      if (loc.locationError === 'denied') {
+        setGpsFeedback({
+          type: 'warn',
+          title: 'Location Permission Denied',
+          message: 'Your browser or device has blocked location access. Tap the guide below to enable location permission in 2 taps.',
+        });
+        setGpsTroubleshootOpen(true);
+      } else if (loc.latitude && loc.longitude) {
+        setGpsFeedback({
+          type: 'ok',
+          title: 'GPS Signal Ready',
+          message: `Coordinates detected (${loc.latitude.toFixed(4)}, ${loc.longitude.toFixed(4)}) with ±${loc.accuracyMeters}m accuracy via ${loc.sourceAccuracy === 'high' ? 'GPS satellite lock' : 'cellular/Wi-Fi triangulation'}. Location services are working properly!`,
+        });
+      } else if (loc.locationError === 'timeout') {
+        setGpsFeedback({
+          type: 'warn',
+          title: 'Location Timed Out',
+          message: 'Could not get an accurate fix in time. Ensure mobile data/Wi-Fi is active and try again.',
+        });
+      } else {
+        setGpsFeedback({
+          type: 'warn',
+          title: 'Location Unavailable',
+          message: 'Could not obtain coordinates. Make sure Location / GPS is turned ON in your phone settings or pull-down menu.',
+        });
+      }
+    } catch {
+      setGpsFeedback({
+        type: 'warn',
+        title: 'Location Detection Error',
+        message: 'Browser could not access location. Please check device settings.',
+      });
+    } finally {
+      setTestingGps(false);
     }
   };
 
@@ -474,6 +567,186 @@ export default function KpiWorkflowClient() {
           </button>
         </div>
       </div>
+
+      {/* Mobile-Friendly Quick Attendance & GPS Check-In Dock */}
+      {report && activeKpi && (
+        <div className="rounded-2xl border border-slate-200/90 bg-gradient-to-br from-white to-slate-50/80 p-4 sm:p-5 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="flex size-7 items-center justify-center rounded-lg bg-[#0f3a5c] text-white">
+                  <MapPin size={15} />
+                </span>
+                <div>
+                  <h2 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                    <span>Quick Daily Attendance</span>
+                    <span className="text-[11px] font-medium text-slate-500">· Dhaka (GMT+6)</span>
+                  </h2>
+                  <p className="text-xs text-slate-500 truncate">
+                    Staff: <span className="font-semibold text-slate-800">{activeKpi.employee.name}</span> ({activeKpi.employee.empId})
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
+                  activeKpi.attendance.todayCheckIn
+                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                    : 'bg-amber-100 text-amber-900 border border-amber-200'
+                }`}
+              >
+                <span className={`size-2 rounded-full ${activeKpi.attendance.todayCheckIn ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'}`} />
+                {activeKpi.attendance.todayCheckIn
+                  ? `In: ${activeKpi.attendance.todayCheckIn} (${activeKpi.attendance.todayStatus || 'Present'})`
+                  : 'Not Checked In Yet'}
+              </span>
+
+              {activeKpi.attendance.todayCheckOut && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
+                  Out: {activeKpi.attendance.todayCheckOut}
+                </span>
+              )}
+
+              {activeKpi.attendance.todayLocationLabel && activeKpi.attendance.todayCheckIn && (
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold ${
+                    activeKpi.attendance.todayLocationType === 'office_location'
+                      ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                      : activeKpi.attendance.todayLocationType === 'remote_location'
+                        ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                        : 'bg-rose-50 text-rose-800 border border-rose-200'
+                  }`}
+                >
+                  <MapPin size={11} />
+                  {activeKpi.attendance.todayLocationLabel}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Action Buttons: Full touch targets for mobile */}
+          <div className="mt-4 grid grid-cols-1 sm:flex sm:flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              disabled={busy || Boolean(activeKpi.attendance.todayCheckIn)}
+              onClick={() => handleAttendanceAction('checkin')}
+              className="inline-flex w-full sm:w-auto min-h-[44px] sm:min-h-[38px] items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <LogIn size={15} className={locating ? 'animate-spin' : ''} />
+              {locating ? 'Acquiring GPS / Network Lock...' : activeKpi.attendance.todayCheckIn ? 'Checked In Today' : '1-Tap Check In'}
+            </button>
+
+            <button
+              type="button"
+              disabled={busy || !activeKpi.attendance.todayCheckIn || Boolean(activeKpi.attendance.todayCheckOut)}
+              onClick={() => handleAttendanceAction('checkout')}
+              className="inline-flex w-full sm:w-auto min-h-[44px] sm:min-h-[38px] items-center justify-center gap-2 rounded-xl bg-[#0f3a5c] px-4 py-2.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#12436b] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <LogOut size={15} />
+              {activeKpi.attendance.todayCheckOut ? 'Checked Out' : 'Check Out'}
+            </button>
+
+            <button
+              type="button"
+              disabled={testingGps || busy}
+              onClick={handleTestGps}
+              className="inline-flex w-full sm:w-auto min-h-[44px] sm:min-h-[38px] items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-bold text-slate-700 shadow-xs transition hover:bg-slate-50 active:scale-[0.98] disabled:opacity-50"
+            >
+              <Navigation size={14} className={testingGps ? 'animate-spin text-blue-600' : 'text-slate-500'} />
+              {testingGps ? 'Testing GPS...' : 'Test Location & Signal'}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setGpsTroubleshootOpen((v) => !v)}
+              className="inline-flex w-full sm:w-auto min-h-[44px] sm:min-h-[38px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+            >
+              <HelpCircle size={14} className="text-amber-600" />
+              <span>{gpsTroubleshootOpen ? 'Hide GPS Guide' : 'GPS Not Working?'}</span>
+              {gpsTroubleshootOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            </button>
+          </div>
+
+          {/* GPS Feedback Pill */}
+          {gpsFeedback && (
+            <div
+              className={`mt-3 flex items-start gap-2.5 rounded-xl p-3 text-xs ${
+                gpsFeedback.type === 'ok'
+                  ? 'border border-emerald-200 bg-emerald-50/90 text-emerald-900'
+                  : 'border border-amber-200 bg-amber-50/90 text-amber-900'
+              }`}
+            >
+              {gpsFeedback.type === 'ok' ? (
+                <CheckCircle2 size={16} className="shrink-0 text-emerald-600 mt-0.5" />
+              ) : (
+                <AlertTriangle size={16} className="shrink-0 text-amber-600 mt-0.5" />
+              )}
+              <div className="min-w-0">
+                <p className="font-bold">{gpsFeedback.title}</p>
+                <p className="mt-0.5 text-xs leading-relaxed">{gpsFeedback.message}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Expandable Device-Specific GPS Troubleshooting */}
+          {gpsTroubleshootOpen && (
+            <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 text-xs text-slate-700 space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <h3 className="font-bold text-slate-900 flex items-center gap-1.5 text-xs">
+                  <Smartphone size={14} className="text-blue-600" />
+                  Fix GPS / Location on Phone or Laptop in 2 Steps
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setGpsTroubleshootOpen(false)}
+                  className="text-slate-400 hover:text-slate-600"
+                >
+                  <X size={15} />
+                </button>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {/* Android Chrome */}
+                <div className="rounded-lg bg-slate-50 p-3 border border-slate-200/80">
+                  <p className="font-bold text-slate-900 flex items-center gap-1">
+                    <span className="size-2 rounded-full bg-emerald-500" />
+                    Android (Chrome / Browser)
+                  </p>
+                  <ol className="mt-2 list-decimal pl-4 space-y-1 text-slate-600 leading-relaxed">
+                    <li>Tap the <strong>tune/lock icon</strong> 🔒 or 🎛️ in the URL bar (left of eduexpressint.com).</li>
+                    <li>Tap <strong>Permissions</strong> &gt; <strong>Location</strong> &gt; switch to <strong>Allow</strong>.</li>
+                    <li>Swipe down your phone&apos;s notification bar and make sure <strong>Location / GPS is ON</strong>.</li>
+                    <li>Tap <strong>Test Location &amp; Signal</strong> above.</li>
+                  </ol>
+                </div>
+
+                {/* iPhone Safari */}
+                <div className="rounded-lg bg-slate-50 p-3 border border-slate-200/80">
+                  <p className="font-bold text-slate-900 flex items-center gap-1">
+                    <span className="size-2 rounded-full bg-blue-500" />
+                    iPhone (Safari / iOS)
+                  </p>
+                  <ol className="mt-2 list-decimal pl-4 space-y-1 text-slate-600 leading-relaxed">
+                    <li>Tap the <strong>aA</strong> icon in the address bar &gt; <strong>Website Settings</strong> &gt; <strong>Location: Allow</strong>.</li>
+                    <li>Or open iPhone <strong>Settings &gt; Privacy &amp; Security &gt; Location Services</strong> (make sure ON).</li>
+                    <li>Scroll to <strong>Safari Websites</strong> &gt; select <strong>While Using the App</strong>.</li>
+                    <li>Refresh this page and tap <strong>Check In</strong>.</li>
+                  </ol>
+                </div>
+              </div>
+
+              <div className="rounded-lg bg-blue-50/70 p-2.5 text-[11px] text-blue-900 flex items-start gap-1.5">
+                <CheckCircle2 size={13} className="shrink-0 text-blue-600 mt-0.5" />
+                <span>
+                  <strong>Indoor Office Fallback Active:</strong> When inside Dhanmondi office building where satellite GPS is blocked, the system automatically uses Wi-Fi and mobile network triangulation.
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Mode Tabs */}
       <div className="flex gap-2 overflow-x-auto border-b border-slate-200 pb-px">
@@ -842,22 +1115,22 @@ export default function KpiWorkflowClient() {
                         Monthly Attendance: {activeKpi.attendance.pct}% · EOD Streak: {activeKpi.discipline.streak} days · Score: {activeKpi.score}/100
                       </p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex w-full sm:w-auto flex-col sm:flex-row gap-2">
                       <button
                         type="button"
                         disabled={busy || Boolean(activeKpi.attendance.todayCheckIn)}
                         onClick={() => handleAttendanceAction('checkin')}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50"
+                        className="inline-flex w-full sm:w-auto min-h-[44px] sm:min-h-[38px] items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50"
                       >
-                        <LogIn size={14} /> {locating ? 'Capturing GPS...' : 'Check In'}
+                        <LogIn size={15} /> {locating ? 'Capturing GPS...' : activeKpi.attendance.todayCheckIn ? 'Checked In Today' : 'Check In'}
                       </button>
                       <button
                         type="button"
-                        disabled={busy || !activeKpi.attendance.todayCheckIn}
+                        disabled={busy || !activeKpi.attendance.todayCheckIn || Boolean(activeKpi.attendance.todayCheckOut)}
                         onClick={() => handleAttendanceAction('checkout')}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-[#0f3a5c] px-3.5 py-2 text-xs font-bold text-white hover:bg-[#12436b] disabled:opacity-50"
+                        className="inline-flex w-full sm:w-auto min-h-[44px] sm:min-h-[38px] items-center justify-center gap-1.5 rounded-xl bg-[#0f3a5c] px-4 py-2 text-xs font-bold text-white hover:bg-[#12436b] disabled:opacity-50"
                       >
-                        <LogOut size={14} /> Check Out
+                        <LogOut size={15} /> {activeKpi.attendance.todayCheckOut ? 'Checked Out' : 'Check Out'}
                       </button>
                     </div>
                   </div>
