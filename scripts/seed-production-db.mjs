@@ -77,6 +77,9 @@ try {
   console.log('Syncing 306/306 CSC-designated flags across China universities...');
   execSync('node scripts/sync-china-csc-flags.mjs', { stdio: 'inherit' });
 
+  console.log('Running Phase 4 active-destination universities expansion (11 non-China destinations)...');
+  execSync('node scripts/seed-active-destinations-universities.mjs', { stdio: 'inherit' });
+
   console.log('Syncing private Tier-2 InternalSourceWatch vault...');
   execSync('node scripts/seed-hidden-sources.mjs', { stdio: 'inherit' });
 

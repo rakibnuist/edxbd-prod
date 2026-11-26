@@ -5,7 +5,7 @@
  */
 
 export const OPEN_DATA_REPOSITORIES = {
-  version: '2026.11.26',
+  version: '2026.11.26.2',
   releaseDateIso: '2026-11-26T00:00:00Z',
   licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
   zenodoDoi: '10.5281/zenodo.24545329',
@@ -14,7 +14,7 @@ export const OPEN_DATA_REPOSITORIES = {
   zenodoConceptDoi: '10.5281/zenodo.24423800',
   zenodoConceptDoiUrl: 'https://doi.org/10.5281/zenodo.24423800',
   githubRepoUrl: 'https://github.com/rakibnuist/bangladesh-study-abroad-dataset',
-  githubReleaseUrl: 'https://github.com/rakibnuist/bangladesh-study-abroad-dataset/releases/tag/v2026.11.26',
+  githubReleaseUrl: 'https://github.com/rakibnuist/bangladesh-study-abroad-dataset/releases/tag/v2026.11.26.2',
   githubRawBase: 'https://raw.githubusercontent.com/rakibnuist/bangladesh-study-abroad-dataset/main/data',
   kaggleUrl:
     'https://www.kaggle.com/datasets/abdullahalrakibww/bangladesh-study-abroad-china-cost-benchmark-2027',

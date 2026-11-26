@@ -826,6 +826,37 @@ export default function CostCalculatorWidget({
                       </td>
                     </tr>
                     <tr>
+                      <td className="px-3 py-2 font-semibold text-slate-600">Verified University Catalog</td>
+                      <td className="px-3 py-2">
+                        {rowA.verifiedUniversityCount > 0 ? (
+                          <a
+                            href={`https://eduexpressint.com/universities?country=${encodeURIComponent(rowA.name)}&utm_source=embed_widget&utm_medium=referral&utm_campaign=cost_calculator`}
+                            target="_blank"
+                            rel="noopener"
+                            className="font-semibold text-[#12436b] underline underline-offset-2"
+                          >
+                            {rowA.verifiedUniversityCount} verified {rowA.verifiedUniversityCount === 1 ? 'university' : 'universities'} →
+                          </a>
+                        ) : (
+                          <span className="text-slate-500">Global benchmark reference</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2">
+                        {rowB.verifiedUniversityCount > 0 ? (
+                          <a
+                            href={`https://eduexpressint.com/universities?country=${encodeURIComponent(rowB.name)}&utm_source=embed_widget&utm_medium=referral&utm_campaign=cost_calculator`}
+                            target="_blank"
+                            rel="noopener"
+                            className="font-semibold text-[#12436b] underline underline-offset-2"
+                          >
+                            {rowB.verifiedUniversityCount} verified {rowB.verifiedUniversityCount === 1 ? 'university' : 'universities'} →
+                          </a>
+                        ) : (
+                          <span className="text-slate-500">Global benchmark reference</span>
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
                       <td className="px-3 py-2 font-semibold text-slate-600">Key Guardrail</td>
                       <td className="px-3 py-2 text-slate-700">{rowA.keyGuardrail}</td>
                       <td className="px-3 py-2 text-slate-700">{rowB.keyGuardrail}</td>

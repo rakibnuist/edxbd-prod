@@ -20,9 +20,9 @@ export const metadata: Metadata = {
 };
 
 async function loadWidgetData() {
-  const destinations = buildPublicCalculatorDestinations();
   try {
     const allUniversities = await getUniversityRecords();
+    const destinations = buildPublicCalculatorDestinations(allUniversities);
     const chinaUniversities = allUniversities.filter(
       (u) => u.isActive && u.country.toLowerCase() === 'china',
     );
@@ -47,7 +47,7 @@ async function loadWidgetData() {
     return {
       universities: [],
       initialDetail: null,
-      destinations,
+      destinations: buildPublicCalculatorDestinations(),
       activeUniversitiesCount: 159,
       chinaUniversitiesCount: 150,
     };

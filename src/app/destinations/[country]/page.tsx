@@ -23,6 +23,7 @@ import { countries } from '@/lib/countries';
 import { citationJsonLd } from '@/lib/json-ld';
 import { ogImage, pageMetadata } from '@/lib/seo';
 import { SITE_URL, absoluteUrl } from '@/lib/site-urls';
+import { getUniversityRecords } from '@/lib/university-records';
 import { COUNTRY_SEO, OFFICIAL_COUNTRY_SOURCES, type CountrySeo } from './country-seo';
 
 type Props = { params: Promise<{ country: string }> };
@@ -88,6 +89,9 @@ export default async function CountryPage({ params }: Props) {
   const status = country.serviceStatus || 'Active';
   const path = countryPath(slug);
   const pageUrl = absoluteUrl(path);
+  const verifiedUniversities = await getUniversityRecords(country.name)
+    .then((rows) => rows.filter((u) => u.isActive))
+    .catch(() => []);
   const photo = destinationPhoto(slug);
   const reviewed = country.reviewerInfo?.lastVerifiedDate;
   const dateModified = verifiedIso(country);
@@ -275,7 +279,41 @@ export default async function CountryPage({ params }: Props) {
               ))}
             </ul>
           </article>
-          {country.universities && country.universities.length > 0 ? (
+          {verifiedUniversities.length > 0 ? (
+            <article className={kit.card}>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className={kit.h3}>Verified {country.name} universities ({verifiedUniversities.length})</h3>
+                <Link
+                  href={`/universities?country=${encodeURIComponent(country.name)}`}
+                  className="text-[13px] font-semibold text-petrol-700 underline underline-offset-4 hover:text-petrol-800"
+                >
+                  Filter all in directory →
+                </Link>
+              </div>
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                {verifiedUniversities.slice(0, 8).map((u) => (
+                  <li key={u.slug} className="rounded-2xl border border-petrol-800/10 bg-canvas p-3.5 transition hover:border-petrol-800/25">
+                    <Link href={`/universities/${u.slug}`} className="block">
+                      <span className="block text-[15px] font-bold leading-snug text-petrol-800 hover:underline">
+                        {u.name}
+                      </span>
+                      <span className="mt-1 block text-[13px] text-ink-soft">
+                        {u.city} · {u.programs.length} programs · {u.scholarships.length} funding {u.scholarships.length === 1 ? 'track' : 'tracks'}
+                      </span>
+                      {u.details?.tuition && (
+                        <span className="mt-1.5 block text-[12.5px] font-semibold text-lime-deep">
+                          {u.details.tuition}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4 text-[13.5px] leading-6 text-ink-mute">
+                Published in local institutional currency with non-tuition fees separated. Availability and fee schedules are confirmed in writing before application.
+              </p>
+            </article>
+          ) : country.universities && country.universities.length > 0 ? (
             <article className={kit.card}>
               <h3 className={kit.h3}>Institutions noted in current guidance</h3>
               <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
@@ -304,7 +342,12 @@ export default async function CountryPage({ params }: Props) {
           )}
         </div>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <Link href="/universities" className="ed-btn ed-btn-outline min-h-[48px] px-6">Browse university records</Link>
+          <Link
+            href={verifiedUniversities.length > 0 ? `/universities?country=${encodeURIComponent(country.name)}` : '/universities'}
+            className="ed-btn ed-btn-outline min-h-[48px] px-6"
+          >
+            Browse {country.name} university records
+          </Link>
           <Link href="/find-education" className="ed-btn ed-btn-outline min-h-[48px] px-6">Research by program</Link>
           <Link href="/how-we-verify-universities" className="ed-btn ed-btn-outline min-h-[48px] px-6">How we verify universities</Link>
         </div>

@@ -76,6 +76,7 @@ export type PublicCalculatorDestination = {
   flagshipScholarships: CountryScholarshipBenchmark[];
   publicAuthorityNames: string[];
   lastVerifiedIso: string;
+  verifiedUniversityCount: number;
 };
 
 function stripProgramSourceUrl(row: ProgramRow): PublicCalculatorProgram {
@@ -180,7 +181,16 @@ export function buildPublicUniversitySummaries(
  * Public-safe destination rows for the embeddable widget (zero external URLs;
  * keeps Tier-1 authority names + verification date only).
  */
-export function buildPublicCalculatorDestinations(): PublicCalculatorDestination[] {
+export function buildPublicCalculatorDestinations(
+  allUniversities: CleanUniversityRecord[] = [],
+): PublicCalculatorDestination[] {
+  const countByCountry = new Map<string, number>();
+  for (const u of allUniversities) {
+    if (!u.isActive) continue;
+    const key = u.country.trim().toLowerCase();
+    countByCountry.set(key, (countByCountry.get(key) ?? 0) + 1);
+  }
+
   return GLOBAL_DESTINATIONS_BENCHMARK.map((d) => ({
     slug: d.slug,
     name: d.name,
@@ -202,5 +212,6 @@ export function buildPublicCalculatorDestinations(): PublicCalculatorDestination
     flagshipScholarships: d.flagshipScholarships,
     publicAuthorityNames: d.publicAuthorityNames,
     lastVerifiedIso: d.lastVerifiedIso,
+    verifiedUniversityCount: countByCountry.get(d.name.trim().toLowerCase()) ?? 0,
   }));
 }

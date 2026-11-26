@@ -572,6 +572,16 @@ const chinaCscCount = universities.filter((u) => u.country === 'China' && Boolea
 const chinaLangUniCount = uniRows.filter((u) => u.country === 'China' && u.has_chinese_language_program === 'yes').length;
 const chinaEngUniCount = uniRows.filter((u) => u.country === 'China' && u.has_english_taught === 'yes').length;
 const malaysiaCount = universities.filter((u) => u.country === 'Malaysia').length;
+const countryCountsMap = universities.reduce((acc, u) => {
+  acc[u.country] = (acc[u.country] || 0) + 1;
+  return acc;
+}, {});
+const catalogCountriesCount = Object.keys(countryCountsMap).length;
+const otherActiveUniCount = universities.length - chinaCount;
+const countryBreakdownSummary = Object.entries(countryCountsMap)
+  .sort((a, b) => b[1] - a[1])
+  .map(([c, n]) => `${c} (${n})`)
+  .join(', ');
 const cityCount = chinaBenchmark.cityCount;
 const td = chinaBenchmark.tuitionDistributions;
 const feeB = chinaBenchmark.feeBenchmarks || [];
@@ -619,13 +629,13 @@ license: "CC-BY-4.0"
 repository-code: "${REPO_URL}"
 url: "${SITE_URL}/press"
 abstract: >-
-  Open, CC BY 4.0 dataset of ${universities.length} verified active universities
-  (${chinaCount} in China across ${cityCount} cities and ${malaysiaCount} in Malaysia),
+  Open, CC BY 4.0 global higher-education dataset of ${universities.length} verified active universities
+  across ${catalogCountriesCount} countries (${countryBreakdownSummary}),
   ${programs.length} degree and language programs, ${fees.length} itemized non-tuition fee rows,
   ${scholarships.length} structured university scholarship tracks, a ${dest32Rows.length}-country
   global Bangladesh outbound cost/visa matrix, and ${countryScholRows.length} Bangladesh-eligible
   flagship national scholarships covering Bangladesh Bank AD Student File rules, statutory visa
-  financial proofs, and explicit single-year CNY tuition quartiles.
+  financial proofs, and explicit local-currency tuition benchmarks.
 keywords:
   - bangladesh-higher-education
   - study-in-china
@@ -664,7 +674,7 @@ const zenodoJson = {
   description:
     `<p>An open, evidence-verified higher-education cost, scholarship, and visa benchmark dataset compiled for Bangladeshi students, parents, journalists, and education researchers by <strong>EduExpress International</strong> (<a href="${SITE_URL}">${SITE_URL}</a>, Dhanmondi, Dhaka).</p>` +
     `<ul>` +
-    `<li><strong>${universities.length} verified active institutions</strong> (${chinaCount} Chinese universities across ${cityCount} cities + ${malaysiaCount} Malaysian universities).</li>` +
+    `<li><strong>${universities.length} verified active institutions across ${catalogCountriesCount} countries</strong> (${countryBreakdownSummary}).</li>` +
     `<li><strong>${programs.length} structured degree &amp; language programs</strong> with explicit currency tuition.</li>` +
     `<li><strong>${fees.length} itemized non-tuition fee records</strong> separating tuition from dormitory, medical insurance, residence permit, health check, and EMGS costs.</li>` +
     `<li><strong>${scholarships.length} structured university scholarship tracks</strong> with parsed tuition waiver type, dorm/insurance waivers, and separate living stipends.</li>` +
@@ -697,7 +707,7 @@ fs.writeFileSync(path.join(OUT_DIR, '.zenodo.json'), `${JSON.stringify(zenodoJso
 const resources = [
   {
     path: 'data/universities_verified.csv',
-    description: `${universities.length} verified active universities (China & Malaysia) with CSC/English/Chinese-language flags, rankings, root official domains, and record counts.`,
+    description: `${universities.length} verified active universities across ${catalogCountriesCount} countries (${countryBreakdownSummary}) with CSC/English/Chinese-language flags, rankings, root official domains, and record counts.`,
   },
   {
     path: 'data/programs_verified.csv',
@@ -733,7 +743,7 @@ const kaggleMetadata = {
   title: 'Bangladesh Global Study Abroad Cost Dataset 2027',
   id: KAGGLE_DATASET_ID,
   subtitle: `${dest32Rows.length} countries, ${universities.length} verified unis, ${programs.length.toLocaleString()} programs & ${(scholarships.length + countryScholRows.length).toLocaleString()} scholarships (2026/27)`.slice(0, 80),
-  description: `# Bangladesh Global Study Abroad Cost & Scholarship Dataset (2027)\n\nOpen CC BY 4.0 global higher-education benchmark published by **EduExpress International** (${SITE_URL}/press, Dhanmondi, Dhaka, Bangladesh).\n\n## Highlights\n- **${dest32Rows.length}-country global Bangladesh outbound matrix** (12 active EduExpress countries + 20 top OECD/regional benchmark destinations) with 2026/27 statutory visa solvency rules\n- **${universities.length} verified active universities** (${chinaCount} in China across ${cityCount} cities incl. ${chinaCscCount}/306 CSC, ${malaysiaCount} in Malaysia — actively expanding across additional countries)\n- **${programs.length} structured degree & language programs** with explicit tuition and medium of instruction\n- **${scholarships.length} structured university scholarship rows** + **${countryScholRows.length} Bangladesh-eligible flagship national scholarships** across all ${dest32Rows.length} countries\n- **${fees.length} itemized non-tuition fee rows** kept strictly separate from tuition`,
+  description: `# Bangladesh Global Study Abroad Cost & Scholarship Dataset (2027)\n\nOpen CC BY 4.0 global higher-education benchmark published by **EduExpress International** (${SITE_URL}/press, Dhanmondi, Dhaka, Bangladesh).\n\n## Highlights\n- **${dest32Rows.length}-country global Bangladesh outbound matrix** (12 active EduExpress countries + 20 top OECD/regional benchmark destinations) with 2026/27 statutory visa solvency rules\n- **${universities.length} verified active universities across ${catalogCountriesCount} countries** (${countryBreakdownSummary})\n- **${programs.length} structured degree & language programs** with explicit tuition and medium of instruction\n- **${scholarships.length} structured university scholarship rows** + **${countryScholRows.length} Bangladesh-eligible flagship national scholarships** across all ${dest32Rows.length} countries\n- **${fees.length} itemized non-tuition fee rows** kept strictly separate from tuition`,
   isPrivate: false,
   licenses: [{ name: 'CC-BY-4.0' }],
   keywords: [
@@ -814,7 +824,7 @@ const readme = `# Bangladesh Global Study Abroad Cost & Scholarship Dataset (202
 [![Programs](https://img.shields.io/badge/Verified_Programs-${programs.length}-1d4ed8.svg)](${SITE_URL}/china-study-report-bangladesh)
 [![Scholarships](https://img.shields.io/badge/Scholarships-${scholarships.length + countryScholRows.length}-b45309.svg)](${SITE_URL}/scholarships)
 
-An open, zero-signup, machine-readable global higher-education dataset covering **${dest32Rows.length} study destinations worldwide** (12 active EduExpress countries + 20 top OECD/regional benchmark destinations), **${universities.length} verified active universities** (currently **${chinaCount} in China** across ${cityCount} cities including **${chinaCscCount}/306 CSC-designated universities**, ${chinaEngUniCount} offering English-taught tracks, and ${chinaLangUniCount} offering Non-Degree Chinese Language programs + **${malaysiaCount} in Malaysia**, actively expanding to additional countries in upcoming versions), **${programs.length} structured degree and language programs**, **${fees.length} itemized non-tuition fee rows**, **${scholarships.length} structured university scholarship tracks**, and **${countryScholRows.length} Bangladesh-eligible flagship national scholarships** (**${scholarships.length + countryScholRows.length} scholarships total**) — published under **CC BY 4.0** by **[EduExpress International](${SITE_URL})** (Dhanmondi, Dhaka, Bangladesh).
+An open, zero-signup, machine-readable global higher-education dataset covering **${dest32Rows.length} study destinations worldwide** (12 active EduExpress countries + 20 top OECD/regional benchmark destinations), **${universities.length} verified active universities across ${catalogCountriesCount} countries** (**${chinaCount} in China** across ${cityCount} cities including **${chinaCscCount}/306 CSC-designated universities**, ${chinaEngUniCount} offering English-taught tracks, and ${chinaLangUniCount} offering Non-Degree Chinese Language programs + **${otherActiveUniCount} verified flagship institutions across ${Math.max(1, catalogCountriesCount - 1)} additional active destinations**: ${Object.entries(countryCountsMap).filter(([c]) => c !== 'China').sort((a, b) => b[1] - a[1]).map(([c, n]) => `${c} ${n}`).join(', ')}), **${programs.length} structured degree and language programs**, **${fees.length} itemized non-tuition fee rows**, **${scholarships.length} structured university scholarship tracks**, and **${countryScholRows.length} Bangladesh-eligible flagship national scholarships** (**${scholarships.length + countryScholRows.length} scholarships total**) — published under **CC BY 4.0** by **[EduExpress International](${SITE_URL})** (Dhanmondi, Dhaka, Bangladesh).
 
 > **Canonical Sources & Permanent Mirrors**
 > - **Interactive 32-Country Cost & Scholarship Calculator:** [${SITE_URL}/compare-costs](${SITE_URL}/compare-costs) ([Embeddable Widget](${SITE_URL}/embed/cost-calculator))
@@ -829,7 +839,7 @@ An open, zero-signup, machine-readable global higher-education dataset covering 
 
 ## 1. Key Benchmark Snapshot (${RELEASE_DATE} · v${VERSION})
 
-- **Catalog Coverage:** **${universities.length} verified active universities** (${chinaCount} in China across ${cityCount} cities including **${chinaCscCount}/306 CSC-designated universities**; ${malaysiaCount} in Malaysia).
+- **Catalog Coverage:** **${universities.length} verified active universities across ${catalogCountriesCount} countries** (${countryBreakdownSummary}).
 - **China Language & English Access:** **${chinaEngUniCount}** Chinese universities with English-taught programs and **${chinaLangUniCount}** with Non-Degree Chinese Language tracks.
 - **Global Country Coverage:** **${dest32Rows.length} destinations** (12 EduExpress Active + 20 Global Benchmark Reference destinations where Bangladeshi students go) with 2026/27 statutory visa financial proof thresholds and **${countryScholRows.length}** flagship scholarships.
 - **2-Tier Hybrid Source Governance:** High-level regulatory authorities and root institutional domains are cited openly, while deep brochure/policy tracking URLs are monitored privately to prevent dead links and detect updates automatically.
