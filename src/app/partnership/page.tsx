@@ -5,6 +5,7 @@ import {
   Award,
   CheckCircle2,
   Clock3,
+  Download,
   FileCheck2,
   GraduationCap,
   Handshake,
@@ -351,6 +352,14 @@ export default async function PartnershipPage() {
               <a href="#partnership-form" className="ed-btn ed-btn-signal min-h-[54px] px-7">
                 Apply Free in 60 Seconds <ArrowRight size={18} aria-hidden="true" />
               </a>
+              <a
+                href="/api/b2b/partner-pack"
+                download="EduExpress-B2B-Partner-Process-Pack-2027.pdf"
+                className="inline-flex min-h-[54px] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 text-[15.5px] font-bold text-white transition hover:bg-white/20"
+              >
+                <Download size={17} className="text-lime" aria-hidden="true" />
+                Download Partner Pack (PDF)
+              </a>
               <PartnershipContactLink
                 kind="whatsapp"
                 label="hero_whatsapp"
@@ -606,6 +615,23 @@ export default async function PartnershipPage() {
               </div>
             </article>
           ))}
+        </div>
+
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-petrol-800/10 bg-canvas-soft p-5 sm:p-6">
+          <div className="max-w-xl">
+            <h3 className="font-heading text-lg font-bold text-petrol-800">Download the Official Partner Process Pack (PDF)</h3>
+            <p className="mt-1 text-sm text-ink-soft">
+              Keep the written China USD rate card, non-poaching guarantees, and onboarding milestones on hand for your management team.
+            </p>
+          </div>
+          <a
+            href="/api/b2b/partner-pack"
+            download="EduExpress-B2B-Partner-Process-Pack-2027.pdf"
+            className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-petrol-800 px-6 text-sm font-bold text-lime transition hover:bg-petrol-900"
+          >
+            <Download size={16} aria-hidden="true" />
+            Download Process Pack (PDF)
+          </a>
         </div>
       </Section>
 

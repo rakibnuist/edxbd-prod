@@ -8,8 +8,14 @@ type DefaultTab = 'china' | 'destinations';
 
 export default function EmbedCodeSnippet({
   compact = false,
+  chinaUniversitiesCount = 150,
+  activeUniversitiesCount = 159,
+  globalDestinationsCount = 32,
 }: {
   compact?: boolean;
+  chinaUniversitiesCount?: number;
+  activeUniversitiesCount?: number;
+  globalDestinationsCount?: number;
 }) {
   const [defaultTab, setDefaultTab] = useState<DefaultTab>('china');
   const [copied, setCopied] = useState(false);
@@ -19,9 +25,9 @@ export default function EmbedCodeSnippet({
       ? 'https://eduexpressint.com/embed/cost-calculator?tab=destinations'
       : 'https://eduexpressint.com/embed/cost-calculator';
 
-  const iframeHeight = defaultTab === 'destinations' ? 540 : 580;
+  const iframeHeight = defaultTab === 'destinations' ? 760 : 720;
 
-  const htmlCode = `<iframe src="${iframeSrc}" title="Bangladesh Study Abroad Cost Calculator — EduExpress International" width="100%" height="${iframeHeight}" style="border:0;border-radius:16px;max-width:780px;" loading="lazy"></iframe>\n<p style="font-size:12px;color:#475569;">Data: <a href="https://eduexpressint.com/compare-costs" target="_blank" rel="noopener">EduExpress International Study Abroad Cost Benchmark</a> (CC BY 4.0 · DOI: ${OPEN_DATA_REPOSITORIES.zenodoDoi})</p>`;
+  const htmlCode = `<iframe src="${iframeSrc}" title="Bangladesh Study Abroad Cost & Scholarship Calculator — EduExpress International" width="100%" height="${iframeHeight}" style="border:0;border-radius:16px;max-width:860px;" loading="lazy"></iframe>\n<p style="font-size:12px;color:#475569;">Data: <a href="https://eduexpressint.com/compare-costs" target="_blank" rel="noopener">EduExpress International Study Abroad Cost &amp; Scholarship Benchmark</a> (CC BY 4.0 · DOI: ${OPEN_DATA_REPOSITORIES.zenodoDoi})</p>`;
 
   const handleCopy = async () => {
     try {
@@ -45,10 +51,10 @@ export default function EmbedCodeSnippet({
             <Code2 size={13} aria-hidden="true" /> Free Embeddable Widget (CC BY 4.0)
           </span>
           <h3 className="mt-2.5 text-[20px] font-bold tracking-[-0.02em] text-petrol-800">
-            Embed the Bangladesh Study Abroad Cost Calculator
+            Embed the Bangladesh Study Abroad Cost &amp; Scholarship Calculator
           </h3>
           <p className="mt-1.5 max-w-2xl text-[14.5px] leading-6 text-ink-soft">
-            Schools, university career portals, student blogs, and journalists can embed this live, ad-free calculator with one line of HTML. Pulls directly from our verified 159-university &amp; 12-destination benchmark.
+            Schools, university career portals, student blogs, and journalists can embed this live, ad-free calculator with one line of HTML. Pulls directly from our verified {activeUniversitiesCount}-university catalog ({chinaUniversitiesCount} in China with scholarship &amp; language filters) and {globalDestinationsCount}-country global benchmark.
           </p>
         </div>
 
@@ -74,7 +80,7 @@ export default function EmbedCodeSnippet({
               : 'border border-petrol-800/20 bg-canvas-soft text-petrol-800 hover:bg-petrol-800/10'
           }`}
         >
-          China 1st-Year Calculator (150 Universities)
+          China Cost &amp; Scholarships ({chinaUniversitiesCount} Universities)
         </button>
         <button
           type="button"
@@ -85,7 +91,7 @@ export default function EmbedCodeSnippet({
               : 'border border-petrol-800/20 bg-canvas-soft text-petrol-800 hover:bg-petrol-800/10'
           }`}
         >
-          12-Destination &amp; Student File Matrix
+          {globalDestinationsCount}-Country Global &amp; Scholarship Matrix
         </button>
       </div>
 

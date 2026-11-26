@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { FINANCE_ACTIVITY_TYPES, canAccessFinanceRole } from '@/lib/auth';
 import {
   canAccessLeadScope,
   verifyLiveAdminUser,
@@ -32,6 +33,7 @@ export async function GET(
     }
 
     const isAdmin = Boolean(admin);
+    const canSeeFinance = canAccessFinanceRole(actor.role);
     const { id } = await params;
 
     const lead = await prisma.lead.findUnique({
@@ -40,7 +42,11 @@ export async function GET(
         assignedEmployee: { select: { id: true, name: true, empId: true } },
         universityApps: { orderBy: { createdAt: 'desc' } },
         documents: { orderBy: { createdAt: 'asc' } },
-        activities: { orderBy: { createdAt: 'desc' }, take: 60 },
+        activities: {
+          where: canSeeFinance ? undefined : { type: { notIn: [...FINANCE_ACTIVITY_TYPES] } },
+          orderBy: { createdAt: 'desc' },
+          take: 60,
+        },
       },
     });
 
@@ -81,7 +87,7 @@ export async function GET(
       notes: string | null;
     }> = [];
 
-    if (isAdmin) {
+    if (canSeeFinance) {
       const matchOr = [
         { leadId: lead.id },
         ...(lead.leadRef ? [{ leadRef: lead.leadRef }] : []),
@@ -118,10 +124,10 @@ export async function GET(
       ]);
     }
 
-    const financeReceivedTotal = isAdmin
+    const financeReceivedTotal = canSeeFinance
       ? financeIncomes.filter((i) => !i.excludeFromCash).reduce((s, r) => s + (Number(r.amount) || 0), 0)
       : null;
-    const financeSpentTotal = isAdmin
+    const financeSpentTotal = canSeeFinance
       ? financeExpenses.reduce((s, r) => s + (Number(r.amount) || 0), 0)
       : null;
 
@@ -162,9 +168,9 @@ export async function GET(
       departureDate: lead.departureDate,
       nextFollowup: lead.nextFollowup,
       driveLink: lead.driveLink,
-      serviceFee: lead.serviceFee || 0,
-      paidAmount: lead.paidAmount || 0,
-      deposit: lead.deposit || 0,
+      serviceFee: canSeeFinance ? lead.serviceFee || 0 : 0,
+      paidAmount: canSeeFinance ? lead.paidAmount || 0 : 0,
+      deposit: canSeeFinance ? lead.deposit || 0 : 0,
       applicationNotes: lead.applicationNotes,
       notes: lead.notes,
       bloodGroup: lead.bloodGroup,
@@ -190,11 +196,12 @@ export async function GET(
     return NextResponse.json(
       {
         isAdmin,
+        canAccessFinance: canSeeFinance,
         application,
         universityApps: lead.universityApps,
         documents: lead.documents,
         activities: lead.activities,
-        finance: isAdmin
+        finance: canSeeFinance
           ? {
               receivedTotal: financeReceivedTotal || 0,
               spentTotal: financeSpentTotal || 0,
@@ -231,6 +238,7 @@ export async function PATCH(
     }
 
     const isAdmin = Boolean(admin);
+    const canSeeFinance = canAccessFinanceRole(actor.role);
     const { id } = await params;
 
     const existing = await prisma.lead.findUnique({ where: { id } });
@@ -257,6 +265,13 @@ export async function PATCH(
     }
 
     const data = { ...(validated.data || {}) };
+
+    // Non-finance roles must never view or overwrite student financial fields
+    if (!canSeeFinance) {
+      delete data.serviceFee;
+      delete data.paidAmount;
+      delete data.deposit;
+    }
 
     // Enforce RBAC rules for counselors
     if (!isAdmin) {

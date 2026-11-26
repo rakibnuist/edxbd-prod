@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { teamMembers as canonicalTeamDefaults } from '@/data/teamMembers';
+import { formatRoleLabel, isAdminRole, type StaffRole } from '@/lib/roles';
 
 interface AdminEmployeeRow {
   id: string;
@@ -94,7 +95,7 @@ interface EditorFormState {
   // CRM access
   enableLogin: boolean;
   loginEmail: string;
-  loginRole: 'counselor' | 'admin' | 'super_admin';
+  loginRole: StaffRole;
   loginPassword: string;
   // Public Website bio & photo
   syncPublicProfile: boolean;
@@ -333,7 +334,7 @@ export default function AdminTeamManagerPanel({
     setBanner(null);
     const fallback = findDefaultProfile(member.name, member.workEmail);
     const pub = member.publicProfile;
-    const roleChoice = (member.loginRole || 'counselor') as 'counselor' | 'admin' | 'super_admin';
+    const roleChoice = (member.loginRole || 'counselor') as StaffRole;
 
     setEditor({
       mode: 'edit',
@@ -349,7 +350,7 @@ export default function AdminTeamManagerPanel({
       active: member.active,
       enableLogin: Boolean(member.user),
       loginEmail: member.user?.email || member.workEmail,
-      loginRole: ['counselor', 'admin', 'super_admin'].includes(roleChoice) ? roleChoice : 'counselor',
+      loginRole: ['counselor', 'operations_admin', 'admin', 'super_admin'].includes(roleChoice) ? roleChoice : 'counselor',
       loginPassword: '',
       syncPublicProfile: Boolean(pub),
       isPublished: pub?.isPublished ?? true,
@@ -476,7 +477,12 @@ export default function AdminTeamManagerPanel({
       }
 
       // 2. Sync CRM Login account if enabled
-      if (editor.enableLogin) {
+      const canModifyTargetLogin =
+        currentUser?.role === 'super_admin' ||
+        editor.userId === currentUser?.id ||
+        !isAdminRole(editor.loginRole);
+
+      if (editor.enableLogin && canModifyTargetLogin) {
         const targetEmail = editor.loginEmail.trim().toLowerCase();
         if (editor.userId) {
           const payload: Record<string, unknown> = {
@@ -484,7 +490,9 @@ export default function AdminTeamManagerPanel({
             email: targetEmail,
             employeeId: savedEmployeeId || null,
           };
-          if (currentUser?.role === 'super_admin' || editor.loginRole !== 'super_admin') {
+          if (currentUser?.role === 'super_admin' && editor.userId !== currentUser?.id) {
+            payload.role = editor.loginRole;
+          } else if (editor.userId !== currentUser?.id && !isAdminRole(editor.loginRole)) {
             payload.role = editor.loginRole;
           }
           if (editor.loginPassword.trim()) {
@@ -500,6 +508,8 @@ export default function AdminTeamManagerPanel({
             throw new Error(userData.message || 'Staff saved, but CRM login update failed.');
           }
         } else {
+          const createRole: StaffRole =
+            currentUser?.role === 'super_admin' ? editor.loginRole : 'counselor';
           const userRes = await authenticatedFetch('/api/admin/users', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -507,7 +517,7 @@ export default function AdminTeamManagerPanel({
               name: trimmedName,
               email: targetEmail,
               password: editor.loginPassword.trim(),
-              role: editor.loginRole === 'super_admin' ? 'admin' : editor.loginRole,
+              role: createRole,
               employeeId: savedEmployeeId,
             }),
           });
@@ -708,6 +718,9 @@ export default function AdminTeamManagerPanel({
         >
           {unifiedTeam.map((member) => {
             const isSelf = Boolean(member.user?.id && member.user.id === currentUser?.id);
+            const isProtectedAdmin = Boolean(
+              member.user && isAdminRole(member.user.role) && currentUser?.role !== 'super_admin',
+            );
             return (
               <article
                 key={member.key}
@@ -777,7 +790,7 @@ export default function AdminTeamManagerPanel({
                       <Shield size={11} className="shrink-0 text-slate-400" />
                       {member.user ? (
                         <span className="truncate font-semibold text-emerald-700" title={member.user.email}>
-                          CRM: {member.user.role.replace('_', ' ')} ({member.user.email})
+                          CRM: {formatRoleLabel(member.user.role)} ({member.user.email})
                         </span>
                       ) : (
                         <span className="text-amber-700">No CRM login linked</span>
@@ -794,7 +807,7 @@ export default function AdminTeamManagerPanel({
                   >
                     <Edit3 size={12} /> Edit
                   </button>
-                  {!isSelf && (
+                  {!isSelf && !isProtectedAdmin && (
                     <button
                       type="button"
                       onClick={() =>
@@ -1048,9 +1061,15 @@ export default function AdminTeamManagerPanel({
                         <input
                           type="email"
                           required={editor.enableLogin}
+                          disabled={
+                            Boolean(editor.userId) &&
+                            editor.userId !== currentUser?.id &&
+                            isAdminRole(editor.loginRole) &&
+                            currentUser?.role !== 'super_admin'
+                          }
                           value={editor.loginEmail}
                           onChange={(e) => setEditor({ ...editor, loginEmail: e.target.value })}
-                          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs"
+                          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs disabled:bg-slate-100 disabled:text-slate-500"
                         />
                       </div>
                       <div>
@@ -1059,20 +1078,25 @@ export default function AdminTeamManagerPanel({
                           value={editor.loginRole}
                           disabled={
                             editor.userId === currentUser?.id ||
-                            (editor.loginRole === 'super_admin' && currentUser?.role !== 'super_admin')
+                            (isAdminRole(editor.loginRole) && currentUser?.role !== 'super_admin')
                           }
                           onChange={(e) =>
                             setEditor({
                               ...editor,
-                              loginRole: e.target.value as 'counselor' | 'admin' | 'super_admin',
+                              loginRole: e.target.value as StaffRole,
                             })
                           }
                           className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold"
                         >
                           <option value="counselor">Counselor / Staff</option>
-                          <option value="admin">Admin</option>
+                          {(currentUser?.role === 'super_admin' || editor.loginRole === 'operations_admin') && (
+                            <option value="operations_admin">Operations Admin (No Finance)</option>
+                          )}
+                          {(currentUser?.role === 'super_admin' || editor.loginRole === 'admin') && (
+                            <option value="admin">Admin (Full + Finance)</option>
+                          )}
                           {(currentUser?.role === 'super_admin' || editor.loginRole === 'super_admin') && (
-                            <option value="super_admin">Super Admin</option>
+                            <option value="super_admin">Full Control (Super Admin)</option>
                           )}
                         </select>
                       </div>
@@ -1084,10 +1108,16 @@ export default function AdminTeamManagerPanel({
                           type="password"
                           minLength={editor.userId && !editor.loginPassword ? undefined : 12}
                           required={!editor.userId && editor.enableLogin}
+                          disabled={
+                            Boolean(editor.userId) &&
+                            editor.userId !== currentUser?.id &&
+                            isAdminRole(editor.loginRole) &&
+                            currentUser?.role !== 'super_admin'
+                          }
                           value={editor.loginPassword}
                           onChange={(e) => setEditor({ ...editor, loginPassword: e.target.value })}
                           placeholder={editor.userId ? 'Leave blank to keep' : 'Min 12 characters'}
-                          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs"
+                          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs disabled:bg-slate-100 disabled:text-slate-500"
                         />
                       </div>
                     </div>

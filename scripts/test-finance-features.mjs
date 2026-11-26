@@ -125,7 +125,43 @@ test('P&L, running cashflow ledger, year view, and investors exclude pre-data ca
   assert.equal(inv.byPerson[0].pctShare, 45);
 });
 
-test('Finance & Payroll API routes strictly require verifyLiveAdminUser and exclude counselors', () => {
+test('Finance & Payroll API routes strictly require verifyLiveAdminUser + canAccessFinanceRole and exclude counselors & operations_admin', async () => {
+  const {
+    canAccessFinanceRole,
+    isAdminRole,
+    isStaffRole,
+    generateToken,
+    verifyToken,
+  } = await import('../src/lib/auth.ts');
+
+  const prevSecret = process.env.JWT_SECRET;
+  process.env.JWT_SECRET = '0123456789abcdef0123456789abcdef';
+  try {
+    assert.equal(isAdminRole('super_admin'), true);
+    assert.equal(isAdminRole('admin'), true);
+    assert.equal(isAdminRole('operations_admin'), true);
+    assert.equal(isAdminRole('counselor'), false);
+    assert.equal(isStaffRole('operations_admin'), true);
+
+    assert.equal(canAccessFinanceRole('super_admin'), true);
+    assert.equal(canAccessFinanceRole('admin'), true);
+    assert.equal(canAccessFinanceRole('operations_admin'), false);
+    assert.equal(canAccessFinanceRole('counselor'), false);
+    assert.equal(canAccessFinanceRole('user'), false);
+
+    const opsToken = generateToken({
+      userId: 'ops-1',
+      email: 'mhtamal04@gmail.com',
+      role: 'operations_admin',
+    });
+    const decodedOps = verifyToken(opsToken);
+    assert.equal(decodedOps?.role, 'operations_admin');
+    assert.equal(canAccessFinanceRole(decodedOps?.role), false);
+  } finally {
+    if (prevSecret === undefined) delete process.env.JWT_SECRET;
+    else process.env.JWT_SECRET = prevSecret;
+  }
+
   const routes = [
     'src/app/api/admin/finance/summary/route.ts',
     'src/app/api/admin/finance/income/route.ts',
@@ -143,12 +179,33 @@ test('Finance & Payroll API routes strictly require verifyLiveAdminUser and excl
   for (const r of routes) {
     const src = fs.readFileSync(r, 'utf8');
     assert.match(src, /verifyLiveAdminUser/, `${r} must enforce verifyLiveAdminUser`);
+    assert.match(src, /canAccessFinanceRole/, `${r} must enforce canAccessFinanceRole`);
     assert.doesNotMatch(src, /verifyLiveStaffUser/, `${r} must not allow non-admin counselors`);
+  }
+
+  // Operational routes that carry financial fields/events must redact them via canAccessFinanceRole
+  for (const r of [
+    'src/app/api/admin/dashboard/route.ts',
+    'src/app/api/admin/applications/route.ts',
+    'src/app/api/admin/applications/[id]/route.ts',
+    'src/app/api/admin/leads/route.ts',
+    'src/app/api/admin/leads/[id]/route.ts',
+    'src/app/api/admin/leads/[id]/portal/route.ts',
+    'src/app/api/admin/employees/route.ts',
+    'src/app/api/admin/kpi/route.ts',
+    'src/app/api/admin/kpi/[empId]/route.ts',
+  ]) {
+    const src = fs.readFileSync(r, 'utf8');
+    assert.match(src, /canAccessFinanceRole/, `${r} must gate financial fields/events with canAccessFinanceRole`);
   }
 
   const layoutSrc = fs.readFileSync('src/app/admin/AdminLayoutClient.tsx', 'utf8');
   assert.match(layoutSrc, /href:\s*'\/admin\/finance'/);
+  assert.match(layoutSrc, /canAccessFinanceRole/);
   const counselorPrefixMatch = layoutSrc.match(/COUNSELOR_ALLOWED_PREFIXES\s*=\s*\[([^\]]+)\]/);
   assert.ok(counselorPrefixMatch, 'COUNSELOR_ALLOWED_PREFIXES must exist');
   assert.doesNotMatch(counselorPrefixMatch[1], /finance|payroll/i, 'Counselors must not be allowed on /admin/finance');
+
+  const financeUiSrc = fs.readFileSync('src/components/admin/FinanceWorkspaceClient.tsx', 'utf8');
+  assert.match(financeUiSrc, /canAccessFinanceRole/);
 });

@@ -102,6 +102,7 @@ interface FinanceBundle {
 
 interface DetailResponse {
   isAdmin: boolean;
+  canAccessFinance?: boolean;
   application: ApplicationRowDto;
   universityApps: UniAppItem[];
   documents: DocItem[];
@@ -120,6 +121,7 @@ export interface CatalogUniversityOption {
 interface ApplicationDetailDrawerProps {
   applicationId: string | null;
   isAdmin: boolean;
+  canAccessFinance?: boolean;
   employees: TrackerEmployeeOption[];
   universities?: string[];
   programs?: string[];
@@ -146,6 +148,7 @@ function formatDhakaStamp(iso: string): string {
 export default function ApplicationDetailDrawer({
   applicationId,
   isAdmin,
+  canAccessFinance,
   employees,
   universities = [],
   programs = [],
@@ -332,6 +335,7 @@ export default function ApplicationDetailDrawer({
   };
 
   const app = detail?.application || null;
+  const canSeeFinance = canAccessFinance ?? Boolean(detail?.canAccessFinance);
   const currentStageDef = getStageDef(app?.applicationStage);
   const currentStageIndex = APPLICATION_TRACKER_STAGES.findIndex((s) => s.key === currentStageDef.key);
   const nextStageDef =
@@ -399,9 +403,13 @@ export default function ApplicationDetailDrawer({
         channelType: form.channelType,
         source: form.source,
         referrer: form.referrer || null,
-        deposit: form.deposit ? Number(form.deposit) : 0,
-        serviceFee: form.serviceFee ? Number(form.serviceFee) : 0,
-        paidAmount: form.paidAmount ? Number(form.paidAmount) : 0,
+        ...(canSeeFinance
+          ? {
+              deposit: form.deposit ? Number(form.deposit) : 0,
+              serviceFee: form.serviceFee ? Number(form.serviceFee) : 0,
+              paidAmount: form.paidAmount ? Number(form.paidAmount) : 0,
+            }
+          : {}),
         applicationNotes: form.applicationNotes || null,
         medicalNotes: form.medicalNotes || null,
         ...(isAdmin
@@ -731,7 +739,7 @@ export default function ApplicationDetailDrawer({
             { id: 'overview' as const, label: 'Excel File & Visa', icon: FileText },
             { id: 'universities' as const, label: `Universities (${detail?.universityApps?.length ?? 0})`, icon: Building2 },
             { id: 'documents' as const, label: `Documents (${app?.docsReceived ?? 0}/${app?.docsTotal ?? 0})`, icon: ClipboardCheck },
-            ...(isAdmin
+            ...(canSeeFinance
               ? [{ id: 'finance' as const, label: 'Finance Ledger', icon: Landmark }]
               : []),
             { id: 'timeline' as const, label: `Timeline (${detail?.activities?.length ?? 0})`, icon: MessageSquare },
@@ -1201,28 +1209,32 @@ export default function ApplicationDetailDrawer({
                           className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
                         />
                       </div>
-                      <div>
-                        <label className="mb-1 block text-[11px] font-semibold text-slate-600">Deposit (৳)</label>
-                        <input
-                          type="number"
-                          min="0"
-                          step="any"
-                          value={form.deposit || '0'}
-                          onChange={(e) => setForm({ ...form, deposit: e.target.value })}
-                          className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs tabular-nums text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="mb-1 block text-[11px] font-semibold text-slate-600">Agreed Service Fee (৳)</label>
-                        <input
-                          type="number"
-                          min="0"
-                          step="any"
-                          value={form.serviceFee || '0'}
-                          onChange={(e) => setForm({ ...form, serviceFee: e.target.value })}
-                          className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs tabular-nums text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
-                        />
-                      </div>
+                      {canSeeFinance && (
+                        <>
+                          <div>
+                            <label className="mb-1 block text-[11px] font-semibold text-slate-600">Deposit (৳)</label>
+                            <input
+                              type="number"
+                              min="0"
+                              step="any"
+                              value={form.deposit || '0'}
+                              onChange={(e) => setForm({ ...form, deposit: e.target.value })}
+                              className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs tabular-nums text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="mb-1 block text-[11px] font-semibold text-slate-600">Agreed Service Fee (৳)</label>
+                            <input
+                              type="number"
+                              min="0"
+                              step="any"
+                              value={form.serviceFee || '0'}
+                              onChange={(e) => setForm({ ...form, serviceFee: e.target.value })}
+                              className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs tabular-nums text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+                            />
+                          </div>
+                        </>
+                      )}
                       <div className="sm:col-span-3">
                         <label className="mb-1 block text-[11px] font-semibold text-slate-600">Application Notes</label>
                         <textarea
@@ -1501,8 +1513,8 @@ export default function ApplicationDetailDrawer({
                 </div>
               )}
 
-              {/* TAB 4: Admin-Only Linked Finance Ledger */}
-              {tab === 'finance' && isAdmin && detail?.finance && (
+              {/* TAB 4: Finance-Admin-Only Linked Finance Ledger */}
+              {tab === 'finance' && canSeeFinance && detail?.finance && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-3 gap-3">
                     <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3.5">

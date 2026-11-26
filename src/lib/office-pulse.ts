@@ -1,4 +1,5 @@
 import 'server-only';
+import { FINANCE_ACTIVITY_TYPES } from './roles';
 import {
   CLOSED_LEAD_STATUSES,
   dhakaTimeNow,
@@ -126,7 +127,11 @@ function isLeadOverdue(
   return false;
 }
 
-export async function buildOwnerOfficePulse(): Promise<OwnerOfficePulsePayload> {
+export async function buildOwnerOfficePulse(options?: { includeFinanceActivities?: boolean }): Promise<OwnerOfficePulsePayload> {
+  const includeFinanceActivities = options?.includeFinanceActivities ?? true;
+  const activityTypeFilter = includeFinanceActivities
+    ? {}
+    : { type: { notIn: [...FINANCE_ACTIVITY_TYPES] } };
   const nowMs = Date.now();
   const todayIso = dhakaTodayIso(nowMs);
   const nowTime = dhakaTimeNow(nowMs);
@@ -157,12 +162,12 @@ export async function buildOwnerOfficePulse(): Promise<OwnerOfficePulsePayload> 
         select: { employeeId: true },
       }),
       prisma.activityEvent.findMany({
-        where: { createdAt: { gte: dayStart } },
+        where: { createdAt: { gte: dayStart }, ...activityTypeFilter },
         orderBy: { createdAt: 'desc' },
         select: { employeeId: true, createdAt: true },
       }),
       prisma.activityEvent.findMany({
-        where: { createdAt: { gte: recentWindowStart } },
+        where: { createdAt: { gte: recentWindowStart }, ...activityTypeFilter },
         orderBy: { createdAt: 'desc' },
         take: 14,
         select: {

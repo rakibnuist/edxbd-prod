@@ -124,11 +124,11 @@ const DEFAULT_GBP_POSTS = [
     isRecurring: true,
   },
   {
-    slug: 'open-data-159-universities-zenodo-2027',
+    slug: 'open-data-362-universities-zenodo-2027',
     topicType: 'STANDARD',
-    title: 'Open 159-University Study Cost Dataset (CC BY 4.0)',
+    title: 'Open 362-University Study Cost Dataset (CC BY 4.0)',
     summary:
-      'Explore our CERN-archived open dataset (Zenodo DOI: 10.5281/zenodo.24423801) analyzing 159 verified universities across China (150) and Malaysia (9), 898 programs, 888 itemized non-tuition fees, and 276 scholarships. Built for Bangladeshi families, school counselors, and journalists.',
+      'Explore our CERN-archived open dataset (Zenodo DOI: 10.5281/zenodo.24545329) covering 362 verified universities including all 306/306 CSC-designated Chinese universities + 9 in Malaysia, 1,796 programs, 736 scholarships, and a 32-country outbound cost & visa matrix. Built for Bangladeshi families, school counselors, and journalists.',
     callToAction: 'LEARN_MORE',
     ctaUrl: 'https://eduexpressint.com/press?utm_source=google&utm_medium=organic&utm_campaign=gbp_post_open_data',
     mediaUrl: '/images/gbp/dhanmondi-brandwall.jpg',

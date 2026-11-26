@@ -6,13 +6,16 @@ import {
   Activity,
   AlertTriangle,
   ArrowRight,
+  Check,
   CheckCircle2,
   ClipboardList,
   Clock,
   ExternalLink,
   FileCheck2,
   Flame,
+  FolderCheck,
   FolderKanban,
+  FolderPlus,
   Globe2,
   GraduationCap,
   Handshake,
@@ -24,6 +27,7 @@ import {
   Phone,
   PiggyBank,
   RefreshCw,
+  Search,
   Settings,
   ShieldCheck,
   TrendingUp,
@@ -31,9 +35,11 @@ import {
   UserCog,
   Users2,
   Wallet,
+  X,
   Zap,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { canAccessFinanceRole } from '@/lib/roles';
 import AdminTeamManagerPanel from '@/components/admin/AdminTeamManagerPanel';
 import MetaConnectionPanel from '@/components/admin/MetaConnectionPanel';
 import type { ConsultancyExecutiveSnapshot } from '@/lib/consultancy-analytics';
@@ -55,7 +61,10 @@ interface DashboardStats {
   websiteLeads: number;
   todayLeads: number;
   chinaLeads: number;
+  totalApplications?: number;
+  visasOrEnrolled?: number;
   totalUniversities: number;
+  expiringUniversities?: number;
   totalTeam: number;
   publishedTeam: number;
   totalTestimonials: number;
@@ -71,6 +80,8 @@ interface DashboardStats {
     program: string;
     status: string;
     source: string;
+    isApplication?: boolean;
+    leadRef?: string | null;
     assessAcademicLevel?: string | null;
     assessAcademicResults?: string | null;
     assessLanguage?: string | null;
@@ -108,10 +119,15 @@ const statusTones: Record<string, { bg: string; text: string; label: string }> =
   in_progress: { bg: 'bg-indigo-50 text-indigo-900 border-indigo-200', text: 'text-indigo-700', label: 'In Progress' },
   qualified: { bg: 'bg-cyan-50 text-cyan-900 border-cyan-200', text: 'text-cyan-700', label: 'Qualified' },
   no_response: { bg: 'bg-slate-100 text-slate-700 border-slate-200', text: 'text-slate-600', label: 'No Response' },
-  closed: { bg: 'bg-emerald-50 text-emerald-900 border-emerald-200', text: 'text-emerald-700', label: 'Completed' },
+  application_started: { bg: 'bg-violet-50 text-violet-900 border-violet-200', text: 'text-violet-700', label: 'File Opened' },
+  application_submitted: { bg: 'bg-indigo-50 text-indigo-900 border-indigo-200', text: 'text-indigo-700', label: 'Submitted' },
+  admission_received: { bg: 'bg-teal-50 text-teal-900 border-teal-200', text: 'text-teal-700', label: 'Admitted' },
+  visa_applied: { bg: 'bg-amber-50 text-amber-900 border-amber-200', text: 'text-amber-700', label: 'Visa Applied' },
+  visa_approved: { bg: 'bg-emerald-50 text-emerald-900 border-emerald-200', text: 'text-emerald-700', label: 'Visa Approved' },
+  closed: { bg: 'bg-slate-100 text-slate-700 border-slate-200', text: 'text-slate-600', label: 'Closed' },
   converted: { bg: 'bg-emerald-50 text-emerald-900 border-emerald-200', text: 'text-emerald-700', label: 'Enrolled' },
   enrolled: { bg: 'bg-emerald-50 text-emerald-900 border-emerald-200', text: 'text-emerald-700', label: 'Enrolled' },
-  not_interested: { bg: 'bg-gray-100 text-gray-700 border-gray-200', text: 'text-gray-600', label: 'Closed' },
+  not_interested: { bg: 'bg-gray-100 text-gray-700 border-gray-200', text: 'text-gray-600', label: 'Not Interested' },
 };
 
 function formatDhakaDate(isoString: string): string {
@@ -145,12 +161,24 @@ function cleanDigits(phone: string): string {
 export default function AdminDashboardPage() {
   const { user, isAuthenticated, loading: authLoading, authenticatedFetch } = useAuth();
   const isCounselor = user?.role === 'counselor';
+  const canSeeFinance = canAccessFinanceRole(user?.role);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Simplified Tabs & Actions
+  const [activeTab, setActiveTab] = useState<'enquiries' | 'pipeline' | 'finance' | 'pulse'>('enquiries');
+  const [leadSearch, setLeadSearch] = useState('');
+  const [openingFileId, setOpeningFileId] = useState<string | null>(null);
+  const [actionFeedback, setActionFeedback] = useState<{
+    type: 'success' | 'error';
+    message: string;
+    leadRef?: string;
+    leadName?: string;
+  } | null>(null);
 
   const fetchDashboard = async (background = false) => {
     try {
@@ -193,9 +221,63 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handleOpenFile = async (leadId: string, leadName: string) => {
+    try {
+      setOpeningFileId(leadId);
+      setActionFeedback(null);
+      const res = await authenticatedFetch('/api/admin/applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ existingLeadId: leadId }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setActionFeedback({
+          type: 'error',
+          message: data.error || data.message || 'Could not open file for this lead.',
+        });
+        return;
+      }
+
+      const assignedRef = data.application?.leadRef || data.leadRef || 'APP-FILE';
+
+      // Update local state immediately
+      setStats((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          totalApplications: (prev.totalApplications || 0) + 1,
+          recentLeads: prev.recentLeads.map((l) =>
+            l.id === leadId
+              ? {
+                  ...l,
+                  isApplication: true,
+                  leadRef: assignedRef,
+                  status: 'application_started',
+                }
+              : l,
+          ),
+        };
+      });
+
+      setActionFeedback({
+        type: 'success',
+        leadName,
+        leadRef: assignedRef,
+        message: `File opened for ${leadName}! Moved to Application Tracker (${assignedRef}).`,
+      });
+    } catch {
+      setActionFeedback({
+        type: 'error',
+        message: 'Network error while opening file.',
+      });
+    } finally {
+      setOpeningFileId(null);
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated && !authLoading) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- initial async data load
       fetchDashboard();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -230,70 +312,89 @@ export default function AdminDashboardPage() {
   const metaPct = stats.totalLeads > 0 ? Math.round((stats.metaLeads / stats.totalLeads) * 100) : 0;
   const webPct = Math.max(0, 100 - metaPct);
 
+  const filteredRecentLeads = (stats.recentLeads || []).filter((lead) => {
+    if (!leadSearch.trim()) return true;
+    const q = leadSearch.trim().toLowerCase();
+    return (
+      lead.name.toLowerCase().includes(q) ||
+      (lead.email || '').toLowerCase().includes(q) ||
+      (lead.phone || '').toLowerCase().includes(q) ||
+      (lead.country || '').toLowerCase().includes(q) ||
+      (lead.program || '').toLowerCase().includes(q) ||
+      (lead.leadRef || '').toLowerCase().includes(q)
+    );
+  });
+
   return (
-    <div className="mx-auto max-w-7xl space-y-8 pb-16">
-      {/* Header Banner */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0a2540] via-[#0f3a5c] to-[#124b7a] p-6 text-white shadow-lg sm:p-8">
+    <div className="mx-auto max-w-7xl space-y-6 pb-16">
+      {/* Streamlined Executive Header */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0a2540] via-[#0f3a5c] to-[#124b7a] p-6 text-white shadow-lg sm:p-7">
         <div className="absolute right-0 top-0 -mt-10 -mr-10 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-6">
-          <div className="max-w-2xl space-y-2">
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-5">
+          <div className="max-w-2xl space-y-1.5">
             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-200">
               <span className="relative flex size-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
               </span>
-              {isCounselor
-                ? 'Dhaka Desk Active · GMT+6 Assigned Pipeline'
-                : 'Remote Office Monitor · Live Dhaka Pulse & Meta Engine'}
+              Dhaka Office Active · GMT+6 Live Desk
             </div>
-            <h1 className="font-heading text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
+            <h1 className="font-heading text-2xl font-bold tracking-tight sm:text-3xl">
               {isCounselor ? 'Counselor Admissions Desk' : 'Admissions Command Center'}
             </h1>
-            <p className="text-sm leading-relaxed text-slate-200 sm:text-base">
-              {isCounselor
-                ? 'Manage your assigned student pipeline, check in with GPS location verification, submit EOD reflections, and follow up on overdue prospects.'
-                : 'Real-time remote monitoring for Dhanmondi office GPS check-ins, live counselor CRM activity, SLA queues, and student enquiries.'}
+            <p className="text-xs leading-relaxed text-slate-200 sm:text-sm">
+              Manage incoming student leads, open application files into the Application Tracker, and monitor student visa progression.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <Link
+              href="/admin/applications"
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-sky-400 px-4 py-2 text-xs font-extrabold text-slate-950 shadow-sm transition hover:bg-sky-300"
+            >
+              <FolderKanban size={15} />
+              Application Tracker ({stats.totalApplications ?? stats.inProgressLeads})
+            </Link>
+            <Link
+              href="/admin/leads"
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-xs font-bold text-white backdrop-blur transition hover:bg-white/20"
+            >
+              <Users2 size={14} />
+              Leads ({stats.totalLeads})
+            </Link>
             <button
               type="button"
               onClick={() => fetchDashboard(true)}
               disabled={refreshing}
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-bold text-white backdrop-blur transition hover:bg-white/20 disabled:cursor-wait"
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-bold text-white backdrop-blur transition hover:bg-white/20 disabled:cursor-wait"
+              title="Refresh dashboard metrics"
             >
-              <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
+              <RefreshCw size={13} className={refreshing ? 'animate-spin' : ''} />
               {refreshing ? 'Refreshing...' : 'Refresh'}
             </button>
             {!isCounselor && (
               <button
+                type="button"
                 onClick={handleSyncMetaLeads}
                 disabled={syncing}
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 text-xs font-bold text-white backdrop-blur transition hover:bg-white/20 disabled:cursor-wait"
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-emerald-500/20 border border-emerald-400/40 px-3 py-2 text-xs font-bold text-emerald-200 transition hover:bg-emerald-500/30 disabled:cursor-wait"
+                title="Sync leads from Meta Graph API"
               >
-                <RefreshCw size={14} className={syncing ? 'animate-spin' : ''} />
-                {syncing ? 'Syncing Graph API...' : 'Sync Meta Leads Now'}
+                <RefreshCw size={13} className={syncing ? 'animate-spin' : ''} />
+                {syncing ? 'Syncing...' : 'Sync Meta'}
               </button>
             )}
-            <Link
-              href="/admin/leads"
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-amber-400 px-5 py-2.5 text-xs font-bold text-slate-950 shadow-sm transition hover:bg-amber-300"
-            >
-              <Users2 size={15} />
-              Open Leads Workspace
-            </Link>
           </div>
         </div>
 
         {syncMessage && (
-          <div className="relative z-10 mt-4 rounded-xl border border-emerald-400/40 bg-emerald-500/20 px-4 py-2 text-xs font-semibold text-emerald-100">
+          <div className="relative z-10 mt-3 rounded-xl border border-emerald-400/40 bg-emerald-500/20 px-4 py-2 text-xs font-semibold text-emerald-100">
             {syncMessage}
           </div>
         )}
       </section>
 
-      {/* Primary KPI Cards Grid */}
+      {/* 4 Clean Primary Key Metrics */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Total Enquiries */}
         <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
@@ -302,180 +403,658 @@ export default function AdminDashboardPage() {
               <Users2 size={22} />
             </span>
             <span className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-blue-800">
-              <TrendingUp size={12} />
-              All-Time
+              +{stats.todayLeads} Today
             </span>
           </div>
-          <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-500">Total Enquiries</p>
+          <p className="mt-3 text-xs font-bold uppercase tracking-wider text-slate-500">Student Enquiries</p>
           <div className="mt-1 flex items-baseline gap-2">
             <span className="font-heading text-3xl font-bold text-slate-900">{stats.totalLeads}</span>
-            <span className="text-xs text-slate-500">students</span>
+            <span className="text-xs text-slate-500">total leads</span>
           </div>
-          <div className="mt-3 flex items-center gap-2 text-xs text-slate-600">
-            <span className="font-semibold text-blue-700">{stats.metaLeads} Meta Ads</span>
-            <span>·</span>
-            <span>{stats.websiteLeads} Website</span>
+          <div className="mt-3 flex items-center justify-between text-xs text-slate-600">
+            <span>{stats.metaLeads} Meta · {stats.websiteLeads} Web</span>
+            <Link href="/admin/leads" className="font-bold text-blue-700 hover:underline">
+              View all →
+            </Link>
           </div>
         </div>
 
-        {/* Action Required: New Enquiries */}
+        {/* Active Application Files (Tracker) */}
+        <div className="group relative overflow-hidden rounded-2xl border border-sky-300 bg-gradient-to-br from-sky-50/60 via-white to-white p-5 shadow-sm transition hover:shadow-md">
+          <div className="flex items-start justify-between">
+            <span className="grid size-11 place-items-center rounded-xl bg-sky-100 text-[#0f3a5c]">
+              <FolderKanban size={22} />
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-sky-300 bg-sky-100 px-2.5 py-0.5 text-[11px] font-bold text-[#071c2e]">
+              In Tracker
+            </span>
+          </div>
+          <p className="mt-3 text-xs font-bold uppercase tracking-wider text-slate-600">Active Applications</p>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="font-heading text-3xl font-bold text-[#071c2e]">
+              {stats.totalApplications ?? stats.inProgressLeads}
+            </span>
+            <span className="text-xs font-medium text-slate-500">open files</span>
+          </div>
+          <div className="mt-3 flex items-center justify-between text-xs">
+            <span className="text-slate-600">Files undergoing processing</span>
+            <Link href="/admin/applications" className="font-bold text-[#0f3a5c] hover:underline">
+              Open Tracker →
+            </Link>
+          </div>
+        </div>
+
+        {/* Visas & Enrolled */}
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50/50 via-white to-white p-5 shadow-sm transition hover:shadow-md">
+          <div className="flex items-start justify-between">
+            <span className="grid size-11 place-items-center rounded-xl bg-emerald-100 text-emerald-800">
+              <FolderCheck size={22} />
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-100 px-2.5 py-0.5 text-[11px] font-bold text-emerald-900">
+              Successful
+            </span>
+          </div>
+          <p className="mt-3 text-xs font-bold uppercase tracking-wider text-slate-500">Visas &amp; Enrolled</p>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="font-heading text-3xl font-bold text-emerald-950">
+              {stats.visasOrEnrolled ?? stats.closedLeads}
+            </span>
+            <span className="text-xs font-semibold text-emerald-800">students won</span>
+          </div>
+          <div className="mt-3 flex items-center justify-between text-xs text-slate-600">
+            <span>Visas approved &amp; flown</span>
+            <Link href="/admin/applications?stage=visa_approved" className="font-bold text-emerald-800 hover:underline">
+              View list →
+            </Link>
+          </div>
+        </div>
+
+        {/* Untouched New Enquiries */}
         <div className="group relative overflow-hidden rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50/50 via-white to-white p-5 shadow-sm transition hover:shadow-md">
           <div className="flex items-start justify-between">
             <span className="grid size-11 place-items-center rounded-xl bg-amber-100 text-amber-800">
               <Flame size={22} />
             </span>
             <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-100 px-2.5 py-0.5 text-[11px] font-bold text-amber-900">
-              Needs Outreach
+              Needs Contact
             </span>
           </div>
-          <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-500">Untouched New Leads</p>
+          <p className="mt-3 text-xs font-bold uppercase tracking-wider text-slate-500">New Untouched Leads</p>
           <div className="mt-1 flex items-baseline gap-2">
-            <span className="font-heading text-3xl font-bold text-amber-900">{stats.newLeads}</span>
-            <span className="text-xs font-semibold text-amber-800">status: new</span>
+            <span className="font-heading text-3xl font-bold text-amber-950">{stats.newLeads}</span>
+            <span className="text-xs font-semibold text-amber-800">pending</span>
           </div>
           <div className="mt-3 flex items-center justify-between text-xs">
-            <span className="text-slate-600">Pending counselor contact</span>
-            <Link href="/admin/leads" className="font-bold text-amber-800 hover:underline">
-              View queue →
+            <span className="text-slate-600">{stats.noResponseLeads} no-response</span>
+            <Link href="/admin/leads?queue=new" className="font-bold text-amber-800 hover:underline">
+              Start calling →
             </Link>
           </div>
         </div>
-
-        {/* Active Pipeline */}
-        <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
-          <div className="flex items-start justify-between">
-            <span className="grid size-11 place-items-center rounded-xl bg-cyan-50 text-cyan-700">
-              <Zap size={22} />
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-0.5 text-[11px] font-bold text-cyan-800">
-              Active Stage
-            </span>
-          </div>
-          <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-500">In Active Pipeline</p>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="font-heading text-3xl font-bold text-slate-900">{stats.inProgressLeads}</span>
-            <span className="text-xs text-slate-500">active files</span>
-          </div>
-          <div className="mt-3 flex items-center gap-2 text-xs text-slate-600">
-            <span>{stats.noResponseLeads} No Response</span>
-            <span>·</span>
-            <span>{stats.closedLeads} Completed</span>
-          </div>
-        </div>
-
-        {/* University Catalog */}
-        <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
-          <div className="flex items-start justify-between">
-            <span className="grid size-11 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
-              <GraduationCap size={22} />
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
-              Live Catalog
-            </span>
-          </div>
-          <p className="mt-4 text-xs font-bold uppercase tracking-wider text-slate-500">Active Universities</p>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="font-heading text-3xl font-bold text-slate-900">{stats.totalUniversities}</span>
-            <span className="text-xs text-slate-500">institutions</span>
-          </div>
-          <div className="mt-3 flex items-center justify-between text-xs">
-            <span className="text-slate-600">China &amp; Europe profiles</span>
-            {!isCounselor ? (
-              <Link href="/admin/universities" className="font-bold text-emerald-700 hover:underline">
-                Manage →
-              </Link>
-            ) : (
-              <Link href="/universities" target="_blank" className="font-bold text-emerald-700 hover:underline">
-                Browse →
-              </Link>
-            )}
-          </div>
-        </div>
       </section>
 
-      {/* Quick Command Hub */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-500">Quick Operations Hub</h2>
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Link
-            href="/admin/leads"
-            className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-900"
+      {/* Navigation Tabs (Simplify Everything into Clear Workspaces) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setActiveTab('enquiries')}
+            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition ${
+              activeTab === 'enquiries'
+                ? 'bg-[#0f3a5c] text-white shadow-sm'
+                : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+            }`}
           >
-            <Users2 size={16} className="text-blue-700" />
-            Student Leads
-          </Link>
+            <Users2 size={15} />
+            Recent Enquiries
+            <span
+              className={`rounded-full px-2 py-0.5 text-[10px] ${
+                activeTab === 'enquiries' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
+              }`}
+            >
+              {stats.recentLeads.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('pipeline')}
+            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition ${
+              activeTab === 'pipeline'
+                ? 'bg-[#0f3a5c] text-white shadow-sm'
+                : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            <Layers size={15} />
+            Pipeline &amp; Demand
+          </button>
+
+          {canSeeFinance && stats.financeSnapshot && (
+            <button
+              type="button"
+              onClick={() => setActiveTab('finance')}
+              className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition ${
+                activeTab === 'finance'
+                  ? 'bg-[#0f3a5c] text-white shadow-sm'
+                  : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <Landmark size={15} />
+              Financial Snapshot
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('pulse')}
+            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition ${
+              activeTab === 'pulse'
+                ? 'bg-[#0f3a5c] text-white shadow-sm'
+                : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            <Activity size={15} />
+            {isCounselor ? 'Today Desk' : 'Office & Staff Pulse'}
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2">
           <Link
             href="/admin/applications"
-            className="flex items-center gap-2.5 rounded-xl border border-sky-200 bg-sky-50/70 px-3.5 py-2.5 text-xs font-bold text-[#071c2e] transition hover:border-sky-300 hover:bg-sky-100"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-bold text-sky-900 transition hover:bg-sky-100"
           >
-            <FolderKanban size={16} className="text-[#0f3a5c]" />
-            Application Tracker
+            <FolderKanban size={13} className="text-[#0f3a5c]" />
+            Full Tracker ({stats.totalApplications ?? stats.inProgressLeads}) →
           </Link>
           <Link
-            href="/admin/kpi"
-            className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-900"
+            href="/admin/leads"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
           >
-            <TrendingUp size={16} className="text-cyan-700" />
-            KPI &amp; Attendance
+            All Leads ({stats.totalLeads}) →
           </Link>
-          {!isCounselor && (
-            <>
-              <Link
-                href="/admin/finance"
-                className="flex items-center gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50/70 px-3.5 py-2.5 text-xs font-bold text-emerald-950 transition hover:border-emerald-300 hover:bg-emerald-100"
-              >
-                <Landmark size={16} className="text-emerald-700" />
-                Finance &amp; Ledger
-              </Link>
-              <Link
-                href="/admin/users"
-                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-900"
-              >
-                <UserCog size={16} className="text-indigo-700" />
-                Team &amp; Users
-              </Link>
-              <Link
-                href="/admin/settings#lead-flow"
-                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-slate-400 hover:bg-slate-100 hover:text-slate-950"
-              >
-                <Settings size={16} className="text-slate-700" />
-                Settings &amp; Flow
-              </Link>
-              <Link
-                href="/admin/universities"
-                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-900"
-              >
-                <GraduationCap size={16} className="text-emerald-700" />
-                Universities
-              </Link>
-              <Link
-                href="/admin/trust"
-                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-amber-300 hover:bg-amber-50 hover:text-amber-900"
-              >
-                <ShieldCheck size={16} className="text-amber-700" />
-                Company Records
-              </Link>
-              <Link
-                href="/admin/evidence"
-                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-900"
-              >
-                <FileCheck2 size={16} className="text-blue-700" />
-                Evidence Library
-              </Link>
-              <Link
-                href="/admin/partnerships"
-                className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-bold text-slate-800 transition hover:border-purple-300 hover:bg-purple-50 hover:text-purple-900"
-              >
-                <Handshake size={16} className="text-purple-700" />
-                B2B Partners ({stats.totalPartnerships})
-              </Link>
-            </>
-          )}
         </div>
-      </section>
+      </div>
 
-      {/* Owner Finance & Cashflow Snapshot (Admin Only) */}
-      {!isCounselor && stats.financeSnapshot && (
+      {/* TAB 1: RECENT ENQUIRIES (FRONTLINE ACTION HUB) */}
+      {activeTab === 'enquiries' && (
+        <section className="space-y-4">
+          {actionFeedback && (
+            <div
+              className={`flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-4 text-xs font-medium transition ${
+                actionFeedback.type === 'success'
+                  ? 'border-emerald-300 bg-emerald-50 text-emerald-950'
+                  : 'border-rose-300 bg-rose-50 text-rose-950'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <span
+                  className={`grid size-6 place-items-center rounded-full ${
+                    actionFeedback.type === 'success' ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'
+                  }`}
+                >
+                  {actionFeedback.type === 'success' ? <Check size={14} /> : <AlertTriangle size={14} />}
+                </span>
+                <p className="font-semibold">{actionFeedback.message}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                {actionFeedback.type === 'success' && actionFeedback.leadRef && (
+                  <Link
+                    href={`/admin/applications?search=${encodeURIComponent(actionFeedback.leadRef)}`}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 px-3 py-1.5 font-bold text-white shadow-sm hover:bg-emerald-800"
+                  >
+                    <FolderKanban size={13} />
+                    View in Application Tracker →
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setActionFeedback(null)}
+                  className="rounded p-1 text-slate-500 hover:text-slate-800"
+                  title="Dismiss notification"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="size-2 rounded-full bg-emerald-500" />
+                  <h2 className="font-heading text-lg font-bold text-slate-900">Recent Student Enquiries</h2>
+                  <span className="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-700">
+                    {filteredRecentLeads.length} shown
+                  </span>
+                </div>
+                <p className="mt-0.5 text-xs text-slate-500">
+                  Click <strong>WhatsApp</strong> to reach out immediately, or <strong>Open File</strong> to move lead to Application Tracker.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="relative">
+                  <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
+                  <input
+                    type="text"
+                    value={leadSearch}
+                    onChange={(e) => setLeadSearch(e.target.value)}
+                    placeholder="Search recent enquiries..."
+                    className="w-48 sm:w-60 rounded-xl border border-slate-200 bg-slate-50/70 py-1.5 pl-8 pr-3 text-xs text-slate-900 placeholder-slate-400 focus:border-[#0f3a5c] focus:bg-white focus:outline-none"
+                  />
+                </div>
+                <Link
+                  href="/admin/leads"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-1.5 text-xs font-bold text-slate-800 hover:bg-slate-100"
+                >
+                  View All {stats.totalLeads} Leads <ArrowRight size={13} />
+                </Link>
+              </div>
+            </div>
+
+            <div className="mt-4 divide-y divide-slate-100">
+              {filteredRecentLeads.length > 0 ? (
+                filteredRecentLeads.map((lead) => {
+                  const tone = statusTones[lead.status] || statusTones.new;
+                  const digits = cleanDigits(lead.phone || '');
+                  const waUrl = digits
+                    ? `https://wa.me/${digits}?text=${encodeURIComponent(
+                        `Hello ${lead.name}, thank you for contacting EduExpress regarding your study in China plans!`
+                      )}`
+                    : null;
+
+                  return (
+                    <div
+                      key={lead.id}
+                      className="flex flex-wrap items-center justify-between gap-4 py-4 transition hover:bg-slate-50/60 sm:px-2"
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <div className="grid size-10 shrink-0 place-items-center rounded-full bg-slate-100 font-heading text-sm font-bold text-slate-700">
+                          {lead.name.slice(0, 1).toUpperCase()}
+                        </div>
+                        <div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="text-sm font-bold text-slate-900">{lead.name}</p>
+                            <span
+                              className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-bold ${tone.bg}`}
+                            >
+                              {tone.label}
+                            </span>
+                            {lead.isApplication ? (
+                              <span className="inline-flex items-center gap-1 rounded-md border border-sky-300 bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-900">
+                                <FolderCheck size={11} className="text-sky-700" /> File Active
+                              </span>
+                            ) : null}
+                            {lead.source?.includes('meta') ? (
+                              <span className="inline-flex rounded-md bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-800">
+                                Meta Form
+                              </span>
+                            ) : (
+                              <span className="inline-flex rounded-md bg-cyan-100 px-2 py-0.5 text-[10px] font-bold text-cyan-800">
+                                Website
+                              </span>
+                            )}
+                          </div>
+                          <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                            <span className="font-semibold text-slate-700">{lead.country || 'China'}</span>
+                            <span>·</span>
+                            <span>{lead.program || 'Admissions Enquiry'}</span>
+                            {lead.assessAcademicLevel && (
+                              <>
+                                <span>·</span>
+                                <span className="font-medium text-slate-700">
+                                  {lead.assessAcademicLevel}
+                                  {lead.assessAcademicResults ? ` (${lead.assessAcademicResults})` : ''}
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2">
+                        <div className="mr-2 text-right text-xs text-slate-500">
+                          <div className="flex items-center justify-end gap-1">
+                            <Clock size={12} />
+                            <span>{formatDhakaDate(lead.createdAt)}</span>
+                          </div>
+                          <span className="text-[11px] text-slate-400">{lead.phone || lead.email}</span>
+                        </div>
+
+                        {waUrl && (
+                          <a
+                            href={waUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 px-3 text-xs font-bold text-emerald-800 transition hover:bg-emerald-100"
+                            title="Chat on WhatsApp"
+                          >
+                            <MessageCircle size={14} className="text-emerald-700" />
+                            WhatsApp
+                          </a>
+                        )}
+
+                        {lead.phone && (
+                          <a
+                            href={`tel:${lead.phone}`}
+                            className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+                            title="Call student"
+                          >
+                            <Phone size={13} className="text-slate-600" />
+                            Call
+                          </a>
+                        )}
+
+                        {/* OPEN FILE ACTION -> MOVES LEAD TO APPLICATION TRACKER */}
+                        {lead.isApplication ? (
+                          <Link
+                            href={`/admin/applications?search=${encodeURIComponent(lead.leadRef || lead.name)}`}
+                            className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-sky-300 bg-sky-50 px-3 text-xs font-bold text-sky-900 shadow-sm transition hover:bg-sky-100"
+                            title="Student file is active in Application Tracker"
+                          >
+                            <FolderKanban size={13} className="text-sky-700" />
+                            In Tracker ({lead.leadRef || 'APP'}) →
+                          </Link>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleOpenFile(lead.id, lead.name)}
+                            disabled={openingFileId === lead.id}
+                            className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-emerald-600 px-3 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700 disabled:opacity-60"
+                            title="Open student file and move to Application Tracker"
+                          >
+                            <FolderPlus size={13} />
+                            {openingFileId === lead.id ? 'Opening...' : 'Open File'}
+                          </button>
+                        )}
+
+                        <Link
+                          href={`/admin/leads?search=${encodeURIComponent(lead.name)}`}
+                          className="inline-flex min-h-9 items-center rounded-lg border border-slate-200 p-2 text-slate-600 transition hover:bg-slate-50"
+                          title="Open in Leads Workspace"
+                        >
+                          <ExternalLink size={14} />
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p className="py-8 text-center text-sm text-slate-500">
+                  {leadSearch.trim() ? `No enquiries matching "${leadSearch}".` : 'No student enquiries recorded yet.'}
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* TAB 2: PIPELINE & DEMAND */}
+      {activeTab === 'pipeline' && (
+        <section className="space-y-6">
+          {/* 6-Stage Admissions Pipeline Funnel */}
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <h2 className="font-heading text-lg font-bold text-slate-900">Admissions Pipeline Funnel</h2>
+                <p className="text-xs text-slate-500">
+                  6-milestone progression across all {stats.totalLeads} student files
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                {stats.consultancy && (
+                  <>
+                    <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-bold text-indigo-800">
+                      Offer Yield: {stats.consultancy.stageFunnel.offerRatePercent}%
+                    </span>
+                    <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-800">
+                      Enrolled Yield: {stats.consultancy.stageFunnel.enrollmentRatePercent}%
+                    </span>
+                  </>
+                )}
+                <Link href="/admin/applications" className="ml-1 text-xs font-bold text-[#0f3a5c] hover:underline">
+                  Open Tracker →
+                </Link>
+              </div>
+            </div>
+
+            {stats.consultancy ? (
+              <>
+                <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
+                  {[
+                    {
+                      step: '1. New',
+                      count: stats.consultancy.stageFunnel.newLeads,
+                      sub: 'Untouched',
+                      cls: 'border-amber-200 bg-amber-50/70 text-amber-900',
+                      href: '/admin/leads?queue=new',
+                    },
+                    {
+                      step: '2. Counseling',
+                      count: stats.consultancy.stageFunnel.counselingQualified,
+                      sub: 'Qualified / Call',
+                      cls: 'border-sky-200 bg-sky-50/70 text-sky-900',
+                      href: '/admin/leads?queue=in_progress',
+                    },
+                    {
+                      step: '3. Applied',
+                      count: stats.consultancy.stageFunnel.universityApplied,
+                      sub: 'Uni Submitted',
+                      cls: 'border-indigo-200 bg-indigo-50/70 text-indigo-900',
+                      href: '/admin/applications',
+                    },
+                    {
+                      step: '4. Admitted',
+                      count: stats.consultancy.stageFunnel.offerAdmitted,
+                      sub: 'Offer / JW202',
+                      cls: 'border-violet-200 bg-violet-50/70 text-violet-900',
+                      href: '/admin/applications?stage=admitted',
+                    },
+                    {
+                      step: '5. Visa',
+                      count: stats.consultancy.stageFunnel.visaStage,
+                      sub: 'Embassy / Stamped',
+                      cls: 'border-blue-200 bg-blue-50/70 text-blue-900',
+                      href: '/admin/applications?stage=visa_approved',
+                    },
+                    {
+                      step: '6. Enrolled',
+                      count: stats.consultancy.stageFunnel.enrolledConverted,
+                      sub: 'Arrived / Won',
+                      cls: 'border-emerald-200 bg-emerald-50/70 text-emerald-900',
+                      href: '/admin/applications?stage=fly',
+                    },
+                  ].map((stage) => (
+                    <Link
+                      key={stage.step}
+                      href={stage.href}
+                      className={`rounded-2xl border p-3.5 text-center transition hover:shadow-sm ${stage.cls}`}
+                    >
+                      <p className="text-[11px] font-bold uppercase tracking-wide opacity-80">{stage.step}</p>
+                      <p className="mt-1 font-heading text-2xl font-bold">{stage.count}</p>
+                      <p className="mt-0.5 text-[11px] opacity-75">{stage.sub}</p>
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-xs text-slate-700">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+                    <span>
+                      <strong className="text-slate-900">{stats.consultancy.consultancyOps.activeUniApps}</strong> Active Uni Apps
+                    </span>
+                    <span>
+                      <strong className="text-emerald-700">{stats.consultancy.consultancyOps.offersReceivedCount}</strong> Offers Issued
+                    </span>
+                    <span>
+                      <strong className="text-amber-700">{stats.consultancy.consultancyOps.docsPendingReviewCount}</strong> Docs Pending Verify
+                    </span>
+                    {stats.consultancy.consultancyOps.medicalTrackCount > 0 && (
+                      <span>
+                        <strong className="text-teal-700">{stats.consultancy.consultancyOps.medicalTrackCount}</strong> MBBS Files
+                      </span>
+                    )}
+                  </div>
+                  <Link
+                    href="/admin/leads?queue=no_response"
+                    className="font-semibold text-amber-800 hover:underline"
+                  >
+                    {stats.consultancy.stageFunnel.noResponse} No-Response Follow-ups →
+                  </Link>
+                </div>
+              </>
+            ) : null}
+          </div>
+
+          {/* Lead Channels & Source Distribution */}
+          {!isCounselor && (
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div className="flex items-center gap-3">
+                  <span className="grid size-10 place-items-center rounded-xl bg-blue-100 text-blue-700">
+                    <Layers size={20} />
+                  </span>
+                  <div>
+                    <h2 className="font-heading text-lg font-bold text-slate-900">Lead Channels &amp; Routing Engine</h2>
+                    <p className="text-xs text-slate-500">Live enquiry breakdown across Meta Instant Forms and Website assessments</p>
+                  </div>
+                </div>
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold ${
+                    stats.metaSync?.tokenConfigured && stats.metaSync?.pixelConfigured
+                      ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                      : 'border-amber-200 bg-amber-50 text-amber-800'
+                  }`}
+                >
+                  <CheckCircle2 size={14} />
+                  {stats.metaSync?.tokenConfigured && stats.metaSync?.pixelConfigured
+                    ? 'Pixel + CAPI Configured'
+                    : 'Check Meta Token in Settings'}
+                </span>
+              </div>
+
+              <div className="mt-5">
+                <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
+                  <span>Lead Source Distribution</span>
+                  <span>
+                    {stats.metaLeads} Meta ({metaPct}%) · {stats.websiteLeads} Website ({webPct}%)
+                  </span>
+                </div>
+                <div className="mt-2 flex h-3 w-full overflow-hidden rounded-full bg-slate-100">
+                  <div style={{ width: `${metaPct}%` }} className="bg-gradient-to-r from-blue-600 to-indigo-600" />
+                  <div style={{ width: `${webPct}%` }} className="bg-gradient-to-r from-cyan-400 to-teal-500" />
+                </div>
+                <div className="mt-2 flex items-center justify-between text-[11px] text-slate-500">
+                  <span className="flex items-center gap-1.5">
+                    <span className="size-2 rounded-full bg-blue-600" /> Meta Instant Forms &amp; Paid Social
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="size-2 rounded-full bg-cyan-400" /> Website Assessment &amp; Direct Forms
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Destination Demand & Deadlines */}
+          {stats.consultancy && (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 className="font-heading text-base font-bold text-slate-900">Destination Country Demand</h3>
+                    <p className="text-xs text-slate-500">China flagship vs side study corridors</p>
+                  </div>
+                  <Globe2 size={18} className="text-[#0f3a5c]" />
+                </div>
+                <div className="mt-4 space-y-3">
+                  {stats.consultancy.countryDemand.length === 0 ? (
+                    <p className="text-xs text-slate-500">No destination demand data recorded yet.</p>
+                  ) : (
+                    stats.consultancy.countryDemand.map((item) => {
+                      const pct = stats.totalLeads > 0 ? Math.max(4, Math.round((item.total / stats.totalLeads) * 100)) : 0;
+                      const isChina = item.country === 'China';
+                      return (
+                        <div key={item.country} className="space-y-1">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-bold text-slate-800">{item.country}</span>
+                            <span className="text-slate-600">
+                              <strong className="text-slate-900">{item.total}</strong> files · {item.active} active
+                            </span>
+                          </div>
+                          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                            <div
+                              className={`h-full rounded-full ${isChina ? 'bg-[#0f3a5c]' : 'bg-cyan-500'}`}
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+
+              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 className="font-heading text-base font-bold text-slate-900">Visa &amp; Departure Deadlines</h3>
+                    <p className="text-xs text-slate-500">Upcoming milestones within 120 days</p>
+                  </div>
+                  <Clock size={18} className="text-amber-600" />
+                </div>
+                <div className="mt-4 space-y-2.5">
+                  {stats.consultancy.urgentDeadlines.length === 0 ? (
+                    <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-xs text-slate-500">
+                      No upcoming visa or departure cutoffs within 120 days.
+                    </div>
+                  ) : (
+                    stats.consultancy.urgentDeadlines.slice(0, 5).map((item) => {
+                      const urgentBadge =
+                        item.daysUntil < 0
+                          ? `Overdue ${Math.abs(item.daysUntil)}d`
+                          : item.daysUntil === 0
+                            ? 'Today'
+                            : `${item.daysUntil}d left`;
+                      const badgeTone =
+                        item.daysUntil <= 3
+                          ? 'bg-rose-100 text-rose-800 border-rose-200'
+                          : item.daysUntil <= 14
+                            ? 'bg-amber-100 text-amber-800 border-amber-200'
+                            : 'bg-sky-100 text-sky-800 border-sky-200';
+                      return (
+                        <Link
+                          key={item.id}
+                          href={`/admin/applications?search=${encodeURIComponent(item.name)}`}
+                          className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 transition hover:border-slate-200 hover:bg-white"
+                        >
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="truncate text-xs font-bold text-slate-900">{item.name}</span>
+                              <span className="rounded bg-slate-200/80 px-1.5 py-0.5 text-[10px] font-semibold text-slate-700">
+                                {item.country}
+                              </span>
+                            </div>
+                            <p className="mt-0.5 truncate text-[11px] text-slate-500">
+                              {item.deadlineType === 'visa' ? 'Visa cutoff' : 'Flight'}: {item.deadlineDate}
+                            </p>
+                          </div>
+                          <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-bold ${badgeTone}`}>
+                            {urgentBadge}
+                          </span>
+                        </Link>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* TAB 3: FINANCIAL SNAPSHOT (FINANCE ADMIN ONLY) */}
+      {activeTab === 'finance' && canSeeFinance && stats.financeSnapshot && (
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div className="flex items-center gap-3">
@@ -485,8 +1064,7 @@ export default function AdminDashboardPage() {
               <div>
                 <h2 className="font-heading text-lg font-bold text-slate-900">Financial Control Snapshot</h2>
                 <p className="text-xs text-slate-500">
-                  Live cash ledger migrated from CRM · {stats.financeSnapshot.incomeEntryCount} cash income &amp; {stats.financeSnapshot.expenseEntryCount} expense entries
-                  {stats.financeSnapshot.latestEntryDate ? ` · Last entry ${stats.financeSnapshot.latestEntryDate}` : ''}
+                  Live cash ledger · {stats.financeSnapshot.incomeEntryCount} cash income &amp; {stats.financeSnapshot.expenseEntryCount} expense entries
                 </p>
               </div>
             </div>
@@ -494,7 +1072,7 @@ export default function AdminDashboardPage() {
               href="/admin/finance"
               className="inline-flex items-center gap-1.5 rounded-xl bg-[#0f3a5c] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#124b7a]"
             >
-              Open Finance Console
+              Open Full Finance Console
               <ArrowRight size={14} />
             </Link>
           </div>
@@ -509,12 +1087,12 @@ export default function AdminDashboardPage() {
                 {formatBdt(stats.financeSnapshot.cashPosition)}
               </p>
               <p className="mt-1 text-[11px] text-emerald-800">
-                All-time net: {formatBdt(stats.financeSnapshot.allTimeNetProfit)}
+                Net profit: {formatBdt(stats.financeSnapshot.allTimeNetProfit)}
               </p>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">All-Time Cash In</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">All-Time Collections</span>
               <p className="mt-2 font-heading text-2xl font-bold tabular-nums text-slate-900">
                 {formatBdt(stats.financeSnapshot.allTimeIncome)}
               </p>
@@ -543,585 +1121,36 @@ export default function AdminDashboardPage() {
               </p>
               <p className="mt-1 text-[11px] text-violet-800">
                 {stats.financeSnapshot.payrollPendingCount > 0
-                  ? `${stats.financeSnapshot.payrollPendingCount} pending payroll (${formatBdt(stats.financeSnapshot.payrollPendingAmount)})`
-                  : 'All payroll up to date'}
+                  ? `${stats.financeSnapshot.payrollPendingCount} pending payroll`
+                  : 'Payroll up to date'}
               </p>
             </div>
           </div>
         </section>
       )}
 
-      {/* Owner Remote Office Pulse / Counselor Today Desk */}
-      {!isCounselor && stats.officePulse && (
-        <RemoteOfficePulseSection
-          pulse={stats.officePulse}
-          onRefresh={() => fetchDashboard(true)}
-          refreshing={refreshing}
-        />
-      )}
-      {isCounselor && stats.counselorDesk && (
-        <CounselorDeskSection
-          desk={stats.counselorDesk}
-          onRefresh={() => fetchDashboard(true)}
-          refreshing={refreshing}
-        />
-      )}
-
-      {/* Campaign Intelligence & Admissions Funnel */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Campaign Card (2 Cols for Admins, Full Width for Counselors) */}
-        <section className={`space-y-6 ${isCounselor ? 'lg:col-span-3' : 'lg:col-span-2'}`}>
-          {/* Live Channel Intake & Lead Flow Summary (Admins Only) */}
-          {!isCounselor && (
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-              <div className="flex items-center gap-3">
-                <span className="grid size-10 place-items-center rounded-xl bg-blue-100 text-blue-700">
-                  <Layers size={20} />
-                </span>
-                <div>
-                  <h2 className="font-heading text-lg font-bold text-slate-900">Lead Channels &amp; Routing Engine</h2>
-                  <p className="text-xs text-slate-500">Live enquiry breakdown across Meta Instant Forms and Website assessments</p>
-                </div>
-              </div>
-              <span
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold ${
-                  stats.metaSync?.tokenConfigured && stats.metaSync?.pixelConfigured
-                    ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
-                    : 'border-amber-200 bg-amber-50 text-amber-800'
-                }`}
-              >
-                <CheckCircle2 size={14} />
-                {stats.metaSync?.tokenConfigured && stats.metaSync?.pixelConfigured
-                  ? 'Pixel + CAPI Configured'
-                  : 'Check Meta Token in Settings'}
-              </span>
-            </div>
-
-            <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                <p className="text-xs text-slate-500">Enquiries Today (Dhaka)</p>
-                <p className="mt-1 font-heading text-xl font-bold text-slate-900">{stats.todayLeads}</p>
-                <p className="mt-1 text-[11px] text-slate-600">{stats.chinaLeads} China · {Math.max(0, stats.totalLeads - stats.chinaLeads)} Other</p>
-              </div>
-              <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                <p className="text-xs text-slate-500">Active Lead Flow Mode</p>
-                <p className="mt-1 font-semibold capitalize text-slate-900">
-                  {(stats.metaSync?.leadFlowMode || 'auto_balanced').replace(/_/g, ' ')}
-                </p>
-                <Link href="/admin/settings#lead-flow" className="mt-1 inline-block text-[11px] font-bold text-[#0f3a5c] hover:underline">
-                  Configure Flow &amp; Team →
-                </Link>
-              </div>
-              <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                <p className="text-xs text-slate-500">Meta CAPI &amp; Pixel ID</p>
-                <p className="mt-1 truncate font-mono text-xs font-bold text-slate-900">
-                  {stats.metaSync?.pixelId || 'Not configured'}
-                </p>
-                <p className="mt-1 text-[11px] text-slate-600">
-                  {stats.metaSync?.lastCheckOk === true
-                    ? 'Verified healthy'
-                    : stats.metaSync?.lastCheckOk === false
-                      ? 'Needs token check'
-                      : 'Configure in Settings'}
-                </p>
-              </div>
-            </div>
-
-            {/* Source Distribution Bar */}
-            <div className="mt-6">
-              <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
-                <span>Lead Source Breakdown</span>
-                <span>
-                  {stats.metaLeads} Meta ({metaPct}%) · {stats.websiteLeads} Website ({webPct}%)
-                </span>
-              </div>
-              <div className="mt-2 flex h-3 w-full overflow-hidden rounded-full bg-slate-100">
-                <div style={{ width: `${metaPct}%` }} className="bg-gradient-to-r from-blue-600 to-indigo-600" />
-                <div style={{ width: `${webPct}%` }} className="bg-gradient-to-r from-cyan-400 to-teal-500" />
-              </div>
-              <div className="mt-2 flex items-center justify-between text-[11px] text-slate-500">
-                <span className="flex items-center gap-1.5">
-                  <span className="size-2 rounded-full bg-blue-600" /> Meta Instant Forms &amp; Paid Social
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="size-2 rounded-full bg-cyan-400" /> Website Assessment &amp; Direct Forms
-                </span>
-              </div>
-            </div>
-          </div>
-          )}
-
-          {/* 6-Stage Admissions Pipeline Funnel & Consultancy Operations */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-              <div>
-                <h2 className="font-heading text-lg font-bold text-slate-900">Admissions Pipeline Funnel</h2>
-                <p className="text-xs text-slate-500">
-                  6-milestone progression across all {stats.totalLeads} {isCounselor ? 'assigned & open' : ''} student files
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                {stats.consultancy && (
-                  <>
-                    <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-bold text-indigo-800">
-                      Offer Yield: {stats.consultancy.stageFunnel.offerRatePercent}%
-                    </span>
-                    <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-800">
-                      Enrolled Yield: {stats.consultancy.stageFunnel.enrollmentRatePercent}%
-                    </span>
-                  </>
-                )}
-                <Link href="/admin/leads" className="ml-1 text-xs font-bold text-[#0f3a5c] hover:underline">
-                  Open Pipeline →
-                </Link>
-              </div>
-            </div>
-
-            {stats.consultancy ? (
-              <>
-                <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
-                  {[
-                    {
-                      step: '1. New',
-                      count: stats.consultancy.stageFunnel.newLeads,
-                      sub: 'Untouched',
-                      cls: 'border-amber-200 bg-amber-50/70 text-amber-900',
-                      href: '/admin/leads?queue=new',
-                    },
-                    {
-                      step: '2. Counseling',
-                      count: stats.consultancy.stageFunnel.counselingQualified,
-                      sub: 'Qualified / Call',
-                      cls: 'border-sky-200 bg-sky-50/70 text-sky-900',
-                      href: '/admin/leads?queue=in_progress',
-                    },
-                    {
-                      step: '3. Applied',
-                      count: stats.consultancy.stageFunnel.universityApplied,
-                      sub: 'Uni Submitted',
-                      cls: 'border-indigo-200 bg-indigo-50/70 text-indigo-900',
-                      href: '/admin/leads?queue=in_progress',
-                    },
-                    {
-                      step: '4. Admitted',
-                      count: stats.consultancy.stageFunnel.offerAdmitted,
-                      sub: 'Offer / JW202',
-                      cls: 'border-violet-200 bg-violet-50/70 text-violet-900',
-                      href: '/admin/leads?status=admission_received',
-                    },
-                    {
-                      step: '5. Visa',
-                      count: stats.consultancy.stageFunnel.visaStage,
-                      sub: 'Embassy / Stamped',
-                      cls: 'border-blue-200 bg-blue-50/70 text-blue-900',
-                      href: '/admin/leads?status=visa_applied',
-                    },
-                    {
-                      step: '6. Enrolled',
-                      count: stats.consultancy.stageFunnel.enrolledConverted,
-                      sub: 'Arrived / Won',
-                      cls: 'border-emerald-200 bg-emerald-50/70 text-emerald-900',
-                      href: '/admin/leads?status=enrolled',
-                    },
-                  ].map((stage) => (
-                    <Link
-                      key={stage.step}
-                      href={stage.href}
-                      className={`rounded-2xl border p-3.5 text-center transition hover:shadow-sm ${stage.cls}`}
-                    >
-                      <p className="text-[11px] font-bold uppercase tracking-wide opacity-80">{stage.step}</p>
-                      <p className="mt-1 font-heading text-2xl font-bold">{stage.count}</p>
-                      <p className="mt-0.5 text-[11px] opacity-75">{stage.sub}</p>
-                    </Link>
-                  ))}
-                </div>
-
-                {/* Live Case Workload & Verification Strips */}
-                <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-xs text-slate-700">
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
-                    <span>
-                      <strong className="text-slate-900">{stats.consultancy.consultancyOps.activeUniApps}</strong> Active Uni Apps
-                    </span>
-                    <span>
-                      <strong className="text-emerald-700">{stats.consultancy.consultancyOps.offersReceivedCount}</strong> Offers Issued
-                    </span>
-                    <span>
-                      <strong className="text-amber-700">{stats.consultancy.consultancyOps.docsPendingReviewCount}</strong> Uploaded Docs Pending Verify
-                    </span>
-                    {stats.consultancy.consultancyOps.medicalTrackCount > 0 && (
-                      <span>
-                        <strong className="text-teal-700">{stats.consultancy.consultancyOps.medicalTrackCount}</strong> MBBS / Medical Files
-                      </span>
-                    )}
-                    {stats.consultancy.consultancyOps.riskEscalatedCount > 0 && (
-                      <span className="font-semibold text-rose-700">
-                        {stats.consultancy.consultancyOps.riskEscalatedCount} Escalated / Risk
-                      </span>
-                    )}
-                  </div>
-                  <Link
-                    href="/admin/leads?queue=no_response"
-                    className="font-semibold text-amber-800 hover:underline"
-                  >
-                    {stats.consultancy.stageFunnel.noResponse} No-Response Follow-ups →
-                  </Link>
-                </div>
-              </>
-            ) : (
-              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-4 text-center">
-                  <p className="text-xs font-bold text-amber-800">New Enquiries</p>
-                  <p className="mt-1 font-heading text-2xl font-bold text-amber-900">{stats.newLeads}</p>
-                  <p className="mt-0.5 text-[11px] text-amber-700">Awaiting contact</p>
-                </div>
-                <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4 text-center">
-                  <p className="text-xs font-bold text-blue-800">In Progress</p>
-                  <p className="mt-1 font-heading text-2xl font-bold text-blue-900">{stats.inProgressLeads}</p>
-                  <p className="mt-0.5 text-[11px] text-blue-700">In active counseling</p>
-                </div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center">
-                  <p className="text-xs font-bold text-slate-700">No Response</p>
-                  <p className="mt-1 font-heading text-2xl font-bold text-slate-900">{stats.noResponseLeads}</p>
-                  <p className="mt-0.5 text-[11px] text-slate-500">Follow-up needed</p>
-                </div>
-                <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-4 text-center">
-                  <p className="text-xs font-bold text-emerald-800">Closed / Enrolled</p>
-                  <p className="mt-1 font-heading text-2xl font-bold text-emerald-900">{stats.closedLeads}</p>
-                  <p className="mt-0.5 text-[11px] text-emerald-700">Concluded outcomes</p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Destination Country Demand & Upcoming Visa/Departure Deadlines */}
-          {stats.consultancy && (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <div>
-                    <h3 className="font-heading text-base font-bold text-slate-900">Destination Country Demand</h3>
-                    <p className="text-xs text-slate-500">China flagship vs side study corridors</p>
-                  </div>
-                  <Globe2 size={18} className="text-[#0f3a5c]" />
-                </div>
-                <div className="mt-4 space-y-3">
-                  {stats.consultancy.countryDemand.length === 0 ? (
-                    <p className="text-xs text-slate-500">No destination demand data recorded yet.</p>
-                  ) : (
-                    stats.consultancy.countryDemand.map((item) => {
-                      const pct = stats.totalLeads > 0 ? Math.max(4, Math.round((item.total / stats.totalLeads) * 100)) : 0;
-                      const isChina = item.country === 'China';
-                      return (
-                        <div key={item.country} className="space-y-1">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="font-bold text-slate-800">{item.country}</span>
-                            <span className="text-slate-600">
-                              <strong className="text-slate-900">{item.total}</strong> files · {item.active} active
-                              {item.progressed > 0 ? ` · ${item.progressed} applied+` : ''}
-                            </span>
-                          </div>
-                          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
-                            <div
-                              className={`h-full rounded-full ${isChina ? 'bg-[#0f3a5c]' : 'bg-cyan-500'}`}
-                              style={{ width: `${pct}%` }}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
-              </div>
-
-              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <div>
-                    <h3 className="font-heading text-base font-bold text-slate-900">Visa &amp; Departure Deadlines</h3>
-                    <p className="text-xs text-slate-500">Overdue or upcoming within 120 days</p>
-                  </div>
-                  <Clock size={18} className="text-amber-600" />
-                </div>
-                <div className="mt-4 space-y-2.5">
-                  {stats.consultancy.urgentDeadlines.length === 0 ? (
-                    <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-xs text-slate-500">
-                      No upcoming visa or departure dates within 120 days. Set <strong className="text-slate-700">Visa Deadline</strong> or{' '}
-                      <strong className="text-slate-700">Target Flight</strong> in any Student File to track embassy/travel cutoffs here.
-                    </div>
-                  ) : (
-                    stats.consultancy.urgentDeadlines.map((item) => {
-                      const urgentBadge =
-                        item.daysUntil < 0
-                          ? `Overdue ${Math.abs(item.daysUntil)}d`
-                          : item.daysUntil === 0
-                            ? 'Today'
-                            : `${item.daysUntil}d left`;
-                      const badgeTone =
-                        item.daysUntil <= 3
-                          ? 'bg-rose-100 text-rose-800 border-rose-200'
-                          : item.daysUntil <= 14
-                            ? 'bg-amber-100 text-amber-800 border-amber-200'
-                            : 'bg-sky-100 text-sky-800 border-sky-200';
-                      return (
-                        <Link
-                          key={item.id}
-                          href={`/admin/leads?lead=${encodeURIComponent(item.id)}`}
-                          className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 transition hover:border-slate-200 hover:bg-white"
-                        >
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className="truncate text-xs font-bold text-slate-900">{item.name}</span>
-                              <span className="rounded bg-slate-200/80 px-1.5 py-0.5 text-[10px] font-semibold text-slate-700">
-                                {item.country}
-                              </span>
-                            </div>
-                            <p className="mt-0.5 truncate text-[11px] text-slate-500">
-                              {item.deadlineType === 'visa' ? 'Visa cutoff' : 'Flight'}: {item.deadlineDate}
-                              {item.university ? ` · ${item.university}` : ''}
-                              {item.assignedTo ? ` · ${item.assignedTo}` : ''}
-                            </p>
-                          </div>
-                          <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-bold ${badgeTone}`}>
-                            {urgentBadge}
-                          </span>
-                        </Link>
-                      );
-                    })
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* Right Sidebar: Meta Connection & Institutional Records */}
-        {!isCounselor && (
+      {/* TAB 4: OFFICE & STAFF PULSE */}
+      {activeTab === 'pulse' && (
         <section className="space-y-6">
-          <MetaConnectionPanel />
-
-          {/* Institutional Catalog Health */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h3 className="font-heading text-base font-bold text-slate-900">Consultancy Catalog &amp; Setup</h3>
-            <p className="mt-0.5 text-xs text-slate-500">Universities, counselors, records &amp; partner desks</p>
-
-            <div className="mt-4 space-y-2.5">
-              <Link
-                href="/admin/universities"
-                className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-slate-100"
-              >
-                <div className="flex items-center gap-2.5">
-                  <GraduationCap size={16} className="text-[#0f3a5c]" />
-                  <span className="text-xs font-bold text-slate-800">Partner Universities</span>
-                </div>
-                <span className="rounded-full bg-sky-100 px-2.5 py-0.5 text-[11px] font-bold text-sky-900">
-                  {stats.totalUniversities} Active
-                </span>
-              </Link>
-
-              <Link
-                href="/admin/users"
-                className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-slate-100"
-              >
-                <div className="flex items-center gap-2.5">
-                  <UserCheck size={16} className="text-indigo-600" />
-                  <span className="text-xs font-bold text-slate-800">Team &amp; Users</span>
-                </div>
-                <span className="rounded-full bg-indigo-100 px-2.5 py-0.5 text-[11px] font-bold text-indigo-800">
-                  {stats.publishedTeam} / {stats.totalTeam} Public
-                </span>
-              </Link>
-
-              <Link
-                href="/admin/settings#lead-flow"
-                className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-slate-100"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Settings size={16} className="text-emerald-700" />
-                  <span className="text-xs font-bold text-slate-800">Lead Flow &amp; GPS Rules</span>
-                </div>
-                <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
-                  Configure
-                </span>
-              </Link>
-
-              <Link
-                href="/admin/trust"
-                className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-slate-100"
-              >
-                <div className="flex items-center gap-2.5">
-                  <ShieldCheck size={16} className="text-teal-700" />
-                  <span className="text-xs font-bold text-slate-800">Company Records &amp; Offices</span>
-                </div>
-                <span className="rounded-full bg-teal-100 px-2.5 py-0.5 text-[11px] font-bold text-teal-800">
-                  Manage
-                </span>
-              </Link>
-
-              <Link
-                href="/admin/testimonials"
-                className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-slate-100"
-              >
-                <div className="flex items-center gap-2.5">
-                  <MessageSquareQuote size={16} className="text-purple-600" />
-                  <span className="text-xs font-bold text-slate-800">Student Testimonials</span>
-                </div>
-                <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-[11px] font-bold text-purple-800">
-                  {stats.totalTestimonials} Verified
-                </span>
-              </Link>
-
-              <Link
-                href="/admin/partnerships"
-                className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-slate-100"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Handshake size={16} className="text-amber-600" />
-                  <span className="text-xs font-bold text-slate-800">Institutional Partners</span>
-                </div>
-                <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-[11px] font-bold text-amber-800">
-                  {stats.totalPartnerships} Partners
-                </span>
-              </Link>
-
-              <Link
-                href="/admin/countries"
-                className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-slate-100"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Globe2 size={16} className="text-cyan-600" />
-                  <span className="text-xs font-bold text-slate-800">Active Destinations</span>
-                </div>
-                <span className="rounded-full bg-cyan-100 px-2.5 py-0.5 text-[11px] font-bold text-cyan-800">
-                  {stats.totalCountries} Countries
-                </span>
-              </Link>
-            </div>
-          </div>
-        </section>
-        )}
-      </div>
-
-      {/* Unified Team Directory (Add, Edit Portraits, Sync CRM & Public Website) */}
-      {!isCounselor && <AdminTeamManagerPanel compact onChanged={() => void fetchDashboard()} />}
-
-      {/* Live Incoming Student Enquiries Feed */}
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="size-2 rounded-full bg-emerald-500" />
-              <h2 className="font-heading text-lg font-bold text-slate-900">Recent Student Enquiries</h2>
-            </div>
-            <p className="mt-1 text-xs text-slate-500">
-              Live submissions from Meta Instant Forms and website assessments (Click WhatsApp to connect immediately)
-            </p>
-          </div>
-          <Link
-            href="/admin/leads"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-800 hover:bg-slate-100"
-          >
-            Open All {stats.totalLeads} Enquiries <ArrowRight size={14} />
-          </Link>
-        </div>
-
-        <div className="mt-5 divide-y divide-slate-100">
-          {stats.recentLeads.length > 0 ? (
-            stats.recentLeads.map((lead) => {
-              const tone = statusTones[lead.status] || statusTones.new;
-              const digits = cleanDigits(lead.phone || '');
-              const waUrl = digits ? `https://wa.me/${digits}?text=${encodeURIComponent(`Hello ${lead.name}, thank you for contacting EduExpress regarding your study in China plans!`)}` : null;
-
-              return (
-                <div
-                  key={lead.id}
-                  className="flex flex-wrap items-center justify-between gap-4 py-4 transition hover:bg-slate-50/60 sm:px-2"
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className="grid size-10 shrink-0 place-items-center rounded-full bg-slate-100 font-heading text-sm font-bold text-slate-700">
-                      {lead.name.slice(0, 1).toUpperCase()}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-bold text-slate-900">{lead.name}</p>
-                        <span className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-bold ${tone.bg}`}>
-                          {tone.label}
-                        </span>
-                        {lead.source?.includes('meta') ? (
-                          <span className="inline-flex rounded-md bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-800">
-                            Meta Form
-                          </span>
-                        ) : (
-                          <span className="inline-flex rounded-md bg-cyan-100 px-2 py-0.5 text-[10px] font-bold text-cyan-800">
-                            Website
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                        <span>{lead.country || 'China'}</span>
-                        <span>·</span>
-                        <span>{lead.program || 'China March 2027'}</span>
-                        {lead.assessAcademicLevel && (
-                          <>
-                            <span>·</span>
-                            <span className="font-medium text-slate-700">
-                              {lead.assessAcademicLevel}
-                              {lead.assessAcademicResults ? ` (${lead.assessAcademicResults})` : ''}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <div className="mr-3 text-right text-xs text-slate-500">
-                      <div className="flex items-center gap-1">
-                        <Clock size={12} />
-                        <span>{formatDhakaDate(lead.createdAt)}</span>
-                      </div>
-                      <span className="text-[11px] text-slate-400">{lead.phone || lead.email}</span>
-                    </div>
-
-                    {waUrl && (
-                      <a
-                        href={waUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 px-3 text-xs font-bold text-emerald-800 transition hover:bg-emerald-100"
-                        title="Chat on WhatsApp"
-                      >
-                        <MessageCircle size={14} className="text-emerald-700" />
-                        WhatsApp
-                      </a>
-                    )}
-
-                    {lead.phone && (
-                      <a
-                        href={`tel:${lead.phone}`}
-                        className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
-                        title="Call student"
-                      >
-                        <Phone size={13} className="text-slate-600" />
-                        Call
-                      </a>
-                    )}
-
-                    <Link
-                      href="/admin/leads"
-                      className="inline-flex min-h-9 items-center rounded-lg border border-slate-200 p-2 text-slate-600 transition hover:bg-slate-50"
-                      title="Open in Leads Workspace"
-                    >
-                      <ExternalLink size={14} />
-                    </Link>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <p className="py-6 text-center text-sm text-slate-500">No student enquiries recorded yet.</p>
+          {!isCounselor && stats.officePulse && (
+            <RemoteOfficePulseSection
+              pulse={stats.officePulse}
+              onRefresh={() => fetchDashboard(true)}
+              refreshing={refreshing}
+            />
           )}
-        </div>
-      </section>
+
+          {isCounselor && stats.counselorDesk && (
+            <CounselorDeskSection
+              desk={stats.counselorDesk}
+              onRefresh={() => fetchDashboard(true)}
+              refreshing={refreshing}
+            />
+          )}
+
+          {!isCounselor && <AdminTeamManagerPanel compact onChanged={() => void fetchDashboard()} />}
+        </section>
+      )}
     </div>
   );
 }

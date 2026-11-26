@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, BadgeCheck, CheckCircle2, CircleSlash, Download, FileSearch, GraduationCap, ReceiptText, Sparkles } from 'lucide-react';
 
+import PageConversionBeacon from '@/components/analytics/PageConversionBeacon';
 import { CtaBand, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
@@ -63,6 +64,7 @@ export default async function FeesAndTransparencyPage() {
   return (
     <>
       <JsonLd data={structuredData} />
+      <PageConversionBeacon event="package_view" context={{ label: 'fees_and_transparency_packages', destination: 'china' }} />
 
       <PageHero
         path={PATH}

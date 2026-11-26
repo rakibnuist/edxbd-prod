@@ -15,6 +15,7 @@ import {
   trackWhatsAppClick,
   trackPhoneClick,
   trackDestinationView,
+  trackPackageView,
   trackScholarshipInquiry,
   trackUniversityInterest,
   trackProgramInterest,
@@ -195,6 +196,10 @@ export async function POST(request: NextRequest) {
         result = await trackDestinationView(data.countryName, data.userData, request);
         break;
 
+      case 'package_view':
+        result = await trackPackageView(data.packageName, data.destination, data.userData, request);
+        break;
+
       case 'scholarship_inquiry':
         result = await trackScholarshipInquiry(data.userData, request);
         break;
@@ -301,6 +306,7 @@ export async function GET() {
       'whatsapp_click',
       'phone_click',
       'destination_view',
+      'package_view',
       'scholarship_inquiry',
       'university_interest',
       'program_interest',

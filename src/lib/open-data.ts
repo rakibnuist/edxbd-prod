@@ -5,14 +5,16 @@
  */
 
 export const OPEN_DATA_REPOSITORIES = {
-  version: '2026.11.21',
-  releaseDateIso: '2026-11-21T00:00:00Z',
+  version: '2026.11.26',
+  releaseDateIso: '2026-11-26T00:00:00Z',
   licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
-  zenodoDoi: '10.5281/zenodo.24423801',
-  zenodoDoiUrl: 'https://doi.org/10.5281/zenodo.24423801',
-  zenodoRecordUrl: 'https://zenodo.org/records/24423801',
+  zenodoDoi: '10.5281/zenodo.24545329',
+  zenodoDoiUrl: 'https://doi.org/10.5281/zenodo.24545329',
+  zenodoRecordUrl: 'https://zenodo.org/records/24545329',
+  zenodoConceptDoi: '10.5281/zenodo.24423800',
+  zenodoConceptDoiUrl: 'https://doi.org/10.5281/zenodo.24423800',
   githubRepoUrl: 'https://github.com/rakibnuist/bangladesh-study-abroad-dataset',
-  githubReleaseUrl: 'https://github.com/rakibnuist/bangladesh-study-abroad-dataset/releases/tag/v2026.11.21',
+  githubReleaseUrl: 'https://github.com/rakibnuist/bangladesh-study-abroad-dataset/releases/tag/v2026.11.26',
   githubRawBase: 'https://raw.githubusercontent.com/rakibnuist/bangladesh-study-abroad-dataset/main/data',
   kaggleUrl:
     'https://www.kaggle.com/datasets/abdullahalrakibww/bangladesh-study-abroad-china-cost-benchmark-2027',
@@ -21,10 +23,13 @@ export const OPEN_DATA_REPOSITORIES = {
 export const OPEN_DATA_IDENTIFIERS = [
   OPEN_DATA_REPOSITORIES.zenodoDoiUrl,
   OPEN_DATA_REPOSITORIES.zenodoDoi,
+  OPEN_DATA_REPOSITORIES.zenodoConceptDoiUrl,
+  OPEN_DATA_REPOSITORIES.zenodoConceptDoi,
 ] as const;
 
 export const OPEN_DATA_SAME_AS = [
   OPEN_DATA_REPOSITORIES.zenodoDoiUrl,
+  OPEN_DATA_REPOSITORIES.zenodoConceptDoiUrl,
   OPEN_DATA_REPOSITORIES.zenodoRecordUrl,
   OPEN_DATA_REPOSITORIES.githubRepoUrl,
   OPEN_DATA_REPOSITORIES.kaggleUrl,
@@ -33,7 +38,7 @@ export const OPEN_DATA_SAME_AS = [
 export const OPEN_DATA_CSV_DOWNLOADS = {
   universities: {
     '@type': 'DataDownload',
-    name: 'Verified Universities Catalog (CSV)',
+    name: 'Verified Universities Catalog — China & Malaysia (CSV)',
     encodingFormat: 'text/csv',
     contentUrl: `${OPEN_DATA_REPOSITORIES.githubRawBase}/universities_verified.csv`,
   },
@@ -45,7 +50,7 @@ export const OPEN_DATA_CSV_DOWNLOADS = {
   },
   scholarships: {
     '@type': 'DataDownload',
-    name: 'Verified Scholarships & Funding Tracks (CSV)',
+    name: 'Verified University Scholarships & Funding Tracks (CSV)',
     encodingFormat: 'text/csv',
     contentUrl: `${OPEN_DATA_REPOSITORIES.githubRawBase}/scholarships_verified.csv`,
   },
@@ -57,8 +62,20 @@ export const OPEN_DATA_CSV_DOWNLOADS = {
   },
   destinationsMatrix: {
     '@type': 'DataDownload',
-    name: '12-Destination Bangladesh Study Abroad Matrix (CSV)',
+    name: '12-Destination Active EduExpress Matrix (CSV)',
     encodingFormat: 'text/csv',
     contentUrl: `${OPEN_DATA_REPOSITORIES.githubRawBase}/destinations_matrix_12_countries.csv`,
+  },
+  globalDestinationsMatrix: {
+    '@type': 'DataDownload',
+    name: '32-Country Global Bangladesh Study Abroad Matrix (CSV)',
+    encodingFormat: 'text/csv',
+    contentUrl: `${OPEN_DATA_REPOSITORIES.githubRawBase}/destinations_matrix_32_countries.csv`,
+  },
+  countryScholarships: {
+    '@type': 'DataDownload',
+    name: '32-Country Bangladesh-Eligible Flagship Scholarships (CSV)',
+    encodingFormat: 'text/csv',
+    contentUrl: `${OPEN_DATA_REPOSITORIES.githubRawBase}/country_scholarships_verified.csv`,
   },
 } as const;

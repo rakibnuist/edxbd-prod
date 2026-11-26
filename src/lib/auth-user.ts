@@ -23,7 +23,7 @@ export interface LiveStaffUser extends StaffAuthUser {
 
 /**
  * Verify both the signed JWT and the caller's live database record + tokenVersion
- * for strict administrator roles ('admin' | 'super_admin').
+ * for administrator roles ('operations_admin' | 'admin' | 'super_admin').
  */
 export async function verifyLiveAdminUser(request: Request): Promise<AuthUser | null> {
   const decoded = verifyTokenFromRequest(request);

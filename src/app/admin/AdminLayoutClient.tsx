@@ -22,11 +22,13 @@ import {
   CalendarClock,
   FolderKanban,
   Landmark,
+  EyeOff,
 } from 'lucide-react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import LogoutButton from '@/components/LogoutButton';
 import LiveAlertsBell from '@/components/admin/LiveAlertsBell';
+import { canAccessFinanceRole } from '@/lib/roles';
 
 type NavGroup = 'operations' | 'team_controls' | 'website_cms';
 
@@ -52,6 +54,7 @@ const NAV: Array<{
   { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote, group: 'website_cms' },
   { name: 'Evidence Library', href: '/admin/evidence', icon: Images, group: 'website_cms' },
   { name: 'Company Records', href: '/admin/trust', icon: ShieldCheck, group: 'website_cms' },
+  { name: 'Hidden Source Vault', href: '/admin/source-watches', icon: EyeOff, group: 'website_cms', badge: 'Private' },
   { name: 'GBP & LinkedIn Posts', href: '/admin/gbp-posts', icon: CalendarClock, group: 'website_cms' },
 ];
 
@@ -70,9 +73,31 @@ function isCounselorRouteAllowed(pathname: string): boolean {
   );
 }
 
+function isFinanceRoute(pathname: string): boolean {
+  return pathname === '/admin/finance' || pathname.startsWith('/admin/finance/');
+}
+
 function AdminHeader({ activeName }: { activeName: string }) {
   const { user } = useAuth();
   const isCounselor = user?.role === 'counselor';
+  const isOpsAdmin = user?.role === 'operations_admin';
+  const roleBadgeLabel = isCounselor
+    ? 'COUNSELOR'
+    : user?.role === 'super_admin'
+      ? 'FULL CONTROL'
+      : isOpsAdmin
+        ? 'OPS ADMIN'
+        : 'ADMIN';
+  const roleDotClass = isCounselor
+    ? 'bg-emerald-600'
+    : isOpsAdmin
+      ? 'bg-indigo-600'
+      : 'bg-blue-600';
+  const rolePillClass = isCounselor
+    ? 'bg-emerald-100 text-emerald-800'
+    : isOpsAdmin
+      ? 'bg-indigo-100 text-indigo-800'
+      : 'bg-blue-100 text-blue-800';
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 py-3 backdrop-blur lg:px-6 print:hidden">
@@ -104,14 +129,10 @@ function AdminHeader({ activeName }: { activeName: string }) {
 
         {/* User Role Tag */}
         <div className="hidden md:flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs">
-          <span className={`size-2 rounded-full ${isCounselor ? 'bg-emerald-600' : 'bg-blue-600'}`} />
+          <span className={`size-2 rounded-full ${roleDotClass}`} />
           <span className="font-semibold text-slate-700">{user?.email || 'admin@eduexpressint.com'}</span>
-          <span
-            className={`rounded px-1.5 py-0.5 text-[10px] font-extrabold ${
-              isCounselor ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'
-            }`}
-          >
-            {isCounselor ? 'COUNSELOR' : user?.role === 'super_admin' ? 'SUPER ADMIN' : 'ADMIN'}
+          <span className={`rounded px-1.5 py-0.5 text-[10px] font-extrabold ${rolePillClass}`}>
+            {roleBadgeLabel}
           </span>
         </div>
 
@@ -135,6 +156,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user } = useAuth();
   const isCounselor = user?.role === 'counselor';
+  const canSeeFinance = canAccessFinanceRole(user?.role);
 
   const visibleNav = isCounselor
     ? NAV.filter(
@@ -144,13 +166,16 @@ function AdminShell({ children }: { children: React.ReactNode }) {
           item.href === '/admin/applications' ||
           item.href === '/admin/kpi',
       )
-    : NAV;
+    : canSeeFinance
+      ? NAV
+      : NAV.filter((item) => item.href !== '/admin/finance');
 
   const isActive = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname === href || pathname.startsWith(href + '/');
 
   const activeItem = visibleNav.find((n) => isActive(n.href, n.exact));
-  const routeAllowed = !isCounselor || isCounselorRouteAllowed(pathname);
+  const blockedFinance = !canSeeFinance && isFinanceRoute(pathname);
+  const routeAllowed = !blockedFinance && (!isCounselor || isCounselorRouteAllowed(pathname));
 
   const navSections: NavGroup[] = isCounselor
     ? ['operations']
@@ -306,6 +331,27 @@ function AdminShell({ children }: { children: React.ReactNode }) {
               <main className="min-w-0 flex-1 overflow-auto bg-slate-50/70 p-4 sm:p-6 lg:p-8 print:overflow-visible print:bg-white print:p-0">
                 {routeAllowed ? (
                   children
+                ) : blockedFinance && !isCounselor ? (
+                  <div className="mx-auto mt-12 max-w-lg rounded-2xl border border-amber-200 bg-white p-8 text-center shadow-sm">
+                    <h2 className="text-lg font-bold text-slate-900">Financial Details Restricted</h2>
+                    <p className="mt-2 text-sm text-slate-600">
+                      Your account has full operational access across leads, applications, KPI, team, settings, and website management, while company financial records, payroll, and cash ledgers are restricted to full-control administrators.
+                    </p>
+                    <div className="mt-5 flex justify-center gap-3">
+                      <Link
+                        href="/admin"
+                        className="rounded-xl bg-[#0f3a5c] px-4 py-2 text-xs font-bold text-white hover:bg-[#12436b]"
+                      >
+                        Back to Dashboard
+                      </Link>
+                      <Link
+                        href="/admin/applications"
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-800 hover:bg-slate-100"
+                      >
+                        Open Application Tracker
+                      </Link>
+                    </div>
+                  </div>
                 ) : (
                   <div className="mx-auto mt-12 max-w-lg rounded-2xl border border-amber-200 bg-white p-8 text-center shadow-sm">
                     <h2 className="text-lg font-bold text-slate-900">Counselor Access Scope</h2>

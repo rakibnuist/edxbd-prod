@@ -74,3 +74,15 @@ export function pageMetadata(seo: PageSeo): Metadata {
 export const ogImage = (name: string, alt: string) => ({ url: `/og/${name}.jpg`, width: 1200, height: 630, alt });
 
 export const absoluteUrl = (path: string) => `${SITE_URL}${path === '/' ? '' : path}`;
+
+/**
+ * Automates bilingual hreflang alternating pair generation between EN (/...) and BN (/bn/...).
+ * Sets en-BD, bn-BD, and x-default per search engine indexing standards.
+ */
+export function bilingualHreflang(enPath: string, bnPath: string): Record<string, string> {
+  return {
+    'en-BD': enPath,
+    'bn-BD': bnPath,
+    'x-default': enPath,
+  };
+}

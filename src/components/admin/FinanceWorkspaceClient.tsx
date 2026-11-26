@@ -36,6 +36,7 @@ import {
   X,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { canAccessFinanceRole } from '@/lib/roles';
 import {
   PROFIT_SHARES,
   buildCategoryBreakdown,
@@ -373,7 +374,7 @@ export default function FinanceWorkspaceClient() {
   }, [tab, loadSummary, loadCashflow, loadYear, loadInvestors, loadPayroll, searchStudentLedger, studentQuery]);
 
   useEffect(() => {
-    if (!isAuthenticated || authLoading || user?.role === 'counselor') return;
+    if (!isAuthenticated || authLoading || !canAccessFinanceRole(user?.role)) return;
     let cancelled = false;
     const params = new URLSearchParams();
     if (monthFilter) params.set('month', monthFilter);
@@ -407,7 +408,7 @@ export default function FinanceWorkspaceClient() {
   }, [isAuthenticated, authLoading, user?.role, authenticatedFetch, monthFilter, includeExcluded]);
 
   useEffect(() => {
-    if (!isAuthenticated || authLoading || user?.role === 'counselor') return;
+    if (!isAuthenticated || authLoading || !canAccessFinanceRole(user?.role)) return;
     let cancelled = false;
 
     if (tab === 'cashflow') {
@@ -725,7 +726,35 @@ export default function FinanceWorkspaceClient() {
     );
   };
 
-  if (authLoading || loading) {
+  if (authLoading) {
+    return (
+      <div className="mx-auto max-w-7xl space-y-6 pb-16">
+        <div className="h-28 animate-pulse rounded-2xl border border-slate-200 bg-white" />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((k) => (
+            <div key={k} className="h-36 animate-pulse rounded-2xl border border-slate-200 bg-white" />
+          ))}
+        </div>
+        <div className="h-80 animate-pulse rounded-2xl border border-slate-200 bg-white" />
+      </div>
+    );
+  }
+
+  if (isAuthenticated && !canAccessFinanceRole(user?.role)) {
+    return (
+      <div className="mx-auto mt-12 max-w-lg rounded-2xl border border-amber-200 bg-white p-8 text-center shadow-sm">
+        <div className="mx-auto mb-3 grid size-11 place-items-center rounded-xl bg-amber-50 text-amber-700">
+          <Landmark size={22} />
+        </div>
+        <h2 className="font-heading text-lg font-bold text-slate-900">Financial Details Restricted</h2>
+        <p className="mt-1.5 text-sm text-slate-600">
+          Only full-control financial administrators can access the Treasury Ledger, Investor Equity, and Payroll workspace.
+        </p>
+      </div>
+    );
+  }
+
+  if (loading) {
     return (
       <div className="mx-auto max-w-7xl space-y-6 pb-16">
         <div className="h-28 animate-pulse rounded-2xl border border-slate-200 bg-white" />

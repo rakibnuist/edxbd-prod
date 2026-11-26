@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { sendCrmStage } from '@/lib/meta-crm-events';
-import { isAdminRole } from '@/lib/auth';
+import { canAccessFinanceRole, isAdminRole } from '@/lib/auth';
 import { canAccessLeadScope, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
-import { logActivityEvent } from '@/lib/crm-operations';
+import { generatePublicToken, logActivityEvent } from '@/lib/crm-operations';
+import { generateNextLeadRef, getDocsTemplateForDestination } from '@/lib/application-tracker';
 import { parseNumericGpa } from '@/lib/wa-templates';
 import prisma from '@/lib/prisma';
 import { validateLeadUpdate } from '@/lib/lead-workflow';
@@ -35,6 +36,11 @@ export async function GET(
       return NextResponse.json({ message: 'Unauthorized - Lead is assigned to another counselor' }, { status: 403 });
     }
 
+    if (!canAccessFinanceRole(actor.role)) {
+      const { serviceFee: _sf, paidAmount: _pa, deposit: _dep, ...redactedLead } = lead;
+      return NextResponse.json(redactedLead, { headers: { 'Cache-Control': 'no-store, private' } });
+    }
+
     return NextResponse.json(lead, { headers: { 'Cache-Control': 'no-store, private' } });
   } catch (error) {
     console.error('Fetch lead error:', error);
@@ -55,7 +61,11 @@ async function applyLeadUpdateAndLog(
     select: {
       id: true,
       name: true,
+      country: true,
       status: true,
+      isApplication: true,
+      leadRef: true,
+      publicToken: true,
       applicationStage: true,
       assignedTo: true,
       assignedEmployeeId: true,
@@ -68,7 +78,29 @@ async function applyLeadUpdateAndLog(
     return { status: 'forbidden' };
   }
 
-  const updatePayload = { ...validatedData };
+  const updatePayload: Record<string, unknown> = { ...validatedData };
+
+  // If a lead opens file or status moves to application pipeline, ensure isApplication: true and tracker setup
+  const isOpeningFile =
+    updatePayload.isApplication === true ||
+    ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(
+      String(updatePayload.status || ''),
+    );
+
+  if (isOpeningFile) {
+    updatePayload.isApplication = true;
+    if (!before.leadRef && !updatePayload.leadRef) {
+      const refs = await prisma.lead.findMany({ where: { leadRef: { not: null } }, select: { leadRef: true } });
+      updatePayload.leadRef = generateNextLeadRef(refs.map((r) => r.leadRef));
+    }
+    if (!before.publicToken && !updatePayload.publicToken) {
+      updatePayload.publicToken = generatePublicToken();
+      updatePayload.publicEnabled = true;
+    }
+    if (!updatePayload.applicationStage && (!before.applicationStage || before.applicationStage === 'documents')) {
+      updatePayload.applicationStage = 'documents';
+    }
+  }
   // Counselors cannot transfer leads to other counselors (they can only claim unassigned leads for themselves)
   if (!isAdminRole(actor.role)) {
     if ('assignedEmployeeId' in updatePayload || 'assignedTo' in updatePayload) {
@@ -80,7 +112,7 @@ async function applyLeadUpdateAndLog(
         delete updatePayload.assignedTo;
       }
     }
-  } else if (updatePayload.assignedEmployeeId && !('assignedTo' in updatePayload)) {
+  } else if (typeof updatePayload.assignedEmployeeId === 'string' && updatePayload.assignedEmployeeId && !('assignedTo' in updatePayload)) {
     const emp = await prisma.employee.findUnique({
       where: { id: updatePayload.assignedEmployeeId },
       select: { name: true },
@@ -88,7 +120,10 @@ async function applyLeadUpdateAndLog(
     if (emp) updatePayload.assignedTo = emp.name;
   }
   if ('assessAcademicResults' in updatePayload && !('gpa' in updatePayload)) {
-    const parsedGpa = parseNumericGpa(null, updatePayload.assessAcademicResults);
+    const parsedGpa = parseNumericGpa(
+      null,
+      typeof updatePayload.assessAcademicResults === 'string' ? updatePayload.assessAcademicResults : null,
+    );
     if (parsedGpa !== null) updatePayload.gpa = parsedGpa;
   }
 
@@ -99,6 +134,30 @@ async function applyLeadUpdateAndLog(
   if (!lead) return { status: 'not_found' };
 
   const actorDisplay = actor.employee?.name || actor.email;
+
+  if (isOpeningFile && !before.isApplication) {
+    const docCount = await prisma.leadDocument.count({ where: { leadId: lead.id } });
+    if (docCount === 0) {
+      const templateDocs = getDocsTemplateForDestination(lead.country);
+      await prisma.leadDocument.createMany({
+        data: templateDocs.map((docType) => ({
+          leadId: lead.id,
+          docType,
+          status: 'pending',
+          updatedBy: actor.email,
+        })),
+      }).catch(() => {});
+    }
+    after(() => logActivityEvent({
+      type: 'application_opened',
+      actorName: actorDisplay,
+      actorUserId: actor.userId,
+      employeeId: actor.employee?.id || lead.assignedEmployeeId,
+      leadId: lead.id,
+      leadName: lead.name,
+      toValue: `${lead.leadRef || ''} · ${lead.country} (${lead.applicationStage || 'documents'})`,
+    }));
+  }
 
   if (lead.status !== before.status) {
     after(() => sendCrmStage(lead, lead.status));
@@ -145,7 +204,7 @@ async function applyLeadUpdateAndLog(
       employeeId: actor.employee?.id || lead.assignedEmployeeId,
       leadId: lead.id,
       leadName: lead.name,
-      details: updatePayload.notes?.slice(0, 300) || null,
+      details: typeof updatePayload.notes === 'string' ? updatePayload.notes.slice(0, 300) : null,
     }));
   }
 
@@ -180,6 +239,11 @@ export async function PUT(
     }
     if (res.status === 'not_found') {
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+    }
+
+    if (!canAccessFinanceRole(actor.role)) {
+      const { serviceFee: _sf, paidAmount: _pa, deposit: _dep, ...redactedLead } = res.lead;
+      return NextResponse.json(redactedLead, { headers: { 'Cache-Control': 'no-store, private' } });
     }
 
     return NextResponse.json(res.lead, { headers: { 'Cache-Control': 'no-store, private' } });
@@ -222,6 +286,11 @@ export async function PATCH(
     }
     if (res.status === 'not_found') {
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
+    }
+
+    if (!canAccessFinanceRole(actor.role)) {
+      const { serviceFee: _sf, paidAmount: _pa, deposit: _dep, ...redactedLead } = res.lead;
+      return NextResponse.json(redactedLead, { headers: { 'Cache-Control': 'no-store, private' } });
     }
 
     return NextResponse.json(res.lead, { headers: { 'Cache-Control': 'no-store, private' } });

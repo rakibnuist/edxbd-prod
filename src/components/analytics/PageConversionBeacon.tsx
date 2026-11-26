@@ -2,13 +2,14 @@
 
 import { useEffect, useRef } from 'react';
 import {
+  trackPackageView,
   trackSuccessStoryView,
   trackUniversityView,
   type ConversionContext,
 } from '@/lib/conversion-events';
 
 type Props = {
-  event: 'university_view' | 'success_story_view';
+  event: 'university_view' | 'success_story_view' | 'package_view';
   context?: ConversionContext;
 };
 
@@ -21,6 +22,10 @@ export default function PageConversionBeacon({ event, context }: Props) {
     sent.current = true;
     if (event === 'university_view') {
       trackUniversityView(context);
+      return;
+    }
+    if (event === 'package_view') {
+      trackPackageView(context);
       return;
     }
     trackSuccessStoryView(context);

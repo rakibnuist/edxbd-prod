@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse, after } from 'next/server';
-import { isAdminRole } from '@/lib/auth';
+import { canAccessFinanceRole, isAdminRole } from '@/lib/auth';
 import { buildCounselorLeadWhere, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { isLeadStatus } from '@/lib/lead-workflow';
 import { sendCrmStage } from '@/lib/meta-crm-events';
@@ -49,12 +49,12 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' }
     });
 
+    const canSeeFinance = canAccessFinanceRole(actor.role);
+    const payload = canSeeFinance
+      ? leads
+      : leads.map(({ serviceFee: _sf, paidAmount: _pa, deposit: _dep, ...rest }) => rest);
 
-
-
-
-
-    return NextResponse.json(leads, { headers: { 'Cache-Control': 'no-store, private' } });
+    return NextResponse.json(payload, { headers: { 'Cache-Control': 'no-store, private' } });
   } catch {
     // Error fetching leads
     return NextResponse.json(

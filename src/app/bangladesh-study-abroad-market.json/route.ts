@@ -28,7 +28,7 @@ export async function GET() {
 
   return NextResponse.json(
     {
-      title: 'Bangladesh Study Abroad Market Benchmark & Destination Matrix 2027',
+      title: 'Bangladesh Study Abroad Market Benchmark & 32-Country Global Destination Matrix 2027',
       url: 'https://eduexpressint.com/bangladesh-study-abroad-market',
       bengaliUrl: 'https://eduexpressint.com/bn/bangladesh-study-abroad-market',
       datasetUrl: 'https://eduexpressint.com/bangladesh-study-abroad-market.json',
@@ -47,6 +47,7 @@ export async function GET() {
       license: 'https://creativecommons.org/licenses/by/4.0/',
       methodology: {
         tuitionAndLivingSeparated: true,
+        sourceGovernance: '2-tier-hybrid (high-level public authorities exposed; granular update-tracking URLs retained privately for automated change monitoring)',
         chinaVisaFirstPolicy:
           'No file opening charge. No EduExpress service fee before China visa approval. Earlier third-party fees must be itemized in writing.',
         malaysiaServiceFee: 'BDT 0 EduExpress service fee; EMGS, tuition, and travel are paid directly by the student.',

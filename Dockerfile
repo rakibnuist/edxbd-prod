@@ -60,6 +60,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
 COPY --from=builder --chown=nextjs:nodejs /app/data/research ./data/research
 COPY --from=builder --chown=nextjs:nodejs /app/src/data/chinaMarch2027Campaign.ts ./src/data/chinaMarch2027Campaign.ts
+COPY --from=builder --chown=nextjs:nodejs /app/src/lib/private-source-registry.ts ./src/lib/private-source-registry.ts
 COPY --from=deps --chown=nextjs:nodejs /app/node_modules/bcryptjs ./node_modules/bcryptjs
 COPY --from=deps --chown=nextjs:nodejs /app/node_modules/dotenv ./node_modules/dotenv
 

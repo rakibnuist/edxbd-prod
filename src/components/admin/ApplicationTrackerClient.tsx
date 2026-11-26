@@ -36,6 +36,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatBdt } from '@/lib/finance-logic';
+import { canAccessFinanceRole } from '@/lib/roles';
 import { toSafeExternalUrl } from '@/lib/safe-url';
 import {
   APPLICATION_TRACKER_STAGES,
@@ -58,6 +59,7 @@ import ApplicationDetailDrawer from '@/components/admin/ApplicationDetailDrawer'
 
 interface ApplicationsApiResponse {
   isAdmin: boolean;
+  canAccessFinance?: boolean;
   stages: ApplicationStageDef[];
   rows: ApplicationRowDto[];
   meta: {
@@ -145,6 +147,7 @@ export default function ApplicationTrackerClient() {
   const [inlineBusyId, setInlineBusyId] = useState<string | null>(null);
 
   const isAdmin = data ? data.isAdmin : user?.role !== 'counselor';
+  const canAccessFinance = data ? Boolean(data.canAccessFinance) : canAccessFinanceRole(user?.role);
 
   const flashNotice = useCallback((tone: 'ok' | 'err', text: string) => {
     setNotice({ tone, text });
@@ -601,7 +604,7 @@ export default function ApplicationTrackerClient() {
       'Docs Total',
       'Visa Deadline',
       'Departure Date',
-      ...(isAdmin ? ['Deposit (BDT)', 'Finance Paid (BDT)'] : []),
+      ...(canAccessFinance ? ['Deposit (BDT)', 'Finance Paid (BDT)'] : []),
       'Drive Link',
       'Notes',
     ];
@@ -633,7 +636,7 @@ export default function ApplicationTrackerClient() {
         r.docsTotal,
         r.visaDeadline || '',
         r.departureDate || '',
-        ...(isAdmin ? [r.deposit || 0, r.financeReceivedTotal || 0] : []),
+        ...(canAccessFinance ? [r.deposit || 0, r.financeReceivedTotal || 0] : []),
         r.driveLink || '',
         r.applicationNotes || '',
       ];
@@ -1489,7 +1492,7 @@ export default function ApplicationTrackerClient() {
           </div>
 
           <div className="flex items-center gap-3">
-            {isAdmin && bucketCounts.financeReceived > 0 && (
+            {canAccessFinance && bucketCounts.financeReceived > 0 && (
               <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold tabular-nums text-emerald-900">
                 Linked Cash In: {formatBdt(bucketCounts.financeReceived)}
               </span>
@@ -1585,14 +1588,14 @@ export default function ApplicationTrackerClient() {
                   <th className="px-3 py-3">Pipeline Stage</th>
                   <th className="px-3 py-3">Embassy / Visa</th>
                   <th className="px-3 py-3">Docs</th>
-                  {isAdmin && <th className="px-3 py-3 text-right">Paid (৳)</th>}
+                  {canAccessFinance && <th className="px-3 py-3 text-right">Paid (৳)</th>}
                   <th className="px-3 py-3 text-right print:hidden">Dossier</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {paginatedRows.length === 0 ? (
                   <tr>
-                    <td colSpan={isAdmin ? 10 : 8} className="px-6 py-14 text-center text-slate-500">
+                    <td colSpan={8 + (isAdmin ? 1 : 0) + (canAccessFinance ? 1 : 0)} className="px-6 py-14 text-center text-slate-500">
                       <p className="font-bold text-slate-700">No application files match the current filters.</p>
                       <p className="mt-1 text-xs">
                         Reset filters or click <strong>+ New Application</strong> to open a student file.
@@ -1826,8 +1829,8 @@ export default function ApplicationTrackerClient() {
                           </div>
                         </td>
 
-                        {/* Admin-Only Finance Column */}
-                        {isAdmin && (
+                        {/* Finance-Admin-Only Column */}
+                        {canAccessFinance && (
                           <td className="px-3 py-3 text-right align-top tabular-nums">
                             {row.financeReceivedTotal && row.financeReceivedTotal > 0 ? (
                               <div className="font-bold text-[#0b7a53]">
@@ -2022,6 +2025,7 @@ export default function ApplicationTrackerClient() {
       <NewApplicationModal
         open={newModalOpen}
         isAdmin={isAdmin}
+        canAccessFinance={canAccessFinance}
         employees={employees}
         intakes={data?.meta.intakes ?? []}
         destinations={data?.meta.destinations ?? []}
@@ -2042,6 +2046,7 @@ export default function ApplicationTrackerClient() {
       <ApplicationDetailDrawer
         applicationId={activeDrawerId}
         isAdmin={isAdmin}
+        canAccessFinance={canAccessFinance}
         employees={employees}
         universities={data?.meta.universities ?? []}
         programs={data?.meta.programs ?? []}

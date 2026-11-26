@@ -27,6 +27,7 @@ export type ConversionEvent =
   | 'b2b_inquiry_submit'
   | 'whatsapp_click'
   | 'phone_click'
+  | 'package_view'
   | 'appointment_booked'
   | 'compare_started'
   | 'compare_completed'
@@ -57,6 +58,7 @@ const META_EVENT_MAP: Partial<Record<ConversionEvent, string>> = {
   b2b_inquiry_submit: 'Lead',
   whatsapp_click: 'Contact',
   phone_click: 'Contact',
+  package_view: 'ViewContent',
   appointment_booked: 'Schedule',
   application_started: 'SubmitApplication',
   offer_received: 'CompleteRegistration',
@@ -216,6 +218,10 @@ export function trackConversion(event: ConversionEvent, context: ConversionConte
 
 export const trackAssessmentStart = (ctx?: ConversionContext) => trackConversion('assessment_start', ctx);
 export const trackAssessmentSubmit = (ctx?: ConversionContext) => trackConversion('assessment_submit', ctx);
+// Aliases for EFA (Education Fit Assessment) event name parity
+export const trackEfaStart = trackAssessmentStart;
+export const trackEfaFinish = trackAssessmentSubmit;
+export const trackPackageView = (ctx?: ConversionContext) => trackConversion('package_view', ctx);
 export const trackB2BInquirySubmit = (ctx?: ConversionContext) => trackConversion('b2b_inquiry_submit', ctx);
 export const trackWhatsAppClick = (ctx?: ConversionContext) => trackConversion('whatsapp_click', ctx);
 export const trackPhoneClick = (ctx?: ConversionContext) => trackConversion('phone_click', ctx);

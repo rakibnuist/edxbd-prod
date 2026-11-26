@@ -2,9 +2,8 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, CalendarClock, CheckCircle2, ExternalLink, MapPin, Search } from 'lucide-react';
+import { ArrowRight, CalendarClock, CheckCircle2, MapPin, Search } from 'lucide-react';
 import { SCHOLARSHIP_CATEGORIES, type ScholarshipRow } from '@/lib/catalog-views';
-import { toSafeExternalUrl } from '@/lib/safe-url';
 
 const PAGE = 18;
 const fieldClass = 'mt-1.5 h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-base sm:text-[15px] font-semibold text-petrol-800 outline-none focus:border-petrol-800 focus:ring-4 focus:ring-lime/50';
@@ -55,7 +54,6 @@ export default function ScholarshipFinder({ rows }: { rows: ScholarshipRow[] }) 
         {filtered.length ? <>
           <ul className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {filtered.slice(0, visible).map(row => {
-              const safeSourceUrl = toSafeExternalUrl(row.sourceUrl);
               return (
               <li key={row.key} className="flex flex-col rounded-3xl border border-petrol-800/15 bg-white p-5">
                 <div className="flex flex-wrap gap-2 text-[14px] font-bold"><span className="rounded-full bg-lime-pale px-2.5 py-1 text-lime-deep">{row.category}</span>{row.deadlinePassed && <span className="rounded-full bg-amber-50 px-2.5 py-1 text-amber-800">Deadline passed</span>}</div>
@@ -65,9 +63,11 @@ export default function ScholarshipFinder({ rows }: { rows: ScholarshipRow[] }) 
                 {row.eligiblePrograms.length > 0 && <p className="mt-3 text-[14px] leading-5 text-ink-mute"><strong>For:</strong> {row.eligiblePrograms.slice(0, 3).join('; ')}{row.eligiblePrograms.length > 3 && ` and ${row.eligiblePrograms.length - 3} more`}</p>}
                 {row.renewal && <p className="mt-2 text-[14px] leading-5 text-ink-mute"><strong>Renewal:</strong> {row.renewal}</p>}
                 <p className="mt-4 flex gap-2 text-[15px] text-ink-soft"><CalendarClock size={16} className="mt-0.5 shrink-0 text-petrol-800" />{row.deadline || 'Deadline not recorded'}</p>
-                <div className="mt-auto flex flex-wrap gap-2 pt-5">
+                <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-5">
                   <Link href={`/universities/${row.universitySlug}#costs`} className="ed-btn ed-btn-signal min-h-11 w-full text-[15px]">Cost after scholarship <ArrowRight size={15} /></Link>
-                  {safeSourceUrl ? <a href={safeSourceUrl} target="_blank" rel="noopener noreferrer" className="ed-btn ed-btn-outline min-h-11 gap-1.5 px-4 text-[15px]">Source <ExternalLink size={14} /></a> : <span className="inline-flex min-h-11 items-center px-1 text-[14px] text-ink-mute">Source link pending</span>}
+                  <Link href="/how-we-verify-universities" className="inline-flex min-h-9 items-center gap-1.5 px-1 text-[13.5px] font-semibold text-ink-mute hover:text-petrol-800">
+                    <CheckCircle2 size={14} className="text-lime-deep" /> Verified from official institutional notice
+                  </Link>
                 </div>
               </li>
               );

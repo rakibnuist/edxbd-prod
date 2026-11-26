@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { isAdminRole } from '@/lib/auth';
+import { ALLOWED_USER_ROLES, isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 
-const ALLOWED_ROLES = ['user', 'counselor', 'admin', 'super_admin'] as const;
+const ALLOWED_ROLES = ALLOWED_USER_ROLES;
 const MIN_PASSWORD_LENGTH = 12;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 

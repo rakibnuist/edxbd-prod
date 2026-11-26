@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Check, ChevronDown, ExternalLink, ShieldCheck } from 'lucide-react';
+import PageConversionBeacon from '@/components/analytics/PageConversionBeacon';
 import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import type { ChinaGuidePage as ChinaGuidePageData, ChinaGuideSection } from '@/data/chinaGuidePages';
@@ -334,6 +335,7 @@ export default async function ChinaGuidePage({ guide }: { guide: ChinaGuidePageD
 
             {servicePackages.length ? (
               <section id="service-packages" className="scroll-mt-28 space-y-5">
+                <PageConversionBeacon event="package_view" context={{ label: 'china_guide_service_packages', destination: 'china' }} />
                 <h2 className={sectionTitle}>EduExpress China service packages</h2>
                 <p className={bodyText}>The university award defines your scholarship coverage. Your EduExpress Package defines the agreed support, service fee and responsibilities.</p>
                 <div className="space-y-4">

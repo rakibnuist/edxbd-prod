@@ -128,8 +128,7 @@ const FAQS = [
   },
   {
     question: 'Can I compare Chinese university fees and scholarships before visiting your Dhanmondi office?',
-    answer:
-      'Yes. You can use our public China Cost Comparison tool (/compare-costs), browse all 150 verified Chinese universities (/china-universities), or inspect our CERN-archived open dataset (DOI: 10.5281/zenodo.24423801) published under CC BY 4.0 before booking a free consultation.',
+    answer: `Yes. You can use our public China Cost Comparison tool (/compare-costs), browse our verified Chinese university directory (/china-universities), or inspect our CERN-archived open dataset (DOI: ${OPEN_DATA_REPOSITORIES.zenodoDoi}) published under CC BY 4.0 before booking a free consultation.`,
   },
   {
     question: 'Which China intakes and degree levels do you support from Bangladesh?',
@@ -266,7 +265,7 @@ export default async function StudyInChinaAgencyBangladeshPage() {
                     rel="noopener noreferrer"
                     className="underline decoration-lime/60 underline-offset-2 hover:text-lime"
                   >
-                    10.5281/zenodo.24423801
+                    {OPEN_DATA_REPOSITORIES.zenodoDoi}
                   </a>
                 </dd>
               </div>

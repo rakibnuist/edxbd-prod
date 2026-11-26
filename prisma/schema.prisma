@@ -14,6 +14,11 @@ model University {
   location String
   country  String
   city     String
+  province String?
+  chineseName String?
+  cscAgencyNumber String?
+  isCscDesignated Boolean @default(false)
+  isMoeMbbsListed Boolean @default(false)
   intake   String // Comma-separated string
   degree   String // Comma-separated string
   taught   String // Comma-separated string
@@ -795,4 +800,36 @@ model PayrollRecord {
   @@unique([month, empId, name])
   @@index([month])
   @@index([employeeId])
+}
+
+// Private server-only source vault for automated fee, scholarship, and visa policy monitoring.
+// Never queried by public pages, widgets, or CC BY 4.0 exports (2-Tier Hybrid Model).
+model InternalSourceWatch {
+  id                String    @id @default(cuid())
+  watchKey          String    @unique
+  entityType        String    // university | program | scholarship | fee | country_policy
+  entityId          String
+  entityLabel       String
+  country           String?
+  sourceUrl         String
+  authorityLabel    String
+  checkIntervalDays Int       @default(30)
+  etag              String?
+  lastModifiedHdr   String?
+  lastContentHash   String?
+  lastHttpStatus    Int?
+  lastSnippet       String?
+  diffSummary       String?
+  lastCheckedAt     DateTime?
+  lastChangedAt     DateTime?
+  reviewedAt        DateTime?
+  reviewedBy        String?
+  status            String    @default("active") // active | changed_needs_review | broken_link | paused
+  notes             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([entityType, entityId])
+  @@index([status, lastCheckedAt])
+  @@index([country])
 }

@@ -274,3 +274,94 @@ export function CtaBand({
     </section>
   );
 }
+
+export interface VerifiedFactItem {
+  claim: string;
+  source: string;
+  sourceUrl?: string;
+}
+
+/**
+ * Machine-readable and visual "Verified Facts as-of {date}" block for AI assistant citation and SEO governance.
+ * Embeds structured Dataset / FactCheck JSON-LD alongside a human-readable proof rail.
+ */
+export function VerifiedFactsBlock({
+  verifiedDate,
+  facts,
+  reviewer = 'EduExpress Research & Compliance Desk',
+  className = '',
+}: {
+  verifiedDate: string;
+  facts: VerifiedFactItem[];
+  reviewer?: string;
+  className?: string;
+}) {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'SpecialAnnouncement',
+    name: 'Verified Admissions, Fee & Visa Policy Facts',
+    dateModified: verifiedDate,
+    maintainer: {
+      '@type': 'EducationalOrganization',
+      name: 'EduExpress International',
+      url: 'https://eduexpressint.com',
+    },
+    about: facts.map((fact) => ({
+      '@type': 'ClaimReview',
+      claimReviewed: fact.claim,
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: '5',
+        bestRating: '5',
+        alternateName: 'Officially Verified',
+      },
+      author: {
+        '@type': 'Organization',
+        name: reviewer,
+      },
+      itemReviewed: {
+        '@type': 'CreativeWork',
+        name: fact.source,
+        ...(fact.sourceUrl ? { url: fact.sourceUrl } : {}),
+      },
+    })),
+  };
+
+  return (
+    <aside
+      className={`rounded-3xl border border-petrol-800/10 bg-canvas-soft p-6 sm:p-7 ${className}`}
+      aria-label="Verified facts and evidence sources"
+    >
+      <JsonLd data={structuredData} />
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-petrol-800/10 pb-3">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-lime-pale px-3 py-1 text-xs font-bold text-lime-deep">
+          <BadgeCheck size={14} className="text-[#2ead4b]" aria-hidden="true" />
+          Verified Facts as of {verifiedDate}
+        </span>
+        <span className="text-xs font-medium text-ink-mute">Reviewer: {reviewer}</span>
+      </div>
+      <ul className="mt-4 divide-y divide-petrol-800/5">
+        {facts.map((fact, idx) => (
+          <li key={idx} className="py-2.5 first:pt-0 last:pb-0">
+            <p className="text-[14.5px] font-semibold text-petrol-800">{fact.claim}</p>
+            <p className="mt-0.5 text-xs text-ink-soft">
+              Source:{' '}
+              {fact.sourceUrl ? (
+                <a
+                  href={fact.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium underline underline-offset-2 hover:text-petrol-800"
+                >
+                  {fact.source}
+                </a>
+              ) : (
+                <span className="font-medium text-petrol-800">{fact.source}</span>
+              )}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  );
+}

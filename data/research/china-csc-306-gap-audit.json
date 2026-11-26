@@ -1,0 +1,490 @@
+{
+  "generatedAtIso": "2026-11-25T23:14:54.200Z",
+  "summary": {
+    "totalCscListCount": 306,
+    "existingActiveChinaUniversities": 353,
+    "matchedCscUniversities": 306,
+    "missingCscUniversitiesCount": 0,
+    "nonCscExistingChinaUniversities": 47,
+    "existingChinaMissingChineseLanguageProgram": 79,
+    "existingScholarshipsMissingExplicitCoverageOrAmount": 0
+  },
+  "missingCscUniversities": [],
+  "existingWithoutChineseLanguageProgram": [
+    {
+      "slug": "anhui-medical-university",
+      "name": "Anhui Medical University",
+      "city": "Hefei",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "beihua-university",
+      "name": "Beihua University",
+      "city": "Jilin City",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "beijing-technology-and-business-university",
+      "name": "Beijing Technology and Business University",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "capital-medical-university",
+      "name": "Capital Medical University",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "central-academy-of-fine-arts",
+      "name": "Central Academy of Fine Arts",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "central-conservatory-of-music",
+      "name": "Central Conservatory of Music",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "central-south-university-of-forestry-and-technology",
+      "name": "Central South University of Forestry and Technology",
+      "city": "Changsha",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "changchun-sci-tech-university",
+      "name": "Changchun Sci-Tech University",
+      "city": "Changchun",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "changchun-university-of-science-and-technology",
+      "name": "Changchun University of Science and Technology",
+      "city": "Changchun",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "chengdu-normal-university",
+      "name": "Chengdu Normal University",
+      "city": "Chengdu",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "china-conservatory-of-music",
+      "name": "China Conservatory of Music",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "china-medical-university",
+      "name": "China Medical University",
+      "city": "Shenyang",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "cpu",
+      "name": "China Pharmaceutical University",
+      "city": "Nanjing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "china-university-of-petroleum-east-china",
+      "name": "China University of Petroleum, East China",
+      "city": "Qingdao",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "china-youth-university-of-political-studies",
+      "name": "China Youth University of Political Studies",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "chongqing-medical-university",
+      "name": "Chongqing Medical University",
+      "city": "Chongqing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "civil-aviation-university-of-china",
+      "name": "Civil Aviation University of China",
+      "city": "Tianjin",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "dalian-medical-university",
+      "name": "Dalian Medical University",
+      "city": "Dalian",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "fujian-police-college",
+      "name": "Fujian Police College",
+      "city": "Fuzhou",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "fuist",
+      "name": "Fuzhou University of International Studies and Trade",
+      "city": "Fuzhou",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "graduate-school-of-chinese-academy-of-agricultural-sciences",
+      "name": "Graduate School of Chinese Academy of Agricultural Sciences",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "guangdong-pharmaceutical-university",
+      "name": "Guangdong Pharmaceutical University",
+      "city": "Guangzhou",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "guangdong-polytechnic-normal-university",
+      "name": "Guangdong Polytechnic Normal University",
+      "city": "Guangzhou",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "guangxi-medical-university",
+      "name": "Guangxi Medical University",
+      "city": "Nanning",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "guangzhou-medical-university",
+      "name": "Guangzhou Medical University",
+      "city": "Guangzhou",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "guangzhou-university-of-chinese-medicine",
+      "name": "Guangzhou University of Chinese Medicine",
+      "city": "Guangzhou",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "hainan-medical-university",
+      "name": "Hainan Medical University",
+      "city": "Haikou",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "hdu",
+      "name": "Hangzhou Dianzi University",
+      "city": "Hangzhou",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "hitsz",
+      "name": "Harbin Institute of Technology, Shenzhen",
+      "city": "Shenzhen",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "harbin-medical-university",
+      "name": "Harbin Medical University",
+      "city": "Harbin",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "hafa",
+      "name": "Hebei Academy of Fine Arts",
+      "city": "Shijiazhuang",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "hbust",
+      "name": "Hebei University of Science and Technology",
+      "city": "Shijiazhuang",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "xinxiang-medical-university",
+      "name": "Henan Medical University (Xinxiang Medical University)",
+      "city": "Xinxiang",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "henan-university",
+      "name": "Henan University",
+      "city": "Kaifeng",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "hsu",
+      "name": "Huangshan University",
+      "city": "Huangshan",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "jiangsu-police-institute",
+      "name": "Jiangsu Police Institute",
+      "city": "Nanjing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "jiangsu-university-of-science-and-technology",
+      "name": "Jiangsu University of Science and Technology",
+      "city": "Zhenjiang",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "jiangsu-university-of-technology",
+      "name": "Jiangsu University of Technology",
+      "city": "Changzhou",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "jit",
+      "name": "Jinling Institute of Technology",
+      "city": "Nanjing",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "jinzhou-medical-university",
+      "name": "Jinzhou Medical University",
+      "city": "Jinzhou",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "kunming-medical-university",
+      "name": "Kunming Medical University",
+      "city": "Kunming",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "kunming-university-of-science-and-technology",
+      "name": "Kunming University of Science and Technology",
+      "city": "Kunming",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "lyu",
+      "name": "Linyi University",
+      "city": "Linyi",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "njit",
+      "name": "Nanjing Institute of Technology",
+      "city": "Nanjing",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "nanjing-medical-university",
+      "name": "Nanjing Medical University",
+      "city": "Nanjing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "njtech",
+      "name": "Nanjing Tech University",
+      "city": "Nanjing",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "national-police-university-of-china",
+      "name": "National Police University of China",
+      "city": "Shenyang",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "ningxia-medical-university",
+      "name": "Ningxia Medical University",
+      "city": "Yinchuan",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "north-sichuan-medical-college",
+      "name": "North Sichuan Medical College",
+      "city": "Nanchong",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "panzhihua-university",
+      "name": "Panzhihua University",
+      "city": "Panzhihua",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "peking-union-medical-college",
+      "name": "Peking Union Medical College",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "peking-university-health-science-center",
+      "name": "Peking University Health Science Center",
+      "city": "Beijing",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "peoples-public-security-university-of-china",
+      "name": "People's Public Security University of China",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "qinghai-university",
+      "name": "Qinghai University",
+      "city": "Xining",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "smu",
+      "name": "Sanming University",
+      "city": "Sanming",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "shanghai-business-school",
+      "name": "Shanghai Business School",
+      "city": "Shanghai",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "shanghai-institute-of-technology",
+      "name": "Shanghai Institute of Technology",
+      "city": "Shanghai",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "shanghai-polytechnic-university",
+      "name": "Shanghai Polytechnic University",
+      "city": "Shanghai",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "suep",
+      "name": "Shanghai University of Electric Power",
+      "city": "Shanghai",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "shanghaitech-university",
+      "name": "ShanghaiTech University",
+      "city": "Shanghai",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "sichuan-tourism-university",
+      "name": "Sichuan Tourism University",
+      "city": "Chengdu",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "southern-medical-university",
+      "name": "Southern Medical University",
+      "city": "Guangzhou",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "southern-university-of-science-and-technology",
+      "name": "Southern University of Science and Technology",
+      "city": "Shenzhen",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "southwest-medical-university",
+      "name": "Southwest Medical University",
+      "city": "Luzhou",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "southwest-petroleum-university",
+      "name": "Southwest Petroleum University",
+      "city": "Chengdu",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "central-academy-of-drama",
+      "name": "The Central Academy of Drama",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "university-of-nottingham-ningbo-china",
+      "name": "The University of Nottingham Ningbo China",
+      "city": "Ningbo",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "tiangong-university",
+      "name": "Tiangong University",
+      "city": "Tianjin",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "tianjin-medical-university",
+      "name": "Tianjin Medical University",
+      "city": "Tianjin",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "university-of-chinese-academy-of-sciences",
+      "name": "University of Chinese Academy of Sciences",
+      "city": "Beijing",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "westlake-university",
+      "name": "Westlake University",
+      "city": "Hangzhou",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "wuchang-university-of-technology",
+      "name": "Wuchang University of Technology",
+      "city": "Wuhan",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "wuzhou-university",
+      "name": "Wuzhou University",
+      "city": "Wuzhou",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "xsyu",
+      "name": "Xi'an Shiyou University",
+      "city": "Xi'an",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "xinjiang-university-of-finance-and-economics",
+      "name": "Xinjiang University of Finance and Economics",
+      "city": "Urumqi",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "xuzhou-medical-university",
+      "name": "Xuzhou Medical University",
+      "city": "Xuzhou",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "yangzhou-university",
+      "name": "Yangzhou University",
+      "city": "Yangzhou",
+      "isCscDesignated": true
+    },
+    {
+      "slug": "yunnan-vocational-college-of-mechanical-and-electrical-technology",
+      "name": "Yunnan Vocational College of Mechanical and Electrical Technology",
+      "city": "Kunming",
+      "isCscDesignated": false
+    },
+    {
+      "slug": "zhejiang-police-college",
+      "name": "Zhejiang Police College",
+      "city": "Hangzhou",
+      "isCscDesignated": true
+    }
+  ],
+  "vagueScholarshipsSample": []
+}

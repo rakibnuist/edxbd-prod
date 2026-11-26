@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminRole } from '@/lib/auth';
+import { canAccessFinanceRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
 import { validateIncomePayload } from '@/lib/finance-logic';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
@@ -13,8 +13,8 @@ export async function PUT(
 ) {
   try {
     const admin = await verifyLiveAdminUser(request);
-    if (!admin || !isAdminRole(admin.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403, headers: NO_STORE });
+    if (!admin || !canAccessFinanceRole(admin.role)) {
+      return NextResponse.json({ message: 'Unauthorized - Financial access required' }, { status: 403, headers: NO_STORE });
     }
 
     const { id } = await params;
@@ -63,8 +63,8 @@ export async function DELETE(
 ) {
   try {
     const admin = await verifyLiveAdminUser(request);
-    if (!admin || !isAdminRole(admin.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403, headers: NO_STORE });
+    if (!admin || !canAccessFinanceRole(admin.role)) {
+      return NextResponse.json({ message: 'Unauthorized - Financial access required' }, { status: 403, headers: NO_STORE });
     }
 
     const { id } = await params;

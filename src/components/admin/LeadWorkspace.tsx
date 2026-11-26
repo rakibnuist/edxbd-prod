@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowDownUp, ChevronLeft, ChevronRight, Columns3, Download, ExternalLink,
-  Flame, GraduationCap, LayoutList, Mail, Phone, RefreshCw, Search,
+  Flame, FolderCheck, FolderKanban, FolderPlus, GraduationCap, LayoutList, Mail, Phone, RefreshCw, Search,
   SlidersHorizontal, Upload, UserCheck, X, Clock, CalendarClock,
 } from 'lucide-react';
 import LeadCopilotPanel from '@/components/admin/LeadCopilotPanel';
@@ -235,6 +235,45 @@ function Detail({
             )}
           </div>
         </div>
+
+        {lead.isApplication ? (
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-sky-200 bg-sky-50/80 p-3.5 text-xs text-sky-950">
+            <div className="flex items-center gap-2.5">
+              <span className="grid size-8 place-items-center rounded-lg bg-sky-100 text-[#0f3a5c]">
+                <FolderKanban size={18} />
+              </span>
+              <div>
+                <p className="font-bold">Active in Application Tracker</p>
+                <p className="text-[11px] text-sky-700">Ref: {lead.leadRef || 'APP-FILE'}</p>
+              </div>
+            </div>
+            <Link
+              href={`/admin/applications?search=${encodeURIComponent(lead.leadRef || lead.name)}`}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#0f3a5c] px-3.5 py-2 font-bold text-white shadow-sm hover:bg-[#124b7a]"
+            >
+              Open in Tracker →
+            </Link>
+          </div>
+        ) : (
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3.5 text-xs text-emerald-950">
+            <div>
+              <p className="font-bold">Student ready to open file?</p>
+              <p className="text-[11px] text-emerald-800">
+                Move student into Application Tracker to initialize document checklist and application workflow.
+              </p>
+            </div>
+            <button
+              type="button"
+              disabled={saving}
+              onClick={async () => {
+                await onUpdate(lead.id, { isApplication: true, status: 'application_started' });
+              }}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 px-3.5 py-2 font-bold text-white shadow-sm hover:bg-emerald-800 disabled:opacity-60"
+            >
+              <FolderPlus size={14} /> Open File
+            </button>
+          </div>
+        )}
 
         <section>
           <h3 className="mb-2 text-sm font-semibold">Lead status</h3>
@@ -859,7 +898,9 @@ export default function LeadWorkspace({
                     if (droppedId) {
                       const targetLead = leads.find((x) => x.id === droppedId);
                       if (targetLead && !col.statuses.includes(targetLead.status)) {
-                        await onUpdate(droppedId, { status: col.targetStatus });
+                        const payload: Record<string, unknown> = { status: col.targetStatus };
+                        if (col.id === 'application') payload.isApplication = true;
+                        await onUpdate(droppedId, payload);
                       }
                     }
                   }}
@@ -900,6 +941,27 @@ export default function LeadWorkspace({
                             {lead.country} · {lead.program || lead.assessSubject || 'Admission'}
                           </p>
                           <GpaPill lead={lead} />
+
+                          <div className="mt-1.5 flex flex-wrap items-center gap-1">
+                            {lead.isApplication ? (
+                              <Link
+                                href={`/admin/applications?search=${encodeURIComponent(lead.leadRef || lead.name)}`}
+                                className="inline-flex items-center gap-1 rounded bg-sky-50 border border-sky-200 px-1.5 py-0.5 text-[10px] font-bold text-sky-900 hover:bg-sky-100"
+                                title="Open in Application Tracker"
+                              >
+                                <FolderCheck size={10} className="text-sky-700" /> In Tracker ({lead.leadRef || 'APP'})
+                              </Link>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => onUpdate(lead.id, { isApplication: true, status: 'application_started' })}
+                                className="inline-flex items-center gap-1 rounded bg-emerald-50 border border-emerald-300 px-1.5 py-0.5 text-[10px] font-bold text-emerald-800 hover:bg-emerald-100"
+                                title="Open file and move to Application Tracker"
+                              >
+                                <FolderPlus size={10} /> Open File
+                              </button>
+                            )}
+                          </div>
 
                           <div className="mt-2.5 flex items-center justify-between gap-1.5 border-t border-slate-100 pt-2">
                             <div className="flex items-center gap-1.5">
@@ -1006,18 +1068,36 @@ export default function LeadWorkspace({
 
                       <td className="col-span-2 row-start-3 md:py-4 md:pr-4">
                         <StatusSelect lead={lead} saving={savingId === lead.id} update={onUpdate} />
-                        {lead.publicToken && (
-                          <div className="mt-1.5 flex items-center gap-2 text-[11px] text-slate-500">
+                        <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                          {lead.isApplication ? (
+                            <Link
+                              href={`/admin/applications?search=${encodeURIComponent(lead.leadRef || lead.name)}`}
+                              className="inline-flex items-center gap-1 rounded border border-sky-300 bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-900 hover:bg-sky-100"
+                              title="Open in Application Tracker"
+                            >
+                              <FolderKanban size={11} className="text-sky-700" /> In Tracker ({lead.leadRef || 'APP'}) →
+                            </Link>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => onUpdate(lead.id, { isApplication: true, status: 'application_started' })}
+                              className="inline-flex items-center gap-1 rounded border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 hover:bg-emerald-100"
+                              title="Open file and move to Application Tracker"
+                            >
+                              <FolderPlus size={11} /> Open File
+                            </button>
+                          )}
+                          {lead.publicToken && (
                             <a
                               href={`/track/${lead.publicToken}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 font-semibold text-blue-700 hover:underline"
+                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-700 hover:underline"
                             >
-                              <ExternalLink size={10} /> Portal Step {step}/6 ({pct}%)
+                              <ExternalLink size={10} /> Step {step}/6 ({pct}%)
                             </a>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </td>
 
                       <td className="col-start-2 row-start-2 text-right text-xs leading-5 tabular-nums text-gray-600 md:py-4 md:pr-4 md:text-left">

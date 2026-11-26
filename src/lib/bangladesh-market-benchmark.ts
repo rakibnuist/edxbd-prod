@@ -1,13 +1,21 @@
-import { OFFICIAL_COUNTRY_SOURCES } from '../app/destinations/[country]/country-seo';
 import { CHINA_REPORT_OFFICIAL_AUTHORITIES } from './china-benchmark';
 import type { ChinaIntakeRow } from './china-intakes';
 import { activeCountries } from './countries';
+import {
+  GLOBAL_BENCHMARK_LAST_VERIFIED_ISO,
+  GLOBAL_BENCHMARK_LAST_VERIFIED_LABEL,
+  GLOBAL_BENCHMARK_NEXT_REVIEW_LABEL,
+  GLOBAL_DESTINATIONS_BENCHMARK,
+  GLOBAL_DESTINATIONS_BY_SLUG,
+  type CountryScholarshipBenchmark,
+  type GlobalDestinationBenchmark,
+} from './global-study-destinations';
 import { destinationPath } from './site-urls';
 import type { CleanUniversityRecord } from './university-records';
 
-export const BANGLADESH_MARKET_LAST_VERIFIED_ISO = '2026-11-21';
-export const BANGLADESH_MARKET_LAST_VERIFIED_LABEL = '21 November 2026';
-export const BANGLADESH_MARKET_NEXT_REVIEW_LABEL = '21 February 2027';
+export const BANGLADESH_MARKET_LAST_VERIFIED_ISO = GLOBAL_BENCHMARK_LAST_VERIFIED_ISO;
+export const BANGLADESH_MARKET_LAST_VERIFIED_LABEL = GLOBAL_BENCHMARK_LAST_VERIFIED_LABEL;
+export const BANGLADESH_MARKET_NEXT_REVIEW_LABEL = GLOBAL_BENCHMARK_NEXT_REVIEW_LABEL;
 
 export type MarketAuthoritySource = {
   label: string;
@@ -15,10 +23,14 @@ export type MarketAuthoritySource = {
   note: string;
 };
 
+/**
+ * Tier-1 High-Level Public Authorities (root ministry/regulatory portals only).
+ * Deep policy/fee/brochure tracking URLs remain private in `InternalSourceWatch`.
+ */
 export const BANGLADESH_MARKET_SOURCES: MarketAuthoritySource[] = [
   {
     label: 'Bangladesh Bank — Foreign Exchange Policy Department (GFET & Student File)',
-    href: 'https://www.bb.org.bd/en/index.php/fepd/fepdguideline',
+    href: 'https://www.bb.org.bd/',
     note: 'Official central bank foreign exchange regulations for overseas education remittances and AD bank Student Files',
   },
   {
@@ -38,12 +50,12 @@ export const BANGLADESH_MARKET_SOURCES: MarketAuthoritySource[] = [
   },
   {
     label: 'Malaysian Qualifications Register (MQA / MQR)',
-    href: 'https://www2.mqa.gov.my/mqr/',
+    href: 'https://www2.mqa.gov.my/',
     note: 'Statutory accreditation registry for Malaysian public, private, and international branch campuses',
   },
   {
     label: 'UK Visas and Immigration (UKVI) — Student & Graduate Route',
-    href: 'https://www.gov.uk/student-visa',
+    href: 'https://www.gov.uk/',
     note: 'UK Student Visa financial rules, licensed sponsor register, and Jan 2027 18-month Graduate Route transition',
   },
   {
@@ -58,13 +70,13 @@ export const BANGLADESH_MARKET_SOURCES: MarketAuthoritySource[] = [
   },
   {
     label: 'Finnish Immigration Service (Migri) — Studying in Finland',
-    href: 'https://migri.fi/en/studying-in-finland',
+    href: 'https://migri.fi/',
     note: 'Type A residence permit rules and official EUR 800/month (EUR 9,600/year) means-of-support benchmark',
   },
   {
-    label: 'British Council Bangladesh — School & Language Exams',
-    href: 'https://www.britishcouncil.org.bd/en/exam/school',
-    note: 'CAIE / Edexcel O-Level & A-Level exam registration framework and IELTS testing in Bangladesh',
+    label: 'IRCC Canada · Home Affairs Australia · DAAD Germany · JASSO Japan · Campus France',
+    href: 'https://www.daad.de/',
+    note: 'Official OECD/global destination immigration & national scholarship authorities for the 32-country benchmark matrix',
   },
   {
     label: 'China Bangladesh Consultancy Alliance (CBCA) — Founding Member #08',
@@ -73,7 +85,7 @@ export const BANGLADESH_MARKET_SOURCES: MarketAuthoritySource[] = [
   },
   {
     label: 'FACD-CAB (FACECAB) Official Member Directory — EduExpress International (ID: FCM-452)',
-    href: 'https://www.facdcab.org/members/directory/2264',
+    href: 'https://www.facdcab.org/',
     note: 'Foreign Admission & Career Development Consultants Association of Bangladesh verified member record',
   },
 ];
@@ -81,10 +93,10 @@ export const BANGLADESH_MARKET_SOURCES: MarketAuthoritySource[] = [
 export const BANGLADESH_MACRO_INDICATORS = [
   {
     indicator: 'Outbound Bangladeshi Student Pool',
-    figure: '50,000+ tertiary (OECD) · 100,000+ broader outbound estimates',
+    figure: '50,000+ tertiary (OECD) · 90,000–100,000+ broader outbound estimates',
     implication:
       'Bangladesh outbound demand is rising steadily across undergraduate, MBBS, and postgraduate tiers, led by families comparing long-term degree ROI against local private fees.',
-    sourceNote: 'OECD Education at a Glance baseline & 2025–2026 ICEF / industry outbound estimates',
+    sourceNote: 'OECD Education at a Glance baseline & 2025–2026 UNESCO UIS / ICEF outbound estimates',
   },
   {
     indicator: 'UK Bangladesh Cohort & Policy Shift',
@@ -120,7 +132,7 @@ export const STUDENT_FILE_COMPARISON = [
   {
     dimension: 'Regulatory Requirement',
     studentFileCountries:
-      'Required for countries needing advance tuition or blocked-account remittance (Malaysia, UK, Finland, Hungary self-funded, Germany, Australia, USA). Governed by Bangladesh Bank GFET via an Authorized Dealer (AD) bank branch.',
+      'Required for countries needing advance tuition or blocked-account remittance (Malaysia, UK, Finland, Hungary self-funded, Germany, Australia, Canada, USA, Netherlands, Norway). Governed by Bangladesh Bank GFET via an Authorized Dealer (AD) bank branch.',
     chinaAdvantage:
       'Not required for full CSC / Type A scholarships (zero tuition remittance) and most self-funded/provincial-waiver Chinese tracks where fees are settled on campus upon arrival during registration week.',
   },
@@ -231,15 +243,20 @@ export type DestinationPortfolioRow = {
   intakes: string;
   indicativeTuition: string;
   indicativeLiving: string;
+  officialVisaFinancialProof: string;
   studentFileRule: string;
   eduExpressFeeModel: string;
   keyGuardrail: string;
+  flagshipScholarships: CountryScholarshipBenchmark[];
+  /** Tier-1 high-level public authority names & root portals only. */
+  publicAuthorityNames: string[];
   officialSources: { label: string; href: string }[];
 };
 
 export type BangladeshMarketSnapshot = {
   generatedAtIso: string;
   activeDestinationCount: number;
+  globalBenchmarkDestinationCount: number;
   liveCatalog: {
     activeUniversities: number;
     byCountry: { country: string; count: number }[];
@@ -250,7 +267,10 @@ export type BangladeshMarketSnapshot = {
     consentedStoriesCount: number;
   };
   chinaIntakes: ChinaIntakeRow[];
+  /** EduExpress's 12 active service destinations (Flagship + Waves 1–3). */
   destinations: DestinationPortfolioRow[];
+  /** Full 32-country outbound Bangladesh benchmark (12 Active + 20 Benchmark Reference) with scholarships. */
+  globalDestinations: GlobalDestinationBenchmark[];
 };
 
 export function buildBangladeshMarketBenchmark(
@@ -285,15 +305,12 @@ export function buildBangladeshMarketBenchmark(
       eduExpressFeeModel: 'Written service schedule before onboarding',
       keyGuardrail: 'Confirm institution accreditation and official embassy notice prior to payment.',
     };
-    const sources =
-      country.slug === 'china'
+    const globalMatch = GLOBAL_DESTINATIONS_BY_SLUG.get(country.slug);
+    const rootSources =
+      globalMatch?.publicAuthorityRootPortals ??
+      (country.slug === 'china'
         ? CHINA_REPORT_OFFICIAL_AUTHORITIES.slice(0, 3).map((s) => ({ label: s.label, href: s.href }))
-        : country.slug === 'malaysia'
-          ? [
-              { label: 'Education Malaysia Global Services (EMGS)', href: 'https://educationmalaysia.gov.my/' },
-              { label: 'Malaysian Qualifications Register (MQR / MQA)', href: 'https://www2.mqa.gov.my/mqr/' },
-            ]
-          : OFFICIAL_COUNTRY_SOURCES[country.slug] ?? [];
+        : []);
 
     return {
       slug: country.slug,
@@ -303,16 +320,21 @@ export function buildBangladeshMarketBenchmark(
       intakes: country.intakesText || 'Check current cycle',
       indicativeTuition: country.costs?.tuition || 'Confirmed per institution',
       indicativeLiving: country.costs?.living || 'Prepared in written schedule',
+      officialVisaFinancialProof:
+        globalMatch?.officialVisaFinancialProof || 'Confirm current statutory financial proof with destination embassy.',
       studentFileRule: meta.studentFileRule,
       eduExpressFeeModel: meta.eduExpressFeeModel,
       keyGuardrail: meta.keyGuardrail,
-      officialSources: sources,
+      flagshipScholarships: globalMatch?.flagshipScholarships ?? [],
+      publicAuthorityNames: globalMatch?.publicAuthorityNames ?? [],
+      officialSources: rootSources,
     };
   });
 
   return {
     generatedAtIso: now.toISOString(),
     activeDestinationCount: activeCountries.length,
+    globalBenchmarkDestinationCount: GLOBAL_DESTINATIONS_BENCHMARK.length,
     liveCatalog: {
       activeUniversities: activeUnis.length,
       byCountry,
@@ -324,5 +346,6 @@ export function buildBangladeshMarketBenchmark(
     },
     chinaIntakes,
     destinations,
+    globalDestinations: GLOBAL_DESTINATIONS_BENCHMARK,
   };
 }

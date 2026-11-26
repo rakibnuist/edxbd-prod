@@ -3,10 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { AlertTriangle, ExternalLink, Plus, Search, X } from 'lucide-react';
+import { AlertTriangle, Plus, Search, X } from 'lucide-react';
 import { FEE_LABELS, FIRST_YEAR_FEES, firstYearEstimate, type FeeCategory, type FeeRow, type ProgramRow } from '@/lib/catalog-views';
 import { trackCompareCompleted, trackCompareStarted } from '@/lib/conversion-events';
-import { toSafeExternalUrl } from '@/lib/safe-url';
 import FinancialFeasibilityCard from '@/components/finders/FinancialFeasibilityCard';
 
 const MAX = 3;
@@ -17,10 +16,9 @@ type Props = { programs: ProgramRow[]; fees: Record<string, FeeRow[]> };
 
 function FeeCell({ fees }: { fees: FeeRow[] }) {
   if (!fees.length) return <span className="text-slate-400">Not recorded</span>;
-  return <ul className="space-y-1.5">{fees.map((fee, index) => {
-    const safeSourceUrl = toSafeExternalUrl(fee.sourceUrl);
-    return <li key={index}><span className="font-semibold text-petrol-800">{fee.cost}</span>{fees.length > 1 && <span className="block text-[14px] text-ink-mute">{fee.item}</span>}{safeSourceUrl && <a href={safeSourceUrl} target="_blank" rel="noopener noreferrer" className="ml-1 inline-flex items-center text-petrol-800" aria-label={`Source for ${fee.item}`}><ExternalLink size={12} /></a>}</li>;
-  })}</ul>;
+  return <ul className="space-y-1.5">{fees.map((fee, index) => (
+    <li key={index}><span className="font-semibold text-petrol-800">{fee.cost}</span>{fees.length > 1 && <span className="block text-[14px] text-ink-mute">{fee.item}</span>}</li>
+  ))}</ul>;
 }
 
 export default function CostCompare({ programs, fees }: Props) {
@@ -85,10 +83,9 @@ export default function CostCompare({ programs, fees }: Props) {
               <caption className="sr-only">First-year costs for selected programs, in CNY as recorded</caption>
               <thead><tr className="border-b border-slate-200 align-top"><th scope="col" className="w-44 p-4 text-[14px] font-bold text-ink-mute">Program</th>{columns.map(({ program }) => <th key={program.key} scope="col" className="p-4"><div className="flex items-start justify-between gap-2"><div><span className="block text-base font-black text-petrol-800">{program.name}</span><Link href={`/universities/${program.universitySlug}`} className="text-[15px] font-bold text-petrol-800 hover:underline">{program.universityName}</Link><span className="block text-[14px] font-semibold text-ink-mute">{program.level} · {program.city}</span></div><button type="button" onClick={() => remove(program.key)} aria-label={`Remove ${program.name}`} className="grid size-8 shrink-0 place-items-center rounded-full hover:bg-slate-100"><X size={16} /></button></div></th>)}</tr></thead>
               <tbody className="divide-y divide-slate-100 align-top">
-                <tr><th scope="row" className="p-4 font-bold">Tuition (per year)</th>{columns.map(({ program }) => {
-                  const safeSourceUrl = toSafeExternalUrl(program.sourceUrl);
-                  return <td key={program.key} className="p-4"><span className="font-semibold text-petrol-800">{program.tuitionLabel || 'Not recorded'}</span>{safeSourceUrl && <a href={safeSourceUrl} target="_blank" rel="noopener noreferrer" className="ml-1 inline-flex text-petrol-800" aria-label="Tuition source"><ExternalLink size={12} /></a>}</td>;
-                })}</tr>
+                <tr><th scope="row" className="p-4 font-bold">Tuition (per year)</th>{columns.map(({ program }) => (
+                  <td key={program.key} className="p-4"><span className="font-semibold text-petrol-800">{program.tuitionLabel || 'Not recorded'}</span></td>
+                ))}</tr>
                 {FIRST_YEAR_FEES.map(category => <tr key={category}><th scope="row" className="p-4 font-bold">{FEE_LABELS[category]}</th>{columns.map(({ program, universityFees }) => <td key={program.key} className="p-4"><FeeCell fees={byCategory(universityFees, category)} /></td>)}</tr>)}
                 {columns.some(({ universityFees }) => byCategory(universityFees, 'other').length) && <tr><th scope="row" className="p-4 font-bold">{FEE_LABELS.other}<span className="block text-[14px] font-semibold text-ink-mute">Not added to the total</span></th>{columns.map(({ program, universityFees }) => <td key={program.key} className="p-4"><FeeCell fees={byCategory(universityFees, 'other')} /></td>)}</tr>}
                 <tr className="bg-petrol-800 text-white"><th scope="row" className="p-4 font-black">First-year estimate</th>{columns.map(({ program, estimate }) => <td key={program.key} className="p-4">{estimate.total !== null ? <><strong className="text-xl">CNY {number(estimate.total)}</strong>{bdtRate && <span className="block text-[15px] text-white/80">≈ BDT {number(estimate.total * bdtRate)}</span>}</> : <><span className="flex items-center gap-1.5 font-black"><AlertTriangle size={16} className="text-amber-300" />Incomplete</span><span className="mt-1 block text-[14px] leading-5 text-white/80">Confirm: {estimate.unclear.join(', ')}</span>{estimate.partial > 0 && <span className="mt-1 block text-[14px] text-white/80">Clear items so far: CNY {number(estimate.partial)}</span>}</>}{estimate.missing.length > 0 && <span className="mt-1 block text-[14px] leading-5 text-white/70">Not recorded: {estimate.missing.join(', ')}</span>}</td>)}</tr>

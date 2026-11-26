@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { Prisma } from '@prisma/client';
+import { canAccessFinanceRole } from '@/lib/auth';
 import {
   buildCounselorLeadWhere,
   canAccessLeadScope,
@@ -13,6 +14,7 @@ import {
   DESTINATION_OPTIONS,
   DEGREE_OPTIONS,
   deriveLeadStatusFromStage,
+  generateNextLeadRef,
   getDocsTemplateForDestination,
   getIntakeSortValue,
   normalizeTrackerStage,
@@ -25,19 +27,6 @@ const NO_STORE_HEADERS = { 'Cache-Control': 'no-store, private' };
 
 function isApplicationLeadWhere(): Prisma.LeadWhereInput {
   return { isApplication: true };
-}
-
-function generateNextLeadRef(existingRefs: Array<string | null>): string {
-  let maxNum = 445;
-  for (const ref of existingRefs) {
-    if (!ref) continue;
-    const m = ref.match(/(?:LEAD|APP)-(\d+)/i);
-    if (m) {
-      const n = Number.parseInt(m[1], 10);
-      if (Number.isFinite(n) && n > maxNum) maxNum = n;
-    }
-  }
-  return `APP-${String(maxNum + 1).padStart(4, '0')}`;
 }
 
 export async function GET(request: NextRequest) {
@@ -53,6 +42,7 @@ export async function GET(request: NextRequest) {
     }
 
     const isAdmin = Boolean(admin);
+    const canSeeFinance = canAccessFinanceRole(actor.role);
     const url = new URL(request.url);
     const market = (url.searchParams.get('market') || 'all').trim().toLowerCase();
     const channel = (url.searchParams.get('channel') || 'all').trim().toLowerCase();
@@ -171,11 +161,11 @@ export async function GET(request: NextRequest) {
       }),
     ]);
 
-    // Admin-only Finance linkage: compute received & spent totals by leadId or leadRef
+    // Finance-admin-only linkage: compute received & spent totals by leadId or leadRef
     const receivedByLead = new Map<string, number>();
     const spentByLead = new Map<string, number>();
 
-    if (isAdmin && leads.length > 0) {
+    if (canSeeFinance && leads.length > 0) {
       const leadIds = leads.map((l) => l.id);
       const leadRefMap = new Map<string, string>();
       for (const l of leads) {
@@ -269,9 +259,9 @@ export async function GET(request: NextRequest) {
         departureDate: l.departureDate,
         nextFollowup: l.nextFollowup,
         driveLink: l.driveLink,
-        serviceFee: l.serviceFee || 0,
-        paidAmount: l.paidAmount || 0,
-        deposit: l.deposit || 0,
+        serviceFee: canSeeFinance ? l.serviceFee || 0 : 0,
+        paidAmount: canSeeFinance ? l.paidAmount || 0 : 0,
+        deposit: canSeeFinance ? l.deposit || 0 : 0,
         applicationNotes: l.applicationNotes,
         notes: l.notes,
         bloodGroup: l.bloodGroup,
@@ -288,8 +278,8 @@ export async function GET(request: NextRequest) {
         uniTotal,
         uniAdmitted,
         uniList,
-        financeReceivedTotal: isAdmin ? receivedByLead.get(l.id) || 0 : null,
-        financeSpentTotal: isAdmin ? spentByLead.get(l.id) || 0 : null,
+        financeReceivedTotal: canSeeFinance ? receivedByLead.get(l.id) || 0 : null,
+        financeSpentTotal: canSeeFinance ? spentByLead.get(l.id) || 0 : null,
         createdAt: l.createdAt.toISOString(),
         updatedAt: l.updatedAt.toISOString(),
       };
@@ -359,6 +349,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         isAdmin,
+        canAccessFinance: canSeeFinance,
         stages: APPLICATION_TRACKER_STAGES,
         rows,
         meta: {
@@ -406,6 +397,7 @@ export async function POST(request: NextRequest) {
     }
 
     const isAdmin = Boolean(admin);
+    const canSeeFinance = canAccessFinanceRole(actor.role);
     const body = await readLimitedJson(request, 32 * 1024);
 
     // Block counselors from setting China market
@@ -443,7 +435,12 @@ export async function POST(request: NextRequest) {
       if (patchValidation.error) {
         return NextResponse.json({ error: patchValidation.error }, { status: 400, headers: NO_STORE_HEADERS });
       }
-      const patch = patchValidation.data || {};
+      const patch = { ...(patchValidation.data || {}) };
+      if (!canSeeFinance) {
+        delete patch.serviceFee;
+        delete patch.paidAmount;
+        delete patch.deposit;
+      }
       const nextStage = typeof patch.applicationStage === 'string' ? patch.applicationStage : normalizeTrackerStage(existing.applicationStage);
       const nextToken = existing.publicToken || generatePublicToken();
       let nextRef = (typeof patch.leadRef === 'string' ? patch.leadRef : existing.leadRef) || null;
@@ -518,7 +515,11 @@ export async function POST(request: NextRequest) {
         toValue: `${updated.leadRef || ''} · ${updated.country} (${nextStage})`,
       });
 
-      return NextResponse.json({ id: updated.id, application: updated }, { status: 201, headers: NO_STORE_HEADERS });
+      const sanitizedApplication = canSeeFinance
+        ? updated
+        : { ...updated, serviceFee: 0, paidAmount: 0, deposit: 0 };
+
+      return NextResponse.json({ id: updated.id, application: sanitizedApplication }, { status: 201, headers: NO_STORE_HEADERS });
     }
 
     // Mode B: Create a brand-new Application Tracker student file
@@ -599,9 +600,9 @@ export async function POST(request: NextRequest) {
         visaDeadline: (data.visaDeadline as string | null) ?? null,
         departureDate: (data.departureDate as string | null) ?? null,
         driveLink: (data.driveLink as string | null) ?? null,
-        serviceFee: Number(data.serviceFee) || 0,
-        paidAmount: Number(data.paidAmount) || 0,
-        deposit: Number(data.deposit) || 0,
+        serviceFee: canSeeFinance ? Number(data.serviceFee) || 0 : 0,
+        paidAmount: canSeeFinance ? Number(data.paidAmount) || 0 : 0,
+        deposit: canSeeFinance ? Number(data.deposit) || 0 : 0,
         applicationNotes: (data.applicationNotes as string | null) ?? null,
         notes: (data.notes as string | null) ?? null,
         bloodGroup: (data.bloodGroup as string | null) ?? null,
@@ -651,7 +652,11 @@ export async function POST(request: NextRequest) {
       toValue: `${created.leadRef} · ${country} (${stage})`,
     });
 
-    return NextResponse.json({ id: created.id, application: created }, { status: 201, headers: NO_STORE_HEADERS });
+    const sanitizedCreated = canSeeFinance
+      ? created
+      : { ...created, serviceFee: 0, paidAmount: 0, deposit: 0 };
+
+    return NextResponse.json({ id: created.id, application: sanitizedCreated }, { status: 201, headers: NO_STORE_HEADERS });
   } catch (error) {
     const bodyError = jsonBodyErrorResponse(error);
     if (bodyError) return bodyError;

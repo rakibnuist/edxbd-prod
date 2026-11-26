@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminRole } from '@/lib/auth';
+import { FINANCE_ACTIVITY_TYPES, canAccessFinanceRole, isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { computeEmployeeKpiReport, normalizeMonthParam, shiftIsoDays } from '@/lib/kpi-workflow';
 import prisma from '@/lib/prisma';
@@ -90,6 +90,7 @@ export async function GET(
       prisma.activityEvent.findMany({
         where: {
           createdAt: { gte: winStartDate, lte: winEndDate },
+          ...(canAccessFinanceRole(actor.role) ? {} : { type: { notIn: [...FINANCE_ACTIVITY_TYPES] } }),
           OR: [
             { employeeId: employee.id },
             { actorName: employee.name },

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminRole } from '@/lib/auth';
+import { FINANCE_ACTIVITY_TYPES, canAccessFinanceRole, isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { seedDefaultMonthlyTargets } from '@/lib/crm-operations';
 import { computeEmployeeKpiReport, normalizeMonthParam, shiftIsoDays } from '@/lib/kpi-workflow';
@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     const isAdmin = isAdminRole(actor.role);
+    const canSeeFinance = canAccessFinanceRole(actor.role);
     const selfEmpId = staff?.employee?.id || '__none__';
 
     const { searchParams } = new URL(request.url);
@@ -79,9 +80,12 @@ export async function GET(request: NextRequest) {
         },
       }),
       prisma.activityEvent.findMany({
-        where: isAdmin
-          ? { createdAt: { gte: winStartDate, lte: winEndDate } }
-          : { employeeId: selfEmpId, createdAt: { gte: winStartDate, lte: winEndDate } },
+        where: {
+          ...(isAdmin
+            ? { createdAt: { gte: winStartDate, lte: winEndDate } }
+            : { employeeId: selfEmpId, createdAt: { gte: winStartDate, lte: winEndDate } }),
+          ...(canSeeFinance ? {} : { type: { notIn: [...FINANCE_ACTIVITY_TYPES] } }),
+        },
         orderBy: { createdAt: 'desc' },
         select: { id: true, type: true, actorName: true, actorUserId: true, employeeId: true, leadId: true, leadName: true, fromValue: true, toValue: true, details: true, createdAt: true },
       }),
@@ -98,10 +102,14 @@ export async function GET(request: NextRequest) {
       activities,
     });
 
+    const safeTargets = canSeeFinance
+      ? targets
+      : targets.map(({ targetRevenue: _tr, ...rest }) => ({ ...rest, targetRevenue: 0 }));
+
     return NextResponse.json(
       {
         ...report,
-        targets,
+        targets: safeTargets,
         recentDailyLogs: dailyLogs.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 20),
         openTasks: tasks.filter((t) => t.status !== 'done').slice(0, 60),
         recentActivities: activities.slice(0, 40),

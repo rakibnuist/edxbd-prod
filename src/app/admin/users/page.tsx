@@ -7,6 +7,7 @@ import { Suspense, useState, useEffect, useCallback } from 'react';
 import PublicAboutTeamPanel from '@/components/admin/PublicAboutTeamPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { teamMembers as canonicalTeamDefaults } from '@/data/teamMembers';
+import { formatRoleLabel, isAdminRole, type UserRole } from '@/lib/roles';
 
 interface LinkedEmployee {
   id: string;
@@ -24,7 +25,7 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: 'super_admin' | 'admin' | 'counselor' | 'user';
+  role: UserRole;
   employee?: LinkedEmployee | null;
   createdAt: string;
   updatedAt: string;
@@ -55,7 +56,7 @@ function UsersPageContent() {
     name: '',
     email: '',
     password: '',
-    role: 'counselor' as 'super_admin' | 'admin' | 'counselor' | 'user',
+    role: 'counselor' as UserRole,
     employeeId: '',
   });
   const [showMessageModal, setShowMessageModal] = useState(false);
@@ -82,8 +83,8 @@ function UsersPageContent() {
   >({});
 
   const isSuperAdmin = currentUser?.role === 'super_admin';
-  const isAdmin = currentUser?.role === 'admin';
-  const canMessage = isSuperAdmin || isAdmin;
+  const hasAdminAccess = isAdminRole(currentUser?.role);
+  const canMessage = hasAdminAccess;
 
   const fetchSentMessages = async () => {
     try {
@@ -121,14 +122,14 @@ function UsersPageContent() {
   }, [authenticatedFetch]);
 
   useEffect(() => {
-    if (currentUser?.role === 'admin' || currentUser?.role === 'super_admin') {
+    if (isAdminRole(currentUser?.role)) {
       const timeoutId = window.setTimeout(() => void fetchUsers(), 0);
       return () => window.clearTimeout(timeoutId);
     }
   }, [currentUser?.role, fetchUsers]);
 
-  // Check if current user is admin or super_admin
-  if (currentUser?.role !== 'admin' && currentUser?.role !== 'super_admin') {
+  // Check if current user has admin access
+  if (!hasAdminAccess) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
@@ -883,11 +884,13 @@ function UsersPageContent() {
                           ? 'bg-purple-100 text-purple-800'
                           : user.role === 'admin'
                           ? 'bg-red-100 text-red-800'
+                          : user.role === 'operations_admin'
+                          ? 'bg-indigo-100 text-indigo-800'
                           : user.role === 'counselor'
                           ? 'bg-emerald-100 text-emerald-800'
                           : 'bg-gray-100 text-gray-800'
                       }`}>
-                        {user.role === 'super_admin' ? 'Super Admin' : user.role === 'counselor' ? 'Counselor (Scoped)' : user.role}
+                        {formatRoleLabel(user.role)}
                       </span>
                       <div className="flex space-x-2">
                         {canMessage && user.id !== currentUser?.id && (
@@ -904,9 +907,14 @@ function UsersPageContent() {
                         )}
                         <button
                           onClick={() => openEditModal(user)}
-                          title={`Edit ${user.name}`}
+                          disabled={!isSuperAdmin && isAdminRole(user.role) && user.id !== currentUser?.id}
+                          title={
+                            !isSuperAdmin && isAdminRole(user.role) && user.id !== currentUser?.id
+                              ? 'Only full-control super admins can edit another admin account'
+                              : `Edit ${user.name}`
+                          }
                           aria-label={`Edit ${user.name}`}
-                          className="text-blue-600 hover:text-blue-900"
+                          className="text-blue-600 hover:text-blue-900 disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -914,8 +922,14 @@ function UsersPageContent() {
                         </button>
                         <button
                           onClick={() => handleDeleteUser(user.id)}
-                          disabled={user.id === currentUser?.id}
-                          title={user.id === currentUser?.id ? 'You cannot delete your own account' : `Delete ${user.name}`}
+                          disabled={user.id === currentUser?.id || (!isSuperAdmin && isAdminRole(user.role))}
+                          title={
+                            user.id === currentUser?.id
+                              ? 'You cannot delete your own account'
+                              : !isSuperAdmin && isAdminRole(user.role)
+                                ? 'Only full-control super admins can delete an admin account'
+                                : `Delete ${user.name}`
+                          }
                           aria-label={`Delete ${user.name}`}
                           className="text-red-600 hover:text-red-900 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
@@ -1094,13 +1108,14 @@ function UsersPageContent() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                   <select
                     value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'super_admin' | 'admin' | 'counselor' | 'user' })}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="counselor">Counselor (Scoped: Leads + KPI Desk)</option>
                     <option value="user">User (Public only)</option>
-                    {isSuperAdmin && <option value="admin">Admin</option>}
-                    {isSuperAdmin && <option value="super_admin">Super Admin</option>}
+                    {isSuperAdmin && <option value="operations_admin">Operations Admin (Full Except Financial Details)</option>}
+                    {isSuperAdmin && <option value="admin">Admin (Full + Finance)</option>}
+                    {isSuperAdmin && <option value="super_admin">Super Admin (Full Control)</option>}
                   </select>
                 </div>
                 <div className="flex justify-end space-x-3">
@@ -1277,15 +1292,20 @@ function UsersPageContent() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                   <select
                     value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value as 'super_admin' | 'admin' | 'counselor' | 'user' })}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
                     disabled={editingUser.id === currentUser?.id}
                     aria-describedby={editingUser.id === currentUser?.id ? 'own-role-help' : undefined}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                   >
                     <option value="counselor">Counselor (Scoped: Leads + KPI Desk)</option>
                     <option value="user">User (Public only)</option>
-                    {(isSuperAdmin || formData.role === 'admin') && <option value="admin">Admin</option>}
-                    {isSuperAdmin && <option value="super_admin">Super Admin</option>}
+                    {(isSuperAdmin || formData.role === 'operations_admin') && (
+                      <option value="operations_admin">Operations Admin (Full Except Financial Details)</option>
+                    )}
+                    {(isSuperAdmin || formData.role === 'admin') && <option value="admin">Admin (Full + Finance)</option>}
+                    {(isSuperAdmin || formData.role === 'super_admin') && (
+                      <option value="super_admin">Super Admin (Full Control)</option>
+                    )}
                   </select>
                   {editingUser.id === currentUser?.id && (
                     <p id="own-role-help" className="mt-1 text-xs text-gray-500">Your own role cannot be changed.</p>

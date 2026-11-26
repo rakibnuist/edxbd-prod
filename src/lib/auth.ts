@@ -1,4 +1,31 @@
 import jwt from 'jsonwebtoken';
+import {
+  ALLOWED_USER_ROLES,
+  FINANCE_ACTIVITY_TYPES,
+  canAccessFinanceRole,
+  formatRoleLabel,
+  isAdminRole,
+  isStaffRole,
+  isSuperAdminRole,
+  type AdminRole,
+  type FinanceAdminRole,
+  type StaffRole,
+  type UserRole,
+} from './roles';
+
+export {
+  ALLOWED_USER_ROLES,
+  FINANCE_ACTIVITY_TYPES,
+  canAccessFinanceRole,
+  formatRoleLabel,
+  isAdminRole,
+  isStaffRole,
+  isSuperAdminRole,
+  type AdminRole,
+  type FinanceAdminRole,
+  type StaffRole,
+  type UserRole,
+};
 
 function getJwtSecret(): string {
   const envSecret = process.env.JWT_SECRET;
@@ -9,9 +36,6 @@ function getJwtSecret(): string {
     'JWT_SECRET environment variable is missing or too short (min 32 chars). Refusing to sign/verify tokens with an insecure secret.'
   );
 }
-
-export type AdminRole = 'admin' | 'super_admin';
-export type StaffRole = 'counselor' | AdminRole;
 
 export interface AuthUser {
   userId: string;
@@ -25,14 +49,6 @@ export interface StaffAuthUser {
   email: string;
   role: StaffRole;
   tokenVersion: number;
-}
-
-export function isAdminRole(role: unknown): role is AdminRole {
-  return role === 'admin' || role === 'super_admin';
-}
-
-export function isStaffRole(role: unknown): role is StaffRole {
-  return role === 'counselor' || role === 'admin' || role === 'super_admin';
 }
 
 export function verifyToken(token: string): AuthUser | null {

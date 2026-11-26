@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminRole } from '@/lib/auth';
+import { canAccessFinanceRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
 import { logActivityEvent } from '@/lib/crm-operations';
 import { isValidMonth, validateExpensePayload } from '@/lib/finance-logic';
@@ -11,8 +11,8 @@ const NO_STORE = { 'Cache-Control': 'no-store, private' };
 export async function GET(request: NextRequest) {
   try {
     const admin = await verifyLiveAdminUser(request);
-    if (!admin || !isAdminRole(admin.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403, headers: NO_STORE });
+    if (!admin || !canAccessFinanceRole(admin.role)) {
+      return NextResponse.json({ message: 'Unauthorized - Financial access required' }, { status: 403, headers: NO_STORE });
     }
 
     const { searchParams } = new URL(request.url);
@@ -53,8 +53,8 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const admin = await verifyLiveAdminUser(request);
-    if (!admin || !isAdminRole(admin.role)) {
-      return NextResponse.json({ message: 'Unauthorized - Admin access required' }, { status: 403, headers: NO_STORE });
+    if (!admin || !canAccessFinanceRole(admin.role)) {
+      return NextResponse.json({ message: 'Unauthorized - Financial access required' }, { status: 403, headers: NO_STORE });
     }
 
     const body = await readLimitedJson(request, 24 * 1024);

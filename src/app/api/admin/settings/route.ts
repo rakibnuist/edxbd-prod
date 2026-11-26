@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
+import { isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser } from '@/lib/auth-user';
 import prisma from '@/lib/prisma';
 import { DEFAULT_META_PIXEL_ID, getAllSettings, saveSettings, validateSettings, SETTING_KEYS } from '@/lib/settings';
@@ -24,7 +25,7 @@ function presentForClient(settings: Record<string, string>, metaAccessTokenSaved
   };
 }
 
-const isAdmin = (role?: string) => role === 'admin' || role === 'super_admin';
+const isAdmin = isAdminRole;
 
 export async function GET(request: NextRequest) {
   const decoded = await verifyLiveAdminUser(request);

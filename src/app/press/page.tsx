@@ -62,8 +62,7 @@ export const metadata = pageMetadata({
 const MEDIA_FAQS = [
   {
     question: 'Under what license may journalists and researchers republish EduExpress data?',
-    answer:
-      'Both live JSON endpoints (/china-study-report.json and /bangladesh-study-abroad-market.json) and our archived open-data mirrors on Zenodo (DOI 10.5281/zenodo.24423801), GitHub, and Kaggle are released under Creative Commons Attribution 4.0 International (CC BY 4.0). Journalists, researchers, and career counselors may quote figures freely with attribution and a link to the cited report or DOI.',
+    answer: `Both live JSON endpoints (/china-study-report.json and /bangladesh-study-abroad-market.json) and our archived open-data mirrors on Zenodo (DOI ${OPEN_DATA_REPOSITORIES.zenodoDoi}), GitHub, and Kaggle are released under Creative Commons Attribution 4.0 International (CC BY 4.0). Journalists, researchers, and career counselors may quote figures freely with attribution and a link to the cited report or DOI.`,
   },
   {
     question: 'How does EduExpress calculate China tuition quartiles without guessing?',
@@ -175,14 +174,13 @@ export default async function PressRoomPage() {
         mainEntityOfPage: canonical,
         name: 'Media, Data & Research Press Room — EduExpress International',
         headline: 'Media, Data & Research Press Room | EduExpress International',
-        description:
-          'Open CC BY 4.0 Bangladesh study abroad datasets (Zenodo DOI 10.5281/zenodo.24423801, GitHub, Kaggle), CNY/BDT tuition benchmarks, bilingual press briefs, spokesperson bios, and verification contacts.',
+        description: `Open CC BY 4.0 Bangladesh study abroad datasets (Zenodo DOI ${OPEN_DATA_REPOSITORIES.zenodoDoi}, GitHub, Kaggle), CNY/BDT tuition benchmarks, bilingual press briefs, spokesperson bios, and verification contacts.`,
         image: `${SITE}/og/china.jpg`,
         primaryImageOfPage: primaryImageOfPageSchema('/og/china.jpg'),
         inLanguage: 'en-BD',
         isAccessibleForFree: true,
         datePublished: '2026-11-21T00:00:00Z',
-        dateModified: '2026-11-21T00:00:00Z',
+        dateModified: OPEN_DATA_REPOSITORIES.releaseDateIso,
         about: { '@id': `${SITE}/#organization` },
         publisher: { '@id': `${SITE}/#organization` },
         isPartOf: { '@id': `${SITE}/#website` },
@@ -197,9 +195,9 @@ export default async function PressRoomPage() {
       {
         '@type': 'Dataset',
         '@id': `${canonical}#dataset`,
-        name: 'Bangladesh Study Abroad & China University Cost Benchmark Dataset (2027)',
+        name: 'Bangladesh Study Abroad, Scholarship & China University Cost Benchmark Dataset (2027)',
         alternateName: 'EduExpress International Bangladesh Study Abroad Open Dataset',
-        description: `Open CC BY 4.0 dataset covering ${marketSnapshot.liveCatalog.activeUniversities} verified active universities (${chinaReport.universityCount} in China across ${chinaReport.cityCount} cities and ${marketSnapshot.liveCatalog.activeUniversities - chinaReport.universityCount} in Malaysia), ${marketSnapshot.liveCatalog.programsCount} structured degree and language programs, ${marketSnapshot.liveCatalog.itemizedFeeRowsCount} itemized non-tuition fee rows, ${marketSnapshot.liveCatalog.scholarshipsCount} scholarship tracks, and a ${marketSnapshot.activeDestinationCount}-destination Bangladesh outbound cost and Student File matrix.`,
+        description: `Open CC BY 4.0 dataset covering ${marketSnapshot.liveCatalog.activeUniversities} verified active universities (${chinaReport.universityCount} in China across ${chinaReport.cityCount} cities and ${marketSnapshot.liveCatalog.activeUniversities - chinaReport.universityCount} in Malaysia), ${marketSnapshot.liveCatalog.programsCount} structured degree and language programs, ${marketSnapshot.liveCatalog.itemizedFeeRowsCount} itemized non-tuition fee rows, ${marketSnapshot.liveCatalog.scholarshipsCount} structured university scholarship tracks, and a ${marketSnapshot.globalBenchmarkDestinationCount}-country global Bangladesh outbound cost, visa proof, and scholarship matrix (${marketSnapshot.activeDestinationCount} active EduExpress destinations + ${marketSnapshot.globalBenchmarkDestinationCount - marketSnapshot.activeDestinationCount} global reference benchmarks).`,
         url: canonical,
         identifier: [...OPEN_DATA_IDENTIFIERS],
         sameAs: [...OPEN_DATA_SAME_AS],
@@ -244,6 +242,8 @@ export default async function PressRoomPage() {
           OPEN_DATA_CSV_DOWNLOADS.programs,
           OPEN_DATA_CSV_DOWNLOADS.scholarships,
           OPEN_DATA_CSV_DOWNLOADS.fees,
+          OPEN_DATA_CSV_DOWNLOADS.globalDestinationsMatrix,
+          OPEN_DATA_CSV_DOWNLOADS.countryScholarships,
           OPEN_DATA_CSV_DOWNLOADS.destinationsMatrix,
         ],
         variableMeasured: [
@@ -259,7 +259,7 @@ export default async function PressRoomPage() {
           'Bangladesh Bank Student File',
           'Study in Malaysia cost benchmark',
           'Higher education open data',
-          'Zenodo DOI 10.5281/zenodo.24423801',
+          `Zenodo DOI ${OPEN_DATA_REPOSITORIES.zenodoDoi}`,
         ],
       },
     ],
@@ -275,7 +275,7 @@ export default async function PressRoomPage() {
         eyebrow="Digital PR · Open Research Desk (CC BY 4.0)"
         title="Media, data & research press room."
         lead="Open, zero-signup study abroad datasets, verified tuition benchmarks, bilingual press briefs, and spokesperson contacts for journalists, researchers, and school counselors in Bangladesh."
-        reviewed="21 November 2026"
+        reviewed="26 November 2026"
         actions={
           <>
             <a href="#open-datasets" className="ed-btn ed-btn-signal min-h-[52px] px-7">
@@ -342,7 +342,7 @@ export default async function PressRoomPage() {
                 Release v{OPEN_DATA_REPOSITORIES.version} · CC BY 4.0
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-petrol-800/15 bg-white px-3 py-1 text-[12.5px] font-semibold text-petrol-800">
-                {marketSnapshot.liveCatalog.activeUniversities} Verified Universities · 5 CSVs + 2 JSONs
+                {marketSnapshot.liveCatalog.activeUniversities} Verified Universities · {marketSnapshot.globalBenchmarkDestinationCount} Global Countries · 7 CSVs + 2 JSONs
               </span>
             </div>
             <a
@@ -423,7 +423,7 @@ export default async function PressRoomPage() {
                   Bangladesh Study Abroad Benchmark
                 </h3>
                 <p className="mt-1 text-[13.5px] leading-5 text-ink-soft">
-                  Interactive tabular explorer across all 7 files ({marketSnapshot.liveCatalog.activeUniversities} universities, {marketSnapshot.liveCatalog.programsCount} programs, {marketSnapshot.liveCatalog.itemizedFeeRowsCount} fee rows).
+                  Interactive tabular explorer across all 9 files ({marketSnapshot.liveCatalog.activeUniversities} universities, {marketSnapshot.liveCatalog.programsCount} programs, {marketSnapshot.globalBenchmarkDestinationCount} countries &amp; scholarships).
                 </p>
               </div>
               <span className="mt-3 text-[12.5px] font-semibold text-lime-deep">
@@ -437,7 +437,7 @@ export default async function PressRoomPage() {
           <div className={kit.cardDark}>
             <div className="flex items-center justify-between gap-3">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[13px] font-semibold text-lime">
-                <BarChart3 size={15} aria-hidden="true" /> Dataset 01 · 12 Destinations
+                <BarChart3 size={15} aria-hidden="true" /> Dataset 01 · {marketSnapshot.globalBenchmarkDestinationCount} Global Destinations ({marketSnapshot.activeDestinationCount} Active)
               </span>
               <span className="text-[13px] text-white/70">Updated {BANGLADESH_MARKET_LAST_VERIFIED_LABEL}</span>
             </div>
@@ -516,7 +516,11 @@ export default async function PressRoomPage() {
 
         {/* Free Embeddable Study Abroad Cost Calculator Widget */}
         <div id="embed-widget" className="mt-8 scroll-mt-24">
-          <EmbedCodeSnippet />
+          <EmbedCodeSnippet
+            chinaUniversitiesCount={chinaReport.universityCount}
+            activeUniversitiesCount={marketSnapshot.liveCatalog.activeUniversities}
+            globalDestinationsCount={marketSnapshot.globalBenchmarkDestinationCount}
+          />
         </div>
       </Section>
 

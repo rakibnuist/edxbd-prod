@@ -208,6 +208,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/become-a-partner',
+        destination: '/partnership',
+        permanent: true,
+      },
+      {
         source: '/universities/zhengzhou-university',
         destination: '/universities/zzu',
         permanent: true,

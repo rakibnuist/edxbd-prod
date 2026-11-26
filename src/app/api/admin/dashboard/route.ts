@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminRole } from '@/lib/auth';
+import { canAccessFinanceRole, isAdminRole } from '@/lib/auth';
 import { buildCounselorLeadWhere, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { logAndFormatServerError } from '@/lib/api-error';
 import { buildConsultancyExecutiveSnapshot } from '@/lib/consultancy-analytics';
@@ -36,10 +36,12 @@ export async function GET(request: NextRequest) {
     }
 
     const isAdmin = isAdminRole(actor.role);
+    const canSeeFinance = canAccessFinanceRole(actor.role);
     const scopeWhere = isAdmin ? {} : buildCounselorLeadWhere(staff?.employee || null);
 
     const todayIso = dhakaTodayIso();
     const startOfToday = new Date(new Date(`${todayIso}T00:00:00.000Z`).getTime() - 6 * 3600 * 1000);
+    const in90Days = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
 
     const [
       totalLeads,
@@ -51,7 +53,10 @@ export async function GET(request: NextRequest) {
       websiteLeads,
       todayLeads,
       chinaLeads,
+      totalApplications,
+      visasOrEnrolled,
       totalUniversities,
+      expiringUniversities,
       totalTeam,
       publishedTeam,
       totalTestimonials,
@@ -78,7 +83,26 @@ export async function GET(request: NextRequest) {
       prisma.lead.count({ where: { AND: [scopeWhere, { NOT: { source: { contains: 'meta' } } }] } }),
       prisma.lead.count({ where: { AND: [scopeWhere, { createdAt: { gte: startOfToday } }] } }),
       prisma.lead.count({ where: { AND: [scopeWhere, { country: 'China' }] } }),
+      prisma.lead.count({ where: { AND: [scopeWhere, { isApplication: true }] } }),
+      prisma.lead.count({
+        where: {
+          AND: [
+            scopeWhere,
+            { isApplication: true },
+            { status: { in: ['visa_approved', 'enrolled', 'fly'] } },
+          ],
+        },
+      }),
       prisma.university.count({ where: { isActive: true } }),
+      prisma.university.count({
+        where: {
+          isActive: true,
+          OR: [
+            { verificationExpiresAt: { lte: in90Days } },
+            { verificationStatus: 'expired' },
+          ],
+        },
+      }),
       isAdmin ? prisma.teamMember.count() : Promise.resolve(0),
       isAdmin ? prisma.teamMember.count({ where: { isPublished: true } }) : Promise.resolve(0),
       isAdmin ? prisma.testimonial.count({ where: { isPublished: true } }) : Promise.resolve(0),
@@ -88,7 +112,7 @@ export async function GET(request: NextRequest) {
       prisma.lead.findMany({
         where: scopeWhere,
         orderBy: { createdAt: 'desc' },
-        take: 8,
+        take: 12,
         select: {
           id: true,
           name: true,
@@ -98,6 +122,8 @@ export async function GET(request: NextRequest) {
           program: true,
           status: true,
           source: true,
+          isApplication: true,
+          leadRef: true,
           assessAcademicLevel: true,
           assessAcademicResults: true,
           assessLanguage: true,
@@ -124,10 +150,10 @@ export async function GET(request: NextRequest) {
     ]);
 
     const [officePulse, counselorDesk, consultancy, financeSnapshot] = await Promise.all([
-      isAdmin ? buildOwnerOfficePulse().catch(() => null) : Promise.resolve(null),
+      isAdmin ? buildOwnerOfficePulse({ includeFinanceActivities: canSeeFinance }).catch(() => null) : Promise.resolve(null),
       !isAdmin ? buildCounselorDeskSummary(staff?.employee || null).catch(() => null) : Promise.resolve(null),
       buildConsultancyExecutiveSnapshot(prisma, scopeWhere, todayIso).catch(() => null),
-      isAdmin ? getFinanceDashboardSnapshot().catch(() => null) : Promise.resolve(null),
+      canSeeFinance ? getFinanceDashboardSnapshot().catch(() => null) : Promise.resolve(null),
     ]);
 
     const resolvedMeta = isAdmin ? resolveMetaConfig(settings) : null;
@@ -144,7 +170,10 @@ export async function GET(request: NextRequest) {
       websiteLeads,
       todayLeads,
       chinaLeads,
+      totalApplications,
+      visasOrEnrolled,
       totalUniversities,
+      expiringUniversities,
       totalTeam,
       publishedTeam,
       totalTestimonials,
@@ -156,7 +185,7 @@ export async function GET(request: NextRequest) {
       ...(officePulse ? { officePulse } : {}),
       ...(counselorDesk ? { counselorDesk } : {}),
       ...(consultancy ? { consultancy } : {}),
-      ...(isAdmin && financeSnapshot ? { financeSnapshot } : {}),
+      ...(canSeeFinance && financeSnapshot ? { financeSnapshot } : {}),
       ...(isAdmin && resolvedMeta
         ? {
             metaSync: {

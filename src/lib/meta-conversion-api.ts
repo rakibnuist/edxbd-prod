@@ -838,6 +838,33 @@ export const trackDestinationView = async (
   return await sendConversionAPIEvent('ViewContent', userData || {}, customData, eventId, request);
 };
 
+// Track service package views (Education consultancy packages & support tiers)
+export const trackPackageView = async (
+  packageName: string,
+  destination: string = 'China',
+  userData?: {
+    email?: string;
+    phone?: string;
+    firstName?: string;
+    lastName?: string;
+  },
+  request?: Request
+): Promise<{ success: boolean; eventId: string; error?: string }> => {
+  const eventId = generateEventId();
+
+  const customData = {
+    content_name: `Package View: ${packageName}`,
+    content_category: 'Service Package',
+    package_name: packageName,
+    destination_country: destination,
+    value: 0,
+    currency: 'BDT',
+    education_consultancy_event: true,
+  };
+
+  return await sendConversionAPIEvent('ViewContent', userData || {}, customData, eventId, request);
+};
+
 // Track scholarship inquiry
 export const trackScholarshipInquiry = async (
   userData: {

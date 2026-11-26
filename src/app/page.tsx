@@ -19,6 +19,7 @@ import {
 
 import MobileLeadBar from '@/components/home/MobileLeadBar';
 import B2BHomeBanner from '@/components/home/B2BHomeBanner';
+import TrustStrip from '@/components/TrustStrip';
 import { Stars, type StoryCardData } from '@/components/stories/StoryCard';
 import StoryMarquee from '@/components/stories/StoryMarquee';
 import HomeLeadForm from '@/components/lead/HomeLeadForm';
@@ -442,6 +443,9 @@ export default async function Home() {
           ))}
         </div>
       </section>
+
+      {/* Trust & Transparency commitments */}
+      <TrustStrip />
 
       {/* 2. University logos — continuous, gapless infinite loop of all directory universities */}
       {logos.length >= 6 && (

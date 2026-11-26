@@ -1,6 +1,5 @@
 import type { CleanUniversityRecord } from './university-records';
 import { parseSourceFee } from './clear-cost';
-import { toSafeExternalUrl } from './safe-url';
 
 /** Flat, serializable views of the university catalogue for cross-university finders. */
 
@@ -40,8 +39,6 @@ export type ScholarshipRow = {
 
 export const SCHOLARSHIP_CATEGORIES: ScholarshipCategory[] = ['Chinese Government (CSC)', 'Provincial or city government', 'Belt and Road / ministry', 'Chinese language (CLEC)', 'University scholarship'];
 
-const httpUrl = (value?: string) => toSafeExternalUrl(value) ?? undefined;
-
 /** Map catalogue spellings ("Master's", "Masters", "Undergraduate") onto one label. */
 export function levelLabel(value: string): string {
   const label = value.trim().toLowerCase().replace(/[’'.-]/g, '');
@@ -77,7 +74,7 @@ export function deadlineHasPassed(raw: string | undefined, now: Date): boolean {
 export function scholarshipCategory(title: string, type = ''): ScholarshipCategory {
   const text = `${title} ${type}`.toLowerCase();
   if (/chinese government|\bcsc\b|china scholarship council/.test(text)) return 'Chinese Government (CSC)';
-  if (/belt and road|silk road|ministry of commerce|mofcom|\bwmo\b/.test(text)) return 'Belt and Road / ministry';
+  if (/belt\s*(?:and|&)\s*road|silk road|ministry of commerce|mofcom|\bwmo\b/.test(text)) return 'Belt and Road / ministry';
   if (/\bclec\b|chinese language teachers|confucius/.test(text)) return 'Chinese language (CLEC)';
   if (/provincial|province|municipal|government scholarship|city scholarship/.test(text)) return 'Provincial or city government';
   return 'University scholarship';
@@ -114,7 +111,8 @@ export function toFeeRows(university: CleanUniversityRecord): FeeRow[] {
   return university.fees.flatMap(fee => {
     const category = feeCategory(fee.item);
     if (!category) return [];
-    return [{ item: fee.item, cost: fee.cost, category, firstYearCny: category === 'other' ? null : firstYearAmount(category, fee.cost), sourceUrl: httpUrl(fee.sourceUrl) }];
+    // 2-Tier Hybrid Model: granular fee sourceUrl remains private in InternalSourceWatch.
+    return [{ item: fee.item, cost: fee.cost, category, firstYearCny: category === 'other' ? null : firstYearAmount(category, fee.cost) }];
   });
 }
 
@@ -155,7 +153,6 @@ export function toProgramRows(universities: CleanUniversityRecord[], now: Date):
       annualTuitionCny: parseSourceFee(program.tuition, 'CNY', 'year'),
       deadline: program.applicationDeadline,
       deadlinePassed: deadlineHasPassed(program.applicationDeadline, now),
-      sourceUrl: httpUrl(program.sourceUrl),
     })));
 }
 
@@ -175,7 +172,6 @@ export function toScholarshipRows(universities: CleanUniversityRecord[], now: Da
       renewal: scholarship.renewal,
       deadline: scholarship.deadline,
       deadlinePassed: scholarship.status === 'closed' || deadlineHasPassed(scholarship.deadline, now),
-      sourceUrl: httpUrl(scholarship.sourceUrl),
     };
   }));
 }

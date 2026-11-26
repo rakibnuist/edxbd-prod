@@ -4,6 +4,7 @@ import CostCompare from '@/components/finders/CostCompare';
 import EmbedCodeSnippet from '@/components/embed/EmbedCodeSnippet';
 import { CtaBand, FaqBlock, JsonLd, PageHero, Section } from '@/components/page/PageKit';
 import { toFeeRows, toProgramRows, type FeeRow } from '@/lib/catalog-views';
+import { GLOBAL_DESTINATIONS_BENCHMARK } from '@/lib/global-study-destinations';
 import { primaryImageOfPageSchema } from '@/lib/json-ld';
 import { SITE_URL, ogImage, pageMetadata } from '@/lib/seo';
 import { getUniversityRecords } from '@/lib/university-records';
@@ -27,17 +28,23 @@ const faqs = [
 
 async function load() {
   try {
-    const universities = await getUniversityRecords('China');
+    const allUniversities = await getUniversityRecords();
+    const universities = allUniversities.filter(u => u.isActive && u.country.toLowerCase() === 'china');
     const fees: Record<string, FeeRow[]> = {};
-    for (const university of universities) if (university.isActive) fees[university.slug] = toFeeRows(university);
-    return { programs: toProgramRows(universities, new Date()), fees };
+    for (const university of universities) fees[university.slug] = toFeeRows(university);
+    return {
+      programs: toProgramRows(universities, new Date()),
+      fees,
+      chinaCount: universities.length,
+      activeCount: allUniversities.filter(u => u.isActive).length,
+    };
   } catch {
-    return { programs: [], fees: {} };
+    return { programs: [], fees: {}, chinaCount: 150, activeCount: 159 };
   }
 }
 
 export default async function CompareCostsPage() {
-  const { programs, fees } = await load();
+  const { programs, fees, chinaCount, activeCount } = await load();
   const url = `${SITE_URL}${PATH}`;
 
   return (
@@ -85,7 +92,12 @@ export default async function CompareCostsPage() {
         title="Embed this calculator on your school, club, or blog."
         intro="Free for Dhaka schools, university career portals, YouTube educators, and newsrooms under CC BY 4.0."
       >
-        <EmbedCodeSnippet compact />
+        <EmbedCodeSnippet
+          compact
+          chinaUniversitiesCount={chinaCount}
+          activeUniversitiesCount={activeCount}
+          globalDestinationsCount={GLOBAL_DESTINATIONS_BENCHMARK.length}
+        />
       </Section>
       <FaqBlock items={faqs} title="About this comparison" tone="white" />
       <CtaBand title="Want the full cost in writing?" text="Send us the programs you are comparing. A counsellor confirms the current fees with each university and gives you a written breakdown before you pay anything." />

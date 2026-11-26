@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminRole } from '@/lib/auth';
+import { canAccessFinanceRole, isAdminRole } from '@/lib/auth';
 import { verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { jsonBodyErrorResponse, readLimitedJson } from '@/lib/request-body';
 import prisma from '@/lib/prisma';
+
+function stripSalary<T extends { salary?: unknown }>(row: T): Omit<T, 'salary'> {
+  const { salary: _salary, ...rest } = row;
+  return rest;
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -34,7 +39,9 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ employees }, { headers: { 'Cache-Control': 'no-store, private' } });
+    const canSeeFinance = canAccessFinanceRole(actor.role);
+    const payload = canSeeFinance ? employees : employees.map(stripSalary);
+    return NextResponse.json({ employees: payload }, { headers: { 'Cache-Control': 'no-store, private' } });
   } catch {
     return NextResponse.json({ error: 'Failed to load employees' }, { status: 500 });
   }
@@ -67,6 +74,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: `Employee ID ${empId} already exists.` }, { status: 409 });
     }
 
+    const canSeeFinance = canAccessFinanceRole(decoded.role);
     const created = await prisma.employee.create({
       data: {
         empId,
@@ -76,13 +84,19 @@ export async function POST(request: NextRequest) {
         phone: typeof body.phone === 'string' && body.phone.trim() ? body.phone.trim().slice(0, 40) : null,
         team: typeof body.team === 'string' && body.team.trim() ? body.team.trim().toLowerCase().slice(0, 40) : 'china',
         specialization: typeof body.specialization === 'string' ? body.specialization.trim().slice(0, 160) || null : null,
-        salary: typeof body.salary === 'number' && Number.isFinite(body.salary) && body.salary >= 0 ? body.salary : 0,
+        salary:
+          canSeeFinance && typeof body.salary === 'number' && Number.isFinite(body.salary) && body.salary >= 0
+            ? body.salary
+            : 0,
         active: typeof body.active === 'boolean' ? body.active : true,
         joinDate: typeof body.joinDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.joinDate) ? body.joinDate : null,
       },
     });
 
-    return NextResponse.json(created, { status: 201, headers: { 'Cache-Control': 'no-store, private' } });
+    return NextResponse.json(
+      canSeeFinance ? created : stripSalary(created),
+      { status: 201, headers: { 'Cache-Control': 'no-store, private' } },
+    );
   } catch (err) {
     const bodyError = jsonBodyErrorResponse(err);
     if (bodyError) return bodyError;
@@ -124,7 +138,8 @@ export async function PATCH(request: NextRequest) {
     if (typeof body.phone === 'string') data.phone = body.phone.trim().slice(0, 40) || null;
     if (typeof body.email === 'string') data.email = body.email.trim().toLowerCase().slice(0, 200) || null;
     if (typeof body.specialization === 'string') data.specialization = body.specialization.trim().slice(0, 160) || null;
-    if (body.salary !== undefined && body.salary !== null) {
+    const canSeeFinance = canAccessFinanceRole(decoded.role);
+    if (canSeeFinance && body.salary !== undefined && body.salary !== null) {
       const parsedSalary = Number(body.salary);
       if (Number.isFinite(parsedSalary) && parsedSalary >= 0 && parsedSalary <= 100000000) {
         data.salary = parsedSalary;
@@ -141,7 +156,10 @@ export async function PATCH(request: NextRequest) {
         .catch(() => null);
     }
 
-    return NextResponse.json(updated, { headers: { 'Cache-Control': 'no-store, private' } });
+    return NextResponse.json(
+      canSeeFinance ? updated : stripSalary(updated),
+      { headers: { 'Cache-Control': 'no-store, private' } },
+    );
   } catch (err) {
     const bodyError = jsonBodyErrorResponse(err);
     if (bodyError) return bodyError;
@@ -174,6 +192,18 @@ export async function DELETE(request: NextRequest) {
     }
     if (existing.userId && existing.userId === decoded.userId) {
       return NextResponse.json({ error: 'Cannot delete your own staff profile.' }, { status: 400 });
+    }
+    if (existing.userId && decoded.role !== 'super_admin') {
+      const linkedUser = await prisma.user.findUnique({
+        where: { id: existing.userId },
+        select: { role: true },
+      });
+      if (linkedUser && isAdminRole(linkedUser.role)) {
+        return NextResponse.json(
+          { error: 'Only a super admin can remove another administrator staff profile.' },
+          { status: 403 },
+        );
+      }
     }
 
     await prisma.employee.delete({ where: { id } });

@@ -64,6 +64,19 @@ try {
   console.log('Running seed-gbp-posts.mjs...');
   execSync('node scripts/seed-gbp-posts.mjs', { stdio: 'inherit' });
 
+  console.log('Running Phase 2 China Batch A backfill (languages + scholarships)...');
+  execSync('node scripts/backfill-china-batch-a.mjs', { stdio: 'inherit' });
+
+  console.log('Running Phase 2 China CSC 306-university Waves 1-5...');
+  execSync('node scripts/seed-china-csc-batch-b1.mjs', { stdio: 'inherit' });
+  execSync('node scripts/seed-china-csc-batch-b2.mjs', { stdio: 'inherit' });
+  execSync('node scripts/seed-china-csc-batch-b3.mjs', { stdio: 'inherit' });
+  execSync('node scripts/seed-china-csc-batch-b4.mjs', { stdio: 'inherit' });
+  execSync('node scripts/seed-china-csc-batch-b5.mjs', { stdio: 'inherit' });
+
+  console.log('Syncing private Tier-2 InternalSourceWatch vault...');
+  execSync('node scripts/seed-hidden-sources.mjs', { stdio: 'inherit' });
+
   console.log('--- PRODUCTION DATABASE SYNC COMPLETED SUCCESSFULLY ---');
 } catch (err) {
   console.error('Error during production database sync:', err);

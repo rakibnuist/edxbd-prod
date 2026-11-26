@@ -15,6 +15,7 @@ export type LeadRecord = {
   program?: string | null; message?: string | null; status: string; source: string;
   notes?: string | null; assignedTeam?: string | null; assignedTo?: string | null;
   assignedEmployeeId?: string | null;
+  isApplication?: boolean; leadRef?: string | null;
   publicToken?: string | null; publicEnabled?: boolean;
   applicationStage?: string | null; university?: string | null; degree?: string | null;
   gpa?: number | null; visaDeadline?: string | null; departureDate?: string | null;
@@ -113,6 +114,7 @@ export function filterLeads(leads: LeadRecord[], filters: {
 
 export type LeadUpdateData = {
   status?: LeadStatus;
+  isApplication?: boolean;
   notes?: string;
   assignedTo?: string | null;
   assignedEmployeeId?: string | null;
@@ -152,7 +154,7 @@ function normalizeBoundedHttpUrl(raw: unknown, maxLen = 1000): string | null {
 }
 
 const ALLOWED_LEAD_UPDATE_KEYS = new Set<string>([
-  'status', 'notes', 'assignedTo', 'assignedEmployeeId', 'applicationStage',
+  'status', 'isApplication', 'notes', 'assignedTo', 'assignedEmployeeId', 'applicationStage',
   'university', 'degree', 'gpa', 'nextFollowup', 'visaDeadline', 'departureDate',
   'driveLink', 'publicEnabled', 'riskFlag', 'medicalProgram',
   'assessAcademicLevel', 'assessAcademicResults', 'assessLanguage',
@@ -176,6 +178,10 @@ export function validateLeadUpdate(value: unknown): { data?: LeadUpdateData; err
   if ('status' in body) {
     if (!isLeadStatus(body.status)) return { error: 'Choose a supported lead status.' };
     data.status = body.status;
+  }
+  if ('isApplication' in body) {
+    if (typeof body.isApplication !== 'boolean') return { error: 'isApplication must be true or false.' };
+    data.isApplication = body.isApplication;
   }
   if ('notes' in body) {
     if (typeof body.notes !== 'string' || body.notes.length > 12000) return { error: 'Counselor notes must be text of at most 12,000 characters.' };

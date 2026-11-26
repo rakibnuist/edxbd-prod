@@ -295,6 +295,19 @@ export function deriveLeadStatusFromStage(stage: string, currentStatus?: string)
   }
 }
 
+export function generateNextLeadRef(existingRefs: Array<string | null>): string {
+  let maxNum = 445;
+  for (const ref of existingRefs) {
+    if (!ref) continue;
+    const m = ref.match(/(?:LEAD|APP)-(\d+)/i);
+    if (m) {
+      const n = Number.parseInt(m[1], 10);
+      if (Number.isFinite(n) && n > maxNum) maxNum = n;
+    }
+  }
+  return `APP-${String(maxNum + 1).padStart(4, '0')}`;
+}
+
 export function validateApplicationPatchPayload(body: Record<string, unknown>): {
   data?: Record<string, unknown>;
   error?: string;

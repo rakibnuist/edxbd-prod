@@ -52,7 +52,7 @@ const CANONICAL_TEAM = [
     phone: '+8801843433699',
     email: 'sjubaer015@gmail.com',
     team: 'general',
-    userRole: 'admin',
+    userRole: 'super_admin',
     preserveLogin: false,
     matchUserPatterns: [/^sjubaer015@gmail\.com$/i, /sakib|jubaer/i],
     displayOrder: 2,
@@ -69,7 +69,7 @@ const CANONICAL_TEAM = [
     phone: '+8801798631827',
     email: 'mhtamal04@gmail.com',
     team: 'china',
-    userRole: 'counselor',
+    userRole: 'operations_admin',
     preserveLogin: false,
     matchUserPatterns: [/^mhtamal04@gmail\.com$/i, /tamal/i],
     displayOrder: 3,
@@ -137,7 +137,7 @@ const CANONICAL_TEAM = [
     phone: '+8801341226195',
     email: 'tajahmmed2@gmail.com',
     team: 'china',
-    userRole: 'counselor',
+    userRole: 'operations_admin',
     preserveLogin: false,
     matchUserPatterns: [/^tajahmmed2@gmail\.com$/i, /taj/i],
     displayOrder: 7,
@@ -245,7 +245,7 @@ async function main() {
         claimedUserIds.add(matchedUser.id);
         await prisma.user.update({
           where: { id: matchedUser.id },
-          data: { name: member.name },
+          data: { name: member.name, role: member.userRole },
         });
       }
     } else if (matchedUser) {

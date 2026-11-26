@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { FINANCE_ACTIVITY_TYPES, canAccessFinanceRole } from '@/lib/auth';
 import { canAccessLeadScope, verifyLiveAdminUser, verifyLiveStaffUser } from '@/lib/auth-user';
 import { generatePublicToken, logActivityEvent } from '@/lib/crm-operations';
 import { getDocsTemplateForDestination } from '@/lib/application-tracker';
@@ -57,11 +58,15 @@ export async function GET(
       return NextResponse.json({ message: 'Unauthorized - Lead assigned to another counselor' }, { status: 403 });
     }
 
+    const canSeeFinance = canAccessFinanceRole(actor.role);
     const [universityApps, documents, activities] = await Promise.all([
       prisma.leadUniversityApp.findMany({ where: { leadId: id }, orderBy: { createdAt: 'desc' } }),
       prisma.leadDocument.findMany({ where: { leadId: id }, orderBy: { createdAt: 'asc' } }),
       prisma.activityEvent.findMany({
-        where: { leadId: id },
+        where: {
+          leadId: id,
+          ...(canSeeFinance ? {} : { type: { notIn: [...FINANCE_ACTIVITY_TYPES] } }),
+        },
         orderBy: { createdAt: 'desc' },
         take: 40,
       }),
