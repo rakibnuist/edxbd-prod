@@ -160,6 +160,9 @@ export default async function StudyInUkPage() {
             <Link href={applyHref} className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Start UK Eligibility Assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="/uk-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              UK Study Cost Guide
+            </Link>
             <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               View 8 Verified Universities
             </a>
@@ -427,6 +430,13 @@ export default async function StudyInUkPage() {
             </tbody>
           </table>
         </div>
+
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-sand-50/70 p-4 text-xs">
+          <span className="text-slate-700">Looking for granular monthly accommodation, groceries, IHS, and bank Student File breakdown?</span>
+          <Link href="/uk-study-cost-bangladesh" className="font-bold text-petrol-800 hover:text-emerald-800 inline-flex items-center gap-1">
+            Read Complete UK Study Cost Guide <ArrowRight size={14} />
+          </Link>
+        </div>
       </Section>
 
       {/* 8. Visa & Residence Process */}
@@ -631,6 +641,13 @@ export default async function StudyInUkPage() {
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-sand-50/70 p-4 text-xs">
+          <span className="text-slate-700">Looking for granular monthly accommodation, groceries, IHS, and bank Student File breakdown?</span>
+          <Link href="/uk-study-cost-bangladesh" className="font-bold text-petrol-800 hover:text-emerald-800 inline-flex items-center gap-1">
+            Read Complete UK Study Cost Guide <ArrowRight size={14} />
+          </Link>
         </div>
       </Section>
 
