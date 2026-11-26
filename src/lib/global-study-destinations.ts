@@ -160,7 +160,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     region: 'Europe',
     serviceStatus: 'Active',
     tier: 'Wave 1 Active',
-    href: '/destinations/uk',
+    href: '/study-in-uk-from-bangladesh',
     currency: 'GBP',
     intakes: 'January & September',
     indicativeTuition: 'GBP 13,000 – 26,000 / year (1-year taught Master or 3-year Honours; Russell Group higher)',
