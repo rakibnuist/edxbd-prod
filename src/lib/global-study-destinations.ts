@@ -398,7 +398,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     region: 'Europe',
     serviceStatus: 'Active',
     tier: 'Wave 2 Active',
-    href: '/destinations/georgia',
+    href: '/study-in-georgia-from-bangladesh',
     currency: 'USD',
     intakes: 'March & September/October',
     indicativeTuition: 'USD 3,500 – 8,000 / year (MD/MBBS typically USD 4,500 – 8,000 / year)',
