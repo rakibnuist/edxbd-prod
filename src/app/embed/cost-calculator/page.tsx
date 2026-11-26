@@ -57,13 +57,14 @@ async function loadWidgetData() {
 export default async function EmbedCostCalculatorPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tab?: string }>;
+  searchParams: Promise<{ tab?: string; theme?: string }>;
 }) {
-  const [{ tab }, data] = await Promise.all([searchParams, loadWidgetData()]);
+  const [{ tab, theme }, data] = await Promise.all([searchParams, loadWidgetData()]);
   const initialTab = tab === 'destinations' ? 'destinations' : 'china';
+  const isDark = theme === 'dark';
 
   return (
-    <div className="min-h-screen bg-transparent p-2 sm:p-3">
+    <div className={`min-h-screen p-2 sm:p-3 ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-transparent'}`}>
       {/* Keep embedded iframes completely clean without root-layout mobile bars or extra bottom spacing */}
       <style
         dangerouslySetInnerHTML={{
