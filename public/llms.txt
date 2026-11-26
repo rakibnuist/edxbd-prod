@@ -40,7 +40,7 @@ Key facts:
 - [China K-Visa for STEM graduates](https://eduexpressint.com/updates/china-k-visa): eligibility, documents and application steps for qualified Bangladeshi STEM graduates
 - [China universities](https://eduexpressint.com/china-universities): profiles with programmes, fees, city guides and scholarships
 - [China student success stories](https://eduexpressint.com/china-success-stories): consented student admission cases with privacy-safe records
-- [Bangladesh to China Study Data & Cost Report](https://eduexpressint.com/china-study-report-bangladesh): live catalogue benchmark across 150 Chinese universities, explicit CNY tuition quartiles, non-tuition charges, scholarships and verification counts ([JSON dataset](https://eduexpressint.com/china-study-report.json))
+- [Bangladesh to China Study Data & Cost Report](https://eduexpressint.com/china-study-report-bangladesh): live catalogue benchmark across 353 Chinese universities (306/306 CSC-designated), explicit CNY tuition quartiles, non-tuition charges, scholarships and verification counts ([JSON dataset](https://eduexpressint.com/china-study-report.json))
 - [বাংলা গাইড (Study in China in Bengali)](https://eduexpressint.com/bn/study-in-china): চীন পড়াশোনা, খরচ ও ভিসার সম্পূর্ণ বাংলা গাইড
 - [চায়না স্টুডেন্ট ভিসা গাইড (বাংলা)](https://eduexpressint.com/bn/china-student-visa-bangladesh): X1/X2 ভিসা ও JW202 ধাপসমূহ
 - [চীনে পড়াশোনার খরচ (বাংলা)](https://eduexpressint.com/bn/study-in-china-cost-bangladesh): টিউশন, হোস্টেল ও বাজেট হিসাব
@@ -66,7 +66,7 @@ Key facts:
 - [Study in Bangladesh vs. Study Abroad Countries](https://eduexpressint.com/bangladesh-vs-study-abroad-countries): staying in Bangladesh (A-Levels & local private universities) compared against Malaysia, China, UK, Europe, USA, Australia, and New Zealand (living costs separated)
 - [University and programme finder](https://eduexpressint.com/universities): search universities by subject, level, intake and scholarship
 - [China program and tuition finder](https://eduexpressint.com/programs): every recorded China programme filtered by yearly tuition, language, city and deadline
-- [Compare first-year costs](https://eduexpressint.com/compare-costs): up to three China programmes side by side, fee by fee
+- [Compare first-year costs & 32-country calculator](https://eduexpressint.com/compare-costs): side-by-side university fee comparison plus 32 global study destinations ([Embeddable Widget](https://eduexpressint.com/embed/cost-calculator))
 - [Scholarship guidance and database](https://eduexpressint.com/scholarships): what awards cover, plus a searchable list of recorded China scholarships
 - [All destinations](https://eduexpressint.com/destinations): China, United Kingdom, South Korea, Malaysia, Hungary, Finland, Cyprus, Croatia, Georgia, Malta, Greece, Thailand
 - [Compare study destinations](https://eduexpressint.com/compare-study-destinations): cost and entry side by side
@@ -77,7 +77,7 @@ Key facts:
 
 - [About EduExpress](https://eduexpressint.com/about): history, team and office
 - [Media, Data & Research Press Room](https://eduexpressint.com/press): open CC BY 4.0 datasets, 4 bilingual press briefs, spokesperson bios and journalist verification desk
-- [Zenodo Academic Dataset Archive (CERN DOI 10.5281/zenodo.24423801)](https://doi.org/10.5281/zenodo.24423801): permanent open-access CC BY 4.0 archive of the 159-university, 898-program, 888-fee, 276-scholarship and 12-destination Bangladesh benchmark ([Zenodo Record](https://zenodo.org/records/24423801) · [GitHub Repo](https://github.com/rakibnuist/bangladesh-study-abroad-dataset) · [Kaggle Dataset](https://www.kaggle.com/datasets/abdullahalrakibww/bangladesh-study-abroad-china-cost-benchmark-2027))
+- [Zenodo Academic Dataset Archive (CERN DOI 10.5281/zenodo.24553975)](https://doi.org/10.5281/zenodo.24553975): permanent open-access CC BY 4.0 archive (Concept DOI [10.5281/zenodo.24423800](https://doi.org/10.5281/zenodo.24423800)) covering 416 verified universities across 12 active countries (including 306/306 CSC-designated Chinese universities), 1,974 programs, 1,609 fees, 791 scholarships and a 32-country global benchmark ([Zenodo Record](https://zenodo.org/records/24553975) · [GitHub Repo](https://github.com/rakibnuist/bangladesh-study-abroad-dataset) · [Kaggle Dataset](https://www.kaggle.com/datasets/abdullahalrakibww/bangladesh-study-abroad-china-cost-benchmark-2027))
 - [How we verify universities](https://eduexpressint.com/how-we-verify-universities): sources and review dates behind every listed fact
 - [Better Education Standard](https://eduexpressint.com/better-education-standard): how options are compared before recommending
 - [Proof library](https://eduexpressint.com/proof-library): published company and office records
