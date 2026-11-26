@@ -62,8 +62,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { country: slug } = await params;
   const country = countries.find((item) => item.slug === slug);
   if (!country) return { title: 'Country Not Found' };
-  // China, Malaysia, UK, Hungary, South Korea, Finland, Malta, Cyprus, Georgia, Greece, and Croatia are permanently redirected to their own flagship guides.
-  if (country.slug === 'china' || country.slug === 'malaysia' || country.slug === 'uk' || country.slug === 'hungary' || country.slug === 'south-korea' || country.slug === 'finland' || country.slug === 'malta' || country.slug === 'cyprus' || country.slug === 'georgia' || country.slug === 'greece' || country.slug === 'croatia') return {};
+  // All 11 side destinations + China are permanently redirected to their own dedicated flagship guides.
+  if (country.slug === 'china' || country.slug === 'malaysia' || country.slug === 'uk' || country.slug === 'hungary' || country.slug === 'south-korea' || country.slug === 'finland' || country.slug === 'malta' || country.slug === 'cyprus' || country.slug === 'georgia' || country.slug === 'greece' || country.slug === 'croatia' || country.slug === 'thailand') return {};
 
   const seo = seoFor(country);
   // Every served country has a real-photo share card in public/og/<slug>.jpg.
@@ -92,6 +92,7 @@ export default async function CountryPage({ params }: Props) {
   if (country.slug === 'georgia') permanentRedirect('/study-in-georgia-from-bangladesh');
   if (country.slug === 'greece') permanentRedirect('/study-in-greece-from-bangladesh');
   if (country.slug === 'croatia') permanentRedirect('/study-in-croatia-from-bangladesh');
+  if (country.slug === 'thailand') permanentRedirect('/study-in-thailand-from-bangladesh');
 
   const seo = seoFor(country);
   const name = seo.displayName;

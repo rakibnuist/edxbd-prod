@@ -504,7 +504,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     region: 'Asia',
     serviceStatus: 'Active',
     tier: 'Wave 3 Active',
-    href: '/destinations/thailand',
+    href: '/study-in-thailand-from-bangladesh',
     currency: 'THB',
     intakes: 'January & August',
     indicativeTuition: 'THB 90,000 – 250,000 / year (public international vs private programs)',

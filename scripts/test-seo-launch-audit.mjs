@@ -497,7 +497,7 @@ test('Step 16 built HTML checks — bn visa SERP bounds, homepage WebPage schema
     'study-in-georgia-from-bangladesh',
     'study-in-greece-from-bangladesh',
     'study-in-croatia-from-bangladesh',
-    'destinations/thailand',
+    'study-in-thailand-from-bangladesh',
   ]) {
     const html = fs.readFileSync(path.join(BUILD_APP_DIR, `${slug}.html`), 'utf8');
     assert.ok(html.includes('"mainEntityOfPage":"https://eduexpressint.com/'), `${slug}.html must include mainEntityOfPage`);
