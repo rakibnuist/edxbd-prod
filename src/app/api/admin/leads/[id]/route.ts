@@ -70,6 +70,7 @@ async function applyLeadUpdateAndLog(
       assignedTo: true,
       assignedEmployeeId: true,
       notes: true,
+      nextFollowup: true,
     },
   });
   if (!before) return { status: 'not_found' };
@@ -205,6 +206,19 @@ async function applyLeadUpdateAndLog(
       leadId: lead.id,
       leadName: lead.name,
       details: typeof updatePayload.notes === 'string' ? updatePayload.notes.slice(0, 300) : null,
+    }));
+  }
+  if ('nextFollowup' in updatePayload && lead.nextFollowup !== before.nextFollowup) {
+    after(() => logActivityEvent({
+      type: 'followup_scheduled',
+      actorName: actorDisplay,
+      actorUserId: actor.userId,
+      employeeId: actor.employee?.id || lead.assignedEmployeeId,
+      leadId: lead.id,
+      leadName: lead.name,
+      fromValue: before.nextFollowup || 'None',
+      toValue: lead.nextFollowup || 'Cleared',
+      details: lead.nextFollowup ? `Scheduled re-contact for ${lead.nextFollowup}` : 'Follow-up cleared',
     }));
   }
 

@@ -9,7 +9,7 @@ export const LEAD_STATUSES = [
   ['converted', 'Converted'], ['not_interested', 'Not interested'], ['closed', 'Closed'],
 ] as const;
 export type LeadStatus = typeof LEAD_STATUSES[number][0];
-export type LeadQueue = 'all' | 'new' | 'no_response' | 'in_progress' | 'closed';
+export type LeadQueue = 'all' | 'new' | 'follow_up' | 'no_response' | 'in_progress' | 'closed';
 export type LeadRecord = {
   id: string; name: string; email: string; phone?: string | null; country: string;
   program?: string | null; message?: string | null; status: string; source: string;
@@ -32,7 +32,7 @@ export const isLeadStatus = (value: unknown): value is LeadStatus =>
 export const leadStatusLabel = (value: string) => LEAD_STATUSES.find(([status]) => status === value)?.[1]
   ?? value.replaceAll('_', ' ').replace(/^./, value => value.toUpperCase());
 const closed = new Set(['closed', 'not_interested', 'enrolled', 'converted']);
-export function leadQueue(status: string): Exclude<LeadQueue, 'all'> {
+export function leadQueue(status: string): Exclude<LeadQueue, 'all' | 'follow_up'> {
   if (status === 'new' || status === 'no_response') return status;
   return closed.has(status) ? 'closed' : 'in_progress';
 }
@@ -41,8 +41,13 @@ export const leadStatusTone = (status: string) => status === 'no_response' ? 'bg
   : ['enrolled', 'converted', 'visa_approved'].includes(status) ? 'bg-emerald-50 text-emerald-900'
   : 'bg-gray-100 text-gray-700';
 export function leadCounts(leads: LeadRecord[]) {
-  const counts = { all: leads.length, new: 0, no_response: 0, in_progress: 0, closed: 0 };
-  for (const lead of leads) counts[leadQueue(lead.status)]++;
+  const counts = { all: leads.length, new: 0, follow_up: 0, no_response: 0, in_progress: 0, closed: 0 };
+  for (const lead of leads) {
+    counts[leadQueue(lead.status)]++;
+    if (lead.nextFollowup && !closed.has(lead.status)) {
+      counts.follow_up++;
+    }
+  }
   return counts;
 }
 function extractLeadGpaNumber(lead: Pick<LeadRecord, 'gpa' | 'assessAcademicResults'>): number | null {
@@ -55,7 +60,14 @@ function extractLeadGpaNumber(lead: Pick<LeadRecord, 'gpa' | 'assessAcademicResu
   return Number.isFinite(parsed) && parsed > 0 && parsed <= 5.5 ? parsed : null;
 }
 
-export type LeadQuickPreset = 'all' | 'china_hot' | 'sla_risk' | 'followup_due';
+export type LeadQuickPreset =
+  | 'all'
+  | 'china_hot'
+  | 'sla_risk'
+  | 'followup_due'
+  | 'followup_today'
+  | 'followup_overdue'
+  | 'followup_upcoming';
 
 export function filterLeads(leads: LeadRecord[], filters: {
   search: string;
@@ -72,7 +84,9 @@ export function filterLeads(leads: LeadRecord[], filters: {
   const gpaMin = typeof filters.gpaMin === 'number' && Number.isFinite(filters.gpaMin) ? filters.gpaMin : null;
   const assignedFilter = filters.assignedTo && filters.assignedTo !== 'all' ? filters.assignedTo : null;
   const quick = filters.quickPreset || 'all';
-  const todayDhaka = new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 10);
+  const nowDhakaStr = new Date(Date.now() + 6 * 3600 * 1000).toISOString();
+  const todayDhaka = nowDhakaStr.slice(0, 10);
+  const currentTimeDhaka = nowDhakaStr.slice(11, 16);
   const twoHoursAgoMs = Date.now() - 2 * 3600 * 1000;
 
   return leads.filter(lead => {
@@ -82,7 +96,13 @@ export function filterLeads(leads: LeadRecord[], filters: {
     ].some(value => value?.toLocaleLowerCase().includes(query))) {
       return false;
     }
-    if (filters.queue !== 'all' && leadQueue(lead.status) !== filters.queue) return false;
+    if (filters.queue !== 'all') {
+      if (filters.queue === 'follow_up') {
+        if (!lead.nextFollowup || closed.has(lead.status)) return false;
+      } else if (leadQueue(lead.status) !== filters.queue) {
+        return false;
+      }
+    }
     if (filters.status !== 'all' && lead.status !== filters.status) return false;
     if (filters.country !== 'all' && lead.country !== filters.country) return false;
     if (filters.source !== 'all' && lead.source !== filters.source) return false;
@@ -103,12 +123,24 @@ export function filterLeads(leads: LeadRecord[], filters: {
       const createdMs = Date.parse(lead.createdAt);
       if (lead.status !== 'new' || Number.isNaN(createdMs) || createdMs > twoHoursAgoMs) return false;
     } else if (quick === 'followup_due') {
-      if (!lead.nextFollowup || lead.nextFollowup > todayDhaka || closed.has(lead.status)) return false;
+      if (!lead.nextFollowup || lead.nextFollowup.slice(0, 10) > todayDhaka || closed.has(lead.status)) return false;
+    } else if (quick === 'followup_today') {
+      if (!lead.nextFollowup || lead.nextFollowup.slice(0, 10) !== todayDhaka || closed.has(lead.status)) return false;
+    } else if (quick === 'followup_overdue') {
+      if (!lead.nextFollowup || closed.has(lead.status)) return false;
+      const fDate = lead.nextFollowup.slice(0, 10);
+      const fTime = lead.nextFollowup.length >= 16 ? lead.nextFollowup.slice(11, 16) : null;
+      if (fDate > todayDhaka) return false;
+      if (fDate === todayDhaka && (!fTime || fTime >= currentTimeDhaka)) return false;
+    } else if (quick === 'followup_upcoming') {
+      if (!lead.nextFollowup || lead.nextFollowup.slice(0, 10) <= todayDhaka || closed.has(lead.status)) return false;
     }
     return true;
   }).sort((a, b) => filters.sort === 'oldest' ? Date.parse(a.createdAt) - Date.parse(b.createdAt)
     : filters.sort === 'updated' ? Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
     : filters.sort === 'gpa_desc' ? (extractLeadGpaNumber(b) ?? -1) - (extractLeadGpaNumber(a) ?? -1)
+    : filters.sort === 'followup_soonest' ? (a.nextFollowup || '9999-99-99').localeCompare(b.nextFollowup || '9999-99-99')
+    : filters.sort === 'followup_latest' ? (b.nextFollowup || '').localeCompare(a.nextFollowup || '')
     : Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
@@ -230,7 +262,7 @@ export function validateLeadUpdate(value: unknown): { data?: LeadUpdateData; err
       data[field] = res.value;
     }
   }
-  for (const dateField of ['nextFollowup', 'visaDeadline', 'departureDate'] as const) {
+  for (const dateField of ['visaDeadline', 'departureDate'] as const) {
     if (dateField in body) {
       const res = normalizeOptionalShortText(body[dateField], dateField, 32);
       if (!res.ok) return { error: res.error };
@@ -240,7 +272,143 @@ export function validateLeadUpdate(value: unknown): { data?: LeadUpdateData; err
       data[dateField] = res.value;
     }
   }
+  if ('nextFollowup' in body) {
+    const rawVal = body.nextFollowup;
+    if (rawVal === null || rawVal === '') {
+      data.nextFollowup = null;
+    } else {
+      const res = normalizeOptionalShortText(rawVal, 'nextFollowup', 32);
+      if (!res.ok) return { error: res.error };
+      if (res.value) {
+        const normalized = res.value.replace(' ', 'T');
+        if (!/^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2})?)?$/.test(normalized)) {
+          return { error: 'nextFollowup must be YYYY-MM-DD or YYYY-MM-DDTHH:mm.' };
+        }
+        data.nextFollowup = normalized.slice(0, 16);
+      } else {
+        data.nextFollowup = null;
+      }
+    }
+  }
   return Object.keys(data).length ? { data } : { error: 'Choose a field to update.' };
+}
+
+export type FollowupClassification = 'none' | 'overdue' | 'today' | 'upcoming';
+
+export function formatFollowupDisplay(followup: string | null | undefined, nowMs = Date.now()): string | null {
+  if (!followup) return null;
+  const trimmed = followup.trim().replace(' ', 'T');
+  const datePart = trimmed.slice(0, 10);
+  const timePart = trimmed.length >= 16 ? trimmed.slice(11, 16) : null;
+
+  let formattedTime = '';
+  if (timePart) {
+    const [hStr, mStr] = timePart.split(':');
+    const h = Number.parseInt(hStr, 10);
+    const m = Number.parseInt(mStr, 10);
+    if (!Number.isNaN(h) && !Number.isNaN(m)) {
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const h12 = h % 12 || 12;
+      formattedTime = `${h12}:${m.toString().padStart(2, '0')} ${ampm}`;
+    }
+  }
+
+  const todayDhaka = new Date(nowMs + 6 * 3600 * 1000).toISOString().slice(0, 10);
+  const tomorrowDhaka = new Date(nowMs + 30 * 3600 * 1000).toISOString().slice(0, 10);
+  const yesterdayDhaka = new Date(nowMs - 18 * 3600 * 1000).toISOString().slice(0, 10);
+
+  if (datePart === todayDhaka) {
+    return formattedTime ? `Today at ${formattedTime}` : 'Today';
+  }
+  if (datePart === tomorrowDhaka) {
+    return formattedTime ? `Tomorrow at ${formattedTime}` : 'Tomorrow';
+  }
+  if (datePart === yesterdayDhaka) {
+    return formattedTime ? `Yesterday at ${formattedTime}` : 'Yesterday';
+  }
+
+  try {
+    const d = new Date(`${datePart}T00:00:00Z`);
+    const dateFormatted = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' }).format(d);
+    return formattedTime ? `${dateFormatted}, ${formattedTime}` : dateFormatted;
+  } catch {
+    return formattedTime ? `${datePart} ${formattedTime}` : datePart;
+  }
+}
+
+export function getFollowupClassification(followup: string | null | undefined, nowMs = Date.now()): {
+  classification: FollowupClassification;
+  isOverdue: boolean;
+  isToday: boolean;
+  isUpcoming: boolean;
+  label: string;
+  badgeClass: string;
+} {
+  if (!followup) {
+    return {
+      classification: 'none',
+      isOverdue: false,
+      isToday: false,
+      isUpcoming: false,
+      label: 'No follow-up',
+      badgeClass: 'bg-slate-100 text-slate-600 border-slate-200',
+    };
+  }
+
+  const trimmed = followup.trim().replace(' ', 'T');
+  const datePart = trimmed.slice(0, 10);
+  const timePart = trimmed.length >= 16 ? trimmed.slice(11, 16) : null;
+  const nowDhakaStr = new Date(nowMs + 6 * 3600 * 1000).toISOString();
+  const todayDhaka = nowDhakaStr.slice(0, 10);
+  const currentTimeDhaka = nowDhakaStr.slice(11, 16);
+
+  const display = formatFollowupDisplay(followup, nowMs) || followup;
+
+  let isOverdue = false;
+  let isToday = false;
+  let isUpcoming = false;
+
+  if (datePart < todayDhaka) {
+    isOverdue = true;
+  } else if (datePart > todayDhaka) {
+    isUpcoming = true;
+  } else {
+    isToday = true;
+    if (timePart && timePart < currentTimeDhaka) {
+      isOverdue = true;
+    }
+  }
+
+  if (isOverdue) {
+    return {
+      classification: 'overdue',
+      isOverdue: true,
+      isToday,
+      isUpcoming: false,
+      label: `Overdue: ${display}`,
+      badgeClass: 'bg-rose-50 text-rose-800 border-rose-300',
+    };
+  }
+
+  if (isToday) {
+    return {
+      classification: 'today',
+      isOverdue: false,
+      isToday: true,
+      isUpcoming: false,
+      label: `Due Today (${display})`,
+      badgeClass: 'bg-amber-50 text-amber-900 border-amber-300',
+    };
+  }
+
+  return {
+    classification: 'upcoming',
+    isOverdue: false,
+    isToday: false,
+    isUpcoming: true,
+    label: display,
+    badgeClass: 'bg-sky-50 text-sky-900 border-sky-300',
+  };
 }
 export function leadContactLinks(lead: Pick<LeadRecord, 'phone' | 'email' | 'name'>) {
   const rawDigits = (lead.phone || '').replace(/[^0-9]/g, '');

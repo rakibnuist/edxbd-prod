@@ -216,7 +216,7 @@ export default async function StudyInHungaryPage() {
               </li>
               <li className="flex items-start gap-2.5">
                 <span className="font-bold text-amber-600">✕</span>
-                <span><strong>Seeking Zero-Interview Visa Guarantees:</strong> Hungarian consular visa processing includes an in-person academic and financial interview. We reject agencies promising "guaranteed visas."</span>
+                <span><strong>Seeking Unrealistic Visa Guarantees:</strong> Hungarian consular visa processing includes an in-person academic and financial interview. We reject agencies promising 100% unconditional visa outcomes.</span>
               </li>
               <li className="flex items-start gap-2.5">
                 <span className="font-bold text-amber-600">✕</span>

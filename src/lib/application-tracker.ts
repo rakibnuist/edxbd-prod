@@ -385,7 +385,7 @@ export function validateApplicationPatchPayload(body: Record<string, unknown>): 
     data.applicationStage = rawStage;
   }
 
-  for (const dateField of ['visaDeadline', 'departureDate', 'nextFollowup', 'dateOfBirth', 'embassyDate'] as const) {
+  for (const dateField of ['visaDeadline', 'departureDate', 'dateOfBirth', 'embassyDate'] as const) {
     if (dateField in body) {
       const raw = body[dateField];
       if (raw === null || raw === '') {
@@ -395,6 +395,22 @@ export function validateApplicationPatchPayload(body: Record<string, unknown>): 
       } else {
         return { error: `${dateField} must be YYYY-MM-DD.` };
       }
+    }
+  }
+
+  if ('nextFollowup' in body) {
+    const raw = body.nextFollowup;
+    if (raw === null || raw === '') {
+      data.nextFollowup = null;
+    } else if (typeof raw === 'string') {
+      const trimmed = raw.trim().replace(' ', 'T');
+      if (/^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2})?)?$/.test(trimmed)) {
+        data.nextFollowup = trimmed.slice(0, 16);
+      } else {
+        return { error: 'nextFollowup must be YYYY-MM-DD or YYYY-MM-DDTHH:mm.' };
+      }
+    } else {
+      return { error: 'nextFollowup must be text.' };
     }
   }
 

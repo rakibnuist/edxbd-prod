@@ -9,6 +9,8 @@ const {
   filterLeads,
   validateLeadUpdate,
   leadContactLinks,
+  formatFollowupDisplay,
+  getFollowupClassification,
   parseMetaLeadsCsv,
   extractMetaFormFields,
   mapMetaGraphLeadToImportPayload,
@@ -25,9 +27,61 @@ test('No Response is a single shared, writable workflow state', () => {
   assert.equal(LEAD_STATUSES.filter(([key]) => key === 'no_response').length, 1);
   assert.deepEqual(validateLeadUpdate({ status: 'no_response' }), { data: { status: 'no_response' } });
 });
-test('queue counts partition all leads, including unanswered and closed enquiries', () => {
-  assert.deepEqual(leadCounts(rows), { all: 4, new: 1, no_response: 1, in_progress: 1, closed: 1 });
-  assert.deepEqual(leadCounts([]), { all: 0, new: 0, no_response: 0, in_progress: 0, closed: 0 });
+test('queue counts partition all leads, including unanswered, scheduled follow-ups and closed enquiries', () => {
+  assert.deepEqual(leadCounts(rows), { all: 4, new: 1, follow_up: 0, no_response: 1, in_progress: 1, closed: 1 });
+  assert.deepEqual(leadCounts([]), { all: 0, new: 0, follow_up: 0, no_response: 0, in_progress: 0, closed: 0 });
+
+  const rowsWithFollowup = [
+    ...rows,
+    { id: 'e', name: 'Scheduled Lead', email: 'e@example.test', country: 'China', status: 'contacted', source: 'website', nextFollowup: '2026-11-28T15:00', createdAt: '2026-01-05', updatedAt: '2026-01-05' },
+  ];
+  assert.deepEqual(leadCounts(rowsWithFollowup), { all: 5, new: 1, follow_up: 1, no_response: 1, in_progress: 2, closed: 1 });
+});
+test('follow-up scheduling validates date and datetime-local formats', () => {
+  assert.deepEqual(validateLeadUpdate({ nextFollowup: '2026-11-28' }), { data: { nextFollowup: '2026-11-28' } });
+  assert.deepEqual(validateLeadUpdate({ nextFollowup: '2026-11-28T14:30' }), { data: { nextFollowup: '2026-11-28T14:30' } });
+  assert.deepEqual(validateLeadUpdate({ nextFollowup: null }), { data: { nextFollowup: null } });
+  assert.deepEqual(validateLeadUpdate({ nextFollowup: '' }), { data: { nextFollowup: null } });
+  assert.ok(validateLeadUpdate({ nextFollowup: 'invalid-date' }).error);
+  assert.ok(validateLeadUpdate({ nextFollowup: '2026/11/28' }).error);
+});
+test('formatFollowupDisplay and getFollowupClassification handle timestamps and SLA status', () => {
+  const fixedNow = new Date('2026-11-26T10:00:00.000Z').getTime(); // 4:00 PM Dhaka (16:00)
+  assert.equal(formatFollowupDisplay('2026-11-26T17:00', fixedNow), 'Today at 5:00 PM');
+  assert.equal(formatFollowupDisplay('2026-11-27T11:00', fixedNow), 'Tomorrow at 11:00 AM');
+  assert.equal(formatFollowupDisplay('2026-11-25T11:00', fixedNow), 'Yesterday at 11:00 AM');
+
+  const todayUpcoming = getFollowupClassification('2026-11-26T17:00', fixedNow);
+  assert.equal(todayUpcoming.classification, 'today');
+  assert.equal(todayUpcoming.isToday, true);
+
+  const overduePastDay = getFollowupClassification('2026-11-25T10:00', fixedNow);
+  assert.equal(overduePastDay.classification, 'overdue');
+  assert.equal(overduePastDay.isOverdue, true);
+
+  const upcomingFuture = getFollowupClassification('2026-11-28T10:00', fixedNow);
+  assert.equal(upcomingFuture.classification, 'upcoming');
+  assert.equal(upcomingFuture.isUpcoming, true);
+});
+test('filterLeads correctly filters by follow_up queue and presets', () => {
+  const sampleLeads = [
+    { id: 'f1', name: 'Lead Due Today', email: 'f1@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: '2026-11-26T23:59', createdAt: '2026-01-01', updatedAt: '2026-01-01' },
+    { id: 'f2', name: 'Lead Overdue', email: 'f2@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: '2026-11-20T10:00', createdAt: '2026-01-01', updatedAt: '2026-01-01' },
+    { id: 'f3', name: 'Lead Upcoming', email: 'f3@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: '2026-12-01T10:00', createdAt: '2026-01-01', updatedAt: '2026-01-01' },
+    { id: 'f4', name: 'Lead No Followup', email: 'f4@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: null, createdAt: '2026-01-01', updatedAt: '2026-01-01' },
+  ];
+  const followups = filterLeads(sampleLeads, { ...defaults, queue: 'follow_up' });
+  assert.equal(followups.length, 3);
+  assert.deepEqual(followups.map(l => l.id), ['f1', 'f2', 'f3']);
+
+  const dueToday = filterLeads(sampleLeads, { ...defaults, quickPreset: 'followup_today' });
+  assert.deepEqual(dueToday.map(l => l.id), ['f1']);
+
+  const overdue = filterLeads(sampleLeads, { ...defaults, quickPreset: 'followup_overdue' });
+  assert.deepEqual(overdue.map(l => l.id), ['f2']);
+
+  const upcoming = filterLeads(sampleLeads, { ...defaults, quickPreset: 'followup_upcoming' });
+  assert.deepEqual(upcoming.map(l => l.id), ['f3']);
 });
 test('search, queue, country and source filters combine without changing original data', () => {
   assert.deepEqual(filterLeads(rows, { ...defaults, queue: 'no_response' }).map(row => row.id), ['b']);

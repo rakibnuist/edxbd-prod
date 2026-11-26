@@ -291,7 +291,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     region: 'Europe',
     serviceStatus: 'Active',
     tier: 'Wave 1 Active',
-    href: '/destinations/finland',
+    href: '/study-in-finland-from-bangladesh',
     currency: 'EUR',
     intakes: 'September (Joint Application in Jan) & Select Jan',
     indicativeTuition: 'EUR 8,000 – 15,000 / year (UAS & Research Universities; PhD tuition-exempt)',

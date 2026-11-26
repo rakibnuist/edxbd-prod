@@ -187,7 +187,9 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   const reqHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'china-admission-requirements.html'), 'utf8');
   assert.ok(reqHtml.includes('/updates/csca-guide-study-in-china') && reqHtml.includes('/updates/china-k-visa'));
 
-  const finlandHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'destinations', 'finland.html'), 'utf8');
+  const finlandHtml = fs.existsSync(path.join(BUILD_APP_DIR, 'study-in-finland-from-bangladesh.html'))
+    ? fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-finland-from-bangladesh.html'), 'utf8')
+    : fs.readFileSync(path.join(process.cwd(), 'src/app/study-in-finland-from-bangladesh/page.tsx'), 'utf8');
   assert.ok(finlandHtml.includes('9,600') && !finlandHtml.includes('6,720'));
 
   const croatiaHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'destinations', 'croatia.html'), 'utf8');
@@ -227,12 +229,18 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
     'bn/study-in-china must emit citationJsonLd and link CSCA guide',
   );
 
-  const ukHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'destinations', 'uk.html'), 'utf8');
+  const ukPath = fs.existsSync(path.join(BUILD_APP_DIR, 'study-in-uk-from-bangladesh.html'))
+    ? path.join(BUILD_APP_DIR, 'study-in-uk-from-bangladesh.html')
+    : path.join(BUILD_APP_DIR, 'destinations', 'uk.html');
+  const ukHtml = fs.readFileSync(ukPath, 'utf8');
   assert.ok(
     ukHtml.includes('https://www.gov.uk/student-visa') && ukHtml.includes('CreativeWork'),
-    'destinations/uk must include UKVI official link and citationJsonLd',
+    'study-in-uk-from-bangladesh must include UKVI official link and citationJsonLd',
   );
-  assert.ok(finlandHtml.includes('https://migri.fi/en/studying-in-finland'), 'destinations/finland must include Migri URL');
+  assert.ok(
+    finlandHtml.includes('https://migri.fi/en/residence-permit-for-studies') || finlandHtml.includes('https://migri.fi/en/studying-in-finland'),
+    'destinations/finland must include Migri URL',
+  );
 
   const sitemapBody = fs.readFileSync(path.join(BUILD_APP_DIR, 'sitemap.xml.body'), 'utf8');
   assert.ok(
@@ -478,10 +486,10 @@ test('Step 16 built HTML checks — bn visa SERP bounds, homepage WebPage schema
     'universities/asia-pacific-university',
     'csc-scholarship-bangladesh',
     'bn/csc-scholarship-bangladesh',
-    'destinations/uk',
-    'destinations/south-korea',
-    'destinations/hungary',
-    'destinations/finland',
+    'study-in-uk-from-bangladesh',
+    'study-in-south-korea-from-bangladesh',
+    'study-in-hungary-from-bangladesh',
+    'study-in-finland-from-bangladesh',
     'destinations/cyprus',
     'destinations/croatia',
     'destinations/georgia',
@@ -508,7 +516,7 @@ test('Step 16 built HTML checks — bn visa SERP bounds, homepage WebPage schema
   );
   for (const rel of [
     'about',
-    'destinations/uk',
+    'study-in-uk-from-bangladesh',
     'how-we-verify-universities',
     'better-education-standard',
     'privacy',

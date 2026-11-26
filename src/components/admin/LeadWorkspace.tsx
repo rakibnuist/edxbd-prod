@@ -3,17 +3,18 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  ArrowDownUp, ChevronLeft, ChevronRight, Columns3, Download, ExternalLink,
+  AlertCircle, ArrowDownUp, ChevronLeft, ChevronRight, Columns3, Download, ExternalLink,
   Flame, FolderCheck, FolderKanban, FolderPlus, GraduationCap, LayoutList, Mail, Phone, RefreshCw, Search,
   SlidersHorizontal, Upload, UserCheck, X, Clock, CalendarClock,
 } from 'lucide-react';
+import FollowupScheduler from '@/components/admin/FollowupScheduler';
 import LeadCopilotPanel from '@/components/admin/LeadCopilotPanel';
 import LeadPortalDrawerSection, { type EmployeeOption } from '@/components/admin/LeadPortalDrawerSection';
 import WaTemplateButton from '@/components/admin/WaTemplateButton';
 import type { FitResponseLanguage } from '@/lib/fit-matcher';
 import type { LeadCopilotResult } from '@/lib/lead-copilot';
 import {
-  filterLeads, leadContactLinks, leadCounts, leadStatusLabel, leadStatusTone,
+  filterLeads, formatFollowupDisplay, getFollowupClassification, leadContactLinks, leadCounts, leadStatusLabel, leadStatusTone,
   LEAD_STATUSES, type LeadQueue, type LeadQuickPreset, type LeadRecord,
 } from '@/lib/lead-workflow';
 import { portalProgressPct, resolvePortalMilestoneStep } from '@/lib/student-portal';
@@ -47,6 +48,7 @@ const date = (value: string) => new Intl.DateTimeFormat('en-GB', { day: 'numeric
 const queues: { id: LeadQueue; label: string }[] = [
   { id: 'all', label: 'All leads' },
   { id: 'new', label: 'New enquiries' },
+  { id: 'follow_up', label: 'Follow-ups' },
   { id: 'no_response', label: 'No Response' },
   { id: 'in_progress', label: 'In progress' },
   { id: 'closed', label: 'Completed / closed' },
@@ -283,6 +285,21 @@ function Detail({
           )}
         </section>
 
+        <section className="rounded-xl border border-blue-200/80 bg-blue-50/30 p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+              <CalendarClock size={16} className="text-[#12436b]" />
+              Follow-up & Re-contact Scheduling
+            </h3>
+            <span className="text-[11px] text-slate-500 font-medium">Never miss reaching a client</span>
+          </div>
+          <FollowupScheduler
+            lead={lead}
+            saving={saving}
+            onUpdate={onUpdate}
+          />
+        </section>
+
         {(lead.riskFlag || lead.medicalProgram) && (
           <p className="rounded-lg bg-amber-50 p-3 text-sm text-amber-900">
             {lead.medicalProgram
@@ -449,6 +466,7 @@ export default function LeadWorkspace({
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [selectedId, setSelectedId] = useState<string | null>(initialLeadId);
+  const [schedulingLead, setSchedulingLead] = useState<LeadRecord | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
   const counts = useMemo(() => leadCounts(leads), [leads]);
@@ -483,6 +501,9 @@ export default function LeadWorkspace({
   const currentPage = Math.min(page, pages);
   const rows = filtered.slice((currentPage - 1) * size, currentPage * size);
   const selected = leads.find((lead) => lead.id === selectedId);
+  const currentSchedulingLead = schedulingLead
+    ? leads.find((l) => l.id === schedulingLead.id) || schedulingLead
+    : null;
   const activeFilterCount =
     [status, country, source, assignedTo, gpaMin].filter((v) => v !== 'all').length;
   const hasFilters = Boolean(search || activeFilterCount > 0 || queue !== 'all' || quickPreset !== 'all');
@@ -653,16 +674,17 @@ export default function LeadWorkspace({
       </div>
 
       {/* Summary KPI Bar */}
-      <dl className="grid grid-cols-2 gap-y-5 rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm sm:grid-cols-4 sm:divide-x sm:divide-gray-200">
+      <dl className="grid grid-cols-2 gap-y-5 rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm sm:grid-cols-5 sm:divide-x sm:divide-gray-200">
         {[
           ['Total enquiries', counts.all],
           ['New enquiries', counts.new],
+          ['Follow-ups', counts.follow_up],
           ['No Response', counts.no_response],
           ['In progress', counts.in_progress],
         ].map(([label, value], index) => (
           <div key={label} className={index ? 'sm:px-5' : 'sm:pr-5'}>
             <dt className="text-xs font-medium text-gray-500">{label}</dt>
-            <dd className={`mt-1 text-2xl font-bold tabular-nums ${label === 'New enquiries' && value ? 'text-[#12436b]' : 'text-slate-900'}`}>
+            <dd className={`mt-1 text-2xl font-bold tabular-nums ${label === 'Follow-ups' && value ? 'text-amber-700' : label === 'New enquiries' && value ? 'text-[#12436b]' : 'text-slate-900'}`}>
               {loading && !leads.length ? '—' : value}
             </dd>
           </div>
@@ -700,9 +722,11 @@ export default function LeadWorkspace({
           <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Quick focus:</span>
           {[
             { id: 'all' as LeadQuickPreset, label: 'All Enquiries', icon: null },
+            { id: 'followup_due' as LeadQuickPreset, label: 'Follow-ups Due Today', icon: CalendarClock },
+            { id: 'followup_overdue' as LeadQuickPreset, label: 'Overdue Follow-ups', icon: AlertCircle },
+            { id: 'followup_upcoming' as LeadQuickPreset, label: 'Upcoming Follow-ups', icon: Clock },
             { id: 'china_hot' as LeadQuickPreset, label: 'China Hot (GPA >= 3.5)', icon: Flame },
             { id: 'sla_risk' as LeadQuickPreset, label: 'Untouched > 2h (SLA)', icon: Clock },
-            { id: 'followup_due' as LeadQuickPreset, label: 'Follow-up Due Today', icon: CalendarClock },
           ].map((preset) => {
             const Icon = preset.icon;
             const active = quickPreset === preset.id;
@@ -765,6 +789,8 @@ export default function LeadWorkspace({
               }}
             >
               <option value="newest">Newest first</option>
+              <option value="followup_soonest">Follow-up: Soonest first</option>
+              <option value="followup_latest">Follow-up: Latest first</option>
               <option value="oldest">Oldest first</option>
               <option value="updated">Recently updated</option>
               <option value="gpa_desc">Highest GPA first</option>
@@ -963,6 +989,30 @@ export default function LeadWorkspace({
                             )}
                           </div>
 
+                          <div className="mt-2 flex flex-wrap items-center gap-1">
+                            {lead.nextFollowup ? (
+                              <button
+                                type="button"
+                                onClick={() => setSchedulingLead(lead)}
+                                className={`inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-bold transition hover:shadow-xs ${getFollowupClassification(lead.nextFollowup).badgeClass}`}
+                                title="Reschedule or view follow-up"
+                              >
+                                <CalendarClock size={10} className="shrink-0" />
+                                {formatFollowupDisplay(lead.nextFollowup)}
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => setSchedulingLead(lead)}
+                                className="inline-flex items-center gap-1 rounded border border-dashed border-slate-300 px-1.5 py-0.5 text-[10px] font-medium text-slate-500 hover:border-slate-400 hover:text-slate-800 transition"
+                                title="Schedule follow-up"
+                              >
+                                <Clock size={10} className="shrink-0 text-slate-400" />
+                                + Follow-up
+                              </button>
+                            )}
+                          </div>
+
                           <div className="mt-2.5 flex items-center justify-between gap-1.5 border-t border-slate-100 pt-2">
                             <div className="flex items-center gap-1.5">
                               <WaTemplateButton lead={lead} compact onEnsureToken={onEnsureToken} />
@@ -1102,11 +1152,35 @@ export default function LeadWorkspace({
 
                       <td className="col-start-2 row-start-2 text-right text-xs leading-5 tabular-nums text-gray-600 md:py-4 md:pr-4 md:text-left">
                         <div>{date(lead.createdAt)}</div>
-                        {lead.nextFollowup && (
-                          <div className="mt-1 inline-flex items-center gap-1 rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-800">
-                            Follow: {lead.nextFollowup}
-                          </div>
-                        )}
+                        <div className="mt-1 flex flex-wrap items-center gap-1">
+                          {lead.nextFollowup ? (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSchedulingLead(lead);
+                              }}
+                              className={`inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] font-bold transition hover:shadow-xs ${getFollowupClassification(lead.nextFollowup).badgeClass}`}
+                              title="Click to reschedule or view follow-up"
+                            >
+                              <CalendarClock size={11} className="shrink-0" />
+                              {getFollowupClassification(lead.nextFollowup).label}
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSchedulingLead(lead);
+                              }}
+                              className="inline-flex items-center gap-1 rounded border border-dashed border-slate-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-slate-500 hover:border-slate-400 hover:bg-slate-50 hover:text-slate-800 transition"
+                              title="Schedule re-contact time for this student"
+                            >
+                              <Clock size={11} className="shrink-0 text-slate-400" />
+                              + Follow-up
+                            </button>
+                          )}
+                        </div>
                       </td>
 
                       <td className="col-start-2 row-start-1 text-right md:py-4">
@@ -1187,6 +1261,51 @@ export default function LeadWorkspace({
           onTokenChanged={onTokenChanged}
           onCopilot={onCopilot}
         />
+      )}
+
+      {currentSchedulingLead && (
+        <dialog
+          open
+          onCancel={() => setSchedulingLead(null)}
+          aria-labelledby="quick-followup-modal-title"
+          className="fixed inset-0 z-50 m-auto max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl backdrop:bg-black/40"
+        >
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2.5">
+              <span className="grid size-9 place-items-center rounded-lg bg-blue-50 text-[#12436b]">
+                <CalendarClock size={18} />
+              </span>
+              <div>
+                <h3 id="quick-followup-modal-title" className="text-sm font-bold text-slate-900">
+                  Schedule Re-contact
+                </h3>
+                <p className="text-xs text-slate-500">
+                  {currentSchedulingLead.name} · {currentSchedulingLead.phone || currentSchedulingLead.country}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSchedulingLead(null)}
+              aria-label="Close scheduling modal"
+              className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="mt-4">
+            <FollowupScheduler
+              lead={currentSchedulingLead}
+              saving={savingId === currentSchedulingLead.id}
+              onUpdate={async (id, data) => {
+                const ok = await onUpdate(id, data);
+                if (ok) setSchedulingLead(null);
+                return ok;
+              }}
+              onClose={() => setSchedulingLead(null)}
+            />
+          </div>
+        </dialog>
       )}
     </div>
   );

@@ -538,8 +538,9 @@ export function computeEmployeeKpiReport(input: {
     for (const l of activeLeads) {
       const createdMs = new Date(l.createdAt).getTime();
       const ageHours = Number.isFinite(createdMs) ? Math.max(0, Math.round((nowMs - createdMs) / 3600000)) : 0;
+      const followDate = l.nextFollowup ? l.nextFollowup.slice(0, 10) : null;
 
-      if (l.nextFollowup === today) {
+      if (followDate === today) {
         followupsDueToday++;
         slaBottlenecks.push({
           id: l.id,
@@ -555,7 +556,7 @@ export function computeEmployeeKpiReport(input: {
           maxSlaHours,
           createdAt: new Date(l.createdAt).toISOString(),
         });
-      } else if (l.nextFollowup && l.nextFollowup < today) {
+      } else if (followDate && followDate < today) {
         followupsOverdue++;
         slaBottlenecks.push({
           id: l.id,

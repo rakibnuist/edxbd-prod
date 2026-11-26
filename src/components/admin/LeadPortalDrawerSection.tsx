@@ -453,7 +453,7 @@ export default function LeadPortalDrawerSection({
             Next Follow-up
             <input
               type="date"
-              value={nextFollowup}
+              value={nextFollowup ? nextFollowup.slice(0, 10) : ''}
               onChange={(e) => setNextFollowup(e.target.value)}
               className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs text-slate-900"
             />
