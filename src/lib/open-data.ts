@@ -60,12 +60,6 @@ export const OPEN_DATA_CSV_DOWNLOADS = {
     encodingFormat: 'text/csv',
     contentUrl: `${OPEN_DATA_REPOSITORIES.githubRawBase}/itemized_fees_verified.csv`,
   },
-  destinationsMatrix: {
-    '@type': 'DataDownload',
-    name: '12-Destination Active EduExpress Matrix (CSV)',
-    encodingFormat: 'text/csv',
-    contentUrl: `${OPEN_DATA_REPOSITORIES.githubRawBase}/destinations_matrix_12_countries.csv`,
-  },
   globalDestinationsMatrix: {
     '@type': 'DataDownload',
     name: '32-Country Global Bangladesh Study Abroad Matrix (CSV)',

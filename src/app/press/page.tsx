@@ -195,8 +195,8 @@ export default async function PressRoomPage() {
       {
         '@type': 'Dataset',
         '@id': `${canonical}#dataset`,
-        name: 'Bangladesh Study Abroad, Scholarship & China University Cost Benchmark Dataset (2027)',
-        alternateName: 'EduExpress International Bangladesh Study Abroad Open Dataset',
+        name: 'Bangladesh Global Study Abroad Cost & Scholarship Dataset (2027)',
+        alternateName: 'EduExpress International Bangladesh Global Study Abroad Open Dataset',
         description: `Open CC BY 4.0 dataset covering ${marketSnapshot.liveCatalog.activeUniversities} verified active universities (${chinaReport.universityCount} in China across ${chinaReport.cityCount} cities and ${marketSnapshot.liveCatalog.activeUniversities - chinaReport.universityCount} in Malaysia), ${marketSnapshot.liveCatalog.programsCount} structured degree and language programs, ${marketSnapshot.liveCatalog.itemizedFeeRowsCount} itemized non-tuition fee rows, ${marketSnapshot.liveCatalog.scholarshipsCount} structured university scholarship tracks, and a ${marketSnapshot.globalBenchmarkDestinationCount}-country global Bangladesh outbound cost, visa proof, and scholarship matrix (${marketSnapshot.activeDestinationCount} active EduExpress destinations + ${marketSnapshot.globalBenchmarkDestinationCount - marketSnapshot.activeDestinationCount} global reference benchmarks).`,
         url: canonical,
         identifier: [...OPEN_DATA_IDENTIFIERS],
@@ -244,7 +244,6 @@ export default async function PressRoomPage() {
           OPEN_DATA_CSV_DOWNLOADS.fees,
           OPEN_DATA_CSV_DOWNLOADS.globalDestinationsMatrix,
           OPEN_DATA_CSV_DOWNLOADS.countryScholarships,
-          OPEN_DATA_CSV_DOWNLOADS.destinationsMatrix,
         ],
         variableMeasured: [
           'Annual university tuition in explicit CNY and MYR',
