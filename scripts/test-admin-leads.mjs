@@ -64,10 +64,12 @@ test('formatFollowupDisplay and getFollowupClassification handle timestamps and 
   assert.equal(upcomingFuture.isUpcoming, true);
 });
 test('filterLeads correctly filters by follow_up queue and presets', () => {
+  const nowDhakaStr = new Date(Date.now() + 6 * 3600 * 1000).toISOString();
+  const todayDhaka = nowDhakaStr.slice(0, 10);
   const sampleLeads = [
-    { id: 'f1', name: 'Lead Due Today', email: 'f1@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: '2026-11-26T23:59', createdAt: '2026-01-01', updatedAt: '2026-01-01' },
-    { id: 'f2', name: 'Lead Overdue', email: 'f2@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: '2026-11-20T10:00', createdAt: '2026-01-01', updatedAt: '2026-01-01' },
-    { id: 'f3', name: 'Lead Upcoming', email: 'f3@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: '2026-12-01T10:00', createdAt: '2026-01-01', updatedAt: '2026-01-01' },
+    { id: 'f1', name: 'Lead Due Today', email: 'f1@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: `${todayDhaka}T23:59`, createdAt: '2026-01-01', updatedAt: '2026-01-01' },
+    { id: 'f2', name: 'Lead Overdue', email: 'f2@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: '2020-01-01T10:00', createdAt: '2026-01-01', updatedAt: '2026-01-01' },
+    { id: 'f3', name: 'Lead Upcoming', email: 'f3@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: '2030-01-01T10:00', createdAt: '2026-01-01', updatedAt: '2026-01-01' },
     { id: 'f4', name: 'Lead No Followup', email: 'f4@test.com', country: 'China', status: 'contacted', source: 'website', nextFollowup: null, createdAt: '2026-01-01', updatedAt: '2026-01-01' },
   ];
   const followups = filterLeads(sampleLeads, { ...defaults, queue: 'follow_up' });

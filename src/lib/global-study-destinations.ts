@@ -434,7 +434,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     region: 'Europe',
     serviceStatus: 'Active',
     tier: 'Wave 3 Active',
-    href: '/destinations/greece',
+    href: '/study-in-greece-from-bangladesh',
     currency: 'EUR',
     intakes: 'September/October',
     indicativeTuition: 'EUR 1,500 – 10,000 / year (public English Master/Bachelor; English Medicine ~EUR 12,000 – 13,000)',

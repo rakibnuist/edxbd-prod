@@ -493,8 +493,8 @@ test('Step 16 built HTML checks — bn visa SERP bounds, homepage WebPage schema
     'study-in-malta-from-bangladesh',
     'study-in-cyprus-from-bangladesh',
     'study-in-georgia-from-bangladesh',
+    'study-in-greece-from-bangladesh',
     'destinations/croatia',
-    'destinations/greece',
     'destinations/thailand',
   ]) {
     const html = fs.readFileSync(path.join(BUILD_APP_DIR, `${slug}.html`), 'utf8');
