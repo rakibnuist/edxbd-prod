@@ -26,7 +26,7 @@ function parseArgs(argv) {
     force: false,
     notify: false,
     dryRun: false,
-    timeoutMs: 12000,
+    timeoutMs: 18000,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
@@ -117,7 +117,7 @@ function escapeHtml(text) {
 }
 
 async function sendTelegramDigest(changedItems, brokenItems) {
-  const rows = await prisma.siteSetting.findMany({
+  const rows = await prisma.setting.findMany({
     where: { key: { in: ['alert_telegram_bot_token', 'alert_telegram_chat_id'] } },
   });
   const map = new Map(rows.map((r) => [r.key, r.value]));
@@ -183,6 +183,7 @@ async function main() {
   const changedItems = [];
   const brokenItems = [];
   let unchangedCount = 0;
+  let wafProtectedCount = 0;
 
   for (const watch of due) {
     const headers = {
@@ -205,6 +206,24 @@ async function main() {
           await prisma.internalSourceWatch.update({
             where: { id: watch.id },
             data: { lastCheckedAt: now, lastHttpStatus: 304 },
+          });
+        }
+        continue;
+      }
+
+      // Government WAF / bot-gated responses (403/412/429) are not dead 404 links;
+      // record status cleanly for manual periodic checks without false broken-link spam.
+      if (res.status === 403 || res.status === 412 || res.status === 429) {
+        wafProtectedCount += 1;
+        if (!args.dryRun) {
+          await prisma.internalSourceWatch.update({
+            where: { id: watch.id },
+            data: {
+              lastCheckedAt: now,
+              lastHttpStatus: res.status,
+              status: watch.status === 'broken_link' ? 'active' : watch.status,
+              notes: `WAF/bot-protected (HTTP ${res.status}) — automated fetch blocked; verify manually in browser.`,
+            },
           });
         }
         continue;
@@ -286,7 +305,7 @@ async function main() {
     }
   }
 
-  console.log(`Done: ${unchangedCount} unchanged, ${changedItems.length} changed, ${brokenItems.length} broken/unreachable.`);
+  console.log(`Done: ${unchangedCount} unchanged/baselined, ${changedItems.length} changed, ${wafProtectedCount} WAF-protected (manual check), ${brokenItems.length} broken/unreachable.`);
   if (args.notify && !args.dryRun && (changedItems.length > 0 || brokenItems.length > 0)) {
     await sendTelegramDigest(changedItems, brokenItems);
   }

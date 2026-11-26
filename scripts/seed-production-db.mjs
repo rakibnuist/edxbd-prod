@@ -74,6 +74,9 @@ try {
   execSync('node scripts/seed-china-csc-batch-b4.mjs', { stdio: 'inherit' });
   execSync('node scripts/seed-china-csc-batch-b5.mjs', { stdio: 'inherit' });
 
+  console.log('Syncing 306/306 CSC-designated flags across China universities...');
+  execSync('node scripts/sync-china-csc-flags.mjs', { stdio: 'inherit' });
+
   console.log('Syncing private Tier-2 InternalSourceWatch vault...');
   execSync('node scripts/seed-hidden-sources.mjs', { stdio: 'inherit' });
 
