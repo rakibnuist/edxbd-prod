@@ -327,7 +327,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     region: 'Europe',
     serviceStatus: 'Active',
     tier: 'Wave 2 Active',
-    href: '/destinations/malta',
+    href: '/study-in-malta-from-bangladesh',
     currency: 'EUR',
     intakes: 'February, May & October',
     indicativeTuition: 'EUR 6,000 – 12,000 / year',

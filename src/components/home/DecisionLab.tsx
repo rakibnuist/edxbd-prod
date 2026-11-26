@@ -53,6 +53,7 @@ const routePaths: Record<string, string> = {
   'south-korea': '/study-in-south-korea-from-bangladesh',
   hungary: '/study-in-hungary-from-bangladesh',
   finland: '/study-in-finland-from-bangladesh',
+  malta: '/study-in-malta-from-bangladesh',
   uk: '/study-in-uk-from-bangladesh',
   cyprus: '/destinations/cyprus',
 };
