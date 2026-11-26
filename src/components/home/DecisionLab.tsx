@@ -51,7 +51,7 @@ const routePaths: Record<string, string> = {
   china: '/study-in-china-from-bangladesh',
   malaysia: '/study-in-malaysia-from-bangladesh',
   'south-korea': '/destinations/south-korea',
-  hungary: '/destinations/hungary',
+  hungary: '/study-in-hungary-from-bangladesh',
   uk: '/study-in-uk-from-bangladesh',
   cyprus: '/destinations/cyprus',
 };

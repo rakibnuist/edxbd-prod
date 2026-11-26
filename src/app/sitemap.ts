@@ -126,6 +126,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/bn/csca-exam-bangladesh',
     '/study-in-malaysia-from-bangladesh',
     '/study-in-uk-from-bangladesh',
+    '/study-in-hungary-from-bangladesh',
     '/malaysia-study-cost-bangladesh',
     '/malaysia-student-visa-bangladesh',
     '/study-in-malaysia-after-o-level',

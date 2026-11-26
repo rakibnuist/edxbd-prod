@@ -212,7 +212,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     region: 'Europe',
     serviceStatus: 'Active',
     tier: 'Wave 1 Active',
-    href: '/destinations/hungary',
+    href: '/study-in-hungary-from-bangladesh',
     currency: 'EUR',
     intakes: 'September (Main) & February (Select)',
     indicativeTuition: 'EUR 3,000 – 8,000 / year (Medicine/Dentistry EUR 14,000 – 17,000 / year)',
