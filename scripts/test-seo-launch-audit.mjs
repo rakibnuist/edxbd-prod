@@ -224,6 +224,17 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.ok(!ukCostHtml.includes('Official Planning Baseline'));
 
+  const finlandCostHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'finland-study-cost-bangladesh.html'), 'utf8');
+  assert.ok(
+    finlandCostHtml.includes('Planning Assumption') &&
+      finlandCostHtml.includes('9,600') &&
+      finlandCostHtml.includes('800') &&
+      finlandCostHtml.includes('migri.fi/en/residence-permit-for-studies') &&
+      !finlandCostHtml.includes('6,720'),
+    'finland-study-cost-bangladesh must include Planning Assumption, Migri EUR 9,600 / EUR 800 figures, Migri link, and no obsolete 6,720',
+  );
+  assert.ok(!finlandCostHtml.includes('Official Planning Baseline'));
+
   const chinaHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-china-from-bangladesh.html'), 'utf8');
   for (const href of [
     '/csc-scholarship-bangladesh',
