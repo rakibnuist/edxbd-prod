@@ -469,7 +469,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     region: 'Europe',
     serviceStatus: 'Active',
     tier: 'Wave 3 Active',
-    href: '/destinations/croatia',
+    href: '/study-in-croatia-from-bangladesh',
     currency: 'EUR',
     intakes: 'September/October',
     indicativeTuition: 'EUR 2,500 – 6,000 / year (English Medicine EUR 10,000 – 12,000 / year)',

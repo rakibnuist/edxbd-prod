@@ -192,7 +192,9 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
     : fs.readFileSync(path.join(process.cwd(), 'src/app/study-in-finland-from-bangladesh/page.tsx'), 'utf8');
   assert.ok(finlandHtml.includes('9,600') && !finlandHtml.includes('6,720'));
 
-  const croatiaHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'destinations', 'croatia.html'), 'utf8');
+  const croatiaHtml = fs.existsSync(path.join(BUILD_APP_DIR, 'study-in-croatia-from-bangladesh.html'))
+    ? fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-croatia-from-bangladesh.html'), 'utf8')
+    : fs.readFileSync(path.join(BUILD_APP_DIR, 'destinations', 'croatia.html'), 'utf8');
   assert.ok(!/schengen/i.test(croatiaHtml), 'study-in-croatia-from-bangladesh must not sell Schengen');
 
   for (const slug of [
@@ -494,7 +496,7 @@ test('Step 16 built HTML checks — bn visa SERP bounds, homepage WebPage schema
     'study-in-cyprus-from-bangladesh',
     'study-in-georgia-from-bangladesh',
     'study-in-greece-from-bangladesh',
-    'destinations/croatia',
+    'study-in-croatia-from-bangladesh',
     'destinations/thailand',
   ]) {
     const html = fs.readFileSync(path.join(BUILD_APP_DIR, `${slug}.html`), 'utf8');

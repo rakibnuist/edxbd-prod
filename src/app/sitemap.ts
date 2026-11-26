@@ -133,6 +133,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/study-in-cyprus-from-bangladesh',
     '/study-in-georgia-from-bangladesh',
     '/study-in-greece-from-bangladesh',
+    '/study-in-croatia-from-bangladesh',
     '/malaysia-study-cost-bangladesh',
     '/malaysia-student-visa-bangladesh',
     '/study-in-malaysia-after-o-level',

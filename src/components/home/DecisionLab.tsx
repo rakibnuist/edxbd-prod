@@ -58,6 +58,7 @@ const routePaths: Record<string, string> = {
   cyprus: '/study-in-cyprus-from-bangladesh',
   georgia: '/study-in-georgia-from-bangladesh',
   greece: '/study-in-greece-from-bangladesh',
+  croatia: '/study-in-croatia-from-bangladesh',
 };
 
 type Screen = 'priority' | 'profile' | 'limits' | 'signal' | 'contact' | 'done';
