@@ -62,8 +62,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { country: slug } = await params;
   const country = countries.find((item) => item.slug === slug);
   if (!country) return { title: 'Country Not Found' };
-  // China, Malaysia, UK, and Hungary are permanently redirected to their own flagship guides.
-  if (country.slug === 'china' || country.slug === 'malaysia' || country.slug === 'uk' || country.slug === 'hungary') return {};
+  // China, Malaysia, UK, Hungary, and South Korea are permanently redirected to their own flagship guides.
+  if (country.slug === 'china' || country.slug === 'malaysia' || country.slug === 'uk' || country.slug === 'hungary' || country.slug === 'south-korea') return {};
 
   const seo = seoFor(country);
   // Every served country has a real-photo share card in public/og/<slug>.jpg.
@@ -85,6 +85,7 @@ export default async function CountryPage({ params }: Props) {
   if (country.slug === 'malaysia') permanentRedirect('/study-in-malaysia-from-bangladesh');
   if (country.slug === 'uk') permanentRedirect('/study-in-uk-from-bangladesh');
   if (country.slug === 'hungary') permanentRedirect('/study-in-hungary-from-bangladesh');
+  if (country.slug === 'south-korea') permanentRedirect('/study-in-south-korea-from-bangladesh');
 
   const seo = seoFor(country);
   const name = seo.displayName;

@@ -248,7 +248,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     region: 'Asia',
     serviceStatus: 'Active',
     tier: 'Wave 1 Active',
-    href: '/destinations/south-korea',
+    href: '/study-in-south-korea-from-bangladesh',
     currency: 'USD',
     intakes: 'March & September',
     indicativeTuition: 'USD 4,000 – 10,000 / year (public vs private STEM/Business)',
