@@ -156,6 +156,22 @@ export async function PATCH(request: NextRequest) {
         .catch(() => null);
     }
 
+    if (typeof data.name === 'string' || typeof data.empId === 'string' || data.salary !== undefined) {
+      const currentMonth = new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 7);
+      await prisma.payrollRecord.updateMany({
+        where: {
+          OR: [{ employeeId: id }, { empId: existing.empId }],
+          month: currentMonth,
+          status: 'pending',
+        },
+        data: {
+          ...(typeof data.name === 'string' ? { name: data.name } : {}),
+          ...(typeof data.empId === 'string' ? { empId: String(data.empId) } : {}),
+          ...(data.salary !== undefined ? { baseSalary: Number(data.salary), netPay: Number(data.salary) } : {}),
+        },
+      }).catch(() => {});
+    }
+
     return NextResponse.json(
       canSeeFinance ? updated : stripSalary(updated),
       { headers: { 'Cache-Control': 'no-store, private' } },
@@ -206,6 +222,12 @@ export async function DELETE(request: NextRequest) {
       }
     }
 
+    await prisma.payrollRecord.deleteMany({
+      where: {
+        OR: [{ employeeId: id }, { empId: existing.empId }],
+        status: 'pending',
+      },
+    }).catch(() => {});
     await prisma.employee.delete({ where: { id } });
     return NextResponse.json({ deleted: true, id: existing.id, empId: existing.empId }, { headers: { 'Cache-Control': 'no-store, private' } });
   } catch (err) {

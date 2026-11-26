@@ -511,13 +511,26 @@ export async function getOrGenerateMonthlyPayroll(monthInput?: string | null) {
     presentCountByEmpId.set(a.empId, (presentCountByEmpId.get(a.empId) || 0) + 1);
   }
 
+  const activeEmpIds = new Set(activeEmployees.map((e) => e.id));
+  const activeEmpCodes = new Set(activeEmployees.map((e) => e.empId));
+
+  // Fetch all existing records for this month
+  const existingRecords = await prisma.payrollRecord.findMany({
+    where: { month },
+  });
+
   for (const emp of activeEmployees) {
     const daysWorked = presentCountByEmpId.get(emp.empId) || 0;
-    const existing = await prisma.payrollRecord.findUnique({
-      where: { month_empId_name: { month, empId: emp.empId, name: emp.name } },
-      select: { id: true, employeeId: true },
-    });
-    if (!existing) {
+
+    // Find all records that match this employee: by employeeId first, then by empId, then by name
+    const matches = existingRecords.filter(
+      (r) =>
+        r.employeeId === emp.id ||
+        r.empId === emp.empId ||
+        r.name.trim().toLowerCase() === emp.name.trim().toLowerCase(),
+    );
+
+    if (matches.length === 0) {
       await prisma.payrollRecord.create({
         data: {
           month,
@@ -534,19 +547,64 @@ export async function getOrGenerateMonthlyPayroll(monthInput?: string | null) {
         },
       });
     } else {
-      await prisma.payrollRecord.update({
-        where: { id: existing.id },
-        data: {
-          daysWorked,
-          workingDays,
-          ...(existing.employeeId ? {} : { employeeId: emp.id }),
-        },
+      // Sort matches: paid records first, then newest
+      matches.sort((a, b) => {
+        if (a.status === 'paid' && b.status !== 'paid') return -1;
+        if (b.status === 'paid' && a.status !== 'paid') return 1;
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
       });
+
+      const primary = matches[0];
+      const duplicates = matches.slice(1);
+
+      // Clean up duplicate pending records for this employee
+      for (const dup of duplicates) {
+        if (dup.status !== 'paid') {
+          await prisma.payrollRecord.delete({ where: { id: dup.id } }).catch(() => {});
+        }
+      }
+
+      const updateData: Record<string, unknown> = {
+        daysWorked,
+        workingDays,
+        employeeId: emp.id,
+        empId: emp.empId,
+        name: emp.name,
+      };
+
+      if (primary.status === 'pending' && primary.baseSalary === 0 && (emp.salary || 0) > 0) {
+        updateData.baseSalary = emp.salary;
+        updateData.netPay = (emp.salary || 0) + primary.bonus - primary.deductions;
+      }
+
+      await prisma.payrollRecord.update({
+        where: { id: primary.id },
+        data: updateData,
+      }).catch(() => {});
     }
   }
 
+  // Remove stale pending records whose employee is no longer active or was deleted
+  await prisma.payrollRecord.deleteMany({
+    where: {
+      month,
+      status: 'pending',
+      AND: [
+        { employeeId: { notIn: Array.from(activeEmpIds) } },
+        { empId: { notIn: Array.from(activeEmpCodes) } },
+      ],
+    },
+  }).catch(() => {});
+
   const allMonthRows = await prisma.payrollRecord.findMany({
-    where: { month },
+    where: {
+      month,
+      OR: [
+        { employeeId: { in: Array.from(activeEmpIds) } },
+        { empId: { in: Array.from(activeEmpCodes) } },
+        { status: 'paid' },
+      ],
+    },
     orderBy: [{ empId: 'asc' }, { name: 'asc' }],
   });
 

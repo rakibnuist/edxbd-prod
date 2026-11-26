@@ -254,6 +254,7 @@ export default function FinanceWorkspaceClient() {
     Record<string, { baseSalary?: string; bonus?: string; deductions?: string; notes?: string }>
   >({});
   const [payrollBusyId, setPayrollBusyId] = useState<string | null>(null);
+  const [payrollSyncing, setPayrollSyncing] = useState(false);
   const [payslipRecord, setPayslipRecord] = useState<PayrollRecordDto | null>(null);
 
   // Ledger filters, sort, & display density
@@ -333,12 +334,17 @@ export default function FinanceWorkspaceClient() {
 
   const loadPayroll = useCallback(
     async (targetMonth = payrollMonth) => {
-      const res = await authenticatedFetch(
-        `/api/admin/payroll?month=${encodeURIComponent(targetMonth)}`,
-      );
-      if (res.ok) {
-        setPayrollData(await res.json());
-        setPayrollEdits({});
+      setPayrollSyncing(true);
+      try {
+        const res = await authenticatedFetch(
+          `/api/admin/payroll?month=${encodeURIComponent(targetMonth)}`,
+        );
+        if (res.ok) {
+          setPayrollData(await res.json());
+          setPayrollEdits({});
+        }
+      } finally {
+        setPayrollSyncing(false);
       }
     },
     [authenticatedFetch, payrollMonth],
@@ -2663,13 +2669,25 @@ export default function FinanceWorkspaceClient() {
               </div>
 
               <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
-                <div className="border-b border-slate-200 bg-slate-50/70 px-5 py-3.5">
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Payroll Register — {formatMonthLabel(payrollData.month)}
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Marking an employee as Paid automatically synchronizes a Salary disbursement into the Expense Ledger.
-                  </p>
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-slate-50/70 px-5 py-3.5">
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      Payroll Register — {formatMonthLabel(payrollData.month)}
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      Synchronized with active Employee roster. Marking an employee as Paid disburses salary to the Expense Ledger.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={payrollSyncing}
+                    onClick={() => loadPayroll(payrollMonth)}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-xs hover:bg-slate-50 hover:text-slate-900 transition disabled:opacity-50"
+                    title="Re-sync payroll register with active Employee roster and attendance"
+                  >
+                    <RefreshCw size={12} className={payrollSyncing ? 'animate-spin' : ''} />
+                    Sync with Employees
+                  </button>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">

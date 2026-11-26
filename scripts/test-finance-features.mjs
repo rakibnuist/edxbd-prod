@@ -209,3 +209,19 @@ test('Finance & Payroll API routes strictly require verifyLiveAdminUser + canAcc
   const financeUiSrc = fs.readFileSync('src/components/admin/FinanceWorkspaceClient.tsx', 'utf8');
   assert.match(financeUiSrc, /canAccessFinanceRole/);
 });
+
+test('getOrGenerateMonthlyPayroll aligns with active Employee roster and deduplicates stale records', async () => {
+  const { getOrGenerateMonthlyPayroll } = await import('../src/lib/finance-service.ts');
+  const result = await getOrGenerateMonthlyPayroll('2026-11');
+  assert.equal(result.month, '2026-11');
+  assert.ok(Array.isArray(result.rows));
+
+  // No duplicate empIds in the returned rows
+  const empIds = result.rows.map(r => r.empId);
+  const uniqueEmpIds = new Set(empIds);
+  assert.equal(empIds.length, uniqueEmpIds.size, 'Each employee must appear exactly once without duplicates');
+
+  // Verify sorted order
+  const sortedEmpIds = [...empIds].sort();
+  assert.deepEqual(empIds, sortedEmpIds, 'Payroll rows must be ordered by empId');
+});

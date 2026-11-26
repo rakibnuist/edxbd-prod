@@ -4,6 +4,9 @@ import path from 'node:path';
 // Next resolves extensionless local TypeScript imports and @/* aliases.
 // Read-only Node checks use the same source files without changing the bundler config.
 export async function resolve(specifier, context, nextResolve) {
+  if (specifier === 'server-only') {
+    return { url: 'data:text/javascript,export default {}', shortCircuit: true };
+  }
   let target = specifier;
   if (specifier.startsWith('@/')) {
     target = pathToFileURL(path.resolve(process.cwd(), 'src', specifier.slice(2))).href;
