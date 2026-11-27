@@ -21,22 +21,16 @@ if (fs.existsSync(target)) {
     changed = true;
   }
 
-  // 2. Pre-create _ssgManifest.js as soon as buildId is obtained so async NFT tracing never hits ENOENT
-  const buildIdTarget = "_buildcontext.NextBuildContext.buildId = buildId;";
-  const ssgPrecreateCode = `_buildcontext.NextBuildContext.buildId = buildId;
-            try {
-                const _initSsgDir = _path.default.join(distDir, _constants1.CLIENT_STATIC_FILES_PATH, buildId);
-                await _fs.promises.mkdir(_initSsgDir, { recursive: true });
-                await _fs.promises.writeFile(_path.default.join(_initSsgDir, '_ssgManifest.js'), 'self.__SSG_MANIFEST=[];self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()', 'utf8');
-            } catch (_) {}`;
-
-  if (content.includes(buildIdTarget) && !content.includes('_initSsgDir')) {
-    content = content.replace(buildIdTarget, ssgPrecreateCode);
+  // 2. Ensure writeFileUtf8 creates parent directories recursively so _ssgManifest.js and other manifests never throw ENOENT
+  const writeFileTarget = "async function writeFileUtf8(filePath, content) {\n    await _fs.promises.writeFile(filePath, content, 'utf-8');\n}";
+  const writeFileReplacement = "async function writeFileUtf8(filePath, content) {\n    await _fs.promises.mkdir(_path.default.dirname(filePath), { recursive: true });\n    await _fs.promises.writeFile(filePath, content, 'utf-8');\n}";
+  if (content.includes(writeFileTarget)) {
+    content = content.replace(writeFileTarget, writeFileReplacement);
     changed = true;
   }
 
   if (changed) {
     fs.writeFileSync(target, content, 'utf8');
-    console.log('✓ Patched Next.js proxy and SSG manifest race conditions in node_modules/next/dist/build/index.js');
+    console.log('✓ Patched Next.js proxy and writeFileUtf8 mkdir in node_modules/next/dist/build/index.js');
   }
 }
