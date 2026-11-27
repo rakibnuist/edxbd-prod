@@ -29,6 +29,14 @@ if (fs.existsSync(target)) {
     changed = true;
   }
 
+  // 3. Ensure requiredServerFiles copyFile tolerates missing non-critical manifests in standalone packaging
+  const requiredCopyTarget = "await _fs.promises.copyFile(filePath, outputPath);";
+  const requiredCopyReplacement = "await _fs.promises.copyFile(filePath, outputPath).catch((err) => { if (err.code !== 'ENOENT') throw err; });";
+  if (content.includes(requiredCopyTarget)) {
+    content = content.replace(requiredCopyTarget, requiredCopyReplacement);
+    changed = true;
+  }
+
   if (changed) {
     fs.writeFileSync(target, content, 'utf8');
     console.log('✓ Patched Next.js proxy and writeFileUtf8 mkdir in node_modules/next/dist/build/index.js');
