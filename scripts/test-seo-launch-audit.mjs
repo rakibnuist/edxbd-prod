@@ -245,6 +245,16 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.ok(!hungaryCostHtml.includes('Official Planning Baseline'));
 
+  const koreaCostHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'south-korea-study-cost-bangladesh.html'), 'utf8');
+  assert.ok(
+    koreaCostHtml.includes('Planning Assumption') &&
+      koreaCostHtml.includes('Global Korea Scholarship') &&
+      koreaCostHtml.includes('studyinkorea.go.kr') &&
+      koreaCostHtml.includes('overseas.mofa.go.kr'),
+    'south-korea-study-cost-bangladesh must include Planning Assumption, Global Korea Scholarship, and NIIED/MOFA citations',
+  );
+  assert.ok(!koreaCostHtml.includes('Official Planning Baseline'));
+
   const chinaHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-china-from-bangladesh.html'), 'utf8');
   for (const href of [
     '/csc-scholarship-bangladesh',

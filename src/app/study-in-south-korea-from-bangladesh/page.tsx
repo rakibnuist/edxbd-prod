@@ -158,6 +158,9 @@ export default async function StudyInSouthKoreaPage() {
             <Link href={applyHref} className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Start Korea Eligibility Assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="/south-korea-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Korea Study Cost Guide (2027)
+            </Link>
             <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               View 6 Verified Universities
             </a>
@@ -482,6 +485,19 @@ export default async function StudyInSouthKoreaPage() {
           <p className="mt-4 text-[13px] text-emerald-900 font-medium">
             * Note: EduExpress does NOT sell government scholarships. GKS awards are strictly granted by NIIED and the Korean Embassy. We provide authentic profile auditing, SOP &amp; Study Plan mentoring, professor outreach guidance, and consular interview preparation.
           </p>
+        </div>
+
+        {/* Detailed Cost Guide Cross-Link */}
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-3xl border border-petrol-800/15 bg-white p-6 shadow-xs">
+          <div>
+            <h4 className="font-bold text-petrol-800 text-[16px]">Need an itemized, line-by-line financial breakdown for South Korea?</h4>
+            <p className="text-xs text-slate-600 mt-1 max-w-xl">
+              Inspect semester tuition at SNU, KAIST, Yonsei &amp; SKKU, Seoul vs regional living budgets, Korean Embassy approved bank solvency guidelines (USD 20k / USD 16k–18k), and student work earnings.
+            </p>
+          </div>
+          <Link href="/south-korea-study-cost-bangladesh" className="ed-btn ed-btn-signal shrink-0 text-xs px-6 py-3">
+            South Korea Cost Guide (2027) <ArrowRight size={14} aria-hidden="true" />
+          </Link>
         </div>
       </Section>
 
