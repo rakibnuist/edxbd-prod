@@ -57,6 +57,15 @@ if (fs.existsSync(utilsTarget)) {
     utilsChanged = true;
   }
 
+  // 4. Patch next-server.js.nft.json trace loading race condition in writeStandaloneDirectory
+  const nextServerTraceTarget = "await handleTraceFiles(_path.default.join(distDir, 'next-server.js.nft.json'));";
+  const nextServerTraceReplacement = "await handleTraceFiles(_path.default.join(distDir, 'next-server.js.nft.json')).catch(async (err) => { if (err.code === 'ENOENT') { await new Promise((r) => setTimeout(r, 1000)); await handleTraceFiles(_path.default.join(distDir, 'next-server.js.nft.json')).catch((e) => { if (e.code !== 'ENOENT') throw e; }); return; } throw err; });";
+
+  if (utilsContent.includes(nextServerTraceTarget)) {
+    utilsContent = utilsContent.replace(nextServerTraceTarget, nextServerTraceReplacement);
+    utilsChanged = true;
+  }
+
   if (utilsChanged) {
     fs.writeFileSync(utilsTarget, utilsContent, 'utf8');
     console.log('✓ Patched Next.js copyTracedFiles ENOENT tolerance in node_modules/next/dist/build/utils.js');
