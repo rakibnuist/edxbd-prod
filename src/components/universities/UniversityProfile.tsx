@@ -56,7 +56,7 @@ export default async function UniversityProfile({ university }: { university: Cl
   ]);
   const research = researchRows.find(row => row.slug === university.slug);
   const publicDetails = details ? prepareUniversityProfile(details) : undefined;
-  const packages = trust.servicePackages.filter(item => item.destination.toLowerCase() === university.country.toLowerCase());
+  const packages = trust.servicePackages.filter(item => item.destination?.toLowerCase() === university.country?.toLowerCase());
   const legacyAwards: UniversityScholarshipOption[] = university.scholarships.map<UniversityScholarshipOption>((award, index) => ({
     id: `${university.slug}-recorded-${index}`, title: award.title, type: award.type || 'University funding route',
     levels: [], coverage: [award.coverage, award.amount].filter((value): value is string => Boolean(value)),

@@ -71,7 +71,7 @@ export default async function Page() {
   const hours = office?.hours ?? 'Saturday to Thursday, 11:00 AM to 6:00 PM';
   const supportPackage =
     trust?.servicePackages.find(item => item.slug === 'china-complete-support-package') ??
-    trust?.servicePackages.find(item => item.destination.toLowerCase() === 'china');
+    trust?.servicePackages.find(item => item.destination?.toLowerCase() === 'china');
   const whatsappHref = `https://wa.me/${whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(
     'Hello, I would like a study plan for China March 2027 intake.'
   )}`;

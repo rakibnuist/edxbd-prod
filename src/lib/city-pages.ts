@@ -8,7 +8,7 @@ export const citySlug = (city: string) => city.normalize('NFKD').toLowerCase().r
 export function chinaCities(universities: CleanUniversityRecord[]) {
   const byCity = new Map<string, CleanUniversityRecord[]>();
   for (const university of universities) {
-    if (!university.isActive || university.country.toLowerCase() !== 'china' || !university.city.trim()) continue;
+    if (!university.isActive || !university.country || university.country.toLowerCase() !== 'china' || !university.city?.trim()) continue;
     const list = byCity.get(university.city.trim()) || [];
     list.push(university);
     byCity.set(university.city.trim(), list);

@@ -167,7 +167,7 @@ export default async function StudyInChinaFromBangladeshPage() {
 
   const supportPackage =
     trust.servicePackages.find(item => item.slug === 'china-complete-support-package') ??
-    trust.servicePackages.find(item => item.destination.toLowerCase() === 'china');
+    trust.servicePackages.find(item => item.destination?.toLowerCase() === 'china');
   const packagePrice = supportPackage?.priceLabel ?? '2,00,000 BDT';
   const packageItems = supportPackage?.includedItems?.length
     ? supportPackage.includedItems
