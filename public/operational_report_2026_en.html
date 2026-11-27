@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EduExpress International - 2026 Operational & Financial Performance Report</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 8mm 12mm 8mm 12mm;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.35;
+    background: #ffffff;
+    font-size: 9.8px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .header {
+    border-bottom: 2px solid #0f3a5c;
+    padding-bottom: 5px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .brand-title {
+    font-size: 19px;
+    font-weight: 800;
+    color: #0f3a5c;
+    letter-spacing: -0.5px;
+  }
+  .brand-sub {
+    font-size: 9px;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .badge {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    color: #0f3a5c;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+    margin-bottom: 8px;
+  }
+  .kpi-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-top: 3px solid #0f3a5c;
+    border-radius: 5px;
+    padding: 6px 8px;
+  }
+  .kpi-card.green {
+    border-top-color: #0b7a53;
+    background: #f0fdf4;
+  }
+  .kpi-label {
+    font-size: 7.8px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+  }
+  .kpi-value {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #0f3a5c;
+    margin: 2px 0 1px 0;
+  }
+  .kpi-card.green .kpi-value {
+    color: #0b7a53;
+  }
+  .kpi-note {
+    font-size: 7.5px;
+    color: #475569;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: #0f3a5c;
+    border-left: 3px solid #0f3a5c;
+    padding-left: 5px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .card-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    padding: 6px 8px;
+  }
+  ul.bullet-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  ul.bullet-list li {
+    position: relative;
+    padding-left: 12px;
+    margin-bottom: 3.5px;
+    font-size: 8.8px;
+    color: #334155;
+  }
+  ul.bullet-list li::before {
+    content: '▪';
+    position: absolute;
+    left: 2px;
+    color: #0f3a5c;
+    font-size: 11px;
+    top: -1px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.6px;
+    margin-top: 3px;
+  }
+  th, td {
+    padding: 3px 5px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  th {
+    background: #f1f5f9;
+    font-weight: 700;
+    color: #334155;
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+  .highlight-row {
+    background: #f0fdf4;
+    font-weight: 700;
+    color: #0b7a53;
+  }
+  .alert-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 4px 7px;
+    margin-top: 4px;
+    font-size: 8px;
+    color: #334155;
+    line-height: 1.3;
+  }
+  .footer {
+    border-top: 1px solid #cbd5e1;
+    padding-top: 4px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 7.8px;
+    color: #64748b;
+  }
+  .footer-strong {
+    font-weight: 700;
+    color: #0f3a5c;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <div class="brand-title">EduExpress International</div>
+      <div class="brand-sub">2026 Operational & Financial Performance Report (Audited Intake Review)</div>
+    </div>
+    <div class="badge">
+      Fiscal Year 2026 | eduexpressint.com
+    </div>
+  </div>
+
+  <!-- KPI Grid -->
+  <div class="grid-4">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Operating Revenue</div>
+      <div class="kpi-value">৳30,09,321 BDT</div>
+      <div class="kpi-note">Excludes Capital Injections</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Operating Gross Margin</div>
+      <div class="kpi-value">56.7% (৳17.06L)</div>
+      <div class="kpi-note">High Operational Profitability</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Student Conversion & Departures</div>
+      <div class="kpi-value">34 Placed / 18 Flown</div>
+      <div class="kpi-note">354 Processed Inquiries</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Institutional Bank Debt</div>
+      <div class="kpi-value">৳0.00 BDT</div>
+      <div class="kpi-note">100% Equity & Cash Funded</div>
+    </div>
+  </div>
+
+  <!-- Two Columns -->
+  <div class="two-col">
+    <!-- Col 1: P&L Breakdown & Fulfillment Cost -->
+    <div class="card-box">
+      <div class="section-title">1. Audited Revenue & Cost Structure (2026)</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Revenue Category</th>
+            <th style="text-align: right;">Amount (BDT)</th>
+            <th style="text-align: right;">Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Service Charges (Admissions & Packaging)</td>
+            <td style="text-align: right; font-weight: 600;">৳25,23,700</td>
+            <td style="text-align: right;">83.9%</td>
+          </tr>
+          <tr>
+            <td>Application Deposits (Secured Candidates)</td>
+            <td style="text-align: right;">৳2,86,900</td>
+            <td style="text-align: right;">9.5%</td>
+          </tr>
+          <tr>
+            <td>File Opening & Assessment Fees</td>
+            <td style="text-align: right;">৳1,34,000</td>
+            <td style="text-align: right;">4.5%</td>
+          </tr>
+          <tr>
+            <td>Direct App Fee Reimbursements & Other</td>
+            <td style="text-align: right;">৳64,721</td>
+            <td style="text-align: right;">2.1%</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Total Operating Revenue (A)</strong></td>
+            <td style="text-align: right; font-weight: 800;">৳30,09,321</td>
+            <td style="text-align: right;">100.0%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-title" style="margin-top: 5px;">2. Direct Fulfillment & COGS (Direct Student Delivery)</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Fulfillment Item</th>
+            <th style="text-align: right;">Amount (BDT)</th>
+            <th style="text-align: right;">% of Rev</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Student Air Tickets (Group & Individual)</td>
+            <td style="text-align: right;">৳8,44,410</td>
+            <td style="text-align: right;">28.1%</td>
+          </tr>
+          <tr>
+            <td>Direct University Application Fees</td>
+            <td style="text-align: right;">৳2,93,700</td>
+            <td style="text-align: right;">9.8%</td>
+          </tr>
+          <tr>
+            <td>Embassy Visa Processing & Stamping Fees</td>
+            <td style="text-align: right;">৳1,11,300</td>
+            <td style="text-align: right;">3.7%</td>
+          </tr>
+          <tr>
+            <td>Airport Pickup & Student Health Screening</td>
+            <td style="text-align: right;">৳54,178</td>
+            <td style="text-align: right;">1.8%</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Total Fulfillment Cost (B)</strong></td>
+            <td style="text-align: right; font-weight: 800;">৳13,03,588</td>
+            <td style="text-align: right;">43.3%</td>
+          </tr>
+          <tr>
+            <td><strong>Gross Operational Profit (A - B)</strong></td>
+            <td style="text-align: right; font-weight: 800; color: #0b7a53;">৳17,05,733</td>
+            <td style="text-align: right; font-weight: 700;"><strong>56.7%</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-title" style="margin-top: 5px;">3. Operational Overheads & SDE Reconciliation</div>
+      <ul class="bullet-list">
+        <li><strong>Fixed SG&A Overhead:</strong> Office rent (৳1.20L), utility bills & maintenance (৳1.09L), digital ads/marketing (৳2.81L), staff payroll (৳2.05L), and admin/misc (৳4.52L) = <strong>৳11.67 Lakh BDT</strong>.</li>
+        <li><strong>Founders' Withdrawn Stipend (2026):</strong> Rakib (৳1.80L) + Sakib (৳1.40L) = <strong>৳3.20 Lakh BDT</strong>.</li>
+        <li><strong>Seller's Discretionary Earnings (SDE):</strong> Total net discretionary value created for ownership in 2026 reached <strong>৳5.39 Lakh BDT</strong> (normalized 12-month run-rate: <strong>৳9.30 Lakh BDT</strong>).</li>
+      </ul>
+    </div>
+
+    <!-- Col 2: Pipeline, Conversion & Intake Metrics -->
+    <div class="card-box">
+      <div class="section-title">4. CRM Pipeline & Intake Seasonality</div>
+      <p style="font-size: 8.8px; color: #475569; margin-bottom: 4px;">
+        Student admissions are heavily seasonal, delivering strong cash surpluses during intake closing windows:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Intake Window (2026)</th>
+            <th style="text-align: right;">Revenue (BDT)</th>
+            <th style="text-align: right;">Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Spring Intake Window (March–April)</td>
+            <td style="text-align: right;">৳8,74,721</td>
+            <td style="text-align: right;">29.1%</td>
+          </tr>
+          <tr>
+            <td>Summer Pre-booking (May–June)</td>
+            <td style="text-align: right;">৳0 (Pre-inflows)</td>
+            <td style="text-align: right;">0.0%</td>
+          </tr>
+          <tr class="highlight-row">
+            <td>Autumn Intake Peak (July–September)</td>
+            <td style="text-align: right; font-weight: 800;">৳20,14,600</td>
+            <td style="text-align: right; font-weight: 700;">66.9%</td>
+          </tr>
+          <tr>
+            <td>Early File Openings (October)</td>
+            <td style="text-align: right;">৳1,20,000</td>
+            <td style="text-align: right;">4.0%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-title" style="margin-top: 5px;">5. Student Conversion & Cohort Analysis</div>
+      <ul class="bullet-list">
+        <li><strong>Total Registered Inquiries:</strong> 354 leads generated via digital channels and direct referrals.</li>
+        <li><strong>Active & Qualified Admissions:</strong> 34 students successfully admitted into Chinese university programs (NUIST, NJTech, XJTU, HITSZ).</li>
+        <li><strong>Completed Departures (2026):</strong> 18 students fully processed, ticketed, and flown to campus for Autumn 2026. Remaining enrolled cohorts rolling into Spring 2027.</li>
+        <li><strong>Average Deal Size:</strong> <strong>৳78,865 – ৳1,18,000 BDT</strong> per successful student packaging.</li>
+        <li><strong>Customer Acquisition Cost (CAC):</strong> <strong>~৳11,200 BDT</strong> per enrolled student (lean ad spend enabled by strong organic search rankings).</li>
+      </ul>
+
+      <div class="section-title" style="margin-top: 5px;">6. Asset Registry & Balance Sheet Strength</div>
+      <ul class="bullet-list">
+        <li><strong>Bank / Cash Surplus:</strong> <strong>৳5,84,239 BDT</strong> unencumbered cash on hand.</li>
+        <li><strong>Physical Workstations & Devices:</strong> 5 configured laptops, 4 official smartphones, and a fully furnished office setup in Dhanmondi, Dhaka.</li>
+        <li><strong>Digital IP:</strong> High-authority web application (), direct university admissions channels, and verified Google Business Profile authority.</li>
+      </ul>
+
+      <div class="alert-box">
+        <strong>Audited Conclusion:</strong> In 2026, EduExpress proved its operational model—delivering over ৳30.0 Lakh in revenue and a 56.7% gross margin on a lean ৳12.3 Lakh capital base with zero debt.
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div>
+      <span class="footer-strong">Certified Leadership:</span> Abdullah Al Rakib (CEO) & Sakib Al Jubaer (Managing Director)
+    </div>
+    <div>
+      <span class="footer-strong">Corporate Office:</span> Dhanmondi, Dhaka | +880 1410-585926 | admin@eduexpressint.com
+    </div>
+  </div>
+
+</body>
+</html>
