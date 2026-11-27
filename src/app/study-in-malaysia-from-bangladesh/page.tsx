@@ -651,10 +651,32 @@ export default async function StudyInMalaysiaPage() {
           ))}
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-8 rounded-3xl border border-rule bg-white p-6 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                Official Regulatory Roadmap · 2027 Intake
+              </span>
+              <h3 className="text-base font-bold text-petrol-800">
+                Deep Dive: EMGS eVAL Tracking, High Commission (Dhaka) Checklist & i-KAD
+              </h3>
+              <p className="mt-1 text-xs text-slate-600">
+                Access percentage milestone breakdown (0% to 100%), required certificate attestations (Board & MoFA), Section 15 airport border escort protocols, and BDT 0 service terms.
+              </p>
+            </div>
+            <Link
+              href="/malaysia-student-visa-bangladesh"
+              className="ed-btn ed-btn-signal min-h-[48px] px-6 text-xs font-bold whitespace-nowrap shrink-0"
+            >
+              Read Visa & eVAL Guide <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+
+        <div className="mt-6 text-center">
           <Link
             href="/malaysia-student-visa-bangladesh"
-            className="ed-btn ed-btn-signal min-h-[48px] px-8 text-sm"
+            className="ed-btn ed-btn-outline min-h-[48px] px-8 text-sm"
           >
             View Complete Malaysia Student Visa Guide <ArrowRight size={16} />
           </Link>

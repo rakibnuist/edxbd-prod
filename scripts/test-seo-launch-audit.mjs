@@ -278,6 +278,18 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.ok(!cyprusCostHtml.includes('Official Planning Baseline'));
 
+  const malaysiaVisaHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'malaysia-student-visa-bangladesh.html'), 'utf8');
+  assert.ok(
+    malaysiaVisaHtml.includes('Planning Assumption') &&
+      malaysiaVisaHtml.includes('Education Malaysia Global Services') &&
+      malaysiaVisaHtml.includes('Jabatan Imigresen Malaysia') &&
+      malaysiaVisaHtml.includes('Single Entry Visa') &&
+      malaysiaVisaHtml.includes('i-KAD') &&
+      malaysiaVisaHtml.includes('educationmalaysia.gov.my'),
+    'malaysia-student-visa-bangladesh must include Planning Assumption, EMGS, JIM, Single Entry Visa, i-KAD, and official citations',
+  );
+  assert.ok(!malaysiaVisaHtml.includes('Official Planning Baseline'));
+
   const chinaHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-china-from-bangladesh.html'), 'utf8');
   for (const href of [
     '/csc-scholarship-bangladesh',
