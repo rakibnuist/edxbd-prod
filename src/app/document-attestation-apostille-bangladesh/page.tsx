@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import AttestationWorkflowBuilder from '@/components/calculators/AttestationWorkflowBuilder';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
 
@@ -142,6 +143,16 @@ export default function DocumentAttestationApostilleBangladeshPage() {
       />
 
       <TrustBar />
+
+      {/* Interactive Attestation & e-Apostille Workflow Builder */}
+      <Section
+        id="attestation-workflow-builder"
+        tone="sage"
+        title="Build your custom Dhaka document attestation &amp; e-Apostille checklist."
+        intro="Choose your target study destination and your Bangladeshi academic qualification (Education Board SSC/HSC, O/A-Levels, Bachelor’s degree, or BTEB Diploma) to generate your sequential legalization roadmap and timeline."
+      >
+        <AttestationWorkflowBuilder />
+      </Section>
 
       {/* Module 1: 12-Country Attestation & Translation Requirements Matrix */}
       <Section

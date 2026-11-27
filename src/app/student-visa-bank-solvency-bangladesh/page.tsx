@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import VisaSolvencyCalculator from '@/components/calculators/VisaSolvencyCalculator';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
 
@@ -149,6 +150,16 @@ export default async function StudentVisaBankSolvencyPage() {
       />
 
       <TrustBar />
+
+      {/* Interactive Calculator Module */}
+      <Section
+        id="solvency-calculator"
+        tone="sage"
+        title="Calculate your exact student visa bank balance &amp; maturity requirement."
+        intro="Select your target destination, scholarship status, and unpaid first-year tuition to inspect your statutory bank closing balance in foreign currency and BDT, permitted account holder rules, and Bangladesh Bank Student File steps."
+      >
+        <VisaSolvencyCalculator />
+      </Section>
 
       {/* Module 1: 12-Country Bank Solvency & Sponsor Comparison Table */}
       <Section

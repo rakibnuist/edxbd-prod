@@ -1,5 +1,7 @@
 import 'server-only';
 /* eslint-disable @typescript-eslint/no-explicit-any -- Legacy database fields are normalized into CleanUniversityRecord here. */
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { cache } from 'react';
 import prisma from '@/lib/prisma';
 import { toSafeExternalUrl, toSafeExternalUrlList, toSafeSitePathOrUrl } from './safe-url';
@@ -214,7 +216,15 @@ function mapPrismaToClean(record: any): CleanUniversityRecord {
     },
     notes: parseJson(record.notes, []),
     badges: parseJson(record.badges, []),
-    logo: toSafeSitePathOrUrl(record.logo) ?? undefined,
+    logo: (() => {
+      const raw = toSafeSitePathOrUrl(record.logo) ?? undefined;
+      if (!raw) return undefined;
+      if (raw.startsWith('/')) {
+        const filePath = path.join(process.cwd(), 'public', raw.split('?')[0]);
+        return existsSync(filePath) ? raw : undefined;
+      }
+      return raw;
+    })(),
     isActive: record.isActive,
     officialUrl: toSafeExternalUrl(record.officialUrl) ?? undefined,
     relationshipType: record.relationshipType as any,

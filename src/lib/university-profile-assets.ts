@@ -6,5 +6,16 @@ import path from 'node:path';
 export function universityProfileLogo(university: { slug: string; logo?: string }) {
   const url = `/images/universities/logos/${university.slug}.webp`;
   const file = path.join(process.cwd(), 'public', url);
-  return existsSync(file) ? `${url}?v=${Math.trunc(statSync(file).mtimeMs).toString(36)}` : university.logo;
+  if (existsSync(file)) {
+    return `${url}?v=${Math.trunc(statSync(file).mtimeMs).toString(36)}`;
+  }
+  if (university.logo) {
+    if (university.logo.startsWith('/')) {
+      const explicitFile = path.join(process.cwd(), 'public', university.logo.split('?')[0]);
+      if (existsSync(explicitFile)) return university.logo;
+      return undefined;
+    }
+    return university.logo;
+  }
+  return undefined;
 }

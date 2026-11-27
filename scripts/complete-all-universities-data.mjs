@@ -869,7 +869,10 @@ async function main() {
     const allLangs = [...new Set(dbPrograms.flatMap((p) => parseCsv(p.languages)))];
     const allIntakes = [...new Set(dbPrograms.flatMap((p) => parseCsv(p.intakes)))];
     const allMajors = [...new Set(dbPrograms.map((p) => p.name))];
-    const logoPath = `/images/universities/logos/${u.slug}.webp`;
+    const candidateLogo = `/images/universities/logos/${u.slug}.webp`;
+    const resolvedLogo = fs.existsSync(path.join(rootDir, 'public', candidateLogo))
+      ? candidateLogo
+      : (u.logo && fs.existsSync(path.join(rootDir, 'public', u.logo.split('?')[0])) ? u.logo : null);
 
     const verifiedSources = [
       ...new Set(
@@ -902,7 +905,7 @@ async function main() {
     await prisma.university.update({
       where: { id: u.id },
       data: {
-        logo: logoPath,
+        logo: resolvedLogo,
         tuition: cleanUniTuition,
         location: u.location || `${u.city}, ${u.country}`,
         intake: allIntakes.join(', ') || u.intake || (isMalaysia ? 'February, July, September' : 'September'),

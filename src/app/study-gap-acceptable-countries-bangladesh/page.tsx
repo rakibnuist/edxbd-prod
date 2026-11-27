@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import StudyGapEligibilityMatcher from '@/components/calculators/StudyGapEligibilityMatcher';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
 
@@ -184,6 +185,16 @@ export default async function StudyGapAcceptableCountriesPage() {
           </div>
         </div>
       </section>
+
+      {/* Interactive Study Gap & Age Limit Matcher */}
+      <Section
+        id="study-gap-matcher"
+        tone="sage"
+        title="Test your study gap &amp; age across all 12 destinations."
+        intro="Adjust your target degree level, years since last graduation, current age, and available gap proof to filter destinations into High-Fit, Conditional, and Age-Capped tracks."
+      >
+        <StudyGapEligibilityMatcher />
+      </Section>
 
       {/* Module 1: 12-Country Study Gap & Age Limit Comparison Table */}
       <Section

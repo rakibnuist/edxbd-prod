@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import MoiVisaMatcher from '@/components/calculators/MoiVisaMatcher';
 import { citationJsonLd, primaryImageOfPageSchema } from '@/lib/json-ld';
 import { pageMetadata } from '@/lib/seo';
 
@@ -143,6 +144,16 @@ export default async function StudyAbroadWithoutIeltsPage() {
       />
 
       <TrustBar />
+
+      {/* Interactive MOI vs Embassy Visa Matcher */}
+      <Section
+        id="moi-visa-matcher"
+        tone="sage"
+        title="Test your MOI or alternative English proof across all 12 destinations."
+        intro="Select your target degree level and current English evidence to separate destinations where MOI is accepted at both the university and visa counter from those requiring an online entrance exam or PTE/IELTS."
+      >
+        <MoiVisaMatcher />
+      </Section>
 
       {/* Module 1: 12-Country MOI & No-IELTS Visa Matrix */}
       <Section

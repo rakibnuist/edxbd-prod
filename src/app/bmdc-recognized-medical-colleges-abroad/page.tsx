@@ -15,6 +15,7 @@ import {
   Stethoscope,
 } from 'lucide-react';
 import EducationFitAssessment from '@/components/assessment/EducationFitAssessment';
+import BmdcEligibilityChecker from '@/components/calculators/BmdcEligibilityChecker';
 import CscaMasterProOfferCard from '@/components/china/CscaMasterProOfferCard';
 import { FaqBlock, JsonLd, PageHero, Section, TrustBar, kit } from '@/components/page/PageKit';
 import { MoeMbbsDirectoryExplorer } from '@/components/pathways/MbbsComparisonWorkbench';
@@ -227,6 +228,16 @@ export default function BmdcRecognizedMedicalCollegesAbroadPage() {
           </div>
         </div>
       </section>
+
+      {/* Interactive BMDC Pre-Departure Eligibility Checker */}
+      <Section
+        id="bmdc-eligibility-checker"
+        tone="sage"
+        title="Check your BMDC Foreign Medical Eligibility Certificate readiness."
+        intro="Enter your SSC and HSC Science GPAs, HSC Biology grade point, and passing year to test whether you qualify for a pre-departure BMDC Eligibility Certificate and the 45 Chinese MOE medical universities."
+      >
+        <BmdcEligibilityChecker />
+      </Section>
 
       {/* Module 1: 4-Country Medical Study Comparison (China vs Georgia vs Croatia vs BD Private) */}
       <Section
