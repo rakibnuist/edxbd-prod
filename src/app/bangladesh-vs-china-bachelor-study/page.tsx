@@ -412,6 +412,7 @@ export default async function BangladeshVsChinaBachelorPage() {
           { label: 'Computer Science & AI in China Guide', href: '/updates/study-cs-ai-in-china-bangladesh' },
           { label: 'Business, Finance & Economics in China Guide', href: '/updates/study-business-finance-in-china-bangladesh' },
           { label: 'Polytechnic Diploma to Bachelor Transfer Guide', href: '/updates/china-diploma-to-bachelor-transfer-bangladesh' },
+          { label: 'Engineering, Automation & Robotics in China Guide', href: '/updates/study-engineering-in-china-bangladesh' },
           { label: 'Study in Bangladesh vs. Abroad (All Destinations)', href: '/bangladesh-vs-study-abroad-countries' },
           { label: 'China vs. UK, USA, Australia & Dhaka Hub', href: '/compare-bachelor-china-abroad-bangladesh' },
           { label: 'Bangladesh–China Study Data Report', href: '/china-study-report-bangladesh' },

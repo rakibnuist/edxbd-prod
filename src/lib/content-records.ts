@@ -35,6 +35,7 @@ import { CHINA_CS_AI_ADMISSION_2027_SLUG, CHINA_CS_AI_ADMISSION_2027_DATA } from
 import { CHINA_MARCH_2027_LANGUAGE_GUIDE_SLUG, CHINA_MARCH_2027_LANGUAGE_DATA } from '@/data/chinaMarch2027LanguageFoundationGuide';
 import { CHINA_BUSINESS_FINANCE_2027_SLUG, CHINA_BUSINESS_FINANCE_2027_DATA } from '@/data/chinaBusinessFinanceAdmissionGuide2027';
 import { CHINA_DIPLOMA_TO_BACHELOR_2027_SLUG, CHINA_DIPLOMA_TO_BACHELOR_2027_DATA } from '@/data/chinaDiplomaToBachelorTransferGuide2027';
+import { CHINA_ENGINEERING_ROBOTICS_2027_SLUG, CHINA_ENGINEERING_ROBOTICS_2027_DATA } from '@/data/chinaEngineeringRoboticsAdmissionGuide2027';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -220,6 +221,10 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   }
   if (!serialized.some(u => u.slug === CHINA_DIPLOMA_TO_BACHELOR_2027_SLUG)) {
     const fallback = serializeUpdate(CHINA_DIPLOMA_TO_BACHELOR_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  if (!serialized.some(u => u.slug === CHINA_ENGINEERING_ROBOTICS_2027_SLUG)) {
+    const fallback = serializeUpdate(CHINA_ENGINEERING_ROBOTICS_2027_DATA);
     if (fallback) serialized.unshift(fallback);
   }
   // Fallbacks are unshifted above; re-sort so the newest posts (DB or fallback) lead the feed.
@@ -500,6 +505,15 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
       publishedAt: CHINA_DIPLOMA_TO_BACHELOR_2027_DATA.publishedAt,
       category: CHINA_DIPLOMA_TO_BACHELOR_2027_DATA.category,
       categories: CHINA_DIPLOMA_TO_BACHELOR_2027_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === CHINA_ENGINEERING_ROBOTICS_2027_SLUG)) {
+    updates.unshift({
+      slug: CHINA_ENGINEERING_ROBOTICS_2027_DATA.slug,
+      updatedAt: CHINA_ENGINEERING_ROBOTICS_2027_DATA.updatedAt,
+      publishedAt: CHINA_ENGINEERING_ROBOTICS_2027_DATA.publishedAt,
+      category: CHINA_ENGINEERING_ROBOTICS_2027_DATA.category,
+      categories: CHINA_ENGINEERING_ROBOTICS_2027_DATA.categories,
     });
   }
   const categorySlugs = Array.from(

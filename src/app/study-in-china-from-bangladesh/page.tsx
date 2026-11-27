@@ -792,6 +792,9 @@ export default async function StudyInChinaFromBangladeshPage() {
               <Link href="/updates/china-diploma-to-bachelor-transfer-bangladesh" className={kit.link}>
                 Polytechnic Diploma Transfer <ArrowRight size={15} aria-hidden="true" />
               </Link>
+              <Link href="/updates/study-engineering-in-china-bangladesh" className={kit.link}>
+                Engineering &amp; Robotics Guide <ArrowRight size={15} aria-hidden="true" />
+              </Link>
               <Link href="/study-in-china-without-ielts" className={kit.link}>
                 English &amp; MOI options <ArrowRight size={15} aria-hidden="true" />
               </Link>
