@@ -77,7 +77,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in Thailand from Bangladesh 2027 | EduExpress',
     description:
-      'Complete cost breakdown for studying in Thailand from Bangladesh: Bangkok public university tuition (THB 110k–350k/yr), Non-Immigrant ED visa proof, living costs, and AIT/Chula fellowships.',
+      'Thailand study cost breakdown for Bangladeshi students: university tuition (THB 110k–350k/yr), ED visa financial proof, living costs, and fellowships.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('thailand', 'Cost of Studying in Thailand from Bangladesh — EduExpress International'),

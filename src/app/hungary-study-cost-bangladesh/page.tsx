@@ -70,7 +70,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in Hungary from Bangladesh 2027 | EduExpress',
     description:
-      'Complete cost breakdown for studying in Hungary from Bangladesh: Stipendium Hungaricum vs Self-Funded tuition, EUR & HUF living budgets, NDGAP solvency, and student work earnings.',
+      'Hungary study cost breakdown for Bangladeshi students: Stipendium Hungaricum vs self-funded tuition, living budgets in Budapest, and NDGAP visa solvency.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('hungary', 'Cost of Studying in Hungary from Bangladesh — EduExpress International'),

@@ -322,6 +322,7 @@ export default async function StudyInChinaFromBangladeshPage() {
                           width={116}
                           height={48}
                           sizes="116px"
+                          unoptimized
                           loading="lazy"
                           decoding="async"
                           className="max-h-11 w-auto max-w-[116px] object-contain"
@@ -1012,6 +1013,7 @@ export default async function StudyInChinaFromBangladeshPage() {
                     alt={`${university.name} logo`}
                     width={56}
                     height={56}
+                    unoptimized
                     className="size-14 rounded-2xl border border-slate-200/80 bg-white object-contain p-1.5"
                   />
                   <div>

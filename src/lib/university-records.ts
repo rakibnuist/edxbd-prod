@@ -214,7 +214,7 @@ function mapPrismaToClean(record: any): CleanUniversityRecord {
     },
     notes: parseJson(record.notes, []),
     badges: parseJson(record.badges, []),
-    logo: toSafeSitePathOrUrl(record.logo) ?? undefined,
+    logo: toSafeSitePathOrUrl(record.logo) ?? `/images/universities/logos/${record.slug}.webp`,
     isActive: record.isActive,
     officialUrl: toSafeExternalUrl(record.officialUrl) ?? undefined,
     relationshipType: record.relationshipType as any,

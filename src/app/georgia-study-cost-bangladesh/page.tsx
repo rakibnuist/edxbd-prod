@@ -80,7 +80,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in Georgia from Bangladesh 2027 | EduExpress',
     description:
-      'Complete cost breakdown for studying in Georgia from Bangladesh: English MD/MBBS tuition ($5,300–$8,000/yr), D3 Visa bank solvency ($3,500–$5,000), Tbilisi living costs, and BMDC licensing rules.',
+      'Georgia study cost breakdown for Bangladeshi students: English MD tuition ($5,300–$8,000/yr), D3 visa bank solvency, Tbilisi costs, and BMDC rules.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('georgia', 'Cost of Studying in Georgia from Bangladesh — EduExpress International'),

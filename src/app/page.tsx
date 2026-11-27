@@ -478,6 +478,7 @@ export default async function Home() {
                           width={116}
                           height={48}
                           sizes="116px"
+                          unoptimized
                           loading="lazy"
                           decoding="async"
                           className="max-h-11 w-auto max-w-[116px] object-contain"

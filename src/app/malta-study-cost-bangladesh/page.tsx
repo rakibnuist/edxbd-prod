@@ -71,7 +71,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in Malta from Bangladesh 2027 | EduExpress',
     description:
-      'Complete cost breakdown for studying in Malta from Bangladesh: university tuition (EUR 6,000–14,000/yr), Identità bank solvency, monthly living expenses, and Jobsplus work rights.',
+      'Malta study cost breakdown for Bangladeshi students: university tuition (€6,000–€14,000/yr), Identità bank solvency, living expenses, and Jobsplus work.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('malta', 'Cost of Studying in Malta from Bangladesh — EduExpress International'),

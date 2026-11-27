@@ -71,7 +71,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in Cyprus from Bangladesh 2027 | EduExpress',
     description:
-      'Complete cost breakdown for studying in the Republic of Cyprus (EU) from Bangladesh: university tuition (EUR 3,500–10,000/yr), CRMD bank solvency, living expenses, and 20 hrs/week work rights.',
+      'Cyprus study cost breakdown for Bangladeshi students: university tuition (€3,500–€10,000/yr), CRMD bank solvency, living costs, and 20 hrs/week work rights.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('cyprus', 'Cost of Studying in Cyprus from Bangladesh — EduExpress International'),

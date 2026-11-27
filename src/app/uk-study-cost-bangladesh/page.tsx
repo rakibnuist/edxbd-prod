@@ -64,7 +64,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in the UK from Bangladesh 2027 | EduExpress',
     description:
-      'Complete UK study cost breakdown for Bangladeshi students: tuition in GBP and BDT, UKVI maintenance (£1,483/mo London vs £1,136 outside), CAS deposit, IHS, and bank Student File guide.',
+      'UK study cost breakdown for Bangladeshi students: tuition in GBP & BDT, UKVI maintenance (£1,483/mo London vs £1,136), CAS deposit, IHS, and bank file.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('uk', 'Cost of Studying in the UK from Bangladesh — EduExpress International'),

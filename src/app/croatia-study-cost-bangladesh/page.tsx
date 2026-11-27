@@ -77,7 +77,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in Croatia from Bangladesh 2027 | EduExpress',
     description:
-      'Complete cost breakdown for studying in Croatia from Bangladesh: English MD tuition (€12,000/yr), Business/STEM (€3,500–€5,500/yr), Type D visa bank solvency, Zagreb vs Split living budgets, and Schengen mobility.',
+      'Croatia study cost breakdown for Bangladeshi students: English MD (€12,000/yr) & STEM tuition, Type D visa bank solvency, and living expenses in Zagreb.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('croatia', 'Cost of Studying in Croatia from Bangladesh — EduExpress International'),

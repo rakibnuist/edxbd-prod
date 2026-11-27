@@ -29,6 +29,7 @@ import { WECHAT_BATCH3_25_GUIDES_DATA } from '@/data/newWechatBatch3Guides2027';
 import { WECHAT_BATCH4_9_GUIDES_DATA } from '@/data/newWechatBatch4Guides2027';
 import { WECHAT_BATCH5_7_GUIDES_DATA } from '@/data/newWechatBatch5Guides2027';
 import { WECHAT_BATCH6_5_GUIDES_DATA } from '@/data/newWechatBatch6Guides2027';
+import { WECHAT_BATCH7_3_GUIDES_DATA } from '@/data/newWechatBatch7Guides2027';
 import { SHENYANG_CITY_UNIVERSITY_GUIDE_DATA } from '@/data/shenyangCityUniversityGuide2027';
 import { TOP_MS_CS_AI_2027_SLUG, TOP_MS_CS_AI_2027_DATA } from '@/data/topMsCsAiChina2027Guide';
 import { OPEN_UNIVERSITIES_2027_SLUG, OPEN_UNIVERSITIES_2027_DATA } from '@/data/chinaUniversitiesOpen2027Guide';
@@ -227,6 +228,9 @@ const getUpdate = cache(async (slug: string) => {
   }
   if (WECHAT_BATCH6_5_GUIDES_DATA[slug]) {
     return WECHAT_BATCH6_5_GUIDES_DATA[slug];
+  }
+  if (WECHAT_BATCH7_3_GUIDES_DATA[slug]) {
+    return WECHAT_BATCH7_3_GUIDES_DATA[slug];
   }
   if (slug === SHENYANG_CITY_UNIVERSITY_GUIDE_DATA.slug) {
     return SHENYANG_CITY_UNIVERSITY_GUIDE_DATA;

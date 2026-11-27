@@ -26,11 +26,6 @@ export default function robots(): MetadataRoute.Robots {
     ],
     sitemap: [
       'https://eduexpressint.com/sitemap.xml',
-      'https://eduexpressint.com/sitemaps/pages.xml',
-      'https://eduexpressint.com/sitemaps/countries.xml',
-      'https://eduexpressint.com/sitemaps/guides.xml',
-      'https://eduexpressint.com/sitemaps/universities.xml',
-      'https://eduexpressint.com/sitemaps/success-stories.xml',
     ],
   };
 }

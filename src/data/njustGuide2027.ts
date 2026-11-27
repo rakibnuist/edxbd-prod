@@ -7,6 +7,7 @@ export const NJUST_2027_SOURCES = [
   'https://www.csca.cn/',
   'https://mp.weixin.qq.com/s/QPiDsTTFgaHSEjgH3U4gug',
   'https://mp.weixin.qq.com/s/lDKxcSGHtDJDgMjB_zy8SA',
+  'https://mp.weixin.qq.com/s/c8toMgVqnE6OxQM5Azk5sw',
 ];
 
 export const NJUST_2027_DATA = {

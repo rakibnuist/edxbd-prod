@@ -74,7 +74,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in Greece from Bangladesh 2027 | EduExpress',
     description:
-      'Complete cost breakdown for studying in Greece from Bangladesh: public university tuition (€1,000–€3,500/yr), National Type-D visa bank solvency, Athens vs Thessaloniki living budgets, and 20 hrs/wk work rights.',
+      'Greece study cost breakdown for Bangladeshi students: university tuition (€1,000–€3,500/yr), Type-D visa bank solvency, Athens budget, and student work.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('greece', 'Cost of Studying in Greece from Bangladesh — EduExpress International'),
@@ -126,7 +126,7 @@ export default async function GreeceStudyCostPage() {
         dateModified: '2026-11-27',
         name: 'Cost of Studying in Greece from Bangladesh 2027: Tuition, Solvency & Living | EduExpress',
         description:
-          'Complete cost breakdown for studying in Greece from Bangladesh: public university tuition (€1,000–€3,500/yr), National Type-D visa bank solvency, Athens vs Thessaloniki living budgets, and 20 hrs/wk work rights.',
+          'Greece study cost breakdown for Bangladeshi students: university tuition (€1,000–€3,500/yr), Type-D visa bank solvency, Athens budget, and student work.',
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },

@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ChevronDown, MapPin, Search } from 'lucide-react';
+import { ArrowRight, ChevronDown, GraduationCap, MapPin, Search } from 'lucide-react';
 import type { ChinaMbbsGuide } from '@/lib/china-mbbs-guide';
 import { mbbsApplyHref } from '@/lib/mbbs-enquiry';
 
@@ -33,7 +33,7 @@ export default function MbbsUniversityFinder({ universities }: { universities: U
     <p role="status" aria-live="polite" className="my-5 text-[15px] text-ink-soft">{filtered.length} university {filtered.length === 1 ? 'option' : 'options'} · English-taught MBBS · Tuition before scholarship</p>
     <div className="grid items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
       {filtered.map(item => <article key={item.id} id={`mbbs-${item.id}`} className="scroll-mt-32 overflow-hidden rounded-3xl border border-canvas-soft bg-white">
-        <div className="p-6"><div className="flex min-h-[60px] items-start gap-3">{item.logo && <Image src={item.logo} alt={`${item.name} logo`} width={56} height={56} className="size-14 shrink-0 rounded-2xl border border-canvas-soft bg-white object-contain p-1.5"/>}<div><h3 className="text-[18px] font-semibold leading-6 text-petrol-800">{item.name}</h3><p className="mt-1 inline-flex items-center gap-1 text-[14px] text-ink-soft"><MapPin size={14} aria-hidden="true"/>{item.city}, China</p></div></div>
+        <div className="p-6"><div className="flex min-h-[60px] items-start gap-3"><div className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-2xl border border-canvas-soft bg-white p-1.5 shadow-sm">{item.logo ? <Image src={item.logo} alt={`${item.name} logo`} width={56} height={56} unoptimized className="size-full object-contain" /> : <GraduationCap size={28} className="text-petrol-800" aria-hidden="true" />}</div><div><h3 className="text-[18px] font-semibold leading-6 text-petrol-800">{item.name}</h3><p className="mt-1 inline-flex items-center gap-1 text-[14px] text-ink-soft"><MapPin size={14} aria-hidden="true"/>{item.city}, China</p></div></div>
           <p className={`mt-4 min-h-11 rounded-2xl px-3.5 py-2.5 text-[14px] font-semibold leading-5 ${item.funding ? 'bg-lime-pale text-lime-deep' : 'bg-canvas-soft text-petrol-800'}`}>{item.highlight}</p>
           <dl className="mt-5"><dt className="text-[14px] text-ink-soft">Annual tuition</dt><dd className="mt-1 font-display text-[30px] font-black leading-none tracking-[-0.01em] text-petrol-800">CNY {money(item.tuition)}<span className="ml-1 font-sans text-[14px] font-normal tracking-normal text-ink-soft">/year</span></dd></dl>
           <p className="mt-2 text-[14px] text-ink-soft">{item.duration} · {item.medium} · Clinical Medicine</p>

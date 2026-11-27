@@ -2,37 +2,15 @@ import Link from 'next/link';
 import {
   AlertTriangle,
   ArrowRight,
-  BadgeCheck,
-  Banknote,
-  Briefcase,
-  Building,
   Building2,
-  Calendar,
   CheckCircle2,
-  Clock,
-  CreditCard,
   ExternalLink,
-  FileCheck,
   FileCheck2,
-  FileSearch,
-  FileText,
   Globe,
-  GraduationCap,
-  HelpCircle,
-  Hospital,
   IdCard,
-  Info,
   Landmark,
-  MapPin,
-  Plane,
-  Receipt,
-  Scale,
   ShieldAlert,
   ShieldCheck,
-  Sparkles,
-  Stethoscope,
-  UserCheck,
-  Users,
   Wallet,
 } from 'lucide-react';
 import prisma from '@/lib/prisma';
@@ -48,34 +26,29 @@ export const revalidate = 3600;
 
 const KOREA_VISA_SOURCES = [
   {
-    label: 'Embassy of the Republic of Korea in Dhaka, Bangladesh — Consular & Visa Section',
+    label: 'Embassy of the Republic of Korea in Dhaka — Consular & D-2/D-4 Student Visa Guidelines',
     href: 'https://overseas.mofa.go.kr/bd-en/index.do',
-    note: 'Diplomatic mission in Baridhara Diplomatic Zone, Dhaka responsible for D-2 and D-4 visa issuance, consular document legalization, and designated TB hospital accreditations.',
-  },
-  {
-    label: 'Korea Visa Portal — Ministry of Justice, Republic of Korea',
-    href: 'https://www.visa.go.kr/',
-    note: 'Statutory government portal for visa status tracking, Visa Issuance Confirmation (VIC) verification, and official e-Form applications.',
+    note: 'Statutory consular mission in Baridhara Diplomatic Enclave, Dhaka governing D-2/D-4 visa checklists, TB screening hospitals, and the 14 designated commercial banks for solvency certificates.',
   },
   {
     label: 'HiKorea (Korea Immigration Service — Ministry of Justice)',
     href: 'https://www.hikorea.go.kr/',
-    note: 'Official e-Government portal for foreign residents: Alien Registration Card (ARC) appointments, S-3 part-time work authorization, and D-10 job seeker extensions.',
+    note: 'Official Korean Immigration portal for e-Visa verification, Alien Registration Card (ARC) biometrics within 90 days, S-3 part-time work permits, and D-10 Job Seeker visas.',
   },
   {
     label: 'Study in Korea (National Institute for International Education — NIIED)',
     href: 'https://www.studyinkorea.go.kr/',
-    note: 'Statutory body under the Ministry of Education overseeing IEQAS university certifications, Global Korea Scholarship (GKS) visas, and standard Certificate of Admission benchmarks.',
+    note: 'Korean Ministry of Education portal administering Global Korea Scholarship (GKS) visa invitations, IEQAS-certified university status, and TOPIK verification.',
   },
   {
-    label: 'International Organization for Migration (IOM) — Migration Health Assessment Clinic, Dhaka',
-    href: 'https://bangladesh.iom.int/',
-    note: 'Korean Embassy designated medical screening clinic in Gulshan-2, Dhaka conducting mandatory Tuberculosis (TB) testing for long-term visa applicants.',
+    label: 'Republic of Korea Visa Portal (e-Visa & Certificate of Visa Issuance Confirmation)',
+    href: 'https://www.visa.go.kr/',
+    note: 'Official Ministry of Justice system for downloading the Visa Grant Notice and tracking Visa Issuance Numbers (VIN).',
   },
   {
-    label: 'Bangladesh Bank — Foreign Exchange Policy (Student File Guidelines)',
+    label: 'Bangladesh Bank — Foreign Exchange Policy (Student File SWIFT Transfers)',
     href: 'https://www.bb.org.bd/en/index.php/fepd/fepdguideline',
-    note: 'Authorized Dealer bank regulations governing legal outward foreign exchange remittances via SWIFT (Form TM) for tuition fees and international living allowances under FE Circulars.',
+    note: 'Authorized Dealer bank regulations for opening a Student File and remitting semester tuition to Korean universities before Certificate of Admission (CoA) issuance.',
   },
 ];
 
@@ -83,62 +56,65 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'South Korea Student Visa from Bangladesh 2027 | EduExpress',
     description:
-      'Complete South Korea student visa guide for Bangladeshi students: D-2 vs D-4 visa rules, Dhaka Embassy submission, $10k–$20k bank solvency, TB test & ARC card.',
+      'South Korea D-2 & D-4 student visa guide for Bangladeshi students: Dhaka Korean Embassy rules, 14 approved banks ($16k–$20k solvency), CoA, and ARC.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('south-korea', 'South Korea Student Visa from Bangladesh — EduExpress International'),
   });
 }
 
-const faqs = [
+const KOREA_VISA_FAQS = [
   {
-    question: 'What is the difference between a D-2 Degree Visa and a D-4 Language Visa for South Korea?',
+    question: 'What is the difference between the South Korea D-2 and D-4 student visa categories?',
     answer:
-      'The D-2 visa is designated for regular degree-seeking students admitted to Associate (D-2-1), Bachelor’s (D-2-2), Master’s (D-2-3), or Doctoral (D-2-4) programs at accredited Korean colleges and universities. It grants multi-year stay, formal part-time work rights (S-3 permit), and direct transition to the D-10 post-study job seeker visa. The D-4-1 visa is granted for short-term Korean language trainees enrolled in university-affiliated language institutes (typically 6 to 12 months). D-4 holders must study for at least 6 months before becoming eligible for part-time work, and it cannot directly convert to a work visa without first progressing into a full degree program.',
+      'The D-2 Visa is issued to full-time academic degree students enrolled in Korean universities: D-2-1 (Associate Degree), D-2-2 (Bachelor’s Degree), D-2-3 (Master’s Degree), and D-2-4 (PhD/Doctoral Degree). The D-4-1 Visa is issued specifically to students enrolled in non-degree Korean language training programs at a university-affiliated Korean Language Institute (KLI). Bangladeshi applicants targeting English-taught or Korean-taught bachelor’s and master’s programs apply directly under the D-2 category.',
   },
   {
-    question: 'What is a Visa Issuance Confirmation (VIC) and why does it fast-track embassy approval?',
+    question: 'Why does the Korean Embassy in Dhaka only accept bank statements from 14 designated banks?',
     answer:
-      'A Visa Issuance Confirmation (VIC / 사증발급인정서) is an electronic pre-visa authorization issued directly by the Korea Immigration Service (under the Ministry of Justice) in South Korea. When you are admitted to an IEQAS (International Education Quality Assurance System) certified university or Top 1% accredited institution, the university applies for the VIC on your behalf. Once approved, the immigration office generates an official Visa Confirmation Number. Bangladeshi students then submit only this confirmation number, their passport, photos, and basic visa form to the Embassy in Dhaka, with visa issuance typically completed in 5 to 7 working days with minimal document scrutiny.',
+      'To combat fraudulent financial statements, the Embassy of the Republic of Korea in Dhaka enforces a strict rule requiring self-funded D-2 and D-4 visa applicants to submit bank solvency certificates and 6-month transaction statements exclusively from its list of 14 designated commercial banks operating in Bangladesh (including Standard Chartered, HSBC, Eastern Bank PLC, The City Bank, BRAC Bank, Prime Bank, Dhaka Bank, Mutual Trust Bank, Dutch-Bangla Bank, and others specified in the current Embassy notice). Statements from non-listed banks or cooperative societies are automatically rejected.',
   },
   {
-    question: 'How much bank balance is required for a South Korean student visa at the Dhaka Embassy?',
+    question: 'How much bank balance is required for a South Korean D-2 student visa from Bangladesh?',
     answer:
-      'Under Ministry of Justice and Korean Embassy in Dhaka regulations, applicants must demonstrate funds held in a recognized commercial bank under the student’s or parent’s name for at least 30 consecutive days prior to issuing the balance certificate: (1) For universities in the Seoul Metropolitan Area (Seoul, Incheon, Gyeonggi Province), the financial solvency requirement is USD 20,000 (approximately BDT 24.5 Lakh). (2) For regional non-metropolitan universities, the requirement is USD 16,000 to USD 18,000 (approximately BDT 19.5 to 22 Lakh). (3) For D-4 language programs, the balance requirement is USD 10,000 (approximately BDT 12.2 Lakh). The balance certificate must be submitted alongside a 6-month transaction statement and bank manager verification details.',
+      'For self-funded degree students, the financial solvency threshold depends on university region: approximately USD 20,000 (~24.4 Lakh BDT) for universities in the Seoul Capital Area (Seoul, Incheon, Gyeonggi-do) and USD 16,000 to USD 18,000 (~19.5 to 22.0 Lakh BDT) for regional universities outside the capital metropolitan area (such as KAIST in Daejeon, Kyungpook National in Daegu, or Pusan National in Busan). Funds must be held in the student’s or biological parents’ account at one of the 14 Embassy-designated banks for at least 30 to 90 days. Full Global Korea Scholarship (GKS) scholars are exempt from this bank balance requirement.',
   },
   {
-    question: 'Can parents sponsor a student’s financial solvency, and what documents are required?',
+    question: 'What is a Certificate of Admission (CoA) and how is it issued by a Korean university?',
     answer:
-      'Yes. If the bank account is held in the name of the student’s father or mother, the applicant must submit: (1) An official Family Certificate or English-translated, notarized Birth Certificate attested by the Ministry of Foreign Affairs (MOFA) proving parent-child relationship. (2) Parents’ National ID cards. (3) An Affidavit of Financial Sponsorship executed on non-judicial stamp paper. (4) Documented evidence of legitimate income generation, such as Income Tax Return assessment receipts (TIN), Trade License (if business owners), or Salary Certificate with salary bank statements (if employed). Unexplained recent bulk deposits without documentary paper trails are a primary cause of embassy refusal.',
+      'The Certificate of Admission (CoA — 표준입학허가서) is the statutory immigration sponsorship document issued by a Korean university’s International Office after you pass academic screening and remit your first-semester tuition invoice via a Bangladesh Bank Student File. Every CoA carries an official Korean Ministry of Justice barcode and serial number, which is mandatory to lodge your D-2 visa application at the Korean Embassy in Dhaka.',
   },
   {
-    question: 'Where must Bangladeshi students complete the mandatory Tuberculosis (TB) screening?',
+    question: 'Where do Bangladeshi students complete the mandatory Tuberculosis (TB) test for a Korean student visa?',
     answer:
-      'Under Korean consular rules, all Bangladeshi nationals applying for long-term Korean visas (staying over 91 days) must undergo a comprehensive Tuberculosis (TB) screening exclusively at medical centers officially designated by the Embassy of the Republic of Korea in Dhaka. The premier designated facility is the International Organization for Migration (IOM) Migration Health Assessment Clinic in Gulshan-2, Dhaka. The medical certificate includes a chest X-ray and clinical examination report, remains valid for 3 months from issuance, and must be submitted in original sealed or verifiable format.',
+      'All Bangladeshi citizens applying for a long-term Korean visa (staying over 90 days) must submit a Tuberculosis (TB) clearance certificate issued strictly by one of the Korean Embassy Dhaka’s designated panel hospitals/clinics (such as United Hospital, Evercare Hospital, Square Hospital, or ICDDR,B / IOM designated diagnostics per the Embassy’s active circular). The chest X-ray and sputum/blood check certificate is valid for 3 months from the date of issue.',
   },
   {
-    question: 'What is the attestation sequence for Bangladeshi academic certificates before visa lodgement?',
+    question: 'What are the part-time work (S-3) and post-study work (D-10) rules in South Korea?',
     answer:
-      'All original academic certificates and marksheets (SSC, HSC, Bachelor’s, or Master’s) must be authenticated in the following mandatory legal sequence: (1) Respective Education Board or Autonomous University Registrar verification. (2) Ministry of Education (MOE), Government of Bangladesh (Secretariat, Dhaka). (3) Ministry of Foreign Affairs (MOFA), Consular Section (Segunbagicha, Dhaka). (4) Consular legalization or notary verification as specified by the Korean Embassy in Dhaka. Submitting documents without MOFA authentication leads to immediate dossier rejection.',
-  },
-  {
-    question: 'Are Bangladeshi students permitted to work part-time in South Korea on a D-2 visa?',
-    answer:
-      'Yes. Under Article 20 of the Korean Immigration Control Act, international degree students on a D-2 visa can work legally after completing one full semester (6 months) and obtaining an S-3 Part-Time Work Permit from their university’s international student office and the local Immigration Office via HiKorea. Undergraduate students holding TOPIK Level 3 or higher (or equivalent English test scores in English-taught tracks) are permitted to work up to 20 to 25 hours per week during term time, and unlimited hours during summer and winter vacations. The statutory national minimum wage in South Korea is KRW 10,030 per hour (approximately USD 7.50 to 8.00 / ~BDT 900–1,000/hr).',
-  },
-  {
-    question: 'What post-arrival formalities must be completed within 90 days of arriving in South Korea?',
-    answer:
-      'Within 90 days of landing at Incheon International Airport (ICN), all international students must visit their regional Korea Immigration Office to apply for the Alien Registration Card (ARC / 외국인등록증). The ARC is your biometric legal identity card in Korea containing your registration number, residency address, and visa expiration. Additionally, degree students are automatically enrolled in South Korea’s National Health Insurance Service (NHIS), which provides comprehensive medical, prescription, and hospitalization coverage across all national clinics and hospitals with a subsidized student premium of approximately KRW 70,000 to KRW 80,000 per month.',
-  },
-  {
-    question: 'What is EduExpress’s fee policy for South Korean admission and student visa processing?',
-    answer:
-      'EduExpress operates with complete fee transparency: we charge BDT 0 file-opening fees. Our full consultancy and visa service fee for South Korea is BDT 100,000 (1 Lakh Taka), payable 100% strictly after your visa is approved and issued. If your visa is not granted, you owe EduExpress zero agency fees. Students self-pay only direct official fees: the Korean Embassy visa fee ($60), the designated IOM TB medical checkup, government attestations, and university tuition directly to institutional bank accounts.',
+      'D-2 degree students can apply via HiKorea for an S-3 Part-Time Work Permit from the Korean Immigration Service. Students meeting the required TOPIK (Korean proficiency) or English-track criteria may work 20 to 25 hours per week during semester terms and unlimited hours during official vacations at Korea’s statutory minimum wage (KRW 10,030/hour). After graduating with a Bachelor’s, Master’s, or PhD, you can switch to the D-10-1 Job Seeker Visa for up to 2 years to transition into a full-time E-7 Professional Employment Visa.',
   },
 ];
 
 export default async function SouthKoreaStudentVisaPage() {
+  let universities: { id: string; name: string; slug: string; city: string | null; tuition: string | null }[] = [];
+  try {
+    universities = await prisma.university.findMany({
+      where: { country: { contains: 'Korea' }, isActive: true },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        city: true,
+        tuition: true,
+      },
+      take: 8,
+      orderBy: { name: 'asc' },
+    });
+  } catch {
+    universities = [];
+  }
+
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -148,9 +124,9 @@ export default async function SouthKoreaStudentVisaPage() {
         url: canonical,
         mainEntityOfPage: canonical,
         dateModified: '2026-11-27',
-        name: 'South Korea Student Visa from Bangladesh 2027 | EduExpress',
+        name: 'South Korea Student Visa from Bangladesh 2027: D-2 Visa, 14 Banks & CoA Guide',
         description:
-          'Complete South Korea student visa guide for Bangladeshi students: D-2 vs D-4 visa rules, Dhaka Embassy submission, $10k–$20k bank solvency, TB test & ARC card.',
+          'South Korea D-2 & D-4 student visa guide for Bangladeshi students: Dhaka Korean Embassy rules, 14 approved banks ($16k–$20k solvency), CoA, and ARC.',
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
@@ -160,25 +136,6 @@ export default async function SouthKoreaStudentVisaPage() {
       },
     ],
   };
-
-  // Fetch verified South Korean partner universities from database
-  let universities: { slug: string; name: string; location: string; rankingWorld: number | null; tuition: string | null }[] = [];
-  try {
-    universities = await prisma.university.findMany({
-      where: { country: 'South Korea' },
-      select: {
-        slug: true,
-        name: true,
-        location: true,
-        rankingWorld: true,
-        tuition: true,
-      },
-      take: 6,
-      orderBy: [{ name: 'asc' }],
-    });
-  } catch {
-    universities = [];
-  }
 
   return (
     <article lang="en">
@@ -191,746 +148,351 @@ export default async function SouthKoreaStudentVisaPage() {
           { name: 'South Korea', path: '/study-in-south-korea-from-bangladesh' },
           { name: 'Student Visa' },
         ]}
-        eyebrow="Embassy of the Republic of Korea, Dhaka · D-2 Degree & D-4 Language Visa · BDT 100k Post-Visa Fee"
+        eyebrow="D-2 Degree & GKS Visa Guide · Dhaka Korean Embassy Rules · BDT 0 Upfront Fee"
         title="South Korea Student Visa from Bangladesh 2027."
-        lead="An evidence-first, step-by-step roadmap for Bangladeshi scholars applying for South Korean D-2 (degree) and D-4 (language) student visas: navigating Certificate of Admission (CoA) vs Visa Issuance Confirmation (VIC), meeting Dhaka Embassy USD 10,000–$20,000 bank solvency rules, completing TB screening and MOFA attestation, and securing your post-arrival Alien Registration Card (ARC)."
+        lead="A complete consular and financial guide for Bangladeshi students applying for the South Korean D-2 Student Visa at the Embassy of the Republic of Korea in Dhaka: securing your Certificate of Admission (CoA), meeting the 14-designated-bank solvency rules, consular legalization, and post-arrival ARC registration."
         actions={
           <>
-            <Link href="/apply?country=South+Korea" className="ed-btn ed-btn-signal min-h-[52px] px-7">
-              Start Free Visa Assessment <ArrowRight size={18} aria-hidden="true" />
+            <Link href="/apply?country=South%20Korea" className="ed-btn ed-btn-signal min-h-[52px] px-7">
+              Start Free Korea Visa Assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
-            <a href="#korea-visa-steps" className="ed-btn ed-btn-outline min-h-[52px] px-7">
-              View 5-Step Process
-            </a>
+            <Link href="/south-korea-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Compare South Korea Tuition &amp; Costs
+            </Link>
           </>
         }
       />
 
-      <TrustBar destination="South Korea" feeNote="100% After Visa Approval · BDT 0 File Opening" />
+      <TrustBar destination="South Korea" />
 
-      {/* Planning Assumption & Key Visa Summary Grid */}
-      <section aria-label="Visa planning metrics" className="border-b border-canvas-soft bg-white py-10">
+      {/* Key Statutory Visa Metrics */}
+      <section aria-label="South Korea visa statutory metrics" className="border-b border-canvas-soft bg-white py-10">
         <div className={kit.wrap}>
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
-                Planning Assumption · November 2026 Rate
+                Planning Assumption · November 2026 Baseline
               </span>
               <p className="text-xs text-slate-500">
-                Official Currency Baseline: <strong>1 KRW ≈ 0.088 BDT</strong> | <strong>1 USD ≈ 122 BDT ≈ 1,380 KRW</strong>.
+                Exchange Rate Baseline: <strong>1 USD ≈ 122 BDT</strong> · <strong>1,000 KRW ≈ 90 BDT</strong>.
               </p>
             </div>
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-800">
-              <ShieldCheck size={16} /> BDT 100,000 Fee — 100% Payable After Visa Approval
+              <ShieldCheck size={16} /> BDT 0 File-Opening Fee · Written ClearCost Sheet
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-2xl border border-rule bg-canvas-soft p-5">
               <div className="flex items-center gap-2 text-xs font-bold uppercase text-slate-500">
-                <Globe size={16} className="text-emerald-700" /> Statutory Categories
+                <FileCheck2 size={16} className="text-emerald-700" /> Visa Categories
               </div>
-              <p className="mt-2 text-base font-bold text-petrol-800">D-2 Degree &amp; D-4 Language</p>
-              <p className="mt-1 text-xs text-slate-600">D-2 for Bachelor’s/Master’s/PhD; D-4 for university language centers.</p>
+              <p className="mt-2 text-base font-bold text-petrol-800">D-2-2 / D-2-3 / D-2-4</p>
+              <p className="mt-1 text-xs text-slate-600">Bachelor (D-2-2), Master (D-2-3), PhD (D-2-4) &amp; Language (D-4-1).</p>
             </div>
 
             <div className="rounded-2xl border border-rule bg-canvas-soft p-5">
               <div className="flex items-center gap-2 text-xs font-bold uppercase text-slate-500">
-                <Banknote size={16} className="text-emerald-700" /> Financial Solvency
+                <Wallet size={16} className="text-emerald-700" /> Bank Solvency (Dhaka)
               </div>
-              <p className="mt-2 text-base font-bold text-petrol-800">USD 10,000 – $20,000</p>
-              <p className="mt-1 text-xs text-slate-600">Held 30+ days in approved schedule commercial bank under student/parents.</p>
+              <p className="mt-2 text-base font-bold text-petrol-800">USD 16,000 – 20,000</p>
+              <p className="mt-1 text-xs text-slate-600">Held in one of the Korean Embassy Dhaka’s 14 designated banks.</p>
             </div>
 
             <div className="rounded-2xl border border-rule bg-canvas-soft p-5">
               <div className="flex items-center gap-2 text-xs font-bold uppercase text-slate-500">
-                <Building2 size={16} className="text-emerald-700" /> Dhaka Mission
+                <Building2 size={16} className="text-emerald-700" /> Consular Authority
               </div>
-              <p className="mt-2 text-base font-bold text-petrol-800">Embassy of Korea, Dhaka</p>
-              <p className="mt-1 text-xs text-slate-600">4 Madani Avenue, Baridhara Diplomatic Zone. Consular visa fee: $60.</p>
+              <p className="mt-2 text-base font-bold text-petrol-800">Korean Embassy Dhaka</p>
+              <p className="mt-1 text-xs text-slate-600">Baridhara Diplomatic Enclave; e-Visa Grant Notice via visa.go.kr.</p>
             </div>
 
             <div className="rounded-2xl border border-rule bg-canvas-soft p-5">
               <div className="flex items-center gap-2 text-xs font-bold uppercase text-slate-500">
-                <IdCard size={16} className="text-emerald-700" /> Legal Resident Card
+                <IdCard size={16} className="text-emerald-700" /> Post-Arrival &amp; Work
               </div>
-              <p className="mt-2 text-base font-bold text-petrol-800">Alien Registration (ARC)</p>
-              <p className="mt-1 text-xs text-slate-600">Issued by local Immigration within 90 days. Unlocks S-3 work permits.</p>
+              <p className="mt-2 text-base font-bold text-petrol-800">ARC + 2-Yr D-10 PSW</p>
+              <p className="mt-1 text-xs text-slate-600">90-day Alien Registration Card, S-3 work permit, and D-10 job visa.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Section 1: Visa Categories (D-2 vs D-4) */}
+      {/* Module 1: Visa Categories & Solvency Table */}
       <Section
         id="visa-categories"
-        title="Selecting the Right South Korean Student Visa: D-2 vs. D-4."
-        intro="South Korea’s Ministry of Justice strictly categorizes international educational stays into degree-seeking (D-2) and training (D-4) streams. Selecting the appropriate category determines your allowable work hours, stay validity, and pathway toward professional post-study employment."
+        tone="white"
+        title="South Korean student visa categories &amp; Dhaka Embassy solvency matrix."
+        intro="The Embassy of the Republic of Korea in Dhaka evaluates your visa sub-class based on degree level, IEQAS university accreditation, and bank solvency."
       >
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-2xl border-2 border-emerald-700/20 bg-white p-7 shadow-sm">
-            <div className="flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
-                <GraduationCap size={14} /> Degree Seeking
-              </span>
-              <span className="text-xs font-bold text-slate-400">Code: D-2</span>
-            </div>
-            <h3 className="mt-4 text-xl font-bold text-petrol-900">D-2 Visa: Associate, Bachelor’s, Master’s &amp; PhD</h3>
-            <p className="mt-2 text-sm text-slate-600">
-              For Bangladeshi scholars admitted to formal higher education degree programs at accredited Korean national, public, or private universities.
-            </p>
-
-            <ul className="mt-5 space-y-2.5 text-xs text-slate-700">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-emerald-700" />
-                <span><strong>D-2-1:</strong> Associate Degree at Junior Colleges (2–3 years).</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-emerald-700" />
-                <span><strong>D-2-2:</strong> Bachelor’s Degree at 4-year Universities (4 years).</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-emerald-700" />
-                <span><strong>D-2-3:</strong> Master’s Degree Programs at Graduate Schools (2 years).</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-emerald-700" />
-                <span><strong>D-2-4:</strong> Doctoral (PhD) Research Programs (3–4 years).</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-emerald-700" />
-                <span><strong>D-2-6:</strong> Exchange Students under Bilateral University Partnerships.</span>
-              </li>
-            </ul>
-
-            <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50/60 p-4 text-xs text-slate-700">
-              <p className="font-bold text-emerald-900">Key Privileges &amp; Progression:</p>
-              <p className="mt-1">
-                Eligible for S-3 Part-Time Work Permit (up to 20–25 hrs/wk in semester, unlimited in breaks) after 6 months. Upon degree completion, graduates seamlessly transition to the <strong>2-year D-10 Job Seeker Visa</strong>, which converts into an E-7 Professional Employment Visa or F-2-7 Resident Visa.
-              </p>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-rule bg-white p-7 shadow-sm">
-            <div className="flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">
-                <Globe size={14} /> Language Training
-              </span>
-              <span className="text-xs font-bold text-slate-400">Code: D-4-1</span>
-            </div>
-            <h3 className="mt-4 text-xl font-bold text-petrol-900">D-4-1 Visa: Korean Language Trainee</h3>
-            <p className="mt-2 text-sm text-slate-600">
-              For students enrolled in intensive Korean language programs (10 to 40 weeks) at university-affiliated language education centers before starting their degrees.
-            </p>
-
-            <ul className="mt-5 space-y-2.5 text-xs text-slate-700">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-slate-500" />
-                <span><strong>Program Structure:</strong> 4 terms per year (Spring, Summer, Fall, Winter), 200 hours per 10-week term.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-slate-500" />
-                <span><strong>Stay Duration:</strong> Issued in 6-month renewable blocks up to a strict maximum of 2 years.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-slate-500" />
-                <span><strong>Bank Solvency:</strong> Minimum USD 10,000 (approx. BDT 12.2 Lakh) held for 30+ days.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-slate-500" />
-                <span><strong>Attendance Requirement:</strong> Mandatory 90%+ class attendance; falling below 70% cancels the visa immediately.</span>
-              </li>
-            </ul>
-
-            <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50/70 p-4 text-xs text-slate-700">
-              <p className="font-bold text-amber-900">Critical D-4 Boundaries &amp; Limitations:</p>
-              <p className="mt-1">
-                D-4 language students are strictly barred from working any part-time job during their first 6 months in Korea. D-4 visas cannot transition into work visas directly—you must attain TOPIK Level 3 or 4 and convert into a D-2 degree program in Korea.
-              </p>
-            </div>
-          </div>
+        <div className="overflow-x-auto rounded-3xl border border-petrol-800/15 bg-white shadow-xs">
+          <table className="w-full min-w-[680px] border-collapse text-left text-[14.5px]">
+            <caption className="sr-only">South Korea D-2 and D-4 student visa categories and financial requirements</caption>
+            <thead className="bg-petrol-800 text-white">
+              <tr>
+                <th className="px-6 py-4 font-bold">Visa Code &amp; Track</th>
+                <th className="px-6 py-4 font-bold">Target Program</th>
+                <th className="px-6 py-4 font-bold">Required Solvency (USD / BDT)</th>
+                <th className="px-6 py-4 font-bold">Language &amp; Key Requirement</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-canvas-soft text-ink-soft">
+              <tr>
+                <td className="px-6 py-4 font-bold text-petrol-800">D-2-2 (Undergraduate)</td>
+                <td className="px-6 py-4">4-Year Bachelor’s Degree</td>
+                <td className="px-6 py-4 font-semibold text-emerald-800">$20,000 Seoul (~24.4L BDT) / $16k–$18k Regional</td>
+                <td className="px-6 py-4">IELTS 5.5–6.5 (English track) or TOPIK 3+ (Korean track)</td>
+              </tr>
+              <tr className="bg-canvas-soft/50">
+                <td className="px-6 py-4 font-bold text-petrol-800">D-2-3 (Master’s) &amp; D-2-4 (PhD)</td>
+                <td className="px-6 py-4">Graduate &amp; Research Degrees</td>
+                <td className="px-6 py-4 font-semibold text-emerald-800">$20,000 Seoul (~24.4L BDT) / $16k–$18k Regional</td>
+                <td className="px-6 py-4">IELTS 6.0+ / TOPIK 4+ or Professor Lab Acceptance + Tuition Waiver</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-bold text-petrol-800">D-2 (GKS Government Scholar)</td>
+                <td className="px-6 py-4">Bachelor’s, Master’s, PhD (+1 Yr Korean)</td>
+                <td className="px-6 py-4 font-semibold text-emerald-800">$0 Bank Solvency (Waived by NIIED Invitation)</td>
+                <td className="px-6 py-4">Official NIIED GKS Final Invitation Letter; Visa fee waived</td>
+              </tr>
+              <tr className="bg-canvas-soft/50">
+                <td className="px-6 py-4 font-bold text-petrol-800">D-4-1 (Language Trainee)</td>
+                <td className="px-6 py-4">University Korean Language Institute</td>
+                <td className="px-6 py-4 font-semibold text-emerald-800">$10,000+ (~12.2L BDT) frozen/held per Embassy rules</td>
+                <td className="px-6 py-4">Strict scrutiny at Dhaka Embassy; IEQAS-certified university required</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </Section>
 
-      {/* Section 2: Two Issuance Routes (CoA vs VIC) */}
+      {/* Module 2: 6-Stage D-2 Visa Roadmap */}
       <Section
-        id="issuance-routes"
+        id="visa-process"
         tone="sage"
-        title="Standard CoA vs. Visa Issuance Confirmation (VIC): Why University Accreditation Matters."
-        intro="South Korea operates a two-tier visa issuance system. Understanding whether your institution processes a Standard Certificate of Admission (CoA) or an electronic Visa Issuance Confirmation (VIC) directly determines your embassy interview requirement and approval speed."
+        title="6-stage South Korea D-2 student visa process in Dhaka."
+        intro="Korea enforces two distinct intakes — March (Spring, primary) and September (Autumn). Start document legalization at least 3 months before your semester begins."
+      >
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {[
+            {
+              step: 'Stage 01',
+              title: 'University Admission & Tuition Invoice',
+              timeline: '12–16 Weeks Before Intake',
+              body: 'Pass the Korean university’s document evaluation and department interview. Receive your conditional acceptance and 1st-semester tuition invoice (after merit scholarship deduction).',
+            },
+            {
+              step: 'Stage 02',
+              title: 'Student File SWIFT & CoA Issuance',
+              timeline: '8–12 Weeks Before Intake',
+              body: 'Open a Student File at an Authorized Dealer bank in Bangladesh to wire 1st-semester tuition. The university then issues your barcoded Certificate of Admission (CoA — 표준입학허가서).',
+            },
+            {
+              step: 'Stage 03',
+              title: 'MoFA & Korean Embassy Document Legalization',
+              timeline: '6–10 Weeks Before Intake',
+              body: 'Attest original academic certificates and transcripts via Education Board, Ministry of Education, MoFA Dhaka, and obtain consular legalization / Apostille verification.',
+            },
+            {
+              step: 'Stage 04',
+              title: '14-Bank Solvency & Designated Hospital TB Test',
+              timeline: '4–6 Weeks Before Intake',
+              body: 'Obtain the official 6-month bank statement and solvency certificate from one of the Korean Embassy’s 14 designated banks, plus your TB clearance from an Embassy-approved hospital in Dhaka.',
+            },
+            {
+              step: 'Stage 05',
+              title: 'Dhaka Korean Embassy Submission & Interview',
+              timeline: '4–5 Weeks Before Intake',
+              body: 'Submit your CoA, legalized certificates, family relation proof, sponsor tax returns (TIN/IT-10B), and bank documents to the Embassy of the Republic of Korea in Baridhara, Dhaka.',
+            },
+            {
+              step: 'Stage 06',
+              title: 'e-Visa Grant Notice & 90-Day ARC Card',
+              timeline: '2–3 Weeks Visa Processing',
+              body: 'Download your electronic Visa Grant Notice from visa.go.kr, fly to Incheon (ICN), and complete biometrics at the local HiKorea immigration office within 90 days to receive your Alien Registration Card (ARC).',
+            },
+          ].map((item) => (
+            <div key={item.step} className="flex flex-col justify-between rounded-3xl border border-petrol-800/10 bg-white p-6 shadow-xs">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="rounded-full bg-lime px-3 py-1 text-xs font-black text-petrol-800">{item.step}</span>
+                  <span className="text-xs font-semibold text-slate-500">{item.timeline}</span>
+                </div>
+                <h3 className="mt-4 text-[19px] font-bold text-petrol-800">{item.title}</h3>
+                <p className="mt-2 text-[14.5px] leading-6 text-ink-soft">{item.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* Module 3: Dhaka Embassy Compliance & Refusal Prevention */}
+      <Section
+        id="compliance"
+        tone="white"
+        title="Korean Embassy Dhaka financial verification &amp; refusal prevention."
+        intro="The Consular Section in Baridhara conducts direct bank verification and academic credibility screening on every D-2 application."
       >
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-rule bg-white p-7">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-800">
-              <Sparkles size={16} /> Route 1 (Fast-Track) · IEQAS Top 1% Universities
-            </div>
-            <h3 className="mt-2 text-lg font-bold text-petrol-900">Visa Issuance Confirmation (VIC / 사증발급인정서)</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-600">
-              When admitted to an officially certified university under South Korea’s <strong>International Education Quality Assurance System (IEQAS)</strong>—including prestigious SKY universities (Seoul National, Korea, Yonsei), KAIST, SKKU, and Hanyang—the university applies directly to the local Korea Immigration Service on your behalf.
-            </p>
-
-            <div className="mt-5 space-y-3">
-              <div className="rounded-xl border border-slate-200 bg-canvas-soft p-3.5 text-xs text-slate-700">
-                <p className="font-bold text-petrol-800">1. University Submits Online in Korea:</p>
-                <p className="mt-0.5 text-slate-600">The university submits your academic qualifications and financial verification directly to the Korean immigration office.</p>
-              </div>
-              <div className="rounded-xl border border-slate-200 bg-canvas-soft p-3.5 text-xs text-slate-700">
-                <p className="font-bold text-petrol-800">2. Immigration Issues Electronic Confirmation Number:</p>
-                <p className="mt-0.5 text-slate-600">Once immigration validates your file, an official Visa Issuance Confirmation Number is generated and emailed to you.</p>
-              </div>
-              <div className="rounded-xl border border-slate-200 bg-canvas-soft p-3.5 text-xs text-slate-700">
-                <p className="font-bold text-petrol-800">3. Expedited Lodgement at Dhaka Embassy:</p>
-                <p className="mt-0.5 text-slate-600">You submit only your original passport, photo, application form containing the confirmation number, and TB certificate. No repeated financial or academic document audit is required. Visa issued in <strong>5 to 7 working days</strong>.</p>
-              </div>
-            </div>
+          <div className={kit.cardSage}>
+            <h3 className="text-[19px] font-bold text-petrol-800">Mandatory Sponsor &amp; Family Documentation</h3>
+            <ul className="mt-4 space-y-3 text-[14.5px] leading-6 text-ink-soft">
+              <li className="flex items-start gap-2.5">
+                <CheckCircle2 size={18} className="mt-1 shrink-0 text-emerald-700" />
+                <span><strong>Strict Parent-Only Sponsorship:</strong> The Korean Embassy in Dhaka generally requires the financial sponsor to be the student’s biological parents (or self/spouse). Third-party or distant relative sponsors face high refusal rates.</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <CheckCircle2 size={18} className="mt-1 shrink-0 text-emerald-700" />
+                <span><strong>Family Relation Certificate (FRC):</strong> Submit an official English Family Relation Certificate issued by your City Corporation / Union Parishad and attested by MoFA, matching parent names across your NID, passport, and SSC/HSC certificates.</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <CheckCircle2 size={18} className="mt-1 shrink-0 text-emerald-700" />
+                <span><strong>Verifiable Parent Income Trail:</strong> Include your parent’s latest 3 years of National Board of Revenue (NBR) Income Tax acknowledgment receipts, IT-10B wealth statement, trade license (for business owners), or employer salary certificate.</span>
+              </li>
+            </ul>
           </div>
 
-          <div className="rounded-2xl border border-rule bg-white p-7">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500">
-              <FileSearch size={16} /> Route 2 (Standard Consular Review)
+          <div className="rounded-3xl border border-amber-300 bg-amber-50/70 p-6 sm:p-7">
+            <div className="flex items-center gap-3">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-amber-200 text-amber-900">
+                <ShieldAlert size={20} aria-hidden="true" />
+              </span>
+              <h3 className="text-[19px] font-bold text-amber-950">Top D-2 Visa Refusal Triggers in Dhaka</h3>
             </div>
-            <h3 className="mt-2 text-lg font-bold text-petrol-900">Standard Certificate of Admission (CoA / 표준입학허가서)</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-600">
-              For universities that do not process VIC, the institution issues a signed Standard Certificate of Admission (CoA) alongside their Certificate of Business Registration. The student must lodge a complete, verified physical dossier directly at the Embassy of Korea in Dhaka.
-            </p>
-
-            <div className="mt-5 space-y-3">
-              <div className="rounded-xl border border-slate-200 bg-canvas-soft p-3.5 text-xs text-slate-700">
-                <p className="font-bold text-petrol-800">1. Full Physical Document Dossier Required:</p>
-                <p className="mt-0.5 text-slate-600">You must present original attested academic certificates, 6-month bank statements, bank solvency, and sponsorship affidavits.</p>
-              </div>
-              <div className="rounded-xl border border-slate-200 bg-canvas-soft p-3.5 text-xs text-slate-700">
-                <p className="font-bold text-petrol-800">2. Consular Scrutiny &amp; Verification Calls:</p>
-                <p className="mt-0.5 text-slate-600">Embassy consular officers verify the genuineness of bank balances with Bangladeshi bank managers and verify academic records.</p>
-              </div>
-              <div className="rounded-xl border border-slate-200 bg-canvas-soft p-3.5 text-xs text-slate-700">
-                <p className="font-bold text-petrol-800">3. Mandatory Consular Interview:</p>
-                <p className="mt-0.5 text-slate-600">Applicants are called for an in-person interview in Baridhara to verify language proficiency, study motivation, and return intentions. Processing takes <strong>2 to 4 weeks</strong>.</p>
-              </div>
-            </div>
+            <ul className="mt-4 space-y-3 text-[14.5px] leading-6 text-amber-950/90">
+              <li className="flex items-start gap-2.5">
+                <AlertTriangle size={18} className="mt-1 shrink-0 text-amber-700" />
+                <span><strong>Non-Listed Bank Statements:</strong> Submitting solvency from a bank outside the Korean Embassy’s 14 designated commercial banks, or failing to respond when the Embassy phones the branch manager.</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <AlertTriangle size={18} className="mt-1 shrink-0 text-amber-700" />
+                <span><strong>Applying to Non-IEQAS / Restricted Universities:</strong> Choosing low-tier colleges placed under visa restriction by the Korean Ministry of Justice due to high international student dropout rates.</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <AlertTriangle size={18} className="mt-1 shrink-0 text-amber-700" />
+                <span><strong>Name Spelling Discrepancies:</strong> Mismatched parent name spellings between your Birth Certificate, Family Relation Certificate, and your father’s tax/bank records.</span>
+              </li>
+            </ul>
           </div>
         </div>
       </Section>
 
-      {/* Section 3: Document Checklist & Bank Solvency */}
-      <Section
-        id="document-checklist"
-        title="Comprehensive South Korea Student Visa Checklist."
-        intro="Every document submitted to the Korean Embassy in Dhaka must be rigorously prepared, translated into English, notarized, and attested by the statutory ministries of Bangladesh."
-      >
-        <div className="overflow-hidden rounded-2xl border border-rule bg-white shadow-sm">
-          <div className="border-b border-rule bg-canvas-soft p-5">
-            <h3 className="text-base font-bold text-petrol-900">Mandatory Dossier Checklist for Bangladeshi Scholars</h3>
-            <p className="mt-1 text-xs text-slate-600">Applicable for D-2 Degree &amp; D-4 Language Visa lodgement at Baridhara Diplomatic Zone, Dhaka.</p>
-          </div>
-
-          <div className="divide-y divide-rule text-xs">
-            <div className="grid gap-3 p-5 sm:grid-cols-3">
-              <div className="font-bold text-petrol-800">
-                1. Passport &amp; Application Form
-              </div>
-              <div className="sm:col-span-2 text-slate-700 space-y-1">
-                <p>• Original Passport valid for at least 6 months beyond the intended stay duration with minimum 2 blank visa pages.</p>
-                <p>• Completed Visa Application Form (e-Form from Korea Visa Portal) with 1 recent passport-sized color photograph (3.5cm x 4.5cm, white background, taken within last 6 months, matte finish).</p>
-                <p>• Photocopy of passport biographical pages and previous international visas.</p>
-              </div>
-            </div>
-
-            <div className="grid gap-3 p-5 sm:grid-cols-3">
-              <div className="font-bold text-petrol-800">
-                2. Official University Admission Documents
-              </div>
-              <div className="sm:col-span-2 text-slate-700 space-y-1">
-                <p>• Original Standard Certificate of Admission (표준입학허가서 - CoA) issued by the university president (indicating tuition fee status, intake date, and degree level).</p>
-                <p>• Official Visa Issuance Confirmation (VIC) printout (if university processed immigration approval in Korea).</p>
-                <p>• Copy of the Korean University’s Certificate of Business Registration (사업자등록증 / 고유번호증).</p>
-                <p>• Tuition Fee Payment Receipt or official Scholarship Award Certificate (e.g. GKS Award, University Tuition Waiver letter).</p>
-              </div>
-            </div>
-
-            <div className="grid gap-3 p-5 sm:grid-cols-3">
-              <div className="font-bold text-petrol-800">
-                3. Attested Academic Credentials
-              </div>
-              <div className="sm:col-span-2 text-slate-700 space-y-1">
-                <p>• All original Academic Certificates and Marksheets (SSC, HSC, Bachelor’s, or Master’s).</p>
-                <p>• <strong>Strict Legal Attestation Sequence:</strong></p>
-                <p className="pl-3 text-slate-600">1. Respective Education Board / Autonomous University Controller verification.</p>
-                <p className="pl-3 text-slate-600">2. Ministry of Education (MOE), Bangladesh Secretariat, Dhaka.</p>
-                <p className="pl-3 text-slate-600">3. Ministry of Foreign Affairs (MOFA), Consular Section, Segunbagicha, Dhaka.</p>
-                <p className="pl-3 text-slate-600">4. Consular legalization or notary verification as required by the Korean Embassy.</p>
-              </div>
-            </div>
-
-            <div className="grid gap-3 p-5 sm:grid-cols-3">
-              <div className="font-bold text-petrol-800">
-                4. Financial Solvency &amp; Bank Documentation
-              </div>
-              <div className="sm:col-span-2 text-slate-700 space-y-1">
-                <p>• <strong>Balance Thresholds:</strong></p>
-                <p className="pl-3 text-slate-600">• Seoul Metropolitan Area (Seoul/Incheon/Gyeonggi): Minimum <strong>USD 20,000</strong> (approx. BDT 24.5 Lakh).</p>
-                <p className="pl-3 text-slate-600">• Non-Metropolitan Provincial Universities: Minimum <strong>USD 16,000 – $18,000</strong> (approx. BDT 19.5 – 22 Lakh).</p>
-                <p className="pl-3 text-slate-600">• D-4 Language Training: Minimum <strong>USD 10,000</strong> (approx. BDT 12.2 Lakh).</p>
-                <p>• Original Bank Solvency Certificate + 6-month Bank Account Statement with official bank seal, manager contact details, and branch QR verification.</p>
-                <p>• <strong>30-Day Rule:</strong> Funds must be maintained for at least 30 consecutive days prior to issuing the balance certificate.</p>
-                <p>• <strong>If Sponsored by Parents:</strong></p>
-                <p className="pl-3 text-slate-600">• Family Relationship Certificate or English-translated Birth Certificate attested by MOFA.</p>
-                <p className="pl-3 text-slate-600">• Affidavit of Financial Support on non-judicial stamp paper (notarized).</p>
-                <p className="pl-3 text-slate-600">• Parents’ National ID Cards, Tax Return (TIN) receipts, and Trade License or Salary Certificate.</p>
-              </div>
-            </div>
-
-            <div className="grid gap-3 p-5 sm:grid-cols-3">
-              <div className="font-bold text-petrol-800">
-                5. Designated TB Medical Certificate
-              </div>
-              <div className="sm:col-span-2 text-slate-700 space-y-1">
-                <p>• Certificate of Tuberculosis (TB) Screening issued within 3 months of visa lodgement.</p>
-                <p>• <strong>Mandatory Designated Clinic:</strong> International Organization for Migration (IOM) Migration Health Assessment Clinic, Gulshan-2, Dhaka (or other embassy-authorized clinics).</p>
-                <p>• Must include official Chest X-ray evaluation, sputum smear test (if indicated), and physician clinical assessment.</p>
-              </div>
-            </div>
-
-            <div className="grid gap-3 p-5 sm:grid-cols-3">
-              <div className="font-bold text-petrol-800">
-                6. Police Clearance &amp; Study Motivation
-              </div>
-              <div className="sm:col-span-2 text-slate-700 space-y-1">
-                <p>• Police Clearance Certificate (PCC) issued by Bangladesh Police, attested by MOFA Consular Section (valid for 3–6 months).</p>
-                <p>• Detailed Study Plan &amp; Personal Statement (in English or Korean): articulating academic background, reasons for choosing South Korea, specific departmental research interests, financial plan, and post-graduation career trajectory.</p>
-                <p>• Valid Language Proficiency Score Card (IELTS/TOEFL for English-taught programs; TOPIK Level 3+ for Korean-taught programs).</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* Section 4: 5-Step Process */}
-      <Section
-        id="korea-visa-steps"
-        tone="sage"
-        title="The 5-Step South Korea Student Visa Application Process."
-        intro="A predictable, transparent application chronology designed to eliminate delays, prevent document discrepancies, and ensure successful visa lodgement at the Embassy in Dhaka."
-      >
-        <div className="relative border-l-2 border-emerald-700/30 pl-6 sm:pl-8 ml-3 sm:ml-4 space-y-10">
-          <div className="relative">
-            <span className="absolute -left-[35px] sm:-left-[43px] flex h-8 w-8 items-center justify-center rounded-full bg-emerald-800 text-xs font-bold text-white ring-4 ring-white">
-              1
-            </span>
-            <div className="rounded-xl border border-rule bg-white p-6 shadow-sm">
-              <span className="text-xs font-bold uppercase text-emerald-800">Step 1 · Weeks 1–3</span>
-              <h3 className="mt-1 text-base font-bold text-petrol-900">University Admission, Tuition Payment &amp; CoA/VIC Issuance</h3>
-              <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                Submit your certified academic dossier, portfolio, and statement of purpose to your shortlisted Korean universities. Upon acceptance, remit the required 1st-semester tuition fee or registration deposit via authorized SWIFT telegraphic transfer (Student File) from a Bangladeshi commercial bank. The university processes your official Standard Certificate of Admission (CoA) or files for a Visa Issuance Confirmation (VIC) with Korean immigration.
-              </p>
-            </div>
-          </div>
-
-          <div className="relative">
-            <span className="absolute -left-[35px] sm:-left-[43px] flex h-8 w-8 items-center justify-center rounded-full bg-emerald-800 text-xs font-bold text-white ring-4 ring-white">
-              2
-            </span>
-            <div className="rounded-xl border border-rule bg-white p-6 shadow-sm">
-              <span className="text-xs font-bold uppercase text-emerald-800">Step 2 · Weeks 3–4</span>
-              <h3 className="mt-1 text-base font-bold text-petrol-900">Government Attestations (Board, MOE &amp; MOFA Bangladesh)</h3>
-              <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                Have all original educational certificates and marksheets verified by your respective Education Board or University Registrar, authenticated by the Ministry of Education (MOE) at the Bangladesh Secretariat, and attested by the Ministry of Foreign Affairs (MOFA) Consular Section in Segunbagicha, Dhaka. Obtain your Police Clearance Certificate (PCC) and have it attested by MOFA simultaneously.
-              </p>
-            </div>
-          </div>
-
-          <div className="relative">
-            <span className="absolute -left-[35px] sm:-left-[43px] flex h-8 w-8 items-center justify-center rounded-full bg-emerald-800 text-xs font-bold text-white ring-4 ring-white">
-              3
-            </span>
-            <div className="rounded-xl border border-rule bg-white p-6 shadow-sm">
-              <span className="text-xs font-bold uppercase text-emerald-800">Step 3 · Weeks 5–6</span>
-              <h3 className="mt-1 text-base font-bold text-petrol-900">Designated TB Medical Checkup &amp; Bank Solvency Finalization</h3>
-              <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                Schedule and complete your mandatory Tuberculosis (TB) screening at the Korean Embassy-designated IOM Migration Health Assessment Clinic in Gulshan-2, Dhaka. Simultaneously, ensure your or your parents’ bank balance (USD 10,000–$20,000 equivalent) has completed the mandatory 30-day maintenance period, and request your formal Bank Solvency Certificate and 6-month statement with official bank seals.
-              </p>
-            </div>
-          </div>
-
-          <div className="relative">
-            <span className="absolute -left-[35px] sm:-left-[43px] flex h-8 w-8 items-center justify-center rounded-full bg-emerald-800 text-xs font-bold text-white ring-4 ring-white">
-              4
-            </span>
-            <div className="rounded-xl border border-rule bg-white p-6 shadow-sm">
-              <span className="text-xs font-bold uppercase text-emerald-800">Step 4 · Weeks 6–8</span>
-              <h3 className="mt-1 text-base font-bold text-petrol-900">Visa Dossier Lodgement &amp; Consular Interview in Dhaka</h3>
-              <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                Submit your complete visa dossier and pay the consular visa fee ($60) at the Embassy of the Republic of Korea in Baridhara, Dhaka (or authorized application center). If applying via CoA route, prepare for an in-person interview covering your study plan, financial stability, and reasons for returning to Bangladesh. Track your real-time application status online via the Korea Visa Portal.
-              </p>
-            </div>
-          </div>
-
-          <div className="relative">
-            <span className="absolute -left-[35px] sm:-left-[43px] flex h-8 w-8 items-center justify-center rounded-full bg-emerald-800 text-xs font-bold text-white ring-4 ring-white">
-              5
-            </span>
-            <div className="rounded-xl border border-rule bg-white p-6 shadow-sm">
-              <span className="text-xs font-bold uppercase text-emerald-800">Step 5 · Weeks 8–10</span>
-              <h3 className="mt-1 text-base font-bold text-petrol-900">Visa Issuance, Incheon Flight &amp; Post-Arrival ARC Registration</h3>
-              <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                Collect your passport containing the Korean visa sticker or download the official Visa Grant Notice. Attend EduExpress’s pre-departure orientation in Dhanmondi, book your flight to Incheon International Airport (ICN), and register for your Alien Registration Card (ARC) and National Health Insurance (NHIS) at the local Korea Immigration Office within 90 days of arrival.
-              </p>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* Section 5: Transparent Cost Breakdown */}
-      <Section
-        id="visa-costs"
-        title="South Korea Student Visa Costs: Itemized Breakdown."
-        intro="EduExpress operates with strict fee transparency. Every cost item, recipient, and payment timing is set out in writing before you start."
-      >
-        <div className="overflow-hidden rounded-2xl border border-rule bg-white shadow-sm">
-          <div className="border-b border-rule bg-canvas-soft p-5">
-            <h3 className="text-base font-bold text-petrol-900">South Korea Student Visa Expense Breakdown</h3>
-            <p className="mt-1 text-xs text-slate-600">Assumptions: 1 USD ≈ 122 BDT | 1 KRW ≈ 0.088 BDT. Figures verified for 2026/2027 admissions.</p>
-          </div>
-
-          <div className="divide-y divide-rule text-xs">
-            <div className="grid grid-cols-12 gap-2 bg-canvas-soft/80 p-3.5 font-bold text-slate-600">
-              <div className="col-span-4 sm:col-span-3">Item / Service</div>
-              <div className="col-span-3 sm:col-span-3">Cost (Foreign / BDT)</div>
-              <div className="col-span-3 sm:col-span-3">Payable To</div>
-              <div className="col-span-2 sm:col-span-3">Payment Timing</div>
-            </div>
-
-            <div className="grid grid-cols-12 gap-2 p-4 text-slate-700 items-center">
-              <div className="col-span-4 sm:col-span-3 font-semibold text-petrol-900">
-                Korean Embassy Visa Fee
-              </div>
-              <div className="col-span-3 sm:col-span-3">
-                USD 60 (~BDT 7,320)
-              </div>
-              <div className="col-span-3 sm:col-span-3 text-slate-600">
-                Embassy of Korea, Dhaka
-              </div>
-              <div className="col-span-2 sm:col-span-3 text-slate-600">
-                At visa submission
-              </div>
-            </div>
-
-            <div className="grid grid-cols-12 gap-2 p-4 text-slate-700 items-center">
-              <div className="col-span-4 sm:col-span-3 font-semibold text-petrol-900">
-                Designated TB Medical Test
-              </div>
-              <div className="col-span-3 sm:col-span-3">
-                ~BDT 6,500 – 8,000
-              </div>
-              <div className="col-span-3 sm:col-span-3 text-slate-600">
-                IOM Dhaka / Panel Clinic
-              </div>
-              <div className="col-span-2 sm:col-span-3 text-slate-600">
-                At medical examination
-              </div>
-            </div>
-
-            <div className="grid grid-cols-12 gap-2 p-4 text-slate-700 items-center">
-              <div className="col-span-4 sm:col-span-3 font-semibold text-petrol-900">
-                Board, MOE &amp; MOFA Attestation
-              </div>
-              <div className="col-span-3 sm:col-span-3">
-                ~BDT 3,000 – 5,000
-              </div>
-              <div className="col-span-3 sm:col-span-3 text-slate-600">
-                Respective ministries/boards
-              </div>
-              <div className="col-span-2 sm:col-span-3 text-slate-600">
-                During document verification
-              </div>
-            </div>
-
-            <div className="grid grid-cols-12 gap-2 p-4 text-slate-700 items-center">
-              <div className="col-span-4 sm:col-span-3 font-semibold text-petrol-900">
-                Police Clearance Certificate
-              </div>
-              <div className="col-span-3 sm:col-span-3">
-                BDT 500
-              </div>
-              <div className="col-span-3 sm:col-span-3 text-slate-600">
-                Bangladesh Police Portal
-              </div>
-              <div className="col-span-2 sm:col-span-3 text-slate-600">
-                Online application
-              </div>
-            </div>
-
-            <div className="grid grid-cols-12 gap-2 p-4 text-slate-700 items-center bg-emerald-50/50">
-              <div className="col-span-4 sm:col-span-3 font-bold text-emerald-950">
-                EduExpress File Opening
-              </div>
-              <div className="col-span-3 sm:col-span-3 font-bold text-emerald-800">
-                BDT 0 (Completely Free)
-              </div>
-              <div className="col-span-3 sm:col-span-3 text-slate-600">
-                EduExpress International
-              </div>
-              <div className="col-span-2 sm:col-span-3 font-semibold text-emerald-800">
-                Zero upfront charge
-              </div>
-            </div>
-
-            <div className="grid grid-cols-12 gap-2 p-4 text-slate-700 items-center bg-emerald-50/80">
-              <div className="col-span-4 sm:col-span-3 font-bold text-emerald-950">
-                EduExpress Full Service Fee
-              </div>
-              <div className="col-span-3 sm:col-span-3 font-bold text-emerald-800">
-                BDT 100,000 (1 Lakh Taka)
-              </div>
-              <div className="col-span-3 sm:col-span-3 text-slate-600">
-                EduExpress International
-              </div>
-              <div className="col-span-2 sm:col-span-3 font-bold text-emerald-900">
-                100% AFTER Visa Approval
-              </div>
-            </div>
-
-            <div className="grid grid-cols-12 gap-2 p-4 text-slate-700 items-center">
-              <div className="col-span-4 sm:col-span-3 font-semibold text-petrol-900">
-                Alien Registration (ARC) in Korea
-              </div>
-              <div className="col-span-3 sm:col-span-3">
-                KRW 30,000 (~BDT 2,640)
-              </div>
-              <div className="col-span-3 sm:col-span-3 text-slate-600">
-                Korea Immigration Office
-              </div>
-              <div className="col-span-2 sm:col-span-3 text-slate-600">
-                Within 90 days in Korea
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* Section 6: Refusal Risks & Common Pitfalls */}
-      <Section
-        id="refusal-risks"
-        tone="sage"
-        title="Why South Korea Student Visas Get Refused &amp; How to Protect Your Application."
-        intro="Consular officers at the Embassy of Korea in Dhaka evaluate applications with high rigor. Understanding the most frequent refusal causes ensures your submission is bulletproof."
-      >
-        <div className="grid gap-5 md:grid-cols-2">
-          <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
-            <div className="flex items-center gap-2 text-xs font-bold text-red-700">
-              <ShieldAlert size={16} /> Refusal Risk #1
-            </div>
-            <h3 className="mt-2 text-base font-bold text-petrol-900">Sudden Lump-Sum Bank Deposits (&ldquo;Fresh Money&rdquo;)</h3>
-            <p className="mt-2 text-xs text-slate-600">
-              Depositing USD 15,000–$20,000 into a bank account just days before printing the solvency certificate without a credible, documented source of funds triggers immediate suspicion of borrowed money.
-            </p>
-            <div className="mt-4 rounded-xl border border-slate-200 bg-canvas-soft p-3 text-xs text-slate-700">
-              <p className="font-bold text-emerald-800">The EduExpress Fix:</p>
-              <p className="mt-0.5">We insist on maintaining funds across 30 to 90 consecutive days supported by legitimate salary transfers, documented business profits, or asset sales backed by verifiable tax returns.</p>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
-            <div className="flex items-center gap-2 text-xs font-bold text-red-700">
-              <ShieldAlert size={16} /> Refusal Risk #2
-            </div>
-            <h3 className="mt-2 text-base font-bold text-petrol-900">Inability to Communicate During Consular Interview</h3>
-            <p className="mt-2 text-xs text-slate-600">
-              If applying for an English-taught degree but struggling to articulate your study plan in basic English, or applying for a Korean-taught degree without basic conversational Korean, consular officers issue 26-1 refusals for lack of study intention.
-            </p>
-            <div className="mt-4 rounded-xl border border-slate-200 bg-canvas-soft p-3 text-xs text-slate-700">
-              <p className="font-bold text-emerald-800">The EduExpress Fix:</p>
-              <p className="mt-0.5">Every student undergoes 3 structured mock interview sessions in Dhanmondi, rehearsing professors’ names, curriculum subjects, lab research goals, and career objectives.</p>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
-            <div className="flex items-center gap-2 text-xs font-bold text-red-700">
-              <ShieldAlert size={16} /> Refusal Risk #3
-            </div>
-            <h3 className="mt-2 text-base font-bold text-petrol-900">Choosing Non-Certified or Restricted Universities</h3>
-            <p className="mt-2 text-xs text-slate-600">
-              South Korea’s Ministry of Justice publishes an annual list of universities restricted from issuing student visas due to high illegal stay rates (over 10%). Unscrupulous agents often steer students toward these vulnerable regional colleges.
-            </p>
-            <div className="mt-4 rounded-xl border border-slate-200 bg-canvas-soft p-3 text-xs text-slate-700">
-              <p className="font-bold text-emerald-800">The EduExpress Fix:</p>
-              <p className="mt-0.5">We shortlist exclusively from IEQAS-certified institutions and Top 1% universities that possess official electronic Visa Issuance Confirmation (VIC) authority.</p>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
-            <div className="flex items-center gap-2 text-xs font-bold text-red-700">
-              <ShieldAlert size={16} /> Refusal Risk #4
-            </div>
-            <h3 className="mt-2 text-base font-bold text-petrol-900">Submitting Unverified or Inconsistent Documents</h3>
-            <p className="mt-2 text-xs text-slate-600">
-              Discrepancies in father’s or mother’s name spelling between the passport, National ID, birth certificate, and academic marksheets, or missing official ministry attestation seals, cause immediate return of files.
-            </p>
-            <div className="mt-4 rounded-xl border border-slate-200 bg-canvas-soft p-3 text-xs text-slate-700">
-              <p className="font-bold text-emerald-800">The EduExpress Fix:</p>
-              <p className="mt-0.5">Our compliance officers conduct a 6-point forensic audit of every character across all certificates, birth records, and bank vouchers before ministry submission.</p>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* Section 7: Post-Arrival Formalities (ARC & NHIS) */}
-      <Section
-        id="post-arrival-rules"
-        title="Alien Registration Card (ARC), Health Insurance &amp; Part-Time Work Rights."
-        intro="Landing at Incheon Airport is just the first step. To maintain valid legal residency, open Korean bank accounts, and work legally, you must complete standard post-arrival formalities."
-      >
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="rounded-2xl border border-rule bg-white p-6">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase text-emerald-800">
-              <IdCard size={18} /> Alien Registration Card (ARC)
-            </div>
-            <h3 className="mt-3 text-base font-bold text-petrol-900">Biometric ARC Registration</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-600">
-              Within 90 days of arrival, reserve an appointment via HiKorea at your local immigration office. Submit your passport, university enrollment certificate, lease contract (dorm or one-room), 3.5x4.5cm photo, and KRW 30,000 fee for fingerprinting. Your ARC serves as your official national identity card in Korea.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-rule bg-white p-6">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase text-emerald-800">
-              <Hospital size={18} /> National Health Insurance
-            </div>
-            <h3 className="mt-3 text-base font-bold text-petrol-900">Mandatory NHIS Enrollment</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-600">
-              All international students residing in South Korea under D-2 and D-4 visas are automatically enrolled in the statutory National Health Insurance Service (NHIS) upon ARC issuance. You receive comprehensive dental, clinical, and hospital coverage across Korea for a subsidized rate of ~KRW 70,000–80,000/month.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-rule bg-white p-6">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase text-emerald-800">
-              <Briefcase size={18} /> Part-Time Employment (S-3)
-            </div>
-            <h3 className="mt-3 text-base font-bold text-petrol-900">S-3 Work Permit Regulations</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-600">
-              After 1 semester, obtain your university international advisor’s signature and report your employment contract on HiKorea. Undergraduates with TOPIK Level 3+ can work 20–25 hours/week during term-time and unlimited hours in vacations at the national minimum wage of KRW 10,030/hr (~BDT 900–1,000/hr).
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      {/* Section 8: Verified Universities in South Korea */}
+      {/* Module 4: Verified South Korean Universities */}
       {universities.length > 0 && (
         <Section
           id="korea-universities"
           tone="sage"
-          title="Top South Korean Partner Universities for Bangladeshi Scholars."
-          intro="Explore top-tier national research institutes and prestigious private universities in South Korea offering English-taught degrees, high scholarship accessibility, and streamlined visa processing."
-        >
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {universities.map((uni) => (
-              <div key={uni.slug} className="rounded-2xl border border-rule bg-white p-5 shadow-sm transition hover:shadow-md">
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800">
-                    <BadgeCheck size={14} /> IEQAS Certified
-                  </span>
-                  {uni.rankingWorld && (
-                    <span className="text-[11px] font-bold text-slate-400">QS #{uni.rankingWorld}</span>
-                  )}
-                </div>
-                <h3 className="mt-3 text-base font-bold text-petrol-900">{uni.name}</h3>
-                <p className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
-                  <MapPin size={13} /> {uni.location}
-                </p>
-                {uni.tuition && (
-                  <div className="mt-3 rounded-lg border border-slate-100 bg-canvas-soft p-2.5 text-xs text-slate-700">
-                    <span className="font-semibold text-slate-500">Tuition Range:</span>
-                    <p className="mt-0.5 font-bold text-petrol-800">{uni.tuition}</p>
-                  </div>
-                )}
-                <div className="mt-4 flex items-center justify-between pt-2 border-t border-slate-100">
-                  <Link
-                    href={`/universities/${uni.slug}`}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-800"
-                  >
-                    View University Profile <ArrowRight size={13} />
-                  </Link>
-                  <Link
-                    href={`/apply?university=${encodeURIComponent(uni.name)}&country=South+Korea`}
-                    className="text-xs font-semibold text-slate-500 hover:text-slate-700"
-                  >
-                    Check Eligibility
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-rule bg-canvas-soft p-4 text-xs text-slate-600">
-            <span>Looking for detailed fee comparisons and semester living costs across Seoul vs provincial cities?</span>
-            <Link
-              href="/south-korea-study-cost-bangladesh"
-              className="inline-flex items-center gap-1 font-bold text-emerald-700 hover:text-emerald-800"
-            >
-              Read South Korea Study Cost Guide <ArrowRight size={14} />
+          title="Verified South Korean universities in the EduExpress directory."
+          intro="Compare IEQAS-certified Korean research and national universities offering English-track degrees and merit scholarships."
+          action={
+            <Link href="/universities?country=south-korea" className="ed-btn ed-btn-outline min-h-[48px] px-6">
+              Browse all South Korea universities <ArrowRight size={16} />
             </Link>
+          }
+        >
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {universities.map((uni) => (
+              <Link
+                key={uni.id}
+                href={`/universities/${uni.slug}`}
+                className="group flex flex-col justify-between rounded-3xl border border-petrol-800/10 bg-white p-5 transition hover:border-petrol-800 hover:shadow-sm"
+              >
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">{uni.city || 'South Korea'}</span>
+                  <h3 className="mt-1.5 text-[17px] font-bold text-petrol-800 group-hover:underline">{uni.name}</h3>
+                  {uni.tuition && <p className="mt-2 text-xs text-slate-600">Tuition: {uni.tuition}</p>}
+                </div>
+                <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-petrol-800">
+                  View profile &amp; fees <ArrowRight size={13} />
+                </span>
+              </Link>
+            ))}
           </div>
         </Section>
       )}
 
-      {/* Section 9: FAQs */}
-      <Section
-        id="korea-visa-faqs"
-        title="Frequently Asked Questions: South Korea Student Visa."
-        intro="Straightforward answers to the most common questions asked by Bangladeshi students and parents regarding Korean student visa procedures, bank statements, and interview preparation."
-      >
-        <FaqBlock items={faqs} />
-      </Section>
-
-      {/* Section 10: Sources, Reviewer & Accountability */}
-      <section aria-label="Sources and Editorial Review" className="border-t border-rule bg-canvas-soft py-10">
+      {/* Module 5: Written Service Terms Banner */}
+      <section className="bg-petrol-800 py-14 text-white">
         <div className={kit.wrap}>
-          <div className="rounded-2xl border border-rule bg-white p-6 sm:p-8">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">
-              Verified Government Sources &amp; Editorial Governance
-            </h3>
-            <p className="mt-1 text-xs text-slate-600">
-              This guide is prepared and maintained under EduExpress International’s Evidence-First Content Standard. Information is cross-checked against official Korean consular decrees, Korea Immigration Service regulations, and Bangladesh Bank foreign exchange circulars.
+          <div className="mx-auto max-w-4xl text-center">
+            <span className="text-xs font-bold uppercase tracking-wider text-lime">Written Cost Transparency</span>
+            <h2 className="mt-1 font-display text-2xl font-black sm:text-4xl text-white">
+              BDT 0 File-Opening Charge · ClearCost Breakdown in Writing
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-white/85">
+              We charge zero upfront file-opening fees for South Korea. Every university application fee, Student File tuition transfer, document legalization cost, and hospital TB screening fee is itemized in writing on your <strong>ClearCost Sheet</strong> before you proceed.
             </p>
-
-            <div className="mt-4 grid gap-2 sm:grid-cols-2 text-xs">
-              {KOREA_VISA_SOURCES.map((s, idx) => (
-                <div key={idx} className="rounded-xl border border-slate-100 bg-canvas-soft/60 p-3">
-                  <a
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-bold text-petrol-800 hover:text-emerald-700 inline-flex items-center gap-1"
-                  >
-                    {s.label} <ExternalLink size={12} />
-                  </a>
-                  <p className="mt-1 text-[11px] text-slate-500">{s.note}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-rule pt-4 text-xs text-slate-500">
-              <div>
-                <strong>Author:</strong> Abdullah Al Rakib (Founder &amp; CEO, EduExpress International) · <strong>Reviewer:</strong> Sakib Al Jubaer (Managing Director)
-              </div>
-              <div>
-                <strong>Last Verified:</strong> November 2026 · <strong>Next Scheduled Audit:</strong> February 2027
-              </div>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link href="/study-in-south-korea-from-bangladesh" className="ed-btn ed-btn-signal min-h-[48px] px-7 text-sm">
+                South Korea Study Pillar Guide <ArrowRight size={16} />
+              </Link>
+              <Link href="/south-korea-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[48px] border-white text-white hover:bg-white/10 px-7 text-sm">
+                South Korea Tuition &amp; Living Cost Breakdown
+              </Link>
+              <Link href="/fees-and-transparency" className="ed-btn ed-btn-outline min-h-[48px] border-white text-white hover:bg-white/10 px-7 text-sm">
+                Our Fee &amp; Transparency Policy
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Section 11: Conversion Lead Assessment */}
-      <Section
-        id="visa-assessment"
-        tone="sage"
-        title="Get Your Free South Korea Profile &amp; Visa Assessment."
-        intro="Find out if your academic background, IELTS/TOPIK score, and financial sponsorship qualify for South Korean degree admissions and embassy visa approval within 1 working day."
-      >
-        <div className="mx-auto max-w-2xl rounded-3xl border border-rule bg-white p-6 sm:p-8 shadow-sm">
-          <EducationFitAssessment />
+      {/* Module 6: FAQs */}
+      <FaqBlock
+        items={KOREA_VISA_FAQS}
+        title="Frequently asked questions about the South Korea student visa."
+        tone="white"
+      />
+
+      {/* Module 7: Official Sources, Reviewer & Disclaimer */}
+      <Section id="sources" tone="sage" title="Official Korean immigration sources &amp; editorial review.">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {KOREA_VISA_SOURCES.map((source) => (
+            <a
+              key={source.href}
+              href={source.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col justify-between rounded-2xl border border-petrol-800/15 bg-white p-4 transition hover:border-petrol-800/40"
+            >
+              <div>
+                <span className="flex items-center justify-between gap-2 text-xs font-bold text-petrol-800">
+                  <span>{source.label}</span>
+                  <ExternalLink size={13} className="shrink-0" aria-hidden="true" />
+                </span>
+                <p className="mt-1.5 text-[12px] leading-5 text-slate-600">{source.note}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-petrol-800/10 bg-white p-5 text-xs leading-relaxed text-slate-600">
+          <p>
+            <strong>Editorial &amp; Compliance Review:</strong> Reviewed by <strong>Abdullah Al Rakib</strong> (Founder &amp; CEO, EduExpress International) and the Senior Counseling Desk at Evergreen Latif, House 12/1, Road 4/A, Dhanmondi, Dhaka 1209. Verified against Embassy of the Republic of Korea in Dhaka D-2 consular notices, HiKorea Ministry of Justice regulations, and NIIED Study in Korea guidelines on <time dateTime="2026-11-27" className="font-bold text-petrol-800">27 November 2026</time>.
+          </p>
+          <p className="mt-2 text-amber-900">
+            <strong>Mandatory Standard Disclaimer:</strong> EduExpress International provides admission and visa-application guidance under written service terms. Final admission, GKS or university scholarship award, CoA issuance, and D-2/D-4 visa decisions rest solely with the respective Korean universities, NIIED, and the Embassy of the Republic of Korea in Dhaka.
+          </p>
         </div>
       </Section>
+
+      {/* Module 8: Assessment Form */}
+      <section className="bg-white py-14">
+        <div className={kit.wrap}>
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-8 text-center">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">D-2 Eligibility &amp; 14-Bank Audit</span>
+              <h2 className="mt-1 text-2xl font-bold sm:text-3xl text-petrol-800">Check Your South Korea Student Visa &amp; Scholarship Fit</h2>
+              <p className="mt-2 text-sm text-slate-600">
+                Share your academic GPA, IELTS/TOPIK status, and target intake (March or September). Our Dhanmondi team will review your IEQAS university options and 14-bank solvency plan within one working day.
+              </p>
+            </div>
+            <div className="rounded-3xl border border-rule bg-canvas-soft p-6 shadow-sm sm:p-10">
+              <EducationFitAssessment />
+            </div>
+          </div>
+        </div>
+      </section>
     </article>
   );
 }

@@ -34,6 +34,7 @@ function Cover({ update, sizes, priority }: { update: UpdateCardData; sizes: str
         src={update.featuredImage}
         alt={update.title}
         fill
+        unoptimized
         sizes={sizes}
         priority={priority}
         className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none"

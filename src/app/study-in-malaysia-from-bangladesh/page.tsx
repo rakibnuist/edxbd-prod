@@ -799,13 +799,20 @@ export default async function StudyInMalaysiaPage() {
               <div>
                 <div className="flex items-start justify-between gap-4">
                   <div className="relative size-16 shrink-0 overflow-hidden rounded-2xl border border-rule bg-canvas-soft p-1.5">
-                    <Image
-                      src={uni.logo}
-                      alt={`${uni.name} official logo`}
-                      fill
-                      sizes="64px"
-                      className="object-contain p-1"
-                    />
+                    {uni.logo ? (
+                      <Image
+                        src={uni.logo}
+                        alt={`${uni.name} official logo`}
+                        fill
+                        unoptimized
+                        sizes="64px"
+                        className="object-contain p-1"
+                      />
+                    ) : (
+                      <span className="grid size-full place-items-center text-xs font-bold text-petrol-800">
+                        {uni.name.slice(0, 3)}
+                      </span>
+                    )}
                   </div>
                   <span className="rounded-full bg-canvas-soft px-3 py-1 text-[11px] font-bold text-petrol-800">
                     {uni.city}

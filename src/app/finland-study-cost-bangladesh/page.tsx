@@ -69,7 +69,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in Finland from Bangladesh 2027 | EduExpress',
     description:
-      'Complete cost breakdown for studying in Finland from Bangladesh: Migri EUR 9,600/year living funds, UAS vs Research university tuition, health insurance, and 30 hrs/wk work income.',
+      'Finland study cost breakdown for Bangladeshi students: Migri €9,600/yr living funds, UAS & university tuition, health insurance, and 30 hrs/wk work income.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('finland', 'Cost of Studying in Finland from Bangladesh — EduExpress International'),

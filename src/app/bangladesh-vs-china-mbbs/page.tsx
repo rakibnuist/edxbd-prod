@@ -85,7 +85,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'MBBS in Bangladesh Private Medical vs China 2027: Costs, BMDC & RQE Rules | EduExpress',
     description:
-      'Authentic comparison of Bangladesh private medical colleges (MOHFW gazetted fees) vs 45 Chinese MOE public medical universities. Includes BMDC Eligibility Certificate fact-check, RQE licensing law, hospital scale, scholarships, and March Pre-Med pathways.',
+      'Compare Bangladesh private medical college costs vs 45 Chinese MOE public universities: BMDC eligibility rules, RQE licensing laws, and scholarship facts.',
     path: PATH,
     type: 'article',
     locale: 'en_BD',
