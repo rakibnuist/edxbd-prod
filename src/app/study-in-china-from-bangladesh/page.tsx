@@ -42,7 +42,7 @@ export const revalidate = 3600;
 export async function generateMetadata() {
   const content = await getChinaStudyHub();
   return pageMetadata({
-    title: 'Study in China from Bangladesh | EduExpress International',
+    title: 'Study in China from Bangladesh 2027: Scholarships, Costs & Visa | EduExpress',
     description: content.description,
     path: PATH,
     locale: 'en_BD',

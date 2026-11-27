@@ -31,9 +31,9 @@ const ORG = { '@id': 'https://eduexpressint.com/#organization' };
 export const revalidate = 3600;
 
 export const metadata = pageMetadata({
-  title: 'Study in China Agency in Bangladesh — Dhanmondi Visa-First Consultancy',
+  title: 'Study in China Agency in Dhaka, Bangladesh (354+ Universities & BDT 0 Before Visa) | EduExpress',
   description:
-    'Looking for a trusted study in China agency in Bangladesh? EduExpress International (Dhanmondi, Dhaka, since 2018) offers 150 verified Chinese universities, written ClearCost sheets, and BDT 0 service fee before China visa approval.',
+    'Looking for a trusted study in China & CSC scholarship agency in Dhaka, Bangladesh? EduExpress International (Dhanmondi, since 2018) offers 354+ verified Chinese universities (306+ CSC-designated), written ClearCost sheets, and BDT 0 service fee before China visa approval.',
   path: PATH,
   locale: 'en_BD',
 });
@@ -55,7 +55,7 @@ const AGENCY_CHECKLIST = [
     criterion: 'Tuition & Hidden First-Year Fees',
     redFlag: 'Quoting only discounted tuition while hiding hostel, insurance, medical check, residence permit, or registration charges.',
     eduExpressStandard:
-      'Public ClearCost database covering 150 verified Chinese universities and itemized non-tuition fees, plus a written first-year cost sheet naming every recipient and due date.',
+      'Public ClearCost database covering 354+ verified Chinese universities (306+ CSC-designated) and itemized non-tuition fees, plus a written first-year cost sheet naming every recipient and due date.',
   },
   {
     criterion: 'MBBS & Degree Recognition',
@@ -86,7 +86,7 @@ const WORKFLOW_STEPS = [
   {
     step: '02',
     title: 'Verified Shortlist & Comparison',
-    detail: 'Compare 2–3 suitable universities from our 150-university China catalog side by side with official degree and recognition checks.',
+    detail: 'Compare 2–3 suitable universities from our 354+ university China catalog (including 306+ CSC-designated institutions) side by side with official degree and recognition checks.',
   },
   {
     step: '03',
@@ -148,7 +148,7 @@ export default async function StudyInChinaAgencyBangladeshPage() {
   ]);
 
   const activeChina = chinaUniversities.filter((u) => u.isActive);
-  const chinaCount = activeChina.length || 150;
+  const chinaCount = activeChina.length || 354;
   const programCount = activeChina.reduce((sum, u) => sum + u.programs.length, 0);
   const scholarshipCount = activeChina.reduce((sum, u) => sum + u.scholarships.length, 0);
 
@@ -169,9 +169,9 @@ export default async function StudyInChinaAgencyBangladeshPage() {
         mainEntityOfPage: PAGE_URL,
         name: 'Study in China Agency in Bangladesh — EduExpress International',
         description:
-          'Evidence-first China education consultancy in Dhanmondi, Dhaka offering 150 verified Chinese universities, written cost breakdowns, and BDT 0 service fee before China visa approval.',
+          'Evidence-first China education consultancy in Dhanmondi, Dhaka offering 354+ verified Chinese universities (306+ CSC-designated), written cost breakdowns, and BDT 0 service fee before China visa approval.',
         inLanguage: 'en-BD',
-        dateModified: '2026-11-22',
+        dateModified: '2026-11-28',
         about: ORG,
         publisher: ORG,
         reviewedBy: ORG,
@@ -190,7 +190,7 @@ export default async function StudyInChinaAgencyBangladeshPage() {
         url: PAGE_URL,
         serviceType: 'China Education Consultancy',
         description:
-          'China university shortlisting across 150 verified institutions, written first-year ClearCost breakdowns, CSC/provincial scholarship eligibility checks, and JW201/JW202 + X1 student visa file preparation in Dhanmondi, Dhaka.',
+          'China university shortlisting across 354+ verified institutions (306+ CSC-designated), written first-year ClearCost breakdowns, CSC/provincial scholarship eligibility checks, and JW201/JW202 + X1 student visa file preparation in Dhanmondi, Dhaka.',
         provider: ORG,
         areaServed: [
           { '@type': 'City', name: 'Dhaka' },
@@ -212,7 +212,7 @@ export default async function StudyInChinaAgencyBangladeshPage() {
         ]}
         eyebrow="Since 2018 · CBCA Founding Member (#08) & FACD-CAB (FCM-452) · Dhanmondi, Dhaka"
         title="Study in China agency in Bangladesh — verify costs & visas before you pay."
-        lead="EduExpress International is a Dhaka-based, evidence-first China education consultancy — Founding Member (#08) of the China Bangladesh Consultancy Alliance (CBCA) and verified Active Member of FACD-CAB (ID: FCM-452). Compare 150 verified Chinese universities with written first-year cost sheets and BDT 0 EduExpress service fee before China visa approval."
+        lead="EduExpress International is a Dhaka-based, evidence-first China education consultancy — Founding Member (#08) of the China Bangladesh Consultancy Alliance (CBCA) and verified Active Member of FACD-CAB (ID: FCM-452). Compare 354+ verified Chinese universities (306+ CSC-designated) with written first-year cost sheets and BDT 0 EduExpress service fee before China visa approval."
         reviewed="November 2026"
         actions={
           <>
@@ -347,7 +347,7 @@ export default async function StudyInChinaAgencyBangladeshPage() {
             </div>
             <div className="flex flex-wrap gap-2.5 text-[14px] font-semibold">
               <Link href="/china-universities" className="ed-btn ed-btn-outline min-h-[42px] px-4">
-                150 China Universities
+                354+ China Universities (306+ CSC)
               </Link>
               <Link href="/china-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[42px] px-4">
                 CSC &amp; Provincial Scholarships

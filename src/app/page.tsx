@@ -38,9 +38,9 @@ import { RSS_FEED } from '@/lib/seo';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: { absolute: 'Study Abroad Consultancy in Bangladesh | EduExpress' },
+  title: { absolute: 'Study Abroad & Education Consultancy in Bangladesh (Dhanmondi, Dhaka) | EduExpress' },
   description:
-    'Free study abroad assessment in Dhanmondi, Dhaka. Compare universities, scholarships and the full cost in writing, with no fee before your China visa.',
+    'Trusted study abroad & education consultancy in Dhanmondi, Dhaka since 2018. Study in China, Malaysia, UK & Europe with written ClearCost sheets, BDT 0 file-opening fee & BDT 0 service charge for Malaysia and the UK.',
   alternates: { canonical: '/', types: RSS_FEED },
   openGraph: {
     title: 'Study Abroad, With the Costs in Writing | EduExpress',

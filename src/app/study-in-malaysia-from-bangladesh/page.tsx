@@ -44,9 +44,9 @@ const MALAYSIA_HUB_SOURCES = [
 
 export async function generateMetadata() {
   return pageMetadata({
-    title: 'Study in Malaysia from Bangladesh | EduExpress',
+    title: 'Study in Malaysia from Bangladesh 2027: Total Cost in BDT, EMGS Visa & BDT 0 Fee | EduExpress',
     description:
-      'Study in Malaysia from Bangladesh: MQA accreditation, UK dual degrees, EMGS eVAL visa guide, and BDT 0 service charge at EduExpress International.',
+      'Study in Malaysia from Bangladesh in 2027: total cost in BDT, MQA universities (UTM, APU, Taylor’s, Sunway, UCSI), EMGS eVAL visa timeline, MOI rules, and BDT 0 service charge.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('malaysia', 'Study in Malaysia from Bangladesh — EduExpress International'),

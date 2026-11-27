@@ -50,7 +50,7 @@ const fullDay = (iso?: string) => {
 export async function generateMetadata() {
   const guide = await getChinaMbbsGuide();
   return pageMetadata({
-    title: 'MBBS in China for Bangladeshi Students | EduExpress',
+    title: 'MBBS in China for Bangladeshi Students 2027: Cost in BDT & 45 BMDC List | EduExpress',
     description: guide.description,
     path: PATH,
     image: ogImage('china-guide', heroImage.alt),

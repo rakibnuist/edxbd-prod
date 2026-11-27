@@ -11,9 +11,9 @@ const SITE = 'https://eduexpressint.com';
 const PATH = '/csc-scholarship-bangladesh';
 
 export const metadata = pageMetadata({
-  title: 'CSC Scholarship 2027: Application Guide | EduExpress',
+  title: 'CSC Scholarship 2027–2028 Bangladesh: 306 Universities & Application Guide | EduExpress',
   description:
-    'Complete 2027/2028 Chinese Government (CSC) Scholarship guide for Bangladeshi students: Type A & Type B routes, full coverage, stipends and open deadlines.',
+    'Complete 2027/2028 Chinese Government (CSC) Scholarship guide for Bangladeshi students: Type A & Type B routes across 306+ universities, stipends, CSCA rules & deadlines.',
   path: PATH,
   image: ogImage('china', 'A student at the I love NUIST sign on campus in Nanjing'),
   type: 'article',

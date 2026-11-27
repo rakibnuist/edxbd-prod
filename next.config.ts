@@ -232,6 +232,32 @@ const nextConfig: NextConfig = {
         destination: '/universities/njupt',
         permanent: true,
       },
+      // Commercial B2C query slug aliases (table & voice search variants)
+      {
+        source: '/fees-and-refund-policy',
+        destination: '/fees-and-transparency',
+        permanent: true,
+      },
+      {
+        source: '/csc-scholarships-bangladesh',
+        destination: '/csc-scholarship-bangladesh',
+        permanent: true,
+      },
+      {
+        source: '/mbbs-in-china-for-bangladeshi-students',
+        destination: '/mbbs-in-china-bangladesh',
+        permanent: true,
+      },
+      {
+        source: '/best-education-consultancy-in-bangladesh',
+        destination: '/education-consultant-dhaka',
+        permanent: true,
+      },
+      {
+        source: '/best-study-abroad-agency-in-bangladesh',
+        destination: '/education-consultant-dhaka',
+        permanent: true,
+      },
     ];
   },
 
