@@ -32,7 +32,7 @@ export const CHINA_BUSINESS_FINANCE_2027_DATA: GuideData = {
   metaTitle: 'Study Business & Finance in China from Bangladesh: 2027 Guide | EduExpress',
   metaDescription:
     'Guide to BBA, International Trade & Finance degrees in China for Bangladeshi scholars: AACSB universities (UIBE, ZUEL, Antai), MOFCOM scholarships, and career mobility.',
-  featuredImage: '/updates/covers/uibe-csc-scholarship-2027.jpg',
+  featuredImage: '/updates/covers/china-business-finance-economics-guide-2027.jpg',
   author: 'Abdullah Al Rakib',
   reviewer: 'Sakib Al Jubaer',
   sourceUrls: JSON.stringify(CHINA_BUSINESS_FINANCE_2027_SOURCES),

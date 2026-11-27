@@ -33,7 +33,7 @@ export const CHINA_CS_AI_ADMISSION_2027_DATA: GuideData = {
   metaTitle: 'Study CS & AI in China from Bangladesh: 2027 Guide & CSC Scholarships | EduExpress',
   metaDescription:
     'Evidence-first guide to Computer Science and AI degrees in China for Bangladeshi scholars: top C9/211 universities (NUIST, XJTU, HIT), Washington Accord accreditation, CSC Type-B stipends, and visa rules.',
-  featuredImage: '/updates/covers/top-ms-computer-science-ai-china-csc-scholarship-2027.jpg',
+  featuredImage: '/updates/covers/china-cs-ai-admission-guide-2027.jpg',
   author: 'Abdullah Al Rakib',
   reviewer: 'Sakib Al Jubaer',
   sourceUrls: JSON.stringify(CHINA_CS_AI_ADMISSION_2027_SOURCES),

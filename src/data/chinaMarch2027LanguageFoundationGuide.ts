@@ -34,7 +34,7 @@ export const CHINA_MARCH_2027_LANGUAGE_DATA: GuideData = {
   metaTitle: 'China March 2027 Intake Guide: Language, Foundation & CSCA | EduExpress',
   metaDescription:
     'Complete guide to China March 2027 spring intake for Bangladeshi scholars: Chinese language programs, university foundations (SYCU, NUAA, HIT), CSCA prep, fees, and X2/X1 visas.',
-  featuredImage: '/updates/covers/jiangsu-university-march-2027-intake.jpg',
+  featuredImage: '/updates/covers/china-march-2027-language-foundation-guide.jpg',
   author: 'Abdullah Al Rakib',
   reviewer: 'Sakib Al Jubaer',
   sourceUrls: JSON.stringify(CHINA_MARCH_2027_LANGUAGE_SOURCES),

@@ -31,7 +31,7 @@ export const CHINA_MBBS_ADMISSION_2027_DATA: GuideData = {
   metaTitle: 'MBBS in China Admission Guide 2027: MOE Colleges & BMDC Rules | EduExpress',
   metaDescription:
     'Evidence-first guide to MBBS in China for Bangladeshi students: 45 MOE-listed universities, BMDC eligibility rules, university tuition (CNY 25k–45k/yr), and CSC realities.',
-  featuredImage: '/images/real/china_campus/cie_campus_visit.webp',
+  featuredImage: '/updates/covers/china-mbbs-admission-guide-2027.jpg',
   author: 'Abdullah Al Rakib',
   reviewer: 'Sakib Al Jubaer',
   sourceUrls: JSON.stringify(CHINA_MBBS_ADMISSION_2027_SOURCES),

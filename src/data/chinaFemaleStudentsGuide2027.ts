@@ -31,7 +31,7 @@ export const CHINA_FEMALE_STUDENTS_2027_DATA: GuideData = {
   metaTitle: 'Study in China for Female Students from Bangladesh | EduExpress',
   metaDescription:
     '2027 safety, living & admissions guide for Bangladeshi female students in China: segregated female dormitories, 24/7 security, halal food, healthcare, and parental peace of mind.',
-  featuredImage: '/updates/covers/fudan-university-chinese-culture-and-society-program-2027.jpg',
+  featuredImage: '/updates/covers/china-female-students-safety-guide-2027.jpg',
   author: 'Shamoyla Narmin',
   reviewer: 'Abdullah Al Rakib',
   sourceUrls: JSON.stringify(CHINA_FEMALE_STUDENTS_2027_SOURCES),

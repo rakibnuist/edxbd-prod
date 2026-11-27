@@ -32,7 +32,7 @@ export const CHINA_DIPLOMA_TO_BACHELOR_2027_DATA: GuideData = {
   metaTitle: 'China Bachelor Transfer for BD Polytechnic Diploma Holders | EduExpress',
   metaDescription:
     '2027 admission & credit transfer guide for Bangladeshi BTEB 4-year diploma graduates: Dazhuan-to-Benke pathways, B.Sc. engineering in China, scholarships, and DUET comparison.',
-  featuredImage: '/updates/covers/guangdong-polytechnic-normal-university-admissions-2027.jpg',
+  featuredImage: '/updates/covers/china-diploma-to-bachelor-transfer-guide-2027.jpg',
   author: 'Abdullah Al Rakib',
   reviewer: 'Sakib Al Jubaer',
   sourceUrls: JSON.stringify(CHINA_DIPLOMA_TO_BACHELOR_2027_SOURCES),

@@ -32,7 +32,7 @@ export const CHINA_ENGINEERING_ROBOTICS_2027_DATA: GuideData = {
   metaTitle: 'Study Engineering & Robotics in China from Bangladesh: 2027 Guide | EduExpress',
   metaDescription:
     '2027 admissions & scholarship guide for Bangladeshi engineering students: Robotics, Automation, Civil & Mechanical degrees in China, Washington Accord accreditation, and CSC funding.',
-  featuredImage: '/updates/covers/tianjin-university-csc-scholarship-2027.jpg',
+  featuredImage: '/updates/covers/china-engineering-robotics-admission-guide-2027.jpg',
   author: 'Abdullah Al Rakib',
   reviewer: 'Sakib Al Jubaer',
   sourceUrls: JSON.stringify(CHINA_ENGINEERING_ROBOTICS_2027_SOURCES),

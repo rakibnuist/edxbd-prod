@@ -32,7 +32,7 @@ export const CHINA_POSTGRADUATE_CSC_2027_DATA: GuideData = {
   metaTitle: 'China Master\'s & PhD CSC Application Guide | EduExpress',
   metaDescription:
     'Comprehensive 2027 postgraduate guide for Bangladeshi scholars: CSC Type-B vs Type-A, emailing professors, Acceptance Letters, research proposals, and monthly stipends.',
-  featuredImage: '/updates/covers/southeast-university-postgraduate-admissions-guide-2027.jpg',
+  featuredImage: '/updates/covers/china-postgraduate-csc-scholarship-guide-2027.jpg',
   author: 'Abdullah Al Rakib',
   reviewer: 'Sakib Al Jubaer',
   sourceUrls: JSON.stringify(CHINA_POSTGRADUATE_CSC_2027_SOURCES),
