@@ -158,6 +158,9 @@ export default async function StudyInHungaryPage() {
             <Link href={applyHref} className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Start Hungary Eligibility Assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="/hungary-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Hungary Cost Guide (2027)
+            </Link>
             <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               View 6 Verified Universities
             </a>
@@ -479,9 +482,15 @@ export default async function StudyInHungaryPage() {
               <span>Complete health insurance coverage in Hungary up to HUF 65,000/year per person.</span>
             </div>
           </div>
-          <p className="mt-4 text-[13px] text-emerald-900 font-medium">
-            * Note: EduExpress does NOT sell government scholarships. Stipendium Hungaricum nominations are strictly awarded by the Ministry of Education Bangladesh and Hungarian host universities. We provide authentic dossier preparation, SOP review, and entrance exam mentoring.
-          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-canvas-soft border border-petrol-800/10 p-4">
+            <span className="text-xs font-semibold text-slate-700">Looking for a detailed breakdown of Hungarian university tuition, living expenses in Budapest vs regional cities, and Student File transfers?</span>
+            <Link
+              href="/hungary-study-cost-bangladesh"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-petrol-800 hover:text-emerald-700 hover:underline"
+            >
+              Read Full Hungary Study Cost Guide (2027) <ArrowRight size={14} aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </Section>
 

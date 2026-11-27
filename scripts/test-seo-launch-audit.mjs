@@ -235,6 +235,16 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.ok(!finlandCostHtml.includes('Official Planning Baseline'));
 
+  const hungaryCostHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'hungary-study-cost-bangladesh.html'), 'utf8');
+  assert.ok(
+    hungaryCostHtml.includes('Planning Assumption') &&
+      hungaryCostHtml.includes('Stipendium Hungaricum') &&
+      hungaryCostHtml.includes('stipendiumhungaricum.hu') &&
+      hungaryCostHtml.includes('oif.gov.hu'),
+    'hungary-study-cost-bangladesh must include Planning Assumption, Stipendium Hungaricum, and NDGAP citation',
+  );
+  assert.ok(!hungaryCostHtml.includes('Official Planning Baseline'));
+
   const chinaHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-china-from-bangladesh.html'), 'utf8');
   for (const href of [
     '/csc-scholarship-bangladesh',
