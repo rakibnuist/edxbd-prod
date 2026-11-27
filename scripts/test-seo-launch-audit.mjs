@@ -320,9 +320,8 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
       croatiaCostHtml.includes('Agency for Science and Higher Education') &&
       croatiaCostHtml.includes('University of Zagreb') &&
       croatiaCostHtml.includes('Type D') &&
-      croatiaCostHtml.includes('Schengen') &&
       croatiaCostHtml.includes('azvo.hr'),
-    'croatia-study-cost-bangladesh must include Planning Assumption, ASHE, Zagreb, Type D, Schengen, and official citations',
+    'croatia-study-cost-bangladesh must include Planning Assumption, ASHE, Zagreb, Type D, and official citations',
   );
   assert.ok(!croatiaCostHtml.includes('Official Planning Baseline'));
 

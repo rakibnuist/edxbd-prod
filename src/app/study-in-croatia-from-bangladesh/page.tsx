@@ -508,7 +508,7 @@ export default async function StudyInCroatiaPage() {
                 Deep Dive: Croatia Study Cost Guide (/croatia-study-cost-bangladesh)
               </h3>
               <p className="mt-1 text-xs text-slate-600">
-                Explore comprehensive tuition fee schedules across University of Zagreb, Split, and Rijeka, Ministry of the Interior (MUP) Type D bank solvency rules (€400–€550/mo), subsidized Mensa dining (X-ica), and Schengen Area mobility.
+                Explore comprehensive tuition fee schedules across University of Zagreb, Split, and Rijeka, Ministry of the Interior (MUP) Type D bank solvency rules (€400–€550/mo), subsidized Mensa dining (X-ica), and European Bologna degree standards.
               </p>
             </div>
             <Link
