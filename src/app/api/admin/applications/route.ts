@@ -145,6 +145,7 @@ export async function GET(request: NextRequest) {
           assignedTo: true,
           status: true,
           leadMarket: true,
+          source: true,
         },
         orderBy: { createdAt: 'desc' },
         take: 100,

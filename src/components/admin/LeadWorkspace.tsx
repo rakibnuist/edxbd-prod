@@ -10,7 +10,9 @@ import {
 import FollowupScheduler from '@/components/admin/FollowupScheduler';
 import LeadCopilotPanel from '@/components/admin/LeadCopilotPanel';
 import LeadPortalDrawerSection, { type EmployeeOption } from '@/components/admin/LeadPortalDrawerSection';
+import QuickInteractionLogger from '@/components/admin/QuickInteractionLogger';
 import WaTemplateButton from '@/components/admin/WaTemplateButton';
+import { categorizeLeadSource, formatFriendlySource, getSourceCategoryDef } from '@/lib/lead-sources';
 import type { FitResponseLanguage } from '@/lib/fit-matcher';
 import type { LeadCopilotResult } from '@/lib/lead-copilot';
 import {
@@ -184,7 +186,10 @@ function Detail({
     ['Program / interest', lead.program || lead.assessSubject],
     ['Assigned team', lead.assignedTeam?.replaceAll('_', ' ')],
     ['Assigned counselor', lead.assignedTo],
-    ['Enquiry source', lead.source],
+    [
+      'Enquiry source',
+      `${formatFriendlySource(lead.source)} (${getSourceCategoryDef(categorizeLeadSource(lead.source, lead.utm, lead.channelType)).shortLabel})`,
+    ],
     ['Received', date(lead.createdAt)],
     ['Last activity', date(lead.updatedAt)],
   ];
@@ -362,9 +367,24 @@ function Detail({
           />
         )}
 
+        {/* 1-Tap Mobile & Desktop Interaction / Call Logger */}
         <section>
-          <label htmlFor="counselor-notes" className="text-sm font-semibold">Counselor notes</label>
-          <p className="mt-1 text-xs text-gray-600">Internal follow-up notes for your admissions team.</p>
+          <QuickInteractionLogger
+            leadId={lead.id}
+            leadName={lead.name}
+            phone={lead.phone}
+            currentStatus={lead.status}
+            currentFollowup={lead.nextFollowup}
+            onLeadUpdated={(updated) => {
+              if (updated.notes) setNotes(updated.notes);
+              onUpdate(lead.id, updated as any);
+            }}
+          />
+        </section>
+
+        <section>
+          <label htmlFor="counselor-notes" className="text-sm font-semibold">Raw Notes & Archive</label>
+          <p className="mt-1 text-xs text-gray-600">Full notes record for this student file.</p>
           <textarea
             id="counselor-notes"
             value={notes}
@@ -722,6 +742,10 @@ export default function LeadWorkspace({
           <span className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-slate-400">Quick focus:</span>
           {[
             { id: 'all' as LeadQuickPreset, label: 'All Enquiries', icon: null },
+            { id: 'positive_clients' as LeadQuickPreset, label: '🌟 Positive / Qualified', icon: FolderCheck },
+            { id: 'in_process_apps' as LeadQuickPreset, label: '📂 In-Process Files', icon: FolderKanban },
+            { id: 'paid_leads' as LeadQuickPreset, label: '🟣 Paid Ads (Meta)', icon: null },
+            { id: 'organic_leads' as LeadQuickPreset, label: '🟢 Organic Web', icon: null },
             { id: 'followup_due' as LeadQuickPreset, label: 'Follow-ups Due Today', icon: CalendarClock },
             { id: 'followup_overdue' as LeadQuickPreset, label: 'Overdue Follow-ups', icon: AlertCircle },
             { id: 'followup_upcoming' as LeadQuickPreset, label: 'Upcoming Follow-ups', icon: Clock },
@@ -834,7 +858,7 @@ export default function LeadWorkspace({
             </label>
 
             <label className="space-y-1.5 text-xs text-gray-700">
-              <span>Source</span>
+              <span>Source Channel</span>
               <select
                 className={`${control} w-full`}
                 value={source}
@@ -843,8 +867,21 @@ export default function LeadWorkspace({
                   setPage(1);
                 }}
               >
-                <option value="all">All sources</option>
-                {sources.map((v) => <option key={v} value={v}>{v}</option>)}
+                <option value="all">All Sources (All Channels)</option>
+                <optgroup label="Main Channels">
+                  <option value="cat:paid">🟣 Paid Ads (Meta / PPC)</option>
+                  <option value="cat:organic">🟢 Organic (Website / SEO)</option>
+                  <option value="cat:whatsapp">💬 WhatsApp Inbound</option>
+                  <option value="cat:in_house">🏢 In-House / Walk-in</option>
+                  <option value="cat:b2b">🤝 Partner Network (B2B)</option>
+                </optgroup>
+                <optgroup label="Specific Enquiries">
+                  {sources.map((v) => (
+                    <option key={v} value={v}>
+                      {formatFriendlySource(v)}
+                    </option>
+                  ))}
+                </optgroup>
               </select>
             </label>
 
@@ -1099,15 +1136,19 @@ export default function LeadWorkspace({
                           {lead.university || lead.program || lead.assessSubject || 'Program to discuss'}
                         </p>
                         <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                          {lead.source?.includes('meta') ? (
-                            <span className="inline-flex items-center gap-1 rounded-md border border-blue-200/60 bg-blue-50 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-blue-700">
-                              <span className="size-1.5 rounded-full bg-blue-600" /> Meta Form
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-slate-700">
-                              <span className="size-1.5 rounded-full bg-slate-500" /> Website
-                            </span>
-                          )}
+                          {(() => {
+                            const cat = categorizeLeadSource(lead.source, lead.utm, lead.channelType);
+                            const def = getSourceCategoryDef(cat);
+                            return (
+                              <span
+                                className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${def.badgeClass}`}
+                                title={`Raw Source: ${lead.source || 'None'}`}
+                              >
+                                <span className="size-1.5 rounded-full" style={{ backgroundColor: def.dotColor }} />
+                                {def.shortLabel}
+                              </span>
+                            );
+                          })()}
                           {lead.assignedTo && (
                             <span className="inline-flex items-center gap-1 rounded-md border border-indigo-200 bg-indigo-50 px-2 py-0.5 text-[10px] font-bold text-indigo-800">
                               <UserCheck size={10} /> {lead.assignedTo}

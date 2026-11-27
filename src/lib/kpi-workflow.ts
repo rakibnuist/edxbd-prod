@@ -1,7 +1,10 @@
 // Pure Asia/Dhaka (GMT+6) date helpers & 4-pillar Employee KPI + Workflow computation
 import { resolveAttendanceLocationStatus, type OfficeLocationStatus } from './office-location';
+import { categorizeLeadSource, getSourceCategoryDef, type LeadSourceCategory } from './lead-sources';
 
 export const KPI_ACT_WEIGHTS: Record<string, number> = {
+  call_logged: 3,
+  discussion_logged: 2,
   lead_created: 3,
   lead_status_changed: 2,
   lead_assigned: 1,
@@ -23,7 +26,7 @@ export const KPI_ACT_WEIGHTS: Record<string, number> = {
 export const KPI_ACT_GROUPS: Record<string, string[]> = {
   lead_work: ['lead_created', 'lead_status_changed', 'lead_assigned', 'lead_updated_via_app', 'payment_recorded'],
   application: ['application_opened', 'application_stage_changed', 'embassy_status_changed', 'uni_app_status', 'document_updated'],
-  communication: ['reply_to_student', 'note'],
+  communication: ['call_logged', 'discussion_logged', 'reply_to_student', 'note'],
   tasks: ['task_completed', 'daily_log_submitted', 'daily_log_updated', 'attendance_in'],
 };
 
@@ -157,6 +160,9 @@ export interface KpiLeadRow {
   phone: string;
   country: string;
   status: string;
+  source?: string | null;
+  utm?: unknown;
+  channelType?: string | null;
   isApplication?: boolean;
   referrer?: string | null;
   applicationStage: string;
@@ -167,6 +173,17 @@ export interface KpiLeadRow {
   assessAcademicResults: string | null;
   createdAt: Date | string;
   updatedAt: Date | string;
+}
+
+export interface KpiSourceMetric {
+  source: string;
+  category: LeadSourceCategory;
+  categoryLabel: string;
+  totalLeads: number;
+  contactedLeads: number;
+  qualifiedLeads: number;
+  filesOpened: number;
+  conversionRatePct: number;
 }
 
 export interface KpiActivityRow {
@@ -241,6 +258,9 @@ export interface ComputedEmployeeKpi {
     applicationStartedCount: number;
     admittedCount: number;
     enrolledCount: number;
+    callsLogged: number;
+    filesOpened: number;
+    conversionRatePct: number;
   };
   sla: {
     maxSlaHours: number;
@@ -294,6 +314,7 @@ export interface KpiReportResult {
   };
   employees: ComputedEmployeeKpi[];
   slaBottlenecks: SlaBottleneckLead[];
+  sourceMetrics: KpiSourceMetric[];
 }
 
 function buildAliases(emp: KpiEmployeeRow): Set<string> {
@@ -638,6 +659,11 @@ export function computeEmployeeKpiReport(input: {
     }
 
     const score = Math.round(attendanceScore + disciplineScore + activityScore + executionScore);
+    const filesOpened = empLeads.filter(
+      (l) => l.isApplication || ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(l.status),
+    ).length;
+    const callsLogged = actByType['call_logged'] || 0;
+    const conversionRatePct = empLeads.length > 0 ? Number(((filesOpened / empLeads.length) * 100).toFixed(1)) : 0;
 
     let workflowStage: WorkflowStageKey = 'on_track';
     if (!isWorkingDayToday) {
@@ -702,6 +728,9 @@ export function computeEmployeeKpiReport(input: {
         applicationStartedCount,
         admittedCount,
         enrolledCount,
+        callsLogged,
+        filesOpened,
+        conversionRatePct,
       },
       sla: {
         maxSlaHours,
@@ -757,6 +786,46 @@ export function computeEmployeeKpiReport(input: {
     ? Math.round(computedEmployees.reduce((sum, e) => sum + e.score, 0) / activeCount)
     : 0;
 
+  const sourceMap = new Map<string, {
+    source: string;
+    category: LeadSourceCategory;
+    totalLeads: number;
+    contactedLeads: number;
+    qualifiedLeads: number;
+    filesOpened: number;
+  }>();
+
+  for (const l of input.leads) {
+    const s = l.source || 'website';
+    const cat = categorizeLeadSource(s, l.utm, l.channelType);
+    let entry = sourceMap.get(s);
+    if (!entry) {
+      entry = {
+        source: s,
+        category: cat,
+        totalLeads: 0,
+        contactedLeads: 0,
+        qualifiedLeads: 0,
+        filesOpened: 0,
+      };
+      sourceMap.set(s, entry);
+    }
+    entry.totalLeads += 1;
+    if (l.status !== 'new') entry.contactedLeads += 1;
+    if (['qualified', 'consultation_scheduled', 'consultation_completed'].includes(l.status)) entry.qualifiedLeads += 1;
+    if (l.isApplication || ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(l.status)) {
+      entry.filesOpened += 1;
+    }
+  }
+
+  const sourceMetrics: KpiSourceMetric[] = Array.from(sourceMap.values())
+    .map((e) => ({
+      ...e,
+      categoryLabel: getSourceCategoryDef(e.category).label,
+      conversionRatePct: e.totalLeads > 0 ? Number(((e.filesOpened / e.totalLeads) * 100).toFixed(1)) : 0,
+    }))
+    .sort((a, b) => b.totalLeads - a.totalLeads);
+
   return {
     month,
     today,
@@ -775,5 +844,6 @@ export function computeEmployeeKpiReport(input: {
     },
     employees: computedEmployees,
     slaBottlenecks: slaBottlenecks.slice(0, 100),
+    sourceMetrics,
   };
 }

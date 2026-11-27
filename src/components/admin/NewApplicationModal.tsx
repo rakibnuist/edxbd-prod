@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   FilePlus2,
   FolderOpen,
@@ -48,6 +48,7 @@ export interface PromotableLeadOption {
   assignedTo: string | null;
   status: string;
   leadMarket: string;
+  source?: string | null;
 }
 
 interface NewApplicationModalProps {
@@ -104,6 +105,7 @@ export default function NewApplicationModal({
   const [applicationStage, setApplicationStage] = useState('documents');
   const [embassyStatus, setEmbassyStatus] = useState('Pending');
   const [channelType, setChannelType] = useState('B2C');
+  const [source, setSource] = useState('office_walkin');
   const [referrer, setReferrer] = useState('');
   const [assignedEmployeeId, setAssignedEmployeeId] = useState('');
   const [deposit, setDeposit] = useState('');
@@ -126,6 +128,12 @@ export default function NewApplicationModal({
     () => promotableLeads.find((l) => l.id === selectedLeadId) || null,
     [promotableLeads, selectedLeadId],
   );
+
+  useEffect(() => {
+    if (selectedLead?.source) {
+      setSource(selectedLead.source);
+    }
+  }, [selectedLead]);
 
   const matchedUni = useMemo(() => {
     const q = university.trim().toLowerCase();
@@ -211,6 +219,7 @@ export default function NewApplicationModal({
               applicationStage,
               embassyStatus,
               channelType,
+              source: source || selectedLead?.source || 'In-House',
               referrer: referrer.trim() || null,
               ...(canAccessFinance ? { deposit: deposit ? Number(deposit) : 0 } : {}),
               driveLink: driveLink.trim() || null,
@@ -232,7 +241,7 @@ export default function NewApplicationModal({
               embassyStatus,
               leadMarket: 'Bangladesh',
               channelType,
-              source: channelType === 'B2B' ? 'B2B' : 'In-House',
+              source: source || (channelType === 'B2B' ? 'B2B' : 'In-House'),
               referrer: referrer.trim() || null,
               assignedEmployeeId: isAdmin && assignedEmployeeId ? assignedEmployeeId : undefined,
               ...(canAccessFinance ? { deposit: deposit ? Number(deposit) : 0 } : {}),
@@ -579,11 +588,36 @@ export default function NewApplicationModal({
               </label>
               <select
                 value={channelType}
-                onChange={(e) => setChannelType(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setChannelType(val);
+                  if (val === 'B2B' && source === 'office_walkin') {
+                    setSource('b2b_agent');
+                  }
+                }}
                 className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
               >
                 <option value="B2C">EduExpress Direct (B2C)</option>
                 <option value="B2B">Partner Agent (B2B)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                Source Channel / Acquisition *
+              </label>
+              <select
+                value={source}
+                onChange={(e) => setSource(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+              >
+                <option value="office_walkin">🏢 Office Walk-in (Dhanmondi)</option>
+                <option value="whatsapp_direct">💬 WhatsApp Inbound</option>
+                <option value="website_organic">🟢 Website (Organic / Direct)</option>
+                <option value="meta_ads">🟣 Meta Ads (Facebook / Instagram)</option>
+                <option value="b2b_agent">🤝 Partner Agent (B2B)</option>
+                <option value="referral">👥 Personal / Student Referral</option>
+                <option value="In-House">🏢 In-House Direct</option>
               </select>
             </div>
 

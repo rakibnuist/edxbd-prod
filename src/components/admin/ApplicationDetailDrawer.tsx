@@ -27,6 +27,8 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { formatBdt } from '@/lib/finance-logic';
 import { toSafeExternalUrl } from '@/lib/safe-url';
+import QuickInteractionLogger from '@/components/admin/QuickInteractionLogger';
+import { categorizeLeadSource, formatFriendlySource, getSourceCategoryDef } from '@/lib/lead-sources';
 import {
   APPLICATION_TRACKER_STAGES,
   DEGREE_OPTIONS,
@@ -628,6 +630,15 @@ export default function ApplicationDetailDrawer({
                 >
                   {app?.channelType === 'B2B' ? 'Partner Agent · B2B' : 'EduExpress Direct · B2C'}
                 </span>
+                {app?.source && (() => {
+                  const cat = categorizeLeadSource(app.source, null, app.channelType);
+                  const def = getSourceCategoryDef(cat);
+                  return (
+                    <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${def.badgeClass}`}>
+                      {def.shortLabel}: {formatFriendlySource(app.source)}
+                    </span>
+                  );
+                })()}
                 {app?.employeeName && (
                   <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-bold text-slate-200">
                     Counselor: {app.employeeName}
@@ -1183,6 +1194,23 @@ export default function ApplicationDetailDrawer({
                           <option value="B2B">Partner Agent (B2B)</option>
                         </select>
                       </div>
+                      <div>
+                        <label className="mb-1 block text-[11px] font-semibold text-slate-600">Source Acquisition</label>
+                        <select
+                          value={form.source || 'In-House'}
+                          onChange={(e) => setForm({ ...form, source: e.target.value })}
+                          className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-900 focus:border-[#0f3a5c] focus:outline-none"
+                        >
+                          <option value="office_walkin">🏢 Office Walk-in</option>
+                          <option value="whatsapp_direct">💬 WhatsApp Inbound</option>
+                          <option value="website_organic">🟢 Website (Organic / SEO)</option>
+                          <option value="meta_ads">🟣 Meta Ads (Facebook / Instagram)</option>
+                          <option value="b2b_agent">🤝 Partner Agent (B2B)</option>
+                          <option value="referral">👥 Personal Referral</option>
+                          <option value="In-House">🏢 In-House Direct</option>
+                          <option value="B2B">🤝 B2B</option>
+                        </select>
+                      </div>
                       {isAdmin && (
                         <div>
                           <label className="mb-1 block text-[11px] font-semibold text-slate-600">Assigned Counselor</label>
@@ -1613,6 +1641,19 @@ export default function ApplicationDetailDrawer({
               {/* TAB 5: Activity Timeline & Notes */}
               {tab === 'timeline' && (
                 <div className="space-y-4">
+                  {app && (
+                    <QuickInteractionLogger
+                      leadId={app.id}
+                      leadName={app.name}
+                      phone={app.phone}
+                      currentStatus={app.status}
+                      currentFollowup={app.nextFollowup}
+                      onLeadUpdated={() => {
+                        onMutated();
+                      }}
+                    />
+                  )}
+
                   <form onSubmit={handlePostNote} className="space-y-2.5 rounded-xl border border-slate-200 bg-slate-50 p-4">
                     <div className="flex items-center gap-2">
                       <button

@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
-  Activity, AlertTriangle, Award, Calendar, CheckCircle2, ChevronDown, ChevronUp, Clock,
-  ExternalLink, FileText, Flame, HelpCircle, ListChecks, LogIn, LogOut,
-  MapPin, Navigation, Plus, RefreshCw, Smartphone, Target, Trash2, Users, X,
+  Activity, AlertTriangle, Award, BarChart3, Calendar, CheckCircle2, ChevronDown, ChevronUp, Clock,
+  Download, ExternalLink, FileText, Flame, FolderCheck, HelpCircle, ListChecks, LogIn, LogOut,
+  MapPin, Navigation, PhoneCall, Plus, RefreshCw, Smartphone, Target, Trash2, TrendingUp, Users, X,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import type {
@@ -14,6 +14,7 @@ import type {
   WorkflowStageKey,
 } from '@/lib/kpi-workflow';
 import { buildWhatsAppUrl } from '@/lib/wa-templates';
+import { formatFriendlySource } from '@/lib/lead-sources';
 
 type DailyLogItem = {
   id: string;
@@ -174,8 +175,8 @@ async function captureBrowserLocation(): Promise<{
 export default function KpiWorkflowClient() {
   const { user, authenticatedFetch } = useAuth();
   const isCounselor = user?.role === 'counselor';
-  const [tab, setTab] = useState<'overview' | 'workspace' | 'manage'>('overview');
-  const effectiveTab = isCounselor && tab === 'manage' ? 'workspace' : tab;
+  const [tab, setTab] = useState<'overview' | 'analytics' | 'workspace' | 'manage'>('overview');
+  const effectiveTab = isCounselor && (tab === 'manage' || tab === 'analytics') ? 'overview' : tab;
   const [month, setMonth] = useState<string>(currentMonthIso);
   const [report, setReport] = useState<ApiKpiPayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -402,6 +403,57 @@ export default function KpiWorkflowClient() {
     } finally {
       setBusy(false);
     }
+  };
+
+  const handleExportAnalyticsCsv = () => {
+    if (!report) return;
+    const lines: string[] = [];
+    lines.push('--- COUNSELOR OUTREACH & CONVERSION LEADERBOARD ---');
+    lines.push(['Rank', 'Counselor Name', 'Role', 'Team', 'Calls Logged', 'Students Contacted', 'Assigned Leads', 'Files Opened', 'Conversion Rate %', 'KPI Score'].join(','));
+    const sortedCounselors = [...report.employees].sort(
+      (a, b) =>
+        (b.funnel.filesOpened || 0) - (a.funnel.filesOpened || 0) ||
+        (b.funnel.conversionRatePct || 0) - (a.funnel.conversionRatePct || 0) ||
+        b.score - a.score,
+    );
+    sortedCounselors.forEach((emp, idx) => {
+      lines.push([
+        idx + 1,
+        `"${emp.employee.name}"`,
+        `"${emp.employee.role}"`,
+        `"${emp.employee.team}"`,
+        emp.funnel.callsLogged || 0,
+        emp.activity.touchedLeadsMonth,
+        emp.funnel.totalAssigned,
+        emp.funnel.filesOpened || 0,
+        `${emp.funnel.conversionRatePct || 0}%`,
+        emp.score,
+      ].join(','));
+    });
+
+    lines.push('');
+    lines.push('--- AD CAMPAIGN & ACQUISITION PERFORMANCE ---');
+    lines.push(['Acquisition Source', 'Category', 'Total Inbound Leads', 'Contacted Leads', 'Files Opened', 'Conversion Rate %', 'Verdict'].join(','));
+    (report.sourceMetrics || []).forEach((src) => {
+      const verdict = src.filesOpened >= 5 ? 'Top Performing Ad' : src.filesOpened > 0 ? 'Converting' : src.totalLeads > 10 ? 'High Inbound / Review Lead Quality' : 'Low Volume';
+      lines.push([
+        `"${formatFriendlySource(src.source)}"`,
+        `"${src.categoryLabel}"`,
+        src.totalLeads,
+        src.contactedLeads,
+        src.filesOpened,
+        `${src.conversionRatePct}%`,
+        `"${verdict}"`,
+      ].join(','));
+    });
+
+    const blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eduexpress-counselor-campaign-analytics-${report.month}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleCreateTask = async (e: React.FormEvent) => {
@@ -752,6 +804,7 @@ export default function KpiWorkflowClient() {
       <div className="flex gap-2 overflow-x-auto border-b border-slate-200 pb-px">
         {[
           { id: 'overview' as const, label: isCounselor ? 'My KPI & SLA Overview' : 'Team KPI & Live Workflow', icon: Award },
+          ...(!isCounselor ? [{ id: 'analytics' as const, label: 'Leaderboard & Ad ROI', icon: BarChart3 }] : []),
           { id: 'workspace' as const, label: 'My Check-In & Daily Logs', icon: Flame },
           ...(!isCounselor ? [{ id: 'manage' as const, label: 'Tasks & KPI Targets', icon: ListChecks }] : []),
         ].map((t) => {
@@ -1043,6 +1096,212 @@ export default function KpiWorkflowClient() {
                 })}
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {effectiveTab === 'analytics' && report && (
+        <div className="space-y-6">
+          {/* Header Action Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
+            <div>
+              <h2 className="text-base font-extrabold text-slate-900">
+                Counselor Outreach Leaderboard &amp; Ad Campaign Performance
+              </h2>
+              <p className="mt-0.5 text-xs text-slate-500">
+                Month: {report.month} · Real-time Conversion Funnel &amp; Acquisition Quality
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleExportAnalyticsCsv}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-800 transition hover:border-slate-300 hover:bg-slate-100"
+            >
+              <Download size={14} /> Export CSV Report
+            </button>
+          </div>
+
+          {/* Section 1: Counselor Performance Leaderboard */}
+          <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
+            <div className="mb-4">
+              <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                <Award size={16} className="text-amber-500" />
+                Counselor Conversion &amp; Outreach Leaderboard
+              </h3>
+              <p className="text-xs text-slate-500">
+                Ranked by files opened, conversion rate and logged calls.
+              </p>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="border-b border-slate-100 bg-slate-50/70 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+                  <tr>
+                    <th className="py-2.5 px-3">Rank</th>
+                    <th className="py-2.5 px-3">Counselor</th>
+                    <th className="py-2.5 px-3 text-center">Calls Logged</th>
+                    <th className="py-2.5 px-3 text-center">Students Touched</th>
+                    <th className="py-2.5 px-3 text-center">Assigned Leads</th>
+                    <th className="py-2.5 px-3 text-center">Files Opened</th>
+                    <th className="py-2.5 px-3 text-center">Conversion %</th>
+                    <th className="py-2.5 px-3 text-center">SLA Compliance</th>
+                    <th className="py-2.5 px-3 text-right">KPI Score</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {[...report.employees]
+                    .sort(
+                      (a, b) =>
+                        (b.funnel.filesOpened || 0) - (a.funnel.filesOpened || 0) ||
+                        (b.funnel.conversionRatePct || 0) - (a.funnel.conversionRatePct || 0) ||
+                        b.score - a.score,
+                    )
+                    .map((emp, idx) => {
+                      const medal =
+                        idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx + 1}`;
+                      return (
+                        <tr key={emp.employee.id} className="hover:bg-slate-50/60 transition">
+                          <td className="py-3 px-3 font-bold text-slate-700">{medal}</td>
+                          <td className="py-3 px-3">
+                            <div className="font-bold text-slate-900">{emp.employee.name}</div>
+                            <div className="text-[10px] text-slate-400 capitalize">
+                              {emp.employee.role} · {emp.employee.team}
+                            </div>
+                          </td>
+                          <td className="py-3 px-3 text-center font-bold tabular-nums text-slate-800">
+                            {emp.funnel.callsLogged || 0}
+                          </td>
+                          <td className="py-3 px-3 text-center font-bold tabular-nums text-indigo-700">
+                            {emp.activity.touchedLeadsMonth}
+                          </td>
+                          <td className="py-3 px-3 text-center font-medium tabular-nums text-slate-600">
+                            {emp.funnel.totalAssigned}
+                          </td>
+                          <td className="py-3 px-3 text-center">
+                            <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200 bg-emerald-50 px-2 py-0.5 font-bold text-emerald-800 tabular-nums">
+                              <FolderCheck size={11} /> {emp.funnel.filesOpened || 0}
+                            </span>
+                          </td>
+                          <td className="py-3 px-3 text-center font-bold tabular-nums text-[#0f3a5c]">
+                            {emp.funnel.conversionRatePct || 0}%
+                          </td>
+                          <td className="py-3 px-3 text-center font-medium tabular-nums">
+                            <span
+                              className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                                emp.sla.compliancePct >= 80
+                                  ? 'bg-emerald-50 text-emerald-800'
+                                  : 'bg-rose-50 text-rose-800'
+                              }`}
+                            >
+                              {emp.sla.compliancePct}%
+                            </span>
+                          </td>
+                          <td className="py-3 px-3 text-right font-extrabold tabular-nums text-[#0f3a5c]">
+                            {emp.score}/100
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Section 2: Ad Campaign & Acquisition Quality (ROI Tracker) */}
+          <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
+            <div className="mb-4">
+              <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                <TrendingUp size={16} className="text-purple-600" />
+                Ad Campaign &amp; Lead Source Quality (ROI Analysis)
+              </h3>
+              <p className="text-xs text-slate-500">
+                Compare which Meta ad campaign, organic page, or WhatsApp channel produces actual student applications.
+              </p>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="border-b border-slate-100 bg-slate-50/70 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+                  <tr>
+                    <th className="py-2.5 px-3">Acquisition Source</th>
+                    <th className="py-2.5 px-3">Channel Type</th>
+                    <th className="py-2.5 px-3 text-center">Total Inbound</th>
+                    <th className="py-2.5 px-3 text-center">Contacted</th>
+                    <th className="py-2.5 px-3 text-center">Files Opened</th>
+                    <th className="py-2.5 px-3 text-center">Lead to File %</th>
+                    <th className="py-2.5 px-3 text-right">Campaign Verdict</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {(!report.sourceMetrics || report.sourceMetrics.length === 0) ? (
+                    <tr>
+                      <td colSpan={7} className="py-8 text-center text-slate-400">
+                        No acquisition source data recorded for this month.
+                      </td>
+                    </tr>
+                  ) : (
+                    report.sourceMetrics.map((src) => {
+                      const isHighYield = src.filesOpened >= 5;
+                      const isConverting = src.filesOpened > 0;
+                      return (
+                        <tr key={src.source} className="hover:bg-slate-50/60 transition">
+                          <td className="py-3 px-3">
+                            <div className="font-bold text-slate-900">
+                              {formatFriendlySource(src.source)}
+                            </div>
+                            <div className="font-mono text-[10px] text-slate-400">{src.source}</div>
+                          </td>
+                          <td className="py-3 px-3">
+                            <span className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700">
+                              {src.categoryLabel}
+                            </span>
+                          </td>
+                          <td className="py-3 px-3 text-center font-bold tabular-nums text-slate-800">
+                            {src.totalLeads}
+                          </td>
+                          <td className="py-3 px-3 text-center tabular-nums text-slate-600">
+                            {src.contactedLeads} (
+                            {src.totalLeads > 0
+                              ? Math.round((src.contactedLeads / src.totalLeads) * 100)
+                              : 0}
+                            %)
+                          </td>
+                          <td className="py-3 px-3 text-center">
+                            <span className="inline-flex items-center gap-1 rounded bg-emerald-50 px-2 py-0.5 font-bold text-emerald-800 tabular-nums">
+                              {src.filesOpened}
+                            </span>
+                          </td>
+                          <td className="py-3 px-3 text-center font-bold tabular-nums text-[#0f3a5c]">
+                            {src.conversionRatePct}%
+                          </td>
+                          <td className="py-3 px-3 text-right">
+                            <span
+                              className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                                isHighYield
+                                  ? 'border border-purple-200 bg-purple-100 text-purple-800'
+                                  : isConverting
+                                    ? 'border border-emerald-200 bg-emerald-100 text-emerald-800'
+                                    : src.totalLeads > 15
+                                      ? 'border border-amber-200 bg-amber-100 text-amber-800'
+                                      : 'bg-slate-100 text-slate-600'
+                              }`}
+                            >
+                              {isHighYield
+                                ? '⭐ Top Performing Ad'
+                                : isConverting
+                                  ? '✓ Converting'
+                                  : src.totalLeads > 15
+                                    ? '⚠️ Check Ad Quality'
+                                    : 'Growing'}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

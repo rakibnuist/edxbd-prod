@@ -1,4 +1,5 @@
 import { parseLeadFlowConfig, selectCounselorByFlowConfig } from './lead-flow';
+import { categorizeLeadSource } from './lead-sources';
 
 export const LEAD_STATUSES = [
   ['new', 'New'], ['contacted', 'Contacted'], ['no_response', 'No Response'],
@@ -25,6 +26,7 @@ export type LeadRecord = {
   assessSubject?: string | null; assessBudget?: string | null; assessIntake?: string | null;
   assessLanguage?: string | null; assessCareerGoal?: string | null;
   destinationInterest?: string | null; landingPage?: string | null;
+  utm?: string | null; channelType?: string | null;
   createdAt: string; updatedAt: string;
 };
 export const isLeadStatus = (value: unknown): value is LeadStatus =>
@@ -62,6 +64,10 @@ function extractLeadGpaNumber(lead: Pick<LeadRecord, 'gpa' | 'assessAcademicResu
 
 export type LeadQuickPreset =
   | 'all'
+  | 'positive_clients'
+  | 'in_process_apps'
+  | 'paid_leads'
+  | 'organic_leads'
   | 'china_hot'
   | 'sla_risk'
   | 'followup_due'
@@ -105,7 +111,15 @@ export function filterLeads(leads: LeadRecord[], filters: {
     }
     if (filters.status !== 'all' && lead.status !== filters.status) return false;
     if (filters.country !== 'all' && lead.country !== filters.country) return false;
-    if (filters.source !== 'all' && lead.source !== filters.source) return false;
+    if (filters.source !== 'all') {
+      if (filters.source.startsWith('cat:')) {
+        const cat = filters.source.slice(4);
+        const leadCat = categorizeLeadSource(lead.source, lead.utm, lead.channelType);
+        if (leadCat !== cat) return false;
+      } else if (lead.source !== filters.source) {
+        return false;
+      }
+    }
     if (assignedFilter) {
       if (assignedFilter === '__unassigned__' && lead.assignedTo) return false;
       if (assignedFilter !== '__unassigned__' && lead.assignedTo !== assignedFilter) return false;
@@ -114,7 +128,16 @@ export function filterLeads(leads: LeadRecord[], filters: {
       const g = extractLeadGpaNumber(lead);
       if (g === null || g < gpaMin) return false;
     }
-    if (quick === 'china_hot') {
+    if (quick === 'positive_clients') {
+      if (!['qualified', 'consultation_scheduled', 'consultation_completed'].includes(lead.status)) return false;
+    } else if (quick === 'in_process_apps') {
+      const isApp = lead.isApplication || ['application_started', 'application_submitted', 'admission_received', 'visa_applied'].includes(lead.status);
+      if (!isApp || ['closed', 'not_interested', 'enrolled', 'converted'].includes(lead.status)) return false;
+    } else if (quick === 'paid_leads') {
+      if (categorizeLeadSource(lead.source, lead.utm, lead.channelType) !== 'paid') return false;
+    } else if (quick === 'organic_leads') {
+      if (categorizeLeadSource(lead.source, lead.utm, lead.channelType) !== 'organic') return false;
+    } else if (quick === 'china_hot') {
       const isChina = (lead.country || '').toLowerCase().includes('china') || (lead.destinationInterest || '').toLowerCase().includes('china');
       const g = extractLeadGpaNumber(lead);
       if (!isChina || (g !== null && g < 3.5)) return false;

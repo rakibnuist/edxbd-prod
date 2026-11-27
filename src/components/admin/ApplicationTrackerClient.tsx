@@ -38,6 +38,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { formatBdt } from '@/lib/finance-logic';
 import { canAccessFinanceRole } from '@/lib/roles';
 import { toSafeExternalUrl } from '@/lib/safe-url';
+import { categorizeLeadSource, formatFriendlySource, getSourceCategoryDef } from '@/lib/lead-sources';
 import {
   APPLICATION_TRACKER_STAGES,
   EMBASSY_STATUSES,
@@ -118,7 +119,7 @@ export default function ApplicationTrackerClient() {
   const [yearFilter, setYearFilter] = useState<string>('2027');
   const [sessionFilter, setSessionFilter] = useState<'all' | IntakeSessionKey>('all');
   const [exactIntakeFilter, setExactIntakeFilter] = useState<string>('all');
-  const [channelFilter, setChannelFilter] = useState<'all' | 'b2c' | 'b2b'>('all');
+  const [channelFilter, setChannelFilter] = useState<'all' | 'b2c' | 'b2b' | 'paid' | 'organic' | 'whatsapp' | 'in_house'>('all');
   const [counselorFilter, setCounselorFilter] = useState<string>('all');
   const [referrerFilter, setReferrerFilter] = useState<string>('all');
   const [destinationFilter, setDestinationFilter] = useState<string>('all');
@@ -326,6 +327,10 @@ export default function ApplicationTrackerClient() {
     for (const r of timeScopedRows) {
       if (channelFilter === 'b2c' && isB2BRow(r)) continue;
       if (channelFilter === 'b2b' && !isB2BRow(r)) continue;
+      if (['paid', 'organic', 'whatsapp', 'in_house'].includes(channelFilter)) {
+        const cat = categorizeLeadSource(r.source, null, r.channelType);
+        if (cat !== channelFilter) continue;
+      }
 
       const bucket = getStageBucket(r.applicationStage);
       const isWithdrawn = bucket === 'withdrawn';
@@ -356,6 +361,10 @@ export default function ApplicationTrackerClient() {
     return timeScopedRows.filter((row) => {
       if (channelFilter === 'b2c' && isB2BRow(row)) return false;
       if (channelFilter === 'b2b' && !isB2BRow(row)) return false;
+      if (['paid', 'organic', 'whatsapp', 'in_house'].includes(channelFilter)) {
+        const cat = categorizeLeadSource(row.source, null, row.channelType);
+        if (cat !== channelFilter) return false;
+      }
       if (counselorFilter !== 'all') {
         if (counselorFilter === '__unassigned__') {
           if (row.assignedEmployeeId || row.employeeName) return false;
@@ -586,6 +595,8 @@ export default function ApplicationTrackerClient() {
       'Intake Session',
       'Full Intake',
       'Channel (B2C/B2B)',
+      'Source Channel',
+      'Acquisition Source',
       'Counselor',
       'Partner / Reference',
       'Destination',
@@ -618,6 +629,8 @@ export default function ApplicationTrackerClient() {
         extractIntakeSession(r.assessIntake),
         r.assessIntake || '',
         isB2BRow(r) ? 'B2B Partner' : 'B2C Direct',
+        getSourceCategoryDef(categorizeLeadSource(r.source, null, r.channelType)).label,
+        r.source || 'In-House',
         r.employeeName || 'Unassigned',
         r.referrer || '',
         r.country,
@@ -915,9 +928,9 @@ export default function ApplicationTrackerClient() {
               <select
                 value={channelFilter}
                 onChange={(e) => {
-                  const nextChannel = e.target.value as 'all' | 'b2c' | 'b2b';
+                  const nextChannel = e.target.value as any;
                   setChannelFilter(nextChannel);
-                  if (nextChannel === 'b2c') setReferrerFilter('all');
+                  if (nextChannel !== 'b2b') setReferrerFilter('all');
                   setPage(1);
                 }}
                 className={`w-full rounded-xl border px-3 py-2 text-xs font-semibold transition focus:border-[#0f3a5c] focus:outline-none ${
@@ -928,9 +941,17 @@ export default function ApplicationTrackerClient() {
                       : 'border-slate-200 bg-white text-slate-800'
                 }`}
               >
-                <option value="all">All Channels ({channelCounts.total})</option>
-                <option value="b2c">EduExpress Direct · B2C ({channelCounts.b2c})</option>
-                <option value="b2b">Partner Network · B2B ({channelCounts.b2b})</option>
+                <option value="all">All Channels &amp; Sources ({channelCounts.total})</option>
+                <optgroup label="Main Channels">
+                  <option value="b2c">EduExpress Direct · B2C ({channelCounts.b2c})</option>
+                  <option value="b2b">Partner Network · B2B ({channelCounts.b2b})</option>
+                </optgroup>
+                <optgroup label="Acquisition Source">
+                  <option value="paid">🟣 Paid Ads (Meta / PPC)</option>
+                  <option value="organic">🟢 Organic (Website / SEO)</option>
+                  <option value="whatsapp">💬 WhatsApp Inbound</option>
+                  <option value="in_house">🏢 Office Walk-in / In-House</option>
+                </optgroup>
               </select>
             </div>
 
@@ -1595,6 +1616,15 @@ export default function ApplicationTrackerClient() {
                               B2B
                             </span>
                           )}
+                          {row.source && (() => {
+                            const cat = categorizeLeadSource(row.source, null, row.channelType);
+                            const def = getSourceCategoryDef(cat);
+                            return (
+                              <span className={`rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase ${def.badgeClass}`}>
+                                {def.shortLabel}
+                              </span>
+                            );
+                          })()}
                         </div>
                         <h4 className="mt-1 text-sm font-bold text-slate-900">{row.name}</h4>
                         {row.phone && (
@@ -1849,6 +1879,19 @@ export default function ApplicationTrackerClient() {
                                 </>
                               )}
                             </span>
+                            {row.source && (() => {
+                              const cat = categorizeLeadSource(row.source, null, row.channelType);
+                              const def = getSourceCategoryDef(cat);
+                              return (
+                                <span
+                                  className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${def.badgeClass}`}
+                                  title={`Acquisition: ${row.source}`}
+                                >
+                                  <span className="size-1.5 rounded-full" style={{ backgroundColor: def.dotColor }} />
+                                  {def.shortLabel}
+                                </span>
+                              );
+                            })()}
                           </div>
                           <div className="mt-1.5">
                             {isAdmin ? (
