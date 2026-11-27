@@ -786,6 +786,9 @@ export default async function StudyInChinaFromBangladeshPage() {
               <Link href="/updates/study-cs-ai-in-china-bangladesh" className={kit.link}>
                 Computer Science &amp; AI Guide <ArrowRight size={15} aria-hidden="true" />
               </Link>
+              <Link href="/updates/study-business-finance-in-china-bangladesh" className={kit.link}>
+                Business &amp; Finance Guide <ArrowRight size={15} aria-hidden="true" />
+              </Link>
               <Link href="/study-in-china-without-ielts" className={kit.link}>
                 English &amp; MOI options <ArrowRight size={15} aria-hidden="true" />
               </Link>

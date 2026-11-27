@@ -275,6 +275,7 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/updates/mbbs-in-china-admission-guide-bangladesh',
     '/updates/study-cs-ai-in-china-bangladesh',
     '/updates/china-march-2027-language-foundation-guide',
+    '/updates/study-business-finance-in-china-bangladesh',
     '/proof-library',
     '/education-fit-assessment'
   ]

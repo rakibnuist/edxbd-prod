@@ -410,6 +410,7 @@ export default async function BangladeshVsChinaBachelorPage() {
         tone="white"
         extraLinks={[
           { label: 'Computer Science & AI in China Guide', href: '/updates/study-cs-ai-in-china-bangladesh' },
+          { label: 'Business, Finance & Economics in China Guide', href: '/updates/study-business-finance-in-china-bangladesh' },
           { label: 'Study in Bangladesh vs. Abroad (All Destinations)', href: '/bangladesh-vs-study-abroad-countries' },
           { label: 'China vs. UK, USA, Australia & Dhaka Hub', href: '/compare-bachelor-china-abroad-bangladesh' },
           { label: 'Bangladesh–China Study Data Report', href: '/china-study-report-bangladesh' },
