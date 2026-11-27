@@ -45,6 +45,7 @@ import { CHINA_MBBS_ADMISSION_2027_SLUG, CHINA_MBBS_ADMISSION_2027_DATA } from '
 import { CHINA_CS_AI_ADMISSION_2027_SLUG, CHINA_CS_AI_ADMISSION_2027_DATA } from '@/data/chinaCsAiAdmissionGuide2027';
 import { CHINA_MARCH_2027_LANGUAGE_GUIDE_SLUG, CHINA_MARCH_2027_LANGUAGE_DATA } from '@/data/chinaMarch2027LanguageFoundationGuide';
 import { CHINA_BUSINESS_FINANCE_2027_SLUG, CHINA_BUSINESS_FINANCE_2027_DATA } from '@/data/chinaBusinessFinanceAdmissionGuide2027';
+import { CHINA_DIPLOMA_TO_BACHELOR_2027_SLUG, CHINA_DIPLOMA_TO_BACHELOR_2027_DATA } from '@/data/chinaDiplomaToBachelorTransferGuide2027';
 
 interface UpdatePageProps {
   params: Promise<{
@@ -190,6 +191,9 @@ const getUpdate = cache(async (slug: string) => {
   }
   if (slug === CHINA_BUSINESS_FINANCE_2027_SLUG) {
     return CHINA_BUSINESS_FINANCE_2027_DATA;
+  }
+  if (slug === CHINA_DIPLOMA_TO_BACHELOR_2027_SLUG) {
+    return CHINA_DIPLOMA_TO_BACHELOR_2027_DATA;
   }
   if (NEW_GUIDES_2027_DATA[slug]) {
     return NEW_GUIDES_2027_DATA[slug];
