@@ -162,6 +162,9 @@ export default async function HungaryStudyCostPage() {
             <Link href="/apply?country=Hungary" className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Check Hungary Eligibility <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="/hungary-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Hungary Student Visa Guide
+            </Link>
             <a href="#stipendium-vs-self" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Stipendium vs Self-Funded
             </a>

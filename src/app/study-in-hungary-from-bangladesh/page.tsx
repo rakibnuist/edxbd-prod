@@ -161,6 +161,12 @@ export default async function StudyInHungaryPage() {
             <Link href="/hungary-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               Hungary Cost Guide (2027)
             </Link>
+            <Link href="/hungary-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Hungary Student Visa Guide
+            </Link>
+            <Link href="/hungary-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Stipendium Scholarship Guide
+            </Link>
             <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               View 6 Verified Universities
             </a>

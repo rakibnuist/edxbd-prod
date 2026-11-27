@@ -167,6 +167,9 @@ export default async function SouthKoreaStudyCostPage() {
             <Link href="/apply?country=South%20Korea" className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Check Korea Eligibility <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="/south-korea-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Korea D-2 Student Visa Guide
+            </Link>
             <a href="#gks-vs-self" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               GKS vs Self-Funded
             </a>

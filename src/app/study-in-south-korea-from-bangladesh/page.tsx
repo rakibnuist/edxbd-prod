@@ -161,6 +161,12 @@ export default async function StudyInSouthKoreaPage() {
             <Link href="/south-korea-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               Korea Study Cost Guide (2027)
             </Link>
+            <Link href="/south-korea-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Korea D-2 Visa Guide
+            </Link>
+            <Link href="/south-korea-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Korea GKS Scholarship Guide
+            </Link>
             <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               View 6 Verified Universities
             </a>

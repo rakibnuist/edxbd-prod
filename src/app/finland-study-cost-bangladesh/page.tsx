@@ -161,6 +161,9 @@ export default async function FinlandStudyCostPage() {
             <Link href="/apply?country=Finland" className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Check My Finland Eligibility <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="/finland-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Finland Residence Permit Guide
+            </Link>
             <a href="#migri-proof" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Migri EUR 9,600 Fund Rule
             </a>

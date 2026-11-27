@@ -163,6 +163,9 @@ export default async function UkStudyCostPage() {
             <Link href="/apply?country=UK" className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Check My UK Costs & Eligibility <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="/uk-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              UK Student Visa &amp; CAS Guide
+            </Link>
             <a href="#student-file" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Bank Student File Guide
             </a>

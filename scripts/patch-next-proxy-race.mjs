@@ -66,6 +66,29 @@ if (fs.existsSync(utilsTarget)) {
     utilsChanged = true;
   }
 
+  // 5. Tolerate missing trace files in handleTraceFiles itself
+  const handleTraceTarget = "const traceData = JSON.parse(await _fs.promises.readFile(/* turbopackIgnore: true */ traceFilePath, 'utf8'));";
+  const handleTraceReplacement = "let traceRaw; try { traceRaw = await _fs.promises.readFile(traceFilePath, 'utf8'); } catch (err) { if (err.code === 'ENOENT') return; throw err; } const traceData = JSON.parse(traceRaw);";
+  if (utilsContent.includes(handleTraceTarget)) {
+    utilsContent = utilsContent.replace(handleTraceTarget, handleTraceReplacement);
+    utilsChanged = true;
+  }
+
+  // 6. Catch ENOENT in middlewareTrace and instrumentation.js.nft.json
+  const middlewareTraceTarget = "await handleTraceFiles(middlewareTrace);";
+  const middlewareTraceReplacement = "await handleTraceFiles(middlewareTrace).catch((err) => { if (err.code !== 'ENOENT') throw err; });";
+  if (utilsContent.includes(middlewareTraceTarget)) {
+    utilsContent = utilsContent.replace(middlewareTraceTarget, middlewareTraceReplacement);
+    utilsChanged = true;
+  }
+
+  const instTraceTarget = "await handleTraceFiles(_path.default.join(distDir, 'server', 'instrumentation.js.nft.json'));";
+  const instTraceReplacement = "await handleTraceFiles(_path.default.join(distDir, 'server', 'instrumentation.js.nft.json')).catch((err) => { if (err.code !== 'ENOENT') throw err; });";
+  if (utilsContent.includes(instTraceTarget)) {
+    utilsContent = utilsContent.replace(instTraceTarget, instTraceReplacement);
+    utilsChanged = true;
+  }
+
   if (utilsChanged) {
     fs.writeFileSync(utilsTarget, utilsContent, 'utf8');
     console.log('✓ Patched Next.js copyTracedFiles ENOENT tolerance in node_modules/next/dist/build/utils.js');

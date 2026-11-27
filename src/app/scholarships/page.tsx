@@ -63,10 +63,14 @@ const guides = [
   { label: 'China scholarships explained', text: 'CSC, provincial and university awards', href: '/china-scholarships-bangladesh' },
   { label: 'CSC scholarship from Bangladesh', text: 'Chinese Government Scholarship routes', href: '/csc-scholarship-bangladesh' },
   { label: 'CSC স্কলারশিপ গাইড (বাংলা)', text: 'Type A ও Type B নিয়ম, মাসিক ভাতা ও ডকুমেন্টস', href: '/bn/csc-scholarship-bangladesh' },
+  { label: 'Hungary Stipendium Hungaricum & merit scholarships', text: 'SHED MoE dual-portal nomination, 100% tuition waiver & HUF stipends', href: '/hungary-scholarships-bangladesh' },
+  { label: 'South Korea GKS & university scholarships', text: 'Embassy vs University track, BK21 STEM labs & 30%–100% TOPIK/IELTS waivers', href: '/south-korea-scholarships-bangladesh' },
   { label: 'China study data & cost report', text: 'Live CNY tuition quartiles and scholarship counts', href: '/china-study-report-bangladesh' },
   { label: '2027 CSCA entrance exam guide', text: 'China Scholastic Competency Assessment (CSCA) structure and rules', href: '/updates/csca-guide-study-in-china' },
   { label: 'CSCA ভর্তি পরীক্ষার গাইড (বাংলা)', text: 'ঢাকা সময়সূচি, ফি ও ফ্রি CSCA Master Pro মক টেস্ট', href: '/bn/csca-exam-bangladesh' },
   { label: 'Cost of studying in China', text: 'Tuition, hostel, insurance, visa and travel', href: '/study-in-china-cost-bangladesh' },
+  { label: 'Study gap acceptable countries (12-country matrix)', text: 'Bachelor & Master/PhD gap limits, age caps and verifiable work proofs', href: '/study-gap-acceptable-countries-bangladesh' },
+  { label: 'Student visa bank solvency & Student File guide', text: 'Compare required bank balance, maturity rules and FE Circular 37 across 12 countries', href: '/student-visa-bank-solvency-bangladesh' },
   { label: 'University and program finder', text: 'Scholarships on file, per university', href: '/universities' },
 ];
 
