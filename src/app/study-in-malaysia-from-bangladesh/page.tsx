@@ -1157,12 +1157,18 @@ export default async function StudyInMalaysiaPage() {
               </p>
             </div>
 
-            <div className="mt-6 border-t border-white/20 pt-4">
+            <div className="mt-6 space-y-2.5 border-t border-white/20 pt-4">
               <Link
                 href="/malaysia-study-cost-bangladesh"
-                className="inline-flex items-center gap-2 text-sm font-bold text-lime hover:underline"
+                className="flex items-center gap-2 text-sm font-bold text-lime hover:underline"
               >
                 Read Itemized Malaysia Cost Guide <ArrowRight size={16} />
+              </Link>
+              <Link
+                href="/malaysia-scholarships-bangladesh"
+                className="flex items-center gap-2 text-sm font-bold text-white hover:text-lime hover:underline"
+              >
+                Explore Malaysia Scholarships &amp; 10%–75% Merit Waivers <ArrowRight size={16} />
               </Link>
             </div>
           </div>

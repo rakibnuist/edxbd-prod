@@ -160,7 +160,13 @@ export default async function RootLayout({
     },
     "telephone": [office?.phonePrimary, office?.phoneSecondary].filter(Boolean),
     "foundingDate": "2018-03-08",
-    "founder": { "@type": "Person", "name": "Abdullah Al Rakib", "jobTitle": "Founder and CEO" },
+    "founder": {
+      "@type": "Person",
+      "@id": "https://eduexpressint.com/author/abdullah-al-rakib#person",
+      "name": "Abdullah Al Rakib",
+      "url": "https://eduexpressint.com/author/abdullah-al-rakib",
+      "jobTitle": "Founder and CEO"
+    },
     "slogan": "Better Education. Clear Costs. Written Proof.",
     "hasMap": office?.mapUrl || "https://www.google.com/maps/search/?api=1&query=EduExpress+International+Dhanmondi+Dhaka",
     "knowsLanguage": ["English", "Bengali"],

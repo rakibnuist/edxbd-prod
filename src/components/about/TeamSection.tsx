@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase();
 
@@ -56,7 +57,15 @@ export default function TeamSection({ team }: { team: TeamMember[] }) {
                                 </div>
 
                                 <div className="flex flex-1 flex-col px-2.5 pb-2.5 pt-4">
-                                    <h3 className="text-[19px] font-semibold leading-snug text-petrol-800">{member.name}</h3>
+                                    <h3 className="text-[19px] font-semibold leading-snug text-petrol-800">
+                                        {member.name === 'Abdullah Al Rakib' ? (
+                                            <Link href="/author/abdullah-al-rakib" className="hover:underline">
+                                                {member.name}
+                                            </Link>
+                                        ) : (
+                                            member.name
+                                        )}
+                                    </h3>
                                     <p className="mt-0.5 text-[13.5px] font-semibold text-lime-deep">{member.role}</p>
                                     {member.bio ? (
                                         <p className="mt-2 line-clamp-3 text-[14px] leading-6 text-ink-soft">

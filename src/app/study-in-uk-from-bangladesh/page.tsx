@@ -166,6 +166,9 @@ export default async function StudyInUkPage() {
             <Link href="/uk-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               UK Student Visa Guide
             </Link>
+            <Link href="/uk-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              UK Scholarships Guide
+            </Link>
             <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               View 8 Verified Universities
             </a>

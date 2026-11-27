@@ -260,7 +260,8 @@ export default async function Home() {
     seenLogos.add(item.logo);
     return true;
   });
-  const tickerLogos = logos.slice(0, 26);
+  const tickerRow1 = logos.filter((_, i) => i % 2 === 0);
+  const tickerRow2 = logos.filter((_, i) => i % 2 === 1);
   const levels = [...new Set(plannerData.flatMap(item => item.levels))].filter(level => ['Bachelor’s', 'Master’s', 'PhD'].includes(level));
 
   const activeDestinations = countries.filter(country => country.isActive);
@@ -453,10 +454,11 @@ export default async function Home() {
           <p className="text-center text-[15px] font-semibold text-ink-soft">
             {plannerData.length} universities in our verified directory, with fees, intakes and scholarships
           </p>
-          <div className="home-ticker mt-6">
+          <div className="home-ticker mt-6 flex flex-col gap-3.5">
+            {/* Line 1: Leftwards */}
             <div
               className="home-ticker-track items-center"
-              style={{ ['--ticker-duration' as string]: `${Math.max(48, Math.round(tickerLogos.length * 2))}s` }}
+              style={{ ['--ticker-duration' as string]: `${Math.max(60, Math.round(tickerRow1.length * 2.2))}s` }}
             >
               {[0, 1].map(copy => (
                 <ul
@@ -465,12 +467,49 @@ export default async function Home() {
                   aria-hidden={copy === 1 ? true : undefined}
                   inert={copy === 1 ? true : undefined}
                 >
-                  {tickerLogos.map(item => (
-                    <li key={`${item.slug}-${copy}`} className="shrink-0">
+                  {tickerRow1.map(item => (
+                    <li key={`${item.slug}-r1-${copy}`} className="shrink-0">
                       <Link
                         href={`/universities/${item.slug}`}
                         title={item.name}
-                        className="flex h-16 w-[148px] items-center justify-center rounded-2xl border border-slate-200/70 bg-white px-4 py-2 shadow-[0_2px_10px_rgba(15,58,92,0.04)] transition hover:border-petrol-800/40"
+                        className="flex h-16 w-[148px] items-center justify-center rounded-2xl border border-slate-200/70 bg-white px-4 py-2 shadow-[0_2px_10px_rgba(15,58,92,0.04)] transition hover:border-petrol-800/40 hover:shadow-md"
+                      >
+                        <Image
+                          src={item.logo as string}
+                          alt={`${item.name} logo`}
+                          width={116}
+                          height={48}
+                          sizes="116px"
+                          unoptimized
+                          loading="lazy"
+                          decoding="async"
+                          className="max-h-11 w-auto max-w-[116px] object-contain"
+                        />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ))}
+            </div>
+
+            {/* Line 2: Rightwards (Alternating Direction) */}
+            <div
+              className="home-ticker-track-reverse items-center"
+              style={{ ['--ticker-duration' as string]: `${Math.max(60, Math.round(tickerRow2.length * 2.3))}s` }}
+            >
+              {[0, 1].map(copy => (
+                <ul
+                  key={copy}
+                  className="flex shrink-0 items-center gap-4 pr-4"
+                  aria-hidden={copy === 1 ? true : undefined}
+                  inert={copy === 1 ? true : undefined}
+                >
+                  {tickerRow2.map(item => (
+                    <li key={`${item.slug}-r2-${copy}`} className="shrink-0">
+                      <Link
+                        href={`/universities/${item.slug}`}
+                        title={item.name}
+                        className="flex h-16 w-[148px] items-center justify-center rounded-2xl border border-slate-200/70 bg-white px-4 py-2 shadow-[0_2px_10px_rgba(15,58,92,0.04)] transition hover:border-petrol-800/40 hover:shadow-md"
                       >
                         <Image
                           src={item.logo as string}

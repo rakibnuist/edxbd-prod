@@ -49,7 +49,9 @@ const structuredData = {
   about: { '@id': 'https://eduexpressint.com/#organization' },
   mainEntity: {
     '@type': 'Person',
+    '@id': 'https://eduexpressint.com/author/abdullah-al-rakib#person',
     name: 'Abdullah Al Rakib',
+    url: 'https://eduexpressint.com/author/abdullah-al-rakib',
     jobTitle: 'Founder and CEO',
     worksFor: { '@id': 'https://eduexpressint.com/#organization' },
   },
@@ -138,7 +140,11 @@ export default async function About() {
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr]">
           <div data-anim="up" className={`space-y-5 ${kit.body} text-[17px] leading-8`}>
             <p>
-              EduExpress International&apos;s journey began on 8 March 2018 through Founder and CEO Abdullah Al Rakib&apos;s work in Chinese
+              EduExpress International&apos;s journey began on 8 March 2018 through Founder and CEO{' '}
+              <Link href="/author/abdullah-al-rakib" className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-emerald-800">
+                Abdullah Al Rakib&apos;s
+              </Link>{' '}
+              work in Chinese
               higher education. In 2019 he established Wuxi Haiying Culture and Art Consulting Co., Ltd. in China and developed
               institutional cooperation with Chinese universities, including a formal student-recruitment agreement with Linyi University.
             </p>

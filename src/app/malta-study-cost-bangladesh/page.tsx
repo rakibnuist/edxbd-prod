@@ -172,6 +172,9 @@ export default async function MaltaStudyCostPage() {
             <Link href="/apply?country=Malta" className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Check Malta Eligibility <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="/malta-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Malta Student Visa Guide
+            </Link>
             <a href="#solvency-rules" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Identità Solvency Rules
             </a>

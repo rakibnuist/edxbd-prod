@@ -174,6 +174,12 @@ export default async function CroatiaStudyCostPage() {
               Start Croatia Assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
             <Link
+              href="/croatia-student-visa-bangladesh"
+              className="ed-btn ed-btn-outline min-h-[52px] px-6"
+            >
+              Croatia Student Visa Guide
+            </Link>
+            <Link
               href="/study-in-croatia-from-bangladesh"
               className="ed-btn ed-btn-outline min-h-[52px] px-6"
             >

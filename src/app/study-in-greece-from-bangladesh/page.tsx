@@ -166,6 +166,9 @@ export default async function StudyInGreecePage() {
             <Link href="/greece-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               Full Cost Guide
             </Link>
+            <Link href="/greece-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Greece Type D Visa Guide
+            </Link>
           </>
         }
       />

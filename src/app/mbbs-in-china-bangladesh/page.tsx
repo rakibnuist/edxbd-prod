@@ -19,6 +19,7 @@ const contents = [['Universities & fees', 'mbbs-universities'], ['Scholarships',
 const documents = ['Passport and recent photograph', 'SSC and HSC certificates and full transcripts', 'English-language evidence', 'Required CSCA score report', 'Personal statement or study plan', 'Medical examination and police clearance', 'Financial support documents'];
 const visaFirstTerms = 'No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.';
 const related = [
+  { title: 'BMDC Recognized Medical Colleges Abroad (2027 Guide)', body: 'Pre-departure BMDC Eligibility Certificate, RQE licensing law, WDOMS & 45 Chinese MOE list.', href: '/bmdc-recognized-medical-colleges-abroad' },
   { title: 'MBBS in China Admission Guide 2027', body: 'MOE 45-university list, BMDC eligibility rules, and tuition breakdown.', href: '/updates/mbbs-in-china-admission-guide-bangladesh' },
   { title: 'Study in China from Bangladesh', body: 'Explore degrees, education quality and the wider China study plan.', href: '/study-in-china-from-bangladesh' },
   { title: 'Scholarships in China', body: 'Understand coverage, selection and renewal before applying.', href: '/china-scholarships-bangladesh' },

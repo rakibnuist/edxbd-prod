@@ -158,7 +158,7 @@ export default async function SouthKoreaStudyCostPage() {
           { name: 'South Korea', path: '/study-in-south-korea-from-bangladesh' },
           { name: 'Study Costs' },
         ]}
-        eyebrow="Transparent Cost Planning · Planning Assumption: 1 KRW ≈ 0.090 BDT (1 USD ≈ 122 BDT) · BDT 0 EduExpress Fee"
+        eyebrow="Transparent Cost Planning · Planning Assumption: 1 KRW ≈ 0.090 BDT (1 USD ≈ 122 BDT) · BDT 0 Upfront File Fee"
         title="Cost of Studying in South Korea from Bangladesh."
         lead="A comprehensive, transparent financial guide for Bangladeshi students and families: Global Korea Scholarship (GKS) full funding vs self-funded tuition (KRW 3.5M–8M/semester), monthly living budgets in Seoul and regional tech hubs (KRW & BDT), Korean Embassy D-2 visa bank solvency rules (USD 20,000 / USD 16k–18k across 14 approved banks), and student work rights under TOPIK thresholds."
         reviewed="November 2026"
@@ -169,6 +169,9 @@ export default async function SouthKoreaStudyCostPage() {
             </Link>
             <Link href="/south-korea-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Korea D-2 Student Visa Guide
+            </Link>
+            <Link href="/south-korea-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Korea GKS Scholarship Guide
             </Link>
             <a href="#gks-vs-self" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               GKS vs Self-Funded
@@ -197,7 +200,7 @@ export default async function SouthKoreaStudyCostPage() {
             <span>• Global High-Tech &amp; R&amp;D Leader</span>
             <span>• Direct University &amp; Embassy Fees</span>
             <span className="rounded-full bg-emerald-100 px-3 py-1 font-bold text-emerald-800">
-              EduExpress Fee: BDT 0
+              BDT 0 Upfront · 100% After Visa
             </span>
           </div>
         </div>
@@ -237,9 +240,9 @@ export default async function SouthKoreaStudyCostPage() {
               <CheckCircle2 className="size-6 text-emerald-800" />
               <h3 className="text-base font-bold text-petrol-800">EduExpress Fee Guarantee</h3>
             </div>
-            <p className="mt-2 text-2xl font-extrabold text-emerald-800">BDT 0 Service Charge</p>
+            <p className="mt-2 text-2xl font-extrabold text-emerald-800">BDT 0 Upfront File Fee</p>
             <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-              EduExpress International provides <strong>100% free counseling</strong> for both Global Korea Scholarship (GKS) applications and direct university admissions. Zero file opening charges, zero hidden commissions.
+              EduExpress charges <strong>BDT 0 file-opening fees</strong> before visa issuance. Any written consultancy service fee is payable strictly <strong>100% after your Korean D-2/D-4 student visa is approved</strong>.
             </p>
           </div>
         </div>
@@ -299,10 +302,10 @@ export default async function SouthKoreaStudyCostPage() {
                 <td className="p-4 text-slate-600">Airlines (Thai Airways, Singapore Airlines, Malaysia Airlines, China Southern)</td>
               </tr>
               <tr className="bg-emerald-50/50">
-                <td className="p-4 font-bold text-emerald-900">EduExpress Processing &amp; File Guidance</td>
+                <td className="p-4 font-bold text-emerald-900">EduExpress File-Opening &amp; Pre-Visa Charge</td>
                 <td className="p-4 font-bold text-emerald-900">USD 0</td>
-                <td className="p-4 font-bold text-emerald-900">BDT 0</td>
-                <td className="p-4 text-xs text-emerald-800">100% Free Transparent Study Abroad Consultancy</td>
+                <td className="p-4 font-bold text-emerald-900">BDT 0 Upfront (100% Post-Visa Terms)</td>
+                <td className="p-4 text-xs text-emerald-800">Zero upfront file-opening charge; payable only after visa approval</td>
               </tr>
             </tbody>
           </table>
@@ -830,7 +833,7 @@ export default async function SouthKoreaStudyCostPage() {
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Financial Planning</span>
               <h2 className="mt-1 text-2xl font-bold sm:text-3xl text-petrol-800">Get Your South Korea Cost &amp; GKS Feasibility Assessment</h2>
               <p className="mt-2 text-sm text-slate-600">
-                Share your academic background, target major, and budget. Our senior counselors evaluate your GKS scholarship eligibility, verify your bank solvency profile against Embassy rules, and help you apply with BDT 0 consultancy fees.
+                Share your academic background, target major, and budget. Our senior counselors evaluate your GKS scholarship eligibility, verify your bank solvency profile against Embassy rules, and help you apply with BDT 0 upfront file-opening fees.
               </p>
             </div>
             <div className="rounded-3xl border border-rule bg-canvas-soft p-6 shadow-sm sm:p-10">

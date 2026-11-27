@@ -153,7 +153,7 @@ export default async function HungaryStudyCostPage() {
           { name: 'Hungary', path: '/study-in-hungary-from-bangladesh' },
           { name: 'Study Costs' },
         ]}
-        eyebrow="Transparent Cost Planning · Planning Assumption: 1 EUR ≈ 130 BDT (1 HUF ≈ 0.33 BDT) · BDT 0 EduExpress Fee"
+        eyebrow="Transparent Cost Planning · Planning Assumption: 1 EUR ≈ 130 BDT (1 HUF ≈ 0.33 BDT) · BDT 0 Upfront Fee"
         title="Cost of Studying in Hungary from Bangladesh."
         lead="A complete financial blueprint for Bangladeshi students and families: Stipendium Hungaricum bilateral scholarship funding vs self-funded tuition fees (EUR 3,000–8,000/yr), monthly living budgets in Budapest and regional cities (HUF & EUR), NDGAP embassy solvency proof, and Bangladesh Bank Student File wire transfers."
         reviewed="November 2026"
@@ -164,6 +164,9 @@ export default async function HungaryStudyCostPage() {
             </Link>
             <Link href="/hungary-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Hungary Student Visa Guide
+            </Link>
+            <Link href="/hungary-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Stipendium Scholarship Guide
             </Link>
             <a href="#stipendium-vs-self" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Stipendium vs Self-Funded
@@ -192,7 +195,7 @@ export default async function HungaryStudyCostPage() {
             <span>• Central European Schengen Member</span>
             <span>• Direct University &amp; Embassy Fees</span>
             <span className="rounded-full bg-emerald-100 px-3 py-1 font-bold text-emerald-800">
-              EduExpress Fee: BDT 0
+              BDT 0 Upfront · 100% After Visa
             </span>
           </div>
         </div>
@@ -232,9 +235,9 @@ export default async function HungaryStudyCostPage() {
               <CheckCircle2 className="size-6 text-emerald-800" />
               <h3 className="text-base font-bold text-petrol-800">EduExpress Fee Guarantee</h3>
             </div>
-            <p className="mt-2 text-2xl font-extrabold text-emerald-800">BDT 0 Service Charge</p>
+            <p className="mt-2 text-2xl font-extrabold text-emerald-800">BDT 0 Upfront File Fee</p>
             <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-              EduExpress International provides <strong>100% free guidance</strong> for both Stipendium Hungaricum applications and direct self-funded university admissions. Zero hidden file opening charges or post-visa commissions.
+              EduExpress charges <strong>BDT 0 file-opening fees</strong> before visa issuance. Our European service fee of BDT 100,000 (1 Lakh Taka) is payable <strong>100% after your Hungarian study visa is approved</strong>.
             </p>
           </div>
         </div>
@@ -294,10 +297,10 @@ export default async function HungaryStudyCostPage() {
                 <td className="p-4 text-slate-600">Airlines (Qatar Airways, Emirates, Turkish Airlines, Gulf Air)</td>
               </tr>
               <tr className="bg-emerald-50/50">
-                <td className="p-4 font-bold text-emerald-900">EduExpress Processing &amp; File Guidance</td>
+                <td className="p-4 font-bold text-emerald-900">EduExpress File-Opening &amp; Pre-Visa Charge</td>
                 <td className="p-4 font-bold text-emerald-900">EUR 0</td>
-                <td className="p-4 font-bold text-emerald-900">BDT 0</td>
-                <td className="p-4 text-xs text-emerald-800">100% Free Transparent Study Abroad Consultancy</td>
+                <td className="p-4 font-bold text-emerald-900">BDT 0 Upfront (BDT 100,000 After Visa)</td>
+                <td className="p-4 text-xs text-emerald-800">100% payable only after Hungary study visa approval</td>
               </tr>
             </tbody>
           </table>
@@ -775,7 +778,7 @@ export default async function HungaryStudyCostPage() {
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Budget Estimation</span>
               <h2 className="mt-1 text-2xl font-bold sm:text-3xl text-petrol-800">Get Your Personalized Hungarian Cost &amp; Scholarship Assessment</h2>
               <p className="mt-2 text-sm text-slate-600">
-                Share your target subject, university preference, and budget. Our counselors calculate your exact tuition breakdown, assist with Stipendium Hungaricum nomination strategy, and guide your Student File wire transfers with BDT 0 service fees.
+                Share your target subject, university preference, and budget. Our counselors calculate your exact tuition breakdown, assist with Stipendium Hungaricum nomination strategy, and guide your Student File wire transfers with BDT 0 upfront file-opening fees.
               </p>
             </div>
             <div className="rounded-3xl border border-rule bg-canvas-soft p-6 shadow-sm sm:p-10">

@@ -152,7 +152,7 @@ export default async function FinlandStudyCostPage() {
           { name: 'Finland', path: '/study-in-finland-from-bangladesh' },
           { name: 'Study Costs' },
         ]}
-        eyebrow="Transparent Cost Planning · Planning Assumption: 1 EUR ≈ 130 BDT · BDT 0 EduExpress Fee"
+        eyebrow="Transparent Cost Planning · Planning Assumption: 1 EUR ≈ 130 BDT · BDT 0 Upfront File-Opening Fee"
         title="Cost of Studying in Finland from Bangladesh."
         lead="A complete, verified financial breakdown for Bangladeshi students and families: Migri EUR 9,600/year living maintenance rules, University vs UAS tuition scales, health insurance costs, Bangladesh Bank Student File procedures, and 30 hrs/week part-time work earnings."
         reviewed="November 2026"
@@ -163,6 +163,9 @@ export default async function FinlandStudyCostPage() {
             </Link>
             <Link href="/finland-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Finland Residence Permit Guide
+            </Link>
+            <Link href="/finland-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Finland Scholarships Guide
             </Link>
             <a href="#migri-proof" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Migri EUR 9,600 Fund Rule
@@ -191,7 +194,7 @@ export default async function FinlandStudyCostPage() {
             <span>• No Hidden Surcharges</span>
             <span>• Direct University &amp; Migri Payments</span>
             <span className="rounded-full bg-emerald-100 px-3 py-1 font-bold text-emerald-800">
-              EduExpress Fee: BDT 0
+              BDT 0 Upfront · 100% After Visa
             </span>
           </div>
         </div>
@@ -231,9 +234,9 @@ export default async function FinlandStudyCostPage() {
               <CheckCircle2 className="size-6 text-emerald-800" />
               <h3 className="text-base font-bold text-petrol-800">EduExpress Fee Guarantee</h3>
             </div>
-            <p className="mt-2 text-2xl font-extrabold text-emerald-800">BDT 0 Service Charge</p>
+            <p className="mt-2 text-2xl font-extrabold text-emerald-800">BDT 0 Upfront File Fee</p>
             <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-              EduExpress International charges <strong>zero service fees</strong> for admissions guidance to verified Finnish universities and Universities of Applied Sciences (UAS). Students pay official government fees directly to Migri, VFS, and universities.
+              EduExpress charges <strong>BDT 0 file-opening fees</strong> before visa issuance. Our European service fee of BDT 100,000 (1 Lakh Taka) is payable <strong>100% after your Finnish student residence permit is approved</strong>.
             </p>
           </div>
         </div>
@@ -287,11 +290,11 @@ export default async function FinlandStudyCostPage() {
                 <td className="p-4 text-xs text-slate-500">After residence permit card approval</td>
               </tr>
               <tr className="bg-emerald-50/50">
-                <td className="p-4 font-bold text-emerald-900">EduExpress Agency Processing Fee</td>
+                <td className="p-4 font-bold text-emerald-900">EduExpress File-Opening &amp; Pre-Visa Charge</td>
                 <td className="p-4 text-emerald-900">EduExpress International</td>
                 <td className="p-4 font-bold text-emerald-900">EUR 0</td>
-                <td className="p-4 font-bold text-emerald-900">BDT 0</td>
-                <td className="p-4 text-xs text-emerald-800">100% Free Transparent Service</td>
+                <td className="p-4 font-bold text-emerald-900">BDT 0 Upfront (BDT 100,000 After Visa)</td>
+                <td className="p-4 text-xs text-emerald-800">100% payable only after residence permit approval</td>
               </tr>
             </tbody>
           </table>
@@ -777,7 +780,7 @@ export default async function FinlandStudyCostPage() {
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Budget Estimation</span>
               <h2 className="mt-1 text-2xl font-bold sm:text-3xl text-petrol-800">Get Your Personalized Finnish Cost &amp; Scholarship Assessment</h2>
               <p className="mt-2 text-sm text-slate-600">
-                Share your target degree (Bachelor’s or Master’s) and academic scores. Our counselors audit your eligibility for Finnish university tuition waivers, calculate your exact Migri bank deposit, and guide your Joint Application with BDT 0 service fees.
+                Share your target degree (Bachelor’s or Master’s) and academic scores. Our counselors audit your eligibility for Finnish university tuition waivers, calculate your exact Migri bank deposit, and guide your Joint Application with BDT 0 upfront file-opening fees.
               </p>
             </div>
             <div className="rounded-3xl border border-rule bg-canvas-soft p-6 shadow-sm sm:p-10">

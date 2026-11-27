@@ -164,6 +164,9 @@ export default async function StudyInFinlandPage() {
             <Link href="/finland-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               Finland Residence Permit Guide
             </Link>
+            <Link href="/finland-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Finland Scholarships Guide
+            </Link>
             <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               View 6 Verified Universities
             </a>

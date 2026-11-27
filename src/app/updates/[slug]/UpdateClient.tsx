@@ -104,7 +104,14 @@ export default function UpdateClient({ update, related = [], stale, cscDirectory
 
           <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-[15px] text-ink-soft">
             <span>
-              By <strong className="text-petrol-800">{authorName}</strong>
+              By{' '}
+              {authorName.toLowerCase() === 'abdullah al rakib' ? (
+                <Link href="/author/abdullah-al-rakib" className="font-bold text-petrol-800 underline underline-offset-4 hover:text-emerald-800">
+                  {authorName}
+                </Link>
+              ) : (
+                <strong className="text-petrol-800">{authorName}</strong>
+              )}
               {teamMember ? `, ${teamMember.role}` : ''}
             </span>
             {published && <span>Published <time dateTime={update.publishedAt || update.createdAt}>{published}</time></span>}
@@ -194,7 +201,20 @@ export default function UpdateClient({ update, related = [], stale, cscDirectory
                     <ShieldCheck size={16} className="mt-0.5 shrink-0 text-green-600" aria-hidden="true" />
                     <span>
                       {checked ? `Last reviewed ${checked}` : 'Being re-checked for the current cycle'}
-                      {update.reviewer ? ` · Reviewed by ${update.reviewer}` : ''}
+                      {update.reviewer ? (
+                        <>
+                          {' · Reviewed by '}
+                          {update.reviewer.toLowerCase() === 'abdullah al rakib' ? (
+                            <Link href="/author/abdullah-al-rakib" className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-emerald-800">
+                              {update.reviewer}
+                            </Link>
+                          ) : (
+                            update.reviewer
+                          )}
+                        </>
+                      ) : (
+                        ''
+                      )}
                       {fmtDate(update.nextReviewAt) ? ` · Next review ${fmtDate(update.nextReviewAt)}` : ''}
                     </span>
                   </p>

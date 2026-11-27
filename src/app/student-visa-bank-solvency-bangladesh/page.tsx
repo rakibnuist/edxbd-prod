@@ -115,6 +115,7 @@ export default async function StudentVisaBankSolvencyPage() {
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
+        reviewedBy: { '@id': `${SITE}/author/abdullah-al-rakib#person` },
         primaryImageOfPage: primaryImageOfPageSchema('/og-image.jpg'),
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
         ...citationJsonLd(SOLVENCY_SOURCES),
@@ -225,7 +226,7 @@ export default async function StudentVisaBankSolvencyPage() {
               </tr>
               <tr>
                 <td className="px-5 py-4 font-bold text-petrol-800">
-                  <Link href="/malta-study-cost-bangladesh" className="hover:underline">Malta (Identità Study)</Link>
+                  <Link href="/malta-student-visa-bangladesh" className="hover:underline">Malta (Identità Study)</Link>
                 </td>
                 <td className="px-5 py-4 font-bold text-petrol-800">EUR 7,500 – 10,000 (+ Tuition)</td>
                 <td className="px-5 py-4 font-semibold text-emerald-800">~9.8L – 13.0L BDT</td>
@@ -234,7 +235,7 @@ export default async function StudentVisaBankSolvencyPage() {
               </tr>
               <tr className="bg-canvas-soft/50">
                 <td className="px-5 py-4 font-bold text-petrol-800">
-                  <Link href="/cyprus-study-cost-bangladesh" className="hover:underline">Cyprus (EU CRMD)</Link>
+                  <Link href="/cyprus-student-visa-bangladesh" className="hover:underline">Cyprus (EU CRMD)</Link>
                 </td>
                 <td className="px-5 py-4 font-bold text-petrol-800">EUR 7,000 – 8,500 (+ Deposit)</td>
                 <td className="px-5 py-4 font-semibold text-emerald-800">~9.1L – 11.0L BDT</td>
@@ -243,7 +244,7 @@ export default async function StudentVisaBankSolvencyPage() {
               </tr>
               <tr>
                 <td className="px-5 py-4 font-bold text-petrol-800">
-                  <Link href="/georgia-study-cost-bangladesh" className="hover:underline">Georgia (D3 Study Visa)</Link>
+                  <Link href="/georgia-student-visa-bangladesh" className="hover:underline">Georgia (D3 Study Visa)</Link>
                 </td>
                 <td className="px-5 py-4 font-bold text-petrol-800">USD 3,500 – 5,000 (+ Tuition)</td>
                 <td className="px-5 py-4 font-semibold text-emerald-800">~4.3L – 6.1L BDT</td>
@@ -252,7 +253,7 @@ export default async function StudentVisaBankSolvencyPage() {
               </tr>
               <tr className="bg-canvas-soft/50">
                 <td className="px-5 py-4 font-bold text-petrol-800">
-                  <Link href="/greece-study-cost-bangladesh" className="hover:underline">Greece (Type D National)</Link>
+                  <Link href="/greece-student-visa-bangladesh" className="hover:underline">Greece (Type D National)</Link>
                 </td>
                 <td className="px-5 py-4 font-bold text-petrol-800">EUR 6,000 – 7,800 (+ Tuition)</td>
                 <td className="px-5 py-4 font-semibold text-emerald-800">~7.8L – 10.1L BDT</td>
@@ -261,7 +262,7 @@ export default async function StudentVisaBankSolvencyPage() {
               </tr>
               <tr>
                 <td className="px-5 py-4 font-bold text-petrol-800">
-                  <Link href="/croatia-study-cost-bangladesh" className="hover:underline">Croatia (MUP Study)</Link>
+                  <Link href="/croatia-student-visa-bangladesh" className="hover:underline">Croatia (MUP Study)</Link>
                 </td>
                 <td className="px-5 py-4 font-bold text-petrol-800">EUR 6,000 – 7,500 (+ Tuition)</td>
                 <td className="px-5 py-4 font-semibold text-emerald-800">~7.8L – 9.8L BDT</td>
@@ -270,7 +271,7 @@ export default async function StudentVisaBankSolvencyPage() {
               </tr>
               <tr className="bg-canvas-soft/50">
                 <td className="px-5 py-4 font-bold text-petrol-800">
-                  <Link href="/thailand-study-cost-bangladesh" className="hover:underline">Thailand (Non-Immigrant ED)</Link>
+                  <Link href="/thailand-student-visa-bangladesh" className="hover:underline">Thailand (Non-Immigrant ED)</Link>
                 </td>
                 <td className="px-5 py-4 font-bold text-petrol-800">USD 4,000 – 6,000</td>
                 <td className="px-5 py-4 font-semibold text-emerald-800">~4.9L – 7.3L BDT</td>
@@ -364,7 +365,7 @@ export default async function StudentVisaBankSolvencyPage() {
 
         <div className="mt-6 rounded-2xl border border-petrol-800/10 bg-white p-5 text-xs leading-relaxed text-slate-600">
           <p>
-            <strong>Editorial &amp; Compliance Review:</strong> Reviewed by <strong>Abdullah Al Rakib</strong> (Founder &amp; CEO, EduExpress International) and the Senior Counseling Desk at Evergreen Latif, House 12/1, Road 4/A, Dhanmondi, Dhaka 1209 on <time dateTime="2026-11-27" className="font-bold text-petrol-800">27 November 2026</time>.
+            <strong>Editorial &amp; Compliance Review:</strong> Reviewed by <Link href="/author/abdullah-al-rakib" className="font-bold text-petrol-800 underline underline-offset-4 hover:text-emerald-700">Abdullah Al Rakib</Link> (Founder &amp; CEO, EduExpress International) and the Senior Counseling Desk at Evergreen Latif, House 12/1, Road 4/A, Dhanmondi, Dhaka 1209 on <time dateTime="2026-11-27" className="font-bold text-petrol-800">27 November 2026</time>.
           </p>
           <p className="mt-2 text-amber-900">
             <strong>Mandatory Standard Disclaimer:</strong> EduExpress International provides admission and visa-application guidance under written service terms. Final admission, scholarship award, and visa issuance decisions rest solely with the respective universities and official embassy authorities.

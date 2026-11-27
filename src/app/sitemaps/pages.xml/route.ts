@@ -43,6 +43,7 @@ const pages: { path: string; lastmod: string }[] = [
   { path: '/press', lastmod: '2026-11-21' },
   { path: '/education-consultant-dhaka', lastmod: '2026-11-15' },
   { path: '/study-in-china-agency-bangladesh', lastmod: '2026-11-22' },
+  { path: '/author/abdullah-al-rakib', lastmod: '2026-11-27' },
 ];
 
 export function GET() {

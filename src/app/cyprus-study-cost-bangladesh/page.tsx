@@ -175,6 +175,9 @@ export default async function CyprusStudyCostPage() {
             <Link href="/apply?country=Cyprus" className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Check Cyprus Eligibility <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="/cyprus-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Cyprus Student Visa Guide
+            </Link>
             <a href="#solvency-rules" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               CRMD Solvency Rules
             </a>

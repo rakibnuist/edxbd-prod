@@ -166,6 +166,9 @@ export default async function StudyInCyprusPage() {
             <Link href="/cyprus-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               Cyprus Cost Guide (EUR &amp; BDT)
             </Link>
+            <Link href="/cyprus-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Cyprus Student Visa Guide
+            </Link>
           </>
         }
       />

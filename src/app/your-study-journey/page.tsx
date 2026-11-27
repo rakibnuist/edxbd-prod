@@ -178,6 +178,7 @@ export default function StudyJourneyPage() {
               Start stage one free <ArrowRight size={18} aria-hidden="true" />
             </Link>
             <Link href="/proof-library" className="ed-btn ed-btn-outline min-h-[52px] px-7">Inspect the proof library</Link>
+            <Link href="/document-attestation-apostille-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">Document attestation &amp; e-Apostille guide</Link>
           </>
         }
         aside={

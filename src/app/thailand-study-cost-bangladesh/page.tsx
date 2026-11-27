@@ -174,6 +174,12 @@ export default async function ThailandStudyCostPage() {
               Start Thailand Assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
             <Link
+              href="/thailand-student-visa-bangladesh"
+              className="ed-btn ed-btn-outline min-h-[52px] px-6"
+            >
+              Thailand ED Visa Guide
+            </Link>
+            <Link
               href="/study-in-thailand-from-bangladesh"
               className="ed-btn ed-btn-outline min-h-[52px] px-6"
             >

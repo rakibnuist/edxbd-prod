@@ -30,6 +30,11 @@ const mosaic = [
 const researchLinks = [
   { label: 'Bangladesh Study Abroad Market 2027 Report', text: 'Outbound trends, 12 destinations & Student File rules', href: '/bangladesh-study-abroad-market' },
   { label: 'Compare destinations side by side', text: 'Cost and entry side by side', href: '/compare-study-destinations' },
+  { label: 'Study gap acceptable countries (12-country matrix)', text: 'Bachelor, Master & PhD gap limits, age caps and work proofs', href: '/study-gap-acceptable-countries-bangladesh' },
+  { label: 'Student visa bank solvency & Student File guide', text: 'Required balances, maturity rules & FE Circular 37 across 12 countries', href: '/student-visa-bank-solvency-bangladesh' },
+  { label: 'Study abroad without IELTS (MOI matrix)', text: 'University MOI acceptance vs embassy visa language requirements', href: '/study-abroad-without-ielts-from-bangladesh' },
+  { label: 'BMDC recognized medical colleges abroad', text: 'BMDC Eligibility Certificate rules, WDOMS/WFME & 45 Chinese MOE schools', href: '/bmdc-recognized-medical-colleges-abroad' },
+  { label: 'Document attestation & MOFA e-Apostille guide', text: 'Education Board, MoE/UGC, myGov e-Apostille & Embassy legalization in Dhaka', href: '/document-attestation-apostille-bangladesh' },
   { label: 'Research universities and scholarships', text: 'Programs, tuition and intakes by destination', href: '/find-education' },
   { label: 'Fees and transparency', text: 'What you pay us, when, and what is refundable', href: '/fees-and-transparency' },
   { label: 'Guidance for parents and sponsors', text: 'Costs, safety and responsibilities', href: '/for-parents' },

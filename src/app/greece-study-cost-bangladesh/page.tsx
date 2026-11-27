@@ -174,6 +174,9 @@ export default async function GreeceStudyCostPage() {
             <Link href="/apply?country=Greece" className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Start Free Cost Assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <Link href="/greece-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              Greece Type D Visa Guide
+            </Link>
             <a href="#itemized-budget" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               View First-Year Budget
             </a>

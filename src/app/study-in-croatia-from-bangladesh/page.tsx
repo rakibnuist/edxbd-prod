@@ -167,6 +167,9 @@ export default async function StudyInCroatiaPage() {
             <Link href="/croatia-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               Full Cost Guide
             </Link>
+            <Link href="/croatia-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Croatia Student Visa Guide
+            </Link>
           </>
         }
       />

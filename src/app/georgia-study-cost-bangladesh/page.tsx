@@ -177,6 +177,12 @@ export default async function GeorgiaStudyCostPage() {
               Start Georgia Assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
             <Link
+              href="/georgia-student-visa-bangladesh"
+              className="ed-btn ed-btn-outline min-h-[52px] px-6"
+            >
+              Georgia D3 Visa Guide
+            </Link>
+            <Link
               href="/study-in-georgia-from-bangladesh"
               className="ed-btn ed-btn-outline min-h-[52px] px-6"
             >

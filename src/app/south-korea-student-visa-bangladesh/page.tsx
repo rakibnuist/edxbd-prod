@@ -130,6 +130,7 @@ export default async function SouthKoreaStudentVisaPage() {
         inLanguage: 'en-BD',
         isPartOf: { '@id': `${SITE}/#website` },
         publisher: { '@id': `${SITE}/#organization` },
+        reviewedBy: { '@id': `${SITE}/author/abdullah-al-rakib#person` },
         primaryImageOfPage: primaryImageOfPageSchema('/og/south-korea.jpg'),
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
         ...citationJsonLd(KOREA_VISA_SOURCES),
@@ -468,7 +469,7 @@ export default async function SouthKoreaStudentVisaPage() {
 
         <div className="mt-6 rounded-2xl border border-petrol-800/10 bg-white p-5 text-xs leading-relaxed text-slate-600">
           <p>
-            <strong>Editorial &amp; Compliance Review:</strong> Reviewed by <strong>Abdullah Al Rakib</strong> (Founder &amp; CEO, EduExpress International) and the Senior Counseling Desk at Evergreen Latif, House 12/1, Road 4/A, Dhanmondi, Dhaka 1209. Verified against Embassy of the Republic of Korea in Dhaka D-2 consular notices, HiKorea Ministry of Justice regulations, and NIIED Study in Korea guidelines on <time dateTime="2026-11-27" className="font-bold text-petrol-800">27 November 2026</time>.
+            <strong>Editorial &amp; Compliance Review:</strong> Reviewed by <Link href="/author/abdullah-al-rakib" className="font-bold text-petrol-800 underline underline-offset-4 hover:text-emerald-700">Abdullah Al Rakib</Link> (Founder &amp; CEO, EduExpress International) and the Senior Counseling Desk at Evergreen Latif, House 12/1, Road 4/A, Dhanmondi, Dhaka 1209. Verified against Embassy of the Republic of Korea in Dhaka D-2 consular notices, HiKorea Ministry of Justice regulations, and NIIED Study in Korea guidelines on <time dateTime="2026-11-27" className="font-bold text-petrol-800">27 November 2026</time>.
           </p>
           <p className="mt-2 text-amber-900">
             <strong>Mandatory Standard Disclaimer:</strong> EduExpress International provides admission and visa-application guidance under written service terms. Final admission, GKS or university scholarship award, CoA issuance, and D-2/D-4 visa decisions rest solely with the respective Korean universities, NIIED, and the Embassy of the Republic of Korea in Dhaka.

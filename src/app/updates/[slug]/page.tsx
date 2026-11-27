@@ -89,6 +89,12 @@ const teamPersonSchema = (name: string | null | undefined) => {
   if (!member) return null;
   return {
     '@type': 'Person',
+    ...(member.slug === 'abdullah-al-rakib'
+      ? {
+          '@id': 'https://eduexpressint.com/author/abdullah-al-rakib#person',
+          url: 'https://eduexpressint.com/author/abdullah-al-rakib',
+        }
+      : {}),
     name: member.name,
     jobTitle: member.role,
     ...(member.image ? { image: `https://eduexpressint.com${member.image}` } : {}),

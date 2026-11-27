@@ -165,6 +165,9 @@ export default async function StudyInGeorgiaPage() {
             <Link href="/georgia-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               Full Cost Guide
             </Link>
+            <Link href="/georgia-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Georgia D3 Visa Guide
+            </Link>
           </>
         }
       />

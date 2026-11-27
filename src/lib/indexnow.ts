@@ -251,8 +251,20 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/hungary-student-visa-bangladesh',
     '/south-korea-student-visa-bangladesh',
     '/finland-student-visa-bangladesh',
+    '/malta-student-visa-bangladesh',
+    '/cyprus-student-visa-bangladesh',
+    '/georgia-student-visa-bangladesh',
+    '/greece-student-visa-bangladesh',
+    '/croatia-student-visa-bangladesh',
+    '/thailand-student-visa-bangladesh',
     '/hungary-scholarships-bangladesh',
     '/south-korea-scholarships-bangladesh',
+    '/uk-scholarships-bangladesh',
+    '/finland-scholarships-bangladesh',
+    '/malaysia-scholarships-bangladesh',
+    '/study-abroad-without-ielts-from-bangladesh',
+    '/bmdc-recognized-medical-colleges-abroad',
+    '/document-attestation-apostille-bangladesh',
     '/study-gap-acceptable-countries-bangladesh',
     '/student-visa-bank-solvency-bangladesh',
     '/study-in-malaysia-after-o-level',
@@ -289,6 +301,7 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/updates/china-postgraduate-csc-scholarship-guide-bangladesh',
     '/updates/study-in-china-for-female-students-bangladesh',
     '/proof-library',
+    '/author/abdullah-al-rakib',
     '/education-fit-assessment'
   ]
 

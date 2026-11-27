@@ -162,6 +162,9 @@ export default async function StudyInMaltaPage() {
             <Link href="/malta-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               Malta Cost Guide (EUR &amp; BDT)
             </Link>
+            <Link href="/malta-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Malta Student Visa Guide
+            </Link>
           </>
         }
       />

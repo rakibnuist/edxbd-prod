@@ -78,6 +78,96 @@ const PAGE_INDEX: SearchHit[] = [
     href: '/bn/bangladesh-study-abroad-market',
     context: 'bangladesh study abroad market 2027 ১২টি দেশের খরচ স্টুডেন্ট ফাইল বাংলা গাইড',
   },
+  {
+    kind: 'guide',
+    title: 'Study Gap Acceptable Countries for Bangladeshi Students (2027)',
+    href: '/study-gap-acceptable-countries-bangladesh',
+    context: '12-country study gap & age limit matrix for Bachelor, Master & PhD, TIN/tax certificate & work experience proof',
+  },
+  {
+    kind: 'guide',
+    title: 'Student Visa Bank Solvency & Bangladesh Bank Student File Guide',
+    href: '/student-visa-bank-solvency-bangladesh',
+    context: 'Compare required bank balance, 28-day to 6-month maturity rules, sponsor documents & FE Circular 37 across 12 countries',
+  },
+  {
+    kind: 'guide',
+    title: 'Study Abroad Without IELTS from Bangladesh (MOI Matrix)',
+    href: '/study-abroad-without-ielts-from-bangladesh',
+    context: 'Compare university Medium of Instruction (MOI) acceptance vs embassy visa language requirements across 12 countries',
+  },
+  {
+    kind: 'guide',
+    title: 'BMDC Recognized Medical Colleges Abroad & 45 China MOE List',
+    href: '/bmdc-recognized-medical-colleges-abroad',
+    context: 'BMDC Eligibility Certificate rules (SSC+HSC GPA 7.00, Biology 3.50), WDOMS/WFME, 45 Chinese MOE universities vs Georgia, Croatia & BD private MBBS',
+  },
+  {
+    kind: 'guide',
+    title: 'Document Attestation, MOFA e-Apostille & Notarization Guide',
+    href: '/document-attestation-apostille-bangladesh',
+    context: 'Education Board, Ministry of Education, UGC, MOFA myGov e-Apostille QR verification & Embassy legalization in Dhaka',
+  },
+  {
+    kind: 'guide',
+    title: 'Malaysia Scholarships for Bangladeshi Students',
+    href: '/malaysia-scholarships-bangladesh',
+    context: 'MTCP, MIS, Sunway, Taylor’s, APU & Monash Malaysia 10%–75% merit tuition waivers with BDT 0 EduExpress service fee',
+  },
+  {
+    kind: 'guide',
+    title: 'UK Scholarships for Bangladeshi Students',
+    href: '/uk-scholarships-bangladesh',
+    context: 'Chevening, Commonwealth, GREAT £10,000 awards & £2,000–£8,000 automatic CAS merit bursaries',
+  },
+  {
+    kind: 'guide',
+    title: 'Hungary Scholarships (Stipendium Hungaricum & SHED)',
+    href: '/hungary-scholarships-bangladesh',
+    context: 'Stipendium Hungaricum dual-portal DreamApply + SHED MoE Bangladesh nomination, 100% tuition waiver & HUF stipends',
+  },
+  {
+    kind: 'guide',
+    title: 'South Korea Scholarships (GKS, BK21 & University Waivers)',
+    href: '/south-korea-scholarships-bangladesh',
+    context: 'Global Korea Scholarship (GKS) Embassy vs University track, BK21 STEM professor lab stipends & 30%–100% TOPIK/IELTS tuition waivers',
+  },
+  {
+    kind: 'guide',
+    title: 'Finland Scholarships & UAS Early-Bird Waivers',
+    href: '/finland-scholarships-bangladesh',
+    context: 'Finland Scholarship (100% tuition + €5,000 relocation grant), 20%–50% UAS waivers & Migri €9,600 living fund requirement',
+  },
+  {
+    kind: 'guide',
+    title: 'UK Student Visa from Bangladesh (CAS & 28-Day Rule)',
+    href: '/uk-student-visa-bangladesh',
+    context: 'UKVI Student Route points, £13,347/£10,224 28-day bank maintenance, IOM TB certificate, IHS & VFS Dhaka',
+  },
+  {
+    kind: 'guide',
+    title: 'Hungary Student Visa from Bangladesh (Type D & Enter Hungary)',
+    href: '/hungary-student-visa-bangladesh',
+    context: 'Schengen Type D study visa, VFS Global Dhaka, EUR 5,000–7,000 bank solvency & NDGAP residence permit',
+  },
+  {
+    kind: 'guide',
+    title: 'South Korea Student Visa from Bangladesh (D-2 & D-4)',
+    href: '/south-korea-student-visa-bangladesh',
+    context: 'IEQAS CoA vs Standard track, USD 20,000 / 10,000 bank solvency, apostille & Korean Embassy Dhaka filing',
+  },
+  {
+    kind: 'guide',
+    title: 'Finland Student Residence Permit from Bangladesh (Migri €9,600)',
+    href: '/finland-student-visa-bangladesh',
+    context: 'Studyinfo.fi, Enter Finland portal, EUR 9,600/year sole student account rule & VFS New Delhi biometrics',
+  },
+  {
+    kind: 'page',
+    title: 'Abdullah Al Rakib — Founder & CEO Profile',
+    href: '/author/abdullah-al-rakib',
+    context: 'Founder & CEO of EduExpress International, PhD Researcher at NUIST Nanjing China, editorial governance & credentials',
+  },
 ];
 
 const normalize = (value: string) => value.trim().toLowerCase();

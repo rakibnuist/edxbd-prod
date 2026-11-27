@@ -166,6 +166,9 @@ export default async function StudyInThailandPage() {
             <Link href="/thailand-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               Full Cost Guide
             </Link>
+            <Link href="/thailand-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Thailand ED Visa Guide
+            </Link>
           </>
         }
       />

@@ -95,7 +95,7 @@ const UK_COST_FAQS = [
   {
     question: 'What are the pre-departure costs before flying to the UK?',
     answer:
-      'Compulsory pre-departure expenses paid directly to official bodies include: the mandatory IOM Dhaka TB medical screening (~12,500 BDT), the UKVI Student Visa application fee of £490 (~76,000 BDT), the Immigration Health Surcharge (IHS) of £776 per year (~120,000 BDT/year), academic certificate attestations, and a one-way flight from Dhaka to London/Manchester (~60,000 to 95,000 BDT). EduExpress charges BDT 0 for admission and visa guidance.',
+      'Compulsory pre-departure expenses paid directly to official bodies include: the mandatory IOM Dhaka TB medical screening (~12,500 BDT), the UKVI Student Visa application fee of £490 (~76,000 BDT), the Immigration Health Surcharge (IHS) of £776 per year (~120,000 BDT/year), academic certificate attestations, and a one-way flight from Dhaka to London/Manchester (~60,000 to 95,000 BDT). EduExpress charges BDT 0 upfront file-opening fees (our BDT 100,000 service fee is payable 100% after visa approval).',
   },
   {
     question: 'What is the updated UK Graduate Route policy for 2027?',
@@ -154,7 +154,7 @@ export default async function UkStudyCostPage() {
           { name: 'United Kingdom', path: '/study-in-uk-from-bangladesh' },
           { name: 'Study Costs' },
         ]}
-        eyebrow="Transparent Cost Planning · Planning Assumption: 1 GBP ≈ 155 BDT · BDT 0 EduExpress Fee"
+        eyebrow="Transparent Cost Planning · Planning Assumption: 1 GBP ≈ 155 BDT · BDT 0 Upfront File-Opening Fee"
         title="Cost of Studying in the UK from Bangladesh."
         lead="A comprehensive financial planning guide for Bangladeshi students and families. Granular breakdown of tuition fees, official UKVI living maintenance rules (£1,483/mo London vs £1,136 outside), CAS deposits, IHS healthcare surcharges, and Bangladesh Bank Student File remittance."
         reviewed="November 2026"
@@ -165,6 +165,9 @@ export default async function UkStudyCostPage() {
             </Link>
             <Link href="/uk-student-visa-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               UK Student Visa &amp; CAS Guide
+            </Link>
+            <Link href="/uk-scholarships-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-7">
+              UK Scholarships Guide
             </Link>
             <a href="#student-file" className="ed-btn ed-btn-outline min-h-[52px] px-7">
               Bank Student File Guide
@@ -193,7 +196,7 @@ export default async function UkStudyCostPage() {
             <span>• No Hidden Surcharges</span>
             <span>• Direct University & UKVI Payments</span>
             <span className="rounded-full bg-emerald-100 px-3 py-1 font-bold text-emerald-800">
-              EduExpress Fee: BDT 0
+              BDT 0 Upfront · 100% After Visa
             </span>
           </div>
         </div>
@@ -253,10 +256,10 @@ export default async function UkStudyCostPage() {
                 <td className="p-4 text-slate-600">Airlines (Biman, Emirates, Qatar, Saudia, Turkish Airlines)</td>
               </tr>
               <tr className="bg-emerald-50/50 font-bold text-emerald-900">
-                <td className="p-4">EduExpress Student Counseling Charge</td>
+                <td className="p-4">EduExpress File-Opening &amp; Pre-Visa Charge</td>
                 <td className="p-4">£0</td>
-                <td className="p-4">BDT 0 (Free Service)</td>
-                <td className="p-4">Free admission counseling &amp; CAS compliance review</td>
+                <td className="p-4">BDT 0 Upfront (BDT 100,000 After Visa)</td>
+                <td className="p-4">100% payable only after UK Student Visa approval</td>
               </tr>
             </tbody>
           </table>
@@ -658,7 +661,7 @@ export default async function UkStudyCostPage() {
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Budget Estimation</span>
               <h2 className="mt-1 text-2xl font-bold sm:text-3xl text-petrol-800">Get Your Personalized UK Cost &amp; Visa Financial Assessment</h2>
               <p className="mt-2 text-sm text-slate-600">
-                Share your target subject, university preference, and budget. Our counselors calculate your exact 28-day UKVI maintenance sum, CAS deposit schedule, and Student File remittance plan with BDT 0 service fees.
+                Share your target subject, university preference, and budget. Our counselors calculate your exact 28-day UKVI maintenance sum, CAS deposit schedule, and Student File remittance plan with BDT 0 upfront file-opening fees.
               </p>
             </div>
             <div className="rounded-3xl border border-rule bg-canvas-soft p-6 shadow-sm sm:p-10">

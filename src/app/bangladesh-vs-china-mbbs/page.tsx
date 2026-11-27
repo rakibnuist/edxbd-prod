@@ -154,6 +154,9 @@ export default function BangladeshVsChinaMbbsPage() {
             <a href="#bmdc-regulations" className="ed-btn ed-btn-signal min-h-[52px] px-7">
               BMDC &amp; Practice Law <ArrowRight size={18} aria-hidden="true" />
             </a>
+            <Link href="/bmdc-recognized-medical-colleges-abroad" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              BMDC Foreign Medical &amp; 45 MOE Guide
+            </Link>
             <a href="#cost-calculator" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               Compare 6-Year Costs
             </a>

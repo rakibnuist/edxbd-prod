@@ -326,7 +326,16 @@ export function PathwayGovernanceSection({
             </div>
             <div>
               <dt className="font-semibold text-petrol-800">Reviewed by</dt>
-              <dd>{reviewerName} · {reviewerRole}</dd>
+              <dd>
+                {reviewerName === 'Abdullah Al Rakib' ? (
+                  <Link href="/author/abdullah-al-rakib" className="font-semibold text-petrol-800 underline underline-offset-4 hover:text-emerald-800">
+                    {reviewerName}
+                  </Link>
+                ) : (
+                  reviewerName
+                )}{' '}
+                · {reviewerRole}
+              </dd>
             </div>
             <div>
               <dt className="font-semibold text-petrol-800">Last verified / Next review</dt>
