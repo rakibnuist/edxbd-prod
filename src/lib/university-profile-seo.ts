@@ -29,16 +29,25 @@ export function universityProfileFaq(university: UniversityIdentity, programs: U
   const isChina = university.country.toLowerCase() === 'china';
   const isMalaysia = university.country.toLowerCase() === 'malaysia';
 
+  const sampleMajors = [...new Set(programs.map(p => p.name).filter(Boolean))].slice(0, 6);
+  const sampleQualifications = [...new Set(programs.flatMap(p => p.qualifications || []).filter(Boolean))].slice(0, 4);
+
   const items: UniversityFaqItem[] = [
     {
       question: `Where is ${university.name} located and what degrees are offered?`,
-      answer: `${university.name} is located in ${university.city}, ${university.country}.${levels.length ? ` The current catalog lists ${programs.length} program${programs.length === 1 ? '' : 's'} across ${levels.join(', ')} study levels.` : ''}`,
+      answer: `${university.name} is located in ${university.city}, ${university.country}.${levels.length ? ` The current catalog lists ${programs.length} program${programs.length === 1 ? '' : 's'} across ${levels.join(', ')} study levels${sampleMajors.length ? ` (including ${sampleMajors.join(', ')})` : ''}.` : ''}`,
     },
     {
       question: `What are the tuition fees and hostel costs at ${identity.shortName}?`,
       answer: feePreviews.length
         ? `${feePreviews.map(fee => `${PROGRAM_LEVEL_LABELS[fee.level]}: ${fee.amount} ${fee.period}`).join('; ')}.${hostelFee?.amount ? ` Campus accommodation is listed at ${hostelFee.amount} ${hostelFee.period}.` : ' Campus accommodation, medical, insurance, and registration costs are itemized per program.'} These are official gross amounts before any scholarship deduction.`
         : 'Tuition depends on the selected degree level and major. Select any program in the catalog above to view its itemized annual tuition and campus living costs.',
+    },
+    {
+      question: `What are the 2027 admission entry requirements at ${identity.shortName} for international students?`,
+      answer: sampleQualifications.length
+        ? `Recorded academic entry criteria at ${identity.shortName} include: ${sampleQualifications.join('; ')}. Applicants must also submit academic transcripts, highest diploma, passport copy, physical examination record, police clearance, and program-specific language proof (English MOI, IELTS/TOEFL, or HSK depending on the major).`
+        : `International applicants to ${identity.shortName} must meet the academic qualification, age, and language requirements listed for their chosen degree level (Bachelor's, Master's, or PhD) and submit verified transcripts, passport, medical form, and police clearance.`,
     },
     {
       question: `Can international students study in English at ${identity.shortName}?`,
@@ -173,6 +182,10 @@ function courseDescription(program: UniversityProgramDetail, university: Pick<Cl
   if (program.duration) parts.push(`duration ${program.duration}`);
   if (program.languages.length) parts.push(`taught in ${program.languages.join(' and ')}`);
   if (program.intake) parts.push(`intake ${program.intake}`);
+  const tuition = program.fees?.find(fee => fee.key === 'tuition' && fee.amount !== undefined && !fee.optional);
+  if (tuition && tuition.amount !== undefined) {
+    parts.push(`tuition ${tuition.currency} ${tuition.amount.toLocaleString('en-US')}/${tuition.period}`);
+  }
   return `${parts.join('; ')}.`;
 }
 

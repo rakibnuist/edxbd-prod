@@ -45,6 +45,20 @@ export function CscDirectoryOverview({ data }: { data: CscDirectoryEnrichment })
                 Verified China University Profiles
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
               </Link>
+              <Link
+                href="/programs"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-petrol-800 shadow-sm ring-1 ring-slate-200 transition hover:ring-petrol-600"
+              >
+                2027 China Program &amp; Tuition Finder
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/bmdc-recognized-medical-colleges-abroad"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-petrol-800 shadow-sm ring-1 ring-slate-200 transition hover:ring-petrol-600"
+              >
+                45 China MOE Medical Universities List
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+              </Link>
               <a
                 href="https://www.campuschina.org/"
                 target="_blank"

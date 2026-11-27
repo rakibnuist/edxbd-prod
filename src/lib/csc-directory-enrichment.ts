@@ -51,13 +51,19 @@ const CSC_DIRECTORY_FAQS: CscDirectoryFaq[] = [
     question:
       'Where can I verify the official 2027 CSC designated university list, 5-digit Agency Number, and updated admissions email?',
     answer:
-      'Official designated university participation, 5-digit Type B Agency Numbers, degree catalogs, and current international admissions emails are published on the China Scholarship Council portal (campuschina.org) and each university international office notice. EduExpress links verified university profiles and 2027 CSC guides on this page so Bangladeshi applicants can cross-check live entry details without relying on outdated email spreadsheets.',
+      'Official designated university participation (306 Chinese universities), 5-digit Type B Agency Numbers, degree catalogs, and current international admissions emails are published on the China Scholarship Council portal (campuschina.org) and each university international office notice. EduExpress links verified university profiles and 2027 CSC guides on this page so Bangladeshi applicants can cross-check live entry details without relying on outdated email spreadsheets.',
   },
   {
     question:
       'What is the difference between CSC Type A and CSC Type B scholarships for Bangladeshi applicants?',
     answer:
       'CSC Type A covers bilateral and embassy-nominated routes through government channels such as the Ministry of Education Bangladesh and the Chinese Embassy in Dhaka. CSC Type B covers direct university-nominated Master’s and PhD tracks applied straight to a designated Chinese university admissions system along with the CSC portal using that university’s 5-digit Agency Number.',
+  },
+  {
+    question:
+      'Which Chinese universities offer MSc Artificial Intelligence, Computer Science, Engineering, and MBBS under the 2027 intake?',
+    answer:
+      'Leading CSC-designated Chinese universities offering English-taught MSc/PhD programs in Artificial Intelligence, Computer Science, and Engineering include Nanjing University (NJU), Nanchang University, Peking University, Zhejiang University, Shanghai Jiao Tong University, Harbin Institute of Technology, Beihang University, and NUIST. Each linked university profile on EduExpress lists 2027 entry requirements, annual tuition in CNY, language proof rules (IELTS, TOEFL, or English MOI), and scholarship options.',
   },
   {
     question:
@@ -236,7 +242,7 @@ export function buildCscDirectoryEnrichment(
       const bTime = b.publishedAt ? Date.parse(b.publishedAt) || 0 : 0;
       return bTime - aTime;
     })
-    .slice(0, 16)
+    .slice(0, 24)
     .map(({ title, slug }) => ({ title, slug }));
 
   const matchedSet = new Set(matchedSlugs);
@@ -263,7 +269,7 @@ export function buildCscDirectoryEnrichment(
       if (a.score !== b.score) return b.score - a.score;
       return a.uni.name.localeCompare(b.uni.name);
     })
-    .slice(0, 16);
+    .slice(0, 32);
 
   const featuredUniversities: CscFeaturedUniversityRow[] = scored.map(({ uni, guide }) => ({
     name: uni.name,
