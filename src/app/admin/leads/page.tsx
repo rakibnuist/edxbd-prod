@@ -88,8 +88,13 @@ function LeadsPageContent() {
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'The enquiry could not be updated. Please retry.');
-      setLeads((previous) => previous.map((lead) => (lead.id === id ? result : lead)));
-      setNotice(data.notes !== undefined ? 'Counselor notes saved.' : 'Lead updated.');
+      if (result.isApplication) {
+        setLeads((previous) => previous.filter((lead) => lead.id !== id));
+        setNotice(`File opened! Lead moved to Application Tracker (${result.leadRef || 'APP-FILE'}).`);
+      } else {
+        setLeads((previous) => previous.map((lead) => (lead.id === id ? result : lead)));
+        setNotice(data.notes !== undefined ? 'Counselor notes saved.' : 'Lead updated.');
+      }
       return true;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Update failed.');

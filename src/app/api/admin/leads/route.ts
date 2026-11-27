@@ -34,8 +34,12 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const source = searchParams.get('source');
     const country = searchParams.get('country');
+    const includeApps = searchParams.get('includeApps') === '1';
 
     const filterWhere: Record<string, unknown> = {};
+    if (!includeApps) {
+      filterWhere.isApplication = false;
+    }
     if (status && status !== 'all') filterWhere.status = status;
     if (source && source !== 'all') filterWhere.source = source;
     if (country && country !== 'all') filterWhere.country = country;

@@ -302,6 +302,18 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.ok(!greeceCostHtml.includes('Official Planning Baseline'));
 
+  const georgiaCostHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'georgia-study-cost-bangladesh.html'), 'utf8');
+  assert.ok(
+    georgiaCostHtml.includes('Planning Assumption') &&
+      georgiaCostHtml.includes('National Center for Educational Quality Enhancement') &&
+      georgiaCostHtml.includes('Tbilisi State Medical University') &&
+      georgiaCostHtml.includes('D3') &&
+      georgiaCostHtml.includes('BMDC') &&
+      georgiaCostHtml.includes('eqe.ge'),
+    'georgia-study-cost-bangladesh must include Planning Assumption, NCEQE, TSMU, D3, BMDC, and official citations',
+  );
+  assert.ok(!georgiaCostHtml.includes('Official Planning Baseline'));
+
   const chinaHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-china-from-bangladesh.html'), 'utf8');
   for (const href of [
     '/csc-scholarship-bangladesh',

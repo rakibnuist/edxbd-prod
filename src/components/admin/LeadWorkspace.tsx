@@ -740,10 +740,17 @@ export default function LeadWorkspace({
         {/* Quick Priority Filter Pills */}
         <div className="-mx-3.5 mt-3 flex items-center gap-1.5 overflow-x-auto px-3.5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0 sm:pb-0">
           <span className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-slate-400">Quick focus:</span>
+          <Link
+            href="/admin/applications"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-sky-300 bg-sky-50 px-2.5 py-1 text-xs font-bold text-[#0f3a5c] shadow-xs hover:bg-sky-100 transition"
+            title="View opened files in Application Tracker"
+          >
+            <FolderKanban size={13} className="text-[#0f3a5c]" />
+            Application Tracker →
+          </Link>
           {[
             { id: 'all' as LeadQuickPreset, label: 'All Enquiries', icon: null },
             { id: 'positive_clients' as LeadQuickPreset, label: '🌟 Positive / Qualified', icon: FolderCheck },
-            { id: 'in_process_apps' as LeadQuickPreset, label: '📂 In-Process Files', icon: FolderKanban },
             { id: 'paid_leads' as LeadQuickPreset, label: '🟣 Paid Ads (Meta)', icon: null },
             { id: 'organic_leads' as LeadQuickPreset, label: '🟢 Organic Web', icon: null },
             { id: 'followup_due' as LeadQuickPreset, label: 'Follow-ups Due Today', icon: CalendarClock },

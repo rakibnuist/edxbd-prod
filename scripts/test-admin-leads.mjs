@@ -85,6 +85,26 @@ test('filterLeads correctly filters by follow_up queue and presets', () => {
   const upcoming = filterLeads(sampleLeads, { ...defaults, quickPreset: 'followup_upcoming' });
   assert.deepEqual(upcoming.map(l => l.id), ['f3']);
 });
+test('opened application files (isApplication: true) are excluded from leads queues and counts by default', () => {
+  const mixed = [
+    ...rows,
+    { id: 'app1', name: 'Student In Tracker', email: 'app1@test.com', country: 'China', status: 'application_started', isApplication: true, source: 'website', createdAt: '2026-01-05', updatedAt: '2026-01-05' },
+  ];
+  // Default count excludes opened files
+  assert.deepEqual(leadCounts(mixed), { all: 4, new: 1, follow_up: 0, no_response: 1, in_progress: 1, closed: 1 });
+  // Explicit count including applications
+  assert.deepEqual(leadCounts(mixed, true), { all: 5, new: 1, follow_up: 0, no_response: 1, in_progress: 2, closed: 1 });
+
+  // Default filter excludes opened files
+  const filtered = filterLeads(mixed, defaults);
+  assert.equal(filtered.some(l => l.id === 'app1'), false);
+  assert.equal(filtered.length, 4);
+
+  // Explicit filter including applications
+  const filteredWithApps = filterLeads(mixed, { ...defaults, includeApplications: true });
+  assert.equal(filteredWithApps.some(l => l.id === 'app1'), true);
+  assert.equal(filteredWithApps.length, 5);
+});
 test('search, queue, country and source filters combine without changing original data', () => {
   assert.deepEqual(filterLeads(rows, { ...defaults, queue: 'no_response' }).map(row => row.id), ['b']);
   assert.deepEqual(filterLeads(rows, { ...defaults, search: 'COMPUTER', country: 'China', source: 'website' }).map(row => row.id), ['a']);

@@ -42,9 +42,11 @@ export const leadStatusTone = (status: string) => status === 'no_response' ? 'bg
   : status === 'new' ? 'bg-sky-50 text-sky-900'
   : ['enrolled', 'converted', 'visa_approved'].includes(status) ? 'bg-emerald-50 text-emerald-900'
   : 'bg-gray-100 text-gray-700';
-export function leadCounts(leads: LeadRecord[]) {
-  const counts = { all: leads.length, new: 0, follow_up: 0, no_response: 0, in_progress: 0, closed: 0 };
+export function leadCounts(leads: LeadRecord[], includeApplications = false) {
+  const counts = { all: 0, new: 0, follow_up: 0, no_response: 0, in_progress: 0, closed: 0 };
   for (const lead of leads) {
+    if (!includeApplications && lead.isApplication) continue;
+    counts.all++;
     counts[leadQueue(lead.status)]++;
     if (lead.nextFollowup && !closed.has(lead.status)) {
       counts.follow_up++;
@@ -85,6 +87,7 @@ export function filterLeads(leads: LeadRecord[], filters: {
   gpaMin?: number | null;
   assignedTo?: string;
   quickPreset?: LeadQuickPreset;
+  includeApplications?: boolean;
 }) {
   const query = filters.search.trim().toLocaleLowerCase();
   const gpaMin = typeof filters.gpaMin === 'number' && Number.isFinite(filters.gpaMin) ? filters.gpaMin : null;
@@ -96,6 +99,9 @@ export function filterLeads(leads: LeadRecord[], filters: {
   const twoHoursAgoMs = Date.now() - 2 * 3600 * 1000;
 
   return leads.filter(lead => {
+    if (!filters.includeApplications && quick !== 'in_process_apps' && lead.isApplication) {
+      return false;
+    }
     if (query && ![
       lead.name, lead.email, lead.phone, lead.country, lead.program,
       lead.source, lead.university, lead.assignedTo, lead.assessAcademicResults,

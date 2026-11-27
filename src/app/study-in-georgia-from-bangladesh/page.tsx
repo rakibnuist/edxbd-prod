@@ -162,6 +162,9 @@ export default async function StudyInGeorgiaPage() {
             <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               View 4 Verified Institutions
             </a>
+            <Link href="/georgia-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Full Cost Guide
+            </Link>
           </>
         }
       />
@@ -486,6 +489,27 @@ export default async function StudyInGeorgiaPage() {
             <p>
               <strong>Official Bangladesh Bank Remittance Protocol:</strong> Educational remittances to Georgia must be executed through an Authorized Dealer commercial bank in Bangladesh via an approved <strong>Student File</strong> opened under Bangladesh Bank foreign exchange guidelines. Funds wire directly to the university’s verified official SWIFT/IBAN account. EduExpress never accepts cash or personal payments for university tuition.
             </p>
+          </div>
+
+          {/* Deep-Dive Cost Guide Callout */}
+          <div className="mt-6 flex flex-col items-start justify-between gap-4 rounded-3xl border border-petrol-800/15 bg-white p-6 shadow-xs sm:flex-row sm:items-center">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                Itemized Cost Breakdown · 2027 Benchmark
+              </span>
+              <h3 className="text-base font-bold text-petrol-800">
+                Deep Dive: Georgia Study Cost Guide (/georgia-study-cost-bangladesh)
+              </h3>
+              <p className="mt-1 text-xs text-slate-600">
+                Explore comprehensive tuition fee schedules across TSMU, TSU, Iliauni and UG, NCEQE ministerial recognition, National D3 Visa bank solvency rules ($3,500–$5,000), Tbilisi student living budgets, and BMDC licensing guidelines.
+              </p>
+            </div>
+            <Link
+              href="/georgia-study-cost-bangladesh"
+              className="ed-btn ed-btn-signal min-h-[48px] px-6 text-xs font-bold whitespace-nowrap shrink-0"
+            >
+              Read Georgia Cost Guide <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </Section>
