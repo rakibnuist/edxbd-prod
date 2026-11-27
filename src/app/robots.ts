@@ -17,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
       // training crawler so no vendor default can treat the site as opted out.
       ...[
         // Search discovery (cited answers)
-        'OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot', 'meta-webindexer', 'DuckAssistBot', 'Applebot', 'Bingbot', 'Googlebot',
+        'OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot', 'DeepSeekBot', 'YouBot', 'meta-webindexer', 'DuckAssistBot', 'Applebot', 'Bingbot', 'Googlebot',
         // User-triggered retrieval (someone asked an assistant about us)
         'ChatGPT-User', 'Claude-User', 'Perplexity-User', 'meta-externalfetcher', 'MistralAI-User',
         // Model training and grounding (being known to the model itself)

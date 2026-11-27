@@ -655,6 +655,83 @@ export default async function Home() {
               </div>
             </div>
           </div>
+
+          {/* 2C. CSC Scholarship 2027/2028 & CSCA Exam Dual Spotlight Banner */}
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            {/* Left Card: CSC Scholarship 2027/2028 & 306 Universities Directory */}
+            <div className="flex flex-col justify-between rounded-3xl border border-petrol-800/15 bg-canvas-soft p-6 sm:p-8">
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-petrol-800 px-3 py-1 text-xs font-bold text-lime">
+                    2027 / 2028 CSC Cycle Open
+                  </span>
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-petrol-800">
+                    306 Designated Universities
+                  </span>
+                </div>
+                <h3 className="mt-4 font-display text-[26px] font-black leading-tight text-petrol-800 sm:text-[30px]">
+                  Chinese Government Scholarship (CSC) 2027 Guide &amp; 306 University List.
+                </h3>
+                <p className="mt-2.5 text-[15px] leading-6 text-ink-soft">
+                  Compare Type A bilateral (Embassy deadline 10 Jan 2027) and Type B direct university routes covering 100% tuition, free campus housing, medical insurance, and monthly stipends (CNY 2,500–3,500/mo).
+                </p>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <Link href="/csc-scholarship-bangladesh" className="ed-btn ed-btn-signal min-h-[46px] px-5 text-sm">
+                  CSC Scholarship Guide <ArrowRight size={16} aria-hidden="true" />
+                </Link>
+                <Link href="/updates/complete-csc-universities-list-2027" className="ed-btn ed-btn-outline min-h-[46px] bg-white px-5 text-sm">
+                  Browse 306 CSC Universities
+                </Link>
+                <Link
+                  href="/bn/csc-scholarship-bangladesh"
+                  lang="bn"
+                  hrefLang="bn-BD"
+                  style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+                  className="text-xs font-bold text-petrol-800 underline underline-offset-4 hover:text-emerald-800"
+                >
+                  বাংলায় CSC গাইড →
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Card: 2027 CSCA Entrance Exam & Free CSCA Master Pro Offer */}
+            <div className="flex flex-col justify-between rounded-3xl border border-lime-deep/25 bg-lime-pale p-6 sm:p-8">
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-petrol-800 px-3 py-1 text-xs font-bold text-white">
+                    Mandatory for China UG &amp; CSC
+                  </span>
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-extrabold text-emerald-800">
+                    Free CNY 99 Activation Code
+                  </span>
+                </div>
+                <h3 className="mt-4 font-display text-[26px] font-black leading-tight text-petrol-800 sm:text-[30px]">
+                  2027 CSCA Entrance Exam Guide &amp; Free Mock Test Access.
+                </h3>
+                <p className="mt-2.5 text-[15px] leading-6 text-petrol-800/85">
+                  Preparing for the China Scholastic Competency Assessment (CSCA)? Open your verified China application file at <strong>BDT 0 file-opening charge</strong> and receive a complimentary <strong>CSCA Master Pro</strong> activation code (155 mock papers &amp; 21 past papers on cscamaster.com).
+                </p>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <Link href="/updates/csca-guide-study-in-china" className="ed-btn ed-btn-primary min-h-[46px] px-5 text-sm">
+                  2027 CSCA Exam Guide <ArrowRight size={16} aria-hidden="true" />
+                </Link>
+                <Link href="/universities?country=China&cscaFree=1" rel="nofollow" className="ed-btn ed-btn-outline min-h-[46px] bg-white px-5 text-sm">
+                  CSCA-Exempt Universities
+                </Link>
+                <Link
+                  href="/bn/csca-exam-bangladesh"
+                  lang="bn"
+                  hrefLang="bn-BD"
+                  style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+                  className="text-xs font-bold text-petrol-800 underline underline-offset-4 hover:text-emerald-800"
+                >
+                  CSCA বাংলা গাইড →
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
