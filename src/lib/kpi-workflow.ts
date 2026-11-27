@@ -261,6 +261,9 @@ export interface ComputedEmployeeKpi {
     callsLogged: number;
     filesOpened: number;
     conversionRatePct: number;
+    todayCallsLogged?: number;
+    todayTouchedLeads?: number;
+    todayFilesOpened?: number;
   };
   sla: {
     maxSlaHours: number;
@@ -466,6 +469,8 @@ export function computeEmployeeKpiReport(input: {
     const actByType: Record<string, number> = {};
     const actionsByDay = new Map<string, number>();
     const touchedLeadIds = new Set<string>();
+    const todayTouchedLeadIds = new Set<string>();
+    let todayCallsLogged = 0;
     let actScore = 0;
     let todayEvents = 0;
     let todayWeighted = 0;
@@ -480,6 +485,12 @@ export function computeEmployeeKpiReport(input: {
         if (d === today) {
           todayEvents++;
           todayWeighted += w;
+          if (a.type === 'call_logged') {
+            todayCallsLogged++;
+          }
+          if (a.leadId && a.type !== 'student_message') {
+            todayTouchedLeadIds.add(a.leadId);
+          }
         }
       }
       if (a.leadId && a.type !== 'student_message') {
@@ -662,6 +673,11 @@ export function computeEmployeeKpiReport(input: {
     const filesOpened = empLeads.filter(
       (l) => l.isApplication || ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(l.status),
     ).length;
+    const todayFilesOpened = empLeads.filter(
+      (l) =>
+        (l.isApplication || ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(l.status)) &&
+        (toDhakaDate(l.createdAt) === today || toDhakaDate(l.updatedAt) === today),
+    ).length;
     const callsLogged = actByType['call_logged'] || 0;
     const conversionRatePct = empLeads.length > 0 ? Number(((filesOpened / empLeads.length) * 100).toFixed(1)) : 0;
 
@@ -731,6 +747,9 @@ export function computeEmployeeKpiReport(input: {
         callsLogged,
         filesOpened,
         conversionRatePct,
+        todayCallsLogged,
+        todayTouchedLeads: todayTouchedLeadIds.size,
+        todayFilesOpened,
       },
       sla: {
         maxSlaHours,

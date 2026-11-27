@@ -5,9 +5,10 @@ import Link from 'next/link';
 import {
   Activity, AlertTriangle, Award, BarChart3, Calendar, CheckCircle2, ChevronDown, ChevronUp, Clock,
   Download, ExternalLink, FileText, Flame, FolderCheck, HelpCircle, ListChecks, LogIn, LogOut,
-  MapPin, Navigation, PhoneCall, Plus, RefreshCw, Smartphone, Target, Trash2, TrendingUp, Users, X,
+  MapPin, Navigation, PhoneCall, Plus, RefreshCw, Smartphone, Sparkles, Target, Trash2, TrendingUp, Users, X,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { captureBrowserLocation } from '@/lib/browser-geolocation';
 import type {
   ComputedEmployeeKpi,
   KpiReportResult,
@@ -105,73 +106,6 @@ function currentMonthIso(): string {
   return new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 7);
 }
 
-async function captureBrowserLocation(): Promise<{
-  latitude?: number;
-  longitude?: number;
-  accuracyMeters?: number;
-  locationError?: 'denied' | 'timeout' | 'unavailable' | 'unsupported';
-  sourceAccuracy?: 'high' | 'network';
-}> {
-  if (typeof window === 'undefined' || !('geolocation' in navigator)) {
-    return { locationError: 'unsupported' };
-  }
-
-  // Strategy 1: Attempt High Accuracy (GPS hardware satellite lock, 7s timeout, allows 30s cached fix)
-  const tryHighAccuracy = (): Promise<GeolocationPosition> =>
-    new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: true,
-        timeout: 7000,
-        maximumAge: 30000,
-      });
-    });
-
-  // Strategy 2: Fallback to Low Accuracy (Wi-Fi access points + Cellular triangulation, 12s timeout, allows 3min cached fix)
-  // This works 100% reliably indoors and on phones where satellite lock is weak or slow.
-  const tryLowAccuracy = (): Promise<GeolocationPosition> =>
-    new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: false,
-        timeout: 12000,
-        maximumAge: 180000,
-      });
-    });
-
-  try {
-    let pos: GeolocationPosition;
-    let source: 'high' | 'network' = 'high';
-
-    try {
-      pos = await tryHighAccuracy();
-    } catch (err: unknown) {
-      const geoErr = err as GeolocationPositionError;
-      // If user explicitly denied permission, do not retry, return 'denied' immediately
-      if (geoErr && typeof geoErr.code === 'number' && geoErr.code === 1) {
-        return { locationError: 'denied' };
-      }
-      // If timed out (common indoors) or position unavailable, fall back to cellular/Wi-Fi triangulation
-      source = 'network';
-      pos = await tryLowAccuracy();
-    }
-
-    return {
-      latitude: pos.coords.latitude,
-      longitude: pos.coords.longitude,
-      accuracyMeters: Math.round(pos.coords.accuracy || 0),
-      sourceAccuracy: source,
-    };
-  } catch (err: unknown) {
-    const geoErr = err as GeolocationPositionError;
-    if (geoErr && typeof geoErr.code === 'number' && geoErr.code === 1) {
-      return { locationError: 'denied' };
-    }
-    if (geoErr && typeof geoErr.code === 'number' && geoErr.code === 3) {
-      return { locationError: 'timeout' };
-    }
-    return { locationError: 'unavailable' };
-  }
-}
-
 export default function KpiWorkflowClient() {
   const { user, authenticatedFetch } = useAuth();
   const isCounselor = user?.role === 'counselor';
@@ -190,6 +124,11 @@ export default function KpiWorkflowClient() {
   const [accomplishments, setAccomplishments] = useState('');
   const [challenges, setChallenges] = useState('');
   const [tomorrowPlan, setTomorrowPlan] = useState('');
+
+  // EOD Check-out modal & reflection state
+  const [checkOutModalOpen, setCheckOutModalOpen] = useState(false);
+  const [checkOutSubmitting, setCheckOutSubmitting] = useState(false);
+  const [checkOutError, setCheckOutError] = useState<string | null>(null);
 
   // GPS verification state
   const [testingGps, setTestingGps] = useState(false);
@@ -295,8 +234,26 @@ export default function KpiWorkflowClient() {
 
   const maxDailyTotal = Math.max(1, ...teamDailyBars.map((b) => b.total));
 
+  const handleOpenCheckOutModal = () => {
+    if (!activeKpi) return;
+    setCheckOutError(null);
+    const calls = activeKpi.funnel.todayCallsLogged ?? 0;
+    const leads = activeKpi.funnel.todayTouchedLeads ?? 0;
+    const files = activeKpi.funnel.todayFilesOpened ?? 0;
+    if (!accomplishments.trim()) {
+      setAccomplishments(
+        `Today completed ${calls} calls and contacted ${leads} students across active inquiries. Processed ${files} application files.`,
+      );
+    }
+    setCheckOutModalOpen(true);
+  };
+
   const handleAttendanceAction = async (mode: 'checkin' | 'checkout') => {
     if (!activeKpi) return;
+    if (mode === 'checkout') {
+      handleOpenCheckOutModal();
+      return;
+    }
     setBusy(true);
     setNotice(null);
     setError(null);
@@ -329,6 +286,58 @@ export default function KpiWorkflowClient() {
     } finally {
       setLocating(false);
       setBusy(false);
+    }
+  };
+
+  const handleConfirmCheckOutAndEod = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!activeKpi) return;
+    if (!accomplishments.trim()) {
+      setCheckOutError('Please document your key accomplishments for today before checking out.');
+      return;
+    }
+    setCheckOutSubmitting(true);
+    setCheckOutError(null);
+    try {
+      // 1. Submit daily EOD reflection
+      const logRes = await authenticatedFetch('/api/admin/daily-logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          employeeId: activeKpi.employee.id,
+          accomplishments: accomplishments.trim(),
+          challenges: challenges.trim(),
+          tomorrowPlan: tomorrowPlan.trim(),
+        }),
+      });
+      const logData = await logRes.json();
+      if (!logRes.ok) {
+        throw new Error(logData.error || 'Failed to submit daily log');
+      }
+
+      // 2. Perform attendance checkout
+      const attRes = await authenticatedFetch('/api/admin/attendance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          employeeId: activeKpi.employee.id,
+          mode: 'checkout',
+        }),
+      });
+      const attData = await attRes.json();
+      if (!attRes.ok) {
+        throw new Error(attData.error || 'Attendance check-out failed');
+      }
+
+      setNotice(
+        `স্বাগতম! ${activeKpi.employee.name} সফলভাবে চেক-আউট সম্পন্ন করেছেন (${attData.checkOut}, ${attData.hoursWorked}h)। EOD রিপোর্ট সংরক্ষিত হয়েছে।`,
+      );
+      setCheckOutModalOpen(false);
+      await loadReport();
+    } catch (err) {
+      setCheckOutError(err instanceof Error ? err.message : 'Check-out failed. Please try again.');
+    } finally {
+      setCheckOutSubmitting(false);
     }
   };
 
@@ -1866,6 +1875,180 @@ export default function KpiWorkflowClient() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+      {/* ================= MODAL: COUNSELOR EOD CHECK-OUT & METRICS CONFIRMATION ================= */}
+      {checkOutModalOpen && activeKpi && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200"
+        >
+          <div className="relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-[#0f3a5c] via-[#124b7a] to-[#0f3a5c] p-5 text-white">
+              <div className="flex items-center gap-3">
+                <div className="grid size-10 place-items-center rounded-2xl bg-white/15 text-emerald-300">
+                  <LogOut size={20} />
+                </div>
+                <div>
+                  <h2 className="font-heading text-base font-bold text-white sm:text-lg">
+                    Daily Check-Out &amp; EOD Reflection
+                  </h2>
+                  <p className="text-xs text-sky-100">
+                    {activeKpi.employee.name} ({activeKpi.employee.empId}) · {report?.today || 'Today'}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCheckOutModalOpen(false)}
+                className="grid size-9 place-items-center rounded-xl bg-white/10 text-white transition hover:bg-white/20 active:scale-95"
+                aria-label="Close dialog"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <form onSubmit={handleConfirmCheckOutAndEod} className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
+              {/* Automated Today's Performance Summary (Auto-Captured) */}
+              <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50/80 via-white to-slate-50 p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5">
+                    <Sparkles size={13} className="text-emerald-600" />
+                    Automated Daily Activity Capture
+                  </p>
+                  <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-100/70 rounded-full px-2 py-0.5">
+                    Live Auto-Tally
+                  </span>
+                </div>
+
+                <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                  <div className="rounded-xl border border-emerald-100 bg-white p-2.5 shadow-2xs">
+                    <span className="block text-[11px] font-semibold text-slate-500">Calls Logged</span>
+                    <span className="text-lg font-bold text-emerald-700">
+                      {activeKpi.funnel.todayCallsLogged ?? 0}
+                    </span>
+                  </div>
+                  <div className="rounded-xl border border-emerald-100 bg-white p-2.5 shadow-2xs">
+                    <span className="block text-[11px] font-semibold text-slate-500">Students Touched</span>
+                    <span className="text-lg font-bold text-blue-700">
+                      {activeKpi.funnel.todayTouchedLeads ?? 0}
+                    </span>
+                  </div>
+                  <div className="rounded-xl border border-emerald-100 bg-white p-2.5 shadow-2xs">
+                    <span className="block text-[11px] font-semibold text-slate-500">Files Opened</span>
+                    <span className="text-lg font-bold text-purple-700">
+                      {activeKpi.funnel.todayFilesOpened ?? 0}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-2.5 flex items-center justify-between text-xs text-slate-600 px-1">
+                  <span>
+                    Checked In: <strong className="text-slate-800">{activeKpi.attendance.todayCheckIn || 'N/A'}</strong>
+                  </span>
+                  <span>
+                    Status: <strong className="text-emerald-700">{activeKpi.attendance.todayStatus || 'Present'}</strong>
+                  </span>
+                </div>
+              </div>
+
+              {checkOutError && (
+                <div className="rounded-xl border border-rose-300 bg-rose-50 p-3 text-xs font-semibold text-rose-800">
+                  {checkOutError}
+                </div>
+              )}
+
+              {/* Reflection Fields */}
+              <div className="space-y-3">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-slate-800">
+                      Today&apos;s Key Accomplishments *
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const calls = activeKpi.funnel.todayCallsLogged ?? 0;
+                        const leads = activeKpi.funnel.todayTouchedLeads ?? 0;
+                        const files = activeKpi.funnel.todayFilesOpened ?? 0;
+                        setAccomplishments(
+                          `Today completed ${calls} calls and contacted ${leads} students across active inquiries. Processed ${files} application files.`,
+                        );
+                      }}
+                      className="text-[11px] font-bold text-[#0f3a5c] hover:underline"
+                    >
+                      Auto-fill Stats
+                    </button>
+                  </div>
+                  <textarea
+                    required
+                    rows={3}
+                    value={accomplishments}
+                    onChange={(e) => setAccomplishments(e.target.value)}
+                    placeholder="Called China leads, sent WhatsApp guidance, updated JW202 stages…"
+                    className="mt-1.5 w-full rounded-xl border border-slate-300 p-3 text-xs sm:text-sm text-slate-900 shadow-2xs focus:border-[#0f3a5c] focus:outline-none focus:ring-1 focus:ring-[#0f3a5c]"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-slate-800">
+                    Challenges / Blockers Encountered (Optional)
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={challenges}
+                    onChange={(e) => setChallenges(e.target.value)}
+                    placeholder="e.g. Students missing notarized transcripts, delay in receiving documents…"
+                    className="mt-1.5 w-full rounded-xl border border-slate-300 p-3 text-xs sm:text-sm text-slate-900 shadow-2xs focus:border-[#0f3a5c] focus:outline-none focus:ring-1 focus:ring-[#0f3a5c]"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-slate-800">
+                    Tomorrow&apos;s Priority Plan (Optional)
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={tomorrowPlan}
+                    onChange={(e) => setTomorrowPlan(e.target.value)}
+                    placeholder="e.g. Follow up with shortlisted China applicants, interview prep…"
+                    className="mt-1.5 w-full rounded-xl border border-slate-300 p-3 text-xs sm:text-sm text-slate-900 shadow-2xs focus:border-[#0f3a5c] focus:outline-none focus:ring-1 focus:ring-[#0f3a5c]"
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-2 flex flex-col gap-2">
+                <button
+                  type="submit"
+                  disabled={checkOutSubmitting || !accomplishments.trim()}
+                  className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-[#0f3a5c] px-4 py-3 text-xs sm:text-sm font-bold text-white shadow-md transition hover:from-emerald-700 hover:to-[#12436b] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {checkOutSubmitting ? (
+                    <>
+                      <RefreshCw size={16} className="animate-spin" />
+                      Submitting EOD Report &amp; Checking Out...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 size={16} />
+                      Submit Daily Log &amp; Complete Check-Out
+                    </>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCheckOutModalOpen(false)}
+                  className="min-h-[42px] w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-100"
+                >
+                  Cancel / Keep Working
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

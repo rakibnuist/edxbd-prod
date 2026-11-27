@@ -42,6 +42,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { canAccessFinanceRole } from '@/lib/roles';
 import AdminTeamManagerPanel from '@/components/admin/AdminTeamManagerPanel';
 import MetaConnectionPanel from '@/components/admin/MetaConnectionPanel';
+import CounselorDashboardCheckInCard from '@/components/admin/CounselorDashboardCheckInCard';
 import type { ConsultancyExecutiveSnapshot } from '@/lib/consultancy-analytics';
 import { formatBdt, type FinanceDashboardSnapshot } from '@/lib/finance-logic';
 import type {
@@ -393,6 +394,16 @@ export default function AdminDashboardPage() {
           </div>
         )}
       </section>
+
+      {/* Counselor 1-Tap Daily Check-In & On-Duty Status Hero */}
+      {isCounselor && stats.counselorDesk && (
+        <section className="animate-in fade-in duration-300">
+          <CounselorDashboardCheckInCard
+            desk={stats.counselorDesk}
+            onCheckInSuccess={() => void fetchDashboard(true)}
+          />
+        </section>
+      )}
 
       {/* 4 Clean Primary Key Metrics */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
