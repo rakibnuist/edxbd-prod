@@ -673,6 +673,29 @@ export default async function Page() {
         </div>
       </section>
 
+      {/* Spring 2027 Language & Foundation Specialization Guide Callout */}
+      <section className="border-b border-canvas-soft bg-canvas-soft px-5 py-6 sm:px-8">
+        <div className="mx-auto flex max-w-[1180px] flex-col items-start justify-between gap-4 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:p-6">
+          <div>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-lime-pale px-3 py-0.5 text-xs font-bold uppercase tracking-wider text-lime-deep">
+              Spring 2027 Admissions Guide
+            </span>
+            <h3 className="mt-1 text-base font-bold text-petrol-800 sm:text-lg">
+              Chinese Language, Foundation Pathways &amp; CSCA Preparation Guide
+            </h3>
+            <p className="mt-0.5 text-sm text-ink-soft">
+              Detailed breakdown of 1-semester language immersion, HSK benchmarks, X2 vs. X1 visa rules, and university tuition.
+            </p>
+          </div>
+          <Link
+            href="/updates/china-march-2027-language-foundation-guide"
+            className="ed-btn ed-btn-outline shrink-0 text-xs sm:text-sm"
+          >
+            Read spring guide <ArrowRight size={15} aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+
       {/* Closing Executive CTA & Dhanmondi Consultation Zone */}
       <section className="border-b border-white/10 bg-gradient-to-br from-[#051827] via-petrol-800 to-[#12436b] px-5 py-14 text-white sm:px-8 lg:py-16">
         <div className="mx-auto max-w-[1180px]">
@@ -752,6 +775,7 @@ export default async function Page() {
               <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm text-white/80">
                 {[
                   ['/study-in-china-from-bangladesh', 'Study in China guide'],
+                  ['/updates/china-march-2027-language-foundation-guide', 'Language & foundation guide'],
                   ['/china-intakes-deadlines', 'Intakes & deadlines'],
                   ['/china-scholarships-bangladesh', 'Scholarships'],
                   ['/study-in-china-cost-bangladesh', 'Study costs'],

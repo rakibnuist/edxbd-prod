@@ -32,6 +32,7 @@ import { CUHK_PROGRAMS_2027_SLUG, CUHK_PROGRAMS_2027_DATA } from '@/data/cuhkPro
 import { UK_RED_BRICK_2027_SLUG, UK_RED_BRICK_2027_DATA } from '@/data/ukRedBrickUniversitiesGuide2027';
 import { CHINA_MBBS_ADMISSION_2027_SLUG, CHINA_MBBS_ADMISSION_2027_DATA } from '@/data/chinaMbbsAdmissionGuide2027';
 import { CHINA_CS_AI_ADMISSION_2027_SLUG, CHINA_CS_AI_ADMISSION_2027_DATA } from '@/data/chinaCsAiAdmissionGuide2027';
+import { CHINA_MARCH_2027_LANGUAGE_GUIDE_SLUG, CHINA_MARCH_2027_LANGUAGE_DATA } from '@/data/chinaMarch2027LanguageFoundationGuide';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -205,6 +206,10 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   }
   if (!serialized.some(u => u.slug === CHINA_CS_AI_ADMISSION_2027_SLUG)) {
     const fallback = serializeUpdate(CHINA_CS_AI_ADMISSION_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  if (!serialized.some(u => u.slug === CHINA_MARCH_2027_LANGUAGE_GUIDE_SLUG)) {
+    const fallback = serializeUpdate(CHINA_MARCH_2027_LANGUAGE_DATA);
     if (fallback) serialized.unshift(fallback);
   }
   // Fallbacks are unshifted above; re-sort so the newest posts (DB or fallback) lead the feed.
@@ -458,6 +463,15 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
       publishedAt: CHINA_CS_AI_ADMISSION_2027_DATA.publishedAt,
       category: CHINA_CS_AI_ADMISSION_2027_DATA.category,
       categories: CHINA_CS_AI_ADMISSION_2027_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === CHINA_MARCH_2027_LANGUAGE_GUIDE_SLUG)) {
+    updates.unshift({
+      slug: CHINA_MARCH_2027_LANGUAGE_DATA.slug,
+      updatedAt: CHINA_MARCH_2027_LANGUAGE_DATA.updatedAt,
+      publishedAt: CHINA_MARCH_2027_LANGUAGE_DATA.publishedAt,
+      category: CHINA_MARCH_2027_LANGUAGE_DATA.category,
+      categories: CHINA_MARCH_2027_LANGUAGE_DATA.categories,
     });
   }
   const categorySlugs = Array.from(
