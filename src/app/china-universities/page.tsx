@@ -155,7 +155,7 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
               Or search by budget &amp; entrance requirement:{' '}
               <Link href="/programs" className={kit.link}>program and tuition finder</Link> ·{' '}
               <Link href="/compare-costs" className={kit.link}>compare first-year costs</Link> ·{' '}
-              <Link href="/universities?country=China&cscaFree=1" className={kit.link}>CSCA-exempt universities</Link>
+              <Link href="/universities?country=China&cscaFree=1" rel="nofollow" className={kit.link}>CSCA-exempt universities</Link>
             </p>
           </nav>
         )}
@@ -166,6 +166,41 @@ export default async function ChinaUniversitiesPage({ searchParams }: Props) {
           <UniversitiesClient directory={compactDirectory(universities)} />
         </Suspense>
       </div>
+
+      {/* Complete Server-Rendered Crawl Index of All Chinese Universities */}
+      <section aria-labelledby="all-china-universities-index" className="border-t border-slate-200 bg-white py-12">
+        <div className={kit.wrap}>
+          <details className="rounded-3xl border border-slate-200 bg-canvas-soft p-6 sm:p-8" open>
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                  Complete China Directory · {universities.length} Accredited Profiles
+                </span>
+                <h2 id="all-china-universities-index" className="mt-1 font-display text-xl font-black text-petrol-800 sm:text-2xl">
+                  All {universities.length} Chinese Universities (A–Z Direct Profile Index)
+                </h2>
+              </div>
+              <span className="rounded-full bg-white px-3.5 py-1.5 text-xs font-bold text-petrol-800 shadow-2xs">
+                A–Z Index
+              </span>
+            </summary>
+            <ul className="mt-6 grid grid-cols-1 gap-x-6 gap-y-1.5 border-t border-slate-200/80 pt-6 text-xs sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {[...universities]
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((u) => (
+                  <li key={u.slug} className="truncate">
+                    <Link
+                      href={`/universities/${u.slug}`}
+                      className="text-slate-700 hover:font-semibold hover:text-petrol-800 hover:underline"
+                    >
+                      {u.name}
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+          </details>
+        </div>
+      </section>
 
       <Section title="Free CSCA Master Pro prep for EduExpress China applicants.">
         <CscaMasterProOfferCard assessmentHref="/education-fit-assessment" compact />

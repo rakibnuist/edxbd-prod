@@ -229,6 +229,7 @@ export default async function UniversitiesPage({ searchParams }: Props) {
                   <Link
                     key={item.href}
                     href={item.href}
+                    rel="nofollow"
                     className="inline-flex min-h-9 items-center rounded-full bg-white/10 px-3.5 text-xs font-semibold text-white/90 transition-all hover:bg-lime/25 hover:text-lime"
                   >
                     {item.label}
@@ -299,6 +300,7 @@ export default async function UniversitiesPage({ searchParams }: Props) {
                 <Link
                   key={item.name}
                   href={item.href}
+                  rel={item.href.includes('?') ? 'nofollow' : undefined}
                   className={`inline-flex min-h-[42px] items-center gap-2 rounded-full px-4 text-xs font-bold transition-all ${
                     isSelected
                       ? 'bg-petrol-800 text-white shadow-sm'
@@ -347,6 +349,54 @@ export default async function UniversitiesPage({ searchParams }: Props) {
           </div>
         </section>
       )}
+
+      {/* Complete Server-Rendered Crawl Index of All Active Universities by Country */}
+      <section aria-labelledby="complete-university-index" className="border-t border-slate-200 bg-white py-12">
+        <div className={kit.wrap}>
+          <details className="group rounded-3xl border border-slate-200 bg-canvas-soft p-6 sm:p-8" open>
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                  Complete Accredited Institution Index · {activeCount} Verified Profiles
+                </span>
+                <h2 id="complete-university-index" className="mt-1 font-display text-xl font-black text-petrol-800 sm:text-2xl">
+                  Browse All {activeCount} Verified Universities by Destination (A–Z)
+                </h2>
+              </div>
+              <span className="rounded-full bg-white px-3.5 py-1.5 text-xs font-bold text-petrol-800 shadow-2xs">
+                Direct Profile Links
+              </span>
+            </summary>
+            <div className="mt-6 space-y-6 border-t border-slate-200/80 pt-6">
+              {listedDestinations.map((dest) => {
+                const countryUnis = universities
+                  .filter((u) => u.isActive && u.country.toLowerCase() === dest.name.toLowerCase())
+                  .sort((a, b) => a.name.localeCompare(b.name));
+                if (countryUnis.length === 0) return null;
+                return (
+                  <div key={dest.name}>
+                    <h3 className="text-sm font-extrabold uppercase tracking-wider text-petrol-800">
+                      {dest.flag} {dest.name} ({countryUnis.length})
+                    </h3>
+                    <ul className="mt-2.5 grid grid-cols-1 gap-x-6 gap-y-1.5 text-xs sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                      {countryUnis.map((u) => (
+                        <li key={u.slug} className="truncate">
+                          <Link
+                            href={`/universities/${u.slug}`}
+                            className="text-slate-700 hover:font-semibold hover:text-petrol-800 hover:underline"
+                          >
+                            {u.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </details>
+        </div>
+      </section>
 
       {/* Bottom Shortlist Conversion Section */}
       <section id="shortlist" className="scroll-mt-24 bg-petrol-800 py-16 text-white lg:py-20" data-cta-band>

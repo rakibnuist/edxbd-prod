@@ -254,5 +254,5 @@ export const UK_RED_BRICK_2027_DATA: GuideData = {
   </div>
 </div>
 
-<p class="ed-note">Thinking about studying in the UK for the 2027 intake? Start your application planning on our <a href="/destinations/uk">Study in the UK Guide</a>, read our <a href="/updates/foundation-year-scholarships-international-students">Foundation Year Scholarships Guide</a>, or book an appointment via our <a href="/education-fit-assessment">Education Fit Assessment</a>.</p>`,
+<p class="ed-note">Thinking about studying in the UK for the 2027 intake? Start your application planning on our <a href="/study-in-uk-from-bangladesh">Study in the UK Guide</a>, read our <a href="/uk-scholarships-bangladesh">UK Scholarships Guide</a>, or book an appointment via our <a href="/education-fit-assessment">Education Fit Assessment</a>.</p>`,
 };

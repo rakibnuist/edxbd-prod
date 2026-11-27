@@ -783,6 +783,7 @@ export default function UniversitiesClient({ directory }: Props) {
                               </Link>
                               <Link
                                 href={applicationHref}
+                                rel="nofollow"
                                 onClick={() => recordClick('university_apply_click', university)}
                                 className="ed-btn ed-btn-signal min-h-[42px] flex-[1.2] px-2.5 text-xs font-bold sm:whitespace-nowrap sm:px-3"
                                 aria-label={`Check eligibility for ${university.name}`}
@@ -817,7 +818,7 @@ export default function UniversitiesClient({ directory }: Props) {
                     <p className="text-xs text-slate-500">
                       Showing {Math.min(visibleCount, filtered.length)} of {filtered.length} universities
                     </p>
-                    <Link href={moreHref} scroll={false} prefetch={false} className="ed-btn ed-btn-outline min-h-[44px] px-6 text-xs font-bold">
+                    <Link href={moreHref} rel="nofollow" scroll={false} prefetch={false} className="ed-btn ed-btn-outline min-h-[44px] px-6 text-xs font-bold">
                       Show {Math.min(12, filtered.length - visibleCount)} more universities
                     </Link>
                   </div>
