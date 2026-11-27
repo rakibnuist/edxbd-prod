@@ -279,6 +279,7 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/updates/china-diploma-to-bachelor-transfer-bangladesh',
     '/updates/study-engineering-in-china-bangladesh',
     '/updates/china-postgraduate-csc-scholarship-guide-bangladesh',
+    '/updates/study-in-china-for-female-students-bangladesh',
     '/proof-library',
     '/education-fit-assessment'
   ]

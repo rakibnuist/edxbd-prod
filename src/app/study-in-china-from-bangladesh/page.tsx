@@ -798,6 +798,9 @@ export default async function StudyInChinaFromBangladeshPage() {
               <Link href="/updates/china-postgraduate-csc-scholarship-guide-bangladesh" className={kit.link}>
                 Postgraduate CSC Research Guide <ArrowRight size={15} aria-hidden="true" />
               </Link>
+              <Link href="/updates/study-in-china-for-female-students-bangladesh" className={kit.link}>
+                Female Students &amp; Safety Guide <ArrowRight size={15} aria-hidden="true" />
+              </Link>
               <Link href="/study-in-china-without-ielts" className={kit.link}>
                 English &amp; MOI options <ArrowRight size={15} aria-hidden="true" />
               </Link>

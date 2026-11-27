@@ -354,6 +354,7 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
     '/updates/china-diploma-to-bachelor-transfer-bangladesh',
     '/updates/study-engineering-in-china-bangladesh',
     '/updates/china-postgraduate-csc-scholarship-guide-bangladesh',
+    '/updates/study-in-china-for-female-students-bangladesh',
   ]) {
     assert.ok(chinaHubHtml.includes(href), `study-in-china-from-bangladesh must link to ${href}`);
   }
@@ -378,6 +379,10 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   assert.ok(
     bdVsChinaHtml.includes('/updates/china-postgraduate-csc-scholarship-guide-bangladesh'),
     'bangladesh-vs-china-bachelor-study must link to /updates/china-postgraduate-csc-scholarship-guide-bangladesh',
+  );
+  assert.ok(
+    bdVsChinaHtml.includes('/updates/study-in-china-for-female-students-bangladesh'),
+    'bangladesh-vs-china-bachelor-study must link to /updates/study-in-china-for-female-students-bangladesh',
   );
 
   const marchIntakeHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'china-march-2027-intake.html'), 'utf8');
