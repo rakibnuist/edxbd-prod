@@ -83,6 +83,9 @@ try {
   console.log('Running Phase 4 active-destination universities expansion (11 non-China destinations)...');
   execSync('node scripts/seed-active-destinations-universities.mjs', { stdio: 'inherit' });
 
+  console.log('Running 2027 WeChat Batch 7 admissions sync (HEBUT, SWUFE, NJUST)...');
+  execSync('node scripts/sync-wechat-batch7-universities.mjs', { stdio: 'inherit' });
+
   console.log('Syncing private Tier-2 InternalSourceWatch vault...');
   execSync('node scripts/seed-hidden-sources.mjs', { stdio: 'inherit' });
 
