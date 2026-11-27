@@ -23,7 +23,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "node scripts/patch-next-proxy-race.mjs && next build --webpack",
     "start": "next start",
     "local": "node server.js",
     "local:build": "npm run build && npm run local",

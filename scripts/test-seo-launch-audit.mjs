@@ -314,6 +314,18 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.ok(!georgiaCostHtml.includes('Official Planning Baseline'));
 
+  const croatiaCostHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'croatia-study-cost-bangladesh.html'), 'utf8');
+  assert.ok(
+    croatiaCostHtml.includes('Planning Assumption') &&
+      croatiaCostHtml.includes('Agency for Science and Higher Education') &&
+      croatiaCostHtml.includes('University of Zagreb') &&
+      croatiaCostHtml.includes('Type D') &&
+      croatiaCostHtml.includes('Schengen') &&
+      croatiaCostHtml.includes('azvo.hr'),
+    'croatia-study-cost-bangladesh must include Planning Assumption, ASHE, Zagreb, Type D, Schengen, and official citations',
+  );
+  assert.ok(!croatiaCostHtml.includes('Official Planning Baseline'));
+
   const chinaHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-china-from-bangladesh.html'), 'utf8');
   for (const href of [
     '/csc-scholarship-bangladesh',
