@@ -104,21 +104,21 @@ export const MALAYSIA_UNIVERSITIES_2027_DATA: GuideData = {
         <td>September &amp; February</td>
       </tr>
       <tr>
-        <td><strong>Universiti Kebangsaan Malaysia (UKM)</strong><br/><em>Bangi, Selangor</em></td>
+        <td><strong><a href="/universities/universiti-kebangsaan-malaysia">Universiti Kebangsaan Malaysia</a> (UKM)</strong><br/><em>Bangi, Selangor</em></td>
         <td><strong>QS World #138</strong></td>
         <td>Social Sciences, Economics, Biotechnology, Health Sciences.</td>
         <td>USD 3,200 &ndash; 4,900</td>
         <td>October &amp; March</td>
       </tr>
       <tr>
-        <td><strong>Universiti Putra Malaysia (UPM)</strong><br/><em>Serdang, Selangor</em></td>
+        <td><strong><a href="/universities/universiti-putra-malaysia">Universiti Putra Malaysia</a> (UPM)</strong><br/><em>Serdang, Selangor</em></td>
         <td><strong>QS World #148</strong></td>
         <td>Agricultural Sciences, Veterinary Medicine, Forestry, Engineering.</td>
         <td>USD 2,800 &ndash; 4,600</td>
         <td>October &amp; March</td>
       </tr>
       <tr>
-        <td><strong>Universiti Sains Malaysia (USM)</strong><br/><em>Penang</em></td>
+        <td><strong><a href="/universities/universiti-sains-malaysia">Universiti Sains Malaysia</a> (USM)</strong><br/><em>Penang</em></td>
         <td><strong>QS World #146</strong></td>
         <td>APEX University status &middot; Pharmacy, Science, Architecture.</td>
         <td>USD 2,900 &ndash; 4,700</td>
@@ -152,7 +152,7 @@ export const MALAYSIA_UNIVERSITIES_2027_DATA: GuideData = {
       </tr>
       <tr>
         <td><strong><a href="/universities/sunway-university">Sunway University</a></strong><br/><em>Sunway City, KL</em></td>
-        <td><strong>QS World #601</strong><br/>QS 5-Star Rated</td>
+        <td><strong>QS World #539</strong><br/>QS 5-Star Rated</td>
         <td>Dual degree validated by <strong>Lancaster University (UK, QS Top 150)</strong></td>
         <td>Actuarial Science (#1 in Asia), Computer Science, Psychology, Accounting &amp; Finance</td>
         <td>USD 6,000 &ndash; 8,800</td>
@@ -165,18 +165,46 @@ export const MALAYSIA_UNIVERSITIES_2027_DATA: GuideData = {
         <td>USD 5,500 &ndash; 8,000</td>
       </tr>
       <tr>
+        <td><strong><a href="/universities/inti-international-university">INTI International University</a></strong><br/><em>Nilai, Negeri Sembilan</em></td>
+        <td><strong>QS World #516</strong><br/>QS 5-Stars in 7 Categories</td>
+        <td>Dual awards with <strong>Univ of Hertfordshire (UK)</strong> &amp; Southern New Hampshire (USA 4+0)</td>
+        <td>Computer Science, Business, Engineering, Biotechnology, Mass Communication</td>
+        <td>USD 4,800 &ndash; 7,800</td>
+      </tr>
+      <tr>
         <td><strong><a href="/universities/asia-pacific-university">Asia Pacific University</a> (APU)</strong><br/><em>Technology Park, KL</em></td>
-        <td><strong>QS World #621</strong><br/>Premier Digital Tech</td>
+        <td><strong>QS World #611</strong><br/>Premier Digital Tech</td>
         <td>Dual award with <strong>De Montfort University (DMU Leicester, UK)</strong></td>
         <td>Artificial Intelligence, Cyber Security, Software Engineering, Data Analytics, Fintech</td>
         <td>USD 5,800 &ndash; 7,800</td>
       </tr>
       <tr>
-        <td><strong>Management &amp; Science University (MSU)</strong><br/><em>Shah Alam, Selangor</em></td>
+        <td><strong><a href="/universities/management-and-science-university">Management &amp; Science University</a> (MSU)</strong><br/><em>Shah Alam, Selangor</em></td>
         <td><strong>QS World #580</strong></td>
         <td>Hospital-backed Medical Campus &middot; MQA Accredited</td>
         <td>MBBS, Biomedical Science, Pharmacy, Graphic Design, Business</td>
         <td>USD 5,200 &ndash; 7,500</td>
+      </tr>
+      <tr>
+        <td><strong><a href="/universities/segi-university">SEGi University &amp; Colleges</a></strong><br/><em>Kota Damansara, Selangor</em></td>
+        <td><strong>QS 5-Star Plus</strong><br/>MQA Tier 5</td>
+        <td>Dual degrees with <strong>UCLan UK</strong> &amp; University of Sunderland</td>
+        <td>MBBS, Dentistry (BDS), Pharmacy, IT, Accounting &amp; Finance</td>
+        <td>USD 4,200 &ndash; 6,800</td>
+      </tr>
+      <tr>
+        <td><strong><a href="/universities/university-of-cyberjaya">University of Cyberjaya</a> (UoC)</strong><br/><em>Cyberjaya, Selangor</em></td>
+        <td><strong>QS 5-Star Teaching</strong><br/>SETARA 5-Star</td>
+        <td>Healthcare &amp; Technology Specialist Campus</td>
+        <td>MBBS (RM50,000 scholarship), Doctor of Pharmacy (PharmD), Physiotherapy</td>
+        <td>USD 4,500 &ndash; 6,800</td>
+      </tr>
+      <tr>
+        <td><strong><a href="/universities/universiti-kuala-lumpur">Universiti Kuala Lumpur</a> (UniKL)</strong><br/><em>Kuala Lumpur</em></td>
+        <td><strong>SETARA 5-Star</strong><br/>Top Technical Uni</td>
+        <td>12 Specialized Institutes &middot; Direct Industry Linkage</td>
+        <td>MBBS (UniKL RCMP), Software Engineering, Robotics, Aviation Technology</td>
+        <td>USD 4,500 &ndash; 6,500</td>
       </tr>
     </tbody>
   </table>
@@ -186,8 +214,10 @@ export const MALAYSIA_UNIVERSITIES_2027_DATA: GuideData = {
 <p>Students can complete identical degrees from world-leading UK and Australian universities at Malaysian branch campuses, receiving the exact same graduation certificate as students at the home campus:</p>
 <ul>
   <li><strong><a href="/universities/monash-university-malaysia">Monash University Malaysia</a> (Sunway City):</strong> Member of Australia's prestigious Group of Eight (Go8) and ranked <strong>QS World #37</strong>. Programs include Engineering, Computer Science, Business, and Medicine (MBBS). Annual tuition: USD 9,500 &ndash; 14,000.</li>
+  <li><strong><a href="/universities/university-of-southampton-malaysia">University of Southampton Malaysia</a> (EduCity Johor):</strong> Member of the UK Russell Group and ranked <strong>QS World #80</strong>. Signature 2+2 and 4+0 MEng Aeronautics, Mechanical, and EEE engineering. Annual tuition: USD 10,000 &ndash; 14,500.</li>
   <li><strong><a href="/universities/university-of-nottingham-malaysia">University of Nottingham Malaysia</a> (Semenyih):</strong> Member of the UK's elite Russell Group and ranked <strong>QS World #108</strong>. Programs in Chemical, Civil, and Mechanical Engineering, Computer Science, and International Relations. Annual tuition: USD 8,500 &ndash; 12,500.</li>
-  <li><strong>Curtin University Malaysia (Miri, Sarawak):</strong> Ranked in the global top 180. Australian engineering and business curricula. Annual tuition: USD 7,000 &ndash; 10,000.</li>
+  <li><strong><a href="/universities/heriot-watt-university-malaysia">Heriot-Watt University Malaysia</a> (Putrajaya):</strong> UK Royal Charter institution ranked <strong>QS World #235</strong>. World leader in Actuarial Science and Petroleum Engineering with lakeside Putrajaya campus. Annual tuition: USD 8,500 &ndash; 12,000.</li>
+  <li><strong><a href="/universities/uow-malaysia">UOW Malaysia</a> (Glenmarie, Shah Alam):</strong> Part of the global University of Wollongong Australia network (<strong>QS World #167</strong>). Computing, Game Development, Software Engineering, and Business dual awards. Annual tuition: USD 5,500 &ndash; 8,500.</li>
 </ul>
 
 <h2>4. Scholarships in Malaysia for International Students 2026/2027</h2>

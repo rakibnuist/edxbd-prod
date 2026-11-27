@@ -325,6 +325,17 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.ok(!croatiaCostHtml.includes('Official Planning Baseline'));
 
+  const thailandCostHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'thailand-study-cost-bangladesh.html'), 'utf8');
+  assert.ok(
+    thailandCostHtml.includes('Planning Assumption') &&
+      thailandCostHtml.includes('Ministry of Higher Education, Science, Research and Innovation') &&
+      thailandCostHtml.includes('Chulalongkorn University') &&
+      thailandCostHtml.includes('Non-Immigrant ED') &&
+      thailandCostHtml.includes('mhesi.go.th'),
+    'thailand-study-cost-bangladesh must include Planning Assumption, MHESI, Chulalongkorn, Non-Immigrant ED, and official citations',
+  );
+  assert.ok(!thailandCostHtml.includes('Official Planning Baseline'));
+
   const chinaHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-china-from-bangladesh.html'), 'utf8');
   for (const href of [
     '/csc-scholarship-bangladesh',

@@ -271,6 +271,7 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/greece-study-cost-bangladesh',
     '/georgia-study-cost-bangladesh',
     '/croatia-study-cost-bangladesh',
+    '/thailand-study-cost-bangladesh',
     '/proof-library',
     '/education-fit-assessment'
   ]
