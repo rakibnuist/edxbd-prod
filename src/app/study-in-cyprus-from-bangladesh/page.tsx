@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {
   ArrowRight,
   Award,
+  Banknote,
   BookOpen,
   Building2,
   CalendarCheck,
@@ -162,9 +163,9 @@ export default async function StudyInCyprusPage() {
             <Link href={applyHref} className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Start Cyprus Fit Assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
-            <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
-              View Verified Institutions
-            </a>
+            <Link href="/cyprus-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Cyprus Cost Guide (EUR &amp; BDT)
+            </Link>
           </>
         }
       />
@@ -490,6 +491,29 @@ export default async function StudyInCyprusPage() {
               <strong>Official Bangladesh Bank Remittance Rule:</strong> All tuition payments must be wired directly from an authorized commercial bank in Bangladesh via an approved <strong>Student File</strong> directly to the verified IBAN account of the licensed Cypriot university. EduExpress International never accepts cash or personal account transfers for university tuition fees.
             </p>
           </div>
+        </div>
+
+        {/* Dedicated Cost Guide Callout Card */}
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-petrol-800/15 bg-white p-6 shadow-xs">
+          <div className="flex items-center gap-4">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-petrol-800 text-white">
+              <Banknote size={24} />
+            </div>
+            <div>
+              <h4 className="font-display text-base font-bold text-petrol-800">
+                Need an Itemized BDT &amp; EUR Cost Breakdown for Cyprus?
+              </h4>
+              <p className="mt-1 text-xs text-ink-soft">
+                Read our complete Cyprus Study Cost Guide: University of Cyprus vs private colleges, CRMD bank solvency rules (€7,000–8,000), monthly living expenses, and 20 hrs/week student work rights.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/cyprus-study-cost-bangladesh"
+            className="ed-btn ed-btn-signal min-h-[46px] px-6 text-xs font-bold"
+          >
+            Read Cyprus Cost Guide <ArrowRight size={16} aria-hidden="true" />
+          </Link>
         </div>
       </Section>
 
