@@ -18,9 +18,9 @@ const PAGE_URL = `https://eduexpressint.com${PATH}`;
 const ORG = { '@id': 'https://eduexpressint.com/#organization' };
 
 export const metadata = pageMetadata({
-  title: 'Education Consultant in Dhanmondi, Dhaka | EduExpress',
+  title: 'Best Study Abroad Agency in Dhaka, Bangladesh (Dhanmondi) | EduExpress',
   description:
-    'Visit EduExpress in Dhanmondi, Dhaka for education fit guidance, university comparison, complete cost planning and application support. Parents welcome.',
+    'Visit EduExpress International in Dhanmondi, Dhaka for study abroad counselling with BDT 0 file-opening fee, written ClearCost sheets, and pay-after-visa terms for China & Europe (Malaysia BDT 0 service fee).',
   path: PATH,
 });
 
@@ -327,6 +327,98 @@ export default async function EducationConsultantDhakaPage() {
       )}
 
       <PaymentRules title="Clear rules before any payment." intro="The China visa-first rule, written costs and our no-guarantee policy, in plain words." />
+
+      <Section
+        id="agency-fee-comparison"
+        tone="sage"
+        title="How to verify a study abroad agency in Bangladesh (2027 BDT 0 before-visa comparison)."
+        intro="Most student complaints in Dhaka come from non-refundable file-opening charges and verbal scholarship promises. Compare our written service fee rules side by side before you submit documents."
+      >
+        <div className="overflow-x-auto rounded-3xl border border-petrol-800/15 bg-white shadow-sm">
+          <table className="w-full min-w-[780px] border-collapse text-left text-[15px]">
+            <thead>
+              <tr className="border-b border-petrol-800/15 bg-petrol-800 text-white">
+                <th className="px-5 py-4 font-semibold">Destination Route</th>
+                <th className="px-5 py-4 font-semibold">File-Opening / Upfront Agency Fee</th>
+                <th className="px-5 py-4 font-semibold">EduExpress Service Fee</th>
+                <th className="px-5 py-4 font-semibold">Payment Timing</th>
+                <th className="px-5 py-4 font-semibold">What Is Included &amp; Written Guarantees</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-petrol-800/10 text-petrol-800">
+              <tr className="bg-lime-pale/40">
+                <td className="px-5 py-4 font-bold">
+                  <Link href="/study-in-china-from-bangladesh" className="underline underline-offset-4 hover:text-lime-deep">
+                    China (Flagship · 306 CSC &amp; Partner Unis)
+                  </Link>
+                </td>
+                <td className="px-5 py-4 font-bold text-[#1f8a3b]">BDT 0 (Zero Upfront)</td>
+                <td className="px-5 py-4 font-semibold">BDT 2,00,000 (Complete Package)</td>
+                <td className="px-5 py-4 font-semibold">100% After Visa Approval</td>
+                <td className="px-5 py-4 text-[14px] leading-6 text-ink-soft">
+                  Includes admission, JW201/JW202, X1/X2 visa processing, Bangladesh medical checkup, one-way Dhaka–China air ticket &amp; airport pickup. Option A: BDT 0 deposit with original documents; Option B: BDT 15,000 deductible deposit to retain originals.
+                </td>
+              </tr>
+              <tr>
+                <td className="px-5 py-4 font-bold">
+                  <Link href="/study-in-malaysia-from-bangladesh" className="underline underline-offset-4 hover:text-lime-deep">
+                    Malaysia (Foundation, Bachelor, Master, PhD)
+                  </Link>
+                </td>
+                <td className="px-5 py-4 font-bold text-[#1f8a3b]">BDT 0 (Zero Upfront)</td>
+                <td className="px-5 py-4 font-bold text-[#1f8a3b]">BDT 0 (Free Consultancy)</td>
+                <td className="px-5 py-4 font-semibold">No Consultancy Charge</td>
+                <td className="px-5 py-4 text-[14px] leading-6 text-ink-soft">
+                  Free profile assessment, MQA university shortlisting, offer letter application, and EMGS eVAL / SEV visa file guidance. Student pays only direct university, EMGS, medical, and flight costs.
+                </td>
+              </tr>
+              <tr className="bg-canvas-soft/60">
+                <td className="px-5 py-4 font-bold">
+                  <Link href="/destinations" className="underline underline-offset-4 hover:text-lime-deep">
+                    Europe &amp; UK (UK, Hungary, Finland, Malta, Cyprus, Georgia, Greece, Croatia)
+                  </Link>
+                </td>
+                <td className="px-5 py-4 font-bold text-[#1f8a3b]">BDT 0 (Zero Upfront)</td>
+                <td className="px-5 py-4 font-semibold">BDT 1,00,000 (1 Lakh Taka)</td>
+                <td className="px-5 py-4 font-semibold">100% After Visa Approval</td>
+                <td className="px-5 py-4 text-[14px] leading-6 text-ink-soft">
+                  Includes university admission, scholarship guidance (Stipendium Hungaricum / UK merit / Finland), bank solvency &amp; Student File checklist, and VFS/Embassy visa preparation.
+                </td>
+              </tr>
+              <tr>
+                <td className="px-5 py-4 font-bold">
+                  <Link href="/study-in-south-korea-from-bangladesh" className="underline underline-offset-4 hover:text-lime-deep">
+                    South Korea &amp; Thailand (GKS &amp; English-Track)
+                  </Link>
+                </td>
+                <td className="px-5 py-4 font-bold text-[#1f8a3b]">BDT 0 (Zero Upfront)</td>
+                <td className="px-5 py-4 font-semibold">Written ClearCost Schedule</td>
+                <td className="px-5 py-4 font-semibold">After Visa Approval</td>
+                <td className="px-5 py-4 text-[14px] leading-6 text-ink-soft">
+                  Official Recognition Check, 1-page ClearCost Sheet separating university tuition, apostille/attestation, embassy fee, and travel expenses before you commit.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link href="/student-visa-bank-solvency-bangladesh" className="ed-btn ed-btn-outline min-h-[46px] bg-white px-5 text-[15px]">
+            Bank Solvency Calculator (12 Countries)
+          </Link>
+          <Link href="/study-gap-acceptable-countries-bangladesh" className="ed-btn ed-btn-outline min-h-[46px] bg-white px-5 text-[15px]">
+            Study Gap Eligibility Matcher
+          </Link>
+          <Link href="/study-abroad-without-ielts-from-bangladesh" className="ed-btn ed-btn-outline min-h-[46px] bg-white px-5 text-[15px]">
+            Study Without IELTS (MOI Matcher)
+          </Link>
+          <Link href="/bmdc-recognized-medical-colleges-abroad" className="ed-btn ed-btn-outline min-h-[46px] bg-white px-5 text-[15px]">
+            BMDC Medical Eligibility Checker
+          </Link>
+          <Link href="/document-attestation-apostille-bangladesh" className="ed-btn ed-btn-outline min-h-[46px] bg-white px-5 text-[15px]">
+            MOFA e-Apostille Workflow Builder
+          </Link>
+        </div>
+      </Section>
 
       <Section tone="white">
         <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">

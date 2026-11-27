@@ -74,6 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/bn/mbbs-in-china-bangladesh',
     '/bn/csca-exam-bangladesh',
     '/bn/study-in-china-after-ssc-dakhil',
+    '/bn/study-in-malaysia-from-bangladesh',
     '/uk-study-cost-bangladesh',
     '/finland-study-cost-bangladesh',
     '/hungary-study-cost-bangladesh',

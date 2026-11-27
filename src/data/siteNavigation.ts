@@ -116,9 +116,14 @@ export const primaryNavigation = [
 // a first-time student or parent recognises without decoding the brand terms.
 export const costNavigation: SiteLink[] = [
   { name: 'Scholarship guidance', href: '/scholarships', note: 'What awards really cover and who qualifies' },
-  { name: 'China scholarships', href: '/china-scholarships-bangladesh', note: 'CSC, provincial and university awards' },
+  { name: 'China scholarships (CSC 306 list)', href: '/china-scholarships-bangladesh', note: 'CSC Type A/B, provincial and university awards' },
   { name: 'Cost of studying in China', href: '/study-in-china-cost-bangladesh', note: 'Tuition, hostel, insurance, visa and travel' },
   { name: 'Cost of studying in Malaysia', href: '/malaysia-study-cost-bangladesh', note: 'RM/BDT tuition, EMGS, Student File and BDT 0 service fee' },
+  { name: 'Visa Bank Solvency Calculator', href: '/student-visa-bank-solvency-bangladesh', note: 'Calculate 12-country bank statement & FDR in BDT' },
+  { name: 'Study Gap Eligibility Matcher', href: '/study-gap-acceptable-countries-bangladesh', note: 'Check HSC/Bachelor study gap rules across 12 countries' },
+  { name: 'Study Without IELTS (MOI Matcher)', href: '/study-abroad-without-ielts-from-bangladesh', note: 'Check MOI vs IELTS/PTE visa rules by destination' },
+  { name: 'BMDC Foreign Medical Checker', href: '/bmdc-recognized-medical-colleges-abroad', note: 'Verify China MOE 45-list & BMDC eligibility before MBBS' },
+  { name: 'MOFA e-Apostille Workflow Builder', href: '/document-attestation-apostille-bangladesh', note: 'Step-by-step Education Board, MOFA & Embassy attestation' },
   { name: 'Malaysia after O-Level', href: '/study-in-malaysia-after-o-level', note: '1-year Foundation or 2-year Diploma routes' },
   { name: 'China vs UK, USA, Australia & Dhaka', href: '/compare-bachelor-china-abroad-bangladesh', note: '4-year bachelor tuition & scholarship matrix' },
   { name: 'Bangladesh vs Abroad matrix', href: '/bangladesh-vs-study-abroad-countries', note: 'Compare 7 bachelor routes side by side' },
@@ -138,6 +143,7 @@ export const aboutNavigation: SiteLink[] = [
   { name: 'B2B Partner Desk', href: '/b2b', note: 'Agency admissions processing & bilateral MOU terms' },
   { name: 'Partner with us', href: '/partnership', note: 'Global Partner Programme & regional cooperation' },
   { name: 'বাংলা গাইড (Study in China)', href: '/bn/study-in-china', note: 'চীন পড়াশোনা, খরচ ও ভিসা গাইড (বাংলায়)' },
+  { name: 'মালয়েশিয়ায় উচ্চশিক্ষা (বাংলা গাইড)', href: '/bn/study-in-malaysia-from-bangladesh', note: '০ টাকা সার্ভিস ফি ও EMGS ভিসা গাইড (বাংলায়)' },
   { name: 'বিদেশে উচ্চশিক্ষা ২০২৭ মার্কেট গাইড', href: '/bn/bangladesh-study-abroad-market', note: '১২টি দেশের টিউশন ও স্টুডেন্ট ফাইল বাংলা গাইড' },
   { name: 'Contact and visit us', href: '/contact', note: 'Phone, WhatsApp and office hours' },
 ];

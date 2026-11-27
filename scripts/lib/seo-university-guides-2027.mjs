@@ -7,6 +7,7 @@ import { WECHAT_BATCH4_9_GUIDE_SPECS, upsertWechatBatch4Universities } from './s
 import { WECHAT_BATCH5_7_GUIDE_SPECS, upsertWechatBatch5Universities } from './seo-wechat-batch5-guides-2027.mjs';
 import { WECHAT_BATCH6_5_GUIDE_SPECS, upsertWechatBatch6Universities } from './seo-wechat-batch6-guides-2027.mjs';
 import { WECHAT_BATCH7_3_GUIDE_SPECS, upsertWechatBatch7Universities } from './seo-wechat-batch7-guides-2027.mjs';
+import { MALAYSIA_EUROPE_2027_GUIDE_SPECS } from './seo-malaysia-europe-guides-2027.mjs';
 import { TOP_MS_CS_AI_2027_DATA } from '../../src/data/topMsCsAiChina2027Guide.ts';
 import { OPEN_UNIVERSITIES_2027_DATA } from '../../src/data/chinaUniversitiesOpen2027Guide.ts';
 import { CSC_UNIVERSITY_LIST_2027_DATA } from '../../src/data/cscUniversityList2027Guide.ts';
@@ -2136,7 +2137,7 @@ export async function sync2027UniversityGuidesAndRecords(prisma) {
   const now = new Date();
   const reviewAt = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
 
-  const allSpecs = [...GUIDE_2027_SPECS, ...NEW_7_GUIDE_SPECS, ...WECHAT_15_GUIDE_SPECS, ...WECHAT_BATCH2_18_GUIDE_SPECS, ...WECHAT_BATCH3_25_GUIDE_SPECS, ...SHENYANG_CITY_UNIVERSITY_GUIDE_SPECS, ...WECHAT_BATCH4_9_GUIDE_SPECS, ...WECHAT_BATCH5_7_GUIDE_SPECS, ...WECHAT_BATCH6_5_GUIDE_SPECS, ...WECHAT_BATCH7_3_GUIDE_SPECS];
+  const allSpecs = [...GUIDE_2027_SPECS, ...NEW_7_GUIDE_SPECS, ...WECHAT_15_GUIDE_SPECS, ...WECHAT_BATCH2_18_GUIDE_SPECS, ...WECHAT_BATCH3_25_GUIDE_SPECS, ...SHENYANG_CITY_UNIVERSITY_GUIDE_SPECS, ...WECHAT_BATCH4_9_GUIDE_SPECS, ...WECHAT_BATCH5_7_GUIDE_SPECS, ...WECHAT_BATCH6_5_GUIDE_SPECS, ...WECHAT_BATCH7_3_GUIDE_SPECS, ...MALAYSIA_EUROPE_2027_GUIDE_SPECS];
 
   for (const spec of allSpecs) {
     const existing = await prisma.content.findUnique({

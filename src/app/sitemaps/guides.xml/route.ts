@@ -60,6 +60,7 @@ const handbuiltStaticGuides = new Set([
   'bn/csca-exam-bangladesh',
   'bn/study-in-china-after-ssc-dakhil',
   'bn/bangladesh-study-abroad-market',
+  'bn/study-in-malaysia-from-bangladesh',
 ]);
 
 const handbuiltLastmod: Record<string, string> = {
@@ -110,6 +111,7 @@ const handbuiltLastmod: Record<string, string> = {
   'bn/csca-exam-bangladesh': '2026-11-15',
   'bn/study-in-china-after-ssc-dakhil': '2026-11-21',
   'bn/bangladesh-study-abroad-market': '2026-11-21',
+  'bn/study-in-malaysia-from-bangladesh': '2026-11-28',
 };
 
 const guideSlugs = [
@@ -170,6 +172,7 @@ const guideSlugs = [
   'bn/csca-exam-bangladesh',
   'bn/study-in-china-after-ssc-dakhil',
   'bn/bangladesh-study-abroad-market',
+  'bn/study-in-malaysia-from-bangladesh',
 ];
 
 export async function GET() {

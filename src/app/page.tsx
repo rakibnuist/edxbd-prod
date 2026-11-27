@@ -853,6 +853,97 @@ export default async function Home() {
                 <Link href="/bangladesh-study-abroad-market" className="inline-flex min-h-[42px] items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[14px] font-semibold text-petrol-800 transition-colors hover:bg-lime">
                   2027 Market Benchmark <ArrowRight size={14} aria-hidden="true" />
                 </Link>
+                <Link href="/bn/study-in-malaysia-from-bangladesh" hrefLang="bn" lang="bn" className="inline-flex min-h-[42px] items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[14px] font-semibold text-petrol-800 transition-colors hover:bg-lime">
+                  মালয়েশিয়া গাইড (বাংলা) <ArrowRight size={14} aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Interactive 12-Country Eligibility & Regulatory Calculators */}
+            <div className="mt-6 rounded-3xl border border-petrol-800/15 bg-white p-6 shadow-sm sm:p-8">
+              <div className="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                  <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-lime-deep">
+                    Interactive 2027 Eligibility &amp; Visa Calculators
+                  </p>
+                  <h3 className="mt-1.5 font-display text-[26px] font-black leading-tight text-petrol-800 sm:text-[32px]">
+                    Check your bank solvency, study gap, MOI &amp; BMDC eligibility in 30 seconds.
+                  </h3>
+                </div>
+                <Link href="/education-consultant-dhaka#agency-fee-comparison" className="text-[14px] font-semibold text-petrol-800 underline underline-offset-4 hover:text-lime-deep">
+                  Compare BDT 0 before-visa agency rules →
+                </Link>
+              </div>
+              <div className="mt-6 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-5">
+                <Link
+                  href="/student-visa-bank-solvency-bangladesh"
+                  className="group flex flex-col justify-between rounded-2xl bg-canvas-soft p-4 transition hover:-translate-y-0.5 hover:bg-lime-pale"
+                >
+                  <div>
+                    <span className="inline-block rounded-full bg-petrol-800 px-2.5 py-0.5 text-[11px] font-bold text-lime">BDT Calculator</span>
+                    <p className="mt-2.5 text-[16px] font-bold leading-snug text-petrol-800">Visa Bank Solvency &amp; Student File</p>
+                    <p className="mt-1 text-[13px] leading-5 text-ink-soft">Calculate exact BDT bank statement, FDR &amp; sponsor rules for 12 countries.</p>
+                  </div>
+                  <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-bold text-petrol-800 group-hover:underline">
+                    Calculate BDT <ArrowRight size={13} aria-hidden="true" />
+                  </span>
+                </Link>
+
+                <Link
+                  href="/study-gap-acceptable-countries-bangladesh"
+                  className="group flex flex-col justify-between rounded-2xl bg-canvas-soft p-4 transition hover:-translate-y-0.5 hover:bg-lime-pale"
+                >
+                  <div>
+                    <span className="inline-block rounded-full bg-petrol-800 px-2.5 py-0.5 text-[11px] font-bold text-lime">Gap Matcher</span>
+                    <p className="mt-2.5 text-[16px] font-bold leading-snug text-petrol-800">Study Gap Acceptable Countries</p>
+                    <p className="mt-1 text-[13px] leading-5 text-ink-soft">Test 1–8 year HSC/Bachelor study gaps against age caps &amp; embassy rules.</p>
+                  </div>
+                  <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-bold text-petrol-800 group-hover:underline">
+                    Check gap rules <ArrowRight size={13} aria-hidden="true" />
+                  </span>
+                </Link>
+
+                <Link
+                  href="/study-abroad-without-ielts-from-bangladesh"
+                  className="group flex flex-col justify-between rounded-2xl bg-canvas-soft p-4 transition hover:-translate-y-0.5 hover:bg-lime-pale"
+                >
+                  <div>
+                    <span className="inline-block rounded-full bg-petrol-800 px-2.5 py-0.5 text-[11px] font-bold text-lime">MOI vs IELTS</span>
+                    <p className="mt-2.5 text-[16px] font-bold leading-snug text-petrol-800">Study Abroad Without IELTS</p>
+                    <p className="mt-1 text-[13px] leading-5 text-ink-soft">See where an English Medium of Instruction (MOI) certificate works for visa.</p>
+                  </div>
+                  <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-bold text-petrol-800 group-hover:underline">
+                    Match MOI routes <ArrowRight size={13} aria-hidden="true" />
+                  </span>
+                </Link>
+
+                <Link
+                  href="/bmdc-recognized-medical-colleges-abroad"
+                  className="group flex flex-col justify-between rounded-2xl bg-canvas-soft p-4 transition hover:-translate-y-0.5 hover:bg-lime-pale"
+                >
+                  <div>
+                    <span className="inline-block rounded-full bg-petrol-800 px-2.5 py-0.5 text-[11px] font-bold text-lime">MBBS &amp; BMDC</span>
+                    <p className="mt-2.5 text-[16px] font-bold leading-snug text-petrol-800">BMDC Medical Eligibility Checker</p>
+                    <p className="mt-1 text-[13px] leading-5 text-ink-soft">Calculate SSC+HSC GPA &amp; Biology score + verify China MOE 45-list medical schools.</p>
+                  </div>
+                  <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-bold text-petrol-800 group-hover:underline">
+                    Verify MBBS GPA <ArrowRight size={13} aria-hidden="true" />
+                  </span>
+                </Link>
+
+                <Link
+                  href="/document-attestation-apostille-bangladesh"
+                  className="group flex flex-col justify-between rounded-2xl bg-canvas-soft p-4 transition hover:-translate-y-0.5 hover:bg-lime-pale"
+                >
+                  <div>
+                    <span className="inline-block rounded-full bg-petrol-800 px-2.5 py-0.5 text-[11px] font-bold text-lime">myGov Apostille</span>
+                    <p className="mt-2.5 text-[16px] font-bold leading-snug text-petrol-800">MOFA e-Apostille &amp; Attestation</p>
+                    <p className="mt-1 text-[13px] leading-5 text-ink-soft">Build your Board, UGC, Ministry of Education &amp; MOFA attestation checklist.</p>
+                  </div>
+                  <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-bold text-petrol-800 group-hover:underline">
+                    Build checklist <ArrowRight size={13} aria-hidden="true" />
+                  </span>
+                </Link>
               </div>
             </div>
           </div>
