@@ -95,7 +95,7 @@ const UK_COST_FAQS = [
   {
     question: 'What are the pre-departure costs before flying to the UK?',
     answer:
-      'Compulsory pre-departure expenses paid directly to official bodies include: the mandatory IOM Dhaka TB medical screening (~12,500 BDT), the UKVI Student Visa application fee of £490 (~76,000 BDT), the Immigration Health Surcharge (IHS) of £776 per year (~120,000 BDT/year), academic certificate attestations, and a one-way flight from Dhaka to London/Manchester (~60,000 to 95,000 BDT). EduExpress charges BDT 0 upfront file-opening fees (our BDT 100,000 service fee is payable 100% after visa approval).',
+      'Compulsory pre-departure expenses paid directly to official bodies include: the mandatory IOM Dhaka TB medical screening (~12,500 BDT), the UKVI Student Visa application fee of £490 (~76,000 BDT), the Immigration Health Surcharge (IHS) of £776 per year (~120,000 BDT/year), academic certificate attestations, and a one-way flight from Dhaka to London/Manchester (~60,000 to 95,000 BDT). EduExpress charges BDT 0 file-opening fees and BDT 0 consultancy service charge for UK admissions and visa processing.',
   },
   {
     question: 'What is the updated UK Graduate Route policy for 2027?',
@@ -256,10 +256,10 @@ export default async function UkStudyCostPage() {
                 <td className="p-4 text-slate-600">Airlines (Biman, Emirates, Qatar, Saudia, Turkish Airlines)</td>
               </tr>
               <tr className="bg-emerald-50/50 font-bold text-emerald-900">
-                <td className="p-4">EduExpress File-Opening &amp; Pre-Visa Charge</td>
+                <td className="p-4">EduExpress Consultancy &amp; Visa Service Charge</td>
                 <td className="p-4">£0</td>
-                <td className="p-4">BDT 0 Upfront (BDT 100,000 After Visa)</td>
-                <td className="p-4">100% payable only after UK Student Visa approval</td>
+                <td className="p-4">BDT 0 (Free Consultancy)</td>
+                <td className="p-4">Zero file-opening fee and zero EduExpress service charge for UK</td>
               </tr>
             </tbody>
           </table>

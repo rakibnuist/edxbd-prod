@@ -169,7 +169,7 @@ export const GLOBAL_DESTINATIONS_BENCHMARK: GlobalDestinationBenchmark[] = [
     studentFileRule: 'AD Bank Student File for tuition wire + 28-day untouched liquid bank statement',
     partTimeWorkRights: 'Up to 20 hours/week during term for degree-level students; full-time in official holidays',
     postStudyWorkPolicy: 'Graduate Route: 2 years if applied on/before 31 Dec 2026; 18 months for Bachelor/Master applications from Jan 2027 (3 years for PhD)',
-    eduExpressFeeModel: 'Written service schedule before onboarding',
+    eduExpressFeeModel: 'BDT 0 EduExpress service fee (100% Free Consultancy for UK admissions & visa support)',
     keyGuardrail: 'Confirm UKVI licensed sponsor status, Jan 2027 18-month Graduate Route shift, and taught-Master dependant restrictions.',
     flagshipScholarships: [
       {

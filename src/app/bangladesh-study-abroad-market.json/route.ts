@@ -49,8 +49,10 @@ export async function GET() {
         tuitionAndLivingSeparated: true,
         sourceGovernance: '2-tier-hybrid (high-level public authorities exposed; granular update-tracking URLs retained privately for automated change monitoring)',
         chinaVisaFirstPolicy:
-          'No file opening charge. No EduExpress service fee before China visa approval. Earlier third-party fees must be itemized in writing.',
+          'No file opening charge. No EduExpress service fee before China visa approval (BDT 200,000 complete package after visa). Earlier third-party fees must be itemized in writing.',
         malaysiaServiceFee: 'BDT 0 EduExpress service fee; EMGS, tuition, and travel are paid directly by the student.',
+        ukServiceFee: 'BDT 0 EduExpress service fee; CAS deposit, UKVI visa fee, IHS, and IOM TB test are paid directly by the student.',
+        europeServiceFee: 'BDT 0 file-opening charge; BDT 100,000 (1 Lakh Taka) service fee for other European destinations (Hungary, Finland, Malta, Cyprus, Georgia, Greece, Croatia) payable 100% after visa approval.',
         license: 'https://creativecommons.org/licenses/by/4.0/',
       },
       snapshot,

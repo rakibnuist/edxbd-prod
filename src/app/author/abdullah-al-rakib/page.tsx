@@ -77,7 +77,7 @@ const AUTHOR_FAQS = [
   {
     question: 'Why did Abdullah Al Rakib establish the "Visa-First, Costs in Writing" policy at EduExpress?',
     answer:
-      'Bangladeshi students and parents frequently lose money to unverified consultancies that charge non-refundable upfront "file-opening fees" or promise "100% guaranteed scholarships and visas." To eliminate financial opacity, Abdullah Al Rakib instituted EduExpress’s signature governance rule: BDT 0 file-opening charges across all 12 destinations, a 1-page itemized ClearCost Sheet before any student proceeds, and 100% of EduExpress’s service fee for China, the UK, and Europe payable strictly after visa approval.',
+      'Bangladeshi students and parents frequently lose money to unverified consultancies that charge non-refundable upfront "file-opening fees" or promise "100% guaranteed scholarships and visas." To eliminate financial opacity, Abdullah Al Rakib instituted EduExpress’s signature governance rule: BDT 0 file-opening charges across all 12 destinations, a 1-page itemized ClearCost Sheet before any student proceeds, BDT 0 consultancy service fee for Malaysia and the United Kingdom (UK), and 100% of EduExpress’s service fee for China (BDT 200,000) and other European destinations (BDT 100,000) payable strictly after visa approval.',
   },
   {
     question: 'Can students and parents book an academic fit consultation with EduExpress’s Dhanmondi team?',
@@ -91,7 +91,7 @@ const authoredClusters = [
     category: 'China Flagship Research & Guides',
     items: [
       { label: 'Study in China from Bangladesh (2027 Master Pillar)', href: '/study-in-china-from-bangladesh', note: 'Complete admission, CSCA, cost & X1/X2 visa architecture' },
-      { label: 'China Study Data & Cost Benchmark Report', href: '/china-study-report-bangladesh', note: 'Open dataset across 79 universities & 1,904+ programs' },
+      { label: 'China Study Data & Cost Benchmark Report', href: '/china-study-report-bangladesh', note: 'Open dataset across 354+ Chinese universities (306+ CSC-designated) & 2,000+ programs' },
       { label: 'CSC Scholarship Bangladesh Guide (Type A & Type B)', href: '/csc-scholarship-bangladesh', note: 'Stipends, age caps, agency numbers & pre-admission rules' },
       { label: 'MBBS in China for Bangladeshi Students (45 MOE List)', href: '/mbbs-in-china-bangladesh', note: 'MOE English-medium universities & BMDC RQE rules' },
       { label: 'BMDC Recognized Medical Colleges Abroad (RQE & 45 MOE Guide)', href: '/bmdc-recognized-medical-colleges-abroad', note: 'Eligibility Certificate, WDOMS/WFME & 4-country medical comparison' },

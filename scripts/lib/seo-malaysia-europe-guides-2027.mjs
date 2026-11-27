@@ -6,7 +6,7 @@
  * - Direct-answer lede + `<aside class="key-facts">` summary table
  * - Verified institutional links to `/universities/<slug>` and country pillar pages
  * - Local currency + estimated BDT fee tables separating tuition from EMGS / IHS / VFS / residence permits
- * - Written EduExpress fee policy disclosure (Malaysia BDT 0 service fee; Europe BDT 1,00,000 100% after visa approval)
+ * - Written EduExpress fee policy disclosure (Malaysia & UK BDT 0 service fee; Other European countries BDT 1,00,000 100% after visa approval)
  * - Structured FAQ section for Google & LLM grounding crawlers
  */
 
@@ -328,6 +328,7 @@ export const MALAYSIA_EUROPE_2027_GUIDE_SPECS = [
     <tr><td><strong>Inside London</strong> (London Boroughs)</td><td>GBP 1,483 / month</td><td><strong>GBP 13,347</strong> (~BDT 20.7 Lakh)</td><td>+ Unpaid Year-1 Tuition shown on CAS (typically BDT 38L&ndash;52L total held)</td></tr>
     <tr><td><strong>Outside London</strong> (Manchester, Birmingham, Leeds, Bristol, Coventry, Glasgow, Cardiff)</td><td>GBP 1,136 / month</td><td><strong>GBP 10,224</strong> (~BDT 15.8 Lakh)</td><td>+ Unpaid Year-1 Tuition shown on CAS (typically BDT 30L&ndash;42L total held)</td></tr>
     <tr><th>Holding Rules</th><td colspan="3"><strong>28 consecutive days</strong> untouched minimum balance &middot; Statement dated within <strong>31 days</strong> of UKVI online submission &middot; Only parents, legal guardians, or student’s own account allowed (no uncles/siblings)</td></tr>
+    <tr><th>EduExpress UK Service Fee</th><td colspan="3"><strong>BDT 0 File-Opening Fee &middot; BDT 0 EduExpress Service Charge (100% Free Consultancy for UK)</strong></td></tr>
   </tbody></table>
 </aside>
 <h2>1. Compare Top Russell Group &amp; Career-Focused UK Universities in Our Directory</h2>

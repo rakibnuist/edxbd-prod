@@ -50,9 +50,9 @@ async function main() {
       evidenceNote: 'Company archive count supplied by management.', displayOrder: 1, isPublished: true,
     },
     {
-      key: 'china_university_collaborations', value: '134+', label: 'China university routes we work with',
-      definition: 'University routes available through direct collaboration, authorization, study-group access, network access and other institutional channels. The relationship type varies by university and is confirmed in writing before application.',
-      evidenceNote: 'Company relationship records supplied by management.', displayOrder: 2, isPublished: true,
+      key: 'china_university_collaborations', value: '354+', label: 'China university routes in our verified directory (306+ CSC-designated)',
+      definition: 'Verified Chinese university profiles in the EduExpress directory—including 306+ CSC-designated institutions—available through direct collaboration, authorization, study-group access, network access, and public direct-application channels. The relationship type varies by university and is confirmed in writing before application.',
+      evidenceNote: 'Live verified China university directory & CSC agency registry count.', displayOrder: 2, isPublished: true,
     },
     {
       key: 'china_students_supported', value: '2000+', label: 'Students supported through B2C and B2B channels',

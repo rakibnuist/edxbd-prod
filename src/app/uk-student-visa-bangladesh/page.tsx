@@ -109,7 +109,7 @@ const UK_VISA_FAQS = [
   {
     question: 'What is EduExpress’s service charge and payment timing for UK admission and visa processing?',
     answer:
-      'EduExpress operates with a strict BDT 0 file-opening charge for UK admission and visa counseling. You pay zero upfront agency fees during university shortlisting, offer processing, Pre-CAS interview preparation, and VFS visa filing. Our transparent European/UK service package (BDT 100,000) is payable 100% after visa approval under written service terms, while third-party official expenses (university CAS deposit, IOM TB test, IHS surcharge, and £490 UKVI fee) are paid directly by the student to the respective authorities.',
+      'EduExpress operates with a strict BDT 0 file-opening charge and BDT 0 consultancy service fee for UK admission and visa counseling. You pay zero agency fees during university shortlisting, offer processing, Pre-CAS interview preparation, and VFS visa filing, while third-party official expenses (university CAS deposit, IOM TB test, IHS surcharge, and £490 UKVI fee) are paid directly by the student to the respective authorities.',
   },
 ];
 
@@ -476,10 +476,10 @@ export default async function UkStudentVisaPage() {
           <div className="mx-auto max-w-4xl text-center">
             <span className="text-xs font-bold uppercase tracking-wider text-lime">Written Cost Transparency</span>
             <h2 className="mt-1 font-display text-2xl font-black sm:text-4xl text-white">
-              BDT 0 File-Opening Charge · Pay EduExpress Only After Visa Approval
+              BDT 0 File-Opening Charge · BDT 0 EduExpress Service Fee for UK
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-white/85">
-              We do not charge upfront file-opening fees for the UK. You receive a 1-page itemized <strong>ClearCost Sheet</strong> separating university CAS deposits, IOM medical fees, IHS surcharges, and UKVI visa fees from our BDT 100,000 service package (payable 100% after visa issuance).
+              We do not charge file-opening fees or consultancy service fees for the UK. You receive a 1-page itemized <strong>ClearCost Sheet</strong> separating direct university CAS deposits, IOM medical fees, IHS surcharges, and UKVI visa fees—with BDT 0 EduExpress service charge.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link href="/study-in-uk-from-bangladesh" className="ed-btn ed-btn-signal min-h-[48px] px-7 text-sm">

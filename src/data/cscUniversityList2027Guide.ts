@@ -58,12 +58,12 @@ export const CSC_UNIVERSITY_LIST_2027_DATA: GuideData = {
   complianceApprovedAt: new Date('2026-11-16T04:00:00.000Z'),
   seoApprovedAt: new Date('2026-11-16T04:00:00.000Z'),
   archivedAt: null,
-  content: `<p class="lede">The <strong>Chinese Government Scholarship (CGS / CSC, 中国政府奖学金)</strong>, administered by the <strong>China Scholarship Council (CSC)</strong> under the Ministry of Education of China, funds international students across 279 designated higher education institutions nationwide. This directory provides the verified <strong>2027/2028 CSC University Directory</strong>, detailing official 5-digit <strong>Agency Numbers</strong>, provincial clusters, <strong>Double First-Class</strong> academic tiers, eligible degree levels (Bachelor's, Master's, PhD), and teaching languages for prospective international scholars.</p>
+  content: `<p class="lede">The <strong>Chinese Government Scholarship (CGS / CSC, 中国政府奖学金)</strong>, administered by the <strong>China Scholarship Council (CSC)</strong> under the Ministry of Education of China, funds international students across 306+ designated higher education institutions nationwide. This directory provides the verified <strong>2027/2028 CSC University Directory</strong>, detailing official 5-digit <strong>Agency Numbers</strong>, provincial clusters, <strong>Double First-Class</strong> academic tiers, eligible degree levels (Bachelor's, Master's, PhD), and teaching languages for prospective international scholars.</p>
 
 <aside class="key-facts">
   <h2>CSC University System 2027: Key Facts at a Glance</h2>
   <table><tbody>
-    <tr><th>Designated Institutions</th><td><strong>279 National Universities</strong> across 31 provinces and municipalities</td></tr>
+    <tr><th>Designated Institutions</th><td><strong>306+ National Universities</strong> across 31 provinces and municipalities</td></tr>
     <tr><th>Agency Number Format</th><td><strong>5-Digit Numeric Code</strong> (e.g., 10001 Peking University, 10288 NJUST, 10293 NJUPT)</td></tr>
     <tr><th>Application System</th><td>Chinese Government Scholarship Information System (<a href="https://studyinchina.csc.edu.cn/" target="_blank" rel="noopener">studyinchina.csc.edu.cn</a>)</td></tr>
     <tr><th>Scheme Types</th><td><strong>Type A</strong> (Bilateral Embassy Route) &amp; <strong>Type B</strong> (University Postgraduate / Silk Road Direct Route)</td></tr>
@@ -426,7 +426,7 @@ export const CSC_UNIVERSITY_LIST_2027_DATA: GuideData = {
 
 <details>
   <summary>Are Chinese universities under the CSC recognized in Bangladesh and internationally?</summary>
-  <p>Yes. All 279 CSC host universities are statutory public institutions accredited by the Ministry of Education of China. Degrees earned at these universities are verified by the Chinese Service Center for Scholarly Exchange (CSCSE), recognized by the University Grants Commission (UGC) of Bangladesh for equivalence, and recognized by medical and engineering councils worldwide (including BMDC for MOE-listed English MBBS universities and IEB for Washington Accord-aligned engineering faculties).</p>
+  <p>Yes. All 306+ CSC host universities are statutory public institutions accredited by the Ministry of Education of China. Degrees earned at these universities are verified by the Chinese Service Center for Scholarly Exchange (CSCSE), recognized by the University Grants Commission (UGC) of Bangladesh for equivalence, and recognized by medical and engineering councils worldwide (including BMDC for MOE-listed English MBBS universities and IEB for Washington Accord-aligned engineering faculties).</p>
 </details>
 
 <details>

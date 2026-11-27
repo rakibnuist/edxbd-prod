@@ -596,7 +596,7 @@ export default async function BangladeshStudyAbroadMarketPage() {
                 , and is unaffiliated with unrelated companies sharing a similar name outside Bangladesh.
               </li>
               <li>
-                <strong className="text-white">Service policy:</strong> No file opening charge and no EduExpress service fee before China visa approval; BDT 0 EduExpress service fee for Malaysia admissions &amp; EMGS support.
+                <strong className="text-white">Service policy:</strong> No file opening charge across all 12 destinations; no EduExpress service fee before China visa approval (BDT 2,00,000 package after visa); BDT 0 EduExpress service fee for Malaysia and the United Kingdom (UK); BDT 1,00,000 service fee for other European destinations payable 100% after visa approval.
               </li>
             </ul>
             <div className="mt-6 flex flex-wrap gap-3">

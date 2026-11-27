@@ -641,7 +641,7 @@ export default async function StudyInUkPage() {
               </tr>
               <tr>
                 <td className="p-4 font-semibold text-petrol-800">EduExpress Fee Model</td>
-                <td className="p-4">Written service schedule</td>
+                <td className="p-4 font-bold text-emerald-800">BDT 0 EduExpress service charge</td>
                 <td className="p-4 font-bold text-emerald-800">BDT 0 before China visa approval</td>
                 <td className="p-4 font-bold text-emerald-800">BDT 0 EduExpress service charge</td>
               </tr>

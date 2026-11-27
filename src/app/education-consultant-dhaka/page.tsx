@@ -97,8 +97,8 @@ const dhakaOfficeFaqs = [
     answer: 'No. EduExpress International (eduexpressint.com), established in 2018 in Dhanmondi, Dhaka, Bangladesh, is an independent Bangladeshi study-abroad consultancy and is not affiliated with any UK company sharing the word EduExpress.',
   },
   {
-    question: 'What is the EduExpress fee policy for China and Malaysia applications?',
-    answer: 'For China, EduExpress charges BDT 0 for file opening and BDT 0 EduExpress service fee before China student visa approval (the post-visa Complete China Support Package is BDT 2,00,000). For Malaysia, EduExpress charges BDT 0 service fee. University, embassy, medical, translation, and courier fees are always itemized in writing in advance.',
+    question: 'What is the EduExpress fee policy for China, Malaysia, the UK, and Europe applications?',
+    answer: 'For China, EduExpress charges BDT 0 for file opening and BDT 0 EduExpress service fee before China student visa approval (the post-visa Complete China Support Package is BDT 2,00,000). For Malaysia and the United Kingdom (UK), EduExpress charges BDT 0 consultancy service fee (100% free consultancy). For other European destinations (Hungary, Finland, Malta, Cyprus, Georgia, Greece, Croatia), our service charge is BDT 1,00,000 (1 Lakh Taka) payable 100% after visa approval. University, embassy, medical, translation, and courier fees are always itemized in writing in advance.',
   },
   {
     question: 'Can parents join the counselling session at the Dhanmondi office?',
@@ -362,27 +362,31 @@ export default async function EducationConsultantDhakaPage() {
               <tr>
                 <td className="px-5 py-4 font-bold">
                   <Link href="/study-in-malaysia-from-bangladesh" className="underline underline-offset-4 hover:text-lime-deep">
-                    Malaysia (Foundation, Bachelor, Master, PhD)
+                    Malaysia
+                  </Link>{' '}
+                  &amp;{' '}
+                  <Link href="/study-in-uk-from-bangladesh" className="underline underline-offset-4 hover:text-lime-deep">
+                    United Kingdom (UK)
                   </Link>
                 </td>
                 <td className="px-5 py-4 font-bold text-[#1f8a3b]">BDT 0 (Zero Upfront)</td>
                 <td className="px-5 py-4 font-bold text-[#1f8a3b]">BDT 0 (Free Consultancy)</td>
                 <td className="px-5 py-4 font-semibold">No Consultancy Charge</td>
                 <td className="px-5 py-4 text-[14px] leading-6 text-ink-soft">
-                  Free profile assessment, MQA university shortlisting, offer letter application, and EMGS eVAL / SEV visa file guidance. Student pays only direct university, EMGS, medical, and flight costs.
+                  Free profile assessment, MQA / UKVI university shortlisting, offer &amp; CAS processing, Pre-CAS interview prep, and EMGS eVAL / UKVI Student Visa file guidance. Student pays only direct university, EMGS/UKVI/IHS, medical, and flight costs.
                 </td>
               </tr>
               <tr className="bg-canvas-soft/60">
                 <td className="px-5 py-4 font-bold">
                   <Link href="/destinations" className="underline underline-offset-4 hover:text-lime-deep">
-                    Europe &amp; UK (UK, Hungary, Finland, Malta, Cyprus, Georgia, Greece, Croatia)
+                    Other European Countries (Hungary, Finland, Malta, Cyprus, Georgia, Greece, Croatia)
                   </Link>
                 </td>
                 <td className="px-5 py-4 font-bold text-[#1f8a3b]">BDT 0 (Zero Upfront)</td>
                 <td className="px-5 py-4 font-semibold">BDT 1,00,000 (1 Lakh Taka)</td>
                 <td className="px-5 py-4 font-semibold">100% After Visa Approval</td>
                 <td className="px-5 py-4 text-[14px] leading-6 text-ink-soft">
-                  Includes university admission, scholarship guidance (Stipendium Hungaricum / UK merit / Finland), bank solvency &amp; Student File checklist, and VFS/Embassy visa preparation.
+                  Includes university admission, scholarship guidance (Stipendium Hungaricum / Finland / Schengen merit), bank solvency &amp; Student File checklist, and VFS/Embassy visa preparation.
                 </td>
               </tr>
               <tr>

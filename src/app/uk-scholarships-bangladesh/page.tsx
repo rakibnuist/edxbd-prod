@@ -87,7 +87,7 @@ const UK_SCHOLARSHIP_FAQS = [
   {
     question: 'What is EduExpress’s service charge for UK scholarship and university admission guidance?',
     answer:
-      'EduExpress operates with a strict BDT 0 file-opening charge. We never charge upfront fees to assess your UK scholarship eligibility, apply for automatic university merit bursaries, or review your CAS financial plan. Under our written European/UK service agreement, our BDT 100,000 service package is payable 100% after your UK student visa is approved.',
+      'EduExpress operates with a strict BDT 0 file-opening charge and BDT 0 consultancy service fee for the UK. We never charge agency fees to assess your UK scholarship eligibility, apply for automatic university merit bursaries, review your CAS financial plan, or guide your VFS visa application.',
   },
 ];
 
