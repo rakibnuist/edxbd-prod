@@ -230,6 +230,55 @@ function officialAuthoritiesBlock() {
   ].join('\n') + '\n';
 }
 
+function decisionAndRegulatoryDirectAnswersBlock() {
+  return [
+    '## 12-Country Regulatory, Visa Solvency, Study Gap, MOI, BMDC & Scholarship Direct Answers (2027)',
+    '',
+    '### 1. Student Visa Bank Solvency & Bangladesh Bank Student File (FE Circular 37)',
+    `URL: ${url('/student-visa-bank-solvency-bangladesh')}`,
+    '- China (X1/X2 Visa): USD 2,500–5,000+ (~BDT 3.1L–6.2L+) closing balance in student, parent, or blood-sponsor account (3–6 month statement; waived on full CSC scholarship).',
+    '- Malaysia (EMGS eVAL & SEV): MYR 15,000–25,000 (~BDT 4.0L–6.8L) in student or parent account for Dhaka SEV stamping; semester tuition wired via Bangladesh Bank Student File.',
+    '- United Kingdom (UKVI Student Route): Unpaid Year-1 tuition (after CAS deposit) + £13,347 (Inside London, £1,483/mo × 9) or £10,224 (Outside London, £1,136/mo × 9), held untouched for 28 consecutive days strictly in Student or Legal Parent account ONLY (statement ≤31 days old).',
+    '- Finland (Migri Type A Residence Permit): Statutory EUR 9,600/year (EUR 800/month × 12, ~BDT 12.48L) deposited strictly inside the STUDENT’S SOLE PERSONAL bank account (plus paid Year-1 tuition receipt and 6-month sponsor tax/income provenance).',
+    '- Hungary (Schengen Type D): EUR 6,500–8,000 (~BDT 8.5L–10.4L) liquid solvency + SWIFT MT103 paid tuition receipt (waived for Stipendium Hungaricum scholars).',
+    '- South Korea (D-2 Visa): USD 20,000 (Seoul Metro) or USD 16,000–18,000 (Regional) held for 30–90 days strictly inside one of the Korean Embassy Dhaka’s 14 designated commercial banks (waived for full GKS scholars).',
+    '- Malta (Identità CVU): EUR 8,000–10,000 (~BDT 10.5L–13.2L) meeting 75% minimum wage benchmark + paid tuition receipt.',
+    '- Republic of Cyprus (EU CRMD Blue Slip): EUR 7,000–8,500 (~BDT 9.1L–11.0L) bank statement attested by bank & MoFA Dhaka + initial tuition deposit wire.',
+    '- Georgia (D3 Study Visa), Greece (Type D), Croatia (MUP Temporary Stay), Thailand (Non-Immigrant ED): Georgia USD 3,500–5,000; Greece EUR 6,000–7,800; Croatia EUR 6,000–7,200; Thailand USD 4,000–6,000.',
+    '',
+    '### 2. Study Gap & Statutory Age Limits for Bangladeshi Students',
+    `URL: ${url('/study-gap-acceptable-countries-bangladesh')}`,
+    '- China: Bachelor gap up to 3–5 years (CSC age <25); Master’s gap up to 8–12 years (CSC age <35); PhD gap up to 10–14 years (CSC age <40).',
+    '- Malaysia: Highest gap flexibility in Asia — Bachelor gap up to 5–7 years, Master/PhD gap up to 10–15 years (EMGS age limit 18–45).',
+    '- UK, Finland & Europe: Bachelor gap 2–3 years optimal (Finland up to 4–6 years via UAS Entrance Exam with no upper age cap); Master/PhD gap 5–10+ years accepted when backed by verifiable employment NOC, bank salary credits, or trade license/TIN.',
+    '- South Korea: Strictest undergraduate gap audit in Dhaka (Bachelor gap 1–2 years max, GKS UG <25; Graduate gap 4–6 years, GKS PG <40).',
+    '',
+    '### 3. Study Abroad Without IELTS from Bangladesh (MOI vs. Embassy Visa Rules)',
+    `URL: ${url('/study-abroad-without-ielts-from-bangladesh')}`,
+    '- Both University & Embassy Visa Safe with MOI / Internal Interview: China (English MOI + university video interview or 1-yr Chinese HSK Foundation), Malaysia (MOI or on-campus IEP), Hungary Self-Funded (live Zoom faculty entrance exam), Georgia (recorded Zoom English interview), Thailand (MOI or AIT-EET).',
+    '- Conditional / Exam Required: UK (accepted without IELTS only if a UKVI track-record HEP university assesses CEFR B2 from an approved BD university MOI/HSC English ≥75% + internal test + Pre-CAS interview and certifies B2 on the CAS), Finland (Bachelor UAS track via International UAS Digital Entrance Exam; Master’s requires IELTS 6.5/PTE 62).',
+    '',
+    '### 4. BMDC Recognized Medical Colleges Abroad & 45 China MOE List',
+    `URL: ${url('/bmdc-recognized-medical-colleges-abroad')} · Comparison: ${url('/bangladesh-vs-china-mbbs')}`,
+    '- Statutory Pre-Departure Gate (BMDC Act 2010): Bangladeshi citizens studying MBBS/MD abroad who wish to return and sit the BMDC Registration Qualifying Examination (RQE) in Dhaka MUST obtain a pre-departure BMDC Eligibility Certificate (Combined SSC+HSC Science GPA ≥ 7.00, individual ≥ 3.00, HSC Biology GP ≥ 3.50, and HSC passing year within the current or immediate preceding 1–2 years).',
+    '- Recognized Foreign Medical Routes: (1) China’s 45 MOE-authorized English-medium public medical universities (tuition CNY 24,000–48,000/yr ≈ BDT 4.5L–9.0L/yr; 2,500–10,000+ bed Grade-3A hospitals; WDOMS listed); (2) Georgia WFME/NCEQE 6-year English MD (USD 5,300–8,000/yr); (3) Croatia EU Directive 2005/36/EC 6-year English MD at Zagreb, Split, Rijeka (EUR 12,000/yr).',
+    '',
+    '### 5. Document Attestation, MOFA myGov e-Apostille & Legalization in Dhaka',
+    `URL: ${url('/document-attestation-apostille-bangladesh')}`,
+    '- Sequential Chain: (1) Issuing body verification (Education Board for SSC/HSC, British Council for O/A-Levels, University Controller + UGC Agargaon for BD Bachelor/Master, BTEB for Polytechnic Diploma); (2) Ministry of Education (SHED/TMED) digital verification via myGov.bd; (3) Ministry of Foreign Affairs (MoFA Segunbagicha) QR-coded e-Apostille (1961 Hague Convention) or bilateral Embassy Consular Legalization; (4) Online Police Clearance Certificate (pcc.police.gov.bd) with MoFA QR verification.',
+    '',
+    '### 6. Country Scholarship Manuals & Founder E-E-A-T Governance',
+    `- China Scholarships & 306 CSC Directory: ${url('/china-scholarships-bangladesh')} · ${url('/csc-scholarship-bangladesh')} · ${url('/updates/complete-csc-universities-list-2027')}`,
+    `- Malaysia Scholarships (MTCP, MIS, GRA & 10%–75% Sunway/Taylor’s/APU/Monash waivers at BDT 0 service fee): ${url('/malaysia-scholarships-bangladesh')}`,
+    `- UK Scholarships (Chevening, Commonwealth, GREAT £10k & £2,000–£8,000 automatic CAS merit discounts): ${url('/uk-scholarships-bangladesh')}`,
+    `- Hungary Scholarships (Stipendium Hungaricum dual-portal DreamApply + SHED shed.gov.bd nomination): ${url('/hungary-scholarships-bangladesh')}`,
+    `- South Korea Scholarships (Global Korea Scholarship GKS Embassy vs University track & BK21 STEM labs): ${url('/south-korea-scholarships-bangladesh')}`,
+    `- Finland Scholarships (100% tuition + €5,000 Finland Scholarship & 20%–50% UAS waivers): ${url('/finland-scholarships-bangladesh')}`,
+    `- Chief Editorial Reviewer & Founder Profile: Abdullah Al Rakib (Founder & CEO, EduExpress International since 8 March 2018; PhD Researcher in Computer Application Technology at Nanjing University of Information Science & Technology — NUIST, China; M.Sc. in AI; B.Sc. in Microelectronics Engineering; CBCA Founding Member #08; FACD-CAB FCM-452): ${url('/author/abdullah-al-rakib')}`,
+    '',
+  ].join('\n') + '\n';
+}
+
 export async function buildLlmsFull(): Promise<string> {
   const [office, universities, updates] = await Promise.all([loadOffice(), universityBlock(), updatesBlock()]);
   return [
@@ -246,6 +295,7 @@ export async function buildLlmsFull(): Promise<string> {
     intakeBlock(),
     destinationBlock(),
     malaysiaAndKeyRoutesBlock(),
+    decisionAndRegulatoryDirectAnswersBlock(),
     officialAuthoritiesBlock(),
     guideBlock(),
     universities,

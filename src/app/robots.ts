@@ -17,11 +17,11 @@ export default function robots(): MetadataRoute.Robots {
       // training crawler so no vendor default can treat the site as opted out.
       ...[
         // Search discovery (cited answers)
-        'OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot', 'DeepSeekBot', 'YouBot', 'meta-webindexer', 'DuckAssistBot', 'Applebot', 'Bingbot', 'Googlebot',
+        'OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot', 'DeepSeekBot', 'YouBot', 'PhindBot', 'meta-webindexer', 'DuckAssistBot', 'Applebot', 'Bingbot', 'Googlebot', 'GoogleOther',
         // User-triggered retrieval (someone asked an assistant about us)
         'ChatGPT-User', 'Claude-User', 'Perplexity-User', 'meta-externalfetcher', 'MistralAI-User',
         // Model training and grounding (being known to the model itself)
-        'GPTBot', 'ClaudeBot', 'Google-Extended', 'Applebot-Extended', 'Amazonbot', 'cohere-ai', 'meta-externalagent', 'CCBot', 'Bytespider',
+        'GPTBot', 'ClaudeBot', 'Google-Extended', 'Google-CloudVertexBot', 'Applebot-Extended', 'Amazonbot', 'cohere-ai', 'meta-externalagent', 'CCBot', 'Bytespider', 'AI2Bot', 'Diffbot',
       ].map(userAgent => ({ userAgent, allow: '/', disallow: privatePaths })),
     ],
     sitemap: [
