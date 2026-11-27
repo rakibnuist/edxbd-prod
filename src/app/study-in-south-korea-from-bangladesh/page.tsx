@@ -552,6 +552,19 @@ export default async function StudyInSouthKoreaPage() {
             </p>
           </div>
         </div>
+
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-petrol-800/15 bg-white p-5 shadow-sm">
+          <div>
+            <h4 className="font-bold text-petrol-900">Need the full Dhaka Embassy visa checklist &amp; bank solvency guide?</h4>
+            <p className="mt-0.5 text-xs text-slate-600">Read our complete step-by-step breakdown of D-2 &amp; D-4 visa rules, IOM TB screening, and IEQAS fast-track approval.</p>
+          </div>
+          <Link
+            href="/south-korea-student-visa-bangladesh"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-petrol-800 px-5 py-2.5 text-xs font-bold text-white hover:bg-petrol-900"
+          >
+            South Korea Student Visa Guide <ArrowRight size={14} />
+          </Link>
+        </div>
       </Section>
 
       {/* 9. Work Rights & Post-Study Career Pathways */}

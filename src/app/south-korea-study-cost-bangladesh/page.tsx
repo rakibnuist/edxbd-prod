@@ -71,7 +71,7 @@ export async function generateMetadata() {
   return pageMetadata({
     title: 'Cost of Studying in South Korea from Bangladesh 2027 | EduExpress',
     description:
-      'Complete cost breakdown for studying in South Korea from Bangladesh: GKS scholarship vs self-funded tuition, KRW living budgets, Korean Embassy solvency rules, and student work rights.',
+      'South Korea study cost breakdown for Bangladeshi students: GKS scholarship vs tuition fees, KRW living expenses, embassy solvency, and part-time work.',
     path: PATH,
     locale: 'en_BD',
     image: ogImage('south-korea', 'Cost of Studying in South Korea from Bangladesh — EduExpress International'),
@@ -767,6 +767,9 @@ export default async function SouthKoreaStudyCostPage() {
           <div className="mt-4 flex flex-wrap gap-4 text-xs font-semibold">
             <Link href="/study-in-south-korea-from-bangladesh" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
               South Korea Flagship Country Hub <ArrowRight size={14} aria-hidden="true" />
+            </Link>
+            <Link href="/south-korea-student-visa-bangladesh" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
+              South Korea Student Visa Guide (D-2 &amp; D-4) <ArrowRight size={14} aria-hidden="true" />
             </Link>
             <Link href="/hungary-study-cost-bangladesh" className="inline-flex items-center gap-1.5 text-petrol-800 hover:underline">
               Hungary Study Cost Guide (2027) <ArrowRight size={14} aria-hidden="true" />
