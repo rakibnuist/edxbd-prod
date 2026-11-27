@@ -255,6 +255,17 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.ok(!koreaCostHtml.includes('Official Planning Baseline'));
 
+  const maltaCostHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'malta-study-cost-bangladesh.html'), 'utf8');
+  assert.ok(
+    maltaCostHtml.includes('Planning Assumption') &&
+      maltaCostHtml.includes('Identità') &&
+      maltaCostHtml.includes('Jobsplus') &&
+      maltaCostHtml.includes('identita.gov.mt') &&
+      maltaCostHtml.includes('mfhea.mt'),
+    'malta-study-cost-bangladesh must include Planning Assumption, Identità, Jobsplus, and MFHEA citations',
+  );
+  assert.ok(!maltaCostHtml.includes('Official Planning Baseline'));
+
   const chinaHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-china-from-bangladesh.html'), 'utf8');
   for (const href of [
     '/csc-scholarship-bangladesh',

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {
   ArrowRight,
   Award,
+  Banknote,
   BookOpen,
   Building2,
   CalendarCheck,
@@ -158,9 +159,9 @@ export default async function StudyInMaltaPage() {
             <Link href={applyHref} className="ed-btn ed-btn-signal min-h-[52px] px-7">
               Start Malta Eligibility Assessment <ArrowRight size={18} aria-hidden="true" />
             </Link>
-            <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
-              View Verified Institutions
-            </a>
+            <Link href="/malta-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Malta Cost Guide (EUR &amp; BDT)
+            </Link>
           </>
         }
       />
@@ -482,6 +483,29 @@ export default async function StudyInMaltaPage() {
           <p className="mt-4 text-[13px] text-emerald-900 font-medium">
             * Note: EduExpress audits your bank statement to ensure compliance with Identità Malta guidelines and verifies your college’s MFHEA license before you pay any university fee.
           </p>
+        </div>
+
+        {/* Dedicated Cost Guide Callout Card */}
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-petrol-800/15 bg-white p-6 shadow-xs">
+          <div className="flex items-center gap-4">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-petrol-800 text-white">
+              <Banknote size={24} />
+            </div>
+            <div>
+              <h4 className="font-display text-base font-bold text-petrol-800">
+                Need an Itemized BDT &amp; EUR Cost Breakdown for Malta?
+              </h4>
+              <p className="mt-1 text-xs text-ink-soft">
+                Explore our full Malta Study Cost Guide: University of Malta vs MCAST tuition schedules, Identità bank solvency rules (€9,000–10,000), monthly living expenses, and Jobsplus work rights.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/malta-study-cost-bangladesh"
+            className="ed-btn ed-btn-signal min-h-[46px] px-6 text-xs font-bold"
+          >
+            Read Malta Cost Guide <ArrowRight size={16} aria-hidden="true" />
+          </Link>
         </div>
       </Section>
 
