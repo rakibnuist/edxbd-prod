@@ -163,6 +163,9 @@ export default async function StudyInGreecePage() {
             <a href="#universities" className="ed-btn ed-btn-outline min-h-[52px] px-6">
               View 4 Verified Institutions
             </a>
+            <Link href="/greece-study-cost-bangladesh" className="ed-btn ed-btn-outline min-h-[52px] px-6">
+              Full Cost Guide
+            </Link>
           </>
         }
       />
@@ -496,6 +499,28 @@ export default async function StudyInGreecePage() {
             <p>
               <strong>Official Bangladesh Bank Remittance Protocol:</strong> All tuition payments to Greek universities must be transferred via an Authorized Dealer (AD) bank in Bangladesh through an official <strong>Student File</strong> opened under Bangladesh Bank foreign exchange guidelines. Funds wire directly to the university’s verified IBAN account in Greece. EduExpress does not handle tuition fees in cash or personal accounts.
             </p>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-3xl border border-rule bg-white p-6 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                Itemized Cost Breakdown · 2027 Benchmark
+              </span>
+              <h3 className="text-base font-bold text-petrol-800">
+                Deep Dive: Greece Study Cost Guide (/greece-study-cost-bangladesh)
+              </h3>
+              <p className="mt-1 text-xs text-slate-600">
+                Explore comprehensive tuition fee schedules across NTUA, AUTH, NKUA and AUEB, Ministry of Migration Type-D bank solvency rules (€400–€500/mo), Athens vs. Thessaloniki student budgets, and 20 hrs/week part-time work rights.
+              </p>
+            </div>
+            <Link
+              href="/greece-study-cost-bangladesh"
+              className="ed-btn ed-btn-signal min-h-[48px] px-6 text-xs font-bold whitespace-nowrap shrink-0"
+            >
+              Read Greece Cost Guide <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </Section>

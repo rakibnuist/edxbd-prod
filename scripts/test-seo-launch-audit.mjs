@@ -290,6 +290,18 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.ok(!malaysiaVisaHtml.includes('Official Planning Baseline'));
 
+  const greeceCostHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'greece-study-cost-bangladesh.html'), 'utf8');
+  assert.ok(
+    greeceCostHtml.includes('Planning Assumption') &&
+      greeceCostHtml.includes('Hellenic Authority for Higher Education') &&
+      greeceCostHtml.includes('Type-D') &&
+      greeceCostHtml.includes('Athens') &&
+      greeceCostHtml.includes('Thessaloniki') &&
+      greeceCostHtml.includes('ethaae.gr'),
+    'greece-study-cost-bangladesh must include Planning Assumption, HAHE, Type-D, Athens, Thessaloniki, and official citations',
+  );
+  assert.ok(!greeceCostHtml.includes('Official Planning Baseline'));
+
   const chinaHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-china-from-bangladesh.html'), 'utf8');
   for (const href of [
     '/csc-scholarship-bangladesh',
