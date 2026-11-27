@@ -272,6 +272,7 @@ export async function submitAllImportantPages(): Promise<IndexNowResponse> {
     '/georgia-study-cost-bangladesh',
     '/croatia-study-cost-bangladesh',
     '/thailand-study-cost-bangladesh',
+    '/updates/mbbs-in-china-admission-guide-bangladesh',
     '/proof-library',
     '/education-fit-assessment'
   ]

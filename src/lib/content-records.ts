@@ -30,6 +30,7 @@ import { CHINA_BACHELOR_SCHOLARSHIPS_2027_SLUG, CHINA_BACHELOR_SCHOLARSHIPS_2027
 import { GEORGIA_MBBS_FEES_2027_SLUG, GEORGIA_MBBS_FEES_2027_DATA } from '@/data/georgiaMbbsFees2027Guide';
 import { CUHK_PROGRAMS_2027_SLUG, CUHK_PROGRAMS_2027_DATA } from '@/data/cuhkProgramsGuide2027';
 import { UK_RED_BRICK_2027_SLUG, UK_RED_BRICK_2027_DATA } from '@/data/ukRedBrickUniversitiesGuide2027';
+import { CHINA_MBBS_ADMISSION_2027_SLUG, CHINA_MBBS_ADMISSION_2027_DATA } from '@/data/chinaMbbsAdmissionGuide2027';
 
 const parseList = (value?: string | null): string[] => {
   if (!value) return [];
@@ -195,6 +196,10 @@ export const getPublishedUpdates = cache(async (take?: number, prioritizeFeature
   }
   if (!serialized.some(u => u.slug === UK_RED_BRICK_2027_SLUG)) {
     const fallback = serializeUpdate(UK_RED_BRICK_2027_DATA);
+    if (fallback) serialized.unshift(fallback);
+  }
+  if (!serialized.some(u => u.slug === CHINA_MBBS_ADMISSION_2027_SLUG)) {
+    const fallback = serializeUpdate(CHINA_MBBS_ADMISSION_2027_DATA);
     if (fallback) serialized.unshift(fallback);
   }
   // Fallbacks are unshifted above; re-sort so the newest posts (DB or fallback) lead the feed.
@@ -430,6 +435,15 @@ export const getIndexableUpdatesForSitemap = cache(async () => {
       publishedAt: UK_RED_BRICK_2027_DATA.publishedAt,
       category: UK_RED_BRICK_2027_DATA.category,
       categories: UK_RED_BRICK_2027_DATA.categories,
+    });
+  }
+  if (!updates.some(u => u.slug === CHINA_MBBS_ADMISSION_2027_SLUG)) {
+    updates.unshift({
+      slug: CHINA_MBBS_ADMISSION_2027_DATA.slug,
+      updatedAt: CHINA_MBBS_ADMISSION_2027_DATA.updatedAt,
+      publishedAt: CHINA_MBBS_ADMISSION_2027_DATA.publishedAt,
+      category: CHINA_MBBS_ADMISSION_2027_DATA.category,
+      categories: CHINA_MBBS_ADMISSION_2027_DATA.categories,
     });
   }
   const categorySlugs = Array.from(

@@ -336,6 +336,12 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
   );
   assert.ok(!thailandCostHtml.includes('Official Planning Baseline'));
 
+  const mbbsHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'mbbs-in-china-bangladesh.html'), 'utf8');
+  assert.ok(
+    mbbsHubHtml.includes('/updates/mbbs-in-china-admission-guide-bangladesh'),
+    'mbbs-in-china-bangladesh must link to /updates/mbbs-in-china-admission-guide-bangladesh',
+  );
+
   const chinaHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'study-in-china-from-bangladesh.html'), 'utf8');
   for (const href of [
     '/csc-scholarship-bangladesh',

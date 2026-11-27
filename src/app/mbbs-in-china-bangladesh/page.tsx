@@ -19,6 +19,7 @@ const contents = [['Universities & fees', 'mbbs-universities'], ['Scholarships',
 const documents = ['Passport and recent photograph', 'SSC and HSC certificates and full transcripts', 'English-language evidence', 'Required CSCA score report', 'Personal statement or study plan', 'Medical examination and police clearance', 'Financial support documents'];
 const visaFirstTerms = 'No file opening charge. No EduExpress service fee before China visa approval. Any university, embassy, medical, translation, courier, deposit or other third-party fee required earlier must be itemized in writing before the student proceeds.';
 const related = [
+  { title: 'MBBS in China Admission Guide 2027', body: 'MOE 45-university list, BMDC eligibility rules, and tuition breakdown.', href: '/updates/mbbs-in-china-admission-guide-bangladesh' },
   { title: 'Study in China from Bangladesh', body: 'Explore degrees, education quality and the wider China study plan.', href: '/study-in-china-from-bangladesh' },
   { title: 'Scholarships in China', body: 'Understand coverage, selection and renewal before applying.', href: '/china-scholarships-bangladesh' },
   { title: 'China admission requirements', body: 'Prepare your qualifications, language evidence and CSCA.', href: '/china-admission-requirements' },
@@ -243,7 +244,10 @@ export default async function MbbsChinaPage() {
               <p className="mt-2 text-[15px] leading-6 text-ink-soft">Before scholarship. Add first-year registration CNY 600, textbooks, living expenses, travel and other applicable charges. Freshman awards are assessed after payment and registration.</p>
               {fullDay(checkedAt) && <p className="mt-4 inline-flex items-center gap-2 text-[14px] font-semibold text-lime-deep"><ShieldCheck size={16} aria-hidden="true" />Fees checked against university sources on {fullDay(checkedAt)}</p>}
             </div>
-            <Link href="/study-in-china-cost-bangladesh" className={`mt-4 ${kit.link}`}>Explore the full China cost guide <ArrowRight size={15} aria-hidden="true" /></Link>
+            <div className="mt-4 flex flex-col gap-2">
+              <Link href="/updates/mbbs-in-china-admission-guide-bangladesh" className={kit.link}>Read the comprehensive 2027 MBBS in China Admission Guide <ArrowRight size={15} aria-hidden="true" /></Link>
+              <Link href="/study-in-china-cost-bangladesh" className={kit.link}>Explore the full China cost guide <ArrowRight size={15} aria-hidden="true" /></Link>
+            </div>
           </div>
           <div className={`${kit.cardLime} self-start`}>
             <h3 className={kit.h3}>Your itemised cost breakdown</h3>
