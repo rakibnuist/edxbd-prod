@@ -349,9 +349,16 @@ test('Pre-deploy SEO Launch Acceptance Audit across built Next.js artifacts', ()
     '/china-study-report-bangladesh',
     '/updates/china-k-visa',
     '/updates/csca-guide-study-in-china',
+    '/updates/study-cs-ai-in-china-bangladesh',
   ]) {
     assert.ok(chinaHubHtml.includes(href), `study-in-china-from-bangladesh must link to ${href}`);
   }
+
+  const bdVsChinaHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'bangladesh-vs-china-bachelor-study.html'), 'utf8');
+  assert.ok(
+    bdVsChinaHtml.includes('/updates/study-cs-ai-in-china-bangladesh'),
+    'bangladesh-vs-china-bachelor-study must link to /updates/study-cs-ai-in-china-bangladesh',
+  );
 
   const bnHubHtml = fs.readFileSync(path.join(BUILD_APP_DIR, 'bn', 'study-in-china.html'), 'utf8');
   assert.ok(

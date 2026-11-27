@@ -783,6 +783,9 @@ export default async function StudyInChinaFromBangladeshPage() {
               <Link href="/updates/csca-guide-study-in-china" className={kit.link}>
                 CSCA exam guide <ArrowRight size={15} aria-hidden="true" />
               </Link>
+              <Link href="/updates/study-cs-ai-in-china-bangladesh" className={kit.link}>
+                Computer Science &amp; AI Guide <ArrowRight size={15} aria-hidden="true" />
+              </Link>
               <Link href="/study-in-china-without-ielts" className={kit.link}>
                 English &amp; MOI options <ArrowRight size={15} aria-hidden="true" />
               </Link>

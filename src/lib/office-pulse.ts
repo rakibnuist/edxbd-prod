@@ -82,6 +82,7 @@ export interface OwnerOfficePulsePayload {
 export interface CounselorDeskSummary {
   dhakaDate: string;
   dhakaTime: string;
+  employeeId?: string | null;
   employeeName: string | null;
   empId: string | null;
   role: string | null;
@@ -96,6 +97,9 @@ export interface CounselorDeskSummary {
   mapsUrl: string | null;
   eodSubmitted: boolean;
   todayActions: number;
+  todayCallsLogged?: number;
+  todayTouchedLeads?: number;
+  todayFilesOpened?: number;
   openTasks: number;
   overdueTasks: number;
   overdueLeads: number;
@@ -338,7 +342,7 @@ export async function buildCounselorDeskSummary(
   }
 
   const dayStart = dhakaStartUtc(todayIso);
-  const [att, log, todayActions, tasks, leads] = await Promise.all([
+  const [att, log, todayActions, tasks, leads, callsCount, touchedEvents] = await Promise.all([
     prisma.attendance.findUnique({
       where: { empId_date: { empId: employee.empId, date: todayIso } },
       select: { checkIn: true, checkOut: true, status: true, hoursWorked: true, source: true, notes: true },
@@ -356,7 +360,14 @@ export async function buildCounselorDeskSummary(
     }),
     prisma.lead.findMany({
       where: { assignedEmployeeId: employee.id },
-      select: { status: true, nextFollowup: true, createdAt: true, updatedAt: true },
+      select: { id: true, status: true, isApplication: true, nextFollowup: true, createdAt: true, updatedAt: true },
+    }),
+    prisma.activityEvent.count({
+      where: { employeeId: employee.id, type: 'call_logged', createdAt: { gte: dayStart } },
+    }),
+    prisma.activityEvent.findMany({
+      where: { employeeId: employee.id, createdAt: { gte: dayStart }, leadId: { not: null } },
+      select: { leadId: true },
     }),
   ]);
 
@@ -371,10 +382,20 @@ export async function buildCounselorDeskSummary(
 
   const activeLeads = leads.filter((l) => !CLOSED_LEAD_STATUSES.has(l.status));
   const overdueLeads = activeLeads.filter((l) => isLeadOverdue(l, todayIso, nowMs)).length;
+  const todayTouchedLeads = new Set(touchedEvents.map((e) => e.leadId).filter(Boolean)).size;
+  const todayFilesOpened = leads.filter(
+    (l) =>
+      (l.isApplication ||
+        ['application_started', 'application_submitted', 'admission_received', 'visa_applied', 'visa_approved'].includes(
+          l.status,
+        )) &&
+      new Date(l.updatedAt).getTime() >= dayStart.getTime(),
+  ).length;
 
   return {
     dhakaDate: todayIso,
     dhakaTime: nowTime,
+    employeeId: employee.id,
     employeeName: employee.name,
     empId: employee.empId,
     role: employee.role ?? null,
@@ -389,6 +410,9 @@ export async function buildCounselorDeskSummary(
     mapsUrl: att?.checkIn ? loc.mapsUrl : null,
     eodSubmitted: Boolean(log),
     todayActions,
+    todayCallsLogged: callsCount,
+    todayTouchedLeads,
+    todayFilesOpened,
     openTasks: tasks.length,
     overdueTasks: tasks.filter((t) => t.dueDate && t.dueDate < todayIso).length,
     overdueLeads,
